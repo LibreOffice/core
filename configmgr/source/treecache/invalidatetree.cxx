@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace configmgr
 namespace backend
 {
 // -----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccess const& _aCachedNode,
+std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccessRef const& _aCachedNode,
                                             ISubtree const * _pLoadedSubtree,
                                             AbsolutePath const& _aAbsoluteSubtreePath)
 {
@@ -250,7 +250,7 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
 
             {
                 data::TreeAccessor aTreeAccess(aChangingAccessor.accessor(),aCachedTreeAddress);
-                data::NodeAccess aRootNode = aTreeAccess.getRootNode();
+                data::NodeAccessRef aRootNode = aTreeAccess.getRootNode();
 
                 aTreeChanges = createDiffs(aRootNode, aLoadedNodeInstance->data().get(), aLoadedNodeInstance->root().location());
                 aRootAddress = aRootNode.address();
