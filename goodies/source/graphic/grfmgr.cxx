@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-21 16:48:23 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 11:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,13 @@ GraphicObject::GraphicObject( const ByteString& rUniqueID, const GraphicManager*
     mpUserData  ( NULL )
 {
     ImplConstruct();
+
+    // assign default properties
+    ImplAssignGraphicData();
+
     ImplSetGraphicManager( pMgr, &rUniqueID );
+
+    // update properties
     ImplAssignGraphicData();
 }
 
