@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:17:27 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,7 +1352,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     if( bVert )
                     {
                         nTop -= nUpper;
-                        SwTwips nY = nOrig + nRegSum *( (nOrig-nTop)/nRegSum );
+                        SwTwips nY = nOrig - nRegSum *( (nOrig-nTop)/nRegSum );
                         if( nY > nTop )
                             nY -= nRegSum;
                         nUpper = nTop + nUpper - nY;
