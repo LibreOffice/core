@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:13:49 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 13:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,10 @@
 
 #include <eeitemid.hxx>
 
+#ifndef SVX_LIGHT
 #ifndef _SVX_ASIANCFG_HXX
 #include "asiancfg.hxx"
+#endif
 #endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
@@ -343,8 +345,12 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = FALSE;
 
+#ifndef SVX_LIGHT
     SvxAsianConfig aAsian;
     mnCharCompressType = aAsian.GetCharDistanceCompression();
+#else
+    mnCharCompressType = 0;
+#endif
 
 #ifdef __LITTLEENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
