@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.214 $
+ *  $Revision: 1.215 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:58:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -936,7 +935,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         // delay settings initialization until first "real" frame
         // this relies on the IntroWindow not needing any system settings
         if ( !pSVData->maAppData.mbSettingsInit &&
-             ! (nStyle & WB_INTROWIN)
+             ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN))
              )
         {
             mpWindowImpl->mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
@@ -987,8 +986,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
     ImplUpdatePos();
 
-    // calculate app font res
-    if ( mpWindowImpl->mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & WB_INTROWIN) )
+    // calculate app font res (except for the Intro Window or the default window)
+    if ( mpWindowImpl->mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN)) )
         ImplInitAppFontData( this );
 
     if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
