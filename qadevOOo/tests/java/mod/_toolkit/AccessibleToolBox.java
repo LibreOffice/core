@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBox.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-04-28 11:22:18 $
+ *  last change:$Date: 2003-05-22 13:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,8 @@ public class AccessibleToolBox extends TestCase {
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
