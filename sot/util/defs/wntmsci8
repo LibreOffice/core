@@ -1464,3 +1464,6 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ??_C@_0DF@HCMHNEML@o?3?2SRX644?2wntmsci8?2inc?2com?1sun?1s@
 ?RemoveOwnerLock@SotObject@@QAEXXZ
 ??_C@_0DF@NBFBPMIH@o?3?2SRX645?2wntmsci8?2inc?2com?1sun?1s@
+?GetModifySvStream@UCBStorageStream@@QAEPAVSvStream@@XZ
+??0Storage@@QAE@AAVUCBStorageStream@@E@Z
+?SetStrm@StgCache@@QAEXPAVUCBStorageStream@@@Z
