@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:50:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,7 @@ void SlideSorterController::DeleteSelectedPages (void)
     for (aI=aSelectedPages.begin(); aI!=aSelectedPages.end(); aI++)
     {
         // Do not delete the last slide in the document.
-        if (pDocument->GetSdPageCount(PK_STANDARD) == 1)
+        if (GetModel().GetPageCount() == 1)
             break;
 
         USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
