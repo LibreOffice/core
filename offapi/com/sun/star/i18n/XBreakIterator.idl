@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:30:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com {  module sun {  module star {  module i18n {
     <p> Assumption: StartPos is inclusive and EndPos is exclusive. </p>
  */
 
-interface XBreakIterator: com::sun::star::uno::XInterface
+published interface XBreakIterator: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** Traverses specified number of characters/cells in Text from

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ NUMBER=[SIGN]*(1*DIGIT  *(GRPSEP 1*DIGIT))[DECSEP]1*DIGIT[EXPONENT]
     and generic Unicode enabled parser.
  */
 
-interface XCharacterClassification : com::sun::star::uno::XInterface
+published interface XCharacterClassification : com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** Convert lower case alpha to upper case alpha, starting at
