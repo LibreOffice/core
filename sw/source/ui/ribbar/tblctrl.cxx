@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:26:39 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ SwTableOptimizeCtrl::SwTableOptimizeCtrl(
     ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 /**********************************************************************
 
