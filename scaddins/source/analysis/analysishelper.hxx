@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
+ *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,12 @@ double              GammaHelp( double& x, sal_Bool& bReflect );
 double              Gamma( double f );
 double              GammaN( double f, sal_uInt32 nIter );
 double              Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE_IAE;
-//double                BesselR( double fNum, double fOrder ) THROWDEF_RTE;
-double              Besselk( double fNum, double fOrder );
+double              Besselk0( double fNum );
+double              Besselk1( double fNum );
+double              Besselk( double fNum, sal_Int32 nOrder );
+double              Bessely0( double fNum );
+double              Bessely1( double fNum );
+double              Bessely( double fNum, sal_Int32 nOrder );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
                         sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
+ *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,45 +838,184 @@ double Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE_I
 }
 
 
-/*double BesselR( double fNum, double fOrder ) THROWDEF_RTE
+double Besselk0( double fNum )
 {
-    double      fZ, fZm, fN, fn, fAct, fOld;
-    sal_Int16   nIterMax = 100;
+    double  fRet;
 
-    fZ = fNum * 0.5;                // x/2
-    fZm = fZ * fZ;                  // (x/2)^2
-    fZ = pow( fZ, fOrder );         // (x/2)^n
-
-    fN = 1.0;                       // effectiv: k!
-    fn = 1.0;
-
-    fOrder++;
-    fAct = fZ / Gamma( fOrder );
-    fOld = fAct * 0.9;
-
-    while( fAct != fOld && nIterMax )
+    if( fNum <= 2.0 )
     {
-        fZ *= fZm;
+        double  fNum2 = fNum * 0.5;
+        double  y = fNum2 * fNum2;
 
-        fN *= fn;
-        fn++;
+        fRet = -log( fNum2 ) * Bessel( fNum, 0, sal_True ) +
+                ( -0.57721566 + y * ( 0.42278420 + y * ( 0.23069756 + y * ( 0.3488590e-1 +
+                    y * ( 0.262698e-2 + y * ( 0.10750e-3 + y * 0.74e-5 ) ) ) ) ) );
+    }
+    else
+    {
+        double  y = 2.0 / fNum;
 
-        fOld = fAct;
-
-        fOrder++;
-        double  fG = Gamma( fOrder );
-        fAct += fZ / fN / fG;
-
-        nIterMax--;
+        fRet = exp( -fNum ) / sqrt( fNum ) * ( 1.25331414 + y * ( -0.7832358e-1 +
+                y * ( 0.2189568e-1 + y * ( -0.1062446e-1 + y * ( 0.587872e-2 +
+                y * ( -0.251540e-2 + y * 0.53208e-3 ) ) ) ) ) );
     }
 
-    return fAct;
-}*/
+    return fRet;
+}
 
 
-double Besselk( double fNum, double fOrder )
+double Besselk1( double fNum )
 {
-    return 0.0;
+    double  fRet;
+
+    if( fNum <= 2.0 )
+    {
+        double  fNum2 = fNum * 0.5;
+        double  y = fNum2 * fNum2;
+
+        fRet = log( fNum2 ) * Bessel( fNum, 1, sal_True ) +
+                ( 1.0 + y * ( 0.15443144 + y * ( -0.67278579 + y * ( -0.18156897 + y * ( -0.1919402e-1 +
+                    y * ( -0.110404e-2 + y * ( -0.4686e-4 ) ) ) ) ) ) )
+                / fNum;
+    }
+    else
+    {
+        double  y = 2.0 / fNum;
+
+        fRet = exp( -fNum ) / sqrt( fNum ) * ( 1.25331414 + y * ( 0.23498619 +
+                y * ( -0.3655620e-1 + y * ( 0.1504268e-1 + y * ( -0.780353e-2 +
+                y * ( 0.325614e-2 + y * ( -0.68245e-3 ) ) ) ) ) ) );
+    }
+
+    return fRet;
+}
+
+
+double Besselk( double fNum, sal_Int32 nOrder )
+{
+    switch( nOrder )
+    {
+        case 0:     return Besselk0( fNum );        break;
+        case 1:     return Besselk1( fNum );        break;
+        default:
+        {
+            double      fBkp;
+
+            double      fTox = 2.0 / fNum;
+            double      fBkm = Besselk0( fNum );
+            double      fBk = Besselk1( fNum );
+
+            for( sal_Int32 n = 1 ; n < nOrder ; n++ )
+            {
+                fBkp = fBkm + double( n ) * fTox * fBk;
+                fBkm = fBk;
+                fBk = fBkp;
+            }
+
+            return fBk;
+        }
+    }
+}
+
+
+double Bessely0( double fNum )
+{
+    double  fRet;
+
+    if( fNum < 8.0 )
+    {
+        double  y = fNum * fNum;
+
+        double  f1 = -2957821389.0 + y * ( 7062834065.0 + y * ( -512359803.6 +
+                    y * ( 10879881.29 + y * ( -86327.92757 + y * 228.4622733 ) ) ) );
+
+        double  f2 = 40076544269.0 + y * ( 745249964.8 + y * ( 7189466.438 +
+                    y * ( 47447.26470 + y * ( 226.1030244 + y ) ) ) );
+
+        fRet = f1 / f2 + 0.636619772 * Bessel( fNum, 0, sal_False ) * log( fNum );
+    }
+    else
+    {
+        double  z = 8.0 / fNum;
+        double  y = z * z;
+        double  xx = fNum - 0.785398164;
+
+        double  f1 = 1.0 + y * ( -0.1098628627e-2 + y * ( 0.2734510407e-4 +
+                        y * ( -0.2073370639e-5 + y * 0.2093887211e-6 ) ) );
+
+        double  f2 = -0.1562499995e-1 + y * ( 0.1430488765e-3 +
+                        y * ( -0.6911147651e-5 + y * ( 0.7621095161e-6 +
+                        y * ( -0.934945152e-7 ) ) ) );
+
+        fRet = sqrt( 0.636619772 / fNum ) * ( sin( xx ) * f1 + z * cos( xx ) * f2 );
+    }
+
+    return fRet;
+}
+
+
+double Bessely1( double fNum )
+{
+    double  fRet;
+
+    if( fNum < 8.0 )
+    {
+        double  y = fNum * fNum;
+
+        double  f1 = fNum * ( -0.4900604943e13 + y * ( 0.1275274390e13 +
+                        y * ( -0.5153438139e11 + y * ( 0.7349264551e9 +
+                        y * ( -0.4237922726e7 + y * 0.8511937935e4 ) ) ) ) );
+
+        double  f2 = 0.2499580570e14 + y * ( 0.4244419664e12 +
+                        y * ( 0.3733650367e10 + y * ( 0.2245904002e8 +
+                        y * ( 0.1020426050e6 + y * ( 0.3549632885e3 + y ) ) ) ) );
+
+        fRet = f1 / f2 + 0.636619772 * ( Bessel( fNum, 1, sal_False ) * log( fNum ) - 1.0 / fNum );
+    }
+    else
+    {
+        double  z = 8.0 / fNum;
+        double  y = z * z;
+        double  xx = fNum - 2.356194491;
+
+        double  f1 = 1.0 + y * ( 0.183105e-2 + y * ( -0.3516396496e-4 +
+                        y * ( 0.2457520174e-5 + y * ( -0.240337019e6 ) ) ) );
+
+        double  f2 = 0.04687499995 + y * ( -0.2002690873e-3 +
+                        y * ( 0.8449199096e-5 + y * ( -0.88228987e-6 +
+                        y * 0.105787412e-6 ) ) );
+
+        fRet = sqrt( 0.636619772 / fNum ) * ( sin( xx ) * f1 + z * cos( xx ) * f2 );
+    }
+
+    return fRet;
+}
+
+
+double Bessely( double fNum, sal_Int32 nOrder )
+{
+    switch( nOrder )
+    {
+        case 0:     return Bessely0( fNum );        break;
+        case 1:     return Bessely1( fNum );        break;
+        default:
+        {
+            double      fByp;
+
+            double      fTox = 2.0 / fNum;
+            double      fBym = Bessely0( fNum );
+            double      fBy = Bessely1( fNum );
+
+            for( sal_Int32 n = 1 ; n < nOrder ; n++ )
+            {
+                fByp = double( n ) * fTox * fBy - fBym;
+                fBym = fBy;
+                fBy = fByp;
+            }
+
+            return fBy;
+        }
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
+ *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,9 +946,7 @@ double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROW
 
 double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    THROW_IAE;
-
-    if( nOrder < 0 )
+    if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
     return Besselk( fNum, nOrder );
@@ -957,11 +955,11 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROW
 
 double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    THROW_IAE;
-
-    if( nOrder < 0 )
+    if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
-    return 0.0; // temporary solution ;-)
+
+//  return yn( nOrder, fNum );
+    return Bessely( fNum, nOrder );
 }
 
 
