@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:12:50 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         !((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
         SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
 
-    SwEditShell::SetUndoActionCount( SW_MOD()->GetUndoOptions().GetUndoCount() );
+    SwEditShell::SetUndoActionCount(
+        static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
     pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
 
     const FASTBOOL bBrowse = pWrtShell->GetDoc()->IsBrowseMode();
@@ -1306,7 +1307,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
              nY = rUserData.GetToken( 0, ';', nPos ).ToInt32();
         Point aCrsrPos( nX, nY );
 
-        sal_uInt16 nZoomFactor  = rUserData.GetToken(0, ';', nPos ).ToInt32();
+        sal_uInt16 nZoomFactor =
+            static_cast< sal_uInt16 >( rUserData.GetToken(0, ';', nPos ).ToInt32() );
 
         long nLeft  = rUserData.GetToken(0, ';', nPos ).ToInt32(),
              nTop   = rUserData.GetToken(0, ';', nPos ).ToInt32(),
@@ -1336,22 +1338,26 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
             bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
             pWrtShell->SetMacroExecAllowed( false );
+/*!!! pb (11.08.2004): #i32536#
             pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
             if( bSelectObj )
             {
                 pWrtShell->SelectObj( aCrsrPos );
                 pWrtShell->EnterSelFrmMode( &aCrsrPos );
             }
+*/
             // OD 11.02.2003 #100556# - reset flag value
             pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
 
             // OD 08.04.2003 #108693# - set visible area before applying
             // information from print preview. Otherwise, the applied information
             // is lost.
+/*!!! pb (11.08.2004): #i32536#
             if ( bBrowse )
                 SetVisArea( aVis.TopLeft() );
             else
                 SetVisArea( aVis );
+*/
             //apply information from print preview - if available
             if( sNewCrsrPos.Len() )
             {
@@ -1359,12 +1365,14 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
                       nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
                 Point aCrsrPos( nX, nY );
                 bSelectObj = pWrtShell->IsObjSelectable( aCrsrPos );
+/*!!! pb (11.08.2004): #i32536#
                 pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, FALSE );
                 if( bSelectObj )
                 {
                     pWrtShell->SelectObj( aCrsrPos );
                     pWrtShell->EnterSelFrmMode( &aCrsrPos );
                 }
+*/
                 sNewCrsrPos.Erase();
             }
             else if(USHRT_MAX != nNewPage)
@@ -1404,10 +1412,11 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
         long nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
         sal_Int16 nZoomType = pWrtShell->GetViewOptions()->GetZoomType();
         sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
-        sal_Bool bSelectedFrame = pWrtShell->GetSelFrmType(), bGotViewLeft = sal_False, bGotViewTop = sal_False,
-                 bGotVisibleLeft = sal_False, bGotVisibleTop = sal_False, bGotVisibleRight = sal_False,
-                 bGotVisibleBottom = sal_False, bGotZoomType = sal_False, bGotZoomFactor = sal_False,
-                 bGotIsSelectedFrame = sal_False;
+        sal_Bool bSelectedFrame = ( pWrtShell->GetSelFrmType() != FRMTYPE_NONE ),
+                 bGotViewLeft = sal_False, bGotViewTop = sal_False, bGotVisibleLeft = sal_False,
+                 bGotVisibleTop = sal_False, bGotVisibleRight = sal_False,
+                 bGotVisibleBottom = sal_False, bGotZoomType = sal_False,
+                 bGotZoomFactor = sal_False, bGotIsSelectedFrame = sal_False;
 
         for (sal_Int16 i = 0 ; i < nLength; i++)
         {
@@ -1490,12 +1499,14 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
                     bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
                     pWrtShell->SetMacroExecAllowed( false );
+/*!!! pb (11.08.2004): #i32536#
                     pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
                     if( bSelectObj )
                     {
                         pWrtShell->SelectObj( aCrsrPos );
                         pWrtShell->EnterSelFrmMode( &aCrsrPos );
                     }
+*/
                     // OD 11.02.2003 #100556# - reset flag value
                     pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
                 }
@@ -1506,6 +1517,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                 if ( bGotZoomType && bGotZoomFactor &&
                    ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
                     SetZoom( eZoom, nZoomFactor, sal_True );
+/*!!! pb (11.08.2004): #i32536#
                 if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
                 {
                     Point aTopLeft(aVis.TopLeft());
@@ -1517,6 +1529,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                 }
                 else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
                     SetVisArea( aVis );
+*/
 
                 pWrtShell->LockView( sal_True );
                 pWrtShell->EndAction();
