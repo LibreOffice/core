@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySe
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( lcl_GetDocDefaultsMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( lcl_GetDocDefaultsMap() ));
     return aRef;
 }
 
