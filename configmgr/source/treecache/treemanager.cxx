@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:43 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ TreeManager::TreeManager(BackendCacheRef const & _xBackend, memory::HeapManager 
 : m_xCacheController(_xBackend)
 , m_aCacheList()
 , m_aTemplates(new CacheData(_rCacheHeapManager))
+, m_bEnableAsync(true)
 {
     OSL_PRECOND(_xBackend.is(),"Trying to create a TreeManager without a backend");
 
@@ -378,9 +379,15 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
     else
     {
         CFG_TRACE_INFO_NI("TreeManager: found node in cache");
+        if (_aOptions.isRefreshEnabled())
+        {
+             backend::ComponentRequest aRequest( aSubtreePath.getModuleName(), _aOptions );
+             getCacheLoader()->refreshComponent(aRequest);
+        }
 
         aAccessor = data::Accessor(aCache->getDataSegment(aSubtreePath));
         OSL_ENSURE(aAccessor.is(),"Cannot get accessor for existing component");
+
     }
 
     data::NodeAddress aResultAddress = aCache->acquireNode(aAccessor,aSubtreePath);
@@ -527,10 +534,20 @@ void TreeManager::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccesso
 {
     {
         CFG_TRACE_INFO("TreeManager: committing an Update to the cache controller");
+        RequestOptions aOptions = aChangeTree.getOptions();;
+        //Modify RequestOptions
+        if(!m_bEnableAsync)
+        {
+            aOptions.enableAsync(false);
+        }
+        else
+        {
+            aOptions.enableAsync(true);
+        }
         backend::UpdateRequest anUpdate(
                                 & aChangeTree.root,
                                 aChangeTree.getRootNodePath(),
-                                aChangeTree.getOptions());
+                                aOptions);
 
         getCacheLoader()->saveAndNotify(anUpdate);
         CFG_TRACE_INFO_NI("TreeManager: committing done");
@@ -590,6 +607,27 @@ void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const Reques
             if (xBackendCache.is()) xBackendCache->freeComponent(aComponentDesc);
         }
     }
+}
+// ----------------------------------------------------------------------------
+void TreeManager::refreshAll() CFG_UNO_THROW_ALL(  )
+{
+    //Find what components are in cache and that have client references and reload
+    //such components.
+     BackendCacheRef aCacheLoaderRef = getCacheLoader();
+     OSL_ENSURE(aCacheLoaderRef.is(), "TreeManager::refreshAll : No backend available");
+     aCacheLoaderRef->refreshAllComponents();
+}
+// ----------------------------------------------------------------------------
+void TreeManager::flushAll()CFG_NOTHROW()
+{
+     BackendCacheRef aCacheLoaderRef = getCacheLoader();
+     OSL_ENSURE(aCacheLoaderRef.is(), "TreeManager::flushAll : No backend available");
+     aCacheLoaderRef->flushPendingUpdates();
+}
+//-----------------------------------------------------------------------------
+void TreeManager::enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW()
+{
+    m_bEnableAsync = bEnableAsync;
 }
 
 //-----------------------------------------------------------------------------
