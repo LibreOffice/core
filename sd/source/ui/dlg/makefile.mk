@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:03:21 $
+#   last change: $Author: rt $ $Date: 2005-01-27 14:13:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,6 @@ SRC1FILES =\
     vectdlg.src\
     dlgolbul.src \
     LayerDialog.src			\
-    PreviewWindow.src		\
     PaneDockingWindow.src
 
 
@@ -154,8 +153,6 @@ SLOFILES =  \
         $(SLO)$/LayerDialogContent.obj		\
         $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
-        $(SLO)$/PreviewWindow.obj			\
-        $(SLO)$/PreviewChildWindow.obj		\
         $(SLO)$/TemplateScanner.obj \
                 $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
@@ -192,8 +189,6 @@ LIB1OBJFILES= \
         $(SLO)$/LayerDialogContent.obj		\
         $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
-        $(SLO)$/PreviewWindow.obj			\
-        $(SLO)$/PreviewChildWindow.obj		\
         $(SLO)$/SpellDialogChildWindow.obj \
         $(SLO)$/TemplateScanner.obj \
         $(SLO)$/sdabstdlg.obj \
