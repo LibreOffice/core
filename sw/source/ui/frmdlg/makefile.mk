@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 12:56:31 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 13:48:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,17 +89,12 @@ SLOFILES =  \
         $(SLO)$/colex.obj \
         $(SLO)$/cption.obj \
         $(SLO)$/frmdlg.obj \
-        $(SLO)$/frmex.obj \
         $(SLO)$/frmmgr.obj \
         $(SLO)$/frmpage.obj \
         $(SLO)$/pattern.obj \
         $(SLO)$/uiborder.obj \
         $(SLO)$/wrap.obj
 
-.IF "$(OS)"=="SOLARIS"
-NOOPTFILES = \
-        $(SLO)$/frmex.obj
-.ENDIF          # "$(OS)"=="SOLARIS"
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
