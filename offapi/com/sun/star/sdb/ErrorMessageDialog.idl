@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorMessageDialog.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:33 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,14 +99,14 @@ module com {  module sun {  module star {  module sdb {
      </module>
      ,
     they will - sooner or later - encounter
-    <type scope="com.sun.star.sdbc">SQLException</type>
+    <type scope="com::sun::star::sdbc">SQLException</type>
     's.
     <br/>
     These exceptions can be chained, so the information wrapped in one single
-    <type scope="com.sun.star.sdbc">SQLException</type>
+    <type scope="com::sun::star::sdbc">SQLException</type>
     can be rather complex (e.g., every instance where such an exception is passing before it is finally caught, could
     append a
-    <type scope="com.sun.star.sdb">SQLContext</type>
+    <type scope="com::sun::star::sdb">SQLContext</type>
     to explain what it was doing), and they should be
     presented to the user in a consistent way.
     <br/>
@@ -130,7 +130,7 @@ service ErrorMessageDialog
     /** is the exception displayed by the dialog
         <p>
         This should contain a
-        <type scope="com.sun.star.sdbc">SQLException</type>
+        <type scope="com::sun::star::sdbc">SQLException</type>
         instance, or an instance
         of any class derived from this exception.
         </p>

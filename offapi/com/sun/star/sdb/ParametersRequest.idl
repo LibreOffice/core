@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParametersRequest.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:33 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,10 @@ exception ParametersRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
     /** is the list of parameters requested.
         The objects returned by the
-        <type scope="com.sun.star.container">XIndexAccess</type>
+        <type scope="com::sun::star::container">XIndexAccess</type>
         have to
         be property sets describing the respective parameter. For this, the objects have to support the
-        service
-        <service scope="com.sun.star.sdbcx">
-        Column
-        </service>
-        .
+        service <type scope="com::sun::star::sdbcx">Column</type>.
     */
     com::sun::star::container::XIndexAccess Parameters;
 
@@ -113,6 +109,9 @@ exception ParametersRequest: com::sun::star::task::ClassifiedInteractionRequest
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:06:33  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.2.1  2002/02/18 10:22:59  oj
     #97563# parameter,return value and exception description
 

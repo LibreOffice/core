@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:38 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
             an isolated connection object
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
-        @see com::sun::star::sdb::XConnection
+        @see com::sun::star::sdbc::XConnection
      */
     XConnection getIsolatedConnection([in]string user, [in]string password)
       raises (com::sun::star::sdbc::SQLException);
@@ -154,6 +154,9 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:06:38  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.1  2002/02/18 10:24:28  oj
     #97563# parameter,return value and exception description
 

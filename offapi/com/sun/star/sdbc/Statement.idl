@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Statement.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:58 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,13 +234,17 @@ service Statement
 
 
     // DocMerge from xml: property com::sun::star::sdbc::Statement::ResultSetConcurrency
-    /** retrieves the result set concurrency.@see com::sun::star::sdbc::ResultSetConcurrency;
+    /** retrieves the result set concurrency.
+
+        @see com::sun::star::sdbc::ResultSetConcurrency
      */
     [property] long ResultSetConcurrency;
 
 
     // DocMerge from xml: property com::sun::star::sdbc::Statement::ResultSetType
-    /** determine the result set type.@see com::sun::star::sdbc::ResultSetType;
+    /** determine the result set type.
+
+        @see com::sun::star::sdbc::ResultSetType
      */
     [property] long ResultSetType;
 

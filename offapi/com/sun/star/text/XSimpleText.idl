@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleText.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 10:42:44 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ interface XSimpleText: com::sun::star::text::XTextRange
     // DocMerge from idl: method com::sun::star::text::XSimpleText::createTextCursorByRange
     /** @returns
                 a new instance of a <type>TextCursor</type> which is located
-                at the specified <type>TextPosition</type> to travel in the
+                at the specified <type>TextRange</type> to travel in the
                 given text context.
 
                 <p>The initial position is set to <var>aTextPosition</var>.

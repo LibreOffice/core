@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlCharacter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 13:04:05 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 // DocMerge from idl: constants com::sun::star::text::ControlCharacter
 /** These constants are the codes for inserting control characters
-        using the <type>XControlCharacterInsertable</type> interface.
+        using <method>XSimpleText::insertControlCharacter</method> interface.
  */
 constants ControlCharacter
 {

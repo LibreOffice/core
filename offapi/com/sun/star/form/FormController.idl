@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormController.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:25 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ service FormController
     /** used to notify errors which happen in the form the controller is responsible for.
 
         <p>A form controller listens for error events at the form it is responsible for.<br/>
-        If and only if no <type>XSQLErrorListener</type> is registered at the controller, it
+        If and only if no <type scope="com::sun::star::sdb">XSQLErrorListener</type> is registered at the controller, it
         uses an own dialog to notify the user of the error.</p>
 
     */
@@ -193,6 +193,9 @@ service FormController
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:25  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.20.1  2002/07/15 11:07:12  fs
     -m reviewed
 

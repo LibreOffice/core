@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-20 13:28:52 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ service TextSection
     specified in <member>TextSection::FileLink</member>.
 
     <p>The source may be a text section or a bookmark.
-    If <member>Textsection::FileLink</member> is empty, then the
+    If <member>TextSection::FileLink</member> is empty, then the
     current document is searched for the source. If this property
     is empty and <member>TextSection::FileLink</member> is set,
     then the complete document content is linked into this section.</p>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:52 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module task {
     own configuration and there lifetime. Such events are simple strings
     wich meaning doesn't matter for any real service implementation of this
     specification. But triggered events must be available inside the
-    configuration and some <type>Job</type>s must be registered for that.
+    configuration and some <type>XJob</type>s must be registered for that.
     It's possible to start it synchronously (<type>XJob</type>) or asynchronously
     (<type>XAsyncJob</type>). But in general it's forbidden to use any UI inside
     synchronous one. That can be the source of many trouble and will be forbidden.

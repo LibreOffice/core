@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AtomDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:47 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module util
 
 /** contains a string and the corresponding registered atom .
 
-    @see com::sun:star::util::XAtomServer
+    @see com::sun::star::util::XAtomServer
 */
 struct AtomDescription
 {

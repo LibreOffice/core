@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTask.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:27 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 interface XTask: XFrame
 {
     //-------------------------------------------------------------------------
-    /** use <type scope="com::sun::star::util">XClosable</type> or
+    /** use <type scope="com::sun::star::util">XCloseable</type> or
         <member scope="com::sun::star::lang">XComponent::dispose()</member>
         at a <type>Frame</type> instead of this one
         @deprecated

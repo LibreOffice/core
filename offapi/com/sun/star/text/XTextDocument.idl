@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 10:37:46 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ interface XTextDocument: com::sun::star::frame::XModel
 
                 <p>This text does not contain texts in <type>TextFrame</type>s,
                 or cells of <type>TextTable</type>s etc. directly. These are
-                accessible from the contents via <type>X...Supplier</type>
+                accessible from the contents via <code>X...Supplier</code>
                 (e.g. <type>XTextTablesSupplier</type>).
      */
     com::sun::star::text::XText getText();

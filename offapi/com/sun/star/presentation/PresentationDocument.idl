@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-06 10:28:39 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ service PresentationDocument
 {
     /** This is a basic service for a drawing document.
 
-        <p>The following services are available at the <type>com.sun.star.lang.XMultiServiceFactory</type>
+        <p>The following services are available at the
+        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
         only in a presentation application
 
         <ul>
@@ -131,6 +132,9 @@ service PresentationDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/12/06 10:28:39  cl
+    #96976# added service description for document settings service
+
     Revision 1.4  2002/10/03 13:06:22  mi
     #94968# IDL reviews merged
 

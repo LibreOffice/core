@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParameterizedContentProvider.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XParameterizedContentProvider: com::sun::star::uno::XInterface
         arguments.
 
         @param Template  A URL template.  If the input is malformed or too
-        complex, an <type>IllegalArgumentException</type> may be raised.
+        complex, an <type scope="com::sun::star::lang">IllegalArgumentException</type> may be raised.
 
         @param Arguments  Any supplementary arguments required by this
         <type>XContentProvider</type>, represented as a single string.  If the

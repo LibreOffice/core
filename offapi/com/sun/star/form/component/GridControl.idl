@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:36:05 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
 
 /** specifies a model for a control which can display form data in a table-like way.
 
-    <p>In opposite to other <type>FormControl</type>s, grid controls do not only
+    <p>In opposite to other form controls, grid controls do not only
     display the single current value of a column they are bound to. Moreover, they do
     display not only the current row of the form, but all rows (at least potentially, limited
     by the control size, of course).</p>
@@ -123,8 +123,8 @@
     the control belongs to, and the columns correspond to single columns of the form's row set.</p>
 
     <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
-    <type>DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
-    as own services. Instead, they need to be created using the <type>XGridColumnFactory</type> interface.</p>
+    <type scope="com::sun::star::form">DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
+    as own services. Instead, they need to be created using the <type scope="com::sun::star::form">XGridColumnFactory</type> interface.</p>
  */
 service GridControl
 {
@@ -143,7 +143,7 @@ service GridControl
 
     /** allows to create column models to be inserted into the control model.
 
-        <p>Note that the object returned by the <member>XGridColumnFactory::createColumn</member>
+        <p>Note that the object returned by the <membere scope="com::sun::star::form">XGridColumnFactory::createColumn</member>
         method is not part of the grid control, yet. It needs to be inserted using any of the
         container interfaces.</p>
 

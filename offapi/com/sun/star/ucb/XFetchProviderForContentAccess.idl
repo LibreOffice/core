@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFetchProviderForContentAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
                                       , [in] boolean bDirection );
 
     //-------------------------------------------------------------------------
-    /** returns the <type>XContentIdentfier</type>s of the columns of the
+    /** returns the <type>XContentIdentifier</type>s of the columns of the
         indicated rows
 
         @returns

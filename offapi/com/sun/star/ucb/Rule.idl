@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Rule.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-11-05 10:18:11 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** describes a rule that can be applies to a number of objects.
 
-    <p>A rule consists of a sequence of <type>RuleTerm></type>s describing the
+    <p>A rule consists of a sequence of <type>RuleTerm</type>s describing the
     objects to which the rule should be applied, the <type>RuleAction</type>
     which should be used on the matching objects, and a parameter.
 */

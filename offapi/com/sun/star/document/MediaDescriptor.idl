@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:50 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ service MediaDescriptor
     /** handle exceptional situations
 
         <p>
-        Object implementing the <type scope="com::sun::star::task">Interactionhandler</type>
+        Object implementing the <type scope="com::sun::star::task">InteractionHandler</type>
         service that is used to handle exceptional situations where proceeding with the task
         is impossible without additional information or impossible at all.
         The implemented api provides a default implementation for it that can handle many situations.
@@ -277,7 +277,7 @@ service MediaDescriptor
         <p>
         Type of the medium to load, that must match to one of the types defined
         in the <type>TypeDetection</type> configuration (otherwise it's ignored).
-        This bypasses the type detection of the <type>Desktop</type> environment,
+        This bypasses the type detection of the <type scope="com::sun::star::frame">Desktop</type> environment,
         so passing a wrong MediaType will cause failure of loading.
         </p>
      */
@@ -329,7 +329,7 @@ service MediaDescriptor
         Setting this to <TRUE/> forces the component to create a new window on loading
         in any case. If the component supports multiple views, a second view is
         opened, if not, the component is loaded one more time. Otherwise the behavior
-        depends on the default window handling of the <type>Desktop</type> environment.
+        depends on the default window handling of the <type scope="com::sun::star::frame">Desktop</type> environment.
         </p>
      */
     [property] boolean OpenNewView;
@@ -438,7 +438,7 @@ service MediaDescriptor
     /** name of the template instead of the URL
 
         <p>
-        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</type>
+        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</member>
         property it can be used instead of the URL of the template. Use always in conjunction with
         <member>MediaDescriptor::TemplateRegionName</member>.
         </p>
@@ -449,7 +449,7 @@ service MediaDescriptor
     /** name of the template instead of the URL
 
         <p>
-        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</type>
+        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</member>
         property it can be used instead of the URL of the template. Use always in conjunction with
         <member>MediaDescriptor::TemplateRegionName</member>.
         </p>
@@ -493,8 +493,8 @@ service MediaDescriptor
         <p>
         Data to set a special view state after loading. The type depends on
         the component and is usually retrieved from a <type scope="com::sun::star::frame">Controller</type>
-        object by its <type scope="com::sun::star::view">XViewDataSupplier</type>
-        interface. Default is: no ViewData.
+        object by its <type scope="com::sun::star::frame">XController</type>
+        interface. Default is: no view data.
         </p>
      */
     [property] any ViewData;

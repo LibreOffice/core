@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:04 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,8 @@ service Shape
     /** contains a text range where the shape should be anchored to.
      <p>There are two different ways to get newly created shapes into the
      text document. One of them is to use the insertTextContent() method of
-     the <type scope=com::sun::star::text>XSimpleText</type>. The other is to call the add()
-     method of the <type scope=com::sun::star::drawing>XShapes</type> interface.
+     the <type scope="com::sun::star::text">XSimpleText</type>. The other is to call the add()
+     method of the <type scope="com::sun::star::drawing">XShapes</type> interface.
      To be able to determine an anchor position for shape that are anchored at a certain
      text position the property TextRange is used.</p>
      */

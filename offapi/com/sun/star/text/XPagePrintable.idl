@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPagePrintable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 10:53:32 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,9 @@ interface XPagePrintable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPagePrintable::printPages
-    /** prints the pages according to the <type scope="com::sun::star::view">PagePrintSettings</type>.@see com::sun::star::view::PrintOptions
+    /** prints the pages according to the <typ>PagePrintSettings</type>.
+
+    @see com::sun::star::view::PrintOptions
      */
     void printPages( [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
             raises( com::sun::star::lang::IllegalArgumentException );

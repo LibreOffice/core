@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardEx.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:13 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 //=============================================================================
 /** The extended clipboard interface.
 
-    @see com::sun::star::datatransfer::clipbaord::XClipboard
+    @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
 interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClipboard

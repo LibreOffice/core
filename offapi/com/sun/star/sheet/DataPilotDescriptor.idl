@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: TransparencyGradientTable.idl,v $
+ *  $RCSfile: DataPilotDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-10 16:12:57 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,36 +58,32 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_TransparencyGradientTable_idl__
-#define __com_sun_star_drawing_TransparencyGradientTable_idl__
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
-#include <com/sun/star/container/XNameContainer.idl>
+#ifndef __com_sun_star_sheet_DataPilotTableDescriptor_idl__
+#define __com_sun_star_sheet_DataPilotTableDescriptor_idl__
+
+#ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
+#include <com/sun/star/sheet/XDataPilotDescriptor.idl>
 #endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module drawing {
+module com { module sun { module star { module sheet {
 
 //=============================================================================
 
-/** this is a container for <type scope="com::sun::star::awt">Gradient</type>s
+/** represents the description of the layout of a data pilot table.
 
-    <p>It is used for example to access the <type scope="com::sun::star::awt">Gradient</type>s that
-    are used inside a document for fill transparency.
-
-    @see DrawingDocumentFactory
-    @see com::sun::star::awt::Gradient
+    @see com::sun::star::sheet::DataPilotTable
 */
-service TransparencyGradientTable
+service DataPilotDescriptor
 {
-    /** this container lets you access the <typeu scope="com::sun::star::awt">Gradient</type>s that
-        are indexed with a name.
+    //-------------------------------------------------------------------------
 
-        <p>Note: You can add new entries for later use, but you cannot
-        remove entries that are used inside the document.
-    */
-    interface com::sun::star::container::XNameContainer;
+    /** provides access to the layout settings of the data pilot table.
+     */
+    interface com::sun::star::sheet::XDataPilotDescriptor;
+
 };
 
 //=============================================================================
@@ -95,4 +91,3 @@ service TransparencyGradientTable
 }; }; }; };
 
 #endif
-

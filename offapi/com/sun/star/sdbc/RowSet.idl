@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:58 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,9 @@ interface XParameters;
 
 // DocMerge from xml: service com::sun::star::container::com::sun::star::sdbc::RowSet
 /** is a client side ResultSet, which combines the characteristics of a
-    <type scope="sun::com::star::sdbc">Statement</type>
+    <type scope="com::sun::star::sdbc">Statement</type>
     and a
-    <type scope="sun::com::star::sdbc">ResultSet</type>
-    .
+    <type scope="com::sun::star::sdbc">ResultSet</type>.
 
 
     <p>
@@ -161,7 +160,7 @@ service RowSet
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::QueryTimeOut
     /** retrieves the number of seconds the driver will wait for a Statement
         to execute. If the limit is exceeded, a
-        <type scope="sun::com::star::sdbc">SQLException</type>
+        <type scope="com::sun::star::sdbc">SQLException</type>
         is thrown.
         There is no limitation, if set to zero.
      */
@@ -217,7 +216,9 @@ service RowSet
 
 
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::ResultSetType
-    /** determine the result set type.@see com::sun::star::sdbc::ResultSetType;
+    /** determine the result set type.
+
+        @see com::sun::star::sdbc::ResultSetType
      */
     [property] long ResultSetType;
 };
@@ -228,6 +229,9 @@ service RowSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:06:58  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.3  2002/06/07 09:47:05  fs
     added XColumnLocate
 

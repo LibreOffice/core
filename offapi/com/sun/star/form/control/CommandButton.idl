@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandButton.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:50:45 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ service CommandButton
         This may be interesting for e.g. forms which want to provide input validation before submitting
         data.<br/>
 
-        @see com::sun::star::form::HTMLForm
+        @see com::sun::star::form::component::HTMLForm
         @see com::sun::star::form::XSubmit
         @see com::sun::star::form::XReset
         @see com::sun::star::awt::XButton
@@ -116,6 +116,9 @@ service CommandButton
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/12/10 15:50:45  obo
+    #106005# remove $Log entries
+
     Revision 1.3  2002/10/03 13:05:07  mi
     #94968# IDL reviews merged
 

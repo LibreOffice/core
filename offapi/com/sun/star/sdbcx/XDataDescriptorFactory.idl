@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataDescriptorFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:21 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ interface XDataDescriptorFactory: com::sun::star::uno::XInterface
     /** returns a descriptor of a definition object.
         @returns
             the descriptor for that kind of objects
-        @see com::sun::star::Container
      */
     com::sun::star::beans::XPropertySet createDataDescriptor();
 };
@@ -92,6 +91,9 @@ interface XDataDescriptorFactory: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:07:21  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.1  2002/02/18 10:00:22  oj
     #97563# parameter,return value and exception description
 

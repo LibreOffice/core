@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionSupplyParameters.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:40 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module sdb {
 
     <p>
     This continuation is typically used in conjunction with a
-    <type scope="com.sun.star.sdb">ParametersRequest</type>.
+    <type scope="com::sun::star::sdb">ParametersRequest</type>.
     </p>
 */
 interface XInteractionSupplyParameters: com::sun::star::task::XInteractionContinuation
@@ -93,6 +93,9 @@ interface XInteractionSupplyParameters: com::sun::star::task::XInteractionContin
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:06:40  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.16.1  2002/02/18 10:25:25  oj
     #97563# parameter,return value and exception description
 

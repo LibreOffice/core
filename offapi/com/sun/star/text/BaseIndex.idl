@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseIndex.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-20 14:36:47 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
         @see com::sun::star::text::ContentIndex
         @see com::sun::star::text::UserDefinedIndex
-        @see com::sun::star::text::IllustrationsIndex
+        @see com::sun::star::text::IllustrationIndex
         @see com::sun::star::text::TableIndex
         @see com::sun::star::text::ObjectIndex
  */

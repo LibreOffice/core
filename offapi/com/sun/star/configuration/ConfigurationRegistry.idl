@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationRegistry.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,11 @@ service ConfigurationRegistry
 
     /** is used to commit changes to the configuration.
         <p>As specified for the
-        <type scope="com.sun.star.configuration">ConfigurationUpdateAccess</type>
+        <type scope="com::sun::star::configuration">ConfigurationUpdateAccess</type>
         service, all changes made to an configuration subtree have to be commited
         before they become persistent.
         To do this for a configuration accessed as a registry, call
-        <member scope="com.sun.star.util">XFlushable::flush()</member>.
+        <method scope="com::sun::star::util">XFlushable::flush</method>.
         </p>
         <p><strong>Warning:</strong><em>Changes that are not flushed will be
         lost.</em>

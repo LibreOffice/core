@@ -1,10 +1,10 @@
 /*************************************************************************
  *
  *  $RCSfile: XErrorBroadcaster.idl,v $
+
+ *  $Revision: 1.6 $
  *
- *  $Revision: 1.5 $
- *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ interface XErrorBroadcaster: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:30  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.1  2002/07/26 10:00:06  fs
     IDL review form layer
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DuplicateCommandIdentifierException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:20 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
     the same command identifier was used for two threads.
 
     <p>Each thread must use it's own command identifier, which must be obtained
-    using <member>XcommandProcessor::createCommandIdentifier</member>. Command
+    using <method>XCommandProcessor::createCommandIdentifier</method>. Command
     identifier <code>0</code>, which indicates that the command shall never
     be aborted by a client, can be used by any thread.
 

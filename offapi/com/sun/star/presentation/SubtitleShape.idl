@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubtitleShape.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:46:12 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
     <p>Presentation shapes can be used in a presentation
     page layouts and theire position and size is by default set
-    by the presentation shapes on the <type>MasterPage</type>.
+    by the presentation shapes on the <type scope="com::sun::star::drawing">MasterPage</type>.
  */
 service SubtitleShape
 {

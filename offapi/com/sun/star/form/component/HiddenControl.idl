@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HiddenControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:37:56 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     <p>The only sense of a hidden control is to store data in the form which is
     not visible to the user.</p>
 
-    <p>Usually, hidden controls are used in <type scope="com::sun::star::form">HTMLForm</type>s,
+    <p>Usually, hidden controls are used in <type scope="com::sun::star::form::component">HTMLForm</type>s,
     where they contain data which is to be submitted.<br/>
     Nevertheless, you can use them in your own forms for storing any data, for instance
     to evaluate it in some scripting macro.</p>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:56 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,14 +282,14 @@ service PreparedStatement
 
     // DocMerge from idl: property com::sun::star::sdbc::PreparedStatement::ResultSetConcurrency
     /** retrieves the result set concurrency.
-             @see com::sun::star::sdbc::ResultSetConcurrency;
+             @see com::sun::star::sdbc::ResultSetConcurrency
      */
     [property] long ResultSetConcurrency;
 
 
     // DocMerge from idl: property com::sun::star::sdbc::PreparedStatement::ResultSetType
     /** Determine the result set type.
-             @see com::sun::star::sdbc::ResultSetType;
+             @see com::sun::star::sdbc::ResultSetType
      */
     [property] long ResultSetType;
 

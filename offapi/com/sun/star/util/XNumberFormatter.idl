@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatter.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:58 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** @returns
-                the attached <type>NumberFormatsSupplier</type>.
+                the attached <type>XNumberFormatsSupplier</type>.
      */
     com::sun::star::util::XNumberFormatsSupplier getNumberFormatsSupplier();
 

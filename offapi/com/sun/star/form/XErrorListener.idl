@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XErrorListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:31 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 //=============================================================================
 
-/** used to be notified when errors in a <type scope="com::sun::star::component">DatabaseForm</type> happen.
+/** used to be notified when errors in a database form happen.
 
     <p>Each time an exception is triggered by a database form, the error
     event is posted to the error listeners. This event may be used to
@@ -93,7 +93,6 @@ interface XErrorListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a database action performed by a database form raises
         an exception.
-        @see XDatabaseForm
      */
     void errorOccured( [in] com::sun::star::form::ErrorEvent aEvent );
 
@@ -106,6 +105,9 @@ interface XErrorListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:04:31  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.16.2  2002/07/26 10:00:07  fs
     IDL review form layer
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Descriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     <p>
     A descriptor containes at least the informations of the name of an object.
     </p>
-    @see com::sun::star::sdbcx::XAppend;
+    @see com::sun::star::sdbcx::XAppend
  */
 service Descriptor
 {
@@ -100,6 +100,9 @@ service Descriptor
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:07:16  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.2.2  2002/02/18 12:57:56  oj
     #97563# parameter,return value and exception description
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Package.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:27:07 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ module com {  module sun {  module star {  module packages {
     Each instance is created with an argument which specifies the URL of
     the Package file to which the user requires access. If the instance is
     created without arguments, it must be initialised with the
-    <type>XInitialization</type> service methods before it is a valid
-    instance of the service.
+    <type scope="com::sun::star::lang">XInitialization</type> service methods
+    before it is a valid instance of the service.
 */
 service Package
 {

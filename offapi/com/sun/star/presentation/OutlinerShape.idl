@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlinerShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 17:38:07 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
     <p>Presentation shapes can be used in a presentation
     page layouts and theire position and size is by default set
-    by the presentation shapes on the <type>MasterPage</type>.
+    by the presentation shapes on the <type scope="com::sun::star::drawing">MasterPage</type>.
  */
 service OutlinerShape
 {

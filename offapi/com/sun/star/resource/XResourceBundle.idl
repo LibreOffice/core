@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResourceBundle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:26 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ module com { module sun { module star { module resource {
 
     <p>The get methods all require the key as an argument and return
     the object if found. If the object is not found, the get methods
-    throw a <type scope="com:sun:star:container">NoSuchElementException</type>.
+    throw a <type scope="com::sun::star::container">NoSuchElementException</type>.
 
     <P> <STRONG>NOTE:</STRONG> You should always supply a base service
     with no suffixes. This will be the class of "last resort" if a
@@ -240,8 +240,8 @@ interface XResourceBundle: com::sun::star::container::XNameAccess
     /** contains the parent bundle of this bundle.
 
         <p>The parent bundle is searched by the method
-        <member>XNameAccess::getByName</member> when this bundle does not
-        contain a particular resource.
+        <method scope="com::sun::star::container">XNameAccess::getByName</method>
+        when this bundle does not contain a particular resource.
      */
     [attribute] XResourceBundle Parent;
 

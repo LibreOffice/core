@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-06 10:23:57 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ service DrawingDocument
     service com::sun::star::document::OfficeDocument;
 
     /** This service describes the available services that can be
-        created with the <type scope="com:sun:star:lang">XMultiServiceFactory</type>
+        created with the <type scope="com::sun::star::lang">XMultiServiceFactory</type>
         of a document that supports drawing objects.
 
         The following services are only for documents in a drawing application.
@@ -136,11 +136,11 @@ service DrawingDocument
             <li><type scope="com::sun::star::style">Style</type></li>
         </ul>
 
-        <p>The following service gives access to the xml namespaces used
+        <p>The following service gives access to the XML namespaces used
         inside the document.
 
         <ul>
-            <li><type>com.sun.star.xml.NamespaceMap</type></li>
+            <li><type scope="com::sun::star::xml">NamespaceContainer</type></li>
         </ul>
 
         <p>The following service can be used to add a background to a

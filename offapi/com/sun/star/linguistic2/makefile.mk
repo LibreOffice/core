@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tl $ $Date: 2001-05-08 08:31:30 $
+#   last change: $Author: mi $ $Date: 2002-12-10 16:13:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ IDLFILES=\
     LinguServiceEvent.idl\
     LinguServiceEventFlags.idl\
     LinguServiceManager.idl\
-    OtherLingu.idl\
     SpellChecker.idl\
     SpellFailure.idl\
     Thesaurus.idl\

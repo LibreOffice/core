@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyleLoader.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-    a sequence of the supported properties as declared in <type>loadStylesFromURL</type>
+    a sequence of the supported properties as declared in <member>XStyleLoader::loadStylesFromURL</member>
     with their current values.
     */
     sequence<com::sun::star::beans::PropertyValue> getStyleLoaderOptions();
@@ -128,6 +128,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/10/25 15:50:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.6  2001/03/16 16:41:43  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

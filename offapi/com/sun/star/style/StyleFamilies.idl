@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleFamilies.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,7 @@ service StyleFamilies
     /** This mandatory interface makes it possible to get access to the
                 style families by their names.
 
-                <p>The elements within this collection are <type>StyleFamily</type>
-                instances accessed by <type>XStyleFamily</type>.
+                <p>The elements within this collection are <type>StyleFamily</type> instances.
      */
     interface com::sun::star::container::XNameAccess;
 
@@ -138,8 +137,7 @@ service StyleFamilies
     /** This optional interface makes it possible to get access to the
                 style families by index.
 
-                <p>The elements within this collection are <type>StyleFamily</type>
-                instances accessed by <type>XStyleFamily</type>.
+                <p>The elements within this collection are <type>StyleFamily</type> instances.
      */
     [optional] interface com::sun::star::container::XIndexAccess;
 
@@ -152,6 +150,9 @@ service StyleFamilies
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/10/25 15:50:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:40  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSourceBrowser.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:29 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,8 @@ module com {  module sun {  module star {  module sdb {
     @see com::sun::star::sdb::DatabaseContext
     @see com::sun::star::sdb::DataSource
     @see com::sun::star::frame::XDispatch
-    @see com::sun::star::frame::XDispatchInterceptor
+    @see com::sun::star::frame::XDispatchProvider
+    @see com::sun::star::frame::XDispatchProviderInterceptor
 */
 service DataSourceBrowser
 {

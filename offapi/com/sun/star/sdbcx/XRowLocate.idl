@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowLocate.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:23 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ interface XRowLocate: com::sun::star::uno::XInterface
         @param second
             the second bookmark
         @returns
-            a value of <type scope="com::sun::star::sdbcx">CompareBookmark</Type>
+            a value of <type scope="com::sun::star::sdbcx">CompareBookmark</type>
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
 
@@ -173,7 +173,7 @@ interface XRowLocate: com::sun::star::uno::XInterface
             <TRUE/> if so
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
-        @see com::sun::star::sdbc::CompareBookmark
+        @see com::sun::star::sdbcx::CompareBookmark
      */
     boolean hasOrderedBookmarks() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
@@ -196,6 +196,9 @@ interface XRowLocate: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:07:23  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.1  2002/02/18 10:00:22  oj
     #97563# parameter,return value and exception description
 

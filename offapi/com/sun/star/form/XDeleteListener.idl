@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ interface XDeleteListener: com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
 
     /** is invoked when the current record of the database form will be deleted.
-        @see XDatabaseForm
      */
     boolean approveDelete( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -100,7 +99,6 @@ interface XDeleteListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a database form has finished the delete processing and
         the data has been successfully deleted from the datasource.
-        @see XDatabaseForm
      */
     void deleted( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -113,6 +111,9 @@ interface XDeleteListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:30  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.2  2002/07/26 10:00:06  fs
     IDL review form layer
 

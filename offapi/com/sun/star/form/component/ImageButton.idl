@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:40:31 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ service ImageButton
         <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
         property is changed, the model loads the specified image, and sets it as image source
         at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
-        <type scope="com::sun::star::awt">XImageConsumers</type> are notified and supplied with
+        <type scope="com::sun::star::awt">XImageConsumer</type>s are notified and supplied with
         the binary data of the image.<br/>
         Usually, controls acting for an <type>ImageButton</type> model are consumers, and use the
         data stream to display the image</p>

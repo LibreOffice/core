@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineNumberingSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-09 10:57:22 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,6 @@
 // DocMerge from xml: interface com::sun::star::text::XLineNumberingSupplier
 /** contains the settings of the line numbering in a text document.
 
-
-
-
-
-
-
-
-
-
-
-
-
     @deprecated
  */
 interface XLineNumberingSupplier: com::sun::star::uno::XInterface
@@ -97,7 +85,7 @@ interface XLineNumberingSupplier: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XLineNumberingSupplier::getLineNumberingRules
-    /** @return the <type>LineNumberingsSettings</type> of the object.
+    /** @return the <type>LineNumberingSettings</type> of the object.
      */
     sequence< sequence<com::sun::star::beans::PropertyValue> > getLineNumberingRules();
 

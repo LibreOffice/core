@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloseListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-04-05 06:54:27 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
     </p>
 
     <p>
-    If an event <member scope="com::sun::star::lang">XEventListener::disposing()</member>
-    occured, nobody called <member>XClosable::close()</member> on listened object before.
+    If an event <method scope="com::sun::star::lang">XEventListener::disposing</method>
+    occured, nobody called <method>XCloseable::close</method> on listened object before.
     Then it's not allowed to break this request - it must be accepted!
     </p>
 
@@ -108,14 +108,14 @@ interface XCloseListener: com::sun::star::lang::XEventListener
         <p>
         Is called before <member>XCloseListener::notifyClosing()</member>.
         Listener has the chance to break that by throwing a <type>CloseVetoException</type>.
-        This exception must be passed to the original caller of <member>XClosable::close()</member>
+        This exception must be passed to the original caller of <member>XCloseable::close()</member>
         without any interaction.
         </p>
 
         <p>
         The parameter <var>GetsOwnership</var> regulate who has to try to close the listened object
         again, if this listener disagree with the request by throwing the exception.
-        If it's set to <FALSE/> the original caller of <member>XClosable::close()</member>
+        If it's set to <FALSE/> the original caller of <member>XCloseable::close()</member>
         will be the owner in every case. It's not allowed to call close() from this listener then.
         If it's set to <TRUE/> this listener will be the new owner if he throw the exception,
         otherwise not! If his still running processes will be finished he must call close() on
@@ -156,7 +156,7 @@ interface XCloseListener: com::sun::star::lang::XEventListener
         </p>
 
         <p>
-        If the event <member>XEventListener::disposing()</member> occured before
+        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occured before
         it must be accepted too. There exist no chance for a disagreement any more.
         </p>
 

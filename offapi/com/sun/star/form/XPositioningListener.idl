@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPositioningListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:34 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ interface XPositioningListener: com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
 
     /** is invoked when the database form has been positioned on a data record.
-        @see XDatabaseForm
      */
     [oneway] void positioned( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -102,6 +101,9 @@ interface XPositioningListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:34  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.1  2002/07/26 10:00:12  fs
     IDL review form layer
 

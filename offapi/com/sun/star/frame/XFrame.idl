@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:06:58 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         According to a call to this interface, the frame calls
-        <member>XFrameEventListener::frameAction()</member> with
+        <method>XFrameEventListener::frameAction</method> with
         <const>FrameAction::CONTEXT_CHANGED</const> to all listeners which
         are registered using <member>XFrame::addFrameActionListener</member>.
         For external controllers this event can be used to requery dispatches.

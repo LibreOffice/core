@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:57 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,13 +250,17 @@ service ResultSet
 
 
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::ResultSetConcurrency
-    /** retrieves the result set concurrency.@see com::sun::star::sdbc::ResultSetConcurrency;
+    /** retrieves the result set concurrency.
+
+        @see com::sun::star::sdbc::ResultSetConcurrency
      */
     [readonly, property] long ResultSetConcurrency;
 
 
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::ResultSetType
-    /** determines the result set type.@see com::sun::star::sdbc::ResultSetType;
+    /** determines the result set type.
+
+        @see com::sun::star::sdbc::ResultSetType
      */
     [readonly, property] long ResultSetType;
 
@@ -264,7 +268,7 @@ service ResultSet
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::FetchDirection
     /** retrieves the direction for fetching rows from database tables
         that is the default for result sets generated from this
-        <type scope="sun::com::star::sdbc">Statement</type>
+        <type scope="com::sun::star::sdbcx">Statement</type>
         object.
         <br/>
         If this <code>Statement</code> object has not set a fetch direction,
@@ -276,11 +280,11 @@ service ResultSet
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::FetchSize
     /** retrieves the number of result set rows that is the default fetch size
         for result sets generated from this
-        <type scope="sun::com::star::sdbc">Statement</type>
+        <type scope="com::sun::star::sdbcx">Statement</type>
         object.
         <br/>
         If this
-        <type scope="sun::com::star::sdbc">Statement</type>
+        <type scope="com::sun::star::sdbcx">Statement</type>
         object has not set a fetch size,
         the return value is implementation-specific.
      */
@@ -293,6 +297,9 @@ service ResultSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:06:57  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.2  2002/02/18 12:55:23  oj
     #97563# parameter,return value and exception description
 

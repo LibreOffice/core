@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandButton.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:13:50 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ service CommandButton
 
     /** supplies the image producer when the button is to display an image.
 
-        <p>If the <member scope="com::sun::star::awt">UnoButtonControlModel::ImageURL</member> points to the location of an
+        <p>If the <member scope="com::sun::star::awt">UnoControlButtonModel::ImageURL</member> points to the location of an
         image to be displayed on the button, this interface can be used to retrieve an image
         producer, which itself will supply the image.</p>
 

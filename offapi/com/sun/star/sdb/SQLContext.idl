@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLContext.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:36 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@
     for SQLExceptions, several SQLContext-objects may be chained, then the
     most recent context is appended to the list's tail.
 
-    @see XConnection::getWarnings
-    @see XResultSet::getWarnings
-    @see XStatement::getWarnings
+    @see com::sun::star::sdbc::XConnection::getWarnings
+    @see com::sun::star::sdbc::XResultSet::getWarnings
+    @see com::sun::star::sdbc::XStatement::getWarnings
  */
 exception SQLContext: com::sun::star::sdbc::SQLWarning
 {
@@ -99,6 +99,9 @@ exception SQLContext: com::sun::star::sdbc::SQLWarning
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:06:36  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.1  2002/02/18 10:24:07  oj
     #97563# parameter,return value and exception description
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:50 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ service DataForm
         fill them by their own choice.</p>
 
         <p>This is sligtly changed if the form is loaded using the
-        <member>XCompletedExecution::connectWithCompletion</member> method. In this case, the parameters
+        <member scope="com::sun::star::sdb">XCompletedExecution::connectWithCompletion</member> method. In this case, the parameters
         are obtained from the interaction handler, not from the listeners</p>
 
         @see XCompletedExecution

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:01 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,7 +1269,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTransactions
     /** support the Database transactions?
         If not, invoking the method
-        <member scope="com::Sun::star::sdbc">XConnection::commit()</member>
+        <member scope="com::sun::star::sdbc">XConnection::commit()</member>
         is a noop and the
         isolation level is TransactionIsolation_NONE.
         @returns
@@ -2788,6 +2788,9 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/10/03 13:07:01  mi
+    #94968# IDL reviews merged
+
     Revision 1.9.2.1  2002/02/18 08:58:22  oj
     #97563# parameter,return value and exception description
 

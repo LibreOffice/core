@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInsertListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:33 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,12 @@ interface XInsertListener: com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
 
     /** is invoked when a database form starts inserting a record.
-
-        @see XDatabaseForm
      */
     void inserting( [in] com::sun::star::lang::EventObject aEvent );
 
     //-------------------------------------------------------------------------
 
     /** is invoked after a database form has inserted a record to a data source.
-
-        @see XDatabaseForm
      */
     void inserted( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -112,6 +108,9 @@ interface XInsertListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:33  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.1  2002/07/26 10:00:11  fs
     IDL review form layer
 

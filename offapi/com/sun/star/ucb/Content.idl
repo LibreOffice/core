@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:20 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ service Content
         -----------------------------------------------------------------------
 
         // For folder objects, this command will return an implementation
-        // of service <type>DynamicContentResultSet</type>.
+        // of service <type>DynamicResultSet</type>.
         //
         // The <type>OpenCommandArgument2</type> members must be filled as follows:
         //
@@ -350,7 +350,7 @@ service Content
 
         // This command searches for subcontents of a content matching the
         // given search criteria. The command will return an implemenation
-        // of service <type>DynamicContentResultSet</type>.
+        // of service <type>DynamicResultSet</type>.
         <type>XDynamicResultSet</type>
             <B>search</B>
                 <type>SearchCommandArgument</type> aSearchCommandArg

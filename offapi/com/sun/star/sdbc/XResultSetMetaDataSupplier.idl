@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSetMetaDataSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:03 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ interface XResultSetMetaData;
     <p>
     The number, types, and properties of a ResultSet's columns are
     provided by the
-    <type scope="com::sun::star::sdbc">ResultSetMetaData</type>
-    object returned by the
+    <type scope="com::sun::star::sdbc">XResultSetMetaData</type>
+    interface returned by the
     <member scope="com::sun::star::sdbc">XResultSetMetaDataSupplier::getMetaData()</member>
     method.
     </p>
@@ -106,6 +106,9 @@ interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 13:07:03  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.2.1  2002/02/18 08:58:22  oj
     #97563# parameter,return value and exception description
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRestoreListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:35 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** receives notifications about data beeing restored.
 
     <p>Such a notification is typically sent when the user cancels updating the
-    current record of a <type scope="com:.sun::star::form::component">DatabaseForm</type>
+    current record of a database form
     without saving the data. After restoring, the user operates on the original data.</p>
 
     <p>Please do <em><b>not</b></em> use anymore, this interface is deprecated, and
@@ -105,6 +105,9 @@ interface XRestoreListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:04:35  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.16.1  2002/07/26 10:00:14  fs
     IDL review form layer
 

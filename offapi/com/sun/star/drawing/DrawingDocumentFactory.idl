@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:06 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,15 @@ service DrawingDocumentFactory
         and can be inserted into text as <type scope="com::sun::star::text">TextContent</type>.
 
         <ul>
-            <li><type scope="com::sun::star::text">TextField::DateTime</type></li>
-            <li><type scope="com::sun::star::text">TextField::URL</type></li>
-            <li><type scope="com::sun::star::text">TextField::PageNumber</type></li>
-            <li><type scope="com::sun::star::text">TextField::PageCount</type></li>
-            <li><type scope="com::sun::star::text">TextField::SheetName</type></li>
-            <li><type scope="com::sun::star::text">TextField::FileName</type></li>
-            <li><type scope="com::sun::star::text">TextField::DocInfo.Title</type></li>
-            <li><type scope="com::sun::star::text">TextField::Author</type></li>
-            <li><type scope="com::sun::star::text">TextField::Measure</type></li>
+            <li><member scope="com::sun::star::text">TextField::DateTime</member></li>
+            <li><member scope="com::sun::star::text">TextField::URL</member></li>
+            <li><member scope="com::sun::star::text">TextField::PageNumber</member></li>
+            <li><member scope="com::sun::star::text">TextField::PageCount</member></li>
+            <li><member scope="com::sun::star::text">TextField::SheetName</member></li>
+            <li><member scope="com::sun::star::text">TextField::FileName</member></li>
+            <li><member scope="com::sun::star::text">TextField::DocInfo.Title</member></li>
+            <li><member scope="com::sun::star::text">TextField::Author</member></li>
+            <li><member scope="com::sun::star::text">TextField::Measure</member></li>
         </ul>
 
         <p>The following services gives access to resources used inside the document
@@ -136,7 +136,7 @@ service DrawingDocumentFactory
         </ul>
 
         <p>The following service can be set at the <code>Numbering</code> property
-        inside a <type scope="com:sun:star:style">ParagraphProperties</type>
+        inside a <type scope="com::sun::star::style">ParagraphProperties</type>
 
         <ul>
             <li><type scope="com::sun::star::text">NumberingRules</type></li>
@@ -145,7 +145,7 @@ service DrawingDocumentFactory
         <p>The following services can be used for a <type scope="com::sun::star::image">ImageMap</type>
         inside the document.
 
-        <br>A <type>com.sun.star.image.ImageMap</type> can be obtained from a
+        <br>A <type scope="com::sun::star::image">ImageMap</type> can be obtained from a
         <type>GraphicObjectShape</type>
 
         <ul>
@@ -158,7 +158,7 @@ service DrawingDocumentFactory
         of a document.
 
         <ul>
-            <li><type scope="com::sun::star::document">Defaults</type></li>
+            <li><type scope="com::sun::star::drawing">Defaults</type></li>
         </ul>
     */
     interface com::sun::star::lang::XMultiServiceFactory;

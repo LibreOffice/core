@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlActions.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:40 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 16:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     @see com::sun::star::ui::dialogs::XFilePickerControlAccess
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
-    @see com::sun::star::ui::dialogs::ExetendedFilePickerElementIds
+    @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
  */
 
 constants ControlActions
