@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-11 12:29:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,41 +874,38 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName.EqualsAscii(pFilterLotus))
         {
-//          SvStream* pStream = rMedium.GetInStream();
-//          if (pStream)
+            String sItStr;
+            SfxItemSet*  pSet = rMedium.GetItemSet();
+            const SfxPoolItem* pItem;
+            if ( pSet && SFX_ITEM_SET ==
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
             {
-                String sItStr;
-                SfxItemSet*  pSet = rMedium.GetItemSet();
-                const SfxPoolItem* pItem;
-                if ( pSet && SFX_ITEM_SET ==
-                     pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
-                {
-                    sItStr = ((const SfxStringItem*)pItem)->GetValue();
-                }
+                sItStr = ((const SfxStringItem*)pItem)->GetValue();
+            }
 
-                if (sItStr.Len() == 0)
-                {
-                    //  default for lotus import (from API without options):
-                    //  IBM_437 encoding
+            if (sItStr.Len() == 0)
+            {
+                //  default for lotus import (from API without options):
+                //  IBM_437 encoding
+                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
+            }
 
-                    sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
-                }
+            ScColumn::bDoubleAlloc = TRUE;
+            FltError eError = ScImportLotus123( rMedium, &aDocument,
+                                                ScGlobal::GetCharsetValue(sItStr));
+            ScColumn::bDoubleAlloc = FALSE;
+            if (eError != eERR_OK)
+            {
+                if (!GetError())
+                    SetError(eError);
 
-                ScColumn::bDoubleAlloc = TRUE;
-                FltError eError = ScImportLotus123( rMedium, &aDocument,
-                                    ScGlobal::GetCharsetValue(sItStr));
-                ScColumn::bDoubleAlloc = FALSE;
-                if (eError != eERR_OK)
-                {
-                    if (!GetError())
-                        SetError(eError);
-
-                    if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-                        bRet = TRUE;
-                }
-                else
+                if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                     bRet = TRUE;
             }
+            else
+                bRet = TRUE;
+            bSetColWidths = TRUE;
+            bSetRowHeights = TRUE;
         }
         else if ( aFltName.EqualsAscii(pFilterExcel4) || aFltName.EqualsAscii(pFilterExcel5) ||
                    aFltName.EqualsAscii(pFilterExcel95) || aFltName.EqualsAscii(pFilterExcel97) ||
