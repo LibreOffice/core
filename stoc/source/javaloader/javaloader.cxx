@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-17 13:43:40 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 09:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ namespace stoc_javaloader {
 
             _javaLoader = Reference<XImplementationLoader>(reinterpret_cast<XImplementationLoader *>(
                               java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
+            pJNIEnv->DeleteLocalRef( joJavaLoader );
             if(!_javaLoader.is())
                 throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "javaloader error - mapping of java XImplementationLoader to c++ failed")), Reference<XInterface>());
