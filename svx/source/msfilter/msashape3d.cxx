@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:37:20 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
-double SvxMSDffAutoShape3D::Fix16ToAngle( sal_Int32 nFixAngle )
+double SvxMSDffCustomShape3D::Fix16ToAngle( sal_Int32 nFixAngle )
 {
     double fAngle = 0.0;
     if ( nFixAngle )
@@ -134,7 +134,7 @@ double SvxMSDffAutoShape3D::Fix16ToAngle( sal_Int32 nFixAngle )
     return fAngle;
 }
 
-SvxMSDffAutoShape3D::Transformation2D::Transformation2D( const DffPropSet& rPropSet, const Rectangle& rSnapRect ) :
+SvxMSDffCustomShape3D::Transformation2D::Transformation2D( const DffPropSet& rPropSet, const Rectangle& rSnapRect ) :
     aCenter( rSnapRect.Center() )
 {
     bParallel = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ) != 0;
@@ -154,7 +154,7 @@ SvxMSDffAutoShape3D::Transformation2D::Transformation2D( const DffPropSet& rProp
     }
 }
 
-void SvxMSDffAutoShape3D::Transformation2D::ApplySkewSettings( Polygon3D& rPoly3D )
+void SvxMSDffCustomShape3D::Transformation2D::ApplySkewSettings( Polygon3D& rPoly3D )
 {
     sal_uInt16 j;
     for ( j = 0; j < rPoly3D.GetPointCount(); j++ )
@@ -166,7 +166,7 @@ void SvxMSDffAutoShape3D::Transformation2D::ApplySkewSettings( Polygon3D& rPoly3
     }
 }
 
-Point SvxMSDffAutoShape3D::Transformation2D::Transform2D( const Vector3D& rPoint3D )
+Point SvxMSDffCustomShape3D::Transformation2D::Transform2D( const Vector3D& rPoint3D )
 {
     Point aPoint2D;
     if ( bParallel )
@@ -186,7 +186,7 @@ Point SvxMSDffAutoShape3D::Transformation2D::Transform2D( const Vector3D& rPoint
     return aPoint2D;
 }
 
-void SvxMSDffAutoShape3D::Rotate( Vector3D& rPoint, const double x, const double y, const double z )
+void SvxMSDffCustomShape3D::Rotate( Vector3D& rPoint, const double x, const double y, const double z )
 {
     // rotation z axis
      Vector3D aPoint( rPoint );
@@ -204,7 +204,7 @@ void SvxMSDffAutoShape3D::Rotate( Vector3D& rPoint, const double x, const double
     rPoint.Z() = -( aPoint.Y() * sin( x ) ) + aPoint.Z() * cos( x );
 }
 
-void SvxMSDffAutoShape3D::Rotate( PolyPolygon3D& rPolyPoly3D, const Point3D& rOrigin, const double x, const double y, const double z )
+void SvxMSDffCustomShape3D::Rotate( PolyPolygon3D& rPolyPoly3D, const Point3D& rOrigin, const double x, const double y, const double z )
 {
     sal_uInt16 i, j;
     for( i = 0; i < rPolyPoly3D.Count(); i++ )
@@ -224,7 +224,7 @@ void SvxMSDffAutoShape3D::Rotate( PolyPolygon3D& rPolyPoly3D, const Point3D& rOr
     }
 }
 
-SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const DffPropSet& rPropSet,
+SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const DffPropSet& rPropSet,
                 SfxItemSet& aSet, Rectangle& rSnapRect, sal_uInt32 nSpFlags )
 {
     SdrObject* pRet = NULL;
@@ -540,7 +540,7 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
     return pRet;
 }
 
-Rectangle SvxMSDffAutoShape3D::CalculateNewSnapRect( const Rectangle& rOriginalSnapRect, const DffPropSet& rPropSet )
+Rectangle SvxMSDffCustomShape3D::CalculateNewSnapRect( const Rectangle& rOriginalSnapRect, const DffPropSet& rPropSet )
 {
     const Point aCenter( rOriginalSnapRect.Center() );
 
