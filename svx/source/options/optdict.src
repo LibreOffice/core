@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 12:20:43 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ dutch ] = "~Uitzondering (-)" ;
         Text [ spanish ] = "~Excepción (-)" ;
         Text [ english_us ] = "~Exception (-)" ;
-        Text[ chinese_simplified ] = "ÀıÍâ(-)";
+        Text[ chinese_simplified ] = "ÀıÍâ(-)(~E)";
         Text[ russian ] = "Èñêëş÷åíèå (-)";
         Text[ polish ] = "Wyj¹tek (-)";
         Text[ japanese ] = "—áŠO(-) (~E)";
@@ -217,7 +217,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ dutch ] = "Woordenboek" ;
         Text [ spanish ] = "Diccionario" ;
         Text [ english_us ] = "Dictionary" ;
-        Text[ chinese_simplified ] = "´Êµä";
+        Text[ chinese_simplified ] = "×Öµä";
         Text[ russian ] = "Ñëîâàğü";
         Text[ polish ] = "S³ownik";
         Text[ japanese ] = "«‘";
@@ -403,7 +403,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ arabic ] = "ÇáÇŞÊÑÇÍ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ğñïôåéíüìåíá:";
-        Text[ korean ] = "Á¦¾È:";
+        Text[ korean ] = "Á¦¾È(~B):";
         Text[ turkish ] = "Öneri";
     };
 
@@ -438,7 +438,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "·s¦rµü(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î";
+        Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
     };
@@ -465,7 +465,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
     };
@@ -499,7 +499,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "´À¥N(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "´ëÃ¼";
+        Text[ korean ] = "´ëÃ¼(~R)";
         Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
     };
