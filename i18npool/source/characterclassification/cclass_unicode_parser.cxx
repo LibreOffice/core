@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <cclass_unicode.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 
 #ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
@@ -84,14 +84,13 @@
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
-#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 #include <string.h>     // memcpy()
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
-using namespace ::drafts::com::sun::star::i18n;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
