@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:58:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,14 +422,12 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
 
 void XclImpFont::ReadFontName2( XclImpStream& rStrm )
 {
-    maData.maName.Erase();
-    rStrm.AppendByteString( maData.maName, false );
+    maData.maName = rStrm.ReadByteString( false );
 }
 
 void XclImpFont::ReadFontName8( XclImpStream& rStrm )
 {
-    maData.maName.Erase();
-    rStrm.AppendUniString( maData.maName, rStrm.ReaduInt8() );
+    maData.maName = rStrm.ReadUniString( rStrm.ReaduInt8() );
 }
 
 void XclImpFont::GuessScriptType()
@@ -528,23 +526,23 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
     {
         case xlBiff2:
         case xlBiff3:
-            rStrm.AppendByteString( aFormat, false );
+            aFormat = rStrm.ReadByteString( false );
         break;
 
         case xlBiff4:
             rStrm.Ignore( 2 );  // in BIFF4 the index field exists, but is undefined
-            rStrm.AppendByteString( aFormat, false );
+            aFormat = rStrm.ReadByteString( false );
         break;
 
         case xlBiff5:
         case xlBiff7:
             rStrm >> mnNextXclIdx;
-            rStrm.AppendByteString( aFormat, false );
+            aFormat = rStrm.ReadByteString( false );
         break;
 
         case xlBiff8:
             rStrm >> mnNextXclIdx;
-            rStrm.AppendUniString( aFormat );
+            aFormat = rStrm.ReadUniString();
         break;
 
         default:
@@ -1346,9 +1344,9 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
         {
             String aStyleName;
             if( GetBiff() < xlBiff8 )
-                rStrm.AppendByteString( aStyleName, false );    // 8 bit length
+                aStyleName = rStrm.ReadByteString( false );    // 8 bit length
             else
-                rStrm.AppendUniString( aStyleName );
+                aStyleName = rStrm.ReadUniString();
             if( aStyleName.Len() )  // #i1624# #i1768# ignore unnamed styles
                 pXF->SetStyleName( aStyleName );
         }
