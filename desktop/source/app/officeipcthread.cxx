@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:54:29 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,8 @@ void SAL_CALL OfficeIPCThread::run()
 
             sal_Bool bDocRequestSent = sal_False;
             ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
+            cProcessed.reset();
+            pRequest->pcProcessed = &cProcessed;
 
             // Print requests are not dependent on the -invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
@@ -695,13 +697,13 @@ void SAL_CALL OfficeIPCThread::run()
                 ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aEmpty, aEmpty, "APPEAR", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
-                if (pRequest != NULL) pRequest->cProcessed.set();
+                cProcessed.set();
             }
 
             // we don't need the mutex any longer...
             aGuard.clear();
             // wait for processing to finish
-            if (pRequest != NULL) pRequest->cProcessed.wait();
+            cProcessed.wait();
             // processing finished, inform the requesting end
             nBytes = 0;
             while (
@@ -775,7 +777,7 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
 
         // set processed flag
-        aRequest.cProcessed.set();
+        aRequest.pcProcessed->set();
 
     }
 }
