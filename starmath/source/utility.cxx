@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
+ *  last change: $Author: tl $ $Date: 2001-08-17 14:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ void SmRectCache::Reset()
 ByteString ConvertUnknownCharacter(sal_Unicode ch)
 {
     ByteString aString( RTL_CONSTASCII_STRINGPARAM( PRE_TE TE_UCS2 ) );
+    aString.Append( "(" );
     aString += ByteString::CreateFromInt32(ch);
     aString += POST_TE;
     return aString;
