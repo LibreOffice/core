@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:58:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName == sSalvageURL )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        sal_Bool bOK = (rProp.Value >>= sVal);
                         DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
