@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:15:49 $
+#   last change: $Author: kz $ $Date: 2004-05-19 00:45:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,6 @@ AUTOSEG=true
 
 NO_HID_FILES=app.src
 .EXPORT : NO_HID_FILES
-
-# --- Imagelisten --------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/app.srs
-BMP_IN=$(PRJ)$/res/imagelst
 
 # --- Update-Version -----------------------------------------------
 
