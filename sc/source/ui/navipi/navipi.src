@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ swedish ] = "Dataområde" ;
                 Text [ dutch ] = "Gegevensbereik" ;
                 Text [ spanish ] = "Área de datos" ;
-                Text [ english_us ] = "Data Area" ;
+                Text [ english_us ] = "Data Range" ;
                 Text[ chinese_simplified ] = "Êı¾İÇøÓò";
                 Text[ russian ] = "Îáëàñòü äàííûõ";
                 Text[ polish ] = "Obszar danych";
@@ -354,7 +354,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ chinese_simplified ] = "¿ªÊ¼";
                 Text[ russian ] = "Íà÷àëî";
                 Text[ polish ] = "Pocz¹tek";
-                Text[ japanese ] = "½À°Ä";
+                Text[ japanese ] = "ÃŞ°À“ª";
                 Text[ chinese_traditional ] = "¶}©l";
                 Text[ arabic ] = "ÈÏÇíÉ";
                 Text[ dutch ] = "Begin";
@@ -384,7 +384,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ chinese_simplified ] = "½áÊø";
                 Text[ russian ] = "Êîíåö";
                 Text[ polish ] = "Koniec";
-                Text[ japanese ] = "I—¹";
+                Text[ japanese ] = "ÃŞ°À––";
                 Text[ chinese_traditional ] = "µ²§ô";
                 Text[ arabic ] = "äåÇíÉ";
                 Text[ dutch ] = "Einde";
@@ -501,7 +501,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
                 Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
-                Text[ russian ] = "Ğåæèì ïåğåòÿãèâàíèÿ";
+                Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
                 Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
                 Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
@@ -529,7 +529,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ portuguese ] = "Modo Arrastar" ;
         Text [ portuguese_brazilian ] = "Dragmodus" ;
         Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
-        Text[ russian ] = "Ğåæèì ïåğåòÿãèâàíèÿ";
+        Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
         Text[ polish ] = "Tryb przeci¹gania";
         Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
         Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
@@ -650,7 +650,7 @@ Window RID_SCDLG_NAVIGATOR
         Text = "Aktives Fenster" ;
         Text [ English ] = "Active Window" ;
         Text [ dutch ] = "Actief venster" ;
-        Text [ english_us ] = "Active window" ;
+        Text [ english_us ] = "Active Window" ;
         Text [ italian ] = "Finestra attiva" ;
         Text [ spanish ] = "Ventana activa" ;
         Text [ french ] = "Fenêtre active" ;
@@ -676,7 +676,7 @@ Window RID_SCDLG_NAVIGATOR
     {
         Text = "Name des Szenarios" ;
         Text [ ENGLISH ] = "Szenario Name" ;
-        Text [ ENGLISH_US ] = "Scenario name";
+        Text [ ENGLISH_US ] = "Scenario Name";
         Text[ italian ] = "Nome dello scenario";
         Text[ portuguese_brazilian ] = "Name des Szenarios";
         Text[ portuguese ] = "Nome do cenário";
@@ -796,7 +796,7 @@ String SCSTR_CONTENT_ROOT
     Text [ portuguese ] = "Conteúdos" ;
     Text [ portuguese_brazilian ] = "Inhalte" ;
     Text[ chinese_simplified ] = "ÄÚÈİ";
-    Text[ russian ] = "Ñîäåğæàíèå";
+    Text[ russian ] = "Ñîäåğæèìîå";
     Text[ polish ] = "Zawartoœci";
     Text[ japanese ] = "“à—e";
     Text[ chinese_traditional ] = "¤º®e";
@@ -865,7 +865,7 @@ String SCSTR_CONTENT_DBAREA
     TEXT = "Datenbankbereiche" ;
     TEXT [ English ] = "Database areas" ;
     Text [ dutch ] = "Database-bereiken" ;
-    Text [ english_us ] = "Database ranges" ;
+    Text [ english_us ] = "Database Ranges" ;
     Text [ italian ] = "Aree database" ;
     Text [ spanish ] = "Áreas de base de datos" ;
     Text [ french ] = "Plages de base de données" ;
@@ -895,8 +895,8 @@ String SCSTR_CONTENT_GRAPHIC
     Text [ spanish ] = "Imágenes" ;
     Text [ french ] = "Images" ;
     Text [ dutch ] = "Afbeeldingen" ;
-    Text [ swedish ] = "Grafiker" ;
-    Text [ danish ] = "Billeder" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Grafik" ;
     Text [ portuguese ] = "Imagens" ;
     Text [ portuguese_brazilian ] = "Grafiken" ;
     Text[ chinese_simplified ] = "Í¼ĞÎ";
