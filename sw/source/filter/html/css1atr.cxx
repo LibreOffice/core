@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 12:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1697,7 +1697,7 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
     return bScriptDependent;
 }
 
-static  OutCSS1DropCapRule(
+static void OutCSS1DropCapRule(
                     SwHTMLWriter& rHTMLWrt, const String& rSelector,
                     const SwFmtDrop& rDrop, sal_Bool bHasClass,
                      sal_Bool bHasScriptDependencies  )
@@ -3902,6 +3902,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/10/09 14:57:36  mib
+      #90476#: Support for CJK/CTL font attributes
+
       Revision 1.9  2001/07/30 14:36:19  mib
       #90539#: Don't export table paragarph styles as P
 
