@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextMenuInterceptor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:31:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -62,7 +62,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
     public static void main(String args[])
     {
         try {
-            OfficeConnect aConnect = OfficeConnect.createConnection("localhost", "8100");
+            OfficeConnect aConnect = OfficeConnect.createConnection("localhost", "2083");
 
             com.sun.star.frame.XDesktop xDesktop =
                 (com.sun.star.frame.XDesktop)aConnect.createRemoteInstance(
