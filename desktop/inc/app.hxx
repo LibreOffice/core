@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:50:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,12 +175,13 @@ class Desktop : public Application
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const ::rtl::OUString& aFileURL );
 
-        void                    OpenStartupScreen();
-        Reference<XStatusIndicator> getSplashScreen();
-        void                    CloseStartupScreen();
+        Reference<XStatusIndicator> m_rSplashScreen;
+        void                    OpenSplashScreen();
+        void                    SetSplashScreenProgress(sal_Int32);
+        void                    CloseSplashScreen();
+
         void                    EnableOleAutomation();
         DECL_LINK(          AsyncInitFirstRun, void* );
-
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>
