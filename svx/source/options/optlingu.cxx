@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-04 12:45:12 $
+ *  last change: $Author: rt $ $Date: 2002-01-03 11:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
+#include <unolingu.hxx>
 #endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
