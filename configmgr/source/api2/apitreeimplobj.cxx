@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 17:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,6 @@ void ApiTreeImpl::init(ApiTreeImpl* pParentTree)
     if (m_xProvider.is())
     {
         m_xProvider->addEventListener(this);
-        m_xProvider->acquire();
     }
 
     OSL_ASSERT(m_pParentTree == 0);
@@ -293,15 +292,11 @@ void ApiTreeImpl::init(ApiTreeImpl* pParentTree)
 void ApiTreeImpl::deinit()
 {
     setParentTree(0);
-    OSL_ENSURE(m_xProvider.is(),"WARNING: Provider is no Component - did we still survive ?");
 
     if (m_xProvider.is())
     {
-        if (m_xProvider.is())
-        {
-            m_xProvider->removeEventListener(this);
-            m_xProvider->release();
-        }
+        m_xProvider->removeEventListener(this);
+        m_xProvider.clear();
     }
 }
 //-------------------------------------------------------------------------
