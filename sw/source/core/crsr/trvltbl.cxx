@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: ama $ $Date: 2002-01-31 14:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,6 @@ FASTBOOL SwCrsrShell::SelTblRow()
     SET_CURR_SHELL( this );
 
     // lasse ueber das Layout die Boxen suchen
-    Point aPt( pTblFrm->Frm().Left(), pTblFrm->Frm().Right() );
     SwSelBoxes aBoxes;
 
     SwTblSearchType eType = TBLSEARCH_ROW;
@@ -262,7 +261,6 @@ FASTBOOL SwCrsrShell::SelTblCol()
     SET_CURR_SHELL( this );
 
     // lasse ueber das Layout die Boxen suchen
-    Point aPt( pTblFrm->Frm().Top(), pTblFrm->Frm().Bottom() );
     SwSelBoxes aBoxes;
     SwTblSearchType eType = TBLSEARCH_COL;
     if( !IsReadOnlyAvailable() )
