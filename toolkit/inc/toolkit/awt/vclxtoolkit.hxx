@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:06:23 $
+ *  last change: $Author: obr $ $Date: 2001-03-12 12:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
 #include <com/sun/star/awt/XToolkit.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XDATATRANSFER_HPP_
-#include <com/sun/star/awt/XDataTransfer.hpp>
+#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
+#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -109,7 +109,9 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XDataTransfer >
+                    public cppu::WeakComponentImplHelper2<
+                    ::com::sun::star::awt::XToolkit,
+::com::sun::star::awt::XDataTransferProviderAccess >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;

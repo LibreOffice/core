@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:20:50 $
+ *  last change: $Author: obr $ $Date: 2001-03-12 12:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
-    : cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XDataTransfer >( GetMutex() )
+    : cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit,
+    ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
 {
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
 //  if( nVCLToolkitInstanceCount++ == 0 )
