@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kr $ $Date: 2001-09-11 14:33:34 $
+#   last change: $Author: mh $ $Date: 2001-10-18 12:08:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,13 +69,12 @@ USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST=$(TARGET)
 
+.IF "$(SOLAR_JAVA)" == "TRUE"
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
-
-.IF "$(SOLAR_JAVA)" == "TRUE"
 
 .INCLUDE :  ..$/cppumaker.mk
 
@@ -95,6 +94,9 @@ SHL1DEF= 		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
 
+.ELSE	# SOLAR_JAVA
+all:
+    @echo Nothing to do: SOLAR_JAVA not set
 .ENDIF
 
 # --- Targets ------------------------------------------------------
