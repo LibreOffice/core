@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-15 10:02:14 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,7 @@ public:
 
     void            Sort( USHORT nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     USHORT          Query( USHORT nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
-    BOOL            ValidQuery( USHORT nRow, USHORT nTab, const ScQueryParam& rQueryParam );
+    BOOL            ValidQuery( USHORT nRow, USHORT nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial = NULL );
     BOOL            CreateQueryParam( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                         USHORT nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(USHORT nCol, USHORT nRow, USHORT nTab, String& rStr);

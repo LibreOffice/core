@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:16:16 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,10 +1146,10 @@ USHORT ScDocument::Query(USHORT nTab, const ScQueryParam& rQueryParam, BOOL bKee
 }
 
 
-BOOL ScDocument::ValidQuery( USHORT nRow, USHORT nTab, const ScQueryParam& rQueryParam )
+BOOL ScDocument::ValidQuery( USHORT nRow, USHORT nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial )
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
-        return pTab[nTab]->ValidQuery( nRow, rQueryParam );
+        return pTab[nTab]->ValidQuery( nRow, rQueryParam, pSpecial );
 
     DBG_ERROR("missing tab");
     return FALSE;
