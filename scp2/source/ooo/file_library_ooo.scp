@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.75 $
+*  $Revision: 1.76 $
 *
-*  last change: $Author: vg $ $Date: 2004-12-23 09:49:51 $
+*  last change: $Author: rt $ $Date: 2005-01-07 09:28:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1356,6 +1356,11 @@ STD_LIB_FILE( gid_File_Lib_Vclplug_Gen, vclplug_gen )
 #ifdef ENABLE_GTK
 #ifndef MACOSX
 STD_LIB_FILE( gid_File_Lib_Vclplug_Gtk, vclplug_gtk )
+#endif
+#endif
+#ifdef ENABLE_KDE
+#ifndef MACOSX
+STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vclplug_Kde, vclplug_kde )
 #endif
 #endif
 #endif
