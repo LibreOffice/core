@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:11:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@ public:
     /** Reads a HLINK record and inserts it into the document.
         @descr  Import stream must be located at start of a HLINK record. */
     static void         ReadHlink( XclImpStream& rStrm );
+
+    /** Inserts the URL into a range of cells. Does not modify value or formula cells. */
+    static void         InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl );
 };
 
 // Label ranges ===============================================================
