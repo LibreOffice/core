@@ -34,6 +34,7 @@ foreach $i (@files)
     open ( FILEIN, $i->{filename} ) || die "could not open $i->{filename} for reading";
 
     $relPath = ".";
+    $relToSource = ".";
     if( $i->{directory} =~ /.*$pattern((\/|\\)(.*))/ )
     {
         $relPath = $3;
@@ -42,11 +43,25 @@ foreach $i (@files)
         {
             $relPath = "\.\.\/$relPath";
         }
+        if($pattern eq "www")
+        {
+            $relToSource = "\.\.\/$relPath";
+        } else
+        {
+            $relToSource = $relPath;
+        }
     } else
     {
         if($pattern eq "examples")
         {
             $relPath = "\.\.";
+        }
+        if($pattern eq "www")
+        {
+            $relToSource = "\.\.";
+        } else
+        {
+            $relToSource = $relPath;
         }
     }
 
@@ -64,6 +79,8 @@ foreach $i (@files)
         }
 
         s#((http:\/\/api\.openoffice\.org\/)(common\/ref[^\"]+))#$relPath\/$3#go;
+        s#((http:\/\/api\.openoffice\.org\/unbranded-source\/)(.*)(examples\/examples.html))#$relToSource\/$4#go;
+
         if($pattern eq "examples")
         {
             # change the links for the C++/Java examples in the ODK
