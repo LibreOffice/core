@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef PCH
-#include "segmentc.hxx"
-#endif
 
 #include "pagedata.hxx"
 
