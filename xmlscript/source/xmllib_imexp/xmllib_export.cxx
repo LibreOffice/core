@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:42:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ static OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM("false") );
 
 //==================================================================================================
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportLibraryContainer(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptorArray* pLibArray )
@@ -147,7 +147,7 @@ SAL_CALL exportLibraryContainer(
 
 //==================================================================================================
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptor& rLib )
