@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:11:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,11 +396,11 @@ ModalDialog DLG_FILTERCRIT
         Text [ english_us ] = "Operator" ;
         Text[ chinese_simplified ] = "Á´½Ó";
         Text[ russian ] = "Îïåğàòîğ";
-        Text[ polish ] = "Operator";
+        Text[ polish ] = "£¹cze";
         Text[ japanese ] = "‰‰Zq";
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ÇÑÊÈÇØ";
-        Text[ greek ] = "ÔåëåóôŞò";
+        Text[ greek ] = "Óıíäåóç";
         Text[ korean ] = "¿¬»êÀÚ";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
@@ -483,7 +483,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ english_us ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ portuguese ] = "=;<>;<;<=;>;>=;equivalente;não equivalente;zero;não zero";
         Text[ russian ] = "=;<>;<;<=;>;>=;ğàâíî;íå ğàâíî;íóëü;íå íóëü";
-        Text[ dutch ] = "=;<>;<;<=;>;>=;gelijk;niet gelijk;leeg;niet leeg";
+        Text[ dutch ] = "=;<>;<;<=;>;>=;gelijk;niet gelijk aan;leeg;niet leeg";
         Text[ french ] = "=;<>;<;<=;>;>=;comme;différent de;vide;non vide";
         Text[ spanish ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ italian ] = "=;<>;<;<=;>;>=;simile;non simile;nullo;non nullo";
@@ -493,7 +493,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ portuguese_brazilian ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ japanese ] = "=;<>;<;<=;>;>=;“¯‚¶;“¯‚¶‚Å‚È‚¢;‹ó;‹ó‚Å‚È‚¢";
         Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;µÈÓÚ;²»µÈÓÚ;Áã;²»µÈÓÚÁã";
-        Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;µ¥©ó;¤£µ¥©ó;¹s;¤£µ¥©ó¹s";
+        Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;µ¥©ó;¤£µ¥©ó;ªÅ¯Ê;¤£ªÅ¯Ê";
         Text[ arabic ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ greek ] = "=;<>;<;<=;>;>=;üğùò;ü÷é üğùò;êåíü;ü÷é êåíü";
         Text[ korean ] = "=;<>;<;<=;>;>=;°°À½;°°Áö ¾ÊÀ½;³Î;³ÎÀÌ ¾Æ´Ô";
@@ -514,7 +514,7 @@ ModalDialog DLG_FILTERCRIT
     Text[ japanese ] = "Ì¨ÙÀ";
     Text[ korean ] = "Filter";
     Text[ chinese_simplified ] = "¹ıÂËÆ÷";
-    Text[ chinese_traditional ] = "¹LÂo¾¹";
+    Text[ chinese_traditional ] = "¿z¿ï";
     Text[ turkish ] = "Filtre";
     Text[ arabic ] = "İáÊÑ";
 };
