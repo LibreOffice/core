@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-18 16:10:16 $
+ *  last change: $Author: cl $ $Date: 2000-10-24 13:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,20 +1351,22 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
             if(pRange)
             {
                 ESelection aRange = pRange->GetSelection();
-                ESelection aOldSelection = aRange;
+//              ESelection aOldSelection = aRange;
 
-                aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara ) + 1;
+                aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara );
 
                 aRange.nEndPara = aRange.nStartPara;
                 aRange.nEndPos  = aRange.nStartPos;
 
                 pRange->SetSelection( aRange );
-                if (!bAbsorb)                   // nicht ersetzen -> hinten anhaengen
-                    pRange->CollapseToEnd();
-
                 pRange->setString( aText );
 
-                pRange->SetSelection( aOldSelection );
+                aRange.nStartPos = 0;
+                aRange.nStartPara += 1;
+                aRange.nEndPos = 0;
+                aRange.nEndPara += 1;
+
+                pRange->SetSelection( aRange );
 
                 return;
             }
