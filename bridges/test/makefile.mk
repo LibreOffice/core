@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 19:07:09 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:49:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,7 +126,7 @@ UNOTYPES = \
 #		com.sun.star.corba.CorbaString8 
 #com.sun.star.corba.giop.RequestHeader_1_1
 
-JARFILES = jurt.jar sandbox.jar unoil.jar
+JARFILES = jurt.jar unoil.jar
 
 
 
