@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 13:06:53 $
+ *  last change: $Author: th $ $Date: 2001-03-20 17:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ DBG_NAMEEX( Window );
 #define TB_LINESPACING          3
 #define TB_SPIN_SIZE            14
 #define TB_SPIN_OFFSET          2
+#define TB_NEXT_SIZE            22
+#define TB_NEXT_OFFSET          2
 #define TB_BORDER_OFFSET1       4
 #define TB_BORDER_OFFSET2       2
 #define TB_CUSTOMIZE_OFFSET     2
@@ -581,7 +583,7 @@ static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
                 pThis->mpFloatSizeAry[i].mnHeight );
     rLines = pThis->mpFloatSizeAry[i].mnLines;
     if ( pThis->maNextToolBoxStr.Len() && pThis->mbScroll )
-        aSize.Width() += TB_SPIN_SIZE-TB_SPIN_OFFSET;
+        aSize.Width() += TB_NEXT_SIZE-TB_NEXT_OFFSET;
     return aSize;
 }
 
@@ -2064,18 +2066,18 @@ void ToolBox::ImplFormat( BOOL bResize )
 
         if ( maNextToolBoxStr.Len() && mbScroll )
         {
-            nMax -= TB_SPIN_SIZE-TB_SPIN_OFFSET;
+            nMax -= TB_NEXT_SIZE-TB_NEXT_OFFSET;
             if ( mbHorz )
             {
-                maNextToolRect.Left()    = nLeft+nMax+TB_SPIN_OFFSET;
-                maNextToolRect.Right()   = maNextToolRect.Left()+TB_SPIN_SIZE-1;
+                maNextToolRect.Left()    = nLeft+nMax;
+                maNextToolRect.Right()   = maNextToolRect.Left()+TB_NEXT_SIZE-1;
                 maNextToolRect.Top()     = nTop;
                 maNextToolRect.Bottom()  = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
             }
             else
             {
-                maNextToolRect.Top()     = nTop+nMax+TB_SPIN_OFFSET;;
-                maNextToolRect.Bottom()  = maNextToolRect.Top()+TB_SPIN_SIZE-1;
+                maNextToolRect.Top()     = nTop+nMax;
+                maNextToolRect.Bottom()  = maNextToolRect.Top()+TB_NEXT_SIZE-1;
                 maNextToolRect.Left()    = nLeft;
                 maNextToolRect.Right()   = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
             }
@@ -2356,71 +2358,96 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 // -----------------------------------------------------------------------
 
 static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
-                               BOOL bLeft = FALSE, BOOL bTop = FALSE )
+                               BOOL bLeft = FALSE, BOOL bTop = FALSE,
+                               long nSize = 6 )
 {
     Color           aOldFillColor = pBox->GetFillColor();
     WindowAlign     eAlign = pBox->meAlign;
+    long            n = 0;
+    long            nHalfSize;
     if ( bLeft )
         eAlign = WINDOWALIGN_RIGHT;
     else if ( bTop )
         eAlign = WINDOWALIGN_BOTTOM;
+
+    nHalfSize = nSize/2;
 
     switch ( eAlign )
     {
         case WINDOWALIGN_LEFT:
             if ( bBlack )
                 pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+0, nY+6 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+1, nY+5 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+            while ( n <= nHalfSize )
+            {
+                pBox->DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
+                n++;
+            }
             if ( bBlack )
             {
                 pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
-                pBox->DrawRect( Rectangle( nX+2, nY+3, nX+2, nY+3 ) );
+                n = 1;
+                while ( n < nHalfSize )
+                {
+                    pBox->DrawRect( Rectangle( nX+n, nY+1+n, nX+n, nY+nSize-1-n ) );
+                    n++;
+                }
             }
             break;
         case WINDOWALIGN_TOP:
             if ( bBlack )
                 pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+            while ( n <= nHalfSize )
+            {
+                pBox->DrawRect( Rectangle( nX+n, nY+n, nX+nSize-n, nY+n ) );
+                n++;
+            }
             if ( bBlack )
             {
                 pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-                pBox->DrawRect( Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
+                n = 1;
+                while ( n < nHalfSize )
+                {
+                    pBox->DrawRect( Rectangle( nX+1+n, nY+n, nX+nSize-1-n, nY+n ) );
+                    n++;
+                }
             }
             break;
         case WINDOWALIGN_RIGHT:
             if ( bBlack )
                 pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+6 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+2, nY+5 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+0, nY+3 ) );
+            while ( n <= nHalfSize )
+            {
+                pBox->DrawRect( Rectangle( nX+nHalfSize-n, nY+n, nX+nHalfSize-n, nY+nSize-n ) );
+                n++;
+            }
             if ( bBlack )
             {
                 pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
-                pBox->DrawRect( Rectangle( nX+1, nY+3, nX+1, nY+3 ) );
+                n = 1;
+                while ( n < nHalfSize )
+                {
+                    pBox->DrawRect( Rectangle( nX+nHalfSize-n, nY+1+n, nX+nHalfSize-n, nY+nSize-1-n ) );
+                    n++;
+                }
             }
             break;
         case WINDOWALIGN_BOTTOM:
             if ( bBlack )
                 pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+6, nY+3 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+5, nY+2 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+0 ) );
+            while ( n <= nHalfSize )
+            {
+                pBox->DrawRect( Rectangle( nX+n, nY+nHalfSize-n, nX+nSize-n, nY+nHalfSize-n ) );
+                n++;
+            }
             if ( bBlack )
             {
                 pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-                pBox->DrawRect( Rectangle( nX+3, nY+1, nX+3, nY+1 ) );
+                n = 1;
+                while ( n < nHalfSize )
+                {
+                    pBox->DrawRect( Rectangle( nX+1+n, nY+nHalfSize-n, nX+nSize-1-n, nY+nHalfSize-n ) );
+                    n++;
+                }
             }
             break;
     }
@@ -2487,21 +2514,21 @@ void ToolBox::ImplDrawNext( BOOL bIn )
     if ( mbHorz )
     {
         bLeft = TRUE;
-        nX++;
-        nY += (maNextToolRect.GetHeight()-12)/2;
+        nX += (maNextToolRect.GetWidth()-6)/2-4;
+        nY += (maNextToolRect.GetHeight()-6)/2-6;
     }
     else
     {
         bTop = TRUE;
-        nY++;
-        nX += (maNextToolRect.GetWidth()-12)/2;
+        nY += (maNextToolRect.GetHeight()-6)/2-4;
+        nX += (maNextToolRect.GetWidth()-6)/2-6;
     }
 
     nX += maNextToolRect.Left();
     nY += maNextToolRect.Top();
     SetLineColor();
     SetFillColor( COL_LIGHTBLUE );
-    ImplDrawToolArrow( this, nX, nY, TRUE, bLeft, bTop );
+    ImplDrawToolArrow( this, nX, nY, TRUE, bLeft, bTop, 10 );
 }
 
 // -----------------------------------------------------------------------
