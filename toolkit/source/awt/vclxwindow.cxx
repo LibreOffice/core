@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-13 09:37:01 $
+ *  last change: $Author: fs $ $Date: 2002-04-25 11:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,21 +82,49 @@
 #include <com/sun/star/awt/Style.hpp>
 #endif
 
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXPOINTER_HXX_
 #include <toolkit/awt/vclxpointer.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
 
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
+#endif
 
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
 
@@ -522,12 +550,18 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 
     mxViewGraphics = NULL;
 
-    if ( mxAccessibleContext.get().is() )
+    // dispose our accessibility wrapper
+    try
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessibility wrapper!" );
+    }
+    mxAccessibleContext = ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >();
 
     if ( GetWindow() && !mbDisposing )
     {
@@ -1380,15 +1414,45 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
         GetWindow()->SetZoom( Fraction( fZoomX ) );
 }
 
+// ::com::sun::star::lang::XEventListener
+void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    using namespace ::com::sun::star;
+    using namespace ::drafts::com::sun::star;
+
+    // check if it comes from our AccessibleContext
+    uno::Reference< uno::XInterface > aAC( mxAccessibleContext.get(), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
+
+    DBG_ASSERT( aAC.get() == xSource.get(), "VCLXWindow::disposing: where does this call come from?" );
+    if ( aAC.get() == xSource.get() )
+    {   // yep, it does
+        mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
+    }
+}
+
 // ::drafts::com::sun::star::accessibility::XAccessible
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    using namespace ::com::sun::star;
+
+    ::vos::OGuard aGuard( GetMutex() );
+
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xC( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
     if ( !xC.is() )
     {
         xC = CreateAccessibleContext();
         mxAccessibleContext = xC;
+
+        // add as event listener to this component
+        // in case somebody disposes it, we do not want to have a (though weak) reference to a dead
+        // object
+        uno::Reference< lang::XComponent > xComp( xC, uno::UNO_QUERY );
+        if ( xComp.is() )
+            xComp->addEventListener( this );
     }
 
-    return mxAccessibleContext;
+    return xC;
 }
