@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:57:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,8 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
     //  Items for position and size (see ScGridWindow::UpdateStatusPosSize, #108137#)
 
-    //  SvxPosSizeStatusBarControl needs a SvxSizeItem also in SID_TABLE_CELL (in conflict
-    //  with the sdi definition), because an invalid item state or unknown item type would
-    //  enable date/time display, and a SfxStringItem would show the text!
+    // #i34458# The SvxSizeItem in SID_TABLE_CELL is no longer needed by
+    // SvxPosSizeStatusBarControl, it's enough to have it in SID_ATTR_SIZE.
 
     BOOL bActionItem = FALSE;
     if ( pDrView->IsAction() )              // action rectangle
@@ -349,7 +348,6 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
             rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
-            rSet.Put( SvxSizeItem( SID_TABLE_CELL, aSize ) );
             bActionItem = TRUE;
         }
     }
@@ -362,7 +360,6 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
             rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
-            rSet.Put( SvxSizeItem( SID_TABLE_CELL, aSize ) );
         }
         else                                // mouse position
         {
@@ -370,7 +367,6 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
             rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
-            rSet.Put( SvxSizeItem( SID_TABLE_CELL, Size( 0, 0 ) ) );
         }
     }
 }
