@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewElementListProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 23:01:13 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,10 @@
  *
  ************************************************************************/
 #include "ViewElementListProvider.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
 #include "DrawModelWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
+#include "chartview/DataPointSymbolSupplier.hxx"
+#include "macros.hxx"
 
 /*
 #ifndef _SVDMODEL_HXX
@@ -85,6 +87,15 @@
 #include <vcl/svapp.hxx>
 #endif
 //------------
+// header for class SvxShape
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
+// header for class SdrObject
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
+
 /*
 //for creation of own number formatter
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -92,11 +103,18 @@
 #endif
 */
 
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
-//using namespace ::com::sun::star;
+using namespace ::com::sun::star;
 //using namespace ::drafts::com::sun::star::chart2;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper
@@ -155,9 +173,45 @@ XBitmapList*   ViewElementListProvider::GetBitmapList() const
 //create chartspecific symbols for linecharts
 SdrObjList*   ViewElementListProvider::GetSymbolList() const
 {
-    // in old chart called GetSdrObjList
-    //@todo create symbols here
-    return NULL;
+    static SdrObjList* m_pSymbolList = NULL;
+    static uno::Reference< drawing::XShapes > m_xSymbols(NULL);//@todo this keeps the first drawinglayer alive ...
+    try
+    {
+        if(!m_pSymbolList || !m_pSymbolList->GetObjCount())
+        {
+            //@todo use mutex
+
+            //get factory from draw model
+            uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSuplier( m_pDrawModelWrapper->getUnoModel(), uno::UNO_QUERY );
+            uno::Reference< lang::XMultiServiceFactory > xShapeFactory( xDrawPagesSuplier, uno::UNO_QUERY );
+
+            //create hidden draw page (target):
+            uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSuplier->getDrawPages () );
+            uno::Reference< drawing::XDrawPage >  xDrawPage( xDrawPages->insertNewByIndex ( 1 ) );
+            uno::Reference<drawing::XShapes>      xTarget( xDrawPage, uno::UNO_QUERY );
+
+            //create symbols via uno and convert to native sdr objects
+            drawing::Direction3D aSymbolSize(1000,1000,1000);//this size is somehow arbitrary - nneds only to be big thus the dialog restricts the symbols to its own maximum value
+            m_xSymbols =  DataPointSymbolSupplier::create2DSymbolList( xShapeFactory, xTarget, aSymbolSize );
+            uno::Reference< lang::XUnoTunnel > xUnoTunnel( m_xSymbols, uno::UNO_QUERY );
+            uno::Reference< lang::XTypeProvider > xTypeProvider( m_xSymbols, uno::UNO_QUERY );
+            if(xUnoTunnel.is()&&xTypeProvider.is())
+            {
+                SvxShape* pSvxShape = reinterpret_cast<SvxShape*>(xUnoTunnel->getSomething( SvxShape::getUnoTunnelId() ));
+                if(pSvxShape)
+                {
+                    SdrObject* pSdrObject = pSvxShape->GetSdrObject();
+                    if(pSdrObject)
+                        m_pSymbolList = pSdrObject->GetSubList();
+                }
+            }
+        }
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return m_pSymbolList;
 }
 
 FontList* ViewElementListProvider::getFontList() const

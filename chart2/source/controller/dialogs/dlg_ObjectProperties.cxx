@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:36:10 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,11 +531,12 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             ((SvxLineTabPage&)rPage).SetDlgType(&nDlgType);
             ((SvxLineTabPage&)rPage).Construct();
             ((SvxLineTabPage&)rPage).ActivatePage(*GetInputSetImpl());
-            if( m_pParameter->HasSymbolProperties() && mpSymbolAttr )
+            if( m_pParameter->HasSymbolProperties() )
             {
                 ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
                 ((SvxLineTabPage&)rPage).SetSymbolList(m_pViewElementListProvider->GetSymbolList());
-                ((SvxLineTabPage&)rPage).SetSymbolAttr(mpSymbolAttr);
+                if( mpSymbolAttr )
+                    ((SvxLineTabPage&)rPage).SetSymbolAttr(mpSymbolAttr);
                 ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(&maSymbolGraphic);
             }
             break;
