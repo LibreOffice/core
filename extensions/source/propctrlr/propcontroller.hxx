@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 15:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -355,6 +358,17 @@ namespace pcr
         void        cleanupRowsetConnection();
         sal_Bool    haveRowsetConnection( ) const { return m_xRowsetConnection.is(); }
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                    ensureRowsetConnection();
+
+        /** get the rowset for the object we're inspecting
+            <p>if we inspect a form, the rowset is the object itself</p>
+            <p>if we're inspecting a form control, the XRowSet interface is looked for at the parent.</p>
+            <p>if we're inspectting a grid column, the XRowSet is looked for at the parent of the parent</p>
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+                    getRowSet( ) const;
+
 
         sal_uInt32 GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
@@ -405,6 +419,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/08/06 14:52:59  fs
+ *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
+ *
  *  Revision 1.10  2001/06/11 11:32:48  fs
  *  #86096# changed the property ids
  *
