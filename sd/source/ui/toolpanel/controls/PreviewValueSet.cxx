@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewValueSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:46:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "PreviewValueSet.hxx"
 #include <vcl/image.hxx>
-#include "../TaskPaneTreeNode.hxx"
+#include "taskpane/TaskPaneTreeNode.hxx"
 
 namespace sd { namespace toolpanel { namespace controls {
 
