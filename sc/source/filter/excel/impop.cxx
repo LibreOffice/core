@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:46:56 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,8 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBasePath ):
-    XclImpRootData( xlBiffUnknown, *pDoc, rBasePath, RTL_TEXTENCODING_MS_1252 ),
+ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDocUrl ):
+    XclImpRootData( xlBiffUnknown, *pDoc, rDocUrl, RTL_TEXTENCODING_MS_1252 ),
     ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
     XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
     maStrm( rSvStrm, *this ),
