@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfreprd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:35 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ void DXFPalette::SetColor(BYTE nIndex, BYTE nRed, BYTE nGreen, BYTE nBlue)
 
 DXFRepresentation::DXFRepresentation()
 {
+  setTextEncoding(RTL_TEXTENCODING_IBM_437);
 }
 
 
@@ -221,30 +222,43 @@ BOOL DXFRepresentation::Read(SvStream & rIStream,
 void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
 {
 
-    while (rDGR.GetG()!=0 || (strcmp(rDGR.GetS(),"EOF")!=0 &&
-                              strcmp(rDGR.GetS(),"ENDSEC")!=0) )
-    {
-        if (rDGR.GetG()==9) {
-            if (strcmp(rDGR.GetS(),"$EXTMIN")==0 ||
-                strcmp(rDGR.GetS(),"$EXTMAX")==0)
-            {
-                DXFVector aVector;
-                rDGR.SetF(10,0.0);
-                rDGR.SetF(20,0.0);
-                rDGR.SetF(30,0.0);
-                do {
-                    rDGR.Read();
-                } while (rDGR.GetG()!=9 && rDGR.GetG()!=0);
-                aVector.fx=rDGR.GetF(10);
-                aVector.fy=rDGR.GetF(20);
-                aVector.fz=rDGR.GetF(30);
-                aBoundingBox.Union(aVector);
-            }
-            else rDGR.Read();
-        }
-        else rDGR.Read();
-    }
+         while (rDGR.GetG()!=0 || (strcmp(rDGR.GetS(),"EOF")!=0 &&  strcmp(rDGR.GetS(),"ENDSEC")!=0) )
+         {
+                 if (rDGR.GetG()==9) {
+                         if (strcmp(rDGR.GetS(),"$EXTMIN")==0 ||
+                                 strcmp(rDGR.GetS(),"$EXTMAX")==0)
+                         {
+                                 DXFVector aVector;
+                                 rDGR.SetF(10,0.0);
+                                 rDGR.SetF(20,0.0);
+                                 rDGR.SetF(30,0.0);
+                                 do {
+                                         rDGR.Read();
+                                 } while (rDGR.GetG()!=9 && rDGR.GetG()!=0);
+                                 aVector.fx=rDGR.GetF(10);
+                                 aVector.fy=rDGR.GetF(20);
+                                 aVector.fz=rDGR.GetF(30);
+                                 aBoundingBox.Union(aVector);
+                         } else {
+                                 if (strcmp(rDGR.GetS(),"$DWGCODEPAGE")==0)
+                                 {
+                                         rDGR.Read();
+
+                                         // FIXME: we really need a whole table of
+                                         // $DWGCODEPAGE to encodings mappings
+                                         if ( (strcmp(rDGR.GetS(),"ANSI_932")==0) ||
+                                              (strcmp(rDGR.GetS(),"DOS932")==0) )
+                                         {
+                                                 setTextEncoding(RTL_TEXTENCODING_MS_932);
+                                         }
+                                 }
+                                 else rDGR.Read();
+                         }
+                 }
+                 else rDGR.Read();
+         }
 }
+
 
 void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                                         DXFBoundingBox & rBox)
