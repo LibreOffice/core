@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrdtrans.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-    // STL einbinden
-#if STLPORT_VERSION < 321
-#include <tools/presys.h>
-#include <vector.h>
-#include <tools/postsys.h>
-#else
 #include <vector>
-#endif  // STLPORT_VERSION < 321
 #include <vos/macros.hxx>
 
 
