@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 18:39:05 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:45:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,8 +159,20 @@ SHL1STDLIBS= -lexc
 .ENDIF
 .ENDIF # UNX
 
+#The irony that using the system STL instead of
+#stlport requires that we link libsal with the
+#LIBSTLPORT alias which is not required when using
+#stlport is not lost on me
+.IF "$(USE_SYSTEM_STL)"=="YES"
+SHL1STDLIBS+=$(LIBSTLPORT)
+.ELSE
 .IF "$(OS)"=="MACOSX"
-SHL1STDLIBS+=-lstlport_gcc -framework CoreFoundation
+SHL1STDLIBS+=-lstlport_gcc
+.ENDIF
+.ENDIF
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS+=-framework CoreFoundation
 .ENDIF
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
