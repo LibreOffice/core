@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-17 16:19:22 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 09:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ public:
 
 // XComponentSupplier
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL getComponent()
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent()
         throw ( ::com::sun::star::uno::RuntimeException );
 
 // XCloseable

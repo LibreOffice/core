@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-17 16:19:25 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 09:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ void SAL_CALL OleEmbeddedObject::setClassInfo(
 }
 
 //------------------------------------------------------
-uno::Reference< lang::XComponent > SAL_CALL OleEmbeddedObject::getComponent()
+uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
     // TODO: The return type will be reference to XInterface
@@ -213,8 +213,10 @@ uno::Reference< lang::XComponent > SAL_CALL OleEmbeddedObject::getComponent()
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    // TODO:
-    return uno::Reference< lang::XComponent >();
+    if ( !m_pOleComponent )
+        throw uno::RuntimeException(); // TODO
+
+    return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
 }
 
 //----------------------------------------------

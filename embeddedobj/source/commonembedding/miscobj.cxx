@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-17 16:19:21 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 09:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void SAL_CALL OCommonEmbeddedObject::setClassInfo(
 }
 
 //------------------------------------------------------
-uno::Reference< lang::XComponent > SAL_CALL OCommonEmbeddedObject::getComponent()
+uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -379,7 +379,7 @@ uno::Reference< lang::XComponent > SAL_CALL OCommonEmbeddedObject::getComponent(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    return uno::Reference< lang::XComponent >( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    return uno::Reference< util::XCloseable >( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
 }
 
 //----------------------------------------------
