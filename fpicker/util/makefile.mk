@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-22 07:45:38 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:14:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,18 +72,22 @@ USE_LDUMP2=TRUE
 
 .INCLUDE :  settings.mk
 
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE: pkg_config.mk
 
 # --- fps dynlib ----------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUIBASE)" == "unx"
 
-SHL1TARGET=$(TARGET1)
-
-SHL1STDLIBS=$(CPPULIB)\
+COMMON_LIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
             $(VCLLIB)\
-            $(TOOLSLIB)\
+            $(TOOLSLIB)
+
+.IF "$(GUI)"=="WNT"
+SHL1TARGET=$(TARGET1)
+SHL1STDLIBS=		$(COMMON_LIBS) \
             uwinapi.lib \
             advapi32.lib \
             shell32.lib\
@@ -93,53 +97,61 @@ SHL1STDLIBS=$(CPPULIB)\
             comdlg32.lib\
             kernel32.lib\
             oleaut32.lib
-
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET)
-
-SHL1LIBS=$(SLB)$/fps.lib\
-         $(SLB)$/utils.lib
-
-SHL1OBJS=$(SLOFILES)
-            
-SHL1RES=$(RES)$/$(TARGET1).res
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-# --- fop dynlib --------------------------------------------------
-
-SHL2TARGET=$(TARGET2)
-
-SHL2STDLIBS=$(CPPULIB)\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)\
-            $(TOOLSLIB)\
-            $(VCLLIB)\
+SHL2STDLIBS=		$(COMMON_LIBS) \
             uwinapi.lib \
             advapi32.lib \
             ole32.lib\
             gdi32.lib\
             shell32.lib\
+            comsupp.lib\
             oleaut32.lib
 
+SHL1IMPLIB=i$(SHL1TARGET)
+SHL1LIBS=$(SLB)$/fps.lib\
+         $(SLB)$/utils.lib
+SHL1RES=$(RES)$/$(TARGET1).res
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+.ELSE
+.IF "$(ENABLE_GTK)" == "TRUE"
+SHL1NOCHECK=TRUE
+SHL1TARGET=fps_gnome
+SHL1LIBS=$(SLB)$/fps_gnome.lib
+SHL1STDLIBS= $(COMMON_LIBS) $(PKGCONFIG_LIBS)
+
+.IF "$(OS)"=="SOLARIS"
+LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
+.ENDIF          # "$(OS)"=="SOLARIS"
+
+SHL2STDLIBS= $(SHL1STDLIBS)
+DEF1NAME=$(SHL1TARGET)
+.ENDIF         # "$(ENABLE_GTK)" == "TRUE"
+.ENDIF         # ELSE "$(GUI)"=="WNT"
+
+SHL1DEPN=
+SHL1OBJS=$(SLOFILES)
+
+DEF1EXPORTFILE=	exports.dxp
+
+# --- fop dynlib --------------------------------------------------
+
+SHL2NOCHECK=TRUE
+SHL2TARGET=$(TARGET2)
+
 SHL2DEPN=
-SHL2IMPLIB=i$(SHL2TARGET)
-
-SHL2LIBS=\
-    $(SLB)$/fop.lib\
-    $(SLB)$/utils.lib
-
-SHL2OBJS=$(SLOFILES) 
+SHL2IMPLIB=$(SHL1IMPLIB)
+SHL2LIBS=$(SHL1LIBS)
+SHL2OBJS=$(SLOFILES)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=	exports.dxp
 
-
-# "$(GUI)"=="WNT"
-.ENDIF			
+# "$(GUI)"=="WNT" || "$(GUIBASE)"=="unx"
+.ELSE
+dummy:
+    @echo "Nothing to build for OS $(OS)"
+.ENDIF
 
 
 .INCLUDE :  target.mk
