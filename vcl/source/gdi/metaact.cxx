@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:53:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_METAACT_CXX
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #include <algorithm>
@@ -1492,7 +1491,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     if( nAryLen )
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
-        const ULONG nIntAryLen( ::std::max(nAryLen, static_cast<ULONG>(mnLen)) );
+        const ULONG nIntAryLen( Max(nAryLen, static_cast<ULONG>(mnLen)) );
         mpDXAry = new long[ nIntAryLen ];
 
         ULONG i;
@@ -3964,7 +3963,7 @@ void MetaCommentAction::ImplInitDynamicData( const BYTE* pData, ULONG nDataSize 
     if ( nDataSize && pData )
     {
         mnDataSize = nDataSize, mpData = new BYTE[ mnDataSize ];
-        HMEMCPY( mpData, pData, mnDataSize );
+        memcpy( mpData, pData, mnDataSize );
     }
     else
     {
