@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 17:20:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-24 20:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4201,4 +4201,59 @@ void SvxScriptSetItem::GetSlotIds( USHORT nSlotId, USHORT& rLatin,
         break;
     }
 }
+
+void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
+                        SvxFontItem& rComplex )
+{
+    rtl_TextEncoding eFontTextEncoding = ::gsl_getSystemTextEncoding();
+    rLatin.GetFamily() = FAMILY_ROMAN;
+    rLatin.GetFamilyName() = System::GetStandardFont( STDFONT_ROMAN ).GetName();
+    rLatin.GetStyleName().Erase();
+    rLatin.GetPitch() = PITCH_VARIABLE;
+    rLatin.GetCharSet() = eFontTextEncoding;
+
+    rAsian.GetFamily() = FAMILY_DONTKNOW;
+    rAsian.GetStyleName().Erase();
+    rAsian.GetPitch() = PITCH_DONTKNOW;
+    rAsian.GetCharSet() = RTL_TEXTENCODING_DONTKNOW;
+
+    rComplex.GetFamily() = FAMILY_DONTKNOW;
+    rComplex.GetStyleName().Erase();
+    rComplex.GetPitch() = PITCH_DONTKNOW;
+    rComplex.GetCharSet() = RTL_TEXTENCODING_DONTKNOW;
+
+    rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
+                        "MS Mincho;HG Mincho L;MS PGothic" ));
+    rComplex.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
+                        "Simplified Arabic" ));
+
+    USHORT nLng = System::GetLanguage();
+    switch( nLng )
+    {
+    case LANGUAGE_CHINESE:
+     case LANGUAGE_CHINESE_TRADITIONAL:
+     case LANGUAGE_CHINESE_HONGKONG:
+     case LANGUAGE_CHINESE_SINGAPORE:
+     case LANGUAGE_CHINESE_MACAU:
+        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
+                        "PmingLiU;Ming" ));
+        break;
+
+     case LANGUAGE_CHINESE_SIMPLIFIED:
+        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
+                        "SimSun;Song" ));
+        break;
+    case LANGUAGE_KOREAN:
+    case LANGUAGE_KOREAN_JOHAB:
+        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
+                        "Batang;Myeomgjo;Gulim" ));
+        break;
+    }
+
+    String sAdd( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                    ";Arial Unicode MS;Andale WT UI" )));
+    rAsian.GetFamilyName() += sAdd;
+    rComplex.GetFamilyName() += sAdd;
+}
+
 
