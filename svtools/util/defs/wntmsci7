@@ -9842,3 +9842,10 @@ _real@8@3ffeccccccccccccd000
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx2464213693@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx2464213693@@YAXPAVControl@@JJAAJ@Z
 ?lcl_DecoratedFilter@?%O:\SRC641\src\svtools\source\filepicker\iodlgimp.cxx313087625@@YA?AVString@@ABV2@@Z
+?IsFolder@FStatHelper@@YAEABVString@@@Z
+?FillDataFlavorExVector@TransferableDataHelper@@KAXABV?$Sequence@UDataFlavor@datatransfer@star@sun@com@@@uno@star@sun@com@@AAUDataFlavorExVector@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx100324936@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx100324936@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx100324936@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx100324936@@YAXPAVControl@@JJAAJ@Z
+?lcl_DecoratedFilter@?%O:\SRC641\src\svtools\source\filepicker\iodlgimp.cxx2161719221@@YA?AVString@@ABV2@@Z
