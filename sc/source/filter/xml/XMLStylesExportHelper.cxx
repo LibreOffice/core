@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:12:18 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,13 +804,15 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable, const 
             nNumberFormat = aItr->nNumberFormat;
             if (((*pRowDefaults)[nRow].nIndex != -1))
             {
-                if ((*pRowDefaults)[nRow].nIndex == (*aItr).nStyleNameIndex)
+                if (((*pRowDefaults)[nRow].nIndex == (*aItr).nStyleNameIndex) &&
+                    ((*pRowDefaults)[nRow].bIsAutoStyle == (*aItr).bIsAutoStyle))
                     return -1;
                 else
                     return (*aItr).nStyleNameIndex;
             }
             else if (((*pColDefaults)[nColumn].nIndex != -1) &&
-                ((*pColDefaults)[nColumn].nIndex == (*aItr).nStyleNameIndex))
+                ((*pColDefaults)[nColumn].nIndex == (*aItr).nStyleNameIndex) &&
+                ((*pColDefaults)[nColumn].bIsAutoStyle == (*aItr).bIsAutoStyle))
                 return -1;
             else
                 return (*aItr).nStyleNameIndex;
