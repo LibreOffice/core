@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ();
+    SAL_THROW ( () );
 //--------------------------------------------------------------------------------------------------
 inline void __copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -121,7 +121,7 @@ inline void __copyConstructUnion(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pSource, pTypeDescr );
     if (mapping)
@@ -146,13 +146,13 @@ void copyConstructSequence(
     uno_Sequence ** ppDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ();
+    SAL_THROW ( () );
 //--------------------------------------------------------------------------------------------------
 inline void __copyConstructAnyFromData(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     TYPE_ACQUIRE( pType );
     pDestAny->pType = pType;
@@ -290,7 +290,7 @@ inline void __copyConstructAny(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     if (typelib_TypeClass_VOID == pType->eTypeClass)
     {
@@ -437,7 +437,7 @@ inline void __copyConstructSequence(
     uno_Sequence ** ppDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     typelib_TypeClass eTypeClass = pElementType->eTypeClass;
     if (!mapping ||
@@ -594,7 +594,7 @@ inline void __copyConstructData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    throw ()
+    SAL_THROW ( () )
 {
     switch (pType->eTypeClass)
     {

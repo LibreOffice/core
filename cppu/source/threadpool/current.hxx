@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:40:19 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,5 +75,5 @@ struct IdContainer
     sal_Sequence *      pCurrentId;
 };
 
-IdContainer * getIdContainer() throw ();
+IdContainer * getIdContainer() SAL_THROW( () );
 }

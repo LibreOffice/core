@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-22 14:09:12 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,19 +97,19 @@ class ThreadKey
     oslThreadKeyCallbackFunction _pCallback;
 
 public:
-    inline oslThreadKey getThreadKey() throw ();
+    inline oslThreadKey getThreadKey() SAL_THROW( () );
 
-    inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) throw ();
-    inline ~ThreadKey() throw ();
+    inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW( () );
+    inline ~ThreadKey() SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
-inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) throw ()
+inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW( () )
     : _bInit( sal_False )
     , _pCallback( pCallback )
 {
 }
 //__________________________________________________________________________________________________
-inline ThreadKey::~ThreadKey() throw ()
+inline ThreadKey::~ThreadKey() SAL_THROW( () )
 {
     if (_bInit)
     {
@@ -117,7 +117,7 @@ inline ThreadKey::~ThreadKey() throw ()
     }
 }
 //__________________________________________________________________________________________________
-inline oslThreadKey ThreadKey::getThreadKey() throw ()
+inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW( () )
 {
     if (! _bInit)
     {
@@ -141,7 +141,7 @@ struct CurrentContext
 
     uno_ExtEnvironment *    _pCachedEnv;
     void *                  _pCachedInterface;
-    inline void setCachedInterface( void * pInterface, uno_ExtEnvironment * pEnv ) throw ();
+    inline void setCachedInterface( void * pInterface, uno_ExtEnvironment * pEnv ) SAL_THROW( () );
 
     Reference< XMultiServiceFactory >   _xMgr;
     Reference< XAccessController >      _xAccessController;
@@ -192,11 +192,11 @@ struct CurrentContext
     virtual sal_Bool SAL_CALL hasElements()
         throw (RuntimeException);
 
-    inline CurrentContext() throw ();
-    inline ~CurrentContext() throw ();
+    inline CurrentContext() SAL_THROW( () );
+    inline ~CurrentContext() SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
-inline CurrentContext::~CurrentContext() throw ()
+inline CurrentContext::~CurrentContext() SAL_THROW( () )
 {
 #ifdef CPPU_ASSERTIONS
     OSL_TRACE( "\n> destructing current context..." );
@@ -204,7 +204,7 @@ inline CurrentContext::~CurrentContext() throw ()
     setCachedInterface( 0, 0 );
 }
 //__________________________________________________________________________________________________
-inline CurrentContext::CurrentContext() throw ()
+inline CurrentContext::CurrentContext() SAL_THROW( () )
     : _nRef( 0 )
     , _pCachedEnv( 0 )
     , _pCachedInterface( 0 )
@@ -212,7 +212,7 @@ inline CurrentContext::CurrentContext() throw ()
 }
 //__________________________________________________________________________________________________
 inline void CurrentContext::setCachedInterface(
-    void * pInterface, uno_ExtEnvironment * pEnv ) throw ()
+    void * pInterface, uno_ExtEnvironment * pEnv ) SAL_THROW( () )
 {
     // acquire new one
     if (pInterface)
@@ -502,7 +502,7 @@ sal_Bool CurrentContext::hasElements()
 }
 */
 //==================================================================================================
-extern "C" void SAL_CALL delete_IdContainer( void * p ) throw ()
+extern "C" void SAL_CALL delete_IdContainer( void * p )
 {
     if (p)
     {
@@ -520,7 +520,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p ) throw ()
     }
 }
 //==================================================================================================
-IdContainer * getIdContainer() throw ()
+IdContainer * getIdContainer() SAL_THROW( () )
 {
     static ThreadKey s_key( delete_IdContainer );
     oslThreadKey aKey = s_key.getThreadKey();
@@ -541,7 +541,8 @@ IdContainer * getIdContainer() throw ()
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
-    rtl_uString * pEnvTypeName, void * pEnvContext ) throw ()
+    rtl_uString * pEnvTypeName, void * pEnvContext )
+    SAL_THROW_EXTERN_C()
 {
     *ppCurrentContext = 0;
     /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMapping(
     uno_Environment * pFrom,
     uno_Environment * pTo,
     rtl_uString * pAddPurpose )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Callback function pointer declaration to get a mapping.
     <br>
@@ -160,7 +160,7 @@ typedef void (SAL_CALL * uno_getMappingFunc)(
 */
 SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Revokes a mapping callback registration.
     <br>
@@ -168,7 +168,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
 */
 SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Function pointer declaration to free a mapping.
     <br>
@@ -190,7 +190,7 @@ typedef void (SAL_CALL * uno_freeMappingFunc)( uno_Mapping * pMapping );
 SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Revokes a mapping.<br>
     A mapping registers itself on first acquire and revokes itself on last release.
@@ -199,7 +199,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
 */
 SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Gets an interface mapping from one language environment to another by
     corresponding environment type names.
@@ -216,7 +216,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
     rtl_uString * pFrom,
     rtl_uString * pTo,
     rtl_uString * pAddPurpose )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /* symbol exported by each language binding library */
 #define UNO_EXT_GETMAPPING "uno_ext_getMapping"

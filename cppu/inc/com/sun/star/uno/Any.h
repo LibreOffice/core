@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <rtl/alloc.h>
 #endif
 
-class BinaryCompatible_Impl;
 
 /** */ //for docpp
 namespace com
@@ -110,27 +109,27 @@ class Any : public uno_Any
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) throw ()
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) throw ()
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) throw ()
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) throw ()
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
 
     /** Default constructor:
         Any holds no value; its type is void.
         <br>
     */
-    inline Any() throw ();
+    inline Any() SAL_THROW( () );
 
     /** Copy constructor:
         Sets value of the given any.
         <br>
         @param rAny another any
     */
-    inline Any( const Any & rAny ) throw ();
+    inline Any( const Any & rAny ) SAL_THROW( () );
 
     /** Constructor:
         Sets a copy of the given data.
@@ -138,7 +137,7 @@ public:
         @param pData value
         @param rType type of value
     */
-    inline Any( const void * pData, const Type & rType ) throw ();
+    inline Any( const void * pData, const Type & rType ) SAL_THROW( () );
 
     /** Constructor:
         Sets a copy of the given data.
@@ -146,7 +145,7 @@ public:
         @param pData value
         @param pTypeDescr type of value
     */
-    inline Any( const void * pData, typelib_TypeDescription * pTypeDescr ) throw ();
+    inline Any( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
 
     /** Constructor:
         Sets a copy of the given data.
@@ -154,13 +153,13 @@ public:
         @param pData value
         @param pType type of value
     */
-    inline Any( const void * pData, typelib_TypeDescriptionReference * pType ) throw ();
+    inline Any( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
 
     /** Destructor:
         Destructs any content and frees memory.
         <br>
     */
-    inline ~Any() throw ();
+    inline ~Any() SAL_THROW( () );
 
     /** Assignment operator:
         Sets the value of the given any.
@@ -168,19 +167,19 @@ public:
         @param rAny another any (right side)
         @return this any
     */
-    inline Any & SAL_CALL operator = ( const Any & rAny ) throw ();
+    inline Any & SAL_CALL operator = ( const Any & rAny ) SAL_THROW( () );
 
     /** Gets the type of the set value.
         <br>
         @return a Type object of the set value
      */
-    inline const Type & SAL_CALL getValueType() const throw ()
+    inline const Type & SAL_CALL getValueType() const SAL_THROW( () )
         { return * reinterpret_cast< const Type * >( &pType ); }
     /** Gets the type of the set value.
         <br>
         @return the <b>un</b>acquired type description reference of the set value
      */
-    inline typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const throw ()
+    inline typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const SAL_THROW( () )
         { return pType; }
 
     /** Gets the type description of the set value.<br>
@@ -189,35 +188,35 @@ public:
         <br>
         @param a pointer to type description pointer
     */
-    inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const throw ()
+    inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const SAL_THROW( () )
         { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, getValueTypeRef() ); }
 
     /** Gets the type class of the set value.
         <br>
         @return the type class of the set value
      */
-    inline TypeClass SAL_CALL getValueTypeClass() const throw ()
+    inline TypeClass SAL_CALL getValueTypeClass() const SAL_THROW( () )
         { return (TypeClass)pType->eTypeClass; }
 
     /** Gets the type name of the set value.
         <br>
         @return the type name of the set value
     */
-    inline ::rtl::OUString SAL_CALL getValueTypeName() const throw ()
+    inline ::rtl::OUString SAL_CALL getValueTypeName() const SAL_THROW( () )
         { return ::rtl::OUString( pType->pTypeName ); }
 
     /** Tests if any contains a value.
         <br>
         @return true if any has a value, false otherwise
     */
-    inline sal_Bool SAL_CALL hasValue() const throw ()
+    inline sal_Bool SAL_CALL hasValue() const SAL_THROW( () )
         { return (TypeClass_VOID != getValueTypeClass()); }
 
     /** Gets a pointer to the set value.
         <br>
         @return a pointer to the set value
     */
-    inline const void * SAL_CALL getValue() const throw ()
+    inline const void * SAL_CALL getValue() const SAL_THROW( () )
         { return pData; }
 
     /** Sets a value. If the any already contains a value, that value will be destructed
@@ -226,27 +225,27 @@ public:
         @param pData pointer to value
         @param rType type of value
     */
-    inline void SAL_CALL setValue( const void * pData, const Type & rType ) throw ();
+    inline void SAL_CALL setValue( const void * pData, const Type & rType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
         <br>
         @param pData pointer to value
         @param pType type of value
     */
-    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescriptionReference * pType ) throw ();
+    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
         <br>
         @param pData pointer to value
         @param pTypeDescr type description of value
     */
-    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescription * pTypeDescr ) throw ();
+    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
 
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.
         <br>
     */
-    inline void SAL_CALL clear() throw ();
+    inline void SAL_CALL clear() SAL_THROW( () );
 
     /** Equality operator: compares two anys.<br>
         The values need not be of equal type, e.g. a short integer is compared to
@@ -255,7 +254,7 @@ public:
         @param rAny another any (right side)
         @return true if both any contains equal values
     */
-    inline sal_Bool SAL_CALL operator == ( const Any & rAny ) const throw ();
+    inline sal_Bool SAL_CALL operator == ( const Any & rAny ) const SAL_THROW( () );
     /** Unequality operator: compares two anys.<br>
         The values need not be of equal type, e.g. a short integer is compared to
         a long integer.
@@ -263,11 +262,8 @@ public:
         @param rAny another any (right side)
         @return true if both any contains unequal values
     */
-    inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const throw ()
+    inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW( () )
         { return (! operator == ( rAny )); }
-
-    // test the binary compatibility
-    friend class BinaryCompatible_Impl;
 };
 
 /** Template function to generically construct an any from a C++ value.
@@ -276,7 +272,7 @@ public:
     @return an any
 */
 template< class C >
-inline Any SAL_CALL makeAny( const C & value ) throw ();
+inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () );
 
 class BaseReference;
 class Type;
@@ -287,7 +283,7 @@ class Type;
     @param value source value (right side)
 */
 template< class C >
-inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const C & value ) throw ();
+inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () );
 /** Template binary >>= operator to assign a value from an any.<br>
     If the any does not contain a value that can be assigned <b>without</b>
     data loss, this operation will fail returning false.
@@ -297,7 +293,7 @@ inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const C &
     @return true if assignment was possible without data loss
 */
 template< class C >
-inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, C & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, C & value ) SAL_THROW( () );
 
 /** Template equality operator: compares set value of left side any to right side value.<br>
     The values need not be of equal type, e.g. a short integer is compared to
@@ -310,7 +306,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
     @return true if values are equal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator == ( const ::com::sun::star::uno::Any & rAny, const C & value ) throw ();
+inline sal_Bool SAL_CALL operator == ( const ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () );
 /** Template unequality operator: compares set value of left side any to right side value.<br>
     The values need not be of equal type, e.g. a short integer is compared to
     a long integer.<br>
@@ -322,40 +318,40 @@ inline sal_Bool SAL_CALL operator == ( const ::com::sun::star::uno::Any & rAny, 
     @return true if values are unequal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator != ( const ::com::sun::star::uno::Any & rAny, const C & value ) throw ()
+inline sal_Bool SAL_CALL operator != ( const ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () )
 {
     return (! operator == ( rAny, value ));
 }
 
 // additional specialized >>= and == operators
 // bool
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) throw ();
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW( () );
 // byte
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) SAL_THROW( () );
 // short
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) throw ();
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW( () );
 // long
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) throw ();
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW( () );
 // hyper
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) throw ();
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW( () );
 // float
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW( () );
 // double
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW( () );
 // string
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) throw ();
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW( () );
 // type
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) throw ();
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const Type & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW( () );
 // any
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) throw ();
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW( () );
 // interface
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) throw ();
+inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW( () );
 
 }
 }
@@ -367,7 +363,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
     @param dummy typed pointer for function signature
     @return type of IDL type <b>any</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) throw ()
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) SAL_THROW( () )
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_ANY ) );

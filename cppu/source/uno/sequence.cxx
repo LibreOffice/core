@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-05 11:19:44 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ namespace cppu
 {
 //--------------------------------------------------------------------------------------------------
 static inline void allocSeq(
-    uno_Sequence ** ppSeq, sal_Int32 nElementSize, sal_Int32 nElements ) throw ()
+    uno_Sequence ** ppSeq, sal_Int32 nElementSize, sal_Int32 nElements )
+    SAL_THROW( () )
 {
     if (nElements >= 0) // (re)alloc memory?
     {
@@ -114,7 +115,7 @@ static inline void __defaultConstructElements(
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
-    throw ()
+    SAL_THROW( () )
 {
     switch (pElementType->eTypeClass)
     {
@@ -307,7 +308,7 @@ static inline void __copyConstructElements(
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_AcquireFunc acquire,
     sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
-    throw ()
+    SAL_THROW( () )
 {
     switch (pElementType->eTypeClass)
     {
@@ -525,7 +526,7 @@ static inline void __reallocSequence(
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW( () )
 {
     uno_Sequence * pSource = *ppSequence;
     sal_Int32 nSourceElements = pSource->nElements;
@@ -595,7 +596,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (len)
     {
@@ -637,7 +638,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (len)
     {
@@ -673,7 +674,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
 SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType, sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSHURE( ppSequence, "### null ptr!" );
     OSL_ENSHURE( nSize >= 0, "### new size must be at least 0!" );
@@ -692,7 +693,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
 SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr, sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSHURE( ppSequence, "### null ptr!" );
     OSL_ENSHURE( nSize >= 0, "### new size must be at least 0!" );
@@ -709,7 +710,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSHURE( ppSequence, "### null ptr!" );
     uno_Sequence * pSequence = *ppSequence;
@@ -748,7 +749,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSHURE( ppSequence, "### null ptr!" );
     uno_Sequence * pSequence = *ppSequence;
@@ -783,7 +784,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (*ppDest != pSource)
     {
@@ -798,7 +799,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_assign(
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (*ppDest != pSource)
     {

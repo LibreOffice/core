@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,14 +262,19 @@ typedef struct _uno_ExtEnvironment
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
-    void (SAL_CALL * acquireInterface)( uno_ExtEnvironment * pEnv, void * pInterface );
+    void (SAL_CALL * acquireInterface)(
+        uno_ExtEnvironment * pEnv,
+        void * pInterface );
 
     /** Function to release an interface.
         <br>
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
-    void (SAL_CALL * releaseInterface)( uno_ExtEnvironment * pEnv, void * pInterface );
+    void (SAL_CALL * releaseInterface)(
+        uno_ExtEnvironment * pEnv,
+        void * pInterface );
+
 } uno_ExtEnvironment;
 
 #ifdef SAL_W32
@@ -296,7 +301,7 @@ typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
 */
 SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Gets all specified environments. Caller has to release returned environments and
     free allocated memory.
@@ -309,7 +314,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
 SAL_DLLEXPORT void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvTypeName )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Creates an environment. The new environment is anonymous
     (<b>NOT</b> publicly registered/ accessible).
@@ -320,7 +325,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getRegisteredEnvironments(
 */
 SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Dumps out environment information, i.e. registered interfaces.
     <br>
@@ -330,7 +335,7 @@ SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
 */
 SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
     <br>
     @param stream       output stream (FILE *)
@@ -339,7 +344,7 @@ SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
 */
 SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }

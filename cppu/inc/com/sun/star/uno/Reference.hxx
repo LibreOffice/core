@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 15:34:05 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,37 +85,37 @@ namespace uno
 {
 
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference() throw ()
+inline BaseReference::BaseReference() SAL_THROW( () )
     : _pInterface( 0 )
 {
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface ) throw ()
+inline BaseReference::BaseReference( XInterface * pInterface ) SAL_THROW( () )
     : _pInterface( pInterface )
 {
     if (_pInterface)
         _pInterface->acquire();
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface, __UnoReference_NoAcquire ) throw ()
+inline BaseReference::BaseReference( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () )
     : _pInterface( pInterface )
 {
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( const BaseReference & rRef ) throw ()
+inline BaseReference::BaseReference( const BaseReference & rRef ) SAL_THROW( () )
     : _pInterface( rRef._pInterface )
 {
     if (_pInterface)
         _pInterface->acquire();
 }
 //__________________________________________________________________________________________________
-inline BaseReference::~BaseReference() throw ()
+inline BaseReference::~BaseReference() SAL_THROW( () )
 {
     if (_pInterface)
         _pInterface->release();
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const throw ()
+inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW( () )
 {
     if (_pInterface == rRef._pInterface)
         return sal_True;
@@ -125,7 +125,7 @@ inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const 
     return (x1.get() == x2.get());
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::set( XInterface * pInterface ) throw ()
+inline sal_Bool BaseReference::set( XInterface * pInterface ) SAL_THROW( () )
 {
     if (pInterface != _pInterface)
     {
@@ -138,7 +138,7 @@ inline sal_Bool BaseReference::set( XInterface * pInterface ) throw ()
     return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::set( XInterface * pInterface, __UnoReference_NoAcquire ) throw ()
+inline sal_Bool BaseReference::set( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () )
 {
     if (_pInterface)
         _pInterface->release();
@@ -146,7 +146,7 @@ inline sal_Bool BaseReference::set( XInterface * pInterface, __UnoReference_NoAc
     return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
-inline void BaseReference::clear() throw ()
+inline void BaseReference::clear() SAL_THROW( () )
 {
     if (_pInterface)
     {
@@ -158,7 +158,7 @@ inline void BaseReference::clear() throw ()
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type > & Reference< interface_type >::operator = (
-    interface_type * pInterface ) throw ()
+    interface_type * pInterface ) SAL_THROW( () )
 {
     BaseReference::set( pInterface );
     return *this;
@@ -166,7 +166,7 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline XInterface * Reference< interface_type >::__query(
-    XInterface * pInterface ) throw (RuntimeException)
+    XInterface * pInterface ) SAL_THROW( (RuntimeException) )
 {
     if (pInterface)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-20 14:44:41 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ using namespace cppu_threadpool;
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
     sal_Sequence *pThreadId, void *pThreadSpecificData,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ), sal_Bool bIsOneway )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pThreadSpecificData,doRequest );
 }
@@ -446,7 +446,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
 
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
     sal_Sequence *pThreadId, void *pThreadSpecificData )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->addJob( pThreadId, sal_False, pThreadSpecificData, 0 );
 }
@@ -454,7 +454,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
 
 extern "C" SAL_DLLEXPORT  struct uno_threadpool_Handle * SAL_CALL
 uno_threadpool_createHandle( sal_Int64 nDisposeId )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
@@ -469,7 +469,7 @@ uno_threadpool_createHandle( sal_Int64 nDisposeId )
 
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
     struct uno_threadpool_Handle *pHandle , void **ppThreadSpecificData )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ASSERT( ppThreadSpecificData );
 
@@ -483,14 +483,14 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
 
 extern "C" SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_disposeThreads( sal_Int64 nDisposeId )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->dispose( nDisposeId );
 }
 
 extern "C" SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->stopDisposing( nDisposeId );
 }

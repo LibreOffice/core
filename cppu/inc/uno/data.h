@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TypeDescr,
     void * pVal2, typelib_TypeDescription * pVal2TypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Tests if two values are equal. May compare different types (e.g., short to long).
     <br>
     @param pVal1            pointer to a value
@@ -127,7 +127,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.
@@ -140,7 +140,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_equalData(
 SAL_DLLEXPORT void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.
     <br>
@@ -152,7 +152,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyData(
 SAL_DLLEXPORT void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.<br>
@@ -166,7 +166,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyData(
 SAL_DLLEXPORT void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr, uno_Mapping * mapping )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.<br>
     Interfaces are converted/ mapped by mapping parameter.
@@ -179,7 +179,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyAndConvertData(
 SAL_DLLEXPORT void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, uno_Mapping * mapping )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Destructs a given value; does <b>not</b> free its memory!
     <br>
@@ -189,7 +189,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyAndConvertData(
 */
 SAL_DLLEXPORT void SAL_CALL uno_destructData(
     void * pValue, typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Destructs a given value; does <b>not</b> free its memory!
     <br>
     @param pValue           value to be destructed
@@ -198,7 +198,7 @@ SAL_DLLEXPORT void SAL_CALL uno_destructData(
 */
 SAL_DLLEXPORT void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Default constructs a value. All simple types are set to 0, enums are set to their default
     value.
@@ -208,7 +208,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_destructData(
 */
 SAL_DLLEXPORT void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Default constructs a value. All simple types are set to 0, enums are set to their default
     value.
     <br>
@@ -217,7 +217,7 @@ SAL_DLLEXPORT void SAL_CALL uno_constructData(
 */
 SAL_DLLEXPORT void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 /** Assigns a destination value with a source value. Widening conversion
     <b>without</b> data loss is allowed (e.g., assigning a long with a short).
@@ -236,7 +236,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTypeDescr,
     void * pSource, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 /** Assigns a destination value with a source value. Widening conversion
     <b>without</b> data loss is allowed (e.g., assigning a long with a short).
     Assignment from any value to a value of type Any and vice versa is allowed.
@@ -254,7 +254,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:33:52 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace uno
 
 /** Current context.
 */
-inline Reference< XCurrentContext > SAL_CALL getCurrentContext() throw ()
+inline Reference< XCurrentContext > SAL_CALL getCurrentContext() SAL_THROW( () )
 {
     ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
 
@@ -98,7 +98,7 @@ inline Reference< XCurrentContext > SAL_CALL getCurrentContext() throw ()
 */
 inline void SAL_CALL checkPermission(
     const ::com::sun::star::security::Permission & rPerm )
-    throw (::com::sun::star::security::AccessControlException)
+    SAL_THROW( (::com::sun::star::security::AccessControlException) )
 {
     Reference< XCurrentContext > xContext( getCurrentContext() );
     OSL_ENSURE( xContext.is(), "### cannot get current thread's uno context!" );

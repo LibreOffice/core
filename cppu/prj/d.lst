@@ -34,8 +34,6 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\inc\uno\mapping.h %_DEST%\inc%_EXT%\uno\mapping.h
 ..\inc\uno\mapping.hxx %_DEST%\inc%_EXT%\uno\mapping.hxx
 ..\inc\uno\threadpool.h %_DEST%\inc%_EXT%\uno\threadpool.h
-..\inc\uno\current_context.h %_DEST%\inc%_EXT%\uno\current_context.h
-..\inc\uno\current_context.hxx %_DEST%\inc%_EXT%\uno\current_context.hxx
 
 ..\%__SRC%\lib\icppu.lib %_DEST%\lib%_EXT%\icppu.lib
 ..\%__SRC%\bin\cppu* %_DEST%\bin%_EXT%\*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,19 @@ extern "C"
 sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset,
-    sal_Int32 & rMaxIntegralTypeSize ) throw ();
+    sal_Int32 & rMaxIntegralTypeSize )
+    SAL_THROW_EXTERN_C();
 //------------------------------------------------------------------------
 void SAL_CALL typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
-    rtl_uString * pTypeName ) throw ();
+    rtl_uString * pTypeName )
+    SAL_THROW_EXTERN_C();
 //-----------------------------------------------------------------------------
 void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
-    rtl_uString * pName ) throw ();
+    rtl_uString * pName )
+    SAL_THROW_EXTERN_C();
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
@@ -116,7 +119,8 @@ struct AlignSize_Impl
 // the value of the maximal alignment
 static sal_Int32 nMaxAlignment = (sal_Int32)&((AlignSize_Impl *) 16)->dDouble - 16;
 
-static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment ) throw ()
+static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
+    SAL_THROW( () )
 {
     if( nRequestedAlignment > nMaxAlignment )
         nRequestedAlignment = nMaxAlignment;
@@ -127,14 +131,15 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment ) throw (
  * Calculate the new size of the struktur.
  */
 static inline sal_Int32 newAlignedSize(
-    sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment ) throw ()
+    sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
+    SAL_THROW( () )
 {
     NeededAlignment = adjustAlignment( NeededAlignment );
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
 //--------------------------------------------------------------------------------------------------
-static Mutex & typelib_getStaticInitMutex() throw ()
+static Mutex & typelib_getStaticInitMutex() SAL_THROW( () )
 {
     static Mutex * s_pMutex = 0;
     if (! s_pMutex)
@@ -149,10 +154,28 @@ static Mutex & typelib_getStaticInitMutex() throw ()
     return *s_pMutex;
 }
 
+// !for NOT REALLY WEAK TYPES only!
+static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * pTypeName )
+    SAL_THROW( () )
+{
+    typelib_TypeDescriptionReference * pRef = 0;
+    ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );
+    if (pRef && pRef->pType && pRef->pType->pWeakRef) // found initialized td
+    {
+        return pRef;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+extern "C"
+{
 //##################################################################################################
 SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     static typelib_TypeDescriptionReference * s_aTypes[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -330,7 +353,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
 SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
     {
@@ -348,21 +371,11 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
     }
 }
 
-// !for NOT REALLY WEAK TYPES only!
-static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * pTypeName ) throw ()
-{
-    typelib_TypeDescriptionReference * pRef = 0;
-    ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );
-    if (pRef && pRef->pType && pRef->pType->pWeakRef) // found initialized td
-        return pRef;
-    else
-        return 0;
-}
-
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeDescriptionReference * pElementType ) throw ()
+    typelib_TypeDescriptionReference * pElementType )
+    SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
     {
@@ -400,7 +413,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSHURE( typelib_TypeClass_STRUCT == eTypeClass ||
                  typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
@@ -465,12 +478,13 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
         }
     }
 }
+
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
     {
@@ -517,12 +531,13 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
         }
     }
 }
+
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nDefaultValue )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
     {
@@ -568,7 +583,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
     sal_Int32 nMembers,
     sal_Int64 * pDiscriminants,
     typelib_TypeDescriptionReference ** pMemberTypes )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
     {
@@ -629,5 +644,6 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
         }
     }
 }
+} // extern "C"
 
 }

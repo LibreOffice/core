@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,89 +96,89 @@ public:
         <br>
         @param pEnv environment
     */
-    inline Environment( uno_Environment * pEnv = 0 ) throw ();
+    inline Environment( uno_Environment * pEnv = 0 ) SAL_THROW( () );
 
     /** Copy constructor: acquires given environment
         <br>
         @param rEnv another environment
     */
-    inline Environment( const Environment & rEnv ) throw ();
+    inline Environment( const Environment & rEnv ) SAL_THROW( () );
 
     /** Destructor:
         <br>
         Releases a set environment.
     */
-    inline ~Environment() throw ();
+    inline ~Environment() SAL_THROW( () );
 
     /** Sets a given environment, i.e. acquires given one and releases a set one.
         <br>
         @param pEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( uno_Environment * pEnv ) throw ();
+    inline Environment & SAL_CALL operator = ( uno_Environment * pEnv ) SAL_THROW( () );
     /** Sets a given environment, i.e. acquires given one and releases a set one.
         <br>
         @param rEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( const Environment & rEnv ) throw ()
+    inline Environment & SAL_CALL operator = ( const Environment & rEnv ) SAL_THROW( () )
         { return operator = ( rEnv._pEnv ); }
 
     /** Provides <b>un</b>acquired pointer to the set C environment.
         <br>
         @return <b>un</b>acquired pointer to the C environment struct
     */
-    inline uno_Environment * SAL_CALL get() const throw ()
+    inline uno_Environment * SAL_CALL get() const SAL_THROW( () )
         { return _pEnv; }
 
     /** Gets type name of set environment.
         <br>
         @return type name of set environment
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const throw ()
+    inline ::rtl::OUString SAL_CALL getTypeName() const SAL_THROW( () )
         { return _pEnv->pTypeName; }
 
     /** Gets free context pointer of set environment.
         <br>
         @return free context pointer of set environment
     */
-    inline void * SAL_CALL getContext() const throw ()
+    inline void * SAL_CALL getContext() const SAL_THROW( () )
         { return _pEnv->pContext; }
 
     /** Tests if a environment is set.
         <br>
         @return true, if a environment is set, false otherwise
     */
-    inline sal_Bool SAL_CALL is() const throw ()
+    inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pEnv != 0); }
 
     /** Releases a set environment.
         <br>
     */
-    inline void SAL_CALL clear() throw ();
+    inline void SAL_CALL clear() SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
-inline Environment::Environment( uno_Environment * pEnv ) throw ()
+inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW( () )
     : _pEnv( pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
 //__________________________________________________________________________________________________
-inline Environment::Environment( const Environment & rEnv ) throw ()
+inline Environment::Environment( const Environment & rEnv ) SAL_THROW( () )
     : _pEnv( rEnv._pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
 //__________________________________________________________________________________________________
-inline Environment::~Environment() throw ()
+inline Environment::~Environment() SAL_THROW( () )
 {
     if (_pEnv)
         (*_pEnv->release)( _pEnv );
 }
 //__________________________________________________________________________________________________
-inline void Environment::clear() throw ()
+inline void Environment::clear() SAL_THROW( () )
 {
     if (_pEnv)
     {
@@ -187,13 +187,16 @@ inline void Environment::clear() throw ()
     }
 }
 //__________________________________________________________________________________________________
-inline Environment & Environment::operator = ( uno_Environment * pEnv ) throw ()
+inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THROW( () )
 {
-    if (pEnv)
-        (*pEnv->acquire)( pEnv );
-    if (_pEnv)
-        (*_pEnv->release)( _pEnv );
-    _pEnv = pEnv;
+    if (pEnv != _pEnv)
+    {
+        if (pEnv)
+            (*pEnv->acquire)( pEnv );
+        if (_pEnv)
+            (*_pEnv->release)( _pEnv );
+        _pEnv = pEnv;
+    }
     return *this;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     __destructAny( pDest, release );
     if (pType)
@@ -89,7 +89,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     __destructAny( pDest, release );
     if (pTypeDescr)
@@ -106,7 +106,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (pType)
     {
@@ -122,7 +122,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (pTypeDescr)
     {
@@ -138,7 +138,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (pType)
     {
@@ -154,7 +154,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     if (pTypeDescr)
     {
@@ -167,7 +167,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
 }
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW_EXTERN_C()
 {
     __destructAny( pValue, release );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ namespace cppu
 
 
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 ) throw ()
+inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
+    SAL_THROW( () )
 {
     if (pUnoI1 == pUnoI2)
         return sal_True;
@@ -139,7 +140,7 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 ) throw ()
 inline sal_Bool __equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW( () )
 {
     if (pI1 == pI2)
         return sal_True;
@@ -167,13 +168,13 @@ sal_Bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ();
+    SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool __equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW( () )
 {
     if (pTypeDescr->pBaseTypeDescription &&
         !equalStruct( pDest, pSource, pTypeDescr->pBaseTypeDescription, queryInterface, release ))
@@ -204,13 +205,13 @@ sal_Bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ();
+    SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool __equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW( () )
 {
     if (pDest == pSource)
         return sal_True;
@@ -391,7 +392,7 @@ inline sal_Bool __equalData(
     void * pSource,
     typelib_TypeDescriptionReference * pSourceType, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    throw ()
+    SAL_THROW( () )
 {
     typelib_TypeClass eSourceTypeClass, eDestTypeClass;
     while (typelib_TypeClass_ANY == (eDestTypeClass = pDestType->eTypeClass))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ extern "C" {
  *         altered. ( This is in general a bug ). <br>
  **/
 SAL_DLLEXPORT sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 
 /**
@@ -95,7 +95,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThread
  * @param ppThreadId [out] Contains the (acquired) ThreadId.
  **/
 SAL_DLLEXPORT void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 
 /**
@@ -103,7 +103,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId 
  * thread is broken.
  **/
 SAL_DLLEXPORT void SAL_CALL uno_releaseIdFromCurrentThread()
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 
 /**
@@ -121,7 +121,7 @@ struct uno_threadpool_Handle;
  * @see uno_threadpool_disposeThreads
  ***/
 SAL_DLLEXPORT struct uno_threadpool_Handle * SAL_CALL
-uno_threadpool_createHandle( sal_Int64 nDisposeId ) SAL_THROW ();
+uno_threadpool_createHandle( sal_Int64 nDisposeId ) SAL_THROW_EXTERN_C();
 
 /**
  * This method is called to wait for a reply of a previously sent request. This is a
@@ -134,7 +134,7 @@ uno_threadpool_createHandle( sal_Int64 nDisposeId ) SAL_THROW ();
  **/
 SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_enter( struct uno_threadpool_Handle * pHandle , void **ppThreadSpecificData )
-    SAL_THROW ();
+    SAL_THROW_EXTERN_C();
 
 
 /**
@@ -163,7 +163,7 @@ SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_putRequest( sal_Sequence *pThreadId,
                            void *pThreadSpecificData,
                            void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
-                           sal_Bool bIsOneway ) SAL_THROW ();
+                           sal_Bool bIsOneway ) SAL_THROW_EXTERN_C();
 
 
 /**
@@ -173,7 +173,7 @@ uno_threadpool_putRequest( sal_Sequence *pThreadId,
  * @param pThreadSpecificData The pointer, that is returned by uno_threadpool_enter.
  **/
 SAL_DLLEXPORT void SAL_CALL
-uno_threadpool_putReply( sal_Sequence *pThreadId, void *pThreadSpecificData ) SAL_THROW ();
+uno_threadpool_putReply( sal_Sequence *pThreadId, void *pThreadSpecificData ) SAL_THROW_EXTERN_C();
 
 
 /**
@@ -191,7 +191,7 @@ uno_threadpool_putReply( sal_Sequence *pThreadId, void *pThreadSpecificData ) SA
  * uno_threadpool_stopDisposeThreads.
  **/
 SAL_DLLEXPORT void SAL_CALL
-uno_threadpool_disposeThreads( sal_Int64 nDisposeId ) SAL_THROW ();
+uno_threadpool_disposeThreads( sal_Int64 nDisposeId ) SAL_THROW_EXTERN_C();
 
 
 /**
@@ -204,7 +204,7 @@ uno_threadpool_disposeThreads( sal_Int64 nDisposeId ) SAL_THROW ();
  * @see uno_threadpool_disposeThreads
  **/
 SAL_DLLEXPORT void SAL_CALL
-uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId ) SAL_THROW ();
+uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId ) SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:16:24 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,13 @@ extern "C"
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_acquire( void * pCppI )
-    throw ();
+    SAL_THROW( () );
 /** C function to release a C++ interface.
     <br>
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_release( void * pCppI )
-    throw ();
+    SAL_THROW( () );
 /** C function to query for a C++ interface.
     <br>
     @param pCppI C++ interface pointer
@@ -97,7 +97,7 @@ inline void SAL_CALL cpp_release( void * pCppI )
     @return acquired C++ interface pointer or null
 */
 inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
-    throw ();
+    SAL_THROW( () );
 }
 
 }

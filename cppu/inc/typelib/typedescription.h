@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newUnion(
     sal_Int64 nDefaultDiscriminant,
     typelib_TypeDescriptionReference * pDefaultTypeRef,
     sal_Int32 nMembers,
-    typelib_Union_Init * pMembers ) SAL_THROW ();
+    typelib_Union_Init * pMembers )
+    SAL_THROW_EXTERN_C();
 
 /** Creates an enum type description.
     <br>
@@ -518,7 +519,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newEnum(
     sal_Int32 nDefaultValue,
     sal_Int32 nEnumValues,
     rtl_uString ** ppEnumNames,
-    sal_Int32 * pEnumValues ) SAL_THROW ();
+    sal_Int32 * pEnumValues )
+    SAL_THROW_EXTERN_C();
 
 /** Creates a new type description.
     <br>
@@ -536,7 +538,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_new(
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pType,
     sal_Int32 nMembers,
-    typelib_CompoundMember_Init * pMembers ) SAL_THROW ();
+    typelib_CompoundMember_Init * pMembers )
+    SAL_THROW_EXTERN_C();
 
 /** Creates an interface type description.
     <br>
@@ -557,7 +560,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterface(
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
     typelib_TypeDescriptionReference * pBaseInterface,
     sal_Int32 nMembers,
-    typelib_TypeDescriptionReference ** ppMembers ) SAL_THROW ();
+    typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C();
 
 /** Creates an interface method type description.
     <br>
@@ -582,7 +586,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceMethod(
     sal_Int32 nParams,
     typelib_Parameter_Init * pParams,
     sal_Int32 nExceptions,
-    rtl_uString ** ppExceptionNames ) SAL_THROW ();
+    rtl_uString ** ppExceptionNames )
+    SAL_THROW_EXTERN_C();
 
 /** Creates an interface attribute type description.
     <br>
@@ -598,14 +603,16 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     rtl_uString * pAttributeName,
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly ) SAL_THROW ();
+    sal_Bool bReadOnly )
+    SAL_THROW_EXTERN_C();
 
 /** Increments reference count of given type description.
     <br>
     @param pDesc type description
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_acquire(
-    typelib_TypeDescription * pDesc ) SAL_THROW ();
+    typelib_TypeDescription * pDesc )
+    SAL_THROW_EXTERN_C();
 
 /** Decrements reference count of given type.<br>
     If reference count reaches 0, the trype description is deleted.
@@ -613,7 +620,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_acquire(
     @param pDesc type description
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_release(
-    typelib_TypeDescription * pDesc ) SAL_THROW ();
+    typelib_TypeDescription * pDesc )
+    SAL_THROW_EXTERN_C();
 
 /** Registers a type description and creates a type description reference.<br>
     Type descriptions will be registered automatically if they are provided
@@ -621,7 +629,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_release(
     @param ppNewDescription inout description to be registered;
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_register(
-    typelib_TypeDescription ** ppNewDescription ) SAL_THROW ();
+    typelib_TypeDescription ** ppNewDescription )
+    SAL_THROW_EXTERN_C();
 
 /** Tests whether two types descriptions are equal, i.e. type class and names are equal.
     <br>
@@ -630,7 +639,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_register(
     @return true, if type descriptions are equal
 */
 SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_equals(
-    const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 ) SAL_THROW ();
+    const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 )
+    SAL_THROW_EXTERN_C();
 
 /** Retrieves a type description via its fully qualified name.
     <br>
@@ -638,14 +648,16 @@ SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_equals(
     @param pName name demanded type description
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_getByName(
-    typelib_TypeDescription ** ppRet, rtl_uString * pName ) SAL_THROW ();
+    typelib_TypeDescription ** ppRet, rtl_uString * pName )
+    SAL_THROW_EXTERN_C();
 
 /** Sets size of type description cache.
     <br>
     @param nNewSize new size of cache
 */
 SAL_DLLEXPORT void SAL_CALL typelib_setCacheSize(
-    sal_Int32 nNewSize ) SAL_THROW ();
+    sal_Int32 nNewSize )
+    SAL_THROW_EXTERN_C();
 
 /** Function pointer declaration of callback function get additional descriptions.
     Callbacks <b>must</b> provide <b>complete</b> type descriptions!
@@ -663,7 +675,8 @@ typedef void (SAL_CALL * typelib_typedescription_Callback)(
     @param pCallback callback function
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_registerCallback(
-    void * pContext, typelib_typedescription_Callback pCallback ) SAL_THROW ();
+    void * pContext, typelib_typedescription_Callback pCallback )
+    SAL_THROW_EXTERN_C();
 
 /** Revokes a previously registered callback function.
     <br>
@@ -671,7 +684,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_registerCallback(
     @param pCallback registered callback function
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescription_revokeCallback(
-    void * pContext, typelib_typedescription_Callback pCallback ) SAL_THROW ();
+    void * pContext, typelib_typedescription_Callback pCallback )
+    SAL_THROW_EXTERN_C();
 
 
 /*----------------------------------------------------------------------------*/
@@ -731,7 +745,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescription_revokeCallback(
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
-    rtl_uString * pTypeName ) SAL_THROW ();
+    rtl_uString * pTypeName )
+    SAL_THROW_EXTERN_C();
 
 /** Creates a type description reference.<br>
     This is a weak reference <b>not</b> holding the description.
@@ -744,14 +759,16 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
-    const sal_Char * pTypeName ) SAL_THROW ();
+    const sal_Char * pTypeName )
+    SAL_THROW_EXTERN_C();
 
 /** Increments reference count of type description reference.
     <br>
     @param pRef type description reference
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_acquire(
-    typelib_TypeDescriptionReference * pRef ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pRef )
+    SAL_THROW_EXTERN_C();
 
 /** Increments reference count of type description reference.
     If the reference count reaches 0, the reference is deleted.
@@ -759,7 +776,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_acquire(
     @param pRef type description reference
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_release(
-    typelib_TypeDescriptionReference * pRef ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pRef )
+    SAL_THROW_EXTERN_C();
 
 /** Retrieves the type description for a given reference.<br>
     If it is not possible to resolve the reference, null is returned.
@@ -767,7 +785,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_release(
     @param ppRet inout type description
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_getDescription(
-    typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef ) SAL_THROW ();
+    typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )
+    SAL_THROW_EXTERN_C();
 
 /** Tests whether two types description references are equal, i.e. type class and names are equal.
     <br>
@@ -776,7 +795,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_getDescription(
     @return true, if type description references are equal
 */
 SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
-    const typelib_TypeDescriptionReference * p1, const typelib_TypeDescriptionReference * p2 ) SAL_THROW ();
+    const typelib_TypeDescriptionReference * p1, const typelib_TypeDescriptionReference * p2 )
+    SAL_THROW_EXTERN_C();
 
 /** Assigns a type.
     <br>
@@ -785,7 +805,8 @@ SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
 */
 SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_assign(
     typelib_TypeDescriptionReference ** ppDest,
-    typelib_TypeDescriptionReference * pSource ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pSource )
+    SAL_THROW_EXTERN_C();
 
 /** Tests if values of type pAssignable can be assigned by values of type pFrom.
     This includes widening conversion (e.g., long assignable from short), as long
@@ -796,7 +817,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_assign(
 */
 SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
-    typelib_TypeDescription * pFrom ) SAL_THROW ();
+    typelib_TypeDescription * pFrom )
+    SAL_THROW_EXTERN_C();
 
 /** Tests if values of type pAssignable can be assigned by values of type pFrom.
     This includes widening conversion (e.g., long assignable from short), as long
@@ -807,7 +829,8 @@ SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
 */
 SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
-    typelib_TypeDescriptionReference * pFrom ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pFrom )
+    SAL_THROW_EXTERN_C();
 
 /** Gets static type reference of standard types by type class.
     ==OPTIMIZATION HACK==:
@@ -820,7 +843,8 @@ SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFro
     @return pointer to type reference pointer
 */
 SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
-    typelib_TypeClass eTypeClass ) SAL_THROW ();
+    typelib_TypeClass eTypeClass )
+    SAL_THROW_EXTERN_C();
 
 /** Inits static type reference.
     Thread synchronizes on typelib init mutex.
@@ -831,7 +855,8 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
 */
 SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName ) SAL_THROW ();
+    typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
+    SAL_THROW_EXTERN_C();
 
 /** Inits static sequence type reference.
     Thread synchronizes on typelib init mutex.
@@ -841,7 +866,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
 */
 SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeDescriptionReference * pElementType ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pElementType )
+    SAL_THROW_EXTERN_C();
 
 /** Inits <b>in</b>complete static compound type reference.
     Thread synchronizes on typelib init mutex.
@@ -857,7 +883,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
-    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers ) SAL_THROW ();
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C();
 
 /** Inits <b>in</b>complete static interface type reference.
     Thread synchronizes on typelib init mutex.
@@ -869,7 +896,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
 SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
-    typelib_TypeDescriptionReference * pBaseType ) SAL_THROW ();
+    typelib_TypeDescriptionReference * pBaseType )
+    SAL_THROW_EXTERN_C();
 
 /** Inits <b>in</b>complete static enum type reference.
     Thread synchronizes on typelib init mutex.
@@ -881,7 +909,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
 SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
-    sal_Int32 nDefaultValue ) SAL_THROW ();
+    sal_Int32 nDefaultValue )
+    SAL_THROW_EXTERN_C();
 
 /** Inits <b>in</b>complete static compound type reference.
     Thread synchronizes on typelib init mutex.
@@ -905,7 +934,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
     typelib_TypeDescriptionReference * pDefaultType,
     sal_Int32 nMembers,
     sal_Int64 * pDiscriminants,
-    typelib_TypeDescriptionReference ** pMemberTypes ) SAL_THROW ();
+    typelib_TypeDescriptionReference ** pMemberTypes )
+    SAL_THROW_EXTERN_C();
 
 /** Completes a typedescription to be used for, e.g., marshalling values.
     COMPOUND, UNION, INTERFACE and ENUM type descriptions may be partly
@@ -916,7 +946,8 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
     @return true, if type description is complete
 */
 SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
-    typelib_TypeDescription ** ppTypeDescr ) SAL_THROW ();
+    typelib_TypeDescription ** ppTypeDescr )
+    SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }
