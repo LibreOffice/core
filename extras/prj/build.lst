@@ -26,6 +26,7 @@ er      extras\source\templates\wizard\desktop\lang             nmake   -       
 er      extras\source\templates\wizard\fax\lang                 nmake   -       all     er_twfal NULL
 er      extras\source\templates\wizard\letter\lang              nmake   -       all     er_twlel NULL
 er      extras\source\templates\wizard\memo\lang                nmake   -       all     er_twmel NULL
+er      extras\source\templates\wizard\report\lang              nmake   -       all     er_twrel NULL
 er      extras\source\templates\wizard\styles\lang              nmake   -       all     er_stls NULL
 er      extras\source\templates\wizard\web\lang                 nmake   -       all     er_stwwebl NULL
 er	extras\source\wordbook					nmake	-	all	er_wrdb NULL

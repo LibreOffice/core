@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tv $ $Date: 2001-08-16 08:39:58 $
+#   last change: $Author: va $ $Date: 2002-05-29 15:45:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,6 +159,7 @@ TEMPLATE_WIZARD_FAX_TARGET      = tplwizfax
 TEMPLATE_WIZARD_HOMEPAGE_TARGET = tplwizhomepage
 TEMPLATE_WIZARD_LETTER_TARGET   = tplwizletter
 TEMPLATE_WIZARD_MEMO_TARGET     = tplwizmemo
+TEMPLATE_WIZARD_REPORT_TARGET   = tplwizreport
 TEMPLATE_WIZARD_STYLES_TARGET   = tplwizstyles
 
 WORDBOOK_ALL_TARGET             = wordbook
