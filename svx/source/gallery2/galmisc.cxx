@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-08 19:03:02 $
+ *  last change: $Author: ka $ $Date: 2001-11-23 11:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,7 @@ void GalleryTransferable::InitData()
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
                     delete mpURL, mpURL = NULL;
             }
+            break;
 
             case( SGA_OBJ_SVDRAW ):
             {
