@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintSettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ service PrintSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintBlackFonts
-    /** If <true></true>, all characters are printed in black.
+    /** If <TRUE/>, all characters are printed in black.
 
 
 
@@ -87,49 +87,49 @@ service PrintSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintControls
-    /** If <true></true>, control shapes are included in printing.
+    /** If <TRUE/>, control shapes are included in printing.
      */
     [property] boolean PrintControls;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintDrawings
-    /** If <true></true>, drawing objects (shapes)  are included in printing.
+    /** If <TRUE/>, drawing objects (shapes)  are included in printing.
      */
     [property] boolean PrintDrawings;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintGraphics
-    /** If <true></true>, graphic objects are included in printing.
+    /** If <TRUE/>, graphic objects are included in printing.
      */
     [property] boolean PrintGraphics;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintLeftPages
-    /** If <true></true>, left pages are included in printing.
+    /** If <TRUE/>, left pages are included in printing.
      */
     [property] boolean PrintLeftPages;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintRightPages
-    /** If <true></true>, right pages are included in printing.
+    /** If <TRUE/>, right pages are included in printing.
      */
     [property] boolean PrintRightPages;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintTables
-    /** If <true></true>, tables are included in printing.
+    /** If <TRUE/>, tables are included in printing.
      */
     [property] boolean PrintTables;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintReversed
-    /** If <true></true>, the pages are printed in reverse order.
+    /** If <TRUE/>, the pages are printed in reverse order.
 
 
 
@@ -140,14 +140,14 @@ service PrintSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintProspect
-    /** If <true></true>, the pages are printed in the order of prospects.
+    /** If <TRUE/>, the pages are printed in the order of prospects.
      */
     [property] boolean PrintProspect;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintPageBackground
-    /** If <true></true>, the background of the page is printed.
+    /** If <TRUE/>, the background of the page is printed.
      */
     [property] boolean PrintPageBackground;
 
@@ -168,6 +168,9 @@ service PrintSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:34  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:21  hjs
     initial import
 

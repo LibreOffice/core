@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewSplitable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:47 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ interface XViewSplitable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getIsWindowSplit
-    /** returns <true></true> if the view is split
+    /** returns <TRUE/> if the view is split
         into individual panes.
 
 
@@ -103,7 +103,7 @@ interface XViewSplitable: com::sun::star::uno::XInterface
         <p>Only one of
         <member>XViewSplitable::getIsWindowSplit()</member> and
         <member>XViewFreezable::hasFrozenPanes()</member>
-        can be <true></true>.</p>
+        can be <TRUE/>.</p>
      */
     [const] boolean getIsWindowSplit();
 
@@ -159,6 +159,9 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:47  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:52  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ struct SortField
 
     // DocMerge from xml: field com::sun::star::util::SortField::SortAscending
     /** if data are sorted in ascending order,
-        <false></false> if in descending order.
+        <FALSE/> if in descending order.
      */
     boolean SortAscending;
 
@@ -106,6 +106,9 @@ struct SortField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:19  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingSettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ service LineNumberingSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::On
-    /** If <true></true>, line numbering is used.
+    /** If <TRUE/>, line numbering is used.
      */
     [property] boolean On;
 
@@ -90,14 +90,14 @@ service LineNumberingSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::CountEmptyLines
-    /** If <true></true>, empty lines are counted.
+    /** If <TRUE/>, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::CountLinesInFrames
-    /** If <true></true>, lines in frames are included in counting.
+    /** If <TRUE/>, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 
@@ -154,6 +154,9 @@ service LineNumberingSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:26  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:01  hjs
     initial import
 

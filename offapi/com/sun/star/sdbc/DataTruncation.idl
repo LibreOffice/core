@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataTruncation.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,13 @@ exception DataTruncation: SQLWarning
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::IsParameter
-    /** is <true></true> if a parameter value is truncated.
+    /** is <TRUE/> if a parameter value is truncated.
      */
     boolean IsParameter;
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::DuringRead
-    /** is <true></true> if a read was truncated.
+    /** is <TRUE/> if a read was truncated.
      */
     boolean DuringRead;
 
@@ -117,6 +117,9 @@ exception DataTruncation: SQLWarning
 }; }; }; };
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:39  hjs
     initial import
 

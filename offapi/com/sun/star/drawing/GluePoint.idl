@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GluePoint.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ struct GluePoint
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::GluePoint::PositionAbsolute
-    /** If this is <true></true>, then the position of this <type>GluePoint</type> is
+    /** If this is <TRUE/>, then the position of this <type>GluePoint</type> is
         absolute on a page and is not relative to a shape.
      */
     boolean PositionAbsolute;
@@ -124,6 +124,9 @@ struct GluePoint
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:41  mi
+    moved from api
+
     Revision 1.2  2000/10/25 14:46:06  cl
     new api for glue points added
 

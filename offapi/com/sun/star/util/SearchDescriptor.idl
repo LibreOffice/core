@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SearchDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,35 +90,35 @@ service SearchDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchBackwards
-    /** If <true></true>, the search is done backward in the document.
+    /** If <TRUE/>, the search is done backward in the document.
      */
     [property] boolean SearchBackwards;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchCaseSensitive
-    /** If <true></true>, the case of the letters is important for the match.
+    /** If <TRUE/>, the case of the letters is important for the match.
      */
     [property] boolean SearchCaseSensitive;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchWords
-    /** If <true></true>, only complete words will be found.
+    /** If <TRUE/>, only complete words will be found.
      */
     [property] boolean SearchWords;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchRegularExpression
-    /** If <true></true>, the search string is evaluated as a regular expression.
+    /** If <TRUE/>, the search string is evaluated as a regular expression.
      */
     [property] boolean SearchRegularExpression;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchStyles
-    /** If <true></true>, it is searched for positions where the paragraph style with
+    /** If <TRUE/>, it is searched for positions where the paragraph style with
         the name of the search pattern is applied.
      */
     [property] boolean SearchStyles;
@@ -126,7 +126,7 @@ service SearchDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarity
-    /** If <true></true>, a "similarity search" is performed.
+    /** If <TRUE/>, a "similarity search" is performed.
 
 
 
@@ -149,7 +149,7 @@ service SearchDescriptor
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarityRelax
-    /** If <true></true>, all similarity rules are applied together.
+    /** If <TRUE/>, all similarity rules are applied together.
 
 
 
@@ -201,6 +201,9 @@ service SearchDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:19  hjs
     initial import
 

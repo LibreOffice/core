@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ interface XPrinter: com::sun::star::awt::XPrinterPropertySet
         beforehand, then this call does nothing. If you call
         <member scope="com::sun::star::awt">XPrinter::terminate</member> in or before the call to
         <member scope="com::sun::star::awt">XPrinter::start</member>,
-        <member scope="com::sun::star::awt">XPrinter::termnate</member> returns <false></false>.
+        <member scope="com::sun::star::awt">XPrinter::termnate</member> returns <FALSE/>.
         This call must not block the thread.
 
         </p>@see end
@@ -167,6 +167,9 @@ interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:11  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:53  hjs
     initial import
 

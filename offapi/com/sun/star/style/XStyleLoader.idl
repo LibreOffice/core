@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyleLoader.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XStyleLoader: com::sun::star::uno::XInterface
     /** loads styles from a document at the given URL.
 
 
-        <p>If <var>Overwrite</var> is <true></true>, then all styles
+        <p>If <var>Overwrite</var> is <TRUE/>, then all styles
         will be loaded.  Otherwise, only styles which are not already
         defined in this document are loaded.</p> String URL: The directory and the filename from document with the styles aOptions : Specify which of the Style families the method should load. The XPropertySetValue[]
         has following items <ul>
@@ -126,6 +126,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:12  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:54  hjs
     initial import
 

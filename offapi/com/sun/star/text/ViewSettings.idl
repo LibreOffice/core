@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,28 +83,28 @@ service ViewSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowAnnotations
-    /** If this property is <true></true>, annotations (notes) are visible.
+    /** If this property is <TRUE/>, annotations (notes) are visible.
      */
     [property] boolean ShowAnnotations;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowBreaks
-    /** If this property is <true></true>, paragraph line breaks are visible.
+    /** If this property is <TRUE/>, paragraph line breaks are visible.
      */
     [property] boolean ShowBreaks;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowDrawings
-    /** If this property is <true></true>, shapes are visible.
+    /** If this property is <TRUE/>, shapes are visible.
      */
     [property] boolean ShowDrawings;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFieldCommands
-    /** If this property is <true></true>, text fields are shown with their commands; otherwise
+    /** If this property is <TRUE/>, text fields are shown with their commands; otherwise
         the content is visible.
      */
     [property] boolean ShowFieldCommands;
@@ -112,63 +112,63 @@ service ViewSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFootnoteBackground
-    /** If this property is <true></true>, footnotes symbols are displayed with gray background.
+    /** If this property is <TRUE/>, footnotes symbols are displayed with gray background.
      */
     [property] boolean ShowFootnoteBackground;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowGraphics
-    /** If this property is <true></true>, graphic objects are visible.
+    /** If this property is <TRUE/>, graphic objects are visible.
      */
     [property] boolean ShowGraphics;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenParagraphs
-    /** If this property is <true></true>, hidden paragraghs are displayed.
+    /** If this property is <TRUE/>, hidden paragraghs are displayed.
      */
     [property] boolean ShowHiddenParagraphs;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenText
-    /** If this property is <true></true>, hidden text is displayed.
+    /** If this property is <TRUE/>, hidden text is displayed.
      */
     [property] boolean ShowHiddenText;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHoriRuler
-    /** If this property is <true></true>, the horizontal ruler is displayed.
+    /** If this property is <TRUE/>, the horizontal ruler is displayed.
      */
     [property] boolean ShowHoriRuler;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHoriScrollBar
-    /** If this property is <true></true>, the horizontal scroll bar is displayed.
+    /** If this property is <TRUE/>, the horizontal scroll bar is displayed.
      */
     [property] boolean ShowHoriScrollBar;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowIndexMarkBackground
-    /** If this property is <true></true>, index marks are displayed with gray background.
+    /** If this property is <TRUE/>, index marks are displayed with gray background.
      */
     [property] boolean ShowIndexMarkBackground;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowParaBreaks
-    /** If this property is <true></true>, paragraph breaks are visible.
+    /** If this property is <TRUE/>, paragraph breaks are visible.
      */
     [property] boolean ShowParaBreaks;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowProtectedSpaces
-    /** If this property is <true></true>, protected spaces (hard spaces) are displayed with gray
+    /** If this property is <TRUE/>, protected spaces (hard spaces) are displayed with gray
         background.
      */
     [property] boolean ShowProtectedSpaces;
@@ -176,77 +176,77 @@ service ViewSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowSoftHyphens
-    /** If this property is <true></true>, soft hyphens are displayed with gray background.
+    /** If this property is <TRUE/>, soft hyphens are displayed with gray background.
      */
     [property] boolean ShowSoftHyphens;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowSpaces
-    /** If this property is <true></true>, spaces are displayed with dots.
+    /** If this property is <TRUE/>, spaces are displayed with dots.
      */
     [property] boolean ShowSpaces;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTableBoundaries
-    /** If this property is <true></true>, table boundaries are displayed.
+    /** If this property is <TRUE/>, table boundaries are displayed.
      */
     [property] boolean ShowTableBoundaries;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTables
-    /** If this property is <true></true>, tables are visible.
+    /** If this property is <TRUE/>, tables are visible.
      */
     [property] boolean ShowTables;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTabstops
-    /** If this property is <true></true>, tab stops are visible.
+    /** If this property is <TRUE/>, tab stops are visible.
      */
     [property] boolean ShowTabstops;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTextBoundaries
-    /** If this property is <true></true>, text boundaries are displayed.
+    /** If this property is <TRUE/>, text boundaries are displayed.
      */
     [property] boolean ShowTextBoundaries;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTextFieldBackground
-    /** If this property is <true></true>, text fields are displayed with gray background.
+    /** If this property is <TRUE/>, text fields are displayed with gray background.
      */
     [property] boolean ShowTextFieldBackground;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowVertRuler
-    /** If this property is <true></true>, the vertical ruler is displayed.
+    /** If this property is <TRUE/>, the vertical ruler is displayed.
      */
     [property] boolean ShowVertRuler;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowVertScrollBar
-    /** If this property is <true></true>, the vertical scroll bar is displayed.
+    /** If this property is <TRUE/>, the vertical scroll bar is displayed.
      */
     [property] boolean ShowVertScrollBar;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::SmoothScrolling
-    /** If this property is <true></true>, smooth scrolling is active.
+    /** If this property is <TRUE/>, smooth scrolling is active.
      */
     [property] boolean SmoothScrolling;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::SolidMarkHandles
-    /** If this property is <true></true>, handles of drawing objects are visible.
+    /** If this property is <TRUE/>, handles of drawing objects are visible.
      */
     [property] boolean SolidMarkHandles;
 
@@ -259,6 +259,9 @@ service ViewSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

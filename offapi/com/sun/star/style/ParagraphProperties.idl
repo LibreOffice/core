@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 19:53:44 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackTransparent
-    /** This value is <true></true> if the paragraph background color
+    /** This value is <TRUE/> if the paragraph background color
         is set to transparent.
      */
     [optional, property] boolean ParaBackTransparent;

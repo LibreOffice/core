@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEmbeddedObject.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 11:59:12 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ service TextEmbeddedObject
 
 
 
-        <p> This is visible only if the "TransparentBackground" is <true></true>.</p>
+        <p> This is visible only if the "TransparentBackground" is <TRUE/>.</p>
      */
     [property] long BackColor;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FeatureStateEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
 
 
 
-        <p>This can be, for example, simply <true></true> for a boolean feature like
+        <p>This can be, for example, simply <TRUE/> for a boolean feature like
         underline on/off. Some simple types like <code>string</code> or
         <atom>boolean</atom> are useful here for generic UI elements, like
         a checkmark in a menu.</p>
@@ -134,6 +134,9 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:20  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
         <p>
         <b>Note:</b> This method cannot be called while in the
-        middle of a transaction; calling setReadOnly with <true></true> does not
+        middle of a transaction; calling setReadOnly with <TRUE/> does not
         necessarily cause writes to be prohibited.
         </p>
      */
@@ -349,6 +349,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:41  hjs
     initial import
 

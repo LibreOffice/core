@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:44:06 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::IsNumbering
-    /** If this is <true></true>, numbering is ON for the text of
+    /** If this is <TRUE/>, numbering is ON for the text of
         this <type>Shape</type>.
      */
     [property] boolean IsNumbering;
@@ -164,7 +164,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextAutoGrowHeight
-    /** If this value is <true></true>, the height of the <type>Shape</type> is
+    /** If this value is <TRUE/>, the height of the <type>Shape</type> is
         automatically expanded/shrunk when text is added to or removed from
         the <type>Shape</type>.
      */
@@ -173,7 +173,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextAutoGrowWidth
-    /** If this value is <true></true>, the width of the <type>Shape</type> is
+    /** If this value is <TRUE/>, the width of the <type>Shape</type> is
         automatically expanded/shrunk when text is added to or removed from
         the <type>Shape</type>.
      */
@@ -182,7 +182,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextContourFrame
-    /** If this value is <true></true>, the left edge of every line of text is
+    /** If this value is <TRUE/>, the left edge of every line of text is
         aligned with the left edge of this <type>Shape</type>.
      */
     [property] boolean TextContourFrame;
@@ -190,7 +190,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextFitToSize
-    /** With this set to <true></true>, the text inside of the <type>Shape</type>
+    /** With this set to <TRUE/>, the text inside of the <type>Shape</type>
         is stretched to fit into the <type>Shape</type>.
      */
     [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
@@ -215,7 +215,7 @@ service Text
         to the left edge of the text.
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
         <const>BLOCK</const> or <const>STRETCH</const> or if
-        <member>Text::TextFitSize</member> is <true></true>.</p>
+        <member>Text::TextFitSize</member> is <TRUE/>.</p>
      */
     [property] long TextLeftDistance;
 
@@ -226,7 +226,7 @@ service Text
 
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
         <const>BLOCK</const> or <const>STRETCH</const>
-        or if <member>Text::TextFitSize</member> is <true></true>.</p>
+        or if <member>Text::TextFitSize</member> is <TRUE/>.</p>
      */
     [property] long TextRightDistance;
 
@@ -237,7 +237,7 @@ service Text
 
         <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
         <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
-        <true></true>.</p>
+        <TRUE/>.</p>
      */
     [property] long TextUpperDistance;
 
@@ -251,7 +251,7 @@ service Text
 
         <p>This is only useful if <type>Text::TextVerticalAdjust</type> is
         <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
-        <true></true>.</p>
+        <TRUE/>.</p>
      */
     [property] long TextLowerDistance;
 
@@ -322,7 +322,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationStartInside
-    /** If this value is <true></true>, the text is visible at the start of the
+    /** If this value is <TRUE/>, the text is visible at the start of the
         animation.
      */
     [property] boolean TextAnimationStartInside;
@@ -330,7 +330,7 @@ service Text
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationStopInside
-    /** If this value is <true></true>, the text is visible at the end of the
+    /** If this value is <TRUE/>, the text is visible at the end of the
         animation.
      */
     [property] boolean TextAnimationStopInside;
@@ -348,6 +348,9 @@ service Text
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/07 19:44:06  cl
+    #80304# vertical writing added
+
     Revision 1.4  2000/11/15 16:57:04  cl
     #79743# replaced TextAdjust with TextHorizontalAdjust and TextVerticalAdjust
 

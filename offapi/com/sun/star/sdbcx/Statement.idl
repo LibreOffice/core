@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Statement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:39 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ service Statement
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Statement::UseBookmarks
-    /** returns <true></true> if a resultset should allow the navigation with bookmarks
-        or not. The default is <false></false>.
+    /** returns <TRUE/> if a resultset should allow the navigation with bookmarks
+        or not. The default is <FALSE/>.
      */
     [property] boolean UseBookmarks;
 };
@@ -91,6 +91,9 @@ service Statement
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:39  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:44  hjs
     initial import
 

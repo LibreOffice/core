@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ service TextTableRow
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextTableRow::BackTransparent
-    /** If <true></true>, the background color value in "BackColor" is not visible.
+    /** If <TRUE/>, the background color value in "BackColor" is not visible.
 
         <p>
         </p>
@@ -154,7 +154,7 @@ service TextTableRow
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextTableRow::IsAutoHeight
-    /** If the value of this property is <true></true>, the height of the table row
+    /** If the value of this property is <TRUE/>, the height of the table row
         depends on the content of the table cells.
      */
     [property] boolean IsAutoHeight;
@@ -168,6 +168,9 @@ service TextTableRow
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

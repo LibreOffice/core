@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:28 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ service Shape
 
 
         <p>This color is used if the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
-        is <true></true> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <false></false>.</p>
+        is <TRUE/> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <FALSE/>.</p>
      */
     [property] long DimColor;
 
@@ -108,14 +108,14 @@ service Shape
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::DimHide
     /** If this property and the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
-        are both <true></true>, the shape is hidden instead of dimmed to a color.
+        are both <TRUE/>, the shape is hidden instead of dimmed to a color.
      */
     [property] boolean DimHide;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::DimPrevious
-    /** If this property is <true></true>, this shape is dimmed to the color of
+    /** If this property is <TRUE/>, this shape is dimmed to the color of
         property <member scope="com::sun::star::drawing">Shape::DimColor</member> after executing its
         animation effect.
      */
@@ -132,14 +132,14 @@ service Shape
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::IsEmptyPresentationObject
     /** If this is a default presentation object and if it is empty,
-        this property is <true></true>.
+        this property is <TRUE/>.
      */
     [readonly, property] boolean IsEmptyPresentationObject;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::IsPresentationObject
-    /** If this is a presentation object, this property is <true></true>.
+    /** If this is a presentation object, this property is <TRUE/>.
 
 
 
@@ -159,7 +159,7 @@ service Shape
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::PlayFull
-    /** If this property is <true></true>, the sound of this shape is played in
+    /** If this property is <TRUE/>, the sound of this shape is played in
         full.
 
 
@@ -195,7 +195,7 @@ service Shape
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::presentation::Shape::SoundOn
-    /** If this property is set to <true></true>, a sound is played while the
+    /** If this property is set to <TRUE/>, a sound is played while the
         animation effect is executed.
      */
     [property] boolean SoundOn;
@@ -231,6 +231,9 @@ service Shape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:28  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:30  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-12 10:04:59 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ service LineNumberingProperties
     interface XLineNumberingProperties;
     //-------------------------------------------------------------------------
 
-    /** If <true></true>, line numbering is used.
+    /** If <TRUE/>, line numbering is used.
      */
     [property] boolean IsOn;
 
@@ -91,12 +91,12 @@ service LineNumberingProperties
 
     //-------------------------------------------------------------------------
 
-    /** If <true></true>, empty lines are counted.
+    /** If <TRUE/>, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
     //-------------------------------------------------------------------------
-    /** If <true></true>, lines in frames are included in counting.
+    /** If <TRUE/>, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 12:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ service ChartAxis
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMax
     /** The maximium value of the axis scale is calculated by the chart if
-        this property is <true></true>.
+        this property is <TRUE/>.
      */
     [optional, property] boolean AutoMax;
 
@@ -154,7 +154,7 @@ service ChartAxis
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMin
     /** The minimum value of the axis scale is calculated by the chart if
-        this property is <true></true>.
+        this property is <TRUE/>.
      */
     [optional, property] boolean AutoMin;
 
@@ -177,7 +177,7 @@ service ChartAxis
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoStepMain
     /** The distance between the main tick marks is calculated by the chart
-        if this property is <true></true>.
+        if this property is <TRUE/>.
      */
     [optional, property] boolean AutoStepMain;
 
@@ -282,6 +282,9 @@ service ChartAxis
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.3  2000/10/09 14:24:54  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 
