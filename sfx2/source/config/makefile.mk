@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 11:23:01 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:28:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,11 @@ PRJNAME=sfx2
 TARGET=config
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -92,7 +89,8 @@ UNOTYPES=\
         com.sun.star.frame.XConfigManager \
         com.sun.star.registry.XSimpleRegistry
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         config.src
 
 SLOFILES =	\
