@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-06 08:37:32 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 11:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,20 +237,17 @@ SwModify::~SwModify()
 
 void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
-
-    if( !pRoot || IsModifyLocked() )
-        return;
-
-
-    if ( IsInCache() || IsInSwFntCache() )
+    if (IsInCache() || IsInSwFntCache())
     {
         const USHORT nWhich = pOldValue ? pOldValue->Which() :
                                         pNewValue ? pNewValue->Which() : 0;
         CheckCaching( nWhich );
     }
 
-    LockModify();
+      if (!pRoot || IsModifyLocked())
+        return;
 
+    LockModify();
 
 #ifdef PRODUCT
     bInModify = TRUE;
