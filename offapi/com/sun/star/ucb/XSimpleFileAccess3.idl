@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleFileAccess3.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 01:43:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** This is an extension to the interface <type>XSimpleFileAccess2</type>.
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
 {
