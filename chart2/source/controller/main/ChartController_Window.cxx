@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-25 17:16:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 10:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,8 @@ void ChartController::execute_Paint( const Rectangle& rRect )
 
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
-    pDrawViewWrapper->InitRedraw(pWindow, Region(rRect) );
+    if(pDrawViewWrapper)
+        pDrawViewWrapper->InitRedraw(pWindow, Region(rRect) );
 }
 
 bool isDoubleClick( const MouseEvent& rMEvt )
