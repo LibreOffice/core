@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basegfxfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:58:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <osl/diagnose.h>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_INTERPOLATIONMODE_HPP_
-#include <drafts/com/sun/star/rendering/InterpolationMode.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_INTERPOLATIONMODE_HPP_
+#include <com/sun/star/rendering/InterpolationMode.hpp>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
@@ -90,7 +90,7 @@
 #include <impltext.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
