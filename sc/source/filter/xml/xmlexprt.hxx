@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 09:45:04 $
+ *  last change: $Author: sab $ $Date: 2001-05-22 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ public:
     void CreateSharedData(const sal_Int32 nTableCount);
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
     ScMySharedData* GetSharedData() { return pSharedData; }
+    XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
 };
 
 #endif

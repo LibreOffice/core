@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-22 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,6 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
     pCellsItr = new ScMyNotEmptyCellsIterator(*this);
     pDefaults = new ScMyDefaultStyles();
-    pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(*this);
 
     // document is not set here - create ScChangeTrackingExportHelper later
 
@@ -2063,14 +2062,14 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         break;
     case table::CellContentType_VALUE :
         {
-            pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                 aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
         }
         break;
     case table::CellContentType_TEXT :
         {
             if (GetCellText(aCell))
-                pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                     aCell.xCell->getFormula(), aCell.sStringValue, XML_NAMESPACE_TABLE, sal_True, sal_False);
         }
         break;
@@ -2100,16 +2099,16 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                     {
                         sal_Bool bIsStandard;
                         rtl::OUString sCurrency;
-                        pNumberFormatAttributesExportHelper->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
+                        GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
                         if (bIsStandard)
                         {
                             if (pDoc)
-                                pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                     pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
                                     aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                         }
                         else
-                            pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                 aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                     }
                     else
@@ -3030,5 +3029,12 @@ XMLShapeExport* ScXMLExport::CreateShapeExport()
 void ScXMLExport::CreateSharedData(const sal_Int32 nTableCount)
 {
     pSharedData = new ScMySharedData(nTableCount);
+}
+
+XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExportHelper()
+{
+    if (!pNumberFormatAttributesExportHelper)
+        pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(*this);
+    return pNumberFormatAttributesExportHelper;
 }
 
