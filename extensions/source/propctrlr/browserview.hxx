@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 13:44:49 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
 #endif
+// #95343# --------------------
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 //............................................................................
 namespace pcr
@@ -125,6 +129,9 @@ namespace pcr
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
         Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
 
+        // #95343# ------------------
+        ::com::sun::star::awt::Size getMinimumSize();
+
     protected:
         DECL_LINK(OnPageActivation, void*);
     };
@@ -139,6 +146,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/30 13:44:49  fs
+ *  #86838# forward the GetFocus event to the property box
+ *
  *  Revision 1.2  2001/02/19 14:08:31  fs
  *  #84041# infrastructure for activating pages from outside
  *

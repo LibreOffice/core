@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:25:49 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,12 @@ namespace pcr
             m_aListBox.Activate(IsVisible());
     }
 
+    // #95343# ---------------------------------------------------------
+    sal_Int32 OBrowserPage::getMinimumWidth()
+    {
+        return m_aListBox.GetMinimumWidth()+6;
+    }
+
 //............................................................................
 } // namespace pcr
 //............................................................................
@@ -112,6 +118,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:25:49  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 17:09:37  fs
  ************************************************************************/

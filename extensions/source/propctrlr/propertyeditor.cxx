@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 13:43:32 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,25 @@ namespace pcr
             }
         }
         m_aTabControl.Clear();
+    }
+
+    // #95343# ---------------------------------------------------------
+    sal_Int32 OPropertyEditor::getMinimumWidth()
+    {
+        sal_uInt16 nCount = m_aTabControl.GetPageCount();
+        sal_Int32 nPageMinWidth = 0;
+        for(long i = nCount-1; i >= 0; --i)
+        {
+            sal_uInt16 nID = m_aTabControl.GetPageId((sal_uInt16)i);
+            OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
+            if (pPage)
+            {
+                sal_Int32 nCurPageMinWidth = pPage->getMinimumWidth();
+                if( nCurPageMinWidth > nPageMinWidth )
+                    nPageMinWidth = nCurPageMinWidth;
+            }
+        }
+        return nPageMinWidth+6;
     }
 
     //------------------------------------------------------------------
@@ -430,6 +449,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/05/30 13:43:32  fs
+ *  #86838# forward the GetFocus event to the tab control
+ *
  *  Revision 1.3  2001/02/19 14:08:31  fs
  *  #84041# infrastructure for activating pages from outside
  *

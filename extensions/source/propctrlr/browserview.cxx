@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-06 08:13:10 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,15 @@ namespace pcr
         m_pPropBox->SetSizePixel(aSize);
     }
 
+    // #95343# ---------------------------------------------------------------
+    ::com::sun::star::awt::Size OPropertyBrowserView::getMinimumSize()
+    {
+        Size aSize = GetOutputSizePixel();
+        if( m_pPropBox )
+            aSize.setWidth( m_pPropBox->getMinimumWidth() );
+        return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
+    }
+
 //............................................................................
 } // namespace pcr
 //............................................................................
@@ -195,6 +204,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/08/06 08:13:10  oj
+ *  #102058# use auto_ptr in dtor
+ *
  *  Revision 1.4  2001/05/30 13:44:49  fs
  *  #86838# forward the GetFocus event to the property box
  *

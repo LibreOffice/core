@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:25:58 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ namespace pcr
 
     public:
         OBrowserPage(Window* pParent, WinBits nWinStyle = 0);
+        // #95343# -------------
+        sal_Int32 getMinimumWidth();
 
         OBrowserListBox* getListBox();
     };
@@ -101,6 +103,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:25:58  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 15:45:44  fs
  ************************************************************************/

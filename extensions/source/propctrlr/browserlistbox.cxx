@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,12 @@ namespace pcr
         // initialize the entry
         ChangeEntry(_rPropertyData, nInsertPos);
         return nInsertPos;
+    }
+
+    // #95343# ---------------------------------------------------------
+    sal_Int32 OBrowserListBox::GetMinimumWidth()
+    {
+        return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 10;
     }
 
     //------------------------------------------------------------------
@@ -892,6 +898,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/18 14:45:10  rt
+ *  #65293# semicolon removed
+ *
  *  Revision 1.1  2001/01/12 11:25:25  fs
  *  initial checkin - outsourced the form property browser
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:25:36 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 09:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,10 @@ namespace pcr
 
                 virtual void                SetSelectedEntry(sal_uInt16 nPos);
                 virtual sal_uInt16          GetSelectedEntry();
+
+                // #95343# --------------------------
+                sal_Int32                   GetMinimumWidth();
+
     protected:
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ClickHdl, PushButton* );
@@ -178,6 +182,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:25:36  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 15:48:58  fs
  ************************************************************************/
