@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-18 17:25:18 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2785,7 +2785,8 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
 }
 
 void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
-                                   BOOL bForce, ScTabViewShell* pSourceSh )
+                                   BOOL bForce, ScTabViewShell* pSourceSh,
+                                   BOOL bStopEditing)
 {
     //  #62806# Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
     //  gleich abbrechen und nicht den Status durcheinander bringen
@@ -2909,7 +2910,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         pInputWin->SetSumAssignMode();
                     }
 
-                    SFX_APP()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
+                    if (bStopEditing)
+                        SFX_APP()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
                     //  As long as the content is not edited, turn off online spelling.
                     //  Online spelling is turned back on in StartTable, after setting
