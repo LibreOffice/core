@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:44:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,18 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
     initValueProperty( PROPERTY_DATE, PROPERTY_ID_DATE );
 
     setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_DATEFORMAT));
+
+    osl_incrementInterlockedCount( &m_refCount );
+    try
+    {
+        if ( m_xAggregateSet.is() )
+            m_xAggregateSet->setPropertyValue( PROPERTY_DATEMIN, makeAny( (sal_Int32)( ::Date( 1, 1, 1800 ).GetDate() ) ) );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "ODateModel::ODateModel: caught an exception!" );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //------------------------------------------------------------------------------
