@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-10 10:56:10 $
+ *  last change: $Author: cp $ $Date: 2001-10-05 14:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,7 +1818,7 @@ static char const aImplDef_CJK_JP_Gothic[] = "HG Mincho Light J;MS Gothic;HG Got
 static char const aImplDef_CJK_JP_UIGothic[] = "Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic";
 static char const aImplDef_CJK_SC[] = "MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun";
 static char const aImplDef_CJK_TC[] = "MSung Light TC;MingLiU;Ming;PMingLiU";
-static char const aImplDef_CJK_KR_Batang[] = "HY MyeongJo Light;Batang;Myeongjo";
+static char const aImplDef_CJK_KR_Batang[] = "HY MyeongJo Light K;Batang;Myeongjo";
 static char const aImplDef_CJK_KR_Gulim[] = "Andale Sans UI;Gulim;Roundgothic";
 
 // -----------------------------------------------------------------------
