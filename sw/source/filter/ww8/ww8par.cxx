@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:33:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ using namespace sw::util;
 using namespace sw::types;
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
-    : SvxMSDffManager(*rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
+    : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
         rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm,
         rRdr.maTracer.GetTrace()),
     rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
@@ -3184,14 +3184,14 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 #**************************************************************************/
 
 SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, bool bNewDoc)
+    SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc)
     : mpDocShell(rD.GetDocShell()), maTracer(*(mpDocShell->GetMedium())),
     pStg(pStorage), pStrm(pSt), pTableStream(0), pDataStream(0), rDoc(rD),
     maSectionManager(*this), maInsertedTables(rD),
     maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')), maParaStyleMapper(rD),
     maCharStyleMapper(rD), pMSDffManager(0), mpAtnNames(0), pAuthorInfos(0),
-    mbNewDoc(bNewDoc), nDropCap(0)
+    mbNewDoc(bNewDoc), nDropCap(0),sBaseURL(rBaseURL)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -4602,7 +4602,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     return nErrRet;
 }
 
-ULONG WW8Reader::Read(SwDoc &rDoc, SwPaM &rPam, const String & /* FileName */)
+ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & /* FileName */)
 {
     USHORT nOldBuffSize = 32768;
     bool bNew = !bInsertMode;               // Neues Doc ( kein Einfuegen )
@@ -4656,7 +4656,7 @@ ULONG WW8Reader::Read(SwDoc &rDoc, SwPaM &rPam, const String & /* FileName */)
             Reader::ResetFrmFmts( rDoc );
         }
         SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
-            bNew);
+            rBaseURL, bNew);
         nRet = pRdr->LoadDoc( rPam );
         delete pRdr;
 
