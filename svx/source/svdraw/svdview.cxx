@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:17:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut):
     onAccessibilityOptionsChanged();
 }
 
-SdrView::SdrView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrView::SdrView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrCreateView(pModel1,pXOut),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
@@ -1364,72 +1364,72 @@ BOOL SdrView::IsDeleteMarkedPossible() const
     return IsDeleteMarkedObjPossible();
 }
 
-void SdrView::WriteRecords(SvStream& rOut) const
-{
-    {
-        // Der CharSet muss! als erstes rausgestreamt werden
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCHARSET);
+//BFS01void SdrView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 {
+//BFS01     // Der CharSet muss! als erstes rausgestreamt werden
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCHARSET);
+//BFS01
+//BFS01     // UNICODE:
+//BFS01     // rtl_TextEncoding eOutCharSet=rOut.GetStreamCharSet();
+//BFS01     rtl_TextEncoding eOutCharSet = gsl_getSystemTextEncoding();
+//BFS01
+//BFS01     // #90477# rOut << UINT16( GetStoreCharSet( eOutCharSet ) );
+//BFS01     rOut << (UINT16)GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
+//BFS01 }
+//BFS01 SdrCreateView::WriteRecords(rOut);
+//BFS01}
 
-        // UNICODE:
-        // rtl_TextEncoding eOutCharSet=rOut.GetStreamCharSet();
-        rtl_TextEncoding eOutCharSet = gsl_getSystemTextEncoding();
+//BFS01BOOL SdrView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor) {
+//BFS01     bRet=TRUE;
+//BFS01     switch (rSubHead.GetIdentifier()) {
+//BFS01         case SDRIORECNAME_VIEWCHARSET: {
+//BFS01             UINT16 nCharSet;
+//BFS01             // #90477# rIn>>nCharSet;
+//BFS01             // rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+//BFS01             rIn >> nCharSet;
+//BFS01             rIn.SetStreamCharSet(GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion()));
+//BFS01         } break;
+//BFS01         default: bRet=FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 if (!bRet) bRet=SdrCreateView::ReadRecord(rViewHead,rSubHead,rIn);
+//BFS01 return bRet;
+//BFS01}
 
-        // #90477# rOut << UINT16( GetStoreCharSet( eOutCharSet ) );
-        rOut << (UINT16)GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
-    }
-    SdrCreateView::WriteRecords(rOut);
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrView& rView)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOViewID);
+//BFS01 rView.WriteRecords(rOut);
+//BFS01 return rOut;
+//BFS01}
 
-BOOL SdrView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor) {
-        bRet=TRUE;
-        switch (rSubHead.GetIdentifier()) {
-            case SDRIORECNAME_VIEWCHARSET: {
-                UINT16 nCharSet;
-                // #90477# rIn>>nCharSet;
-                // rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
-                rIn >> nCharSet;
-                rIn.SetStreamCharSet(GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion()));
-            } break;
-            default: bRet=FALSE;
-        }
-    }
-    if (!bRet) bRet=SdrCreateView::ReadRecord(rViewHead,rSubHead,rIn);
-    return bRet;
-}
-
-SvStream& operator<<(SvStream& rOut, const SdrView& rView)
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOViewID);
-    rView.WriteRecords(rOut);
-    return rOut;
-}
-
-SvStream& operator>>(SvStream& rIn, SdrView& rView)
-{
-    if (rIn.GetError()!=0) return rIn;
-    rView.BrkAction();
-    rView.Clear();
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    if (!aHead.IsMagic()) {
-        rIn.SetError(SVSTREAM_FILEFORMAT_ERROR); // Format-Fehler
-        return rIn;
-    }
-    rtl_TextEncoding eStreamCharSetMerker=rIn.GetStreamCharSet(); // Der StreamCharSet wird von SdrView::ReadRecord() gesetzt
-    while (aHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
-        SdrNamedSubRecord aSubRecord(rIn,STREAM_READ);
-        rView.ReadRecord(aHead,aSubRecord,rIn);
-    }
-
-    rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
-
-    rView.InvalidateAllWin();
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrView& rView)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 rView.BrkAction();
+//BFS01 rView.Clear();
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 if (!aHead.IsMagic()) {
+//BFS01     rIn.SetError(SVSTREAM_FILEFORMAT_ERROR); // Format-Fehler
+//BFS01     return rIn;
+//BFS01 }
+//BFS01 rtl_TextEncoding eStreamCharSetMerker=rIn.GetStreamCharSet(); // Der StreamCharSet wird von SdrView::ReadRecord() gesetzt
+//BFS01 while (aHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
+//BFS01     SdrNamedSubRecord aSubRecord(rIn,STREAM_READ);
+//BFS01     rView.ReadRecord(aHead,aSubRecord,rIn);
+//BFS01 }
+//BFS01
+//BFS01 rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
+//BFS01
+//BFS01 rView.InvalidateAllWin();
+//BFS01 return rIn;
+//BFS01}
 
 
 void SdrView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
