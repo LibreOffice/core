@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 17:26:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2009,6 +2009,7 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USH
 
 Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
 {
+    SfxObjectCreateMode eShellMode = GetCreateMode();
     if ( eShellMode == SFX_CREATE_MODE_ORGANIZER )
     {
         //  ohne Inhalte wissen wir auch nicht, wie gross die Inhalte sind
