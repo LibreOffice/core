@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FileAccess.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:18:56 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:34:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -393,6 +393,7 @@ public class FileAccess {
         return filenameConverter.getSystemPathFromFileURL(parentURL + (((childURL == null || childURL.equals("")) ? "" : "/" + childURL)));
     }
 
+
     /**
      * @author rpiterman
      * @param filename
@@ -491,12 +492,21 @@ public class FileAccess {
     }
 
     /**
-         * @author rpiterman
-         * @param path
-         * @return
-         */
+     * @author rpiterman
+     * @param path
+     * @return
+     */
     public static String getFilename(String path) {
         return getFilename(path, "/");
+    }
+
+    /**
+     * return the filename out of a system-dependent path
+     * @param path
+     * @return
+     */
+    public static String getPathFilename(String path) {
+        return getFilename(path, File.separator);
     }
 
     /**
