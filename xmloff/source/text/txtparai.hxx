@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 07:11:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class XMLParaContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
     ::rtl::OUString             sStyleName;
+    ::rtl::OUString             sId;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
     sal_Bool                bIgnoreLeadingSpace;
