@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 14:56:20 $
+ *  last change: $Author: mtg $ $Date: 2001-02-20 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,10 @@ void SwDoc::InitDrawModel()
                                             SDRATTR_END, FALSE );
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );
-    aAttrPool.FreezeIdRanges();
+     if ( !aAttrPool.GetFrozenIdRanges () )
+        aAttrPool.FreezeIdRanges();
+    else
+        pSdrPool->FreezeIdRanges();
 
     //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
     //Seite.
