@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:32:41 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3697,13 +3697,21 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
 }
 
 void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3D,
-    BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft)
+    BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
     // do drawflags allow line drawing at all?
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
     BOOL bLineTransparence = (nLineTransparence != 0);
     BOOL bDrawTransparence = ((nDrawFlags & E3D_DRAWFLAG_TRANSPARENT) != 0);
+
+    // #b4899532# if not filled but fill draft, avoid object being invisible in using
+    // a hair linestyle and COL_LIGHTGRAY
+    SfxItemSet aItemSet(rSet);
+    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+    {
+        ImpPrepareLocalItemSetForDraftLine(aItemSet);
+    }
 
     if(bLineTransparence != bDrawTransparence)
     {
@@ -3714,7 +3722,7 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     XLineStyle aLineStyle(XLINE_NONE);
     if(bDrawOutline)
     {
-        aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        aLineStyle = ((const XLineStyleItem&)(aItemSet.Get(XATTR_LINESTYLE))).GetValue();
         bDrawOutline = (aLineStyle != XLINE_NONE);
     }
 
@@ -3728,8 +3736,8 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     // does the outdev use linestyle?
     if(bDrawOutline && !rOut.GetIgnoreLineStyle())
     {
-        Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
-        sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+        Color aColorLine = ((const XLineColorItem&)(aItemSet.Get(XATTR_LINECOLOR))).GetValue();
+        sal_Int32 nLineWidth = ((const XLineWidthItem&)(aItemSet.Get(XATTR_LINEWIDTH))).GetValue();
 
         if(pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSLINE)
         {
@@ -3765,7 +3773,7 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
 
     bDrawOutline = ((nDrawFlags & E3D_DRAWFLAG_OUTLINE) != 0);
     if(bDrawOutline)
-        ImpSet3DParForLine(rOut, pBase3D, bDrawOutline, nDrawFlags, bGhosted, bIsLineDraft);
+        ImpSet3DParForLine(rOut, pBase3D, bDrawOutline, nDrawFlags, bGhosted, bIsLineDraft, bIsFillDraft);
 
     // Set ObjectTrans if line or fill is still set (maybe retet by upper calls)
     if(bDrawObject || bDrawOutline)
