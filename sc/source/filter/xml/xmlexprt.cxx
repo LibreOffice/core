@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
+ *  last change: $Author: sab $ $Date: 2001-11-16 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,7 +1506,7 @@ void ScXMLExport::_ExportContent()
 
 void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 {
-//  SvXMLExport::_ExportStyles(bUsed);
+    SvXMLExport::_ExportStyles(bUsed);
     if (!pSharedData)
     {
         sal_Int32 nTableCount(0);
