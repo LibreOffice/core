@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:30:11 $
+#   last change: $Author: rt $ $Date: 2004-05-21 07:50:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,9 +80,6 @@ CDEFS+=-DBASICDEBUG
 
 
 # --- Allgemein ----------------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/basicide.srs
-BMP_IN =$(PRJ)$/win/res
 
 SLOFILES =  \
             $(SLO)$/basdoc.obj	\
