@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:07:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
         Text[ turkish ] = "Renk çözünürlüðü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resolución del color";
     };
     ListBox LB_COLORS
     {
@@ -333,6 +334,17 @@ ModalDialog DLG_EXPORT_PIX
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Original" ; Default ; > ;
+        < "Valor umbral de 1 bit" ; Default ; > ;
+        < "1 bit - difusionado" ; Default ; > ;
+        < "Paleta de escala de grises 4 bits" ; Default ; > ;
+        < "Paleta de colores de 4 bits" ; Default ; > ;
+        < "Paleta de escala de grises 8 bits" ; Default ; > ;
+        < "Paleta de colores de 8 bits" ; Default ; > ;
+        < "Color real 24 bits" ; Default ; > ;
+    };
     };
     CheckBox CBX_RLE
     {
@@ -360,6 +372,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "RLE ÄÚµù";
         Text[ turkish ] = "RLE kodlama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Codificación RLE";
     };
     GroupBox GRP_MODE_PIX
     {
@@ -386,6 +399,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
     RadioButton RB_ORIGINAL_PIX
     {
@@ -413,6 +427,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "¿øº»(~O)";
         Text[ turkish ] = "~Asýl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Original";
     };
     RadioButton RB_RES_PIX
     {
@@ -440,6 +455,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "ÇØ»óµµ(~R)";
         Text[ turkish ] = "~Çözünürlük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Resolución";
     };
     ComboBox CBB_RES_PIX
     {
@@ -481,6 +497,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "Å©±â(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño";
     };
     MetricField MTF_SIZEX_PIX
     {
@@ -541,6 +558,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
     };
     FixedText FT_SIZEY_PIX
     {
@@ -567,6 +585,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura";
     };
     OKButton BTN_OK_PIX
     {
@@ -654,6 +673,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "Å©±â";
         Text[ turkish ] = "Büyüklük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tamaño";
     };
     FixedText FT_SIZEX_VEC
     {
@@ -680,6 +700,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
     };
     FixedText FT_SIZEY_VEC
     {
@@ -706,6 +727,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura";
     };
     OKButton BTN_OK_VEC
     {
@@ -752,6 +774,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "¿øº»(~O)";
         Text[ turkish ] = "~Asýl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Original";
     };
     RadioButton RB_SIZE_VEC
     {
@@ -779,6 +802,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "Å©±â(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño";
     };
     GroupBox GRP_MODE_VEC
     {
@@ -805,5 +829,6 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
 };
