@@ -48,10 +48,3 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
 ..\com\sun\star\security\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\security
 ..\com\sun\star\task\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\task
 ..\com\sun\star\uri\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%
-
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
