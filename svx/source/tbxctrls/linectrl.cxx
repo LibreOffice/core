@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:19:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,13 +520,17 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
         aArgs[0].Value = a;
     }
 
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    aLineEndSet.SetNoSelection();
+
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndStyle" )),
                                  aArgs );
 
     delete pLineEndItem;
     delete pLineStartItem;
-    aLineEndSet.SetNoSelection();
 
     return 0;
 }
