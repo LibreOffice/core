@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:37:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,17 +102,17 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -132,6 +132,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -200,7 +203,7 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using ::com::sun::star::beans::PropertyValue;
@@ -218,7 +221,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleParagraphView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
 const xub_StrLen MAX_DESC_TEXT_LEN = 40;
 const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
@@ -465,12 +468,12 @@ void SwAccessibleParagraph::GetStates(
     SwAccessibleContext::GetStates( rStateSet );
 
     // MULTILINE
-    rStateSet.AddState( AccessibleStateType::MULTILINE );
+    rStateSet.AddState( AccessibleStateType::MULTI_LINE );
 
     // MULTISELECTABLE
     SwCrsrShell *pCrsrSh = GetCrsrShell();
     if( pCrsrSh )
-        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
 
     // FOCUSABLE
     if( pCrsrSh )
@@ -503,7 +506,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     {
         // The text is changed
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_TEXT_EVENT;
+        aEvent.EventId = AccessibleEventId::TEXT_CHANGED;
 
         FireAccessibleEvent( aEvent );
     }
@@ -537,7 +540,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         {
             // The text is changed
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
             aEvent.OldValue <<= sOldDesc;
             aEvent.NewValue <<= sNewDesc;
 
@@ -573,7 +576,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
 
 
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
+        aEvent.EventId = AccessibleEventId::CARET_CHANGED;
         aEvent.OldValue <<= nOld;
         aEvent.NewValue <<= nNew;
 
@@ -872,6 +875,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
     sal_Int16 nTextType )
     throw (
         IndexOutOfBoundsException,
+        IllegalArgumentException,
         RuntimeException)
 {
     // error checking
@@ -911,9 +915,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
             break;
 
         default:
-            // The specification asks us to return an empty string
-            // if the text type is invalid.
-            bRet = GetEmptyBoundary( rBound );
+            throw IllegalArgumentException( );
             break;
     }
 
@@ -935,7 +937,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
 }
 
 Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
-        throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1186,7 +1188,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 }
 
 Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
-    sal_Int32 nIndex )
+    sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
 
@@ -1240,20 +1242,42 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     CHECK_FOR_DEFUNC( XAccessibleText );
 
-    if( ! IsValidChar( nIndex, GetString().getLength() ) )
+
+    /*  #i12332# The position after the string needs special treatment.
+        IsValidChar -> IsValidPosition
+    */
+    if( ! (IsValidPosition( nIndex, GetString().getLength() ) ) )
         throw IndexOutOfBoundsException();
+
+    /*  #i12332#  */
+    sal_Bool bBehindText = sal_False;
+    if ( nIndex == GetString().getLength() )
+        bBehindText = sal_True;
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
     aMoveState.bRealHeight = TRUE;
     aMoveState.bRealWidth = TRUE;
     SwSpecialPos aSpecialPos;
-    USHORT nPos = GetPortionData().FillSpecialPos(
-        nIndex, aSpecialPos, aMoveState.pSpecialPos );
+    SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
+
+    USHORT nPos = 0;
+
+    /*  #i12332# FillSpecialPos does not accept nIndex ==
+         GetString().getLength(). In that case nPos is set to the
+         length of the string in the core. This way GetCharRect
+         returns the rectangle for a cursor at the end of the
+         paragraph. */
+    if (bBehindText)
+    {
+        nPos = pNode->GetTxt().Len();
+    }
+    else
+        nPos = GetPortionData().FillSpecialPos
+            (nIndex, aSpecialPos, aMoveState.pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
-    SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
     SwIndex aIndex( pNode, nPos );
     SwPosition aPosition( *pNode, aIndex );
     GetFrm()->GetCharRect( aCoreRect, aPosition, &aMoveState );
@@ -1264,6 +1288,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
     SwRect aFrmLogBounds( GetBounds() ); // twip rel to doc root
+
     Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
     aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
@@ -1307,7 +1332,21 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
     MapMode aMapMode = pWin->GetMapMode();
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.IsInside( aCorePoint ) )
+    {
+        /* #i12332# rPoint is may also be in rectangle returned by
+            getCharacterBounds(getCharacterCount() */
+
+        com::sun::star::awt::Rectangle aRectEndPos =
+            getCharacterBounds(getCharacterCount());
+
+        if (rPoint.X - aRectEndPos.X >= 0 &&
+            rPoint.X - aRectEndPos.X < aRectEndPos.Width &&
+            rPoint.Y - aRectEndPos.Y >= 0 &&
+            rPoint.Y - aRectEndPos.Y < aRectEndPos.Height)
+            return getCharacterCount();
+
         return -1;
+    }
 
     // ask core for position
     DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
@@ -1425,7 +1464,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
 OUString SwAccessibleParagraph::getTextAtIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1454,7 +1493,7 @@ OUString SwAccessibleParagraph::getTextAtIndex(
 
 OUString SwAccessibleParagraph::getTextBeforeIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1492,7 +1531,7 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
 
 OUString SwAccessibleParagraph::getTextBehindIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1752,12 +1791,12 @@ Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-void SwAccessibleParagraph::deselectSelectedAccessibleChild(
+void SwAccessibleParagraph::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
-    aSelectionHelper.deselectSelectedAccessibleChild(nSelectedChildIndex);
+    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }
