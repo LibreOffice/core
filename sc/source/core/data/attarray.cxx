@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:53:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
+#include <svx/bolnitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/shaditem.hxx>
 #include <svtools/poolcach.hxx>
@@ -632,44 +633,76 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         do
         {
             const ScPatternAttr*    pOldPattern = pData[nPos].pPattern;
-            const SfxPoolItem*      pItem = NULL;
+            const SfxItemSet&       rOldSet = pOldPattern->GetItemSet();
+            const SfxPoolItem*      pBoxItem = 0;
+            SfxItemState            eState = rOldSet.GetItemState( ATTR_BORDER, TRUE, &pBoxItem );
+            const SfxPoolItem*      pTLBRItem = 0;
+            SfxItemState            eTLBRState = rOldSet.GetItemState( ATTR_BORDER_TLBR, TRUE, &pTLBRItem );
+            const SfxPoolItem*      pBLTRItem = 0;
+            SfxItemState            eBLTRState = rOldSet.GetItemState( ATTR_BORDER_BLTR, TRUE, &pBLTRItem );
 
-            if ( SFX_ITEM_SET == pOldPattern->GetItemSet().
-                                    GetItemState( ATTR_BORDER, TRUE, &pItem ) )
+            if ( (SFX_ITEM_SET == eState) || (SFX_ITEM_SET == eTLBRState) || (SFX_ITEM_SET == eBLTRState) )
             {
                 ScPatternAttr*  pNewPattern = new ScPatternAttr(*pOldPattern);
-                SvxBoxItem      aBoxItem( *(const SvxBoxItem*)pItem );
+                SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = pData[nPos].nRow;
+
+                SvxBoxItem*     pNewBoxItem = pBoxItem ? (SvxBoxItem*)pBoxItem->Clone() : 0;
+                SvxLineItem*    pNewTLBRItem = pTLBRItem ? (SvxLineItem*)pTLBRItem->Clone() : 0;
+                SvxLineItem*    pNewBLTRItem = pBLTRItem ? (SvxLineItem*)pBLTRItem->Clone() : 0;
 
                 // Linienattribute holen und mit Parametern aktualisieren
 
                 if ( !pLine )
                 {
-                    if ( aBoxItem.GetTop() )    aBoxItem.SetLine( NULL, BOX_LINE_TOP );
-                    if ( aBoxItem.GetBottom() ) aBoxItem.SetLine( NULL, BOX_LINE_BOTTOM );
-                    if ( aBoxItem.GetLeft() )   aBoxItem.SetLine( NULL, BOX_LINE_LEFT );
-                    if ( aBoxItem.GetRight() )  aBoxItem.SetLine( NULL, BOX_LINE_RIGHT );
+                    if( pNewBoxItem )
+                    {
+                        if ( pNewBoxItem->GetTop() )    pNewBoxItem->SetLine( NULL, BOX_LINE_TOP );
+                        if ( pNewBoxItem->GetBottom() ) pNewBoxItem->SetLine( NULL, BOX_LINE_BOTTOM );
+                        if ( pNewBoxItem->GetLeft() )   pNewBoxItem->SetLine( NULL, BOX_LINE_LEFT );
+                        if ( pNewBoxItem->GetRight() )  pNewBoxItem->SetLine( NULL, BOX_LINE_RIGHT );
+                    }
+                    if( pNewTLBRItem && pNewTLBRItem->GetLine() )
+                        pNewTLBRItem->SetLine( 0 );
+                    if( pNewBLTRItem && pNewBLTRItem->GetLine() )
+                        pNewBLTRItem->SetLine( 0 );
                 }
                 else
                 {
                     if ( bColorOnly )
                     {
                         Color aColor( pLine->GetColor() );
-                        SET_LINECOLOR( aBoxItem.GetTop(),    aColor );
-                        SET_LINECOLOR( aBoxItem.GetBottom(), aColor );
-                        SET_LINECOLOR( aBoxItem.GetLeft(),   aColor );
-                        SET_LINECOLOR( aBoxItem.GetRight(),  aColor );
+                        if( pNewBoxItem )
+                        {
+                            SET_LINECOLOR( pNewBoxItem->GetTop(),    aColor );
+                            SET_LINECOLOR( pNewBoxItem->GetBottom(), aColor );
+                            SET_LINECOLOR( pNewBoxItem->GetLeft(),   aColor );
+                            SET_LINECOLOR( pNewBoxItem->GetRight(),   aColor );
+                        }
+                        if( pNewTLBRItem )
+                            SET_LINECOLOR( pNewTLBRItem->GetLine(), aColor );
+                        if( pNewBLTRItem )
+                            SET_LINECOLOR( pNewBLTRItem->GetLine(), aColor );
                     }
                     else
                     {
-                        SET_LINE( aBoxItem.GetTop(),    pLine );
-                        SET_LINE( aBoxItem.GetBottom(), pLine );
-                        SET_LINE( aBoxItem.GetLeft(),   pLine );
-                        SET_LINE( aBoxItem.GetRight(),  pLine );
+                        if( pNewBoxItem )
+                        {
+                            SET_LINE( pNewBoxItem->GetTop(),    pLine );
+                            SET_LINE( pNewBoxItem->GetBottom(), pLine );
+                            SET_LINE( pNewBoxItem->GetLeft(),   pLine );
+                            SET_LINE( pNewBoxItem->GetRight(),   pLine );
+                        }
+                        if( pNewTLBRItem )
+                            SET_LINE( pNewTLBRItem->GetLine(), pLine );
+                        if( pNewBLTRItem )
+                            SET_LINE( pNewBLTRItem->GetLine(), pLine );
                     }
                 }
-                pNewPattern->GetItemSet().Put( aBoxItem );
+                if( pNewBoxItem )   rNewSet.Put( *pNewBoxItem );
+                if( pNewTLBRItem )  rNewSet.Put( *pNewTLBRItem );
+                if( pNewBLTRItem )  rNewSet.Put( *pNewBLTRItem );
 
                 nStart = pData[nPos].nRow + 1;
 
@@ -692,6 +725,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                     else
                         nPos++;
                 }
+                delete pNewBoxItem;
+                delete pNewTLBRItem;
+                delete pNewBLTRItem;
                 delete pNewPattern;
             }
             else
