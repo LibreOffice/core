@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:16:52 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_simplified ] = "Ì×ÓÃÊ¹ÓÃÕßÊı¾İ(~A)";
         Text[ russian ] = "Ïğèìåíèòü äàííûå ïîëüçîâàòåëÿ";
         Text[ polish ] = "Zast~osuj dane u¿ytkownika";
-        Text[ japanese ] = "Õ°»Ş° ÃŞ°À‚ğg—p‚·‚é";
+        Text[ japanese ] = "Õ°»Ş° ÃŞ°À‚ğg—p‚·‚é(~A)";
         Text[ chinese_traditional ] = "±Ä¥Î¨Ï¥ÎªÌ¸ê®Æ(~A)";
         Text[ greek ] = "×ñŞóç ~ğñïóùğéêşí äåäïìİíùí";
         Text[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ ÀÌ¿ë(~A)";
@@ -836,10 +836,10 @@ TabPage TP_DOCINFORELOAD
         Text[ chinese_simplified ] = "~URL";
         Text[ russian ] = "~URL";
         Text[ polish ] = "URL";
-        Text[ japanese ] = "URL(~U)";
+        Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ greek ] = "~URL";
-        Text[ korean ] = "URL(~U)";
+        Text[ korean ] = "~URL";
         Text[ arabic ] = "URL~";
         Text[ turkish ] = "~URL";
         Text[ language_user1 ] = " ";
