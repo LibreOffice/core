@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyaggregation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 15:00:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _CPPUHELPER_COMPBASE_EX_HXX_
 #include <cppuhelper/compbase_ex.hxx>
+#endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
 #endif
 
 /* class hierarchy herein:
@@ -180,7 +183,7 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class OComponentProxyAggregationHelper  :public ::cppu::ImplHelper1 <   com::sun::star::lang::XEventListener
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   com::sun::star::lang::XEventListener
                                                                         >
                                             ,private OProxyAggregation
     {
@@ -227,9 +230,9 @@ namespace comphelper
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     private:
-        OComponentProxyAggregationHelper( );                                                    // never implemented
-        OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& );            // never implemented
-        OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& ); // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( );                                                  // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& );          // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& );   // never implemented
     };
 
     //=========================================================================
@@ -237,7 +240,7 @@ namespace comphelper
     //=========================================================================
     typedef ::cppu::WeakComponentImplHelperBase OComponentProxyAggregation_CBase;
 
-    class OComponentProxyAggregation    :public OBaseMutex
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation   :public OBaseMutex
                                         ,public OComponentProxyAggregation_CBase
                                         ,public OComponentProxyAggregationHelper
     {
@@ -268,9 +271,9 @@ namespace comphelper
         void implEnsureDisposeInDtor( );
 
     private:
-        OComponentProxyAggregation( );                                              // never implemented
-        OComponentProxyAggregation( const OComponentProxyAggregation& );            // never implemented
-        OComponentProxyAggregation& operator=( const OComponentProxyAggregation& ); // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( );                                                // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( const OComponentProxyAggregation& );          // never implemented
+        COMPHELPER_DLLPRIVATE OComponentProxyAggregation& operator=( const OComponentProxyAggregation& );   // never implemented
     };
 
 //.............................................................................
