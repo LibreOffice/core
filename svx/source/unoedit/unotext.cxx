@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-14 09:12:50 $
+ *  last change: $Author: cl $ $Date: 2001-08-16 14:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,12 +485,9 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
                 do
                 {
                     // we have a paragraph
-                    SfxItemSet aOldSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
-                    SfxItemSet aNewSet( *aOldSet.GetPool(), aOldSet.GetRanges() );
-
-                    setPropertyValue( pMap, aValue, aSelection, aOldSet, aNewSet );
-
-                    pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
+                    SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+                    setPropertyValue( pMap, aValue, aSelection, aSet, aSet );
+                    pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
                     nPara++;
                 }
                 while( nPara < nEndPara );
@@ -779,9 +776,20 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
         const uno::Any* pValues = aValues.getConstArray();
         sal_Int32 nCount = aPropertyNames.getLength();
 
-        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-        SfxItemSet* pOldSet = new SfxItemSet( aSet );
-        SfxItemSet* pNewSet = new SfxItemSet( *pOldSet->GetPool(), pOldSet->GetRanges() );
+        sal_Int32 nEndPara = nPara;
+        sal_Int32 nTempPara = nPara;
+
+        if( nTempPara == -1 )
+        {
+            nTempPara = aSel.nStartPara;
+            nEndPara = aSel.nEndPara;
+        }
+
+        SfxItemSet* pOldAttrSet = NULL;
+        SfxItemSet* pNewAttrSet = NULL;
+
+        SfxItemSet* pOldParaSet = NULL;
+        SfxItemSet* pNewParaSet = NULL;
 
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
@@ -794,56 +802,88 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
 
             sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
-/*
-            if( nPara == -1 && !bParaAttrib )
+            if( (nPara == -1) && !bParaAttrib )
             {
-*/
-                setPropertyValue( pMap, *pValues, GetSelection(), *pOldSet, *pNewSet );
+                if( NULL == pNewAttrSet )
+                {
+                    const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
+                    pOldAttrSet = new SfxItemSet( aSet );
+                    pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
+                }
+
+                setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
 
                 if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
                     const SfxPoolItem* pItem;
-                    if( pNewSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
                     {
-                        pOldSet->Put( *pItem );
+                        pOldAttrSet->Put( *pItem );
                     }
                 }
-/*
             }
             else
             {
-                sal_Int32 nEndPara = nPara;
-                sal_Int32 nTempPara = nPara;
-
-                if( nTempPara == -1 )
+                if( NULL == pNewParaSet )
                 {
-                    nTempPara = aSel.nStartPara;
-                    nEndPara = aSel.nEndPara;
+                    const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                    pOldParaSet = new SfxItemSet( aSet );
+                    pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
                 }
 
-                do
+                setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
+
+                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
-                    // we have a paragraph
-                    SfxItemSet aNewSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
-
-                    setPropertyValue( pMap, *pValues, GetSelection(), aNewSet, aNewSet );
-
-                    pForwarder->SetParaAttribs( (USHORT)nTempPara, aNewSet );
-                    nTempPara++;
+                    const SfxPoolItem* pItem;
+                    if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                    {
+                        pOldParaSet->Put( *pItem );
+                    }
                 }
-                while( nTempPara < nEndPara );
+
             }
-*/
         }
 
         if( !bUnknownProperty )
         {
-            pForwarder->QuickSetAttribs( *pNewSet, GetSelection() );
-            GetEditSource()->UpdateData();
-        }
+            sal_Bool bNeedsUpdate = sal_False;
 
-        delete pNewSet;
-        delete pOldSet;
+            if( pNewParaSet )
+            {
+
+                if( pNewParaSet->Count() )
+                {
+                    do
+                    {
+                        SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                        aSet.Put( *pNewParaSet );
+                        pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
+                        nTempPara++;
+                    }
+                    while( nTempPara < nEndPara );
+                    bNeedsUpdate = sal_True;
+                }
+
+                delete pNewParaSet;
+                delete pOldParaSet;
+            }
+
+            if( pNewAttrSet )
+            {
+                if( pNewAttrSet->Count() )
+                {
+                    pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
+                    bNeedsUpdate = sal_True;
+                }
+                delete pNewAttrSet;
+                delete pOldAttrSet;
+
+            }
+
+            if( bNeedsUpdate )
+                GetEditSource()->UpdateData();
+        }
 
         if( bUnknownProperty )
             throw beans::UnknownPropertyException();
@@ -1031,7 +1071,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         aSel.nStartPara = (USHORT)nPara;
         aSel.nStartPos = 0;
         aSel.nEndPara = (USHORT)nPara;
-        aSel.nEndPara = 0xffff;
+        aSel.nEndPos = 0xffff;
     }
     else
     {
@@ -1041,6 +1081,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
+        CheckSelection( aSel, pForwarder );
         SfxItemSet aSet( pForwarder->GetAttribs( aSel, sal_True ) );
 
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
