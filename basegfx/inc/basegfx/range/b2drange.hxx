@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ namespace basegfx
         {
         }
 
+        explicit B2DRange(const B2IRange& rRange);
+
         bool isEmpty() const
         {
             return (
@@ -218,6 +220,16 @@ namespace basegfx
                 );
         }
 
+        double getCenterX() const
+        {
+            return maRangeX.getCenter();
+        }
+
+        double getCenterY() const
+        {
+            return maRangeY.getCenter();
+        }
+
         bool isInside(const B2DTuple& rTuple) const
         {
             return (
@@ -252,6 +264,12 @@ namespace basegfx
         {
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
+        }
+
+        void intersect(const B2DRange& rRange)
+        {
+            maRangeX.intersect(rRange.maRangeX);
+            maRangeY.intersect(rRange.maRangeY);
         }
 
         void grow(double fValue)
