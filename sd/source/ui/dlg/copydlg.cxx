@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:16:24 $
+ *  last change: $Author: cl $ $Date: 2002-05-14 07:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include "sdview.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
+#include "res_bmp.hrc"
 
 #define TOKEN (sal_Unicode(';'))
 
@@ -137,6 +138,8 @@ SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
                 aUIScale(pInView->GetDoc()->GetUIScale())
 {
     FreeResource();
+
+    aBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     // Farbtabellen
     DBG_ASSERT( pColorTab, "Keine gueltige ColorTable uebergeben!" );
