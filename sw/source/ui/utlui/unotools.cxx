@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:36:02 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 08:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,51 +391,55 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        uno::Any aSet;
         sal_Bool bTrue = sal_True;
         sal_Bool bFalse = sal_False;
+        uno::Any aTrueSet( &bTrue, ::getBooleanCppuType() );
+        uno::Any aFalseSet( &bFalse, ::getBooleanCppuType() );
 
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_BREAKS              ), aSet);
-        aSet.setValue(&bTrue, ::getBooleanCppuType());  xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_DRAWINGS             ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FIELD_COMMANDS       ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND  ), aSet);
-        aSet.setValue(&bTrue, ::getBooleanCppuType());  xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_GRAPHICS             ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_TEXT          ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_RULER              ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PARA_BREAKS          ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PROTECTED_SPACES     ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SOFT_HYPHENS         ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SPACES               ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLE_BOUNDARIES     ), aSet);
-        aSet.setValue(&bTrue, ::getBooleanCppuType());  xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLES               ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABSTOPS             ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_BOUNDARIES      ), aSet);
-        aSet.setValue(&bTrue, ::getBooleanCppuType());  xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_RULER              ), aSet);
-        sal_Bool bTemp = 0 !=(nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
-        aSet.setValue(&bTemp, ::getBooleanCppuType());
-                xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_ONLINE_LAYOUT), aSet);
-
-        if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
+        if( !bIsInitialized )
         {
-            uno::Any aZoom; aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH;
-            xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
-        }
-        else
-        {
-            uno::Any aZoom;
-            aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
-            xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_BREAKS               ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_DRAWINGS             ), aTrueSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FIELD_COMMANDS       ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND  ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_GRAPHICS             ), aTrueSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_TEXT          ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_RULER           ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PARA_BREAKS          ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PROTECTED_SPACES     ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SOFT_HYPHENS         ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SPACES               ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLE_BOUNDARIES     ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLES               ), aTrueSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABSTOPS             ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_BOUNDARIES      ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND), aTrueSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_RULER           ), aFalseSet);
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_ONLINE_LAYOUT),
+                    (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) ? aTrueSet : aFalseSet );
 
-            sal_Int16 nZoomValue = 50;
-            if(EX_SHOW_BUSINESS_CARDS == nStyleFlags)
+            if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
-                nZoomValue = 80;
+                uno::Any aZoom; aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH;
+                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
             }
-            aZoom <<= nZoomValue;
-            xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_VALUE), aZoom);
+            else
+            {
+                uno::Any aZoom;
+                aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
+                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
+
+                sal_Int16 nZoomValue = 50;
+                if(EX_SHOW_BUSINESS_CARDS == nStyleFlags)
+                {
+                    nZoomValue = 80;
+                }
+                aZoom <<= nZoomValue;
+                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_VALUE), aZoom);
+            }
+            bIsInitialized = sal_True;
         }
 
         uno::Reference< text::XTextDocument >  xDoc(_xModel, uno::UNO_QUERY);
@@ -464,15 +468,16 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             aPSize.Width = 10000;
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
             xPProp->setPropertyValue(C2U(UNO_NAME_SIZE), aSize);
+
+            uno::Any aZero; aZero <<= (sal_Int32)0;
+            xPProp->setPropertyValue(C2U(UNO_NAME_LEFT_MARGIN), aZero);
+            xPProp->setPropertyValue(C2U(UNO_NAME_RIGHT_MARGIN), aZero);
         }
 
         // can only be done here - the SFX changes the ScrollBar values
-        aSet.setValue(&bFalse, ::getBooleanCppuType());
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_SCROLL_BAR ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType());
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_SCROLL_BAR ), aSet);
+        xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_SCROLL_BAR ), aFalseSet);
+        xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_SCROLL_BAR ), aFalseSet);
 
-        bIsInitialized = sal_True;
         if( aInitializedLink.IsSet() )
         {
             rWindow.Enable(sal_False, sal_True);
