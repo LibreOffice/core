@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,15 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     mnGlyphCount = 0;
     bool bVertical = (rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0;
-    if( !bVertical )
+
+    // count the number of chars to process if no RTL run
+    rArgs.ResetPos();
+    bool bHasRTL = false;
+    while( rArgs.GetNextRun( &i, &j, &bHasRTL ) && !bHasRTL )
+        mnGlyphCount += j - i;
+
+    // if there are RTL runs we need room to remember individual BiDi flags
+    if( bHasRTL )
     {
         // count chars to process as LTR
         rArgs.ResetPos();
@@ -292,58 +300,57 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
     }
 
-    const sal_Unicode* pBidiStr;
-    if( mnGlyphCount == mnCharCount )
-        pBidiStr = rArgs.mpStr + rArgs.mnMinCharPos;
-    else
+    const sal_Unicode* pBidiStr = rArgs.mpStr + rArgs.mnMinCharPos;
+    if( (mnGlyphCount != mnCharCount) || bVertical )
     {
-        // rewrite pBidiStr when right to left/partial fallback runs/vertical layout
-        sal_Unicode* pStr = (sal_Unicode*)alloca( mnCharCount * sizeof(sal_Unicode) );
+        // we need to rewrite the pBidiStr when either
+        // - BiDirectional layout
+        // - vertical layout
+        // - with partial runs (e.g. with control chars or for glyph fallback)
+        // is involved
+        sal_Unicode* pRewrittenStr = (sal_Unicode*)alloca( mnCharCount * sizeof(sal_Unicode) );
+        pBidiStr = pRewrittenStr;
+
         // note: glyph to char mapping is relative to first character
         mpChars2Glyphs = new int[ mnCharCount ];
         mpGlyphs2Chars = new int[ mnCharCount ];
-
         for( i = 0; i < mnCharCount; ++i )
             mpChars2Glyphs[i] = mpGlyphs2Chars[i] = -1;
 
         mnGlyphCount = 0;
         rArgs.ResetPos();
-        for( bool bRTL; rArgs.GetNextRun( &i, &j, &bRTL ); )
+        bool bIsRTL = false;
+        while( rArgs.GetNextRun( &i, &j, &bIsRTL ) )
         {
-            if( bRTL )
+            do
             {
-                // right to left
-                do {
-                    sal_Unicode cChar = rArgs.mpStr[ --j ];
-                    pStr[ mnGlyphCount ] = ::GetMirroredChar( cChar );
-                    mpChars2Glyphs[ j - rArgs.mnMinCharPos ] = mnGlyphCount;
-                    mpGlyphRTLFlags[ mnGlyphCount ] = true;
-                    mpGlyphs2Chars[ mnGlyphCount++ ] = j;
-                } while( i < j );
-            }
-            else if( bVertical )
-            {
-                // vertical mode
-                do {
-                    sal_Unicode cChar = rArgs.mpStr[ i ];
+                // get current character
+                int nCharPos = bIsRTL ? --j : i++;
+                sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+
+                // in the RTL case mirror the character and remember its RTL status
+                if( bIsRTL )
+                {
+                    cChar = ::GetMirroredChar( cChar );
+                    mpGlyphRTLFlags[ nCharPos ] = true;
+                }
+
+                // for vertical writing use vertical alternatives
+                if( bVertical )
+                {
                     sal_Unicode cVert = ::GetVerticalChar( cChar );
-                    pStr[ mnGlyphCount ] = cVert ? cVert : cChar;
-                    mpChars2Glyphs[ i - rArgs.mnMinCharPos ] = mnGlyphCount;
-                    mpGlyphs2Chars[ mnGlyphCount++ ] = i;
-                } while( ++i < j );
-            }
-            else
-            {
-                // left to right
-                do {
-                    sal_Unicode cChar = rArgs.mpStr[ i ];
-                    pStr[ mnGlyphCount ] = cChar;
-                    mpChars2Glyphs[ i - rArgs.mnMinCharPos ] = mnGlyphCount;
-                    mpGlyphs2Chars[ mnGlyphCount++ ] = i;
-                } while( ++i < j );
-            }
+                    if( cVert )
+                        cChar = cVert;
+                }
+
+                // rewrite the original string
+                // update the mappings between original and rewritten string
+                pRewrittenStr[ mnGlyphCount ] = cChar;
+                mpGlyphs2Chars[ mnGlyphCount ] = nCharPos;
+                mpChars2Glyphs[ nCharPos - rArgs.mnMinCharPos ] = mnGlyphCount;
+                ++mnGlyphCount;
+            } while( i < j );
         }
-        pBidiStr = pStr;
     }
 
     mpOutGlyphs     = new WCHAR[ mnGlyphCount ];
