@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 10:48:40 $
+ *  last change: $Author: mba $ $Date: 2000-12-15 13:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         aURL += DEFINE_CONST_UNICODE("HELP_Ticket=");
         aURL += aTicket;
         aHelpURL = aURL;
+        xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
     }
     else
     {
@@ -229,19 +230,24 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         }
     }
 
-    ::com::sun::star::util::URL aURL;
-    aURL.Complete = aHelpURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aURL );
-    Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
-                            DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
-    if ( xDispatch.is() )
+    if ( xFrame.is() )
     {
-        xDispatch->dispatch( aURL, aProps );
-    }
+        ::com::sun::star::util::URL aURL;
+        aURL.Complete = aHelpURL;
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        xTrans->parseStrict( aURL );
+        Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
+                                DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
+        if ( xDispatch.is() )
+        {
+            xDispatch->dispatch( aURL, aProps );
+        }
 
-    return TRUE;
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 /*-----------------22.11.2000 10:59-----------------
