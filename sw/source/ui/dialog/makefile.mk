@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jp $ $Date: 2001-11-14 16:30:21 $
+#   last change: $Author: os $ $Date: 2002-05-08 14:10:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,8 @@ AUTOSEG=true
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
 PROJECTPCHSOURCE=..\ui_1st\ui_pch
+IMGLST_SRS=$(SRS)$/dialog.srs
+BMP_IN=$(PRJ)$/win/imglst
 
 # future: DEMO\dialog.srs
 

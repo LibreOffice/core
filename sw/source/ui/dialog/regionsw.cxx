@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:26:49 $
+ *  last change: $Author: os $ $Date: 2002-05-08 14:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,12 +364,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aDismiss            ( this, SW_RES( CB_DISMISS ) ),
     aHelp               ( this, SW_RES( PB_HELP ) ),
     aCancel             ( this, SW_RES( PB_CANCEL ) ),
-    aProtHideBM         ( SW_RES( BMP_REG_PROT_HIDE ) ),
-    aProtNoHideBM       ( SW_RES( BMP_REG_PROT_NOHIDE ) ),
-    aNoProtHideBM       ( SW_RES( BMP_REG_NOPROT_HIDE ) ),
-    aNoProtNoHideBM     ( SW_RES( BMP_REG_NOPROT_NOHIDE ) ),
-    aExpNode            ( SW_RES( BMP_REG_EXPNODE ) ),
-    aCollNode           ( SW_RES( BMP_REG_COLLNODE ) ),
+    aImageIL(           ResId(IL_BITMAPS)),
+    aImageILH(          ResId(ILH_BITMAPS)),
     bDontCheckPasswd(sal_True)
 {
     FreeResource();
@@ -396,7 +392,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aTree.SetHelpId(HID_REGION_TREE);
     aTree.SetSelectionMode( MULTIPLE_SELECTION );
     aTree.SetWindowBits(WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
-    aTree.SetNodeBitmaps( aExpNode,aCollNode );
     aTree.SetSpaceBetweenEntries(0);
 
     if(bWeb)
@@ -414,12 +409,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 #ifdef DDE_AVAILABLE
     aDDECB.SetClickHdl      ( LINK( this, SwEditRegionDlg, DDEHdl ));
 #endif
-
-    //Array enthaelt Bitmaps nach den Eigenschaften Hide und Protect
-    aBmpArr[0]= aNoProtNoHideBM;
-    aBmpArr[1]= aProtNoHideBM;
-    aBmpArr[2]= aNoProtHideBM;
-    aBmpArr[3]= aProtHideBM;
 
     //Ermitteln der vorhandenen Bereiche
     pCurrSect = rSh.GetCurrSection();
@@ -500,8 +489,8 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
             {
                 SectRepr* pSectRepr = new SectRepr( n,
                                             *(pSect=pFmt->GetSection()) );
-                Bitmap aBM=BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
-                pEntry = aTree.InsertEntry( pSect->GetName(), aBM, aBM );
+                Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
+                pEntry = aTree.InsertEntry( pSect->GetName(), aImg, aImg );
                 pEntry->SetUserData(pSectRepr);
                 RecurseList( pFmt, pEntry );
                 if (pEntry->HasChilds())
@@ -529,9 +518,9 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                     pSect=aTmpArr[n];
                     SectRepr* pSectRepr=new SectRepr(
                                     FindArrPos( pSect->GetFmt() ), *pSect );
-                    Bitmap aBM=BuildBitmap( pSect->IsProtect(),
+                    Image aImage = BuildBitmap( pSect->IsProtect(),
                                             pSect->IsHidden());
-                    pNEntry=aTree.InsertEntry( pSect->GetName(),aBM,aBM,pEntry);
+                    pNEntry=aTree.InsertEntry( pSect->GetName(), aImage, aImage, pEntry);
                     pNEntry->SetUserData(pSectRepr);
                     RecurseList( aTmpArr[n]->GetFmt(), pNEntry );
                     if( pNEntry->HasChilds())
@@ -874,10 +863,10 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->SetProtect(bCheck);
-        Bitmap& aBmp=BuildBitmap( bCheck,
+        Image aImage = BuildBitmap( bCheck,
                                     STATE_CHECK == aHideCB.GetState());
-        aTree.SetExpandedEntryBmp(pEntry,aBmp);
-        aTree.SetCollapsedEntryBmp(pEntry,aBmp);
+        aTree.SetExpandedEntryBmp(pEntry, aImage);
+        aTree.SetCollapsedEntryBmp(pEntry, aImage);
         pEntry = aTree.NextSelected(pEntry);
     }
     aPasswdCB.Enable(bCheck);
@@ -899,10 +888,10 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->SetHidden(STATE_CHECK == pBox->GetState());
-        Bitmap& aBmp=BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
+        Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
                                     STATE_CHECK == pBox->GetState());
-        aTree.SetExpandedEntryBmp(pEntry,aBmp);
-        aTree.SetCollapsedEntryBmp(pEntry,aBmp);
+        aTree.SetExpandedEntryBmp(pEntry, aImage);
+        aTree.SetCollapsedEntryBmp(pEntry, aImage);
 
         pEntry = aTree.NextSelected(pEntry);
     }
@@ -1344,11 +1333,11 @@ IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
     if (pEntry)
     {
         String  aName = aCurName.GetText();
-        Bitmap& aBmp=BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
+        Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
                                     STATE_CHECK == aHideCB.GetState());
         aTree.SetEntryText(pEntry,aName);
-        aTree.SetExpandedEntryBmp(pEntry,aBmp);
-        aTree.SetCollapsedEntryBmp(pEntry,aBmp);
+        aTree.SetExpandedEntryBmp(pEntry, aImage);
+        aTree.SetCollapsedEntryBmp(pEntry, aImage);
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSection().SetName(aName);
 
@@ -1376,7 +1365,15 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     }
     return 0;
 }
+/* -----------------------------08.05.2002 15:00------------------------------
 
+ ---------------------------------------------------------------------------*/
+Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden)
+{
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        aImageILH : aImageIL;
+    return rImgLst.GetImage((!bHidden+(bProtect<<1)) + 1);
+}
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche einfuegen
  --------------------------------------------------------------------*/

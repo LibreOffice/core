@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
+ *  last change: $Author: os $ $Date: 2002-05-08 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
 #endif
-#ifndef _BITMAP_HXX //autogen
-#include <vcl/bitmap.hxx>
-#endif
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
 #endif
@@ -115,6 +112,9 @@
 #endif
 #ifndef _NUMBERINGTYPELISTBOX_HXX
 #include <numberingtypelistbox.hxx>
+#endif
+#ifndef _SV_IMAGE_HXX
+#include <vcl/image.hxx>
 #endif
 
 class SwWrtShell;
@@ -234,14 +234,9 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aOptionsPB;
     PushButton      aDismiss;
     HelpButton      aHelp;
-    Bitmap          aProtHideBM;
-    Bitmap          aProtNoHideBM;
-    Bitmap          aNoProtHideBM;
-    Bitmap          aNoProtNoHideBM;
-    Bitmap          aExpNode;
-    Bitmap          aCollNode;
+    ImageList       aImageIL;
+    ImageList       aImageILH;
 
-    Bitmap          aBmpArr[4];
     SwWrtShell&     rSh;
     SectReprArr     aSectReprArr;
     SvLBoxEntry*    pAktEntry;
@@ -251,8 +246,7 @@ class SwEditRegionDlg : public SfxModalDialog
     BOOL            bWeb            :1;
 
 
-    Bitmap&         BuildBitmap(BOOL bProtect,BOOL bHidden)
-                    { return aBmpArr[bProtect+(bHidden<<1)]; }
+    Image  BuildBitmap(BOOL bProtect,BOOL bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     USHORT  FindArrPos(const SwSectionFmt* pFmt);
@@ -276,6 +270,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( DDEHdl, CheckBox* );
 #endif
     BOOL CheckPasswd(CheckBox* pBox = 0);
+
 public:
     SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
     virtual ~SwEditRegionDlg();
