@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:56:35 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
 #include "AccessibleEditObject.hxx"
+#endif
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
 #endif
 
 #define TEXT_STARTPOS       3
@@ -655,6 +658,7 @@ ScTextWnd::ScTextWnd( Window* pParent )
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
+        pAccTextData ( NULL ),
         bIsInsertMode( TRUE ),
         bFormulaMode ( FALSE )
 {
@@ -1049,6 +1053,9 @@ void ScTextWnd::SetTextString( const String& rNewString )
         }
 
         aString = rNewString;
+
+        if (pAccTextData)
+            pAccTextData->TextChanged();
     }
 }
 

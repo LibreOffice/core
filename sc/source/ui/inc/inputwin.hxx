@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:55:51 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class ScEditEngineDefaulter;
 class EditView;
 struct ESelection;
 class ScInputHandler;
+class ScAccessibleEditLineTextData;
 
 //========================================================================
 
@@ -113,6 +114,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+    void            SetAccessibleTextData(ScAccessibleEditLineTextData* pTextData) {pAccTextData = pTextData;}
+
 protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    Resize();
@@ -138,6 +141,7 @@ private:
     Font        aTextFont;
     ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
     EditView*   pEditView;
+    ScAccessibleEditLineTextData* pAccTextData;
     BOOL        bIsInsertMode;
     BOOL        bFormulaMode;
 };
