@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-09-08 12:24:55 $
+ *  last change:$Date: 2004-01-05 19:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ public class AccessibleDrawDocumentView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing Draw document");
-        xDrawDoc.dispose();
+        util.DesktopTools.closeDoc(xDrawDoc);;
     }
 
     /**
