@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:45:28 $
+ *  last change: $Author: fme $ $Date: 2002-10-21 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,6 +566,8 @@ const SwFrm *SwDrawView::CalcAnchor()
 Rectangle *SwDrawView::IsAnchorAtPos( const Point &rPt ) const
 {
     SdrHdl* pHdl = aHdl.GetHdl(HDL_ANCHOR);
+    if ( ! pHdl )
+        pHdl = aHdl.GetHdl(HDL_ANCHOR_TR);
 
     if(pHdl)
     {
@@ -602,6 +604,9 @@ Rectangle *SwDrawView::IsAnchorAtPos( const Point &rPt ) const
 void SwDrawView::ShowDragAnchor()
 {
     SdrHdl* pHdl = aHdl.GetHdl(HDL_ANCHOR);
+    if ( ! pHdl )
+        pHdl = aHdl.GetHdl(HDL_ANCHOR_TR);
+
     if(pHdl)
     {
         CalcAnchor();
