@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,6 @@ namespace dbaccess
                                                             const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
-
-        // OColumn
-        virtual OColumnSettings*    getSettings() { return static_cast<ORowSetColumn*>(this); }
-        //  virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     };
 
 }
