@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:38:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-29 10:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,7 +971,7 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
 
-                Sequence< Any > aArgs( comphelper::containerToSequence< std::vector< Any >, Any >( aPropertyVector ));
+                Sequence< Any > aArgs( comphelper::containerToSequence< Any >( aPropertyVector ));
                 xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
                                                                 aCommandURL, aArgs, xComponentContext ),
                                                             UNO_QUERY );
@@ -1041,7 +1041,7 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
 
-                Sequence< Any > aArgs( comphelper::containerToSequence< std::vector< Any >, Any >( aPropertyVector ));
+                Sequence< Any > aArgs( comphelper::containerToSequence< Any >( aPropertyVector ));
                 xInit->initialize( aArgs );
             }
 
