@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: npower $ $Date: 2003-09-04 07:25:41 $
+#   last change: $Author: rt $ $Date: 2004-01-05 14:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES=\
-        $(SLO)$/ScriptingContext.obj\
+        $(SLO)$/InvocationCtxProperties.obj\
         $(SLO)$/MasterScriptProvider.obj\
         $(SLO)$/ActiveMSPList.obj\
         $(SLO)$/ProviderCache.obj\
