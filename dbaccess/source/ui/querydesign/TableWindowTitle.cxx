@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,13 +176,11 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 //------------------------------------------------------------------------------
 void OTableWindowTitle::Command( const CommandEvent& rEvt )
 {
-    if( !m_pTabWin->IsActive() )
-        return;
-
     switch( rEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
         {
+            GrabFocus();
             OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
             OSL_ENSURE(pView,"No OQueryTableView!");
             if (!pView->getDesignView()->getController()->isReadOnly())
