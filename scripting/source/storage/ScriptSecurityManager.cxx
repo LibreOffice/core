@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-12 16:19:17 $
+ *  last change: $Author: npower $ $Date: 2003-02-13 14:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
 short ScriptSecurityManager::executeDialog( const OUString & path )
 {
     Sequence < Any > aArgs;
-    if( path )
+    if( path.getLength() != 0 )
     {
         OSL_TRACE("reallocing");
         aArgs.realloc(1);
