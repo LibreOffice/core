@@ -2,7 +2,7 @@
 #include "uievent.hxx"
 
 namespace DOM { namespace events
-{    
+{
 
     Reference< XAbstractView > SAL_CALL CUIEvent::getView() throw(RuntimeException)
     {
@@ -72,7 +72,7 @@ namespace DOM { namespace events
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         // base initializer
