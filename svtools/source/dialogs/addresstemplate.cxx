@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-28 14:41:53 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 14:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,21 +487,26 @@ namespace svt
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::initializeDatasources()
     {
-        DBG_ASSERT(m_xORB.is(), "AddressBookSourceDialog::initializeDatasources: no service factory!");
-        if (!m_xORB.is())
-            return;
-
-        const String sContextServiceName = String::CreateFromAscii("com.sun.star.sdb.DatabaseContext");
-        try
-        {
-            m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(sContextServiceName), UNO_QUERY);
-        }
-        catch(Exception&) { }
         if (!m_xDatabaseContext.is())
         {
-            ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
-            return;
+            DBG_ASSERT(m_xORB.is(), "AddressBookSourceDialog::initializeDatasources: no service factory!");
+            if (!m_xORB.is())
+                return;
+
+            const String sContextServiceName = String::CreateFromAscii("com.sun.star.sdb.DatabaseContext");
+            try
+            {
+                m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(sContextServiceName), UNO_QUERY);
+            }
+            catch(Exception&) { }
+            if (!m_xDatabaseContext.is())
+            {
+                ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
+                return;
+            }
         }
+        m_aDatasource.Clear();
+
         // fill the datasources listbox
         Sequence< ::rtl::OUString > aDatasourceNames;
         try
@@ -647,9 +652,11 @@ namespace svt
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
 
+        const String* pInitialSelection = m_aFieldAssignments.begin() + m_nFieldScrollPos;
+
         ListBox** pListbox = m_pFields;
         String sSaveSelection;
-        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox)
+        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++pInitialSelection)
         {
             sSaveSelection = (*pListbox)->GetSelectEntry();
 
@@ -664,11 +671,17 @@ namespace svt
             for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
                 (*pListbox)->InsertEntry(*pColumnNames);
 
-            // try to restore the selection
-            if (aColumnNameSet.end() != aColumnNameSet.find(sSaveSelection))
-                (*pListbox)->SelectEntry(sSaveSelection);
+            if (pInitialSelection->Len() && (aColumnNameSet.end() != aColumnNameSet.find(*pInitialSelection)))
+                // we can select the entry as specified in our field assignment array
+                (*pListbox)->SelectEntry(*pInitialSelection);
             else
-                (*pListbox)->SelectEntryPos(0);
+                // try to restore the selection
+                if (aColumnNameSet.end() != aColumnNameSet.find(sSaveSelection))
+                    // the old selection is a valid column name
+                    (*pListbox)->SelectEntry(sSaveSelection);
+                else
+                    // select the <none> entry
+                    (*pListbox)->SelectEntryPos(0);
         }
 
         // adjust m_aFieldAssignments
@@ -896,6 +909,13 @@ namespace svt
         {
             DBG_ERROR("AddressBookSourceDialog::OnAdministrateDatasources: an error occured while executing the administration dialog!");
         }
+
+        // re-fill the data source list
+        // try to preserve the current selection
+        String sOldDS = m_aDatasource.GetText();
+        initializeDatasources();
+        resetTables();
+            // will reset the fields implicitly
 
         return 0L;
     }
