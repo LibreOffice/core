@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:21:40 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 09:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,19 +288,26 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     else
         pTmpFnt = GetFont();
     Point aTmpPos( nX, nY + nAsc );
+    sal_Bool bPaint = sal_True;
     if( !IsClipChg() )
     {
         Size aSize = pTmpFnt->_GetTxtSize( pSh, pSh->GetOut(), aTmp );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
         SwRect aRct( aTmpPos, aSize );
-        if( !aRect.IsInside( aRct ) && !aRct.Intersection( aRect ).IsEmpty() )
-            aClip.ChgClip( aRect );
+        if( !aRect.IsInside( aRct ) )
+        {
+            if( aRct.Intersection( aRect ).IsEmpty() )
+                bPaint = sal_False;
+            else
+                aClip.ChgClip( aRect );
+        }
     }
     else if( bGoLeft )
         aTmpPos.X() -= pTmpFnt->_GetTxtSize( pSh, pSh->GetOut(), aTmp ).Width();
     aDrawInf.SetPos( aTmpPos );
-    pTmpFnt->_DrawText( aDrawInf );
+    if( bPaint )
+        pTmpFnt->_DrawText( aDrawInf );
     if( bTooBig )
         delete pTmpFnt;
     if( bRed )
@@ -318,8 +325,12 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
     if( !IsClipChg() )
     {
         SwRect aRct( aStart, aEnd );
-        if( !aRect.IsInside( aRct ) && !aRct.Intersection( aRect ).IsEmpty() )
+        if( !aRect.IsInside( aRct ) )
+        {
+            if( aRct.Intersection( aRect ).IsEmpty() )
+                return;
             aClip.ChgClip( aRect );
+        }
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
