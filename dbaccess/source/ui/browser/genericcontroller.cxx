@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:46:24 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
+#include "datasourceconnector.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -823,6 +826,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 
     return aReturn;
 }
+
 //-------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
 {
@@ -833,94 +837,46 @@ sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& 
             return sal_True;
     return sal_False;
 }
+
 // -----------------------------------------------------------------------------
-Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rsDataSourceName)
+void OGenericUnoController::startConnectionListening(const Reference< XConnection >& _rxConnection)
+{
+    // we have to remove ourself before dispoing the connection
+    Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
+// -----------------------------------------------------------------------------
+void OGenericUnoController::stopConnectionListening(const Reference< XConnection >& _rxConnection)
+{
+    // we have to remove ourself before dispoing the connection
+    Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
+// -----------------------------------------------------------------------------
+Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rsDataSourceName, sal_Bool _bStartListening)
 {
     WaitObject aWaitCursor(getView());
 
-    Reference<XConnection> xConnection;
+    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView());
+    Reference<XConnection> xConnection = aConnector.connect(_rsDataSourceName);
 
-    Any aValue;
-    try
-    {
-        aValue = m_xDatabaseContext->getByName(_rsDataSourceName);
-    }
-    catch(Exception&)
-    {
-    }
-
-    Reference<XPropertySet> xProp;
-    aValue >>= xProp;
-    if (!xProp.is())
-    {
-        DBG_ERROR("OGenericUnoController::connect: coult not retrieve the data source!");
-        return xConnection;
-    }
-
-    ::rtl::OUString sPwd, sUser;
-    sal_Bool bPwdReq = sal_False;
-    try
-    {
-        xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
-        bPwdReq = cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
-        xProp->getPropertyValue(PROPERTY_USER) >>= sUser;
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: error while retrieving data source properties!");
-    }
-
-    SQLExceptionInfo aInfo;
-    try
-    {
-        if(bPwdReq && !sPwd.getLength())
-        {   // password required, but empty -> connect using an interaction handler
-            Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
-            if (!xConnectionCompletion.is())
-            {
-                DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: missing an interface ... need an error message here!");
-            }
-            else
-            {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
-                if (!xHandler.is())
-                {
-                    ShowServiceNotAvailableError(getView(), String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
-                        // TODO: a real parent!
-                }
-                else
-                {
-                    xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
-                }
-            }
-        }
-        else
-        {
-            Reference<XDataSource> xDataSource(xProp,UNO_QUERY);
-            xConnection = xDataSource->getConnection(sUser, sPwd);
-        }
-        // be notified when connection is in disposing
-        Reference< XComponent >  xComponent(xConnection, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-            xComponent->addEventListener(xEvtL);
-        }
-    }
-    catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(Exception&) { DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
-
-    showError(aInfo);
+    // be notified when connection is in disposing
+    if (_bStartListening)
+        startConnectionListening(xConnection);
 
     return xConnection;
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::loadMenu(const Reference< ::com::sun::star::frame::XFrame >& _xFrame)
 {
