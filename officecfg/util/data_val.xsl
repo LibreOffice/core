@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 07:51:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 <xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
 
 <!-- ************************************** -->
-<!-- * oor:node							*** -->
+<!-- * oor:component-data							*** -->
 <!-- ************************************** -->
-	<xsl:template match="/oor:node">		
+	<xsl:template match="/oor:component-data">		
 		<xsl:for-each select="node|prop">
 			<xsl:apply-templates select=".">				
 				<xsl:with-param name="context" select="$component-schema/component/*[@oor:name = current()/@oor:name]"/>							
