@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
+ *  last change: $Author: mt $ $Date: 2001-11-26 15:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@ EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
     nEnd        = nE;
     bFeature    = FALSE;
     bEdge       = FALSE;
+
+    DBG_ASSERT( ( rAttr.Which() >= EE_ITEMS_START ) && ( rAttr.Which() <= EE_ITEMS_END ), "EditCharAttrib CTOR: Invalid id!" );
+    DBG_ASSERT( ( rAttr.Which() < EE_FEATURE_START ) || ( rAttr.Which() > EE_FEATURE_END ) || ( nE = (nS+1) ), "EditCharAttrib CTOR: Invalid feature!" );
 }
 
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
