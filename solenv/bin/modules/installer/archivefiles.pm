@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:14:22 $
+#   last change: $Author: obo $ $Date: 2004-06-22 10:20:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,6 +173,22 @@ sub resolving_archive_flag
                         if ($returnvalue)
                         {
                             installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag");
+                        }
+
+                        if ( ! $installer::globals::iswindowsbuild )
+                        {
+                            # Setting unix rights to "775" for all created directories inside the package
+
+                            $systemcall = "cd $unzipdir; find . -type d -exec chmod 775 \{\} \\\;";
+                            $returnvalue = system($systemcall);
+                            $infoline = "Systemcall: $systemcall\n";
+                            push( @installer::globals::logfileinfo, $infoline);
+
+                            if ($returnvalue)
+                            {
+                                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                                push( @installer::globals::logfileinfo, $infoline);
+                            }
                         }
                     }
                 }
