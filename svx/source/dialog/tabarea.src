@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-09 00:08:45 $
+ *  last change: $Author: thb $ $Date: 2001-06-12 15:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,10 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     RadioButton RBT_TRANS_LINEAR
     {
         Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
         Text = "~Transparenz" ;
         Text [ ENGLISH ] = "~Transparency" ;
-        Text[ english_us ] = "~Linear transparency";
+        Text[ english_us ] = "~Transparency";
         Text[ portuguese ] = "~Transparκncia linear";
         Text[ russian ] = "Οπξηπΰχνξρςό";
         Text[ greek ] = "Γραμμική διαφάνεια";
@@ -179,7 +179,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "Verlauf" ;
         Text [ ENGLISH ] = "Gradient" ;
-        Text[ english_us ] = "~Transparency gradient";
+        Text[ english_us ] = "Transparency ~gradient";
         Text[ portuguese ] = "~Gradaηγo da transparκncia";
         Text[ russian ] = "Γπΰδθενςνΰÿ";
         Text[ greek ] = "Διαβάθμιση διαφάνειας";
