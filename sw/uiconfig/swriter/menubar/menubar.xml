@@ -223,8 +223,8 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:helpid="20350" menu:label="" />
                     <menu:menuitem menu:id=".uno:SetAnchorToPara" menu:helpid="20351" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:helpid="20384" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:helpid="21412" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:helpid="20384" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:helpid="21412" menu:label="" />
                     <menu:menuitem menu:id=".uno:SetAnchorToFrame" menu:helpid="20366" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
@@ -404,7 +404,6 @@
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:helpid="40013" menu:label="" />
                     </menu:menupopup>
             </menu:menu>
-
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
             <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
