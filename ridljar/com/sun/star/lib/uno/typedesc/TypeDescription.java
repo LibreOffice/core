@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:50:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ public final class TypeDescription implements ITypeDescription {
         public void put(TypeDescription desc) {
             synchronized (map) {
                 cleanUp();
-                map.put(desc.getTypeName(), new Entry(desc));
+                map.put(desc.getTypeName(), new Entry(desc, queue));
             }
         }
 
@@ -725,8 +725,8 @@ public final class TypeDescription implements ITypeDescription {
             }
         }
 
-        private final class Entry extends SoftReference {
-            public Entry(TypeDescription desc) {
+        private static final class Entry extends SoftReference {
+            public Entry(TypeDescription desc, ReferenceQueue queue) {
                 super(desc, queue);
                 typeName = desc.getTypeName();
             }
