@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextDocumentView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:19:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,41 +96,52 @@ service AccessibleTextDocumentView
         structure of the document as it is displayed.
 
         <ul>
-            <li>The children returned by <type>getAccessibleChild</type> all
-                support the interface XAccessible. Calling
-                <type>getAccessibleContext</type> for these children returns
-                an object that supports one of the following services.
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all support
+                the interface XAccessible. Calling
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these children
+                returns an object that supports one of the following
+                services.
                 <ul>
-                    <li><type>com.sun.star.text.AccessibleHeaderFooterView</type>:
-                        A child of this kind is returned for every header and
-                        footer that is at least partially visible.
-                    <li><type>com.sun.star.text.AccessibleFootnoteView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleHeaderFooterView</type>:
+                        A child of this kind is returned for every header
+                        and footer that is at least partially visible.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleFootnoteView</type>:
                         A child of this kind is returned for every footnote
                         that is at least partially visible.
-                    <li><type>com.sun.star.text.AccessibleEndnoteView</type>:
+                    <li><type scoep="::com::sun::star::text"
+                        >AccessibleEndnoteView</type>:
                         A child of this kind is returned for every endnote
                         that is at least partially visible.
-                    <li><type>com.sun.star.text.AccessibleParagraphView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
                         A child of this kind is returned for every paragraph
                         fragment that is contained in the document body and
                         is at least partially visible. A paragraph fragment is
                         the part of a paragraph that is displayed on a
                         certain page.
-                    <li><type>com.sun.star.table.AccessibleTableView</type>:
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
                         A child of this kind is returned for every table
                         fragment that is contained in the document body
                         and is at least partially visible. A table fragment is
                         the part of a table that is displayed on a certain page.
-                    <li><type>com.sun.star.text.AccessibleTextFrameView</type>:
-                        A child of this kind is returned for every text frame
-                        that is at least partially visible. These objects are
-                           children of the
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextFrameView</type>: A child of this
+                        kind is returned for every text frame that is at
+                        least partially visible. These objects are children
+                        of the
                         <type>AccessibleTextDocumentView</type> regardless
-                        whether they are bound to a page, a paragarph, a frame,
-                        or a character. The only exception
-                        are text frames that are bound as character. They are
-                        childen of the paragraph they are contained in.
-                    <li><type>com.sun.star.text.AccessibleTextGraphicObject</type>:
+                        whether they are bound to a page, a paragarph, a
+                        frame, or a character. The only exception are text
+                        frames that are bound as character. They are childen
+                        of the paragraph they are contained in.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextGraphicObject</type>:
                         A child of this kind is returned for every graphic that
                         is at least partially visible. These objects are
                         children of the <type>AccessibleTextDocumentView</type>
@@ -138,7 +149,8 @@ service AccessibleTextDocumentView
                         a frame or a character. The only exception
                         are text frames that are bound as character. They are
                         childen of the paragraph they are contained in.
-                    <li><type>com.sun.star.text.AccessibleTextEmbeddedObject</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextEmbeddedObject</type>:
                         A child of this kind is returned for every embedded
                         object that is at least partially visible.
                         These objects are children of the
@@ -146,12 +158,14 @@ service AccessibleTextDocumentView
                         whether they are bound to a page, a paragarph, a frame,
                         or a character.  They are childen of the paragraph they
                         are contained in.
-                    <li><type>com.sun.star.drawing.Accessible*</type>:
-                        A child of this kind is returned for every shape that
+                    <li><type scope="::com::sun::star::drawing"
+                        >AccessibleShape</type>: A child of this kind (or a
+                        derived interface) is returned for every shape that
                         is at least partially visible. These objects are
-                        children of the <type>AccessibleTextDocumentView</type>
-                        regardless whether they are bound to a page, a
-                        paragraph, a frame or a character.
+                        children of the
+                        <type>AccessibleTextDocumentView</type> regardless
+                        whether they are bound to a page, a paragraph, a
+                        frame or a character.
                 </ul>
                 <p>The following rules apply to the children order:
                 <ul>
@@ -178,43 +192,56 @@ service AccessibleTextDocumentView
                         with the exception of controls that appear really last,
                         but also keep the z order.
                 </ul>
-            <li>The role is <type>DOCUMENT</type>.
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::DOCUMENT</const>.
             <li>The name is "document view" (or the equivalent term
                 in application's language).
             <li>The description also is "document view" (or the equivalent term
                 in application's language).
             <li>There are no relation sets.
             <li>The following states might be contained in the state set
-                returned by <type>getAccessibleStateSet</type>:
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>:
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed)
-                    <li><type>EDITABLE</type>
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>MULTI_SELECTABLE</type> (always contained)
-                    <li><type>OPAQUE</type> (always contained)
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::MULTI_SELECTABLE</const>
+                        (always contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, asian or complex default language of the document.
         </ul>
 
-     */
+    */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
     /** This interface describes the graphical representation of a text
           document view.
-     */
+    */
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
     /** This interface is for selecting the document's children. Selectable
           are any children with the exception of headers, footers, footnotes
         and endnotes, where only the grandchildren might be selectable.
-     */
+    */
     interface ::com::sun::star::accessibility::XAccessibleSelection;
 
-    /** This is the interface for listeners */
+    /** This is the interface for listeners
+    */
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
