@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,13 @@ public:
         throw( IllegalArgument );
     const OptionMap&        getOptions();
 
-    sal_uInt16              getNumberOfInputFiles() const;
-    const ::rtl::OString    getInputFile(sal_uInt16 index)
-        throw( IllegalArgument );
-
-    const StringVector& getInputFiles();
+    const StringVector& getInputFiles() const { return m_inputFiles; }
+    bool readStdin() const { return m_stdin; }
 
 protected:
     ::rtl::OString  m_program;
     StringVector    m_inputFiles;
+    bool            m_stdin;
     OptionMap       m_options;
 };
 
