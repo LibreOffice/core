@@ -253,7 +253,7 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
         if(pCaption->ShowNumberInPercent)
         {
             fValue = fValue*100.0/fSumValue;
-            sal_Int32 nRound = fValue*100;
+            sal_Int32 nRound = static_cast< sal_Int32 >( fValue * 100.0 );
             fValue = nRound/100.0;
             if( fValue < 0 )
                 fValue*=-1.0;
@@ -335,7 +335,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX )
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
-    for(sal_Int32 nN =0; nN<m_aXSlots.size();nN++ )
+    for(size_t nN =0; nN<m_aXSlots.size();nN++ )
     {
         double fLocalMinimum, fLocalMaximum;
         if( m_aXSlots[nN].calculateYMinAndMaxForCategoryRange(
@@ -359,7 +359,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX )
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
-    for(sal_Int32 nN =0; nN<m_aXSlots.size();nN++ )
+    for(size_t nN =0; nN<m_aXSlots.size();nN++ )
     {
         double fLocalMinimum, fLocalMaximum;
         if( m_aXSlots[nN].calculateYMinAndMaxForCategoryRange(

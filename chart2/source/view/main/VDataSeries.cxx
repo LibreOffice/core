@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries, const Shape
             }
             catch( uno::Exception& e )
             {
-                e;
+                ASSERT_EXCEPTION( e );
             }
         }
     }
@@ -238,7 +238,7 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries, const Shape
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
 }
@@ -347,7 +347,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     }
     catch( uno::Exception &e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
     return apCaption;
 }
