@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:09:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-11 11:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,10 @@ NumToText##name::NumToText##name() \
         implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
 }
 
-TRANSLITERATION_NUMTOTEXT ( AIUFullWidth_ja_JP, table_AIUFullWidth_ja_JP, sal_False)
-TRANSLITERATION_NUMTOTEXT ( AIUHalfWidth_ja_JP, table_AIUHalfWidth_ja_JP, sal_False)
-TRANSLITERATION_NUMTOTEXT ( IROHAFullWidth_ja_JP, table_IROHAFullWidth_ja_JP, sal_False)
-TRANSLITERATION_NUMTOTEXT ( IROHAHalfWidth_ja_JP, table_IROHAHalfWidth_ja_JP, sal_False)
+TRANSLITERATION_NUMTOTEXT ( AIUFullWidth_ja_JP, table_AIUFullWidth_ja_JP, sal_True)
+TRANSLITERATION_NUMTOTEXT ( AIUHalfWidth_ja_JP, table_AIUHalfWidth_ja_JP, sal_True)
+TRANSLITERATION_NUMTOTEXT ( IROHAFullWidth_ja_JP, table_IROHAFullWidth_ja_JP, sal_True)
+TRANSLITERATION_NUMTOTEXT ( IROHAHalfWidth_ja_JP, table_IROHAHalfWidth_ja_JP, sal_True)
 TRANSLITERATION_NUMTOTEXT ( CircledNumber, table_CircledNumber, sal_False)
 TRANSLITERATION_NUMTOTEXT ( TianGan_zh, table_TianGan_zh, sal_False)
 TRANSLITERATION_NUMTOTEXT ( DiZi_zh, table_DiZi_zh, sal_False)
