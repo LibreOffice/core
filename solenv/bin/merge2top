@@ -3,9 +3,9 @@
 #
 #   $RCSfile: merge2top,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-30 07:16:25 $
+#   last change: $Author: hr $ $Date: 2002-01-30 07:27:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,4 +70,4 @@ if [ x${SOLARENV}x = 'xx' ]; then
     echo "Please configure environment with setsolar"
     exit 1
 fi
-perl -I${SOLARENV}/modules ${SOLARENV}/merge2top.pl "$@"
+perl -I${SOLARENV}/bin/modules ${SOLARENV}/bin/merge2top.pl "$@"
