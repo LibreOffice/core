@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
