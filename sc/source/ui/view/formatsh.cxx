@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:00:43 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2058,5 +2058,39 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         }
         nWhich = aIter.NextWhich();
     }
+}
+
+void ScFormatShell::ExecFormatPaintbrush( SfxRequest& rReq )
+{
+    ScViewFunc* pView = pViewData->GetView();
+    if ( pView->HasPaintBrush() )
+    {
+        // cancel paintbrush mode
+        pView->ResetBrushDocument();
+    }
+    else
+    {
+        BOOL bLock = FALSE;
+        const SfxItemSet *pArgs = rReq.GetArgs();
+        if( pArgs && pArgs->Count() >= 1 )
+            bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
+
+        // in case of multi selection, deselect all and use the cursor position
+        ScRange aDummy;
+        if ( !pViewData->GetSimpleArea(aDummy) )
+            pView->Unmark();
+
+        ScDocument* pBrushDoc = new ScDocument( SCDOCMODE_CLIP );
+        pView->CopyToClip( pBrushDoc, FALSE, TRUE );
+        pView->SetBrushDocument( pBrushDoc, bLock );
+    }
+}
+
+void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
+{
+    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
+        rSet.DisableItem( SID_FORMATPAINTBRUSH );
+    else
+        rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
 }
 
