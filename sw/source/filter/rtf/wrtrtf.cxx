@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:05:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,9 @@ SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
 SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
-SwRTFWriter::SwRTFWriter( const String& rFltName ) : eCurrentCharSet(DEF_ENCODING)
+SwRTFWriter::SwRTFWriter( const String& rFltName, const String& rBaseURL ) : eCurrentCharSet(DEF_ENCODING)
 {
+    SetBaseURL( rBaseURL );
     // schreibe Win-RTF-HelpFileFmt
     bWriteHelpFmt = 'W' == rFltName.GetChar( 0 );
     // schreibe nur Gliederungs Absaetze
@@ -1860,9 +1861,9 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutSection = bOldOutSection;
 }
 
-void GetRTFWriter( const String& rFltName, WriterRef& xRet )
+void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    xRet = new SwRTFWriter( rFltName );
+    xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 
 short SwRTFWriter::GetCurrentPageDirection() const
