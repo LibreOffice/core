@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 19:21:30 $
+ *  last change: $Author: er $ $Date: 2000-11-18 20:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public:
                                     { setDateTime( rDateTime - aEpochStart ); }
 
     /// get the DateTime as a gregorian DateTime
-    inline  DateTime            getGregorianDateTime()
+    inline  DateTime            getGregorianDateTime() const
                                     { return aEpochStart + getDateTime(); }
 
 };
