@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-30 10:14:52 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,9 @@ DrawController::DrawController (
           OMultiTypeInterfaceContainerHelper,
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
-      mrView(rView),
-      mrViewShell(rViewShell),
+      mpView(&rView),
+      mpViewShell(&rViewShell),
+      meViewShellType(rViewShell.GetShellType()),
       maLastVisArea(),
       mrBase(rBase),
       mbDisposing(false)
@@ -140,6 +141,19 @@ DrawController::DrawController (
 
 DrawController::~DrawController (void) throw()
 {
+}
+
+
+
+
+void DrawController::DetachFromViewShell (void)
+{
+    // Set the pointers to view shell and view to NULL so that no one
+    // accesses the soon-to-be-deleted objects.
+    mpViewShell = NULL;
+    mpView = NULL;
+
+    maLastVisArea = Rectangle();
 }
 
 
@@ -285,48 +299,49 @@ Any SAL_CALL DrawController::getSelection()
 
     SdXImpressDocument* pModel = GetModel();
 
-    DBG_ASSERT (&mrView != NULL,
-        "view is NULL in SdUnoDrawView::getSelection()");
+    DBG_ASSERT (mpView != NULL, "view is NULL in SdUnoDrawView::getSelection()");
 
     Any aAny;
 
-    if( mrView.IsTextEdit() )
-        mrView.getTextSelection( aAny );
-
-
-    if( !aAny.hasValue() )
+    if (mpView != NULL)
     {
-        const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
-        if( nCount )
+        if( mpView->IsTextEdit() )
+            mpView->getTextSelection( aAny );
+
+        if ( !aAny.hasValue() )
         {
-            Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
-            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+            sal_uInt32 nCount = rMarkList.GetMarkCount();
+            if( nCount )
             {
-                SdrMark *pMark = rMarkList.GetMark(nNum);
-                if(pMark==NULL)
-                    continue;
+                Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+                for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+                {
+                    SdrMark *pMark = rMarkList.GetMark(nNum);
+                    if(pMark==NULL)
+                        continue;
 
-                SdrObject *pObj = pMark->GetObj();
-                if(pObj==NULL || pObj->GetPage() == NULL)
-                    continue;
+                    SdrObject *pObj = pMark->GetObj();
+                    if(pObj==NULL || pObj->GetPage() == NULL)
+                        continue;
 
-                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+                    Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
 
-                if(!xPage.is())
-                    continue;
+                    if(!xPage.is())
+                        continue;
 
-                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+                    SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
 
-                if(pDrawPage==NULL)
-                    continue;
+                    if(pDrawPage==NULL)
+                        continue;
 
-                Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+                    Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
 
-                if(xShape.is())
-                    xShapes->add(xShape);
+                    if(xShape.is())
+                        xShapes->add(xShape);
+                }
+                aAny <<= xShapes;
             }
-            aAny <<= xShapes;
         }
     }
 
@@ -366,9 +381,12 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
 Reference<awt::XWindow> DrawController::GetWindow (void)
 {
     Reference< ::com::sun::star::awt::XWindow > xWindow;
-    Window* pWindow = mrViewShell.GetActiveWindow();
-    if (pWindow != NULL)
-        xWindow = VCLUnoHelper::GetInterface (pWindow);
+    if (mpViewShell != NULL)
+    {
+        Window* pWindow = mpViewShell->GetActiveWindow();
+        if (pWindow != NULL)
+            xWindow = VCLUnoHelper::GetInterface (pWindow);
+    }
     return xWindow;
 }
 
@@ -596,9 +614,9 @@ void  SAL_CALL
 
 SdXImpressDocument* DrawController::GetModel (void) const throw()
 {
-    if (mrView.GetDocSh())
+    if (mpView!=NULL && mpView->GetDocSh()!=NULL)
     {
-        Reference< frame::XModel > xModel (mrView.GetDocSh()->GetModel());
+        Reference< frame::XModel > xModel (mpView->GetDocSh()->GetModel());
         return SdXImpressDocument::getImplementation(xModel);
     }
     else
