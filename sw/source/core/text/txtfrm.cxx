@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:16:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -801,15 +798,6 @@ void SwTxtFrm::CalcLineSpace()
             // Alles nimmt seinen gewohnten Gang ...
             pPara->SetPrepAdjust();
             pPara->SetPrep();
-#ifdef USED
-            if (nDelta > 0)
-                Grow(nDelta,pHeight);
-            else
-                Shrink(-nDelta,pHeight);
-            ASSERT( GetPara(), "+SwTxtFrm::CalcLineSpace: missing format information" );
-            if( pPara )
-                pPara->GetRepaint()->SSize( Prt().SSize() );
-#endif
         }
     }
 }
