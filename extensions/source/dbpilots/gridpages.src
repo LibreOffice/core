@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:32:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ String RID_STR_DATEPOSTFIX
     Text [ greek ] = " (Çìåñïìçíßá)";
     Text [ korean ] = " (³¯Â¥)";
     Text [ turkish ] = "(Tarih)";
-    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = "(Fecha)";
     Text[ finnish ] = "(Päivämäärä)";
 };
@@ -276,7 +276,7 @@ String RID_STR_TIMEPOSTFIX
     Text [ greek ] = " (¿ñá)";
     Text [ korean ] = " (½Ã°£)";
     Text [ turkish ] = " (Saat)";
-    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = "(Hora)";
     Text[ finnish ] = "(Aika)";
 };
@@ -284,6 +284,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/07/03 22:32:05  kz
+ *  Merge SRC633: 04.07.01 - 00:31:06
+ *
  *  Revision 1.11  2001/06/15 21:50:09  rt
  *  Merge SRC633: 15.06.01 - 23:50:31
  *
@@ -320,6 +323,7 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
 
 
