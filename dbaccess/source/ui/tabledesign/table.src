@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:43:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2502,3 +2502,32 @@ String STR_NO_TYPE_INFO_AVAILABLE
     Text[ hungarian ] = "Nem sikerült kideríteni az adatbázis típusát.\nEhhez az adatforráshoz nem áll rendelkezésre táblatervező mód.";
     Text[ slovenian ] = "Iz zbirke podatkov ni mogoče dobiti podatkov o vrsti.\nZa ta vir podatkov ni na voljo način oblikovanja tabele.";
 };
+
+String STR_CHANGE_COLUMN_NAME
+{
+    Text = "Spaltennamen �ndern";
+    Text [ english ] = "change column name";
+    Text [ english_us ] = "change column name";
+};
+
+String STR_CHANGE_COLUMN_TYPE
+{
+    Text = "Spaltentyp �ndern";
+    Text [ english ] = "change column type";
+    Text [ english_us ] = "change column type";
+};
+
+String STR_CHANGE_COLUMN_DESCRIPTION
+{
+    Text = "Spaltenbeschreibung �ndern";
+    Text [ english ] = "change column description";
+    Text [ english_us ] = "change column description";
+};
+
+String STR_CHANGE_COLUMN_ATTRIBUTE
+{
+    Text = "Spaltenattribut �ndern";
+    Text [ english ] = "change column attribute";
+    Text [ english_us ] = "change column attribute";
+};
+
