@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-05 16:53:10 $
+ *  last change: $Author: mt $ $Date: 2001-03-06 15:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3001,7 +3001,9 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
             uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
             xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
         }
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         xClipboard->setContents( pDataObj, NULL );
+        Application::AcquireSolarMutex( nRef );
     }
     else // DRAGSERVER
     {
