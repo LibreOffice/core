@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:21:52 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <textview.hxx>
 #include <texteng.hxx>
@@ -454,10 +456,6 @@ void TextView::ImpHighlight( const TextSelection& rSel )
     aSel.Justify();
     if ( aSel.HasRange() && !mpTextEngine->IsInUndo() && mpTextEngine->GetUpdateMode() )
     {
-        BOOL bInvertSelection = FALSE;
-#ifdef MAC
-        bInvertSelection = ( mpWindow->GetBackground().GetColor() != COL_WHITE );
-#endif
         mpCursor->Hide();
 
         DBG_ASSERT( !mpTextEngine->mpIdleFormatter->IsActive(), "ImpHighlight: Not formatted!" );
@@ -2052,7 +2050,6 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
 
 void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
 }
 
 void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
