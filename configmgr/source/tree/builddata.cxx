@@ -2,9 +2,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
+ *  last change: $Author: hr $ $Date: 2002-02-18 18:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ namespace configmgr
         NodeAddress         m_aParentAddr;
     public:
         explicit
-        TreeNodeBuilder::LinkSetNodes(UpdateAccessor & _anUpdater)
+        LinkSetNodes(UpdateAccessor & _anUpdater)
         : m_updater(_anUpdater)
         , m_aParentAddr()
         {
