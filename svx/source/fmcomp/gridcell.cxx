@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:08:23 $
+ *  last change: $Author: fs $ $Date: 2002-10-15 07:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor
 //------------------------------------------------------------------------------
 CellControllerRef DbFormattedField::CreateController() const
 {
-    return new EditCellController((Edit*)m_pWindow);
+    return new ::svt::FormattedFieldCellController( static_cast< FormattedField* >( m_pWindow ) );
 }
 
 //------------------------------------------------------------------------------
