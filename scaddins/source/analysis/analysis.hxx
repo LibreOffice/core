@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-02 07:50:06 $
+ *  last change: $Author: dr $ $Date: 2001-10-09 11:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
 #include <com/sun/star/sheet/LocalizedName.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
@@ -73,6 +74,7 @@
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 
 #include "analysisdefs.hxx"
+#include "analysishelper.hxx"
 
 
 class FuncData;
@@ -99,14 +101,24 @@ private:
     ConvertDataList*            pCDL;
     ResMgr*                     pResMgr;
 
+    ScaAnyConverter             aAnyConv;
+
     ResMgr&                     GetResMgr( void ) THROWDEF_RTE;
     STRING                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
     STRING                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
     void                        InitDefLocales( void );
     inline const CSS::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData( void );
+
+                                /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
+    sal_Int32                   getDateMode(
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
+                                    const CSS::uno::Any& rAny )
+                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
 public:
-                                AnalysisAddIn();
+                                AnalysisAddIn(
+                                    const CSS::uno::Reference< CSS::lang::XMultiServiceFactory >& xServiceFact );
     virtual                     ~AnalysisAddIn();
 
     double                      FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
@@ -162,36 +174,36 @@ public:
 
     virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getGcd( const SEQSEQ( double )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getLcm( const SEQSEQ( ANY )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getGcd( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getLcm( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getBin2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getBin2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getOct2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getOct2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getDec2Bin( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2Oct( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2Hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Bin( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Oct( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getHex2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getHex2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getDelta( constREFXPS& xOpt, double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getErf( double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getErf( constREFXPS& xOpt, double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getErfc( double fLowerLimit ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getGestep( constREFXPS& xOpt, double fNum, const ANY& rStep ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
 
@@ -206,11 +218,11 @@ public:
     virtual STRING SAL_CALL     getImln( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImproduct( const SEQSEQ( STRING )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImproduct( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getImreal( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsin( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsum( const SEQSEQ( STRING )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsum( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
@@ -244,7 +256,7 @@ public:
     virtual double SAL_CALL     getOddfyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOddlprice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOddlyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getXirr( const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getXirr( constREFXPS& xOpt, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getXnpv( double fRate, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getIntrate( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCoupncd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;

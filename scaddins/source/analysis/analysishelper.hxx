@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-02 07:50:06 $
+ *  last change: $Author: dr $ $Date: 2001-10-09 11:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,22 @@
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
 #include <com/sun/star/util/Date.hpp>
 
 #include <math.h>
-//#include <tools/list.hxx>
-//#include <tools/solmath.hxx>
 
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 
 #include "analysisdefs.hxx"
-//#include "analysis_solmath.hxx"
 
 
 class ResMgr;
 class SortedIndividualInt32List;
+class ScaAnyConverter;
 
 
 #define PI          3.1415926535897932
@@ -147,9 +147,6 @@ double              Erf( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
 STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
-sal_Int32           GetOpt( const ANY& rAny, sal_Int32 nDefault ) THROWDEF_RTE_IAE;
-double              GetOpt( const ANY& rAny, double fDefault ) THROWDEF_RTE_IAE;
-inline sal_Int32    GetOptBase( const ANY& rAny );
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
                                 double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
@@ -192,78 +189,6 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 
 
-
-
-//-----------------------------------------------------------------------------
-// date helper class for financial functions COUP***
-
-class ScAddInDate
-{
-private:
-    void                        SetDay();
-
-    inline sal_uInt16           GetDaysInMonth() const;
-    inline sal_uInt16           GetDaysInMonth( sal_uInt16 _nMon ) const;
-
-    sal_Int32                   GetDaysInMonthRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
-    sal_Int32                   GetDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
-
-public:
-    sal_uInt16                  nOrigDay;
-    sal_uInt16                  nDay;
-    sal_uInt16                  nMonth;
-    sal_uInt16                  nYear;
-    sal_Bool                    bLastDay;
-    sal_Bool                    b30Days;
-    sal_Bool                    bUSMode;
-
-                                ScAddInDate();
-                                ScAddInDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase );
-                                ScAddInDate( const ScAddInDate& rCopy );
-    ScAddInDate&                operator=( const ScAddInDate& rCopy );
-
-    void                        AddMonths( sal_uInt16 nAddMonths );
-    void                        SubMonths( sal_uInt16 nSubMonths );
-    inline void                 SetYear( sal_uInt16 nNewYear );
-    inline void                 AddYears( sal_uInt16 nAddYears );
-    inline void                 SubYears( sal_uInt16 nSubYears );
-
-    sal_Int32                   GetDate( sal_Int32 nNullDate ) const;
-    static sal_Int32            GetDiff( const ScAddInDate& rFrom, const ScAddInDate& rTo );
-
-    sal_Bool                    operator<( const ScAddInDate& rCmp ) const;
-    inline sal_Bool             operator<=( const ScAddInDate& rCmp ) const { return !(rCmp < *this); }
-    inline sal_Bool             operator>( const ScAddInDate& rCmp ) const  { return rCmp < *this; }
-    inline sal_Bool             operator>=( const ScAddInDate& rCmp ) const { return !(*this < rCmp); }
-};
-
-inline sal_uInt16 ScAddInDate::GetDaysInMonth() const
-{
-    return GetDaysInMonth( nMonth );
-}
-
-inline sal_uInt16 ScAddInDate::GetDaysInMonth( sal_uInt16 _nMon ) const
-{
-    return b30Days ? 30 : DaysInMonth( _nMon, nYear );
-}
-
-inline void ScAddInDate::SetYear( sal_uInt16 nNewYear )
-{
-    nYear = nNewYear;
-    SetDay();
-}
-
-inline void ScAddInDate::AddYears( sal_uInt16 nAddYears )
-{
-    nYear += nAddYears;
-    SetDay();
-}
-
-inline void ScAddInDate::SubYears( sal_uInt16 nSubYears )
-{
-    nYear -= nSubYears;
-    SetDay();
-}
 
 
 //-----------------------------------------------------------------------------
@@ -434,101 +359,162 @@ public:
 
 
 
+//-----------------------------------------------------------------------------
 
+/// sorted list with unique sal_Int32 values
 class SortedIndividualInt32List : private MyList
 {
-    // sorted list were values are unique
-private:
 protected:
+    void                        Insert( sal_Int32 nDay );
+    void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
+    void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  must be an initialized ScaAnyConmverter
+                                    @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
+    void                        InsertHolidayList(
+                                    const ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Any& rHolAny,
+                                    sal_Int32 nNullDate,
+                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
 public:
-                        SortedIndividualInt32List();
-    virtual             ~SortedIndividualInt32List();
+                                SortedIndividualInt32List();
+    virtual                     ~SortedIndividualInt32List();
 
-    void                Insert( sal_Int32 nNewVal );
+                                MyList::Count;
 
-    MyList::Count;
+                                /// @return  element on position nIndex or 0 on invalid index
+    inline sal_Int32            Get( sal_uInt32 nIndex ) const
+                                    { return (sal_Int32) MyList::GetObject( nIndex ); }
 
-    inline sal_Int32    Get( sal_uInt32 nIndex ) const; // reterns a value in every situation,
-                                                        //  even if nIndex is invalid,
-                                                        //  so care about nIndex _before_ using Get()
+                                /// @return  number of elements in the range of nMinVal to nMaxVal (both included)
+    sal_Int32                   CountCondition( sal_Int32 nMinVal, sal_Int32 nMaxVal ) const;
 
-    sal_Int32           CountCondition( sal_Int32 nMinVal, sal_Int32 nMaxVal ) const;
-                                                        // count number of elements, which are in the range
-                                                        //  of nMinVal ... nMaxVal (both included)
-    sal_Bool            Find( sal_Int32 nVal ) const;
+                                /// @return  sal_True if nVal (internal date representation) is contained
+    sal_Bool                    Find( sal_Int32 nVal ) const;
 
-    void                InsertHolidayList(
-                            const SEQSEQ( sal_Int32 )& aHDay,
-                            sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends );
-    void                InsertHolidayList(
-                            const SEQ( double )& aHDay,
-                            sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
-    void                InsertHolidayList(
-                            const ANY& aHDay,
-                            sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
+                                /// @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted
+    void                        InsertHolidayList(
+                                    const CSS::uno::Sequence< CSS::uno::Sequence< sal_Int32 > >& rHolidaySeq,
+                                    sal_Int32 nNullDate,
+                                    sal_Bool bInsertOnWeekend );
+
+                                /// @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted
+    void                        InsertHolidayList(
+                                    const CSS::uno::Sequence< double >& rHolidaySeq,
+                                    sal_Int32 nNullDate,
+                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
+                                    @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
+    void                        InsertHolidayList(
+                                    ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOptions,
+                                    const CSS::uno::Any& rHolAny,
+                                    sal_Int32 nNullDate,
+                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 };
 
 
+//-----------------------------------------------------------------------------
 
-
-class DoubleList : protected MyList
+class ScaDoubleList : protected MyList
 {
 protected:
-    inline void             _Append( double fVal );
-    inline void             AppendVoid( sal_Bool bForceErrorOnEmpty ) THROWDEF_RTE_IAE;
-    inline void             AppendDouble( double fVal ) THROWDEF_RTE_IAE;
-    void                    AppendString( const ANY& r, sal_Bool bEmptyStringAs0 ) THROWDEF_RTE_IAE;
-    void                    AppendDouble( const ANY& r ) THROWDEF_RTE_IAE;
-    inline void             AppendAnyArray2( const ANY& r ) THROWDEF_RTE_IAE;
+    inline void                 ListAppend( double fValue ) { MyList::Append( new double( fValue ) ); }
+
+    inline void                 Append( double fValue ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException )
+                                    { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
+
+                                /** @param rAnyConv  must be an initialized ScaAnyConmverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    const ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Any& rAny,
+                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  must be an initialized ScaAnyConmverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    const ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Sequence< CSS::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  must be an initialized ScaAnyConmverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    const ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Sequence< CSS::uno::Sequence< CSS::uno::Any > >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
 public:
-    virtual                 ~DoubleList();
+    virtual                     ~ScaDoubleList();
 
+                                MyList::Count;
+    inline const double*        Get( sal_uInt32 nIndex ) const
+                                        { return static_cast< const double* >( MyList::GetObject( nIndex ) ); }
 
-    inline const double*    Get( sal_uInt32 nIndex ) const;
-    inline const double*    First( void );
-    inline const double*    Next( void );
+    inline const double*        First() { return static_cast< const double* >( MyList::First() ); }
+    inline const double*        Next()  { return static_cast< const double* >( MyList::Next() ); }
 
-    MyList::Count;
+    void                        Append( const CSS::uno::Sequence< CSS::uno::Sequence< double > >& rValueArr )
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+    void                        Append( const CSS::uno::Sequence< CSS::uno::Sequence< sal_Int32 > >& rValueArr )
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 
-    sal_Bool                Append( double fVal );
-    void                    Append( const SEQSEQ( double )& aValList ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQSEQ( sal_Int32 )& aValList ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQ( ANY )& aValList,
-                                sal_Bool bEmptyStringAs0 = sal_True,
-                                sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
-                                // when bEmptyStringAs0, no empty entry is possible as result ->
-                                //  bForceErrorOnEmpty has no effect, but an exception is thrown,
-                                //  when the string is _not_ empty
-                                // when bForceErrorOnEmpty, no voids and empty strings are allowed
-    void                    Append( const SEQSEQ( ANY )& aValList,
-                                sal_Bool bEmptyStringAs0 = sal_True,
-                                sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
-    virtual sal_Bool        IsProper( double fVal ) const;
-    virtual sal_Bool        IsFaulty( double fVal ) const;
+                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
+                                    const CSS::uno::Any& rAny,
+                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
+                                    const CSS::uno::Sequence< CSS::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+    void                        Append(
+                                    ScaAnyConverter& rAnyConv,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
+                                    const CSS::uno::Sequence< CSS::uno::Sequence< CSS::uno::Any > >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+    virtual sal_Bool            CheckInsert( double fValue ) const
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 };
 
 
+//-----------------------------------------------------------------------------
 
-
-class ChkDoubleList1 : public DoubleList
-{// proper values are > 0.0
+/// stores double values >0.0, throws exception for double values <0.0, does nothing for 0.0
+class ScaDoubleListGT0 : public ScaDoubleList
+{
 public:
-    virtual sal_Bool        IsProper( double fVal ) const;
-    virtual sal_Bool        IsFaulty( double fVal ) const;
+    virtual sal_Bool            CheckInsert( double fValue ) const
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 };
 
 
+//-----------------------------------------------------------------------------
 
-
-class ChkDoubleList2 : public DoubleList
-{   // proper values are >= 0.0
+/// stores double values >=0.0, throws exception for double values <0.0
+class ScaDoubleListGE0 : public ScaDoubleList
+{
 public:
-    virtual sal_Bool        IsProper( double fVal ) const;
-    virtual sal_Bool        IsFaulty( double fVal ) const;
+    virtual sal_Bool            CheckInsert( double fValue ) const
+                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 };
 
 
-
+//-----------------------------------------------------------------------------
 
 class Complex
 {
@@ -717,14 +703,6 @@ inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
 }
 
 
-inline sal_Int32 GetOptBase( const ANY& r )
-{
-    return GetOpt( r, sal_Int32( 0 ) );
-}
-
-
-
-
 inline void MyList::Grow( void )
 {
     if( nNew >= nSize )
@@ -884,50 +862,6 @@ inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 
 
 
-inline sal_Int32 SortedIndividualInt32List::Get( sal_uInt32 n ) const
-{
-    return ( sal_Int32 ) MyList::GetObject( n );
-}
-
-
-
-
-inline void DoubleList::_Append( double f )
-{
-    MyList::Append( new double( f ) );
-}
-
-
-inline const double* DoubleList::Get( sal_uInt32 n ) const
-{
-    return ( const double* ) MyList::GetObject( n );
-}
-
-
-inline const double* DoubleList::First( void )
-{
-    return ( const double* ) MyList::First();
-}
-
-
-inline const double* DoubleList::Next( void )
-{
-    return ( const double* ) MyList::Next();
-}
-
-
-inline sal_Bool DoubleList::Append( double f )
-{
-    if( IsFaulty( f ) )
-        return sal_False;
-    if( IsProper( f ) )
-        _Append( f );
-    return sal_True;
-}
-
-
-
-
 /*inline Complex::Complex( void )
 {
 //#ifdef DEBUG
@@ -1057,6 +991,171 @@ inline ConvertData* ConvertDataList::Next( void )
 {
     return ( ConvertData* ) MyList::Next();
 }
+
+//-----------------------------------------------------------------------------
+
+/// Helper class for date calculation for various financial functions
+class ScaDate
+{
+private:
+    void                        setDay();
+
+                                /// @return  count of days in current month
+    inline sal_uInt16           getDaysInMonth() const;
+                                /// @return  count of days in given month
+    inline sal_uInt16           getDaysInMonth( sal_uInt16 _nMon ) const;
+
+                                /// @ return  count of days in the given month range
+    sal_Int32                   getDaysInMonthRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
+                                /// @ return  count of days in the given year range
+    sal_Int32                   getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
+
+public:
+    sal_uInt16                  nOrigDay;
+    sal_uInt16                  nDay;
+    sal_uInt16                  nMonth;
+    sal_uInt16                  nYear;
+    sal_Bool                    bLastDay;
+    sal_Bool                    b30Days;
+    sal_Bool                    bUSMode;
+
+                                ScaDate();
+                                ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase );
+                                ScaDate( const ScaDate& rCopy );
+    ScaDate&                    operator=( const ScaDate& rCopy );
+
+                                /// adds the given count of months, adjusts day
+    void                        addMonths( sal_uInt16 nAddMonths );
+                                /// subtracts the given count of months, adjusts day
+    void                        subMonths( sal_uInt16 nSubMonths );
+                                /// sets the given year, adjusts day
+    inline void                 setYear( sal_uInt16 nNewYear );
+                                /// adds the given count of years, adjusts day
+    inline void                 addYears( sal_uInt16 nAddYears );
+                                /// subtracts the given count of years, adjusts day
+    inline void                 subYears( sal_uInt16 nSubYears );
+
+                                /// @return  the internal number of the current date
+    sal_Int32                   getDate( sal_Int32 nNullDate ) const;
+                                /// @return  the number of days between the two dates
+    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo );
+
+    sal_Bool                    operator<( const ScaDate& rCmp ) const;
+    inline sal_Bool             operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
+    inline sal_Bool             operator>( const ScaDate& rCmp ) const  { return rCmp < *this; }
+    inline sal_Bool             operator>=( const ScaDate& rCmp ) const { return !(*this < rCmp); }
+};
+
+inline sal_uInt16 ScaDate::getDaysInMonth() const
+{
+    return getDaysInMonth( nMonth );
+}
+
+inline sal_uInt16 ScaDate::getDaysInMonth( sal_uInt16 _nMon ) const
+{
+    return b30Days ? 30 : DaysInMonth( _nMon, nYear );
+}
+
+inline void ScaDate::setYear( sal_uInt16 nNewYear )
+{
+    nYear = nNewYear;
+    setDay();
+}
+
+inline void ScaDate::addYears( sal_uInt16 nAddYears )
+{
+    nYear += nAddYears;
+    setDay();
+}
+
+inline void ScaDate::subYears( sal_uInt16 nSubYears )
+{
+    nYear -= nSubYears;
+    setDay();
+}
+
+
+//-----------------------------------------------------------------------------
+
+/// Helper class for Any->double conversion, using current language settings
+class ScaAnyConverter
+{
+private:
+    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > xServiceFactory;
+
+    sal_Unicode                 cGroupSep;
+    sal_Unicode                 cDecSep;
+
+public:
+                                ScaAnyConverter(
+                                    const CSS::uno::Reference< CSS::lang::XMultiServiceFactory >& xServiceFact );
+                                ~ScaAnyConverter();
+
+                                /// Initializing with current language settings
+    void                        init(
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet )
+                                throw( CSS::uno::RuntimeException );
+
+                                /** Converts an Any to double (without initialization).
+                                    The Any can be empty or contain a double or string.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on other Any types or on invalid strings.
+                                    @return  sal_True if the Any contains a double or a non-empty valid string,
+                                             sal_False if the Any is empty or the string is empty */
+    sal_Bool                    getDouble(
+                                    double& rfResult,
+                                    const CSS::uno::Any& rAny ) const
+                                throw( CSS::lang::IllegalArgumentException );
+
+                                /** Converts an Any to double (with initialization).
+                                    The Any can be empty or contain a double or string.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on other Any types or on invalid strings.
+                                    @return  sal_True if the Any contains a double or a non-empty valid string,
+                                             sal_False if the Any is empty or the string is empty */
+    sal_Bool                    getDouble(
+                                    double& rfResult,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
+                                    const CSS::uno::Any& rAny )
+                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** Converts an Any to double (with initialization).
+                                    The Any can be empty or contain a double or string.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on other Any types or on invalid strings.
+                                    @return  the value of the double or string or fDefault if the Any or string is empty */
+    double                      getDouble(
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
+                                    const CSS::uno::Any& rAny,
+                                    double fDefault )
+                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** Converts an Any to sal_Int32 (with initialization).
+                                    The Any can be empty or contain a double or string.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on other Any types or on invalid values or strings.
+                                    @return  sal_True if the Any contains a double or a non-empty valid string,
+                                             sal_False if the Any is empty or the string is empty */
+    sal_Bool                    getInt32(
+                                    sal_Int32& rnResult,
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
+                                    const CSS::uno::Any& rAny )
+                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+
+                                /** Converts an Any to sal_Int32 (with initialization).
+                                    The Any can be empty or contain a double or string.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on other Any types or on invalid values or strings.
+                                    @return  the truncated value of the double or string or nDefault if the Any or string is empty */
+    sal_Int32                   getInt32(
+                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
+                                    const CSS::uno::Any& rAny,
+                                    sal_Int32 nDefault )
+                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+};
+
+
+//-----------------------------------------------------------------------------
 
 
 #endif

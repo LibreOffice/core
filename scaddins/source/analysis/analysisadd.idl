@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-14 11:22:39 $
+ *  last change: $Author: dr $ $Date: 2001-10-09 11:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ module addin
     };
 
     /**
-     * Interface with analysis functions.
-     */
+    * Interface with analysis functions.
+    */
     interface XAnalysis : com::sun::star::uno::XInterface
     {
         /// _test.
@@ -135,11 +135,13 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// multinomial.
-        double getMultinomial( [in] sequence< sequence<long> > aValList )
+        double getMultinomial( [in] sequence< sequence< long > > aValList )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// seriessum.
-        double getSeriessum( [in] double X, [in] double N, [in] double M, [in] sequence< sequence<double> > CoeffList )
+        double getSeriessum(
+                    [in] double X, [in] double N, [in] double M,
+                    [in] sequence< sequence< double > > CoeffList )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         // quotient.
@@ -159,11 +161,17 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// gcd.
-        double getGcd( [in] sequence< sequence<double> > FirstValList, [in] sequence< any > OptionalValList )
+        double getGcd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< double > > FirstValList,
+                    [in] sequence< any > OptionalValList )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// lcm.
-        double getLcm( [in] sequence< sequence< any > > FirstValList, [in] sequence< any > OptionalValList )
+        double getLcm(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< double > > FirstValList,
+                    [in] sequence< any > OptionalValList )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// besseli.
@@ -183,7 +191,9 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// bin2oct.
-        string getBin2Oct( [in] string BinaryNum, [in] any Places )
+        string getBin2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// bin2dec.
@@ -191,11 +201,15 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// bin2hex.
-        string getBin2Hex( [in] string BinaryNum, [in] any Places )
+        string getBin2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// oct2bin.
-        string getOct2Bin( [in] string OctalNum, [in] any Places )
+        string getOct2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// oct2dec.
@@ -203,23 +217,33 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// oct2hex.
-        string getOct2Hex( [in] string OctalNum, [in] any Places )
+        string getOct2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// dec2bin.
-        string getDec2Bin( [in] long Value, [in] any Places )
+        string getDec2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// dec2oct.
-        string getDec2Oct( [in] long Value, [in] any Places )
+        string getDec2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// dec2hex.
-        string getDec2Hex( [in] double Value, [in] any Places )
+        string getDec2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Value, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// hex2bin.
-        string getHex2Bin( [in] string HexadecimalValue, [in] any Places )
+        string getHex2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// hex2dec.
@@ -227,15 +251,21 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// hex2oct.
-        string getHex2Oct( [in] string HexadecimalValue, [in] any Places )
+        string getHex2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] any Places )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// delta.
-        long getDelta( [in] double Num1, [in] any Num2 )
+        long getDelta(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num1, [in] any Num2 )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// erf.
-        double getErf( [in] double LowerLimit, [in] any UpperLimit )
+        double getErf(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double LowerLimit, [in] any UpperLimit )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// erfc.
@@ -243,7 +273,9 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// gestep.
-        long getGestep( [in] double Num, [in] any Step )
+        long getGestep(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] any Step )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// factdouble.
@@ -295,7 +327,10 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// improduct.
-        string getImproduct( [in] sequence< sequence<string> > Num1, [in] sequence<any> NumberList )
+        string getImproduct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< string > > Num1,
+                    [in] sequence< any > NumberList )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// imreal.
@@ -311,7 +346,10 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// imsum.
-        string getImsum( [in] sequence< sequence<string> > Num1, [in] sequence<any> OptNums )
+        string getImsum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< string > > Num1,
+                    [in] sequence< any > OptNums )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// imsqrt.
@@ -504,6 +542,7 @@ module addin
 
         /// xirr.
         double getXirr(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] sequence< sequence< double > > Values,
                     [in] sequence< sequence< long > > Dates, [in] any Guess )
             raises( com::sun::star::lang::IllegalArgumentException );
