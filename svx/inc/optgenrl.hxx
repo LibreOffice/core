@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:37:33 $
+ *  last change: $Author: pb $ $Date: 2002-09-23 09:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ private:
     Edit                aCompanyEdit;
     FixedText           aNameLbl;
     FixedText           aNameLblRuss;
-    Edit                aFatherName;
     Edit                aFirstName;
+    Edit                aFatherName;
     Edit                aName;
     Edit                aShortName;
     FixedText           aStreetLbl;
