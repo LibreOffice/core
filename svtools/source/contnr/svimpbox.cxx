@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-10 05:56:21 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,6 +972,9 @@ void SvImpLBox::DrawNet()
     Point aPos1, aPos2;
     USHORT nDistance;
     ULONG nMax = nVisibleCount + nOffs + 1;
+
+    const Image& rExpandedNodeBitmap = GetExpandedNodeBmp();
+
     for( ULONG n=0; n< nMax && pEntry; n++ )
     {
         if( pView->IsExpanded(pEntry) )
@@ -980,7 +983,7 @@ void SvImpLBox::DrawNet()
             // wenn keine ContextBitmap, dann etwas nach rechts
             // unter den ersten Text (Node.Bmp ebenfalls
             if( !pView->nContextBmpWidthMax )
-                aPos1.X() += aExpNodeBmp.GetSizePixel().Width() / 2;
+                aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
 
             aPos1.Y() = nY;
             aPos1.Y() += nEntryHeightDIV2;
@@ -1005,7 +1008,7 @@ void SvImpLBox::DrawNet()
                 // wenn keine ContextBitmap, dann etwas nach rechts
                 // unter den ersten Text (Node.Bmp ebenfalls
                 if( !pView->nContextBmpWidthMax )
-                    aPos1.X() += aExpNodeBmp.GetSizePixel().Width() / 2;
+                    aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
                 aPos1.Y() = nY;
                 aPos1.Y() += nEntryHeightDIV2;
                 aPos2.X() = aPos1.X();
@@ -1024,7 +1027,7 @@ void SvImpLBox::DrawNet()
         // wenn keine ContextBitmap, dann etwas nach rechts
         // unter den ersten Text (Node.Bmp ebenfalls
         if( !pView->nContextBmpWidthMax )
-            aPos1.X() += aExpNodeBmp.GetSizePixel().Width() / 2;
+            aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
         aPos1.X() -=  pView->GetIndent();
         aPos1.Y() = GetEntryLine( pEntry );
         aPos1.Y() += nEntryHeightDIV2;
@@ -1416,8 +1419,8 @@ long SvImpLBox::GetEntryLine( SvLBoxEntry* pEntry ) const
 
 void SvImpLBox::SetEntryHeight( short /* nHeight */ )
 {
-    SetNodeBmpYOffset( aExpNodeBmp );
-    SetNodeBmpYOffset( aCollNodeBmp );
+    SetNodeBmpYOffset( GetExpandedNodeBmp() );
+    SetNodeBmpYOffset( GetCollapsedNodeBmp() );
     if(!pView->HasViewData()) // stehen wir im Clear?
     {
         Size aSize = pView->Control::GetOutputSizePixel();
@@ -1542,7 +1545,7 @@ void SvImpLBox::SetNodeBmpTabDistance()
     {
         // nur, wenn der erste dynamische Tab zentriert ist
         // (setze ich momentan voraus)
-        Size aSize = aExpNodeBmp.GetSizePixel();
+        Size aSize = GetExpandedNodeBmp().GetSizePixel();
         nNodeBmpTabDistance -= aSize.Width() / 2;
     }
 }

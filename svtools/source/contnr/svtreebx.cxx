@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-25 06:51:08 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,22 +396,22 @@ XubString SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
     return pItem->GetText();
 }
 
-const Image& SvTreeListBox::GetExpandedEntryBmp(SvLBoxEntry* pEntry) const
+const Image& SvTreeListBox::GetExpandedEntryBmp(SvLBoxEntry* pEntry, BmpColorMode _eMode) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pEntry,"Entry?")
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found")
-    return pItem->GetBitmap2();
+    return pItem->GetBitmap2( _eMode );
 }
 
-const Image& SvTreeListBox::GetCollapsedEntryBmp(SvLBoxEntry* pEntry ) const
+const Image& SvTreeListBox::GetCollapsedEntryBmp( SvLBoxEntry* pEntry, BmpColorMode _eMode ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pEntry,"Entry?")
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found")
-    return pItem->GetBitmap1();
+    return pItem->GetBitmap1( _eMode );
 }
 
 IMPL_LINK_INLINE_START( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
@@ -429,12 +429,15 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
     DBG_CHKTHIS(SvTreeListBox,0);
     nTreeFlags |= TREEFLAG_MANINS;
 
-    aCurInsertedExpBmp = aExpandedEntryBmp;
-    aCurInsertedColBmp = aCollapsedEntryBmp;
+    const Image& rDefExpBmp = pImp->GetDefaultEntryExpBmp( );
+    const Image& rDefColBmp = pImp->GetDefaultEntryColBmp( );
+
+    aCurInsertedExpBmp = rDefExpBmp;
+    aCurInsertedColBmp = rDefColBmp;
 
     SvLBoxEntry* pEntry = CreateEntry();
     pEntry->SetUserData( pUser );
-    InitEntry( pEntry, aText, aCollapsedEntryBmp, aExpandedEntryBmp );
+    InitEntry( pEntry, aText, rDefColBmp, rDefExpBmp );
     pEntry->EnableChildsOnDemand( bChildsOnDemand );
 
     if( !pParent )
@@ -442,8 +445,8 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
     else
         SvLBox::Insert( pEntry, pParent, nPos );
 
-    aPrevInsertedExpBmp = aExpandedEntryBmp;
-    aPrevInsertedColBmp = aCollapsedEntryBmp;
+    aPrevInsertedExpBmp = rDefExpBmp;
+    aPrevInsertedColBmp = rDefColBmp;
 
     nTreeFlags &= (~TREEFLAG_MANINS);
 
@@ -498,12 +501,14 @@ void SvTreeListBox::SetEntryText( SvLBoxEntry* pEntry, const XubString& aStr)
     GetModel()->InvalidateEntry( pEntry );
 }
 
-void SvTreeListBox::SetExpandedEntryBmp(SvLBoxEntry* pEntry, const Image& aBmp)
+void SvTreeListBox::SetExpandedEntryBmp( SvLBoxEntry* pEntry, const Image& aBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-    DBG_ASSERT(pItem,"SetExpBmp:Item not found")
-    pItem->SetBitmap2( pEntry, aBmp );
+
+    DBG_ASSERT(pItem,"SetExpBmp:Item not found");
+    pItem->SetBitmap2( pEntry, aBmp, _eMode );
+
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
@@ -514,12 +519,14 @@ void SvTreeListBox::SetExpandedEntryBmp(SvLBoxEntry* pEntry, const Image& aBmp)
     }
 }
 
-void SvTreeListBox::SetCollapsedEntryBmp(SvLBoxEntry* pEntry,const Image& aBmp )
+void SvTreeListBox::SetCollapsedEntryBmp(SvLBoxEntry* pEntry,const Image& aBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-    DBG_ASSERT(pItem,"SetExpBmp:Item not found")
-    pItem->SetBitmap1( pEntry, aBmp );
+
+    DBG_ASSERT(pItem,"SetExpBmp:Item not found");
+    pItem->SetBitmap1( pEntry, aBmp, _eMode );
+
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
@@ -637,15 +644,26 @@ SvLBoxEntry* __EXPORT SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
     SvLBoxContextBmp* pBmpItem = (SvLBoxContextBmp*)(pSource->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     if( pBmpItem )
     {
-        aCollEntryBmp = pBmpItem->GetBitmap1();
-        aExpEntryBmp  = pBmpItem->GetBitmap2();
+        aCollEntryBmp = pBmpItem->GetBitmap1( BMP_COLOR_NORMAL );
+        aExpEntryBmp  = pBmpItem->GetBitmap2( BMP_COLOR_NORMAL );
     }
-    SvLBoxEntry* pEntry = CreateEntry();
-    InitEntry( pEntry, aStr, aCollEntryBmp, aExpEntryBmp );
-    pEntry->SvListEntry::Clone( pSource );
-    pEntry->EnableChildsOnDemand( pSource->HasChildsOnDemand() );
-    pEntry->SetUserData( pSource->GetUserData() );
-    return pEntry;
+    SvLBoxEntry* pClone = CreateEntry();
+    InitEntry( pClone, aStr, aCollEntryBmp, aExpEntryBmp );
+    pClone->SvListEntry::Clone( pSource );
+    pClone->EnableChildsOnDemand( pSource->HasChildsOnDemand() );
+    pClone->SetUserData( pSource->GetUserData() );
+
+    if ( pBmpItem )
+    {
+        SvLBoxContextBmp* pCloneBitmap = static_cast< SvLBoxContextBmp* >( pClone->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+        if ( pCloneBitmap )
+        {
+            pCloneBitmap->SetBitmap1( pClone, pBmpItem->GetBitmap1( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+            pCloneBitmap->SetBitmap2( pClone, pBmpItem->GetBitmap2( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+        }
+    }
+
+    return pClone;
 }
 
 // *********************************************************************
@@ -670,24 +688,36 @@ void SvTreeListBox::SetIndent( short nNewIndent )
         Invalidate();
 }
 
-void SvTreeListBox::SetDefaultExpandedEntryBmp( const Image& aBmp)
+const Image& SvTreeListBox::GetDefaultExpandedEntryBmp( BmpColorMode _eMode ) const
 {
-    DBG_CHKTHIS(SvTreeListBox,0);
-    Size aSize = aBmp.GetSizePixel();
-    if( aSize.Width() > nContextBmpWidthMax )
-        nContextBmpWidthMax = (short)aSize.Width();
-    SetTabs();
-    aExpandedEntryBmp = aBmp;
+    return pImp->GetDefaultEntryExpBmp( _eMode );
 }
 
-void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp)
+const Image& SvTreeListBox::GetDefaultCollapsedEntryBmp( BmpColorMode _eMode ) const
+{
+    return pImp->GetDefaultEntryColBmp( _eMode );
+}
+
+void SvTreeListBox::SetDefaultExpandedEntryBmp( const Image& aBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     Size aSize = aBmp.GetSizePixel();
     if( aSize.Width() > nContextBmpWidthMax )
         nContextBmpWidthMax = (short)aSize.Width();
     SetTabs();
-    aCollapsedEntryBmp = aBmp;
+
+    pImp->SetDefaultEntryExpBmp( aBmp, _eMode );
+}
+
+void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp, BmpColorMode _eMode )
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    Size aSize = aBmp.GetSizePixel();
+    if( aSize.Width() > nContextBmpWidthMax )
+        nContextBmpWidthMax = (short)aSize.Width();
+    SetTabs();
+
+    pImp->SetDefaultEntryColBmp( aBmp, _eMode );
 }
 
 void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
@@ -708,13 +738,17 @@ void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
         Invalidate();
 }
 
-void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp,
-    const Image& rExpandedNodeBmp)
+void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    SetExpandedNodeBmp( rExpandedNodeBmp );
-    SetCollapsedNodeBmp( rCollapsedNodeBmp );
+    SetExpandedNodeBmp( rExpandedNodeBmp, _eMode );
+    SetCollapsedNodeBmp( rCollapsedNodeBmp, _eMode );
     SetTabs();
+}
+
+void SvTreeListBox::SetDontKnowNodeBitmap( const Image& rDontKnowBmp, BmpColorMode _eMode )
+{
+    pImp->SetDontKnowNodeBmp( rDontKnowBmp, _eMode );
 }
 
 BOOL SvTreeListBox::EditingEntry( SvLBoxEntry*, Selection& )
@@ -1109,18 +1143,18 @@ void __EXPORT SvTreeListBox::ModelHasRemoved( SvListEntry* /* pEntry */ )
     pImp->EntryRemoved();
 }
 
-void SvTreeListBox::SetCollapsedNodeBmp( const Image& rBmp)
+void SvTreeListBox::SetCollapsedNodeBmp( const Image& rBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     AdjustEntryHeight( rBmp );
-    pImp->SetCollapsedNodeBmp( rBmp );
+    pImp->SetCollapsedNodeBmp( rBmp, _eMode );
 }
 
-void SvTreeListBox::SetExpandedNodeBmp( const Image& rBmp)
+void SvTreeListBox::SetExpandedNodeBmp( const Image& rBmp, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     AdjustEntryHeight( rBmp );
-    pImp->SetExpandedNodeBmp( rBmp );
+    pImp->SetExpandedNodeBmp( rBmp, _eMode );
 }
 
 
@@ -1203,14 +1237,14 @@ void SvTreeListBox::SetCurEntry( SvLBoxEntry* pEntry )
         pImp->SetCurEntry( pEntry );
 }
 
-Image SvTreeListBox::GetCollapsedNodeBmp() const
+Image SvTreeListBox::GetCollapsedNodeBmp( BmpColorMode _eMode ) const
 {
-    return pImp->GetCollapsedNodeBmp();
+    return pImp->GetCollapsedNodeBmp( _eMode );
 }
 
-Image SvTreeListBox::GetExpandedNodeBmp() const
+Image SvTreeListBox::GetExpandedNodeBmp( BmpColorMode _eMode ) const
 {
-    return pImp->GetExpandedNodeBmp();
+    return pImp->GetExpandedNodeBmp( _eMode );
 }
 
 Point SvTreeListBox::GetEntryPos( SvLBoxEntry* pEntry ) const
@@ -1686,17 +1720,22 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
             {
                 Point aPos( GetTabPos(pEntry,pFirstDynamicTab), nLine );
                 aPos.X() += pImp->nNodeBmpTabDistance;
+
                 const Image* pImg = 0;
+                BmpColorMode eBitmapMode = BMP_COLOR_NORMAL;
+                if ( GetDisplayBackground().GetColor().IsDark() )
+                    eBitmapMode = BMP_COLOR_HIGHCONTRAST;
+
                 if( IsExpanded(pEntry) )
-                    pImg = &pImp->GetExpandedNodeBmp();
+                    pImg = &pImp->GetExpandedNodeBmp( eBitmapMode );
                 else
                 {
                     if( (!pEntry->HasChilds()) && pEntry->HasChildsOnDemand() &&
                         (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
                         pImp->GetDontKnowNodeBmp().GetSizePixel().Width() )
-                        pImg = &pImp->GetDontKnowNodeBmp();
+                        pImg = &pImp->GetDontKnowNodeBmp( eBitmapMode );
                     else
-                        pImg = &pImp->GetCollapsedNodeBmp();
+                        pImg = &pImp->GetCollapsedNodeBmp( eBitmapMode );
                 }
                 aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
                 DrawImage( aPos, *pImg );
@@ -2312,11 +2351,6 @@ ScrollBar *SvTreeListBox::GetHScroll()
 void SvTreeListBox::EnableAsyncDrag( BOOL b )
 {
     pImp->EnableAsyncDrag( b );
-}
-
-void SvTreeListBox::SetDontKnowNodeBitmap( const Image& rCollapsedNodeBmp )
-{
-    pImp->SetDontKnowNodeBmp( rCollapsedNodeBmp );
 }
 
 SvLBoxEntry* SvTreeListBox::GetFirstEntryInView() const

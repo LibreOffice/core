@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,25 +373,42 @@ void SvLBoxButton::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 // class SvLBoxContextBmp
 // ***************************************************************
 
+struct SvLBoxContextBmp_Impl
+{
+    Image       m_aImage1;
+    Image       m_aImage2;
+
+    Image       m_aImage1_hc;
+    Image       m_aImage2_hc;
+
+    USHORT      m_nB2IndicatorFlags;
+};
+
+// ***************************************************************
 DBG_NAME(SvLBoxContextBmp);
 
 SvLBoxContextBmp::SvLBoxContextBmp( SvLBoxEntry* pEntry, USHORT nItemFlags,
     Image aBmp1, Image aBmp2, USHORT nEntryFlags )
-    : SvLBoxItem( pEntry, nItemFlags )
+    :SvLBoxItem( pEntry, nItemFlags )
+    ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
     DBG_CTOR(SvLBoxContextBmp,0);
-    nEntryFlagsBmp1 = nEntryFlags;
-    SetBitmap1( pEntry, aBmp1 );
-    SetBitmap2( pEntry, aBmp2 );
+
+    m_pImpl->m_nB2IndicatorFlags = nEntryFlags;
+    SetModeImages( aBmp1, aBmp2 );
 }
 
 SvLBoxContextBmp::SvLBoxContextBmp()
+    :SvLBoxItem( )
+    ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
+    m_pImpl->m_nB2IndicatorFlags = 0;
     DBG_CTOR(SvLBoxContextBmp,0);
 }
 
 SvLBoxContextBmp::~SvLBoxContextBmp()
 {
+    delete m_pImpl;
     DBG_DTOR(SvLBoxContextBmp,0);
 }
 
@@ -401,16 +418,51 @@ USHORT SvLBoxContextBmp::IsA()
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
-void SvLBoxContextBmp::SetBitmap1( SvLBoxEntry*, Image aBmp )
+BOOL SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
-    aBmp1 = aBmp;
+
+    sal_Bool bSuccess = sal_True;
+    switch ( _eMode )
+    {
+        case BMP_COLOR_NORMAL:
+            m_pImpl->m_aImage1 = _rBitmap1;
+            m_pImpl->m_aImage2 = _rBitmap2;
+            break;
+
+        case BMP_COLOR_HIGHCONTRAST:
+            m_pImpl->m_aImage1_hc = _rBitmap1;
+            m_pImpl->m_aImage2_hc = _rBitmap2;
+            break;
+
+        default:
+            DBG_ERROR( "SvLBoxContextBmp::SetModeImages: unexpected mode!");
+            bSuccess = sal_False;
+            break;
+    }
+    return bSuccess;
 }
 
-void SvLBoxContextBmp::SetBitmap2( SvLBoxEntry*, Image aBmp)
+Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst, BmpColorMode _eMode )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
-    aBmp2 = aBmp;
+
+    switch ( _eMode )
+    {
+        case BMP_COLOR_NORMAL:
+            return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
+            break;
+
+        case BMP_COLOR_HIGHCONTRAST:
+            return _bFirst ? m_pImpl->m_aImage1_hc : m_pImpl->m_aImage2_hc;
+            break;
+
+        default:
+            DBG_ERROR( "SvLBoxContextBmp::implGetImageStore: unexpected mode!");
+    }
+
+    static Image aDummy;
+    return aDummy;
 }
 
 void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
@@ -419,17 +471,28 @@ void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     DBG_CHKTHIS(SvLBoxContextBmp,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = aBmp1.GetSizePixel();
+    pViewData->aSize = m_pImpl->m_aImage1.GetSizePixel();
 }
 
-void SvLBoxContextBmp::Paint( const Point& rPos, SvLBox& rDev,
-    USHORT nViewDataEntryFlags, SvLBoxEntry* pEntry )
+void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
+    USHORT _nViewDataEntryFlags, SvLBoxEntry* /* pEntry */ )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
-    Image* pBmp = &aBmp1;
-    if( nViewDataEntryFlags & nEntryFlagsBmp1 )
-        pBmp = &aBmp2;
-    rDev.DrawImage( rPos, *pBmp);
+
+    // determine the image set
+    BmpColorMode eMode( BMP_COLOR_NORMAL );
+    if ( !!m_pImpl->m_aImage1_hc )
+    {   // we really have HC images
+        const Wallpaper& rDeviceBackground = _rDev.GetDisplayBackground();
+        if ( rDeviceBackground.GetColor().IsDark() )
+            eMode = BMP_COLOR_HIGHCONTRAST;
+    }
+
+    // get the image
+    const Image& rImage = implGetImageStore( 0 == ( _nViewDataEntryFlags & m_pImpl->m_nB2IndicatorFlags ), eMode );
+
+    // draw
+    _rDev.DrawImage( _rPos, rImage );
 }
 
 SvLBoxItem* SvLBoxContextBmp::Create() const
@@ -441,9 +504,9 @@ SvLBoxItem* SvLBoxContextBmp::Create() const
 void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
-    aBmp1 = ((SvLBoxContextBmp*)pSource)->aBmp1;
-    aBmp2 = ((SvLBoxContextBmp*)pSource)->aBmp2;
-    nEntryFlagsBmp1 = ((SvLBoxContextBmp*)pSource)->nEntryFlagsBmp1;
+    m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage1;
+    m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage2;
+    m_pImpl->m_nB2IndicatorFlags = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_nB2IndicatorFlags;
 }
 
 

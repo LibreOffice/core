@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-13 14:26:19 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,24 @@ private:
     ScrollBar           aHorSBar;
     ScrollBarBox        aScrBarBox;
 
+    // Node Bitmaps
+    enum ImageType
+    {
+        itNodeExpanded = 0,     // node is expanded ( usually a bitmap showing a minus )
+        itNodeCollapsed,        // node is collapsed ( usually a bitmap showing a plus )
+        itNodeDontKnow,         // don't know the node state
+        itEntryDefExpanded,     // default for expanded entries
+        itEntryDefCollapsed,    // default for collapsed entries
+
+        IT_IMAGE_COUNT
+    };
+
+    // all our images
+    Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
+    // plus the high contrast versions
+    Image               m_aNodeAndEntryImages_HC[ IT_IMAGE_COUNT ];
+
     // wg. kompat. hier
-    Image               aDontKnowNodeBmp;
-    Image               aExpNodeBmp, aCollNodeBmp;
     Size                aOutputSize;
     SelectionEngine     aSelEng;
     ImpLBSelEng         aFctSet;
@@ -293,12 +308,22 @@ public:
 
     void                PaintDDCursor( SvLBoxEntry* );
 
-    void                SetExpandedNodeBmp( const Image& );
-    void                SetCollapsedNodeBmp( const Image& );
-    void                SetDontKnowNodeBmp( const Image& rImg ) { aDontKnowNodeBmp = rImg; }
-    const Image&        GetExpandedNodeBmp() const { return aExpNodeBmp; }
-    const Image&        GetCollapsedNodeBmp() const { return aCollNodeBmp; }
-    const Image&        GetDontKnowNodeBmp() const { return aDontKnowNodeBmp; }
+    // Images
+    inline Image&       implGetImageLocation( const ImageType _eType, BmpColorMode _eMode );
+    inline Image&       implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const;
+
+    inline void         SetExpandedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetCollapsedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL  );
+    inline void         SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+
+    inline const Image& GetExpandedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    inline const Image& GetCollapsedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    inline const Image& GetDontKnowNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+
+    inline void         SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline const Image& GetDefaultEntryExpBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline const Image& GetDefaultEntryColBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
     void                KeyUp( BOOL bPageUp, BOOL bNotifyScroll = TRUE );
@@ -327,16 +352,76 @@ public:
     void                CancelPendingEdit();
 };
 
-inline void SvImpLBox::SetExpandedNodeBmp( const Image& rBmp )
+inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
 {
-    aExpNodeBmp = rBmp;
-    SetNodeBmpYOffset( rBmp );
+    DBG_ASSERT( ( BMP_COLOR_HIGHCONTRAST == _eMode ) || ( BMP_COLOR_NORMAL == _eMode ),
+        "SvImpLBox::implGetImageLocation: invalid mode!" );
+    DBG_ASSERT( ( _eType >= 0 ) && ( _eType < IT_IMAGE_COUNT ),
+        "SvImpLBox::implGetImageLocation: invalid image index (will crash)!" );
+
+    Image* _pSet = ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? m_aNodeAndEntryImages_HC : m_aNodeAndEntryImages;
+    return *( _pSet + (sal_Int32)_eType );
 }
 
-inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rBmp )
+inline Image& SvImpLBox::implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const
 {
-    aCollNodeBmp = rBmp;
-    SetNodeBmpYOffset( rBmp );
+    Image& rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, _eMode );
+    if ( !rImage )
+        // fallback to normal images in case the one for the special mode has not been set
+        rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, BMP_COLOR_NORMAL );
+    return rImage;
+}
+
+inline void SvImpLBox::SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode )
+{
+    implGetImageLocation( itNodeDontKnow, _eMode ) = rImg;
+}
+
+inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg, BmpColorMode _eMode )
+{
+    implGetImageLocation( itNodeExpanded, _eMode ) = rImg;
+    SetNodeBmpYOffset( rImg );
+}
+
+inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg, BmpColorMode _eMode )
+{
+    implGetImageLocation( itNodeCollapsed, _eMode ) = rImg;
+    SetNodeBmpYOffset( rImg );
+}
+
+inline const Image& SvImpLBox::GetDontKnowNodeBmp( BmpColorMode _eMode ) const
+{
+    return implGetImageLocationWithFallback( itNodeDontKnow, _eMode );
+}
+
+inline const Image& SvImpLBox::GetExpandedNodeBmp( BmpColorMode _eMode ) const
+{
+    return implGetImageLocationWithFallback( itNodeExpanded, _eMode );
+}
+
+inline const Image& SvImpLBox::GetCollapsedNodeBmp( BmpColorMode _eMode ) const
+{
+    return implGetImageLocationWithFallback( itNodeCollapsed, _eMode );
+}
+
+inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode )
+{
+    implGetImageLocation( itEntryDefExpanded, _eMode ) = _rImg;
+}
+
+inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode )
+{
+    implGetImageLocation( itEntryDefCollapsed, _eMode ) = _rImg;
+}
+
+inline const Image& SvImpLBox::GetDefaultEntryExpBmp( BmpColorMode _eMode )
+{
+    return implGetImageLocationWithFallback( itEntryDefExpanded, _eMode );
+}
+
+inline const Image& SvImpLBox::GetDefaultEntryColBmp( BmpColorMode _eMode )
+{
+    return implGetImageLocationWithFallback( itEntryDefCollapsed, _eMode );
 }
 
 inline Point SvImpLBox::GetEntryPos( SvLBoxEntry* pEntry ) const
