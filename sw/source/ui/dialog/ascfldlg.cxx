@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-06-26 08:29:59 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     }
 
     // initialisiere Zeichensatz
-    aCharSetLB.FillFromTextEncodingTable();
+    aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
     rtl_TextEncoding eSystem = gsl_getSystemTextEncoding();
     aCharSetLB.RemoveTextEncoding( eSystem );
     aCharSetLB.InsertTextEncoding( eSystem, sSystemCharSet );
@@ -554,6 +554,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2002/06/26 08:29:59  os
+      #99863# get default font and language on import from configuration
+
       Revision 1.8  2002/06/21 14:21:24  os
       #99863# text encoded filter of writer: Option dialog called via service
 
