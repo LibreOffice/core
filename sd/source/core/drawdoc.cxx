@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:35:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     pCustomShowList(NULL),
     eLanguage( LANGUAGE_SYSTEM ),
     eLanguageCJK( LANGUAGE_SYSTEM ),
-    eLanguageCTL( LANGUAGE_SYSTEM )
+    eLanguageCTL( LANGUAGE_SYSTEM ),
+    mbStartWithPresentation( false )
 {
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
 
@@ -1840,10 +1841,18 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
     }
 }
 
-
-
-
 sal_Int32 SdDrawDocument::GetPrinterIndependentLayout (void)
 {
     return mnPrinterIndependentLayout;
 }
+
+bool SdDrawDocument::IsStartWithPresentation() const
+{
+    return mbStartWithPresentation;
+}
+
+void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
+{
+    mbStartWithPresentation = bStartWithPresentation;
+}
+
