@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
+ *  last change: $Author: jl $ $Date: 2001-07-31 14:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,25 +493,29 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
 void SAL_CALL ManagerImpl::remove( const Any & rElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
 {
-    Reference< XHierarchicalNameAccess > xElem;
-    if (! (rElement >>= xElem))
+    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
     {
-        throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no type description provider given!") ),
-            (XWeak *)(OWeakObject *)this, 0 );
+        Reference< XHierarchicalNameAccess > xElem;
+        if (! (rElement >>= xElem))
+        {
+            throw IllegalArgumentException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("no type description provider given!") ),
+                (XWeak *)(OWeakObject *)this, 0 );
+        }
+
+        MutexGuard aGuard( _aComponentMutex );
+        ProviderVector::iterator iFind( find( _aProviders.begin(), _aProviders.end(), xElem ) );
+        if (iFind == _aProviders.end())
+        {
+            throw NoSuchElementException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("provider not found!") ),
+                (XWeak *)(OWeakObject *)this );
+        }
+        _aProviders.erase( iFind );
     }
 
-    MutexGuard aGuard( _aComponentMutex );
-    ProviderVector::iterator iFind( find( _aProviders.begin(), _aProviders.end(), xElem ) );
-    if (iFind == _aProviders.end())
-    {
-        throw NoSuchElementException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("provider not found!") ),
-            (XWeak *)(OWeakObject *)this );
-    }
-    _aProviders.erase( iFind );
-    Reference< XComponent > xComp( xElem, UNO_QUERY );
-    if (xComp.is())
+    Reference< XComponent > xComp;
+    if (rElement >>= xComp)
         xComp->removeEventListener( &_aEventListener );
 }
 
