@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:13:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@
 #include "docsh.hxx"
 #include "patattr.hxx"
 #include "scmod.hxx"
-#include "styledlg.hxx"
+//CHINA001 #include "styledlg.hxx"
 #include "attrdlg.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -140,6 +140,7 @@
 #define Interior
 #include <svx/svxslots.hxx>
 
+#include "scabstdlg.hxx" //CHINA001
 
 TYPEINIT1( ScFormatShell, SfxShell );
 
@@ -663,7 +664,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
                 ScDocument*     pDoc    = GetViewData()->GetDocument();
                 ScDocShell*     pDocSh  = GetViewData()->GetDocShell();
-                ScStyleDlg*     pDlg    = NULL;
+                //CHINA001 ScStyleDlg*      pDlg    = NULL;
+                SfxAbstractTabDialog* pDlg    = NULL; //CHINA001
                 USHORT          nRsc    = 0;
 
                 //  #37034#/#37245# alte Items aus der Vorlage merken
@@ -744,7 +746,12 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 pTabViewShell->SetInFormatDialog(TRUE);
 
-                pDlg = new ScStyleDlg( pParent, *pStyleSheet, nRsc );
+                //CHINA001 pDlg = new ScStyleDlg( pParent, *pStyleSheet, nRsc );
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc,ResId(nRsc) );
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(FALSE);
 
