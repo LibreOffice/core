@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:12:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ ModalDialog DLG_NEW_FILE
         Text [ danish ] = "Overskriv" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "Überschreiben" ;
-        Text[ chinese_simplified ] = "¸²Ğ´(~O)";
+        Text[ chinese_simplified ] = "¸ÄĞ´(~O)";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Skasowaæ przez zapisanie";
         Text[ japanese ] = "ã‘‚«(~O)";
@@ -641,6 +641,7 @@ ModalDialog DLG_NEW_FILE
     Text[ catalan ] = "Nuevo";
 };
  // ********************************************************************** EOF
+
 
 
 
