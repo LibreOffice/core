@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:37:58 $
+ *  last change: $Author: tbe $ $Date: 2001-03-01 09:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+
 #pragma hdrstop
 
 #ifndef _SVXIDS_HRC
@@ -128,6 +132,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include <xmlscript/xmldlg_imexp.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -393,11 +399,13 @@ void VCDlgEditor::SetDialog( )
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
     aValue <<= (sal_Int32) 20;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
+    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Button1" ) );
+    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test!" ) );
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aValue );
     uno::Any aAny;
     aAny <<= xCtrl1;
-    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control1" ) ), aAny );
+    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Button1" ) ), aAny );
 
      // Create a EditModel
     uno::Reference< awt::XControlModel > xCtrl2( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ) ) ), uno::UNO_QUERY );
@@ -410,15 +418,64 @@ void VCDlgEditor::SetDialog( )
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
     aValue <<= (sal_Int32) 20;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
+    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Edit1" ) );
+    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text..." ) );
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text" ) ), aValue );
     aAny <<= xCtrl2;
-    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control2" ) ), aAny );
+    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit1" ) ), aAny );
 
     // end of delete
 
+    // delete this 2
+    uno::Reference< script::XLibraryContainer > xDlgCont( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
+    Any aElement = xDlgCont->getByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")) );
+    Reference< container::XNameAccess > xDlgLib;
+    aElement >>= xDlgLib;
+    aElement = xDlgLib->getByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog1")) );
+    Sequence< sal_Int8 > aDialogsSeq;
+    aElement >>= aDialogsSeq;
+
+    // Create a DialogModel
+    Reference< container::XNameContainer > xDialogModel;
+    Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
+    xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
+    xDialogModel = aModelSeq.getConstArray()[0];
+
+    /*
+    Sequence< OUString > aDialogNames = xDlgLib->getElementNames();
+        sal_Int32 nNameCount = aDialogNames.getLength();
+    Sequence< Reference< container::XNameContainer > > aModelsSeq( nNameCount );
+    Reference< container::XNameContainer >* pModels = aModelsSeq.getArray();
+
+    const OUString* pNames = aDialogNames.getConstArray();
+    sal_Int32 i, nDialogCount = 0;
+//  for( i = 0 ; i < nNameCount ; i++ )
+//  {
+        OUString aLibName = pNames[ i ];
+
+        Any aElement = xDlgLib->getByName( aLibName );
+        Sequence< sal_Int8 > aDialogsSeq;
+        aElement >>= aDialogsSeq;
+
+        // Create a DialogModel
+        Reference< container::XNameContainer > xDialogModel;
+        Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
+        xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
+        xDialogModel = aModelSeq.getConstArray()[0];
+        if( xDialogModel.is() )
+            pModels[ nDialogCount++ ] = xDialogModel;
+//  }
+    if( nDialogCount < nNameCount )
+        aModelsSeq.realloc( nDialogCount );
+    */
+    // end of delete 2
+
+
     // set dialog model
-    m_xUnoControlDialogModel = xC;
+    //m_xUnoControlDialogModel = xC;
+    m_xUnoControlDialogModel = xDialogModel;
+
 
     pDlgEdForm = new DlgEdForm();
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel, uno::UNO_QUERY );
@@ -429,16 +486,16 @@ void VCDlgEditor::SetDialog( )
 
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
 
-    Reference< ::com::sun::star::container::XNameAccess > xNA( m_xUnoControlDialogModel, UNO_QUERY );
-    if ( xNA.is() )
+    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
+    if ( xNameAcc.is() )
     {
-           Sequence< OUString > aNames = xNA->getElementNames();
+           Sequence< OUString > aNames = xNameAcc->getElementNames();
            const OUString* pNames = aNames.getConstArray();
         sal_uInt32 nCtrls = aNames.getLength();
 
         for( sal_uInt32 n = 0; n < nCtrls; n++ )
         {
-               Any aA = xNA->getByName( pNames[n] );
+               Any aA = xNameAcc->getByName( pNames[n] );
             Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
                aA >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj(pDlgEdForm);
@@ -748,6 +805,34 @@ void VCDlgEditor::Delete()
     {
         if(pSdrView->GetMarkList().GetMark(i)->GetObj()->ISA(DlgEdForm))
             return;
+    }
+
+    // remove control models of marked objects from dialog model
+    for( i = 0; i < nMark; i++ )
+    {
+        SdrObject* pObj = pSdrView->GetMarkList().GetMark(i)->GetObj();
+        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+
+        if (pDlgEdObj)
+        {
+            // get name from property
+            ::rtl::OUString aName;
+            uno::Reference< beans::XPropertySet >  xPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
+            if (xPSet.is())
+            {
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= aName;
+            }
+
+            Reference< ::com::sun::star::container::XNameAccess > xNameAcc(pDlgEdObj->GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY );
+            if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
+            {
+                Reference< ::com::sun::star::container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
+                if ( xCont.is() )
+                {
+                    xCont->removeByName( aName );
+                }
+            }
+        }
     }
 
     pSdrView->BrkAction();
