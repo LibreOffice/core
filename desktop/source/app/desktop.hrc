@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lo $ $Date: 2002-09-30 15:54:18 $
+ *  last change: $Author: obo $ $Date: 2002-11-20 14:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #define WARNINGBOX_JAVALDXNOTSTARTED        (RID_DESKTOP_DIALOG_START+5)
 
 #define INFOBOX_PLEASERESTARTOFFICE         (RID_DESKTOP_DIALOG_START+50)
+#define INFOBOX_CMDLINEHELP                 (RID_DESKTOP_DIALOG_START+51)
+
+#define QBX_USERDATALOCKED                  (RID_DESKTOP_DIALOG_START+100)
 
 #define STR_RECOVER_QUERY                   (RID_DESKTOP_STRING_START+0)
 #define STR_RECOVER_TITLE                   (RID_DESKTOP_STRING_START+1)
@@ -119,6 +122,6 @@
 #define STR_WARNING_FAULTYJAVAINSTALL       (RID_DESKTOP_STRING_START+203)
 #define STR_WARNING_CANNOTSTARTJVMSETUP     (RID_DESKTOP_STRING_START+204)
 #define STR_WARNING_CANNOTSTARTJAVALDX      (RID_DESKTOP_STRING_START+205)
-#define QBX_USERDATALOCKED                  (RID_DESKTOP_STRING_START+206)
+#define STR_TITLE_USERDATALOCKED            (RID_DESKTOP_STRING_START+206)
 
 #endif // _DESKTOP_HRC_
