@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:39:30 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1623,7 +1623,15 @@ BOOL PNGReaderImpl::ImplCloseChunk ( void )
 
 void PNGReaderImpl::ImplSkipChunk( void )
 {
-    mpIStm->Seek( mnChunkStartPosition + mnChunkDatSizeOrg + 3 );
+    const long nSkipLen = mnChunkStartPosition + mnChunkDatSizeOrg + 4 - mpIStm->Tell();
+
+    if( nSkipLen )
+    {
+        sal_Char* pBuffer = new sal_Char[ nSkipLen ];
+        mpIStm->Read( pBuffer, nSkipLen );
+        delete[] pBuffer;
+    }
+
     mnChunkStatus = CHUNK_IS_CLOSED;
 }
 
