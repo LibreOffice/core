@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:21:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
 
 {
     String aEvent( rEvent );
-    aEvent += 0x0028 ;// "(" = 28h
+    aEvent += '(';
     if ( rCmd.CompareIgnoreCaseToAscii( aEvent, aEvent.Len() ) == COMPARE_EQUAL )
     {
         String aData( rCmd );
