@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:21:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <rtl/ustring.hxx>
+#include <tools/urlobj.hxx>
 #ifndef _XMLFILTERADAPTOR_HXX
 #include "XmlFilterAdaptor.hxx"
 #endif
@@ -179,7 +181,32 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     OUString sXMLImportService (  udImport  );
     const OUString sSaxParser ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser") );
     Reference < XParser > xSaxParser( mxMSF->createInstance( sSaxParser ), UNO_QUERY );
-    Reference < XDocumentHandler > xHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+
+    Sequence< Any > aAnys(1);
+    OUString aBaseURI;
+    if (aMediaMap.find(OUString::createFromAscii("URL"))->second >>= aBaseURI)
+    {
+        INetURLObject aURLObj(aBaseURI);
+        // base URI in this case is the URI of the actual saving location
+        // aURLObj.removeSegment();
+        aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+    }
+
+    // create an XProperty set to configure the exporter for pretty printing
+    PropertyMapEntry aImportInfoMap[] =
+     {
+        { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
+         { NULL, 0, 0, NULL, 0, 0 }
+     };
+
+     Reference< XPropertySet > xInfoSet(
+        GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
+     xInfoSet->setPropertyValue(
+        OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
+    aAnys[0] <<= xInfoSet;
+
+
+    Reference < XDocumentHandler > xHandler( mxMSF->createInstanceWithArguments( sXMLImportService, aAnys ), UNO_QUERY );
     if(! xHandler.is()) {
         OSL_ENSURE(sal_False, "XMLReader::Read: %s Unable to create service instance xHandler\n" );
         return sal_False;
@@ -309,20 +336,35 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         Sequence < Any > aAnys (2);
         aAnys[0] <<= xConverter;
 
-        // create an XProperty set to configure the exporter for pretty printing
+
         // pretty printing is confusing for some filters so it is disabled by default
         sal_Bool bPrettyPrint =
             (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAscii("true"));
+
+        // get the base URI, so we can use relative links
+        OUString aBaseURI;
+        if (aMediaMap.find(OUString::createFromAscii("URL"))->second >>= aBaseURI)
+        {
+            INetURLObject aURLObj(aBaseURI);
+            // base URI in this case is the URI of the actual saving location
+            // aURLObj.removeSegment();
+            aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+        }
+
+        // create an XProperty set to configure the exporter for pretty printing
          PropertyMapEntry aImportInfoMap[] =
          {
-             { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0),
-                PropertyAttribute::MAYBEVOID, 0},
+             { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
              { NULL, 0, 0, NULL, 0, 0 }
          };
+
          Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
          xInfoSet->setPropertyValue(
             OUString::createFromAscii( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
+         xInfoSet->setPropertyValue(
+            OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
         Reference< XExporter > xExporter( mxMSF->createInstanceWithArguments (
