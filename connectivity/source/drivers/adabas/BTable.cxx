@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-31 16:31:17 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,10 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-typedef connectivity::sdbcx::OTableDescriptor_BASE __OAdabas_BASE99;
-
+OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection) : OTable_TYPEDEF(sal_True),m_pConnection(_pConnection)
+{
+    construct();
+}
 // -------------------------------------------------------------------------
 OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
@@ -211,15 +213,6 @@ void OAdabasTable::refreshIndexes()
         delete m_pIndexes;
     m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
-Any SAL_CALL OAdabasTable::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-    return OTable_TYPEDEF::queryInterface(rType);
-}
-
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdabasTable::getUnoTunnelImplementationId()
 {
@@ -243,7 +236,7 @@ sal_Int64 OAdabasTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    return 0;
+    return OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
@@ -390,7 +383,13 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( __OAdabas_BASE99::rBHelper.bDisposed)
+    if (
+#ifdef GCC
+        sdbcx::OTable_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
                 throw DisposedException();
 
     if(!isNew())
@@ -419,7 +418,13 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
 void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( __OAdabas_BASE99::rBHelper.bDisposed)
+    if (
+#ifdef GCC
+        sdbcx::OTable_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
                 throw DisposedException();
 
     if(!isNew())
@@ -483,7 +488,13 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( __OAdabas_BASE99::rBHelper.bDisposed)
+    if (
+#ifdef GCC
+        sdbcx::OTable_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
                 throw DisposedException();
 
         Reference< XPropertySet > xOld;
@@ -553,13 +564,6 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
             break;
     }
     return aValue;
-}
-// -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OAdabasTable::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OTable_TYPEDEF::getTypes());
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OAdabasTable::getName() throw(::com::sun::star::uno::RuntimeException)

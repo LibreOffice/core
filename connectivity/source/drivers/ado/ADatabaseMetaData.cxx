@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,9 @@
 #ifndef _CONNECTIVITY_ADO_ADATABASEMETADATA_HXX_
 #include "ado/ADatabaseMetaData.hxx"
 #endif
-
 #ifndef _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSET_HXX_
 #include "ado/ADatabaseMetaDataResultSet.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
@@ -78,11 +76,14 @@
 #ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #endif
-
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
+#endif
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
 #endif
 
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -92,7 +93,8 @@ using namespace com::sun::star::sdbc;
 //  using namespace connectivity;
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
-    :   m_pADOConnection(_pCon->getConnection())
+    :ODatabaseMetaDataBase(_pCon)
+    ,m_pADOConnection(_pCon->getConnection())
     ,m_pConnection(_pCon)
 {
 }

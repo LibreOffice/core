@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    OAdoIndexDescriptor* pNew = new OAdoIndexDescriptor(isCaseSensitive());
+    OAdoIndex* pNew = new OAdoIndex(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -113,7 +113,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
         OAdoIndex* pIndex = (OAdoIndex*)xTunnel->getSomething(OAdoIndex:: getUnoTunnelImplementationId());
@@ -138,7 +138,7 @@ void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     m_pCollection->Delete(OLEVariant(index));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void OFileTable::refreshColumns()
 
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(4));
     }
@@ -157,20 +157,17 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeExcep
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-
     return OTable_TYPEDEF::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OFileTable::disposing(void)
 {
     OTable::disposing();
+
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    FileClose();
     m_xMetaData = NULL;
-    delete m_pBuffer;
-    m_pBuffer = NULL;
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
@@ -195,7 +192,24 @@ sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    return 0;
+    return OTable_TYPEDEF::getSomething(rId);
 }
+// -----------------------------------------------------------------------------
+void OFileTable::FileClose()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    if (m_aFileStream.IsOpen() && m_aFileStream.IsWritable())
+        m_aFileStream.Flush();
+
+    m_aFileStream.Close();
+
+    if (m_pBuffer)
+    {
+        delete m_pBuffer;
+        m_pBuffer = NULL;
+    }
+}
+// -----------------------------------------------------------------------------
 
 

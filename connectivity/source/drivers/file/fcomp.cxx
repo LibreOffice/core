@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,14 @@ OPredicateCompiler::~OPredicateCompiler()
     Clean();
     DBG_DTOR(OPredicateCompiler,NULL);
 }
-
+// -----------------------------------------------------------------------------
+void OPredicateCompiler::dispose()
+{
+    Clean();
+    m_orgColumns = NULL;
+    if(m_aParameterColumns.isValid())
+        m_aParameterColumns->clear();
+}
 //------------------------------------------------------------------
 //  inline OCursor& OPredicateCompiler::Cursor() const {return m_rCursor;}
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@ void OPreparedStatement::disposing()
     OStatement_BASE2::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
+    m_xMetaData = NULL;
+    m_xRS       = NULL;
+    if(m_aRow.isValid())
+        m_aRow->clear();
+
     if(m_pTable)
     {
         m_pTable->release();
@@ -135,6 +140,8 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
         if(xTunnel.is())
         {
+            if(m_pTable)
+                m_pTable->release();
             m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
             if(m_pTable)
                 m_pTable->acquire();

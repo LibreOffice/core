@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,14 @@ Reference< XDatabaseMetaData > SAL_CALL OAdabasConnection::getMetaData(  ) throw
     if (OConnection_BASE2::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new OAdabasDatabaseMetaData(m_aConnectionHandle,this);
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new OAdabasDatabaseMetaData(m_aConnectionHandle,this);
+        m_xMetaData = xMetaData;
+    }
 
-    return m_xMetaData;
+    return xMetaData;
 }
 //------------------------------------------------------------------------------
 sal_Bool OAdabasConnection::isStarted()

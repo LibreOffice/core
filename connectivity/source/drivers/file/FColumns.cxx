@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    sdbcx::OColumnDescriptor* pRet = new sdbcx::OColumnDescriptor(m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    sdbcx::OColumn* pRet = new sdbcx::OColumn(m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

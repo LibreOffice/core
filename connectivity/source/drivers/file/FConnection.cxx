@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 10:51:47 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,14 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
     if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new ODatabaseMetaData(this);
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new ODatabaseMetaData(this);
+        m_xMetaData = xMetaData;
+    }
 
-    return m_xMetaData;
+    return xMetaData;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
@@ -441,8 +445,10 @@ void OConnection::disposing()
     m_aStatements.clear();
 
     m_bClosed   = sal_True;
-    m_xMetaData = NULL;
+    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
     m_xDir      = NULL;
+    m_xContent  = NULL;
+    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
@@ -451,7 +457,7 @@ void OConnection::disposing()
 ::com::sun::star::uno::Reference< XTablesSupplier > OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-        Reference< XTablesSupplier > xTab = m_xCatalog;
+    Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!m_xCatalog.get().is())
     {
         OFileCatalog *pCat = new OFileCatalog(this);
@@ -459,6 +465,17 @@ void OConnection::disposing()
         m_xCatalog = xTab;
     }
     return xTab;
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > OConnection::getDir() const
+{
+    Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
+    ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+    Sequence< ::rtl::OUString > aProps(1);
+    ::rtl::OUString* pProps = aProps.getArray();
+    pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
+    Reference<XDynamicResultSet> xContent = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+    return xContent;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 10:59:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
 #endif
+#ifndef _CPPUHELPER_PROPSHLP_HXX
+#include <cppuhelper/propshlp.hxx>
+#endif
 #ifndef _ITERATOR_
 #include <iterator>
 #endif
@@ -183,6 +186,11 @@ void OResultSet::disposing(void)
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
     m_pParseTree    = NULL;
+    m_xColNames     = NULL;
+    m_xColumns      = NULL;
+    m_xParamColumns = NULL;
+
+    m_aSQLAnalyzer.dispose();
     if(m_pTable)
     {
         m_pTable->release();
@@ -194,13 +202,13 @@ void OResultSet::disposing(void)
 
     if(m_aRow.isValid())
         m_aRow->clear();
-    if(m_aRow.isValid())
+    if(m_aEvaluateRow.isValid())
         m_aEvaluateRow->clear();
-    if(m_aRow.isValid())
+    if(m_aInsertRow.isValid())
         m_aInsertRow->clear();
-    if(m_aRow.isValid())
+    if(m_aAssignValues.isValid())
         m_aAssignValues->clear();
-    if(m_aRow.isValid())
+    if(m_xParamColumns.isValid())
         m_xParamColumns->clear();
     m_aBookmarkToPos.clear();
 }
@@ -726,7 +734,10 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
         m_aRow = m_aInsertRow;
-        m_aBookmarkToPos[nPos] = m_nRowPos + 1;
+        if(m_nRowPos < 0)
+            m_aBookmarkToPos[nPos] = 1;
+        else
+            m_aBookmarkToPos[nPos] = m_nRowPos + 1;
     }
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumnPrivileges(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
+    Reference< XResultSet > xRef = pResult;
     pResult->setColumnPrivilegesMap();
     return xRef;
 }
@@ -213,13 +213,13 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-        Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
+    Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
     if(!xTables.is())
-                throw SQLException();
+        throw SQLException();
 
     Reference< XNameAccess> xNames = xTables->getTables();
     if(!xNames.is())
-                throw SQLException();
+        throw SQLException();
 
     ORows aRows;
     ORow aRow(19);
@@ -237,7 +237,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
             if(!xColumns.is())
-                                throw SQLException();
+                throw SQLException();
 
             Sequence< ::rtl::OUString> aColNames(xColumns->getElementNames());
 
@@ -293,7 +293,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     }
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
+    Reference< XResultSet > xRef = pResult;
     pResult->setColumnsMap();
     pResult->setRows(aRows);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,16 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
-ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
-                        :   m_pConnection(_pCon)
+ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ODatabaseMetaDataBase(_pCon)
+                        ,m_pConnection(_pCon)
 {
-    m_pConnection->acquire();
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
 {
-    if (m_pConnection)
-        m_pConnection->release();
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
@@ -120,7 +118,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 //      Reference< XResultSet > xRef = pResult;
 //  pResult->openTypeInfo();
 //  return xRef;
-        return Reference< XResultSet >();
+    return Reference< XResultSet >();
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-        if (OResultSet_BASE::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return (first == second) ? 0 : 2;
@@ -215,10 +215,22 @@ sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  
 sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-        if (OResultSet_BASE::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return connectivity::getINT32(bookmark);
+}
+// -------------------------------------------------------------------------
+IPropertyArrayHelper* OFlatResultSet::createArrayHelper( ) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
+{
+    return *OFlatResultSet_BASE3::getArrayHelper();
 }
 
 

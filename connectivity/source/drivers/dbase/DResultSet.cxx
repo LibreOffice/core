@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,4 +235,18 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
     }
     return sal_False;
 }
+// -------------------------------------------------------------------------
+cppu::IPropertyArrayHelper & ODbaseResultSet::getInfoHelper()
+{
+    return *ODbaseResultSet_BASE3::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
+cppu::IPropertyArrayHelper* ODbaseResultSet::createArrayHelper() const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+
 

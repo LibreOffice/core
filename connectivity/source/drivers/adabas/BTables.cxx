@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_TABLEDESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VTableDescriptor.hxx"
-#endif
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
@@ -109,18 +106,18 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     aSchema = _rName.copy(0,nLen);
     aName   = _rName.copy(nLen+1);
 
-        Sequence< ::rtl::OUString > aTypes(1);
+    Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString::createFromAscii("%");
     //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
 
-        Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        aSchema,aName,aTypes);
+    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
+    aSchema,aName,aTypes);
 
-        Reference< XNamed > xRet = NULL;
+    Reference< XNamed > xRet = NULL;
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
             OAdabasTable* pRet = new OAdabasTable(  static_cast<OAdabasCatalog&>(m_rParent).getConnection(),
@@ -145,7 +142,7 @@ void OTables::disposing(void)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    connectivity::sdbcx::OTableDescriptor* pNew = new connectivity::sdbcx::OTableDescriptor(sal_True);
+    OAdabasTable* pNew = new OAdabasTable(static_cast<OAdabasCatalog&>(m_rParent).getConnection());
     return pNew;
 }
 // -------------------------------------------------------------------------

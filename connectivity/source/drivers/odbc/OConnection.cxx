@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 14:42:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,10 +348,14 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
     if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new ODatabaseMetaData(m_aConnectionHandle,this);
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new ODatabaseMetaData(m_aConnectionHandle,this);
+        m_xMetaData = xMetaData;
+    }
 
-    return m_xMetaData;
+    return xMetaData;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
@@ -523,19 +527,13 @@ void OConnection::disposing()
     m_aStatements.clear();
 
     OTools::ThrowException(N3SQLDisconnect(m_aConnectionHandle),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
-    m_bClosed = sal_True;
-    m_xMetaData = NULL;
+    m_bClosed   = sal_True;
+    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
-
-//  for (OWeakRefArray::iterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
-//  {
-//      Reference< XComponent > xComp(j->get(), UNO_QUERY);
-//      if (xComp.is())
-//          xComp->dispose();
-//  }
-//  m_aComposers.clear();
 }
+// -----------------------------------------------------------------------------
+
 
 

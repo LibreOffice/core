@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdoTableDescriptor* pNew = new OAdoTableDescriptor(isCaseSensitive());
+    OAdoTable* pNew = new OAdoTable(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -126,7 +126,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        OAdoTableDescriptor* pTable = (OAdoTableDescriptor*)xTunnel->getSomething(OAdoTableDescriptor:: getUnoTunnelImplementationId());
+        OAdoTable* pTable = (OAdoTable*)xTunnel->getSomething(OAdoTable:: getUnoTunnelImplementationId());
         m_pCollection->Append(OLEVariant(pTable->getImpl()));
     }
 
@@ -147,7 +147,7 @@ void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexO
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     m_pCollection->Delete(OLEVariant(index));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,4 +149,16 @@ void OUserExtend::construct()
     OUser_TYPEDEF::construct();
     registerProperty(PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
+// -----------------------------------------------------------------------------
+cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
+{
+    Sequence< Property > aProps;
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
+{
+    return *OUserExtend_PROP::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
 

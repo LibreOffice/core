@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,21 +159,6 @@ void OAdoUser::refreshGroups()
         delete m_pGroups;
     m_pGroups = new OGroups(*this,m_aMutex,aVector,pGroups,isCaseSensitive());
 }
-// -------------------------------------------------------------------------
-Any SAL_CALL OAdoUser::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-    return OUser_TYPEDEF::queryInterface(rType);
-}
-// -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OAdoUser::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OUser_TYPEDEF::getTypes());
-}
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 {
@@ -197,7 +182,7 @@ sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runt
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    return 0;
+    return OUser_TYPEDEF::getSomething(rId);
 }
 
 // -------------------------------------------------------------------------
@@ -245,5 +230,18 @@ void OUserExtend::construct()
     OUser_TYPEDEF::construct();
     registerProperty(PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
+// -----------------------------------------------------------------------------
+cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
+{
+    Sequence< com::sun::star::beans::Property > aProps;
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
+{
+    return *OUserExtend_PROP::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
+
 
 

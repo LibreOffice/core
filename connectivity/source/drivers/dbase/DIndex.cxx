@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,16 +130,11 @@ using namespace com::sun::star::ucb;
 
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
-IMPLEMENT_SERVICE_INFO(ODbaseIndexDescriptor,"com.sun.star.sdbcx.driver.dbase.IndexDescriptor","com.sun.star.sdbcx.IndexDescriptor");
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_pTable(_pTable)
 {
     construct();
-}
-// -----------------------------------------------------------------------------
-ODbaseIndexDescriptor::ODbaseIndexDescriptor(ODbaseTable* _pTable) : ODbaseIndex(_pTable)
-{
 }
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
@@ -163,16 +158,6 @@ void ODbaseIndex::refreshColumns()
         delete m_pColumns;
     m_pColumns = new ODbaseIndexColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
-Any SAL_CALL ODbaseIndex::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-
-    return ODbaseIndex_BASE::queryInterface(rType);
-}
-
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 {
@@ -196,16 +181,8 @@ sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    return 0;
+    return ODbaseIndex_BASE::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ODbaseIndex::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),ODbaseIndex_BASE::getTypes());
-}
-
 //------------------------------------------------------------------
 ONDXPagePtr ODbaseIndex::getRoot()
 {
@@ -554,7 +531,7 @@ BOOL ODbaseIndex::CreateImpl()
         return FALSE;
     }
 
-    Reference<XPropertySet> xCol;
+    Reference<XFastPropertySet> xCol;
     m_pColumns->getByIndex(1) >>= xCol;
 
     // ist die Spalte schon indiziert ?
@@ -591,7 +568,7 @@ BOOL ODbaseIndex::CreateImpl()
     // Zun‰chst muﬂ das Ergebnis sortiert sein
     Reference<XStatement> xStmt = m_pTable->getConnection()->createStatement();
 
-    String aName(getString(xCol->getPropertyValue(PROPERTY_NAME)));
+    String aName(getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME)));
 
     String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
     String aStatement;
@@ -631,10 +608,10 @@ BOOL ODbaseIndex::CreateImpl()
     m_aFileStream.SetStreamSize(512);
 
     sal_Int32 nType = 0;
-    xCol->getPropertyValue(PROPERTY_TYPE) >>= nType;
+    xCol->getFastPropertyValue(PROPERTY_ID_TYPE) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
     ByteString aCol(aName,gsl_getSystemTextEncoding());
     strcpy(m_aHeader.db_name,aCol.GetBuffer());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,14 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)
-                        :   m_aConnectionHandle(_pHandle),m_pConnection(_pCon)
+                        : ODatabaseMetaDataBase(_pCon)
+                        ,m_aConnectionHandle(_pHandle)
+                        ,m_pConnection(_pCon)
 {
-    m_pConnection->acquire();
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
 {
-    if (m_pConnection)
-        m_pConnection->release();
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)

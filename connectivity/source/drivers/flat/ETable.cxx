@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 09:49:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@ using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ucb;
-using namespace comphelper;
 using namespace cppu;
 using namespace utl;
 using namespace ::com::sun::star::uno;
@@ -587,7 +586,7 @@ void SAL_CALL OFlatTable::disposing(void)
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-3);
+    Sequence< Type > aRet(aTypes.getLength()-2);
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
@@ -602,8 +601,6 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
             aRet.getArray()[i] = *pBegin;
         }
     }
-    aRet.getArray()[i] = ::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 );
-
     return aRet;
 }
 
@@ -912,21 +909,6 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols, 
         }
     }
     return sal_True;
-}
-// -------------------------------------------------------------------------
-void OFlatTable::FileClose()
-{
-    // falls noch nicht alles geschrieben wurde
-    if (m_aFileStream.IsOpen() && m_aFileStream.IsWritable())
-        m_aFileStream.Flush();
-
-    m_aFileStream.Close();
-
-    if (m_pBuffer != NULL)
-    {
-        delete m_pBuffer;
-        m_pBuffer = NULL;
-    }
 }
 // -------------------------------------------------------------------------
 BOOL OFlatTable::CreateImpl()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:15:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,14 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
     if (OConnection_B::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new ODbaseDatabaseMetaData(this);
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new ODbaseDatabaseMetaData(this);
+        m_xMetaData = xMetaData;
+    }
 
-    return m_xMetaData;
+    return xMetaData;
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,21 +168,6 @@ void OAdoGroup::refreshUsers()
         delete m_pUsers;
     m_pUsers = new OUsers(*this,m_aMutex,aVector,pUsers,isCaseSensitive());
 }
-// -------------------------------------------------------------------------
-Any SAL_CALL OAdoGroup::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-    return OGroup_ADO::queryInterface(rType);
-}
-// -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OAdoGroup::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OGroup_ADO::getTypes());
-}
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelImplementationId()
 {
@@ -206,7 +191,7 @@ sal_Int64 OAdoGroup::getSomething( const Sequence< sal_Int8 > & rId ) throw (Run
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    return 0;
+    return OGroup_ADO::getSomething(rId);
 }
 
 // -------------------------------------------------------------------------

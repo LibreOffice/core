@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_KEYDESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VKeyDescriptor.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -168,7 +165,7 @@ void OKeys::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
 {
-    connectivity::sdbcx::OKeyDescriptor* pNew = new connectivity::sdbcx::OKeyDescriptor(sal_True);
+    OAdabasKey* pNew = new OAdabasKey(m_pTable);
     return pNew;
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 09:48:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,44 +264,7 @@ void ODbaseTable::fillColumns()
     }
 }
 // -------------------------------------------------------------------------
-//void ODbaseTable::fillIndexes()
-//{
-//  Dir* pDir = m_pConnection->getDir();
-//  String aPath = pDir->GetName();
-//  aPath += _Name.getStr();
-//  DirEntry aEntry(aPath);
-//  aEntry.SetExtension(String::CreateFromAscii("inf"));
-//
-//  Config aInfFile(aEntry.GetFull());
-//  aInfFile.SetGroup(dBASE_III_GROUP);
-//  sal_Int32 nKeyCnt = aInfFile.GetKeyCount();
-//  ByteString aKeyName;
-//  ByteString aIndexName;
-//
-//  for (sal_Int32 nKey = 0,nPos=0; nKey < nKeyCnt; nKey++)
-//  {
-//      // Verweist der Key auf ein Indexfile?...
-//      aKeyName = aInfFile.GetKeyName( nKey );
-//      //...wenn ja, Indexliste der Tabelle hinzufuegen
-//      if (aKeyName.Copy(0,3) == ByteString("NDX") )
-//      {
-//          aIndexName = aInfFile.ReadKey(aKeyName);
-//          aEntry.SetName(String(aIndexName,getConnection()->getTextEncoding()));
-//          if (aEntry.Exists())
-//          {
-//              readIndex(aEntry.GetBase());
-//          }
-//              //  _rList.Insert(new String(aEntry.GetBase()), nPos++);
-//      }
-//  }
-//}
-// -------------------------------------------------------------------------
-//void ODbaseTable::readIndex(const String& _rName)
-//{
-//}
-// -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection) : ODbaseTable_BASE(_pConnection)
-    //  , m_aColumns(_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
 {
 
 }
@@ -317,7 +280,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
-                //  , m_aColumns(_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
 {
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -536,8 +498,8 @@ void SAL_CALL ODbaseTable::disposing(void)
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp = *aIter;
         xProp = NULL;
     }
-    m_aColumns->clear();
 #endif
+    m_aColumns->clear();
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
@@ -941,22 +903,14 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 // -------------------------------------------------------------------------
 void ODbaseTable::FileClose()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     // falls noch nicht alles geschrieben wurde
     if (m_aMemoStream.IsOpen() && m_aMemoStream.IsWritable())
         m_aMemoStream.Flush();
 
     m_aMemoStream.Close();
 
-    if (m_aFileStream.IsOpen() && m_aFileStream.IsWritable())
-        m_aFileStream.Flush();
-
-    m_aFileStream.Close();
-
-    if (m_pBuffer != NULL)
-    {
-        delete m_pBuffer;
-        m_pBuffer = NULL;
-    }
+    ODbaseTable_BASE::FileClose();
 }
 // -------------------------------------------------------------------------
 BOOL ODbaseTable::CreateImpl()
@@ -1883,20 +1837,5 @@ BOOL ODbaseTable::WriteBuffer()
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_aFileStream.Seek(nPos);
     return m_aFileStream.Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
-}
-// -----------------------------------------------------------------------------
-ODbaseTableDescriptor::ODbaseTableDescriptor( ODbaseConnection* _pConnection) : ODbaseTable(_pConnection)
-{
-}
-typedef connectivity::sdbcx::OTableDescriptor ODbaseTableDescriptor_BASE;
-// -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* ODbaseTableDescriptor::createArrayHelper( ) const
-{
-    return ODbaseTableDescriptor_BASE::createArrayHelper();
-}
-// -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & SAL_CALL ODbaseTableDescriptor::getInfoHelper()
-{
-    return ODbaseTableDescriptor_BASE::getInfoHelper();
 }
 // -----------------------------------------------------------------------------

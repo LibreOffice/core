@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:55:41 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,14 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
     if (OConnection_B::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new OFlatDatabaseMetaData(this);
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new OFlatDatabaseMetaData(this);
+        m_xMetaData = xMetaData;
+    }
 
-    return m_xMetaData;
+    return xMetaData;
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()

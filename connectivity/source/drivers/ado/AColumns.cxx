@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
-
     ADOColumn* pColumn = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pColumn);
 
@@ -107,7 +106,7 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OAdoColumnDescriptor* pNew = new OAdoColumnDescriptor(isCaseSensitive());
+    OAdoColumn* pNew = new OAdoColumn(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -116,10 +115,10 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        OAdoColumnDescriptor* pColumn = (OAdoColumnDescriptor*)xTunnel->getSomething(OAdoColumnDescriptor::getUnoTunnelImplementationId());
+        OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn::getUnoTunnelImplementationId());
         m_pCollection->Append(OLEVariant(pColumn->getColumnImpl()));
     }
 
@@ -140,10 +139,11 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     m_pCollection->Delete(OLEVariant(index));
     OCollection_TYPE::dropByIndex(index);
 }
+// -----------------------------------------------------------------------------
 
 
