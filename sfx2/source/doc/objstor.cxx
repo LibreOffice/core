@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-20 07:37:03 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2272,7 +2272,7 @@ sal_Bool SfxObjectShell::CanReload_Impl()
 sal_Bool SfxObjectShell::IsInformationLost()
 {
     const SfxFilter *pFilt = GetMedium()->GetFilter();
-    if ( pFilt == GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) )
+    if ( pFilt == GetFactory().GetFilterContainer()->GetDefaultFilter_Impl(GetFactory().GetFactoryName()) )
         return sal_False;
     return pFilt && pFilt->IsAlienFormat() && pImp->bDidDangerousSave && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT);
 }
@@ -2459,7 +2459,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 {
     sal_Bool bResult = sal_False;
 
-    SotStorageRef xThumbnailStor = xStor->OpenUCBStorage( ::rtl::OUString::createFromAscii( "Thumbnail" ) );
+    SotStorageRef xThumbnailStor = xStor->OpenUCBStorage( ::rtl::OUString::createFromAscii( "Thumbnails" ) );
     if ( xThumbnailStor.Is() && !xThumbnailStor->GetError() )
     {
         SotStorageStreamRef xStream = xThumbnailStor->OpenSotStream( ::rtl::OUString::createFromAscii( "thumbnail.png" ) );
