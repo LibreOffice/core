@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferDataAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-02 20:48:59 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,11 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** This interface provides direct access to the data in all flavors. It can
+/** This interface provides direct access to the data in all data flavors. It can
     be used by the clipboard implementation to optimize data transport on
     flush operations.
 
     @see com::sun::star::datatransfer::XTransferable
-
- <!-- Dennis: What is meant by "flavors" -->
-
 */
 
 interface XTransferDataAccess: com::sun::star::uno::XInterface
@@ -98,11 +95,11 @@ interface XTransferDataAccess: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-        the data in the requested data flavors. For unsupported flavors an
+        the data in the requested data flavors. For unsupported data flavors an
         empty any (an any without a value) will be returned.
 
         @param aFlavorList
-        the requested data flavors. Unsupported flavors will be ignored.
+        the requested data flavors. Unsupported data flavors will be ignored.
      */
     sequence < any > getData( [in] sequence < DataFlavor > aFlavorList );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFormatTranslator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,18 +79,14 @@ module com { module sun { module star { module datatransfer {
 interface XDataFormatTranslator;
 
 //=============================================================================
-/** manages a list of dataflavors.
-
- <!-- Dennis: Is "dataflavors" a real word? -->
+/** manages a list of data flavors.
 
     @see com::sun::star::datatransfer::XDTransFormatTranslator
 */
 service DataFormatTranslator
 {
     //-------------------------------------------------------------------------
-    /** converts DataFlavors to system data types and vice versa.
-
- <!-- Dennis: DataFlavors is capitalized differently here -->
+    /** converts data flavors to system data types and vice versa.
     */
     interface XDataFormatTranslator;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentType.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-02 20:44:00 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,27 +83,25 @@ interface XMimeContentType : com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-        the media subtype of the contenttype
-
- <!-- Dennis: should "contenttype" be hyphenated or not? -->
+        the media subtype of the content-type
     */
     string getMediaSubtype( );
 
     //-------------------------------------------------------------------------
     /** @returns
-        the full media type of the contenttype (type/subtype)
+        the full media type of the content-type (type/subtype)
     */
     string getFullMediaType( );
 
     //-------------------------------------------------------------------------
     /** @returns
-        a list of the names of all parameters of the contenttype
+        a list of the names of all parameters of the content-type
     */
     sequence< string > getParameters( );
 
     //-------------------------------------------------------------------------
     /** @returns
-        <true/> if the contenttype has the specified parameter
+        <true/> if the content-type has the specified parameter
     */
     boolean hasParameter( [in] string aName );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFlavor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,15 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** Each instance represents the opaque concept of a data format as would
+/** Each instance represents the concept of a data format as it would
     appear on a clipboard or during drag and drop.
-
- <!-- Dennis: What is an "opaque concept"? This sentence needs to be reworded. -->
 */
 
 struct DataFlavor
 {
     //-------------------------------------------------------------------------
-    /** The MIME type/subtype string describing the data format of the object
-        to transfer.
+    /** The MIME content-type (type/subtype) string describing the data format
+        of the object to transfer.
     */
     string MimeType;
 

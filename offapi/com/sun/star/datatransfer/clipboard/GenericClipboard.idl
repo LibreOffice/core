@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericClipboard.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,12 @@ service GenericClipboard
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
-
- <!-- Dennis: When is "service" written "Service"? -->
+    /** a service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** a service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

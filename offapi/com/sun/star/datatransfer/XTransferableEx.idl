@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferableEx.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-02 20:55:45 $
+ *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,13 @@ interface XTransferableEx: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @requestedFlavors
-        Sequence of flavors of interest. Specify an empty sequence for interest
-        in all flavors with top-level MIME types. To get all MIME types, call
-        com::sun::star::datatransfer::XTransferable.
+        Sequence of data flavors of interest. Specify an empty sequence for interest
+        in all data flavors with top-level MIME content-types. To get all MIME
+        content-types, call com::sun::star::datatransfer::XTransferable.
 
         @returns
         the list of the matching supported flavors that were requested. For
-        each requested top-level MIME type, all supported subtypes are returned.
+        each requested top-level MIME content-type, all supported subtypes are returned.
     */
     sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );
 };
