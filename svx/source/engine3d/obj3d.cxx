@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:31:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3760,73 +3760,88 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
 |*
 \************************************************************************/
 
-SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol,
-    const SetOfByte* pVisiLayer) const
+// #110988# test if given hit candidate point is inside bound volume of object
+sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const Vector3D& rFront, const Vector3D& rBack, const Point& rPnt) const
+{
+    const Volume3D& rBoundVol = ((E3dCompoundObject*)this)->GetBoundVolume();
+
+    if(rBoundVol.IsValid())
+    {
+        double fXMax = rFront.X();
+        double fXMin = rBack.X();
+
+        if(fXMax < fXMin)
+        {
+            fXMax = rBack.X();
+            fXMin = rFront.X();
+        }
+
+        if(rBoundVol.MinVec().X() <= fXMax && rBoundVol.MaxVec().X() >= fXMin)
+        {
+            double fYMax = rFront.Y();
+            double fYMin = rBack.Y();
+
+            if(fYMax < fYMin)
+            {
+                fYMax = rBack.Y();
+                fYMin = rFront.Y();
+            }
+
+            if(rBoundVol.MinVec().Y() <= fYMax && rBoundVol.MaxVec().Y() >= fYMin)
+            {
+                double fZMax = rFront.Z();
+                double fZMin = rBack.Z();
+
+                if(fZMax < fZMin)
+                {
+                    fZMax = rBack.Z();
+                    fZMin = rFront.Z();
+                }
+
+                if(rBoundVol.MinVec().Z() <= fZMax && rBoundVol.MaxVec().Z() >= fZMin)
+                {
+                    return sal_True;
+                }
+            }
+        }
+    }
+
+    return sal_False;
+}
+
+SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     E3dPolyScene* pScene = (E3dPolyScene*)GetScene();
+
     if(pScene)
     {
-        // HitLine holen in ObjektKoordinaten
-        // ObjectTrans setzen
+        // get HitLine in ObjectKoordinates
+        // set ObjectTrans
         Matrix4D mTransform = ((E3dCompoundObject*)this)->GetFullTransform();
         pScene->GetCameraSet().SetObjectTrans(mTransform);
 
-        // HitPoint Front und Back erzeugen und umrechnen
+        // create HitPoint Front und Back, transform to object coordinates
         Vector3D aFront(rPnt.X(), rPnt.Y(), 0.0);
         Vector3D aBack(rPnt.X(), rPnt.Y(), ZBUFFER_DEPTH_RANGE);
         aFront = pScene->GetCameraSet().ViewToObjectCoor(aFront);
         aBack = pScene->GetCameraSet().ViewToObjectCoor(aBack);
 
-        const Volume3D& rBoundVol = ((E3dCompoundObject*)this)->GetBoundVolume();
-        if(rBoundVol.IsValid())
+        if(ImpIsInsideBoundVolume(aFront, aBack, rPnt))
         {
-            double fXMax = aFront.X();
-            double fXMin = aBack.X();
+            // Geometrie herstellen
+            if(!bGeometryValid)
+                ((E3dCompoundObject*)this)->ReCreateGeometry();
 
-            if(fXMax < fXMin)
+            // 3D Volumes schneiden sich, teste in der Geometrie
+            // auf Basis der Projektion weiter
+            if(((E3dCompoundObject*)this)->aDisplayGeometry.CheckHit(aFront, aBack, nTol))
             {
-                fXMax = aBack.X();
-                fXMin = aFront.X();
-            }
-
-            if(rBoundVol.MinVec().X() <= fXMax && rBoundVol.MaxVec().X() >= fXMin)
-            {
-                double fYMax = aFront.Y();
-                double fYMin = aBack.Y();
-
-                if(fYMax < fYMin)
-                {
-                    fYMax = aBack.Y();
-                    fYMin = aFront.Y();
-                }
-
-                if(rBoundVol.MinVec().Y() <= fYMax && rBoundVol.MaxVec().Y() >= fYMin)
-                {
-                    double fZMax = aFront.Z();
-                    double fZMin = aBack.Z();
-
-                    if(fZMax < fZMin)
-                    {
-                        fZMax = aBack.Z();
-                        fZMin = aFront.Z();
-                    }
-
-                    if(rBoundVol.MinVec().Z() <= fZMax && rBoundVol.MaxVec().Z() >= fZMin)
-                    {
-                        // Geometrie herstellen
-                        if(!bGeometryValid)
-                            ((E3dCompoundObject*)this)->ReCreateGeometry();
-
-                        // 3D Volumes schneiden sich, teste in der Geometrie
-                        // auf Basis der Projektion weiter
-                        if(((E3dCompoundObject*)this)->aDisplayGeometry.CheckHit(aFront, aBack, nTol) != -1L)
-                            return ((E3dCompoundObject*)this);
-                    }
-                }
+                return ((E3dCompoundObject*)this);
             }
         }
     }
-    return NULL;
+
+    return 0L;
 }
 
 /*************************************************************************
@@ -5103,6 +5118,51 @@ XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtr
     }
 
     return aNewPolyPolygon;
+}
+
+// #110988#
+double E3dCompoundObject::GetMinimalDepthInViewCoor(E3dScene& rScene) const
+{
+    double fRetval(DBL_MAX);
+    B3dTransformationSet& rTransSet = rScene.GetCameraSet();
+    Matrix4D mTransform = ((E3dCompoundObject*)this)->GetFullTransform();
+    rTransSet.SetObjectTrans(mTransform);
+    B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
+    GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+    sal_uInt32 nPolyCounter(0L);
+    sal_uInt32 nEntityCounter(0L);
+
+    while(nPolyCounter < rIndexBucket.Count())
+    {
+        sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
+
+        while(nEntityCounter < nUpperBound)
+        {
+            Vector3D aNewPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
+            aNewPoint = rTransSet.ObjectToViewCoor(aNewPoint);
+
+            if(aNewPoint.Z() < fRetval)
+            {
+                fRetval = aNewPoint.Z();
+            }
+        }
+    }
+
+    return fRetval;
+}
+
+// #110988#
+sal_Bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
+{
+    if(GetObjList()
+        && GetObjList()->GetOwnerObj()
+        && GetObjList()->GetOwnerObj()->ISA(E3dScene))
+    {
+        prScene = (E3dScene*)GetObjList()->GetOwnerObj();
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 // EOF
