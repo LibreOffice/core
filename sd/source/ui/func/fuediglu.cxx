@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 // Objekt verschieben
                 pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
-            else if (pView->HasMarkedObj())
+            else if (pView->AreObjectsMarked())
             {
                 /**************************************************************
                 * Klebepunkt selektieren
