@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConversionDictionary.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,18 @@ interface XConversionDictionary : com::sun::star::uno::XInterface
         @see com::sun::star::linguistic2::ConversionDirection
     */
     short getMaxCharCount(
+            [in] com::sun::star::linguistic2::ConversionDirection eDirection );
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            a list of all left or right parts of the dictionari
+        @param  eDirection
+            specifies if all left or all right parts of the entries
+            should be returned.
+    */
+
+    sequence< string > getConversionEntries(
             [in] com::sun::star::linguistic2::ConversionDirection eDirection );
 
 };
