@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-27 12:24:50 $
+ *  last change: $Author: abi $ $Date: 2001-12-05 12:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       IsVolume( rtl::OUString::createFromAscii( "IsVolume" ) ),
       IsRemoveable( rtl::OUString::createFromAscii( "IsRemoveable" ) ),
       IsRemote( rtl::OUString::createFromAscii( "IsRemote" ) ),
+      IsCompactDisc( rtl::OUString::createFromAscii( "IsCompactDisc" ) ),
+      IsFloppy( rtl::OUString::createFromAscii( "IsFloppy" ) ),
       IsHidden( rtl::OUString::createFromAscii( "IsHidden" ) ),
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
@@ -337,6 +339,28 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
     // Remote
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemote,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+    // CompactDisc
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsCompactDisc,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+    // Floppy
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsFloppy,
                                              -1 ,
                                              getCppuType( static_cast< sal_Bool* >( 0 ) ),
                                              uno::Any(),
@@ -2140,7 +2164,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     }
 
 
-    sal_Bool isDirectory,isFile,isVolume,isRemoveable,isRemote;
+    sal_Bool isDirectory,isFile,isVolume,isRemoveable,isRemote,isFloppy,isCompactDisc;
 
     if( aFileStatus.isValid( FileStatusMask_Type ) )
     {
@@ -2200,12 +2224,24 @@ shell::commit( const shell::ContentMap::iterator& it,
         {
             // Retrieve the flags;
             isRemote = aVolumeInfo.getRemoteFlag();
-            sal_Bool isRemoveable = aVolumeInfo.getRemoveableFlag();
+            isRemoveable = aVolumeInfo.getRemoveableFlag();
+            isCompactDisc = aVolumeInfo.getCompactDiscFlag();
+            isFloppy = aVolumeInfo.getFloppyDiskFlag();
+
             aAny <<= isRemote;
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() ) it1->setValue( aAny );
+
             aAny <<= isRemoveable;
             it1 = properties.find( MyProperty( IsRemoveable ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+
+            aAny <<= isCompactDisc;
+            it1 = properties.find( MyProperty( IsCompactDisc ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+
+            aAny <<= isFloppy;
+            it1 = properties.find( MyProperty( IsFloppy ) );
             if( it1 != properties.end() ) it1->setValue( aAny );
         }
         else
@@ -2215,6 +2251,10 @@ shell::commit( const shell::ContentMap::iterator& it,
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() ) it1->setValue( aAny );
             it1 = properties.find( MyProperty( IsRemoveable ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+            it1 = properties.find( MyProperty( IsCompactDisc ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+            it1 = properties.find( MyProperty( IsFloppy ) );
             if( it1 != properties.end() ) it1->setValue( aAny );
         }
     }
@@ -2234,6 +2274,12 @@ shell::commit( const shell::ContentMap::iterator& it,
 
         it1 = properties.find( MyProperty( IsRemoveable ) );
         if( it1 != properties.end() ) it1->setValue( emptyAny );
+
+        it1 = properties.find( MyProperty( IsCompactDisc ) );
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
+
+        it1 = properties.find( MyProperty( IsFloppy ) );
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
     }
 
 
@@ -2242,6 +2288,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         isFile = false;
         isVolume = isDirectory = true;
         isRemoveable = isRemote = false;
+        isFloppy = isCompactDisc = false;
 
         aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
@@ -2261,6 +2308,14 @@ shell::commit( const shell::ContentMap::iterator& it,
 
         aAny <<= isRemote;
         it1 = properties.find( MyProperty( IsRemote ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        aAny <<= isCompactDisc;
+        it1 = properties.find( MyProperty( IsCompactDisc ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        aAny <<= isFloppy;
+        it1 = properties.find( MyProperty( IsFloppy ) );
         if( it1 != properties.end() ) it1->setValue( aAny );
     }
 

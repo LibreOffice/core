@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-27 12:24:50 $
+ *  last change: $Author: abi $ $Date: 2001-12-05 12:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,8 @@ namespace fileaccess {
         const rtl::OUString IsVolume;
         const rtl::OUString IsRemoveable;
         const rtl::OUString IsRemote;
+        const rtl::OUString IsCompactDisc;
+        const rtl::OUString IsFloppy;
         const rtl::OUString IsHidden;
         const rtl::OUString ContentType;
         const rtl::OUString IsReadOnly;
