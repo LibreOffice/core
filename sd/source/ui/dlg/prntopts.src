@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:11:19 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ chinese_traditional ] = "³Ζͺ`(~N)";
         Text[ arabic ] = "ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
-        Text[ korean ] = "ΈήΈπ(~N)";
+        Text[ korean ] = "ΈήΈπ";
         Text[ turkish ] = "Notlar";
         Text[ language_user1 ] = " ";
     };
