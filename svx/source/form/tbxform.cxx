@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 12:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,10 +279,6 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
         if (eState >= SFX_ITEM_AVAILABLE)
             nSlot = ((SfxUInt16Item*)pState)->GetValue();
 
-        //////////////////////////////////////////////////////////////////////
-        // Ist dieser Slot ein gueltiger Slot?
-        BOOL bValidSlot = FALSE;
-
         switch( nSlot )
         {
             case SID_FM_PUSHBUTTON:
@@ -304,15 +300,12 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_CURRENCYFIELD:
             case SID_FM_PATTERNFIELD:
             case SID_FM_DESIGN_MODE:
-                bValidSlot = TRUE;
-        }
-        //////////////////////////////////////////////////////////////////////
-        // Setzen des Images
-        if (bValidSlot)
-        {
-            //  Image aImage = SFX_IMAGEMANAGER()->GetImage( nSlot );
-            GetToolBox().SetItemImage( SID_FM_CONFIG, SFX_IMAGEMANAGER()->GetImage( nSlot ) );
-            nLastSlot = nSlot;
+            case SID_FM_FORMATTEDFIELD:
+            {   // set a new image, matching to this slot
+                GetToolBox().SetItemImage( SID_FM_CONFIG, SFX_IMAGEMANAGER()->GetImage( nSlot ) );
+                nLastSlot = nSlot;
+            }
+            break;
         }
     }
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
