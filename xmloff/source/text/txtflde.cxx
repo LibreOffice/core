@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
 static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
+static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 
 
 SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -362,6 +363,8 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_URL, FIELD_ID_URL ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_MEASURE, FIELD_ID_MEASURE ),
 
+    // deprecated fields
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TABLE_FORMULA, FIELD_ID_TABLE_FORMULA ),
     ENUM_STRING_MAP_END()
 };
 
@@ -702,6 +705,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_SHEET_NAME:
         case FIELD_ID_MEASURE:
         case FIELD_ID_URL:
+        case FIELD_ID_TABLE_FORMULA:
             ; // these field IDs are final
             break;
 
@@ -743,6 +747,12 @@ sal_Bool XMLTextFieldExport::IsStringField(
         // TODO: depends on... ???
         // workaround #no-bug#: no data type
         return 5100 == GetIntProperty(sPropertyNumberFormat, xPropSet);
+        break;
+
+    case FIELD_ID_TABLE_FORMULA:
+        // legacy field: always a number field (because it always has
+        // a number format)
+        return sal_False;
         break;
 
     case FIELD_ID_COUNT_PAGES:
@@ -918,6 +928,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_VARIABLE_INPUT:
     case FIELD_ID_USER_GET:
     case FIELD_ID_EXPRESSION:
+    case FIELD_ID_TABLE_FORMULA:
         // register number format, if this is a numeric field
         if (! IsStringField(nToken, xPropSet)) {
 
@@ -1703,6 +1714,19 @@ void XMLTextFieldExport::ExportFieldHelper(
         ExportElement( XML_MEASURE, sPresentation );
         break;
     }
+
+    case FIELD_ID_TABLE_FORMULA:
+        ProcessString( XML_FORMULA,
+                       GetStringProperty(sPropertyContent, rPropSet) );
+        ProcessDisplay( sal_True,
+                        GetBoolProperty(sPropertyIsShowFormula, rPropSet),
+                        sal_True );
+        ProcessValueAndType( sal_False,
+                             GetIntProperty(sPropertyNumberFormat, rPropSet),
+                             sEmpty, sEmpty,
+                             0.0f, sal_False, sal_False, sal_True, sal_False );
+        ExportElement( XML_TABLE_FORMULA, sPresentation );
+        break;
 
     case FIELD_ID_UNKNOWN:
     default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:32 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@ enum FieldIdEnum {
     FIELD_ID_COMBINED_CHARACTERS,   // combined characters (asian typography)
 
     FIELD_ID_MEASURE,               // for measure shapes
+
+    FIELD_ID_TABLE_FORMULA,         // DEPRECATED: table formulas (Writer 2.0)
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };

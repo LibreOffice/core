@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-23 09:59:47 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2076,6 +2076,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "column-mapping" ),             // XML_COLUMN_MAPPING
         TOKEN( "row-mapping" ),                // XML_ROW_MAPPING
+
+        TOKEN( "table-formula" ),               // XML_TABLE_FORMULA
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-20 07:59:20 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,6 +796,11 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
 
         case XML_TOK_TEXT_MEASURE:
             pContext = new XMLMeasureFieldImportContext( rImport, rHlp,
+                                                         nPrefix, rName );
+            break;
+
+        case XML_TOK_TEXT_TABLE_FORMULA:
+            pContext = new XMLTableFormulaImportContext( rImport, rHlp,
                                                          nPrefix, rName );
             break;
 

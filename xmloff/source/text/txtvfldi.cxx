@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-17 10:28:43 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ static const sal_Char sAPI_input_user[]         = "InputUser";
 static const sal_Char sAPI_get_expression[]     = "GetExpression";
 static const sal_Char sAPI_set_expression[]     = "SetExpression";
 static const sal_Char sAPI_user[]               = "User";
+static const sal_Char sAPI_table_formula[]      = "TableFormula";
 static const sal_Char sAPI_database[]           = "com.sun.star.text.TextField.Database";
 static const sal_Char sAPI_fieldmaster_database[] = "com.sun.star.text.FieldMaster.Database";
 
@@ -737,6 +738,74 @@ void XMLTextInputFieldImportContext::PrepareField(
     Any aAny;
     aAny <<= GetContent();
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
+}
+
+
+//
+// table formula field
+//
+
+TYPEINIT1( XMLTableFormulaImportContext, XMLTextFieldImportContext );
+
+XMLTableFormulaImportContext::XMLTableFormulaImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& rLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_table_formula,
+                                  nPrfx, rLocalName),
+        sPropertyIsShowFormula(RTL_CONSTASCII_USTRINGPARAM("IsShowFormula")),
+        sPropertyCurrentPresentation(
+            RTL_CONSTASCII_USTRINGPARAM("CurrentPresentation")),
+        aValueHelper(rImport, rHlp, sal_False, sal_True, sal_False, sal_True),
+        sFormula(),
+        bIsShowFormula(sal_False)
+{
+}
+
+XMLTableFormulaImportContext::~XMLTableFormulaImportContext()
+{
+}
+
+void XMLTableFormulaImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    switch (nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_FORMULA:
+            aValueHelper.ProcessAttribute( nAttrToken, sAttrValue );
+            bValid = sal_True;  // we need a formula!
+            break;
+
+        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+            aValueHelper.ProcessAttribute( nAttrToken, sAttrValue );
+            break;
+        case XML_TOK_TEXTFIELD_DISPLAY:
+            if ( sAttrValue.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("formula")) )
+                 bIsShowFormula = sal_True;
+            break;
+        default:
+            // unknown attribute -> ignore
+            break;
+    }
+}
+
+void XMLTableFormulaImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    // set format and formula
+    aValueHelper.PrepareField( xPropertySet );
+
+    Any aAny;
+
+    // set 'show formula' and presentation
+    aAny.setValue( &bIsShowFormula, ::getBooleanCppuType() );
+    xPropertySet->setPropertyValue( sPropertyIsShowFormula, aAny );
+
+    aAny <<= GetContent();
+    xPropertySet->setPropertyValue( sPropertyCurrentPresentation, aAny );
 }
 
 

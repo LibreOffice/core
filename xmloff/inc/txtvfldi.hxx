@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ public:
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         enum VarType eVarType);                 /// variable type
 
-    /// get field master for name and rename if appropriate [TODO: rename]
+    /// get field master for name and rename if appropriate
     static sal_Bool FindFieldMaster(::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet> & xMaster,
                                     SvXMLImport& rImport,
@@ -565,6 +565,47 @@ public:
                                     const ::rtl::OUString& sVarName,
                                     enum VarType eVarType);
 };
+
+
+
+/** import table formula fields (deprecated; for Writer 2.0 compatibility) */
+class XMLTableFormulaImportContext : public XMLTextFieldImportContext
+{
+    const ::rtl::OUString sPropertyNumberFormat;
+    const ::rtl::OUString sPropertyContent;
+    const ::rtl::OUString sPropertyIsShowFormula;
+    const ::rtl::OUString sPropertyCurrentPresentation;
+
+    XMLValueImportHelper aValueHelper;
+
+    ::rtl::OUString sFormula;
+    sal_Bool bFormulaOK;
+
+    sal_Bool bIsShowFormula;
+
+public:
+
+    TYPEINFO();
+
+    XMLTableFormulaImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+    virtual ~XMLTableFormulaImportContext();
+
+protected:
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
 
 
 /** import database display fields (<text:database-display>) */
