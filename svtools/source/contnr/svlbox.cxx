@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 18:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,6 +778,7 @@ __EXPORT SvLBox::~SvLBox()
     {
         pModel->Clear();
         delete pModel;
+        pModel = NULL;
     }
 
     SvLBox::RemoveBoxFromDDList_Impl( *this );
@@ -806,6 +807,7 @@ void SvLBox::DisconnectFromModel()
 {
     DBG_CHKTHIS(SvLBox,0);
     SvLBoxTreeList* pNewModel = new SvLBoxTreeList;
+    pNewModel->SetRefCount( 0 );    // else this will never be deleted
     SvListView::SetModel( pNewModel );
 }
 
