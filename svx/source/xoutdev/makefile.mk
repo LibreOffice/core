@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+#   last change: $Author: ka $ $Date: 2001-05-07 10:31:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,6 @@ CXXFILES= \
         xiocomp.cxx		\
         _xpoly.cxx		\
         _ximp.cxx		\
-        _ximp2.cxx		\
         _xoutbmp.cxx	\
         _xfont.cxx
 
@@ -178,7 +177,6 @@ SVXLIGHTOBJFILES= \
         $(OBJ)$/xiocomp.obj		\
         $(OBJ)$/_xpoly.obj  	\
         $(OBJ)$/_ximp.obj   	\
-        $(OBJ)$/_ximp2.obj  	\
         $(OBJ)$/_xoutbmp.obj	\
         $(OBJ)$/_xfont.obj
 
