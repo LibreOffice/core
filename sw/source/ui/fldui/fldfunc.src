@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:23:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_FLD_FUNC
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
         Text[ japanese ] = "Ì¨°ÙÄÞÀ²Ìß(~T)";
-        Text[ chinese_traditional ] = "Ãþ«¬(~T)";
+        Text[ chinese_traditional ] = "Äæ¦ìÃþ«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍÞá";
         Text[ greek ] = "~Ôýðïò ðåäßïõ";
         Text[ korean ] = "À¯Çü(~T)";
@@ -235,7 +235,7 @@ TabPage TP_FLD_FUNC
         Text [ portuguese ] = "Valor" ;
         Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "Værdi" ;
-        Text [ french ] = "~Valeur" ;
+        Text [ french ] = "Valeur" ;
         Text [ swedish ] = "~Värde" ;
         Text [ dutch ] = "~Waarde" ;
         Text [ spanish ] = "~Valor" ;
@@ -243,7 +243,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÊýÖµ(~V)";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáÞíãÉ";
@@ -392,3 +392,4 @@ TabPage TP_FLD_FUNC
     Text[ catalan ] = "Funciones";
     Text[ finnish ] = "Toiminnot";
 };
+
