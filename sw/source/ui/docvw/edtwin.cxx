@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:11 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,18 +1859,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF))  &&
                                 rSh.GetDrawView()->HasMarkedObj())
                             eKeyState = KS_EnterDrawHandleMode;
-                        else if( rSh.IsSttOfPara() )
+                        else
                         {
-                            if( rSh.GetCurNumRule() )
-                                eKeyState = KS_InsTab;
-                            else
-                            {
-                                SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                                if( pColl &&
-                                    //0 <= pColl->GetOutlineLevel() &&  #i24560#
-                                    MAXLEVEL - 1 > pColl->GetOutlineLevel() )
-                                    eKeyState = KS_InsTab;
-                            }
+                            eKeyState = KS_InsTab;
                         }
                     }
                     break;
