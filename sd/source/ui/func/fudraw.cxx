@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 09:59:10 $
+ *  last change: $Author: af $ $Date: 2002-10-15 15:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,11 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->UnmarkAll();
                 }
 
+                // Switch to FuSelect.
+                pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                    SID_OBJECT_SELECT,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
                 bReturn = TRUE;
             }
         }
@@ -589,6 +594,11 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_TAB:
         {
             KeyCode aCode = rKEvt.GetKeyCode();
+
+            // Switch to FuSelect.
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                SID_OBJECT_SELECT,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
