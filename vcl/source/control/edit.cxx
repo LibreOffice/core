@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2052,6 +2052,9 @@ void Edit::Modify()
 
         ImplCallEventListeners( VCLEVENT_EDIT_MODIFY );
         maModifyHdl.Call( this );
+
+        // #i13677# notify edit listeners about caret position change
+        ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
     }
 }
 
