@@ -21,3 +21,7 @@ dbaccess.OCommandDefinition::com::sun::star::beans::XPropertySet
 
 ### 99122 ###
 dbaccess.ODatasourceBrowser::com::sun::star::form::XFormController
+
+### i31186 ###
+dbaccess.ODatasourceAdministrationDialog::com::sun::star::sdb::DatasourceAdministrationDialog
+dbaccess.OSQLMessageDialog::com::sun::star::sdb::ErrorMessageDialog
