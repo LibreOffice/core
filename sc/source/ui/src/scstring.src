@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:23:00 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text [ french ] = "Hauteur de ligne optimale" ;
     Text [ swedish ] = "Optimal radhöjd" ;
     Text [ dutch ] = "Optimale rijhoogte" ;
-    Text [ spanish ] = "Altura de fila óptima" ;
+    Text [ spanish ] = "Altura óptima de fila" ;
     Text [ english_us ] = "Optimal Row Height" ;
     Text[ chinese_simplified ] = "æœ€ä½³è¡Œé«˜";
     Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòðîêè";
@@ -1635,7 +1635,7 @@ String SCSTR_RENAMETAB
     Text [ ENGLISH ] = "Rename Table" ;
     Text [ english_us ] = "Rename Sheet" ;
     Text [ italian ] = "Rinomina tabella" ;
-    Text [ spanish ] = "Cambiar nombre a hoja" ;
+    Text [ spanish ] = "Cambiar nombre de hoja" ;
     Text [ french ] = "Renommer la feuille" ;
     Text [ dutch ] = "Werkbladnaam wijzigen" ;
     Text [ swedish ] = "Byt namn på tabell" ;
