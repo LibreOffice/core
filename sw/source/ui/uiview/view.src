@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:02:50 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 20:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ String STR_NOGLOS1
     TEXT[ russian ] = "ΐβςξςεκρς κ ρξκπΰωενθώ '";
     TEXT[ polish ] = "Autotekst do skrσtu '";
     TEXT[ japanese ] = "ε…¥ε›ζ”―ζ΄γ®ο½Όο½®ο½°οΎ„ο½¶ο½―οΎ„γ€";
-    TEXT[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†ηΈ®ε―« '";
+    TEXT[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†ηΈ®ε―«<";
     TEXT[ arabic ] = "δΥ ΗαΚαήΗΖν ααΗΞΚΥΗΡ '";
     TEXT[ greek ] = "ΑυτοΚείμενο για τα αρχικά '";
     TEXT[ korean ] = "μλ™ν…μ¤νΈ λ°”λ΅κ°€κΈ° '";
@@ -600,7 +600,7 @@ String STR_NOGLOS2
     TEXT[ russian ] = "' νενΰιδεν.";
     TEXT[ polish ] = "' nie znaleziono.";
     TEXT[ japanese ] = "γ€γ―θ¦‹γ¤γ‹γ‚γΎγ›γ‚“γ§γ—γγ€‚";
-    TEXT[ chinese_traditional ] = "' ζ²’ζ‰θΆ«ζ‰Ύε°γ€‚";
+    TEXT[ chinese_traditional ] = ">ζ²’ζ‰ζ‰Ύε°γ€‚";
     TEXT[ arabic ] = "αγ νυΪΛΡ Ϊανε '";
     TEXT[ greek ] = "' δεν βρέθηκε.";
     TEXT[ korean ] = "' μ°Ύμ§€γ€€λª»ν–μ.";
@@ -1235,6 +1235,7 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
 
 
