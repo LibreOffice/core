@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:39:09 $
+ *  last change: $Author: fs $ $Date: 2002-05-28 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,9 +1519,9 @@ String RID_STR_STANDARD
     Text[ catalan ] = "Predeterminado";
     Text[ finnish ] = "Vakio";
 };
-String RID_STR_URLBUTTON_CLASSNAME
+String RID_STR_FORMATTED_CLASSNAME
 {
-    Text = "URLButton" ;
+    Text = "FormattedField";
 };
 String RID_STR_CONTROL_CLASSNAME
 {
@@ -1537,11 +1537,11 @@ String RID_STR_RADIOBUTTON_CLASSNAME
 };
 String RID_STR_BUTTON_CLASSNAME
 {
-    Text = "CommandButton" ;
+    Text = "PushButton" ;
 };
 String RID_STR_FIXEDTEXT_CLASSNAME
 {
-    Text = "Label" ;
+    Text = "LabelField" ;
 };
 String RID_STR_IMAGE_CLASSNAME
 {
@@ -1549,11 +1549,11 @@ String RID_STR_IMAGE_CLASSNAME
 };
 String RID_STR_GRID_CLASSNAME
 {
-    Text = "Grid" ;
+    Text = "TableControl" ;
 };
 String RID_STR_GROUPBOX_CLASSNAME
 {
-    Text = "FrameControl" ;
+    Text = "GroupBox" ;
 };
 String RID_STR_LISTBOX_CLASSNAME
 {
@@ -1565,11 +1565,11 @@ String RID_STR_COMBOBOX_CLASSNAME
 };
 String RID_STR_EDIT_CLASSNAME
 {
-    Text = "TextField" ;
+    Text = "TextBox" ;
 };
 String RID_STR_FILECONTROL_CLASSNAME
 {
-    Text = "FileControl" ;
+    Text = "FileSelection" ;
 };
 String RID_STR_DATEFIELD_CLASSNAME
 {
@@ -1581,7 +1581,7 @@ String RID_STR_TIMEFIELD_CLASSNAME
 };
 String RID_STR_NUMERICFIELD_CLASSNAME
 {
-    Text = "NumericField" ;
+    Text = "NumericalField" ;
 };
 String RID_STR_CURRENCYFIELD_CLASSNAME
 {
@@ -1597,7 +1597,7 @@ String RID_STR_IMAGECONTROL_CLASSNAME
 };
 String RID_STR_HIDDEN_CLASSNAME
 {
-    Text = "Hidden" ;
+    Text = "HiddenControl" ;
 };
 String RID_STR_CONTROL
 {
