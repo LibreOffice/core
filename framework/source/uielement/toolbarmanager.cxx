@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:44:21 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
 #include <svtools/miscopt.hxx>
 #include <svtools/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -183,6 +186,9 @@
 #include <vcl/taskpanelist.hxx>
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -1012,7 +1018,7 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
             }
         }
 
-        if ( !xController.is() && m_pToolBar && m_pToolBar->IsItemVisible(nId) )
+        if ( !xController.is() && m_pToolBar )
         {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
@@ -1167,22 +1173,17 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                                     m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ));
     if ( !m_xDocImageManager.is() )
     {
-        Reference< XController > xController = m_xFrame->getController();
-        Reference< XModel > xModel;
-        if ( xController.is() )
+        Reference< XModel > xModel( GetModelFromFrame() );
+        if ( xModel.is() )
         {
-            xModel = xController->getModel();
-            if ( xModel.is() )
+            Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
+            if ( xSupplier.is() )
             {
-                Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
-                if ( xSupplier.is() )
-                {
-                    Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                    m_xDocImageManager = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
-                    m_xDocImageManager->addConfigurationListener(
-                                            Reference< XUIConfigurationListener >(
-                                                static_cast< OWeakObject* >( this ), UNO_QUERY ));
-                }
+                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                m_xDocImageManager = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                m_xDocImageManager->addConfigurationListener(
+                                        Reference< XUIConfigurationListener >(
+                                            static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
         }
     }
@@ -1552,6 +1553,35 @@ IMPL_LINK( ToolBarManager, MenuDeactivate, Menu*, pMenu )
     return 0;
 }
 
+Reference< XModel > ToolBarManager::GetModelFromFrame() const
+{
+    Reference< XController > xController = m_xFrame->getController();
+    Reference< XModel > xModel;
+    if ( xController.is() )
+        xModel = xController->getModel();
+
+    return xModel;
+}
+
+sal_Bool ToolBarManager::IsPluginMode() const
+{
+    sal_Bool bPluginMode( sal_False );
+
+    if ( m_xFrame.is() )
+    {
+        Reference< XModel > xModel = GetModelFromFrame();
+        if ( xModel.is() )
+        {
+            Sequence< PropertyValue > aSeq = xModel->getArgs();
+            comphelper::MediaDescriptor aMediaDescriptor( aSeq );
+            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault< sal_Bool >(
+                            comphelper::MediaDescriptor::PROP_VIEWONLY(), sal_False );
+        }
+    }
+
+    return bPluginMode;
+}
+
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 {
     ResetableGuard aGuard( m_aLock );
@@ -1578,11 +1608,12 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
-        if ( !xDisp.is() )
+        if ( !xDisp.is() || IsPluginMode() )
             return 1;
     }
 
     // popup menu for quick customization
+    sal_Bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
     PopupMenu aPopupMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
 
     if ( m_pToolBar->IsCustomize() )
@@ -1660,6 +1691,9 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 
         pMenu->SetPopupMenu( 1, pItemMenu );
     }
+
+    if ( bHideDisabledEntries )
+        pMenu->RemoveDisabledEntries();
 
     return 0;
 }
