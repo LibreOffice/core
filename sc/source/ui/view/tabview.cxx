@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:06:01 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,7 +780,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
     {
         if (pColOutline[SC_SPLIT_LEFT])
         {
-            pColOutline[SC_SPLIT_LEFT]->SetHeaderSize( static_cast<SCCOL>(nBarX));
+            pColOutline[SC_SPLIT_LEFT]->SetHeaderSize( nBarX );
             lcl_SetPosSize( *pColOutline[SC_SPLIT_LEFT],
                     Point(nPosX-nBarX,nOutPosY), Size(nLeftSize+nBarX,nOutlineY), nTotalWidth, bLayoutRTL );
         }
@@ -797,7 +797,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         {
             if (pRowOutline[SC_SPLIT_TOP] && pRowOutline[SC_SPLIT_BOTTOM])
             {
-                pRowOutline[SC_SPLIT_TOP]->SetHeaderSize( static_cast<SCROW>(nBarY) );
+                pRowOutline[SC_SPLIT_TOP]->SetHeaderSize( nBarY );
                 lcl_SetPosSize( *pRowOutline[SC_SPLIT_TOP],
                         Point(nOutPosX,nPosY-nBarY), Size(nOutlineX,nTopSize+nBarY), nTotalWidth, bLayoutRTL );
                 pRowOutline[SC_SPLIT_BOTTOM]->SetHeaderSize( 0 );
@@ -807,7 +807,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         }
         else if (pRowOutline[SC_SPLIT_BOTTOM])
         {
-            pRowOutline[SC_SPLIT_BOTTOM]->SetHeaderSize( static_cast<SCROW>(nBarY) );
+            pRowOutline[SC_SPLIT_BOTTOM]->SetHeaderSize( nBarY );
             lcl_SetPosSize( *pRowOutline[SC_SPLIT_BOTTOM],
                     Point(nOutPosX,nSplitPosY-nBarY), Size(nOutlineX,nBottomSize+nBarY), nTotalWidth, bLayoutRTL );
         }
