@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ void SAL_CALL OfficeIPCThread::run()
     }
     else
     {
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
             TimeValue tval;
