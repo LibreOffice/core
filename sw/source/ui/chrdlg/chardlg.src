@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:59:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ TabPage TP_CHAR_URL
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ(~B)...";
         Text[ russian ] = "~Âûáğàòü...";
-        Text[ polish ] = "Wybierz...";
+        Text[ polish ] = "Przegl¹daj...";
         Text[ japanese ] = "‘I‘ğ(~B)...";
         Text[ chinese_traditional ] = "¿ï¾Ü(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
@@ -532,16 +532,16 @@ TabPage TP_CHAR_URL
         Text [ french ] = "~Frame" ;
         Text [ dutch ] = "~Frame" ;
         Text [ portuguese ] = "~Frame" ;
-        Text[ chinese_simplified ] = "¿ò¶ÔÏó";
+        Text[ chinese_simplified ] = "¿ò¶ÔÏó(~T)";
         Text[ russian ] = "~Êàäğ";
         Text[ polish ] = "Frame";
-        Text[ japanese ] = "ÌÚ°Ñ";
-        Text[ chinese_traditional ] = "°T®Ø";
+        Text[ japanese ] = "ÌÚ°Ñ(~T)";
+        Text[ chinese_traditional ] = "°T®Ø(~T)";
         Text[ arabic ] = "ÅØÇÑ";
         Text[ dutch ] = "~Frame";
-        Text[ chinese_simplified ] = "¿ò¶ÔÏó";
+        Text[ chinese_simplified ] = "¿ò¶ÔÏó(~T)";
         Text[ greek ] = "Ğëáßóéï";
-        Text[ korean ] = "ÇÁ·¹ÀÓ";
+        Text[ korean ] = "ÇÁ·¹ÀÓ(~T)";
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "~Frame";
         Text[ finnish ] = "Kohdekehys";
@@ -575,7 +575,7 @@ TabPage TP_CHAR_URL
         Text[ russian ] = "Ñîáûòèÿ...";
         Text[ polish ] = "Wy~darzenia...";
         Text[ japanese ] = "ÀsŒ_‹@(~E)...";
-        Text[ chinese_traditional ] = "¬ù·|(~E)...";
+        Text[ chinese_traditional ] = "°Ê§@(~E)...";
         Text[ arabic ] = "ÃÍÏÇË...";
         Text[ dutch ] = "~Gebeurtenissen";
         Text[ chinese_simplified ] = "ÊÂ¼ş(~E)...";
@@ -629,14 +629,14 @@ TabPage TP_CHAR_URL
         Text [ danish ] = "Besøgt hyperlink" ;
         Text [ portuguese_brazilian ] = "~Besuchte Links" ;
         Text [ portuguese ] = "Ligação ~visitada" ;
-        Text[ chinese_simplified ] = "·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
+        Text[ chinese_simplified ] = "ÒÑ¾­·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
         Text[ russian ] = "Ïîñåùåííûå ññûëêè";
         Text[ polish ] = "Odwiedzone ³¹cze";
         Text[ japanese ] = "ŠJ‚¢‚½‚±‚Æ‚Ì‚ ‚éØİ¸(~V)";
         Text[ chinese_traditional ] = "³X°İ¹Lªº±¶®|(~V)";
         Text[ arabic ] = "ÇÑÊÈÇØ ÓÈŞ ÒíÇÑÊå";
         Text[ dutch ] = "B~ezochte Link";
-        Text[ chinese_simplified ] = "·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
+        Text[ chinese_simplified ] = "ÒÑ¾­·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
         Text[ greek ] = "Óõíäİóåéò ğïõ İ÷ïõí åğéóêåöèåß";
         Text[ korean ] = "¹æ¹®ÇÑ ¸µÅ©(~V)";
         Text[ turkish ] = "~Kullanılmış hyperlink";
@@ -693,6 +693,7 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
 
