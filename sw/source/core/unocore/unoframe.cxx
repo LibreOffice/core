@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-26 09:56:03 $
+ *  last change: $Author: os $ $Date: 2001-07-09 05:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@
 #endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
+#ifndef _XMLOFF_XMLCNITM_HXX
+#include <xmloff/xmlcnitm.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -600,6 +603,15 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
             rSet.Put(aFrmSz);
         }
     }
+    uno::Any* pUnknown = 0;
+    GetProperty(RES_UNKNOWNATR_CONTAINER, 0, pUnknown);
+    if(pUnknown)
+    {
+        SvXMLAttrContainerItem aAttr(RES_UNKNOWNATR_CONTAINER);
+        aAttr.PutValue(*pUnknown, 0);
+        rSet.Put(aAttr);
+    }
+
     return bRet;
 }
 /* -----------------22.06.98 09:17-------------------
@@ -1730,6 +1742,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         {
             RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
             SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
             0
         };
         static sal_uInt16 __READONLY_DATA aGrAttrRange[] =
