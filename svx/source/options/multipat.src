@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:32:00 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
         Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text[ chinese_simplified ] = "е€ й™¤(~D)";
         Text[ russian ] = "Удалить";
