@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 16:04:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 13:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,7 @@ void OSQLParseNode::tableRangeNodeToStr(::rtl::OUString& rString, const SQLParse
     rString += ::rtl::OUString::createFromAscii(" ");
 
     SQLParseNodeParameter aNewParam(rParam);
-    aNewParam.bQuote = sal_False;
+    //  aNewParam.bQuote = sal_False;
     if (nCount == 4)
     {
         m_aChilds[0]->parseNodeToStr(rString, rParam);
