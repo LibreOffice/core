@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:11:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,19 +1658,17 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
             {
                 if( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )
                 {
-                    if( bHideSelection )
+                    // if the face color is bright then the deactive color is also bright
+                    // -> so you can't see any deactive selection
+                    if( bHideSelection && !rSettings.GetFaceColor().IsBright() )
                         aWallpaper.SetColor( rSettings.GetDeactiveColor() );
                     else
                         aWallpaper.SetColor( rSettings.GetHighlightColor() );
                     // set font color to highlight
                     if( !bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
                     {
-                        // don't paint white on white (pb: #i16031#)
-                        if ( aWallpaper.GetColor().IsBright() != aHiliteFont.GetColor().IsBright() )
-                        {
-                            Control::SetFont( aHiliteFont );
-                            bCurFontIsSel = TRUE;
-                        }
+                        Control::SetFont( aHiliteFont );
+                        bCurFontIsSel = TRUE;
                     }
                 }
                 else // ContextBitmap + InUse-Emphasis + Selektiert
@@ -2475,6 +2473,7 @@ void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
     {
         Font aFont;
         aFont = rStyleSettings.GetFieldFont();
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
         AdjustEntryHeight( aFont );
         RecalcViewData();
