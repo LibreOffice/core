@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:03:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,6 @@ friend class SfxHelpIndexWindow_Impl;
     DECL_LINK(          OpenHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
-    DECL_LINK(          OpenDoneHdl, OpenStatusListener_Impl* );
 
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
@@ -541,6 +540,22 @@ public:
 
     sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
     sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
+
+    void                openDone(const ::rtl::OUString& sURL    ,
+                                       sal_Bool         bSuccess);
+
+    static sal_Bool     splitHelpURL(const ::rtl::OUString& sHelpURL,
+                                           ::rtl::OUString& sFactory,
+                                           ::rtl::OUString& sContent,
+                                           ::rtl::OUString& sAnchor );
+
+    static ::rtl::OUString  buildHelpURL(const ::rtl::OUString& sFactory        ,
+                                         const ::rtl::OUString& sContent        ,
+                                         const ::rtl::OUString& sAnchor         ,
+                                               sal_Bool         bUseQuestionMark);
+
+    void                loadHelpContent(const ::rtl::OUString& sHelpURL                ,
+                                              sal_Bool         bAddToHistory = sal_True);
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
