@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:14:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3590,8 +3590,9 @@ String SwRTFParser::XlateFmtColName(const String &rName) const
 
     RES_POOL_COLLFMT_TYPE nId = RES_NONE;
     size_t nSize = sizeof(stiName) / sizeof(*stiName);
+    size_t i;
 
-    for (size_t i = 0; i < nSize; ++i)
+    for ( i = 0; i < nSize; ++i)
     {
         if ( rName == String( stiName[i], RTL_TEXTENCODING_MS_1252 ) )
         {
