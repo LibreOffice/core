@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: sj $ $Date: 2000-09-29 11:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4376,8 +4376,8 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( UINT32 nFileOfs, SdrPowerPoint
         }
         if ( nFileOfs )
         {
-            INT16 nTCount, nDummy;
-            INT32 i;
+            sal_Int16   nTCount;
+            sal_Int32   i;
             rIn >> mpImplRuler->nFlags;
             if ( mpImplRuler->nFlags & 1 )
                 rIn >> mpImplRuler->nDefaultTab;
@@ -4387,11 +4387,11 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( UINT32 nFileOfs, SdrPowerPoint
                 if ( nTCount )
                 {
                     mpImplRuler->nTabCount = (UINT16)nTCount;
-                    mpImplRuler->pTab = new UINT16[ mpImplRuler->nTabCount ];
+                    mpImplRuler->pTab = new PPTTabEntry[ mpImplRuler->nTabCount ];
                     for ( i = 0; i < nTCount; i++ )
                     {
-                        rIn >> mpImplRuler->pTab[ i ]
-                            >> nDummy;
+                        rIn >> mpImplRuler->pTab[ i ].nOffset
+                            >> mpImplRuler->pTab[ i ].nStyle;
                     }
                 }
             }
@@ -5590,9 +5590,17 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         {
             for ( i = 0; i < GetTabCount(); i++ )
             {
-                nTab = GetTabByIndex( (UINT16)i );
+                SvxTabAdjust eTabAdjust;
+                nTab = GetTabOffsetByIndex( (sal_uInt16)i );
+                switch( GetTabStyleByIndex( (sal_uInt16)i ) )
+                {
+                    case 1 :    eTabAdjust = SVX_TAB_ADJUST_CENTER; break;
+                    case 2 :    eTabAdjust = SVX_TAB_ADJUST_RIGHT; break;
+                    case 3 :    eTabAdjust = SVX_TAB_ADJUST_DECIMAL; break;
+                    default :   eTabAdjust = SVX_TAB_ADJUST_LEFT;
+                }
                 if ( nTab > nTextOfs )
-                    aTabItem.Insert( SvxTabStop( (UINT16)( ( ( nTab - nTextOfs ) * 2540 ) / 576 ) ) );
+                    aTabItem.Insert( SvxTabStop( (UINT16)( ( ( nTab - nTextOfs ) * 2540 ) / 576 ), eTabAdjust ) );
             }
             nLatestManTab = nTab;
         }
