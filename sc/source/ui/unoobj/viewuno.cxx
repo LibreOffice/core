@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:16:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,8 +316,8 @@ table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange() throw(uno::Ru
         //  VisibleRange in Excel auch teilweise sichtbare.
         //! anpassen ???
 
-        USHORT nVisX = pViewData->VisibleCellsX( eWhichH );
-        USHORT nVisY = pViewData->VisibleCellsY( eWhichV );
+        SCCOL nVisX = pViewData->VisibleCellsX( eWhichH );
+        SCROW nVisY = pViewData->VisibleCellsY( eWhichV );
         if (!nVisX) nVisX = 1;  // irgendwas muss ja im Range sein
         if (!nVisY) nVisY = 1;
         aAdr.Sheet       = pViewData->GetTabNo();
@@ -340,8 +340,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
         ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
 
         table::CellRangeAddress aAdr = getVisibleRange();       //! Hilfsfunktion mit ScRange?
-        ScRange aRange( (USHORT)aAdr.StartColumn, (USHORT)aAdr.StartRow, aAdr.Sheet,
-                        (USHORT)aAdr.EndColumn, (USHORT)aAdr.EndRow, aAdr.Sheet );
+        ScRange aRange( (SCCOL)aAdr.StartColumn, (SCROW)aAdr.StartRow, aAdr.Sheet,
+                        (SCCOL)aAdr.EndColumn, (SCROW)aAdr.EndRow, aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
             return new ScCellObj( pDocSh, aRange.aStart );
         else
@@ -369,7 +369,7 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
         SdrModel* pModel = pViewData->GetDocument()->GetDrawLayer();
         if ( pWin && pModel )
         {
-            SdrPage* pPage = pModel->GetPage( pViewData->GetTabNo() );
+            SdrPage* pPage = pModel->GetPage( static_cast<sal_uInt16>(pViewData->GetTabNo()) );
             if ( pPage )
             {
                 ULONG nCount = pPage->GetObjCount();
@@ -610,7 +610,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 
 // XDocumentView
 
-BOOL lcl_TabInRanges( USHORT nTab, const ScRangeList& rRanges )
+BOOL lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
 {
     ULONG nCount = rRanges.Count();
     for (ULONG i=0; i<nCount; i++)
@@ -625,7 +625,7 @@ BOOL lcl_TabInRanges( USHORT nTab, const ScRangeList& rRanges )
 void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
 {
     BOOL bFound = FALSE;
-    USHORT nObjectTab = 0;
+    SCTAB nObjectTab = 0;
 
     SdrModel* pModel = rDrawView.GetModel();
     USHORT nPageCount = pModel->GetPageCount();
@@ -641,7 +641,7 @@ void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* 
                 if ( pObject == pSelObj )
                 {
                     bFound = TRUE;
-                    nObjectTab = i;
+                    nObjectTab = static_cast<SCTAB>(i);
                 }
                 pObject = aIter.Next();
             }
@@ -885,7 +885,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
         const ScMarkData& rMark = pViewData->GetMarkData();
-        USHORT nTabs = rMark.GetSelectCount();
+        SCTAB nTabs = rMark.GetSelectCount();
 
         ScRange aRange;
         if ( nTabs == 1 && pViewData->GetSimpleArea(aRange) )
@@ -1094,7 +1094,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
     if (pViewSh)
     {
         ScViewData* pData = pViewSh->GetViewData();
-        USHORT nTab = pData->GetTabNo();
+        SCTAB nTab = pData->GetTabNo();
         return new ScTableSheetObj( pData->GetDocShell(), nTab );
     }
     return NULL;
@@ -1117,7 +1117,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
             if ( rRanges.Count() == 1 )
             {
-                USHORT nNewTab = rRanges.GetObject(0)->aStart.Tab();
+                SCTAB nNewTab = rRanges.GetObject(0)->aStart.Tab();
                 if ( pViewSh->GetViewData()->GetDocument()->HasTable(nNewTab) )
                     pViewSh->SetTabNo( nNewTab );
             }
@@ -1130,10 +1130,11 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
     uno::Reference< uno::XInterface > xTarget;
     if (GetViewShell())
     {
-        sal_Int16 nX, nY;
+        SCsCOL nX;
+        SCsROW nY;
         ScViewData* pData = GetViewShell()->GetViewData();
         ScSplitPos eSplitMode = pData->GetActivePart();
-        sal_Int16 nTab(pData->GetTabNo());
+        SCTAB nTab(pData->GetTabNo());
         pData->GetPosFromPixel( rPoint.X(), rPoint.Y(), eSplitMode, nX, nY);
 
         ScAddress aCellPos (nX, nY, nTab);
@@ -1147,7 +1148,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
             SdrPage* pDrawPage = NULL;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(nTab);
+                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
 
             if (pDrawPage)
             {
@@ -1394,7 +1395,7 @@ INT16 ScTabViewObj::GetZoom(void) const
     if (pViewSh)
     {
         const Fraction& rZoomY = pViewSh->GetViewData()->GetZoomY();    // Y wird angezeigt
-        return (USHORT)(( rZoomY.GetNumerator() * 100 ) / rZoomY.GetDenominator());
+        return (INT16)(( rZoomY.GetNumerator() * 100 ) / rZoomY.GetDenominator());
     }
     return 0;
 }
@@ -1426,7 +1427,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
 
 INT16 ScTabViewObj::GetZoomType(void) const
 {
-    INT16 aZoomType;
+    INT16 aZoomType = view::DocumentZoomType::OPTIMAL;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
@@ -1479,6 +1480,8 @@ void ScTabViewObj::SetZoomType(INT16 aZoomType)
             case view::DocumentZoomType::PAGE_WIDTH_EXACT:
                 eZoomType = SVX_ZOOM_PAGEWIDTH_NOBORDER;
                 break;
+            default:
+                eZoomType = SVX_ZOOM_OPTIMAL;
             }
             sal_Int16 nZoom(GetZoom());
             sal_Int16 nOldZoom(nZoom);
@@ -1578,7 +1581,8 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitColumn() throw(uno::RuntimeException)
             if ( pViewData->GetVSplitMode() != SC_SPLIT_NONE )
                 ePos = SC_SPLIT_TOPLEFT;
 
-            short nCol, nRow;
+            SCsCOL nCol;
+            SCsROW nRow;
             pViewData->GetPosFromPixel( nSplit, 0, ePos, nCol, nRow, FALSE );
             if ( nCol > 0 )
                 return nCol;
@@ -1599,7 +1603,8 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow() throw(uno::RuntimeException)
             long nSplit = pViewData->GetVSplitPos();
 
             ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // es ist vertikal geteilt
-            short nCol, nRow;
+            SCsCOL nCol;
+            SCsROW nRow;
             pViewData->GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, FALSE );
             if ( nRow > 0 )
                 return nRow;
@@ -1638,7 +1643,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
             aWinStart = pWin->GetPosPixel();
 
         ScViewData* pViewData = pViewSh->GetViewData();
-        Point aSplit = pViewData->GetScrPos( (USHORT)nColumns, (USHORT)nRows, SC_SPLIT_BOTTOMLEFT, TRUE );
+        Point aSplit = pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, TRUE );
         aSplit += aWinStart;
 
         pViewSh->SplitAtPixel( aSplit, TRUE, TRUE );
