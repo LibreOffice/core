@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-06 12:37:12 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,16 +139,14 @@ struct WW8_PCD1
 
 USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta );
 
-
-
-WW8SprmIter::WW8SprmIter(BYTE* pSprms_,     short nLen_,       BYTE nVersion_ )
+WW8SprmIter::WW8SprmIter(BYTE* pSprms_,     long nLen_,       BYTE nVersion_ )
                     :  pSprms( pSprms_), nRemLen( nLen_), nVersion( nVersion_),
                        nDelta( ( 8 > nVersion ) ? 0 : 1 )
 {
     UpdateMyMembers();
 }
 
-void WW8SprmIter::SetSprms(BYTE* pSprms_, short nLen_)
+void WW8SprmIter::SetSprms(BYTE* pSprms_, long nLen_)
 {
     pSprms  = pSprms_;
     nRemLen = nLen_;
@@ -1975,6 +1973,9 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
 
 BOOL WW8PLCFx_Fc_FKP::SeekPos( WW8_FC nFcPos )
 {
+    //hack, In case of emergency enable nHack
+    //USHORT nHack = pPLCF->GetIdx();
+
     // StartPos for next Where()
     SetStartFc( nFcPos );
 
@@ -1991,7 +1992,11 @@ BOOL WW8PLCFx_Fc_FKP::SeekPos( WW8_FC nFcPos )
         if( nPo != pFkp->GetFilePos() )
             DELETEZ( pFkp );
         else
+        {
             pFkp->SeekPos( nFcPos );
+            //hack
+            //pPLCF->SetIdx(nHack);
+        }
     }
     return bRet;
 }
@@ -2026,7 +2031,7 @@ BYTE* WW8PLCFx_Fc_FKP::GetSprms( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
             return 0;
     }
 
-    short nLen;
+    short nLen = 0;
     BYTE* pPos = pFkp->Get( rStart, rEnd, nLen );
     if( rStart == LONG_MAX )
     {               // nicht gefunden
@@ -2175,6 +2180,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDa
                                 rBase.pWw8Fib->nVersion, rBase.pPiecePLCF, 0,
                                 ((6 == GetVersion()) || (7 == GetVersion())) )
                            : 0;
+    pPieceIter = rSBase.pPieceIter;
 }
 
 WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
@@ -2234,6 +2240,9 @@ WW8_CP WW8PLCFx_Cp_FKP::Where()
 
 void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
 {
+    //HACK TIME
+    WW8_CP nOrigCp = p->nStartPos;
+
     p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms( p->nStartPos, p->nEndPos, p->nSprmsLen );
 
 #ifdef DEBUG
@@ -2243,11 +2252,131 @@ void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
 
     if( pPcd )  // Piece-Table vorhanden !!!
     {
-        if(    (nAttrStart >  nAttrEnd)
-            || (nAttrStart ==       -1) )  // Init ( noch kein ++ gerufen )
+
+        // Init ( noch kein ++ gerufen )
+        if( (nAttrStart >  nAttrEnd) || (nAttrStart == -1) )
         {
-            eCutT eC = pPcd->AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
-            p->bRealLineEnd = !( eC & CUT_END ) && ePLCF == PAP;
+            p->bRealLineEnd = (ePLCF == PAP);
+
+            if ( ((ePLCF == PAP ) || (ePLCF == CHP)) && (nOrigCp != LONG_MAX) )
+            {
+
+                p->nStartPos = nOrigCp;
+                BOOL bIsUnicode=FALSE;
+                WW8_FC nStartFc = rSBase.WW8Cp2Fc(p->nStartPos, &bIsUnicode);
+                WW8_FC nOldEndPos = p->nEndPos;
+
+                /*
+                To find the end of a paragraph for a character in a
+                complex format file.
+
+                It is necessary to know the piece that contains the
+                character and the FC assigned to the character.
+                */
+
+                //Set to the piece that contains the character
+                ULONG nOldPos = pPieceIter->GetIdx();
+                pPieceIter->SeekPos( p->nStartPos);
+
+                //FC assigned to the character
+                WW8_FC nFCAssigned = nStartFc;
+
+                /*
+                Using the FC of the character, first search the FKP that
+                describes the character to find the smallest FC in the
+                rgfc that is larger than the character FC.
+                */
+                //Search done, next largest FC is p->nEndPos;
+                WW8_FC nLarger = nOldEndPos;
+
+                /*
+                If the FC found in the FKP is less than or equal to the
+                limit FC of the piece, the end of the paragraph that
+                contains the character is at the FKP FC minus 1.
+                */
+
+                long nCpStart, nCpEnd;
+                void* pData;
+                pPieceIter->Get(nCpStart, nCpEnd, pData);
+
+                WW8_FC nLimitFC = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
+                WW8_FC nBeginLimitFC = nLimitFC;
+                if( 8 <= GetVersion() )
+                {
+                    nBeginLimitFC =
+                        WW8PLCFx_PCD::TransformPieceAddress(nLimitFC,
+                        bIsUnicode);
+                }
+                nLimitFC = nBeginLimitFC +
+                    (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
+
+                if (nOldEndPos <= nLimitFC)
+                {
+                    p->nEndPos = nCpEnd -
+                        (nLimitFC-nOldEndPos) / (bIsUnicode ? 2 : 1);
+                }
+                else
+                {
+                    /*
+                    If the FKP FC that was found was greater than the FC
+                    of the end of the piece, scan piece by piece toward
+                    the end of the document until a piece is found that
+                    contains a  paragraph end mark.
+                    */
+
+                    /*
+                    It's possible to check if a piece contains a paragraph
+                    mark by using the FC of the beginning of the piece to
+                    search in the FKPs for the smallest FC in the FKP rgfc
+                    that is greater than the FC of the beginning of the
+                    piece. If the FC found is less than or equal to the
+                    limit FC of the piece, then the character that ends
+                    the paragraph is the character immediately before the
+                    FKP fc
+                    */
+
+                    (*pPieceIter)++;
+
+                    for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
+                        (*pPieceIter)++)
+                    {
+                        if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
+                        {
+                            ASSERT( !this, "piece iter broken!" );
+                            break;
+                        }
+                        BOOL bIsUnicode = FALSE;
+                        INT32 nFcStart = SVBT32ToLong(((WW8_PCD*)pData)->fc);
+
+                        if( 8 <= GetVersion() )
+                        {
+                            nFcStart =
+                                WW8PLCFx_PCD::TransformPieceAddress(
+                                nFcStart,bIsUnicode );
+                        }
+                        nLimitFC = nFcStart + (nCpEnd - nCpStart) *
+                            (bIsUnicode ? 2 : 1);
+
+                        //if it doesn't exist, skip it
+                        if (!SeekPos(nCpStart))
+                            continue;
+
+                        WW8_FC nOne,nSmallest;
+                        p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms(
+                            nOne, nSmallest, p->nSprmsLen );
+
+                        if (nSmallest <= nLimitFC)
+                        {
+                            p->nEndPos = nCpEnd -
+                                (nLimitFC-nSmallest) / (bIsUnicode ? 2 : 1);
+                            break;
+                        }
+                    }
+                }
+                pPieceIter->SetIdx( nOldPos );
+            }
+            else
+                pPcd->AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
         }
         else
         {
@@ -2351,24 +2480,27 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 
 // ohoho
     long nFkpLen;                               // Fkp-Eintrag
-    long nPcdStart, nPcdEnd, nPcdLen;           // Piece-Grenzen
     long nOldEndCp = nAttrEnd;
 
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
+#if 1
+    pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
+    bLineEnd = (ePLCF == PAP);
+#else
+    long nPcdStart, nPcdEnd, nPcdLen;           // Piece-Grenzen
     eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = !( eC & CUT_END ) && ePLCF == PAP;
     if( !( eC & CUT_START ) ){                  // neuer Eintrag faengt im
                                                 // akt. Piece an
-#ifdef DEBUG
+#   ifdef DEBUG
         if( ePLCF == PAP )
             ePLCF = PAP;                    // um hier einen Brechpunkt zu setzen
         if( ePLCF == CHP )
             ePLCF = CHP;                    // um hier einen Brechpunkt zu setzen
-#endif
+#   endif
         return *this;               // und fertig
     }
                                     // naechster Eintrag im naechsten Piece
-
     if( ePLCF == PAP )
     {
         SearchParaEnd( nOldEndCp );
@@ -2391,6 +2523,7 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen );
     eC  = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
 Ret:
+#endif
     return *this;
 }
 
@@ -2818,7 +2951,7 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
                 BYTE nBChar;
                 rStrm >> nBChar;
                 ByteString aTmp;
-                BYTE nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
+                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
                 if( nWasRead != nBChar )
                     aTmp.ReleaseBufferAccess( nWasRead );
                 pWork = new String( aTmp, eCS );
@@ -2832,7 +2965,7 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
                 if( pExtraArray )
                 {
                     ByteString aTmp;
-                    BYTE nWasRead = rStrm.Read( aTmp.AllocBuffer( nExtraLen ), nExtraLen );
+                    sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nExtraLen ), nExtraLen );
                     if( nWasRead != nExtraLen )
                         aTmp.ReleaseBufferAccess( nWasRead );
                     pWork = new String( aTmp, eCS );
@@ -2851,14 +2984,14 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
             ASSERT( nLen2 == nLen, "Fib lenght and read length are different" );
             nLen2 = nLen;
         }
-        UINT16 nRead = 0;
+        sal_Size nRead = 0;
         for( nLen2 -= 2; nRead < nLen2;  )
         {
             rStrm >> nBChar; ++nRead;
             if( nBChar )
             {
                 ByteString aTmp;
-                BYTE nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
+                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
                 if( nWasRead != nBChar )
                     aTmp.ReleaseBufferAccess( nWasRead );
                 pWork = new String( aTmp, eCS );
@@ -3042,7 +3175,7 @@ BOOL WW8PLCFx_Book::SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion,
         return FALSE;
 
     BOOL bFound = FALSE;
-    long i = 0;
+    USHORT i = 0;
     WW8_CP nStartAkt, nEndAkt;
     do{
         void* p;
@@ -3109,13 +3242,16 @@ long WW8PLCFx_Book::GetHandle() const
 // dadurch kein AErger zu erwarten ist.
 void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 {
+    //Store old end position for supercool new property finder that uses
+    //cp instead of fc's as nature intended
+    rDesc.nOrigEndPos = rDesc.nEndPos;
+
     if ( (&rDesc == pPap) && rDesc.bRealLineEnd )
     {
         if ( pPap->nEndPos != LONG_MAX )    // Para adjust
         {
             nLineEnd = pPap->nEndPos;       // nLineEnd zeigt *hinter* das <CR>
             pPap->nEndPos--;                // Absatzende um 1 Zeichen verkuerzen
-
             if( pChp->nEndPos == nLineEnd ) // gibt es bereits ein CharAttr-Ende,
                                             // das auf das jetzige Absatzende zeigt ?
                 pChp->nEndPos--;            // ... dann auch um 1 Zeichen verkuerzen
@@ -3125,8 +3261,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
                 pSep->nEndPos--;            // ... dann auch um 1 Zeichen verkuerzen
         }
     }
-    else
-    if(    (&rDesc == pChp)
+    else if(       (&rDesc == pChp)
         || (&rDesc == pSep) )
     {                                       // Char Adjust oder Sep Adjust
         if(     (rDesc.nEndPos == nLineEnd) // Wenn Ende Char-Attr == Absatzende ...
@@ -3152,6 +3287,7 @@ void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
 {
     rDesc.pPLCFx->GetSprms( &rDesc );
 
+
     ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
@@ -3174,7 +3310,6 @@ void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
             "oh oh, so much for the subdocument piece theory");
         rDesc.nEndPos   -= rDesc.nCpOfs;
     }
-
     rDesc.bFirstSprm = TRUE;
     AdjustEnds( rDesc );
 }
@@ -3242,11 +3377,15 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         pEdn = &aD[2];
         pFtn = &aD[3];
         pAnd = &aD[4];
-        pChp = &aD[5];
-        pPap = &aD[6];
-        pSep = &aD[7];
-        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[8] : 0;
-        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[9] : 0;
+
+        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
+        //pPcdA index == pPcd index + 1
+        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
+
+        pChp = &aD[7];
+        pPap = &aD[8];
+        pSep = &aD[9];
+
         pSep->pPLCFx = pBase->pSepPLCF;
         pFtn->pPLCFx = pBase->pFtnPLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
@@ -3260,11 +3399,15 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         nPLCF = 7;
         pFld = &aD[0];
         pBkm = ( pBase->pBook ) ? &aD[1] : 0;
-        pChp = &aD[2];
-        pPap = &aD[3];
-        pSep = &aD[4]; // Dummy
-        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
-        pPcdA= ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
+
+        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[2] : 0;
+        //pPcdA index == pPcd index + 1
+        pPcdA= ( pBase->pPLCFx_PCDAttrs ) ? &aD[3] : 0;
+
+        pChp = &aD[4];
+        pPap = &aD[5];
+        pSep = &aD[6]; // Dummy
+
         pAnd = pFtn = pEdn = 0;     // unbenutzt bei SpezText
     }
 
@@ -3354,20 +3497,40 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         p->nCp2OrIdx = 0;
         p->bFirstSprm = FALSE;
         p->pIdStk = 0;
-        p->nStartPos = p->nEndPos = LONG_MAX;
+
+        if ((p == pChp) || (p == pPap))
+            p->nStartPos = p->nEndPos = nStartCp;
+        else
+            p->nStartPos = p->nEndPos = LONG_MAX;
     }
+
+
 
     // initialisieren der Member-Vars High-Level
     for( i=0; i<nPLCF; i++){
         register WW8PLCFxDesc* p = &aD[i];
 
         if( !p->pPLCFx )
+        {
+            p->nStartPos = p->nEndPos = LONG_MAX;
             continue;
+        }
 
         if( p->pPLCFx->IsSprm() )
         {
             p->pIdStk = new UShortStk;  // Vorsicht: nEndPos muss bereits
-            GetNewSprms( *p );          // bei allen PLCFen initialisiert sein
+            if ((p == pChp) || (p == pPap))
+            {
+                WW8_CP nTemp = p->nEndPos+p->nCpOfs;
+                p->pMemPos = 0;
+                p->nStartPos = nTemp;
+                if (!(*p->pPLCFx).SeekPos(p->nStartPos))
+                    p->nEndPos = p->nStartPos = LONG_MAX;
+                else
+                    GetNewSprms( *p );
+            }
+            else
+                GetNewSprms( *p );          // bei allen PLCFen initialisiert sein
         }
         else
         {
@@ -3399,59 +3562,29 @@ short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
     for( i=0; i<(short)nPLCF; i++)
     {
         pD = &aD[i];
-        if(     ( pD->nEndPos    < next     )
-            &&  ( pD->nStartPos == LONG_MAX ) )
-        {   // sonst ist Anfang = Ende
-            next = pD->nEndPos;
-            nextIdx = i;
-            bStart = FALSE;
+        if (pD != pPcdA)
+        {
+            if(     ( pD->nEndPos    < next     )
+                &&  ( pD->nStartPos == LONG_MAX ) )
+            {   // sonst ist Anfang = Ende
+                next = pD->nEndPos;
+                nextIdx = i;
+                bStart = FALSE;
+            }
         }
     }
     for( i=(short)nPLCF-1; i>=0; i--)
     {
         pD = &aD[i];
-#ifdef USE_6AM_CHECKIN
-        bIgnore = FALSE;
-        if( pD->nStartPos < next )
+        if (pD != pPcdA)
         {
-            // StartPos of Attribute is inside a range of CPs to be ignored?
-            if(    pD->pMemPos
-                && pNoAttrScan
-                && *pNoAttrScan
-                && pD->nStartPos == nLastWhereIdxCp )
-            {
-                // Check if the EndPos of this Attribute is BEHIND the scope
-                // of CPs to be ignored: if so  shift the StartPos accordingly!
-                ULONG nOldIdx = pD->pPLCFx->GetIdx();
-                pD->pPLCFx->SetIdx( nOldIdx+1 );
-
-                const long nNASEnd = pD->nStartPos + *pNoAttrScan;
-
-                if( nNASEnd < pD->pPLCFx->Where() )
-                {
-                    pD->nStartPos = nNASEnd;
-                    bIgnore = TRUE;
-                }
-
-                pD->pPLCFx->SetIdx( nOldIdx );
-            }
-
-            if( !bIgnore )
+            if( pD->nStartPos < next )
             {
                 next = pD->nStartPos;
                 nextIdx = i;
                 bStart = TRUE;
             }
         }
-        nLastWhereIdxCp = next;
-#else
-        if( pD->nStartPos < next )
-        {
-            next = pD->nStartPos;
-            nextIdx = i;
-            bStart = TRUE;
-        }
-#endif
     }
     if( pPos )
         *pPos = next;
@@ -3610,7 +3743,11 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes )
     else if( p == pBkm )
         pRes->nSprmId = 259;
     else if( p == pPcd )
-        pRes->nSprmId = 260;
+    {
+        //We slave the piece table attributes to the piece table, the piece
+        //table attribute iterator contains the sprms for this piece.
+        GetSprmStart( nIdx+1, pRes );
+    }
     else if( p == pAnd )
         pRes->nSprmId = 261;
     else
@@ -3619,17 +3756,19 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes )
 
 void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes )
 {
+    pRes->nMemLen = -1;     // Ende-Kennzeichen
 
     // Pruefen !!!
-
     if( &aD[nIdx] == pBkm )
         pRes->nSprmId = 259;
     else if( &aD[nIdx] == pPcd )
-        pRes->nSprmId = 260;
+    {
+        //We slave the piece table attributes to the piece table, the piece
+        //table attribute iterator contains the sprms for this piece.
+        GetSprmEnd( nIdx+1, pRes );
+    }
     else
         pRes->nSprmId = 0;
-
-    pRes->nMemLen = -1;     // Ende-Kennzeichen
 }
 
 
@@ -3673,10 +3812,24 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
         if( p->pIdStk->Count() )
             p->pIdStk->Pop();
         if( !p->pIdStk->Count() )
-        {                       // Kein weiterer Sprm auf dieser Pos ?
-            (*p->pPLCFx)++;     // naechste Gruppe von Sprms
-            p->pMemPos = 0;     // !!!
-            GetNewSprms( *p );
+        {
+            if ( (p == pChp) || (p == pPap) )
+            {
+                p->pMemPos = 0;
+                p->nStartPos = p->nOrigEndPos+p->nCpOfs;
+
+                //On failed seek we have run out of sprms
+                if (!(*p->pPLCFx).SeekPos(p->nStartPos))
+                    p->nEndPos = LONG_MAX;
+                else
+                    GetNewSprms( *p );
+            }
+            else
+            {
+                (*p->pPLCFx)++;     // next Group of Sprms
+                p->pMemPos = 0;     // !!!
+                GetNewSprms( *p );
+            }
             ASSERT( p->nStartPos <= p->nEndPos, "Attribut ueber Kreuz" );
         }
     }
@@ -3684,27 +3837,35 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
 
 void WW8PLCFMan::AdvNoSprm( short nIdx, BOOL bStart )
 {
-
-    // Pruefen !!!
-
+    /*
+    For the case of a piece table we slave the piece table attribute iterator
+    to the piece table and access it through that only. They are two seperate
+    structures, but act together as one logical one. The attributes only go
+    to the next entry when the piece changes
+    */
     register WW8PLCFxDesc* p = &aD[nIdx];
 
-    if( p == pPcd ){                        // NoSprm mit Ende
-        if( bStart ){
-            p->nStartPos = LONG_MAX;
-        }else{                              // naechster NoSprm mit Ende
-            (*p->pPLCFx)++;
-            p->pMemPos = 0;                 // MemPos ungueltig
-            GetNewNoSprms( *p );
-//          p->nCp2OrIdx = p->pPLCFx->GetNoSprms( p->nStartPos, p->nEndPos,
-//                                              p->nSprmsLen );
+    if( p == pPcd )
+    {
+        AdvSprm(nIdx+1,bStart);
+        if( bStart )
+            p->nStartPos = aD[nIdx+1].nStartPos;
+        else
+        {
+            if( !aD[nIdx+1].pIdStk->Count() )
+            {
+                (*p->pPLCFx)++;
+                p->pMemPos = 0;
+                GetNewSprms( aD[nIdx+1] );
+                GetNewNoSprms( *p );
+            }
         }
-    }else{                                  // NoSprm ohne Ende
+    }
+    else
+    {                                  // NoSprm ohne Ende
         (*p->pPLCFx)++;
         p->pMemPos = 0;                     // MemPos ungueltig
         GetNewNoSprms( *p );
-//      p->nCp2OrIdx = p->pPLCFx->GetNoSprms( p->nStartPos, p->nEndPos,
-//                                          p->nSprmsLen );
     }
 }
 
@@ -3853,6 +4014,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
+            aD.nStartPos = LONG_MAX;
             pPLCFx->GetSprms( &aD );
             rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
         }
@@ -3867,6 +4029,7 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
+            aD.nStartPos = LONG_MAX;
             pPLCFx->GetSprms( &aD );
             pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
         }
@@ -5447,9 +5610,9 @@ void WW8DopTypography::WriteToMem(BYTE *&pData) const
         Set_UInt16(pData,rgxchLPunct[i]);
 }
 
-ULONG WW8DopTypography::GetConvertedLang() const
+USHORT WW8DopTypography::GetConvertedLang() const
 {
-    ULONG nLang;
+    USHORT nLang;
     //I have assumed peoples republic/taiwan == simplified/traditional
 
     //This isn't a documented issue, so we might have it all wrong,
@@ -5954,7 +6117,7 @@ static SprmInfo aWwSprmTab[] = {
     0xD620, 0, L_VAR, // "sprmTSetBrc" tap.rgtc[].rgbrc;complex (see below);5 bytes;
     0x7621, 4, L_FIX, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex (see below);4 bytes;
     0x5622, 2, L_FIX, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex (see below);word;
-    0x7623, 2, L_FIX, // "sprmTDxaCol" tap.rgdxaCenter;complex (see below);4 bytes;
+    0x7623, 4, L_FIX, // "sprmTDxaCol" tap.rgdxaCenter;complex (see below);4 bytes;
     0x5624, 0, L_VAR, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;complex (see below);word;
     0x5625, 0, L_VAR, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;complex (see below);word;
     0xD626, 0, L_VAR, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex (see below);5 bytes;
@@ -5967,11 +6130,18 @@ static SprmInfo aWwSprmTab[] = {
     0xCA78, 0, L_VAR, // undocumented "sprmCDoubleLine ?" i.e. variable length thing.
     0x6649, 4, L_FIX, // undocumented
     0xF614, 3, L_FIX, // undocumented
+    0xD612, 0, L_VAR, // undocumented
+    0xD613, 0, L_VAR, // undocumented
     0xD61A, 0, L_VAR, // undocumented
     0xD61B, 0, L_VAR, // undocumented
     0xD61C, 0, L_VAR, // undocumented
     0xD61D, 0, L_VAR, // undocumented
     0xD634, 0, L_VAR, // undocumented
+    0xD238, 0, L_VAR, // undocumented sep
+    0xC64E, 0, L_VAR, // undocumented
+    0xC64F, 0, L_VAR, // undocumented
+    0xC650, 0, L_VAR, // undocumented
+    0xC651, 0, L_VAR, // undocumented
     0xF661, 3, L_FIX // undocumented
 };
 
@@ -6034,8 +6204,8 @@ static short WW8GetSprmSize0( USHORT nId, BYTE* pSprm, BYTE nDelta)
     {
     case 23:
     case 0xC615:
-        if( SVBT16ToShort( &pSprm[1 + nDelta] ) != 255 )
-            nL = SVBT16ToShort( &pSprm[1 + nDelta] ) + rSprm.nLen - 1;
+        if( pSprm[1 + nDelta] != 255 )
+            nL = pSprm[1 + nDelta] + rSprm.nLen;
         else
         {
             BYTE nDel = pSprm[2 + nDelta];
@@ -6193,11 +6363,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.12 2001-04-06 12:37:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.13 2001-04-20 14:52:14 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/04/06 12:37:12  cmc
+      ##657## NetBSD bad alignment crash fix
+
       Revision 1.11  2001/03/16 14:34:34  cmc
       ##503##,##508##,##176##,##502##,##516##,##517##,#78761#,#78762#,#84406#,#83168#,#84126# New piecetable handling and new undocumented sprms, disable by defining CRUEL_CUT, fixes quite a bit I hope
 

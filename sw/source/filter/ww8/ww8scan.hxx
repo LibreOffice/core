@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-16 14:34:34 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,12 +219,12 @@ class WW8SprmIter
     // these members will *not* be updated by UpdateMyMembers()
     BYTE    nVersion;
     BYTE    nDelta;
-    short   nRemLen;    // length of remaining SPRMs (including akt. SPRM)
+    long   nRemLen; // length of remaining SPRMs (including akt. SPRM)
 
     void UpdateMyMembers();
 public:
-    WW8SprmIter( BYTE* pSprms_, short nLen_, BYTE nVersion_ );
-    void   SetSprms( BYTE* pSprms_, short nLen_ );
+    WW8SprmIter( BYTE* pSprms_, long nLen_, BYTE nVersion_ );
+    void   SetSprms( BYTE* pSprms_, long nLen_ );
     BYTE*  operator ++( int );
     BYTE*  GetSprms()     const { return ( pSprms && (0 < nRemLen) )
                                 ? pSprms
@@ -508,6 +508,7 @@ class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
 {
     const WW8ScannerBase& rSBase;
     WW8PLCFx_PCD* pPcd;
+    WW8PLCFpcd_Iter *pPieceIter;
     WW8_CP nAttrStart, nAttrEnd;
     BOOL bLineEnd : 1;
     BOOL bComplex : 1;
@@ -663,7 +664,7 @@ struct WW8PLCFManResult
     BYTE nFlags;        // Absatz- oder Section-Anfang
 };
 
-#define MAN_ANZ_PLCF 12
+#define MAN_ANZ_PLCF 10
 
 #define MAN_MASK_NEW_PAP 1      // neue Zeile
 #define MAN_MASK_NEW_SEP 2      // neue Section
@@ -690,8 +691,21 @@ struct WW8PLCFxDesc
     WW8PLCFx* pPLCFx;
     UShortStk* pIdStk;// Speicher fuer Attr-Id fuer Attr-Ende(n)
     BYTE* pMemPos;      // wo liegen die Sprm(s)
+
     long nStartPos;
     long nEndPos;
+
+    long nOrigEndPos;   // The ending character position of a paragraph is
+                        // always one before the end reported in the FKP,
+                        // also a character run that ends on the same location
+                        // as the paragraph mark is adjusted to end just before
+                        // the paragraph mark so as to handle their close
+                        // first. The value being used to determing where the
+                        // properties end is in nEndPos, but the original
+                        // unadjusted end character position is important as
+                        // it can be used as the beginning cp of the next set
+                        // of properties
+
     long nCp2OrIdx;     // wo liegen die NoSprm(s)
     long nSprmsLen;     // wie viele Bytes fuer weitere Sprms / Laenge Fussnote
     long nCpOfs;        // fuer Offset Header .. Footnote
@@ -699,6 +713,10 @@ struct WW8PLCFxDesc
     BOOL bRealLineEnd;  // FALSE bei Pap-Piece-Ende
     void Save(          WW8PLCFxSave1& rSave ) const;
     void Restore( const WW8PLCFxSave1& rSave );
+    //With nStartPos set to LONG_MAX then in the case of a pap or chp
+    //GetSprms will not search for the sprms, but instead take the
+    //existing ones.
+    WW8PLCFxDesc() : nStartPos(LONG_MAX) {}
 };
 
 
@@ -1544,12 +1562,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.8 2001-03-16 14:34:34 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.9 2001-04-20 14:52:14 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/03/16 14:34:34  cmc
+      ##503##,##508##,##176##,##502##,##516##,##517##,#78761#,#78762#,#84406#,#83168#,#84126# New piecetable handling and new undocumented sprms, disable by defining CRUEL_CUT, fixes quite a bit I hope
+
       Revision 1.7  2001/03/14 15:53:12  jp
       remove compiler warning
 
