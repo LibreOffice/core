@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-12 18:32:12 $
+ *  last change: $Author: mba $ $Date: 2001-12-12 18:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ USHORT ScDocShell::GetSaveTab()
 
 BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 {
-    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled();
+    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled() || SvtSecurityOptions().IsConfirmationEnabled();
     if (bWarningEnabled)
         aDocument.SetMacroCallMode(SC_MACROCALL_ASK);   // ask before executing
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-05 12:47:07 $
+ *  last change: $Author: mba $ $Date: 2001-12-12 19:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <sfx2/misccfg.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <svtools/securityoptions.hxx>
 
 #include <vcl/msgbox.hxx>
 
@@ -1477,6 +1478,7 @@ BOOL ScDocument::CheckMacroWarn()
 {
     if ( nMacroCallMode == SC_MACROCALL_ASK )
     {
+/*
         //  Wenn wegen !IsSecure nichts ausgefuehrt wird, braucht auch nicht gefragt zu werden
         if ( !pShell || !pShell->IsSecure() )
             return FALSE;                           // nicht ausfuehren, aber nicht umstellen
@@ -1484,6 +1486,20 @@ BOOL ScDocument::CheckMacroWarn()
         QueryBox aBox( NULL, WinBits(WB_YES_NO | WB_DEF_YES),
                         ScGlobal::GetRscString(STR_MACRO_WARNING) );
         USHORT nRet = aBox.Execute();
+*/
+        if ( !pShell )
+            return FALSE;
+
+        SvtSecurityOptions aOpt;
+        sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
+        sal_Bool bWarn = aOpt.IsWarningEnabled();
+        sal_Bool bSecure = pShell->IsSecure();
+        int nRet = bSecure ? RET_YES : RET_NO;
+        if ( bSecure && bWarn )
+            nRet = QueryBox( NULL, WinBits(WB_YES_NO | WB_DEF_YES), ScGlobal::GetRscString(STR_MACRO_WARNING) ).Execute();
+        else if ( !bSecure && bConfirm )
+            nRet = QueryBox( NULL, WinBits(WB_YES_NO | WB_DEF_NO), ScGlobal::GetRscString(STR_MACRO_WARNING) ).Execute();
+
         if ( nRet == RET_YES )
             nMacroCallMode = SC_MACROCALL_ALLOWED;
         else
