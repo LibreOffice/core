@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:01:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ ToolBox RID_TBX_FORMULA
             Text[ hebrew ] = "‮נוסחה‬";
             Text[ hindi ] = "सूत्र";
             Text[ slovak ] = "Vzorec";
+            Text[ hungarian ] = "Képlet";
+            Text[ slovenian ] = "Formula";
         };
         ToolBoxItem
         {
@@ -147,6 +149,8 @@ ToolBox RID_TBX_FORMULA
             Text[ hebrew ] = "‮ביטול‬";
             Text[ hindi ] = "रद्द करो";
             Text[ slovak ] = "Zrušiť";
+            Text[ hungarian ] = "Mégsem";
+            Text[ slovenian ] = "Prekliči";
         };
         ToolBoxItem
         {
@@ -184,6 +188,8 @@ ToolBox RID_TBX_FORMULA
             Text[ hebrew ] = "‮יישום‬";
             Text[ hindi ] = "लागू करो";
             Text[ slovak ] = "Použiť";
+            Text[ hungarian ] = "Alkalmaz";
+            Text[ slovenian ] = "Uporabi";
         };
     };
     Edit ED_POS
@@ -240,6 +246,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "‮סכום‬";
             Text[ hindi ] = "जोड़";
             Text[ slovak ] = "Celkom";
+            Text[ hungarian ] = "Összeg";
+            Text[ slovenian ] = "Vsota";
         };
         MenuItem
         {
@@ -274,6 +282,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "Run~den";
             Text[ hindi ] = "Round";
             Text[ slovak ] = "Zaokrúhlenie";
+            Text[ hungarian ] = "Kerekítés";
+            Text[ slovenian ] = "Zaokroži";
         };
         MenuItem
         {
@@ -309,6 +319,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "~Prozent";
             Text[ hindi ] = "प्रतिशत";
             Text[ slovak ] = "Percento";
+            Text[ hungarian ] = "Százalék";
+            Text[ slovenian ] = "Odstotek";
         };
         MenuItem
         {
@@ -345,6 +357,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "~Wurzel";
             Text[ hindi ] = "वर्ग मूल";
             Text[ slovak ] = "Druhá odmocnina";
+            Text[ hungarian ] = "Négyzetgyök";
+            Text[ slovenian ] = "Kvadratni koren";
         };
         MenuItem
         {
@@ -360,7 +374,7 @@ Menu MN_CALC_POPUP
             Text [ portuguese_brazilian ] = "Pot�ncia" ;
             Text [ portuguese ] = "Elevar a po~t�ncia" ;
             Text [ finnish ] = "Potenssim��ritys" ;
-            Text [ danish ] = "Opl�ft i potens" ;
+            Text [ danish ] = "Potens" ;
             Text [ french ] = "Pu~issance" ;
             Text [ swedish ] = "~Upph�ja" ;
             Text[ chinese_simplified ] = "乘幂";
@@ -380,6 +394,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "Poten~ziere";
             Text[ hindi ] = "घात";
             Text[ slovak ] = "Exponent";
+            Text[ hungarian ] = "Hatvány";
+            Text[ slovenian ] = "Potenca";
         };
         MenuItem
         {
@@ -436,6 +452,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Listentrenner";
                         Text[ hindi ] = "सूची अलगानेवाला";
                         Text[ slovak ] = "Oddeľovač v zozname";
+                        Text[ hungarian ] = "Listaelválasztó";
+                        Text[ slovenian ] = "Ločilo v seznamu";
                     };
                     MenuItem
                     {
@@ -471,6 +489,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Gleich";
                         Text[ hindi ] = "समान";
                         Text[ slovak ] = "Rovné";
+                        Text[ hungarian ] = "Egyenlő";
+                        Text[ slovenian ] = "Enako";
                     };
                     MenuItem
                     {
@@ -506,6 +526,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Nicht Gleich";
                         Text[ hindi ] = "समान नहीं";
                         Text[ slovak ] = "Nie je rovné";
+                        Text[ hungarian ] = "Nem egyenlő";
+                        Text[ slovenian ] = "Ni enako";
                     };
                     MenuItem
                     {
@@ -541,6 +563,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Kleiner Gleich";
                         Text[ hindi ] = "कम अथवा समान";
                         Text[ slovak ] = "je menšie alebo rovné";
+                        Text[ hungarian ] = "Kisebb vagy egyenlő";
+                        Text[ slovenian ] = "Manjše ali enako";
                     };
                     MenuItem
                     {
@@ -577,6 +601,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Gr~ößer Gleich";
                         Text[ hindi ] = "अधिक अथवा समान";
                         Text[ slovak ] = "väčší alebo rovnaký";
+                        Text[ hungarian ] = "Nagyobb vagy egyenlő";
+                        Text[ slovenian ] = "Večje ali enako";
                     };
                     MenuItem
                     {
@@ -612,6 +638,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Kle~iner";
                         Text[ hindi ] = "कम";
                         Text[ slovak ] = "Menej";
+                        Text[ hungarian ] = "Kevesebb";
+                        Text[ slovenian ] = "Manjše";
                     };
                     MenuItem
                     {
@@ -648,6 +676,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "G~rößer";
                         Text[ hindi ] = "अधिक";
                         Text[ slovak ] = "Väčší";
+                        Text[ hungarian ] = "Nagyobb";
+                        Text[ slovenian ] = "Večje";
                     };
                     MenuItem
                     {
@@ -687,6 +717,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Logisches ~Oder";
                         Text[ hindi ] = "बूलियन ओर";
                         Text[ slovak ] = "Booleovské Or";
+                        Text[ hungarian ] = "Logikai VAGY";
+                        Text[ slovenian ] = "Logični ali";
                     };
                     MenuItem
                     {
@@ -722,6 +754,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Logisches E~xklusives Oder";
                         Text[ hindi ] = "बूलियन एक्सोर";
                         Text[ slovak ] = "Booleovské Xor";
+                        Text[ hungarian ] = "Logikai kizáró VAGY";
+                        Text[ slovenian ] = "Logični ekskluzivni ali";
                     };
                     MenuItem
                     {
@@ -757,6 +791,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Logisches ~Und";
                         Text[ hindi ] = "बूलियन ऐन्ड";
                         Text[ slovak ] = "Booleovské And";
+                        Text[ hungarian ] = "Logikai ÉS";
+                        Text[ slovenian ] = "Logični in";
                     };
                     MenuItem
                     {
@@ -792,6 +828,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Logi~sches Nicht";
                         Text[ hindi ] = "बूलियन नोट्";
                         Text[ slovak ] = "Booleovské Not";
+                        Text[ hungarian ] = "Logikai NEM";
+                        Text[ slovenian ] = "Logični ne";
                     };
                 };
             };
@@ -812,6 +850,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "~Operatoren";
             Text[ hindi ] = "प्रवर्तकें";
             Text[ slovak ] = "Operátory";
+            Text[ hungarian ] = "Operátorok";
+            Text[ slovenian ] = "Operatorji";
         };
         MenuItem
         {
@@ -848,7 +888,7 @@ Menu MN_CALC_POPUP
                         Text [ portuguese_brazilian ] = "M�dia" ;
                         Text [ portuguese ] = "~M�dia" ;
                         Text [ finnish ] = "Keskiarvo" ;
-                        Text [ danish ] = "Middel" ;
+                        Text [ danish ] = "Middelv�rdi" ;
                         Text [ french ] = "~Moyenne" ;
                         Text [ swedish ] = "M~edelv�rde" ;
                         Text[ chinese_simplified ] = "平均值";
@@ -868,6 +908,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Mittelwert";
                         Text[ hindi ] = "माध्य";
                         Text[ slovak ] = "stredný";
+                        Text[ hungarian ] = "Közép";
+                        Text[ slovenian ] = "Srednja vrednost";
                     };
                     MenuItem
                     {
@@ -883,7 +925,7 @@ Menu MN_CALC_POPUP
                         Text [ portuguese_brazilian ] = "Valor m�nimo" ;
                         Text [ portuguese ] = "Valor m�~nimo" ;
                         Text [ finnish ] = "Minimi" ;
-                        Text [ danish ] = "Minimumv�rdi" ;
+                        Text [ danish ] = "Minimum" ;
                         Text [ french ] = "~Minimum" ;
                         Text [ swedish ] = "M~inimum" ;
                         Text[ chinese_simplified ] = "最小值";
@@ -903,6 +945,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Mi~nimalwert";
                         Text[ hindi ] = "न्यूनतम";
                         Text[ slovak ] = "Minimum";
+                        Text[ hungarian ] = "Minimum";
+                        Text[ slovenian ] = "Najmanj";
                     };
                     MenuItem
                     {
@@ -918,7 +962,7 @@ Menu MN_CALC_POPUP
                         Text [ portuguese_brazilian ] = "Valor m�ximo" ;
                         Text [ portuguese ] = "Valor m�~ximo" ;
                         Text [ finnish ] = "Maksimi" ;
-                        Text [ danish ] = "Maksimumv�rdi" ;
+                        Text [ danish ] = "Maksimum" ;
                         Text [ french ] = "Ma~ximum" ;
                         Text [ swedish ] = "M~aximum" ;
                         Text[ chinese_simplified ] = "最大值";
@@ -938,6 +982,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Ma~ximalwert";
                         Text[ hindi ] = "अधिकतम";
                         Text[ slovak ] = "Maximum";
+                        Text[ hungarian ] = "Maximum";
+                        Text[ slovenian ] = "Največ";
                     };
                 };
             };
@@ -958,6 +1004,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "S~tatistische Funktionen";
             Text[ hindi ] = "अंकशास्त्र फंक्शन्स";
             Text[ slovak ] = "Štatistické funkcie";
+            Text[ hungarian ] = "Statisztikai függvények";
+            Text[ slovenian ] = "Statistične funkcije";
         };
         MenuItem
         {
@@ -1013,6 +1061,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Sinus";
                         Text[ hindi ] = "ज्या";
                         Text[ slovak ] = "Sínus";
+                        Text[ hungarian ] = "Szinusz";
+                        Text[ slovenian ] = "Sinus";
                     };
                     MenuItem
                     {
@@ -1047,6 +1097,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Cosinus";
                         Text[ hindi ] = "कोटिज्या";
                         Text[ slovak ] = "Kosínus";
+                        Text[ hungarian ] = "Koszinusz";
+                        Text[ slovenian ] = "Kosinus";
                     };
                     MenuItem
                     {
@@ -1081,6 +1133,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Tangens";
                         Text[ hindi ] = "टान्जेन्ट्";
                         Text[ slovak ] = "Tangenta";
+                        Text[ hungarian ] = "Tangens";
+                        Text[ slovenian ] = "Tangens";
                     };
                     MenuItem
                     {
@@ -1115,6 +1169,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "~Arcussinus";
                         Text[ hindi ] = "आर्कसैन";
                         Text[ slovak ] = "Arkussínus";
+                        Text[ hungarian ] = "Arkusz szinusz";
+                        Text[ slovenian ] = "Arkus sinus";
                     };
                     MenuItem
                     {
@@ -1149,6 +1205,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "A~rcuscosinus";
                         Text[ hindi ] = "आर्ककोसैन्";
                         Text[ slovak ] = "Arkuskosínus";
+                        Text[ hungarian ] = "Arkusz koszinusz";
+                        Text[ slovenian ] = "Arkus kosinus";
                     };
                     MenuItem
                     {
@@ -1183,6 +1241,8 @@ Menu MN_CALC_POPUP
                         Text[ hebrew ] = "Arcustan~gens";
                         Text[ hindi ] = "आर्कटान्जेन्ट्";
                         Text[ slovak ] = "Arkustangens";
+                        Text[ hungarian ] = "Arkusz tangens";
+                        Text[ slovenian ] = "Arkus tangens";
                     };
                 };
             };
@@ -1204,6 +1264,8 @@ Menu MN_CALC_POPUP
             Text[ hebrew ] = "~Funktionen";
             Text[ hindi ] = "फंक्शन्स";
             Text[ slovak ] = "Funkcie";
+            Text[ hungarian ] = "Függvények";
+            Text[ slovenian ] = "Funkcije";
         };
     };
 };
@@ -1240,6 +1302,8 @@ String STR_FORMULA
     Text[ hebrew ] = "Textformel";
     Text[ hindi ] = "टेक्स्ट् सूत्र";
     Text[ slovak ] = "Textový vzorec";
+    Text[ hungarian ] = "Szövegformula";
+    Text[ slovenian ] = "Besedilna formula";
 };
 #define TB_INPUT  \
     ToolBoxItem\
@@ -1277,6 +1341,8 @@ String STR_FORMULA
         Text[ hebrew ] = "‮נוסחה‬";\
         Text[ hindi ] = "सूत्र";\
         Text[ slovak ] = "Vzorec";\
+        Text[ hungarian ] = "Képlet";\
+        Text[ slovenian ] = "Formula";\
     };\
     ToolBoxItem\
     {\
@@ -1313,6 +1379,8 @@ String STR_FORMULA
         Text[ hebrew ] = "‮ביטול‬";\
         Text[ hindi ] = "रद्द करो";\
         Text[ slovak ] = "Zrušiť";\
+        Text[ hungarian ] = "Mégsem";\
+        Text[ slovenian ] = "Prekliči";\
     };\
     ToolBoxItem\
     {\
@@ -1350,7 +1418,10 @@ String STR_FORMULA
         Text[ hebrew ] = "‮יישום‬";\
         Text[ hindi ] = "लागू करो";\
         Text[ slovak ] = "Použiť";\
+        Text[ hungarian ] = "Alkalmaz";\
+        Text[ slovenian ] = "Uporabi";\
     };
+
 
 
 
