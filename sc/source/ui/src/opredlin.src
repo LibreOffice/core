@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:56:33 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "‮שינויים‬";
         Text[ hindi ] = "परिव~र्तनें";
         Text[ slovak ] = "Sledovanie z~mien";
+        Text[ hungarian ] = "Vált~oztatások";
+        Text[ slovenian ] = "Spre~membe";
     };
     FixedText FT_REMOVE
     {
@@ -111,7 +113,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "~Deletions" ;
         Text [ portuguese_brazilian ] = "~Exclus�es" ;
         Text [ swedish ] = "~Raderingar" ;
-        Text [ danish ] = "Sletninger" ;
+        Text [ danish ] = "~Sletninger" ;
         Text [ italian ] = "~Elimina" ;
         Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "~Suppressions" ;
@@ -133,6 +135,8 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "~Löschungen";
         Text[ hindi ] = "~मिटाना";
         Text[ slovak ] = "Zmazané ~dáta";
+        Text[ hungarian ] = "~Törlések";
+        Text[ slovenian ] = "~Izbrisi";
     };
     FixedText FT_INSERT
     {
@@ -144,7 +148,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "~Insertions" ;
         Text [ portuguese_brazilian ] = "~Inser��es" ;
         Text [ swedish ] = "~Infogningar" ;
-        Text [ danish ] = "Inds�ttelser" ;
+        Text [ danish ] = "~Inds�ttelser" ;
         Text [ italian ] = "Inserisci" ;
         Text [ spanish ] = "~Inserciones" ;
         Text [ french ] = "~Insertions" ;
@@ -166,6 +170,8 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "~Einfügungen";
         Text[ hindi ] = "~जोड़ना";
         Text[ slovak ] = "V~ložené dáta";
+        Text[ hungarian ] = "~Beszúrások";
+        Text[ slovenian ] = "~Vstavki";
     };
     FixedText FT_MOVE
     {
@@ -177,7 +183,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "~Moved entries" ;
         Text [ portuguese_brazilian ] = "~Entradas movidas" ;
         Text [ swedish ] = "~F�rskjutningar" ;
-        Text [ danish ] = "Flytninger" ;
+        Text [ danish ] = "~Flytninger" ;
         Text [ italian ] = "~Sposta" ;
         Text [ spanish ] = "~Desplazamientos" ;
         Text [ french ] = "D�placements" ;
@@ -199,6 +205,8 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "~Verschiebungen";
         Text[ hindi ] = "~स्थान परिवर्तन किया हुआ प्रविष्टियाँ";
         Text[ slovak ] = "Presu~nuté položky";
+        Text[ hungarian ] = "Át~helyezett bejegyzések";
+        Text[ slovenian ] = "~Prestavljeni vnosi";
     };
     FixedLine GB_COLORCHGS
     {
@@ -232,6 +240,8 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "Farbgebung für Änderungen";
         Text[ hindi ] = "परिवर्तनों केलिए रंग";
         Text[ slovak ] = "Farba zmenených položiek";
+        Text[ hungarian ] = "A változtatások színei";
+        Text[ slovenian ] = "Barve za spremembe";
     };
     ListBox CLB_CONTENT
     {
@@ -269,7 +279,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "By author" ;
         Text [ portuguese_brazilian ] = "Pelo autor" ;
         Text [ swedish ] = "Efter f�rfattare" ;
-        Text [ danish ] = "Efter forfatter" ;
+        Text [ danish ] = "Af forfatter" ;
         Text [ italian ] = "per autore" ;
         Text [ spanish ] = "Por autor" ;
         Text [ french ] = "Par auteur" ;
@@ -291,8 +301,12 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ hebrew ] = "Nach Autor";
         Text[ hindi ] = "लेखक से";
         Text[ slovak ] = "Autor";
+        Text[ hungarian ] = "Szerző szerint";
+        Text[ slovenian ] = "Glede na avtorja";
     };
 };
+
+
 
 
 
