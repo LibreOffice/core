@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:43:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,17 +122,17 @@ TabPage RID_SVXPAGE_BORDER
         Text [ finnish ] = "Reunaviiva" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "Cadre" ;
-        Text [ swedish ] = "Ram" ;
+        Text [ swedish ] = "Linjeplacering" ;
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Marco" ;
         Text [ english_us ] = "Frame" ;
-        Text[ chinese_simplified ] = "¿ò";
-        Text[ russian ] = "Ğàìêà";
-        Text[ polish ] = "Ramka";
-        Text[ japanese ] = "˜g";
+        Text[ chinese_simplified ] = "ÏßÌõÅÅĞò";
+        Text[ russian ] = "Ğàñïîëîæåíèå ëèíèé";
+        Text[ polish ] = "Rozmieszczenie linii";
+        Text[ japanese ] = "ü‚ğˆø‚­ˆÊ’u";
         Text[ chinese_traditional ] = "½u±ø±Æ§Ç";
         Text[ arabic ] = "ßÇÏÑ";
-        Text[ greek ] = "Ğëáßóéï";
+        Text[ greek ] = "ÄéÜôáîç ãñáììşí";
         Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ turkish ] = "Çerçeve";
         Text[ language_user1 ] = " ";
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Left";
         Text[ japanese ] = "¶(~L)";
         Text[ korean ] = "¿ŞÂÊ(~L)";
-        Text[ chinese_simplified ] = "×ó(~L)";
+        Text[ chinese_simplified ] = "×ó";
         Text[ chinese_traditional ] = "¥ª";
         Text[ arabic ] = "íÓÇÑ";
         Text[ turkish ] = "~Sol";
@@ -282,7 +282,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Top";
         Text[ japanese ] = "ã(~T)";
         Text[ korean ] = "À§(~T)";
-        Text[ chinese_simplified ] = "ÉÏ(~T)";
+        Text[ chinese_simplified ] = "ÉÏ";
         Text[ chinese_traditional ] = "¤W";
         Text[ arabic ] = "ÃÚáì";
         Text[ turkish ] = "~Üst";
@@ -312,7 +312,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ english_us ] = "~Bottom";
         Text[ portuguese ] = "Em ~baixo";
         Text[ russian ] = "Ñíèçó";
-        Text[ greek ] = "ÊÜôù";
+        Text[ greek ] = "ÊÜô~ù";
         Text[ dutch ] = "Be~neden";
         Text[ french ] = "En ~bas";
         Text[ spanish ] = "~Abajo";
@@ -323,7 +323,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Bottom";
         Text[ japanese ] = "‰º(~B)";
         Text[ korean ] = "¾Æ·¡(~B)";
-        Text[ chinese_simplified ] = "ÏÂ(~B)";
+        Text[ chinese_simplified ] = "ÏÂ";
         Text[ chinese_traditional ] = "¤U";
         Text[ arabic ] = "ÃÓİá";
         Text[ turkish ] = "Al~t";
@@ -352,16 +352,16 @@ TabPage RID_SVXPAGE_BORDER
         Text[ english_us ] = "Synchronize";
         Text[ portuguese ] = "~Sincronizar";
         Text[ russian ] = "Ñèíõğîíèçèğîâàòü";
-        Text[ greek ] = "Óõã÷ñïíéóìüò";
+        Text[ greek ] = "Ó~õã÷ñïíéóìüò";
         Text[ dutch ] = "S~ynchroniseren";
         Text[ french ] = "~Synchroniser";
         Text[ spanish ] = "~Sincronizar";
         Text[ italian ] = "~Sicronizza";
         Text[ danish ] = "Synkroniser";
-        Text[ swedish ] = "Synkronisera";
+        Text[ swedish ] = "S~ynkronisera";
         Text[ polish ] = "Synchronizuj";
         Text[ portuguese_brazilian ] = "Synchronize";
-        Text[ japanese ] = "¼İ¸Û";
+        Text[ japanese ] = "”ä—¦‚ğ•Û‚Â";
         Text[ korean ] = "µ¿±âÈ­";
         Text[ chinese_simplified ] = "Í¬²½»¯";
         Text[ chinese_traditional ] = "¦P¨B¤Æ";
@@ -377,21 +377,21 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "Distance to Content" ;
         Text[ english_us ] = "Settings";
         Text[ portuguese ] = "Predefinições";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ greek ] = "Ñõèìßóåéò";
+        Text[ russian ] = "Ğàññòîÿíèå îò ñîäåğæèìîãî";
+        Text[ greek ] = "Áğüóôáóç áğü ğåñéå÷üìåíá";
         Text[ dutch ] = "Instellingen";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Configuración";
         Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Indstillinger";
-        Text[ swedish ] = "Inställningar";
-        Text[ polish ] = "Ustawienia";
+        Text[ swedish ] = "Avstånd till innehåll";
+        Text[ polish ] = "Odstêp od zawartoœci";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "İ’è";
+        Text[ japanese ] = "“à—e‚Ü‚Å‚ÌŠÔŠu";
         Text[ korean ] = "¼³Á¤";
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "ÖÁÄÚÈİµÄ¾àÀë";
         Text[ chinese_traditional ] = "¦Ü¤º®eªº¶ZÂ÷";
-        Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
+        Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáãÍÊæíÇÊ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
     };
@@ -524,17 +524,17 @@ TabPage RID_SVXPAGE_BORDER
         Text [ finnish ] = "Varjo" ;
         Text [ danish ] = "Skygge" ;
         Text [ french ] = "Ombre" ;
-        Text [ swedish ] = "Skuggad" ;
+        Text [ swedish ] = "Skugga" ;
         Text [ dutch ] = "Schaduw" ;
         Text [ spanish ] = "Sombra" ;
         Text [ english_us ] = "Shadow style" ;
         Text[ chinese_simplified ] = "ÒõÓ°";
         Text[ russian ] = "Òåíü";
         Text[ polish ] = "Cieñ";
-        Text[ japanese ] = "‰e";
+        Text[ japanese ] = "‰e•t‚«";
         Text[ chinese_traditional ] = "³±¼v";
         Text[ arabic ] = "ÇáÙá";
-        Text[ greek ] = "Óêéİò";
+        Text[ greek ] = "ÓêéÜ";
         Text[ korean ] = "À½¿µ";
         Text[ turkish ] = "Gölge";
         Text[ language_user1 ] = " ";
