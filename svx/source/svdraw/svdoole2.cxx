@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-11 09:30:44 $
+ *  last change: $Author: dl $ $Date: 2001-04-12 10:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ SdrOle2Obj::~SdrOle2Obj()
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
 #endif // !SVX_LIGHT
 
-    ImpAbmeldung();
+    Disconnect();
 
 #ifndef SVX_LIGHT
     if (pModel!=NULL) {
@@ -303,20 +303,22 @@ FASTBOOL SdrOle2Obj::IsEmpty() const
     return !ppObjRef->Is();
 }
 
-void SdrOle2Obj::ImpAnmeldung()
+void SdrOle2Obj::Connect()
 {
 #ifndef SVX_LIGHT
-    GetObjRef();    // try to load inplace object
     if(pModel && aName.Len())
     {
         SvPersist* pPers=pModel->GetPersist();
-        if (pPers!=NULL && ppObjRef->Is())
+        if (pPers!=NULL)
         {
             SvInfoObjectRef xIObj;
             SvInfoObject* pInfo = pPers->Find(aName);
 
             if (!pInfo)
             {
+                if ( !ppObjRef->Is() )
+                    GetObjRef();    // try to load inplace object
+
                 xIObj = pInfo = new SvEmbeddedInfoObject(*ppObjRef,aName);
             }
 
@@ -367,7 +369,7 @@ void SdrOle2Obj::ImpAnmeldung()
 #endif // SVX_LIGHT
 }
 
-void SdrOle2Obj::ImpAbmeldung()
+void SdrOle2Obj::Disconnect()
 {
 #ifndef SVX_LIGHT
     if( !IsEmpty() && aName.Len() )
@@ -410,7 +412,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
     FASTBOOL bChg=pNewModel!=pModel;
 
-    if (bChg) ImpAbmeldung();       // mit dem alten Namen
+    if (bChg) Disconnect();       // mit dem alten Namen
 
 #ifndef SVX_LIGHT
     if (pModel && pNewModel)
@@ -460,7 +462,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 #endif
 
     SdrRectObj::SetModel(pNewModel);
-    if (bChg) ImpAnmeldung();
+    if (bChg) Connect();
 }
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
@@ -468,16 +470,16 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
     FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
     FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
 
-    if (bRemove) ImpAbmeldung();
+    if (bRemove) Disconnect();
 
     SdrRectObj::SetPage(pNewPage);
 
-    if (bInsert) ImpAnmeldung();
+    if (bInsert) Connect();
 }
 
 void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
 {
-    ImpAbmeldung();
+    Disconnect();
     *ppObjRef=rNewObjRef;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
@@ -490,7 +492,7 @@ void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
     }
 #endif // !SVX_LIGHT
 
-    ImpAnmeldung();
+    Connect();
     SetChanged();
     SendRepaintBroadcast();
 }
@@ -502,9 +504,9 @@ FASTBOOL SdrOle2Obj::HasSetName() const
 
 void SdrOle2Obj::SetName(const XubString& rStr)
 {
-    ImpAbmeldung();
+    Disconnect();
     aName=rStr;
-    ImpAnmeldung();
+    Connect();
     SetChanged();
 }
 
@@ -650,7 +652,7 @@ void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 void SdrOle2Obj::operator=(const SdrObject& rObj)
 {
     FASTBOOL bModelOk=pModel!=NULL;
-    if (bModelOk) ImpAbmeldung();
+    if (bModelOk) Disconnect();
     SdrRectObj::operator=(rObj);
     aName    =((SdrOle2Obj&)rObj).aName;
     aProgName=((SdrOle2Obj&)rObj).aProgName;
@@ -700,7 +702,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             }
         }
 #endif
-        ImpAnmeldung();
+        Connect();
     }
 }
 
@@ -946,6 +948,8 @@ BOOL SdrOle2Obj::Unload()
             return FALSE;
         DBG_ASSERT( nRefCount == 2, "Wrong RefCount for unload" );
     }
+    else
+        bUnloaded = TRUE;
 
 #ifndef SVX_LIGHT
 
