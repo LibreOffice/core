@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:48:18 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,11 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
 #ifndef _SVX_HTMLMODE_HXX
-#include <htmlmode.hxx>
+#include "htmlmode.hxx"
 #endif
 
 #define _SVX_PAGE_CXX
@@ -135,6 +138,48 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+
+// configuration helper =======================================================
+
+/** Helper to get a configuration setting.
+    @descr  This is a HACK to get a configuration item directly. Normally the
+    OfaHtmlOptions class from 'offmgr' project would do the job, but we cannot
+    use it here. On the other hand, the OfaHtmlOptions cannot be moved to
+    'svtools', because it uses 'svx' itself...
+    The correct way would be to move OfaHtmlOptions to 'svtools' anyway, and to
+    remove the dependency from 'svx' (a call to the static function
+    SvxTextEncodingBox::GetBestMimeEncoding(), which contains low level
+    operations that can be moved to lower projects, i.e. 'rtl'). Then this
+    class can be removed, and the OfaHtmlOptions can be used instead. */
+class SvxHtmlExportModeConfigItem_Impl : public utl::ConfigItem
+{
+public:
+    explicit                    SvxHtmlExportModeConfigItem_Impl();
+
+    /** Returns the HTML export mode, as read from the configuration. */
+    inline sal_Int32            GetExportMode() const { return mnExpMode; }
+
+    /** Returns true, if the current HTML export mode is set to HTML 3.2. */
+    inline bool                 IsExportModeHTML32() const { return mnExpMode == 0; } // 0 == HTML_CFG_HTML32, see offmgr/htmlcfg.hxx
+
+private:
+    sal_Int32                   mnExpMode;
+};
+
+SvxHtmlExportModeConfigItem_Impl::SvxHtmlExportModeConfigItem_Impl() :
+    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/HTML/Export" ) ) ),
+    mnExpMode( 3 )  // default to 3 == HTML_CFG_NS40, see offmgr/htmlcfg.hxx
+{
+    using com::sun::star::uno::Sequence;
+    using com::sun::star::uno::Any;
+
+    Sequence< rtl::OUString > aPropNames( 1 );
+    aPropNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Browser" ) );
+    Sequence< Any > aPropValues( GetProperties( aPropNames ) );
+    if( aPropValues.getLength() == 1 )
+        aPropValues[ 0 ] >>= mnExpMode;
+}
+
 
 // static ----------------------------------------------------------------
 
@@ -320,16 +365,25 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
+    // #109989# get the HTML export setting from configuration.
+    // !! This is a hack, see comments in SvxHtmlExportModeConfigItem_Impl class above.
+    bool bHTML32 = SvxHtmlExportModeConfigItem_Impl().IsExportModeHTML32();
+
     //  fill text flow listbox with valid entries
     aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
     if( bCTL )
         aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
-    if( bCJK )
-        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
-//    if( ... )
-//        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+    // #109989# do not show vertical directions in Writer/Web
+    if( !bWeb )
+    {
+        if( bCJK )
+            aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
+//        if( ... )
+//            aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+    }
 
-    if( !bWeb && (bCJK || bCTL) &&
+    // #109989# show the text direction box in Writer/Web too, but only, if HTML export mode is not HTML3.2.
+    if( !(bWeb && bHTML32) && (bCJK || bCTL) &&
         SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
         aTextFlowLbl.Show();
