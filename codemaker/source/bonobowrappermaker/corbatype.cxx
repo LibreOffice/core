@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corbatype.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ts $ $Date: 2000-12-11 14:20:04 $
+ *  last change: $Author: ts $ $Date: 2000-12-13 12:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,7 +1504,7 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
                 postBuffer.append("    return _u_ret;\n");
             }
 
-            o << "    ::vos::OGuard guard(m_bridge->getORBLock());\n"
+            o << "    ::osl::MutexGuard guard(m_bridge->getORBLock());\n"
                     << "    CORBA_Environment _ev;\n"
                     << "    CORBA_exception_init (&_ev);\n";
 
