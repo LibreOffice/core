@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 11:09:17 $
+ *  last change: $Author: af $ $Date: 2002-10-18 14:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@
 #include "textattr.hrc"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
+
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 
 static USHORT pRanges[] =
 {
@@ -315,38 +319,47 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
                 SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)
                             ( ( const SdrTextHorzAdjustItem& )rAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
                 RECT_POINT eRP;
-                if( eTVA == SDRTEXTVERTADJUST_TOP )
+
+                // Translate item values into local anchor position.
+                switch (eTVA)
                 {
-                    if( eTHA == SDRTEXTHORZADJUST_LEFT )   eRP = RP_LT;
-                    else if( eTHA == SDRTEXTHORZADJUST_CENTER ) eRP = RP_MT;
-                    else if( eTHA == SDRTEXTHORZADJUST_RIGHT )  eRP = RP_RT;
-                    else if( eTHA == SDRTEXTHORZADJUST_BLOCK )
-                    {
-                        eRP = RP_MT;
-                        aTsbFullWidth.SetState( STATE_CHECK );
-                    }
+                    case SDRTEXTVERTADJUST_TOP:
+                        switch (eTHA)
+                        {
+                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LT; break;
+                            case SDRTEXTHORZADJUST_BLOCK:
+                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MT; break;
+                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RT; break;
+                        }
+                        break;
+                    case SDRTEXTVERTADJUST_BLOCK:
+                    case SDRTEXTVERTADJUST_CENTER:
+                        switch (eTHA)
+                        {
+                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LM; break;
+                            case SDRTEXTHORZADJUST_BLOCK:
+                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MM; break;
+                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RM; break;
+                        }
+                        break;
+                    case SDRTEXTVERTADJUST_BOTTOM:
+                        switch (eTHA)
+                        {
+                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LB; break;
+                            case SDRTEXTHORZADJUST_BLOCK:
+                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MB; break;
+                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RB; break;
+                        }
                 }
-                else if( eTVA == SDRTEXTVERTADJUST_CENTER )
+
+                // See if we have to check the "full width" check button.
+                bool bLeftToRight = IsTextDirectionLeftToRight();
+                if ( (bLeftToRight && (eTHA==SDRTEXTHORZADJUST_BLOCK))
+                    || (!bLeftToRight && (eTVA==SDRTEXTVERTADJUST_BLOCK)))
                 {
-                    if( eTHA == SDRTEXTHORZADJUST_LEFT )   eRP = RP_LM;
-                    else if( eTHA == SDRTEXTHORZADJUST_CENTER ) eRP = RP_MM;
-                    else if( eTHA == SDRTEXTHORZADJUST_RIGHT )  eRP = RP_RM;
-                    else if( eTHA == SDRTEXTHORZADJUST_BLOCK )
-                    {
-                        eRP = RP_MM;
-                        aTsbFullWidth.SetState( STATE_CHECK );
-                    }
-                }
-                else if( eTVA == SDRTEXTVERTADJUST_BOTTOM )
-                {
-                    if( eTHA == SDRTEXTHORZADJUST_LEFT )   eRP = RP_LB;
-                    else if( eTHA == SDRTEXTHORZADJUST_CENTER ) eRP = RP_MB;
-                    else if( eTHA == SDRTEXTHORZADJUST_RIGHT )  eRP = RP_RB;
-                    else if( eTHA == SDRTEXTHORZADJUST_BLOCK )
-                    {
-                        eRP = RP_MB;
-                        aTsbFullWidth.SetState( STATE_CHECK );
-                    }
+                    // Move anchor to valid position.
+                    ClickFullWidthHdl_Impl(NULL);
+                    aTsbFullWidth.SetState( STATE_CHECK );
                 }
 
                 aCtlPosition.SetActualRP( eRP );
@@ -483,7 +496,10 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
     }
     if( aTsbFullWidth.GetState() == STATE_CHECK )
-        eTHA = SDRTEXTHORZADJUST_BLOCK;
+        if (IsTextDirectionLeftToRight())
+            eTHA = SDRTEXTHORZADJUST_BLOCK;
+        else
+            eTVA = SDRTEXTVERTADJUST_BLOCK;
 
     if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SFX_ITEM_DONTCARE )
     {
@@ -572,19 +588,36 @@ USHORT* SvxTextAttrPage::GetRanges()
 |*
 \************************************************************************/
 
+/** Check whether we have to uncheck the "Full width" check box.
+*/
 void SvxTextAttrPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 {
-    switch( eRP )
+    if (aTsbFullWidth.GetState() == STATE_CHECK)
     {
-        case RP_LT:
-        case RP_LM:
-        case RP_LB:
-        case RP_RT:
-        case RP_RM:
-        case RP_RB:
-            if( aTsbFullWidth.GetState() == STATE_CHECK )
-                aTsbFullWidth.SetState( STATE_NOCHECK );
-        break;
+        // Depending on write direction and currently checked anchor we have
+        // to uncheck the "full width" button.
+        if (IsTextDirectionLeftToRight())
+            switch( eRP )
+            {
+                case RP_LT:
+                case RP_LM:
+                case RP_LB:
+                case RP_RT:
+                case RP_RM:
+                case RP_RB:
+                    aTsbFullWidth.SetState( STATE_NOCHECK );
+            }
+        else
+            switch (eRP)
+            {
+                case RP_LT:
+                case RP_MT:
+                case RP_RT:
+                case RP_LB:
+                case RP_MB:
+                case RP_RB:
+                    aTsbFullWidth.SetState( STATE_NOCHECK );
+            }
     }
 }
 
@@ -594,26 +627,55 @@ void SvxTextAttrPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 |*
 \************************************************************************/
 
+/** When switching the "full width" check button on the text anchor may have
+    to be moved to a valid and adjacent position.  This position depends on
+    the current anchor position and the text writing direction.
+*/
 IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
 {
     if( aTsbFullWidth.GetState() == STATE_CHECK )
     {
-        switch( aCtlPosition.GetActualRP() )
+        if (IsTextDirectionLeftToRight())
         {
-            case RP_LT:
-            case RP_RT:
-                aCtlPosition.SetActualRP( RP_MT );
-            break;
+            // Move text anchor to horizontal middle axis.
+            switch( aCtlPosition.GetActualRP() )
+            {
+                case RP_LT:
+                case RP_RT:
+                    aCtlPosition.SetActualRP( RP_MT );
+                    break;
 
-            case RP_LM:
-            case RP_RM:
-                aCtlPosition.SetActualRP( RP_MM );
-            break;
+                case RP_LM:
+                case RP_RM:
+                    aCtlPosition.SetActualRP( RP_MM );
+                    break;
 
-            case RP_LB:
-            case RP_RB:
-                aCtlPosition.SetActualRP( RP_MB );
-            break;
+                case RP_LB:
+                case RP_RB:
+                    aCtlPosition.SetActualRP( RP_MB );
+                    break;
+            }
+        }
+        else
+        {
+            // Move text anchor to vertical middle axis.
+            switch( aCtlPosition.GetActualRP() )
+            {
+                case RP_LT:
+                case RP_LB:
+                    aCtlPosition.SetActualRP( RP_LM );
+                    break;
+
+                case RP_MT:
+                case RP_MB:
+                    aCtlPosition.SetActualRP( RP_MM );
+                    break;
+
+                case RP_RT:
+                case RP_RB:
+                    aCtlPosition.SetActualRP( RP_RM );
+                    break;
+            }
         }
     }
     return( 0L );
@@ -764,3 +826,16 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
 }
 
 
+bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
+{
+    // Determine the text writing direction with left to right as default.
+    bool bLeftToRightDirection = true;
+    if (rOutAttrs.GetItemState (SDRATTR_TEXTDIRECTION) != SFX_ITEM_DONTCARE)
+    {
+        const SvxWritingModeItem& rItem = static_cast<const SvxWritingModeItem&> (
+            rOutAttrs.Get (SDRATTR_TEXTDIRECTION));
+        if (rItem.GetValue() == com::sun::star::text::WritingMode_TB_RL)
+            bLeftToRightDirection = false;
+    }
+    return bLeftToRightDirection;
+}
