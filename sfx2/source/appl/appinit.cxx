@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-10 06:25:31 $
+ *  last change: $Author: mba $ $Date: 2001-07-12 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,10 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+
+#if SUPD>637
 #include <rtl/logfile.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -200,13 +203,6 @@ public:
 
 void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& Source ) throw( RuntimeException )
 {
-    Reference< XDesktop > xDesktop( Source.Source, UNO_QUERY );
-    if( xDesktop.is() == sal_True )
-    {
-        xDesktop->removeTerminateListener( this );
-    }
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SFX_APP()->Deinitialize();
 }
 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& aEvent ) throw(TerminationVetoException, RuntimeException )
@@ -220,9 +216,8 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 {
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
-    {
         xDesktop->removeTerminateListener( this );
-    }
+
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxApplication* pApp = SFX_APP();
     SfxPickList_Impl::Get()->ClearMemCache();
@@ -231,6 +226,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
     pApp->NotifyEvent(SfxEventHint( SFX_EVENT_CLOSEAPP) );
+    pApp->Deinitialize();
     Application::Quit();
 }
 
@@ -240,7 +236,9 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 FASTBOOL SfxApplication::Initialize_Impl()
 {
+#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::Initialize_Impl()" );
+#endif
 
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
