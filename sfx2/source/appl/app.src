@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:22:53 $
+ *  last change: $Author: pb $ $Date: 2001-08-15 12:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3076,6 +3076,10 @@ ToolBox RID_ENVTOOLBOX
         {
             Identifier = SID_SAVEASDOC ;
             Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
         };
         ToolBoxItem
         {
