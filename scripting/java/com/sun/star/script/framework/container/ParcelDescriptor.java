@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelDescriptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:06:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,22 @@ public class ParcelDescriptor {
     private String language = null;
     private Map languagedepprops = new Hashtable(3);
 
+    public static synchronized void removeParcelDescriptor(File parent) {
+        File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
+        PARCEL_DESCRIPTOR_MAP.remove(path);
+    }
+
+    public static synchronized void renameParcelDescriptor(File oldFile, File newFile) {
+        File oldPath = new File(oldFile, PARCEL_DESCRIPTOR_NAME);
+        ParcelDescriptor pd = (ParcelDescriptor)PARCEL_DESCRIPTOR_MAP.get(oldPath);
+        if(pd != null) {
+            PARCEL_DESCRIPTOR_MAP.remove(oldPath);
+            File newPath = new File(newFile, PARCEL_DESCRIPTOR_NAME);
+            pd.file = newPath;
+            PARCEL_DESCRIPTOR_MAP.put(newPath, pd);
+        }
+    }
+
     // returns the ParcelDescriptor in the corresponding directory
     // returns null if no ParcelDescriptor is found in the directory
     public static synchronized ParcelDescriptor
@@ -200,6 +216,7 @@ public class ParcelDescriptor {
     public void write(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         XMLParserFactory.getParser().write(document, fos);
+        fos.close();
     }
 
     public void write() throws IOException {
@@ -251,7 +268,7 @@ public class ParcelDescriptor {
             return new ScriptEntry[0];
 
         for (int i = 0; i < len; i++) {
-            String language, languagename, logicalname;
+            String language, languagename, logicalname, description = "";
             Map langProps = new HashMap();
             NodeList nl;
             Element tmp;
@@ -265,6 +282,25 @@ public class ParcelDescriptor {
             else {
                 tmp = (Element)nl.item(0);
                 logicalname = tmp.getAttribute("value");
+            }
+
+            // get the text of the description element
+            nl = scriptElement.getElementsByTagName("locale");
+            if (nl != null)
+            {
+                nl = nl.item(0).getChildNodes();
+                if (nl != null)
+                {
+                    for (int j = 0 ; j < nl.getLength(); j++)
+                    {
+                        if (nl.item(j).getNodeName().equals("description"))
+                        {
+                            CharacterData cd =
+                                (CharacterData)nl.item(j).getFirstChild();
+                            description = cd.getData().trim();
+                        }
+                    }
+                }
             }
 
             nl = scriptElement.getElementsByTagName("functionname");
@@ -290,7 +326,8 @@ public class ParcelDescriptor {
                     }
                 }
             }
-            scripts.add(new ScriptEntry(language, languagename, logicalname, "",langProps));
+            ScriptEntry entry = new ScriptEntry(language, languagename, logicalname, "",langProps, description);
+            scripts.add(entry);
         }
         return (ScriptEntry[])scripts.toArray(new ScriptEntry[0]);
     }
@@ -407,9 +444,16 @@ public class ParcelDescriptor {
         tempitem = document.createElement("displayname");
         tempitem.setAttribute("value", script.getLogicalName());
         item.appendChild(tempitem);
+
         tempitem = document.createElement("description");
-        tempitem.appendChild(document.createTextNode(script.getLogicalName()));
+        String description = script.getDescription();
+        if (description == null || description.equals(""))
+        {
+            description = script.getLogicalName();
+        }
+        tempitem.appendChild(document.createTextNode(description));
         item.appendChild(tempitem);
+
         root.appendChild(item);
 
         item = document.createElement("logicalname");
