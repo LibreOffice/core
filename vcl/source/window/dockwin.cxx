@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:03:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,16 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
 
     maDockTimer.Stop();
     PointerState aState = GetPointerState();
-    if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
+
+    if( aState.mnState & KEY_MOD1 )
+    {
+        // i43499 CTRL disables docking now
+        mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
+        mpDockWin->EndDocking( maDockRect, TRUE );
+        if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
+            maDockTimer.Start();
+    }
+    else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
         mpDockWin->EndDocking( maDockRect, FALSE );
@@ -217,7 +226,8 @@ IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
     mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
         (Time::GetSystemTicks() - mnLastTicks > 500)        &&
-        ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
+        ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
+        !(aState.mnState & KEY_MOD1) )  // i43499 CTRL disables docking now
     {
         maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) );
         maDockPos = mpDockWin->GetParent()->OutputToScreenPixel( maDockPos );  // sfx expects screen coordinates
