@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 13:57:07 $
+ *  last change: $Author: avy $ $Date: 2001-08-23 15:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME( OComponentEventThread );
+DBG_NAME( OComponentEventThread )
 OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImpl ) :
     m_pCompImpl( pCompImpl )
 {
