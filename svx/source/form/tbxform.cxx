@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:37:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,8 +304,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
                                         hasBigImages(),
                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
 
-//              SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-//              GetToolBox().SetItemImage( SID_FM_CONFIG, pFrame->GetImageManager()->GetImage( nSlot, GetToolBox().GetDisplayBackground().GetColor().IsDark() ) );
+                GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;
             }
             break;
