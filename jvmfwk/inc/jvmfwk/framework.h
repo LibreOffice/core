@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:58:03 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,17 @@ extern "C" {
     <h2>Direct Mode</h2>
 
     <p>The direct mode is intended for a scenario where no configuration files
-    are available and a Java VM  shall be run. An exception is the file determined by
-    UNO_JAVA_JFW_VENDOR_SETTINGS
-    which will be used if available. An application can then be run by specifying
-    a few bootstrap parameters. For example:</p>
+    are available and a Java VM  shall be run. That is,
+    the files containing the user and shared settings are not specified by the
+    bootstrap parameters UNO_JAVA_JFW_SHARED_DATA and UNO_JAVA_JFW_USER_DATA.
+    For example, tools, such as regcomp, may use this  framework in a build
+    environment. Then one would want to use settings which have been specified
+    by the build environment. The framework would automatically use the
+    current settings when they change in the environment.
+    </p>
+
+    <p> Here are examples how regcomp could be invoked using bootstrap parameters:
+    </p>
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
@@ -145,7 +152,7 @@ extern "C" {
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
     -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\sunjavaplugin.dll -register ....
     </p>
-    <p>Additionally parameter for the Java VM can be provided. For every parameter
+    <p>Additionall parameters for the Java VM can be provided. For every parameter
     a seperate bootstrap parameter must be specified. The names are
     <code>UNO_JAVA_JFW_PARAMETER_X</code>, where X is 1,2, .. n. For example:</p>
     <p>
@@ -165,7 +172,7 @@ extern "C" {
     <dd>Setting this parameter, for example to &quot;1&quot; or &quot;true&quot;,
     causes the framework to use the environment variable JAVA_HOME. It is expected
     that JAVA_HOME contains a system path rather than a file URL. This parameter
-    and UNO_JAVA_JFW_JREHOME are mutualle exclusive</dd>
+    and UNO_JAVA_JFW_JREHOME are mutually exclusive</dd>
     <dt>UNO_JAVA_JFW_CLASSPATH</dt>
     <dd>Contains the class path which is to be used by the VM. Special character,
     such as '\','{','}','$' must be preceded with '\'. See documentation about the
@@ -183,9 +190,6 @@ extern "C" {
     <dt>UNO_JAVA_JFW_PARAMETER_X</dt>
     <dd>Specifies a parameter for the Java VM. The X is replaced by
     non-negative natural numbers starting with 1.</dd>
-    <dt>UNO_JAVA_JFW_DISABLE</dt>
-    <dd>Setting this variable (e.g. "1" or "true") prevents the framework from
-    starting a VM</dd>
     </dl>
 
     <p>A note about bootstrap parameters. The implementation of the bootstrap
@@ -577,8 +581,8 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
 
 
 /** provides information about the JRE that is to be used.
-    <p>
-    If no JRE is currently selected then <code>ppInfo</code> will contain
+
+    <p>If no JRE is currently selected then <code>ppInfo</code> will contain
     NULL on return.</br>
     If the value of the element <updated> in the javavendors.xml file was
     changed since the time when the last Java was selected then this
@@ -626,9 +630,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
 
 /** provides the information if Java can be used.
 
-    <p>In direct mode the function evaluates the bootstrap parameter
-    UNO_JAVA_JFW_DISABLE_JAVA. If it is set then the out-parameter
-    bgEnabled will be set to false, otherwise it is set to true.
+    <p>That is if the user enabled or disabled the use of Java.
     </p>
 
    @return
@@ -637,6 +639,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
    JFW_E_ERROR An error occurred.<br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
