@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:04:44 $
+ *  last change: $Author: oj $ $Date: 2002-10-10 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,13 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
+    Reference< XStatement > xStatement;
     Reference< XStatement > xMasterStatement = m_xConnection->createStatement();
-    Reference< XStatement > xStatement = new OStatement(this, xMasterStatement);
-    m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    if ( xMasterStatement.is() )
+    {
+        xStatement = new OStatement(this, xMasterStatement);
+        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    }
     return xStatement;
 }
 
@@ -196,9 +200,13 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUStri
     checkDisposed();
 
     // TODO convert the SQL to SQL the driver understands
+    Reference< XPreparedStatement > xStatement;
     Reference< XPreparedStatement > xMasterStatement = m_xConnection->prepareStatement(sql);
-    Reference< XPreparedStatement > xStatement = new OPreparedStatement(this, xMasterStatement);
-    m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    if ( xMasterStatement.is() )
+    {
+        xStatement = new OPreparedStatement(this, xMasterStatement);
+        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    }
     return xStatement;
 }
 
@@ -208,9 +216,13 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& s
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
+    Reference< XPreparedStatement > xStatement;
     Reference< XPreparedStatement > xMasterStatement = prepareCall(sql);
-    Reference< XPreparedStatement > xStatement = new OCallableStatement(this, xMasterStatement);
-    m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    if ( xMasterStatement.is() )
+    {
+        xStatement = new OCallableStatement(this, xMasterStatement);
+        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    }
     return xStatement;
 }
 

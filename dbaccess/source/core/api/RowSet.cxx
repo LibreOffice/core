@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
+ *  last change: $Author: oj $ $Date: 2002-10-10 13:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,6 +1747,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
                                                             aColumns,*this,m_aColumnsMutex,aNames);
                 }
+            }
+            else
+            {
+                ::rtl::OUString sErrorMsg(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The command '")));
+                sErrorMsg += aSql;
+                sErrorMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' does not succeed."));
+                throwGenericSQLException(sErrorMsg,*this);
             }
         }
     }
