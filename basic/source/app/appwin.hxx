@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ class BasicFrame;
 
 class AppWin : public DockingWindow, public SfxListener     // Dokumentfenster
 {
-    friend MsgEdit;
+    friend class MsgEdit;
 protected:
     static short nNumber;           // fortlaufende Nummer
     static short nCount;            // Anzahl Editfenster
