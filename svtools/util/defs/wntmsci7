@@ -13276,3 +13276,4 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YAEABVString@@AAV2@@Z
 ?DataChanged@FontNameBox@@MAEXABVDataChangedEvent@@@Z
 ?InitBitmaps@FontNameBox@@AAEXXZ
+?pMPostUserEvent@CommunicationLinkViaSocket@@1PAVOMutex@vos@@A
