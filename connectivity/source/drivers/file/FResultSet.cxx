@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     {
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
-        *m_aRow = *m_aInsertRow;
+        clearInsertRow();
+        //  *m_aRow = *m_aInsertRow;
         m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
     }
 }
@@ -680,18 +681,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
 
-    OValueVector::iterator aIter = m_aInsertRow->begin();
-    for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
-    {
-        if (aIter->isBound() )
-        {
-            (*m_aRow)[nPos] = (*aIter);
-        }
-        aIter->setBound(sal_False);
-        aIter->setModified(sal_False);
-        aIter->setNull();
-    }
-    //  m_aRow = m_aInsertRow;
+    clearInsertRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
@@ -2481,6 +2471,21 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
         m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
         if(m_pTable)
             m_pTable->acquire();
+    }
+}
+// -----------------------------------------------------------------------------
+void OResultSet::clearInsertRow()
+{
+    OValueVector::iterator aIter = m_aInsertRow->begin();
+    for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
+    {
+        if (aIter->isBound() )
+        {
+            (*m_aRow)[nPos] = (*aIter);
+        }
+        aIter->setBound(sal_False);
+        aIter->setModified(sal_False);
+        aIter->setNull();
     }
 }
 // -----------------------------------------------------------------------------
