@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:19:26 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,10 @@ void SwLayoutViewConfig::Commit()
             case  3: bSet = rParent.IsViewHScrollBar(); break;// "Window/HorizontalScroll",
             case  4: bSet = rParent.IsViewVScrollBar(); break;// "Window/VerticalScroll",
             case  5: bSet = rParent.IsViewAnyRuler(); break; // "Window/ShowRulers"
-            case  6: bSet = rParent.IsViewHRuler(); break;// "Window/HorizontalRuler",
-            case  7: bSet = rParent.IsViewVRuler(); break;// "Window/VerticalRuler",
+            // #i14593# use IsView*Ruler(TRUE) instead of IsView*Ruler()
+            // this preserves the single ruler states even if "Window/ShowRulers" is off
+            case  6: bSet = rParent.IsViewHRuler(TRUE); break;// "Window/HorizontalRuler",
+            case  7: bSet = rParent.IsViewVRuler(TRUE); break;// "Window/VerticalRuler",
             case  8:
                 if(rParent.bIsHScrollMetricSet)
                     pValues[nProp] <<= (sal_Int32)rParent.eHScrollMetric; // "Window/HorizontalRulerUnit"
