@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 16:04:42 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:47:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,10 @@ PRJ=..
 PRJNAME=automation
 TARGET=packimages
 RSCCUSTOMIMG*=$(PRJ)$/util
+
+# point to an existing directory as default that poses no threat
+# to a "find" that looks for "*.png"
+RSCCUSTOMIMG*=$(PRJNAME)$/util
 
 # point to an existing directory as default that poses no threat
 # to a "find" that looks for "*.png"
