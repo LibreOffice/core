@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:41:31 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,11 +784,11 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 while(aIter.IsMore())
                 {
                     SdrObject* pObj = aIter.Next();
-                    const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetItem(EE_CHAR_FONTHEIGHT);
+                    const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetMergedItem(EE_CHAR_FONTHEIGHT);
 
                     if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
                     {
-                        pObj->SetItem(rDefaultFontHeight);
+                        pObj->SetMergedItem(rDefaultFontHeight);
                     }
                 }
             }
