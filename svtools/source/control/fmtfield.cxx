@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 12:36:37 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 10:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,6 +925,7 @@ void DoubleNumericField::ResetConformanceTester()
     aParam.algorithmType = SearchAlgorithms_REGEXP;
     aParam.searchFlag = SearchFlags::ALL_IGNORE_CASE;
     aParam.searchString = sDescription;
+    aParam.transliterateFlags = 0;
 
     String sLanguage, sCountry;
     ConvertLanguageToIsoNames( pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_ENGLISH_US, sLanguage, sCountry );
