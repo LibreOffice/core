@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-16 08:55:22 $
+ *  last change: $Author: obr $ $Date: 2001-05-25 10:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,12 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
         }
     }
 
+/*
+ * OBR: disabled the hack with the knowledge of AS:
+ *      getProfileName should not be used any more
+ */
+
+#if 0
 /* Hack! -------------------------------------------------------------------------------------
     Read values for localy cached components from sversion.ini!
  */
@@ -599,6 +605,8 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     aSVersion.close();
 
 /* Hack! -------------------------------------------------------------------------------------*/
+
+#endif
 
     // I think we don't need any notifications ...
     // because we support readonly variables yet in the moment!
