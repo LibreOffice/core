@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-17 00:39:13 $
+ *  last change: $Author: pluby $ $Date: 2000-11-17 03:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,14 +364,6 @@ void SalFrame::Sync()
 void SalFrame::SetInputContext( SalInputContext* pContext )
 {
 }
-
-// -----------------------------------------------------------------------
-
-#if SUPD < 612
-void SalFrame::UpdateExtTextInputArea()
-{
-}
-#endif
 
 // -----------------------------------------------------------------------
 
