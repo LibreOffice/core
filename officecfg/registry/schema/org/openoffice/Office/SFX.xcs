@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:56:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,72 +62,18 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="SFX" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>MBA</author>
-		<desc xml:lang="en-US">Contains the component-schema for the sfx module.</desc>
+		<desc >Contains the component-schema for the sfx module.</desc>
 	</info>
 	<component>
 		<group oor:name="Help">
 			<info>
-				<desc xml:lang="en-US">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="el">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="nl">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="fr">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="fi">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="cs">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="da">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="zh-CN">含有用于指定 Office 中帮助功能使用方法的设定。</desc>
-				<desc xml:lang="zh-TW">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="ar">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="he">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="ca">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="pt">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="ru">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="es">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="it">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="sv">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="pl">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="pt-BR">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="ja">Office のヘルプ機能の動作方法を指定する設定が含まれます。</desc>
-				<desc xml:lang="ko">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="tr">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="th">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="hi-IN">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="x-comment">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="hu">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="sk">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="sl">Contains settings which specifies how the help in Office should work.</desc>
+				<desc>Contains settings which specifies how the help in Office should work.</desc>
 			</info>
 			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
 				<!-- OldLocation: hlpagent.ini -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="el">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="nl">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="fr">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="fi">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="cs">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="da">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="zh-CN">列出由 SFX 用于启动帮助代理的 ID。</desc>
-					<desc xml:lang="zh-TW">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="ar">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="he">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="ca">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="pt">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="ru">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="es">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="it">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="sv">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="pl">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="pt-BR">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="ja">ヘルプエージェントを開始するために SFX が使用する ID のリストです。</desc>
-					<desc xml:lang="ko">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="tr">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="th">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="hi-IN">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="x-comment">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="hu">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="sk">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="sl">Lists IDs used by SFX to start the help agent.</desc>
+					<desc>Lists IDs used by SFX to start the help agent.</desc>
 				</info>
 				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
