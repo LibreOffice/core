@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-08 14:49:23 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 11:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX //autogen
 #include <so3/clsids.hxx>
@@ -265,9 +268,11 @@ void SmDocShell::LoadSymbols()
 {
     SmModule *pp = SM_MOD1();
     String sURL( pp->GetConfig()->GetSymbolFile() );
-    sURL = SFX_INIMANAGER()->SubstPathVars( sURL );
+
+    SvtPathOptions aOpt;
+    sURL = aOpt.SubstituteVariable( sURL );
     if( !FStatHelper::IsDocument( sURL ) )
-        SFX_INIMANAGER()->SearchFile( sURL, SFX_KEY_USERCONFIG_PATH );
+        aOpt.SearchFile( sURL, SvtPathOptions::PATH_USERCONFIG );
     pp->GetSymSetManager()->Load( sURL );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 11:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFX_INIMGR_HXX //autogen
 #include <sfx2/inimgr.hxx>
@@ -196,7 +199,8 @@ void SmConfig::UseDefault()
     bNoRightSpaces = TRUE;
 
     aSymbolFile = C2S(DEFSYMFILE);
-    SFX_INIMANAGER()->SearchFile( aSymbolFile, SFX_KEY_USERCONFIG_PATH );
+    SvtPathOptions aOpt;
+    aOpt.SearchFile( aSymbolFile, SvtPathOptions::PATH_USERCONFIG );
 
     ePrintSize  = PRINT_SIZE_NORMAL;
     nPrintZoom  = 100;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:25:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 11:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -707,9 +704,13 @@ String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSepara
 inline String lcl_GetDBInsertMode( String sDBName )
 {
     sDBName.SearchAndReplace( DB_DELIM, '.');
+    return aEmptyStr;
+#if 0
+//JP 13.11.00: must be change to the new configuration
     return  SFX_APP()->GetIniManager()->Get( String::CreateFromAscii(
                 RTL_CONSTASCII_STRINGPARAM( "DataBaseFormatInfo" )),
                 FALSE, FALSE, sDBName );
+#endif
 }
 
 
