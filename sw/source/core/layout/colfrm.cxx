@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:18:05 $
+ *  last change: $Author: ama $ $Date: 2002-01-23 13:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,11 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     }
     if( bOrtho )
     {
+#ifdef VERTICAL_LAYOUT
         nAvail = (Prt().*fnRect->fnGetWidth)();
+#else
+        nAvail = Prt().Width();
+#endif
         long nInnerWidth = ( nAvail - nGutter )/ pAttr->GetNumCols();
         pCol = Lower();
         for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i)
