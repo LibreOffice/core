@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:40:00 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,18 +88,18 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     Text[ dutch ] = "Mozaïek" ;
     Text[ spanish ] = "Mosaico" ;
     Text[ english_us ] = "Mosaic" ;
-    Text[ chinese_simplified ] = "ÏâÇ¶";
+    Text[ chinese_simplified ] = "é•¶åµŒ";
     Text[ russian ] = "Ìîçàèêà";
     Text[ polish ] = "Mozaika";
-    Text[ japanese ] = "Ó»Ş²¸";
-    Text[ chinese_simplified ] = "ÏâÇ¶";
+    Text[ japanese ] = "ï¾“ï½»ï¾ï½²ï½¸";
+    Text[ chinese_simplified ] = "é•¶åµŒ";
     Text[ russian ] = "Ìîçàèêà";
     Text[ polish ] = "Mozaika";
-    Text[ japanese ] = "Ó»Ş²¸";
-    Text[ chinese_traditional ] = "Æ^´O";
+    Text[ japanese ] = "ï¾“ï½»ï¾ï½²ï½¸";
+    Text[ chinese_traditional ] = "é‘²åµŒ";
     Text[ arabic ] = "İÓíİÓÇÁ";
     Text[ greek ] = "Ìùóáúêü";
-    Text[ korean ] = "¸ğÀÚÀÌÅ©";
+    Text[ korean ] = "ëª¨ìì´í¬";
     Text[ turkish ] = "Mozaik";
     Text[ language_user1 ] = " ";
 
@@ -121,10 +121,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
-        Text[ japanese ] = "Êß×Ò°À";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
-        Text[ chinese_simplified ] = "²ÎÊı";
-        Text[ chinese_traditional ] = "°Ñ¼Æ";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°";
+        Text[ chinese_simplified ] = "å‚æ•°";
+        Text[ chinese_traditional ] = "åƒæ•¸";
         Text[ turkish ] = "Parametre";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
         Text[ catalan ] = "Parámetros";
@@ -153,14 +153,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Breedte" ;
         Text[ spanish ] = "A~ncho" ;
         Text[ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "¿í¶È(~W)";
+        Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "~Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e«×(~W)";
+        Text[ japanese ] = "å¹…(~W)";
+        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ncho";
@@ -201,14 +201,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Hoogte" ;
         Text[ spanish ] = "A~ltura" ;
         Text[ english_us ] = "H~eight" ;
-        Text[ chinese_simplified ] = "¸ß¶È(~E)";
+        Text[ chinese_simplified ] = "é«˜åº¦(~E)";
         Text[ russian ] = "~Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~E)";
-        Text[ chinese_traditional ] = "°ª«×(~E)";
+        Text[ japanese ] = "é«˜ã•(~E)";
+        Text[ chinese_traditional ] = "é«˜åº¦(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~E)";
+        Text[ korean ] = "ë†’ì´(~E)";
         Text[ turkish ] = "Yüksek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
@@ -251,10 +251,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ swedish ] = "Framhäv ~kanter";
         Text[ polish ] = "Wyró¿nij krawêdzie";
         Text[ portuguese_brazilian ] = "~Enhance edges";
-        Text[ japanese ] = "Šp‚ğ‹­’²‚·‚é(~N)";
-        Text[ korean ] = "°¡ÀåÀÚ¸® °­Á¶(~N)";
-        Text[ chinese_simplified ] = "Í»³öÏÔÊ¾±ß½Ç(~N)";
-        Text[ chinese_traditional ] = "¬ğ¥XÅã¥ÜÃä¨¤(~N)";
+        Text[ japanese ] = "è§’ã‚’å¼·èª¿ã™ã‚‹(~N)";
+        Text[ korean ] = "ê°€ì¥ìë¦¬ ê°•ì¡°(~N)";
+        Text[ chinese_simplified ] = "çªå‡ºæ˜¾ç¤ºè¾¹è§’(~N)";
+        Text[ chinese_traditional ] = "çªå‡ºé¡¯ç¤ºé‚Šè§’(~N)";
         Text[ turkish ] = "~Enhance edges";
         Text[ arabic ] = "ÅÈÑÇÒ ÇáÍæÇİ";
         Text[ catalan ] = "~Resaltar aristas";
@@ -307,14 +307,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     Text[ dutch ] = "Solarisatie" ;
     Text[ spanish ] = "Solarización" ;
     Text[ english_us ] = "Solarization" ;
-    Text[ chinese_simplified ] = "ÆØ¹â";
+    Text[ chinese_simplified ] = "æ›å…‰";
     Text[ russian ] = "Ñîëÿğèçàöèÿ";
     Text[ polish ] = "Solaryzacja";
-    Text[ japanese ] = "¿×Ø¾Ş°¼®İ";
-    Text[ chinese_traditional ] = "Ãn¥ú";
+    Text[ japanese ] = "ï½¿ï¾—ï¾˜ï½¾ï¾ï½°ï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = "æ›å…‰";
     Text[ arabic ] = "ÇáÊÔãøÓ";
     Text[ greek ] = "¸êèåóç óôï öùò";
-    Text[ korean ] = "¼Ö¶ó·¯¸®Á¦ÀÌ¼Ç";
+    Text[ korean ] = "ì†”ë¼ëŸ¬ë¦¬ì œì´ì…˜";
     Text[ turkish ] = "Yüksek pozlama";
     Text[ language_user1 ] = " ";
 
@@ -336,10 +336,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
-        Text[ japanese ] = "Êß×Ò°À";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
-        Text[ chinese_simplified ] = "²ÎÊı";
-        Text[ chinese_traditional ] = "°Ñ¼Æ";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°";
+        Text[ chinese_simplified ] = "å‚æ•°";
+        Text[ chinese_traditional ] = "åƒæ•¸";
         Text[ turkish ] = "Parametre";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
         Text[ catalan ] = "Parámetros";
@@ -368,14 +368,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ dutch ] = "~Drempelwaarde" ;
         Text[ spanish ] = "Valor ~umbral" ;
         Text[ english_us ] = "Threshold ~value" ;
-        Text[ chinese_simplified ] = "³õÊ¼Öµ(~V)";
+        Text[ chinese_simplified ] = "åˆå§‹å€¼(~V)";
         Text[ russian ] = "Ïîğîãîâîå çíà÷åíèå";
         Text[ polish ] = "Wartoœæ progowa";
-        Text[ japanese ] = "‚µ‚«‚¢’l(~V)";
-        Text[ chinese_traditional ] = "Á{¬É­È(~V)";
+        Text[ japanese ] = "ã—ãã„å€¤(~V)";
+        Text[ chinese_traditional ] = "è‡¨ç•Œå€¼(~V)";
         Text[ arabic ] = "ŞíãÉ ÇáÈÏÁ";
         Text[ greek ] = "ÔéìŞ ïñßïõ";
-        Text[ korean ] = "ÀÓ°è°ª(~V)";
+        Text[ korean ] = "ì„ê³„ê°’(~V)";
         Text[ turkish ] = "Eşik değer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor ~umbral";
@@ -415,14 +415,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ dutch ] = "~Diapositief" ;
         Text[ spanish ] = "I~nvertir" ;
         Text[ english_us ] = "~Invert" ;
-        Text[ chinese_simplified ] = "»¥²¹É«×ª»»(~I)";
+        Text[ chinese_simplified ] = "äº’è¡¥è‰²è½¬æ¢(~I)";
         Text[ russian ] = "Èíâåğòèğîâàòü";
         Text[ polish ] = "Odwróæ";
-        Text[ japanese ] = "‹t“](~I)";
-        Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«(~I)";
+        Text[ japanese ] = "é€†è»¢(~I)";
+        Text[ chinese_traditional ] = "äº’è£œè‰²è½‰æ›(~I)";
         Text[ arabic ] = "ÚßÓ";
         Text[ greek ] = "Áíô~éóôñïöŞ";
-        Text[ korean ] = "¹İÀü(~I)";
+        Text[ korean ] = "ë°˜ì „(~I)";
         Text[ turkish ] = "Tersine çevir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nvertir";
@@ -474,16 +474,16 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     Text[ dutch ] = "Ouder maken" ;
     Text[ spanish ] = "Envejecimiento" ;
     Text[ english_us ] = "Aging" ;
-    Text[ chinese_simplified ] = "Ê±Ğ§";
+    Text[ chinese_simplified ] = "æ—¶æ•ˆ";
     Text[ russian ] = "Ñòàğåíèå";
     Text[ polish ] = "Efekt starzenia";
-    Text[ japanese ] = "´²¼Şİ¸Ş";
-    Text[ chinese_traditional ] = "®É®Ä";
+    Text[ japanese ] = "ï½´ï½²ï½¼ï¾ï¾ï½¸ï¾";
+    Text[ chinese_traditional ] = "æ™‚æ•ˆ";
     Text[ arabic ] = "ÇáÊŞÇÏã";
     Text[ dutch ] = "Ouder maken";
-    Text[ chinese_simplified ] = "Ê±Ğ§";
+    Text[ chinese_simplified ] = "æ—¶æ•ˆ";
     Text[ greek ] = "ÃŞñáíóç";
-    Text[ korean ] = "³°À½È¿°ú";
+    Text[ korean ] = "ë‚¡ìŒíš¨ê³¼";
     Text[ turkish ] = "Eskitme";
 
     FixedLine FL_PARAMETER
@@ -504,10 +504,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
-        Text[ japanese ] = "Êß×Ò°À";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
-        Text[ chinese_simplified ] = "²ÎÊı";
-        Text[ chinese_traditional ] = "°Ñ¼Æ";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°";
+        Text[ chinese_simplified ] = "å‚æ•°";
+        Text[ chinese_traditional ] = "åƒæ•¸";
         Text[ turkish ] = "Parametre";
         Text[ arabic ] = "ÇáãÚáãÉ";
         Text[ catalan ] = "Parámetros";
@@ -536,16 +536,16 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ dutch ] = "Mate van veroudering" ;
         Text[ spanish ] = "Grado de envejecim." ;
         Text[ english_us ] = "Aging degree" ;
-        Text[ chinese_simplified ] = "Ê±Ğ§¶È";
+        Text[ chinese_simplified ] = "æ—¶æ•ˆåº¦";
         Text[ russian ] = "Ñòåïåíü ñòàğåíèÿ";
         Text[ polish ] = "Stopieñ efektu starzenia";
-        Text[ japanese ] = "´²¼Şİ¸Ş“x‡";
-        Text[ chinese_traditional ] = "®É®Ä«×";
+        Text[ japanese ] = "ï½´ï½²ï½¼ï¾ï¾ï½¸ï¾åº¦åˆ";
+        Text[ chinese_traditional ] = "æ™‚æ•ˆåº¦";
         Text[ arabic ] = "ÏÑÌÉ ÇáÊŞÇÏã";
         Text[ dutch ] = "Mate van veroudering";
-        Text[ chinese_simplified ] = "Ê±Ğ§¶È";
+        Text[ chinese_simplified ] = "æ—¶æ•ˆåº¦";
         Text[ greek ] = "Âáèìüò ãŞñáíóçò";
-        Text[ korean ] = "³°À½È¿°ú Á¤µµ";
+        Text[ korean ] = "ë‚¡ìŒíš¨ê³¼ ì •ë„";
         Text[ turkish ] = "Eskitme derecesi";
         Text[ catalan ] = "Grado de envejecim.";
     };
@@ -615,14 +615,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text[ dutch ] = "Poster" ;
     Text[ spanish ] = "Póster" ;
     Text[ english_us ] = "Posterize" ;
-    Text[ chinese_simplified ] = "º£±¨";
+    Text[ chinese_simplified ] = "æµ·æŠ¥";
     Text[ russian ] = "Ïëàêàò";
     Text[ polish ] = "Plakat";
-    Text[ japanese ] = "Îß½À°";
-    Text[ chinese_traditional ] = "®ü³ø";
+    Text[ japanese ] = "ï¾ï¾Ÿï½½ï¾€ï½°";
+    Text[ chinese_traditional ] = "æµ·å ±";
     Text[ arabic ] = "ãõáÕŞ";
     Text[ greek ] = "Áößóá";
-    Text[ korean ] = "Æ÷½ºÅÍ";
+    Text[ korean ] = "í¬ìŠ¤í„°";
     Text[ turkish ] = "Afiş";
 
     FixedLine FL_PARAMETER
@@ -643,10 +643,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
-        Text[ japanese ] = "Êß×Ò°À";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
-        Text[ chinese_simplified ] = "²ÎÊı";
-        Text[ chinese_traditional ] = "°Ñ¼Æ";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°";
+        Text[ chinese_simplified ] = "å‚æ•°";
+        Text[ chinese_traditional ] = "åƒæ•¸";
         Text[ turkish ] = "Parametre";
         Text[ arabic ] = "ÇáãÚáãÉ";
         Text[ catalan ] = "Parámetros";
@@ -675,14 +675,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ dutch ] = "Posterkleuren" ;
         Text[ spanish ] = "Colores del póster" ;
         Text[ english_us ] = "Poster colors" ;
-        Text[ chinese_simplified ] = "º£±¨ÑÕÉ«";
+        Text[ chinese_simplified ] = "æµ·æŠ¥é¢œè‰²";
         Text[ russian ] = "Öâåòà ïëàêàòà";
         Text[ polish ] = "Kolory plakatu";
-        Text[ japanese ] = "Îß½À°¶×°";
-        Text[ chinese_traditional ] = "®ü³øÃC¦â";
+        Text[ japanese ] = "ï¾ï¾Ÿï½½ï¾€ï½°ï½¶ï¾—ï½°";
+        Text[ chinese_traditional ] = "æµ·å ±é¡”è‰²";
         Text[ arabic ] = "ÃáæÇä ÇáãõáÕŞ";
         Text[ greek ] = "×ñşìáôá áößóáò";
-        Text[ korean ] = "Æ÷½ºÅÍ »ö»ó";
+        Text[ korean ] = "í¬ìŠ¤í„° ìƒ‰ìƒ";
         Text[ turkish ] = "Afiş renkleri";
         Text[ catalan ] = "Colores del póster";
     };
@@ -755,14 +755,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ dutch ] = "Reliëf" ;
     Text[ spanish ] = "Relieve" ;
     Text[ english_us ] = "Relief" ;
-    Text[ chinese_simplified ] = "¸¡µñ";
+    Text[ chinese_simplified ] = "æµ®é›•";
     Text[ russian ] = "Ğåëüåô";
     Text[ polish ] = "Uwypuklenie";
-    Text[ japanese ] = "ÚØ°Ì";
-    Text[ chinese_traditional ] = "¯BÀJ";
+    Text[ japanese ] = "ï¾šï¾˜ï½°ï¾Œ";
+    Text[ chinese_traditional ] = "æµ®é›•";
     Text[ arabic ] = "äŞÔ";
     Text[ greek ] = "AíÜãëõöï";
-    Text[ korean ] = "¾ç°¢";
+    Text[ korean ] = "ì–‘ê°";
     Text[ turkish ] = "Rölyef";
     Text[ language_user1 ] = " ";
 
@@ -784,10 +784,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
-        Text[ japanese ] = "Êß×Ò°À";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
-        Text[ chinese_simplified ] = "²ÎÊı";
-        Text[ chinese_traditional ] = "°Ñ¼Æ";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°";
+        Text[ chinese_simplified ] = "å‚æ•°";
+        Text[ chinese_traditional ] = "åƒæ•¸";
         Text[ turkish ] = "Parametre";
         Text[ arabic ] = "ÇáãÚáãÉ";
         Text[ catalan ] = "Parámetros";
@@ -816,14 +816,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ dutch ] = "Lichtbron" ;
         Text[ spanish ] = "Fuente de luz" ;
         Text[ english_us ] = "Light source" ;
-        Text[ chinese_simplified ] = "¹âÔ´";
+        Text[ chinese_simplified ] = "å…‰æº";
         Text[ russian ] = "Èñòî÷íèê ñâåòà";
         Text[ polish ] = "ród³o œwiat³a";
-        Text[ japanese ] = "ŒõŒ¹";
-        Text[ chinese_traditional ] = "¥ú·½";
+        Text[ japanese ] = "å…‰æº";
+        Text[ chinese_traditional ] = "å…‰æº";
         Text[ arabic ] = "ãÕÏÑ ÇáÖæÁ";
         Text[ greek ] = "Ğñïİëåõóç öùôüò";
-        Text[ korean ] = "±¤¿ø";
+        Text[ korean ] = "ê´‘ì›";
         Text[ turkish ] = "Işık kaynağı";
         Text[ catalan ] = "Fuente de luz";
     };
@@ -856,6 +856,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     };
     Text[ catalan ] = "Relieve";
 };
+
 
 
 
