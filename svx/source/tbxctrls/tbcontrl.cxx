@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 10:45:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
 #include <svtools/fontoptions.hxx>
 #endif
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -214,6 +217,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxReloadControllerItem,  SfxBoolItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 
 //========================================================================
 // class SvxStyleBox_Impl -----------------------------------------------------
@@ -3245,6 +3249,38 @@ void SvxReloadControllerItem::StateChanged(
                 pItem->GetValue() ? pImpl->GetSpecialImage() :
                 pImpl->GetNormalImage() );
     }
+    rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
+}
+
+//========================================================================
+// class SvxSimpleUndoRedoController -------------------------------------
+//========================================================================
+
+SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( USHORT nSlotId, USHORT nId, ToolBox& rTbx  )
+    :SfxToolBoxControl( nSlotId, nId, rTbx )
+{
+    aDefaultText = rTbx.GetItemText( nId );
+}
+
+// -----------------------------------------------------------------------
+
+SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SvxSimpleUndoRedoController::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
+    ToolBox& rBox = GetToolBox();
+    if ( pItem && eState != SFX_ITEM_DISABLED )
+    {
+        ::rtl::OUString aNewText( MnemonicGenerator::EraseAllMnemonicChars( pItem->GetValue() ) );
+        rBox.SetQuickHelpText( GetId(), aNewText );
+    }
+    if ( eState == SFX_ITEM_DISABLED )
+        rBox.SetQuickHelpText( GetId(), aDefaultText );
     rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 }
 
