@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mtg $ $Date: 2001-06-25 18:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,13 +594,18 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         pValue[nIndex].Name = sAddParaTableSpacingAtStart;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sAddParaTableSpacingAtStart );
 
-        pValue[nIndex].Name = sPrinterName;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
+        {
+            Any aPrinterAny = xPropSet->getPropertyValue ( sPrinterSetup );
+            if ( aPrinterAny.getValueTypeClass() != TypeClass_VOID )
+            {
+                pValue[nIndex].Name = sPrinterName;
+                pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
 
-#if SUPD > 630
-        pValue[nIndex].Name = sPrinterSetup;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterSetup );
-#endif
+                pValue[nIndex].Name = sPrinterSetup;
+                pValue[nIndex++].Value = aPrinterAny;
+            }
+        }
+
 
         pValue[nIndex].Name = sIsKernAsianPunctuation;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sIsKernAsianPunctuation );
