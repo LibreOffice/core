@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-02 08:38:31 $
+ *  last change: $Author: ka $ $Date: 2000-12-21 16:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,9 +259,9 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const Byt
 
 // -----------------------------------------------------------------------------
 
-void GraphicObject::ImplAutoSwapIn( BOOL bIgnoreSwapState )
+void GraphicObject::ImplAutoSwapIn()
 {
-    if( bIgnoreSwapState || IsSwappedOut() )
+    if( IsSwappedOut() )
     {
         if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
             mbAutoSwapped = FALSE;
@@ -579,7 +579,7 @@ Link GraphicObject::GetSwapStreamHdl() const
 
 void GraphicObject::FireSwapInRequest()
 {
-    ImplAutoSwapIn( TRUE );
+    ImplAutoSwapIn();
 }
 
 // -----------------------------------------------------------------------------
@@ -785,7 +785,7 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 const Graphic& GraphicObject::GetGraphic() const
 {
     if( mbAutoSwapped )
-        ( (GraphicObject*) this )->ImplAutoSwapIn( FALSE );
+        ( (GraphicObject*) this )->ImplAutoSwapIn();
 
     return maGraphic;
 }
@@ -803,7 +803,6 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic )
     mbAutoSwapped = FALSE;
     ImplAssignGraphicData();
     delete mpLink, mpLink = NULL;
-    delete mpUserData, mpUserData = NULL;
     delete mpSimpleCache, mpSimpleCache = NULL;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, NULL );
@@ -906,7 +905,7 @@ BOOL GraphicObject::SwapIn()
 
     if( mbAutoSwapped )
     {
-        ImplAutoSwapIn( FALSE );
+        ImplAutoSwapIn();
         bRet = TRUE;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
@@ -933,7 +932,7 @@ BOOL GraphicObject::SwapIn( SvStream* pIStm )
 
     if( mbAutoSwapped )
     {
-        ImplAutoSwapIn( FALSE );
+        ImplAutoSwapIn();
         bRet = TRUE;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
@@ -954,9 +953,22 @@ BOOL GraphicObject::SwapIn( SvStream* pIStm )
 
 // -----------------------------------------------------------------------------
 
+void GraphicObject::SetSwapState()
+{
+    if( !IsSwappedOut() )
+    {
+        mbAutoSwapped = TRUE;
+
+        if( mpMgr )
+            mpMgr->ImplGraphicObjectWasSwappedOut( *this );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, p )
 {
-    if( !mbAutoSwapped && !IsSwappedOut() )
+    if( !IsSwappedOut() )
     {
         mbIsInSwapOut = TRUE;
 

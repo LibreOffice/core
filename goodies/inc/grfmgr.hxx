@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 14:20:44 $
+ *  last change: $Author: ka $ $Date: 2000-12-21 16:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ private:
     void                    ImplConstruct();
     void                    ImplAssignGraphicData();
     void                    ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID = NULL );
-    void                    ImplAutoSwapIn( BOOL bIgnoreSwapState );
+    void                    ImplAutoSwapIn();
     BOOL                    ImplIsAutoSwapped() const { return mbAutoSwapped; }
     BOOL                    ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                                PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const;
@@ -350,7 +350,8 @@ public:
     BOOL                    IsInSwapIn() const { return mbIsInSwapIn; }
     BOOL                    IsInSwapOut() const { return mbIsInSwapOut; }
     BOOL                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
-    BOOL                    IsSwappedOut() const { return maGraphic.IsSwapOut(); }
+    BOOL                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
+    void                    SetSwapState();
 
     BOOL                    Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                   const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
