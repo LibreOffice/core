@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:07:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2001-03-01 21:07:35 $
- // $Revision: 1.5 $
+ //     $Date: 2001-04-26 20:13:15 $
+ // $Revision: 1.6 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -398,7 +398,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ english_us ] = "Repeat ~row" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ЦШёґµДРР(~R)";
-        Text[ russian ] = "Повтор строки";
+        Text[ russian ] = "Строка повтора";
         Text[ polish ] = "Powtarzaj wiersz";
         Text[ japanese ] = "ЊJ‚и•Ф‚·Ќs(~R)";
         Text[ chinese_traditional ] = "­«ЅЖ¦C(~R)";
@@ -427,7 +427,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ english_us ] = "Repeat ~column" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ЦШёґµДБР(~C)";
-        Text[ russian ] = "Повтор столбца";
+        Text[ russian ] = "Колонка повтора";
         Text[ polish ] = "Powtarzaj kolumnк";
         Text[ japanese ] = "ЊJ‚и•Ф‚·—с(~C)";
         Text[ chinese_traditional ] = "­«ЅЖЄєДж(~C)";
