@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:36:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,16 @@ SvTreeListBox::~SvTreeListBox()
     delete pImp;
     delete (Link*)pReserved;
     ClearTabList();
+}
+
+void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
+{
+    pImp->SetExtendedWindowBits( _nBits );
+}
+
+ExtendedWinBits SvTreeListBox::GetExtendedWinBits() const
+{
+    return pImp->GetExtendedWindowBits();
 }
 
 void SvTreeListBox::SetModel( SvLBoxTreeList* pNewModel )
@@ -1265,14 +1275,14 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
 
 void SvTreeListBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
 {
+    DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SetCursor(pEntry, bForceNoSelect);
 }
 
 void SvTreeListBox::SetCurEntry( SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if( pEntry )
-        pImp->SetCurEntry( pEntry );
+    pImp->SetCurEntry( pEntry );
 }
 
 Image SvTreeListBox::GetCollapsedNodeBmp( BmpColorMode _eMode ) const
