@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:24:41 $
+ *  last change: $Author: sab $ $Date: 2001-03-21 10:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,18 +863,21 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
         Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                         GetImport().GetModel(), UNO_QUERY );
         Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
-        Any aAny = xFamilies->getByName( sName );
-
-        xStyles = *(Reference<XNameContainer>*)aAny.getValue();
-        switch( nFamily )
+        if (xFamilies->hasByName(sName))
         {
-        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-            ((SvXMLStylesContext *)this)->xParaStyles = xStyles;
-            break;
+            Any aAny = xFamilies->getByName( sName );
 
-        case XML_STYLE_FAMILY_TEXT_TEXT:
-            ((SvXMLStylesContext *)this)->xTextStyles = xStyles;
-            break;
+            xStyles = *(Reference<XNameContainer>*)aAny.getValue();
+            switch( nFamily )
+            {
+            case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+                ((SvXMLStylesContext *)this)->xParaStyles = xStyles;
+                break;
+
+            case XML_STYLE_FAMILY_TEXT_TEXT:
+                ((SvXMLStylesContext *)this)->xTextStyles = xStyles;
+                break;
+            }
         }
     }
 
