@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-08 12:52:36 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 19:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,15 +124,19 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #endif
 
 using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-using namespace ucb;
-using namespace cppu;
+using namespace ::ucb;
+using namespace ::cppu;
+using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -147,26 +151,30 @@ void ODbaseTable::readHeader()
     m_pFileStream->RefreshBuffer(); // sicherstellen, dass die Kopfinformationen tatsaechlich neu gelesen werden
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-    BYTE aTyp;
-    (*m_pFileStream) >> aTyp;
-    m_pFileStream->Read((char*)m_aHeader.db_aedat, 3*sizeof(BYTE));
+    BYTE nType;
+    (*m_pFileStream) >> nType;
+    m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(BYTE));
     (*m_pFileStream) >> m_aHeader.db_anz;
     (*m_pFileStream) >> m_aHeader.db_kopf;
     (*m_pFileStream) >> m_aHeader.db_slng;
-    m_pFileStream->Read((char*)m_aHeader.db_frei, 20*sizeof(BYTE));
+    m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(BYTE));
 
     if (m_aHeader.db_anz  < 0 ||
         m_aHeader.db_kopf <= 0 ||
         m_aHeader.db_slng <= 0 ||
         ((m_aHeader.db_kopf - 1) / 32 - 1) <= 0) // anzahl felder
     {
-        // Dies ist keine DBase Datei
+        // no dbase file
         m_bValid = sal_False;
+        ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
+        sMessage += getEntry();
+        sMessage += ::rtl::OUString::createFromAscii(" is no valid (or recognized) dBase file.");
+        throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
     }
     else
     {
         // Konsistenzpruefung des Header:
-        m_aHeader.db_typ = (DBFType)aTyp;
+        m_aHeader.db_typ = (DBFType)nType;
         switch (m_aHeader.db_typ)
         {
             case dBaseIII:
@@ -182,7 +190,12 @@ void ODbaseTable::readHeader()
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 break;
             default:
-            {   // Dies ist keine DBase Datei
+            {
+                // no dbase file
+                ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
+                sMessage += getEntry();
+                sMessage += ::rtl::OUString::createFromAscii(" is no valid (or recognized) dBase file.");
+                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
             }
         }
     }
@@ -275,7 +288,12 @@ void ODbaseTable::fillColumns()
     }
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection) : ODbaseTable_BASE(_pConnection),m_pMemoStream(NULL),m_bWriteableMemo(sal_False),m_bValid(sal_False)
+ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
+        :ODbaseTable_BASE(_pConnection)
+        ,m_pMemoStream(NULL)
+        ,m_bWriteable(sal_False)
+        ,m_bWriteableMemo(sal_False)
+        ,m_bValid(sal_False)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -296,6 +314,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _SchemaName,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
+                ,m_bWriteable(sal_False)
                 ,m_bWriteableMemo(sal_False)
                 ,m_bValid(sal_False)
 {
@@ -305,19 +324,19 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
     m_aHeader.db_kopf   = 0;
     m_aHeader.db_slng   = 0;
 
+    String sFileName(getEntry());
+
     INetURLObject aURL;
-    aURL.SetURL(getEntry());
+    aURL.SetURL(sFileName);
 
-    if(aURL.getExtension() != m_pConnection->getExtension())
-        aURL.setExtension(m_pConnection->getExtension());
+    OSL_ENSURE(aURL.getExtension() == m_pConnection->getExtension(),
+        "ODbaseTable::ODbaseTable: invalid extension!");
+        // getEntry is expected to ensure the corect file name
 
-    //  Content aContent(aURL.GetURLNoPass());
-    String aFileName(getEntry());
+    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( sFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
-    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-
-    if(!m_pFileStream)
-        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+    if (!(m_bWriteable = (NULL != m_pFileStream)))
+        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( sFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
 
     if(m_pFileStream)
     {
@@ -330,17 +349,17 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                 // Memo-Dateinamen bilden (.DBT):
                 // nyi: Unschoen fuer Unix und Mac!
 
-                if (m_aHeader.db_typ == FoxProMemo) // foxpro verwendet andere extension
-                    aURL.SetExtension(String::CreateFromAscii("fpt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
+                if (m_aHeader.db_typ == FoxProMemo) // foxpro uses another extension
+                    aURL.SetExtension(String::CreateFromAscii("fpt"));
                 else
-                    aURL.SetExtension(String::CreateFromAscii("dbt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
+                    aURL.SetExtension(String::CreateFromAscii("dbt"));
 
                 // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
                 // allerdings koennen keine Updates durchgefuehrt werden
                 // jedoch die Operation wird ausgefuehrt
                 m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-                if (m_bWriteableMemo = !m_pMemoStream)
-                    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+                if (!(m_bWriteableMemo = (NULL != m_pMemoStream)))
+                    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
                 if (m_pMemoStream)
                     ReadMemoHeader();
             }
@@ -426,14 +445,22 @@ String ODbaseTable::getEntry()
     ::rtl::OUString aURL;
     Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
     Reference< XRow> xRow(xDir,UNO_QUERY);
-    ::rtl::OUString aName;
-    sal_Int32 nLen = m_pConnection->getExtension().Len()+1;
+    ::rtl::OUString sName;
+    ::rtl::OUString sExt;
+    ::rtl::OUString sNeededExt(m_pConnection->getExtension());
+    sal_Int32 nExtLen = sNeededExt.getLength();
+    sal_Int32 nExtLenWithSep = nExtLen + 1;
     xDir->beforeFirst();
     while(xDir->next())
     {
-        aName = xRow->getString(1);
-        aName = aName.replaceAt(aName.getLength()-nLen,nLen,::rtl::OUString());
-        if(aName == m_Name)
+        sName = xRow->getString(1);
+
+        // cut the extension
+        sExt = sName.copy(sName.getLength() - nExtLen);
+        sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
+
+        // name and extension have to coincide
+        if ((sName == m_Name) && (sExt == sNeededExt))
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
 #if SUPD>611
