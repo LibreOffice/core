@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:10:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,11 @@ PackageRegistryBackend::PackageRegistryBackend(
       m_eContext( CONTEXT_UNKNOWN ),
       m_readOnly( false )
 {
-    extract_throw( &m_context, args[ 0 ] );
+    m_context = args[ 0 ].get<OUString>();
     if (args.getLength() > 1) {
-        extract_throw( &m_cachePath, args[ 1 ] );
+        m_cachePath = args[ 1 ].get<OUString>();
         if (args.getLength() > 2)
-            extract_throw( &m_readOnly, args[ 2 ] );
+            m_readOnly = args[ 2 ].get<bool>();
     }
 
     if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
@@ -590,7 +590,8 @@ Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 {
     if (! smallIcon)
         return Any();
-    return makeAny( highContrast ? m_smallIcon_HC : m_smallIcon );
+    const sal_uInt16 nIconId = (highContrast ? m_smallIcon_HC : m_smallIcon);
+    return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
 }
 
 }
