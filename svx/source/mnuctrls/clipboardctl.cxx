@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 07:53:09 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 06:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,23 +125,22 @@ SvxClipBoardControl::~SvxClipBoardControl()
 
 SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 {
-    const SfxPoolItem* pState = 0;
-    SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
-    SfxItemState eState = rDispatch.QueryState( SID_CLIPBOARD_FORMAT_ITEMS,
-                                                pState );
-    if (eState >= SFX_ITEM_AVAILABLE  &&  pState)
+    SfxPoolItem* pState = NULL;
+    SfxItemState eState = GetBindings().QueryState( SID_CLIPBOARD_FORMAT_ITEMS, pState );
+    const SvxClipboardFmtItem* pFmtItem = PTR_CAST( SvxClipboardFmtItem, pState );
+
+    if ( eState >= SFX_ITEM_AVAILABLE  &&  pFmtItem )
     {
         if (pPopup)
             pPopup->Clear();
         else
             pPopup = new PopupMenu;
 
-        const SvxClipboardFmtItem &rFmtItem = *(SvxClipboardFmtItem *) pState;
-        USHORT nCount = rFmtItem.Count();
+        USHORT nCount = pFmtItem->Count();
         for (USHORT i = 0;  i < nCount;  ++i)
         {
-            ULONG nFmtID =  rFmtItem.GetClipbrdFormatId( i );
-            String aFmtStr( rFmtItem.GetClipbrdFormatName( i ) );
+            ULONG nFmtID =  pFmtItem->GetClipbrdFormatId( i );
+            String aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (!aFmtStr.Len())
                 aFmtStr = SvPasteObjectDialog::GetSotFormatUIName( nFmtID );
             pPopup->InsertItem( (USHORT)nFmtID, aFmtStr );
@@ -158,8 +157,11 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         rBox.SetItemDown( nId, FALSE );
 
         SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
-        rDispatch.Execute( SID_CLIPBOARD_FORMAT_ITEMS,
-                           SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+        const SfxPoolItem* pArgs[] =
+        {
+            &aItem, NULL
+        };
+        GetBindings().ExecuteSynchron( SID_CLIPBOARD_FORMAT_ITEMS, pArgs );
     }
 
     GetToolBox().EndSelection();
@@ -177,6 +179,17 @@ SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
 void SvxClipBoardControl::StateChanged(
         USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
+    const SfxBoolItem* pDropDownDisabler = PTR_CAST( SfxBoolItem, pState );
+    sal_Bool bEnableDropDown = !pDropDownDisabler || pDropDownDisabler->GetValue();
+
+    // if not, we need to disable the drop-down
+    if ( bEnableDropDown )
+        GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );
+    else
+        GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~TIB_DROPDOWN );
+    GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
+
+    // enable the item as a whole
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
 }
 
