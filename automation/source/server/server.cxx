@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:06:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,6 @@
 
 // do not use Application Idle but AutoTimer instead
 #define TIMERIDLE
-
-#if OSL_DEBUG_LEVEL > 1
-    #if defined(WNT) || defined(WNT)
-//  #define CPP_EXCEPTIONS
-    #endif
-#else
-    #if defined(WNT) || defined(WNT)
-    #define CPP_EXCEPTIONS
-    #endif
-#endif
 
 #define NO_JPEG
 
@@ -723,44 +713,53 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
 //      MessBox MB( pMainWin, WB_DEF_OK|WB_OK, "Pause ...", "... und Weiter" );
 //      MB.Execute();
 
-    #ifdef CPP_EXCEPTIONS
-        try
-    #endif
+        if ( !StatementList::bCatchGPF )
         {
             if (!pC->CheckWindowWait()  ||  !pC->Execute())
             {
-    #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Leaving CommandHdl\n" );
-    #endif
+#endif
                 return 0;        // So dass die App nochmal ´ne chance bekommt
             }
         }
-    #ifdef CPP_EXCEPTIONS
-        catch( ... )
+        else
         {
-            if ( !StatementFlow::bUseIPC )
-                throw;  // aus der Hilfe heraus nicht leise abbrechen
-
             try
             {
-                ModelessDialog *pDlg = new ModelessDialog(NULL);
-                pDlg->SetOutputSizePixel(Size(150,0));
-                pDlg->SetText( String ( TTProperties::GetSvtResId( TT_GPF ) ) );
-                pDlg->Show();
-                DBG_ERROR("GPF");
-                pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
-                StatementList::bDying = TRUE;
-                while ( StatementList::pFirst )         // Kommandos werden übersprungen
-                    StatementList::NormalReschedule();
-                delete pDlg;
+                if (!pC->CheckWindowWait()  ||  !pC->Execute())
+                {
+#if OSL_DEBUG_LEVEL > 1
+                    m_pDbgWin->AddText( "Leaving CommandHdl\n" );
+#endif
+                    return 0;        // So dass die App nochmal ´ne chance bekommt
+                }
             }
-            catch ( ... )
+            catch( ... )
             {
+                if ( !StatementFlow::bUseIPC )
+                    throw;  // aus der Hilfe heraus nicht leise abbrechen
+
+                try
+                {
+                    ModelessDialog *pDlg = new ModelessDialog(NULL);
+                    pDlg->SetOutputSizePixel(Size(150,0));
+                    pDlg->SetText( String ( TTProperties::GetSvtResId( TT_GPF ) ) );
+                    pDlg->Show();
+                    DBG_ERROR("GPF");
+                    pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
+                    StatementList::bDying = TRUE;
+                    while ( StatementList::pFirst )         // Kommandos werden übersprungen
+                        StatementList::NormalReschedule();
+                    delete pDlg;
+                }
+                catch ( ... )
+                {
+                    pApp->Quit();
+                }
                 pApp->Quit();
             }
-            pApp->Quit();
         }
-    #endif
 
 
         for (int xx = 1;xx < 20;xx++)
