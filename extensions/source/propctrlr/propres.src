@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:36:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ String RID_STR_STANDARD
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
     Text[ slovak ] = "Východzie";
+    Text[ hungarian ] = "Alapértelmezett";
+    Text[ slovenian ] = "Privzeto";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
@@ -124,6 +126,8 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ hebrew ] = "‮כללי‬";
     Text[ hindi ] = "सामान्य";
     Text[ slovak ] = "Všeobecné";
+    Text[ hungarian ] = "Általános";
+    Text[ slovenian ] = "Splošno";
 };
 String RID_STR_PROPPAGE_DATA
 {
@@ -155,6 +159,8 @@ String RID_STR_PROPPAGE_DATA
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
     Text[ slovak ] = "Dáta";
+    Text[ hungarian ] = "Adat";
+    Text[ slovenian ] = "Podatki";
 };
 String RID_STR_BOOL
 {
@@ -186,11 +192,23 @@ String RID_STR_BOOL
     Text[ hebrew ] = "Nein;Ja";
     Text[ hindi ] = "नहीं;हाँ";
     Text[ slovak ] = "Nie;Áno";
+    Text[ hungarian ] = "Nem;Igen";
+    Text[ slovenian ] = "Ne;Da";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23.90.1  2003/12/16 11:43:33  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.23.44.1  2003/11/24 13:32:23  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.23  2003/07/17 12:36:50  hr
+ *  INTEGRATION: CWS mergerc3 (1.22.6); FILE MERGED
+ *  2003/07/16 17:08:05 ihi 1.22.6.1: rc-3 merge all languages
+ *
  *  Revision 1.22.6.1  2003/07/16 17:08:05  ihi
  *  rc-3 merge all languages
  *
@@ -294,6 +312,7 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
 
 
 
