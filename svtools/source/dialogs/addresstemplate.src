@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:19:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 14:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "addresstemplate.hrc"
 #endif
 #ifndef _SVT_CONTROLDIMS_HRC_
-#include <svtools/controldims.hrc>
+#include "controldims.hrc"
 #endif
 
 #define FIELD_ROW_HEIGHT    17
@@ -75,7 +75,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
 {
     SVLook = TRUE ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 86 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+    Size = MAP_APPFONT ( 260 , 88 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
     Hide = TRUE ;
     Moveable = TRUE ;
     Text = "Vorlagen: Adressbuch-Zuordnung";
@@ -249,22 +249,22 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y ) ;
-        Size = MAP_APPFONT ( 248 , 3 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Size = MAP_APPFONT ( 248 , 5 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
     };
 
 #define DECLARE_FIELD( row, column )    \
         FixedText FT_FIELD_BASE + row * 2 + column  \
         {   \
             SVLook = TRUE ; \
-            Pos = MAP_APPFONT ( 3 + column * 116, RSC_SP_CTRL_GROUP_Y + 2 + row * FIELD_ROW_HEIGHT ) ;  \
-            Size = MAP_APPFONT ( 60 , 10 ) ;    \
+            Pos = MAP_APPFONT ( 3 + column * 114, RSC_SP_CTRL_GROUP_Y + 2 + row * FIELD_ROW_HEIGHT ) ;  \
+            Size = MAP_APPFONT ( 59 , 10 ) ;    \
             Group = TRUE;   \
         };  \
         ListBox LB_FIELD_BASE + row * 2 + column    \
         {   \
             SVLook = TRUE;  \
-            Pos = MAP_APPFONT ( 70 + column * 116, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ; \
-            Size = MAP_APPFONT ( 43 , 14 ) ;    \
+            Pos = MAP_APPFONT ( 69 + column * 114, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ; \
+            Size = MAP_APPFONT ( 42 , 14 ) ;    \
             Border = TRUE;  \
             DropDown = TRUE;    \
             TabStop = TRUE; \
@@ -329,22 +329,22 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     ScrollBar SB_FIELDSCROLLER
     {
         SVLook = TRUE;
-        Pos = MAP_APPFONT ( 239, 0 ) ;
-        Size = MAP_APPFONT ( 8 , 19 + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
+        Pos = MAP_APPFONT ( 235, RSC_SP_CTRL_GROUP_Y ) ;
+        Size = MAP_APPFONT ( 8 , 16 - RSC_SP_CTRL_GROUP_Y + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
     };
 
     OKButton PB_OK
     {
         SVLook = TRUE;
         DefButton = TRUE;
-        Pos = MAP_APPFONT ( 151, 68 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Pos = MAP_APPFONT ( 151, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
     CancelButton PB_CANCEL
     {
         SVLook = TRUE;
-        Pos = MAP_APPFONT ( 204, 68 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Pos = MAP_APPFONT ( 204, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
