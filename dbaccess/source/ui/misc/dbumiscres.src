@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:39:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,21 +88,21 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Folha de cбlculo";
-        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“екст;ƒокумент электронной таблицы";
-        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO; еяменп;Єггсбцп рянбкб";
+        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“екст;ƒокумент электронной таблицы;јдресна€ книга";
+        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO; еяменп;Єггсбцп рянбкб;ЅфжЁнфб дйехиэнуещн";
         Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument";
-        Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur";
-        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cбlculo";
+        Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;CarnetAdresses";
+        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cбlculo;Libreta de direcciones";
         Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
         Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
         Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
-        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny";
+        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksiєњka adresowa";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;√Јљƒ;Х\\МvОZƒёЈ≠“ЁЁƒ";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;ХґПС;Х\\МvОZƒёЈ≠“Ёƒ;±ƒёЏљТ†";
         Text[ korean ] = "Adabas;JDBC;ODBC;dBase;≈ЎљЇ∆Ѓ;љЇ«ЅЈєµељ√∆Ѓ єЃЉ≠";
-        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ќƒ„÷;є§„ч±нќƒµµ";
+        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ќƒ„÷;є§„ч±нќƒµµ;Ќ®—ґ≤Њ";
         Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;§е¶r;§uІ@™н§е•у";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;д’;г” дѕ ћѕ«жб";
@@ -255,7 +255,7 @@ String STR_MISSING_TABLES_XDROP
     Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
     Text[ portuguese ] = "A tabela nгo tem suporte na ligaзгo da base de dados e por isso impossнvel de eliminar.";
     Text[ russian ] = "”далить таблицу невозможно, поскольку соедиенение базы данных этого не поддерживает.";
-    Text[ greek ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ greek ] = "ƒен еянбй дхнбфьн нб дйбгсбцея п рянбкбт, ерейдё ден хр№счей уэндеуз ме фзн в№уз дедпмЁнщн.";
     Text[ dutch ] = "De tabel kan niet worden gewist, daar deze niet wordt ondersteund door de database.";
     Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportйe par la connexion de BD.";
     Text[ spanish ] = "No se puede eliminar la tabla porque la conexiуn con la base de datos no apoya esta acciуn.";
@@ -283,7 +283,7 @@ String STR_BUTTON_TEXT_ALL
     Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
     Text[ portuguese ] = "~Tudo";
     Text[ russian ] = "~¬се";
-    Text[ greek ] = "~All";
+    Text[ greek ] = "Љл~б";
     Text[ dutch ] = "~Alle";
     Text[ french ] = "~Tout";
     Text[ spanish ] = "~Todos";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/05/30 19:39:05  kz
+ *  Merge SRC633: 30.05.01 - 21:38:38
+ *
  *  Revision 1.24  2001/05/29 13:11:51  oj
  *  #87149# addressbook ui impl
  *
