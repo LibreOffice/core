@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:26:04 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:58:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,4 +132,6 @@ APP1DEF=	$(MISC)\$(APP1TARGET).def
 # --- Targets ---
 
 .INCLUDE : target.mk
+
+
 
