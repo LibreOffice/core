@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-03 13:59:06 $
+ *  last change: $Author: tra $ $Date: 2001-08-06 07:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,19 +230,59 @@ void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent ) const
 }
 
 //-----------------------------------------------------------------------------------------
-//
+// If there are more then one listener the return value of the last one wins
 //-----------------------------------------------------------------------------------------
 
 OUString SAL_CALL CFilePicker::helpRequested( FilePickerEvent aEvent ) const
 {
-    /*
-    PFNCXFPLISTENER pfncFPListener = &XFilePickerListener::helpRequested;
-    aEvent.Source = Reference< XInterface > (
-        static_cast< XFilePickerNotifier* >(
-            const_cast< CFilePicker* >( this ) ) );
-    notifyAllListener( pfncFPListener, aEvent );
-    */
-    return OUString( );
+    OUString aHelpText;
+
+    if ( !rBHelper.bDisposed )
+    {
+        ::osl::ClearableMutexGuard aGuard( rBHelper.rMutex );
+
+        if ( !rBHelper.bDisposed )
+        {
+            aGuard.clear( );
+
+            ::cppu::OInterfaceContainerHelper* pICHelper =
+                rBHelper.aLC.getContainer( getCppuType( ( Reference< XFilePickerListener > * ) 0 ) );
+
+            if ( pICHelper )
+            {
+                ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
+
+                while( iter.hasMoreElements( ) )
+                {
+                    try
+                    {
+                        /*
+                            if there are multiple listeners responding
+                            to this notification the next response
+                            overwrittes  the one before if it is not empty
+                        */
+
+                        OUString temp;
+
+                        Reference< XFilePickerListener > xFPListener( iter.next( ), ::com::sun::star::uno::UNO_QUERY );
+                        if ( xFPListener.is( ) )
+                        {
+                            temp = xFPListener->helpRequested( aEvent );
+                            if ( temp.getLength( ) )
+                                aHelpText = temp;
+                        }
+
+                    }
+                    catch( RuntimeException& )
+                    {
+                        OSL_ENSURE( false, "RuntimeException during event dispatching" );
+                    }
+                }
+            }
+        }
+    }
+
+    return aHelpText;
 }
 
 //-----------------------------------------------------------------------------------------
