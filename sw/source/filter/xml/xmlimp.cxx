@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: ab $ $Date: 2000-11-28 11:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ enum SwXMLDocTokens
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
+    XML_TOK_DOC_SCRIPT,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
@@ -150,6 +151,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_master_styles,  XML_TOK_DOC_MASTERSTYLES   },
     { XML_NAMESPACE_OFFICE, sXML_meta,       XML_TOK_DOC_META       },
     { XML_NAMESPACE_OFFICE, sXML_body,       XML_TOK_DOC_BODY       },
+    { XML_NAMESPACE_OFFICE, sXML_script,     XML_TOK_DOC_SCRIPT     },
     XML_TOKEN_MAP_END
 };
 
@@ -220,6 +222,9 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_META:
         pContext = GetSwImport().CreateMetaContext( rLocalName );
+        break;
+    case XML_TOK_DOC_SCRIPT:
+        pContext = GetSwImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
         pContext = GetSwImport().CreateBodyContext( rLocalName );

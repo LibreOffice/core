@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: ab $ $Date: 2000-11-28 11:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ public:
     void                    FinishStyles();
     // namespace office
     SvXMLImportContext *CreateMetaContext( const ::rtl::OUString& rLocalName );
+    SvXMLImportContext *CreateScriptContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
                 const ::rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
