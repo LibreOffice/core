@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ public:
 
     SdXMLGroupShapeContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXMLGroupShapeContext();
 
     virtual SvXMLImportContext *CreateChildContext(
