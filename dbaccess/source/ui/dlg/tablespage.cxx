@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:19:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,9 +558,16 @@ namespace dbaui
             if (!m_xCollator.is())
             {
                 // the collator for the string compares
-                m_xCollator = Reference< XCollator >(m_xORB->createInstance(SERVICE_I18N_COLLATOR), UNO_QUERY);
-                if (m_xCollator.is())
-                    m_xCollator->loadDefaultCollator(Application::GetSettings().GetLocale(), 0);
+                try
+                {
+                    m_xCollator = Reference< XCollator >(m_xORB->createInstance(SERVICE_I18N_COLLATOR), UNO_QUERY);
+                    if (m_xCollator.is())
+                        m_xCollator->loadDefaultCollator(Application::GetSettings().GetLocale(), 0);
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"Exception catched!");
+                }
             }
 
             // fill the table list with this connection information
@@ -630,6 +637,10 @@ namespace dbaui
                 catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
                 catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
                 catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"Exception catched!");
+                }
 
                 // adjust the toolbox texts according
                 implAdjustToolBoxTexts();
@@ -670,6 +681,10 @@ namespace dbaui
                 catch(SQLException&)
                 {
                     DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"Exception catched!");
                 }
             }
         }
