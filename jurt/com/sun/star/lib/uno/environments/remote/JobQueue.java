@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
+ *  last change: $Author: kr $ $Date: 2001-02-06 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@ package com.sun.star.lib.uno.environments.remote;
 import java.util.Hashtable;
 
 
-import com.sun.star.lib.sandbox.IInvokeHook;
+import com.sun.star.lib.util.IInvokeHook;
+import com.sun.star.lib.util.IInvokable;
 
 
 import com.sun.star.uno.UnoRuntime;
@@ -81,7 +82,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2001-01-16 18:01:27 $
+ * @version     $Revision: 1.8 $ $ $Date: 2001-02-06 13:31:14 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -132,7 +133,7 @@ public class JobQueue {
     /**
      * A thread for dispatching jobs
      */
-    class JobDispatcher extends Thread {
+    class JobDispatcher extends Thread implements IInvokable {
         JobDispatcher() {
 //              super("JobDispatcher - " + _threadId);
 
@@ -148,7 +149,7 @@ public class JobQueue {
             return _threadId;
         }
 
-        public void doWork() {
+        public Object invoke(Object params[]) {
             try {
                 enter(1000, null);
             }
@@ -156,6 +157,8 @@ public class JobQueue {
                 System.err.println(getClass().getName() + " - exception occurred:" + exception);
                 if(DEBUG) ;exception.printStackTrace();
             }
+
+            return null;
         }
 
         public void run() {
@@ -163,14 +166,14 @@ public class JobQueue {
 
             if(__JobDispatcher_run_hook != null) {
                 try {
-                    __JobDispatcher_run_hook.invoke(this, "doWork", null);
+                    __JobDispatcher_run_hook.invoke(this, null);
                 }
                 catch(Exception exception) { // should not fly
                     System.err.println(getClass().getName() + " - unexpected: method >doWork< threw an exception - " + exception);
                 }
             }
             else
-                doWork();
+                invoke(null);
 
             // dispose the jobQueue
 //              dispose();
