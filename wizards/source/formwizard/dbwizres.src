@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:44:37 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 20:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ String RID_COMMON_START + 15
 
 String RID_COMMON_START + 16
 {
-    Text [ de ] = "Steps";
+    Text [ de ] = "Schritte";
     Text [ en-US] = "Steps";
 };
 
@@ -4257,7 +4257,7 @@ String RID_DB_REPORT_WIZARD_START + 31
 
 String RID_DB_REPORT_WIZARD_START + 32
 {
-    Text [ de ] = "Entscheiden, wie Sie fortfahren möchten?";
+    Text [ de ] = "Entscheiden Sie, wie Sie fortfahren möchten?";
     Text [ en-US ] = "Decide how you want to proceed";
     Text[ pt ] = "~Nome do relatório";
     Text[ ru ] = "~Èìÿ îò÷åòà";
@@ -4494,7 +4494,7 @@ String RID_DB_REPORT_WIZARD_START + 40
 
 String RID_DB_REPORT_WIZARD_START + 41
 {
-    Text [ de ] = "Berichts sofort verwenden";
+    Text [ de ] = "Bericht sofort verwenden";
     Text [ en-US ] = "Use report immediately";
     Text[ pt ] = "Use report template immediately";
     Text[ ru ] = "Use report template immediately";
@@ -5482,6 +5482,14 @@ String RID_DB_REPORT_WIZARD_START + 78
     Text [ de ] = "Wie möchten Sie nach Erstellung des Berichts fortfahren?";
     Text [ en-US ] = "How do you want to proceed after creating the report?";
 };
+
+String RID_DB_REPORT_WIZARD_START + 79
+{
+    Text [ de ] = "Welche Art von Bericht möchten Sie erzeugen?";
+    Text [ en-US ] = "What kind of report do you want to create?";
+};
+
+
 
 
 // ============================================================================
