@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:07:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,33 +170,46 @@
 
 // tabpage languages -----------------------------------------------------
 
-#define FL_UI_LANG                  10
-#define FL_LINGU_LANG               11
-#define FT_WEST_LANG                12
-#define LB_WEST_LANG                13
-#define FT_ASIAN_LANG               14
-#define LB_ASIAN_LANG               15
-#define FT_COMPLEX_LANG             16
-#define LB_COMPLEX_LANG             17
-#define CB_CURRENT_DOC              18
-#define FL_ASIANSUPPORT             19
-#define CB_ASIANSUPPORT             20
-#define FL_CTLSUPPORT               21
-#define CB_CTLSUPPORT               22
-#define FT_LOCALESETTING            23
-#define LB_LOCALESETTING            24
-#define FT_CURRENCY                 25
-#define LB_CURRENCY                 26
-#define FI_WEST_LANG                27
-#define FI_ASIAN_LANG               28
-#define FI_COMPLEX_LANG             29
-#define FI_ASIANSUPPORT             30
-#define FI_CTLSUPPORT               31
-#define FI_LOCALESETTING            32
-#define FI_CURRENCY                 33
-#define FT_DECIMALSEPARATOR         34
-#define CB_DECIMALSEPARATOR         35
+#define FL_UI_LANG              1
+#define FT_UI_LANG              2
+#define LB_UI_LANG              3
+#define FL_LINGU_LANG           4
+#define FT_WEST_LANG            5
+#define LB_WEST_LANG            6
+#define FT_ASIAN_LANG           7
+#define LB_ASIAN_LANG           8
+#define FT_COMPLEX_LANG         9
+#define LB_COMPLEX_LANG         10
+#define CB_CURRENT_DOC          11
+#define FL_ENHANCED             12
+#define CB_ASIANSUPPORT         13
+#define CB_CTLSUPPORT           15
+#define FT_LOCALESETTING        16
+#define LB_LOCALESETTING        17
+#define FT_CURRENCY             18
+#define LB_CURRENCY             19
+#define FI_WEST_LANG            20
+#define FI_ASIAN_LANG           21
+#define FI_COMPLEX_LANG         22
+#define FI_ASIANSUPPORT         23
+#define FI_CTLSUPPORT           24
+#define FI_LOCALESETTING        25
+#define FI_CURRENCY             26
+#define FT_DECIMALSEPARATOR     27
+#define CB_DECIMALSEPARATOR     28
+#define FI_USERINTERFACE        29
+#define FT_USERINTERFACE        30
+#define LB_USERINTERFACE        31
+#define STR_IB_LANGCHANGE_TITLE 32
 
+#define FL_FILEDLG              53
+#define CB_FILEDLG              54
+#define FT_GRAPHICCACHE_UNIT        55
+#define FT_GRAPHICOBJECTCACHE_UNIT  56
+#define FT_GRAPHICOBJECTTIME_UNIT   57
+#define FT_HELPAGENT_TIME_UNIT      58
+#define FL_DOCSTATUS                59
+#define CB_DOCSTATUS                60
 #endif // #ifndef _SVX_OPTGDLG_HRC
 
 // ******************************************************************* EOF
