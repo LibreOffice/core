@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:38:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@ class TabBar;
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#endif
+
 
 using namespace ::com::sun::star::accessibility;
 
@@ -882,6 +886,7 @@ void SvTreeListBox::GetFocus()
     SvLBoxEntry* pEntry = FirstSelected();
     if ( pEntry )
         pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+
 }
 
 void SvTreeListBox::LoseFocus()
@@ -2541,16 +2546,6 @@ BOOL SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
     return pImp->bContextMenuHandling;
 }
 
-void SvTreeListBox::AddEventListener( const Link& rEventListener )
-{
-    pImp->AddEventListener( rEventListener );
-}
-
-void SvTreeListBox::RemoveEventListener( const Link& rEventListener )
-{
-    pImp->RemoveEventListener( rEventListener );
-}
-
 ::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
 {
     Window* pParent = GetAccessibleParentWindow();
@@ -2561,14 +2556,13 @@ void SvTreeListBox::RemoveEventListener( const Link& rEventListener )
     {
         ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
+        {
+            // need to be done here to get the vclxwindow later on in the accessbile
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = new svt::AccessibleListBox( *this, xAccParent );
+        }
     }
     return xAccessible;
-}
-
-void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
-{
-    SvLBox::FillAccessibleStateSet( rStateSet );
 }
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
@@ -2602,3 +2596,12 @@ void SvTreeListBox::EnableCellFocus()
     pImp->EnableCellFocus();
 }
 
+void SvTreeListBox::CallImplEventListeners(ULONG nEvent, void* pData)
+{
+    CallEventListeners(nEvent, pData);
+}
+
+void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
+      SvLBox::FillAccessibleStateSet( rStateSet );
+}
