@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-20 16:59:38 $
+ *  last change: $Author: mba $ $Date: 2001-01-25 15:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,6 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
     if ( !xActiveTask.is() )
         return FALSE;
 
-
     // try to find the help frame
     ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
     Reference < XDispatchProvider > xFrame( xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
@@ -214,14 +213,15 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         aHelpURL += '/';
         aHelpURL += String::CreateFromInt32( nHelpId );
     }
+
     AppendConfigToken_Impl( aHelpURL, sal_True );
 
     if ( aTicket.Len() )
     {
         // if there is a ticket, we are inside a plugin, so a request including the URL must be posted
-        if ( !xFrame.is() )
+//        if ( !xFrame.is() )
             // must be created on dispatch
-            nFlag |= FrameSearchFlag::CREATE;
+//            nFlag |= FrameSearchFlag::CREATE;
         // encode the help URL because it is a parameter of another URL
         String aEncodedURL = INetURLObject::encode(
             aHelpURL, INetURLObject::PART_MAILTO, '%', INetURLObject::ENCODE_ALL );
@@ -229,6 +229,9 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
         aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_Url=");
         aURL += aEncodedURL;
+        aURL += '&';
+        aURL += DEFINE_CONST_UNICODE("HELP_ProgramID=");
+        aURL += GetHelpModuleName( nHelpId );
         aURL += '&';
         aURL += DEFINE_CONST_UNICODE("HELP_User=");
         aURL += aUser;
