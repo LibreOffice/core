@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-06 11:13:30 $
+ *  last change: $Author: kso $ $Date: 2002-09-20 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
  *************************************************************************/
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -77,6 +73,9 @@
 #endif
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONERROR_HPP_
@@ -264,6 +263,108 @@ public:
 };
 
 //=========================================================================
+// Helpers.
+//=========================================================================
+
+static ucb::ContentBroker* getContentBroker( bool bThrow )
+    throw ( ContentCreationException, RuntimeException )
+{
+    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+
+    if ( !pBroker )
+    {
+        if ( bThrow )
+            throw ContentCreationException(
+                    rtl::OUString::createFromAscii( "No Content Broker!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_BROKER );
+    }
+    else
+        OSL_ENSURE( pBroker->getContentProviderManagerInterface()
+                                    ->queryContentProviders().getLength(),
+                    "Content Broker not configured (no providers)!" );
+
+    return pBroker;
+}
+
+//=========================================================================
+static Reference< XContentIdentifier > getContentIdentifier(
+                                    const ucb::ContentBroker & rBroker,
+                                    const rtl::OUString & rURL,
+                                    bool bThrow )
+    throw ( ContentCreationException, RuntimeException )
+{
+    Reference< XContentIdentifierFactory > xIdFac
+                        = rBroker.getContentIdentifierFactoryInterface();
+    if ( xIdFac.is() )
+    {
+        Reference< XContentIdentifier > xId
+            = xIdFac->createContentIdentifier( rURL );
+
+        if ( xId.is() )
+            return xId;
+
+        if ( bThrow )
+            throw ContentCreationException(
+                rtl::OUString::createFromAscii( "No Content Identifier!" ),
+                Reference< XInterface >(),
+                ContentCreationError_IDENTIFIER_CREATION_FAILED );
+    }
+    else
+    {
+        if ( bThrow )
+            throw ContentCreationException(
+                        rtl::OUString::createFromAscii(
+                            "No Content Identifier factory!" ),
+                        Reference< XInterface >(),
+                        ContentCreationError_NO_IDENTIFIER_FACTORY );
+    }
+
+    return Reference< XContentIdentifier >();
+}
+
+//=========================================================================
+static Reference< XContent > getContent(
+                                    const ucb::ContentBroker & rBroker,
+                                    const Reference< XContentIdentifier > & xId,
+                                    bool bThrow )
+    throw ( ContentCreationException, RuntimeException )
+{
+    Reference< XContentProvider > xProvider
+        = rBroker.getContentProviderInterface();
+    if ( xProvider.is() )
+    {
+        Reference< XContent > xContent;
+        try
+        {
+            xContent = xProvider->queryContent( xId );
+        }
+        catch ( IllegalIdentifierException const & )
+        {
+        }
+
+        if ( xContent.is() )
+            return xContent;
+
+        if ( bThrow )
+            throw ContentCreationException(
+                    rtl::OUString::createFromAscii( "No Content!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_CONTENT_CREATION_FAILED );
+    }
+    else
+    {
+        if ( bThrow )
+            throw ContentCreationException(
+                    rtl::OUString::createFromAscii( "No Content Provider!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_PROVIDER );
+    }
+
+    return Reference< XContent >();
+}
+
+//=========================================================================
 //=========================================================================
 //
 // Content Implementation.
@@ -281,60 +382,12 @@ Content::Content( const rtl::OUString& rURL,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
-    if ( !pBroker )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Broker!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_BROKER );
-
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
-
-    Reference< XContentIdentifierFactory > xIdFac
-                        = pBroker->getContentIdentifierFactoryInterface();
-    if ( !xIdFac.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii(
-                        "No Content Identifier factory!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_IDENTIFIER_FACTORY );
+    ucb::ContentBroker* pBroker = getContentBroker( true );
 
     Reference< XContentIdentifier > xId
-                        = xIdFac->createContentIdentifier( rURL );
-    if ( !xId.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Identifier!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_IDENTIFIER_CREATION_FAILED );
+        = getContentIdentifier( *pBroker, rURL, true );
 
-    Reference< XContentProvider > xProvider
-        = pBroker->getContentProviderInterface();
-    if ( !xProvider.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Provider!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_PROVIDER );
-
-    Reference< XContent > xContent;
-    try
-    {
-        xContent = xProvider->queryContent( xId );
-    }
-    catch ( IllegalIdentifierException const & )
-    {
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_CONTENT_CREATION_FAILED );
-    }
-
-    if ( !xContent.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_CONTENT_CREATION_FAILED );
+    Reference< XContent > xContent = getContent( *pBroker, xId, true );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
 }
@@ -344,43 +397,9 @@ Content::Content( const Reference< XContentIdentifier >& rId,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
-    if ( !pBroker )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Broker!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_BROKER );
+    ucb::ContentBroker* pBroker = getContentBroker( true );
 
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
-
-    Reference< XContentProvider > xProvider
-        = pBroker->getContentProviderInterface();
-    if ( !xProvider.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Provider!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_PROVIDER );
-
-    Reference< XContent > xContent;
-    try
-    {
-        xContent = xProvider->queryContent( rId );
-    }
-    catch ( IllegalIdentifierException const & )
-    {
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_CONTENT_CREATION_FAILED );
-    }
-
-    if ( !xContent.is() )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_CONTENT_CREATION_FAILED );
+    Reference< XContent > xContent = getContent( *pBroker, rId, true );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
 }
@@ -390,16 +409,7 @@ Content::Content( const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
-    if ( !pBroker )
-        throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Broker!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_BROKER );
-
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
+    ucb::ContentBroker* pBroker = getContentBroker( true );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), rContent, rEnv );
 }
@@ -416,45 +426,22 @@ sal_Bool Content::create( const rtl::OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    ucb::ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
-
-    Reference< XContentIdentifierFactory > xIdFac
-                        = pBroker->getContentIdentifierFactoryInterface();
-    if ( !xIdFac.is() )
-        return sal_False;
-
     Reference< XContentIdentifier > xId
-                        = xIdFac->createContentIdentifier( rURL );
+        = getContentIdentifier( *pBroker, rURL, false );
     if ( !xId.is() )
         return sal_False;
 
-    Reference< XContentProvider > xProvider
-        = pBroker->getContentProviderInterface();
-    if ( !xProvider.is() )
-        return sal_False;
-
-    Reference< XContent > xContent;
-    try
-    {
-        xContent = xProvider->queryContent( xId );
-    }
-//  catch ( IllegalIdentifierException const & )
-    catch ( Exception const & )
-    {
-        return sal_False;
-    }
-
+    Reference< XContent > xContent = getContent( *pBroker, xId, false );
     if ( !xContent.is() )
         return sal_False;
 
     rContent.m_xImpl
         = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+
     return sal_True;
 }
 
@@ -464,35 +451,17 @@ sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    ucb::ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
-
-    Reference< XContentProvider > xProvider
-        = pBroker->getContentProviderInterface();
-    if ( !xProvider.is() )
-        return sal_False;
-
-    Reference< XContent > xContent;
-    try
-    {
-        xContent = xProvider->queryContent( rId );
-    }
-//  catch ( IllegalIdentifierException const & )
-    catch ( Exception const & )
-    {
-        return sal_False;
-    }
-
+    Reference< XContent > xContent = getContent( *pBroker, rId, false );
     if ( !xContent.is() )
         return sal_False;
 
     rContent.m_xImpl
         = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+
     return sal_True;
 }
 
@@ -502,16 +471,13 @@ sal_Bool Content::create( const Reference< XContent >& xContent,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    ucb::ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
-    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                "Content Broker not configured (no providers)!" );
-
     rContent.m_xImpl
         = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+
     return sal_True;
 }
 
