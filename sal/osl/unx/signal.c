@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-30 13:31:11 $
+ *  last change: $Author: jbu $ $Date: 2001-04-26 13:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,10 @@ static void SignalHandlerFunction(int Signal)
         case SIGBUS:
         case SIGILL:
         case SIGSEGV:
+        case SIGIOT:
+#if ( SIGIOT != SIGABRT )
+        case SIGABRT:
+#endif
             Info.Signal = osl_Signal_AccessViolation;
             break;
 
@@ -341,7 +345,6 @@ static void SignalHandlerFunction(int Signal)
             break;
 
         case SIGINT:
-        case SIGIOT:
         case SIGTERM:
     case SIGQUIT:
     case SIGHUP:
