@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:32 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,14 +787,13 @@ void SAL_CALL OfficeIPCThread::run()
                     new ApplicationEvent( aEmpty, aEmpty,
                                             "APPEAR", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
-                pRequest->cProcessed.set();
+                if (pRequest != NULL) pRequest->cProcessed.set();
             }
 
             // we don't need the mutex any longer...
             aGuard.clear();
             // wait for processing to finish
-            if (pRequest != NULL)
-                pRequest->cProcessed.wait();
+            if (pRequest != NULL) pRequest->cProcessed.wait();
             // processing finished, inform the requesting end
             nBytes = 0;
             while (

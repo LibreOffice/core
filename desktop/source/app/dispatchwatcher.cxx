@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:29 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
+                aDispatchRequest.aRequestType == REQUEST_VIEW ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
                  aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
