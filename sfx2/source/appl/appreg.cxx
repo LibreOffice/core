@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mh $ $Date: 2001-07-23 11:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,6 @@
 
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
-#endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
 #endif
 
 #include <app.hxx>
@@ -247,7 +242,7 @@ void SfxApplication::SetInterfaceByIdImpl( SfxInterfaceId eId,
                 sizeof(SfxInterface*) * nInterfaces );
         memset( pNewInterfaces+nInterfaces, 0,
                 sizeof(SfxInterface*) * (nNewInterfaces-nInterfaces) );
-        delete pInterfaces;
+        delete[] pInterfaces;
         nInterfaces = nNewInterfaces;
         pInterfaces = pNewInterfaces;
     }
