@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-10 11:34:35 $
+#   last change: $Author: mh $ $Date: 2002-04-23 15:24:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,6 +181,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"

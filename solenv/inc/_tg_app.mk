@@ -86,6 +86,10 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -294,6 +298,10 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -502,6 +510,10 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -710,6 +722,10 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -918,6 +934,10 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -1126,6 +1146,10 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -1334,6 +1358,10 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -1542,6 +1570,10 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -1750,6 +1782,10 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -1958,6 +1994,10 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
+# Set up links to libstlport_gcc.dylib before creating bundle
+.IF "$(STLPORT4)"!=""
+    @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
