@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-06-26 12:06:30 $
+ *  last change: $Author: af $ $Date: 2002-06-27 11:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,15 +159,20 @@ sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
     if ((pStateSet != NULL) && !pStateSet->contains(aState))
     {
         pStateSet->AddState (aState);
-        // Clear the mutex guard so that it is not locked during calls to listeners.
+        // Clear the mutex guard so that it is not locked during calls to
+        // listeners.
         aGuard.clear();
 
-        uno::Any aNewValue;
-        aNewValue <<= aState;
-        CommitChange(
-            AccessibleEventId::ACCESSIBLE_STATE_EVENT,
-            aNewValue,
-            uno::Any());
+        // Send event for all states except the DEFUNC state.
+        if (aState != AccessibleStateType::DEFUNC)
+        {
+            uno::Any aNewValue;
+            aNewValue <<= aState;
+            CommitChange(
+                AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+                aNewValue,
+                uno::Any());
+        }
         return sal_True;
     }
     else
