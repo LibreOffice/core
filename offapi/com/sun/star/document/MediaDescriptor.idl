@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,13 @@ service MediaDescriptor
     /** id of the initial view.
      */
     [property] short ViewId;
+
+    //-------------------------------------------------------------------------
+    /** should the macro be executed.
+        the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
+        constant list
+     */
+    [property] short MacroExecutionMode;
 };
 
 //=============================================================================
