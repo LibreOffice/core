@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-21 08:52:19 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,15 @@ OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
                :OImageModel(_rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_CONTROL_COMMANDBUTTON)
                                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR(OButtonModel, NULL);
+    DBG_CTOR( OButtonModel, NULL );
     m_nClassId = FormComponentType::COMMANDBUTTON;
+}
+
+//------------------------------------------------------------------
+OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OImageModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( OButtonModel, NULL );
 }
 
 //------------------------------------------------------------------------------
@@ -142,6 +149,9 @@ void OButtonModel::fillProperties(
 {
     return *const_cast<OButtonModel*>(this)->getArrayHelper();
 }
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

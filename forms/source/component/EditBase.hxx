@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 11:22:55 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,33 +123,29 @@ class OEditBaseModel :  public OBoundControlModel
 
 protected:
 // [properties]         fuer all Editierfelder
-    ::com::sun::star::uno::Any                  m_aDefault;
-    ::rtl::OUString                 m_aDefaultText;         // Defaultwert
-    sal_Bool                    m_bEmptyIsNull : 1;         // LeerString ist NULL
+    ::com::sun::star::uno::Any  m_aDefault;
+    ::rtl::OUString             m_aDefaultText;             // default value
+    sal_Bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
     sal_Bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
 // [properties]
 
     sal_Int16   getLastReadVersion() const { return m_nLastReadVersion; }
 
 public:
-    OEditBaseModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-        const ::rtl::OUString& rUnoControlModelName,
-        const ::rtl::OUString& rDefault,
-        const sal_Bool _bSetDelegator = sal_True);
+    DECLARE_DEFAULT_XTOR( OEditBaseModel );
 
-// ::com::sun::star::io::XPersistObject
+    // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                                         throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
-// ::com::sun::star::beans::XPropertyState
+    // XPropertyState
     virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;

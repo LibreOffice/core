@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,10 +133,14 @@ Sequence<Type> OPatternModel::_getTypes()
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OPatternModel )
+//------------------------------------------------------------------
 OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_CONTROL_PATTERNFIELD)
                                     // use the old control name for compytibility reasons
 {
+    DBG_CTOR( OPatternModel, NULL );
+
     m_nClassId = FormComponentType::PATTERNFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OPatternModel::nTextHandle == -1)
@@ -144,9 +148,21 @@ OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
+OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( OPatternModel, NULL );
+}
+
+//------------------------------------------------------------------
 OPatternModel::~OPatternModel()
 {
+    DBG_DTOR( OPatternModel, NULL );
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OPatternModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

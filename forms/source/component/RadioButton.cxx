@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,18 +144,47 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 }
 
 //------------------------------------------------------------------
+DBG_NAME( ORadioButtonModel )
+//------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False)
-                                    // use the old control name for compytibility reasons
-                    ,OPropertyChangeListener(m_aMutex)
-                    ,m_bInReset(sal_False)
+    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False)
+                    // use the old control name for compytibility reasons
+    ,OPropertyChangeListener(m_aMutex)
+    ,m_bInReset(sal_False)
 {
+    DBG_CTOR( ORadioButtonModel, NULL );
+
     m_nClassId = FormComponentType::RADIOBUTTON;
     m_nDefaultChecked = RB_NOCHECK;
     m_aLabelServiceName = FRM_SUN_COMPONENT_GROUPBOX;
     m_sDataFieldConnectivityProperty = PROPERTY_STATE;
 
+    implConstruct();
+}
 
+//------------------------------------------------------------------
+ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OBoundControlModel( _pOriginal, _rxFactory, sal_False)
+    ,OPropertyChangeListener( m_aMutex )
+    ,m_bInReset( sal_False )
+{
+    DBG_CTOR( ORadioButtonModel, NULL );
+
+    m_nDefaultChecked = _pOriginal->m_nDefaultChecked;
+    m_sReferenceValue = _pOriginal->m_sReferenceValue;
+
+    implConstruct();
+}
+
+//------------------------------------------------------------------------------
+ORadioButtonModel::~ORadioButtonModel()
+{
+    DBG_DTOR( ORadioButtonModel, NULL );
+}
+
+//------------------------------------------------------------------------------
+void ORadioButtonModel::implConstruct()
+{
     increment(m_refCount);
     if (m_xAggregateSet.is())
     {
@@ -164,6 +193,10 @@ ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxF
     }
     decrement(m_refCount);
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

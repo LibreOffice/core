@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 08:11:48 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,7 @@ protected:
     void _reset();
 
 public:
-    OGridControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-
-    virtual ~OGridControlModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OGridControlModel );
 
 // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel);
@@ -239,6 +237,9 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
+    DECLARE_XCLONEABLE();
+
+protected:
     virtual void approveNewElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
             ElementDescription* _pElement
@@ -257,6 +258,8 @@ protected:
 
     void gotColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
     void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
+
+    void cloneColumns( const OGridControlModel* _pOriginalContainer );
 
 private:
     DECL_LINK( OnFontChanged, void* );

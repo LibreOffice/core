@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 13:18:45 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,25 +128,48 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OCheckBoxModel )
+//------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                 :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False, sal_False)
-                                    // use the old control name for compytibility reasons
-                 ,OPropertyChangeListener(m_aMutex)
-                 ,m_bInReset(sal_False)
-                 ,m_pAggregatePropertyMultiplexer(NULL)
+    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False, sal_False)
+                    // use the old control name for compytibility reasons
+    ,OPropertyChangeListener(m_aMutex)
+    ,m_bInReset(sal_False)
+    ,m_pAggregatePropertyMultiplexer(NULL)
 {
+    DBG_CTOR( OCheckBoxModel, NULL );
+    implConstruct();
+
     m_nClassId = FormComponentType::CHECKBOX;
     m_nDefaultChecked = CB_NOCHECK;
     m_sDataFieldConnectivityProperty = PROPERTY_STATE;
+}
 
-    increment(m_refCount);
-    if (m_xAggregateSet.is())
+//------------------------------------------------------------------
+OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OBoundControlModel( _pOriginal, _rxFactory, sal_False, sal_False )
+    ,OPropertyChangeListener( m_aMutex )
+    ,m_bInReset( sal_False )
+    ,m_pAggregatePropertyMultiplexer( NULL )
+{
+    DBG_CTOR( OCheckBoxModel, NULL );
+    implConstruct();
+
+    m_nDefaultChecked = _pOriginal->m_nDefaultChecked;
+    m_sReferenceValue = _pOriginal->m_sReferenceValue;
+}
+
+//------------------------------------------------------------------------------
+void OCheckBoxModel::implConstruct()
+{
+    increment( m_refCount );
+    if ( m_xAggregateSet.is() )
     {
-        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
         m_pAggregatePropertyMultiplexer->acquire();
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_STATE);
+        m_pAggregatePropertyMultiplexer->addProperty( PROPERTY_STATE );
     }
-    decrement(m_refCount);
+    decrement( m_refCount );
 
     doSetDelegator();
 }
@@ -162,7 +185,11 @@ OCheckBoxModel::~OCheckBoxModel()
         m_pAggregatePropertyMultiplexer->release();
         m_pAggregatePropertyMultiplexer = NULL;
     }
+    DBG_DTOR( OCheckBoxModel, NULL );
 }
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
 //------------------------------------------------------------------------------
 void SAL_CALL OCheckBoxModel::disposing()

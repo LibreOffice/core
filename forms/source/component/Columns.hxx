@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 11:09:51 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef FORMS_COMPONENT_CLONEABLE_HXX
+#include "cloneable.hxx"
+#endif
 
 using namespace comphelper;
 
@@ -107,28 +110,30 @@ namespace frm
 //==================================================================
 typedef ::cppu::WeakAggComponentImplHelper2<    ::com::sun::star::container::XChild,
                                                 ::com::sun::star::lang::XUnoTunnel > OGridColumn_BASE;
-class OGridColumn :  public ::comphelper::OBaseMutex
+class OGridColumn   :public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE
                     ,public OPropertySetAggregationHelper
+                    ,public OCloneableAggregation
 {
 protected:
 // [properties]
-    ::com::sun::star::uno::Any                  m_aWidth;                   // Spaltenbreite
-    ::com::sun::star::uno::Any                  m_aAlign;
-    ::com::sun::star::uno::Any                  m_aHidden;                  // Spalte ist versteckt ?
+    ::com::sun::star::uno::Any  m_aWidth;                   // column width
+    ::com::sun::star::uno::Any  m_aAlign;                   // column alignment
+    ::com::sun::star::uno::Any  m_aHidden;                  // column hidden?
 // [properties]
 
-    InterfaceRef                                    m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
-    ::rtl::OUString                                 m_aModelName;
+    InterfaceRef                m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
+                                m_xAggregate;
+    ::rtl::OUString             m_aModelName;
 
 // [properties]
-    ::rtl::OUString                                 m_aLabel;                   // Name der Spalte
-
+    ::rtl::OUString             m_aLabel;                   // Name der Spalte
 // [properties]
 
 public:
     OGridColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName = ::rtl::OUString());
+    OGridColumn(const OGridColumn* _pOriginal, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory );
     virtual ~OGridColumn();
 
     // UNO Anbindung
@@ -176,6 +181,8 @@ public:
 protected:
     static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
     static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
+
+    DECLARE_XCLONEABLE();
 };
 
 #define DECL_COLUMN(ClassName)                                      \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:08:07 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,19 @@ OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
+OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OBoundControlModel( _pOriginal, _rxFactory )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aRefreshListeners( m_aMutex )
+    ,m_bBoundComponent(sal_False)
+    ,m_nNULLPos(-1)
+{
+    DBG_CTOR(OListBoxModel,NULL);
+    m_eListSourceType = _pOriginal->m_eListSourceType;
+    m_aBoundColumn = _pOriginal->m_aBoundColumn;
+}
+
+//------------------------------------------------------------------
 OListBoxModel::~OListBoxModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -220,6 +233,10 @@ OListBoxModel::~OListBoxModel()
 
     DBG_DTOR(OListBoxModel,NULL);
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OListBoxModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

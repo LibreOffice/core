@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 08:11:48 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,9 +202,36 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
 }
 
 //------------------------------------------------------------------
+OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, ::getCppuType( static_cast<Reference<XPropertySet>*>( NULL ) ) )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aSelectListeners( m_aMutex )
+    ,m_aResetListeners( m_aMutex )
+{
+    DBG_CTOR(OGridControlModel,NULL);
+
+    m_aDefaultControl = _pOriginal->m_aDefaultControl;
+    m_nFontEvent = _pOriginal->m_nFontEvent;
+    m_bEnable = _pOriginal->m_bEnable;
+    m_bNavigation = _pOriginal->m_bNavigation;
+    m_nBorder = _pOriginal->m_nBorder;
+    m_bRecordMarker = _pOriginal->m_bRecordMarker;
+    m_bPrintable = _pOriginal->m_bPrintable;
+    m_bAlwaysShowCursor = _pOriginal->m_bAlwaysShowCursor;
+    m_bDisplaySynchron = _pOriginal->m_bDisplaySynchron;
+    m_nFontRelief = _pOriginal->m_nFontRelief;
+    m_nFontEmphasis = _pOriginal->m_nFontEmphasis;
+
+    // clone the columns
+    cloneColumns( _pOriginal );
+
+    // TODO: clone the events?
+}
+
+//------------------------------------------------------------------
 OGridControlModel::~OGridControlModel()
 {
-    DBG_DTOR(OGridControlModel,NULL);
     if (m_nFontEvent)
         Application::RemoveUserEvent(m_nFontEvent);
 
@@ -214,6 +241,47 @@ OGridControlModel::~OGridControlModel()
         dispose();
     }
 
+    DBG_DTOR(OGridControlModel,NULL);
+}
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OGridControlModel )
+
+//------------------------------------------------------------------------------
+void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContainer )
+{
+    try
+    {
+        Reference< XCloneable > xColCloneable;
+
+        const OInterfaceArray::const_iterator pColumnStart = m_aItems.begin();
+        const OInterfaceArray::const_iterator pColumnEnd = m_aItems.end();
+        for ( OInterfaceArray::const_iterator pColumn = pColumnStart; pColumn != pColumnEnd; ++pColumn )
+        {
+            // ask the col for a factory for the clone
+            xColCloneable = xColCloneable.query( *pColumn );
+            DBG_ASSERT( xColCloneable.is(), "OGridControlModel::cloneColumns: column is not cloneable!" );
+
+            if ( xColCloneable.is() )
+            {
+                // create a clone of the column
+                Reference< XCloneable > xColClone( xColCloneable->createClone() );
+                DBG_ASSERT( xColClone.is(), "OGridControlModel::cloneColumns: invalid column clone!" );
+
+                if ( xColClone.is() )
+                {
+                    // insert this clone into our own container
+                    insertByIndex( pColumn - pColumnStart, xColClone->queryInterface( m_aElementType ) );
+                }
+
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "OGridControlModel::cloneColumns: caught an exception while cloning the columns!" );
+    }
 }
 
 // XServiceInfo

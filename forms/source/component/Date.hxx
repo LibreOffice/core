@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:29:28 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    ODateModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    DECLARE_DEFAULT_LEAF_XTOR( ODateModel );
 
 // starform::XBoundComponent
     virtual sal_Bool _commit();
@@ -126,6 +126,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

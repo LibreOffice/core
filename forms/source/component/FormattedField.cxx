@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 13:49:57 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,33 +377,54 @@ InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServi
 }
 
 //------------------------------------------------------------------
-OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
-                                    // use the old control name for compytibility reasons
-            ,OErrorBroadcaster( OComponentHelper::rBHelper )
-            ,OPropertyChangeListener(m_aMutex)
-            ,m_bOriginalNumeric(sal_False)
-            ,m_bNumeric(sal_False)
-            ,m_xOriginalFormatter(NULL)
-            ,m_nKeyType(NumberFormat::UNDEFINED)
-            ,m_aNullDate(DBTypeConversion::getStandardDate())
-            ,m_bAggregateListening(sal_False)
-            ,m_pPropertyMultiplexer(NULL)
-            ,m_nFieldType( DataType::OTHER )
+void OFormattedModel::implConstruct()
 {
-    DBG_CTOR(OFormattedModel, NULL);
-    m_nClassId = FormComponentType::TEXTFIELD;
+    // members
+    m_bOriginalNumeric = sal_False;
+    m_bNumeric = sal_False;
+    m_xOriginalFormatter = NULL;
+    m_nKeyType = NumberFormat::UNDEFINED;
+    m_aNullDate = DBTypeConversion::getStandardDate();
+    m_bAggregateListening = sal_False;
+    m_pPropertyMultiplexer = NULL;
+    m_nFieldType =  DataType::OTHER;
 
+    // default our formats supplier
     increment(m_refCount);
     setPropertyToDefaultByHandle(PROPERTY_ID_FORMATSSUPPLIER);
     decrement(m_refCount);
 
-    m_sDataFieldConnectivityProperty = PROPERTY_EFFECTIVE_VALUE;
-    if (OFormattedModel::nValueHandle == -1)
-        OFormattedModel::nValueHandle = getOriginalHandle(PROPERTY_ID_EFFECTIVE_VALUE);
-
     startAggregateListening();
     doSetDelegator();
+}
+
+//------------------------------------------------------------------
+OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
+                            // use the old control name for compytibility reasons
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OPropertyChangeListener( m_aMutex )
+{
+    DBG_CTOR(OFormattedModel, NULL);
+
+    implConstruct();
+
+    m_sDataFieldConnectivityProperty = PROPERTY_EFFECTIVE_VALUE;
+    m_nClassId = FormComponentType::TEXTFIELD;
+
+    if (OFormattedModel::nValueHandle == -1)
+        OFormattedModel::nValueHandle = getOriginalHandle(PROPERTY_ID_EFFECTIVE_VALUE);
+}
+
+//------------------------------------------------------------------
+OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OPropertyChangeListener( m_aMutex )
+{
+    DBG_CTOR(OFormattedModel, NULL);
+
+    implConstruct();
 }
 
 //------------------------------------------------------------------------------
@@ -414,6 +435,10 @@ OFormattedModel::~OFormattedModel()
 
     DBG_DTOR(OFormattedModel, NULL);
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OFormattedModel )
 
 //------------------------------------------------------------------------------
 void OFormattedModel::startAggregateListening()

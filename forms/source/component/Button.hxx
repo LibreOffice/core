@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 10:56:32 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,7 @@ class OButtonModel
         ,public ::comphelper::OAggregationArrayUsageHelper<OButtonModel>
 {
 public:
-    OButtonModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    ~OButtonModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OButtonModel );
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OButtonModel);
@@ -119,6 +118,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,15 @@ Sequence<Type> ODateModel::_getTypes()
 }
 
 //------------------------------------------------------------------
+DBG_NAME( ODateModel )
+//------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD )
                         // use the old control name for compytibility reasons
             ,OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
 {
+    DBG_CTOR( ODateModel, NULL );
+
     m_nClassId = FormComponentType::DATEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_DATE;
     if (ODateModel::nDateHandle == -1)
@@ -154,6 +158,27 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
 
     setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_DATEFORMAT));
 }
+
+//------------------------------------------------------------------------------
+ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+    ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
+{
+    DBG_CTOR( ODateModel, NULL );
+
+    setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_DATEFORMAT ) );
+}
+
+//------------------------------------------------------------------------------
+ODateModel::~ODateModel( )
+{
+    setAggregateSet(Reference< XFastPropertySet >(), -1);
+    DBG_DTOR( ODateModel, NULL );
+}
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

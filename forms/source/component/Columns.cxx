@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-23 12:47:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,41 +280,68 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
 OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName)
-          :OGridColumn_BASE(m_aMutex)
-          ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
-          ,m_aModelName(_sModelName)
-          ,m_aHidden( makeAny( sal_False ) )
+    :OGridColumn_BASE(m_aMutex)
+    ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
+    ,m_aModelName(_sModelName)
+    ,m_aHidden( makeAny( sal_False ) )
 {
     DBG_CTOR(OGridColumn,NULL);
+
     // Anlegen des UnoControlModels
-    if (m_aModelName.getLength())    // gibt es ein zu aggregierendes Model
+    if ( m_aModelName.getLength() )    // is there a to-be-aggregated model?
     {
-        increment(m_refCount);
+        increment( m_refCount );
 
         // Muss im eigenen Block,
         // da xAgg vor dem delegator setzen wieder freigesetzt sein muﬂ !
         {
-            m_xAggregate = Reference<XAggregation> (_rxFactory->createInstance(m_aModelName), UNO_QUERY);
-            setAggregation(m_xAggregate);
+            m_xAggregate = Reference< XAggregation >( _rxFactory->createInstance( m_aModelName ), UNO_QUERY );
+            setAggregation( m_xAggregate );
         }
 
         if (m_xAggregate.is())
-        {
-            m_xAggregate->setDelegator(static_cast< ::cppu::OWeakObject* >(this));
+        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
+            m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
 
         // Refcount wieder bei NULL
-        decrement(m_refCount);
+        decrement( m_refCount );
     }
 
     if ( m_xAggregateSet.is() )
     {
-        Reference<XPropertySetInfo> xPropInfo = m_xAggregateSet->getPropertySetInfo();
-        if ( xPropInfo.is() && xPropInfo->hasPropertyByName(PROPERTY_TRISTATE) )
-            m_xAggregateSet->setPropertyValue(PROPERTY_TRISTATE, makeAny(sal_True) );
+        Reference< XPropertySetInfo > xPropInfo = m_xAggregateSet->getPropertySetInfo();
+        if ( xPropInfo.is() && xPropInfo->hasPropertyByName( PROPERTY_TRISTATE ) )
+            m_xAggregateSet->setPropertyValue( PROPERTY_TRISTATE, makeAny( sal_True ) );
     }
+}
 
-    m_aHidden <<= (sal_Bool)sal_False;
+//------------------------------------------------------------------------------
+OGridColumn::OGridColumn( const OGridColumn* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
+    :OGridColumn_BASE( m_aMutex )
+    ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
+{
+    DBG_CTOR(OGridColumn,NULL);
+
+    m_aWidth = _pOriginal->m_aWidth;
+    m_aAlign = _pOriginal->m_aAlign;
+    m_aHidden = _pOriginal->m_aHidden;
+    m_aModelName = _pOriginal->m_aModelName;
+    m_aLabel = _pOriginal->m_aLabel;
+
+    increment( m_refCount );
+    {
+        {
+            m_xAggregate = createAggregateClone( _pOriginal );
+            setAggregation( m_xAggregate );
+        }
+
+        if ( m_xAggregate.is() )
+        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
+            m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
+        }
+    }
+    decrement( m_refCount );
 }
 
 //------------------------------------------------------------------------------
@@ -332,8 +359,13 @@ OGridColumn::~OGridColumn()
         InterfaceRef  xIface;
         m_xAggregate->setDelegator(xIface);
     }
+
     DBG_DTOR(OGridColumn,NULL);
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+//IMPLEMENT_DEFAULT_CLONING( OGridColumn )
 
 // XChild
 //------------------------------------------------------------------------------

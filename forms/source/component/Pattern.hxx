@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:45:33 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    OPatternModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    virtual ~OPatternModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OPatternModel );
 
     // starform::XBoundComponent
     virtual sal_Bool _commit();
@@ -113,6 +112,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

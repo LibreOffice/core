@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,7 @@ protected:
     virtual ::com::sun::star::uno::Any  _getControlValue() const;
 
 public:
-    OCheckBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    ~OCheckBoxModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OCheckBoxModel );
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OCheckBoxModel);
@@ -142,6 +141,10 @@ protected:
 protected:
     virtual void        _reset();
     virtual sal_Bool    _commit();
+
+    void implConstruct();
+
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

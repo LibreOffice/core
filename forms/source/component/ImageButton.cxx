@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:25:32 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ DBG_NAME(OImageButtonModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OImageButtonModel(_rxFactory));
+     return *(new OImageButtonModel(_rxFactory));
 }
 
 //------------------------------------------------------------------
@@ -108,6 +108,16 @@ OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxF
     DBG_CTOR(OImageButtonModel, NULL);
     m_nClassId = FormComponentType::IMAGEBUTTON;
 }
+
+//------------------------------------------------------------------
+OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory)
+    :OImageModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR(OImageButtonModel, NULL);
+}
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OImageButtonModel )
 
 //------------------------------------------------------------------------------
 OImageButtonModel::~OImageButtonModel()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:45:09 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,7 @@ protected:
     virtual void _onValueChanged();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-    OEditModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    virtual ~OEditModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
 
     void enableFormattedWriteFake() { m_bWritingFormattedFake = sal_True; }
     void disableFormattedWriteFake() { m_bWritingFormattedFake = sal_False; }
@@ -145,6 +144,8 @@ public:
 
 protected:
     virtual sal_Int16 getPersistenceFlags() const;
+
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

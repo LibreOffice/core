@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hidden.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 16:28:08 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,31 @@ InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceF
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OHiddenModel )
+//------------------------------------------------------------------
 OHiddenModel::OHiddenModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OControlModel(_rxFactory, ::rtl::OUString())
 {
+    DBG_CTOR( OHiddenModel, NULL );
     m_nClassId = FormComponentType::HIDDENCONTROL;
 }
+
+//------------------------------------------------------------------
+OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( OHiddenModel, NULL );
+    m_sHiddenValue = _pOriginal->m_sHiddenValue;
+}
+
+//------------------------------------------------------------------------------
+OHiddenModel::~OHiddenModel( )
+{
+    DBG_CTOR( OHiddenModel, NULL );
+}
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OHiddenModel )
 
 //------------------------------------------------------------------------------
 void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const

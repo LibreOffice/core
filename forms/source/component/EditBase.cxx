@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 13:02:27 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,17 +103,35 @@ const sal_uInt16 DEFAULT_LONG    =  0x0001;
 const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
 const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
+DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
-OEditBaseModel::OEditBaseModel(
-            const Reference<XMultiServiceFactory>& _rxFactory,
-            const ::rtl::OUString& rUnoControlModelName,
-            const ::rtl::OUString& rDefault,
-            const sal_Bool _bSetDelegator)
-     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSetDelegator )
-     ,m_bFilterProposal(sal_False)
-     ,m_bEmptyIsNull(sal_True)
+OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& rUnoControlModelName,
+        const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator )
+    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSetDelegator )
+    ,m_bFilterProposal(sal_False)
+    ,m_bEmptyIsNull(sal_True)
+    ,m_nLastReadVersion(0)
+{
+    DBG_CTOR( OEditBaseModel, NULL );
+}
+
+//------------------------------------------------------------------
+OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory, const sal_Bool _bSetDelegator )
+     :OBoundControlModel( _pOriginal, _rxFactory, sal_True, _bSetDelegator )
      ,m_nLastReadVersion(0)
 {
+    DBG_CTOR( OEditBaseModel, NULL );
+
+    m_bFilterProposal = _pOriginal->m_bFilterProposal;
+    m_bEmptyIsNull = _pOriginal->m_bEmptyIsNull;
+    m_aDefault = _pOriginal->m_aDefault;
+    m_aDefaultText = _pOriginal->m_aDefaultText;
+}
+
+//------------------------------------------------------------------
+OEditBaseModel::~OEditBaseModel( )
+{
+    DBG_DTOR( OEditBaseModel, NULL );
 }
 
 // XPersist
@@ -172,7 +190,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
 //------------------------------------------------------------------------------
 sal_Int16 OEditBaseModel::getPersistenceFlags() const
 {
-    return PF_HANDLE_COMMON_PROPS;
+    return (sal_Int16)PF_HANDLE_COMMON_PROPS;
 }
 
 //------------------------------------------------------------------------------

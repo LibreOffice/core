@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,20 @@ InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XM
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OGroupBoxModel )
+//------------------------------------------------------------------
 OGroupBoxModel::OGroupBoxModel(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
+    DBG_CTOR( OGroupBoxModel, NULL );
     m_nClassId = FormComponentType::GROUPBOX;
+}
+
+//------------------------------------------------------------------
+OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<starlang::XMultiServiceFactory>& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( OGroupBoxModel, NULL );
 }
 
 // XServiceInfo
@@ -122,7 +132,11 @@ StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(::com::
 //------------------------------------------------------------------
 OGroupBoxModel::~OGroupBoxModel()
 {
+    DBG_DTOR( OGroupBoxModel, NULL );
 }
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
 
 //------------------------------------------------------------------------------
 Reference<XPropertySetInfo> SAL_CALL OGroupBoxModel::getPropertySetInfo() throw(RuntimeException)

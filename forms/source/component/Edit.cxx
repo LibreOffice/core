@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-18 12:24:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,13 +357,13 @@ DBG_NAME(OEditModel);
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
                                     // use the old control name for compytibility reasons
-             ,m_nMaxLen(0)
-             ,m_nKeyType(NumberFormat::UNDEFINED)
-             ,m_aNullDate(DBTypeConversion::getStandardDate())
-             ,m_nFormatKey(0)
-             ,m_nFieldType(DataType::OTHER)
-             ,m_bWritingFormattedFake(sal_False)
-             ,m_bNumericField(sal_False)
+    ,m_nMaxLen(0)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
+    ,m_nFormatKey(0)
+    ,m_nFieldType(DataType::OTHER)
+    ,m_bWritingFormattedFake(sal_False)
+    ,m_bNumericField(sal_False)
 {
     DBG_CTOR(OEditModel,NULL);
 
@@ -371,6 +371,26 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OEditModel::nTextHandle == -1)
         OEditModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
+}
+
+//------------------------------------------------------------------
+OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+        :OEditBaseModel( _pOriginal, _rxFactory )
+    ,m_nMaxLen(0)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
+    ,m_nFormatKey(0)
+    ,m_nFieldType(DataType::OTHER)
+    ,m_bWritingFormattedFake(sal_False)
+    ,m_bNumericField(sal_False)
+{
+    DBG_CTOR( OEditModel, NULL );
+
+    // Note that most of the properties are not clone from the original object:
+    // Things as the format key, it's type, and such, depend on the field being part of a loaded form
+    // (they're initialized in _loaded). Even if the original object _is_ part of such a form, we ourself
+    // certainly aren't, so these members are defaulted. If we're inserted into a form which is already loaded,
+    // they will be set to new values, anyway ....
 }
 
 //------------------------------------------------------------------
@@ -384,6 +404,9 @@ OEditModel::~OEditModel()
 
     DBG_DTOR(OEditModel,NULL);
 }
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OEditModel )
 
 //------------------------------------------------------------------------------
 void OEditModel::disposing()

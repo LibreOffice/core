@@ -2,9 +2,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 13:24:24 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,24 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeExcep
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OFileControlModel )
+//------------------------------------------------------------------
 OFileControlModel::OFileControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)
 {
+    DBG_CTOR( OFileControlModel, NULL );
     m_nClassId = FormComponentType::FILECONTROL;
+}
+
+//------------------------------------------------------------------
+OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory )
+    ,m_aResetListeners( m_aMutex )
+{
+    DBG_CTOR( OFileControlModel, NULL );
+
+    m_sDefaultValue = _pOriginal->m_sDefaultValue;
 }
 
 //------------------------------------------------------------------
@@ -149,7 +162,11 @@ OFileControlModel::~OFileControlModel()
         acquire();
         dispose();
     }
+    DBG_DTOR( OFileControlModel, NULL );
 }
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OFileControlModel )
 
 //------------------------------------------------------------------------------
 Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
-    OComboBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    ~OComboBoxModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OComboBoxModel );
 
     virtual void SAL_CALL disposing();
 
@@ -193,6 +192,8 @@ public:
 
 protected:
     void loadData();
+
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

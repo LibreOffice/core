@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,8 @@ class OFixedTextModel
         :public OControlModel
         ,public ::comphelper::OAggregationArrayUsageHelper< OFixedTextModel >
 {
-protected:
-    // UNO Anbindung
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
-
 public:
-    OFixedTextModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory    // factory to create the aggregate with
-    );
+    DECLARE_DEFAULT_LEAF_XTOR( OFixedTextModel );
 
 // XPropertySetRef
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL   getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -107,6 +101,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
 };
 
 //.........................................................................

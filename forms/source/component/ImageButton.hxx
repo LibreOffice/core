@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:20:30 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ class OImageButtonModel
         ,public ::comphelper::OAggregationArrayUsageHelper< OImageButtonModel >
 {
 public:
-    OImageButtonModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    ~OImageButtonModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OImageButtonModel );
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OImageButtonModel);
@@ -105,6 +104,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

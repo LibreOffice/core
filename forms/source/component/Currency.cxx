@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,15 +142,8 @@ Sequence<Type> OCurrencyModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD)
-                                    // use the old control name for compytibility reasons
+void OCurrencyModel::implConstruct()
 {
-    m_nClassId = FormComponentType::CURRENCYFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
-    if (OCurrencyModel::nValueHandle == -1)
-        OCurrencyModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
-
     if (m_xAggregateSet.is())
     {
         try
@@ -187,14 +180,45 @@ OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory
         }
         catch(Exception&)
         {
+            DBG_ERROR( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
         }
     }
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OCurrencyModel )
+//------------------------------------------------------------------
+OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD)
+                                    // use the old control name for compytibility reasons
+{
+    DBG_CTOR( OCurrencyModel, NULL );
+
+    m_nClassId = FormComponentType::CURRENCYFIELD;
+    m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
+    if (OCurrencyModel::nValueHandle == -1)
+        OCurrencyModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
+
+    implConstruct();
+}
+
+//------------------------------------------------------------------
+OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( OCurrencyModel, NULL );
+    implConstruct();
+}
+
+//------------------------------------------------------------------
 OCurrencyModel::~OCurrencyModel()
 {
+    DBG_DTOR( OCurrencyModel, NULL );
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

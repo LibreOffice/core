@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:46:57 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,6 @@ OControlModel::OControlModel(
             const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
-    ,m_aUnoControlModelTypeName(_rUnoControlModelTypeName)
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_xServiceFactory(_rxFactory)
@@ -522,8 +521,6 @@ OControlModel::OControlModel(
     {
         increment(m_refCount);
 
-        // Muss im eigenen Block,
-        // da xAgg vor dem delegator setzen wieder freigesetzt sein muﬂ!
         {
             m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
             setAggregation(m_xAggregate);
@@ -538,6 +535,40 @@ OControlModel::OControlModel(
         // Refcount wieder bei NULL
         decrement(m_refCount);
     }
+}
+
+//------------------------------------------------------------------
+OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bSetDelegator )
+    :OComponentHelper( m_aMutex )
+    ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
+    ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
+    ,m_nClassId( FormComponentType::CONTROL )
+    ,m_xServiceFactory( _rxFactory )
+{
+    DBG_CTOR( OControlModel, NULL );
+    DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
+
+    // copy members
+    m_nTabIndex = _pOriginal->m_nTabIndex;
+    m_nClassId = _pOriginal->m_nClassId;
+
+    // temporarily increment refcount because of temporary references to ourself in the following
+    increment( m_refCount );
+
+    {
+        // transfer the (only, at the very moment!) ref count
+        m_xAggregate = createAggregateClone( _pOriginal );
+
+        // set aggregation (retrieve other direct interfaces of the aggregate)
+        setAggregation( m_xAggregate );
+    }
+
+    // set the delegator, if allowed by our derived class
+    if ( _bSetDelegator )
+        doSetDelegator();
+
+    // decrement ref count
+    decrement( m_refCount );
 }
 
 //------------------------------------------------------------------
@@ -905,22 +936,47 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
 
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
-                                const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-                const ::rtl::OUString& _rUnoControlModelTypeName,
-                const ::rtl::OUString& _rDefault,
-                const sal_Bool _bCommitable,
-                const sal_Bool _bSetDelegator)
-      :OControlModel(_rxFactory, _rUnoControlModelTypeName, _rDefault, _bSetDelegator)
-      ,m_aUpdateListeners(m_aMutex)
-      ,m_aResetListeners(m_aMutex)
-      ,m_bLoaded(sal_False)
-      ,m_bRequired(sal_False)
-      ,m_bCommitable(_bCommitable)
-      ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
-      ,m_bResetting(sal_False)
-      ,m_bForwardValueChanges(sal_True)
+        const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        const ::rtl::OUString& _rUnoControlModelTypeName,
+        const ::rtl::OUString& _rDefault,
+        const sal_Bool _bCommitable,
+        const sal_Bool _bSetDelegator)
+    :OControlModel(_rxFactory, _rUnoControlModelTypeName, _rDefault, _bSetDelegator)
+    ,m_aUpdateListeners(m_aMutex)
+    ,m_aResetListeners(m_aMutex)
+    ,m_bLoaded(sal_False)
+    ,m_bRequired(sal_False)
+    ,m_bCommitable(_bCommitable)
+    ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
+    ,m_bResetting(sal_False)
+    ,m_bForwardValueChanges(sal_True)
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
+}
+
+//------------------------------------------------------------------
+OBoundControlModel::OBoundControlModel(
+        const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory,
+        const sal_Bool _bCommitable, const sal_Bool _bSetDelegator )
+    :OControlModel( _pOriginal, _rxFactory, _bSetDelegator )
+    ,m_aUpdateListeners( m_aMutex )
+    ,m_aResetListeners( m_aMutex )
+    ,m_bLoaded( sal_False )
+    ,m_bRequired( sal_False )
+    ,m_bCommitable( _bCommitable )
+    ,m_bResetting( sal_False )
+    ,m_bForwardValueChanges( sal_True )
+{
+    DBG_CTOR(frm_OBoundControlModel, NULL);
+
+    m_aLabelServiceName = _pOriginal->m_aLabelServiceName;
+    m_sDataFieldConnectivityProperty = _pOriginal->m_sDataFieldConnectivityProperty;
+    m_aControlSource = _pOriginal->m_aControlSource;
+    // m_xLabelControl, though bneing a property, is not to be cloned, not even the reference will be transfered.
+    // (the former should be clear - a clone of the object we're only referencing does not make sense)
+    // (the second would violate the restriction for label controls that they're part of the
+    // same form component hierarchy - we ourself are no part, yet, so we can't have a label control)
+    m_bCommitable = _pOriginal->m_bCommitable;
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,7 @@ protected:
     virtual void _onValueChanged();
 
 public:
-    OListBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    virtual ~OListBoxModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OListBoxModel );
 
 // XServiceInfo
     IMPLEMENTATION_NAME(OListBoxModel);
@@ -205,6 +204,8 @@ public:
 
 protected:
     void loadData();
+
+    DECLARE_XCLONEABLE();
 };
 
 //==================================================================

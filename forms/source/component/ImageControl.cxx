@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:11:54 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,25 +198,45 @@ Sequence<Type> OImageControlModel::_getTypes()
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False)
-                                    // use the old control name for compytibility reasons
-                    ,OPropertyChangeListener(m_aMutex)
-                    ,m_pImageProducer(new ImageProducer)
-                    ,m_bReadOnly(sal_False)
-                    ,m_pAggregatePropertyMultiplexer(NULL)
+    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False)
+                    // use the old control name for compytibility reasons
+    ,OPropertyChangeListener( m_aMutex )
+    ,m_pImageProducer( new ImageProducer )
+    ,m_bReadOnly( sal_False )
+    ,m_pAggregatePropertyMultiplexer( NULL )
 {
-    DBG_CTOR(OImageControlModel,NULL);
+    DBG_CTOR( OImageControlModel, NULL );
     m_nClassId = FormComponentType::IMAGECONTROL;
 
-    m_xImageProducer = m_pImageProducer;
+    implConstruct();
+}
 
+//------------------------------------------------------------------
+OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    :OBoundControlModel( _pOriginal, _rxFactory, sal_False, sal_False )
+                // use the old control name for compytibility reasons
+    ,OPropertyChangeListener( m_aMutex )
+    ,m_pImageProducer( NULL )
+    ,m_pAggregatePropertyMultiplexer( NULL )
+{
+    DBG_CTOR( OImageControlModel, NULL );
+    implConstruct();
+    m_bReadOnly = _pOriginal->m_bReadOnly;
+}
+
+//------------------------------------------------------------------
+void OImageControlModel::implConstruct()
+{
+    m_pImageProducer = new ImageProducer;
+    m_xImageProducer = m_pImageProducer;
     m_sDataFieldConnectivityProperty = PROPERTY_IMAGE_URL;
+
     increment(m_refCount);
-    if (m_xAggregateSet.is())
+    if ( m_xAggregateSet.is() )
     {
-        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
         m_pAggregatePropertyMultiplexer->acquire();
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_IMAGE_URL);
+        m_pAggregatePropertyMultiplexer->addProperty( PROPERTY_IMAGE_URL );
     }
     decrement(m_refCount);
 
@@ -243,6 +263,10 @@ OImageControlModel::~OImageControlModel()
 
     DBG_DTOR(OImageControlModel,NULL);
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

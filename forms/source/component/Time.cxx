@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,11 +165,15 @@ Sequence<Type> OTimeModel::_getTypes()
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OTimeModel )
+//------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD )
                                     // use the old control name for compytibility reasons
             ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
 {
+    DBG_CTOR( OTimeModel, NULL );
+
     m_nClassId = FormComponentType::TIMEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TIME;
     if (OTimeModel::nTimeHandle == -1)
@@ -179,10 +183,25 @@ OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------------------
-OTimeModel::~OTimeModel()
+OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+    ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD )
+{
+    DBG_CTOR( OTimeModel, NULL );
+
+    setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_TIMEFORMAT ) );
+}
+
+//------------------------------------------------------------------------------
+OTimeModel::~OTimeModel( )
 {
     setAggregateSet(Reference< XFastPropertySet >(), -1);
+    DBG_DTOR( OTimeModel, NULL );
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)

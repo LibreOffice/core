@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,14 @@ Sequence<Type> ONumericModel::_getTypes()
 }
 
 //------------------------------------------------------------------
+DBG_NAME( ONumericModel )
+//------------------------------------------------------------------
 ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
                 :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_CONTROL_NUMERICFIELD)
                                     // use the old control name for compytibility reasons
 {
+    DBG_CTOR( ONumericModel, NULL );
+
     m_nClassId = FormComponentType::NUMERICFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
     if (ONumericModel::nValueHandle == -1)
@@ -145,9 +149,21 @@ ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
+ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OEditBaseModel( _pOriginal, _rxFactory )
+{
+    DBG_CTOR( ONumericModel, NULL );
+}
+
+//------------------------------------------------------------------
 ONumericModel::~ONumericModel()
 {
+    DBG_DTOR( ONumericModel, NULL );
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( ONumericModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------

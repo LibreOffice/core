@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hidden.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class OHiddenModel
     ::rtl::OUString     m_sHiddenValue;
 
 public:
-    OHiddenModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    DECLARE_DEFAULT_LEAF_XTOR( OHiddenModel );
 
     // OPropertySetHelper
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
@@ -111,6 +111,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE( );
 };
 
 #endif // _FORMS_HIDDEN_HXX_

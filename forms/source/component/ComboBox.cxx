@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:08:07 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 }
 
 //------------------------------------------------------------------
+DBG_NAME( OComboBoxModel )
+//------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
                     // use the old control name for compytibility reasons
@@ -199,10 +201,29 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
     ,m_nFormatKey(0)
     ,m_nFieldType(DataType::OTHER)
 {
+    DBG_CTOR( OComboBoxModel, NULL );
+
     m_nClassId = FormComponentType::COMBOBOX;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
     if (OComboBoxModel::nTextHandle == -1)
         OComboBoxModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
+}
+
+//------------------------------------------------------------------
+OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OBoundControlModel( _pOriginal, _rxFactory )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_nFormatKey(0)
+    ,m_nFieldType(DataType::OTHER)
+{
+    DBG_CTOR( OComboBoxModel, NULL );
+
+    m_eListSourceType = _pOriginal->m_eListSourceType;
+    m_bEmptyIsNull = _pOriginal->m_bEmptyIsNull;
+    m_aListSource = _pOriginal->m_aListSource;
+    m_aDefaultText = _pOriginal->m_aDefaultText;
 }
 
 //------------------------------------------------------------------
@@ -213,7 +234,13 @@ OComboBoxModel::~OComboBoxModel()
         acquire();
         dispose();
     }
+
+    DBG_DTOR( OComboBoxModel, NULL );
 }
+
+// XCloneable
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OComboBoxModel )
 
 //------------------------------------------------------------------------------
 void OComboBoxModel::disposing()
@@ -469,8 +496,10 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     // Nach dem Lesen die Defaultwerte anzeigen
     if (m_aControlSource.getLength())
+    {
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         _reset();
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 16:12:33 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,7 @@ namespace frm
         sal_Int32 calcFormatKey() const;
         void getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage);
 
-        OFormattedModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-        ~OFormattedModel();
+        DECLARE_DEFAULT_LEAF_XTOR( OFormattedModel );
 
         friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
         friend class OFormattedFieldWrapper;
@@ -197,6 +196,11 @@ namespace frm
     protected:
         virtual sal_Int16 getPersistenceFlags() const;
             // as we have an own version handling for persistence
+
+    protected:
+        DECLARE_XCLONEABLE();
+
+        void implConstruct();
     };
 
     //==================================================================

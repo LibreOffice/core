@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 11:01:15 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ protected:
     virtual ::com::sun::star::uno::Any  _getControlValue() const;
 
 public:
-    ORadioButtonModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
 
     // XServiceInfo
     IMPLEMENTATION_NAME(ORadioButtonModel);
@@ -139,6 +139,9 @@ protected:
 
 protected:
     void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
+
+    void implConstruct();
+    DECLARE_XCLONEABLE( );
 };
 
 //==================================================================

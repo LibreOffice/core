@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:34:25 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class OImageControlModel
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
-    sal_Bool                m_bReadOnly;
+    sal_Bool                                        m_bReadOnly;
 
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
 
@@ -113,8 +113,7 @@ protected:
     inline ImageProducer* GetImageProducer() { return m_pImageProducer; }
 
 public:
-    OImageControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    virtual ~OImageControlModel();
+    DECLARE_DEFAULT_LEAF_XTOR( OImageControlModel );
 
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
@@ -158,6 +157,11 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    DECLARE_XCLONEABLE();
+
+    void implConstruct();
 };
 
 //==================================================================

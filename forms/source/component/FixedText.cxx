@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,20 +97,33 @@ InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServi
     return *(new OFixedTextModel(_rxFactory));
 }
 
-//------------------------------------------------------------------------------
-Sequence<Type> OFixedTextModel::_getTypes()
+//------------------------------------------------------------------
+DBG_NAME( OFixedTextModel )
+//------------------------------------------------------------------
+OFixedTextModel::OFixedTextModel( const Reference<XMultiServiceFactory>& _rxFactory )
+        :OControlModel(_rxFactory, VCL_CONTROLMODEL_FIXEDTEXT)
+
 {
-    static Sequence<Type> aTypes = OControlModel::_getTypes();
-    return aTypes;
+    DBG_CTOR( OFixedTextModel, NULL );
+    m_nClassId = FormComponentType::FIXEDTEXT;
 }
 
 //------------------------------------------------------------------
-OFixedTextModel::OFixedTextModel(const Reference<XMultiServiceFactory>& _rFactory)
-        :OControlModel(_rFactory, VCL_CONTROLMODEL_FIXEDTEXT)
+OFixedTextModel::OFixedTextModel( const OFixedTextModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory )
 
 {
-    m_nClassId = FormComponentType::FIXEDTEXT;
+    DBG_CTOR( OFixedTextModel, NULL );
 }
+
+//------------------------------------------------------------------
+OFixedTextModel::~OFixedTextModel( )
+{
+    DBG_DTOR( OFixedTextModel, NULL );
+}
+
+//------------------------------------------------------------------------------
+IMPLEMENT_DEFAULT_CLONING( OFixedTextModel )
 
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
