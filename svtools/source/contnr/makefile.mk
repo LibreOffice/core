@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+#   last change: $Author: pb $ $Date: 2001-05-07 10:32:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,16 +92,28 @@ CXXFILES=   svtabbx.cxx		\
             svlbitm.cxx		\
             svtreebx.cxx	\
             cont_pch.cxx	\
-            ctrdll.cxx
+            ctrdll.cxx		\
+            imivctl1.cxx	\
+            imivctl2.cxx	\
+            ivctrl.cxx		\
+            fileview.cxx
 
-SLOFILES=   $(SLO)$/svtabbx.obj	\
-            $(SLO)$/svicnvw.obj	\
+SLOFILES=   $(SLO)$/svtabbx.obj		\
+            $(SLO)$/svicnvw.obj		\
             $(SLO)$/svimpicn.obj	\
             $(SLO)$/treelist.obj	\
-            $(SLO)$/svlbox.obj	\
+            $(SLO)$/svlbox.obj		\
             $(SLO)$/svimpbox.obj	\
-            $(SLO)$/svlbitm.obj	\
-            $(SLO)$/svtreebx.obj
+            $(SLO)$/svlbitm.obj		\
+            $(SLO)$/svtreebx.obj	\
+            $(SLO)$/imivctl1.obj	\
+            $(SLO)$/imivctl2.obj	\
+            $(SLO)$/ivctrl.obj		\
+            $(SLO)$/fileview.obj	\
+            $(SLO)$/templwin.obj
+
+EXCEPTIONSFILES=\
+            $(SLO)$/fileview.obj
 
 # Fuer das Setup bauen wir noch mal statisch
 .IF "$(VCSID)" != "OV"
@@ -118,6 +130,10 @@ OBJFILES=	$(OBJ)$/svtabbx.obj	\
 .ENDIF
 
 .ENDIF
+
+SRCFILES =\
+            fileview.src	\
+            templwin.src
 
 HXX1TARGET=	svcontnr
 HXX1EXT=	hxx
