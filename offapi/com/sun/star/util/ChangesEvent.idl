@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChangesEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com {  module sun {  module star {  module util {
     @see com::sun::star::container::ContainerEvent
     @see ElementChange
  */
-struct ChangesEvent: com::sun::star::lang::EventObject
+published struct ChangesEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** contains the accessor to the common root of the changed elements.
