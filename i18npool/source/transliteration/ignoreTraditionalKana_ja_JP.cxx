@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreTraditionalKana_ja_JP.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:04:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #define TRANSLITERATION_TraditionalKana_ja_JP
 #include <transliteration_Ignore.hxx>
