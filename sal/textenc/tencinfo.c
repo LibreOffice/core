@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-12 20:09:21 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
         case 77:    eTextEncoding = RTL_TEXTENCODING_APPLE_ROMAN; break;/* MAC_CHARSET */
         case 128:   eTextEncoding = RTL_TEXTENCODING_MS_932; break;     /* SHIFTJIS_CHARSET */
         case 129:   eTextEncoding = RTL_TEXTENCODING_MS_949; break;     /* HANGEUL_CHARSET */
-/* !!!        case 130:   eCharset = RTL_TEXTENCODING_MS_1361; break; */  /* JOHAB_CHARSET */
+        case 130:   eTextEncoding = RTL_TEXTENCODING_MS_1361; break;    /* JOHAB_CHARSET */
         case 134:   eTextEncoding = RTL_TEXTENCODING_MS_936; break;     /* GB2312_CHARSET */
         case 136:   eTextEncoding = RTL_TEXTENCODING_MS_950; break;     /* CHINESEBIG5_CHARSET */
         case 161:   eTextEncoding = RTL_TEXTENCODING_MS_1253; break;    /* GREEK_CHARSET */
@@ -385,7 +385,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
         case 0x506: eTextEncoding = RTL_TEXTENCODING_MS_1256; break;    /* WindowsArabic - code page 1256 */
         case 0x507: eTextEncoding = RTL_TEXTENCODING_MS_1257; break;    /* WindowsBalticRim - code page 1257 */
         case 0x508: eTextEncoding = RTL_TEXTENCODING_MS_1258; break;    /* WindowsVietnamese - code page 1258 */
-/* !!!        case 0x510: eTextEncoding = RTL_TEXTENCODING_MS_1361; break; */    /* WindowsKoreanJohab - code page 1361, for Windows NT */
+        case 0x510: eTextEncoding = RTL_TEXTENCODING_MS_1361; break;    /* WindowsKoreanJohab - code page 1361, for Windows NT */
         /* Various national standards begin at 0x600 */
         case 0x600: eTextEncoding = RTL_TEXTENCODING_ASCII_US; break;    /* US_ASCII */
         case 0x620: eTextEncoding = RTL_TEXTENCODING_JIS_X_0201; break;  /* JIS_X0201_76 */
@@ -395,8 +395,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
         /* !!! JIS_C6226_78 = 0x624 */
         /* !!! GB_2312_80 = 0x630 */
         /* !!! GBK_95 = 0x631 */ /* annex to GB 13000-93; for Windows 95 */
-        /* !!! KSC_5601_87 = 0x640 */ /* same as KSC 5601-92 without Johab annex */
-        /* !!! KSC_5601_92_Johab = 0x641 */ /* KSC 5601-92 Johab annex */
+//        case 0x640: eTextEncoding = RTL_TEXTENCODING_KSC_5601_1987; break; /* KSC_5601_87 */ /* same as KSC 5601-92 without Johab annex */
+//        case 0x641: eTextEncoding = RTL_TEXTENCODING_KSC_5601_1992; break; /* KSC 5601-92 Johab annex */
         /* !!! CNS_11643_92_P1 = 0x651 */ /* CNS 11643-1992 plane 1 */
         /* !!! CNS_11643_92_P2 = 0x652 */ /* CNS 11643-1992 plane 2 */
         /* !!! CNS_11643_92_P3 = 0x653 */ /* CNS 11643-1992 plane 3 (11643-1986 plane 14) */
@@ -410,7 +410,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
         case 0x920: eTextEncoding = RTL_TEXTENCODING_EUC_JP; break;    /* EUC_JP - ISO 646,1-byte Katakana,JIS 208,JIS 212 */
         case 0x930: eTextEncoding = RTL_TEXTENCODING_EUC_CN; break;    /* EUC_CN - ISO 646, GB 2312-80 */
         case 0x931: eTextEncoding = RTL_TEXTENCODING_EUC_TW; break;    /* EUC_TW - ISO 646, CNS 11643-1992 Planes 1-16 */
-        /* !!! EUC_KR = 0x940 */ /* ISO 646, KS C 5601-1987 */
+        case 0x940: eTextEncoding = RTL_TEXTENCODING_EUC_KR; break;    /* EUC_KR - ISO 646, KS C 5601-1987 */
         /* Miscellaneous standards begin at 0xA00 */
         case 0xA01: eTextEncoding = RTL_TEXTENCODING_SHIFT_JIS; break; /* ShiftJIS - plain Shift-JIS */
         case 0xA02: eTextEncoding = RTL_TEXTENCODING_KOI8_R; break;    /* KOI8_R - Russian Internet standard */
@@ -477,6 +477,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "936", RTL_TEXTENCODING_MS_936 },
         { "949", RTL_TEXTENCODING_MS_949 },
         { "950", RTL_TEXTENCODING_MS_950 },
+        { "1361", RTL_TEXTENCODING_MS_1361 },
         { "cp1252", RTL_TEXTENCODING_MS_1252 },
         { "cp1250", RTL_TEXTENCODING_MS_1250 },
         { "cp1251", RTL_TEXTENCODING_MS_1251 },
@@ -490,6 +491,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "cp936", RTL_TEXTENCODING_MS_936 },
         { "cp949", RTL_TEXTENCODING_MS_949 },
         { "cp950", RTL_TEXTENCODING_MS_950 },
+        { "cp1361", RTL_TEXTENCODING_MS_1361 },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
@@ -552,6 +554,16 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { NULL, RTL_TEXTENCODING_BIG5 }
     };
 
+    static ImplStrCharsetDef const aUnixCharsetKSC56011987Tab[] =
+    {
+        { NULL, RTL_TEXTENCODING_EUC_KR }
+    };
+
+    static ImplStrCharsetDef const aUnixCharsetKSC56011992Tab[] =
+    {
+        { NULL, RTL_TEXTENCODING_MS_1361 }
+    };
+
     static ImplStrCharsetDef const aUnixCharsetISO10646Tab[] =
     {
         { NULL, RTL_TEXTENCODING_UNICODE }
@@ -567,11 +579,6 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
     static ImplStrCharsetDef const aUnixCharsetSymbolTab[] =
     {
         { NULL, RTL_TEXTENCODING_SYMBOL }
-    };
-
-    static ImplStrCharsetDef const aUnixCharsetKoreanEUCTab[] =
-    {
-        { NULL, RTL_TEXTENCODING_EUC_KR }
     };
 
     static ImplStrFirstPartCharsetDef const aUnixCharsetFirstPartTab[] =
@@ -596,7 +603,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "sunolcursor", aUnixCharsetSymbolTab },
         { "sunolglyph", aUnixCharsetSymbolTab },
         { "iso10646", aUnixCharsetUNICODETab },
-/*      { "ksc5601.1992", aUnixCharsetKoreanEUCTab }, */
+        { "ksc5601.1987", aUnixCharsetKSC56011987Tab },
+        { "ksc5601.1992", aUnixCharsetKSC56011992Tab },
 /*        { "tis620.2553",  },          */
 /*        { "sunudcja.1997",  },        */
 /*        { "sunudcko.1997",  },        */
