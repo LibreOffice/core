@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:37:43 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl); //add for ScNamePasteDlg
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl); //add for ScPivotFilterDlg
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl); //add for ScDPFunctionDlg
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl); //add for ScDPSubtotalDlg
+IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl); //add for ScDPShowDetailDlg
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
@@ -516,6 +517,13 @@ void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) co
     pDlg->FillLabelData( rLabelData );
 }
 //add for AbstractScDPSubtotalDlg_Impl end
+
+//add for AbstractScDPShowDetailDlg_Impl begin
+String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
+{
+     return pDlg->GetDimensionName();
+}
+//add for AbstractScDPShowDetailDlg_Impl end
 
 //add for AbstractScNewScenarioDlg_Impl begin
 void AbstractScNewScenarioDlg_Impl::SetScenarioData( const String& rName, const String& rComment,
@@ -1099,6 +1107,16 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
     return 0;
 }
 //add for ScDPSubtotalDlg end
+
+//add for ScDPShowDetailDlg begin
+AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
+        Window* pParent, const ResId& rResId, ScDPObject& rDPObj, USHORT nOrient )
+{
+    if( rResId.GetId() == RID_SCDLG_DPSHOWDETAIL )
+        return new AbstractScDPShowDetailDlg_Impl( new ScDPShowDetailDlg( pParent, rDPObj, nOrient ) );
+    return 0;
+}
+//add for ScDPShowDetailDlg end
 
 //add for ScNewScenarioDlg begin
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const String& rName,
