@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:53:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #include <svx/tstpitem.hxx>
 #endif
 
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -970,7 +973,8 @@ oncemore:
 //                                                      //!! erstmal nicht
 
 //          ConvertFFileName( aPara, pFName );          //!! WW1 ????
-            aFName = INetURLObject::RelToAbs( aFName );
+            aFName = URIHelper::SmartRel2Abs(
+                INetURLObject(rOut.GetBaseURL()), aFName );
 
             String aName( String::CreateFromAscii(
                                         RTL_CONSTASCII_STRINGPARAM( "WW" )));
