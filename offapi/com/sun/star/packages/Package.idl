@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Package.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com {  module sun {  module star {  module packages {
     <type scope="com::sun::star::lang">XInitialization</type> service methods
     before it is a valid instance of the service.
 */
-service Package
+published service Package
 {
     /**
     A Package can be initialised with one of the following:
