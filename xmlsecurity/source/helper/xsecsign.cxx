@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,18 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[0] = cssu::makeAny(rtl::OUString::valueOf(nSecurityId));
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
     args[2] = cssu::makeAny(rtl::OUString::valueOf(nIdOfSignatureElementCollector));
-    args[3] = cssu::makeAny(m_xSecurityContext);
+
+    //i39448 : for nss, the internal module is used for signing, which needs to be improved later
+    sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;
+    if( nEnvIndex < 0 || nEnvIndex >= m_xSecurityContext->getSecurityEnvironmentNumber())
+    {// set defaultEnv
+        args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironment());
+    }
+    else
+    {
+        args[3] = cssu::makeAny(m_xSecurityContext->getSecurityEnvironmentByIndex(nEnvIndex));
+    }
+
     args[4] = cssu::makeAny(m_xXMLSignature);
     xInitialization->initialize(args);
 
@@ -271,11 +282,21 @@ void XSecController::setX509Certificate(
     const rtl::OUString& ouX509IssuerName,
     const rtl::OUString& ouX509SerialNumber)
 {
+    setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber);
+}
+
+void XSecController::setX509Certificate(
+    sal_Int32 nSecurityId,
+    const sal_Int32 nSecurityEnvironmentIndex,
+    const rtl::OUString& ouX509IssuerName,
+    const rtl::OUString& ouX509SerialNumber)
+{
     int index = findSignatureInfor( nSecurityId );
 
     if ( index == -1 )
     {
         InternalSignatureInformation isi(nSecurityId, NULL);
+        isi.signatureInfor.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
         isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
         m_vInternalSignatureInformations.push_back( isi );
@@ -286,6 +307,7 @@ void XSecController::setX509Certificate(
             = m_vInternalSignatureInformations[index].signatureInfor;
         si.ouX509IssuerName = ouX509IssuerName;
         si.ouX509SerialNumber = ouX509SerialNumber;
+        si.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
     }
 }
 
