@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 06:53:34 $
+ *  last change: $Author: as $ $Date: 2002-04-04 09:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,68 +59,58 @@
  *
  ************************************************************************/
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #ifndef __FRAMEWORK_CLASSES_CONVERTER_HXX_
 #include <classes/converter.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported declarations
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
-
-//*****************************************************************************************************************
+//-----------------------------------------------------------------------------
+/**
+ * pack every property item of source list into an any entry of destination list
+ * Resulting list will have follow format then: "sequence< Any(PropertyValue) >".
+ * If one item couldn't be converted it will be ignored - means target list can
+ * be smaller then source list. Source list isn't changed anytime.
+ *
+ * algorithm:
+ *      (a) reserve enough space on destination list for all possible entries of
+ *          source list
+ *      (b) try to pack every property of source into an any of destination list
+ *          (b1) count successfully packed entries only
+ *      (c) use this count of packed entries to resize destination list
+ *          Because we getted enough space before - that will remove unused items
+ *          of destination list at the end of it only.
+ */
 css::uno::Sequence< css::uno::Any > Converter::convert_seqProp2seqAny( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
 {
-    sal_Int32                           nCount      = lSource.getLength();
-    css::uno::Sequence< css::uno::Any > lDestination( nCount )           ;
+    sal_Int32 nCount = lSource.getLength();
+    css::uno::Sequence< css::uno::Any > lDestination(nCount);
 
-    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
-    {
-        lDestination[nItem] <<= lSource[nItem];
-    }
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
+        lDestination[nItem]<<=lSource[nItem];
 
     return lDestination;
 }
 
-//*****************************************************************************************************************
+//-----------------------------------------------------------------------------
+/**
+ * do the same like convert_seqProp2seqAny() before - but reverse.
+ * It try to unpack PropertyValue items from given Any's.
+ */
 css::uno::Sequence< css::beans::PropertyValue > Converter::convert_seqAny2seqProp( const css::uno::Sequence< css::uno::Any >& lSource )
 {
-    sal_Int32                                       nCount      = lSource.getLength();
-    css::uno::Sequence< css::beans::PropertyValue > lDestination( nCount )           ;
+    sal_Int32 nCount = lSource.getLength();
+    sal_Int32 nRealCount = 0;
+    css::uno::Sequence< css::beans::PropertyValue > lDestination(nCount);
 
-    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
     {
-        lSource[nItem] >>= lDestination[nItem];
+        if (lSource[nItem]>>=lDestination[nItem])
+            ++nRealCount;
     }
+
+    if (nRealCount!=nCount)
+        lDestination.realloc(nRealCount);
 
     return lDestination;
 }
