@@ -158,8 +158,7 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
-    $(MISC)/$(TARGET)/opt/gnome/share/applications/{$(LAUNCHERDEPN)} \
-    $(MISC)/$(TARGET)/opt/kde3/share/applnk/Office/{$(LAUNCHERDEPN)} \
+    $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
     $(MISC)/$(TARGET)/opt/gnome/share/application-registry/$(UNIXFILENAME).applications \
     $(MISC)/$(TARGET)/opt/gnome/share/mime-info/$(UNIXFILENAME).keys \
     $(MISC)/$(TARGET)/opt/gnome/share/mime-info/$(UNIXFILENAME).mime \
