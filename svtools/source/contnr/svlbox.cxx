@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:23:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ SvViewDataEntry::SvViewDataEntry()
 SvViewDataEntry::~SvViewDataEntry()
 {
     DBG_DTOR(SvViewDataEntry,0);
-    __DELETE(nItmCnt) pItemData;
+    delete [] pItemData;
 }
 
 // ***************************************************************
