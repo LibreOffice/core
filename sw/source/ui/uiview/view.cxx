@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:39:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,8 +1693,6 @@ void SwView::ScannerEventHdl( const EventObject& rEventObject )
     SfxBindings& rBind = GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_TWAIN_SELECT );
     rBind.Invalidate( SID_TWAIN_TRANSFER );
-//JP 26.06.00: the appwindow doen't exist
-//  Application::GetAppWindow()->EnableInput( TRUE );
 }
 #endif
 
