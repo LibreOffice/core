@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.123 $
+#   $Revision: 1.124 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-05 14:57:58 $
+#   last change: $Author: hjs $ $Date: 2002-09-05 15:49:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -367,19 +367,6 @@ ADDOPTTARGET=do_it_add
 .IF "$(NOPCHFILES)" != ""
 NOPCHTARGET=do_itpch
 .ENDIF
-
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_SOSL)"==""
-.IF "$(PRJNAME)"=="vcl"
-.IF "$(REMOTE_BUILD_FLAG)" == ""
-.IF "$(remote)" == ""
-REMOTE_BUILD=do_it_remote
-REMOTE_DEPEND=do_it_remote
-.ENDIF          # "$(remote)" == ""
-.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
-.ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(BUILD_SOSL)"!=""
-.ENDIF          # "$(UPDATER)"!=""
 
 .IF "$(LIBTARGET)"==""
 .IF "$(OBJFILES)$(IDLOBJFILES)"!=""
@@ -2195,8 +2182,8 @@ COMPVTMP:=$(mktmp iii)
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
 .IF "$(COM)"=="GCC"
-        @echo LIBSTDCPP3:=$(LIBSTDCPP3) >> $(COMPVTMP)
-        @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
+    @echo LIBSTDCPP3:=$(LIBSTDCPP3) >> $(COMPVTMP)
+    @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
 .ENDIF
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
@@ -2571,6 +2558,7 @@ $(EXCEPTIONSNOOPTFILES):
 # - REMOTE_BUILD - build remote vcl -
 # ----------------------------------
 
+.IF "$(REMOTE_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
@@ -2585,6 +2573,7 @@ $(REMOTE_BUILD):
 .ENDIF          # "$(PRJNAME)"=="vcl"
 .ENDIF          # "$(BUILD_SOSL)"==""
 .ENDIF          # "$(UPDATER)"!=""
+.ENDIF			# "$(REMOTE_BUILD)"!=""
 
 .IF "$(LAZY_DEPS)"!=""
 warn_lazy_deps:
@@ -2963,6 +2952,7 @@ ALLTAR : ALLDEP \
 # - REMOTE_DEPEND - remote vcl dependencies -
 # ----------------------------------
 
+.IF "$(REMOTE_DEPEND)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
@@ -2977,6 +2967,7 @@ $(REMOTE_DEPEND):
 .ENDIF          # "$(PRJNAME)"=="vcl"
 .ENDIF          # "$(BUILD_SOSL)"==""
 .ENDIF          # "$(UPDATER)"!=""
+.ENDIF			# "$(REMOTE_DEPEND)"!=""
 
 .ENDIF			# "$(depend)" == ""
 
