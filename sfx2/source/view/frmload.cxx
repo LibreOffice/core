@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 18:01:45 $
+ *  last change: $Author: as $ $Date: 2002-08-23 08:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,8 +532,10 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             // external filters can't be detected with this service ( only their type may be used )
             pExternalFilter = pFilter;
         }
+        // No filter - no valid detection.
+        // Return nothing so the outside detection code can try the next possible type!
         else if (!pFilter)
-            return aTypeName;
+                return ::rtl::OUString();
     }
 
     String aPrefix = String::CreateFromAscii( "private:factory/" );
