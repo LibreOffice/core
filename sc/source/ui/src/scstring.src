@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:04:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ String SCSTR_APPLICATION
     Text[ turkish ] = "StarCalc 5.0";
     Text[ arabic ] = "%PRODUCTNAME Calc 6.0";
     Text[ catalan ] = "%PRODUCTNAME Calc 6.0";
+    Text[ finnish ] = "StarCalc  5.0";
 };
 String SCSTR_50_APPLICATION
 {
@@ -205,6 +206,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ arabic ] = "ÃœÊ· %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Hoja de c·lculo";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 Spreadsheet";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -230,6 +232,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Hoja de c·lculo";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 Tabelle";
 };
 String SCSTR_40_LONG_DOCNAME
 {
@@ -255,6 +258,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Hoja de c·lculo";
+    Text[ finnish ] = "%PRODUCTNAME 4.0 -laskentataulukko";
 };
 String SCSTR_30_LONG_DOCNAME
 {
@@ -280,6 +284,7 @@ String SCSTR_30_LONG_DOCNAME
     Text[ turkish ] = "StarCalc 3.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hoja de c·lculo de StarCalc 3.0";
+    Text[ finnish ] = "StarCalc 3.0 -laskentataulukko";
 };
 String SCSTR_SHORT_SCDOC_NAME
 {
@@ -289,7 +294,7 @@ String SCSTR_SHORT_SCDOC_NAME
     Text [ italian ] = "Foglio di calcolo" ;
     Text [ portuguese_brazilian ] = "Tabela" ;
     Text [ portuguese ] = "Folha de c·lculo" ;
-    Text [ finnish ] = "Taulukko" ;
+    Text [ finnish ] = "Laskentataulukko" ;
     Text [ danish ] = "Regneark" ;
     Text [ french ] = "Feuille de calcul" ;
     Text [ swedish ] = "Tabell" ;
@@ -316,7 +321,7 @@ String SCSTR_HUMAN_SCDOC_NAME
     Text [ italian ] = "Foglio di calcolo" ;
     Text [ portuguese_brazilian ] = "Tabela" ;
     Text [ portuguese ] = "Folha de c·lculo" ;
-    Text [ finnish ] = "Taulukko" ;
+    Text [ finnish ] = "Laskentataulukko" ;
     Text [ danish ] = "Regneark" ;
     Text [ french ] = "Feuille de calcul" ;
     Text [ swedish ] = "Tabell" ;
@@ -344,7 +349,7 @@ String SCSTR_DOCSHELL
     Text [ italian ] = "Tabella" ;
     Text [ portuguese_brazilian ] = "Tabela" ;
     Text [ portuguese ] = "Folha" ;
-    Text [ finnish ] = "Taulukko" ;
+    Text [ finnish ] = "Lomake" ;
     Text [ danish ] = "Ark" ;
     Text [ french ] = "Feuille" ;
     Text [ swedish ] = "Tabell" ;
@@ -416,6 +421,7 @@ String SCSTR_CELLSHELL
     Text[ turkish ] = "H¸cre i˛levi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones de celda";
+    Text[ finnish ] = "Solujen funktiot";
 };
 
 String SCSTR_FORMATSHELL
@@ -442,6 +448,7 @@ String SCSTR_FORMATSHELL
     Text[ turkish ] = "H¸cre format˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formatos de celda";
+    Text[ finnish ] = "Solujen muodot";
 };
 
 
@@ -453,7 +460,7 @@ String SCSTR_DRAWSHELL
     Text [ italian ] = "Oggetti grafici" ;
     Text [ portuguese_brazilian ] = "Objetos gr·ficos" ;
     Text [ portuguese ] = "Objectos gr·ficos" ;
-    Text [ finnish ] = "Graafiset objektit" ;
+    Text [ finnish ] = "Grafiikkaobjektit" ;
     Text [ danish ] = "Grafiske objekter" ;
     Text [ french ] = "Objets graphiques" ;
     Text [ swedish ] = "Grafikobjekt" ;
@@ -525,6 +532,7 @@ String SCSTR_DRAWFORMSHELL
     Text[ turkish ] = "Form nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de formulario";
+    Text[ finnish ] = "Lomakeobjektit";
 };
 
 String SCSTR_CHARTSHELL
@@ -550,6 +558,7 @@ String SCSTR_CHARTSHELL
     Text[ arabic ] = "ﬂ«∆‰«  «·—”„ «·»Ì«‰Ì";
     Text[ turkish ] = "ﬁema nesnesi";
     Text[ catalan ] = "Objetos de diagrama";
+    Text[ finnish ] = "Kaavio-objektit";
 };
 
 String SCSTR_OLEOBJECTSHELL
@@ -576,6 +585,7 @@ String SCSTR_OLEOBJECTSHELL
     Text[ turkish ] = "OLE nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos OLE";
+    Text[ finnish ] = "OLE-objektit";
 };
 
 String SCSTR_GRAPHICSHELL
@@ -601,6 +611,7 @@ String SCSTR_GRAPHICSHELL
     Text[ arabic ] = "’Ê—…";
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Imagen";
+    Text[ finnish ] = "Kuvat";
 };
 String SCSTR_PAGEBREAKSHELL
 {
@@ -626,6 +637,7 @@ String SCSTR_PAGEBREAKSHELL
     Text[ turkish ] = "Sayfa sonu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Salto de p·gina";
+    Text[ finnish ] = "Sivunvaihto";
 };
 
 String SCSTR_EDITSHELL
@@ -664,7 +676,7 @@ String SCSTR_PREVIEWSHELL
     Text [ italian ] = "Anteprima stampa" ;
     Text [ portuguese_brazilian ] = "Examinar impress„o" ;
     Text [ portuguese ] = "Visualizar impress„o" ;
-    Text [ finnish ] = "Esikatselu" ;
+    Text [ finnish ] = "Tulostuksen esikatselu" ;
     Text [ danish ] = "Udskriftsvisning" ;
     Text [ french ] = "AperÁu" ;
     Text [ swedish ] = "Sk‰rmutskrift" ;
@@ -692,7 +704,7 @@ String SCSTR_PIVOTSHELL
     Text [ italian ] = "Tabelle DataPilot" ;
     Text [ portuguese_brazilian ] = "Data Pilot Tables" ;
     Text [ portuguese ] = "Tabelas do Piloto de Dados" ;
-    Text [ finnish ] = "???-taulukot" ;
+    Text [ finnish ] = "Tietotaulukoiden ohjaus" ;
     Text [ danish ] = "DataPilot-tabeller" ;
     Text [ french ] = "Tables du DataPilote" ;
     Text [ swedish ] = "Datapilottabeller" ;
@@ -737,6 +749,7 @@ String SCSTR_AUDITSHELL
     Text[ turkish ] = "Dedektif doldurma kipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modo Detective de relleno";
+    Text[ finnish ] = "Havainnoiva t‰yttˆtila";
 };
 
  // -----------------------------------------------------------------------
@@ -777,7 +790,7 @@ String STR_OPT_ROWHEIGHT
     Text [ italian ] = "Extra" ;
     Text [ portuguese_brazilian ] = "Extra" ;
     Text [ portuguese ] = "Adicionar" ;
-    Text [ finnish ] = "Muut" ;
+    Text [ finnish ] = "Lis‰‰" ;
     Text [ danish ] = "Tilf¯j" ;
     Text [ french ] = "Outils" ;
     Text [ swedish ] = "Extra" ;
@@ -805,7 +818,7 @@ String STR_ROWHEIGHT_TITLE
     Text [ italian ] = "Altezza riga" ;
     Text [ portuguese_brazilian ] = "Altura da fileira" ;
     Text [ portuguese ] = "Altura da linha" ;
-    Text [ finnish ] = "Rivikorkeus" ;
+    Text [ finnish ] = "Rivin korkeus" ;
     Text [ danish ] = "RÊkkeh¯jde" ;
     Text [ french ] = "Hauteur de ligne" ;
     Text [ swedish ] = "Radhˆjd" ;
@@ -833,7 +846,7 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text [ italian ] = "Altezza riga ottimale" ;
     Text [ portuguese_brazilian ] = "Altura Ûtima da fileira" ;
     Text [ portuguese ] = "Optimizar altura da linha" ;
-    Text [ finnish ] = "Sopivin rivikorkeus" ;
+    Text [ finnish ] = "Optimaalinen rivikorkeus" ;
     Text [ danish ] = "Optimal rÊkkeh¯jde" ;
     Text [ french ] = "Hauteur de ligne optimale" ;
     Text [ swedish ] = "Optimal radhˆjd" ;
@@ -887,7 +900,7 @@ String STR_OPT_COLWIDTH
     Text [ italian ] = "Extra" ;
     Text [ portuguese_brazilian ] = "Extra" ;
     Text [ portuguese ] = "Adicionar" ;
-    Text [ finnish ] = "Muut" ;
+    Text [ finnish ] = "Lis‰‰" ;
     Text [ danish ] = "Tilf¯j" ;
     Text [ french ] = "Outils" ;
     Text [ swedish ] = "Extra" ;
@@ -914,7 +927,7 @@ String STR_COLWIDTH_TITLE
     Text [ italian ] = "Larghezza colonna" ;
     Text [ portuguese_brazilian ] = "Largura da coluna" ;
     Text [ portuguese ] = "Largura da coluna" ;
-    Text [ finnish ] = "Sarakeleveys" ;
+    Text [ finnish ] = "Sarakkeen leveys" ;
     Text [ danish ] = "Kolonnebredde" ;
     Text [ french ] = "Largeur de colonne" ;
     Text [ swedish ] = "Kolumnbredd" ;
@@ -941,7 +954,7 @@ String STR_OPT_COLWIDTH_TITLE
     Text [ italian ] = "Larghezza colonna ottimale" ;
     Text [ portuguese_brazilian ] = "Largura Ûtima da coluna" ;
     Text [ portuguese ] = "Optimizar largura da coluna" ;
-    Text [ finnish ] = "Sopivin sarakeleveys" ;
+    Text [ finnish ] = "Optimaalinen palstaleveys" ;
     Text [ danish ] = "Optimal kolonnebredde" ;
     Text [ french ] = "Largeur de colonne optimale" ;
     Text [ swedish ] = "Optimal kolumnbredd" ;
@@ -995,7 +1008,7 @@ String SCSTR_NONE
     Text [ italian ] = "- senza -" ;
     Text [ portuguese_brazilian ] = "- nenhum -" ;
     Text [ portuguese ] = "- nenhuma -" ;
-    Text [ finnish ] = "- ei ole -" ;
+    Text [ finnish ] = "- ei mit‰‰n -" ;
     Text [ danish ] = "- ingen -" ;
     Text [ french ] = "- aucun -" ;
     Text [ swedish ] = "- ingen -" ;
@@ -1076,7 +1089,7 @@ String SCSTR_NEWTABLE
     Text [ italian ] = "- nuova tabella -" ;
     Text [ portuguese_brazilian ] = "- nova tabela -" ;
     Text [ portuguese ] = "- nova folha -" ;
-    Text [ finnish ] = "- new table -" ;
+    Text [ finnish ] = "- uusi lomake -" ;
     Text [ danish ] = "- nyt ark -" ;
     Text [ french ] = "- nouvelle feuille -" ;
     Text [ swedish ] = "- ny tabell -" ;
@@ -1108,7 +1121,7 @@ String SCSTR_ALL
     Text [ spanish ] = "- todo -" ;
     Text [ danish ] = "- alle -" ;
     Text [ swedish ] = "- alla -" ;
-    Text [ finnish ] = "- all -" ;
+    Text [ finnish ] = "- kaikki -" ;
     Text [ english_us ] = "- all -" ;
     Text[ chinese_simplified ] = "- »´≤ø -";
     Text[ russian ] = "- ‚ÒÂ -";
@@ -1146,6 +1159,7 @@ String SCSTR_STDFILTER
     Text[ turkish ] = "- Standart -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- Est·ndar -";
+    Text[ finnish ] = "- Vakio -";
 };
 String SCSTR_TOP10FILTER
 {
@@ -1171,6 +1185,7 @@ String SCSTR_TOP10FILTER
     Text[ turkish ] = "- Top 10 -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- Los 10 primeros -";
+    Text[ finnish ] = "- Top 10 -";
 };
 String SCSTR_NONAME
 {
@@ -1180,7 +1195,7 @@ String SCSTR_NONAME
     Text [ italian ] = "Senza nome" ;
     Text [ portuguese_brazilian ] = "desconhecido" ;
     Text [ portuguese ] = "sem nome" ;
-    Text [ finnish ] = "tuntematon" ;
+    Text [ finnish ] = "nimetˆn" ;
     Text [ danish ] = "ikke-navngivet" ;
     Text [ french ] = "Sans nom" ;
     Text [ swedish ] = "namnlˆs" ;
@@ -1344,7 +1359,7 @@ String SCSTR_CANCEL
     Text [ italian ] = "Annulla" ;
     Text [ portuguese_brazilian ] = "Cancela~r" ;
     Text [ portuguese ] = "Cancela~r" ;
-    Text [ finnish ] = "~Peruuta" ;
+    Text [ finnish ] = "Peruu~ta" ;
     Text [ danish ] = "Annuller" ;
     Text [ french ] = "~Annuler" ;
     Text [ swedish ] = "Av~bryt" ;
@@ -1401,7 +1416,7 @@ String SCSTR_SHOWTABLE
     Text [ italian ] = "Mostra tabella" ;
     Text [ portuguese_brazilian ] = "Mostrar tabela" ;
     Text [ portuguese ] = "Mostrar folha" ;
-    Text [ finnish ] = "N‰yt‰ taulukko" ;
+    Text [ finnish ] = "N‰yt‰ lomake" ;
     Text [ danish ] = "Vis ark" ;
     Text [ french ] = "Afficher la feuille" ;
     Text [ swedish ] = "Visa tabell" ;
@@ -1428,7 +1443,7 @@ String SCSTR_HIDDENTABLES
     Text [ italian ] = "Tabelle nascoste" ;
     Text [ portuguese_brazilian ] = "Ocultar tabelas" ;
     Text [ portuguese ] = "Folhas de c·lculo ocultas" ;
-    Text [ finnish ] = "Piilotetut taulukot" ;
+    Text [ finnish ] = "Piilotetut lomakkeet" ;
     Text [ danish ] = "Skjulte ark" ;
     Text [ french ] = "Feuilles masquÈes" ;
     Text [ swedish ] = "Dolda tabeller" ;
@@ -1456,7 +1471,7 @@ String SCSTR_SELECTDB
     Text [ italian ] = "Seleziona area database" ;
     Text [ portuguese_brazilian ] = "Selecionar Base de Dados" ;
     Text [ portuguese ] = "Seleccionar ·rea da base de dados" ;
-    Text [ finnish ] = "Valitse tietokanta" ;
+    Text [ finnish ] = "Valitse tietokanta-alue" ;
     Text [ danish ] = "VÊlg databaseomrÂde" ;
     Text [ french ] = "SÈlectionner une plage de base de donnÈes" ;
     Text [ swedish ] = "V‰lj databasomrÂde" ;
@@ -1483,7 +1498,7 @@ String SCSTR_AREAS
     Text [ italian ] = "Aree" ;
     Text [ portuguese_brazilian ] = "¡reas da tabela" ;
     Text [ portuguese ] = "¡reas" ;
-    Text [ finnish ] = "Taulukkoalueet" ;
+    Text [ finnish ] = "Alueet" ;
     Text [ danish ] = "OmrÂder" ;
     Text [ french ] = "Plages" ;
     Text [ swedish ] = "OmrÂden" ;
@@ -1510,7 +1525,7 @@ String SCSTR_TABLE
     Text [ italian ] = "Tabella" ;
     Text [ portuguese_brazilian ] = "Tabela" ;
     Text [ portuguese ] = "Folha" ;
-    Text [ finnish ] = "Taulukko" ;
+    Text [ finnish ] = "Lomake" ;
     Text [ danish ] = "Ark" ;
     Text [ french ] = "Feuille" ;
     Text [ swedish ] = "Tabell" ;
@@ -1565,9 +1580,9 @@ String SCSTR_INSTABLE
     Text [ italian ] = "Inserisci tabella" ;
     Text [ portuguese_brazilian ] = "Insere Tabela" ;
     Text [ portuguese ] = "Inserir folha" ;
-    Text [ finnish ] = "Lis‰‰ taulukko" ;
+    Text [ finnish ] = "Lis‰‰ lomake" ;
     Text [ danish ] = "IndsÊt ark" ;
-    Text [ french ] = "InsÈrer une feuille" ;
+    Text [ french ] = "InsÈrer des feuilles" ;
     Text [ swedish ] = "Infoga tabell" ;
     Text [ dutch ] = "Werkblad invoegen" ;
     Text [ spanish ] = "Insertar hoja" ;
@@ -1593,7 +1608,7 @@ String SCSTR_APDTABLE
     Text [ italian ] = "Allega tabella" ;
     Text [ portuguese_brazilian ] = "Anexar Tabela" ;
     Text [ portuguese ] = "Anexar folha" ;
-    Text [ finnish ] = "Lis‰‰ taulukon loppuun" ;
+    Text [ finnish ] = "Liit‰ lomake" ;
     Text [ danish ] = "VedhÊft ark" ;
     Text [ french ] = "Annexer la feuille" ;
     Text [ swedish ] = "Tillfoga tabell" ;
@@ -1636,6 +1651,7 @@ String SCSTR_RENAMETAB
     Text[ turkish ] = "Tabloyu yeniden adland˝r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cambiar nombre a hoja";
+    Text[ finnish ] = "Nime‰ lomake uudelleen";
 };
 String STR_INSERTGRAPHIC
 {
@@ -1703,7 +1719,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text [ italian ] = "Centra in senso orizzontale" ;
     Text [ portuguese_brazilian ] = "Centrar horizontalmente" ;
     Text [ portuguese ] = "Centrado na horizontal" ;
-    Text [ finnish ] = "Keskit‰ vaakasuunnassa" ;
+    Text [ finnish ] = "Keskitetty vaakataso" ;
     Text [ danish ] = "Vandret centreret" ;
     Text [ french ] = "CentrÈ horizontalement" ;
     Text [ swedish ] = "Horisontellt centrerad" ;
@@ -1757,7 +1773,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text [ italian ] = "Allineamento blocco" ;
     Text [ portuguese_brazilian ] = "Bloco" ;
     Text [ portuguese ] = "Justificar" ;
-    Text [ finnish ] = "Lohko" ;
+    Text [ finnish ] = "Tasaa" ;
     Text [ danish ] = "Lige margener" ;
     Text [ french ] = "Alignement bloc" ;
     Text [ swedish ] = "Blockjustering" ;
@@ -1784,7 +1800,7 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text [ italian ] = "Ripeti allineamento" ;
     Text [ portuguese_brazilian ] = "Ajuste repetido" ;
     Text [ portuguese ] = "Repetir alinhamento" ;
-    Text [ finnish ] = "Toisto" ;
+    Text [ finnish ] = "Toista tasaus" ;
     Text [ danish ] = "Gentag justeringen" ;
     Text [ french ] = "RÈpÈter l'alignement" ;
     Text [ swedish ] = "Upprepa justering" ;
@@ -1811,7 +1827,7 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text [ italian ] = "Allineamento standard orizzontale" ;
     Text [ portuguese_brazilian ] = "Ajuste padr„o" ;
     Text [ portuguese ] = "Ajuste padr„o na horizontal" ;
-    Text [ finnish ] = "Vakiotasaus" ;
+    Text [ finnish ] = "Vaakatasaus oletusarvona" ;
     Text [ danish ] = "Standard vandret justering" ;
     Text [ french ] = "Alignement horizontal par dÈfaut" ;
     Text [ swedish ] = "Horisontell justering standard" ;
@@ -1865,7 +1881,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text [ italian ] = "Centra verticalmente" ;
     Text [ portuguese_brazilian ] = "Centrar verticalmente" ;
     Text [ portuguese ] = "Centrado na vertical" ;
-    Text [ finnish ] = "Pystykeskitys" ;
+    Text [ finnish ] = "Keskitetty pystytasossa" ;
     Text [ danish ] = "Lodret centreret" ;
     Text [ french ] = "CentrÈ verticalement" ;
     Text [ swedish ] = "Vertikalt centrerad" ;
@@ -1892,7 +1908,7 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text [ italian ] = "Allinea in basso" ;
     Text [ portuguese_brazilian ] = "Ajuste na base" ;
     Text [ portuguese ] = "Ajustar para baixo" ;
-    Text [ finnish ] = "Tasaa alas" ;
+    Text [ finnish ] = "Tasaa alaosaan" ;
     Text [ danish ] = "Juster nedad" ;
     Text [ french ] = "Alignement en bas" ;
     Text [ swedish ] = "Justera nedÂt" ;
@@ -1919,7 +1935,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text [ italian ] = "Allineamento standard verticale" ;
     Text [ portuguese_brazilian ] = "Ajustar Padr„o" ;
     Text [ portuguese ] = "Ajustar padr„o na vertical" ;
-    Text [ finnish ] = "Vakiotasaus" ;
+    Text [ finnish ] = "Pystytasaus oletusarvona" ;
     Text [ danish ] = "Standard lodret justering" ;
     Text [ french ] = "Alignement vertical par dÈfaut" ;
     Text [ swedish ] = "Vertikal justering standard" ;
@@ -2000,7 +2016,7 @@ String SCSTR_ORIENTATION_STANDARD
     Text [ italian ] = "Orientamento standard" ;
     Text [ portuguese_brazilian ] = "OrientaÁ„o padr„o" ;
     Text [ portuguese ] = "OrientaÁ„o padr„o" ;
-    Text [ finnish ] = "Vakiosuunta" ;
+    Text [ finnish ] = "Oletussuunta" ;
     Text [ danish ] = "Standard skriveretning" ;
     Text [ french ] = "Sens d'Ècriture par dÈfaut" ;
     Text [ swedish ] = "Standardorientering" ;
@@ -2055,7 +2071,7 @@ String SCSTR_CLIP_RTF
     Text [ italian ] = "Testo formattato [RTF]" ;
     Text [ portuguese_brazilian ] = "Texto formatado [RTF]" ;
     Text [ portuguese ] = "Texto formatado [RTF]" ;
-    Text [ finnish ] = "Muotoiltu teksti [RTF]" ;
+    Text [ finnish ] = "Muotoiltu teksti (RTF)" ;
     Text [ danish ] = "Formateret tekst [RTF]" ;
     Text [ french ] = "Texte formatÈ [RTF]" ;
     Text [ swedish ] = "Formaterad text [RTF]" ;
@@ -2125,6 +2141,7 @@ String SCSTR_CLIP_DIF
     Text[ turkish ] = "DIF";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "DIF";
+    Text[ finnish ] = "DIF";
 };
 
 String SCSTR_PROTECTDOC
@@ -2136,7 +2153,7 @@ String SCSTR_PROTECTDOC
     Text [ italian ] = "Proteggi documento" ;
     Text [ portuguese_brazilian ] = "ProdÌgio um documento" ;
     Text [ portuguese ] = "Proteger documento" ;
-    Text [ finnish ] = "Suojaa asiakirjan" ;
+    Text [ finnish ] = "Suojaa asiakirja" ;
     Text [ danish ] = "Beskyt dokument" ;
     Text [ french ] = "ProtÈger le document" ;
     Text [ swedish ] = "Skydda dokument" ;
@@ -2207,6 +2224,7 @@ String SCSTR_PROTECTTAB
     Text[ turkish ] = "Tabloyu koru";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Proteger hoja";
+    Text[ finnish ] = "Suojaa lomake";
 };
 String SCSTR_UNPROTECTTAB
 {
@@ -2232,6 +2250,7 @@ String SCSTR_UNPROTECTTAB
     Text[ turkish ] = "Tablo korumas˝n˝ kald˝r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desproteger hoja";
+    Text[ finnish ] = "Poista lomakkeen suojaus";
 };
 String SCSTR_CHG_PROTECT
 {
@@ -2246,17 +2265,18 @@ String SCSTR_CHG_PROTECT
     Text [ danish ] = "Protect trace" ;
     Text [ portuguese ] = "Proteger histÛrico" ;
     Text [ portuguese_brazilian ] = "Protect trace" ;
-    Text[ chinese_simplified ] = "Protect trace";
+    Text[ chinese_simplified ] = "±£ª§º«¬º";
     Text[ russian ] = "Protect trace";
     Text[ polish ] = "ChroÒ úlad";
     Text[ japanese ] = "ãLò^ÇÃï€åÏ";
-    Text[ chinese_traditional ] = "Protect trace";
+    Text[ chinese_traditional ] = "´O≈@∞Oø˝";
     Text[ arabic ] = "Protect trace";
     Text[ greek ] = "Protect trace";
     Text[ korean ] = "Protect trace";
     Text[ turkish ] = "Protect trace";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protect trace";
+    Text[ finnish ] = "Aufzeichnung sch¸tzen";
 };
 String SCSTR_CHG_UNPROTECT
 {
@@ -2271,17 +2291,18 @@ String SCSTR_CHG_UNPROTECT
     Text [ danish ] = "Unprotect trace" ;
     Text [ portuguese ] = "Desactivar protecÁ„o do histÛrico" ;
     Text [ portuguese_brazilian ] = "Unprotect trace" ;
-    Text[ chinese_simplified ] = "Unprotect trace";
+    Text[ chinese_simplified ] = "»°œ˚±£ª§º«¬º";
     Text[ russian ] = "Unprotect trace";
     Text[ polish ] = "Anuluj ochronÍ úladu";
     Text[ japanese ] = "ãLò^ÇÃï€åÏÇâèú";
-    Text[ chinese_traditional ] = "Unprotect trace";
+    Text[ chinese_traditional ] = "®˙Æ¯´O≈@∞Oø˝";
     Text[ arabic ] = "Unprotect trace";
     Text[ greek ] = "Unprotect trace";
     Text[ korean ] = "Unprotect trace";
     Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Unprotect trace";
+    Text[ finnish ] = "Aufzeichnungsschutz aufheben";
 };
 String SCSTR_PASSWORD
 {
@@ -2402,7 +2423,7 @@ String SCSTR_STAT_PRINT
     Text [ italian ] = "Stampa..." ;
     Text [ portuguese_brazilian ] = "Imprimindo..." ;
     Text [ portuguese ] = "A imprimir..." ;
-    Text [ finnish ] = "Tulostus..." ;
+    Text [ finnish ] = "Tulostetaan" ;
     Text [ danish ] = "Udskriver..." ;
     Text [ french ] = "Impression..." ;
     Text [ swedish ] = "Skriver ut..." ;
@@ -2435,7 +2456,7 @@ String SCSTR_UNKNOWN
     Text [ spanish ] = "Desconocido" ;
     Text [ danish ] = "Ukendt" ;
     Text [ swedish ] = "Ok‰nd" ;
-    Text [ finnish ] = "Unknown" ;
+    Text [ finnish ] = "Tuntematon" ;
     Text [ english_us ] = "Unknown" ;
     Text[ chinese_simplified ] = "Œ¥√¸√˚";
     Text[ russian ] = "ÕÂËÁ‚ÂÒÚÌ˚È";
@@ -2463,7 +2484,7 @@ String SCSTR_CHAR_ATTRS
     Text [ spanish ] = "Atributos de caracteres" ;
     Text [ danish ] = "Tegnattributter" ;
     Text [ swedish ] = "Teckenattribut" ;
-    Text [ finnish ] = "Character Attributes" ;
+    Text [ finnish ] = "Fonttim‰‰ritteet" ;
     Text [ english_us ] = "Font Attributes" ;
     Text[ chinese_simplified ] = "◊÷ÃÂ Ù–‘";
     Text[ russian ] = "¿ÚË·ÛÚ˚ ¯ËÙÚ‡";
@@ -2489,7 +2510,7 @@ String SCSTR_CLPBRD_CLEAR
     Text [ portuguese_brazilian ] = "O Conte˙do do Clipboard deve estar disponÌvel para outros Aplicativos?" ;
     Text [ portuguese ] = "Na ·rea de transferÍncia encontram-se grandes quantidades de dados.\nColocar o conte˙do da ·rea de transferÍncia ‡ disposiÁ„o de outras aplicaÁıes?" ;
     Text [ english_us ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
-    Text [ finnish ] = "Pit‰‰kˆ leikepˆyd‰n sis‰llˆn olla muiden sovellusten k‰ytett‰viss‰?" ;
+    Text [ finnish ] = "Leikepˆyd‰ll‰ on paljon tietoja.\nHaluatko s‰ilytt‰‰ leikepˆyd‰n sis‰llˆn muita sovelluksia varten?" ;
     Text [ danish ] = "Du har placeret en stor mÊngde data i udklipsholderen.\nSkal udklipholderens indhold vÊre tilgÊngeligt for andre applikationer?" ;
     Text [ french ] = "Vous avez dÈposÈ un grand nombre de donnÈes dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation sous une autre application ?" ;
     Text [ swedish ] = "Du har stora datam‰ngder i urklippet. \nSkall innehÂllet i urklippet vara tillg‰ngligt fˆr andra till‰mpningar?" ;
@@ -2532,6 +2553,7 @@ String SCSTR_CFG_APP
     Text[ turkish ] = "Sistem seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones del sistema";
+    Text[ finnish ] = "J‰rjestelm‰asetukset";
 };
 
 String SCSTR_CFG_DOC
@@ -2558,6 +2580,7 @@ String SCSTR_CFG_DOC
     Text[ turkish ] = "Belge seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones del documento";
+    Text[ finnish ] = "Asiakirja-asetukset";
 };
 
 String SCSTR_CFG_VIEW
@@ -2584,6 +2607,7 @@ String SCSTR_CFG_VIEW
     Text[ turkish ] = "Gˆr¸n¸m seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de visualizaciÛn";
+    Text[ finnish ] = "N‰yttˆasetukset";
 };
 
 String SCSTR_CFG_INPUT
@@ -2610,6 +2634,7 @@ String SCSTR_CFG_INPUT
     Text[ turkish ] = "Giri˛ seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de entrada";
+    Text[ finnish ] = "Syˆttˆasetukset";
 };
 
 String SCSTR_CFG_SPELLCHECK
@@ -2636,6 +2661,7 @@ String SCSTR_CFG_SPELLCHECK
     Text[ turkish ] = "Yaz˝m seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de ortografÌa";
+    Text[ finnish ] = "Oikeinkirjoituksen asetukset";
 };
 
 String SCSTR_CFG_PRINT
@@ -2662,6 +2688,7 @@ String SCSTR_CFG_PRINT
     Text[ turkish ] = "Yazd˝rma seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de impresiÛn";
+    Text[ finnish ] = "Tulostusasetukset";
 };
 
 String SCSTR_CFG_NAVIPI
@@ -2688,6 +2715,7 @@ String SCSTR_CFG_NAVIPI
     Text[ turkish ] = "Navigatˆr ayarlar˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ConfiguraciÛn del Navegador";
+    Text[ finnish ] = "Navigaattorin asetukset";
 };
 
 String SCSTR_MINIMUM
@@ -2714,6 +2742,7 @@ String SCSTR_MINIMUM
     Text[ turkish ] = "A~sgari";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~MÌnimo";
+    Text[ finnish ] = "~V‰hint‰‰n";
 };
 String SCSTR_MAXIMUM
 {
@@ -2739,6 +2768,7 @@ String SCSTR_MAXIMUM
     Text[ turkish ] = "A~zami";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~M·ximo";
+    Text[ finnish ] = "~Enint‰‰n";
 };
 String SCSTR_VALUE
 {
@@ -2764,6 +2794,7 @@ String SCSTR_VALUE
     Text[ turkish ] = "~Deer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Valor";
+    Text[ finnish ] = "~Arvo";
 };
 
  // fuer Dialoge:
@@ -2792,6 +2823,7 @@ String SCSTR_CHARSET_USER
     Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema";
+    Text[ finnish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
 };
 
 String SCSTR_COLUMN_USER
@@ -2819,6 +2851,7 @@ String SCSTR_COLUMN_USER
     Text[ turkish ] = "Standart;Metin;Tarih (GAY);Tarih (AGY);Tarih(YAG);›ngilizce (ABD);gizle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Est·ndar;Texto;Fecha (DMA);Fecha (MDA);Fecha (AMD);InglÈs (US);Ocultar";
+    Text[ finnish ] = "Vakio;Teksti;P‰iv‰m‰‰r‰ (PKV);P‰iv‰m‰‰r‰ (KPV);P‰iv‰m‰‰r‰ (VKP);Englanti (USA);Piilota";
 };
 
 String SCSTR_FIELDSEP
@@ -2834,7 +2867,7 @@ String SCSTR_FIELDSEP
     Text [ spanish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{vacÌo}\t32" ;
     Text [ danish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
     Text [ swedish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
-    Text [ finnish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+    Text [ finnish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32" ;
     Text [ english_us ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
     Text[ chinese_simplified ] = ",\t44\t;\t59\t:\t58\t{÷∆±Ì∑˚}\t9\t{ø’∞◊}\t32";
     Text[ russian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{œÓ·ÂÎ}\t32";
@@ -2878,6 +2911,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ turkish ] = "%PRODUCTNAME Calc, girilen form¸lde bir hata buldu.\nA˛a˝da ˆnerilen d¸zeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc encontrÛ un error en la fÛrmula dada.\nøDesea aceptar la correcciÛn sugerida abajo?\n\n";
+    Text[ finnish ] = "%PRODUCTNAME Calc havaitsi virheen annetussa kaavassa.\nHyv‰ksytkˆ ehdotetun korjauksen?\n\n";
 };
 
 //! the graphics filter error strings should be moved to svx or offapp!
@@ -2890,7 +2924,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text [ italian ] = "Impossibile aprire il file grafico" ;
     Text [ portuguese_brazilian ] = "N∆o consigo abrir arquivo gr†fico" ;
     Text [ portuguese ] = "ImpossÌvel abrir ficheiro gr·fico." ;
-    Text [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
+    Text [ finnish ] = "Grafiikkatiedostoja ei voi avata" ;
     Text [ danish ] = "Det er ikke muligt at Âbne grafikfilen" ;
     Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte ˆppnas" ;
@@ -2919,7 +2953,7 @@ String SCSTR_GRFILTER_IOERROR
     Text [ italian ] = "Impossibile leggere il file grafico" ;
     Text [ portuguese_brazilian ] = "N∆o consigo ler arquivo gr†fico" ;
     Text [ portuguese ] = "ImpossÌvel ler o ficheiro gr·fico." ;
-    Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
+    Text [ finnish ] = "Grafiikkatiedostoja ei voi lukea" ;
     Text [ danish ] = "Det er ikke muligt at lÊse grafikfilen" ;
     Text [ french ] = "Impossible de lire le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte l‰sas" ;
@@ -2977,7 +3011,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text [ italian ] = "Versione del file grafico non supportata" ;
     Text [ portuguese_brazilian ] = "Vers∆o de arquivo gr†fico n∆o suportada" ;
     Text [ portuguese ] = "Vers„o do ficheiro gr·fico n„o tem suporte." ;
-    Text [ finnish ] = "Ei tukea grafiikkatiedoston versiolle" ;
+    Text [ finnish ] = "T‰t‰ grafiikkatiedoston versiota ei tueta" ;
     Text [ danish ] = "Grafikfilens version bliver ikke underst¯ttet" ;
     Text [ french ] = "Cette version du fichier graphique n'est pas supportÈe !" ;
     Text [ swedish ] = "Grafikfilens version stˆds inte" ;
@@ -3006,7 +3040,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text [ italian ] = "Filtro grafico non trovato" ;
     Text [ portuguese_brazilian ] = "Filtro gr†fico n∆o encontrado" ;
     Text [ portuguese ] = "Filtro gr·fico n„o encontrado." ;
-    Text [ finnish ] = "Grafiikkasuodinta ei lˆydy" ;
+    Text [ finnish ] = "Grafiikkasuodatinta ei lˆytynyt" ;
     Text [ danish ] = "Grafikfilter blev ikke fundet" ;
     Text [ french ] = "Filtre graphique introuvable" ;
     Text [ swedish ] = "Grafikfilter hittades inte" ;
@@ -3035,7 +3069,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
     Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr†fico" ;
     Text [ portuguese ] = "MemÛria insuficiente para inserir a imagem." ;
-    Text [ finnish ] = "Muisti ei riit‰ grafiikan lis‰‰miseen" ;
+    Text [ finnish ] = "Muisti ei riit‰ kuvien lis‰‰miseen." ;
     Text [ danish ] = "Ikke nok hukommelse til at indsÊtte grafiken" ;
     Text [ french ] = "Impossible d'insÈrer l'image, mÈmoire insuffisante !" ;
     Text [ swedish ] = "Inte tillr‰ckligt med minne fˆr att infoga grafiken" ;
@@ -3068,7 +3102,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ french ] = "Filtre graphique";
     Text[ spanish ] = "Filtro de imagen";
     Text[ italian ] = "Filtro grafico";
-    Text[ danish ] = "Grafikfilter";
+    Text[ danish ] = "Grafikfiltre";
     Text[ swedish ] = "Grafikfilter";
     Text[ polish ] = "Filtr graficzny";
     Text[ portuguese_brazilian ] = "Graphic filter";
@@ -3079,5 +3113,6 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ arabic ] = "›· — «·—”Ê„« ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtro de imagen";
+    Text[ finnish ] = "Grafiikkasuodatin";
 };
 
