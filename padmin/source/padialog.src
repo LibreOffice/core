@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-29 21:08:24 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,7 @@ ModalDialog RID_PADIALOG
         Text[ dutch ] = "~Verwijderen...";
         Text[ french ] = "Supprimer...";
         Text[ spanish ] = "~Eliminar...";
-        Text[ italian ] = "~Rimuovi...";
+        Text[ italian ] = "Ri~muovi...";
         Text[ danish ] = "~Remove...";
         Text[ swedish ] = "Ta ~bort...";
         Text[ polish ] = "Usuс...";
@@ -3146,7 +3146,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ russian ] = "Сп~равка";
         Text[ greek ] = "ВпЮ~иейб";
         Text[ dutch ] = "~Help";
-        Text[ french ] = "~Aide";
+        Text[ french ] = "Aide";
         Text[ spanish ] = "~Ayuda";
         Text[ italian ] = "~?";
         Text[ danish ] = "~Help";
