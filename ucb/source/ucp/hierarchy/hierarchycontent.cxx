@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -494,7 +497,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             // Unreachable
         }
 
-        setPropertyValues( aProperties, Environment );
+        aRet <<= setPropertyValues( aProperties, Environment );
     }
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
@@ -1218,13 +1221,14 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 }
 
 //=========================================================================
-void HierarchyContent::setPropertyValues(
+uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
     throw( ::com::sun::star::uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
+    uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -1245,6 +1249,7 @@ void HierarchyContent::setPropertyValues(
     sal_Bool bExchange = sal_False;
     rtl::OUString aOldTitle;
     rtl::OUString aOldName;
+    sal_Int32 nTitlePos = -1;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
@@ -1254,21 +1259,40 @@ void HierarchyContent::setPropertyValues(
                     RTL_CONSTASCII_STRINGPARAM(  "ContentType" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
         {
-            if ( !isReadOnly() )
+            if ( isReadOnly() )
+            {
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+            }
+            else
             {
                 rtl::OUString aNewValue;
                 if ( rValue.Value >>= aNewValue )
@@ -1290,15 +1314,41 @@ void HierarchyContent::setPropertyValues(
                                 = HierarchyUri::encodeSegment( aNewValue );
 
                             // property change event will be set later...
+
+                            // remember position within sequence of values
+                            // (for error handling).
+                            nTitlePos = n;
                         }
                     }
+                    else
+                    {
+                        aRet[ n ] <<= lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                            "Empty title not allowed!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 );
+                    }
+                }
+                else
+                {
+                    aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                        "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "TargetURL" ) ) )
         {
-            if ( !isReadOnly() )
+            if ( isReadOnly() )
+            {
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+            }
+            else
             {
                 // TargetURL is only supported by links.
 
@@ -1324,7 +1374,29 @@ void HierarchyContent::setPropertyValues(
                                 nChanged++;
                             }
                         }
+                        else
+                        {
+                            aRet[ n ] <<= lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                            "Empty target URL not allowed!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 );
+                        }
                     }
+                    else
+                    {
+                        aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                        "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+                    }
+                }
+                else
+                {
+                    aRet[ n ] <<= beans::UnknownPropertyException(
+                                rtl::OUString::createFromAscii(
+                                    "TargetURL only supported by links!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
         }
@@ -1357,18 +1429,29 @@ void HierarchyContent::setPropertyValues(
                         nChanged++;
                     }
                 }
-                catch ( beans::UnknownPropertyException const & )
+                catch ( beans::UnknownPropertyException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::WrappedTargetException const & )
+                catch ( lang::WrappedTargetException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( beans::PropertyVetoException const & )
+                catch ( beans::PropertyVetoException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::IllegalArgumentException const & )
+                catch ( lang::IllegalArgumentException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
+            }
+            else
+            {
+                aRet[ n ] <<= uno::Exception(
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
     }
@@ -1398,6 +1481,11 @@ void HierarchyContent::setPropertyValues(
             m_aProps.aName  = aOldName;
 
             aOldTitle = aOldName = rtl::OUString();
+
+            // Set error .
+            aRet[ nTitlePos ] <<= uno::Exception(
+                    rtl::OUString::createFromAscii( "Exchange failed!" ),
+                    static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
@@ -1434,6 +1522,8 @@ void HierarchyContent::setPropertyValues(
         aGuard.clear();
         notifyPropertiesChange( aChanges );
     }
+
+    return aRet;
 }
 
 //=========================================================================

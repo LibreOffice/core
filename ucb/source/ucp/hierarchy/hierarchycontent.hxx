@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
                              ::com::sun::star::beans::Property >& rProperties );
-    void setPropertyValues(
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    setPropertyValues(
             const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >& rValues,
             const ::com::sun::star::uno::Reference<

@@ -82,6 +82,7 @@
     <type> com.sun.star.container.XChild                       </type>
     <type> com.sun.star.container.XHierarchicalNameAccess      </type>
     <type> com.sun.star.container.XNameContainer               </type>
+    <type> com.sun.star.lang.IllegalAccessException            </type>
     <type> com.sun.star.lang.XComponent                        </type>
     <type> com.sun.star.lang.XInitialization                   </type>
     <type> com.sun.star.lang.XMultiServiceFactory              </type>
