@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:06:56 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,9 @@ __EXPORT ScTabView::~ScTabView()
         pScMod->SetSelectionTransfer( NULL );
         TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
     }
+
+    DELETEZ(pBrushDocument);
+    DELETEZ(pDrawBrushSet);
 
     DELETEZ(pPageBreakData);
     DELETEZ(pHighlightRanges);
@@ -678,5 +681,41 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
     }
 }
 
+//---------------------------------------------------------------
+
+void ScTabView::SetBrushDocument( ScDocument* pNew, BOOL bLock )
+{
+    delete pBrushDocument;
+    delete pDrawBrushSet;
+
+    pBrushDocument = pNew;
+    pDrawBrushSet = NULL;
+
+    bLockPaintBrush = bLock;
+
+    aViewData.GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+}
+
+void ScTabView::SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock )
+{
+    delete pBrushDocument;
+    delete pDrawBrushSet;
+
+    pBrushDocument = NULL;
+    pDrawBrushSet = pNew;
+
+    bLockPaintBrush = bLock;
+
+    aViewData.GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+}
+
+void ScTabView::ResetBrushDocument()
+{
+    if ( HasPaintBrush() )
+    {
+        SetBrushDocument( NULL, FALSE );
+        SetActivePointer( Pointer( POINTER_ARROW ) );   // switch pointers also when ended with escape key
+    }
+}
 
 
