@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:12:01 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,8 +289,13 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
             ++aIter;
         }
 
-        aEnd->mnNoInlines++;
-        nInsertPos += aEnd->mnNoInlines;
+        ASSERT(aEnd != maEscherLayer.end(), "Something very wrong here");
+        if (aEnd != maEscherLayer.end())
+        {
+            aEnd->mnNoInlines++;
+            nInsertPos += aEnd->mnNoInlines;
+        }
+
         InsertObject(pObject, mnNoInitialObjects + mnInlines + nInsertPos);
     }
 }
