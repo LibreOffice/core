@@ -60,7 +60,8 @@ public class TestCaseOldAPI extends ComplexTestCase {
             "testTitle",
             "testSubTitle",
             "testDiagram",
-            "testAxis"
+            "testAxis",
+            "testLegend"
         };
     }
 
@@ -287,6 +288,33 @@ public class TestCaseOldAPI extends ComplexTestCase {
             xProp.setPropertyValue( "TextRotation", new Integer( nNewTextRotation ));
             assure( "Property TextRotation",
                     AnyConverter.toInt( xProp.getPropertyValue( "TextRotation" )) == nNewTextRotation );
+        }
+        catch( Exception ex )
+        {
+            failed( ex.getMessage() );
+            ex.printStackTrace( (PrintWriter)log );
+        }
+    }
+
+    // ------------
+
+    public void testLegend()
+    {
+        XShape xLegend = mxOldDoc.getLegend();
+        assure( "No Legend returned", xLegend != null );
+
+        XPropertySet xLegendProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class, xLegend );
+        assure( "Legend is no property set", xLegendProp != null );
+
+        try
+        {
+            ChartLegendPosition eNewPos = ChartLegendPosition.BOTTOM;
+            xLegendProp.setPropertyValue( "Alignment", eNewPos );
+            assure( "Property Alignment",
+                    AnyConverter.toObject(
+                        new Type( ChartLegendPosition.class ),
+                        xLegendProp.getPropertyValue( "Alignment" )) == eNewPos );
         }
         catch( Exception ex )
         {
