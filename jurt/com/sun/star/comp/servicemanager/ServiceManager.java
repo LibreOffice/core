@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:07:14 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-05-08 09:53:03 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -194,7 +194,7 @@ public class ServiceManager implements XMultiServiceFactory,
      *                      If any exception occured during the registration, the process will be canceled.
      * @see     com.sun.star.container.XSet
      */
-    public void addFactories( String[] newImpls )
+    private void xaddFactories( String[] newImpls )
                     throws com.sun.star.uno.Exception
     {
         for (int i=0; i<newImpls.length; i++) {
@@ -277,7 +277,7 @@ public class ServiceManager implements XMultiServiceFactory,
             XRegistryKey xRegistryKeys[] = implkey_xRegistryKey.openKeys();
 
             for(int i = 0; i < xRegistryKeys.length; ++ i) {
-                addFactories(new String[]{xRegistryKeys[i].getStringValue()});
+                xaddFactories(new String[]{xRegistryKeys[i].getStringValue()});
             }
         }
     }
@@ -607,14 +607,7 @@ public class ServiceManager implements XMultiServiceFactory,
             throws com.sun.star.uno.RuntimeException
     {
         if ( UNO_TYPE == null )
-          try {
             UNO_TYPE = new com.sun.star.uno.Type(ServiceManager.class);
-          }
-          catch (com.sun.star.uno.Exception e) {
-              com.sun.star.uno.RuntimeException rte = new com.sun.star.uno.RuntimeException();
-              rte.fillInStackTrace();
-              throw rte;
-          }
 
         return UNO_TYPE;
     }
@@ -698,7 +691,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
+     * @version     $Revision: 1.4 $ $ $Date: 2001-05-08 09:53:03 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -771,7 +764,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-05-08 09:53:03 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
