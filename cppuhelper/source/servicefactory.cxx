@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 16:50:43 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #endif
 #include <vector>
 
-#include <rtl/process.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -72,7 +71,6 @@
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <osl/module.h>
-#include <osl/thread.h>
 #include <osl/process.h>
 
 #include <cppuhelper/shlib.hxx>
@@ -116,10 +114,6 @@ void addFactories(
     SAL_THROW( (Exception) );
 //--------------------------------------------------------------------------------------------------
 Reference< security::XAccessController > createDefaultAccessController() SAL_THROW( () );
-//--------------------------------------------------------------------------------------------------
-void * SAL_CALL parentThreadCallback(void) SAL_THROW_EXTERN_C();
-//--------------------------------------------------------------------------------------------------
-void SAL_CALL childThreadCallback( void * xParentContext ) SAL_THROW_EXTERN_C();
 //--------------------------------------------------------------------------------------------------
 Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW( () );
 
@@ -350,8 +344,7 @@ Reference< XComponentContext > bootstrapInitialContext(
     Reference< lang::XMultiComponentFactory > const & xSF,
     Reference< registry::XSimpleRegistry > const & types_xRegistry,
     Reference< registry::XSimpleRegistry > const & services_xRegistry,
-    OUString const & rBootstrapPath,
-    Bootstrap const & bootstrap )
+    OUString const & rBootstrapPath, Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
     Reference< lang::XInitialization > xSFInit( xSF, UNO_QUERY );
@@ -366,6 +359,18 @@ Reference< XComponentContext > bootstrapInitialContext(
     ContextEntry_Init entry;
     ::std::vector< ContextEntry_Init > context_values;
     context_values.reserve( 14 );
+
+    // macro expander singleton for loader
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.util.theMacroExpander");
+    entry.value <<= create_boostrap_macro_expander_factory();
+    context_values.push_back( entry );
+
+    // tdmgr singleton
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
+    entry.value <<= OUSTR("com.sun.star.comp.stoc.TypeDescriptionManager");
+    context_values.push_back( entry );
 
     // read out singleton infos from registry
     if (services_xRegistry.is())
@@ -400,7 +405,7 @@ Reference< XComponentContext > bootstrapInitialContext(
                             xKey->getKeyName().copy( 11 ), RTL_TEXTENCODING_ASCII_US ) );
                         OString aStr2( OUStringToOString(
                             rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                        ::fprintf( stderr, "### failed reading singleton [%s] service name from registry: %s\n", aStr.getStr(), aStr2.getStr() );
+                        fprintf( stderr, "### failed reading singleton [%s] service name from registry: %s\n", aStr.getStr(), aStr2.getStr() );
 #endif
                     }
                 }
@@ -408,35 +413,14 @@ Reference< XComponentContext > bootstrapInitialContext(
         }
     }
 
-    // smgr:
-    // - smgr singleton
+    // ac, policy:
+    add_access_control_entries( &context_values, bootstrap );
+
+    // smgr singleton
     entry.bLateInitService = false;
     entry.name = OUSTR("/singletons/com.sun.star.lang.theServiceManager");
     entry.value <<= xSF;
     context_values.push_back( entry );
-
-    // macro expander singleton for loader
-    entry.bLateInitService = true;
-    entry.name = OUSTR("/singletons/com.sun.star.util.theMacroExpander");
-    entry.value <<= create_boostrap_macro_expander_factory();
-    context_values.push_back( entry );
-
-    // ac, policy:
-    add_access_control_entries( &context_values, bootstrap );
-
-    // tdmgr:
-    // - tdmgr prop: cache size
-    entry.bLateInitService = false;
-    entry.name = OUSTR("/implementations/com.sun.star.comp.stoc.TypeDescriptionManager/CacheSize");
-    entry.value <<= (sal_Int32)512;
-    context_values.push_back( entry );
-    // - tdmgr singleton
-    entry.bLateInitService = true;
-    entry.name = OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
-    entry.value <<= OUSTR("com.sun.star.comp.stoc.TypeDescriptionManager");
-    context_values.push_back( entry );
-
-    Reference< container::XHierarchicalNameAccess > xTDMgr;
 
     Reference< XComponentContext > xContext(
         createComponentContext(
@@ -450,6 +434,8 @@ Reference< XComponentContext > bootstrapInitialContext(
         xProps->setPropertyValue(
             OUSTR("DefaultContext"), makeAny( xContext ) );
     }
+
+    Reference< container::XHierarchicalNameAccess > xTDMgr;
 
     // get tdmgr singleton
     if (xContext->getValueByName(
@@ -497,8 +483,6 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
     const OUString & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
-//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
-
     Reference< lang::XMultiComponentFactory > xSF( bootstrapInitialSF( rBootstrapPath ) );
 
     Reference< registry::XSimpleRegistry > xRegistry;
@@ -605,8 +589,6 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
     SAL_THROW( (Exception) )
 {
     Bootstrap bootstrap;
-
-//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
 
     Reference< lang::XMultiComponentFactory > xSF(
         bootstrapInitialSF( rBootstrapPath ) );

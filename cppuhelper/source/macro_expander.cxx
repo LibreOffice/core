@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-05 16:13:52 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 //---- private forward -----------------------------------------------------------------------------
-Bootstrap const & __get_unorc() SAL_THROW( () );
+Bootstrap const & get_unorc() SAL_THROW( () );
 }
 
 namespace
@@ -255,7 +255,7 @@ OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     }
     else
     {
-        bstrap = ::cppu::__get_unorc().getHandle();
+        bstrap = ::cppu::get_unorc().getHandle();
     }
 
     // expand

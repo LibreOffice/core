@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: sb $ $Date: 2002-10-02 15:35:03 $
+#   last change: $Author: dbo $ $Date: 2002-12-06 10:12:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,7 +198,7 @@ SHL1VERSIONMAP=gcc3_linux_intel.map
 # --- Targets ------------------------------------------------------
 
 .IF "$(diag)"!=""
-CFLAGS += -D__DIAGNOSE=$(diag)
+CFLAGS += -DDIAG=$(diag)
 .ENDIF
 
 .INCLUDE :	target.mk

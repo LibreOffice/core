@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-15 12:19:53 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,16 @@
  *
  ************************************************************************/
 
-// #if (__DIAGNOSE == all) || (__DIAGNOSE == context)
-// #define __CONTEXT_DIAG
-// #endif
+#if (DIAG == all) || (DIAG == context)
+#define CONTEXT_DIAG
+#endif
 
 #ifdef _DEBUG
 #include <stdio.h>
 #endif
 
 #include <vector>
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
 #include <map>
 #endif
 
@@ -82,6 +82,7 @@
 #include <cppuhelper/component_context.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -106,7 +107,7 @@ using namespace ::com::sun::star;
 namespace cppu
 {
 
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
 //--------------------------------------------------------------------------------------------------
 static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * pTypeRef )
 {
@@ -310,7 +311,7 @@ static inline beans::PropertyValue createPropertyValue(
     return beans::PropertyValue( name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
 }
 //--------------------------------------------------------------------------------------------------
-static inline void __dispose( Reference< XInterface > const & xInstance )
+static inline void try_dispose( Reference< XInterface > const & xInstance )
     SAL_THROW( (RuntimeException) )
 {
     Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
@@ -320,7 +321,7 @@ static inline void __dispose( Reference< XInterface > const & xInstance )
     }
 }
 //--------------------------------------------------------------------------------------------------
-static inline void __dispose( Reference< lang::XComponent > const & xComp )
+static inline void try_dispose( Reference< lang::XComponent > const & xComp )
     SAL_THROW( (RuntimeException) )
 {
     if (xComp.is())
@@ -489,7 +490,7 @@ Sequence< Any > ComponentContext::readInitialArguments(
 Any ComponentContext::lookupMap( OUString const & rName )
     SAL_THROW( (RuntimeException) )
 {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
     if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
     {
         ::fprintf( stderr, ">>> dumping out ComponentContext %p m_map:\n", this );
@@ -580,7 +581,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
                 guard.clear();
                 // service has entered the context in the meantime
                 // => try to dispose this object
-                __dispose( xInstance );
+                try_dispose( xInstance );
             }
         }
 
@@ -612,14 +613,14 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 ComponentContext::~ComponentContext()
     SAL_THROW( () )
 {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> destructed context %p\n", this );
 #endif
 }
 //__________________________________________________________________________________________________
 void ComponentContext::disposing()
 {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> disposing context %p\n", this );
 #endif
 
@@ -673,14 +674,14 @@ void ComponentContext::disposing()
     }
 
     // dispose service manager
-    __dispose( m_xSMgr );
+    try_dispose( m_xSMgr );
     m_xSMgr.clear();
     // dispose ac
-    __dispose( xAC );
+    try_dispose( xAC );
     // dispose policy
-    __dispose( xPolicy );
+    try_dispose( xPolicy );
     // dispose tdmgr; revokes callback from cppu runtime
-    __dispose( xTDMgr );
+    try_dispose( xTDMgr );
 
     // everything is disposed, hopefully nobody accesses the context anymore...
     iPos = m_map.begin();
@@ -699,9 +700,9 @@ ComponentContext::ComponentContext(
     : WeakComponentImplHelper1< XComponentContext >( m_mutex )
     , m_xDelegate( xDelegate )
 {
-    while (nEntries--)
+    for ( sal_Int32 nPos = 0; nPos < nEntries; ++nPos )
     {
-        ContextEntry_Init const & rEntry = pEntries[ nEntries ];
+        ContextEntry_Init const & rEntry = pEntries[ nPos ];
 
         if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
         {
@@ -816,7 +817,7 @@ Reference< container::XNameAccess > ConfigurationComponentContext::getCfgNode(
             else
             {
                 guard.clear();
-                __dispose( xCfgProvider );
+                try_dispose( xCfgProvider );
             }
         }
         else
@@ -837,7 +838,7 @@ Reference< container::XNameAccess > ConfigurationComponentContext::getCfgNode(
     }
     catch (Exception & exc)
     {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
         OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
         OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
@@ -942,7 +943,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
         return ret;
     }
 
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
     if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
     {
         ::fprintf( stderr, ">>> dumping out ConfigurationComponentContext %p m_singletons:\n", this );
@@ -1002,7 +1003,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
             {
                 guard.clear();
                 // => try to dispose created object
-                __dispose( xInstance );
+                try_dispose( xInstance );
                 return makeAny( iFind->second );
             }
         }
@@ -1021,7 +1022,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
                 }
                 catch (Exception & exc)
                 {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
                     OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
                     OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
                     ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
@@ -1041,7 +1042,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
 //__________________________________________________________________________________________________
 void ConfigurationComponentContext::disposing()
 {
-#ifdef __CONTEXT_DIAG
+#ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> disposing cfg context %p\n", this );
 #endif
 
@@ -1071,20 +1072,20 @@ void ConfigurationComponentContext::disposing()
         }
         else // dispose immediately
         {
-            __dispose( iPos->second );
+            try_dispose( iPos->second );
         }
         ++iPos;
     }
     m_singletons.clear();
 
     // dispose service manager
-    __dispose( xSMgr );
+    try_dispose( xSMgr );
     // dispose ac
-    __dispose( xAC );
+    try_dispose( xAC );
     // dispose policy
-    __dispose( xPolicy );
+    try_dispose( xPolicy );
     // dispose tdmgr; revokes callback from cppu runtime
-    __dispose( xTDMgr );
+    try_dispose( xTDMgr );
 
     // dispose context values map
     ComponentContext::disposing();
@@ -1096,8 +1097,8 @@ Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
     Reference< XComponentContext > const & xDelegate )
     SAL_THROW( () )
 {
-    ConfigurationComponentContext * p = new ConfigurationComponentContext(
-        pEntries, nEntries, xDelegate );
+    ConfigurationComponentContext * p =
+        new ConfigurationComponentContext( pEntries, nEntries, xDelegate );
     Reference< XComponentContext > xContext( p );
     // listen delegate for disposing, to dispose this (wrapping) context first.
     DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );

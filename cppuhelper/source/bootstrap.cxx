@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-08 10:23:12 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/security.hxx>
-#include <osl/thread.h>
-
-#include <uno/current_context.h>
 
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -105,28 +102,6 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
-
-static OUString str_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-
-//==================================================================================================
-void * SAL_CALL parentThreadCallback(void) SAL_THROW_EXTERN_C()
-{
-    OSL_TRACE( "+> thread creation..." );
-    XCurrentContext * xContext = 0;
-    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
-    return xContext; // return acquired context
-}
-//==================================================================================================
-void SAL_CALL childThreadCallback( void * pParentData ) SAL_THROW_EXTERN_C()
-{
-    OSL_TRACE( "++> child thread running." );
-    XCurrentContext * xContext = (XCurrentContext *)pParentData;
-    if (xContext)
-    {
-        ::uno_setCurrentContext( xContext, str_envType.pData, 0 );
-        xContext->release();
-    }
-}
 
 //==================================================================================================
 void addFactories(
@@ -290,10 +265,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
 
         try
         {
-            OSL_TRACE("opening xxxxx");
               lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
-            OSL_TRACE("opening yyyy");
-
         }
         catch (registry::InvalidRegistryException & invalidRegistryException)
         {
@@ -377,12 +349,10 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
 }
 
 //--------------------------------------------------------------------------------------------------
-static Reference< XComponentContext > SAL_CALL __defaultBootstrap_InitialComponentContext(
+static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
-//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
-
     OUString bootstrapPath;
     OUString iniDir;
 
@@ -507,7 +477,7 @@ static Reference< XComponentContext > SAL_CALL __defaultBootstrap_InitialCompone
         Reference< XComponentContext > xContext( bootstrapInitialContext(
             smgr_XMultiComponentFactory, types_xRegistry,
             Reference< registry::XSimpleRegistry >(),
-            bootstrapPath, bootstrap ) );
+            bootstrapPath, bootstrap, pEntries, nEntries ) );
         xContext = createInitialCfgComponentContext(
             &context_values[ 0 ], context_values.size(), xContext );
 
@@ -565,7 +535,7 @@ static Reference< XComponentContext > SAL_CALL __defaultBootstrap_InitialCompone
 
 static void MyDummySymbolWithinLibrary(){}
 //--------------------------------------------------------------------------------------------------
-Bootstrap const & __get_unorc() SAL_THROW( () )
+Bootstrap const & get_unorc() SAL_THROW( () )
 {
     static rtlBootstrapHandle s_bstrap = 0;
     if (! s_bstrap)
@@ -596,13 +566,13 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
     SAL_THROW( (Exception) )
 {
     Bootstrap bootstrap( iniFile );
-    return __defaultBootstrap_InitialComponentContext( bootstrap );
+    return defaultBootstrap_InitialComponentContext( bootstrap );
 }
 //==================================================================================================
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
-    return __defaultBootstrap_InitialComponentContext( __get_unorc() );
+    return defaultBootstrap_InitialComponentContext( get_unorc() );
 }
 
 } // namespace cppu
