@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:15:29 $
+#   last change: $Author: kz $ $Date: 2001-05-07 14:02:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ SHL1TARGET= $(TARGET)
 SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
-        $(VOSLIB)       \
         $(CPPUHELPERLIB) 
 
 SHL1DEPN=
