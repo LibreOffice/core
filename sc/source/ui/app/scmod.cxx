@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 19:52:44 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,10 +813,7 @@ const ScInputOptions& ScModule::GetInputOptions()
 ScNavipiCfg& ScModule::GetNavipiCfg()
 {
     if ( !pNavipiCfg )
-    {
         pNavipiCfg = new ScNavipiCfg;
-        pNavipiCfg->Initialize();
-    }
 
     return *pNavipiCfg;
 }
