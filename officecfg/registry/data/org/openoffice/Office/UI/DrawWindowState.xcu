@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-02 09:27:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
                     <value xml:lang="de">3D-Einstellungen</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>false</value>
@@ -275,6 +275,9 @@
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -467,7 +470,7 @@
             </node>
             <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Size" oor:type="xs:string">
                     <value>362,75</value>
