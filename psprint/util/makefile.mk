@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cp $ $Date: 2001-05-28 11:07:03 $
+#   last change: $Author: hjs $ $Date: 2001-07-13 12:16:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,13 +102,6 @@ SHL1STDLIBS=$(UNOTOOLSLIB)		\
             -lX11
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-ALLTAR+=	$(LIB1TARGET)
-
-
-# --- All ----------------------------------------------------------------
-
-ALL:		ALLTAR
 
 .ENDIF		# "$(OS)"=="MACOSX"
 
