@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:24:00 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2373,8 +2373,8 @@ sal_Bool DrawPortionInfo::IsRTL() const
 
         sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
 
-        UTextOffset nStart(0);
-        UTextOffset nEnd;
+        int32_t nStart(0);
+        int32_t nEnd;
         UBiDiLevel nCurrDir;
 
         ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
