@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 17:23:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-22 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
 #ifndef INCLUDED_PTHREAD_H
 #include <pthread.h>
 #define INCLUDED_PTHREAD_H
+#endif
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
 #endif
 
 /************************************************************************/
