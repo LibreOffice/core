@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:16:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,11 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
-// #95343# -----------------
 #ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -125,12 +127,19 @@
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
+#ifndef _SVDPAGV_HXX
+#include "svdpagv.hxx"
+#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
 
+#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -150,7 +159,7 @@ FmPropBrwMgr::FmPropBrwMgr( Window *pParent, sal_uInt16 nId,
     // my UNO representation
     m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(pParent);
 
-    pWindow = new FmPropBrw(::comphelper::getProcessServiceFactory(),pBindings, this, pParent);
+    pWindow = new FmPropBrw( ::comphelper::getProcessServiceFactory(), pBindings, this, pParent, pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
 }
@@ -262,12 +271,12 @@ using namespace ::svxform;
 //========================================================================
 DBG_NAME(FmPropBrw);
 //------------------------------------------------------------------------
-FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
-                     SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent)
-          :SfxFloatingWindow(pBindings, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
-          ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *pBindings)
-          ,m_bInitialStateChange(sal_True)
-          ,m_xORB(_xORB)
+FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* pBindings,
+            SfxChildWindow* pMgr, Window* pParent, const SfxChildWinInfo* _pInfo )
+    :SfxFloatingWindow(pBindings, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
+    ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *pBindings)
+    ,m_bInitialStateChange(sal_True)
+    ,m_xORB(_xORB)
 {
     DBG_CTOR(FmPropBrw,NULL);
 
@@ -354,6 +363,9 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
 
     if ( m_xBrowserComponentWindow.is() )
         m_xBrowserComponentWindow->setVisible( sal_True );
+
+    if ( _pInfo )
+        m_sLastActivePage = _pInfo->aExtraString;
 }
 
 //------------------------------------------------------------------------
@@ -366,8 +378,29 @@ FmPropBrw::~FmPropBrw()
 }
 
 //-----------------------------------------------------------------------
+::rtl::OUString FmPropBrw::getCurrentPage() const
+{
+    ::rtl::OUString sCurrentPage;
+    try
+    {
+        if ( m_xBrowserController.is() )
+            m_xBrowserController->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentPage" ) ) ) >>= sCurrentPage;
+
+        if ( !sCurrentPage.getLength() )
+            sCurrentPage = m_sLastActivePage;
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+    }
+    return sCurrentPage;
+}
+
+//-----------------------------------------------------------------------
 void FmPropBrw::implDetachController()
 {
+    m_sLastActivePage = getCurrentPage();
+
     implSetNewObject(Reference< XPropertySet >());
     if (m_xMeAsFrame.is())
         m_xMeAsFrame->setComponent(NULL, NULL);
@@ -385,6 +418,21 @@ void FmPropBrw::implDetachController()
 //-----------------------------------------------------------------------
 sal_Bool FmPropBrw::Close()
 {
+    // suspend the controller (it is allowed to veto)
+    if ( m_xMeAsFrame.is() )
+    {
+        try
+        {
+            Reference< XController > xController( m_xMeAsFrame->getController() );
+            if ( xController.is() && !xController->suspend( sal_True ) )
+                return sal_False;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+        }
+    }
+
     implDetachController();
 
     if( IsRollUp() )
@@ -411,10 +459,22 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
 {
     if (m_xBrowserController.is())
     {
-        m_xBrowserController->setPropertyValue(
-            ::rtl::OUString::createFromAscii("IntrospectedObject"),
-            makeAny(_rxObject)
-        );
+        try
+        {
+            m_xBrowserController->setPropertyValue(
+                ::rtl::OUString::createFromAscii("IntrospectedObject"),
+                makeAny(_rxObject)
+            );
+        }
+        catch( const PropertyVetoException& )
+        {
+            return;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmPropBrw::implSetNewObject: caught an unexpected exception!" );
+            return;
+        }
 
         // set the new title according to the selected object
         String sTitle;
@@ -474,6 +534,7 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
+    rInfo.aExtraString = getCurrentPage();
 }
 
 //-----------------------------------------------------------------------
@@ -494,21 +555,61 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
 
         if (eState >= SFX_ITEM_AVAILABLE)
         {
-            // wenn ich gerade neu angelegt worden bin, moechte ich den Fokus haben
-            if (m_bInitialStateChange)
+            FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
+            Reference< XPropertySet > xObject;
+            if ( pShell )
             {
-                PostUserEvent(LINK(this, FmPropBrw, OnAsyncGetFocus) );
+                // is there a selected object?
+                xObject = xObject.query( pShell->GetImpl()->getSelObject() );
+            }
+
+            // for some functionality, the property browser needs to know the context of the controls
+            Reference< awt::XControlContainer > xControlContext;
+            if ( pShell && pShell->GetFormView() )
+            {
+                SdrPageView* pPageView = pShell->GetFormView()->GetPageViewPvNum(0);
+                xControlContext = pPageView->GetWindow(0)->GetControlContainerRef();
+            }
+            try
+            {
+                if ( m_xBrowserController.is() )
+                    m_xBrowserController->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ),
+                        makeAny( xControlContext )
+                    );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the control context!" );
+            }
+
+            // set the new object to inspect
+            implSetNewObject( xObject );
+
+            // if this is the first time we're here, some additional things need to be done ...
+            if ( m_bInitialStateChange )
+            {
+                // if we're just newly created, we want to have the focus
+                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ) );
+
+                // and additionally, we want to show the page which was active during
+                // our previous incarnation
+                if ( m_sLastActivePage.getLength() )
+                {
+                    try
+                    {
+                        if ( m_xBrowserController.is() )
+                            m_xBrowserController->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentPage" ) ), makeAny( m_sLastActivePage ) );
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                    }
+                }
+
                 m_bInitialStateChange = sal_False;
             }
 
-            FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObject;
-            if (pShell)
-            {
-                // mal schauen ob ein object selektiert ist
-                xObject = pShell->GetImpl()->getSelObject();
-            }
-            implSetNewObject(Reference< XPropertySet >(xObject, UNO_QUERY));
         }
         else
         {
