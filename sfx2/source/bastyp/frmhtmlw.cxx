@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:58:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include <svtools/inetdef.hxx>
 #endif
 //!(dv) #include <chaos2/cntapi.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
@@ -333,6 +335,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     {
         case ScrollingYes:  pStr = sHTML_SC_yes;    break;
         case ScrollingNo:   pStr = sHTML_SC_no;     break;
+          case ScrollingAuto:                           break;  // -Wall
 //      case ScrollingAuto: pStr = sHTML_SC_auto;   break;  // Default !!
     }
 
