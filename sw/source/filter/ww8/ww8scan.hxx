@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,6 +1676,8 @@ public:
     bool GetTextPosExact(short nIdx, WW8_CP& rStart, long& rLen);
     void UpdateIndex( BYTE grpfIhdt );
 };
+
+void SwapQuotesInField(String &rFmt);
 
 #endif
 
