@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:20:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         the default adjusment is to the right. */
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
-        pDoc->SetDefault( (SvxAdjustItem(SVX_ADJUST_RIGHT)) );
+        pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT) );
 
     return bRet;
 }
