@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-12 12:38:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,13 @@ PropertyMapEntry* PropertySetHelperImpl::find( const OUString& aName ) const thr
 
 ///////////////////////////////////////////////////////////////////////
 
+PropertySetHelper::PropertySetHelper( )
+{
+    mp = new PropertySetHelperImpl;
+    mp->mpInfo = new PropertySetInfo;
+    mp->mpInfo->acquire();
+}
+
 PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
 {
     mp = new PropertySetHelperImpl;
@@ -109,6 +116,16 @@ PropertySetHelper::~PropertySetHelper() throw()
 {
     mp->mpInfo->release();
     delete mp;
+}
+
+void PropertySetHelper::setInfo( comphelper::PropertySetInfo* pInfo ) throw()
+{
+    OSL_ENSURE( pInfo != NULL, "need pInfo" );
+    OSL_ENSURE( mp->mpInfo != NULL, "where's the old pInfo?" );
+
+    mp->mpInfo->release();
+    mp->mpInfo = pInfo;
+    mp->mpInfo->acquire();
 }
 
 // XPropertySet
