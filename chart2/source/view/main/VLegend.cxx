@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-04 14:06:32 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
+
+//.............................................................................
+namespace chart
+{
+//.............................................................................
 
 namespace
 {
@@ -611,12 +616,75 @@ layout::AnchorPoint lcl_getAnchorByAutoPos( chart2::LegendPosition ePos )
     return aResult;
 }
 
-} // anonymous namespace
-
-//.............................................................................
-namespace chart
+awt::Point lcl_calculatePositionAndRemainingSpace( awt::Rectangle & rOutAvailableSpace,
+                                 const awt::Size & rReferenceSize,
+                                 double fPrimaryOffset, double fSecondaryOffset,
+                                 chart2::LegendPosition ePos, const awt::Size& aLegendSize )
 {
-//.............................................................................
+    layout::RelativePosition aOffset( fPrimaryOffset,fSecondaryOffset );
+    layout::AnchorPoint aAnchor = lcl_getAnchorByAutoPos( ePos );
+
+    // rotate aOffset (out-param)
+    helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
+
+    sal_Int32 nOffsetX = static_cast< sal_Int32 >(
+        aOffset.Primary * rReferenceSize.Width );
+    // the standard angles are in a coordinate system where y goes up, in
+    // the drawing layer y goes down, so negate it
+    sal_Int32 nOffsetY = - static_cast< sal_Int32 >(
+        aOffset.Secondary * rReferenceSize.Height );
+
+    awt::Point aPos( static_cast< sal_Int32 >(
+                            rOutAvailableSpace.X +
+                            rOutAvailableSpace.Width * aAnchor.Alignment.Primary) +
+                            nOffsetX,
+                        static_cast< sal_Int32 >(
+                            rOutAvailableSpace.Y +
+                            rOutAvailableSpace.Height * aAnchor.Alignment.Secondary) +
+                            nOffsetY );
+    layout::Alignment aAlignment( helper::LayoutHelper::getStandardAlignmentByAngle(
+                                        aAnchor.EscapeDirection ));
+
+    // set position according to Alignment
+    aPos.X -= static_cast< sal_Int32 >(
+        ::rtl::math::round( aAlignment.Primary * static_cast< double >( aLegendSize.Width )));
+    aPos.Y -= static_cast< sal_Int32 >(
+        ::rtl::math::round( aAlignment.Secondary * static_cast< double >( aLegendSize.Height )));
+
+    // adapt rOutAvailableSpace if LegendPosition is not CUSTOM
+    switch( ePos )
+    {
+        case chart2::LegendPosition_LINE_START:
+        {
+            sal_Int32 nExtent = aLegendSize.Width + (aPos.X - rOutAvailableSpace.X)
+                + nOffsetX;
+            rOutAvailableSpace.Width -= nExtent;
+            rOutAvailableSpace.X += nExtent;
+        }
+        break;
+        case chart2::LegendPosition_LINE_END:
+            rOutAvailableSpace.Width = (aPos.X + nOffsetX) - rOutAvailableSpace.X;
+            break;
+        case chart2::LegendPosition_PAGE_START:
+        {
+            sal_Int32 nExtent = aLegendSize.Height + (aPos.Y - rOutAvailableSpace.Y)
+                + nOffsetY;
+            rOutAvailableSpace.Height -= nExtent;
+            rOutAvailableSpace.Y += nExtent;
+        }
+        break;
+        case chart2::LegendPosition_PAGE_END:
+            rOutAvailableSpace.Height = (aPos.Y + nOffsetY) - rOutAvailableSpace.Y;
+            break;
+
+        default:
+            // nothing
+            break;
+    }
+    return aPos;
+}
+
+} // anonymous namespace
 
 VLegend::VLegend(
     const uno::Reference< chart2::XLegend > & xLegend ) :
@@ -761,9 +829,6 @@ void VLegend::createShapes(
 
             if( xBorder.is())
                 xBorder->setSize( aLegendSize );
-
-            m_aBoundRect.Width  = aLegendSize.Width;
-            m_aBoundRect.Height = aLegendSize.Height;
         }
     }
     catch( uno::Exception & ex )
@@ -784,75 +849,39 @@ void VLegend::changePosition(
     try
     {
         // determine position and alignment depending on default position
-        chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
+        awt::Size aLegendSize = m_xShape->getSize();
+
         uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
+
+        bool bAutoPosition = true;
+        double fPrimaryOffset=0.02;// shift legend about 2% into the primary direction by default
+        double fSecondaryOffset=0.0;
+        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        if( (xLegendProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
+        {
+            fPrimaryOffset = aRelativePosition.Primary;
+            fSecondaryOffset = aRelativePosition.Secondary;
+            bAutoPosition = false;
+        }
+        chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
         xLegendProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
 
-        layout::AnchorPoint aAnchor = lcl_getAnchorByAutoPos( ePos );
-        // shift legend about 2% into the primary direction
-        layout::RelativePosition aOffset( 0.02, 0.0 );
+        awt::Rectangle aAvailableSpace(rOutAvailableSpace);
 
-        // rotate aOffset (out-param)
-        helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
-
-        sal_Int32 nOffsetX = static_cast< sal_Int32 >(
-            aOffset.Primary * rReferenceSize.Width );
-        // the standard angles are in a coordinate system where y goes up, in
-        // the drawing layer y goes down, so negate it
-        sal_Int32 nOffsetY = - static_cast< sal_Int32 >(
-            aOffset.Secondary * rReferenceSize.Height );
-
-        awt::Point aPos( static_cast< sal_Int32 >(
-                             rOutAvailableSpace.X +
-                             rOutAvailableSpace.Width * aAnchor.Alignment.Primary) +
-                             nOffsetX,
-                         static_cast< sal_Int32 >(
-                             rOutAvailableSpace.Y +
-                             rOutAvailableSpace.Height * aAnchor.Alignment.Secondary) +
-                             nOffsetY );
-        layout::Alignment aAlignment( helper::LayoutHelper::getStandardAlignmentByAngle(
-                                          aAnchor.EscapeDirection ));
-
-        // set position according to Alignment
-        aPos.X -= static_cast< sal_Int32 >(
-            ::rtl::math::round( aAlignment.Primary * static_cast< double >( m_aBoundRect.Width )));
-        aPos.Y -= static_cast< sal_Int32 >(
-            ::rtl::math::round( aAlignment.Secondary * static_cast< double >( m_aBoundRect.Height )));
-
+        //calculate position:
+        awt::Point aPos = lcl_calculatePositionAndRemainingSpace(
+            rOutAvailableSpace, rReferenceSize,
+            fPrimaryOffset, fSecondaryOffset, ePos, aLegendSize );
         m_xShape->setPosition( aPos );
 
-        m_aBoundRect.X = aPos.X;
-        m_aBoundRect.Y = aPos.Y;
-
-        // adapt rOutAvailableSpace if LegendPosition is not CUSTOM
-        switch( ePos )
+        //calculate remaining space as if having autoposition:
+        if(!bAutoPosition)
         {
-            case chart2::LegendPosition_LINE_START:
-            {
-                sal_Int32 nExtent = m_aBoundRect.Width + (m_aBoundRect.X - rOutAvailableSpace.X)
-                    + nOffsetX;
-                rOutAvailableSpace.Width -= nExtent;
-                rOutAvailableSpace.X += nExtent;
-            }
-            break;
-            case chart2::LegendPosition_LINE_END:
-                rOutAvailableSpace.Width = (m_aBoundRect.X + nOffsetX) - rOutAvailableSpace.X;
-                break;
-            case chart2::LegendPosition_PAGE_START:
-            {
-                sal_Int32 nExtent = m_aBoundRect.Height + (m_aBoundRect.Y - rOutAvailableSpace.Y)
-                    + nOffsetY;
-                rOutAvailableSpace.Height -= nExtent;
-                rOutAvailableSpace.Y += nExtent;
-            }
-            break;
-            case chart2::LegendPosition_PAGE_END:
-                rOutAvailableSpace.Height = (m_aBoundRect.Y + nOffsetY) - rOutAvailableSpace.Y;
-                break;
-
-            default:
-                // nothing
-                break;
+            fPrimaryOffset=0.02;// shift legend about 2% into the primary direction by default
+            fSecondaryOffset=0.0;
+            lcl_calculatePositionAndRemainingSpace(
+                aAvailableSpace, rReferenceSize, fPrimaryOffset, fSecondaryOffset, ePos, aLegendSize );
+            rOutAvailableSpace=aAvailableSpace;
         }
     }
     catch( uno::Exception & ex )
