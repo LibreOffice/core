@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-27 06:31:55 $
+#   last change: $Author: nf $ $Date: 2001-07-09 13:08:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1993,6 +1993,17 @@ ALLTAR:	\
         $(XMLPROPERTIESN) \
         $(XMLXULRESN)	\
         $(RCTARGET) \
+        $(SCP_PRODUCT_TYPE) \
+        $(ALLPARFILES) \
+        $(SCP1TARGETN) \
+        $(SCP2TARGETN) \
+        $(SCP3TARGETN) \
+        $(SCP4TARGETN) \
+        $(SCP5TARGETN) \
+        $(SCP6TARGETN) \
+        $(SCP7TARGETN) \
+        $(SCP8TARGETN) \
+        $(SCP9TARGETN) \
         $(SRCTARGET)	$(SRSTARGET) \
         $(SRC1TARGET)	$(SRS1TARGET) \
         $(SRC2TARGET)	$(SRS2TARGET) \
