@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:44:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,9 +1881,9 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         if ( !bCountFinal )
             setDataSource(NULL); // deattach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        ORowSetImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
+        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,getServiceManager());
         Reference<XEventListener> xHolder = pImExport;
-        pImExport->initialize();
+        pImExport->initialize(m_aDataDescriptor);
         Hide();
         try
         {
