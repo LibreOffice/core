@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:13:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,13 @@
 
 #include "swabstdlg.hxx" //CHINA001
 
+#define TOOLBOX_NAME    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
+
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_GRF_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_GRAFIK_TOOLBOX));
 }
-
 
 void SwGrfShell::Execute(SfxRequest &rReq)
 {
@@ -552,7 +553,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
 
         case SID_COLOR_SETTINGS:
         {
-            svx::ColorToolboxAccess aToolboxAccess;
+            svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
             aToolboxAccess.toggleToolbox();
             break;
         }
@@ -618,7 +619,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 bDisable = TRUE;
             else
             {
-                svx::ColorToolboxAccess aToolboxAccess;
+                svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible() ) );
             }
             break;
