@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:58:19 $
+ *  last change: $Author: nn $ $Date: 2001-03-05 19:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ BOOL ScDocument::LinkEmptyTab( USHORT& rTab, const String& aDocTab,
     rTab = 0;
     String  aFilterName;    // wird vom Loader gefuellt
     String  aOptions;       // Filter-Optionen
+    ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions );
 
     if ( !InsertTab( SC_TAB_APPEND, aDocTab, TRUE ) )
     {
