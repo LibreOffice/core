@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-13 13:57:27 $
+ *  last change: $Author: thb $ $Date: 2002-12-10 17:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,7 +1426,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 if( !pDXArray || !nLen )
                     nAryLen = 0;
                 else
-                    nAryLen = nLen - 1;
+                    nAryLen = nLen; // #105987# Write out all of DX array
 
                 rOStm << (INT16) GDI_TEXTARRAY_ACTION;
                 rOStm << (INT32) ( 28 + ( nLen + 1 ) + ( nAryLen * 4 ) );

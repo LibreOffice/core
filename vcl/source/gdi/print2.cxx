@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-17 13:45:03 $
+ *  last change: $Author: thb $ $Date: 2002-12-10 17:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,21 +349,18 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
         case( META_TEXT_ACTION ):
         {
             MetaTextAction* pA = (MetaTextAction*) mpAct;
-            const Point     aPt( pOut->LogicToPixel( pA->GetPoint() ) );
             const XubString aString( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-#ifdef ENABLE_CTL
-            SalLayout* pSalLayout = pOut->ImplLayout( aString, 0, aString.Len(), aPt );
-            if( pSalLayout )
+
+            if( aString.Len() )
             {
-                Rectangle aBoundRect( pOut->ImplGetTextBoundRect( *pSalLayout ) );
-                mpRect = new Rectangle( pOut->PixelToLogic( aBoundRect ) );
-                pSalLayout->Release();
-            }
-            else
+                const Point aPtLog( pA->GetPoint() );
+
                 mpRect = new Rectangle();
-#else // ENABLE_CTL
-            mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPt.X(), aPt.Y(), aString.GetBuffer(), aString.Len(), NULL ) ) );
-#endif // ENABLE_CTL
+
+                // #105987# Use API method instead of Impl* methods
+                pOut->GetTextBoundRect( *mpRect, pA->GetText(), 0, pA->GetIndex(), pA->GetLen() );
+                mpRect->Move( aPtLog.X(), aPtLog.Y() );
+            }
         }
         break;
 
@@ -375,21 +372,10 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
 
             if( nLen )
             {
-                const Point aPtLog( pA->GetPoint() );
-                const Point aPtPix( pOut->LogicToPixel( aPtLog ) );
-                long*       pPixDX = pA->GetDXArray() ? ( new long[ nLen ] ) : NULL;
-
-                if( pPixDX )
-                {
-                    for ( long i = 0; i < ( nLen - 1 ); i++ )
-                    {
-                        const Point aNextPt( aPtLog.X() + pA->GetDXArray()[ i ], 0 );
-                        pPixDX[ i ] = pOut->LogicToPixel( aNextPt ).X() - aPtPix.X();
-                    }
-                }
-
-#ifdef ENABLE_CTL
-                SalLayout* pSalLayout = pOut->ImplLayout( aString, 0, aString.Len(), aPtPix, 0, pPixDX );
+                // #105987# ImplLayout takes everything in logical coordinates
+                SalLayout* pSalLayout = pOut->ImplLayout( pA->GetText(), pA->GetIndex(),
+                                                          pA->GetLen(), pA->GetPoint(),
+                                                          0, pA->GetDXArray() );
                 if( pSalLayout )
                 {
                     Rectangle aBoundRect( pOut->ImplGetTextBoundRect( *pSalLayout ) );
@@ -398,10 +384,6 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
                 }
                 else
                     mpRect = new Rectangle();
-#else // ENABLE_CTL
-                mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPtPix.X(), aPtPix.Y(), aString.GetBuffer(), aString.Len(), pPixDX ) ) );
-#endif // ENABLE_CTL
-                delete[] pPixDX;
             }
         }
         break;
