@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:38:35 $
+ *  last change: $Author: ab $ $Date: 2001-06-05 09:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
         // #36374: Variable vor Unterscheidung IsNew() anlegen
         // Sonst Error bei Dim Identifier As New Type und option explicit
-        if( !bDefined && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
+        if( !bDefined && !(eOp == _REDIM || eOp == _REDIMP)
+                      && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
         {
             // Variable oder globale Konstante deklarieren
             SbiOpcode eOp;
