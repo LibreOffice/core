@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:45:30 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
 #ifndef _SCH_DLL_HXX //autogen
 #include <sch/schdll.hxx>
 #endif
@@ -119,7 +116,7 @@
 #endif
 
 
-
+#include <sot/clsids.hxx>
 
 SFX_IMPL_MODELESSDIALOG( SwInsertChartChild, SID_INSERT_DIAGRAM )
 
@@ -318,7 +315,7 @@ IMPL_LINK( SwInsertChartDlg, FinishHdl, Button *, EMPTYARG )
     }
     else
     {
-        pShell->Insert( 0, SCH_MOD()->pSchChartDocShellFactory, FALSE );
+        pShell->Insert( 0, &SvGlobalName( SO3_SCH_CLASSID ), FALSE );
     }
     delete pOutSet;
     delete pChData;
