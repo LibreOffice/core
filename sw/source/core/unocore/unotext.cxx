@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
+ *  last change: $Author: os $ $Date: 2002-05-30 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,13 +998,33 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
     //all tables and sections can be removed by the selecting XTextCursor
     {
         SwPosition aStartPos(*pStartNode);
-        GetDoc()->AppendTxtNode( aStartPos );
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
-        SwNodeIndex aIdx(*pEnd);
-        aIdx--;
-        SwPosition aEndPos(aIdx.GetNode());
-        SwPaM aPam(aEndPos);
-        GetDoc()->AppendTxtNode( *aPam.Start() );
+        SwNodeIndex aEndIdx(*pEnd);
+        aEndIdx--;
+        //the inserting of nodes should only be done if really necessary
+        //to prevent #97924# (removes paragraph attributes when setting the text
+        //e.g. of a table cell
+        BOOL bInsertNodes = FALSE;
+        SwNodeIndex aStartIdx(*pStartNode);
+        do
+        {
+            aStartIdx++;
+            SwNode& rCurrentNode = aStartIdx.GetNode();
+            if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
+                ||rCurrentNode.GetNodeType() == ND_TABLENODE)
+            {
+                bInsertNodes = TRUE;
+                break;
+            }
+        }
+        while(aStartIdx < aEndIdx);
+        if(bInsertNodes)
+        {
+            GetDoc()->AppendTxtNode( aStartPos );
+            SwPosition aEndPos(aEndIdx.GetNode());
+            SwPaM aPam(aEndPos);
+            GetDoc()->AppendTxtNode( *aPam.Start() );
+        }
     }
 
     uno::Reference< XTextCursor >  xRet = createCursor();
