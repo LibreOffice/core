@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-17 16:58:52 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 16:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ SvEmbeddedObject* SwTransferable::FindOLEObj() const
 void SwTransferable::RemoveDDELinkFormat()
 {
     RemoveFormat( SOT_FORMATSTR_ID_LINK );
-    CopyToClipboard();
+    CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 }
 
 // -----------------------------------------------------------------------
@@ -1006,7 +1006,7 @@ int SwTransferable::Copy( BOOL bIsCut )
     }
 
     SW_MOD()->pClipboard = this;
-    CopyToClipboard();
+    CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 
     return nRet;
 }
@@ -1025,7 +1025,7 @@ int SwTransferable::CalculateAndCopy()
     AddFormat( FORMAT_STRING );
 
     SW_MOD()->pClipboard = this;
-    CopyToClipboard();
+    CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 
     return 1;
 }
@@ -1072,7 +1072,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
 
     SW_MOD()->pClipboard = this;
-    CopyToClipboard();
+    CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 
     return 1;
 }

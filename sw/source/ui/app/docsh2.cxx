@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 06:14:00 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 16:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
                                         pStrm->GetData(), pStrm->GetSize() );
-                        pClipCntnr->CopyToClipboard();
+                        pClipCntnr->CopyToClipboard(
+                            GetView()? (Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;
                     }
                 }
