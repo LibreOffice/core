@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:44:02 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_SAVE_AS
         Text[ polish ] = "Katalog";
         Text[ portuguese_brazilian ] = "~Catalog";
         Text[ japanese ] = "¶ÀÛ¸Ş(~C)";
-        Text[ korean ] = "Ä«Å¸·Î±×";
+        Text[ korean ] = "Ä«Å¸·Î±×(~C)";
         Text[ chinese_simplified ] = "·ÖÀà(~C)";
         Text[ chinese_traditional ] = "¤ÀÃş(~C)";
         Text[ turkish ] = "~Catalog";
@@ -163,7 +163,7 @@ ModalDialog DLG_SAVE_AS
         Text[ polish ] = "~Schemat";
         Text[ portuguese_brazilian ] = "~Schema";
         Text[ japanese ] = "‚Ğ‚ÈŒ^(~S)";
-        Text[ korean ] = "µµ½Ä";
+        Text[ korean ] = "µµ½Ä(~S)";
         Text[ chinese_simplified ] = "ÂÔÍ¼(~S)";
         Text[ chinese_traditional ] = "²¤¹Ï(~S)";
         Text[ turkish ] = "~Schema";
@@ -233,7 +233,7 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~T)";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá";
         Text[ greek ] = "¼íï~ìá ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§";
+        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
         Text[ turkish ] = "Tablo adı";
         Text[ catalan ] = "~Nombre de la tabla";
         Text[ finnish ] = "~Name der Tabelle";
@@ -258,7 +258,7 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "ªí®æÀËµø¦WºÙ(~N)";
         Text[ arabic ] = "ÇÓã ÚÑÖ ÇáÌÏæá";
         Text[ greek ] = "¼íï~ìá ğñïâïëŞò ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§";
+        Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§(~N)";
         Text[ turkish ] = "Tablo görünümü adı";
         Text[ catalan ] = "Nombre del ~modo tabla";
         Text[ finnish ] = "~Name der Tabellensicht";
@@ -283,7 +283,7 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "¬d¸ß¦WºÙ(~Q)";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊİÓÇÑ";
         Text[ greek ] = "¼íï~ìá åñùôŞìáôïò";
-        Text[ korean ] = "ÁúÀÇ ÀÌ¸§";
+        Text[ korean ] = "ÁúÀÇ ÀÌ¸§(~Q)";
         Text[ turkish ] = "Sorgu adı";
         Text[ catalan ] = "Nombre de la ~consulta";
         Text[ finnish ] = "~Name der Abfrage";
@@ -308,7 +308,7 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "ªí³æ¦WºÙ(~O)";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊãÇÑÉ";
         Text[ greek ] = "¼íï~ìá öüñìáò";
-        Text[ korean ] = "¾ç½Ä ÀÌ¸§";
+        Text[ korean ] = "¾ç½Ä ÀÌ¸§(~O)";
         Text[ turkish ] = "Form adı";
         Text[ catalan ] = "Nombre del form~ulario";
         Text[ finnish ] = "~Name des Formulars";
@@ -333,7 +333,7 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "³øªí¦WºÙ(~R)";
         Text[ arabic ] = "ÇÓã ÇáÊŞÑíÑ";
         Text[ greek ] = "¼ío~ìá áíáöïñÜò";
-        Text[ korean ] = "º¸°í¼­ ÀÌ¸§";
+        Text[ korean ] = "º¸°í¼­ ÀÌ¸§(~R)";
         Text[ turkish ] = "Rapor adı";
         Text[ catalan ] = "Nombre del inform~e";
         Text[ finnish ] = "~Name des Berichts";
@@ -435,6 +435,7 @@ ModalDialog DLG_SAVE_AS
     Text[ catalan ] = "Guardar como";
     Text[ finnish ] = "Tallenna nimellä";
 };
+
 
 
 
