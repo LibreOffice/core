@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nf $ $Date: 2001-08-07 11:12:12 $
+#   last change: $Author: hjs $ $Date: 2001-08-20 13:12:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ longlang_49=german
 langext_49=49
 rsclang_49=-lgGERMAN $(IBM_PC_437)
 rescharset_49=$(deut$(LANG_GUI))
+iso_49=de
 
 .IF "$(RES_ENUS)"!=""
 alllangext+=01
@@ -81,6 +82,7 @@ langext_01=01
 rsclang_01=-lgENGLISH_US $(IBM_PC_437)
 rescharset_01=$(enus$(LANG_GUI))
 RCLANGFLAGS_01+= -d ENGLISH
+iso_01=en-US
 .ENDIF
 
 .IF "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
@@ -94,6 +96,7 @@ langext_39=39
 rsclang_39=-lgITALIAN $(IBM_PC_850)
 rescharset_39=$(ital$(LANG_GUI))
 RCLANGFLAGS_39+= -d ITALY
+iso_39=it
 .ENDIF
 
 .IF "$(RES_SPAN)"!="" || "$(give_me_all_languages)"!=""
@@ -105,6 +108,7 @@ langext_34=34
 rsclang_34=-lgSPANISH $(IBM_PC_850)
 rescharset_34=$(span$(LANG_GUI))
 RCLANGFLAGS_34+= -d SPAIN
+iso_34=es
 .ENDIF
 
 .IF "$(RES_FREN)"!="" || "$(give_me_all_languages)"!=""
@@ -116,6 +120,7 @@ langext_33=33
 rsclang_33=-lgFRENCH $(IBM_PC_850)
 rescharset_33=$(enus$(LANG_GUI))
 RCLANGFLAGS_33+= -d FRENCH
+iso_33=fr
 .ENDIF
 
 .IF "$(RES_DTCH)"!="" || "$(give_me_all_languages)"!=""
@@ -127,6 +132,7 @@ langext_31=31
 rsclang_31=-lgDUTCH $(IBM_PC_850)
 rescharset_31=$(dtch$(LANG_GUI))
 RCLANGFLAGS_31+= -d DTCH
+iso_31=nl
 .ENDIF
 
 .IF "$(RES_DAN)"!="" || "$(give_me_all_languages)"!=""
@@ -137,6 +143,7 @@ longlang_45=danish
 langext_45=45
 rsclang_45=-lgDANISH $(IBM_PC_850)
 rescharset_45=$(dan$(LANG_GUI))
+iso_45=da
 .ENDIF
 
 .IF "$(RES_SWED)"!="" || "$(give_me_all_languages)"!=""
@@ -148,6 +155,7 @@ langext_46=46
 rsclang_46=-lgSWEDISH $(IBM_PC_850)
 rescharset_46=$(swed$(LANG_GUI))
 RCLANGFLAGS_46+= -d SWED
+iso_46=sv
 .ENDIF
 
 .IF "$(RES_PORT)"!="" || "$(give_me_all_languages)"!=""
@@ -159,6 +167,7 @@ langext_03=03
 rsclang_03=-lgPORTUGUESE $(IBM_PC_850)
 rescharset_03=$(port$(LANG_GUI))
 RCLANGFLAGS_03+= -d PORT
+iso_03=pt
 .ENDIF 
 
 .IF "$(RES_JAPN)"!="" || "$(give_me_all_languages)"!=""
@@ -170,6 +179,7 @@ langext_81=81
 rsclang_81=-lgJAPANESE $(UTF8)
 rescharset_81=$(japn$(LANG_GUI))
 RCLANGFLAGS_81+= -d JAPAN
+iso_81=ja
 .ENDIF
 
 .IF "$(RES_CHINSIM)"!="" || "$(give_me_all_languages)"!=""
@@ -181,6 +191,7 @@ langext_86=86
 rsclang_86=-lgCHINESE_SIMPLIFIED $(UTF8)
 rescharset_86=$(chinsim$(LANG_GUI))
 RCLANGFLAGS_86+= -d CHINA
+iso_86=zh-CN
 .ENDIF 
 
 .IF "$(RES_CHINTRAD)"!="" || "$(give_me_all_languages)"!=""
@@ -192,6 +203,7 @@ longlang_88=chinese_traditional
 langext_88=88
 rsclang_88=-lgCHINESE_TRADITIONAL $(UTF8)
 rescharset_88=$(chintrad$(LANG_GUI))
+iso_88=zh-TW
 .ENDIF 
 
 .IF "$(RES_RUSS)"!="" || "$(give_me_all_languages)"!=""
@@ -204,6 +216,7 @@ langext_07=07
 rsclang_07=-lgRUSSIAN $(IBM_PC_852)
 rescharset_07=$(russ$(LANG_GUI))
 RCLANGFLAGS_07+= -d RUSS
+iso_07=ru
 .ENDIF
 
 .IF "$(RES_POL)"!="" || "$(give_me_all_languages)"!=""
@@ -216,6 +229,7 @@ langext_48=48
 rsclang_48=-lgPOLISH $(IBM_PC_852)
 rescharset_48=$(pol$(LANG_GUI))
 RCLANGFLAGS_48+= -d POLISH
+iso_48=pl
 .ENDIF 
 
 .IF "$(RES_ARAB)"!="" || "$(give_me_all_languages)"!=""
@@ -228,6 +242,7 @@ langext_96=96
 rsclang_96=-lgARABIC $(IBM_PC_852)
 rescharset_96=$(arab$(LANG_GUI))
 RCLANGFLAGS_96+= -d ARABIC
+iso_96=ar
 .ENDIF 
 
 .IF "$(RES_GREEK)"!="" || "$(give_me_all_languages)"!=""
@@ -240,6 +255,7 @@ langext_30=30
 rsclang_30=-lgGREEK $(IBM_PC_852)
 rescharset_30=$(greek$(LANG_GUI))
 RCLANGFLAGS_30+= -d GREEK
+iso_30=el
 .ENDIF 
 
 .IF "$(RES_TURK)"!="" || "$(give_me_all_languages)"!=""
@@ -252,6 +268,7 @@ langext_90=90
 rsclang_90=-lgTURKISH $(IBM_PC_857)
 rescharset_90=$(turk$(LANG_GUI))
 RCLANGFLAGS_90+= -d TURKISH
+iso_90=tr
 .ENDIF 
 
 .IF "$(RES_KOREAN)"!="" || "$(give_me_all_languages)"!=""
@@ -264,6 +281,7 @@ langext_82=82
 rsclang_82=-lgKOREAN $(UTF8)
 rescharset_82=$(korean$(LANG_GUI))
 RCLANGFLAGS_82+= -d KOREAN
+iso_82=ko
 .ENDIF 
 
 .IF "$(RES_CAT)"!="" || "$(give_me_all_languages)"!=""
@@ -276,6 +294,7 @@ langext_37=37
 rsclang_37=-lgCATALAN $(IBM_PC_850)
 rescharset_37=$(catalan$(LANG_GUI))
 RCLANGFLAGS_37+= -d CATALAN
+iso_37=ca
 .ENDIF 
 
 .ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
@@ -290,5 +309,6 @@ langext_99=99
 rsclang_99=-lgEXTERN $(UTF8)
 rescharset_99=$(extern$(LANG_GUI))
 RCLANGFLAGS_99+= -d EXTERN
+iso_99=$(L10N-framework)
 .ENDIF 
 
