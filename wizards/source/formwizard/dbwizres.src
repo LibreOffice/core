@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:39:24 $
+ *  last change: $Author: bc $ $Date: 2001-06-05 15:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,13 @@ String RID_DB_COMMON_START + 13
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The selected table or query could not be opened.";
     Text[ finnish ] = "Valittua taulukkoa tai kysely‰ ei voitu avata.";
+};
+
+String RID_DB_COMMON_START + 14
+{
+    Text = "~Hilfe";
+    Text [ english ] = "~Help";
+    Text[ english_us ] = "~Help";
 };
 
 // ============================================================================
@@ -1700,7 +1707,7 @@ String RID_DB_FORM_WIZARD_START + 21
 
 String RID_DB_FORM_WIZARD_START + 22
 {
-    Text = "~Dokumententitel";
+    Text = "Geben Sie den Titel ein";
     Text [ english_us ] = "~Document title";
     Text[ portuguese ] = "~TÌtulo do documento";
     Text[ russian ] = "~«‡„ÓÎÓ‚ÓÍ ‰ÓÍÛÏÂÌÚ‡";
@@ -1962,6 +1969,211 @@ String RID_DB_FORM_WIZARD_START + 31
     Text[ catalan ] = "Flat";
     Text[ finnish ] = "Flach";
 };
+
+String RID_DB_FORM_WIZARD_START + 32
+{
+    Text = "Beschriftungen";
+    Text [ english ] = "Alignment";
+    Text [ english_us ] = "Alignment";
+};
+
+String RID_DB_FORM_WIZARD_START + 33
+{
+    Text = "Beschriftungsfelder linksb¸ndig ausrichten";
+    Text [ english ] = "Align Labels on left Edge";
+    Text [ english_us ] = "Align Labels on left Edge";
+};
+
+String RID_DB_FORM_WIZARD_START + 34
+{
+    Text = "Beschriftungsfelder rechtsb¸ndig ausrichten";
+    Text [ english ] = "Align Labels on right Edge";
+    Text [ english_us ] = "Align Labels on right Edge";
+};
+
+String RID_DB_FORM_WIZARD_START + 35
+{
+    Text = "Anordnung der DB-Felder";
+    Text [ english ] = "Arrangement of DB Fields";
+    Text [ english_us ] = "Arrangement of DB Fields";
+};
+
+String RID_DB_FORM_WIZARD_START + 36
+{
+    Text = "In Spalten-Beschriftungen links";
+    Text [ english ] = "Columnar - Labels left";
+    Text [ english_us ] = "Columnar - Labels left";
+};
+
+String RID_DB_FORM_WIZARD_START + 37
+{
+    Text = "In Spalten - Beschriftungen oben";
+    Text [ english ] = "Columnar - Labels on Top";
+    Text [ english_us ] = "Columnar - Labels on Top";
+};
+
+String RID_DB_FORM_WIZARD_START + 38
+{
+    Text = "In Blˆcken - Beschriftungen links";
+    Text [ english ] = "In Blocks - Labels left";
+    Text [ english_us ] = "Inf Blocks - Labels left";
+};
+
+String RID_DB_FORM_WIZARD_START + 39
+{
+    Text = "In Blˆcken - Beschriftungen oben";
+    Text [ english ] = "In Blocks - Labels oben";
+    Text [ english_us ] = "In Blocks - Labels oben";
+};
+
+String RID_DB_FORM_WIZARD_START + 40
+{
+    Text = "Als Datenblatt";
+    Text [ english ] = "As Grid";
+    Text [ english_us ] = "As Grid";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 45
+{
+    Text = "Datenbankauswahl";
+    Text [ english ] = "Choose Database";
+    Text [ english_us ] = "Choose Database";
+    Text[ language_user1 ] = "Titel der ersten Seite des Autopiloten";
+
+};
+
+String RID_DB_FORM_WIZARD_START + 46
+{
+    Text = "Gestaltung";
+    Text [ english ] = "Layout";
+    Text [ english_us ] = "Layout";
+    Text[ language_user1 ] = "Titel der zweiten Seite des Autopiloten";
+
+};
+
+String RID_DB_FORM_WIZARD_START + 47
+{
+    Text = "Fertigstellung";
+    Text [ english ] = "Completion";
+    Text [ english_us ] = "Completion";
+    Text[ language_user1 ] = "Titel der dritten Seite des Autopiloten";
+};
+
+String RID_DB_FORM_WIZARD_START + 50
+{
+    Text = "Bin‰rfeld Darstellung";
+    Text [ english ] = "Presentation of Binary Fields";
+    Text [ english_us ] = "Presentation of Binary Fields";
+    Text[ language_user1 ] = "‹berschrift einiger Dialog Controls";
+};
+
+String RID_DB_FORM_WIZARD_START + 51
+{
+    Text = "Bin‰rfelder ignorieren";
+    Text [ english ] = "Ignore Binary Fields";
+    Text [ english_us ] = "Ignore Binary Fields";
+    Text[ language_user1 ] = "Label eines Radio-Buttons";
+};
+
+String RID_DB_FORM_WIZARD_START + 52
+{
+    Text = "Bin‰rfelder als Grafiken";
+    Text [ english ] = "Binary Fields as Images";
+    Text [ english_us ] = "Binary Fields as Images";
+    Text[ language_user1 ] = "Label eines Radio-Buttons";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 55
+{
+    Text = "Hintergrundbild";
+    Text[English] = "Background Picture";
+    Text[ English_us ] = "Background Image";
+    Text[ portuguese ] = "Imagem de fundo";
+    Text[ russian ] = " ‡ÚËÌÍ‡ Ì‡ ÙÓÌÂ";
+    Text[ greek ] = "≈ÈÍ¸Ì· ˆ¸ÌÙÔı";
+    Text[ dutch ] = "Background Picture";
+    Text[ french ] = "Image d'arriËre-plan";
+    Text[ spanish ] = "Imagen de fondo";
+    Text[ italian ] = "Immagine di sfondo";
+    Text[ danish ] = "Background Picture";
+    Text[ swedish ] = "Bakgrundsbild";
+    Text[ polish ] = "Ilustracja t≥a";
+    Text[ portuguese_brazilian ] = "Background Picture";
+    Text[ japanese ] = "îwåi√ﬁªﬁ≤›";
+    Text[ korean ] = "Background Picture";
+    Text[ chinese_simplified ] = "±≥æ∞—’…´";
+    Text[ chinese_traditional ] = "≠I¥∫πœ§˘";
+    Text[ turkish ] = "Background Picture";
+    Text[ arabic ] = "’Ê—… «·Œ·›Ì…";
+    Text[ catalan ] = "Background Image";
+    Text[ finnish ] = "Hintergrundbild";
+};
+
+
+
+String RID_DB_FORM_WIZARD_START + 56
+{
+    Text = "~Gekachelt";
+    Text[English] = "~Tiled";
+    Text[ English_us ] = "~Tiled";
+    Text[ portuguese ] = "Em a~zulejo";
+    Text[ russian ] = "œÎËÚÍË";
+    Text[ greek ] = "”Â ·Ò‹ËÂÛÁ";
+    Text[ dutch ] = "Tiling";
+    Text[ french ] = "Carrela~ge";
+    Text[ spanish ] = "A~zulejado";
+    Text[ italian ] = "Affianca";
+    Text[ danish ] = "Tiling";
+    Text[ swedish ] = "Sida vid sida";
+    Text[ polish ] = "P≥ytki";
+    Text[ portuguese_brazilian ] = "Tiling";
+    Text[ japanese ] = "¿≤ŸèÛ(~T)";
+    Text[ korean ] = "~Tiling";
+    Text[ chinese_simplified ] = "∆Ω∆Ã(~T)";
+    Text[ chinese_traditional ] = "•≠æQ(~T)";
+    Text[ turkish ] = "Tiling";
+    Text[ arabic ] = "Tiling";
+    Text[ catalan ] = "~Tiled";
+    Text[ finnish ] = "~Gekachelt";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 57
+{
+    Text = "~Skaliert";
+    Text[English] = "~Scaled";
+    Text[ English_us ] = "~Scaled";
+    Text[ portuguese ] = "~Escalonado";
+    Text[ russian ] = "~Ã‡Ò¯Ú‡·ËÓ‚‡ÌËÂ";
+    Text[ greek ] = " ÎÈÏ‹Í˘~ÛÁ";
+    Text[ dutch ] = "~Scaled";
+    Text[ french ] = "~GraduÈ";
+    Text[ spanish ] = "~Graduado";
+    Text[ italian ] = "~In scala";
+    Text[ danish ] = "~Scaled";
+    Text[ swedish ] = "~Skalat";
+    Text[ polish ] = "Skalowany";
+    Text[ portuguese_brazilian ] = "~Scaled";
+    Text[ japanese ] = "íiäKèÛ(~S)";
+    Text[ korean ] = "~Scaled";
+    Text[ chinese_simplified ] = "≤…”√œ‘ æ±»¿˝(~S)";
+    Text[ chinese_traditional ] = "±ƒ•Œ≈„•‹§Ò®“(~S)";
+    Text[ turkish ] = "~Scaled";
+    Text[ arabic ] = "~Scaled";
+    Text[ catalan ] = "~Scaled";
+    Text[ finnish ] = "~Skaliert";
+};
+
+String RID_DB_FORM_WIZARD_START + 60
+{
+    Text = "Verzeichnispfad";
+    Text[English] = "Directory Path";
+    Text[ English_us ] = "Directory Path";
+};
+
+
 // ============================================================================
 
 String RID_DB_QUERY_WIZARD_START + 0

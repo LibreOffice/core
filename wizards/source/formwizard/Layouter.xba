@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
 
 &apos; Todo: Testplan: ImageControl an erster Stelle im Array der Feldnamen
@@ -42,9 +42,10 @@ Public CurAlignmode as Integer
 Public OldArrangement as Integer
 Public Const cColumnarLeft = 1
 Public Const cColumnarTop = 2
-Public Const cLeftJustified = 3
-Public Const cTopJustified = 4
-Public Const cTabled = 5
+Public Const cTabled = 3
+Public Const cLeftJustified = 4
+Public Const cTopJustified = 5
+
 Public Const cXOffset = 1000
 Public Const cYOffset = 700
 &apos; This is the viewed space that we lose because of the symbol bars
@@ -117,8 +118,8 @@ ErrorAndCloseForm:
 	MsgBox(Form_gErrMsg$, 16, Form_gWizardName$)
 	oDocument.Dispose()
 	Stop
-	exit function
-End function
+	exit Function
+End Function
 
 
 Sub OpenBaseDocument()
@@ -166,16 +167,23 @@ Dim oCurModel as Object
 	oDocument.LockControllers
 	OldBorderType = CurBorderType
 	oModel = oEvent.Source.Model
-	CurBorderType = oModel.Tag
+	CurBorderType = Val(Right(oModel.Name,1))	
 &apos; Todo: Die Grafikurl des Controls umsetzen, ebenso wie die Grafikurl des 
 &apos; alten Controls
-	If OldBorderType &lt;&gt; CurBorderType Then
-		For i = 0 To MaxIndex
-			oCurModel = oDBShapeList(i).GetControl
-			If oCurModel.PropertySetInfo.HasPropertyByName(&quot;Border&quot;)Then
-				oCurModel.Border = CurBorderType
-			End If
-		Next i
+&apos; Todo: Auch unsichtbare Controls müssen eine neue Border bekommen
+&apos; Am besten wird hierbei das dynamische Array oDBShapeList() abgegriffen
+	If CurArrangement = cTabled Then
+		oGridModel.Border = CurBorderType
+	Else
+		&apos; 
+		If OldBorderType &lt;&gt; CurBorderType Then
+			For i = 0 To MaxIndex
+				oCurModel = oDBShapeList(i).GetControl
+				If oCurModel.PropertySetInfo.HasPropertyByName(&quot;Border&quot;)Then
+					oCurModel.Border = CurBorderType
+				End If
+			Next i
+		End If
 	End If
 	oDocument.UnLockControllers
 	ToggleLayoutPage(True)
@@ -191,7 +199,7 @@ Dim oModel as Object
 	oDocument.LockControllers()
 	OldAlignMode = CurAlignMode
 	oModel = oEvent.Source.Model
-	CurAlignMode = oEvent.Source.Model.Tag
+	CurAlignMode = Val(Right(oModel.Name,1))
 	&apos; Todo: Es muss festgestellt werden, welches Imagecontrol vorher selectiert war
 	&apos; und die GrafikUrls müssen entsprechend angepasst werden.	
 	If OldAlignMode &lt;&gt; CurAlignMode Then
@@ -209,59 +217,68 @@ Sub ChangeArrangemode(oEvent as Object)
 Dim oModel as Object
 	OldArrangement = CurArrangement
 	oModel = oEvent.Source.Model
-	oModel.Border = SB3DBORDER	
-	CurArrangement = oModel.Tag
+	CurArrangement = Val(Right(oModel.Name,1))	
 	If CurArrangement &lt;&gt; OldArrangement Then
 		ArrangeControls()
-		Select Case OldArrangement
-			Case cTabled
-				ToggleBorderGroup(True)
-				ToggleAlignGroup(True)
-			Case cColumnarTop, cTopJustified, cLeftJustified
-				ToggleAlignGroup(True)
-		End Select
-
 		Select Case CurArrangement
 			Case cTabled
 				ToggleBorderGroup(False)
 				ToggleAlignGroup(False)
-			Case cColumnarTop,cLeftJustified, cTopJustified
-				ToggleAlignGroup(False)
+			Case Else &apos; cColumnarTop,cLeftJustified, cTopJustified
+				ToggleAlignGroup(CurArrangement = cColumnarLeft)
+				ControlCaptionstoStandardLayout()
+&apos; Todo: geht das nicht eleganter?
+				ToggleDesignmode(oDocument)
+				ToggleDesignmode(oDocument)
+				oDBForm.Load
 		End Select
+		
 	End If
 End Sub
 
 
 Sub	ToggleBorderGroup(bDoEnable as Boolean)
-	oDialogModel.frmBorderLayout.Enabled = bDoEnable
-	oDialogModel.imgBorder0.Enabled = bDoEnable
-	oDialogModel.imgBorder1.Enabled = bDoEnable	
-	oDialogModel.imgBorder2.Enabled = bDoEnable
+	With oDialogModel
+		.hlnBorderLayout.Enabled = bDoEnable
+		.cmdBorder0.Enabled = bDoEnable	 	&apos; 0: No border
+		.cmdBorder1.Enabled = bDoEnable		&apos; 1: 3D border
+		.cmdBorder2.Enabled = bDoEnable		&apos; 2: simple border
+	End With
 End Sub
 
 
-Sub	ToggleAlignGroup(bDoEnable as Boolean)
-	oDialogModel.frmAlign.Enabled = bDoEnable
-	oDialogModel.imgAlign0.Enabled = bDoEnable
-	oDialogModel.imgAlign2.Enabled = bDoEnable	
+Sub	ToggleAlignGroup(ByVal bDoEnable as Boolean)
+	With oDialogModel
+		If bDoEnable Then
+			bDoEnable = CurArrangement &lt;&gt; cTabled
+		End If
+		.hlnAlign.Enabled = bDoEnable
+		.cmdAlign0.Enabled = bDoEnable
+		.cmdAlign2.Enabled = bDoEnable			&apos;
+	End With
 End Sub
 
 
 Sub ToggleLayoutPage(bDoEnable as Boolean)
-	oDialogModel.frmArrangements.Enabled = bDoEnable
-	oDialogModel.imgArrange1.Enabled = bDoEnable
-	oDialogModel.imgArrange2.Enabled = bDoEnable
-	oDialogModel.imgArrange3.Enabled = bDoEnable
-	oDialogModel.imgArrange4.Enabled = bDoEnable
-	oDialogModel.imgArrange5.Enabled = bDoEnable
-	oDialogModel.lblStyles.Enabled = bDoEnable
-	oDialogModel.frmBackground.Enabled = bDoEnable
-	oDialogModel.optTiled.Enabled = bDoEnable
-	oDialogModel.optArea.Enabled = bDoEnable
-	oDialogModel.cmdHelp.Enabled = bDoEnable
-	oDialogModel.cmdBack.Enabled = bDoEnable
-	oDialogModel.cmdGoOn.Enabled = bDoEnable
-	oDialogModel.imgTheme.Enabled = bDoEnable
+	With oDialogModel
+		.hlnArrangements.Enabled = bDoEnable
+		.cmdArrange1.Enabled = bDoEnable
+		.cmdArrange2.Enabled = bDoEnable
+		.cmdArrange3.Enabled = bDoEnable
+		.cmdArrange4.Enabled = bDoEnable
+		.cmdArrange5.Enabled = bDoEnable
+		.lstStyles.Enabled = bDoEnable
+		.lblStyles.Enabled = bDoEnable
+		.hlnBackground.Enabled = bDoEnable
+		.optTiled.Enabled = bDoEnable
+		.optArea.Enabled = bDoEnable
+		.cmdHelp.Enabled = bDoEnable
+		.cmdBack.Enabled = bDoEnable
+		.cmdGoOn.Enabled = bDoEnable
+&apos;		If DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible Then
+			.imgTheme.Enabled = bDoEnable
+&apos;		End If
+	End With
 	ToggleAlignGroup(bDoEnable)
 	ToggleBorderGroup(bDoEnable)
 End Sub
@@ -276,4 +293,5 @@ Dim oShape as Object
 			oShape.Dispose
 		End If
 	Next i
-End Sub</script:module>
+End Sub
+</script:module>

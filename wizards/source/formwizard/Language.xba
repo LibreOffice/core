@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">
-Global Const RID_DB_COMMON_START		= 1000
-Global Const RID_DB_FORM_WIZARD_START	= 2200
+Global Const RID_COMMON	= 1000
+Global Const RID_FORM	= 2200
 
-
+Public WizardTitle(1 To 3) as String
 Public DlgFormDB as Object
 Public oDialogModel as Object
 
@@ -22,103 +22,110 @@ Dim Form_gCreatedForm$
 Dim Form_gErrCouldNotOpenObject$
 Dim Form_gErrNameToLong$
 
-Dim Form_Dlg_Caption(4) as String
-
-&apos;	Const control-properties
-Dim Form_0_cmdCancel$
-Dim Form_0_cmdBack$
-Dim Form_0_CmdNext$
-Dim Form_1_frameDatabase$
-Dim Form_1_frameTables$
-Dim Form_2_lblAvailable$
-Dim Form_2_lblSelected$
-Dim Form_3_frameStyles$
-Dim Form_3_optStyleCol$
-Dim Form_3_optStyleJustified$
-Dim Form_3_optStyleTabled$
-Dim Form_3_frameOrientation$
-Dim Form_3_optHorizontal$
-Dim Form_3_optVertical$
-Dim Form_5_frameFormTitle$
-Dim Form_5_frameOptRun$
-Dim Form_5_cmdReady$
-
 &apos;	Internal Logic
 Dim Form_ilFormTitleSuggestPrefix$
 
 Dim Form_gDatetime_DateComponent$
 Dim Form_gDatetime_TimeComponent$
 
+Public sGoOn as String
+Public sReady as String
+
 Sub LoadLanguage ()
-	Form_gWizardName$ = GetResText(RID_DB_FORM_WIZARD_START + 0)
-	Form_gErrMsg$ = GetResText(RID_DB_COMMON_START + 6)
-	Form_gErrFormOpen$ = GetResText(RID_DB_COMMON_START + 7)
-	Form_gErrNoDatabase$ = GetResText(RID_DB_COMMON_START + 8)
-	Form_gErrNoTableInDatabase$ = GetResText(RID_DB_COMMON_START + 9)
-	Form_gErrTitleSuggestedExist$ = GetResText(RID_DB_COMMON_START + 10)
-	Form_gErrTitleAsTableExist$ = GetResText(RID_DB_COMMON_START + 10)
-	Form_gErrTitleSyntaxError$ = GetResText(RID_DB_COMMON_START + 11)
-	Form_gProgressText$ = GetResText(RID_DB_FORM_WIZARD_START + 2)
-	Form_gCreatedForm$ = GetResText(RID_DB_FORM_WIZARD_START + 26)
-	Form_gErrNameToLong$ = GetResText (RID_DB_FORM_WIZARD_START + 27)
-	Form_gErrCouldNotOpenObject$ = GetResText (RID_DB_COMMON_START + 13)
+	Form_gWizardName$ = GetResText(RID_FORM + 0)
+	Form_gErrMsg$ = GetResText(RID_COMMON + 6)
+	Form_gErrFormOpen$ = GetResText(RID_COMMON + 7)
+	Form_gErrNoDatabase$ = GetResText(RID_COMMON + 8)
+	Form_gErrNoTableInDatabase$ = GetResText(RID_COMMON + 9)
+	Form_gErrTitleSuggestedExist$ = GetResText(RID_COMMON + 10)
+	Form_gErrTitleAsTableExist$ = GetResText(RID_COMMON + 10)
+	Form_gErrTitleSyntaxError$ = GetResText(RID_COMMON + 11)
+
+	Form_gProgressText$ = GetResText(RID_FORM + 2)
+	Form_gCreatedForm$ = GetResText(RID_FORM + 26)
+	Form_gErrNameToLong$ = GetResText (RID_FORM + 27)
+	Form_gErrCouldNotOpenObject$ = GetResText (RID_COMMON + 13)
 
 	&apos;	Internal Logic
-	Form_ilFormTitleSuggestPrefix$ = GetResText(RID_DB_FORM_WIZARD_START + 3)
-	Form_gDatetime_DateComponent$ = GetResText(RID_DB_FORM_WIZARD_START + 4)
-	Form_gDatetime_TimeComponent$ = GetResText(RID_DB_FORM_WIZARD_START + 5)
-
-	&apos;	Non const control-properties
-	Form_Dlg_Caption(0) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 6)
-	Form_Dlg_Caption(1) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 7)
-	Form_Dlg_Caption(2) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 8)
-	Form_Dlg_Caption(3) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 9)
-	Form_Dlg_Caption(4) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 10)
-
-	Form_2_lblAvailable = GetResText(RID_DB_FORM_WIZARD_START + 12)
-	Form_2_lblSelected = GetResText(RID_DB_FORM_WIZARD_START + 13)
-	Form_3_frameStyles = GetResText(RID_DB_FORM_WIZARD_START + 14)
-	Form_3_optStyleCol = GetResText(RID_DB_FORM_WIZARD_START + 15)
-	Form_3_optStyleJustified = GetResText(RID_DB_FORM_WIZARD_START + 16)
-	Form_3_optStyleTabled = GetResText(RID_DB_FORM_WIZARD_START + 17)
-	Form_3_frameOrientation = GetResText(RID_DB_FORM_WIZARD_START + 18)
-	Form_3_optHorizontal = GetResText(RID_DB_FORM_WIZARD_START + 19)
-	Form_3_optVertical = GetResText(RID_DB_FORM_WIZARD_START + 20)
-	Form_5_frameFormTitle = GetResText(RID_DB_FORM_WIZARD_START + 22)
-	Form_5_frameOptRun = GetResText(RID_DB_FORM_WIZARD_START + 23)
-	Form_5_cmdReady = GetResText(RID_DB_COMMON_START + 0)
+	Form_ilFormTitleSuggestPrefix$ = GetResText(RID_FORM + 3)
+	Form_gDatetime_DateComponent$ = GetResText(RID_FORM + 4)
+	Form_gDatetime_TimeComponent$ = GetResText(RID_FORM + 5)
+	
+	sReady = GetResText(RID_COMMON + 0)
 	SetDialogLanguage()
 End Sub
+
 
 Sub SetDialogLanguage ()
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
 	oDialogModel = DlgFormDB.Model
-	oDialogModel.cmdCancel.Label = GetResText(RID_DB_COMMON_START + 1)
-	oDialogModel.cmdBack.Label = GetResText(RID_DB_COMMON_START + 2)
-	oDialogModel.cmdGoOn.Label = GetResText(RID_DB_COMMON_START + 3)
-	oDialogModel.lblDatabases.Label = GetResText(RID_DB_COMMON_START + 4)
-	oDialogModel.lblTables.Label = GetResText(RID_DB_FORM_WIZARD_START + 11) &apos;Form_1_frameTables
+	oDialogModel.cmdCancel.Label = GetResText(RID_COMMON + 1)
+	oDialogModel.cmdBack.Label = GetResText(RID_COMMON + 2)
+	oDialogModel.cmdHelp.Label = GetResText(RID_COMMON + 14)
+	sGoOn = GetResText(RID_COMMON + 3)
+	oDialogModel.cmdGoOn.Label = sGoOn
+	oDialogModel.lblDatabases.Label = GetResText(RID_COMMON + 4)
+	oDialogModel.lblTables.Label = GetResText(RID_FORM + 11) &apos;Form_1_frameTables
 
-	oDialogModel.lblFields.Label = GetResText(RID_DB_FORM_WIZARD_START + 12) &apos;Form_2_lblAvailable
-	oDialogModel.lblSelFields.Label = GetResText(RID_DB_FORM_WIZARD_START + 13) &apos;Form_2_lblSelected
-&apos; Todo: Die folgenden Resourcen lassen sich immer noch als Hilfetexte für die ImageControls missbrauchen
-&apos;	.optStyleCol.Caption = Form_3_optStyleCol
-&apos;	oDialogModel.optStyleHorizontal.Label = Form_3_optHorizontal
-&apos;	oDialogModel.optStyleVertical.Label = Form_3_optVertical
-&apos;	oDialogModel.optStyleJustified.Label = Form_3_optStyleJustified
-&apos;	oDialogModel.optStyleTabled.Label = Form_3_optStyleTabled
+	oDialogModel.lblFields.Label = GetResText(RID_FORM + 12) &apos;Form_2_lblAvailable
+	oDialogModel.lblSelFields.Label = GetResText(RID_FORM + 13) &apos;Form_2_lblSelected
 
-	oDialogModel.lblStyles.Label = GetResText(RID_DB_FORM_WIZARD_START + 21)
+
+	oDialogModel.lblStyles.Label = GetResText(RID_FORM + 21)
 &apos; Todo: Die Position des Eingabefeld für den Formulartitel entsprechend der Länge seines Labels bestimmen	
-&apos;	oDialogModel.frameFormTitle.Label = Form_5_frameFormTitle
-&apos;	oDialogModel.frameOptRun.Label = Form_5_frameOptRun
-	oDialogModel.optEditDocument.Label = GetResText(RID_DB_FORM_WIZARD_START + 24)
-	oDialogModel.optSaveDocument.Label = GetResText(RID_DB_FORM_WIZARD_START + 25)
-	oDialogModel.optEditDocument.Enabled = True
-	oDialogModel.frmBorderLayout.Label = GetResText(RID_DB_FORM_WIZARD_START + 28)
-&apos;	oDialogModel.OptNoFrame.Label = GetResText(RID_DB_FORM_WIZARD_START + 29)
-&apos;	oDialogModel.Opt3D.Label = GetResText(RID_DB_FORM_WIZARD_START + 30)
-&apos;	oDialogModel.OptFlat.Label = GetResText(RID_DB_FORM_WIZARD_START + 31)
+	oDialogModel.lblInputTitle.Label = GetResText(RID_FORM + 22)
+	oDialogModel.lblFinalConfig.Label = GetResText(RID_FORM + 23)
+	oDialogModel.optUseDocument.Label = GetResText(RID_FORM + 24)
+	oDialogModel.optSaveDocument.Label = GetResText(RID_FORM + 25)
+	oDialogModel.optUseDocument.Enabled = True
+	oDialogModel.lblPath.Label = GetResText(RID_FORM + 60)
+	oDialogModel.txtInputPath.Text = ConvertFromUrl(WorkPath)
+	oDialogModel.hlnBorderLayout.Label = GetResText(RID_FORM + 28)
+	oDialogModel.hlnAlign.Label = GetResText(RID_FORM + 32)
+	oDialogModel.hlnArrangements.Label = GetResText(RID_FORM + 35)
+
+	WizardTitle(1) = GetResText(RID_FORM + 45)
+	WizardTitle(2) = GetResText(RID_FORM + 46)
+	WizardTitle(3) = GetResText(RID_FORM + 47)
+
+	oDialogModel.hlnBinaries.Label = GetResText(RID_FORM + 50)
+	oDialogModel.optIgnoreBinaries.Label = GetResText(RID_FORM + 51)
+	oDialogModel.optBinariesasGraphics.Label = GetResText(RID_FORM + 52)
+	
+	oDialogModel.hlnBackground.Label = GetResText(RID_FORM + 55)
+	oDialogModel.optTiled.Label = GetResText(RID_FORM + 56)
+	oDialogModel.optArea.Label = GetResText(RID_FORM + 57)
+
+	oDialogModel.cmdAlign0.ImageURL = FormPath &amp; &quot;Align_0.bmp&quot;
+	oDialogModel.cmdAlign0.HelpText = GetResText(RID_FORM + 33)
+
+	oDialogModel.cmdAlign2.ImageURL = FormPath &amp; &quot;Align_2.bmp&quot;
+	oDialogModel.cmdAlign2.HelpText = GetResText(RID_FORM + 34)
+
+	oDialogModel.cmdBorder0.ImageURL = FormPath &amp; &quot;Border_0.bmp&quot;
+	oDialogModel.cmdBorder0.HelpText = GetResText(RID_FORM + 29)
+
+	oDialogModel.cmdBorder1.ImageURL = FormPath &amp; &quot;Border_1.bmp&quot;
+	oDialogModel.cmdBorder1.HelpText = GetResText(RID_FORM + 30)
+
+	oDialogModel.cmdBorder2.ImageURL = FormPath &amp; &quot;Border_2.bmp&quot;
+	oDialogModel.cmdBorder2.HelpText = GetResText(RID_FORM + 31)
+
+
+	oDialogModel.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.bmp&quot;
+	oDialogModel.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
+
+	oDialogModel.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.bmp&quot;
+	oDialogModel.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
+
+	oDialogModel.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.bmp&quot;
+	oDialogModel.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
+
+	oDialogModel.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.bmp&quot;
+	oDialogModel.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
+
+	oDialogModel.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.bmp&quot;
+	oDialogModel.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
 End Sub
 
 
@@ -287,24 +294,4 @@ Sub InitializeWidthList()
 	oModelService(cCurrencyBox) = &quot;com.sun.star.form.component.CurrencyField&quot;
 	oModelService(cGridControl) = &quot;com.sun.star.form.component.GridControl&quot;
 	oModelService(cImageControl) = &quot;com.sun.star.form.component.DatabaseImageControl&quot;
-End Sub
-
-
-Sub LoadLibrary(sLibname as String)
-Dim oArg(0) as new com.sun.star.beans.PropertyValue
-Dim oUrl as new com.sun.star.util.URL
-Dim oTrans as Object
-Dim oDisp as Object
-
-	oArg(0).Name = &quot;LibraryName&quot;
-	oArg(0).Value = sLibname
-
-	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-	oUrl.Complete = &quot;slot:6517&quot;
-	oTrans.parsestrict(oUrl)
-
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-	oDisp.dispatch(oUrl, oArg())
-End Sub
-
-</script:module>
+End Sub</script:module>

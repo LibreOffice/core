@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DBMeta" script:language="StarBasic">REM  *****  BASIC  *****
 Public sDatabaseList()
-Public sTableName as String
 
 
 Sub GetDatabaseNames()
@@ -17,25 +16,30 @@ Dim NullList()
 Dim OldsDBname as String
 	ToggleDatabasePage(False)
 	GetDBMetaData(sDatabaseList(), oDialogModel.lstDatabases.SelectedItems(0) )
-	oDialogModel.lstTables.Enabled = True
-	oDialogModel.lblTables.Enabled = True
-	oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-	oDialogModel.lstFields.StringItemList() = NullList()
-	oDialogModel.lstSelFields.StringItemList() = NullList()
+	With oDialogModel
+		.lstTables.Enabled = True
+		.lblTables.Enabled = True
+		.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+		.lstFields.StringItemList() = NullList()
+		.lstSelFields.StringItemList() = NullList()
+	End With
 	ToggleDatabasePage(True)
 End Sub
 
 
 Sub GetDBMetaData(sDataBaseList(), DBIndex as Integer)
 Dim oDatabase as Object
+Dim oInteractionHandler as Object
+Dim oDataSource as Object
 	If oDBContext.HasElements Then
 		oDatabase = oDBContext.GetByName(sDatabaseList(DBIndex))
 		sDBName = oDatabase.Name
 		If Not oDatabase.IsPasswordRequired Then
 			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;&quot;,&quot;&quot;)
 		Else
-			Msgbox(&quot;Todo: Passwortabfrage!&quot;)
-			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;extra&quot;,&quot;extra&quot;)
+			oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
+			oDataSource = oDBContext.GetByName(sDatabaseList(DBIndex))
+			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
 		End If
 		Tablenames() = oDBConnection.Tables.ElementNames()
 		Querynames() = oDBConnection.Queries.ElementNames()
@@ -47,7 +51,6 @@ End Sub
 
 Sub GetTableMetaData()
 Dim iType as Long
-Dim ActType$, subType$, ShowAfterCreate$, sSQLExpr$
 Dim m as Integer
 Dim Found as Boolean
 	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
@@ -87,9 +90,10 @@ Dim m as Integer
 Dim iType as Integer
 Dim oField as Object
 Dim MaxIndex as Integer
+Dim EmptyList()
 	If Ubound(oDialogModel.lstTables.StringItemList()) &gt; -1 Then
 		FieldNames() = oColumns.GetElementNames()
-		If oDialogModel.optIgnoreBinaries.State Then
+		If oDialogModel.optIgnoreBinaries.State = 1 Then
 			MaxIndex = Ubound(FieldNames())
 			Dim ResultFieldNames(MaxIndex)
 			m = 0
@@ -101,12 +105,11 @@ Dim MaxIndex as Integer
 					m = m + 1
 				End If
 			Next n
-			&apos; Todo: Den folgenden Code wieder reinnehmen:
-			&apos; Redim ResultFieldNames(m-1) Preserve
-			&apos; Redim FieldNames(m-1) Preserve
+			Redim Preserve ResultFieldNames(m-1)
+			Redim Preserve FieldNames(m-1)
 			FieldNames() = ResultFieldNames()
 		End If
-		oDialogModel.lstFields.StringItemList = FieldNames	
+		oDialogModel.lstFields.StringItemList = FieldNames()
 	End If
 End Sub
 
@@ -116,12 +119,12 @@ Sub CreateDBForm()
 	oDocument.Drawpage.Forms.InsertByIndex (0, oDBForm)
 	oDBForm.Name = &quot;Standard&quot;
 	oDBForm.DataSourceName = sDBName
-	oDBForm.Command = sTableName
+	oDBForm.Command = TableName
 	&apos; Todo: Ist diese Abfrage notwendig?
 	If bIsQuery Then
-		oDBForm.CommandType=1 &apos; Abfrage
+		oDBForm.CommandType = 1 &apos; Abfrage
 	else
-		oDBForm.CommandType=0 &apos; Tabelle
+		oDBForm.CommandType = 0 &apos; Tabelle
 	End If
 End Sub
 </script:module>

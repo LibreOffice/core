@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
 &apos;Very new version
 Public DocumentName as String
@@ -7,6 +7,7 @@ Public FormPath$, FormDBName$, FormReturnValue$
 Public TemplatePath$
 Public WizardPath as String
 Public WebWizardPath as String
+Public WorkPath as String
 Public TexturePath as String
 Public sQueryName as String
 Public NumberofStyles as Integer
@@ -34,8 +35,8 @@ Public Tablename as String
 
 Sub MainWithDefault()
 &apos;On Local Error Goto GlobalError
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-        BasicLibraries.LoadLibrary(&quot;webwizard&quot;)
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
 	bControlsareCreated = False
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
 		Exit Sub
@@ -47,6 +48,7 @@ Sub MainWithDefault()
 	WebWizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/web&quot;)
 	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
 	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
+	WorkPath = GetPathSettings(&quot;Work&quot;)
 	OpenBaseDocument()
 	GetDatabaseNames()
 	InitializeWidthList()
@@ -56,7 +58,6 @@ Sub MainWithDefault()
 	LoadLanguage
 	bNeedFieldRefresh = True
 	CreateForm()
-
 GlobalError:
 	If Err &lt;&gt; 0 Then
 		ToggleWindow(True)
@@ -68,19 +69,22 @@ End Sub
 Sub CreateForm() as String
 Dim i as Integer
 &apos; On Error Goto GlobalError
-	oDialogModel.optIgnoreBinaries.State = True
-	oDialogModel.optEditDocument.State = True
-	oDialogModel.cmdBack.Enabled = False
-	oDialogModel.cmdGoOn.Enabled = False
-	oDialogModel.lblTables.Enabled = False
-	oDialogModel.lstSelFields.Tag = False
-	ToggleListboxControls(oDialogModel, False)
-	oDialogModel.Step = 1
-	oDialogModel.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
-	oDialogModel.Title = Form_Dlg_Caption(oDialogModel.Step)
-	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, oDialogModel.lstStyles, Styles(), False)
+	With oDialogModel
+		.optIgnoreBinaries.State = True
+		.optUseDocument.State = True
+		.cmdBack.Enabled = False
+		.cmdGoOn.Enabled = False
+		.lblTables.Enabled = False
+		.lstSelFields.Tag = False
+		ToggleListboxControls(oDialogModel, False)
+		.Step = 1
+		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
+	End With
+	DlgFormDB.Title = WizardTitle(1)
+	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
 	ImportStyles()
 	ToggleWindow(True)
+	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	DlgFormDB.Execute()
 	Exit Sub
 
@@ -113,31 +117,20 @@ End Function
 Sub FormGetFields()
 Dim i as Integer
 Dim n as Integer
-Dim DocTest as String
 	ToggleDatabasePage(False)
 	n = Ubound(oDialogModel.lstTables.SelectedItems())
+	InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
 	If n &lt;&gt; -1 Then
 		Tablename = Tablenames(oDialogModel.lstTables.SelectedItems(0))
-&apos; Todo: Ask, what&apos; happening here
-&apos;		DocTest$ = SuggestTitleStr$(FormAvailForms, Form_ilFormTitleSuggestPrefix$  + FormActiveTableName$)
-		DocTest = ReplaceString(TableName,&quot;_&quot;,&quot;:&quot;)
-&apos;		i= instr(1, DocTest$,  &quot;:&quot; ,1)
-&apos;		If i &gt; 0 then Mid(DocTest$,i,1,&quot;_&quot;)
-&apos;		DlgFormDB.txtDocTitle.Text = DocTest
 		bIsQuery = FieldinArray(QueryNames(), Ubound(QueryNames()), TableName)
 		If (bIsQuery) Then
 			oColumns = oDBConnection.Queries.GetByName(TableName).Columns
 		Else
 			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
 		End If
-&apos; Todo What&apos;s going on here?
-&apos;			sActFieldName$ = FieldsInQueries.Item (n%)	&apos; should be the same as aField.Name
-&apos;			sActFieldName$ = Left (sActFieldName$, InStr (1, sActFieldName$, &quot;,&quot;) - 1)
-&apos;		Call FixODBCBug()
 		GetSpecificFieldNames()
 		ToggleListboxControls(oDialogModel, True)
 	End If
-	SetUpOriginalList(oDialogModel.lstFields)
 	ToggleDatabasePage(True)
 
 &apos;	bNeedFieldRefresh = False
@@ -156,14 +149,19 @@ End Sub
 
 
 Sub PreviousStep()
-	oDialogModel.Step = oDialogModel.Step - 1
-	oDialogModel.cmdBack.Enabled = oDialogModel.Step &lt;&gt; 1
+Dim CurStep as Integer
+	CurStep = oDialogModel.Step - 1
+	oDialogModel.Step = CurStep
+	oDialogModel.cmdBack.Enabled = CurStep &lt;&gt; 1
 	oDialogModel.cmdGoOn.Enabled = True
-	If oDialogModel.Step = 1 Then
-		oDialogModel.lstSelFields.Tag = Not bControlsareCreated
-	End If
-&apos; Todo: Finde für jeden Step eine sinnige Überschrift
-&apos;	DlgForm.DB.Caption = Form_Dlg_Caption(DlgFormDB.CurrentStep-1)
+	Select Case oDialogModel.Step
+		Case 1
+			oDialogModel.lstSelFields.Tag = Not bControlsareCreated
+		Case 2
+			oDialogModel.cmdGoOn.Label = sGoOn	
+	End Select
+	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; CurStep &amp; &quot;.bmp&quot;	
+	DlgFormDB.Title = WizardTitle(CurStep)
 End Sub
 
 
@@ -174,26 +172,30 @@ Sub NextStep()
 			CreateDBForm()
 			InitializeLayoutSettings()
 			oDialogModel.Step = 2
+			oDBForm.Load
 		Case 2
-			oDialogModel.cmdGoOn.Label = Form_5_cmdReady
+			oDialogModel.cmdGoOn.Label = sReady
 			ToggleControlsofLastPage()
 			oDialogModel.Step = 3
 		Case 3
 			HandleCreatedDocument()
 	End Select
+	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
+	DlgFormDB.Title = WizardTitle(oDialogModel.Step)	
 End Sub
 
 
 Sub InitializeLayoutSettings()
-	bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
+&apos; Todo: Dieses Flag neu setzen!
+	bControlsAreCreated =  False &apos;Not (CBool(oDialogModel.lstSelFields.Tag))
 	If Not bControlsAreCreated Then
 		oDialogModel.optTiled.State = 1
 		OldArrangement = 0
 		CurArrangement = cTabled
 		CurBorderType = SB3DBORDER
 		CurAlignmode = SBALIGNLEFT
-		ToggleBorderGroup(False)
-		ToggleAlignGroup(False)
+		ToggleBorderGroup(bControlsAreCreated)
+		ToggleAlignGroup(bControlsAreCreated)
 		ArrangeControls()
 	End If
 
@@ -227,22 +229,13 @@ Sub ChangeDocumentTitle
 End Sub
 
 
-Sub ChangeDialogHeight
-	If oDialogModel.Height &lt;&gt; 40 Then
-		oDialogModel.Height = 40
-	Else
-		oDialogModel.Height = 210
-	End If
-End Sub
-
-
 Sub CheckPathValidation()
 Dim sPath as String
 Dim sDir as String
 	sPath = ConvertToUrl(oDialogModel.txtInputPath.Text)
-&apos; Todo: Abklären, ob Verzeichnisse auch rekursiv erstellt werden sollen!
-&apos; Wenn ja muss beim Abspeichern eine Sicherheitsabfrage erscheinen
-	sDir = DirectorynameoutofPath(sPath , &quot;/&quot;)
+	If sPath &lt;&gt; &quot;&quot; Then
+		sDir = DirectorynameoutofPath(sPath, &quot;/&quot;)
+	End If	
 	If oUcb.IsFolder(sDir) Then
 		oDialogModel.cmdGoOn.Enabled = oUcb.Exists(sDir)
 	Else
@@ -252,23 +245,33 @@ End Sub
 
 
 Sub ToggleControlsofLastPage()
-	If oDialogModel.optEditDocument.State = 1 Then
-		oDialogModel.cmdGoOn.Enabled = True
-		oDialogModel.txtInputPath.Enabled = False
-		oDialogModel.cmdGetPathDialog.Enabled = False
-		oDialogMode.lblPath.Enabled = False
-	Else
-		oDialogMode.lblPath.Enabled = True
-		oDialogModel.txtInputPath.Enabled = True
-		oDialogModel.cmdGetPathDialog.Enabled = True
-		CheckPathValidation()
-	End If
+	With oDialogModel
+		If .optUseDocument.State = 1 Then
+			.cmdGoOn.Enabled = True
+			.txtInputPath.Enabled = False
+			.cmdGetPathDialog.Enabled = False
+			.lblPath.Enabled = False
+		Else
+			.lblPath.Enabled = True
+			.txtInputPath.Enabled = True
+			.cmdGetPathDialog.Enabled = True
+			CheckPathValidation()
+		End If
+	End With
 End Sub
 
 
 Sub ToggleDatabasePage(bDoEnable as Boolean)
-	oDialogModel.frmBinaries.Enabled = bDoEnable
-	oDialogModel.optIgnoreBinaries.Enabled = bDoEnable
-	oDialogModel.optBinariesasGraphics.Enabled = bDoEnable
-	oDialogModel.cmdHelp.Enabled = bDoEnable
-End Sub</script:module>
+	With oDialogModel
+		.hlnBinaries.Enabled = bDoEnable
+		.optIgnoreBinaries.Enabled = bDoEnable
+		.optBinariesasGraphics.Enabled = bDoEnable
+		.cmdHelp.Enabled = bDoEnable
+	End With
+End Sub
+
+
+Sub SwitchDialogHeight()
+	SwitchWizardDialogHeight(DlgFormDB)
+End Sub
+</script:module>
