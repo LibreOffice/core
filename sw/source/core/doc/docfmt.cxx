@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:47:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,9 +1451,12 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     return pFmt;
 }
 
+// --> OD 2005-01-13 #i40550# - add parameter <bAuto> - not relevant
 SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                SwCharFmt *pDerivedFrom,
-                               BOOL bBroadcast)
+                               BOOL bBroadcast,
+                               BOOL bAuto )
+// <--
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     pCharFmtTbl->Insert( pFmt, pCharFmtTbl->Count() );
@@ -1481,10 +1484,12 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
  * Erzeugen der FormatCollections
  */
 // TXT
-
+// --> OD 2005-01-13 #i40550# - add parameter <bAuto> - not relevant
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
-                                     BOOL bBroadcast)
+                                     BOOL bBroadcast,
+                                     BOOL bAuto )
+// <--
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
@@ -1697,7 +1702,9 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
                                 fnCopyFmt, rDfltFmt );
 
     // erzeuge das Format und kopiere die Attribute
-    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, sal_False );
+    // --> OD 2005-01-13 #i40550#
+    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, FALSE, TRUE );
+    // <--
     pNewFmt->SetAuto( rFmt.IsAuto() );
     pNewFmt->CopyAttrs( rFmt, TRUE );           // kopiere Attribute
 
@@ -1857,7 +1864,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
                 MakeCondTxtFmtColl( pSrc->GetName(), (SwTxtFmtColl*)&rDfltFmt );
             else
-                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, sal_False );
+                // --> OD 2005-01-13 #i40550#
+                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, FALSE, TRUE );
+                // <--
         }
     }
 
