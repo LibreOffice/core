@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 10:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,15 +558,19 @@ void ChartViewImpl::getExplicitValuesForMeter(
 }
 
 bool getPosAndSizeForDiagram(
-    awt::Point& rOutPos, awt::Size& rOutSize,
-    const awt::Rectangle& rSpaceLeft )
+    awt::Point& rOutPos, awt::Size& rOutSize
+    , const awt::Rectangle& rSpaceLeft )
 {
+    //@todo: we need a size dependent on the axis labels
+
     if(rSpaceLeft.Width <= 0 || rSpaceLeft.Height <= 0 )
         return false;
 
-    long nHeight = rSpaceLeft.Height * 5 / 6;
+    //long nHeight = rSpaceLeft.Height * 5 / 6;
     // (1 - 5/6) / 2 = 1/12
-    long nOffsetY = rSpaceLeft.Y + rSpaceLeft.Height / 12;
+    //long nOffsetY = rSpaceLeft.Y + rSpaceLeft.Height / 12;
+    long nHeight = rSpaceLeft.Height * 11 / 12;
+    long nOffsetY = rSpaceLeft.Y;
 
     long nWidth = rSpaceLeft.Width * 5 / 6;
     // (1 - 5/6) / 2 = 1/12
@@ -583,6 +587,7 @@ bool getPosAndSizeForDiagram(
 void createTitle( const uno::Reference< XTitle >& xTitle
                 , sal_Int32 nXPosition
                 , sal_Int32& nrYOffset
+                , sal_Int32 nYDistance
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                  )
@@ -593,9 +598,8 @@ void createTitle( const uno::Reference< XTitle >& xTitle
         aVTitle.init(xPageShapes,xShapeFactory);
         aVTitle.createShapes( awt::Point(0,0) );
         awt::Size aTitleSize = aVTitle.getSize();
-        sal_Int32 nYSpacing = aTitleSize.Height/2;
-        aVTitle.changePosition( awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYSpacing ) );
-        nrYOffset += aTitleSize.Height + nYSpacing;
+        aVTitle.changePosition( awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance ) );
+        nrYOffset += aTitleSize.Height + 2*nYDistance;
     }
 }
 
@@ -680,6 +684,7 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
 
     sal_Int32 nYOffset = 0;
     sal_Int32 nXPosition = rPageSize.Width/2;
+    sal_Int32 nYDistance = rPageSize.Height*2/100;
 
     //------------ apply fill properties to page
     // todo: it would be nicer to just pass the page m_xDrawPage and format it,
@@ -688,18 +693,18 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
 
     //------------ create main title shape
     createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, xPageShapes, m_xShapeFactory );
-    if(nYOffset>=rPageSize.Height)
+                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory );
+    if(nYOffset+nYDistance>=rPageSize.Height)
         return true;
 
     //------------ create sub title shape
     createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, xPageShapes, m_xShapeFactory );
-    if(nYOffset>=rPageSize.Height)
+                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory );
+    if(nYOffset+nYDistance>=rPageSize.Height)
         return true;
 
     //------------ create legend
-    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height - nYOffset );
+    awt::Rectangle aSpaceLeft( 0, nYOffset+nYDistance, rPageSize.Width, rPageSize.Height - nYOffset - 2*nYDistance );
     createLegend( LegendHelper::getLegend( m_xChartModel )
                   , aSpaceLeft, xPageShapes, m_xShapeFactory );
 
