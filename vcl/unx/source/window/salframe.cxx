@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-01 20:37:33 $
+ *  last change: $Author: pl $ $Date: 2001-11-02 12:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,7 +880,10 @@ void SalFrame::Show( BOOL bVisible )
             XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
             XSelectInput( _GetXDisplay(), maFrameData.GetShellWindow(), CLIENT_EVENTS );
         }
-        XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
+        if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
+            XMapRaised( _GetXDisplay(), maFrameData.GetWindow() );
+        else
+            XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
         XSelectInput( _GetXDisplay(), maFrameData.GetWindow(), CLIENT_EVENTS );
 
         if( maGeometry.nWidth > 0
