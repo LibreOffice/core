@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:26:27 $
+ *  last change: $Author: os $ $Date: 2001-03-05 08:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 ((SvxStdParagraphTabPage&)rPage).EnableRegisterMode();
                 ((SvxStdParagraphTabPage&)rPage).EnableAutoFirstLine();
                 ((SvxStdParagraphTabPage&)rPage).EnableAbsLineDist(MM50/2);
+                ((SvxStdParagraphTabPage&)rPage).EnableNegativeMode();
             }
             break;
         case TP_NUMPARA:
@@ -599,6 +600,9 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/29 17:26:27  os
+    #80913# forbidden rules
+
     Revision 1.2  2000/11/27 08:58:18  jp
     Task #80425#: new tabpages
 
