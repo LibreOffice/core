@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-06-25 15:15:59 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,7 @@ class DefList : public csi::xml::AnElement
                             DYN csi::xml::Item* let_dpItem = 0 );
   private:
     virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool        FinishEmptyTag_XmlStyle() const;
 };
 
 
@@ -405,6 +406,14 @@ class AlignAttr : public csi::xml::AnAttribute
                         AlignAttr(
                             const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( String("align"), i_sValue ) {}
+};
+
+class VAlignAttr : public csi::xml::AnAttribute
+{
+  public:
+                        VAlignAttr(
+                            const ::csv::String & i_sValue )
+                            :   csi::xml::AnAttribute( String("valign"), i_sValue ) {}
 };
 
 class WidthAttr : public csi::xml::AnAttribute
