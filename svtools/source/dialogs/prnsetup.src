@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:14:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ String STR_SVT_PRNDLG_READY
     Text[ korean ] = "ÁØºñ";
     Text[ turkish ] = "Hazýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Preparado";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
@@ -108,6 +109,7 @@ String STR_SVT_PRNDLG_PAUSED
     Text[ korean ] = "ÀÏ½ÃÁ¤Áö";
     Text[ turkish ] = "Durduruldu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Detenido";
 };
 String STR_SVT_PRNDLG_PENDING
 {
@@ -132,6 +134,7 @@ String STR_SVT_PRNDLG_PENDING
     Text[ korean ] = "´ë±âÁß ÀÛ¾÷ »èÁ¦";
     Text[ turkish ] = "Silinmek üzere";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminación pendiente";
 };
 String STR_SVT_PRNDLG_BUSY
 {
@@ -156,6 +159,7 @@ String STR_SVT_PRNDLG_BUSY
     Text[ korean ] = "»ç¿ëÁß";
     Text[ turkish ] = "Meþgul";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ocupado";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
@@ -180,6 +184,7 @@ String STR_SVT_PRNDLG_INITIALIZING
     Text[ korean ] = "ÃÊ±âÈ­";
     Text[ turkish ] = "Baþlat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inicializar";
 };
 String STR_SVT_PRNDLG_WAITING
 {
@@ -204,6 +209,7 @@ String STR_SVT_PRNDLG_WAITING
     Text[ korean ] = "´ë±âÁß";
     Text[ turkish ] = "Beklemede";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "En espera";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
@@ -228,6 +234,7 @@ String STR_SVT_PRNDLG_WARMING_UP
     Text[ greek ] = "Ðñïåôïéìáóßá";
     Text[ korean ] = "ÁØºñÁß";
     Text[ turkish ] = "Isýnýyor";
+    Text[ catalan ] = "Arranque";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
@@ -252,6 +259,7 @@ String STR_SVT_PRNDLG_PROCESSING
     Text[ korean ] = "ÁøÇàÁß";
     Text[ turkish ] = "Ýþleniyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Procesar";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
@@ -276,6 +284,7 @@ String STR_SVT_PRNDLG_PRINTING
     Text[ korean ] = "ÀÎ¼â";
     Text[ turkish ] = "Yazdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
@@ -300,6 +309,7 @@ String STR_SVT_PRNDLG_OFFLINE
     Text[ korean ] = "¿ÀÇÁ¶óÀÎ";
     Text[ turkish ] = "Çevrimdýþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desconectado";
 };
 String STR_SVT_PRNDLG_ERROR
 {
@@ -324,6 +334,7 @@ String STR_SVT_PRNDLG_ERROR
     Text[ korean ] = "¿À·ù";
     Text[ turkish ] = "Hata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
@@ -348,6 +359,7 @@ String STR_SVT_PRNDLG_SERVER_UNKNOWN
     Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¼­¹ö";
     Text[ turkish ] = "Bilinmeyen sunucu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Servidor desconocido";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
@@ -372,6 +384,7 @@ String STR_SVT_PRNDLG_PAPER_JAM
     Text[ korean ] = "¿ëÁö °É¸²";
     Text[ turkish ] = "Kaðýt sýkýþmasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bloqueo de papel";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
@@ -396,6 +409,7 @@ String STR_SVT_PRNDLG_PAPER_OUT
     Text[ korean ] = "¿ëÁö°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Yeterli miktarda kaðýt yok";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Falta de papel";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
@@ -420,6 +434,7 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text[ korean ] = "¼öµ¿ ±ÞÁö";
     Text[ turkish ] = "El ile besleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alimentación manual";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
@@ -444,6 +459,7 @@ String STR_SVT_PRNDLG_PAPER_PROBLEM
     Text[ korean ] = "¿ëÁö ¹®Á¦";
     Text[ turkish ] = "Kaðýt sorunu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Problema de papel";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
@@ -468,6 +484,7 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text[ korean ] = "I/O È°¼º";
     Text[ turkish ] = "G/Ç aktif";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "I/O activos";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
@@ -492,6 +509,7 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text[ korean ] = "Ãâ·ÂÇÔÀÌ °¡µæ Âü";
     Text[ turkish ] = "Çýktý çekmecesi doldu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La papelera de salida está llena";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
@@ -516,6 +534,7 @@ String STR_SVT_PRNDLG_TONER_LOW
     Text[ korean ] = "Åä³Ê°¡ Àû½À´Ï´Ù.";
     Text[ turkish ] = "Toner azaldý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tóner bajo";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
@@ -540,6 +559,7 @@ String STR_SVT_PRNDLG_NO_TONER
     Text[ greek ] = "Äåí õðÜñ÷åé Ôoner";
     Text[ korean ] = "Åä³Ê°¡ ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Toner bitti";
+    Text[ catalan ] = "No hay tóner";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
@@ -564,6 +584,7 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text[ korean ] = "ÆäÀÌÁö »èÁ¦";
     Text[ turkish ] = "Sayfayý sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar página";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
@@ -588,6 +609,7 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
     Text[ korean ] = "»ç¿ëÀÚ °³ÀÔÀÌ ÇÊ¿äÇÔ";
     Text[ turkish ] = "Kullanýcý müdahalesi gerekiyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Intervención necesaria del usuario ";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
@@ -612,6 +634,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text[ korean ] = "¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Bellek yeterli deðil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Memoria insuficiente";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
@@ -636,6 +659,7 @@ String STR_SVT_PRNDLG_DOOR_OPEN
     Text[ korean ] = "µ¤°³ ¿­¸²";
     Text[ turkish ] = "Kapak açýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Abrir cubierta";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
@@ -660,6 +684,7 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text[ korean ] = "ÀýÀü ¸ðµå";
     Text[ turkish ] = "Enerji tasarruf kipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modo de ahorro energético";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
@@ -684,6 +709,7 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text[ korean ] = "±âº» ÇÁ¸°ÅÍ";
     Text[ turkish ] = "Standart yazýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Predeterminada";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
@@ -708,6 +734,7 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text[ korean ] = "%d ¹®¼­";
     Text[ turkish ] = "%d belge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%d documentos";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -752,6 +779,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "ÇÁ¸°ÅÍ";
         Text[ turkish ] = "Yazýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Impresora";
     };
     FixedText FT_NAME
     {
@@ -778,6 +806,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     ListBox LB_NAMES
     {
@@ -812,6 +841,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Propiedades...";
     };
     FixedText FT_STATUS
     {
@@ -838,6 +868,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "»óÅÂ";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estado";
     };
     FixedText FI_STATUS
     {
@@ -869,6 +900,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     FixedText FI_TYPE
     {
@@ -900,6 +932,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ubicación";
     };
     FixedText FI_LOCATION
     {
@@ -931,6 +964,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comentario";
     };
     FixedText FI_COMMENT
     {
@@ -963,4 +997,5 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ greek ] = "Ñýèìéóç åêôõðùôÞ";
     Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤";
     Text[ turkish ] = "Yazýcý ayarlarý";
+    Text[ catalan ] = "Configurar impresora";
 };
