@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 12:03:30 $
+ *  last change: $Author: sj $ $Date: 2001-01-10 16:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,29 +540,16 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 
             if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
             {
-                switch( nWinROP )
-                {
-                    case PATCOPY :
-                    {
-                        *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
-                        Size aDestSize( ReadYXExt() );
-                        pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
-                    }
-                    break;
-                    default :
-                    {
-                        Size        aDestSize( ReadYXExt() );
-                        Rectangle   aDestRect( ReadYX(), aDestSize );
-                        aBmp.Read( *pWMF, FALSE );
-                        aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
-                    }
-                    break;
-                }
-            }
-            else
-            {
-                if( aBmpSaveList.Count() )
-                    pOut->ResolveBitmapActions( aBmpSaveList );
+                if ( nWinROP == PATCOPY )
+                    *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
+                                        // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
+
+                Size        aDestSize( ReadYXExt() );
+                Rectangle   aDestRect( ReadYX(), aDestSize );
+
+                if ( nWinROP != PATCOPY )
+                    aBmp.Read( *pWMF, FALSE );
+                aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
             }
         }
         break;

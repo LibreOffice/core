@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 12:03:13 $
+ *  last change: $Author: sj $ $Date: 2001-01-10 16:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,43 +1074,201 @@ void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry
 
 void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
 {
-    for( ULONG i = 0, nCount = rSaveList.Count(); i < nCount; i++ )
+    sal_uInt32 nObjects     = rSaveList.Count();
+    sal_uInt32 nObjectsLeft = nObjects;
+
+    while ( nObjectsLeft )
     {
-        BSaveStruct* pSave1 = (BSaveStruct*) rSaveList.GetObject( i );
-        BOOL         bDrawn = FALSE;
+        sal_uInt32      i, nObjectsOfSameSize = 0;
+        sal_uInt32      nObjectStartIndex = nObjects - nObjectsLeft;
 
-        UpdateFillStyle();
+        BSaveStruct*    pSave = (BSaveStruct*)rSaveList.GetObject( nObjectStartIndex );
+        Rectangle       aRect( pSave->aOutRect );
 
-        if( i < ( nCount - 1 ) )
+        for ( i = nObjectStartIndex; i < nObjects; )
         {
-            BSaveStruct* pSave2 = (BSaveStruct*) rSaveList.GetObject( i + 1 );
-
-            if( ( pSave1->aOutRect == pSave2->aOutRect ) &&
-                ( pSave1->nWinRop == SRCPAINT) && ( pSave2->nWinRop == SRCAND ) )
+            nObjectsOfSameSize++;
+            if ( ++i < nObjects )
             {
-                Bitmap aMask( pSave1->aBmp ); aMask.Invert();
-                BitmapEx aBmpEx( pSave2->aBmp, aMask );
-                mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( ImplMap( pSave1->aOutRect.TopLeft() ), ImplMap( pSave1->aOutRect.GetSize() ), aBmpEx ) );
-                bDrawn = TRUE;
-                i++;
-                delete pSave2;
+                pSave = (BSaveStruct*)rSaveList.GetObject( i );
+                if ( pSave->aOutRect != aRect )
+                    break;
             }
         }
-        if( !bDrawn )
+        aRect = Rectangle( ImplMap( aRect ) );
+        for ( i = nObjectStartIndex; i < ( nObjectStartIndex + nObjectsOfSameSize ); i++ )
         {
-            UINT32  nNewROP, nOldROP;
-            switch( pSave1->nWinRop )
-            {
-                case DSTINVERT: nNewROP = R2_NOT; break;
-                case SRCINVERT: nNewROP = R2_XORPEN; break;
-                default: nNewROP = R2_BLACK; break;
+            pSave = (BSaveStruct*)rSaveList.GetObject( i );
+
+            sal_uInt32  nOldRop, nWinRop = pSave->nWinRop;
+            sal_uInt8   nRasterOperation = (sal_uInt8)( nWinRop >> 16 );
+
+            sal_uInt32  nUsed =  0;
+            if ( ( nRasterOperation & 0xf )  != ( nRasterOperation >> 4 ) )
+                nUsed |= 1;     // pattern is used
+            if ( ( nRasterOperation & 0x33 ) != ( ( nRasterOperation & 0xcc ) >> 2 ) )
+                nUsed |= 2;     // source is used
+            if ( ( nRasterOperation & 0xaa ) != ( ( nRasterOperation & 0x55 ) << 1 ) )
+                nUsed |= 4;     // destination is used
+
+            if ( nUsed & 1 )
+            {   // patterns aren't well supported yet
+                Push();
+                sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
+                UpdateFillStyle();
+                DrawRect( aRect, FALSE );
+                SetRasterOp( nOldRop );
+                Pop();
             }
-            nOldROP = SetRasterOp( nNewROP );
-            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( ImplMap( pSave1->aOutRect.TopLeft() ), ImplMap( pSave1->aOutRect.GetSize() ), pSave1->aBmp ) );
-            SetRasterOp( nOldROP );
+            else
+            {
+                sal_Bool bDrawn = sal_False;
+
+                if ( i == nObjectStartIndex )   // optimizing, sometimes it is possible to create just one transparent bitmap
+                {
+                    if ( nObjectsOfSameSize == 2 )
+                    {
+                        BSaveStruct* pSave2 = (BSaveStruct*)rSaveList.GetObject( i + 1 );
+                        if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
+                        {
+                            if ( pSave->aBmp.IsEqual( pSave2->aBmp ) )
+                            {
+                                Bitmap aMask( pSave->aBmp ); aMask.Invert();
+                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aRect.TopLeft(), aRect.GetSize(), aBmpEx ) );
+                                bDrawn = sal_True;
+                                i++;
+                            }
+                        }
+                    }
+                }
+
+                if ( !bDrawn )
+                {
+                    Push();
+                    sal_uInt32  nOldRop = SetRasterOp( R2_COPYPEN );
+                    Bitmap      aBitmap( pSave->aBmp );
+                    sal_uInt32  nOperation = ( nRasterOperation & 0xf );
+                    switch( nOperation )
+                    {
+                        case 0x1 :
+                        case 0xe :
+                        {
+                            SetRasterOp( R2_XORPEN );
+                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aRect.TopLeft(), aRect.GetSize(), aBitmap ) );
+                            SetRasterOp( R2_COPYPEN );
+                            Bitmap  aMask( aBitmap );
+                            aMask.Invert();
+                            BitmapEx aBmpEx( aBitmap, aMask );
+                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aRect.TopLeft(), aRect.GetSize(), aBmpEx ) );
+                            if ( nOperation == 0x1 )
+                            {
+                                SetRasterOp( R2_NOT );
+                                DrawRect( aRect, FALSE );
+                            }
+                        }
+                        break;
+                        case 0x7 :
+                        case 0x8 :
+                        {
+                            Bitmap  aMask( aBitmap );
+                            aMask.Invert();
+                            BitmapEx aBmpEx( aBitmap, aMask );
+                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aRect.TopLeft(), aRect.GetSize(), aBmpEx ) );
+                            if ( nOperation == 0x7 )
+                            {
+                                SetRasterOp( R2_NOT );
+                                DrawRect( aRect, FALSE );
+                            }
+                        }
+                        break;
+
+                        case 0x4 :
+                        case 0xb :
+                        {
+                            SetRasterOp( R2_NOT );
+                            DrawRect( aRect, FALSE );
+                            SetRasterOp( R2_COPYPEN );
+                            Bitmap  aMask( aBitmap );
+                            aBitmap.Invert();
+                            BitmapEx aBmpEx( aBitmap, aMask );
+                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aRect.TopLeft(), aRect.GetSize(), aBmpEx ) );
+                            SetRasterOp( R2_XORPEN );
+                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aRect.TopLeft(), aRect.GetSize(), aBitmap ) );
+                            if ( nOperation == 0xb )
+                            {
+                                SetRasterOp( R2_NOT );
+                                DrawRect( aRect, FALSE );
+                            }
+                        }
+                        break;
+
+                        case 0x2 :
+                        case 0xd :
+                        {
+                            Bitmap  aMask( aBitmap );
+                            aMask.Invert();
+                            BitmapEx aBmpEx( aBitmap, aMask );
+                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aRect.TopLeft(), aRect.GetSize(), aBmpEx ) );
+                            SetRasterOp( R2_XORPEN );
+                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aRect.TopLeft(), aRect.GetSize(), aBitmap ) );
+                            if ( nOperation == 0xd )
+                            {
+                                SetRasterOp( R2_NOT );
+                                DrawRect( aRect, FALSE );
+                            }
+                        }
+                        break;
+                        case 0x6 :
+                        case 0x9 :
+                        {
+                            SetRasterOp( R2_XORPEN );
+                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aRect.TopLeft(), aRect.GetSize(), aBitmap ) );
+                            if ( nOperation == 0x9 )
+                            {
+                                SetRasterOp( R2_NOT );
+                                DrawRect( aRect, FALSE );
+                            }
+                        }
+                        break;
+
+                        case 0x0 :  // WHITENESS
+                        case 0xf :  // BLACKNESS
+                        {                                                   // in this case nRasterOperation is either 0 or 0xff
+                            maFillStyle = WinMtfFillStyle( Color( nRasterOperation, nRasterOperation, nRasterOperation ) );
+                            UpdateFillStyle();
+                            DrawRect( aRect, FALSE );
+                        }
+                        break;
+
+                        case 0x3 :  // only source is used
+                        case 0xc :
+                        {
+                            if ( nRasterOperation == 0x33 )
+                                aBitmap.Invert();
+                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aRect.TopLeft(), aRect.GetSize(), aBitmap ) );
+                        }
+                        break;
+
+                        case 0x5 :  // only destination is used
+                        {
+                            SetRasterOp( R2_NOT );
+                            DrawRect( aRect, FALSE );
+                        }
+                        case 0xa :  // no operation
+                        break;
+                    }
+                    SetRasterOp( nOldRop );
+                    Pop();
+                }
+            }
         }
-        delete pSave1;
+        nObjectsLeft -= nObjectsOfSameSize;
     }
+
+    void* pPtr;
+    for ( pPtr = rSaveList.First(); pPtr; pPtr = rSaveList.Next() )
+        delete (BSaveStruct*)pPtr;
     rSaveList.Clear();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 16:47:40 $
+ *  last change: $Author: sj $ $Date: 2001-01-10 16:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,13 +722,14 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
                             >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
 
+                Bitmap      aBitmap;
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+
                 if ( offBmiSrc )
                 {
-                    Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+                    UINT32  nSize = cbBmiSrc + cbBitsSrc + 14;
+                    char*   pBuf = new char[ nSize ];
 
-                    UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                    char* pBuf = new char[ nSize ];
                     SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                     aTmp.ObjectOwnsMemory( TRUE );
                     aTmp << (BYTE)'B'
@@ -743,39 +744,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                     aTmp.Seek( 0 );
                     aBitmap.Read( aTmp, TRUE );
-                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                 }
-                else
-                {
-                    if( aBmpSaveList.Count() )
-                        pOut->ResolveBitmapActions( aBmpSaveList );
-
-                    Point aDestOrg = Point( xDest, yDest );
-                    Size aDestExt = Size( cxDest, cyDest );
-
-                    UINT32 nNewRop = R2_BLACK;
-                    switch( dwRop )
-                    {
-                        case DSTINVERT :
-                            nNewRop = R2_NOT;
-                        break;
-                        case 0x00990066 :
-                        case SRCINVERT:
-                            nNewRop = R2_XORPEN;
-                        break;
-                        case BLACKNESS :
-                            nColor = 0;
-                        break;
-                        case WHITENESS :
-                            nColor = 0xffffff;
-                        break;
-                    }
-                    pOut->Push();
-                    UINT32 nOldRop = pOut->SetRasterOp( nNewRop );
-                    pOut->DrawRect( Rectangle( aDestOrg, aDestExt ), FALSE );
-                    pOut->SetRasterOp( nOldRop );
-                    pOut->Pop();
-                }
+                aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
             }
             break;
 
