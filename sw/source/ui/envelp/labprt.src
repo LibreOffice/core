@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ TabPage TP_LAB_PRT
         Text [ ITALIAN ] = "Riga" ;
         Text [ DUTCH ] = "~Rij" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Fileira" ;
-        Text [ SWEDISH ] = "~Rad" ;
+        Text [ SWEDISH ] = "R~ad" ;
         Text [ PORTUGUESE ] = "~Linha" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÐÐ(~W)";
@@ -274,7 +274,7 @@ TabPage TP_LAB_PRT
         Text [ spanish ] = "Configurar..." ;
         Text [ french ] = "~Paramétrer..." ;
         Text [ dutch ] = "~Configureren..." ;
-        Text [ swedish ] = "Inrätta..." ;
+        Text [ swedish ] = "Ställ ~in..." ;
         Text [ danish ] = "Indstil..." ;
         Text [ portuguese_brazilian ] = "Einrichten..." ;
         Text [ portuguese ] = "~Configurar..." ;
