@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:05:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2744,7 +2744,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ french ] = "~Mise en évidence de la sélection dans les en-têtes de lignes ou colonnes" ;
         Text [ dutch ] = "Se~lectie in kolom-/rijenkop accentueren" ;
         Text [ portuguese ] = "Destacar selecção em cabeçalhos de coluna ou linhas" ;
-        Text[ chinese_simplified ] = "Í»³öÏÔÊ¾ĞĞÁĞ±êÌâµÄÑ¡Ôñ(~C)";
+        Text[ chinese_simplified ] = "Í»³öÏÔÊ¾ĞĞÁĞ±êÌâµÄÑ¡ÖĞ(~C)";
         Text[ russian ] = "Âûäåëèòü âûáîğ â çàãîëîâêàõ êîëîíîê è ñòğîê";
         Text[ polish ] = "~Wyró¿nij selekcjê w nag³ówkach kolumn i wierszy";
         Text[ japanese ] = "‘I‘ğ‚µ‚½¾Ù‚Ìs—ñ”Ô†‚ğ‹­’²•\\¦(~C)";
@@ -2908,6 +2908,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ catalan ] = "~Print only selected sheets";
     };
 };
+
 
 
 
