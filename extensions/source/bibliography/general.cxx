@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 12:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::awt;
 using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -696,7 +695,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                         // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
-                                        rSize.Height(), PosSize::POSSIZE);
+                        rSize.Height(), awt::PosSize::POSSIZE);
                 }
             }
         }
