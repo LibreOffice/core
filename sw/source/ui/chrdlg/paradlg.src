@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:45:49 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ TabDialog DLG_PARA
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "¾Æ½Ã¾Æ ÀÎ¼âÃ¼";
+                Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
@@ -216,7 +216,7 @@ TabDialog DLG_PARA
                 Text[ chinese_traditional ] = "½s¸¹";
                 Text[ arabic ] = "ÇáÊÑŞíã";
                 Text[ greek ] = "Áñßèìçóç";
-                Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+                Text[ korean ] = "¹øÈ£¸Å±â±â";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
             };
@@ -300,7 +300,7 @@ TabDialog DLG_PARA
                 Text[ chinese_traditional ] = "Ãä®Ø";
                 Text[ arabic ] = "ÇáÍÏæÏ";
                 Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "°æ°è¼±";
+                Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
             };
@@ -443,7 +443,7 @@ TabDialog DLG_DRAWPARA
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "Asian typography";
+                Text[ korean ] = "¾Æ½Ã¾Æ¡¡Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
