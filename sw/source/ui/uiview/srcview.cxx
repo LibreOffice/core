@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:33:08 $
+ *  last change: $Author: vg $ $Date: 2002-09-03 10:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,9 +198,6 @@
 #endif
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
-#ifndef _SRCVCFG_HXX
-#include <srcvcfg.hxx>
 #endif
 #ifndef _VIEWFUNC_HXX
 #include <viewfunc.hxx>
