@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-10 10:51:17 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 11:47:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -534,6 +534,7 @@ DLLPOSTFIX=mi
 IDLC=guw.pl idlc
 REGMERGE=guw.pl regmerge
 REGCOMPARE=guw.pl regcompare
+REGCOMP=guw.pl regcomp
 CPPUMAKER=guw.pl cppumaker
 JAVAMAKER=guw.pl javamaker
 RDBMAKER=guw.pl rdbmaker

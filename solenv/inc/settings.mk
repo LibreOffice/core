@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-09 13:34:05 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 11:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1221,6 +1221,7 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 IDLC*=idlc
 REGMERGE*=regmerge
 REGCOMPARE*=regcompare
+REGCOMP*=regcomp
 CPPUMAKER*=cppumaker
 JAVAMAKER*=javamaker
 RDBMAKER*=rdbmaker
