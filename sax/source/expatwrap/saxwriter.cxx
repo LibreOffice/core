@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-04 07:21:03 $
+ *  last change: $Author: jbu $ $Date: 2001-01-04 15:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ using namespace ::com::sun::star::io;
 #include "xml2utf.hxx"
 
 #define LINEFEED 10
+#define SAXWRITER_CHECK_FOR_INVALID_CHARS
 
 /******
 *
@@ -104,67 +105,250 @@ using namespace ::com::sun::star::io;
 namespace sax_expatwrap {
 /*****
 *
-* Does special conversions (beside encoding) that is needed for xml. E.g. &<>"' plus some more are
+* Calculates the length of the sequence after conversion, but the conversion is not done.
+* .g. &<>"' plus some more are
 * special characters in XML that need to be transformed
 *
 * @param bConvertAll For Attributes it is necessary to convert every symbol (including line feed and tab)
 *                    Set this to true, if you want to perform this special conversion
-*
+* @return The returned value is equal to the length of the incoming sequence, when no
++         conversion is necessary, otherwise it is larger than the length of the sequence.
 ****/
-sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll ) throw ( SAXException )
+//  inline sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll ) throw()
+//  {
+//      sal_Int32 nLen = 0;
+//      const sal_Int8 *pArray = seq.getConstArray();
+
+//      for( int i = 0 ; i < seq.getLength() ; i ++ ) {
+
+//          sal_Int8 c = pArray[i];
+//          switch( c )
+//          {
+//          case '&':       // resemble to &amp;
+//              nLen +=5;
+//              break;
+//          case '<':       // &lt;
+//          case '>':       // &gt;
+//              nLen +=4;
+//              break;
+//          case 39:        // 39 == ''', &apos;
+//          case '"':       // &quot;
+//          case 13:        // &#x0d;
+//              nLen += 6;
+//              break;
+
+//          case 10:        // &#x0a;
+//          case 9:         // &#x09;
+//              if( bConvertAll )
+//              {
+//                  nLen += 6;        //
+//              }
+//              break;
+//          default:
+//              nLen ++;
+//          }
+//      }
+
+//      return nLen;
+//  }
+
+const sal_Bool g_bValidCharsBelow32[31] =
 {
-    sal_Int32 nLen = 0;
-    const sal_Int8 *pArray = seq.getConstArray();
+//  0 1 2 3 4 5 6 7
+    0,0,0,0,0,0,0,0,  //0
+    0,1,1,0,0,1,0,0,  //8
+    0,0,0,0,0,0,0,0,  //16
+    0,0,0,0,0,0,0
+};
 
+inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
+                                    sal_Bool bDoNormalization,
+                                    sal_Bool bNormalizeWhitespace ) throw( SAXException )
+{
+    sal_Int32 nOutputLength = 0;
 
-    for( int i = 0 ; i < seq.getLength() ; i ++ ) {
-
-        sal_Int8 c = pArray[i];
-        if( '&' == c ) {  // resemble to &amp;
-            nLen += 5;
-        }
-        else if( '<' == c ) {
-            nLen += 4;        // &lt;
-        }
-        else if( '>' == c ) {
-            nLen += 4;        // &gt;
-        }
-        else if( 39 == c ) {    // 39 == '''
-            nLen += 6;        // &apos;
-        }
-        else if( '"' == c ) {
-            nLen += 6;        // &quot;
-        }
-        else if( 13 == c ) {
-            nLen += 6;         // &#x0d;
-        }
-        else if( bConvertAll && LINEFEED == c ) {
-            nLen += 6;
-        }
-        else if( bConvertAll &&  9 == c ) {
-            nLen += 6;
-        }
-        else if( c >= 0 && c < 32 && c != 9 && c != 13 && c != 10 )
+    for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
+    {
+        sal_uInt16 c = pStr[i];
+        if( (c >= 0x0001) && (c <= 0x007F) )
         {
-            SAXException except;
-            except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export: " ) );
-            except.Message += OUString::valueOf( (sal_Int32) c );
-            throw except;
+            if( bDoNormalization )
+            {
+                switch( c )
+                {
+                case '&':       // resemble to &amp;
+                    nOutputLength +=5;
+                    break;
+                case '<':       // &lt;
+                case '>':       // &gt;
+                    nOutputLength +=4;
+                    break;
+                case 39:        // 39 == ''', &apos;
+                case '"':       // &quot;
+                case 13:        // &#x0d;
+                    nOutputLength += 6;
+                    break;
+
+                case 10:        // &#x0a;
+                case 9:         // &#x09;
+                    if( bNormalizeWhitespace )
+                    {
+                        nOutputLength += 6;       //
+                    }
+                    else
+                    {
+                        nOutputLength ++;
+                    }
+                    break;
+                default:
+                    nOutputLength ++;
+                }
+            }
+            else
+            {
+                nOutputLength ++;
+            }
         }
-        else {
-            nLen ++;
+        else if( c > 0x07FF )
+        {
+            nOutputLength += 3;
         }
+        else
+        {
+            nOutputLength += 2;
+        }
+#ifdef SAXWRITER_CHECK_FOR_INVALID_CHARS
+        // check first for the most common characters
+        if( c < 32 || c >= 0xd800 )
+        {
+            if( (c < 32 && ! g_bValidCharsBelow32[c]) ||
+                (c >= 0xd800 && c <= 0xdfff) ||
+                c == 0xffff ||
+                c == 0xfffe )
+            {
+                SAXException except;
+                except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export: " ) );
+                except.Message += OUString::valueOf( (sal_Int32) c );
+                throw except;
+            }
+        }
+#endif
     }
 
-    return nLen;
+    return nOutputLength;
+}
+
+/** Converts an UTF16 string to UTF8 and does XML normalization
+
+    @param pTarget
+           Pointer to a piece of memory, to where the output should be written. The caller
+           must call calcXMLByteLength on the same string, to ensure,
+           that there is enough memory for converting.
+ */
+sal_Int32 convertToXML( const sal_Unicode * pStr, sal_Int32 nStrLen,
+                        sal_Bool bDoNormalization,
+                        sal_Bool bNormalizeWhitespace,
+                        sal_Int8 *pTarget )
+{
+    sal_Int32 nOutputLength = 0;
+    sal_Int32 nPos = 0;
+
+    for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
+    {
+        sal_uInt16 c = pStr[i];
+        if( (c >= 0x0001) && (c <= 0x007F) )
+        {
+            if( bDoNormalization )
+            {
+                switch( c )
+                {
+                case '&':  // resemble to &amp;
+                    memcpy( &(pTarget[nPos]) , "&amp;" , 5 );
+                    nPos += 5;
+                    break;
+                case '<':
+                    memcpy( &(pTarget[nPos]) , "&lt;" , 4 );
+                    nPos += 4;        // &lt;
+                    break;
+                case '>':
+                    memcpy( &(pTarget[nPos]) , "&gt;" , 4 );
+                    nPos += 4;        // &gt;
+                    break;
+                case 39:                 // 39 == '''
+                    memcpy( &(pTarget[nPos]) , "&apos;" , 6 );
+                    nPos += 6;        // &apos;
+                    break;
+                case '"':
+                    memcpy( &(pTarget[nPos]) , "&quot;" , 6 );
+                    nPos += 6;        // &quot;
+                    break;
+                case 13:
+                    memcpy( &(pTarget[nPos]) , "&#x0d;" , 6 );
+                    nPos += 6;
+                    break;
+                case LINEFEED:
+                    if( bNormalizeWhitespace )
+                    {
+                        memcpy( &(pTarget[nPos]) , "&#x0a;" , 6 );
+                        nPos += 6;
+                    }
+                    else
+                    {
+                        pTarget[nPos] = LINEFEED;
+                        nPos ++;
+                    }
+                    break;
+                case 9:
+                    if( bNormalizeWhitespace )
+                    {
+                        memcpy( &(pTarget[nPos]) , "&#x09;" , 6 );
+                        nPos += 6;
+                    }
+                    else
+                    {
+                        pTarget[nPos] = 9;
+                        nPos ++;
+                    }
+                    break;
+                default:
+                    pTarget[nPos] = (sal_Int8)c;
+                    nPos ++;
+                }
+            }
+            else
+            {
+                pTarget[nPos] = (sal_Int8)c;
+                nPos ++;
+            }
+        }
+        else if( c > 0x07FF )
+        {
+            pTarget[nPos] = sal_Int8(0xE0 | ((c >> 12) & 0x0F));
+            nPos ++;
+            pTarget[nPos] = sal_Int8(0x80 | ((c >>  6) & 0x3F));
+            nPos ++;
+            pTarget[nPos] = sal_Int8(0x80 | ((c >>  0) & 0x3F));
+            nPos ++;
+        }
+        else
+        {
+            pTarget[nPos] = sal_Int8(0xC0 | ((c >>  6) & 0x1F));
+            nPos ++;
+            pTarget[nPos] = sal_Int8(0x80 | ((c >>  0) & 0x3F));
+            nPos ++;
+        }
+    }
+    return nPos;
 }
 
 
-inline sal_Int32 getFirstLineBreak( const Sequence<sal_Int8> & seq)
+/** returns position of first ascii 10 within the string, -1 when no 10 in string.
+ */
+static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
 {
-    const sal_Int8 *pSource = seq.getConstArray();
+    const sal_Unicode *pSource = str.getStr();
+    sal_Int32 nLen  = str.getLength();
 
-    sal_Int32 nLen  = seq.getLength();
     for( int n = 0; n < nLen ; n ++ )
     {
         if( LINEFEED == pSource[n] ) {
@@ -174,7 +358,9 @@ inline sal_Int32 getFirstLineBreak( const Sequence<sal_Int8> & seq)
     return -1;
 }
 
-inline sal_Int32 getLastLineBreak( const Sequence<sal_Int8>  & seq)
+/** returns position of last ascii 10 within sequence, -1 when no 10 in string.
+ */
+static inline sal_Int32 getLastLineBreak( const Sequence<sal_Int8>  & seq) throw ()
 {
     const sal_Int8 *pSource = seq.getConstArray();
     sal_Int32 nLen  = seq.getLength();
@@ -199,8 +385,7 @@ public:
     SAXWriter( ) :
         m_nMaxColumn(72),
         m_bForceLineBreak(sal_False),
-        m_bAllowLineBreak(sal_False),
-        m_unicode2utf8( RTL_TEXTENCODING_UTF8 )
+        m_bAllowLineBreak(sal_False)
         {}
 
 public: // XActiveDataSource
@@ -259,8 +444,9 @@ public: // XServiceInfo
 
 private:
 
-    void doIndent( Sequence<sal_Int8> &);
     void writeSequence( const Sequence<sal_Int8> & seq );
+    void insertIndentation( sal_Int8 *pTarget ) throw();
+    sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw();
 
     inline void pushStartElement()
         {
@@ -271,26 +457,8 @@ private:
             }
         }
 
-    Sequence < sal_Int8 > ustring2UTF8( const OUString &sValue )
-        {
-            // OSTRING is binary compatible to a SAL_
-            OString o = OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 );
-            return Sequence< sal_Int8 > ( *( Sequence< sal_Int8 > *) &o );
-        }
 
-    Sequence < sal_Int8 > utf8ToXML( const Sequence< sal_Int8 > & , sal_Bool bConvertAll );
 
-    /****
-     * @param bConvertAll  TRUE,  when LINEFEED plus tab shall also be normalized
-     *                     sal_False  otherwise
-     *
-     ****/
-    Sequence < sal_Int8 > ustring2XML( const OUString &sValue , sal_Bool bConvertAll )
-        {
-            return utf8ToXML( ustring2UTF8( sValue ) , bConvertAll );
-        }
-
-    Unicode2TextConverter m_unicode2utf8;
     Reference< XOutputStream > m_out;
     Sequence < sal_Int8 > m_seqStartElement;
 
@@ -316,12 +484,12 @@ Reference < XInterface > SAL_CALL SaxWriter_CreateInstance(
     return Reference< XInterface > ( SAL_STATIC_CAST(OWeakObject *, p ) );
 }
 
-OUString SaxWriter_getServiceName()
+OUString SaxWriter_getServiceName() throw()
 {
     return OUString::createFromAscii( "com.sun.star.xml.sax.Writer" );
 }
 
-OUString SaxWriter_getImplementationName()
+OUString SaxWriter_getImplementationName() throw()
 {
     return OUString::createFromAscii( "com.sun.star.extensions.xml.sax.Writer" );
 }
@@ -334,102 +502,31 @@ Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
 }
 
 
-Sequence < sal_Int8 >  SAXWriter::utf8ToXML( const Sequence<sal_Int8> & seqSource ,  sal_Bool bConvertAll )
-{
-    sal_Int32 nXMLLength = CalcXMLLen( seqSource , bConvertAll );
 
-    // Note: This optimization does only work as long as all possible conversions
-    //       INCREASE the length of the resulting string. Ensure, that this optimization
-    //       is removed in case there is added a new conversion, that decreases or
-    //       does not change the length of the string.
-    if( nXMLLength == seqSource.getLength() )
+sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw()
+{
+    sal_Int32 nLength =-1;
+    if( m_bForceLineBreak ||
+        m_bAllowLineBreak && nFirstLineBreakOccurence + m_nColumn > m_nMaxColumn )
     {
-        return seqSource;
+        nLength = m_nLevel +1;
     }
-
-    Sequence< sal_Int8 > seqTarget( nXMLLength );
-    sal_Int32 nMaxSource = seqSource.getLength();
-    const sal_Int8 *pSource = seqSource.getConstArray();
-    sal_Int8  *pTarget = seqTarget.getArray();
-    sal_Int32 nTarget = 0;
-
-    for( int nSource = 0 ; nSource < nMaxSource ; nSource ++ ) {
-        sal_Int8 c = pSource[nSource];
-        if( '&' == c ) {  // resemble to &amp;
-            memcpy( &(pTarget[nTarget]) , "&amp;" , 5 );
-            nTarget += 5;
-        }
-        else if( '<' == c ) {
-            memcpy( &(pTarget[nTarget]) , "&lt;" , 4 );
-            nTarget += 4;        // &lt;
-        }
-        else if( '>' == c ) {
-            memcpy( &(pTarget[nTarget]) , "&gt;" , 4 );
-            nTarget += 4;        // &gt;
-        }
-        else if( 39 == c ) {    // 39 == '''
-            memcpy( &(pTarget[nTarget]) , "&apos;" , 6 );
-            nTarget += 6;        // &apos;
-        }
-        else if( '"' == c ) {
-            memcpy( &(pTarget[nTarget]) , "&quot;" , 6 );
-            nTarget += 6;         // &quot;
-        }
-        else if( 13 == c ) {
-            memcpy( &(pTarget[nTarget]) , "&#x0d;" , 6 );
-            nTarget += 6;
-        }
-        else if( LINEFEED == c && bConvertAll ) {
-            memcpy( &(pTarget[nTarget]) , "&#x0a;" , 6 );
-            nTarget += 6;
-        }
-        else if( 9  == c && bConvertAll ) {
-            memcpy( &(pTarget[nTarget]) , "&#x09;" , 6 );
-            nTarget += 6;
-        }
-        else {
-            pTarget[nTarget] = c;
-            nTarget ++;
-        }
-    }
-    return seqTarget;
-}
-
-
-void SAXWriter::doIndent( Sequence<sal_Int8> &seq )
-{
-    sal_Int32 nLength = getFirstLineBreak( seq );
-    nLength = ( nLength >= 0 ) ? nLength : seq.getLength();
-    if( ( m_bForceLineBreak ) ||
-        ( m_bAllowLineBreak && nLength + m_nColumn > m_nMaxColumn  )
-        ) {
-
-        // write the linebreaks !
-        Sequence<sal_Int8> seqIndent( m_nLevel + 1 );
-        char *pData = (char*) seqIndent.getConstArray();
-        pData[0] = 10;
-        memset( &(pData[1]) , 32 , m_nLevel );
-        writeSequence( seqIndent );
-
-        // remove one leading space in the sequence
-        if( seq.getLength() && 32 == seq.getArray()[0] )
-        {
-            memmove( (char*) seq.getConstArray() , &(seq.getConstArray()[1]) , seq.getLength() -1 );
-
-            // an realloc is too expensive
-            // ByteSequence and Sequence< sal_Int8> are binary identical
-            ByteSequence *pSeq = ( ByteSequence *) &seq;
-
-            // WE OWN the sequence  !
-            OSL_ASSERT( pSeq->getHandle()->nRefCount == 1 );
-
-            pSeq->getHandle()->nElements --;
-        }
-    }
-
     m_bForceLineBreak = sal_False;
     m_bAllowLineBreak = sal_False;
+    return nLength;
 }
+
+void SAXWriter::insertIndentation( sal_Int8 *pTarget ) throw()
+{
+    pTarget[0] = 10;
+    memset( &(pTarget[1]) , 32 , m_nLevel );
+}
+
+static inline sal_Bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
+{
+    return *p == ' ';
+}
+
 
 
 /********
@@ -438,7 +535,6 @@ void SAXWriter::doIndent( Sequence<sal_Int8> &seq )
 *****/
 void SAXWriter::writeSequence( const Sequence<sal_Int8> & seq )
 {
-
     sal_Int32 nPos = getLastLineBreak( seq );
     try
     {
@@ -513,7 +609,9 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
 {
     if( ! m_bDocStarted )
     {
-        throw SAXException();
+        throw SAXException(
+            OUString::createFromAscii( "endDocument called before startDocument" ),
+            Reference< XInterface >() , Any() );
     }
     if( m_nLevel ) {
         throw SAXException(
@@ -529,38 +627,89 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
 {
     if( ! m_bDocStarted )
     {
-        throw SAXException();
+        SAXException except;
+        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "startElement called before startDocument" ));
+        throw except;
     }
     if( m_bIsCDATA )
     {
-        throw SAXException();
+        SAXException except;
+        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "startElement call not allowed with CDATA sections" ));
+        throw except;
     }
     pushStartElement();
 
+    // first calculate the sequence length
+    sal_Int32 nLength = 0;
     sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
 
-    OStringBuffer str(92 *( nAttribCount+1) );
-    str.append( "<" );
+    nLength ++; // "<"
+    nLength += calcXMLByteLength( aName.getStr() , aName.getLength(),
+                                  sal_False, sal_False ); // the tag name
 
-    // Tags may only contain ascii chars !
-    str.append( OUStringToOString( aName.getStr() , RTL_TEXTENCODING_UTF8 ) );
+    int n;
+    for( n = 0 ; n < nAttribCount ; n ++ ) {
+        nLength ++; // " "
+        OUString tmp =  xAttribs->getNameByIndex( n );
 
-    for( int n = 0 ; n < nAttribCount ; n ++ ) {
-        str.append( " " );
-        str.append( OUStringToOString( xAttribs->getNameByIndex( n ) , RTL_TEXTENCODING_UTF8 ) );
-        str.append( "=\"" );
+        nLength += calcXMLByteLength( tmp.getStr() , tmp.getLength() , sal_False, sal_False );
 
-        Sequence<sal_Int8> seq = ustring2XML( xAttribs->getValueByIndex( n ) , sal_True );
-        str.append( ( const sal_Char * ) seq.getConstArray() , seq.getLength() );
-        str.append( "\"" );
+        nLength += 2; // ="
+
+        tmp = xAttribs->getValueByIndex( n );
+
+        nLength += calcXMLByteLength( tmp.getStr(), tmp.getLength(), sal_True, sal_True );
+
+        nLength += 1; // "
     }
 
-    // preparing for empty tag
-    str.append( ">" );
+    nLength ++;  // '>'
 
-    m_seqStartElement = Sequence< sal_Int8 >( (const sal_Int8*) str.getStr(),str.getLength() );
+    // Is there a new indentation necesarry ?
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength  );
+    if( nPrefix >= 0 )
+        nLength += nPrefix;
 
-    doIndent( m_seqStartElement );
+    // now create the sequence, store it ( maybe later an empty tag ? )
+    m_seqStartElement = Sequence< sal_Int8 > ( nLength );
+
+    sal_Int8 *pTarget = (sal_Int8*) m_seqStartElement.getConstArray();  // we OWN the sequence
+    sal_Int32 nPos =0;
+
+    // write into sequence
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPrefix;
+    }
+    pTarget[nPos] = '<';
+    nPos ++;
+
+    nPos += convertToXML( aName.getStr(), aName.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
+
+    for( n = 0 ; n < nAttribCount ; n ++ )
+    {
+        pTarget[nPos] = ' ';
+        nPos ++;
+
+        OUString tmp = xAttribs->getNameByIndex( n );
+        nPos += convertToXML( tmp.getStr(), tmp.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
+
+        pTarget[nPos] = '=';
+        nPos ++;
+        pTarget[nPos] = '"';
+        nPos ++;
+
+        tmp = xAttribs->getValueByIndex( n );
+        nPos += convertToXML( tmp.getStr(), tmp.getLength(), sal_True, sal_True , &(pTarget[nPos] ) );
+
+        pTarget[nPos] = '"';
+        nPos ++;
+    }
+
+    pTarget[nPos] = '>';
+    nPos ++;
+    OSL_ASSERT( nPos == nLength );
 
     m_nLevel ++;
 }
@@ -588,20 +737,34 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
     }
     else {
         // only ascii chars allowed
-        OString o = OUStringToOString( aName , RTL_TEXTENCODING_UTF8 );
+        sal_Int32 nLength = 3 + calcXMLByteLength( aName.getStr(), aName.getLength(), sal_False, sal_False );
+        sal_Int32 nPrefix = getIndentPrefixLength( nLength );
 
-        sal_Int32 nLen = aName.getLength();
-        Sequence< sal_Int8 > seqWrite( nLen + 3 );
+        if( nPrefix >= 0 )
+        {
+            nLength += nPrefix;
+        }
+        Sequence< sal_Int8 > seqWrite( nLength );
 
-        sal_Int8 *p = (sal_Int8*)seqWrite.getConstArray();     //we own it
-        const sal_Int8 *pSource = (sal_Int8*) o.pData->buffer;
+        sal_Int8 *pTarget = ( sal_Int8 * ) seqWrite.getConstArray(); // we OWN it
 
-        p[0] = '<';
-        p[1] = '/';
-        memcpy( &(p[2]) , pSource , nLen );
-        p[nLen+2] = '>';
+        sal_Int32 nPos = 0;
+        if( nPrefix >= 0 )
+        {
+            nPos += nPrefix;
+            insertIndentation( pTarget );
+        }
+        pTarget[nPos] = '<';
+        nPos ++;
+        pTarget[nPos] = '/';
+        nPos ++;
 
-        doIndent( seqWrite );
+        nPos += convertToXML( aName.getStr(), aName.getLength(), sal_False, sal_False, &(pTarget[nPos] ) );
+
+        pTarget[nPos] = '>';
+        nPos ++;
+
+        OSL_ASSERT( nPos == nLength );
         writeSequence( seqWrite );
     }
 }
@@ -610,18 +773,76 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
 {
     if( ! m_bDocStarted )
     {
-        throw SAXException();
+        SAXException except;
+        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "characters method called before startDocument" ) );
+        throw except;
     }
-    pushStartElement();
 
-    if( m_bIsCDATA ) {
-        Sequence<sal_Int8> seqWrite = ustring2UTF8( aChars);
-        writeSequence( seqWrite );
-    }
-    else {
-        Sequence<sal_Int8> seqWrite =  ustring2XML( aChars  , sal_False );
-        doIndent( seqWrite );
-        writeSequence( seqWrite );
+    if( aChars.getLength() )
+    {
+        pushStartElement();
+
+        sal_Int32 nLength = calcXMLByteLength( aChars.getStr(), aChars.getLength(),
+                                               ! m_bIsCDATA , sal_False );
+        if( m_bIsCDATA )
+        {
+            // no indentation, no normalization
+            Sequence<sal_Int8> seqWrite( nLength );
+            convertToXML( aChars.getStr(), aChars.getLength() , sal_False, sal_False ,
+                          (sal_Int8*)seqWrite.getConstArray() );
+            writeSequence( seqWrite );
+        }
+        else
+        {
+            // Note : nFirstLineBreakOccurence is not exact, because we don't know, how
+            //        many 2 and 3 byte chars are inbetween. However this whole stuff
+            //        is eitherway for pretty printing only, so it does not need to be exact.
+            sal_Int32 nFirstLineBreakOccurence = getFirstLineBreak( aChars );
+
+            sal_Int32 nIdentPrefix = getIndentPrefixLength(
+                nFirstLineBreakOccurence >= 0 ? nFirstLineBreakOccurence : nLength );
+
+            if( nIdentPrefix >= 0 )
+            {
+                nLength += nIdentPrefix;
+                if( isFirstCharWhitespace( aChars.getStr() ) )
+                {
+                    nLength --;
+                }
+            }
+
+            // create the sequence
+            Sequence< sal_Int8 > seqWrite( nLength );
+            sal_Int8 *pTarget = (sal_Int8 * ) seqWrite.getConstArray();
+
+            // insert indentation
+            sal_Int32 nPos = 0;
+            if( nIdentPrefix >= 0 )
+            {
+                insertIndentation( pTarget );
+                nPos += nIdentPrefix;
+                if( isFirstCharWhitespace( aChars.getStr() ) )
+                {
+                    nPos += convertToXML(
+                        &(aChars.getStr()[1]) , aChars.getLength() -1 ,
+                        sal_True , sal_False , &(pTarget[nPos]) );
+                }
+                else
+                {
+                    nPos += convertToXML(
+                        aChars.getStr() , aChars.getLength() , sal_True, sal_False,
+                        &(pTarget[nPos]));
+                }
+            }
+            else
+            {
+                nPos += convertToXML(
+                    aChars.getStr() , aChars.getLength() , sal_True, sal_False, &(pTarget[nPos]) );
+            }
+
+            OSL_ASSERT( nPos == nLength );
+            writeSequence( seqWrite );
+        }
     }
 }
 
@@ -644,20 +865,53 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
         throw SAXException();
     }
 
+    sal_Int32 nLength = 2;  // "<?"
+    nLength += calcXMLByteLength( aTarget.getStr(), aTarget.getLength(), sal_False, sal_False );
+
+    nLength += 1;  // " "
+
+    nLength += calcXMLByteLength( aData.getStr(), aData.getLength(), sal_False, sal_False );
+
+    nLength += 2; // "?>"
+
     pushStartElement();
 
-    OStringBuffer str( 128 );
-    str.append( "<?" );
-    str.append( OUStringToOString( aTarget , RTL_TEXTENCODING_UTF8 ) );
-    str.append( " " );
-    str.append( OUStringToOString( aData , RTL_TEXTENCODING_UTF8 ) );   // only ascii chars allowed
-    str.append( "?>" );
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
+    if( nPrefix > 0 )
+    {
+        nLength += nPrefix;
+    }
 
-    Sequence<sal_Int8> seq( str.getLength() );
-    memcpy( seq.getArray() , str.getStr() , str.getLength() );
+    Sequence< sal_Int8 > seqWrite( nLength );
 
-    doIndent( seq );
-    writeSequence( seq );
+    sal_Int32 nPos = 0;
+    sal_Int8 * pTarget = ( sal_Int8 * ) seqWrite.getConstArray();
+
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPos;
+    }
+
+    pTarget[nPos] = '<';
+    nPos ++;
+    pTarget[nPos] = '?';
+    nPos ++;
+
+    nPos += convertToXML( aTarget.getStr(), aTarget.getLength(), sal_False, sal_False, &(pTarget[nPos] ) );
+
+    pTarget[nPos] = ' ';
+    nPos ++;
+
+    nPos += convertToXML( aData.getStr(), aData.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
+    pTarget[nPos] = '?';
+    nPos ++;
+    pTarget[nPos] = '>';
+    nPos ++;
+
+    OSL_ASSERT( nPos == nLength );
+
+    writeSequence( seqWrite );
 }
 
 
@@ -673,13 +927,30 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
     {
         throw SAXException ();
     }
-
     pushStartElement();
 
-    Sequence < sal_Int8 > seq( ( sal_Int8 * ) "<![CDATA[" ,  9 );
 
-    doIndent( seq );
+    sal_Int32 nLength = 9;
+    sal_Int32 nPrefix = getIndentPrefixLength( 9 );
+    if( nPrefix >= 0)
+    {
+        nLength += nPrefix;
+    }
+
+    Sequence< sal_Int8 > seq( nLength );
+    sal_Int8 *pTarget = ( sal_Int8* )seq.getConstArray();
+    sal_Int32 nPos = 0;
+
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPrefix;
+    }
+
+    memcpy( &(pTarget[nPos]), "<![CDATA[" , 9 );
+
     writeSequence( seq );
+
     m_bIsCDATA = sal_True;
 }
 
@@ -687,13 +958,30 @@ void SAXWriter::endCDATA(void) throw (RuntimeException)
 {
     if( ! m_bDocStarted | ! m_bIsCDATA)
     {
-        throw SAXException();
+        SAXException except;
+        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "endCDATA was called without startCDATA" ) );
+        throw except;
     }
 
-    pushStartElement();
-    Sequence<sal_Int8> seq( ( sal_Int8 * ) "]]>" , 3 );
+    sal_Int32 nLength = 3;
+    sal_Int32 nPrefix = getIndentPrefixLength( 3 );
+    if( nPrefix >= 0)
+    {
+        nLength += nPrefix;
+    }
 
-    doIndent( seq );
+    Sequence< sal_Int8 > seq( nLength );
+    sal_Int8 *pTarget = ( sal_Int8* )seq.getConstArray();
+    sal_Int32 nPos = 0;
+
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPrefix;
+    }
+
+    memcpy( &(pTarget[nPos]), "]]>" , 3 );
+
     writeSequence( seq );
     m_bIsCDATA = sal_False;
 }
@@ -708,21 +996,44 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
 
     pushStartElement();
 
-    Sequence<sal_Int8> seq = ustring2XML( sComment , sal_False );
+    sal_Int32 nLength = 4; // "<!--"
+    nLength += calcXMLByteLength( sComment.getStr(), sComment.getLength(), sal_False, sal_False);
 
-    Sequence<sal_Int8> seqWrite( seq.getLength() + 7 );
-    sal_Int8 *p = seqWrite.getArray();
-    p[0] = '<';
-    p[1] = '!';
-    p[2] = '-';
-    p[3] = '-';
-    memcpy( &(p[4]) , seq.getConstArray() , seq.getLength() );
-    p[4+seq.getLength()] = '-';
-    p[5+seq.getLength()] = '-';
-    p[6+seq.getLength()] = '>';
+    nLength += 3;
 
-    doIndent( seqWrite );
-    writeSequence( seqWrite );
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
+    if( nPrefix >= 0 )
+    {
+        nLength += nPrefix;
+    }
+
+    Sequence<sal_Int8> seq( nLength );
+
+    sal_Int8 *pTarget = (sal_Int8*) seq.getConstArray();
+    sal_Int32 nPos = 0;
+
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPrefix;
+    }
+    pTarget[nPos] = '<';
+    pTarget[nPos+1] = '!';
+    pTarget[nPos+2] = '-';
+    pTarget[nPos+3] = '-';
+    nPos += 4;
+
+    nPos += convertToXML( sComment.getStr(), sComment.getLength(), sal_False, sal_False,
+                          &(pTarget[nPos]));
+
+    pTarget[nPos] = '-';
+    pTarget[nPos+1] = '-';
+    pTarget[nPos+2] = '>';
+    nPos += 3;
+
+    OSL_ASSERT( nPos == nLength );
+
+    writeSequence( seq );
 }
 
 
@@ -749,12 +1060,28 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
 
     pushStartElement();
 
-    OString str = OUStringToOString( sString , RTL_TEXTENCODING_UTF8 );
+    sal_Int32 nLength = calcXMLByteLength( sString.getStr(), sString.getLength(), sal_False, sal_False );
 
-    Sequence<sal_Int8> seq( str.getLength() );
-    memcpy( seq.getArray() , str.getStr() , str.getLength() );
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
+    if( nPrefix >= 0 )
+    {
+        nLength += nPrefix;
+    }
+    Sequence< sal_Int8 > seq( nLength );
 
-    doIndent( seq );
+    sal_Int8 *pTarget = (sal_Int8*) seq.getConstArray();
+    sal_Int32 nPos = 0;
+
+    if( nPrefix >= 0 )
+    {
+        insertIndentation( pTarget );
+        nPos += nPrefix;
+    }
+
+    nPos += convertToXML( sString.getStr(), sString.getLength(), sal_False, sal_False,
+                          &(pTarget[nPos]));
+
+    OSL_ASSERT( nPos == nLength );
     writeSequence( seq );
 }
 

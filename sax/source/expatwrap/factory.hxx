@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
+ *  last change: $Author: jbu $ $Date: 2001-01-04 15:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 namespace sax_expatwrap {
 Reference< XInterface > SAL_CALL SaxWriter_CreateInstance(
     const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString SaxWriter_getServiceName();
-OUString SaxWriter_getImplementationName();
+OUString SaxWriter_getServiceName() throw();
+OUString SaxWriter_getImplementationName() throw();
 Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw();
 }
 
