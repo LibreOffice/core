@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:32:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,7 +1714,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                 pOut->SetLineColor( rClosedColor );
             pOut->DrawPolygon( rPol );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         static KSHORT nRadius = 0;
         if( nRadius )
         {
