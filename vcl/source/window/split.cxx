@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
+ *  last change: $Author: ssa $ $Date: 2002-07-15 12:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #pragma hdrstop
 
+static Wallpaper ImplBlackWall( Color( COL_BLACK ) );
+static Wallpaper ImplWhiteWall( Color( COL_LIGHTGRAY ) );
+
 // =======================================================================
 
 void Splitter::ImplInitData()
@@ -134,8 +137,10 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     }
 
     SetPointer( Pointer( ePointerStyle ) );
-    SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-
+    if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        SetBackground( ImplWhiteWall );
+    else
+        SetBackground( ImplBlackWall );
 
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->AddWindow( this );
@@ -774,5 +779,11 @@ void Splitter::Paint( const Rectangle& rPaintRect )
         SetLineColor( oldLineCol);
     }
     else
+    {
+        if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+            SetBackground( ImplWhiteWall );
+        else
+            SetBackground( ImplBlackWall );
         Window::Paint( rPaintRect );
+    }
 }
