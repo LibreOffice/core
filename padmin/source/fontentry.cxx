@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:21:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,12 +186,12 @@ static void CreateAfmFile( const INetURLObject& rFontFile )
 
 FontNameDlg::FontNameDlg( Window *pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTNAMEDIALOG ) ),
-        m_aFixedText( this, PaResId( RID_FNTNM_FIXED ) ),
         m_aOKButton( this, PaResId( RID_FNTNM_BTN_OK ) ),
-        m_aRemoveButton( this, PaResId( RID_FNTNM_BTN_REMOVE ) ),
         m_aRenameButton( this, PaResId( RID_FNTNM_BTN_RENAME ) ),
-        m_aFontBox( this, PaResId( RID_FNTNM_LB_FONTS ) ),
+        m_aRemoveButton( this, PaResId( RID_FNTNM_BTN_REMOVE ) ),
         m_aImportButton( this, PaResId( RID_FNTNM_BTN_IMPORT ) ),
+        m_aFontBox( this, PaResId( RID_FNTNM_LB_FONTS ) ),
+        m_aFixedText( this, PaResId( RID_FNTNM_FIXED ) ),
         m_aRenameString( PaResId( RID_FNTNM_STR_RENAME ) ),
         m_aRenameTTCString( PaResId( RID_FNTNM_STR_TTCRENAME ) ),
         m_aNoRenameString( PaResId( RID_FNTNM_STR_NOTRENAMABLE ) ),
@@ -473,12 +473,12 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTIMPORT_DIALOG ) ),
         m_aOKBtn( this, PaResId( RID_FIMP_BTN_OK ) ),
         m_aCancelBtn( this, PaResId( RID_FIMP_BTN_CANCEL ) ),
+        m_aSelectAllBtn( this, PaResId( RID_FIMP_BTN_SELECTALL ) ),
+        m_aNewFontsBox( this, PaResId( RID_FIMP_BOX_NEWFONTS ) ),
         m_aFromFL( this, PaResId( RID_FIMP_FL_FROM ) ),
         m_aFromDirEdt( this, PaResId( RID_FIMP_EDT_FROM ) ),
         m_aFromBtn( this, PaResId( RID_FIMP_BTN_FROM ) ),
         m_aLinkOnlyBox( this, PaResId( RID_FIMP_BOX_LINKONLY ) ),
-        m_aSelectAllBtn( this, PaResId( RID_FIMP_BTN_SELECTALL ) ),
-        m_aNewFontsBox( this, PaResId( RID_FIMP_BOX_NEWFONTS ) ),
         m_aFixedText( this, PaResId( RID_FIMP_TXT_HELP ) ),
         m_bOverwriteAll( false ),
         m_bOverwriteNone( false ),
@@ -524,8 +524,11 @@ void FontImportDialog::importFontsFailed( ::psp::PrintFontManager::ImportFontCal
     String aText;
     switch( eReason )
     {
-        case ::psp::PrintFontManager::ImportFontCallback::NoWritableDirectory:
+        case psp::PrintFontManager::ImportFontCallback::NoWritableDirectory:
             aText = m_aNoWritableFontsDirText;
+            break;
+        default:
+            break;
     }
     ErrorBox aBox( m_pProgress ? (Window*)m_pProgress : (Window*)this, WB_OK | WB_DEF_OK, aText );
     aBox.Execute();
@@ -570,14 +573,16 @@ void FontImportDialog::importFontFailed( const ::rtl::OUString& rFile, ::psp::Pr
     String aText;
     switch( eReason )
     {
-        case ::psp::PrintFontManager::ImportFontCallback::NoAfmMetric:
+        case psp::PrintFontManager::ImportFontCallback::NoAfmMetric:
             aText = m_aNoAfmText;
             break;
-        case ::psp::PrintFontManager::ImportFontCallback::AfmCopyFailed:
+        case psp::PrintFontManager::ImportFontCallback::AfmCopyFailed:
             aText = m_aAfmCopyFailedText;
             break;
-        case ::psp::PrintFontManager::ImportFontCallback::FontCopyFailed:
+        case psp::PrintFontManager::ImportFontCallback::FontCopyFailed:
             aText = m_aFontCopyFailedText;
+            break;
+        default:
             break;
     }
     aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), rFile );
