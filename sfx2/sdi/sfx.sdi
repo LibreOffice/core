@@ -8745,6 +8745,33 @@ SfxBoolItem ExportTo SID_EXPORTDOC
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
+//--------------------------------------------------------------------------
+SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
+(SfxStringItem URL SID_FILE_NAME )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
 
 SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
 (SfxStringItem URL SID_FILE_NAME)
