@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:16:36 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 14:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,10 +570,22 @@ ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWid
 
 ULONG ExtendedFontStruct::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
+    ULONG nRangeCount = 0;
     // TODO: get better info
     // problems are 1) the X Server will lie about monospaced fonts
     // and 2) translation into unicode and query for every unicode char is very costly
-    return 0;
+    if( RTL_TEXTENCODING_SYMBOL == mpXlfd->GetEncoding() )
+    {
+        // postscript symbol font
+        nRangeCount = 1;
+        if( pCodePairs )
+        {
+            pCodePairs[ 0 ] = 0xF020;
+            pCodePairs[ 1 ] = 0xF100;
+        }
+    }
+
+    return nRangeCount;
 }
 
 static short
