@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:15:28 $
+ *  last change: $Author: dl $ $Date: 2001-02-09 13:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,13 @@ TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 
+#define LINGUPROP_DEFLOCALE         "DefaultLocale"
+#define LINGUPROP_CJKLOCALE         "DefaultLocale_CJK"
+#define LINGUPROP_CTLLOCALE         "DefaultLocale_CTL"
+#define LINGUPROP_AUTOSPELL         "IsSpellAuto"
+#define LINGUPROP_HIDEAUTO          "IsSpellHide"
+
+
 /*************************************************************************
 |*
 |* Konstruktor
@@ -256,7 +263,10 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 #endif
     pDeletedPresObjList(NULL),
     nFileFormatVersion(SDIOCOMPAT_VERSIONDONTKNOW),
-    pCustomShowList(NULL)
+    pCustomShowList(NULL),
+    eLanguage( LANGUAGE_SYSTEM ),
+    eLanguageCJK( LANGUAGE_SYSTEM ),
+    eLanguageCTL( LANGUAGE_SYSTEM )
 {
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
 
@@ -284,38 +294,53 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     // die DrawingEngine muss auch wissen, wo er ist
     FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetPool(), this ) );
 
+    // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
+    // eingelesen werden koennen. Der Link zum StyleRequest-Handler des
+    // Dokuments wird erst in NewOrLoadCompleted gesetzt, da erst dann alle
+    // Vorlagen existieren.
+    SdrOutliner& rOutliner = GetDrawOutliner();
+    rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
 #ifndef SVX_LIGHT
-    // Language setzen
-    LanguageType eLang = LANGUAGE_SYSTEM;
+    rOutliner.SetCalcFieldValueHdl(LINK(SFX_APP(), SdModule, CalcFieldValueHdl));
+#endif // !SVX_LIGHT
 
+#ifndef SVX_LIGHT
     try
     {
         uno::Reference< beans::XPropertySet > xProp( SvxGetLinguPropertySet() );
-        if( xProp.is() )
+        if ( xProp.is() )
         {
+            uno::Any aAny;
             sal_Int16 nValue;
-            uno::Any aAny( xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultLanguage"))));
 
-            if( aAny >>= nValue )
-                eLang = nValue;
-        }
-        else
-        {
-            eLang = Application::GetAppInternational().GetLanguage();
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
+            aAny >>= nValue;
+            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE );
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
+            aAny >>= nValue;
+            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE_CJK );
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
+            aAny >>= nValue;
+            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE_CTL );
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
+            aAny >>= bOnlineSpell;
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ) );
+            aAny >>= bHideSpell;
         }
     }
     catch(...)
     {
-        DBG_ERROR("No 'DefaultLanguage' property");
+        DBG_ERROR("Error in LinguProperties");
     }
-
-    if (eLang == LANGUAGE_SYSTEM)
-        eLang = System::GetLanguage();
-    if (eLang == LANGUAGE_DONTKNOW)
-        eLang = LANGUAGE_ENGLISH_US;
-    SetLanguage( eLang, EE_CHAR_LANGUAGE );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
@@ -328,55 +353,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     // Jetzt am Modul (SD)
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
-
-    bHideSpell   = sal_True;
-    bOnlineSpell = sal_False;
-    try
-    {
-        uno::Reference< beans::XPropertySet > xProp( SvxGetLinguPropertySet() );
-        if( xProp.is() )
-        {
-            bHideSpell = ::cppu::any2bool( xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsSpellHide" ))));
-            bOnlineSpell = ::cppu::any2bool( xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsSpellAuto" ))));
-        }
-    }
-    catch(...)
-    {
-        DBG_ERROR( "Ill. Type inside linguistic property" );
-    }
-#else
-    LanguageType eLang = System::GetLanguage();
-    SetLanguage( eLang, EE_CHAR_LANGUAGE );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
-#endif // !SVX_LIGHT
-
-    // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
-    // eingelesen werden koennen. Der Link zum StyleRequest-Handler des
-    // Dokuments wird erst in NewOrLoadCompleted gesetzt, da erst dann alle
-    // Vorlagen existieren.
-    SdrOutliner& rOutliner = GetDrawOutliner();
-    rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-#ifndef SVX_LIGHT
-    rOutliner.SetCalcFieldValueHdl(LINK(SFX_APP(), SdModule, CalcFieldValueHdl));
-#endif // !SVX_LIGHT
-    ULONG nCntrl = rOutliner.GetControlWord();
-    nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl |= EE_CNTRL_URLSFXEXECUTE;
-
-    if (bHideSpell)
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
-
-    if (bOnlineSpell)
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
-    else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-
-    rOutliner.SetControlWord(nCntrl);
-
-#ifndef SVX_LIGHT
 
     try
     {
@@ -410,7 +386,32 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     {
         SetLinkManager( new SvxLinkManager(pDocSh) );
     }
+
+#else
+    LanguageType eLang = System::GetLanguage();
+    SetLanguage( eLang, EE_CHAR_LANGUAGE );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
+    bOnlineSpell = FALSE;
+    bHideSpell = FALSE;
 #endif // !SVX_LIGHT
+
+    ULONG nCntrl = rOutliner.GetControlWord();
+    nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
+    nCntrl |= EE_CNTRL_URLSFXEXECUTE;
+
+    if (bHideSpell)
+        nCntrl |= EE_CNTRL_NOREDLINES;
+    else
+        nCntrl &= ~EE_CNTRL_NOREDLINES;
+
+    if (bOnlineSpell)
+        nCntrl |= EE_CNTRL_ONLINESPELLING;
+    else
+        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+
+    rOutliner.SetControlWord(nCntrl);
+
 
 
     // Dem HitTestOutliner den StyleSheetPool setzen.
