@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cl $ $Date: 2000-10-09 12:49:50 $
+#   last change: $Author: cl $ $Date: 2000-12-01 16:31:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,8 @@ SLOFILES=	\
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
-        $(OBJ)$/sxl_paraitem.obj
+        $(OBJ)$/sxl_paraitem.obj\
+        $(SLO)$/numitem.obj
 
 SVXLIGHTOBJFILES=	\
         $(OBJ)$/frmitems.obj \
