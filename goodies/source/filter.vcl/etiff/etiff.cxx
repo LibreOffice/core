@@ -2,9 +2,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 13:47:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,15 +160,15 @@ public:
 // ------------------------------------------------------------------------
 
 TIFFWriter::TIFFWriter() :
+        mbStatus            ( TRUE ),
+        mpAcc               ( NULL ),
+        mnCurAllPictHeight  ( 0 ),
+        mnSumOfAllPictHeight( 0 ),
         mnLastPercent       ( 0 ),
         mnXResPos           ( 0 ),
         mnYResPos           ( 0 ),
-        mnCurAllPictHeight  ( 0 ),
-        mnSumOfAllPictHeight( 0 ),
-        mnStripByteCountPos ( 0 ),
         mnBitmapPos         ( 0 ),
-        mpAcc               ( NULL ),
-        mbStatus            ( TRUE )
+        mnStripByteCountPos ( 0 )
 {
 }
 
@@ -316,6 +316,9 @@ BOOL TIFFWriter::ImplWriteHeader( BOOL bMultiPage )
             case 24:
                 nTemp = 2;
                 break;
+            default:
+                nTemp = 0;  // -Wall set a default...
+                break;
         }
         ImplWriteTag( PhotometricInterpretation, 3, 1, nTemp );
         mnBitmapPos = mpOStm->Tell();
@@ -379,7 +382,8 @@ void TIFFWriter::ImplWritePalette()
 
 BOOL TIFFWriter::ImplWriteBody()
 {
-    BYTE    nTemp, nShift;
+    BYTE    nTemp = 0;
+    BYTE    nShift;
     ULONG   j, x, y;
 
     ULONG nGfxBegin = mpOStm->Tell();
@@ -631,8 +635,9 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
     return TIFFWriter().WriteTIFF( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // ---------------
 // - Win16 trash -
