@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:33:45 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,6 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
-#define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -102,14 +100,36 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCE_HPP_
+#include <com/sun/star/uri/XUriReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include <com/sun/star/util/XMacroExpander.hpp>
+#endif
+
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 using namespace comphelper;
@@ -188,6 +208,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
     aOUSource += aSubStr;
 
     // update module in library
+    SfxObjectShell* pShell = 0;
     SbxObject* pParent = pModule->GetParent();
     StarBASIC* pBasic = PTR_CAST(StarBASIC,pParent);
     DBG_ASSERT(pBasic, "BasicIDE::CreateMacro: No Basic found!");
@@ -197,7 +218,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
         DBG_ASSERT(pBasMgr, "BasicIDE::CreateMacro: No BasicManager found!");
         if ( pBasMgr )
         {
-            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            pShell = BasicIDE::FindDocShell( pBasMgr );
             String aLibName = pBasic->GetName();
             String aModName = pModule->GetName();
             BasicIDE::UpdateModule( pShell, aLibName, aModName, aOUSource );
@@ -211,8 +232,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
         pDispatcher->Execute( SID_BASICIDE_UPDATEALLMODULESOURCES );
     }
 
-    if ( pBasic )
-        BasicIDE::MarkDocShellModified( pBasic );
+    BasicIDE::MarkDocShellModified( pShell );
 
     return pMethod;
 }
@@ -347,23 +367,26 @@ BOOL BasicIDE::HasDialog( SfxObjectShell* pShell, const String& rLibName, const 
 {
     BOOL bHasDialog = FALSE;
 
-    Reference< container::XNameContainer > xLib;
-    try
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer = GetDialogLibraryContainer( pShell );
+
+    // check if library container has dialog library
+    ::rtl::OUString aOULibName( rLibName );
+    if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
     {
+        // load library
+        if ( !xLibContainer->isLibraryLoaded( aOULibName ) )
+            xLibContainer->loadLibrary( aOULibName );
+
         // get library
-        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+        Reference< container::XNameContainer > xLib;
+        Any aElement = xLibContainer->getByName( aOULibName );
+        aElement >>= xLib;
 
         // check if library has dialog
         ::rtl::OUString aOUDlgName( rDlgName );
-        if( xLib.is() && xLib->hasByName( aOUDlgName ) )
-        {
+        if ( xLib.is() && xLib->hasByName( aOUDlgName ) )
             bHasDialog = TRUE;
-        }
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
     }
 
     return bHasDialog;
@@ -596,7 +619,11 @@ void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, con
     throw(ElementExistException, NoSuchElementException)
 {
     // get library
-    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xLib;
+    if ( BasicIDE::HasDialogLibrary( pShell, rLibName ) )
+        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+    else
+        xLib = BasicIDE::CreateDialogLibrary( pShell, rLibName );
 
     // insert dialog into library
     ::rtl::OUString aOUDlgName( rDlgName );
@@ -657,56 +684,40 @@ BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
 
 //----------------------------------------------------------------------------
 
-BasicManager* BasicIDE::FindBasicManager( const String& aBasMgr )
+String BasicIDE::GetTitle( SfxObjectShell* pShell, LibraryLocation eLocation, USHORT nSFXTitleType, LibraryType eType )
 {
-    BasicManager* pBasicMgr = SFX_APP()->GetBasicManager();
-    SfxObjectShell* pDocShell = 0;
-    while ( pBasicMgr )
-    {
-        String aMgr;
-        if (pDocShell)
-            aMgr = pDocShell->GetTitle( SFX_TITLE_FILENAME );
-        else
-            aMgr = Application::GetAppName();
-
-        if ( aMgr == aBasMgr )
-            return pBasicMgr;
-
-        if ( pDocShell  )
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
-        else
-            pDocShell = SfxObjectShell::GetFirst();
-
-        pBasicMgr = ( pDocShell ? pDocShell->GetBasicManager() : 0 );
-    }
-    return 0;
-}
-
-//----------------------------------------------------------------------------
-
-String BasicIDE::FindTitle( BasicManager* pBasicManager, USHORT nSFXTitleType )
-{
-    BasicManager* pBasicMgr = SFX_APP()->GetBasicManager();
-    SfxObjectShell* pDocShell = 0;
     String aTitle;
-    while ( pBasicMgr )
+
+    switch ( eLocation )
     {
-        if ( pBasicMgr == pBasicManager )
+        case LIBRARY_LOCATION_USER:
         {
-            if (pDocShell)
-                aTitle = pDocShell->GetTitle( nSFXTitleType );
-            else
-                aTitle = Application::GetAppName();
-            return aTitle;
+            if ( eType == LIBRARY_TYPE_MODULE )
+                aTitle = IDEResId( RID_STR_USERMACROS );
+            else if ( eType == LIBRARY_TYPE_DIALOG )
+                aTitle = IDEResId( RID_STR_USERDIALOGS );
+            else if ( eType == LIBRARY_TYPE_ALL )
+                aTitle = IDEResId( RID_STR_USERMACROSDIALOGS );
         }
-
-        if ( pDocShell  )
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
-        else
-            pDocShell = SfxObjectShell::GetFirst();
-
-        pBasicMgr = ( pDocShell ? pDocShell->GetBasicManager() : 0 );
+        break;
+        case LIBRARY_LOCATION_SHARE:
+        {
+            if ( eType == LIBRARY_TYPE_MODULE )
+                aTitle = IDEResId( RID_STR_SHAREMACROS );
+            else if ( eType == LIBRARY_TYPE_DIALOG )
+                aTitle = IDEResId( RID_STR_SHAREDIALOGS );
+            else if ( eType == LIBRARY_TYPE_ALL )
+                aTitle = IDEResId( RID_STR_SHAREMACROSDIALOGS );
+        }
+        break;
+        case LIBRARY_LOCATION_DOCUMENT:
+        {
+            if ( pShell )
+                aTitle = pShell->GetTitle( nSFXTitleType );
+        }
+        break;
     }
+
     return aTitle;
 }
 
@@ -725,43 +736,6 @@ SfxObjectShell* BasicIDE::FindDocShell( BasicManager* pBasMgr )
         pDocShell = SfxObjectShell::GetNext( *pDocShell );
     }
     return 0;
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
-{
-        // BasicManager suchen, der zur Lib passt...
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-        // Koennte z.B. nach CloseDoc schon weg sein...
-        if ( pBasMgr )
-        {
-            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            // Muss ja nicht aus einem Document kommen...
-            if ( pShell )
-            {
-                pShell->SetModified();
-            }
-            else
-            {
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                if ( pIDEShell )
-                    pIDEShell->SetAppBasicModified();
-            }
-
-            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-            if( pBindings )
-            {
-                pBindings->Invalidate( SID_SAVEDOC );
-                pBindings->Update( SID_SAVEDOC );
-            }
-        }
-
-        // Objectcatalog updaten...
-        BasicIDEShell* pShell = IDE_DLL()->GetShell();
-        ObjectCatalog* pObjCatalog = pShell ? pShell->GetObjectCatalog() : 0;
-        if ( pObjCatalog )
-            pObjCatalog->UpdateEntries();
 }
 
 //----------------------------------------------------------------------------
@@ -967,52 +941,6 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
 
 //----------------------------------------------------------------------------
 
-SvStrings* BasicIDE::CreateBasicLibBoxEntries()
-{
-    SvStrings* pStrings = new SvStrings;
-    pStrings->Insert( new String( IDEResId( RID_STR_ALL ) ), 0 );
-
-    BasicManager* pBasicMgr = SFX_APP()->GetBasicManager();
-    SfxObjectShell* pDocShell = 0;
-    while ( pBasicMgr )
-    {
-        // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
-        // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
-        if ( !pDocShell || ( ( pBasicMgr != SFX_APP()->GetBasicManager() )
-                                && !pDocShell->ISA(BasicDocShell)
-                                && ( SfxViewFrame::GetFirst( pDocShell ) ) ) )
-        {
-            String aBasMgr;
-            if (pDocShell)
-                aBasMgr = pDocShell->GetTitle( SFX_TITLE_FILENAME );
-            else
-                aBasMgr = Application::GetAppName();
-
-            // get a sorted list of library names
-            Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pDocShell );
-            sal_Int32 nLibCount = aLibNames.getLength();
-            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
-
-            for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
-            {
-                String aLibName = pLibNames[ i ];
-                String* pEntry = new String( CreateMgrAndLibStr( aBasMgr, aLibName ) );
-                pStrings->Insert( pEntry, pStrings->Count() );
-            }
-        }
-
-        if ( pDocShell  )
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
-        else
-            pDocShell = SfxObjectShell::GetFirst();
-
-        pBasicMgr = ( pDocShell ? pDocShell->GetBasicManager() : 0 );
-    }
-    return pStrings;
-}
-
-//----------------------------------------------------------------------------
-
 SfxBindings& BasicIDE::GetBindings()
 {
     BasicIDEDLL* pIDEDLL = IDE_DLL();
@@ -1043,6 +971,130 @@ SfxBindings* BasicIDE::GetBindingsPtr()
     if( pFrame != NULL )
         pBindings = &pFrame->GetBindings();
     return pBindings;
+}
+
+//----------------------------------------------------------------------------
+
+bool BasicIDE::IsLibraryShared( SfxObjectShell* pShell, const String& rLibName, LibraryType eType )
+{
+    bool bIsShared = false;
+    Reference< script::XLibraryContainer2 > xLibContainer;
+    if ( eType == LIBRARY_TYPE_MODULE )
+        xLibContainer.set( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    else if ( eType == LIBRARY_TYPE_DIALOG )
+        xLibContainer.set( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+
+    ::rtl::OUString aOULibName( rLibName );
+    if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) && xLibContainer->isLibraryLink( aOULibName ) )
+    {
+        ::rtl::OUString aFileURL;
+        Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        Reference< uri::XUriReferenceFactory > xUriFac;
+        if ( xMSF.is() )
+        {
+            xUriFac.set( xMSF->createInstance( ::rtl::OUString::createFromAscii(
+                "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
+        }
+
+        if ( xUriFac.is() )
+        {
+            ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( aOULibName ) );
+            Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
+
+            if ( xUriRef.is() )
+            {
+                ::rtl::OUString aScheme = xUriRef->getScheme();
+                if ( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+                {
+                    aFileURL = aLinkURL;
+                }
+                else if ( aScheme.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.pkg" ) )
+                {
+                    ::rtl::OUString aAuthority = xUriRef->getAuthority();
+                    if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
+                    {
+                        ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
+                        aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                        Reference< XComponentContext > xContext;
+                        Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+                        OSL_ASSERT( xProps.is() );
+                        OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ) >>= xContext );
+                        if ( xContext.is() )
+                        {
+                            Reference<util::XMacroExpander> xMacroExpander(
+                                xContext->getValueByName(
+                                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+                                UNO_QUERY );
+                            if ( xMacroExpander.is() )
+                                aFileURL = xMacroExpander->expandMacros( aDecodedURL );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( aFileURL.getLength() )
+        {
+            osl::DirectoryItem aFileItem;
+            osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+            OSL_VERIFY( osl::DirectoryItem::get( aFileURL, aFileItem ) == osl::FileBase::E_None );
+            OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
+            ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
+
+            ::rtl::OUString aShareURL;
+            OSL_VERIFY( osl_getExecutableFile( &aShareURL.pData ) == osl_Process_E_None );
+            sal_Int32 nIndex = aShareURL.lastIndexOf( '/' );
+            if ( nIndex >= 0 )
+            {
+                nIndex = aShareURL.lastIndexOf( '/', nIndex );
+                if ( nIndex >= 0 )
+                {
+                    aShareURL = aShareURL.copy( 0, nIndex + 1 );
+                    aShareURL += ::rtl::OUString::createFromAscii( "share" );
+                }
+            }
+
+            osl::DirectoryItem aShareItem;
+            osl::FileStatus aShareStatus( FileStatusMask_FileURL );
+            OSL_VERIFY( osl::DirectoryItem::get( aShareURL, aShareItem ) == osl::FileBase::E_None );
+            OSL_VERIFY( aShareItem.getFileStatus( aShareStatus ) == osl::FileBase::E_None );
+            ::rtl::OUString aCanonicalShareURL( aShareStatus.getFileURL() );
+
+            if ( aCanonicalFileURL.match( aCanonicalShareURL ) )
+                bIsShared = true;
+        }
+    }
+
+    return bIsShared;
+}
+
+//----------------------------------------------------------------------------
+
+LibraryLocation BasicIDE::GetLibraryLocation( SfxObjectShell* pShell, const String& rLibName )
+{
+    LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
+
+    if ( rLibName.Len() )
+    {
+        if ( pShell )
+        {
+            eLocation = LIBRARY_LOCATION_DOCUMENT;
+        }
+        else
+        {
+            if ( ( HasModuleLibrary( pShell, rLibName ) && !IsLibraryShared( pShell, rLibName, LIBRARY_TYPE_MODULE ) ) ||
+                 ( HasDialogLibrary( pShell, rLibName ) && !IsLibraryShared( pShell, rLibName, LIBRARY_TYPE_DIALOG ) ) )
+            {
+                eLocation = LIBRARY_LOCATION_USER;
+            }
+            else
+            {
+                eLocation = LIBRARY_LOCATION_SHARE;
+            }
+        }
+    }
+
+    return eLocation;
 }
 
 //----------------------------------------------------------------------------
