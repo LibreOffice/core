@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:42:35 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "±K½XÃş«¬";
         Text[ arabic ] = "äæÚ ÇáãİÊÇÍ";
         Text[ greek ] = "Ôığïò êëåéäéïı";
-        Text[ korean ] = "Å° ÇüÅÂ";
+        Text[ korean ] = "Å° À¯Çü";
         Text[ turkish ] = "Anahtar tipi";
     };
     FixedText FT_DIR
@@ -346,7 +346,7 @@ ModalDialog DLG_SORTING
     StringList [ korean ] =
     {
             < "¿µ¼ıÀÚ" ; > ;
-        < "¹øÈ£" ; > ;
+        < "¼ıÀÚ" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -385,7 +385,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "»¼¼W(~A)";
         Text[ arabic ] = "ÊÕÇÚÏí";
         Text[ greek ] = "Áıîïõóá";
-        Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
+        Text[ korean ] = "¿À¸§Â÷¼ø";
         Text[ turkish ] = "Ar~tan";
         Text[ language_user1 ] = " ";
     };
@@ -414,7 +414,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "»¼´î(~D)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
-        Text[ korean ] = "³»¸²Â÷¼ø(~D)";
+        Text[ korean ] = "³»¸²Â÷¼ø";
         Text[ turkish ] = "A~zalan";
         Text[ language_user1 ] = " ";
     };
@@ -925,7 +925,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "Äæ(~L)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~U)";
+        Text[ korean ] = "¿­";
         Text[ turkish ] = "S~ütun";
         Text[ language_user1 ] = " ";
     };
@@ -1031,7 +1031,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "»sªí²Å(~T)";
         Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
         Text[ greek ] = "Óôçëïèİôçò";
-        Text[ korean ] = "ÅÇ(~T)";
+        Text[ korean ] = "ÅÇ";
         Text[ turkish ] = "~Sekmeler";
         Text[ language_user1 ] = " ";
     };
@@ -1060,7 +1060,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_traditional ] = "¦r¤¸(~H)";
         Text[ arabic ] = "ÃÍÑİ";
         Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "¹®ÀÚ(~C)";
+        Text[ korean ] = "¹®ÀÚ";
         Text[ turkish ] = "~Karakter";
         Text[ language_user1 ] = " ";
     };
