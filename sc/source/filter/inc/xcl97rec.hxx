@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:02:47 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                XclMsodrawing( RootData& rRoot,
+                                XclMsodrawing(
+                                    const XclExpRoot& rRoot,
                                     UINT16 nEscherType = 0,
                                     ULONG nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
@@ -136,14 +137,14 @@ public:
 class XclObj;
 class XclMsodrawing;
 
-class XclObjList : public List, public ExcEmptyRec, public ExcRoot
+class XclObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
 private:
         XclMsodrawing*          pMsodrawingPerSheet;
         XclMsodrawing*          pSolverContainer;
 
 public:
-                                XclObjList( RootData& rRoot );
+                                XclObjList( const XclExpRoot& rRoot );
     virtual                     ~XclObjList();
 
             XclObj*             First() { return (XclObj*) List::First(); }
@@ -167,67 +168,13 @@ public:
 class XclTxo;
 class SdrTextObj;
 
-class XclObj : public ExcRecord
+class XclObj : public XclExpRecord
 {
 protected:
-
-    enum FtType {
-        ftEnd       = 0x0000,
-        // reserved: 0x01-0x03
-        ftMacro     = 0x0004,
-        ftButton    = 0x0005,
-        ftGmo       = 0x0006,
-        ftCf        = 0x0007,
-        ftPioGrbit  = 0x0008,
-        ftPictFmla  = 0x0009,
-        ftCbls      = 0x000A,
-        ftRbo       = 0x000B,
-        ftSbs       = 0x000C,
-        ftNts       = 0x000D,
-        ftSbsFmla   = 0x000E,
-        ftGboData   = 0x000F,
-        ftEdoData   = 0x0010,
-        ftRboData   = 0x0011,
-        ftCblsdata  = 0x0012,
-        ftLbsData   = 0x0013,
-        ftCbsFmls   = 0x0014,
-        ftCmo       = 0x0015
-    };
-
-    enum ObjType {
-        otGroup         = 0x0000,
-        otLine          = 0x0001,
-        otRectangle     = 0x0002,
-        otOval          = 0x0003,
-        otArc           = 0x0004,
-        otChart         = 0x0005,
-        otText          = 0x0006,
-        otButton        = 0x0007,
-        otPicture       = 0x0008,
-        otPolygon       = 0x0009,
-        // reserved: 0x0A
-        otCheckBox      = 0x000B,
-        otOptionButtton = 0x000C,
-        otEditBox       = 0x000D,
-        otLabel         = 0x000E,
-        otDialogBox     = 0x000F,
-        otSpinner       = 0x0010,
-        otScrollBar     = 0x0011,
-        otListBox       = 0x0012,
-        otGroupBox      = 0x0013,
-        otComboBox      = 0x0014,
-        // reserved: 0x15-0x18
-        otComment       = 0x0019,
-        // reserved: 0x1A-0x1D
-        otMsOffDrawing  = 0x001E,
-        // SC internal
-        otUnknown       = 0xFFFF    // only for temporary use
-    };
-
         XclMsodrawing*      pMsodrawing;
         XclMsodrawing*      pClientTextbox;
         XclTxo*             pTxo;
-        ObjType             eObjType;
+        sal_uInt16          mnObjType;
         UINT16              nObjId;
         UINT16              nGrbit;
         BOOL                bFirstOnSheet;
@@ -236,14 +183,17 @@ protected:
 
     /** @param bOwnEscher  If set to true, this object will create its escher data.
         See SetOwnEscher() for details. */
-    explicit                    XclObj( ObjType eObjType, RootData& rRoot, bool bOwnEscher = false );
+    explicit                    XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher = false );
 
                                 // overwritten for writing MSODRAWING record
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
             void                SaveTextRecs( XclExpStream& rStrm );
 
 public:
     virtual                     ~XclObj();
+
+    inline sal_uInt16           GetObjType() const { return mnObjType; }
 
     inline  void                SetId( UINT16 nId ) { nObjId = nId; }
 
@@ -256,30 +206,28 @@ public:
     inline  void                SetAutoLine( BOOL b )
                                     { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
 
-                                // set corresponding ObjType
+                                // set corresponding Excel object type in OBJ/ftCmo
             void                SetEscherShapeType( UINT16 nType );
-    inline  void                SetEscherShapeTypeGroup() { eObjType = otGroup; }
+    inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJ_CMO_GROUP; }
 
-    /** If set to true, this object has created its own escher data. This causes the
-        function EscherEx::EndShape() to not post process this object. This is used
-        i.e. for form controls. They are not handled in the svx base code, so the
-        XclExpObjControl c'tor creates the escher data itself. The svx base code does
-        not receive the correct shape ID after the EscherEx::StartShape() call, which
-        would result in deleting the object in EscherEx::EndShape(). */
+    /** If set to true, this object has created its own escher data.
+        @descr  This causes the function EscherEx::EndShape() to not post process
+        this object. This is used i.e. for form controls. They are not handled in
+        the svx base code, so the XclExpEscherOcxCtrl c'tor creates the escher data
+        itself. The svx base code does not receive the correct shape ID after the
+        EscherEx::StartShape() call, which would result in deleting the object in
+        EscherEx::EndShape(). */
     inline void                 SetOwnEscher( bool bOwnEscher = true ) { mbOwnEscher = bOwnEscher; }
     /** Returns true, if the object has created the escher data itself.
-        See SetOwnEscher() for details. */
+        @descr  See SetOwnEscher() for details. */
     inline bool                 IsOwnEscher() const { return mbOwnEscher; }
 
                                 //! actually writes ESCHER_ClientTextbox
-            void                SetText( RootData& rRoot, const SdrTextObj& rObj );
+            void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
     inline  void                UpdateStopPos();
 
     virtual void                Save( XclExpStream& rStrm );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
 };
 
 
@@ -296,16 +244,12 @@ inline void XclObj::UpdateStopPos()
 
 class XclObjComment : public XclObj
 {
-private:
-    virtual void                SaveCont( XclExpStream& rStrm );
-
 public:
-                                XclObjComment( RootData& rRoot,
+                                XclObjComment( const XclExpRoot& rRoot,
                                     const ScAddress& rPos, const String& rStr, bool bVisible );
     virtual                     ~XclObjComment();
 
     virtual void                Save( XclExpStream& rStrm );
-    virtual ULONG               GetLen() const;
 };
 
 
@@ -316,14 +260,12 @@ class XclObjDropDown : public XclObj
 private:
     BOOL                        bIsFiltered;
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 protected:
 public:
-                                XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFilt );
+                                XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt );
     virtual                     ~XclObjDropDown();
-
-    virtual ULONG               GetLen() const;     // GetNum() done by XclObj
 };
 
 
@@ -333,11 +275,12 @@ class SdrTextObj;
 
 class XclTxo : public ExcRecord
 {
-    friend void XclObjComment::SaveCont( XclExpStream& );
-
 public:
-                                XclTxo( const String& rStr );
+                                XclTxo( const String& rString, sal_uInt16 nFontIx = EXC_FONT_APP );
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
+
+    inline void                 SetHorAlign( XclTxoHorAlign eHorAlign ) { meHorAlign = eHorAlign; }
+    inline void                 SetVerAlign( XclTxoVerAlign eVerAlign ) { meVerAlign = eVerAlign; }
 
     virtual void                Save( XclExpStream& rStrm );
 
@@ -366,41 +309,72 @@ private:
         const SdrObject&    rOleObj;
         SvStorage*          pRootStorage;
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjOle( RootData& rRoot, const SdrObject& rObj );
+                                XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
     virtual void                Save( XclExpStream& rStrm );
-    virtual ULONG               GetLen() const;
 };
 
 
 // ----------------------------------------------------------------------------
 
-#if EXC_INCL_EXP_OCX
+#if EXC_EXP_OCX_CTRL
 
-/** Represents an OBJ record for a form control. */
-class XclExpObjControl : public XclObj
+/** Represents an OBJ record for an OCX form control. */
+class XclExpObjOcxCtrl : public XclObj
 {
-private:
-    String                      maClassName;        /// Class name of the control.
-    sal_uInt32                  mnStrmStart;        /// Start position in 'Ctls' stream.
-    sal_uInt32                  mnStrmSize;         /// Size in 'Ctls' stream.
-
 public:
-                                XclExpObjControl(
-                                    const XclRoot& rRoot,
+                                XclExpObjOcxCtrl(
+                                    const XclExpRoot& rRoot,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::drawing::XShape >& rxShape,
                                     const String& rClassName,
                                     sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
-    virtual sal_uInt32          GetLen() const;
+private:
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 private:
-    virtual void                SaveCont( XclExpStream& rStrm );
+    String                      maClassName;        /// Class name of the control.
+    sal_uInt32                  mnStrmStart;        /// Start position in 'Ctls' stream.
+    sal_uInt32                  mnStrmSize;         /// Size in 'Ctls' stream.
+};
+
+#else
+
+/** Represents an OBJ record for an TBX form control. */
+class XclExpObjTbxCtrl : public XclObj
+{
+public:
+                                XclExpObjTbxCtrl(
+                                    const XclExpRoot& rRoot,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::drawing::XShape >& rxShape,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::awt::XControlModel >& rxCtrlModel );
+    virtual                     ~XclExpObjTbxCtrl();
+
+private:
+    /** Creates the link formulas from the passed tag, that contains the links in text format. */
+    void                        SetLinkFormulas( const XclExpRoot& rRoot, const String& rTag );
+
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
+
+    void                        WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const;
+
+private:
+    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
+
+    XclExpTokArrPtr             mpCellLink;     /// Formula for linked cell.
+    XclExpTokArrPtr             mpSrcRange;     /// Formula for source data range.
+    sal_Int32                   mnHeight;       /// Height of the control.
+    sal_uInt16                  mnEntryCount;   /// Number of entries in list boxes.
+    sal_uInt16                  mnState;        /// Checked/unchecked state.
+    sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
+    bool                        mb3DStyle;      /// true = 3D style.
 };
 
 #endif
@@ -410,14 +384,13 @@ private:
 class XclObjAny : public XclObj
 {
 private:
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( RootData& rRoot );
+                                XclObjAny( const XclExpRoot& rRoot );
     virtual                     ~XclObjAny();
 
     virtual void                Save( XclExpStream& rStrm );
-    virtual ULONG               GetLen() const;
 };
 
 
