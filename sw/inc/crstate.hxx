@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:08:37 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@ struct SwCrsrMoveState
     BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second
                                 // have of bound rect
+    BOOL bInNumPortion   :1;     // point is in number portion #i23726#
+    int nInNumPostionOffset;     // distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
@@ -206,7 +208,9 @@ struct SwCrsrMoveState
         bRealWidth( FALSE ),
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
-        bPosMatchesBounds( FALSE )
+        bPosMatchesBounds( FALSE ),
+        bInNumPortion(FALSE), // #i26726#
+        nInNumPostionOffset(0) // #i26726#
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
@@ -223,7 +227,9 @@ struct SwCrsrMoveState
         bRealWidth( FALSE ),
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
-        bPosMatchesBounds( FALSE )
+        bPosMatchesBounds( FALSE ),
+        bInNumPortion(FALSE), // #i23726#
+        nInNumPostionOffset(0) // #i23726#
     {}
 };
 
