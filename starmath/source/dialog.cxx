@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 12:12:18 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 12:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,8 +792,9 @@ SmCategoryDesc::~SmCategoryDesc()
 {
     for (int i = 0; i < 4; i++)
     {
-        delete Strings[i];
-        delete Graphics[i];
+        delete Strings  [i];
+        delete Graphics [i];
+        delete GraphicsH[i];
     }
 }
 
