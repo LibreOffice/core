@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:48:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,12 @@
 #include <sfx2/viewfrm.hxx>
 
 
+#ifndef _SFXEVENT_HXX
+#include <sfx2/event.hxx>
+#endif
+#ifndef _SWEVENT_HXX
+#include <swevent.hxx>
+#endif
 #ifndef _UNOMAILMERGE_HXX_
 #include <unomailmerge.hxx>
 #endif
@@ -971,7 +977,11 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     DBG_ASSERT( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
+
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, xCurDocSh));
     BOOL bSucc = pMgr->MergeNew( aMergeDesc );
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, xCurDocSh));
+
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
     if ( xCurModel.get() != xModel.get() )
