@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtclds.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:53:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -116,7 +120,7 @@ enum SwColLineAdj
     COLADJ_BOTTOM
 };
 
-class SwFmtCol : public SfxPoolItem
+class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
 //  Pen      aPen;          //Pen fuer die Linine zwischen den Spalten
     ULONG   nLineWidth;     //width of the separator line
@@ -138,7 +142,7 @@ class SwFmtCol : public SfxPoolItem
                             //gemischt (optisch verteilt).
                             //Das Flag ist initial gesetzt.
 
-    void Calc( USHORT nGutterWidth, USHORT nAct );
+    SW_DLLPRIVATE void Calc( USHORT nGutterWidth, USHORT nAct );
 
 public:
     SwFmtCol();
