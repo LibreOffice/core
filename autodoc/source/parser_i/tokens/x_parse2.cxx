@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x_parse2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ X_AutodocParser::GetInfo( ostream &         o_rOutputMedium ) const
             o_rOutputMedium << "Unexpected end of file found." << Endl();
             break;
         default:
-            o_rOutputMedium << "Unknown error during parsing." << Endl();
+            o_rOutputMedium << "Unknown exception during parsing." << Endl();
     }
 }
 
