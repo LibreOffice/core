@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:13:28 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4039,7 +4039,12 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
                             (pFly->Frm().*fnRect->fnAddBottom)( lDiff );
                         }
-                        pFly->GetVirtDrawObj()->_SetRectsDirty();
+                        pFly->GetVirtDrawObj()->SetRectsDirty();
+                        // --> OD 2004-08-17 - also notify view of <SdrObject>
+                        // instance, which represents the Writer fly frame in
+                        // the drawing layer
+                        pFly->GetVirtDrawObj()->SetChanged();
+                        // <--
 
                         if ( pFly->IsFlyInCntFrm() )
                             ((SwFlyInCntFrm*)pFly)->AddRefOfst( lDiff );
