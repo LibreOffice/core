@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:00:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_XUIFUNCTIONLISTENER_HPP_
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
+#include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -447,6 +450,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ))
         ,   m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
         ,   m_aPropStyle( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ))
+        ,   m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
@@ -4882,7 +4886,15 @@ void SAL_CALL LayoutManager::lock()
 throw (RuntimeException)
 {
     implts_lock();
-    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", m_nLockCount );
+
+    ReadGuard aReadLock( m_aLock );
+    sal_Int32 nLockCount( m_nLockCount );
+    aReadLock.unlock();
+
+    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", nLockCount );
+
+    Any a( nLockCount );
+    implts_notifyListeners( css::frame::LayoutManagerEvents::LOCK, a );
 }
 
 void SAL_CALL LayoutManager::unlock()
@@ -4890,7 +4902,11 @@ throw (RuntimeException)
 {
     sal_Bool bDoLayout( implts_unlock() );
 
-    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", m_nLockCount );
+    ReadGuard aReadLock( m_aLock );
+    sal_Int32 nLockCount( m_nLockCount );
+    aReadLock.unlock();
+
+    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", nLockCount );
 
     // conform to documentation: unlock with lock count == 0 means force a layout
 
@@ -4900,16 +4916,22 @@ throw (RuntimeException)
     aWriteLock.unlock();
 
     if ( bDoLayout )
-        implts_doLayout( sal_True );
+      doLayout();
+
+    Any a( nLockCount );
+    implts_notifyListeners( css::frame::LayoutManagerEvents::UNLOCK, a );
 }
 
 void SAL_CALL LayoutManager::doLayout()
 throw (RuntimeException)
 {
-    implts_doLayout( sal_False );
+    sal_Bool bLayouted = implts_doLayout( sal_False );
+
+    if ( bLayouted )
+        implts_notifyListeners( css::frame::LayoutManagerEvents::LAYOUT, Any() );
 }
 
-void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
+sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
@@ -4921,7 +4943,7 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
     ReadGuard aReadLock( m_aLock );
     if ( !m_bParentWindowVisible )
-        return;
+        return sal_False;
 
     bNoLock = ( m_nLockCount == 0 );
     xContainerWindow = m_xContainerWindow;
@@ -4930,10 +4952,14 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
+    sal_Bool bLayouted( sal_False );
+
     if ( bNoLock &&
          xDockingAreaAcceptor.is() &&
          xContainerWindow.is() )
     {
+        bLayouted = sal_True;
+
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteGuard( m_aLock );
         m_bDoLayout = sal_True;
@@ -5002,6 +5028,8 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         }
     }
+
+    return bLayouted;
 }
 
 sal_Bool LayoutManager::implts_compareRectangles( const css::awt::Rectangle& rRect1,
@@ -6248,14 +6276,37 @@ throw (::com::sun::star::uno::RuntimeException)
 //---------------------------------------------------------------------------------------------------------
 //  XLayoutManagerEventBroadcaster
 //---------------------------------------------------------------------------------------------------------
-void SAL_CALL LayoutManager::addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener )
+void SAL_CALL LayoutManager::addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    m_aListenerContainer.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XLayoutManagerListener >*)NULL ), xListener );
 }
 
-void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener )
+void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    m_aListenerContainer.removeInterface( ::getCppuType( (const css::uno::Reference< css::frame::XLayoutManagerListener >*)NULL ), xListener );
+}
+
+void LayoutManager::implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam )
+{
+    css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XLayoutManagerListener >*) NULL ) );
+    if (pContainer!=NULL)
+    {
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
+        {
+            try
+            {
+                ((css::frame::XLayoutManagerListener*)pIterator.next())->layoutEvent( aSource, nEvent, aInfoParam );
+            }
+            catch( css::uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -6470,6 +6521,8 @@ throw ( RuntimeException )
 void SAL_CALL LayoutManager::disposing( const css::lang::EventObject& aEvent )
 throw( RuntimeException )
 {
+    sal_Bool bDisposeAndClear( sal_False );
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
@@ -6528,6 +6581,8 @@ throw( RuntimeException )
         m_xDocCfgMgr.clear();
         m_xModuleCfgMgr.clear();
         m_xFrame.clear();
+
+        bDisposeAndClear = sal_True;
     }
     else if ( aEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
     {
@@ -6554,6 +6609,15 @@ throw( RuntimeException )
 
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    // Send disposing to our listener when we have lost our frame.
+    if ( bDisposeAndClear )
+    {
+        // Send message to all listener and forget her references.
+        css::uno::Reference< css::frame::XLayoutManager > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        css::lang::EventObject aEvent( xThis );
+        m_aListenerContainer.disposeAndClear( aEvent );
+    }
 }
 
 void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
