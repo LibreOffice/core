@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@
 #include <ww8par.hxx>
 #endif
 
-
 struct WW8_SED
 {
     SVBT16 aBits1;      // orientation change + internal, Default: 6
@@ -180,15 +179,19 @@ struct WW8_PdAttrDesc
     WW8_FC nSepxFcPos;
 };
 
-
 SV_IMPL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo )
 
-// class WW8_WrPlc0 ist erstmal nur fuer Header / Footer-Positionen, d.h. es gibt
-// keine inhaltstragende Struktur.
+// class WW8_WrPlc0 ist erstmal nur fuer Header / Footer-Positionen, d.h. es
+// gibt keine inhaltstragende Struktur.
 class WW8_WrPlc0
 {
+private:
     SvULongs aPos;      // PTRARR von CPs / FCs
     ULONG nOfs;
+
+    //No copying
+    WW8_WrPlc0(const WW8_WrPlc0&);
+    WW8_WrPlc0 &operator=(const WW8_WrPlc0&);
 public:
     WW8_WrPlc0( ULONG nOffset );
     USHORT Count() const                { return aPos.Count(); }
@@ -196,7 +199,6 @@ public:
     void Write( SvStream& rStrm );
     ULONG GetCP( USHORT n ) const       { return aPos[ n ]; }
 };
-
 
 //------------------------------------------------------------
 //  Styles
@@ -209,7 +211,7 @@ public:
 USHORT SwWW8Writer::GetId( const SwCharFmt& rFmt ) const
 {
     USHORT nRet = pStyles->Sty_GetWWSlot( rFmt );
-    return ( nRet != 0xfff ) ? nRet : 10;       // Default Char Style
+    return ( nRet != 0x0fff ) ? nRet : 10;      // Default Char Style
 }
 
 // GetId( SwTxtFmtColl ) zur Benutzung an TextNodes -> nil verboten,
@@ -248,7 +250,7 @@ WW8WrtStyle::WW8WrtStyle( SwWW8Writer& rWr )
 
 WW8WrtStyle::~WW8WrtStyle()
 {
-    delete[]( pFmtA );
+    delete[] pFmtA;
     rWrt.pO->Remove( 0, rWrt.pO->Count() );             // leeren
 }
 
@@ -910,9 +912,7 @@ WW8_WrPlcSepx::~WW8_WrPlcSepx()
     if( pAttrs )
     {
         while( nLen )
-        {
             delete[] pAttrs[ --nLen ].pData;
-        }
         delete[] pAttrs;
     }
     delete pTxtPos;
@@ -959,7 +959,6 @@ void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i )
             rWrt.Out_Olst( *pRule );
     }
 }
-
 
 void WW8_WrPlcSepx::WriteFtnEndTxt( SwWW8Writer& rWrt, ULONG nCpStt )
 {
@@ -1024,9 +1023,8 @@ void WW8_WrPlcSepx::WriteFtnEndTxt( SwWW8Writer& rWrt, ULONG nCpStt )
     rDop.epc = rWrt.bEndAtTxtEnd ? 3 : 0;
 }
 
-
 void WW8_WrPlcSepx::SetHeaderFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
-                                   BYTE nFlag )
+    BYTE nFlag )
 {
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_HEADER, TRUE, &pItem )
@@ -1034,8 +1032,9 @@ void WW8_WrPlcSepx::SetHeaderFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
         ((SwFmtHeader*)pItem)->GetHeaderFmt() )
         rHeadFootFlags |= nFlag;
 }
+
 void WW8_WrPlcSepx::SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
-                                   BYTE nFlag )
+    BYTE nFlag )
 {
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_FOOTER, TRUE, &pItem )
@@ -1118,7 +1117,8 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
             if( !( 2 & nEnde ) &&
                 PD_MIRROR == ( PD_MIRROR & pPd->ReadUseOn() ))
             {
-                rWrt.pDop->fSwapBordersFacingPgs = rWrt.pDop->fMirrorMargins = TRUE;
+                rWrt.pDop->fSwapBordersFacingPgs =
+                    rWrt.pDop->fMirrorMargins = TRUE;
                 nEnde |= 2;
             }
 
@@ -1127,7 +1127,6 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
         }
     }
 }
-
 
 int WW8_WrPlcSepx::HasBorderItem( const SwFmt& rFmt )
 {
@@ -1513,7 +1512,6 @@ void WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
     rWrt.bOutPageDescs = bOldPg;
 }
 
-
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
     USHORT i;
@@ -1531,7 +1529,6 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
     }
 }
 
-
 void WW8_WrPlcSepx::WritePlcSed( SwWW8Writer& rWrt ) const
 {
     ASSERT( aCps.Count() == aSects.Count() + 1, "WrPlcSepx: DeSync" );
@@ -1547,7 +1544,7 @@ void WW8_WrPlcSepx::WritePlcSed( SwWW8Writer& rWrt ) const
         rWrt.pTableStrm->Write( nPos, 4 );
     }
 
-    static WW8_SED aSed = { 4, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff };
+    static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
     // ( ueber alle Sections )
     for( i = 0; i < aSects.Count(); i++ )
@@ -1637,8 +1634,8 @@ void WW8_WrPlcPostIt::Append( WW8_CP nCp, const SwPostItField& rPostIt )
     aCntnt.Insert( p, aCntnt.Count() );
 }
 
-void WW8_WrPlcSubDoc::WriteTxt( SwWW8Writer& rWrt, BYTE nTTyp,
-                                long& rCount )
+void WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
+    long& rCount )
 {
     USHORT nLen = aCntnt.Count();
     if( nLen )
@@ -1656,7 +1653,7 @@ void WW8_WrPlcSubDoc::WriteTxt( SwWW8Writer& rWrt, BYTE nTTyp,
                 pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
                 const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
-                rWrt.WritePostItBegin( rPFld );
+                rWrt.WritePostItBegin();
                 rWrt.WriteStringAsPara( rPFld.GetTxt() );
             }
             break;
@@ -1730,9 +1727,8 @@ void WW8_WrPlcSubDoc::WriteTxt( SwWW8Writer& rWrt, BYTE nTTyp,
     }
 }
 
-void WW8_WrPlcSubDoc::WritePlc( SwWW8Writer& rWrt, BYTE nTTyp,
-                                long& rTxtStart, long& rTxtCount,
-                                long& rRefStart, long& rRefCount ) const
+void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
+    long& rTxtStart, long& rTxtCount, long& rRefStart, long& rRefCount ) const
 {
     ULONG nFcStart = rWrt.pTableStrm->Tell();
     USHORT nLen = aCps.Count();
@@ -1847,29 +1843,30 @@ void WW8_WrPlcSubDoc::WritePlc( SwWW8Writer& rWrt, BYTE nTTyp,
                     const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
                     String sAuthor( rPFld.GetPar1() );
                     aStrArr.Seek_Entry( &sAuthor, &nFndPos );
-                    BYTE nLen = (BYTE)sAuthor.Len();
-                    if( nLen > 9 )
+                    BYTE nNameLen = (BYTE)sAuthor.Len();
+                    if( nNameLen > 9 )
                     {
                         sAuthor.Erase( 9 );
-                        nLen = 9;
+                        nNameLen = 9;
                     }
 
                     // xstUsrInitl[ 10 ] pascal-style String holding initials
                     // of annotation author
                     if( rWrt.bWrtWW8 )
                     {
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, nLen );
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, nNameLen );
                         SwWW8Writer::WriteString16( *rWrt.pTableStrm, sAuthor,
-                                                    FALSE );
-                        SwWW8Writer::FillCount( *rWrt.pTableStrm, (9 - nLen) * 2 );
+                            FALSE );
+                        SwWW8Writer::FillCount( *rWrt.pTableStrm,
+                            (9 - nNameLen) * 2 );
 
                     }
                     else
                     {
-                        *rWrt.pTableStrm << nLen;
+                        *rWrt.pTableStrm << nNameLen;
                         SwWW8Writer::WriteString8( *rWrt.pTableStrm, sAuthor,
                                         FALSE, RTL_TEXTENCODING_MS_1252 );
-                        SwWW8Writer::FillCount( *rWrt.pTableStrm, 9 - nLen );
+                        SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nNameLen);
                     }
 
                     //SVBT16 ibst;      // index into GrpXstAtnOwners

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-08 16:41:27 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
 
 struct WW8_TXBXS
 {
-    SVBT32 cTxbx__iNextReuse;
+    SVBT32 cTxbx_iNextReuse;
     SVBT32 cReusable;
     SVBT16 fReusable;
     SVBT32 reserved;

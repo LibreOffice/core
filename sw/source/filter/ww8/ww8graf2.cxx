@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
     else
         *pOut << rSrc;
 
-    delete( pBuf );
+    delete[] pBuf;
 
     return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic, aEmptyStr, *pOut,
                                                 GRFILTER_FORMAT_DONTKNOW );
@@ -569,7 +569,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
     BOOL bOk = ReadGrafFile( aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc );
 
     if ( !bOk )
-    {   delete pGraph;
+    {
+        delete pGraph;
         return pRet;                        // Grafik nicht korrekt eingelesen
     }
 
@@ -639,10 +640,10 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
         (*pPlcxMan)++;
         nStart = pPlcxMan->Where();
     }
-    long nOffset = nPicLocFc;
+    ULONG nOffset = nPicLocFc;
     aSave.Restore(this);
 
-    long nOldPos = pDataStream->Tell();
+    ULONG nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nOffset);
     PicRead( pDataStream, &aPic, bVer67);
@@ -704,46 +705,40 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
         switch(nVersion)
         {
             case 1:
+                *pDataStream >> nLen;
+                sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
+                if (nFlags & 0x08)
                 {
-                    *pDataStream >> nLen;
-                    sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
-                    if (nFlags & 0x08)
-                    {
-                    long pos = pDataStream->Tell();
                     *pDataStream >> nLen;
                     sMark = WW8Read_xstz( *pDataStream, (USHORT)nLen, FALSE );
                     bRet = TRUE;
-                    }
                 }
                 break;
             case 2:
-                {
-                    pDataStream->SeekRel(2); // skip over the last two bytes
-                    *pDataStream >> nLen;
-                    pDataStream->SeekRel(nLen); // skip over the 1st filename
-                    pDataStream->SeekRel(24); // skip over MAGIC_D
+                pDataStream->SeekRel(2); // skip over the last two bytes
+                *pDataStream >> nLen;
+                pDataStream->SeekRel(nLen); // skip over the 1st filename
+                pDataStream->SeekRel(24); // skip over MAGIC_D
 
-                    *pDataStream >> nLen;   //full len
-                    *pDataStream >> nLen;   //real str len
-                    pDataStream->SeekRel(2); // skip over the value 00 03
-                    sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
-                    if (nFlags & 0x08)
-                    {
+                *pDataStream >> nLen;   //full len
+                *pDataStream >> nLen;   //real str len
+                pDataStream->SeekRel(2); // skip over the value 00 03
+                sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
+                if (nFlags & 0x08)
+                {
                     *pDataStream >> nLen;
                     sMark = WW8Read_xstz( *pDataStream, (USHORT)nLen, FALSE );
                     bRet = TRUE;
-                    }
                 }
                 break;
         }
     }
+    pDataStream->Seek( nOldPos );
     return( bRet );
 }
 
-
 SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
-                                       SwFrmFmt* pOldFlyFmt,
-                                       BOOL bSetToBackground )
+    SwFrmFmt* pOldFlyFmt, BOOL bSetToBackground )
 {
     SwFrmFmt* pRet = 0;
     if(    ( ( pStrm == pDataStream ) && !nPicLocFc )
@@ -758,7 +753,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
         Wir mappen ansonsten die Variable pDataStream auf pStream.
     */
 
-    long nOldPos = pDataStream->Tell();
+    ULONG nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nPicLocFc );
     PicRead( pDataStream, &aPic, bVer67);

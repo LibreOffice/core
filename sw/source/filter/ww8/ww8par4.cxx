@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 16:38:04 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ using namespace ::com::sun::star;
 SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
-static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
+static BOOL SwWw8ReadScaling( long& rX, long& rY, SvStorageRef& rSrc1 )
 {
     // Skalierungsfaktoren holen:
     //      Informationen in PIC-Stream ( durch ausprobieren )
@@ -200,18 +200,15 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
 
     rX = nOrgWidth  - nCropLeft - nCropRight;
     rY = nOrgHeight - nCropTop  - nCropBottom;
-    if(       10 > nScaleX
-        || 65536 < nScaleX
-        ||    10 > nScaleY
-        || 65536 < nScaleY)
+    if (10 > nScaleX || 65536 < nScaleX || 10 > nScaleY || 65536 < nScaleY)
     {
         ASSERT( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
         return FALSE;
     }
     else
     {
-        rX = (INT16)( ((long)rX * nScaleX) / 1000 );
-        rY = (INT16)( ((long)rY * nScaleY) / 1000 );
+        rX = (rX * nScaleX) / 1000;
+        rY = (rY * nScaleY) / 1000;
     }
     return TRUE;
 }
@@ -388,7 +385,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
 }
 
 BOOL SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
-    INT16 &rX,INT16 &rY)
+    long &rX,long &rY)
 {
     BOOL bOk=FALSE;
     OLE_MFP aMfp;
@@ -422,7 +419,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
 
         ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
-        INT16 nX=0, nY=0;               // nX, nY ist Ziel-Groesse
+        long nX=0, nY=0;                // nX, nY is graphic size
         BOOL bOleOk = TRUE;
 
         String aSrcStgName = '_';
@@ -436,8 +433,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
             rGraph = *pGrf;
             const Size aSizeTwip = OutputDevice::LogicToLogic(
                 rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
-            nX = (INT16) aSizeTwip.Width();
-            nY = (INT16) aSizeTwip.Height();
+            nX = aSizeTwip.Width();
+            nY = aSizeTwip.Height();
         }
         else
         {
@@ -474,8 +471,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
             {
                 const Size aSizeTwip = OutputDevice::LogicToLogic(
                     rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
-                nX = (INT16) aSizeTwip.Width();
-                nY = (INT16) aSizeTwip.Height();
+                nX = aSizeTwip.Width();
+                nY = aSizeTwip.Height();
                 // PICT: kein WMF da -> Grafik statt OLE
                 bOleOk = FALSE;
             }
@@ -489,7 +486,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
             if(!pFormImpl)
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
             uno::Reference< drawing::XShape > xRef;
-            if( pFormImpl->ReadOCXStream( xSrc1,&xRef,bFloatingCtrl))
+            if( pFormImpl->ReadOCXStream( xSrc1,&xRef,FALSE))
             {
                 uno::Reference< beans::XPropertySet >
                     xPropSet( xRef, uno::UNO_QUERY );
@@ -554,9 +551,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
 
 
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
-                                                INT32 nTblPos,
-                                                INT32 nTblSiz,
-                                                SwDoc& rDoc )
+    INT32 nTblPos, INT32 nTblSiz, SwDoc& rDocOut )
 {
     SvStrings aAuthorNames( 0, 16 );
     WW8ReadSTTBF( !bVer67, rStrm, nTblPos, nTblSiz, bVer67 ? 2 : 0,
@@ -565,7 +560,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     for( USHORT nAuthor = 0; nAuthor < aAuthorNames.Count(); ++nAuthor )
     {
         // Store author in doc
-        USHORT nSWId = rDoc.InsertRedlineAuthor( *aAuthorNames[ nAuthor ] );
+        USHORT nSWId = rDocOut.InsertRedlineAuthor( *aAuthorNames[ nAuthor ] );
         // Store matchpair
         if( !pAuthorInfos )
             pAuthorInfos = new WW8AuthorInfos;
@@ -581,7 +576,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
    Revision Marks ( == Redlining )
 */
 // insert or delete content (change char attributes resp.)
-void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId,
+void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
     const BYTE* pData, short nLen )
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
@@ -697,26 +692,21 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId,
     }
 }
 // insert new content
-void SwWW8ImplReader::Read_CFRMark( USHORT nId, const BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_CFRMark(USHORT , const BYTE* pData, short nLen)
 {
-    Read_CRevisionMark( REDLINE_INSERT, nId, pData, nLen );
+    Read_CRevisionMark( REDLINE_INSERT, pData, nLen );
 }
 // delete old content
-void SwWW8ImplReader::Read_CFRMarkDel( USHORT nId, const BYTE* pData,
-    short nLen )
+void SwWW8ImplReader::Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen)
 {
-    Read_CRevisionMark( REDLINE_DELETE, nId, pData, nLen );
+    Read_CRevisionMark( REDLINE_DELETE, pData, nLen );
 }
 // change properties of content ( == char formating)
-void SwWW8ImplReader::Read_CPropRMark( USHORT nId, const BYTE* pData,
-    short nLen )
+void SwWW8ImplReader::Read_CPropRMark(USHORT , const BYTE* pData, short nLen)
 {
     // complex (len is always 7)
     // 1 byte  - chp.fPropRMark
     // 2 bytes - chp.ibstPropRMark
     // 4 bytes - chp.dttmPropRMark;
-    Read_CRevisionMark( REDLINE_FORMAT, nId, pData, nLen );
+    Read_CRevisionMark( REDLINE_FORMAT, pData, nLen );
 }
-
-
-

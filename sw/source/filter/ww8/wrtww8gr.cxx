@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 16:38:04 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     dont need to store another preview
     */
     GDIMetaFile aWMF;
-    INT16 nX=0,nY=0;
+    long nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
         bGraphicNeeded=FALSE;
@@ -302,7 +302,6 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 Set_UInt32( pDataAdr, nPictureId );
 
                 WW8OleMap *pMap = new WW8OleMap(nPictureId, pObj);
-                const WW8OleMap *pEntry = pMap;
                 BOOL bDuplicate = FALSE;
                 WW8OleMaps &rOleMap = rWW8Wrt.GetOLEMap();
                 USHORT nPos;
@@ -550,11 +549,11 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
             if( pBox )
             {
                 BOOL bShadow = FALSE;               // Shadow ?
-                const SfxPoolItem* pItem;
+                const SfxPoolItem* pShadItem;
                 if( SFX_ITEM_ON
-                    == rAttrSet.GetItemState( RES_SHADOW, TRUE, &pItem ) )
+                    == rAttrSet.GetItemState( RES_SHADOW, TRUE, &pShadItem ) )
                 {
-                    const SvxShadowItem* pSI = (const SvxShadowItem*)pItem;
+                    const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
                     bShadow = ( pSI->GetLocation() != SVX_SHADOW_NONE )
                             && ( pSI->GetWidth() != 0 );
                 }
@@ -738,6 +737,7 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
             }while( nRead );
             aS.Close();
             rStrm.Seek( nSchreibsRausZ );
+            delete[] pBuf;
         }
         if(  bSchreibsRein )
         {
@@ -755,6 +755,7 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
                 nRead -= nRead1;
             }while( nRead );
             aS.Close();
+            delete[] pBuf;
             // kein Seek, da es hier im Stream weitergehen soll...
         }
 #endif

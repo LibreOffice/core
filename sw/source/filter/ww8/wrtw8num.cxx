@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,16 +411,16 @@ void SwWW8Writer::BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
         nb |= 0x8;          // number will be displayed using a hanging indent
     ByteToSVBT8( nb, rAnlv.aBits1 );
 
-    xub_StrLen nS = rFmt.GetPrefix().Len();
     if( 1 < rCharLen )
     {
-        const Font& rFont = rFmt.GetBulletFont()
-                                    ? *rFmt.GetBulletFont()
-                                    : SwNumRule::GetDefBulletFont();
+        const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
+            : SwNumRule::GetDefBulletFont();
+
         USHORT nFontId = GetId( rFont );
         ShortToSVBT16( nFontId, rAnlv.ftc );
         *rpCh = ByteString::ConvertFromUnicode( rFmt.GetBulletChar(),
-                                                rFont.GetCharSet() );
+            rFont.GetCharSet() );
+
         rpCh++;
         rCharLen--;
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
@@ -550,13 +550,10 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
 
 #ifdef NUM_RELSPACE
     SwNumFmt aFmt( *pFmt );
-    const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pNd->SwCntntNode::GetAttr( RES_LR_SPACE );
+    const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pNd->SwCntntNode::GetAttr(
+        RES_LR_SPACE );
     aFmt.SetAbsLSpace( aFmt.GetAbsLSpace() + rLR.GetLeft() );
     pFmt = &aFmt;
-#endif
-
-#ifdef DEBUG
-    BYTE nIncl = pRul->Get(1).GetIncludeUpperLevels();
 #endif
 
     if( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE

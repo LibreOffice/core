@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-28 11:50:45 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,8 @@
 
 #ifdef PCH
 #include "filt_pch.hxx"
-#endif
-
 #pragma hdrstop
+#endif
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
@@ -264,14 +263,17 @@ public:
     WW8_FC GetStartFc() const       { return nStartFc; }
 };
 
-
 class WW8_WrtBookmarks
 {
+private:
     SvULongs aSttCps, aEndCps;              // Array of Start- and End CPs
     SvStringsDtor aSwBkmkNms;               // Array of Sw - Bookmarknames
-//  SvStringsDtor aWWBkmkNms;               // Array of WW - Bookmarknames
 
     USHORT GetPos( const String& rNm );
+
+    //No copying
+    WW8_WrtBookmarks(const WW8_WrtBookmarks&);
+    WW8_WrtBookmarks& operator=(const WW8_WrtBookmarks&);
 public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
@@ -284,16 +286,20 @@ public:
 
 class WW8_WrtRedlineAuthor
 {
+private:
     SvStringsDtor aAuthors;             // Array of Sw - Bookmarknames
 
     USHORT GetPos( const String& rNm );
+
+    //No copying
+    WW8_WrtRedlineAuthor(const WW8_WrtRedlineAuthor&);
+    WW8_WrtRedlineAuthor& operator=(const WW8_WrtRedlineAuthor&);
 public:
     WW8_WrtRedlineAuthor() : aAuthors( 0, 4 ) {}
 
     USHORT AddName( const String& rNm );
     void Write( SwWW8Writer& rWrt );
 };
-
 
 #define ANZ_DEFAULT_STYLES 16
 
@@ -614,7 +620,7 @@ WW8_WrPlc1::WW8_WrPlc1( USHORT nStructSz )
 
 WW8_WrPlc1::~WW8_WrPlc1()
 {
-    delete [] pData;
+    delete[] pData;
 }
 
 void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
@@ -625,7 +631,7 @@ void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
     {
         BYTE* pNew = new BYTE[ 2 * nDataLen ];
         memmove( pNew, pData, nDataLen );
-        delete [] pData;
+        delete[] pData;
         pData = pNew;
         nDataLen *= 2;
     }
@@ -823,8 +829,8 @@ void WW8_WrPlcPn::AppendFkpEntry( WW8_FC nEndFc, short nVarLen,
             ASSERT( !this, "Sprm liess sich nicht einfuegen" );
         }
     }
-    if( pNewSprms != pSprms )
-        delete pNewSprms;
+    if( pNewSprms != pSprms )   //Merge to new has created a new block
+        delete[] pNewSprms;
 }
 
 void WW8_WrPlcPn::WriteFkps()
@@ -895,8 +901,8 @@ WW8_WrFkp::WW8_WrFkp( ePLCFT ePl, WW8_FC nStartFc, BOOL bWrtWW8 )
 
 WW8_WrFkp::~WW8_WrFkp()
 {
-    delete( pFkp );
-    delete( pOfs );
+    delete[] (INT32 *)pFkp;
+    delete[] (INT32 *)pOfs;
 }
 
 BYTE WW8_WrFkp::SearchSameSprm( USHORT nVarLen, const BYTE* pSprms )
@@ -1578,8 +1584,8 @@ void SwWW8Writer::WriteSpecialText( ULONG nStart, ULONG nEnd, BYTE nTTyp )
 
     WriteText();
 
-    delete pCurPam;                    // Pam wieder loeschen
     bOutPageDescs = bOldPageDescs;
+    delete pCurPam;                    // Pam wieder loeschen
     pCurPam = pOldPam;
     pOrigPam = pOldEnd;
     nTxtTyp = nOldTyp;
@@ -1705,7 +1711,6 @@ WW8SaveData::WW8SaveData( SwWW8Writer& rWriter, ULONG nStt, ULONG nEnd )
 WW8SaveData::~WW8SaveData()
 {
     delete rWrt.pCurPam;                    // Pam wieder loeschen
-
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );
     rWrt.bWriteAll = bOldWriteAll;
@@ -2303,17 +2308,11 @@ SwWW8Writer::SwWW8Writer( const String& rFltName )
 
 SwWW8Writer::~SwWW8Writer()
 {
-    if( pBmpPal )
-        delete pBmpPal;
-    if( pKeyMap )
-    {
-        NfKeywordTable* pDel = (NfKeywordTable*)pKeyMap;
-        delete [] pDel;
-    }
-    if( pOLEExp )
-        delete pOLEExp;
-    if( pOCXExp )
-        delete pOCXExp;
+    delete pBmpPal;
+    if (pKeyMap)
+        delete[] (NfKeywordTable*)pKeyMap;
+    delete pOLEExp;
+    delete pOCXExp;
     delete pOleMap;
 }
 
@@ -2321,5 +2320,3 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName );
 }
-
-

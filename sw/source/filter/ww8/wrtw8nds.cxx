@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-08 13:30:47 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ WW8_AttrIter::~WW8_AttrIter()
     rWrt.pChpIter = pOld;
 }
 
-void WW8_AttrIter::GetItems( WW8Bytes& rItems ) const
+void WW8_AttrIter::GetItems( WW8Bytes& ) const
 {
 }
 
@@ -232,6 +232,7 @@ void WW8_AttrIter::GetItems( WW8Bytes& rItems ) const
 // ausgegeben.
 class WW8_SwAttrIter : public WW8_AttrIter
 {
+private:
     const SwTxtNode& rNd;
     SvPtrarr aTxtAtrArr;
     SvUShorts aChrSetArr;
@@ -251,6 +252,9 @@ class WW8_SwAttrIter : public WW8_AttrIter
     void OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart );
     void OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart);
 
+    //No copying
+    WW8_SwAttrIter(const WW8_SwAttrIter&);
+    WW8_SwAttrIter& operator=(const WW8_SwAttrIter&);
 public:
     WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rNd );
 
@@ -270,7 +274,6 @@ public:
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const             { return eNdChrSet; }
 };
-
 
 WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
     : WW8_AttrIter( rWr ), rNd( rTxtNd ), nAktSwPos( 0 ), nTmpSwPos( 0 ),
@@ -402,7 +405,6 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
         p = (void*)&rAttr;
         eChrSet = ((SvxFontItem&)rItem).GetCharSet();
         break;
-
     case RES_TXTATR_CHARFMT:
         {
             const SfxPoolItem* pItem;
@@ -415,9 +417,6 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
             }
         }
         break;
-
-//  case RES_TXTATR_INETFMT:
-//      break;
     }
 
     if( p )
@@ -606,11 +605,11 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
          other, so we make a guess based upon the first character of the text,
          defaulting to asian.
          */
-        USHORT nScript;
+        USHORT nRubyScript;
         if( pBreakIt->xBreak.is() )
-            nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+            nRubyScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
         else
-            nScript = ScriptType::ASIAN;
+            nRubyScript = ScriptType::ASIAN;
 
         const SwTxtRuby* pRubyTxt = rRuby.GetTxtRuby();
         const SwCharFmt* pFmt = pRubyTxt->GetCharFmt();
@@ -621,20 +620,20 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
         {
             const SwAttrSet& rSet = pFmt->GetAttrSet();
             pItem  = &(const SvxFontItem&)rSet.Get(GetWhichOfScript(
-                RES_CHRATR_FONT,nScript));
+                RES_CHRATR_FONT,nRubyScript));
 
             pHeightItem = &(const SvxFontHeightItem&)rSet.Get(
-                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nRubyScript));
         }
         else
         {
             /*Get document defaults if no formatting on ruby text*/
             const SfxItemPool *pPool = rNd.GetSwAttrSet().GetPool();
             pItem  = &(const SvxFontItem&)pPool->GetDefaultItem(
-                GetWhichOfScript(RES_CHRATR_FONT,nScript));
+                GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
 
             pHeightItem = &(const SvxFontHeightItem&)pPool->GetDefaultItem(
-                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nRubyScript));
         }
         long nHeight = (pHeightItem->GetHeight() + 5)/10;
 
@@ -655,15 +654,15 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
 
 
         if( pBreakIt->xBreak.is() )
-            nScript = pBreakIt->xBreak->getScriptType( rNd.GetTxt(),
+            nRubyScript = pBreakIt->xBreak->getScriptType( rNd.GetTxt(),
                 *(pRubyTxt->GetStart()));
         else
-            nScript = ScriptType::ASIAN;
+            nRubyScript = ScriptType::ASIAN;
 
         const SwAttrSet& rSet = rNd.GetSwAttrSet();
         const SvxFontHeightItem &rHeightItem  =
             (const SvxFontHeightItem&)rSet.Get(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nRubyScript));
         nHeight = (rHeightItem.GetHeight() + 10)/20-1;
         aStr += String::CreateFromInt32(nHeight);
         aStr += '(';
@@ -828,7 +827,7 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 }
 
 
-void WW8_SwAttrIter::OutSwFmtRefMark( const SwFmtRefMark& rAttr, BOOL bStart )
+void WW8_SwAttrIter::OutSwFmtRefMark( const SwFmtRefMark& rAttr, BOOL )
 {
     if( rWrt.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ))
         rWrt.AppendBookmark( rWrt.GetBookmarkName( REF_SETREFATTR,
@@ -839,7 +838,6 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
 {
     WW8Bytes aItems;
     rWrt.pChpIter->GetItems( aItems );
-    USHORT nStt_TxtAtt = aItems.Count();
 
     // sprmCFFldVanish
     if( rWrt.bWrtWW8 )
@@ -857,9 +855,6 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
         aItems.Insert( 117, aItems.Count() );
     aItems.Insert( 1, aItems.Count() );
 
-
-//  rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), nStt_TxtAtt,
-//                                  aItems.GetData() );
     rWrt.WriteChar( '\x13' );
     rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), aItems.Count(),
                                     aItems.GetData() );
@@ -1312,8 +1307,6 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
     SwTwips &rPageSize, SwTwips &rTblOffset)
 
 {
-    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
-
     //Tell the undocumented table hack that everything between here and
     //the last table position is nontable text
     WW8_CP nPos = Fc2Cp(Strm().Tell());
@@ -1372,7 +1365,6 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     SwTable& rTbl = rNode.GetTable();
     rWW8Wrt.Out_SfxBreakItems( rTbl.GetFrmFmt()->GetAttrSet(), rNode );
 
-    SwTableLines& rLns = rTbl.GetTabLines();
     SwTwips nPageSize = 0, nTblOffset = 0;
 
     {
@@ -1396,7 +1388,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nPageSize = aRect.Width();
     }
 
-    BOOL bRelBoxSize = TRUE /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
+    /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
+    BOOL bRelBoxSize = TRUE;
     SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
     USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(
@@ -1412,7 +1405,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                                           (USHORT)nTblSz, FALSE );
 
     // WW6 / 8 can not have more then 31 / 64 cells
-    const USHORT nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;
+    const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;
     // rCols are the array of all cols of the table
     const SwWriteTableCols& rCols = pTableWrt->GetCols();
     USHORT nColCnt = rCols.Count();
@@ -1420,7 +1413,6 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     USHORT* pRowSpans = new USHORT[ nColCnt ];
     memset( pBoxArr, 0, sizeof( pBoxArr[0] ) * nColCnt );
     memset( pRowSpans, 0, sizeof( pRowSpans[0] ) * nColCnt );
-    long nLastHeight = 0;
     const SwWriteTableRows& rRows = pTableWrt->GetRows();
     for( USHORT nLine = 0; nLine < rRows.Count(); ++nLine )
     {
@@ -1461,7 +1453,9 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             bFixRowHeight = TRUE;
         }
 
-        USHORT nWWColMax = nRealColCnt > nMaxCols ? nMaxCols : nRealColCnt;
+        //Winword column export limited to 31/64 cells
+        BYTE nWWColMax = nRealColCnt > nMaxCols ?
+            nMaxCols : static_cast<BYTE>(nRealColCnt);
 
         // 1.Zeile eine Headline?  sprmTTableHeader
         if( !nLine && rTbl.IsHeadlineRepeat() )
@@ -1683,8 +1677,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     }
 
     delete pTableWrt;
-    delete pBoxArr;
-    delete pRowSpans;
+    delete[] pBoxArr;
+    delete[] pRowSpans;
 
     // Pam hinter die Tabelle verschieben
     rWW8Wrt.pCurPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
@@ -2002,19 +1996,19 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
         if( bWrtWW8 )
             InsUInt16( pSprmIds[0] );
         else
-            pO->Insert( pSprmIds[0], pO->Count() );
+            pO->Insert( static_cast<BYTE>(pSprmIds[0]), pO->Count() );
         pO->Insert( 1, pO->Count() );
 
         if( bWrtWW8 )
             InsUInt16( pSprmIds[1] );
         else
-            pO->Insert( pSprmIds[1], pO->Count() );
+            pO->Insert( static_cast<BYTE>(pSprmIds[1]), pO->Count() );
         InsUInt16( AddRedlineAuthor( rRedline.GetAuthor() ) );
 
         if( bWrtWW8 )
             InsUInt16( pSprmIds[2] );
         else
-            pO->Insert( pSprmIds[2], pO->Count() );
+            pO->Insert( static_cast<BYTE>(pSprmIds[2]), pO->Count() );
         InsUInt32( SwWW8Writer::GetDTTM( rRedline.GetTimeStamp() ));
     }
 }

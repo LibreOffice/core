@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-14 17:27:58 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@ public:
     WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk);
     void Insert(const SwPosition &rPos);
 private:
+    //No copying
+    WW8DupProperties(const WW8DupProperties&);
+    WW8DupProperties& operator=(const WW8DupProperties&);
     SwWW8FltControlStack* pCtrlStck;
     SfxItemSet aChrSet,aParSet;
 };
@@ -104,8 +107,7 @@ class WW8AnchoringProperties
 public:
     WW8AnchoringProperties() : pStack(0) {}
     ~WW8AnchoringProperties() { delete pStack; }
-    void Remove(const SwPosition &rPos, SwWW8ImplReader &rRdr,
-        SwFltControlStack* pCtrlStck);
+    void Remove(SwWW8ImplReader &rRdr, SwFltControlStack* pCtrlStck);
     void Insert(SwFltControlStack* pCtrlStck);
 private:
     SwFltControlStack *pStack;
@@ -168,16 +170,14 @@ struct WW8SwFlyPara
     BOOL bAutoWidth;
     BOOL bToggelPos;
 
-    WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-        short nPgTop, short nPgLeft, short nPgWidth, INT32 nIniFlyDx,
-        INT32 nIniFlyDy );
+    WW8SwFlyPara(SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
+        short nPgLeft, short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy);
 
     void BoxUpWidth( long nWidth );
     const SwPosition* GetMainTextPos() const    // Fuer PageDesc aus Apo
                 { return pMainTextPos; };
     WW8AnchoringProperties aAnchoring;
 };
-
 
 class SwWW8StyInf
 {
@@ -230,7 +230,7 @@ public:
 
     ~SwWW8StyInf()
     {
-        delete( pWWFly );
+        delete pWWFly;
     }
 
     void SetOrgWWIdent( const String& rName, const USHORT nId )
@@ -255,7 +255,7 @@ friend class SwWW8ImplReader;
     SwNumRule* pStyRule;    // Bullets und Aufzaehlungen in Styles
 
     BYTE* pParaSprms;           // alle ParaSprms des UPX falls UPX.Papx
-    short nSprmsLen;            // Laenge davon
+    USHORT nSprmsLen;           // Laenge davon
 
     BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
@@ -272,32 +272,42 @@ friend class SwWW8ImplReader;
 
     SwCharFmt* SearchCharFmt( const String& rName );
     SwCharFmt* MakeNewCharFmt( WW8_STD* pStd, const String& rName );
-    SwCharFmt* MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd, const String& rName );
+    SwCharFmt* MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd,
+        const String& rName );
 
     SwTxtFmtColl* SearchFmtColl( const String& rName );
     SwTxtFmtColl* MakeNewFmtColl( WW8_STD* pStd, const String& rName );
-    SwTxtFmtColl* MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd, const String& rName );
+    SwTxtFmtColl* MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd,
+        const String& rName );
 
     void Set1StyleDefaults();
-    void Import1Style( USHORT nNr );
+    void Import1Style(USHORT nNr);
+    void RecursiveReg(USHORT nNr);
     void ScanStyles();
+
+    //No copying
+    WW8RStyle(const WW8RStyle&);
+    WW8RStyle& operator=(const WW8RStyle&);
 public:
     WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI );
     void Import();
-    void RegisterNumFmts();
+    void PostProcessStyles();
     const BYTE* HasParaSprm( USHORT nId ) const;
 };
 
 class WW8FlySet: public SfxItemSet
 {
+private:
+    //No copying
+    const WW8FlySet& operator=(const WW8FlySet&);
 public:
-    WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
-              /*const*/ WW8SwFlyPara* pFS, BOOL bGraf );
-    WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
-              const WW8_PIC& rPic, long nWidth, long nHeight );
+    WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
+        const WW8SwFlyPara* pFS, BOOL bGraf );
+    WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
+        long nWidth, long nHeight );
 };
 
-enum WW8LvlType { WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause };
+enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
 inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 {
@@ -313,8 +323,6 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
     return nRet;
 }
 
-#define STI_USER 0xffe
+#define STI_USER 0x0FFE
 
 #endif
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,18 +209,18 @@ BOOL WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
             }
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-            // now we have the right selection for one entry.
-            // Copy this to the definied TextBlock, but only if
-            // it is not an autocorrection entry (== -1)
-            // otherwise the group indicates the group in
-            // the sttbfglsystyle list that this entry belongs
-            // to. Unused at the moment
+            // now we have the right selection for one entry.  Copy this to
+            // the definied TextBlock, but only if it is not an autocorrection
+            // entry (== -1) otherwise the group indicates the group in the
+            // sttbfglsystyle list that this entry belongs to. Unused at the
+            // moment
             INT16 group = rExtra[nGlosEntry]->ToInt32() + 2;
             if (group != -1)
             {
                 rBlocks.ClearDoc();
                 String sLNm( *rStrings[nGlosEntry] );
-                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(sLNm,TRUE), sLNm ))
+                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(sLNm,TRUE),
+                    sLNm ))
                 {
                     SwDoc* pGlDoc = rBlocks.GetDoc();
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(),
@@ -254,34 +254,30 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
         //read the names of the autotext entries
         SvStrings aStrings( 0, 64 ), aExtra( 0, 64 );
 
-        rtl_TextEncoding eStructCharSet = 0x0100 == pGlossary->chseTables
-                                            ? RTL_TEXTENCODING_APPLE_ROMAN
-                                            : rtl_getTextEncodingFromWindowsCharset(
-                                                pGlossary->chseTables );
+        rtl_TextEncoding eStructCharSet =
+            WW8Fib::GetFIBCharset(pGlossary->chseTables);
 
         WW8ReadSTTBF( TRUE, *xTableStream,
                         pGlossary->fcSttbfglsy, pGlossary->lcbSttbfglsy, 0,
                         eStructCharSet, aStrings, &aExtra );
         rStrm->Seek(0);
 
-    //  SwDoc *pD = new SwDoc;
-    //  pD->SetDocShell(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
         SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL));
         if( xDocSh->DoInitNew( 0 ) )
         {
             SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
             SwWW8ImplReader* pRdr = new
-                SwWW8ImplReader( pGlossary->nVersion , xStg, &rStrm, *pD, TRUE );
+                SwWW8ImplReader(pGlossary->nVersion , xStg, &rStrm, *pD, TRUE);
 
             SwNodeIndex
-                aIdx( *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
+                aIdx(*pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
             if( !aIdx.GetNode().IsTxtNode() )
             {
                 ASSERT( !this, "wo ist der TextNode?" );
                 pD->GetNodes().GoNext( &aIdx );
             }
             SwPaM aPamo( aIdx );
-            aPamo.GetPoint()->nContent.Assign( aIdx.GetNode().GetCntntNode(), 0 );
+            aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetCntntNode(), 0);
             pRdr->LoadDoc(aPamo,this);
 
             bRet = MakeEntries( pD, rBlocks, bSaveRelFile, aStrings, aExtra );

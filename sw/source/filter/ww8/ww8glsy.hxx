@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include <ww8scan.hxx>
 #endif
 
-
 class SwTextBlocks;
 class SwNodeIndex;
 class SwSpzFrmFmts;
@@ -123,12 +122,11 @@ private:
     USHORT nStrings;
 
     BOOL MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks, BOOL bSaveRelFile,
-                        SvStrings& rStrings, SvStrings& rExtra);
+        SvStrings& rStrings, SvStrings& rExtra);
     BOOL HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
+
+    //No copying
+    WW8Glossary(const WW8Glossary&);
+    WW8Glossary& operator=(const WW8Glossary&);
 };
-
-
-
-
-
 #endif
