@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:28:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,6 @@ BOOL SwScanner::NextWord()
 }
 
 
->>>>>>> 1.48.26.5
 USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
