@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:27:11 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:19:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SVSDIDEPEND= \
     scslots.hrc \
     $(INC)$/sc.hrc
 
-SRCFILES= \
+SRS1NAME=$(TARGET)
+SRC1FILES= \
     scslots.src
 
 # --- Targets -------------------------------------------------------
