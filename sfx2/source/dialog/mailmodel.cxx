@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-07 16:34:25 $
+ *  last change: $Author: cd $ $Date: 2001-06-12 05:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,14 +200,33 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
             SfxFilterMatcher aFilterMatcher( xDocShell->GetFactory().GetFilterContainer() );
             pFilter = aFilterMatcher.GetDefaultFilter();
         }
-#if 0
+//#if 0
         // create temp file name with leading chars and extension
-        String aLeadingStr( DEFINE_CONST_UNICODE("smail") );
-        sal_Bool bHasName = xDocShell->HasName();
+        sal_Bool    bHasName = xDocShell->HasName();
+        String      aLeadingStr;
+        String*     pExt = NULL;
+
         if ( !bHasName )
             aLeadingStr = String( DEFINE_CONST_UNICODE("noname") );
-        String* pExt = NULL;
-        if ( pFilter )
+        else
+        {
+            INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+            String aName;
+            if ( aFileObj.hasExtension() )
+            {
+                pExt = new String( String::CreateFromAscii( "." ) + aFileObj.getExtension() );
+                aFileObj.removeExtension();
+                aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aLeadingStr += String::CreateFromAscii( "_" );
+            }
+            else
+            {
+                aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aLeadingStr += String::CreateFromAscii( "_" );
+            }
+        }
+
+        if ( pFilter && !pExt )
         {
             pExt = new String( pFilter->GetWildcard()().GetToken(0) );
             // erase the '*' from the extension (e.g. "*.sdw")
@@ -223,16 +242,16 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
         SfxStringItem aFileName( SID_FILE_NAME, rFileName );
         SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
         SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
-#endif
+//#endif
         SfxStringItem* pFilterName = NULL;
         if ( pFilter && bHasFilter )
             pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetName() );
-        pDisp->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON,
-                        pFilterName, 0L );
-//      pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+//      pDisp->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON,
 //                      pFilterName, 0L );
+        pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+                        pFilterName, 0L );
 
-        rFileName = xDocShell->GetMedium()->GetName();
+//        rFileName = xDocShell->GetMedium()->GetName();
 
         delete pFilterName;
         if ( pFilter )
