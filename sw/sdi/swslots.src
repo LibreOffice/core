@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:30 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,7 +875,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ portuguese ] = "Campos";
     SlotName[ russian ] = "Ïîëå";
     SlotName[ dutch ] = "Veldopdracht";
-    SlotName[ french ] = "Instruction de champ";
+    SlotName[ french ] = "Champ";
     SlotName[ spanish ] = "Código de campo";
     SlotName[ italian ] = "Comando di campo";
     SlotName[ danish ] = "Felt";
@@ -1575,13 +1575,13 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName [ english ] =  "Horizontal spiegeln";
     SlotName[ english_us ] = "Flip Horizontal";
     SlotName[ portuguese ] = "Reflectir na horizontal";
-    SlotName[ russian ] = "Îòîáğàçèòü ïî ãîğèçîíòàëè";
+    SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
     SlotName[ dutch ] = "Horizontaal spiegelen";
     SlotName[ french ] = "Refléter horizontalement";
     SlotName[ spanish ] = "Reflejar horizontal";
     SlotName[ italian ] = "Rispecchia orizzontalmente";
     SlotName[ danish ] = "Spejlvend vandret";
-    SlotName[ swedish ] = "Spegla horisontellt";
+    SlotName[ swedish ] = "Spegelvänd horisontellt";
     SlotName[ polish ] = "Przerzuæ w poziomie";
     SlotName[ portuguese_brazilian ] = "GraphicFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
@@ -1601,13 +1601,13 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName [ english ] =  "Vertikal spiegeln";
     SlotName[ english_us ] = "Flip Vertical";
     SlotName[ portuguese ] = "Reflectir na vertical";
-    SlotName[ russian ] = "Îòîáğàçèòü ïî âåğòèêàëè";
+    SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     SlotName[ dutch ] = "Verticaal spiegelen";
     SlotName[ french ] = "Refléter verticalement";
     SlotName[ spanish ] = "Reflejar verticalmente";
     SlotName[ italian ] = "Rispecchia verticalmente";
     SlotName[ danish ] = "Spejlvend lodret";
-    SlotName[ swedish ] = "Spegla vertikalt";
+    SlotName[ swedish ] = "Spegelvänd vertikalt";
     SlotName[ polish ] = "Przerzuæ w pionie";
     SlotName[ portuguese_brazilian ] = "FlipImageVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
@@ -1763,7 +1763,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ spanish ] = "Propiedades del marco";
     SlotName[ italian ] = "Proprietà cornice";
     SlotName[ danish ] = "Ramme-egenskaber";
-    SlotName[ swedish ] = "Ram egenskaper";
+    SlotName[ swedish ] = "Ramegenskaper";
     SlotName[ polish ] = "Edytuj ramkê";
     SlotName[ portuguese_brazilian ] = "FormatFrame";
     SlotName[ japanese ] = "˜g‚ÌÌßÛÊßÃ¨";
@@ -1788,7 +1788,7 @@ SfxSlotInfo FN_FORMAT_GRAFIC_DLG
     SlotName[ french ] = "Éditer une image";
     SlotName[ spanish ] = "Editar imagen";
     SlotName[ italian ] = "Modifica immagine";
-    SlotName[ danish ] = "Rediger billede";
+    SlotName[ danish ] = "Rediger grafik";
     SlotName[ swedish ] = "Redigera grafik";
     SlotName[ polish ] = "Edytuj grafikê";
     SlotName[ portuguese_brazilian ] = "FormatGraphics";
@@ -1840,7 +1840,7 @@ SfxSlotInfo FN_FORMAT_PAGE_DLG
     SlotName[ french ] = "Paramètres de page";
     SlotName[ spanish ] = "Configuración de página";
     SlotName[ italian ] = "Impostazioni di pagina";
-    SlotName[ danish ] = "Sideopsætning";
+    SlotName[ danish ] = "Sideindstillinger";
     SlotName[ swedish ] = "Sidinställningar";
     SlotName[ polish ] = "Ustawienia strony";
     SlotName[ portuguese_brazilian ] = "FormatPage";
@@ -2277,13 +2277,13 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName [ english ] =  "Auf geraden Seiten spiegeln";
     SlotName[ english_us ] = "Mirror Object on Even Pages";
     SlotName[ portuguese ] = "Reflectir nas páginas pares";
-    SlotName[ russian ] = "Îòîáğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
+    SlotName[ russian ] = "Îòğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
     SlotName[ dutch ] = "Op even pagina's spiegelen";
     SlotName[ french ] = "Refléter sur les pages paires";
     SlotName[ spanish ] = "Reflejar objeto en páginas pares";
     SlotName[ italian ] = "Rispecchia sulle pagine pari";
     SlotName[ danish ] = "Spejlvend på lige sider";
-    SlotName[ swedish ] = "Spegla på jämna sidor";
+    SlotName[ swedish ] = "Spegelvänd på jämna sidor";
     SlotName[ polish ] = "Przerzuæ na parzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorOnEvenPages";
     SlotName[ japanese ] = "‹ô”Íß°¼Ş‚É”½“]";
@@ -2849,13 +2849,13 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName [ english ] =  "Grafik auf geraden Seiten spiegeln";
     SlotName[ english_us ] = "Flip Graphics on Even Pages";
     SlotName[ portuguese ] = "Reflectir imagem nas páginas pares";
-    SlotName[ russian ] = "Îòîáğàçèòü îáúåêòû íà ÷åòíûõ ñòğàíèöàõ";
+    SlotName[ russian ] = "Îòğàçèòü ãğàôèêè íà ÷åòíûõ ñòğàíèöàõ";
     SlotName[ dutch ] = "Afbeeldingen op even pagina's spiegelen";
     SlotName[ french ] = "Refléter l'image sur les pages paires";
     SlotName[ spanish ] = "Reflejar imagen en las páginas pares";
     SlotName[ italian ] = "Rispecchia le immagini sulle pagine pari";
     SlotName[ danish ] = "Spejlvend grafik på lige sider";
-    SlotName[ swedish ] = "Spegla grafik på jämna sidor";
+    SlotName[ swedish ] = "Spegelvänd grafik på jämna sidor";
     SlotName[ polish ] = "Przerzuæ grafikê na nieparzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorGraphicOnEvenPages";
     SlotName[ japanese ] = "¸Ş×Ì¨¯¸‚ğ‹ô”Íß°¼Ş‚É”½“]";
@@ -3020,7 +3020,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
     SlotName[ dutch ] = "Tekstmarkering invoegen";
     SlotName[ chinese_simplified ] = "²åÈëÊéÇ©";
-    SlotName[ greek ] = "ÅéóáãùãŞ óåëéäïäåßêôç";
+    SlotName[ greek ] = "ÅéóáãùãŞ óçìáäéïı êåéìİíïõ";
     SlotName[ korean ] = "Ã¥ °¥ÇÇ »ğÀÔ";
     SlotName[ turkish ] = "Metin işareti ekle";
     SlotName[ language_user1 ] = " ";
@@ -3170,7 +3170,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ swedish ] = "Infoga slutnot direkt";
     SlotName[ polish ] = "Wstaw bezpoœrednio przypis koñcowy";
     SlotName[ portuguese_brazilian ] = "InsertEndnoteDirect";
-    SlotName[ japanese ] = "•¶––‹r’‚ğ’¼Ú‘}“ü";
+    SlotName[ japanese ] = "•¶––‹r’‚Ì’¼Ú‘}“ü";
     SlotName[ chinese_simplified ] = "Ö±½Ó²åÈëÎ²×¢";
     SlotName[ chinese_traditional ] = "ª½±µ´¡¤J§Àª`";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÊÚáíŞ ÎÊÇãí ãÈÇÔÑÉ";
@@ -3189,7 +3189,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ portuguese ] = "Inserir código de campo";
     SlotName[ russian ] = "Âñòàâèòü ïîëå";
     SlotName[ dutch ] = "Veldopdracht invoegen";
-    SlotName[ french ] = "Insérer une instruction de champ";
+    SlotName[ french ] = "Insérer un champ";
     SlotName[ spanish ] = "Insertar código de campo";
     SlotName[ italian ] = "Inserisci comando di campo";
     SlotName[ danish ] = "Indsæt felt";
@@ -3215,7 +3215,7 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ portuguese ] = "Inserir campos";
     SlotName[ russian ] = "Âñòàâèòü ïîëå";
     SlotName[ dutch ] = "Veldopdrachten invoegen";
-    SlotName[ french ] = "Insérer des instructions de champ";
+    SlotName[ french ] = "Insérer des champs";
     SlotName[ spanish ] = "Insertar códigos de campo";
     SlotName[ italian ] = "Inserisci comandi di campo";
     SlotName[ danish ] = "Indsæt felter";
@@ -3529,10 +3529,10 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ greek ] = "×åéñïêßíçôç åéóáãùãŞ ìïíüóôõëïõ ğëáéóßïõ";
     SlotName[ dutch ] = "Eenkoloms kader handmatig invoegen";
     SlotName[ french ] = "Insertion manuelle d'un cadre à une colonne";
-    SlotName[ spanish ] = "Insert single column frame manually";
+    SlotName[ spanish ] = "Insertar manualmente marco de una columna";
     SlotName[ italian ] = "Insert single column frame manually";
     SlotName[ danish ] = "Indsæt enkelt-kolonne ramme manuelt";
-    SlotName[ swedish ] = "Insert single column frame manually";
+    SlotName[ swedish ] = "Infoga ram med en kolumn manuellt";
     SlotName[ polish ] = "Wstaw rêcznie ramkê z jedn¹ kolumn¹";
     SlotName[ portuguese_brazilian ] = "Insert single column frame manually";
     SlotName[ japanese ] = "‚P—ñ˜g‚ğè“®‚Å‘}“ü";
@@ -3580,7 +3580,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ spanish ] = "Insertar espacio protegido";
     SlotName[ italian ] = "Inserisci spazio protetto";
     SlotName[ danish ] = "Indsæt hårdt mellemrum";
-    SlotName[ swedish ] = "Infoga skyddat blanksteg";
+    SlotName[ swedish ] = "Infoga hårt blanksteg";
     SlotName[ polish ] = "Wstaw spacjê nie rozdzielaj¹c¹";
     SlotName[ portuguese_brazilian ] = "InsertNonBreakingSpace";
     SlotName[ japanese ] = "•ÛŒì½Íß°½‚Ì‘}“ü";
@@ -3900,7 +3900,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ arabic ] = "ÅÏÑÇÌ ÅÓäÇÏÇÊ ÊÑÇİŞíÉ";
     SlotName[ dutch ] = "Kruisverwijzing invoegen";
     SlotName[ chinese_simplified ] = "²åÈë²ÎÕÕ";
-    SlotName[ greek ] = "ÅéóáãùãŞ ğáñáğïìğŞ ğåäßïõ";
+    SlotName[ greek ] = "ÅéóáãùãŞ ğáñáğïìğŞò";
     SlotName[ korean ] = "ÇÊµå ÂüÁ¶ »ğÀÔ";
     SlotName[ turkish ] = "Çapraz başvuru alanı ekle";
     SlotName[ language_user1 ] = " ";
@@ -3920,7 +3920,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ swedish ] = "Infoga område";
     SlotName[ polish ] = "Wstaw obszar";
     SlotName[ portuguese_brazilian ] = "InsertRegion";
-    SlotName[ japanese ] = "¾¸¼®İ‚Ì‘}“ü";
+    SlotName[ japanese ] = "”ÍˆÍ‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈëÇøÓò";
     SlotName[ chinese_traditional ] = "´¡¤J°Ï°ì";
     SlotName[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
@@ -3946,7 +3946,7 @@ SfxSlotInfo FN_INSERT_SIM
     SlotName[ swedish ] = "Infoga från bildredigering";
     SlotName[ polish ] = "Wstaw z edytora obrazów";
     SlotName[ portuguese_brazilian ] = "InsertObjectStarOffice Image";
-    SlotName[ japanese ] = "²Ò°¼Şİ¸Ş‚©‚ç‚Ì‘}“ü";
+    SlotName[ japanese ] = "²Ò°¼Ş´ÃŞ¨À‚©‚ç‘}“ü";
     SlotName[ chinese_simplified ] = "´ÓÍ¼Ïñ±à¼­Æ÷²åÈë";
     SlotName[ chinese_traditional ] = "±q¤pµe®a´¡¤J";
     SlotName[ arabic ] = "ÅÏÑÇÌ ãä ãÍÑÑ ÇáÕæÑ";
@@ -4067,7 +4067,7 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName [ english ] =  "Script einfügen";
     SlotName[ english_us ] = "Insert Script";
     SlotName[ portuguese ] = "Inserir Script";
-    SlotName[ russian ] = "Âñòàâèòü Script";
+    SlotName[ russian ] = "Âñòàâèòü ñêğèïò";
     SlotName[ dutch ] = "Script invoegen";
     SlotName[ french ] = "Insérer un script";
     SlotName[ spanish ] = "Insertar script";
@@ -4120,7 +4120,7 @@ SfxSlotInfo FN_BUSINESS_CARD
     SlotName[ english_us ] = "Insert business cards";
     SlotName[ portuguese ] = "Inserir cartões de visita";
     SlotName[ russian ] = "Âñòàâèòü âèçèòíûå êàğòî÷êè";
-    SlotName[ greek ] = "ĞñïóèŞêç êáñôşí ğáñïõóßáóçò";
+    SlotName[ greek ] = "ÅéóáãùãŞ óõóôáôéêŞò êÜñôáò";
     SlotName[ dutch ] = "Visitekaartjes invoegen";
     SlotName[ french ] = "Insérer des cartes de visite";
     SlotName[ spanish ] = "Insertar tarjetas de visita";
@@ -4366,7 +4366,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ arabic ] = "Åáì ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ ÇáÊÇáíÉ";
     SlotName[ dutch ] = "Naar volgende tekstmarkering";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»¸öÊéÇ©";
-    SlotName[ greek ] = "Ğñïò åğüìåíï óåëéäïäåßêôç";
+    SlotName[ greek ] = "Ğñïò åğüìåíï óçìÜäé êåéìİíïõ";
     SlotName[ korean ] = "´ÙÀ½ Ã¥ °¥ÇÇ·Î";
     SlotName[ turkish ] = "Sonraki metin belirteci";
     SlotName[ language_user1 ] = " ";
@@ -4948,7 +4948,7 @@ SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
     SlotName = "Zahlenformat bearbeiten";
     SlotName [ english ] =  "Zahlenformat bearbeiten";
     SlotName[ english_us ] = "Edit Number Format";
-    SlotName[ portuguese ] = "Formato de números";
+    SlotName[ portuguese ] = "Editar formato numérico";
     SlotName[ russian ] = "Ïğàâêà ÷èñëîâîãî ôîğìàòà";
     SlotName[ dutch ] = "Getalnotatie bewerken";
     SlotName[ french ] = "Modifier le format numérique";
@@ -4977,7 +4977,7 @@ SfxSlotInfo FN_NUM_OR_NONUM
     SlotName[ portuguese ] = "Activar/des. numeração";
     SlotName[ russian ] = "Âêë./âûêë. íóìåğàöèş";
     SlotName[ dutch ] = "Nummering aan/uit";
-    SlotName[ french ] = "(Dés)activer numérotation/puces";
+    SlotName[ french ] = "(Dés)activer numérotation";
     SlotName[ spanish ] = "Activar/Desact. Numeración";
     SlotName[ italian ] = "Numerazione on/off";
     SlotName[ danish ] = "Nummerering til/fra";
@@ -5536,7 +5536,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ arabic ] = "Åáì ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ ÇáÓÇÈŞÉ";
     SlotName[ dutch ] = "Naar vorige tekstmarkering";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»¸öÊéÇ©";
-    SlotName[ greek ] = "Ğñïò ôïí ğñïçãïıìåíï óåëéäïäåßêôç";
+    SlotName[ greek ] = "Ğñïò ğñïçãïıìåíï óçìÜäé êåéìİíïõ";
     SlotName[ korean ] = "ÀÌÀü Ã¥ °¥ÇÇ·Î";
     SlotName[ turkish ] = "Önceki metin belirteci";
     SlotName[ language_user1 ] = " ";
@@ -5812,7 +5812,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ french ] = "Options d'impression : aperçu";
     SlotName[ spanish ] = "Opciones de impresión";
     SlotName[ italian ] = "Opzioni di stampa";
-    SlotName[ danish ] = "Udskriftsindstillinger vis udskrift";
+    SlotName[ danish ] = "Udskriftsindstillinger sidevisning";
     SlotName[ swedish ] = "Utskriftsalternativ förhandsgranskning";
     SlotName[ polish ] = "Opcje drukowania Widok strony";
     SlotName[ portuguese_brazilian ] = "Printing options";
@@ -5837,7 +5837,7 @@ SfxSlotInfo FN_PREVIEW_ZOOM
     SlotName[ greek ] = "Êëßìáêá ğñïâïëŞò óåëßäáò";
     SlotName[ dutch ] = "Zoom afdrukvoorbeeld";
     SlotName[ french ] = "Échelle de l'aperçu";
-    SlotName[ spanish ] = "Escala";
+    SlotName[ spanish ] = "Escala previsualización";
     SlotName[ italian ] = "Zoom";
     SlotName[ danish ] = "Målestok sidevisning";
     SlotName[ swedish ] = "Skala sidvy";
@@ -5887,7 +5887,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ french ] = "Imprimer l'aperçu";
     SlotName[ spanish ] = "Imprimir previsualización";
     SlotName[ italian ] = "Stampa anteprima pagina";
-    SlotName[ danish ] = "Udskriv vist udskrift";
+    SlotName[ danish ] = "Udskriv sidevisning";
     SlotName[ swedish ] = "Skriv ut förhandsgranskning";
     SlotName[ polish ] = "Drukuj widok strony";
     SlotName[ portuguese_brazilian ] = "PrintPagePreview";
@@ -6092,7 +6092,7 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ portuguese ] = "Repaginar";
     SlotName[ russian ] = "Íîâîå ôîğìàòèğîâàíèå";
     SlotName[ dutch ] = "Nieuwe opmaak";
-    SlotName[ french ] = "Repaginer";
+    SlotName[ french ] = "Nouveau formatage";
     SlotName[ spanish ] = "Reformatear";
     SlotName[ italian ] = "Reimpagina";
     SlotName[ danish ] = "Genformatering";
@@ -6407,7 +6407,7 @@ SfxSlotInfo FN_SHOW_FOUR_PAGES
     SlotName[ french ] = "Aperçu : quatre pages";
     SlotName[ spanish ] = "Vista preliminar: cuatro páginas";
     SlotName[ italian ] = "Vista pagina: quattro pagine";
-    SlotName[ danish ] = "Vis udskrift: fire sider";
+    SlotName[ danish ] = "Sidevisning: fire sider";
     SlotName[ swedish ] = "Förhandsgranskning: fyra sidor";
     SlotName[ polish ] = "Podgl¹d ustawienia strony: Cztery strony";
     SlotName[ portuguese_brazilian ] = "ShowFourPages";
@@ -6433,7 +6433,7 @@ SfxSlotInfo FN_SHOW_TWO_PAGES
     SlotName[ french ] = "Aperçu : deux pages";
     SlotName[ spanish ] = "Vista preliminar: dos páginas";
     SlotName[ italian ] = "Vista pagina: due pagine";
-    SlotName[ danish ] = "Vis udskrift: to sider";
+    SlotName[ danish ] = "Sidevisning: to sider";
     SlotName[ swedish ] = "Förhandsgranskning: två sidor";
     SlotName[ polish ] = "Podgl¹d ustawienia strony:Dwie strony";
     SlotName[ portuguese_brazilian ] = "ShowTwoPages";
@@ -7057,7 +7057,7 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ french ] = "Mode Sélection";
     SlotName[ spanish ] = "Modo Selección";
     SlotName[ italian ] = "Modo selezione";
-    SlotName[ danish ] = "Udvalgsmodus";
+    SlotName[ danish ] = "Markeringsmodus";
     SlotName[ swedish ] = "Markeringsläge";
     SlotName[ polish ] = "Tryb selekcji";
     SlotName[ portuguese_brazilian ] = "SelectionMode";
@@ -7134,7 +7134,7 @@ SfxSlotInfo FN_TABLE_AUTOSUM
     SlotName[ greek ] = "¢èñïéóìá";
     SlotName[ dutch ] = "Som";
     SlotName[ french ] = "Somme";
-    SlotName[ spanish ] = "Sum";
+    SlotName[ spanish ] = "Suma";
     SlotName[ italian ] = "Sum";
     SlotName[ danish ] = "Sum";
     SlotName[ swedish ] = "Summa";
@@ -8063,13 +8063,13 @@ SfxSlotInfo FN_TOOL_HMIRROR
     SlotName [ english ] =  "Horizontal spiegeln";
     SlotName[ english_us ] = "Flip Horizontal";
     SlotName[ portuguese ] = "Reflectir na horizontal";
-    SlotName[ russian ] = "Îòîáğàçèòü ïî ãîğèçîíòàëè";
+    SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
     SlotName[ dutch ] = "Horizontaal spiegelen";
     SlotName[ french ] = "Refléter horizontalement";
     SlotName[ spanish ] = "Reflejar horizontalmente";
     SlotName[ italian ] = "Rispecchia orizzontalmente";
     SlotName[ danish ] = "Spejlvend vandret";
-    SlotName[ swedish ] = "Spegla horisontellt";
+    SlotName[ swedish ] = "Spegelvänd horisontellt";
     SlotName[ polish ] = "Przerzuæ w poziomie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
@@ -8115,13 +8115,13 @@ SfxSlotInfo FN_TOOL_VMIRROR
     SlotName [ english ] =  "Vertikal spiegeln";
     SlotName[ english_us ] = "Flip Vertical";
     SlotName[ portuguese ] = "Reflectir na vertical";
-    SlotName[ russian ] = "Îòîáğàçèòü ïî âåğòèêàëè";
+    SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     SlotName[ dutch ] = "Verticaal spiegelen";
     SlotName[ french ] = "Refléter verticalement";
     SlotName[ spanish ] = "Reflejar verticalmente";
     SlotName[ italian ] = "Rispecchia verticalmente";
     SlotName[ danish ] = "Spejlvend lodret";
-    SlotName[ swedish ] = "Spegla vertikalt";
+    SlotName[ swedish ] = "Spegelvänd vertikalt";
     SlotName[ polish ] = "Przerzuæ w pionie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
@@ -8401,7 +8401,7 @@ SfxSlotInfo FN_VIEW_FIELDS
     SlotName[ portuguese ] = "Códigos de campo";
     SlotName[ russian ] = "Ïîëå";
     SlotName[ dutch ] = "Veldopdrachten";
-    SlotName[ french ] = "Instructions de champ";
+    SlotName[ french ] = "Champs";
     SlotName[ spanish ] = "Códigos de campo";
     SlotName[ italian ] = "Comandi di campo";
     SlotName[ danish ] = "Felter";
@@ -8489,7 +8489,7 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ arabic ] = "ÚáÇãÇÊ";
     SlotName[ dutch ] = "Markeringen";
     SlotName[ chinese_simplified ] = "Óòµ×ÎÆ";
-    SlotName[ greek ] = "ÓçìÜäé";
+    SlotName[ greek ] = "ÓçìÜäéá";
     SlotName[ korean ] = "ÇÊµå À½¿µ";
     SlotName[ turkish ] = "Belirteçler";
     SlotName[ language_user1 ] = " ";
