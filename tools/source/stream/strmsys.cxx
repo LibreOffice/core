@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmsys.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: th $ $Date: 2001-07-03 14:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include "strmos2.cxx"
 #elif defined( WNT )
 #include "strmwnt.cxx"
-#elif defined( WIN )
-#include "strmwin.cxx"
 #elif defined( MAC )
 #include "strmmac.cxx"
 #elif defined( UNX )

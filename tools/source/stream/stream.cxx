@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-26 21:09:46 $
+ *  last change: $Author: th $ $Date: 2001-07-03 14:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,7 @@
 #endif
 */
 
-#ifdef WIN
-#include <dll.hxx>
-#include <svwin.h>
-#ifndef SEG
-#define  SEG(fp)   (*((size_t*)&(fp) + 1))
-#endif
 #include <solar.h>
-#endif
 
 #if defined(BLC)
 #define SWAPNIBBLES(c) c=_crotl(c,4);
@@ -1625,11 +1618,7 @@ ULONG SvStream::Read( void* pData, ULONG nCount )
         if( nCount <= (ULONG)(nBufActualLen - nBufActualPos ) )
         {
             // Ja!
-#ifdef WIN
-            hmemcpy( pData, pBufPos, nCount );
-#else
             memcpy(pData, pBufPos, (size_t) nCount);
-#endif
             nBufActualPos += (USHORT)nCount;
             pBufPos += nCount;
             nBufFree -= (USHORT)nCount;
@@ -1682,11 +1671,7 @@ ULONG SvStream::Read( void* pData, ULONG nCount )
                 {
                     nCount = nCountTmp;  // zurueckstutzen, Eof siehe unten
                 }
-#ifdef WIN
-                hmemcpy( pData, pRWBuf, nCount );
-#else
                 memcpy( pData, pRWBuf, (size_t)nCount );
-#endif
                 nBufActualPos = (USHORT)nCount;
                 pBufPos = pRWBuf + nCount;
             }
@@ -1736,11 +1721,7 @@ ULONG SvStream::Write( const void* pData, ULONG nCount )
     eIOMode = STREAM_IO_WRITE;
     if( nCount <= (ULONG)(nBufSize - nBufActualPos) )
     {
-#ifdef WIN
-        hmemcpy( pBufPos, pData, nCount );
-#else
         memcpy( pBufPos, pData, (size_t)nCount );
-#endif
         nBufActualPos += (USHORT)nCount;
         // wurde der Puffer erweitert ?
         if( nBufActualPos > nBufActualLen )
@@ -1780,11 +1761,8 @@ ULONG SvStream::Write( const void* pData, ULONG nCount )
         else
         {
             // Block in Puffer stellen
-#ifdef WIN
-            hmemcpy( pRWBuf, pData, nCount );
-#else
             memcpy( pRWBuf, pData, (size_t)nCount );
-#endif
+
             // Reihenfolge!
             nBufFilePos += nBufActualPos;
             nBufActualPos = (USHORT)nCount;
@@ -2605,12 +2583,7 @@ ULONG SvMemoryStream::GetData( void* pData, ULONG nCount )
     ULONG nMaxCount = nEndOfData-nPos;
     if( nCount > nMaxCount )
         nCount = nMaxCount;
-#ifdef WIN
-    void _huge* pTmp = (void _huge*)((char _huge*)pBuf + nPos);
-    hmemcpy( (void _huge*)pData, pTmp, (long)nCount);
-#else
     memcpy( pData, pBuf+nPos, (size_t)nCount );
-#endif
     nPos += nCount;
     return nCount;
 }
@@ -2672,12 +2645,7 @@ ULONG SvMemoryStream::PutData( const void* pData, ULONG nCount )
         }
     }
     DBG_ASSERT(pBuf,"Possibly Reallocate failed");
-#ifdef WIN
-    void _huge* pTmp = (void _huge*)((char _huge*)pBuf + nPos);
-    hmemcpy( pTmp, (void _huge*)pData,(long)nCount);
-#else
     memcpy( pBuf+nPos, pData, (size_t)nCount);
-#endif
 
     nPos += nCount;
     if( nPos > nEndOfData )
@@ -2802,11 +2770,7 @@ BOOL SvMemoryStream::ReAllocateMemory( long nDiff )
             bRetVal = TRUE; // Success!
             if( nNewSize < nSize )      // Verkleinern ?
             {
-#ifdef WIN
-                hmemcpy((void _huge*)pNewBuf,(void _huge*)pBuf,(long)nNewSize );
-#else
                 memcpy( pNewBuf, pBuf, (size_t)nNewSize );
-#endif
                 if( nPos > nNewSize )
                     nPos = 0L;
                 if( nEndOfData >= nNewSize )
@@ -2814,11 +2778,7 @@ BOOL SvMemoryStream::ReAllocateMemory( long nDiff )
             }
             else
             {
-#ifdef WIN
-                hmemcpy( (void _huge*)pNewBuf, (void _huge*)pBuf, (long)nSize );
-#else
                 memcpy( pNewBuf, pBuf, (size_t)nSize );
-#endif
             }
 
             FreeMemory();

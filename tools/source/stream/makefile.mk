@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obr $ $Date: 2000-12-19 11:47:37 $
+#   last change: $Author: th $ $Date: 2001-07-03 14:52:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,14 +76,14 @@ TARGET=stream
 SLOFILES=   $(SLO)$/stream.obj   \
             $(SLO)$/strmsys.obj  \
             $(SLO)$/cachestr.obj \
-            $(SLO)$/vcompat.obj	 
+            $(SLO)$/vcompat.obj
 
 .IF "$(UPDATER)" != ""
 
-OBJFILES+=	$(OBJ)$/stream.obj    \
+OBJFILES+=  $(OBJ)$/stream.obj    \
             $(OBJ)$/strmsys.obj   \
             $(OBJ)$/cachestr.obj  \
-            $(OBJ)$/vcompat.obj	  
+            $(OBJ)$/vcompat.obj
 .ENDIF
 
 # --- Targets -------------------------------------------------------
@@ -93,8 +93,7 @@ OBJFILES+=	$(OBJ)$/stream.obj    \
 $(SLO)$/strmsys.obj : \
     strmos2.cxx \
     strmwnt.cxx \
-    strmwin.cxx \
     strmmac.cxx \
     strmunx.cxx \
     strmstd.cxx
-    
+
