@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:26:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,27 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::xml::sax;
+
+// -----------------------------------------------------------------------------
+
+namespace
+{
+bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
+{
+    bool bResult = false;
+    enum XMLTokenEnum eTokenToRename =
+        static_cast< enum XMLTokenEnum >( nParam & 0xffff );
+    if( eTokenToRename != XML_TOKEN_INVALID &&
+        IsXMLToken( rOutAttribute, eTokenToRename ))
+    {
+        enum XMLTokenEnum eReplacementToken =
+            static_cast< enum XMLTokenEnum >( nParam >> 16 );
+        rOutAttribute = GetXMLToken( eReplacementToken );
+        bResult = true;
+    }
+    return bResult;
+}
+} // anonymous namespace
 
 // -----------------------------------------------------------------------------
 
@@ -728,6 +749,17 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
+                case XML_ATACTION_RENAME_ATTRIBUTE:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        RenameAttributeValue(
+                            aAttrValue,
+                            (*aIter).second.m_nParam1,
+                            (*aIter).second.m_nParam2,
+                            (*aIter).second.m_nParam3 );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -1256,6 +1288,18 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
 
     return bRet;
 }
+
+sal_Bool XMLTransformerBase::RenameAttributeValue(
+    OUString& rOutAttributeValue,
+    sal_Int32 nParam1,
+    sal_Int32 nParam2,
+    sal_Int32 nParam3 )
+{
+    return ( lcl_ConvertAttr( rOutAttributeValue, nParam1) ||
+             lcl_ConvertAttr( rOutAttributeValue, nParam2) ||
+             lcl_ConvertAttr( rOutAttributeValue, nParam3) );
+}
+
 
 XMLTokenEnum XMLTransformerBase::GetToken( const OUString& rStr ) const
 {
