@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:22:04 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,9 @@ public:
 
     // Invalidate accessible frame's frame's content
     void InvalidateAccessibleFrmContent( const SwFrm *pFrm );
+
+    // Invalidate accessible frame's cursor position
+    void InvalidateAccessibleCaretPosition( const SwFrm *pFrm );
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();

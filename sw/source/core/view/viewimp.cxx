@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:25:14 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,13 @@ void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
             pTmp->Imp()->GetAccessibleMap().InvalidateFrmContent( pFrm );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
+}
+
+void SwViewImp::InvalidateAccessibleCaretPosition( const SwFrm *pFrm )
+{
+    ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    if( IsAccessible() )
+        GetAccessibleMap().InvalidateCaretPosition( pFrm );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-18 09:23:45 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,6 +1482,11 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
 
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
+
+#ifdef ACCESSIBLE_LAYOUT
+    if( pFrm && Imp()->IsAccessible() )
+        Imp()->InvalidateAccessibleCaretPosition( pFrm );
+#endif
 
     if( bSVCrsrVis )
         pVisCrsr->Show();           // wieder anzeigen

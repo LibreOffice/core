@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:54:46 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,11 @@ public:
     void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 
     void InvalidateFrmContent( const SwFrm *pFrm );
+
+    void InvalidateCaretPosition( const SwFrm *pFrm );
+
+    void SetCaretContext(
+        const ::vos::ORef < SwAccessibleContext >& rCaretContext );
 
     void FireEvents();
 };
