@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:42:07 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese ] = "Reconhecer URL" ;
         Text[ chinese_simplified ] = "Κ¶±π URL";
         Text[ russian ] = "Πΰροξηνΰβΰςό URL";
-        Text[ polish ] = "Rozpoznanie URL";
+        Text[ polish ] = "Rozpoznanie adresu URL";
         Text[ japanese ] = "URL ”F―";
         Text[ chinese_traditional ] = "ΓΡ§O URL";
         Text[ arabic ] = "ΗαΚΪΡέ Ϊαμ URL";
@@ -872,7 +872,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ chinese_simplified ] = "ΈόΈΔΏςµΔ΄σΠ΅";
     Text[ russian ] = "Θημενθςό πΰημεπ πΰμκθ";
     Text[ polish ] = "Zmieρ rozmiar ramki";
-    Text[ japanese ] = "g‚Μ»²½ή•ΟX";
+    Text[ japanese ] = "Γ·½ΔΞή―Έ½‚Μ»²½ή•ΟX";
     Text[ chinese_traditional ] = "Εά§σ®Ψ¤j¤p";
     Text[ arabic ] = "ΚΪΟνα ΝΜγ ΗαίΗΟΡ";
     Text[ greek ] = "Αλλαγή μεγέθους πλαισίου";
@@ -896,7 +896,7 @@ String STR_EVENT_FRM_MOVE
     Text[ chinese_simplified ] = "ÒΖ¶―Ώς";
     Text[ russian ] = "Οεπεμερςθςό πΰμκσ";
     Text[ polish ] = "Przenie ramkκ";
-    Text[ japanese ] = "g‚ΜΪ“®";
+    Text[ japanese ] = "Γ·½ΔΞή―Έ½‚ΜΪ“®";
     Text[ chinese_traditional ] = "²Ύ°Κ®Ψ";
     Text[ arabic ] = "ΕÒΗΝΙ ΗαίΗΟΡ";
     Text[ greek ] = "Μετακίνηση πλαισίου";
@@ -969,7 +969,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ chinese_simplified ] = "ΞΔ±ΎΏς";
     Text[ russian ] = "Òεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Γ·½Δg";
+    Text[ japanese ] = "Γ·½ΔΞή―Έ½";
     Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίζΗΟΡ δΥ";
     Text[ greek ] = "Πλαίσιο κειμένου";
@@ -1258,7 +1258,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ chinese_simplified ] = "ΞΔ±ΎΏς";
     Text[ russian ] = "Òεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Γ·½Δg";
+    Text[ japanese ] = "Γ·½ΔΞή―Έ½";
     Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ δΥ";
     Text[ greek ] = "Πλαίσιο κειμένου";
