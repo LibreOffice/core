@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 17:00:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ String STR_SVT_PRNDLG_PRINTING
 {
     Text = "Drucken" ;
     Text [ ENGLISH ] = "Printing" ;
-    Text [ portuguese ] = "Imprimindo" ;
+    Text [ portuguese ] = "Imprimir" ;
     Text [ english_us ] = "Printing" ;
     Text [ portuguese_brazilian ] = "Drucken" ;
     Text [ swedish ] = "Skriv ut" ;
@@ -960,7 +960,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ chinese_traditional ] = "³]Έm¦LͺνΎχ";
     Text[ arabic ] = "ΕΪΟΗΟ ΗαΨΗΘΪΙ";
     Text[ language_user1 ] = " ";
-    Text[ greek ] = "Εγκατάσταση εκτυπωτή";
+    Text[ greek ] = "Ρύθμιση εκτυπωτή";
     Text[ korean ] = "ΗΑΈ°ΕΝ Ό³Α€";
     Text[ turkish ] = "Yazύcύ ayarlarύ";
 };
