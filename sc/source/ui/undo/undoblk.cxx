@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:50:47 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,9 +689,10 @@ BOOL __EXPORT ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
-                ScRange aRange, ScAddress aOldEnd,
+                ScRange aRange, ScAddress aOldEnd, const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc ) :
     ScBlockUndo( pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT ),
+    aMarkData( rMark ),
     aExtendedRange( aRange ),
     pUndoDoc( pNewUndoDoc )
 {
@@ -725,7 +726,12 @@ void ScUndoCut::DoChange( const BOOL bUndo )
 
     if (bUndo)  // nur bei Undo
     {
-        pUndoDoc->CopyToDocument( aExtendedRange, IDF_ALL, FALSE, pDoc );
+        //  all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+        SCTAB nTabCount = pDoc->GetTableCount();
+        ScRange aCopyRange = aExtendedRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
         ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
@@ -733,7 +739,8 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     else        // nur bei Redo
     {
         pDocShell->UpdatePaintExt( nExtFlags, aExtendedRange );
-        pDoc->DeleteAreaTab( aBlockRange, IDF_ALL );
+        pDoc->DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
+                          aBlockRange.aEnd.Col(), aBlockRange.aEnd.Row(), aMarkData, IDF_ALL );
         SetChangeTrack();
     }
 
@@ -866,18 +873,24 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     // marking is in ScBlockUndo...
     ScUndoUtil::MarkSimpleBlock( pDocShell, aBlockRange );
 
+    SCTAB nTabCount = pDoc->GetTableCount();
     if ( bUndo && !bRedoFilled )
     {
         if (!pRedoDoc)
         {
             BOOL bColInfo = ( aBlockRange.aStart.Row()==0 && aBlockRange.aEnd.Row()==MAXROW );
             BOOL bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==MAXCOL );
+
+            SCTAB nStartTab = aBlockRange.aStart.Tab();
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRedoDoc->InitUndo( pDoc, aBlockRange.aStart.Tab(), aBlockRange.aStart.Tab(),
-                                bColInfo, bRowInfo );
+            pRedoDoc->InitUndoSelected( pDoc, aMarkData, bColInfo, bRowInfo );
         }
-        //  Redo-Daten beim ersten Undo aus dem Dokument lesen
-        pDoc->CopyToDocument( aBlockRange, nUndoFlags, FALSE, pRedoDoc );
+        //  read "redo" data from the document in the first undo
+        //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc
+        ScRange aCopyRange = aBlockRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, nUndoFlags, FALSE, pRedoDoc );
         bRedoFilled = TRUE;
     }
 
@@ -888,8 +901,23 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     pDoc->DeleteSelection( nUndoFlags, aMarkData );
     aMarkData.MarkToSimple();
 
-    if ( !bUndo && pRedoDoc )       // Redo: UndoToDocument vorher
-        pRedoDoc->UndoToDocument( aBlockRange, nUndoFlags, FALSE, pDoc );
+    SCTAB nFirstSelected = aMarkData.GetFirstSelected();
+    ScRange aTabSelectRange = aBlockRange;
+    SCTAB nTab;
+
+    if ( !bUndo && pRedoDoc )       // Redo: UndoToDocument before handling RefData
+    {
+        aTabSelectRange.aStart.SetTab( nFirstSelected );
+        aTabSelectRange.aEnd.SetTab( nFirstSelected );
+        pRedoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, FALSE, pDoc );
+        for (nTab=0; nTab<nTabCount; nTab++)
+            if (nTab != nFirstSelected && aMarkData.GetTableSelect(nTab))
+            {
+                aTabSelectRange.aStart.SetTab( nTab );
+                aTabSelectRange.aEnd.SetTab( nTab );
+                pRedoDoc->CopyToDocument( aTabSelectRange, nUndoFlags, FALSE, pDoc );
+            }
+    }
 
     if (pWorkRefData)
     {
@@ -901,8 +929,19 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     if ( bCreateRedoData && pRefRedoData )
         pRefRedoData->DeleteUnchanged( pDoc );
 
-    if (bUndo)      // Undo: UndoToDocument hinterher
-        pUndoDoc->UndoToDocument( aBlockRange, nUndoFlags, FALSE, pDoc );
+    if (bUndo)      // Undo: UndoToDocument after handling RefData
+    {
+        aTabSelectRange.aStart.SetTab( nFirstSelected );
+        aTabSelectRange.aEnd.SetTab( nFirstSelected );
+        pUndoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, FALSE, pDoc );
+        for (nTab=0; nTab<nTabCount; nTab++)
+            if (nTab != nFirstSelected && aMarkData.GetTableSelect(nTab))
+            {
+                aTabSelectRange.aStart.SetTab( nTab );
+                aTabSelectRange.aEnd.SetTab( nTab );
+                pUndoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, FALSE, pDoc );
+            }
+    }
 
     if ( bUndo )
     {
