@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:16:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 16:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ protected:
     icu::Calendar *body;
     NativeNumberSupplier aNatNum;
     const sal_Char* cCalendar;
+    com::sun::star::lang::Locale aLocale;
     sal_uInt32 fieldSet;
     sal_Int16 fieldValue[CalendarFieldIndex::FIELD_COUNT];
     sal_Int16 fieldSetValue[CalendarFieldIndex::FIELD_COUNT];
@@ -132,7 +133,6 @@ protected:
 private:
     void SAL_CALL setValue() throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL init(Era *_eraArray) throw(com::sun::star::uno::RuntimeException);
-    com::sun::star::lang::Locale aLocale;
     Calendar aCalendar;
     sal_Int16 aStartOfWeek;
 };
