@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-19 15:09:17 $
+ *  last change: $Author: fs $ $Date: 2002-01-23 07:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pSplitter(NULL)
     ,m_pCurrentlyDisplayed(NULL)
     ,m_nAsyncDrop(0)
+    ,m_nAsyncClose( 0 )
     ,m_bQueryEscapeProcessing( sal_False )
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
@@ -412,6 +413,9 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
     DBG_DTOR(SbaTableQueryBrowser,NULL);
+
+    if ( m_nAsyncClose )
+        Application::RemoveUserEvent( m_nAsyncClose );
 }
 
 //------------------------------------------------------------------------------
@@ -1795,10 +1799,9 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             break;
 
         case ID_BROWSER_CLOSE:
-            {
-                Reference<XComponent> xComp(m_xCurrentFrame,UNO_QUERY);
-                ::comphelper::disposeComponent(xComp);
-            }
+            if ( !m_nAsyncClose )
+                m_nAsyncClose = Application::PostUserEvent( LINK( this, SbaTableQueryBrowser, OnAsyncClose ) );
+            // if it's not 0, such a async close is already pending
             break;
 
         case ID_BROWSER_PASTE:
@@ -4010,6 +4013,7 @@ void SbaTableQueryBrowser::frameAction(const ::com::sun::star::frame::FrameActio
 
 }
 // -----------------------------------------------------------------------------
+<<<<<<< unodatbr.cxx
 void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _xColContainer)
 {
     // first we have to clear the grid
@@ -4024,6 +4028,20 @@ void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _
         ::comphelper::disposeComponent(xColumn);
     }
 }
+=======
+IMPL_LINK( SbaTableQueryBrowser, OnAsyncClose, void*, NOTINTERESTEDIN )
+{
+    {
+        m_nAsyncClose = 0;
+
+        // simply dispose the frame we live in
+        Reference<XComponent> xComp(m_xCurrentFrame,UNO_QUERY);
+        ::comphelper::disposeComponent( xComp );
+    }
+    return 0L;
+}
+
+>>>>>>> 1.119.2.1
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
