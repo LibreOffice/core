@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 21:18:47 $
+ *  last change: $Author: pb $ $Date: 2000-11-28 11:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
-#endif
-#ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
 #endif
 #ifndef _SFX_DOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -1275,50 +1272,6 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 nRet |= CptlSttWrd;
         }
     } while( FALSE );
-
-    if( nRet )
-    {
-        SvtHelpOptions aOpt;
-        if( aOpt.IsHelpAgentAutoStartMode() )
-        {
-            // at time max 16 help ids (from 1 to 15)
-            static BYTE aHelpIdArr[ HID_AUTOCORR_HELP_END -
-                                    HID_AUTOCORR_HELP_START ] = {0};
-            ULONG nHelpId = 0;
-            if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd) )
-            {
-                // von 0 - 7
-                if( nRet & Autocorrect )
-                    nHelpId += 4;
-                if( nRet & CptlSttSntnc )
-                    nHelpId += 2;
-                if( nRet & CptlSttWrd )
-                    nHelpId += 1;
-            }
-            else
-            {
-                     if( nRet & ChgQuotes)          nHelpId =  8;
-                else if( nRet & ChgSglQuotes)       nHelpId =  9;
-                else if( nRet & SetINetAttr)        nHelpId = 10;
-                else if( nRet & IngnoreDoubleSpace) nHelpId = 11;
-                else if( nRet & ChgWeightUnderl)    nHelpId = 12;
-                else if( nRet & ChgFractionSymbol ) nHelpId = 13;
-                else if( nRet & ChgToEnEmDash)      nHelpId = 14;
-                else if( nRet & ChgOrdinalNumber)   nHelpId = 15;
-            }
-
-            DBG_ASSERT( nHelpId && nHelpId < (HID_AUTOCORR_HELP_END -
-                                              HID_AUTOCORR_HELP_START + 1),
-                        "wrong HelpId Range" );
-
-            if( nHelpId && aHelpIdArr[ --nHelpId ] < 10 )  // maximal 10 mal zeigen
-            {
-                ++aHelpIdArr[ nHelpId ];
-                nHelpId += HID_AUTOCORR_HELP_START;
-                SfxHelp::ShowHint( nHelpId );
-            }
-        }
-    }
 
     return nRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:51:18 $
+ *  last change: $Author: pb $ $Date: 2000-11-28 11:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
-#endif
 
 #ifndef _TOOLS_RC_H
 #include <tools/rc.h>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
 #endif
 
 #define _SVSTDARR_USHORTS
@@ -398,7 +398,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     aTabDlgOpt.SetPosition( GetPosPixel().X(), GetPosPixel().Y() );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
-    const USHORT nCount = maPageList.Count();
+    const ULONG nCount = maPageList.Count();
 
     for ( i = 0; i < nCount; ++i )
     {
@@ -446,10 +446,6 @@ IconChoiceDialog ::~IconChoiceDialog ()
         delete pRanges;
     if ( pOutSet )
         delete pOutSet;
-
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
 }
 
 /**********************************************************************
@@ -975,10 +971,6 @@ void IconChoiceDialog::ActivatePageImpl ()
             pData->pPage->ActivatePage( *pExampleSet );
     }
 
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->LoadTopic( pData->pPage->GetHelpId() );
-
     SetHelpId( pData->pPage->GetHelpId() );
 
     BOOL bReadOnly = pData->pPage->IsReadOnly();
@@ -1040,7 +1032,7 @@ BOOL IconChoiceDialog::DeActivatePageImpl ()
             pSet = GetRefreshedSet();
             DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
             // alle Pages als neu zu initialsieren flaggen
-            const USHORT nCount = maPageList.Count();
+            const ULONG nCount = maPageList.Count();
 
             for ( USHORT i = 0; i < nCount; ++i )
             {
@@ -1103,7 +1095,7 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     SvUShorts aUS( 16, 16 );
     ULONG nCount = maPageList.Count();
 
-    ULONG i;
+    USHORT i;
     for ( i = 0; i < nCount; ++i )
     {
         IconChoicePageData* pData = maPageList.GetObject (i);
@@ -1128,7 +1120,7 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
         nCount = aUS.Count();
 
         for ( i = 0; i < nCount; ++i )
-            aUS[i] = (USHORT) rPool.GetWhich( aUS[i] );
+            aUS[i] = rPool.GetWhich( aUS[i] );
     }
 
     // sortieren
@@ -1360,7 +1352,7 @@ short IconChoiceDialog::Ok()
 
     const ULONG nCount = maPageList.Count();
 
-    for ( ULONG i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         IconChoicePageData* pData = GetPageData ( i );
 
@@ -1406,7 +1398,7 @@ BOOL IconChoiceDialog::IsInOK() const
 void IconChoiceDialog::FocusOnIcon( USHORT nId )
 {
     // set focus to icon for the current visible page
-    for ( int i=0; i<maIconCtrl.GetEntryCount(); i++)
+    for ( USHORT i=0; i<maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
         USHORT* pUserData = (USHORT*) pEntry->GetUserData();
