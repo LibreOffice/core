@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 12:45:17 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: kz $
- //     $Date: 2000-11-29 12:45:17 $
- // $Revision: 1.5 $
+ //     $Date: 2001-01-26 21:36:59 $
+ // $Revision: 1.6 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ norwegian ] = "~formelcelle" ;
         Text [ italian ] = "~Cella formula" ;
         Text [ portuguese_brazilian ] = "~célula de fórmula" ;
-        Text [ portuguese ] = "Célula ~fórmula" ;
+        Text [ portuguese ] = "Célula de ~fórmula" ;
         Text [ finnish ] = "~kaavasolu" ;
         Text [ danish ] = "~Formelcelle" ;
         Text [ french ] = "Cellule de formule" ;
