@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-18 12:46:35 $
+ *  last change: $Author: jsc $ $Date: 2000-11-02 11:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@ using namespace rtl;
 
 #define SVERSION_NAME           "sversion"
 #define REGISTRY_SECTION        "Registry"
-#define REGISTRY_VERSION_KEY    "UserRegistry 5.3"
-#define REGISTRY_LOCAL_NAME     "user53.rdb"
+#define REGISTRY_VERSION_KEY    "UserRegistry 6.0"
+#define REGISTRY_LOCAL_NAME     "user60.rdb"
 #define REGISTRY_SYSTEM_NAME    "applicat.rdb"
 
 #define LOCALREGISTRY_DEFAULTLOCATION       "?^"
