@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:40:44 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,23 +103,35 @@
 #define ID_BROWSER_DESIGN                   SID_SBA_QRY_DESIGN
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
 
-// menu MENU_BROWSERTREE_CONTEXT
-#define ID_TREE_ADMINISTRATE                1
-#define ID_TREE_CLOSE_CONN                  2
-#define ID_TREE_REBUILD_CONN                3
-#define ID_TREE_QUERY_CREATE_DESIGN         4
-#define ID_TREE_QUERY_CREATE_TEXT           5
-#define ID_TREE_QUERY_EDIT                  6
-#define ID_TREE_QUERY_DELETE                7
-#define ID_TREE_TABLE_CREATE_DESIGN         8
-#define ID_TREE_TABLE_EDIT                  9
-#define ID_TREE_TABLE_DELETE               10
-#define ID_TREE_TABLE_COPY                 11
-#define ID_TREE_QUERY_COPY                 12
-#define ID_TREE_TABLE_PASTE                13
-#define ID_TREE_RELATION_DESIGN            14
-#define ID_TABLE_DESIGN_NO_CONNECTION      15
-#define ID_TREE_VIEW_CREATE_DESIGN         16
+// The following ids are local to special components (e.g. menus), so they don't need to be unique
+// overall. Please have this in mind when changing anything
+#define ID_TREE_ADMINISTRATE                 1
+#define ID_TREE_CLOSE_CONN                   2
+#define ID_TREE_REBUILD_CONN                 3
+#define ID_TREE_QUERY_CREATE_DESIGN          4
+#define ID_TREE_QUERY_CREATE_TEXT            5
+#define ID_TREE_QUERY_EDIT                   6
+#define ID_TREE_QUERY_DELETE                 7
+#define ID_TREE_TABLE_CREATE_DESIGN          8
+#define ID_TREE_TABLE_EDIT                   9
+#define ID_TREE_TABLE_DELETE                10
+#define ID_TREE_TABLE_COPY                  11
+#define ID_TREE_QUERY_COPY                  12
+#define ID_TREE_TABLE_PASTE                 13
+#define ID_TREE_RELATION_DESIGN             14
+#define ID_TABLE_DESIGN_NO_CONNECTION       15
+#define ID_TREE_VIEW_CREATE_DESIGN          16
+#define ID_OPEN_DOCUMENT                    17
+#define ID_EDIT_DOCUMENT                    18
+#define ID_NEW_LINK                         19
+#define ID_EDIT_LINK                        10
+#define ID_DROP_LINK                        21
+#define ID_CREATE_NEW_DOC                   22
+#define ID_FORM_NEW_TEXT                    23
+#define ID_FORM_NEW_CALC                    24
+#define ID_FORM_NEW_IMPRESS                 25
+#define ID_FORM_NEW_PILOT                   26
+#define ID_FORM_NEW_TEMPLATE                27
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY
@@ -137,8 +149,6 @@
 #define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // Distinct anzeigen
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
-
-
 
 
 #endif // DBACCESS_UI_BROWSER_ID_HXX

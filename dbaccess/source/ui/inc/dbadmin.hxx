@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 07:44:46 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,8 @@ public:
     void        clearPassword();
 
     /// apply the current changes, return sal_True if successfull
-    void        applyChangesAsync();
+    void        applyChangesAsync(sal_Int32 _nOnErrorPageId);
+
     /// return <TRUE/> if in the current state, the changes can be saved (i.e. they produce no conflict)
     sal_Bool    isApplyable();
 
@@ -656,6 +657,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/03/29 07:44:46  fs
+ *  #84826# +clearPassword
+ *
  *  Revision 1.13  2001/03/27 06:59:28  oj
  *  new method createConnection and export of ORB
  *

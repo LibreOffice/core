@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:43:05 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,9 @@ class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
-#define CONTAINER_QUERIES       0
-#define CONTAINER_TABLES        1
+#define CONTAINER_QUERIES       sal_Int32(ET_QUERY - ET_BOOKMARK)
+#define CONTAINER_TABLES        sal_Int32(ET_TABLE - ET_BOOKMARK)
+#define CONTAINER_BOOKMARKS     sal_Int32(ET_BOOKMARK - ET_BOOKMARK)
 
 // .........................................................................
 namespace dbaui
@@ -129,7 +130,6 @@ namespace dbaui
 
         ::rtl::OUString         m_sDefaultDataSourceName;
         ::rtl::OUString         m_sDefaultCommand;
-        sal_Int32               m_nDefaultCommandType;
         sal_Bool                m_bHideTreeView;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
@@ -240,7 +240,8 @@ namespace dbaui
         */
         void implAddDatasource(const String& _rDbName, Image& _rDbImage,
                 String& _rQueryName, Image& _rQueryImage,
-                String& _rTableName, Image& _rTableImage);
+                String& _rTableName, Image& _rTableImage,
+                String& _rBookmarkName, Image& _rBookmarkImage);
 
         /** unloads the form, empties the grid model
             @param _bDisposeConnection
@@ -260,7 +261,7 @@ namespace dbaui
         /** search in the tree for query- or tablecontainer equal to this interface and return
             this container entry
         */
-        SvLBoxEntry* getNameAccessFromEntry(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
+        SvLBoxEntry* getEntryFromContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
         // return true when there is connection available
         sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
         sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
@@ -279,23 +280,28 @@ namespace dbaui
         enum EntryType
         {
             ET_DATASOURCE,
-            ET_TABLE_CONTAINER,
+            ET_BOOKMARK_CONTAINER,
             ET_QUERY_CONTAINER,
-            ET_TABLE,
+            ET_TABLE_CONTAINER,
+            ET_BOOKMARK,
             ET_QUERY,
+            ET_TABLE,
             ET_UNKNOWN
         };
         EntryType   getEntryType( SvLBoxEntry* _pEntry );
-        sal_Bool    isObject( EntryType _eType ) { return (ET_TABLE == _eType) || (ET_QUERY == _eType); }
-        sal_Bool    isContainer( EntryType _eType ) { return (ET_TABLE_CONTAINER == _eType) || (ET_QUERY_CONTAINER == _eType); }
+        EntryType   getChildType( SvLBoxEntry* _pEntry );
+        sal_Bool    isObject( EntryType _eType ) { return (ET_TABLE == _eType) || (ET_QUERY == _eType) || (ET_BOOKMARK == _eType); }
+        sal_Bool    isContainer( EntryType _eType ) { return (ET_TABLE_CONTAINER == _eType) || (ET_QUERY_CONTAINER == _eType) || (ET_BOOKMARK_CONTAINER == _eType); }
+        sal_Bool    isContainer( SvLBoxEntry* _pEntry ) { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
         sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
 
         // get the display text of the entry given
-        String      getEntryText( SvLBoxEntry* _pEntry );
+        String      GetEntryText( SvLBoxEntry* _pEntry );
 
         // is called when a table or a query was selected
+        DECL_LINK( OnEntryDoubleClicked, SvLBoxEntry* );
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );

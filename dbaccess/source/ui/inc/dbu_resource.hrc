@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #define RID_STRING_START                RID_DBACCESS_START
 #define RID_UNTYPED_START               RID_DBACCESS_START
 #define RID_WARN_START                  RID_DBACCESS_START
+#define RID_CONTROL_START               RID_DBACCESS_START
 
 //========================================================================
 // dialog ids
@@ -102,6 +103,8 @@
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
 #define DLG_ADABASSTAT                  RID_DIALOG_START + 18
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
+#define DLG_DOCUMENTLINK                RID_DIALOG_START + 20
+#define DLG_DEADDOCUMENTLINK            RID_DIALOG_START + 21
 
 //========================================================================
 // tab pages
@@ -115,12 +118,12 @@
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START +  6
 #define PAGE_ADO                        RID_PAGE_START +  7
 #define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
-#define RID_DB_TAB_EDITOR               RID_PAGE_START +  9
-#define TAB_WIZ_COLUMN_SELECT           RID_PAGE_START + 10
-#define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 11
-#define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 12
-#define TAB_WIZ_COPYTABLE               RID_PAGE_START + 13
-#define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 14
+#define TAB_WIZ_COLUMN_SELECT           RID_PAGE_START +  9
+#define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 10
+#define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
+#define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
+#define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
+#define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
 
 //========================================================================
 // error boxes
@@ -203,10 +206,13 @@
 #define IMG_DATABASE_NEW                RID_IMAGE_START + 10
 #define IMG_DATABASE_DELETED            RID_IMAGE_START + 11
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
+#define BOOKMARK_TREE_ICON              RID_IMAGE_START + 13
+#define BOOKMARKFOLDER_TREE_ICON        RID_IMAGE_START + 14
 
 //========================================================================
 // image lists
 #define IMG_JOINS                       RID_IMAGELIST_START + 0
+
 //========================================================================
 // menues
 
@@ -223,6 +229,16 @@
 #define RID_TABLE_DESIGN_MAIN_MENU      RID_MENU_START + 10
 #define RID_QUERY_DESIGN_MAIN_MENU      RID_MENU_START + 11
 #define RID_RELATION_DESIGN_MAIN_MENU   RID_MENU_START + 12
+#define RID_NEW_FORM                    RID_MENU_START + 13
+#define MENU_BROWSER_TABLECONTEXT       RID_MENU_START + 14
+#define MENU_BROWSER_QUERYCONTEXT       RID_MENU_START + 15
+#define MENU_BROWSER_BOOKMARKCONTEXT    RID_MENU_START + 16
+#define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 17
+
+//========================================================================
+// controls
+
+#define RID_DB_TAB_EDITOR               RID_CONTROL_START +  0
 
 //========================================================================
 // strings
@@ -384,6 +400,13 @@
 #define STR_VIEW_TITLE                      RID_STRING_START + 150
 #define STR_QUERYDESIGN_NO_VIEW_SUPPORT     RID_STRING_START + 151
 #define STR_QUERYDESIGN_NO_VIEW_ASK         RID_STRING_START + 152
+#define STR_QUERY_OBJECTS                   RID_STRING_START + 153
+#define STR_DOCUMENT_OBJECTS                RID_STRING_START + 154
+#define STR_QUERY_DROP_DOCUMENT_LINK        RID_STRING_START + 155
+#define STR_LINKEDDOC_DOESNOTEXIST          RID_STRING_START + 156
+#define STR_UNEXPECTED_ERROR                RID_STRING_START + 157
+#define STR_COULDNOTOPEN_LINKEDDOC          RID_STRING_START + 158
+#define RID_STR_BOOKMARKS_CONTAINER         RID_STRING_START + 159
 
 //========================================================================
 // untyped resources
@@ -398,120 +421,11 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2001/04/24 14:34:10  oj
+ *  impl views and a menu
+ *
  *  Revision 1.38  2001/04/12 15:30:17  fs
  *  +STR_LOADING_TABLE/-QUERY
- *
- *  Revision 1.37  2001/04/11 11:36:03  oj
- *  #85699# check if pkey already exists
- *
- *  Revision 1.36  2001/04/03 08:14:57  fs
- *  +STR_CONNECTING_DATASOURCE
- *
- *  Revision 1.35  2001/04/02 10:18:50  oj
- *  #84817# give error msg when no field was selected
- *
- *  Revision 1.34  2001/03/21 13:51:48  oj
- *  #85217# new querybox
- *
- *  Revision 1.33  2001/03/20 08:49:25  oj
- *  new defines
- *
- *  Revision 1.32  2001/03/19 06:01:17  fs
- *  +STR_INDEXDESIGN_DOUBLE_COLUMN_NAME + QUERY_SAVE_TABLE_EDIT_INDEXES
- *
- *  Revision 1.31  2001/03/16 16:20:09  fs
- *  new ids for the index design dialog and friends
- *
- *  Revision 1.30  2001/03/14 10:35:10  oj
- *  #84840# check if connection is null and show extra button
- *
- *  Revision 1.29  2001/03/02 17:05:09  fs
- *  +RID_OPENTABLES_WARNINGS*
- *
- *  Revision 1.28  2001/03/01 15:22:17  oj
- *  #84511# change message
- *
- *  Revision 1.27  2001/02/28 10:10:01  oj
- *  changes for the new relation design
- *
- *  Revision 1.26  2001/02/23 15:02:06  oj
- *  a lot of import export
- *
- *  Revision 1.25  2001/02/16 15:54:53  oj
- *  new ex- import data
- *
- *  Revision 1.24  2001/02/14 14:39:23  oj
- *  some changes
- *
- *  Revision 1.23  2001/02/06 08:07:55  oj
- *  new querybox
- *
- *  Revision 1.22  2001/02/05 13:48:36  fs
- *  #83430# +ERR_CANTADMINQUERIES / +WARN_SAVEFORQUERIES
- *
- *  Revision 1.21  2001/02/05 09:14:15  oj
- *  some new resources
- *
- *  Revision 1.20  2001/01/30 08:26:51  fs
- *  +STR_ALL_*
- *
- *  Revision 1.19  2001/01/26 06:56:59  fs
- *  +PAGE_QUERYADMINISTRATION
- *
- *  Revision 1.18  2001/01/11 09:20:02  oj
- *  #81232# new string
- *
- *  Revision 1.17  2001/01/09 16:03:40  oj
- *  #81232#
- *
- *  Revision 1.16  2001/01/04 11:19:55  fs
- *  #81485# +PAGE_ADO
- *
- *  Revision 1.15  2000/12/12 12:30:16  oj
- *  #80933# new dialog ids
- *
- *  Revision 1.14  2000/12/10 16:12:38  fs
- *  RID_STR_QUERIES-/-TABLES_CONTAINER
- *
- *  Revision 1.13  2000/12/08 21:12:18  fs
- *  +MENU_BROWSERTREE_CONTEXT
- *
- *  Revision 1.12  2000/12/03 10:27:34  fs
- *  #79820# have a range for dbaccess resource ids now
- *
- *  Revision 1.11  2000/11/10 16:10:43  oj
- *  new defines
- *
- *  Revision 1.10  2000/11/02 15:18:43  fs
- *  #79380# +STR_ERR_EMPTY_DSN_NAME
- *
- *  Revision 1.9  2000/10/30 15:19:12  fs
- *  #79816# STR_INVALID_REGISTEREDDRIVER is obsolete
- *
- *  Revision 1.8  2000/10/26 18:05:29  fs
- *  DLG_PARAMETERS
- *
- *  Revision 1.7  2000/10/26 14:52:48  oj
- *  new strings
- *
- *  Revision 1.6  2000/10/25 13:01:27  fs
- *  STR_REMEMBERPASSWORD*
- *
- *  Revision 1.5  2000/10/24 12:07:49  fs
- *  DLG_DATASOURCE_SELECTION
- *
- *  Revision 1.4  2000/10/12 16:20:04  fs
- *  ERR_COULDNOTRESTOREDS/BMP_DATABASE_DELETED/MENU_DATASOURCELIST_POPUP
- *
- *  Revision 1.3  2000/10/11 11:32:07  fs
- *  new bitmap ids for the admin dialog
- *
- *  Revision 1.2  2000/10/09 12:41:10  fs
- *  some new strings
- *
- *  Revision 1.1  2000/10/05 10:08:18  fs
- *  initial checkin
- *
  *
  *  Revision 1.0 25.09.00 08:50:32  fs
  ************************************************************************/
