@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.59 $
+*  $Revision: 1.60 $
 *
-*  last change: $Author: hr $ $Date: 2004-12-10 18:37:55 $
+*  last change: $Author: hjs $ $Date: 2004-12-14 14:00:36 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -376,16 +376,6 @@ File gid_File_Bin_Senddoc
   #endif
 End
 
-#ifdef SOLARIS
-
-File gid_File_Bin_Sorev
-    BIN_FILE_BODY;
-    Name = "sorev";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED, SETUPZIP);
-End
-
-#endif
 
 #ifdef UNX
 
