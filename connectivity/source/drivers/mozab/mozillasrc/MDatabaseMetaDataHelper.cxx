@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:42:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,10 @@
 #include <MNSInit.hxx>
 #include <MNameMapper.hxx>
 
-// More Mozilla includes for LDAP Connection Test
-#include "prprf.h"
-#include "nsILDAPURL.h"
-#include "nsILDAPMessage.h"
-#include "nsILDAPMessageListener.h"
-#include "nsILDAPErrors.h"
-#include "nsILDAPConnection.h"
-#include "nsILDAPOperation.h"
+#ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
+#include "MNSMozabProxy.hxx"
+#endif
+static ::osl::Mutex m_aMetaMutex;
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -149,26 +145,16 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
     OSL_TRACE( "IN/OUT MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()\n" );
 }
 
+static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array);
 //enum all sub folders
 static nsresult enumSubs(nsIAbDirectory * parentDir,nsISupportsArray * array)
 {
     nsresult rv = NS_OK ;
-    nsCOMPtr<nsIEnumerator> subDirectories;
+    nsCOMPtr<nsISimpleEnumerator> subDirectories;
     rv = parentDir->GetChildNodes(getter_AddRefs(subDirectories));
     if (NS_FAILED(rv)) { return rv; }
 
-    while (NS_ENUMERATOR_FALSE == subDirectories->IsDone()) {
-        nsCOMPtr<nsISupports> newDirSupports ;
-
-        rv = subDirectories->CurrentItem(getter_AddRefs(newDirSupports)) ;
-                NS_ENSURE_SUCCESS(rv, rv);
-                subDirectories->Next();
-        nsCOMPtr<nsIAbDirectory> childDir = do_QueryInterface(newDirSupports, &rv) ;
-                NS_ENSURE_SUCCESS(rv, rv);
-        array->AppendElement(childDir);
-
-        rv = enumSubs(childDir,array);
-    }
+    rv = enumSubs(subDirectories,array);
     return rv;
 }
 
@@ -228,7 +214,7 @@ static nsresult insertPABDescription()
 }
 // -------------------------------------------------------------------------
 // Case where we get a parent uri, and need to list its children.
-static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **aSubs, sal_Bool aProfileExists)
+static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
     *aSubs = nsnull ;
@@ -236,38 +222,35 @@ static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **a
     nsCOMPtr<nsISupportsArray> array ;
 
     NS_NewISupportsArray(getter_AddRefs(array)) ;
-    if (aProfileExists) {
 
-        retCode = insertPABDescription();
-        NS_ENSURE_SUCCESS(retCode, retCode) ;
+    retCode = insertPABDescription();
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
 
-        nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &retCode)) ;
-        NS_ENSURE_SUCCESS(retCode, retCode) ;
-        nsCOMPtr<nsIRDFResource> rdfResource ;
+    nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &retCode)) ;
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
+    nsCOMPtr<nsIRDFResource> rdfResource ;
 
-        OSL_TRACE("uri: %s\n", aParent.getStr()) ;
-        retCode = rdfService->GetResource(aParent.getStr(), getter_AddRefs(rdfResource)) ;
-        NS_ENSURE_SUCCESS(retCode, retCode) ;
-        nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(rdfResource, &retCode) ;
-        nsCOMPtr<nsIEnumerator> tempEnum ;
+    OSL_TRACE("uri: %s\n", aParent.getStr()) ;
+    retCode = rdfService->GetResource(nsDependentCString(aParent.getStr(),aParent.getLength()), getter_AddRefs(rdfResource)) ;
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
+    nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(rdfResource, &retCode) ;
+    nsCOMPtr<nsISimpleEnumerator> tempEnum ;
 
-        NS_ENSURE_SUCCESS(retCode, retCode) ;
-        retCode = directory->GetChildNodes(getter_AddRefs(tempEnum)) ;
-        NS_ENSURE_SUCCESS(retCode, retCode) ;
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
+    retCode = directory->GetChildNodes(getter_AddRefs(tempEnum)) ;
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
 
-        if (NS_SUCCEEDED(tempEnum->First())) {
-            do {
-                nsCOMPtr<nsIAbDirectory> element ;
-                retCode = tempEnum->CurrentItem(getter_AddRefs(element)) ;
-                if (NS_SUCCEEDED(retCode))
-                   {
-                       array->AppendElement(element) ;
-                       enumSubs(element,array);
-                   }
-            } while (NS_SUCCEEDED(tempEnum->Next())) ;
+    PRBool hasMore = PR_TRUE ;
+    while (NS_SUCCEEDED(tempEnum->HasMoreElements(&hasMore)) && hasMore) {
+        nsCOMPtr<nsIAbDirectory> element ;
+        retCode = tempEnum->GetNext(getter_AddRefs(element)) ;
+        if (NS_SUCCEEDED(retCode))
+        {
+            array->AppendElement(element) ;
+            enumSubs(element,array);
         }
-
     }
+
     array->Enumerate(aSubs) ;
     return retCode ;
 }
@@ -335,8 +318,11 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
     NS_ENSURE_SUCCESS(retCode, retCode) ;
     nsCOMPtr<nsIRDFResource> rdfResource ;
 
-    retCode = rdfService->GetResource(aUri.getStr(), getter_AddRefs(rdfResource)) ;
+    retCode = rdfService->GetResource(nsDependentCString(aUri.getStr(),aUri.getLength()), getter_AddRefs(rdfResource)) ;
     NS_ENSURE_SUCCESS(retCode, retCode) ;
+    retCode = rdfService->UnregisterResource(rdfResource) ;
+    NS_ENSURE_SUCCESS(retCode, retCode) ;
+
     nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(rdfResource, &retCode) ;
 
     NS_ENSURE_SUCCESS(retCode, retCode) ;
@@ -355,42 +341,133 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
 void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI )
 {
     if ( ! bGivenURI ) {
-        m_aErrorString = ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist");
+        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Mozilla Addressbook Directories Exist"));
     }
     else {
         if (_pCon->usesFactory()) {
             if ( _pCon->isOutlookExpress() ) {
-                m_aErrorString = ::rtl::OUString::createFromAscii("No Outlook Express Addressbook Exists");
+                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Outlook Express Addressbook Exists"));
             }
             else {
-                m_aErrorString = ::rtl::OUString::createFromAscii("No Outlook (MAPI) Addressbook Exists");
+                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Outlook (MAPI) Addressbook Exists"));
             }
         }
         else {
             if (_pCon->isLDAP()) {
-                m_aErrorString = ::rtl::OUString::createFromAscii("Unable to connect to LDAP Server");
+                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Unable to connect to LDAP Server"));
             }
             else {
-                m_aErrorString = ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist");
+                m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Mozilla Addressbook Directories Exist"));
             }
         }
     }
 }
 
+nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
+                        ::std::vector< ::rtl::OUString >*   _rStrings,
+                        ::std::vector< ::rtl::OUString >*   _rTypes,
+                        rtl::OUString * sError)
+{
+    if (!sAbURI || !nmap || !_rStrings || !_rTypes || !sError)
+    {
+        return NS_ERROR_NULL_POINTER;
+    }
+    OSL_TRACE("Using URI %s to getTables()\n",sAbURI );
+
+    // Get the mozilla addressbooks from the base directory.
+    nsresult rv = NS_OK;
+    nsCOMPtr<nsIEnumerator> subDirectories;
+
+    switch(*nDirectoryType)
+    {
+    case SDBCAddress::Mozilla:
+        rv = getSubsFromParent(sAbURI, getter_AddRefs(subDirectories)) ;
+        break;
+    case SDBCAddress::Outlook:
+    case SDBCAddress::OutlookExp:
+        rv = getSubsFromFactory(sAbURI, getter_AddRefs(subDirectories)) ;
+        break;
+    case SDBCAddress::LDAP:
+        rv = getSubsFromURI(sAbURI, getter_AddRefs(subDirectories)) ;
+        break;
+    default:
+        rv = getSubsFromParent(sAbURI, getter_AddRefs(subDirectories));
+    }
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    // At this point we have a list containing the nsIAbDirectory we need to map as tables
+    rv = subDirectories -> First();
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    PRUnichar              *name = nsnull;
+    PRBool                  bIsMailList = PR_FALSE;
+
+    ::rtl::OUString aTableName;
+
+    nmap->reset();
+    do {
+        nsCOMPtr<nsIAbDirectory> subDirectory;
+
+        nsCOMPtr<nsISupports> item;
+        rv = subDirectories -> CurrentItem(getter_AddRefs(item));
+        if ( NS_FAILED( rv ) ) {
+            *sError = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem Getting Addressbook Entry"));
+            return NS_ERROR_FAILURE;
+        }
+
+        subDirectory = do_QueryInterface(item, &rv);
+
+        subDirectory -> GetIsMailList(&bIsMailList);
+        // For now we're not interested in mailing lists.
+        rv = subDirectory -> GetDirName(&name);
+        if ( NS_FAILED( rv ) ) {
+            *sError = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem Getting Addressbook Directory Name"));
+            return NS_ERROR_FAILURE;
+        }
+        MTypeConverter::prUnicharToOUString(name, aTableName);
+        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+
+        ODatabaseMetaDataResultSet::ORow aRow(3);
+
+        // Insert table into map
+        if ( aTableName.getLength() == 0 )
+            aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
+
+        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+
+        rv = nmap->add( aTableName, subDirectory);
+        if (!NS_FAILED(rv)) //failed means we have added this directory
+        {
+            //map mailing lists as views
+            _rStrings->push_back( aTableName ); // Table name
+            if (!bIsMailList) {
+                ::rtl::OUString aTableType(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE")));
+                _rTypes->push_back( aTableType ); // Table type
+            }
+            else
+            {
+                ::rtl::OUString aTableType(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VIEW")));
+                _rTypes->push_back( aTableType ); // Table type
+            }
+        }
+        rv = subDirectories -> Next();
+    } while ( rv == NS_OK);
+
+    return( NS_OK );
+}
 sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                        _pCon,
                                                    ::std::vector< ::rtl::OUString >&   _rStrings,
-                                                   ::std::vector< ::rtl::OUString >&   _rTypes,
-                                                   sal_Bool                            forceLoad )
+                                                   ::std::vector< ::rtl::OUString >&   _rTypes)
 {
     sal_Bool                                    bGivenURI;
-    sal_Bool                                    bIsRootDir;
     rtl::OUString                               sAbURI;
     OString                                     sAbURIString;
 
-    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)\n", _pCon, forceLoad?"True":"False" );
+    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)\n", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
+    ::osl::MutexGuard aGuard( m_aMetaMutex );
     // Only do the query if we have to - performance degrades otherwise
-    if ( ! forceLoad && m_aTableNames.size() > 0 ) {
+    if ( ! _pCon->getForceLoadTables() && m_aTableNames.size() > 0 ) {
         _rStrings = m_aTableNames;
         _rTypes   = m_aTableTypes;
         return( sal_True );
@@ -418,118 +495,58 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     // Get the mozilla addressbooks from the base directory.
     nsresult rv = NS_OK;
     nsCOMPtr<nsIEnumerator> subDirectories;
-
+    sal_Int32 nDirectoryType=0;
     if (!bGivenURI) {
-        rv = getSubsFromParent(s_pADDRESSBOOKROOTDIR, getter_AddRefs(subDirectories), m_bProfileExists) ;
-        if ( NS_FAILED( rv ) ) {
-            setAbSpecificError( _pCon, bGivenURI );
-            return( sal_False );
-        }
+        sAbURIString = s_pADDRESSBOOKROOTDIR;
+        nDirectoryType = SDBCAddress::Mozilla;
     }
     else {
         if (_pCon->usesFactory()) {
-            rv = getSubsFromFactory(sAbURIString, getter_AddRefs(subDirectories)) ;
-            if ( NS_FAILED( rv ) ) {
-                setAbSpecificError( _pCon, bGivenURI );
-                return sal_False;
-            }
+            nDirectoryType = SDBCAddress::Outlook;
         }
         else {
             if (_pCon->isLDAP()) {
-                rv = getSubsFromURI(sAbURIString, getter_AddRefs(subDirectories)) ;
-                if ( NS_FAILED( rv ) ) {
-                    setAbSpecificError( _pCon, bGivenURI );
-                    return sal_False;
-                }
+                nDirectoryType = SDBCAddress::LDAP;
             }
             else {
-                rv = getSubsFromParent(sAbURIString, getter_AddRefs(subDirectories), m_bProfileExists);
-                if ( NS_FAILED( rv ) ) {
-                    setAbSpecificError( _pCon, bGivenURI );
-                    return sal_False;
-                }
+                sAbURIString = s_pADDRESSBOOKROOTDIR;
+                nDirectoryType = SDBCAddress::Mozilla;
             }
         }
     }
-    // Catch all (just in case), should be caught before this
-    if ( NS_FAILED( rv ) ) {
-        OSL_ASSERT( "Shouldn't have reached this line with a failure");
+    if (nDirectoryType == SDBCAddress::Mozilla && !m_bProfileExists)
+    {
         setAbSpecificError( _pCon, bGivenURI );
         return sal_False;
     }
-    // At this point we have a list containing the nsIAbDirectory we need to map as tables
-    rv = subDirectories -> First();
-    if ( NS_FAILED( rv ) ) {
-        setAbSpecificError( _pCon, bGivenURI );
-        return sal_False;
-    }
-    else {
-        bIsRootDir = sal_True;
-    }
-
-    PRUnichar              *name = nsnull;
-    PRBool                  bIsMailList = PR_FALSE;
-
-    ::rtl::OUString aTableName;
 
     MNameMapper *nmap = _pCon->getNameMapper();
     nmap->reset();
-    do {
-        nsCOMPtr<nsIAbDirectory> subDirectory;
 
-        if ( bIsRootDir ) {
-            nsCOMPtr<nsISupports> item;
-            rv = subDirectories -> CurrentItem(getter_AddRefs(item));
-            if ( NS_FAILED( rv ) ) {
-                m_aErrorString = ::rtl::OUString::createFromAscii("Problem Getting Addressbook Entry");
-                return sal_False;
-            }
+    //rv = getTableStringsProxied(sAbURIString.getStr(),&nDirectoryType,nmap,&m_aTableNames,&m_aTableTypes,&m_aErrorString);
 
-            subDirectory = do_QueryInterface(item, &rv);
-        }
-        subDirectory -> GetIsMailList(&bIsMailList);
-        // For now we're not interested in mailing lists.
-        rv = subDirectory -> GetDirName(&name);
-        if ( NS_FAILED( rv ) ) {
-            m_aErrorString = ::rtl::OUString::createFromAscii("Problem Getting Addressbook Directory Name");
-            return sal_False;
-        }
-        MTypeConverter::prUnicharToOUString(name, aTableName);
-        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_GET_TABLE_STRINGS;
+    args.argCount = 6;
+    args.arg1 = (void*)sAbURIString.getStr();
+    args.arg2 = (void*)&nDirectoryType;
+    args.arg3 = (void*)nmap;
+    args.arg4 = (void*)&m_aTableNames;
+    args.arg5 = (void*)&m_aTableTypes;
+    args.arg6 = (void*)&m_aErrorString;
+    rv = xMProxy.StartProxy(&args);
 
-            ODatabaseMetaDataResultSet::ORow aRow(3);
-
-            // Insert table into map
-            if ( aTableName.getLength() == 0 ) {
-                aTableName = rtl::OUString::createFromAscii("AddressBook");
-            }
-
-            OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
-
-        rv = nmap->add( aTableName, subDirectory);
-        if (!NS_FAILED(rv)) //failed means we have added this directory
-        {
-            //map mailing lists as views
-            m_aTableNames.push_back( aTableName ); // Table name
-            if (!bIsMailList) {
-                ::rtl::OUString aTableType(::rtl::OUString::createFromAscii("TABLE"));
-                m_aTableTypes.push_back( aTableType ); // Table type
-            }
-            else
-            {
-                ::rtl::OUString aTableType(::rtl::OUString::createFromAscii("VIEW"));
-                m_aTableTypes.push_back( aTableType ); // Table type
-            }
-        }
-        if ( bIsRootDir ) {
-            rv = subDirectories -> Next();
-        }
-    } while ( bIsRootDir && rv == NS_OK);
-
+    if (NS_FAILED(rv))
+    {
+        setAbSpecificError( _pCon, bGivenURI );
+        return sal_False;
+    }
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTableStrings()\n" );
     _rStrings = m_aTableNames;
     _rTypes   = m_aTableTypes;
 
+    _pCon->setForceLoadTables(sal_False);
     return( sal_True );
 }
 
@@ -538,16 +555,18 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                                              const Sequence< ::rtl::OUString >& types,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
+
     static ODatabaseMetaDataResultSet::ORows    aRows;
 
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTables()\n" );
+    ::osl::MutexGuard aGuard( m_aMetaMutex );
 
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString::createFromAscii("%");;
+    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));;
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
@@ -568,7 +587,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
             if ( aTableName.getLength() == 0 ) {
-                aTableName = rtl::OUString::createFromAscii("AddressBook");
+                aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
             }
 
             OSL_TRACE( "TableName = %s ; TableType = %s\n", OUtoCStr(aTableName), OUtoCStr(aTableType) );
@@ -585,156 +604,6 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     return(sal_True);
 }
 
-//-------------------------------------------------------------------
-
-#define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
-#define NS_LDAPOPERATION_CONTRACTID      "@mozilla.org/network/ldap-operation;1"
-#define NS_LDAPMESSAGE_CONTRACTID      "@mozilla.org/network/ldap-message;1"
-#define NS_LDAPURL_CONTRACTID       "@mozilla.org/network/ldap-url;1"
-
-namespace connectivity {
-    namespace mozab {
-        class MLDAPMessageListener : public nsILDAPMessageListener {
-            NS_DECL_ISUPPORTS
-            NS_DECL_NSILDAPMESSAGELISTENER
-
-            MLDAPMessageListener(nsILDAPConnection* _ldapConnection);
-            ~MLDAPMessageListener();
-
-            sal_Bool    connected();
-            void        setPassword( const ::rtl::OUString &aPassword);
-        protected:
-            nsCOMPtr<nsILDAPConnection> m_LDAPConnection;
-
-            ::osl::Mutex        m_aMutex;
-            ::osl::Condition    m_aCondition;
-
-            sal_Bool    m_IsComplete;
-            sal_Bool    m_GoodConnection;
-            rtl::OUString   m_sPassword;
-
-            void        setConnectionStatus( sal_Bool _good );
-        };
-    }
-}
-
-NS_IMPL_THREADSAFE_ISUPPORTS1(MLDAPMessageListener, nsILDAPMessageListener)
-
-MLDAPMessageListener::MLDAPMessageListener(nsILDAPConnection* _ldapConnection)
-    : mRefCnt( 0 )
-    , m_IsComplete( sal_False )
-    , m_GoodConnection( sal_False )
-    , m_LDAPConnection( _ldapConnection )
-{
-    m_aCondition.reset();
-}
-
-MLDAPMessageListener::~MLDAPMessageListener()
-{
-}
-
-sal_Bool MLDAPMessageListener::connected()
-{
-    TimeValue               timeValue = { 10, 0 };  // 10 Seconds 0 NanoSecond timeout
-    osl::Condition::Result  rv = ::osl::Condition::result_ok;
-
-    // Can't hold mutex or condition would never get set...
-    while( m_aCondition.check() == sal_False || rv  == ::osl::Condition::result_error ) {
-        rv = m_aCondition.wait( &timeValue );
-        if ( rv == ::osl::Condition::result_timeout ) {
-            return sal_False;
-        }
-    }
-
-    return m_GoodConnection;
-}
-
-void MLDAPMessageListener::setPassword( const ::rtl::OUString &aPassword)
-{
-   //::osl::MutexGuard aGuard( m_aMutex );
-   m_sPassword = aPassword;
-}
-void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    m_IsComplete = sal_True;
-    m_GoodConnection = _good;
-
-    m_aCondition.set();
-}
-
-NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit( nsresult aStatus )
-{
-    nsresult rv;
-
-    // Make sure that the Init() worked properly
-    if ( NS_FAILED(aStatus ) ) {
-        setConnectionStatus( sal_False );
-        return aStatus;
-    }
-
-    // Initiate the LDAP operation
-    nsCOMPtr<nsILDAPOperation> ldapOperation =
-        do_CreateInstance(NS_LDAPOPERATION_CONTRACTID, &rv);
-    if ( NS_FAILED( rv ) ) {
-        setConnectionStatus( sal_False );
-        return rv;
-    }
-
-    rv = ldapOperation->Init(m_LDAPConnection, this);
-    if ( NS_FAILED( rv ) ) {
-        setConnectionStatus( sal_False );
-        return rv;
-    }
-
-    const sal_Unicode* password=nsnull;
-    if (m_sPassword.getLength() != 0)
-    {
-        password = m_sPassword.getStr();
-    }
-
-    // Bind
-    rv = ldapOperation->SimpleBind(password);
-    if ( NS_FAILED( rv ) ) {
-        setConnectionStatus( sal_False );
-        return rv;
-    }
-    // rv = ldapOperation->Abandon();
-    // NS_ENSURE_SUCCESS(rv, rv);
-
-    return rv;
-}
-
-NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
-{
-    nsresult rv;
-
-    PRInt32 messageType;
-    rv = aMessage->GetType(&messageType);
-    NS_ENSURE_SUCCESS(rv, rv);
-    PRInt32 errCode;
-    switch (messageType)
-    {
-    case nsILDAPMessage::RES_BIND:
-        rv = aMessage->GetErrorCode(&errCode);
-        // if the login failed
-        if (errCode != nsILDAPErrors::SUCCESS) {
-            setConnectionStatus( sal_False );
-        }
-        else
-            setConnectionStatus( sal_True );
-        break;
-    case nsILDAPMessage::RES_SEARCH_RESULT:
-        setConnectionStatus( sal_True );
-        break;
-    default:
-        break;
-    }
-
-    return NS_OK;
-}
-
-//-------------------------------------------------------------------
 
 sal_Bool
 MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
@@ -765,64 +634,101 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
         sal_Int32 len =  sAbURI.getLength();
         sAbURI = sAbURI.replaceAt( pos, len - pos, OString("") );
     }
-
-    nsCOMPtr<nsILDAPURL> url;
-    url = do_CreateInstance(NS_LDAPURL_CONTRACTID, &rv);
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-    rv = url->SetSpec( nsDependentCString(sAbURI.getStr()) );
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-    nsCAutoString host;
-    rv = url->GetAsciiHost(host);
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-    PRInt32 port;
-    rv = url->GetPort(&port);
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-    nsXPIDLCString dn;
-    rv = url->GetDn(getter_Copies (dn));
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-
-
-    // Get the ldap connection
-    nsCOMPtr<nsILDAPConnection> ldapConnection;
-    ldapConnection = do_CreateInstance(NS_LDAPCONNECTION_CONTRACTID, &rv);
-    if ( NS_FAILED(rv) )
-        return sal_False;
-
-    // Initiate LDAP message listener
-    nsCOMPtr<nsILDAPMessageListener> messageListener;
-    MLDAPMessageListener* _messageListener =
-        new MLDAPMessageListener ( ldapConnection );
-    if (_messageListener == NULL)
-            return sal_False;
-
-    _messageListener->setPassword(sAbPassword);
-    messageListener = _messageListener;
-
     const sal_Unicode* bindDN=nsnull;
     if (sAbBindDN.getLength() != 0)
     {
         bindDN = sAbBindDN.getStr();
     }
-    // Now lets initialize the LDAP connection properly.
-    rv = ldapConnection->Init(host.get(), port, useSSL, bindDN,
-                              messageListener);
-    if ( NS_FAILED(rv) )
-        return sal_False;
 
-    if ( ! _messageListener->connected() ) {
-        setAbSpecificError( _pCon, sal_True );
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_INIT_LDAP;
+    args.argCount = 4;
+    args.arg1 = (void*)sAbURI.getStr();
+    args.arg2 = (void*)bindDN;
+    args.arg3 = (void*)sAbPassword.getStr();
+    args.arg4 = (void*)&useSSL;
+
+    MNSMozabProxy xMProxy;
+    if (xMProxy.StartProxy(&args))  //Init LDAP
+    {
+        args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
+        TimeValue               timeValue = { 1, 0 };  // 1 * 60 Seconds timeout
+        sal_Int32               times=0;
+        while( times < 60 )
+        {
+            rv = xMProxy.StartProxy(&args); //check whether ldap is connect
+            if (!rv )
+            {
+                osl_waitThread(&timeValue);
+                times++;
+            }
+            else
+                break;
+        }
+        args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
+        rv = xMProxy.StartProxy(&args); //release resource
+    }
+    return rv;
+}
+
+sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl::OUString & aTableName)
+{
+    sal_Bool                                    bIsMozillaAB;
+
+    bIsMozillaAB = !_pCon->usesFactory() && ! _pCon->isLDAP();
+
+    if ( !bIsMozillaAB )
+    {
+        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("We do not support create table for this kind of AddressBook"));
         return sal_False;
     }
+    else
+        OSL_TRACE("Create table\n");
 
-    return sal_True;
+    // Get the mozilla addressbooks from the base directory.
+    nsresult rv = NS_OK;
+
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_NEW_ADDRESS_BOOK;
+    args.argCount = 1;
+    args.arg1 = (void*)&aTableName;
+    rv = xMProxy.StartProxy(&args);
+
+    _pCon->setForceLoadTables(sal_True); //force reload table next time
+    if (rv == NS_ERROR_FILE_IS_LOCKED)
+    {
+        m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("You can't create Mozilla AddressBook while Mozilla is running!"));
+    }
+    else if (NS_FAILED(rv))
+    {
+        setAbSpecificError( _pCon, !bIsMozillaAB );
+    }
+    OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()\n" );
+    return( NS_SUCCEEDED(rv) );
+}
+nsresult NewAddressBook(const ::rtl::OUString * aName)
+{
+    if (isProfileLocked())
+        return NS_ERROR_FILE_IS_LOCKED;
+    nsresult rv;
+    nsCOMPtr<nsIAbDirectoryProperties> aProperties = do_CreateInstance(NS_ABDIRECTORYPROPERTIES_CONTRACTID, &rv);
+    NS_ENSURE_ARG_POINTER(aProperties);
+    const ::rtl::OUString& uName = *aName;
+    nsString nsName;
+    MTypeConverter::ouStringToNsString(uName,nsName);
+    aProperties->SetDescription(nsName);
+
+    nsCOMPtr<nsIRDFService> rdfService = do_GetService (kRDFServiceCID, &rv);
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    nsCOMPtr<nsIRDFResource> parentResource;
+    rv = rdfService->GetResource(NS_LITERAL_CSTRING(kAllDirectoryRoot), getter_AddRefs(parentResource));
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    nsCOMPtr<nsIAbDirectory> parentDir = do_QueryInterface(parentResource, &rv);
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    rv = parentDir->CreateNewDirectory(aProperties);
+    return rv;
 }
