@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localstratumbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:10:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ sal_Bool LocalStratumBase::isMoreRecent(const rtl::OUString& aFileUrl,
 
     getLayerDirectories(layerUrl, subLayerUrl) ;
 
-    return layerUrl.getLength() != 0 &&
+    return layerUrl.getLength() == 0 ||
             !BasicLocalFileLayer::getTimestamp(layerUrl + aFileUrl).equals( aTimestamp);
 }
 //------------------------------------------------------------------------------
