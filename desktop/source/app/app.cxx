@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:25 $
+ *  last change: $Author: cd $ $Date: 2002-10-18 06:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ ResMgr* Desktop::GetDesktopResManager()
     if ( !Desktop::pResMgr )
     {
         String aMgrName = String::CreateFromAscii( "dkt" );
-        aMgrName += String::CreateFromInt32(SOLARUPD); // current version number
+        aMgrName += String::CreateFromInt32(SUPD); // current version number
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
@@ -1278,14 +1278,17 @@ void Desktop::Main()
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
-    // check user installation directory for lockfile so we can be sure
-    // there is no other instance using our data files from a remote host
-    Lockfile aLock;
-    if (!aLock.check()) {
-        // Lockfile exists, and user clicked 'no'
-        return;
+    if ( !pCmdLineArgs->IsInvisible() )
+    {
+        // check user installation directory for lockfile so we can be sure
+        // there is no other instance using our data files from a remote host
+        Lockfile aLock;
+        if (!aLock.check()) {
+            // Lockfile exists, and user clicked 'no'
+            return;
+        }
+        // lockfile will be removed in Lockfile d'tor
     }
-    // lockfile will be removed in Lockfile d'tor
 
     com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
@@ -1353,7 +1356,7 @@ void Desktop::Main()
 
     LanguageType aLanguageType;
     String aMgrName = String::CreateFromAscii( "iso" );
-    aMgrName += String::CreateFromInt32(SOLARUPD); // current build version
+    aMgrName += String::CreateFromInt32(SUPD); // current build version
     ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
     String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
     delete pLabelResMgr;
@@ -2208,7 +2211,7 @@ void Desktop::OpenStartupScreen()
                 LanguageType aLanguageType;
                 String       aMgrName = String::CreateFromAscii( "iso" );
 
-                aMgrName += String::CreateFromInt32(SOLARUPD); // current build version
+                aMgrName += String::CreateFromInt32(SUPD); // current build version
                 ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
 
                 ResId aIntroBmpRes( nResId, pLabelResMgr );
