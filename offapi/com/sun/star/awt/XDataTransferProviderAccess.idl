@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataTransferProviderAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:00:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,12 @@
 
 module com { module sun { module star { module datatransfer {
 module dnd {
-    interface XDragGestureRecognizer;
-    interface XDragSource;
-    interface XDropTarget;
+     published interface XDragGestureRecognizer;
+     published interface XDragSource;
+     published interface XDropTarget;
 };
 module clipboard {
-    interface XClipboard;
+     published interface XClipboard;
 };
 }; }; }; };
 
@@ -83,14 +83,14 @@ module clipboard {
 
 module com { module sun { module star { module awt {
 
-interface XWindow;
+ published interface XWindow;
 
 //=============================================================================
 
 /** This interface extends the XToolkit interface with clipboard and
     drag-and-drop support.
 */
-interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
+published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
