@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,6 +738,13 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
 
     if ( xDoc.Is() )
     {
+        if ( pSet )
+        {
+            SFX_ITEMSET_ARG( pSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, FALSE );
+            if ( pTitleItem )
+                xDoc->GetMedium()->GetItemSet()->Put( *pTitleItem );
+        }
+
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
         {
@@ -748,6 +755,7 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
 
             sal_Int32 nLength = aArgs.getLength();
             aArgs.realloc( nLength + 1 );
+
             aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
             aArgs[nLength].Value <<= ::rtl::OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
 
