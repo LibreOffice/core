@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:57:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "~Op��es" ;
         Text [ portuguese ] = "~Op��es" ;
         Text [ finnish ] = "A~setukset" ;
-        Text [ danish ] = "Indstillinger" ;
+        Text [ danish ] = "~Indstillinger" ;
         Text [ french ] = "~Options" ;
         Text [ swedish ] = "~Alternativ" ;
         Text [ dutch ] = "~Opties" ;
@@ -139,6 +139,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "~विकल्प";
         Text[ slovak ] = "M~ožnosti";
+        Text[ hungarian ] = "~Beállítások";
+        Text[ slovenian ] = "~Možnosti";
     };
     FixedText TXT_SAMPLE
     {
@@ -157,7 +159,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "L~uokka" ;
-        Text [ danish ] = "Kategori" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ french ] = "~Cat�gorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Categorie" ;
@@ -180,6 +182,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "~Kategorie";
         Text[ hindi ] = "व~र्ग";
         Text[ slovak ] = "Ka~tegórie";
+        Text[ hungarian ] = "Ka~tegória";
+        Text[ slovenian ] = "Ka~tegorija";
     };
     ComboBox BOX_CATEGORY
     {
@@ -200,7 +204,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "~Numera��o" ;
         Text [ portuguese ] = "~Numera��o" ;
         Text [ finnish ] = "~Numerointi" ;
-        Text [ danish ] = "Nummerering" ;
+        Text [ danish ] = "~Nummerering" ;
         Text [ french ] = "Num�rotation" ;
         Text [ swedish ] = "~Numrering" ;
         Text [ dutch ] = "~Nummering" ;
@@ -223,6 +227,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
         Text[ slovak ] = "Číslova~nie";
+        Text[ hungarian ] = "~Számozás";
+        Text[ slovenian ] = "Oš~tevilčevanje";
     };
     ListBox BOX_FORMAT
     {
@@ -243,7 +249,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "~Legenda" ;
         Text [ portuguese ] = "~Texto para etiqueta" ;
         Text [ finnish ] = "Kuvaotsikko" ;
-        Text [ danish ] = "Billedtekst" ;
+        Text [ danish ] = "~Billedtekst" ;
         Text [ french ] = "~Texte de l�gende" ;
         Text [ swedish ] = "~Bildtext" ;
         Text [ dutch ] = "~Opschrift" ;
@@ -266,6 +272,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "~Beschriftungstext";
         Text[ hindi ] = "~कॉप्शन्";
         Text[ slovak ] = "~Popisok";
+        Text[ hungarian ] = "~Felirat";
+        Text[ slovenian ] = "~Napis";
     };
     Edit EDT_TEXT
     {
@@ -287,7 +295,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ portuguese ] = "~Posi��o" ;
         Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
@@ -309,6 +317,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
         Text[ slovak ] = "~Umiestnenie";
+        Text[ hungarian ] = "~Pozíció";
+        Text[ slovenian ] = "~Položaj";
     };
     ListBox BOX_POS
     {
@@ -334,7 +344,7 @@ ModalDialog DLG_CAPTION
         Text[ french ] = "~Appliquer bordure et ombre";
         Text[ spanish ] = "~Aplicar borde y sombra";
         Text[ italian ] = "~Applica bordo e ombra";
-        Text[ danish ] = "Overtag ramme og skygge";
+        Text[ danish ] = "~Anvend kant og skygge";
         Text[ swedish ] = "�~verta inramning och skugga";
         Text[ polish ] = "~Zastosuj obramowanie i cieniowanie";
         Text[ portuguese_brazilian ] = "~Aplicar borda e sombreado";
@@ -352,6 +362,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "~Umrandung und Schatten übernehmen";
         Text[ hindi ] = "~किनारा और छाया लागू करो";
         Text[ slovak ] = "Použiť ohr~aničenie a tieňovanie";
+        Text[ hungarian ] = "~Szegély és árnyék alkalmazása";
+        Text[ slovenian ] = "~Uporabi obrobe in senčenje";
     };
     FixedText FT_OBJECT_NAME
     {
@@ -385,6 +397,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "~Objektname";
         Text[ hindi ] = "~वस्तु नाम";
         Text[ slovak ] = "Názov o~bjektu";
+        Text[ hungarian ] = "~Objektumnév";
+        Text[ slovenian ] = "Ime pre~dmeta";
     };
     Edit ED_OBJECT_NAME
     {
@@ -425,6 +439,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
     String STR_BEGINNING
     {
@@ -435,7 +451,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "Acima" ;
         Text [ portuguese ] = "No in�cio" ;
         Text [ finnish ] = "Yl�puolella" ;
-        Text [ danish ] = "Ved begyndelsen" ;
+        Text [ danish ] = "Over" ;
         Text [ french ] = "Au d�but" ;
         Text [ swedish ] = "I b�rjan" ;
         Text [ dutch ] = "Aan begin" ;
@@ -457,6 +473,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "Am Anfang";
         Text[ hindi ] = "ऊपर";
         Text[ slovak ] = "Nad";
+        Text[ hungarian ] = "Felett";
+        Text[ slovenian ] = "Nad";
     };
     String STR_END
     {
@@ -467,7 +485,7 @@ ModalDialog DLG_CAPTION
         Text [ portuguese_brazilian ] = "Abaixo" ;
         Text [ portuguese ] = "No fim" ;
         Text [ finnish ] = "Alapuolella" ;
-        Text [ danish ] = "Ved slutningen" ;
+        Text [ danish ] = "Under" ;
         Text [ french ] = "� la fin" ;
         Text [ swedish ] = "I slutet" ;
         Text [ dutch ] = "Aan einde" ;
@@ -489,6 +507,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "Am Ende";
         Text[ hindi ] = "नीचे";
         Text[ slovak ] = "Pod";
+        Text[ hungarian ] = "Alatt";
+        Text[ slovenian ] = "Spodaj";
     };
     String STR_ABOVE
     {
@@ -521,6 +541,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "Oberhalb";
         Text[ hindi ] = "ऊपर";
         Text[ slovak ] = "Nad";
+        Text[ hungarian ] = "Felett";
+        Text[ slovenian ] = "Nad";
     };
     String STR_CP_BELOW
     {
@@ -553,6 +575,8 @@ ModalDialog DLG_CAPTION
         Text[ hebrew ] = "Unterhalb";
         Text[ hindi ] = "नीचे";
         Text[ slovak ] = "Pod";
+        Text[ hungarian ] = "Alatt";
+        Text[ slovenian ] = "Spodaj";
     };
     Text[ chinese_simplified ] = "标签";
     Text[ russian ] = "��������";
@@ -570,6 +594,8 @@ ModalDialog DLG_CAPTION
     Text[ hebrew ] = "Beschriftung";
     Text[ hindi ] = "कॉप्शन्";
     Text[ slovak ] = "Popisok";
+    Text[ hungarian ] = "Felirat";
+    Text[ slovenian ] = "Napis";
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
@@ -631,6 +657,8 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ hebrew ] = "Kapitelweise Nummerierung";
         Text[ hindi ] = "अध्याय के अनुसार संख्या देना";
         Text[ slovak ] = "Číslovanie podľa kapitol";
+        Text[ hungarian ] = "Számozás fejezetenként";
+        Text[ slovenian ] = "Oštevilčevanje po poglavjih";
     };
     FixedText FT_LEVEL
     {
@@ -642,7 +670,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ english_us ] = "~Level" ;
         Text [ portuguese_brazilian ] = "~N�vel" ;
         Text [ swedish ] = "~Niv�" ;
-        Text [ danish ] = "Niveau" ;
+        Text [ danish ] = "~Niveau" ;
         Text [ italian ] = "Li~vello" ;
         Text [ spanish ] = "~Nivel" ;
         Text [ french ] = "Ni~veau" ;
@@ -664,6 +692,8 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "~स्तर";
         Text[ slovak ] = "Ú~roveň";
+        Text[ hungarian ] = "~Szint";
+        Text[ slovenian ] = "~Raven";
     };
     ListBox LB_LEVEL
     {
@@ -784,6 +814,14 @@ ModalDialog DLG_SEQUENCE_OPTION
     {
          < "Žiadne" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Semmi" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Brez" ; > ;
+    };
     };
     FixedText FT_SEPARATOR
     {
@@ -794,7 +832,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ english_us ] = "~Separator" ;
         Text [ portuguese_brazilian ] = "~Separador" ;
         Text [ swedish ] = "Skilje~tecken" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "~Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
         Text [ french ] = "~S�parateur" ;
@@ -817,6 +855,8 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ hebrew ] = "~Trenner";
         Text[ hindi ] = "~अलगानेवाला";
         Text[ slovak ] = "O~ddeľovač";
+        Text[ hungarian ] = "~Elválasztó";
+        Text[ slovenian ] = "~Ločilo";
     };
     Edit ED_SEPARATOR
     {
@@ -852,8 +892,11 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ hebrew ] = "Nummernkreis Optionen";
     Text[ hindi ] = "संख्या फैलाव विकल्प";
     Text[ slovak ] = "Voľby intervalu číslovania";
+    Text[ hungarian ] = "Számtartomány beállításai";
+    Text[ slovenian ] = "Možnosti obsega števil";
 };
  // ********************************************************************** EOF
+
 
 
 
