@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 13:23:03 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 13:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,6 +1191,20 @@ void SdrPaintView::DelWin(OutputDevice* pWin1)
 #ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->ForceParent();
 #endif
+}
+
+Rectangle SdrPaintView::GetVisibleArea( USHORT nNum )
+{
+    OutputDevice* pWin = GetWin(nNum);
+
+    if( pWin )
+    {
+        // get visible area
+        Size aVisSizePixel( pWin->GetOutputSizePixel() );
+        return Rectangle( pWin->PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)) );
+    }
+
+    return Rectangle();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
