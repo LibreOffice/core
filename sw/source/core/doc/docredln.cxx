@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-23 14:50:42 $
+ *  last change: $Author: dvo $ $Date: 2002-10-11 15:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,19 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->Insert( pRedl );
                         }
                     }
+                    else if ( POS_OUTSIDE == eCmpPos )
+                    {
+                        // #102366# handle overlapping redlines in broken
+                        // documents
+
+                        // split up the new redline, since it covers the
+                        // existing redline. Insert the first part, and
+                        // progress with the remainder as usual
+                        SwRedline* pSplit = new SwRedline( *pNewRedl );
+                        pSplit->SetEnd( *pRStt );
+                        pNewRedl->SetStart( *pREnd );
+                        pRedlineTbl->Insert( pSplit );
+                    }
                     break;
                 case REDLINE_DELETE:
                     if( POS_INSIDE == eCmpPos )
@@ -368,6 +381,19 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl, n );
                         }
+                    }
+                    else if ( POS_OUTSIDE == eCmpPos )
+                    {
+                        // #102366# handle overlapping redlines in broken
+                        // documents
+
+                        // split up the new redline, since it covers the
+                        // existing redline. Insert the first part, and
+                        // progress with the remainder as usual
+                        SwRedline* pSplit = new SwRedline( *pNewRedl );
+                        pSplit->SetEnd( *pRStt );
+                        pNewRedl->SetStart( *pREnd );
+                        pRedlineTbl->Insert( pSplit );
                     }
                     break;
                 case REDLINE_FORMAT:
