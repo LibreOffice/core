@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:43:42 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,7 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
                     const SdrObject* pObj=pM->GetObj();
                     const SdrPageView* pPV=pM->GetPageView();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                    Rectangle aBound(pObj->GetBoundRect());
+                    Rectangle aBound(pObj->GetCurrentBoundRect());
                     for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                         USHORT nId=pPts->GetObject(nPtNum);
                         USHORT nGlueNum=pGPL->FindGluePoint(nId);
@@ -1646,8 +1646,9 @@ FASTBOOL SdrDragCrook::Beg()
         for(sal_uInt16 a(0); a < nPageViewNum; a++)
         {
             SdrPageView* pPV = rView.GetPageViewPvNum(a);
-            OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
-            Rectangle aPixelSize = pOut->LogicToPixel(aMarkRect);
+            // OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
+            OutputDevice& rOut = (pPV->GetWindow(0)->GetOutputDevice());
+            Rectangle aPixelSize = rOut.LogicToPixel(aMarkRect);
 
             sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
             sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
@@ -2019,8 +2020,9 @@ FASTBOOL SdrDragDistort::Beg()
         for(sal_uInt16 a(0); a < nPageViewNum; a++)
         {
             SdrPageView* pPV = rView.GetPageViewPvNum(a);
-            OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
-            Rectangle aPixelSize = pOut->LogicToPixel(aMarkRect);
+            // OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
+            OutputDevice& rOut = (pPV->GetWindow(0)->GetOutputDevice());
+            Rectangle aPixelSize = rOut.LogicToPixel(aMarkRect);
 
             sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
             sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
