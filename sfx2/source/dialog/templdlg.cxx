@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-01-15 16:10:42 $
+ *  last change: $Author: os $ $Date: 2002-02-04 10:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,18 +358,27 @@ IMPL_LINK( DropListBox_Impl, OnAsyncExecuteError, void*, NOTINTERESTEDIN )
 
 long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    if( pDialog->bCanDel && rNEvt.GetType() == EVENT_KEYINPUT )
+    long nRet = 0;
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-
-        if( KEY_DELETE == rKeyCode.GetCode() && !rKeyCode.GetModifier() )
+        if(!rKeyCode.GetModifier())
         {
-            pDialog->DeleteHdl( NULL );
-            return 1;
+            if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
+            {
+                pDialog->DeleteHdl( NULL );
+                nRet =  1;
+            }
+            else if( KEY_RETURN == rKeyCode.GetCode())
+            {
+                GetDoubleClickHdl().Call(this);
+                nRet = 1;
+            }
         }
     }
-
-    return SvTreeListBox::Notify( rNEvt );
+    if(!nRet)
+        nRet = SvTreeListBox::Notify( rNEvt );
+    return nRet;
 }
 
 
