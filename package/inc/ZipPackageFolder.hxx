@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-01-10 11:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,14 +167,10 @@ class ZipPackage;
 class ZipPackageFolder : public ZipPackageEntry,
                          public ::cppu::OWeakObject,
                          public ::com::sun::star::container::XNameContainer,
-                         public ::com::sun::star::container::XEnumerationAccess,
-                         public ::com::sun::star::beans::XPropertySet
+                         public ::com::sun::star::container::XEnumerationAccess
 {
 private:
-    ::rtl::OUString sMediaType;
     TunnelHash aContents;
-    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
-    static com::sun::star::uno::Any aReturn;
 public:
     ZipPackage *pPackage;
     com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > xPackage;
@@ -183,19 +179,15 @@ public:
     virtual ~ZipPackageFolder( void );
 
     static void copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource);
+    // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut)
         throw(::com::sun::star::uno::RuntimeException);
-
     void  updateReferences( ZipFile * pNewZipFile);
     void  releaseUpwardRef( void );
-
-    inline sal_Bool isFolder( void ) {return sal_True;}
-    inline sal_Bool isStream( void ) {return sal_False;}
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL acquire(  )
         throw();
     virtual void SAL_CALL release(  )
@@ -206,14 +198,17 @@ public:
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  )
         throw(::com::sun::star::uno::RuntimeException);
+
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(::com::sun::star::uno::RuntimeException);
+
     // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -221,28 +216,15 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
+
     // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
 };
 #endif

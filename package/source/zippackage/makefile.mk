@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mtg $ $Date: 2000-12-20 11:24:27 $
+#   last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -54,7 +54,7 @@
 #
 #   All Rights Reserved.
 #
-#   Contributor(s): Martin Gallwey (gallwey@sun.com)
+#   Contributor(s): _______________________________________
 #
 #
 #
@@ -75,19 +75,63 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES= \
-        $(SLO)$/ZipPackage.obj	\
-        $(SLO)$/ZipPackageBuffer.obj	\
-        $(SLO)$/ZipPackageEntry.obj	\
-        $(SLO)$/ZipPackageFolder.obj	\
+APP1TARGET=sandbox
+APP1OBJS= \
+        $(SLO)$/Adler32.obj	\
+        $(SLO)$/CRC32.obj	\
+        $(SLO)$/ByteChucker.obj	\
+        $(SLO)$/ByteGrabber.obj	\
+        $(SLO)$/Inflater.obj	\
+        $(SLO)$/Deflater.obj	\
+        $(SLO)$/ZipEnumeration.obj	\
+        $(SLO)$/ZipFile.obj	\
+        $(SLO)$/ZipOutputStream.obj	\
+        $(SLO)$/EntryInputStream.obj	\
         $(SLO)$/ManifestExport.obj				\
         $(SLO)$/ManifestWriter.obj				\
         $(SLO)$/ManifestReader.obj				\
         $(SLO)$/ManifestImport.obj				\
         $(SLO)$/AttributeList.obj				\
+        $(SLO)$/ZipPackage.obj	\
+        $(SLO)$/ZipPackageEntry.obj	\
+        $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
-        $(SLO)$/ZipPackageSink.obj	\
-        $(SLO)$/ZipPackageStream.obj
+        $(SLO)$/ZipPackageStream.obj \
+        $(SLO)$/ZipPackageSink.obj \
+        $(SLO)$/ZipPackageBuffer.obj \
+        $(SLO)$/sandbox.obj
+
+APP1STDLIBS= \
+        $(TOOLSLIB)	\
+        $(VOSLIB)	\
+        $(CPPULIB)	\
+        $(CPPUHELPERLIB)	\
+        $(UCBHELPERLIB)	\
+        $(COMPHELPERLIB)	\
+        $(RTLLIB)	\
+        $(SVTOOLLIB)	\
+        $(SALLIB)	\
+        $(SALMAINLIB)	\
+        $(ONELIB)	\
+        $(SVLLIB)	\
+        $(ZLIB3RDLIB)	\
+        $(UNOTOOLSLIB) \
+        $(SVAPP) \
+        svmem.lib \
+        itools.lib \
+        so2.lib \
+        sot.lib \
+        msvcirt.lib \
+        libci.lib \
+        advapi32.lib \
+        shell32.lib \
+        ivcl.lib \
+        uuid.lib \
+        kernel32.lib \
+        ole32.lib \
+        oleaut32.lib \
+        msvcrt.lib \
+
 
 # --- UNO stuff ---------------------------------------------------
 
@@ -101,15 +145,19 @@ UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb
 UNOTYPES=\
     com.sun.star.io.XSeekable \
     com.sun.star.io.XOutputStream \
+    com.sun.star.io.XActiveDataSink \
     com.sun.star.lang.XInitialization \
-    com.sun.star.container.XHierarchicalNameAccess \
     com.sun.star.lang.XSingleServiceFactory \
+    com.sun.star.lang.XUnoTunnel \
     com.sun.star.util.XChangesBatch \
+    com.sun.star.container.XHierarchicalNameAccess \
     com.sun.star.container.XEnumeration \
     com.sun.star.container.XNamed \
     com.sun.star.container.XNameContainer \
-    com.sun.star.container.XEnumerationAccess \
-    com.sun.star.io.XActiveDataSink 
+    com.sun.star.xml.sax.XDocumentHandler \
+    com.sun.star.ucb.ContentCreationError \
+    com.sun.star.ucb.ContentCreationException \
+    com.sun.star.container.XEnumerationAccess
 
 # --- Targets ------------------------------------------------------
 

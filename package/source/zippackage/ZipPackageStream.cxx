@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@ using namespace cppu;
 
 ZipPackageStream::ZipPackageStream (ZipFile *pInFile)
 : pZipFile(pInFile)
-, bPackageMember( sal_False )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -173,55 +172,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     else
         return xStream;
 }
-    //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageStream::getPropertySetInfo(  )
-        throw(uno::RuntimeException)
-{
-    return uno::Reference < beans::XPropertySetInfo > ();
-}
-void SAL_CALL ZipPackageStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if (aPropertyName == ::rtl::OUString::createFromAscii("MediaType"))
-        aValue >>= sMediaType;
-    else if (aPropertyName == ::rtl::OUString::createFromAscii("Size"))
-        aValue >>= aEntry.nSize;
-    else
-        throw beans::UnknownPropertyException();
-}
-uno::Any SAL_CALL ZipPackageStream::getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    uno::Any aAny;
-    if (PropertyName == ::rtl::OUString::createFromAscii("MediaType"))
-    {
-        aAny <<= sMediaType;
-        return aAny;
-    }
-    else if (PropertyName == ::rtl::OUString::createFromAscii("Size"))
-    {
-        aAny <<= aEntry.nSize;
-        return aAny;
-    }
-    else
-        throw beans::UnknownPropertyException();
-}
-void SAL_CALL ZipPackageStream::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageStream::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageStream::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageStream::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
 uno::Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
     throw (uno::RuntimeException)
 {
@@ -241,7 +191,9 @@ uno::Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
     throw(uno::RuntimeException)
 {
-    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+    if (aIdentifier.getLength() == 16 &&
+        0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),
+                               aIdentifier.getConstArray(), 16 ) )
         return reinterpret_cast < sal_Int64 > ( this );
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:39 $
+ *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,12 +116,13 @@ ZipPackage::~ZipPackage( void )
 {
     if (pContent)
         delete pContent;
-    // As all folders and streams contain raferences to their parents,
+    // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
     // the hash_map of the root folder is cleared, releasing all subfolders
     // and substreams which in turn release theirs, etc. When xRootFolder is
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).
+
     pRootFolder->releaseUpwardRef();
 }
 

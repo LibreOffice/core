@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,11 @@
 #endif
 
 using namespace com::sun::star;
+using namespace com::sun::star::package::ZipConstants;
+using namespace rtl;
+
 ZipPackageEntry::ZipPackageEntry (void)
+: bPackageMember ( sal_False )
 {
 }
 
@@ -129,4 +133,88 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< uno::XInterface 
     if (!xNewParent->hasByName(getName()))
         xNewParent->insertByName(getName(), aAny);
     xParent = Parent;
+}
+    //XPropertySet
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
+        throw(uno::RuntimeException)
+{
+    return uno::Reference < beans::XPropertySetInfo > (NULL);
+}
+void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if (aPropertyName == OUString::createFromAscii("MediaType"))
+    {
+        aValue >>= sMediaType;
+
+        // If this ZipPackageEntry is a new entry to the package, set it's
+        // compression method based on mime type. Obviously, if it's an existing
+        // member, we can't change the compression type without Bad Things
+        // Happening (tm)
+        if ( !bPackageMember)
+        {
+            if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
+                aEntry.nMethod = DEFLATED;
+            else
+                aEntry.nMethod = STORED;
+        }
+    }
+    else if (aPropertyName == OUString::createFromAscii("Size"))
+        aValue >>= aEntry.nSize;
+    else if (aPropertyName == OUString::createFromAscii("Compress"))
+    {
+        if (bPackageMember)
+            return;
+        sal_Bool bCompress;
+        aValue >>= bCompress;
+        if (bCompress)
+            aEntry.nMethod = DEFLATED;
+        else
+            aEntry.nMethod = STORED;
+    }
+    else
+        throw beans::UnknownPropertyException();
+}
+uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aAny;
+    if (PropertyName == OUString::createFromAscii("MediaType"))
+    {
+        aAny <<= sMediaType;
+        return aAny;
+    }
+    else if (PropertyName == OUString::createFromAscii("Size"))
+    {
+        aAny <<= aEntry.nSize;
+        return aAny;
+    }
+    else if (PropertyName == OUString::createFromAscii("Compress"))
+    {
+        sal_Bool bCompress = sal_False;
+
+        if (aEntry.nMethod == DEFLATED)
+            bCompress = sal_True;
+
+        aAny <<= bCompress;
+        return aAny;
+    }
+    else
+        throw beans::UnknownPropertyException();
+}
+void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:39 $
+ *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,55 +241,6 @@ void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, con
     else
         throw container::NoSuchElementException();
     insertByName(aName, aElement);
-}
-    //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageFolder::getPropertySetInfo(  )
-        throw(uno::RuntimeException)
-{
-    return uno::Reference < beans::XPropertySetInfo > (NULL);
-}
-void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if (aPropertyName == OUString::createFromAscii("MediaType"))
-        aValue >>= sMediaType;
-    else if (aPropertyName == OUString::createFromAscii("Size"))
-        aValue >>= aEntry.nSize;
-    else
-        throw beans::UnknownPropertyException();
-}
-uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    uno::Any aAny;
-    if (PropertyName == OUString::createFromAscii("MediaType"))
-    {
-        aAny <<= sMediaType;
-        return aAny;
-    }
-    else if (PropertyName == OUString::createFromAscii("Size"))
-    {
-        aAny <<= aEntry.nSize;
-        return aAny;
-    }
-    else
-        throw beans::UnknownPropertyException();
-}
-void SAL_CALL ZipPackageFolder::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageFolder::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageFolder::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageFolder::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
 }
 void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < ManifestEntry *> &rManList, ZipOutputStream & rZipOut)
     throw(uno::RuntimeException)
