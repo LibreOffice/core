@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
+ *  last change: $Author: pl $ $Date: 2001-12-18 10:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,9 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nPosSize |= WINDOW_POSSIZE_WIDTH;
         if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
             nPosSize |= WINDOW_POSSIZE_HEIGHT;
+
+        if( IsRollUp() )
+            RollDown();
 
         long nX         = rData.GetX();
         long nY         = rData.GetY();
