@@ -18,4 +18,3 @@ es	external\psprint\ppds	nmake	-	u	es_psprintppds NULL
 es      external\sane		nmake	-	all	es_sane NULL
 es      external\twain		nmake	-	all	es_twain NULL
 es      external\w4w		nmake	-	u	es_w4w NULL
-es	external\neon\rtufiles	nmake	-	all	es_neonrtu es_neon NULL
