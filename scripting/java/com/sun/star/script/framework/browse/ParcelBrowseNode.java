@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:23 $
+ *  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,8 @@ import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.Type;
-
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.script.framework.provider.PathUtils;
 import java.io.*;
 import java.util.*;
 
@@ -76,28 +77,29 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
     private String name;
     private String location;
     private Collection browsenodes;
-
+    private XComponentContext m_XCtx;
     public boolean deletable = false;
     public boolean editable = false;
 
     public ParcelBrowseNode(String name) {
         this.name = name;
-
         registerProperty("Deletable", new Type(boolean.class),
             (short)0, "deletable");
         registerProperty("Editable", new Type(boolean.class),
             (short)0, "editable");
     }
 
-    public ParcelBrowseNode(File dir) {
+    public ParcelBrowseNode(XComponentContext ctx, File dir) {
         this(dir.getName());
-        this.location = dir.getAbsolutePath();
+        this.m_XCtx = ctx;
+        this.location = PathUtils.toScriptLocation(  m_XCtx, dir.getAbsolutePath() );
         this.pd = ParcelDescriptor.getParcelDescriptor(dir);
         this.deletable = true;
     }
 
-    public ParcelBrowseNode(InputStream is, String name) {
+    public ParcelBrowseNode(XComponentContext ctx,InputStream is, String name) {
         this(name);
+        this.m_XCtx = ctx;
         this.location = "document";
 
         try {

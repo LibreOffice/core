@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:28 $
+*  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -172,13 +172,13 @@ public abstract class ScriptProvider
                             "SCRIPTING_DOC_REF"));
 
                 LogUtils.DEBUG("creating DocBrowseNode, model: " + model.getURL());
-                m_browseNodeProxy = new DocBrowseNode(model, language);
+                m_browseNodeProxy = new DocBrowseNode(m_xContext,model, language);
             }
             else if (AnyConverter.isString(aArguments[0]) == true)
             {
                 String path = AnyConverter.toString(aArguments[0]);
                 LogUtils.DEBUG("creating DirBrowseNode, path: " + path);
-                m_browseNodeProxy = new DirBrowseNode(path, language);
+                m_browseNodeProxy = new DirBrowseNode(m_xContext, path, language);
             }
             else
             {

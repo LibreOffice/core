@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathUtils.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:27 $
+ *  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,13 @@ import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 
+import com.sun.star.util.XMacroExpander;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
 public class PathUtils {
 
     public static String FILE_URL_PREFIX;
+    public static String BOOTSTRAP_NAME;
     private static boolean m_windows = false;
 
     static {
@@ -88,6 +92,7 @@ public class PathUtils {
             m_windows = true;
 
         FILE_URL_PREFIX = m_windows ? "file:///" : "file://";
+        BOOTSTRAP_NAME = m_windows ? "bootstrap.ini" : "bootstraprc";
     }
 
     private PathUtils() {
@@ -252,5 +257,86 @@ public class PathUtils {
             returnPath += "/";
         }
         return returnPath;
+    }
+    public static String toScriptLocation(XComponentContext ctxt, String path) {
+        String sharePath = getSharePath(ctxt);
+        String userPath = getUserPath(ctxt);
+
+        LogUtils.DEBUG("toScriptLocation, path: " + path);
+        LogUtils.DEBUG("toScriptLocation, share path: " + sharePath);
+        LogUtils.DEBUG("toScriptLocation, user path: " + userPath);
+
+        try {
+            path = URLDecoder.decode(path, "UTF-8");
+        }
+        catch (java.io.UnsupportedEncodingException ignore) {
+            // ignore
+        }
+
+        if (m_windows) {
+            path = replaceWindowsPathSeparators(path);
+        }
+
+        if (path.indexOf(sharePath) != -1) {
+            return "share";
+        }
+        else if (path.indexOf(userPath) != -1) {
+            return "user";
+        }
+        return path;
+    }
+
+    private static String getOfficeURL(XComponentContext ctxt, String name) {
+
+        String result = null;
+
+        try {
+            Object serviceObj = ctxt.getValueByName(
+                "/singletons/com.sun.star.util.theMacroExpander");
+
+            LogUtils.DEBUG("got serviceObj");
+            XMacroExpander me = (XMacroExpander) AnyConverter.toObject(
+                new Type(XMacroExpander.class), serviceObj);
+
+            result = me.expandMacros(name);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae) {
+            LogUtils.DEBUG("Caught IllegalArgumentException trying to " +
+                "expand dir: " + name);
+        }
+
+        return result;
+    }
+
+    public static String getShareURL(XComponentContext ctxt) {
+        return getOfficeURL(ctxt,
+            "${$SYSBINDIR/" + BOOTSTRAP_NAME +
+            "::BaseInstallation}/share");
+    }
+
+    public static String getSharePath(XComponentContext ctxt) {
+        String s = getShareURL(ctxt);
+
+        if (s.startsWith(FILE_URL_PREFIX)) {
+            s = s.substring(FILE_URL_PREFIX.length());
+        }
+
+        return s;
+    }
+
+    public static String getUserURL(XComponentContext ctxt) {
+        return getOfficeURL(ctxt,
+            "${$SYSBINDIR/" + BOOTSTRAP_NAME +
+            "::UserInstallation}/user");
+    }
+
+    public static String getUserPath(XComponentContext ctxt) {
+        String s = getUserURL(ctxt);
+
+        if (s.startsWith(FILE_URL_PREFIX)) {
+            s = s.substring(FILE_URL_PREFIX.length());
+        }
+
+        return s;
     }
 }
