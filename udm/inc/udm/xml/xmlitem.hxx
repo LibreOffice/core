@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:32:37 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 namespace csv
 {
-    class AnyWrite;
+    class bostream;
 }
 
 
@@ -106,13 +106,13 @@ class Attribute
     void                WriteOut(
                             csv::bostream &     io_aFile ) const;
 
-    const csv::String& Name() const;
-    const csv::String& Value() const;
+    const ::csv::String& Name() const;
+    const ::csv::String& Value() const;
 
   private:
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_Name() const = 0;
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_Value() const = 0;
 };
 
@@ -125,7 +125,7 @@ class Element : public Item
     Element &           operator<<(             /// For multiple content items.
                             DYN Item *          let_dpItem );
     Element &           operator<<(             /// For multiple content items.
-                            const csv::String& let_drText );
+                            const ::csv::String& let_drText );
     Element &           operator<<(             /// For multiple content items.
                             const char *        let_dpText );
     Element &           operator<<(
@@ -150,7 +150,7 @@ class Element : public Item
     virtual void        do_SetContent(
                             DYN Item *          let_dpItem ) = 0;
     // Helpers
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_TagName() const = 0;
     virtual const Item *
                         inq_Content() const = 0;
@@ -238,7 +238,7 @@ class AnElement : public Element
 {
   public:
                         AnElement(
-                            const csv::String& i_sTagName );
+                            const ::csv::String& i_sTagName );
                         ~AnElement();
   private:
     // Interface Element
@@ -248,14 +248,14 @@ class AnElement : public Element
                             DYN Attribute *     let_dpAttr );
     virtual void        do_SetContent(
                             DYN Item *          let_dpItem );
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_TagName() const;
     virtual const Item *
                         inq_Content() const;
     virtual const AttrList *
                         inq_Attrs() const;
     // DATA
-    csv::String        sTagName;
+    ::csv::String        sTagName;
     Dyn< Item >         pContent;
     AttrList            aAttrs;
 };
@@ -265,17 +265,17 @@ class AnEmptyElement : public EmptyElement
 {
   public:
                         AnEmptyElement(
-                            const csv::String & i_sTagName );
+                            const ::csv::String & i_sTagName );
                         ~AnEmptyElement();
   private:
     // Interface Element:
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_TagName() const;
     // Interface EmptyElement:
     virtual AttrList &  inq_RefAttrs();
 
     // DATA
-    csv::String     sTagName;
+    ::csv::String       sTagName;
     AttrList            aAttrs;
 };
 
@@ -283,17 +283,17 @@ class APureElement : public PureElement
 {
   public:
                         APureElement(
-                            const csv::String & i_sTagName );
+                            const ::csv::String &   i_sTagName );
                         ~APureElement();
   private:
     // Interface Element:
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_TagName() const;
     // Interface PureElement:
     virtual Dyn< Item > &
                         inq_RefContent();
     // DATA
-    csv::String         sTagName;
+    ::csv::String         sTagName;
     Dyn< Item >         pContent;
 };
 
@@ -301,14 +301,14 @@ class ASglTag : public SglTag
 {
   public:
                         ASglTag(
-                            const csv::String & i_sTagName );
+                            const ::csv::String & i_sTagName );
                         ~ASglTag();
   private:
     // Interface Element:
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_TagName() const;
     // DATA
-    csv::String         sTagName;
+    ::csv::String         sTagName;
 };
 
 
@@ -318,18 +318,18 @@ class AnAttribute : public Attribute
 {
   public:
                         AnAttribute(
-                            const csv::String & i_sName,
-                            const csv::String & i_sValue );
+                            const ::csv::String & i_sName,
+                            const ::csv::String & i_sValue );
                         ~AnAttribute();
   private:
     // Interface Attribute:
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_Name() const;
-    virtual const csv::String &
+    virtual const ::csv::String &
                         inq_Value() const;
     // DATA
-    csv::String         sName;
-    csv::String         sValue;
+    ::csv::String         sName;
+    ::csv::String         sValue;
 };
 
 
@@ -344,7 +344,7 @@ class Text : public TextContent
 {
   public:
                         Text(
-                            const csv::String & i_sText );
+                            const ::csv::String & i_sText );
                         Text(
                             const char *        i_sText );
                         ~Text();
@@ -352,7 +352,7 @@ class Text : public TextContent
     virtual void        do_WriteOut(
                             csv::bostream &     io_aFile ) const;
     // DATA
-    csv::String         sText;
+    ::csv::String         sText;
 };
 
 
@@ -360,13 +360,13 @@ class XmlCode : public TextContent
 {
   public:
                         XmlCode(
-                            const csv::String & i_sText );
+                            const ::csv::String & i_sText );
                         ~XmlCode();
   private:
     virtual void        do_WriteOut(
                             csv::bostream &     io_aFile ) const;
     // DATA
-    csv::String         sText;
+    ::csv::String         sText;
 };
 
 
@@ -377,10 +377,10 @@ inline void
 Item::WriteOut( csv::bostream & io_aFile ) const
     { do_WriteOut(io_aFile); }
 
-inline const csv::String &
+inline const ::csv::String &
 Attribute::Name() const
     { return inq_Name(); }
-inline const csv::String &
+inline const ::csv::String &
 Attribute::Value() const
     { return inq_Value(); }
 
@@ -388,7 +388,7 @@ inline Element &
 Element::operator<<( DYN Item * let_dpItem )
     { op_streamout(let_dpItem); return *this; }
 inline Element &
-Element::operator<<( const csv::String & let_drText )
+Element::operator<<( const ::csv::String & let_drText )
     { op_streamout( new Text(let_drText) ); return *this; }
 inline Element &
 Element::operator<<( const char * let_drText )

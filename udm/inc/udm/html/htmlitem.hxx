@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:32:37 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,11 @@ class Image : public csi::xml::AnEmptyElement
 {
   public:
                         Image(
-                            const csv::String & i_sSrc,
-                            const csv::String & i_sWidth,
-                            const csv::String & i_sHeight,
-                            const csv::String & i_sAlign,
-                            const csv::String & i_sBorder );
+                            const ::csv::String & i_sSrc,
+                            const ::csv::String & i_sWidth,
+                            const ::csv::String & i_sHeight,
+                            const ::csv::String & i_sAlign,
+                            const ::csv::String & i_sBorder );
 };
 
 /** <A name="">
@@ -133,7 +133,7 @@ class Label : public csi::xml::AnElement
 {
   public:
                         Label(
-                            const csv::String & i_sLabel )
+                            const ::csv::String & i_sLabel )
                                 :   csi::xml::AnElement("a")
                                 { *this << new csi::xml::AnAttribute("name", i_sLabel); }
   private:
@@ -240,7 +240,7 @@ class Link : public csi::xml::AnElement
 {
   public:
                         Link(
-                            const csv::String &i_sDestinaton )
+                            const ::csv::String &i_sDestinaton )
                                 :   csi::xml::AnElement("a")
                                 { *this << new csi::xml::AnAttribute("href", i_sDestinaton); }
 };
@@ -274,10 +274,10 @@ class Table : public csi::xml::AnElement
                         Table()
                                 :   csi::xml::AnElement("table") {}
                         Table(
-                            const csv::String & i_sBorder,
-                            const csv::String & i_sWidth,
-                            const csv::String & i_sCellPadding,
-                            const csv::String & i_sCellSpacing  );
+                            const ::csv::String & i_sBorder,
+                            const ::csv::String & i_sWidth,
+                            const ::csv::String & i_sCellPadding,
+                            const ::csv::String & i_sCellSpacing  );
     TableRow &          AddRow();
   private:
     virtual bool        FinishEmptyTag_XmlStyle() const;
@@ -363,7 +363,7 @@ class ClassAttr : public csi::xml::AnAttribute
 {
   public:
                         ClassAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "class", i_sValue ) {}
 };
 
@@ -371,7 +371,7 @@ class StyleAttr : public csi::xml::AnAttribute
 {
   public:
                         StyleAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "style", i_sValue ) {}
 };
 
@@ -379,7 +379,7 @@ class SizeAttr : public csi::xml::AnAttribute
 {
   public:
                         SizeAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "size", i_sValue ) {}
 };
 
@@ -387,7 +387,7 @@ class ColorAttr : public csi::xml::AnAttribute
 {
   public:
                         ColorAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "color", i_sValue ) {}
 };
 
@@ -395,7 +395,7 @@ class BgColorAttr : public csi::xml::AnAttribute
 {
   public:
                         BgColorAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "bgcolor", i_sValue ) {}
 };
 
@@ -403,7 +403,7 @@ class AlignAttr : public csi::xml::AnAttribute
 {
   public:
                         AlignAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "align", i_sValue ) {}
 };
 
@@ -411,7 +411,7 @@ class WidthAttr : public csi::xml::AnAttribute
 {
   public:
                         WidthAttr(
-                            const csv::String & i_sValue )
+                            const ::csv::String & i_sValue )
                             :   csi::xml::AnAttribute( "width", i_sValue ) {}
 };
 

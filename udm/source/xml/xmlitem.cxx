@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:32:38 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ Impl_SetContent( Dyn< Item >  &         o_rContent,
 
 //*********************     Attribute       ****************************//
 
-const csv::String   attrValueBegin("=\"");
-const csv::String   attrValueEnd("\"");
+const String   attrValueBegin("=\"");
+const String   attrValueEnd("\"");
 
 void
 Attribute::WriteOut( csv::bostream & io_aFile ) const
@@ -168,12 +168,12 @@ Attribute::WriteOut( csv::bostream & io_aFile ) const
 
 //************************      Element     ****************************//
 
-const csv::String    newline("\n");
-const csv::String    space(" ");
-const csv::String    beginTagBegin("<");
-const csv::String    endTagBegin("</");
-const csv::String    tagEnd(">");
-const csv::String    emptyTagEnd("/>");
+const String    newline("\n");
+const String    space(" ");
+const String    beginTagBegin("<");
+const String    endTagBegin("</");
+const String    tagEnd(">");
+const String    emptyTagEnd("/>");
 
 void
 Element::do_WriteOut( csv::bostream & io_aFile ) const
@@ -342,7 +342,7 @@ SglTag::inq_Attrs() const
 
 //***************************       AnElement       **************************//
 
-AnElement::AnElement( const csv::String &   i_sTagName )
+AnElement::AnElement( const String &   i_sTagName )
     :   sTagName( i_sTagName )
         // pContent,
         // aAttrs
@@ -371,7 +371,7 @@ AnElement::do_SetContent( DYN Item * let_dpItem )
     Impl_SetContent( pContent, let_dpItem );
 }
 
-const csv::String &
+const String &
 AnElement::inq_TagName() const
 {
     return sTagName;
@@ -392,7 +392,7 @@ AnElement::inq_Attrs() const
 
 //***************************     AnEmptyElement    **************************//
 
-AnEmptyElement::AnEmptyElement( const csv::String &   i_sTagName )
+AnEmptyElement::AnEmptyElement( const String &   i_sTagName )
     :   sTagName( i_sTagName )
         // aAttrs
 {
@@ -403,7 +403,7 @@ AnEmptyElement::~AnEmptyElement()
 
 }
 
-const csv::String &
+const String &
 AnEmptyElement::inq_TagName() const
 {
     return sTagName;
@@ -418,7 +418,7 @@ AnEmptyElement::inq_RefAttrs()
 
 //***************************     APureElement      **************************//
 
-APureElement::APureElement( const csv::String &   i_sTagName )
+APureElement::APureElement( const String &   i_sTagName )
     :   sTagName( i_sTagName )
         // pContent
 {
@@ -428,7 +428,7 @@ APureElement::~APureElement()
 {
 }
 
-const csv::String &
+const String &
 APureElement::inq_TagName() const
 {
     return sTagName;
@@ -444,7 +444,7 @@ APureElement::inq_RefContent()
 
 //***************************     ASglTag           **************************//
 
-ASglTag::ASglTag( const csv::String &   i_sTagName )
+ASglTag::ASglTag( const String &   i_sTagName )
     :   sTagName( i_sTagName )
 {
 }
@@ -453,7 +453,7 @@ ASglTag::~ASglTag()
 {
 }
 
-const csv::String &
+const String &
 ASglTag::inq_TagName() const
 {
     return sTagName;
@@ -461,8 +461,8 @@ ASglTag::inq_TagName() const
 
 
 //***************************       AnAttribute     **************************//
-AnAttribute::AnAttribute( const csv::String &   i_sName,
-                          const csv::String &   i_sValue )
+AnAttribute::AnAttribute( const String &   i_sName,
+                          const String &   i_sValue )
     :   sName(i_sName),
         sValue(i_sValue)
 {
@@ -472,13 +472,13 @@ AnAttribute::~AnAttribute()
 {
 }
 
-const csv::String &
+const String &
 AnAttribute::inq_Name() const
 {
     return sName;
 }
 
-const csv::String &
+const String &
 AnAttribute::inq_Value() const
 {
     return sValue;
@@ -488,7 +488,7 @@ AnAttribute::inq_Value() const
 
 //***************************       Text        **************************//
 
-Text::Text( const csv::String &   i_sText )
+Text::Text( const String &   i_sText )
     :   sText(i_sText)
 {
 }
@@ -539,7 +539,7 @@ Text::do_WriteOut( csv::bostream & io_aFile ) const
 
 //***************************       XmlCode     **************************//
 
-XmlCode::XmlCode( const csv::String &   i_sText )
+XmlCode::XmlCode( const String &   i_sText )
     :   sText(i_sText)
 {
 }

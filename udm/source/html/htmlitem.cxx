@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:32:37 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,11 @@ HorizontalLine::LineBreakAfterBeginTag() const
 #endif
 
 
-Image::Image( const csv::String &   i_sSrc,
-              const csv::String &   i_sWidth,
-              const csv::String &   i_sHeight,
-              const csv::String &   i_sAlign,
-              const csv::String &   i_sBorder )
+Image::Image( const String &   i_sSrc,
+              const String &   i_sWidth,
+              const String &   i_sHeight,
+              const String &   i_sAlign,
+              const String &   i_sBorder )
     :   AnEmptyElement( "img" )
 {
     *this << new AnAttribute("src",i_sSrc)
@@ -165,10 +165,10 @@ TableRow::LineBreakAfterBeginTag() const
 }
 
 
-Table::Table( const csv::String &   i_sBorder,
-              const csv::String &   i_sWidth,
-              const csv::String &   i_sCellPadding,
-              const csv::String &   i_sCellSpacing  )
+Table::Table( const String &   i_sBorder,
+              const String &   i_sWidth,
+              const String &   i_sCellPadding,
+              const String &   i_sCellSpacing  )
     :   csi::xml::AnElement("table")
 {
     if ( i_sBorder.length() > 0 )
