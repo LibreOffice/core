@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-07 18:02:41 $
+ *  last change: $Author: sab $ $Date: 2001-03-09 05:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     bRowHeaderOpen(sal_False),
     bShapeStyles (sal_False),
     pDetectiveObjContainer(NULL),
-    pChangeTrackingExportHelper(NULL)
+    pChangeTrackingExportHelper(NULL),
+    aXShapesVec()
 {
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
@@ -522,22 +523,22 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
     {
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
-        if (xShapesIndex.is())
+        uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
+        if (xShapesIndex.is() && xShapes.is())
         {
-            if( xDrawPage.is() )
+            GetShapeExport()->seekShapes(xShapes);
+            aXShapesVec[nTable] = xShapes;
+            uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+            if( xFormsSupplier.is() )
             {
-                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
-                if( xFormsSupplier.is() )
+                uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
+                if( xForms.is() && xForms->hasElements() )
                 {
-                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
-                    if( xForms.is() && xForms->hasElements() )
-                    {
-                        GetFormExport()->examineForms(xDrawPage);
-                        ScMyDrawPage aDrawPage;
-                        aDrawPage.bHasForms = sal_True;
-                        aDrawPage.xDrawPage = xDrawPage;
-                        pSharedData->AddDrawPage(aDrawPage, nTable);
-                    }
+                    GetFormExport()->examineForms(xDrawPage);
+                    ScMyDrawPage aDrawPage;
+                    aDrawPage.bHasForms = sal_True;
+                    aDrawPage.xDrawPage = xDrawPage;
+                    pSharedData->AddDrawPage(aDrawPage, nTable);
                 }
             }
             sal_Int32 nShapes = xShapesIndex->getCount();
@@ -1303,6 +1304,7 @@ void ScXMLExport::_ExportContent()
                             DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
                         }
                         GetxCurrentShapes(xCurrentShapes);
+                        GetShapeExport()->seekShapes(aXShapesVec[nTable]);
                         WriteTableShapes();
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         pSharedData->SetLastColumn(nTable, aRange.EndColumn);
@@ -1457,6 +1459,8 @@ void ScXMLExport::_ExportAutoStyles()
                 GetChartExport()->setTableAddressMapper(xChartExportMapper);
                 sal_Int32 nTableCount = xIndex->getCount();
                 pCellStyles->AddNewTable(nTableCount - 1);
+                uno::Reference<drawing::XShapes> xShapes;
+                aXShapesVec.resize(nTableCount, xShapes);
                 for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
                 {
                     uno::Any aTable = xIndex->getByIndex(nTable);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 05:46:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-09 05:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HDL_
+#include <com/sun/star/drawing/XShapes.hdl>
+#endif
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -93,6 +96,8 @@ class ScMyDetectiveOpContainer;
 struct ScMyCell;
 class ScDocument;
 class ScMySharedData;
+
+typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
 class ScXMLExport : public SvXMLExport
 {
@@ -117,6 +122,7 @@ class ScXMLExport : public SvXMLExport
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
+    ScMyXShapesVec                      aXShapesVec;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
