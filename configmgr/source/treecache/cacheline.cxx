@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:39:15 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@ namespace configmgr
 
     CacheLine::CacheLine(Name const & _aModuleName, memory::HeapManager & _rHeapImpl)
     : m_storage(_rHeapImpl  )
-    , m_name(_aModuleName)
     , m_base()
+    , m_name(_aModuleName)
     , m_nDataRefs(0)
     {
     }
@@ -115,8 +115,8 @@ namespace configmgr
     CacheLine::CacheLine(Name const & _aModuleName, memory::HeapManager & _rHeapImpl,
                             memory::SegmentAddress const & _aSegment)
     : m_storage(_rHeapImpl,_aSegment.id)
-    , m_name(_aModuleName)
     , m_base( memory::Pointer(_aSegment.base) )
+    , m_name(_aModuleName)
     , m_nDataRefs(0)
     {
     }
