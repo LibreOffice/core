@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2001-07-04 12:29:00 $
+#   last change: $Author: vg $ $Date: 2001-07-05 13:27:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.27 $ ';
+$id_str = ' $Revision: 1.28 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -211,7 +211,7 @@ sub MakeDir {
     } else {
         print STDERR "Error $error occurred while making $BuildDir\n";
         $ENV{mk_tmp} = "";
-        exit();
+        exit(1);
     };
 };
 
@@ -262,10 +262,14 @@ sub get_prj_platform {
     while(<PrjBuildFile>) {
         s/\r\n//;
         if ($_ =~ /nmake/) {
-            $' =~ /\s+-\s+(\w+)\s+(\S+)/;
-            my $platform = $1;
-            my $alias = $2;
-            &mark_platform($alias, $platform);
+            if ($' =~ /\s+-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
+                my $platform = $1;
+                my $alias = $2;
+                &mark_platform($alias, $platform);
+            } else {
+                print STDERR "Misspelling in line: \n$_\n";
+                exit(1);
+            };
         };
     };
     seek(PrjBuildFile, 0, 0);
