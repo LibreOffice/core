@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:41:22 $
+ *  last change: $Author: tra $ $Date: 2002-10-30 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,12 +211,16 @@ namespace // private
     int WindowsFileOpenCtrlIds[] =
     {
         0,
-        IDOK,
-        IDCANCEL,
-        cmb1
+        IDOK,       //  PUSHBUTTON_OK
+        IDCANCEL,   //  PUSHBUTTON_CANCEL
+        cmb1,       //  LISTBOX_FILTER
+        0,          //  CONTROL_FILEVIEW
+        0,          //  not available in system file picker
+        stc2,       //  LISTBOX_FILTER_LABEL
+        stc3        //  LISTBOX_FILE_NAME_LABEL
     };
     const SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
-        sizeof( WindowsFileOpenCtrlIds ) / sizeof( int );
+        sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
 
 }; // end namespace
 
