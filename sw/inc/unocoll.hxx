@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 15:29:29 $
+ *  last change: $Author: mtg $ $Date: 2001-03-21 14:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,9 @@ class SwUnoCollection
 #define SW_SERVICE_NUMBERING_RULES                      97
 #define SW_SERVICE_TEXT_COLUMNS                         98
 #define SW_SERVICE_INDEX_HEADER_SECTION                 99
+#define SW_SERVICE_DEFAULTS                             100
 
-#define SW_SERVICE_LAST                 SW_SERVICE_INDEX_HEADER_SECTION
+#define SW_SERVICE_LAST                 SW_SERVICE_DEFAULTS
 
 
 #define SW_SERVICE_INVALID          USHRT_MAX
