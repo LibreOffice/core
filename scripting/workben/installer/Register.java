@@ -3,7 +3,6 @@ package installer;
 import java.lang.String;
 import java.io.*;
 import javax.swing.*;
-
 public class Register{
     private static String[] singletonDefParams = { "drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava",
                                            "drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager",
@@ -17,28 +16,24 @@ public class Register{
     }
     private static boolean regSingletons( String path, String progPath, String opSys, JLabel statusLabel ) {
         try{
-            int exitcode=0;
-            Runtime rt = Runtime.getRuntime();
-            Process p;
+            boolean goodResult = false;
             String[] env = new String[1];
             String regCmd = null;
+            ExecCmd command = new ExecCmd();
             for ( int i=0; i<singletonDefParams.length; i++){
                 if ( opSys.indexOf( "Windows" ) == -1 ){
                 // Not windows
                     env[0] = "LD_LIBRARY_PATH=" + progPath;
-                    p=rt.exec("chmod a+x " + progPath + "regsingleton");
-                    exitcode=p.waitFor();
+                    command.exec( "chmod a+x " + progPath + "regsingleton", null );
                     regCmd = progPath + "regsingleton " + path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb " + singletonDefParams[i];
-                    p=rt.exec( regCmd, env );
+                    goodResult = command.exec( regCmd, env );
                 }
                 else {
             // Windows
                     regCmd = quotedString( progPath + "regsingleton.exe" ) + " " + quotedString( path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb" ) + " " + quotedString( singletonDefParams[i] );
-
-                    p=rt.exec( regCmd );
+                    goodResult = command.exec( regCmd,null );
                 }
-                exitcode = p.waitFor();
-                if ( exitcode != 0 ){
+                if ( !goodResult ){
                     System.out.println("Regsingleton cmd failed, cmd: " + regCmd );
                     statusLabel.setText("Regsingleton ScriptRuntimeForJava Failed, please view SFrameworkInstall.log");
                     return false;
@@ -61,14 +56,13 @@ public class Register{
 
     try {
         String s=null;
-        int exitcode=0;
+        boolean goodResult = false;
         String env[] = new String[1];
-        Runtime rt = Runtime.getRuntime();
+            ExecCmd command = new ExecCmd();
         boolean isWindows =
                 (System.getProperty("os.name").indexOf("Windows") != -1);
 
         String progpath = path.concat("program" + File.separator);
-        Process p;
 
             statusLabel.setText("Registering Scripting Framework...");
 
@@ -82,14 +76,13 @@ public class Register{
             if (!isWindows) {
             env[0]="LD_LIBRARY_PATH=" + progpath;
 
-            p = rt.exec("chmod a+x " + progpath + "pkgchk");
-            exitcode = p.waitFor();
+            goodResult = command.exec("chmod a+x " + progpath + "pkgchk", null );
 
-            if (exitcode == 0){
+            if ( goodResult ){
                         cmd = progpath + "pkgchk " + progpath + packages[i];
 
                 System.err.println(cmd);
-                        p=rt.exec(cmd, env);
+                        goodResult = command.exec(cmd, env);
                     }
                 }
             else {
@@ -97,11 +90,10 @@ public class Register{
                         packages[i] + "\"";
 
             System.err.println(cmd);
-                    p=rt.exec(cmd);
-            }
+                    goodResult =command.exec(cmd,null);
 
-                exitcode = p.waitFor();
-                if (exitcode != 0) {
+            }
+                if (!goodResult) {
                     System.err.println("\nPkgChk Failed");
 
             if(!isWindows)
