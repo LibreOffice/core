@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:42:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,6 +866,8 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
                 break;
             default:
                 DBG_ERROR("unknown field type!");
+                eElementName = XML_SEQUENCE_DECL;
+                break;
         }
 
         if( IsXMLToken( rLocalName, eElementName ) )
