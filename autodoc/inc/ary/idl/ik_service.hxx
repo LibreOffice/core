@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ik_service.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,11 @@ using ifc_ce::DocText;
 struct attr: public ifc_ce::attr
 {
     static void         Get_IncludedServices(
-                            Dyn_StdConstIterator<CommentedReference> &
+                            Dyn_StdConstIterator<CommentedRelation> &
                                                 o_result,
                             const CodeEntity &  i_ce );
     static void         Get_ExportedInterfaces(
-                            Dyn_StdConstIterator<CommentedReference> &
+                            Dyn_StdConstIterator<CommentedRelation> &
                                                 o_result,
                             const CodeEntity &  i_ce );
     static void         Get_Properties(

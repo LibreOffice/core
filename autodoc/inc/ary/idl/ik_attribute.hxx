@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ik_attribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,24 @@ namespace ifc_attribute
 {
 
 using ifc_ce::DocText;
+using ::ary::idl::ifc_ce::Dyn_TypeIterator;
 
 
 struct attr: public ifc_ce::attr
 {
+    static bool         HasAnyStereotype(
+                            const CodeEntity &  i_ce );
     static bool         IsReadOnly(
                             const CodeEntity &  i_ce );
+    static bool         IsBound(
+                            const CodeEntity &  i_ce );
     static Type_id      Type(
+                            const CodeEntity &  i_ce );
+    static void         Get_GetExceptions(
+                            Dyn_TypeIterator &  o_result,
+                            const CodeEntity &  i_ce );
+    static void         Get_SetExceptions(
+                            Dyn_TypeIterator &  o_result,
                             const CodeEntity &  i_ce );
 };
 
