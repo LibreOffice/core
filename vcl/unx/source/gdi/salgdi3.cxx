@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-08 12:42:01 $
+ *  last change: $Author: hdu $ $Date: 2002-05-30 15:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1826,6 +1826,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                     pFontData->maName = pFontData->maName.Copy( 4 );
                 if( aInfo.m_eType == psp::fonttype::TrueType )
                 {
+                    // prefer truetype fonts
+                    pFontData->mnQuality += 10;
                     // asian type 1 fonts are not known
                     ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
                     int nPos = aFileName.SearchBackward( '_' );
@@ -1876,7 +1878,11 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                     continue;
                 ImplFontData aFontData;
                 SetImplFontData( aInfo, aFontData );
-                aFontData.mnQuality += 4096;    // prefer to X11 fonts
+                // prefer builtin_rasterizer fonts
+                aFontData.mnQuality += 4096;
+                // prefer truetype fonts
+                if( aInfo.m_eType == psp::fonttype::TrueType )
+                    aFontData.mnQuality += 1000;
                 int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
                 if( aFontData.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
                     aFontData.maName = aFontData.maName.Copy( 4 );
