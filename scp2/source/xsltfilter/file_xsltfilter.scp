@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_xsltfilter.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:25:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,18 @@
 
 #include "macros.inc"
 
-File gid_File_Oo_Office_Filter_Xslt_Pkg
+File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Uno_Packages;
-    Name = "fcfg_xslt.zip";
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_xslt_types.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Filters_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_xslt_filters.xcu";
 End
 
 File gid_File_Stw_Docbooktemplate
