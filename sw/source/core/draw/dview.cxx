@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:43:27 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,11 @@
 #include <svx/outliner.hxx>
 #endif
 
+// OD 18.06.2003 #108784#
+#ifndef _SVDVMARK_HXX //autogen
+#include <svx/svdvmark.hxx>
+#endif
+#include <vector>
 
 class SwSdrHdl : public SdrHdl
 {
@@ -512,7 +517,7 @@ const SwFrm *SwDrawView::CalcAnchor()
     if ( rMrkList.GetMarkCount() != 1 )
         return NULL;
 
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
 
     //Fuer Absatzgebundene Objekte suchen, andernfalls einfach nur
     //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
@@ -527,11 +532,29 @@ const SwFrm *SwDrawView::CalcAnchor()
     else
     {
         SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-        pAnch = pC->GetAnchor();
+        // OD 17.06.2003 #108784# - determine correct anchor position for
+        // 'virtual' drawing objects.
+        if ( pObj->ISA(SwDrawVirtObj) )
+        {
+            pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
+        }
+        else
+        {
+            pAnch = pC->GetAnchor();
+        }
         if( !pAnch )
         {
             pC->ConnectToLayout();
-            pAnch = pC->GetAnchor();
+            // OD 17.06.2003 #108784# - determine correct anchor position for
+            // 'virtual' drawing objects.
+            if ( pObj->ISA(SwDrawVirtObj) )
+            {
+                pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
+            }
+            else
+            {
+                pAnch = pC->GetAnchor();
+            }
         }
         aMyRect = pObj->GetSnapRect();
     }
@@ -556,7 +579,12 @@ const SwFrm *SwDrawView::CalcAnchor()
     if ( aPt != aMyPt )
     {
         if ( pAnch->IsCntntFrm() )
-            pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, !bFly );
+        {
+            // OD 26.06.2003 #108784# - allow drawing objects in header/footer,
+            // but exclude control objects.
+            bool bBodyOnly = CheckControlLayer( pObj );
+            pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, bBodyOnly );
+        }
         else if ( !bFly )
         {
             const SwRect aRect( aPt.X(), aPt.Y(), 1, 1 );
@@ -744,13 +772,74 @@ void SwDrawView::CheckPossibilities()
     bResizeProtect  |= bProtect | bSzProtect;
 }
 
+/** replace marked <SwDrawVirtObj>-objects by its reference object for delete
+    marked objects.
+
+    OD 18.06.2003 #108784#
+
+    @author OD
+*/
+void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
+{
+    SdrPageView* pDrawPageView = _rMarkView.GetPageViewPgNum(0);
+    const SdrMarkList& rMarkList = _rMarkView.GetMarkList();
+
+    if( rMarkList.GetMarkCount() )
+    {
+        // collect marked objects in a local data structure
+        std::vector<SdrObject*> aMarkedObjs;
+        for( sal_uInt32 i = 0; i < rMarkList.GetMarkCount(); ++i )
+        {
+            SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetObj();
+            aMarkedObjs.push_back( pMarkedObj );
+        }
+        // unmark all objects
+        _rMarkView.UnmarkAllObj();
+        // re-mark objects, but for marked <SwDrawVirtObj>-objects marked its
+        // reference object.
+        while ( !aMarkedObjs.empty() )
+        {
+            SdrObject* pMarkObj = aMarkedObjs.back();
+            if ( pMarkObj->ISA(SwDrawVirtObj) )
+            {
+                SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
+                if ( !_rMarkView.IsObjMarked( pRefObj )  )
+                {
+                    _rMarkView.MarkObj( pRefObj, pDrawPageView );
+                }
+            }
+            else
+            {
+                _rMarkView.MarkObj( pMarkObj, pDrawPageView );
+            }
+
+            aMarkedObjs.pop_back();
+        }
+        // sort marked list in order to assure consistent state in drawing layer
+        _rMarkView.SortMarkList();
+    }
+}
+
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    if( pDoc->GetRootFrm() )
+    if ( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->StartAllAction();
     pDoc->StartUndo();
-    if( pDoc->DeleteSelection( *this ) )
+    // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
+    // reference objects.
+    {
+        SdrPageView* pDrawPageView = rImp.GetPageView();
+        if ( pDrawPageView )
+        {
+            SdrMarkView* pMarkView = PTR_CAST( SdrMarkView, &(pDrawPageView->GetView()) );
+            if ( pMarkView )
+            {
+                ReplaceMarkedDrawVirtObjs( *pMarkView );
+            }
+        }
+    }
+    if ( pDoc->DeleteSelection( *this ) )
     {
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
