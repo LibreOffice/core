@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 05:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/streamhelper.hxx>
+
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -171,10 +174,7 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * configures date/time
      */
-    aSignatureHelper.SetDateTime(
-        nSecurityId,
-        rtl::OUString::createFromAscii("2002-07-06"),
-        rtl::OUString::createFromAscii("15:25:20"));
+    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
 
     /*
      * signs the xml stream
