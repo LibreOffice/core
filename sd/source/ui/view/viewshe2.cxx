@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-24 15:19:03 $
+ *  last change: $Author: cl $ $Date: 2002-02-13 13:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,7 +1673,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
 
         pStr++;
 
-        while( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') )
+        while( (*pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9')) || (*pStr == '+') || (*pStr == '-') )
         {
             sBuffer.append( *pStr++ );
         }
@@ -1693,7 +1693,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
                 if( *pStr++ != ',' )
                     return;
 
-                while( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') )
+                while( (*pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9')) || (*pStr == '+') || (*pStr == '-')  )
                 {
                     sBuffer.append( *pStr++ );
                 }
