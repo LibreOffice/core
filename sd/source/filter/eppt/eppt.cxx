@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:10:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
 #endif
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
 #endif
@@ -142,6 +139,9 @@
 #endif
 #include <svtools/wmf.hxx>
 
+#ifndef _MSDFFIMP_HXX
+#include <svx/msdffimp.hxx>
+#endif
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
 #endif
@@ -163,6 +163,7 @@
 #define PPT_TRANSITION_TYPE_ZOOM           11
 #define PPT_TRANSITION_TYPE_SPLIT          13
 
+using namespace com::sun::star;
 
 //============================ PPTWriter ==================================
 
@@ -245,12 +246,12 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     if ( !ImplCreateSummaryInformation() )
         return;
 
-    mpStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "PowerPoint Document" ) ) );
+    mpStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "PowerPoint Document" ) ) );
     if ( !mpStrm )
         return;
 
     if ( !mpPicStrm )
-        mpPicStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
+        mpPicStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
 
     mpPptEscherEx = new PptEscherEx( *mpStrm, mnDrawings );
 
@@ -346,7 +347,7 @@ static inline sal_uInt32 PPTtoEMU( INT32 nPPT )
 
 sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 {
-    mpCurUserStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ) );
+    mpCurUserStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ) );
     if ( !mpCurUserStrm )
         return FALSE;
     char pUserName[] = "Current User";
@@ -1876,13 +1877,16 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                 SdrObject* pSdrObj = GetSdrObjectFromXShape( pPtr->xShape );
                 if ( pSdrObj && pSdrObj->ISA( SdrOle2Obj ) )
                 {
-                    SvInPlaceObjectRef  xInplaceObj( ((SdrOle2Obj*)pSdrObj)->GetObjRef() );
-                    if( xInplaceObj.Is() )
+                    ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pSdrObj )->GetObjRef() );
+                    if( xObj.is() )
                     {
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
-                        aOleExport.ExportOLEObject( *xInplaceObj, *xTempStorage );
+                        aOleExport.ExportOLEObject( xObj, *xTempStorage );
+
+                        //TODO/MBA: testing
                         String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
-                        SvStorageRef xCleanStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
+                        SvMemoryStream aStream;
+                        SvStorageRef xCleanStorage( new SvStorage( FALSE, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
