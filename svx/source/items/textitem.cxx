@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 09:57:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #include "svxids.hrc"
 #include "svxitems.hrc"
 
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _VCL_VCLENUM_HXX
 #include <vcl/vclenum.hxx>
 #endif
