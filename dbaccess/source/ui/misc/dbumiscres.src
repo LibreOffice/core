@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:31:17 $
+ *  last change: $Author: vg $ $Date: 2002-12-09 09:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Текст;Электронная таблица;Адресная книга";
         Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
@@ -622,6 +622,9 @@ String STR_REDO_COLON
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2002/12/05 10:31:17  kz
+ *  Merge SRX644: 05.12.02 - 11:27:53
+ *
  *  Revision 1.50  2002/11/25 15:12:13  kz
  *  Merge SRX644: 25.11.02 - 16:08:20
  *
