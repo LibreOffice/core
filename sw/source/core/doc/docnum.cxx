@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:51:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,23 +289,10 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( rOutlNds.Seek_Entry( pEndNd, &nEndPos ) )
         ++nEndPos;
 
-
     // jetzt haben wir unseren Bereich im OutlineNodes-Array
     // dann prufe ersmal, ob nicht unterebenen aufgehoben werden
     // (Stufung ueber die Grenzen)
     register USHORT n;
-    if( 0 <= nOffset )          // nach unten
-    {
-        for( n = nSttPos; n < nEndPos; ++n )
-            if( rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->
-                GetOutlineLevel() + nOffset >= MAXLEVEL )
-                return FALSE;
-    }
-    else
-        for( n = nSttPos; n < nEndPos; ++n )
-            if( rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->
-                GetOutlineLevel() < -nOffset )
-                return FALSE;
 
     // so, dann koennen wir:
     // 1. Vorlagen-Array anlegen
@@ -318,10 +305,86 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         if( nLevel < MAXLEVEL )
             aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
     }
-    for( n = 0; n < MAXLEVEL; ++n )
-        if( !aCollArr[ n ] )
-            aCollArr[ n ] = GetTxtCollFromPool( RES_POOLCOLL_HEADLINE1 + n );
 
+    /* --> #i13747#
+
+       Build a move table that states from which level an outline will
+       be moved to which other level. */
+
+    /* the move table
+
+       aMoveArr[n] = m: replace aCollArr[n] with aCollArr[m]
+    */
+    int aMoveArr[MAXLEVEL];
+    int nStep; // step size for searching in aCollArr: -1 or 1
+    int nNum; // amount of steps for stepping in aCollArr
+
+    if (nOffset < 0)
+    {
+        nStep = -1;
+        nNum = -nOffset;
+    }
+    else
+    {
+        nStep = 1;
+        nNum = nOffset;
+    }
+
+    /* traverse aCollArr */
+    for (n = 0; n < MAXLEVEL; n++)
+    {
+        /* If outline level n has an assigned paragraph style step
+           nNum steps forwards (nStep == 1) or backwards (nStep ==
+           -1).  One step is to go to the next non-null entry in
+           aCollArr in the selected direction. If nNum steps were
+           possible write the index of the entry found to aCollArr[n],
+           i.e. outline level n will be replaced by outline level
+           aCollArr[n].
+
+           If outline level n has no assigned paragraph style
+           aMoveArr[n] is set to -1.
+        */
+        if (aCollArr[n] != NULL)
+        {
+            USHORT m = n;
+            int nCount = nNum;
+
+            while (nCount > 0 && m + nStep >= 0 && m + nStep < MAXLEVEL)
+            {
+                m += nStep;
+
+                if (aCollArr[m] != NULL)
+                    nCount--;
+            }
+
+            if (nCount == 0)
+                aMoveArr[n] = m;
+            else
+                aMoveArr[n] = -1;
+
+        }
+        else
+            aMoveArr[n] = -1;
+    }
+
+    /* If moving of the outline levels is applicable, i.e. for all
+       outline levels occuring in the document there has to be a valid
+       target outline level implied by aMoveArr. */
+    bool bMoveApplicable = true;
+    for (n = nSttPos; n < nEndPos; n++)
+    {
+        SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
+        SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
+        int nLevel = pColl->GetOutlineLevel();
+
+        if (aMoveArr[nLevel] == -1)
+            bMoveApplicable = false;
+    }
+
+    if (! bMoveApplicable )
+        return FALSE;
+
+    /* <-- #i13747 # */
     if( DoesUndo() )
     {
         ClearRedo();
@@ -329,12 +392,31 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     // 2. allen Nodes die neue Vorlage zuweisen
-    for( n = nSttPos; n < nEndPos; ++n )
+
+    n = nSttPos;
+    while( n < nEndPos)
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
-        pColl = aCollArr[ pColl->GetOutlineLevel() + nOffset ];
-        pColl = (SwTxtFmtColl*)pTxtNd->ChgFmtColl( pColl );
+
+        ASSERT(pColl->GetOutlineLevel() < MAXLEVEL,
+               "non outline node in outline nodes?");
+
+        int nLevel = pColl->GetOutlineLevel();
+
+        ASSERT(aMoveArr[nLevel] >= 0,
+               "move table: current TxtColl not found when building table!");
+
+
+        if (nLevel < MAXLEVEL && aMoveArr[nLevel] >= 0)
+        {
+            pColl = aCollArr[ aMoveArr[nLevel] ];
+
+            if (pColl != NULL)
+                pColl = (SwTxtFmtColl*)pTxtNd->ChgFmtColl( pColl );
+        }
+
+        n++;
         // Undo ???
     }
 
