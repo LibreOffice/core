@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:52:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,22 +200,20 @@ void Help()
 /*****************************************************************************/
 {
     //fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-ULF][-L l1,l2,...]\n" );
-    fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-L l1,l2,...]\n" );
+    fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-    fprintf( stdout, " -e: no function\n" );
-    fprintf( stdout, " -b: no function\n" );
-    fprintf( stdout, " -u: no function\n" );
+    fprintf( stdout, " -QQ: quite output\n" );
     //fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
     //fprintf( stdout, " -ULF: enables Unicode Language File format, leads to UTF8 encoded version of lng files" );
-    fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
+    fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-    fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
-    fprintf( stdout, "     Example: -L 01,99=35\n" );
-    fprintf( stdout, "              Restriction to 01 and 99, 35 will be fallback for 99\n" );
+    fprintf( stdout, "     f1, f2,... are also elements of (de,en-US...)\n" );
+    fprintf( stdout, "     Example: -L de,es=en-US\n" );
+    fprintf( stdout, "              Restriction to de and es, en-US will be fallback for es\n" );
 }
 
 /*****************************************************************************/
