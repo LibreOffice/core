@@ -441,7 +441,6 @@ UDK_3_0_0 {
         osl_getLocalTimeFromSystemTime;
         osl_getSystemTimeFromLocalTime;
         osl_getAbsoluteFileURL;
-        osl_getTempDirURL;
 
         osl_unmountVolumeDevice;
         osl_automountVolumeDevice;
@@ -484,6 +483,13 @@ UDK_3_0_0 {
         rtl_tres_destroy;
         osl_getProcessLocale;
         osl_setProcessLocale;
+    local:
+        *;
+};
+
+UDK_3.1 {
+    global:
+        osl_getTempDirURL;
     local:
         *;
 };
