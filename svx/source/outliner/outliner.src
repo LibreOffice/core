@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:31:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ String RID_OUTLUNDO_HEIGHT
     TEXT[ hebrew ] = "‮הזזה‬";
     TEXT[ hindi ] = "स्थानान्तर";
     TEXT[ slovak ] = "Presunúť";
+    TEXT[ hungarian ] = "Áthelyezés";
+    TEXT[ slovenian ] = "Premakni";
 };
 String RID_OUTLUNDO_DEPTH
 {
@@ -128,6 +130,8 @@ String RID_OUTLUNDO_DEPTH
     Text[ hebrew ] = "‮כניסה‬";
     Text[ hindi ] = "इन्डेन्ट";
     Text[ slovak ] = "Odsadenie";
+    Text[ hungarian ] = "Behúzás";
+    Text[ slovenian ] = "Zamik";
 };
 String RID_OUTLUNDO_EXPAND
 {
@@ -163,6 +167,8 @@ String RID_OUTLUNDO_EXPAND
     Text[ hebrew ] = "‮הצגת תת נקודות‬";
     Text[ hindi ] = "अधीनबिन्दुओं को दिखाओ";
     Text[ slovak ] = "Zobraziť podbody";
+    Text[ hungarian ] = "Alpontok megjelenítése";
+    Text[ slovenian ] = "Pokaži podtočke";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
@@ -198,6 +204,8 @@ String RID_OUTLUNDO_COLLAPSE
     Text[ hebrew ] = "‮כיווץ‬";
     Text[ hindi ] = "दबाओ";
     Text[ slovak ] = "Skryť všetky súčasti";
+    Text[ hungarian ] = "Összecsukás";
+    Text[ slovenian ] = "Strni";
 };
 String RID_OUTLUNDO_ATTR
 {
@@ -232,6 +240,8 @@ String RID_OUTLUNDO_ATTR
     TEXT[ hebrew ] = "‮יישום תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
     TEXT[ slovak ] = "Použiť atribúty";
+    TEXT[ hungarian ] = "Jellemzők alkalmazása";
+    TEXT[ slovenian ] = "Uporabi atribute";
 };
 String RID_OUTLUNDO_INSERT
 {
@@ -268,7 +278,10 @@ String RID_OUTLUNDO_INSERT
     TEXT[ hebrew ] = "‮הוספה‬";
     TEXT[ hindi ] = "जोड़ो";
     TEXT[ slovak ] = "Vložiť";
+    TEXT[ hungarian ] = "Beszúrás";
+    TEXT[ slovenian ] = "Vstavi";
 };
+
 
 
 
