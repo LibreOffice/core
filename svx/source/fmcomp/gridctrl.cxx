@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 15:05:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 15:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 using namespace ::dbtools;
 using namespace ::svxform;
 using namespace ::svt;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::datatransfer;
