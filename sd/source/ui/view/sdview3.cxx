@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:37:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 20:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) )
         {
-            XFillExchangeData aFillData;
+            XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
 
             *xStm >> aFillData;
 
