@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:11:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,7 +895,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                          !static_cast<SwDrawVirtObj*>(pObj)->IsConnected() )
                     {
                         SwRect aNewObjRect( aObjRect );
-                        static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj())
+                        static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( 0L ))
                                         ->AdjustPositioningAttr( pNewAnchorFrm,
                                                                  &aNewObjRect );
 
