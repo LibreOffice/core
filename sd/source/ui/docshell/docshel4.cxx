@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 12:20:25 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,13 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 
             SdrOutliner* pOutl = pViewShell->GetView()->GetTextEditOutliner();
             if( pOutl )
+            {
+                SdrObject* pObj = pViewShell->GetView()->GetTextEditObject();
+                if( pObj )
+                    pObj->NbcSetOutlinerParaObject( pOutl->CreateParaObject() );
+
                 pOutl->ClearModifyFlag();
+            }
         }
 
         bRet = TRUE;
