@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-02 14:25:24 $
+ *  last change: $Author: ka $ $Date: 2002-10-29 08:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,6 +509,24 @@ uno::Any SAL_CALL ValueSetAcc::getAccessibleKeyBinding()
     throw (uno::RuntimeException)
 {
     return uno::Any();
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
+    throw (uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
+    throw (uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
 }
 
 // -----------------------------------------------------------------------------
@@ -1028,6 +1046,24 @@ uno::Any SAL_CALL ValueItemAcc::getAccessibleKeyBinding()
     throw (uno::RuntimeException)
 {
     return uno::Any();
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
+    throw (uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
+    throw (uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
 }
 
 // -----------------------------------------------------------------------------
