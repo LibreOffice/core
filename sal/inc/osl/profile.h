@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 13:41:48 $
+ *  last change: $Author: dbo $ $Date: 2002-11-28 15:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,60 +85,89 @@ typedef sal_uInt32 oslProfileOption;
 
 typedef void* oslProfile;
 
-/** Open or create a configuration profile.
+/** Deprecated API.
+    Open or create a configuration profile.
     @return 0 if the profile could not be created, otherwise a handle to the profile.
+    @deprecated
 */
 oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, oslProfileOption Options);
 
-/** Close the opened profile an flush all data to the disk.
+/** Deprecated API.
+    Close the opened profile an flush all data to the disk.
     @param Profile handle to a opened profile.
+    @deprecated
 */
 sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile);
 
 
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile);
-
-
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_Char* pszString, sal_uInt32 MaxLen,
                               const sal_Char* pszDefault);
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
                             const sal_Char* pszSection, const sal_Char* pszEntry,
                             sal_Bool Default);
+/** Deprecated API.
+    @deprecated
+*/
 sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Default);
 
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                                const sal_Char* pszSection, const sal_Char* pszEntry,
                                const sal_Char* pszString);
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
                              const sal_Char* pszSection, const sal_Char* pszEntry,
                              sal_Bool Value);
+/** Deprecated API.
+    @deprecated
+*/
 sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Value);
 
-/** Acquire the mutex, block if already acquired by another thread.
+/** Deprecated API.
+    Acquire the mutex, block if already acquired by another thread.
     @param Profile handle to a opened profile.
     @return False if section or entry could not be found.
+    @deprecated
 */
 sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
                                const sal_Char *pszSection, const sal_Char *pszEntry);
 
-/** Get all entries belonging to the specified section.
+/** Deprecated API.
+    Get all entries belonging to the specified section.
     @param Profile handle to a opened profile.
     @return Pointer to a array of pointers.
+    @deprecated
 */
 sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_Char *pszSection,
                                     sal_Char* pszBuffer, sal_uInt32 MaxLen);
 
-/** Get all section entries
+/** Deprecated API.
+    Get all section entries
     @param Profile handle to a opened profile.
     @return Pointer to a array of pointers.
+    @deprecated
 */
 sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen);
 

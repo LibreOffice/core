@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-08 15:28:42 $
+ *  last change: $Author: dbo $ $Date: 2002-11-28 15:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ namespace osl {
     const int Profile_READLOCK  = osl_Profile_READLOCK;  /* lock file for reading            */
     const int Profile_WRITELOCK = osl_Profile_WRITELOCK; /* lock file for writing            */
 
+    /** Deprecated API.
+        @deprecated
+    */
     class Profile {
         oslProfile profile;
 
