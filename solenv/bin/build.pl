@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-24 10:06:10 $
+#   last change: $Author: vg $ $Date: 2003-10-28 11:09:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.93 $ ';
+    $id_str = ' $Revision: 1.94 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -97,15 +97,12 @@
 #########################
 
     $perl = "";
-    $remove_commando = "";
     if ( $^O eq 'MSWin32' ) {
         $perl = "$ENV{COMSPEC} -c perl5";
-        $remove_commando = "rmdir /S /Q";
         $nul = '> NULL';
     } else {
         use Cwd 'chdir';
         $perl = 'perl';
-        $remove_commando = 'rm -rf';
         $nul = '> /dev/null';
     };
 
@@ -1372,7 +1369,10 @@ sub clear_module {
         my $dir = &CorrectPath($StandDir.$Prj.'/'.$_);
         if ((!-d $dir.'/CVS') && &is_output_tree($dir)) {
             #print "I would delete $dir\n";
-            system ("$remove_commando $dir");
+            rmtree("$dir", 0, 1);
+            if (defined $SIG{__WARN__}) {
+                &print_error($SIG{__WARN__}) if ($SIG{__WARN__} ne '');
+            };
         };
     };
 };
