@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:23:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #include "undoopt.hxx"
 
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -204,11 +207,20 @@ void SvtUndoOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
     //broadcast changes
     Broadcast(SfxSimpleHint(SFX_HINT_UNDO_OPTIONS_CHANGED));
 }
+
+// -----------------------------------------------------------------------
+namespace
+{
+    class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
+    {
+    };
+}
+
 // -----------------------------------------------------------------------
 SvtUndoOptions::SvtUndoOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUndoOptions_Impl::ctor()");
@@ -227,7 +239,7 @@ SvtUndoOptions::SvtUndoOptions()
 SvtUndoOptions::~SvtUndoOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
     EndListening(*pImp);
     if ( !--nRefCount )
     {
