@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:23:31 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,9 @@ static const char* const aImplKillLeadingList[] =
     "cg",
     "hg",
     "fz",
+    "ipa",
+    "sazanami",
+    "kochi",
     NULL
 };
 
