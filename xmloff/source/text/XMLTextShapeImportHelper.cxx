@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-16 10:21:29 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::xml::sax;
 XMLTextShapeImportHelper::XMLTextShapeImportHelper(
         SvXMLImport& rImp ) :
     XMLShapeImportHelper( rImp, rImp.GetModel(),
-                          XMLTextImportHelper::CreateShapeExtPropMapper() ),
+                          XMLTextImportHelper::CreateShapeExtPropMapper(rImp) ),
     rImport( rImp ),
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
     sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),

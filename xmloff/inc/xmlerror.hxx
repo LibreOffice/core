@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #define XMLERROR_SAX            ( XMLERROR_CLASS_FORMAT | 0x00000001 )
 
 // API errors:
+#define XMLERROR_STYLE_PROP_VALUE   ( XMLERROR_CLASS_API    | 0x00000001 )
+#define XMLERROR_STYLE_PROP_UNKNOWN ( XMLERROR_CLASS_API    | 0x00000002 )
+#define XMLERROR_STYLE_PROP_OTHER   ( XMLERROR_CLASS_API    | 0x00000003 )
 
 // other errors:
 #define XMLERROR_CANCEL         ( XMLERROR_CLASS_OTHER  | 0x00000001 )

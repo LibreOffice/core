@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,7 +788,7 @@ uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
 
 XMLTextImportHelper* SvXMLImport::CreateTextImport()
 {
-    return new XMLTextImportHelper( xModel );
+    return new XMLTextImportHelper( xModel, *this );
 }
 
 XMLShapeImportHelper* SvXMLImport::CreateShapeImport()

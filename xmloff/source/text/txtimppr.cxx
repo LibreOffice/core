@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-01 09:56:38 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,9 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
 
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
+            SvXMLImport& rImport,
             XMLFontStylesContext *pFontDecls ) :
-    SvXMLImportPropertyMapper( rMapper ),
+    SvXMLImportPropertyMapper( rMapper, rImport ),
     nSizeTypeIndex( -2 ),
     xFontDecls( pFontDecls )
 {

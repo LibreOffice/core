@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 11:32:06 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,22 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVETOEXCEPTION_HPP_
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -82,12 +98,19 @@
 #include "xmlimppr.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
 #include "xmlkywd.hxx"
 #include "unoatrcn.hxx"
 #include "xmlnmspe.hxx"
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 // STL includes
@@ -104,10 +127,17 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::xmloff::token;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::lang::WrappedTargetException;
+using ::com::sun::star::beans::UnknownPropertyException;
+using ::com::sun::star::beans::PropertyVetoException;
+
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
-    maPropMapper  ( rMapper )
+        const UniReference< XMLPropertySetMapper >& rMapper,
+        SvXMLImport& rImp ):
+    maPropMapper  ( rMapper ),
+    rImport(rImp)
 {
 }
 
@@ -347,10 +377,11 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
                                       xInfo, maPropMapper );
         if ( !bSet )
             bSet = _FillPropertySet( aProperties, rPropSet,
-                                     xInfo, maPropMapper );
+                                     xInfo, maPropMapper, rImport);
     }
     else
-        bSet = _FillPropertySet( aProperties, rPropSet, xInfo, maPropMapper );
+        bSet = _FillPropertySet( aProperties, rPropSet, xInfo,
+                                 maPropMapper, rImport );
 
     return bSet;
 }
@@ -360,6 +391,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
+    SvXMLImport& rImport,
     struct _ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
@@ -392,15 +424,45 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                 rPropSet->setPropertyValue( rPropName, rProp.maValue );
                 bSet = sal_True;
             }
-            catch(...)
+            catch ( IllegalArgumentException& e )
             {
-#ifndef PRODUCT
-                ByteString aError("Exception caught while setting property '");
-                aError += ByteString( String( rPropName),
-                                      RTL_TEXTENCODING_ASCII_US );
-                aError += ByteString("'; style may not be imported correctly.");
-                OSL_ENSURE( bSet, aError.GetBuffer() );
-#endif
+                // illegal value: check whether this property is
+                // allowed to throw this exception
+                if ( 0 == ( nPropFlags & MID_FLAG_PROPERTY_MAY_EXCEPT ) )
+                {
+                    Sequence<OUString> aSeq(1);
+                    aSeq[0] = rPropName;
+                    rImport.SetError(
+                        XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                        aSeq, e.Message, NULL );
+                }
+            }
+            catch ( UnknownPropertyException& e )
+            {
+                // unknown property: This is always an error!
+                Sequence<OUString> aSeq(1);
+                aSeq[0] = rPropName;
+                rImport.SetError(
+                    XMLERROR_STYLE_PROP_UNKNOWN | XMLERROR_FLAG_ERROR,
+                    aSeq, e.Message, NULL );
+            }
+            catch ( PropertyVetoException& e )
+            {
+                // property veto: this shouldn't happen
+                Sequence<OUString> aSeq(1);
+                aSeq[0] = rPropName;
+                rImport.SetError(
+                    XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
+                    aSeq, e.Message, NULL );
+            }
+            catch ( WrappedTargetException& e )
+            {
+                // wrapped target: this shouldn't happen either
+                Sequence<OUString> aSeq(1);
+                aSeq[0] = rPropName;
+                rImport.SetError(
+                    XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
+                    aSeq, e.Message, NULL );
             }
         }
 

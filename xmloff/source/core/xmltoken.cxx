@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 06:39:36 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2072,6 +2072,7 @@ namespace xmloff { namespace token {
         TOKEN( "text-overlap" ),               // XML_TEXT_OVERLAP
         TOKEN( "spline-order" ),               // XML_SPLINE_ORDER
         TOKEN( "spline-resolution" ),          // XML_SPLINE_RESOLUTION
+        TOKEN( "paper-tray-name" ),            // XML_PAPER_TRAY_NAME
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:04:18 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ namespace xmloff
         // initialize our style map
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
-        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
+        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr(), _rImporter);
 
         // 'initialize'
         m_aCurrentPageIds = m_aControlIds.end();
@@ -587,6 +587,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/05/28 15:04:18  fs
+ *  #86712# no releaseContext anymore
+ *
  *  Revision 1.12  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *

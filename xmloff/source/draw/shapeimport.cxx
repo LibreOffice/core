@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-15 10:31:02 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // construct PropertySetMapper
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory);
-    mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper );
+    mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     // set lock to avoid deletion
     mpPropertySetMapper->acquire();
 
@@ -244,7 +244,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     }
 
     // chain text attributes
-    mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper());
+    mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImporter));
 
 /*
     // chain form attributes
@@ -254,7 +254,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);
-    mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper );
+    mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     if(mpPresPagePropsMapper)
     {
         // set lock to avoid deletion
@@ -1175,14 +1175,14 @@ void XMLShapeImportHelper::restoreConnections()
     }
 }
 
-SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel )
+SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
-    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper );
+    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
     // chain text attributes
-    pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper() );
+    pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper( rImport ) );
     return pResult;
 }
 

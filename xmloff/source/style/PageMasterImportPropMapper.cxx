@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:16 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ using namespace ::com::sun::star::container;
 PageMasterImportPropertyMapper::PageMasterImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImp ) :
-    SvXMLImportPropertyMapper( rMapper ),
+    SvXMLImportPropertyMapper( rMapper, rImp ),
     rImport( rImp )
 {
 }

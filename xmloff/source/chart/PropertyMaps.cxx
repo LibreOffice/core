@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-16 13:28:49 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,14 +454,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
 XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             const SvXMLImport& rImport ) :
-        SvXMLImportPropertyMapper( rMapper ),
-        mrImport( SAL_CONST_CAST( SvXMLImport&, rImport ))
+    mrImport( SAL_CONST_CAST( SvXMLImport&, rImport )),
+    SvXMLImportPropertyMapper( rMapper, mrImport )
 {
     // chain shape mapper for drawing properties
 
     // give an empty model. It is only used for numbering rules that don't exist in chart
     uno::Reference< frame::XModel > xEmptyModel;
-    ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel ));
+    ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel, mrImport ));
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents

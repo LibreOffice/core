@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,12 +416,12 @@ void XMLTextStyleContext::FillPropertySet(
             if ( !bSet )
                 SvXMLImportPropertyMapper::_FillPropertySet(
                     GetProperties(), rPropSet, xInfo, rPropMapper,
-                    aContextIDs );
+                    GetImport(), aContextIDs );
         }
         else
             SvXMLImportPropertyMapper::_FillPropertySet(
                     GetProperties(), rPropSet, xInfo, rPropMapper,
-                    aContextIDs );
+                    GetImport(), aContextIDs );
 
         // have we found a combined characters
         sal_Int32 nIndex = aContextIDs[0].nIndex;
