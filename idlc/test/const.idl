@@ -6,7 +6,6 @@ module test
     const long add = 1 + 2;
     const long sub = 3 - 2;
     const hyper h = 123456789;
-    const string str = "hallo";
     const float f7 = 3.4123;
     const float f2 = 3.4123 + 10e-12;
     const boolean bt = True;
