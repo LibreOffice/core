@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:52:25 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 191 , 75 ) ;
+    Size = MAP_APPFONT ( 191 , 63 ) ;
     Text = "Quelle auswählen" ;
     Text [ ENGLISH ] = "Select source" ;
     Moveable = TRUE ;
@@ -123,7 +123,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_DATABASE
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "~In %PRODUCTNAME angemeldete Datenquelle" ;
         Text [ ENGLISH ] = "Database source" ;
@@ -152,7 +152,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_EXTERNAL
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "~Externe Quelle/Schnittstelle" ;
         Text [ ENGLISH ] = "External source/interface" ;
@@ -179,10 +179,10 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ catalan ] = "~Fuente externa/Interfaz";
         Text[ finnish ] = "~Ulkoinen lähde/liittymä";
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 123 , 69 ) ;
+        Size = MAP_APPFONT ( 123 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Select" ;
         Text[ english_us ] = "Selection";
@@ -239,7 +239,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_SERVICE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 241 , 95 ) ;
+    Size = MAP_APPFONT ( 241 , 94 ) ;
     Text = "Externe Datenquelle" ;
     Text [ ENGLISH ] = "External source" ;
     Moveable = TRUE ;
@@ -266,7 +266,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     FixedText FT_SERVICE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Service" ;
         Text [ ENGLISH ] = "Service" ;
         Text[ english_us ] = "~Service";
@@ -294,15 +294,15 @@ ModalDialog RID_SCDLG_DAPISERVICE
     ListBox LB_SERVICE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 12 ) ;
-        Size = MAP_APPFONT ( 116 , 80 ) ;
+        Pos = MAP_APPFONT ( 56 , 12 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_SOURCE
     {
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Quelle" ;
         Text [ ENGLISH ] = "Source" ;
         Text[ english_us ] = "So~urce";
@@ -330,14 +330,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Edit ED_SOURCE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 28 ) ;
-        Size = MAP_APPFONT ( 116 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 28 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Name" ;
         Text [ ENGLISH ] = "Name" ;
         Text[ english_us ] = "~Name";
@@ -365,14 +365,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 43 ) ;
-        Size = MAP_APPFONT ( 116 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 44 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_USER
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Benutzer" ;
         Text [ ENGLISH ] = "User" ;
         Text[ english_us ] = "Us~er";
@@ -400,14 +400,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Edit ED_USER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 58 ) ;
-        Size = MAP_APPFONT ( 116 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 60 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_PASSWD
     {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Kennwort" ;
         Text [ ENGLISH ] = "Password" ;
         Text[ english_us ] = "~Password";
@@ -435,15 +435,15 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Edit ED_PASSWD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 73 ) ;
-        Size = MAP_APPFONT ( 116 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 76 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
         PassWord = TRUE ;
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 173 , 89 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Select" ;
         Text[ english_us ] = "Selection";
@@ -500,7 +500,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_DATABASE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 241 , 75 ) ;
+    Size = MAP_APPFONT ( 241 , 63 ) ;
     Text = "Datenquelle auswählen" ;
     Text [ ENGLISH ] = "Select data source" ;
     Moveable = TRUE ;
@@ -528,7 +528,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     FixedText FT_DATABASE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ ENGLISH ] = "Database" ;
         Text[ english_us ] = "~Database";
@@ -556,16 +556,16 @@ ModalDialog RID_SCDLG_DAPIDATA
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 12 ) ;
-        Size = MAP_APPFONT ( 116 , 80 ) ;
+        Pos = MAP_APPFONT ( 56 , 12 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
 
     FixedText FT_OBJECT
     {
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Daten~quelle" ;
         Text [ ENGLISH ] = "Data source" ;
         Text[ english_us ] = "Data so~urce";
@@ -593,16 +593,16 @@ ModalDialog RID_SCDLG_DAPIDATA
     ComboBox CB_OBJECT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 27 ) ;
-        Size = MAP_APPFONT ( 116 , 80 ) ;
+        Pos = MAP_APPFONT ( 56 , 28 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
 
     FixedText FT_OBJTYPE
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text[ english_us ] = "~Type";
@@ -630,8 +630,8 @@ ModalDialog RID_SCDLG_DAPIDATA
     ListBox LB_OBJTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 42 ) ;
-        Size = MAP_APPFONT ( 116 , 80 ) ;
+        Pos = MAP_APPFONT ( 56 , 44 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -797,10 +797,10 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     };
 
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 173 , 69 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Select" ;
         Text[ english_us ] = "Selection";

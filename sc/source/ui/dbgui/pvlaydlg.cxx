@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-25 19:40:06 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
         aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
         aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos ),
-        aGbAreas        ( this, ScResId( GB_OUTPUT ) ),
+        aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
 
         aWndRow         ( this, ScResId( WND_ROW ),    TYPE_ROW ),
         aWndCol         ( this, ScResId( WND_COL ),    TYPE_COL ),
@@ -162,7 +162,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aPtrRow         ( POINTER_PIVOT_ROW  ),
 
         aSlider         ( this, ScResId( WND_HSCROLL ) ),
-        aGbLayout       ( this, ScResId( GB_LAYOUT ) ),
+        aFlLayout       ( this, ScResId( FL_LAYOUT ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrNewTable    ( ScResId( SCSTR_NEWTABLE ) ),
 
@@ -240,7 +240,7 @@ void __EXPORT ScPivotLayoutDlg::Init()
     aBtnMore.AddWindow( &aBtnDetectCat );
     aBtnMore.AddWindow( &aBtnTotalCol );
     aBtnMore.AddWindow( &aBtnTotalRow );
-    aBtnMore.AddWindow( &aGbAreas );
+    aBtnMore.AddWindow( &aFlAreas );
     aBtnMore.SetClickHdl( LINK( this, ScPivotLayoutDlg, MoreClickHdl ) );
 
     {
@@ -275,12 +275,9 @@ void __EXPORT ScPivotLayoutDlg::Init()
         aSlider.SetPosSizePixel( aPos, aSize );
         aSlider.SetEndScrollHdl( LINK( this, ScPivotLayoutDlg, ScrollHdl ) );
         aSlider.SetPageSize( PAGE_SIZE );
-        aSlider.SetVisibleSize( LINE_SIZE );
+        aSlider.SetVisibleSize( PAGE_SIZE );
         aSlider.SetLineSize( LINE_SIZE );
-        aSlider.SetRange( Range( 0, (thePivotData.nLabels/LINE_SIZE)*LINE_SIZE
-                                       + ((thePivotData.nLabels%LINE_SIZE)
-                                            ? LINE_SIZE
-                                            : 0) ) );
+        aSlider.SetRange( Range( 0, ((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE ) );
         aSlider.Show();
     }
     else

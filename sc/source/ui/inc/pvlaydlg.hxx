@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
@@ -142,14 +139,15 @@ public:
     const Pointer*  NotifyMouseMove      ( const Point& rAt );
 
 private:
-    ScrollBar       aSlider;
+    FixedLine       aFlLayout;
     FieldWindow     aWndRow;
     FieldWindow     aWndCol;
     FieldWindow     aWndData;
     FieldWindow     aWndSelect;
-    GroupBox        aGbLayout;
-
+    ScrollBar       aSlider;
     FixedInfo       aFtInfo;
+
+    FixedLine       aFlAreas;
     ListBox         aLbOutPos;
     FixedText       aFtOutArea;
     ScRefEdit       aEdOutPos;
@@ -158,12 +156,11 @@ private:
     CheckBox        aBtnDetectCat;
     CheckBox        aBtnTotalCol;
     CheckBox        aBtnTotalRow;
-    GroupBox        aGbAreas;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
-    MoreButton      aBtnMore;
     HelpButton      aBtnHelp;
+    MoreButton      aBtnMore;
 
     Pointer         aPtrField;
     Pointer         aPtrCol;

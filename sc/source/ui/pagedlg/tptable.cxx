@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ ScTablePage::ScTablePage( Window*               pParent,
         aBtnDrawings        ( this, ScResId( BTN_DRAWINGS ) ),
         aBtnFormulas        ( this, ScResId( BTN_FORMULAS ) ),
         aBtnNullVals        ( this, ScResId( BTN_NULLVALS ) ),
-        aGbPrint            ( this, ScResId( GB_PRINT ) ),
+        aFlPrint            ( this, ScResId( FL_PRINT ) ),
+        aFlSep              ( this, ScResId( FL_SEP ) ),
         aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
         aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
         aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
@@ -140,12 +141,12 @@ ScTablePage::ScTablePage( Window*               pParent,
         aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
         aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
         aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
-        aGbPageDir          ( this, ScResId( GB_PAGEDIR ) ),
+        aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
         aBtnScaleAll        ( this, ScResId( BTN_SCALEALL ) ),
         aBtnScalePageNum    ( this, ScResId( BTN_SCALEPAGENUM ) ),
         aEdScaleAll         ( this, ScResId( ED_SCALEALL ) ),
         aEdScalePageNum     ( this, ScResId( ED_SCALEPAGENUM ) ),
-        aGbScale            ( this, ScResId( GB_SCALE ) )
+        aFlScale            ( this, ScResId( FL_SCALE ) )
 {
     SetExchangeSupport();
     aBtnPageNo          .SetClickHdl( PAGENO_HDL );
@@ -153,6 +154,7 @@ ScTablePage::ScTablePage( Window*               pParent,
     aBtnLeftRight       .SetClickHdl( PAGEDIR_HDL );
     aBtnScaleAll        .SetClickHdl( SCALE_HDL );
     aBtnScalePageNum    .SetClickHdl( SCALE_HDL );
+    aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
     FreeResource();
 }
 

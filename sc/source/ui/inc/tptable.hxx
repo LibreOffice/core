@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -95,6 +91,7 @@ private:
                          const SfxItemSet&  rCoreSet );
             ~ScTablePage();
 private:
+    FixedLine       aFlPrint;
     CheckBox        aBtnHeaders;
     CheckBox        aBtnGrid;
     CheckBox        aBtnNotes;
@@ -103,8 +100,9 @@ private:
     CheckBox        aBtnDrawings;
     CheckBox        aBtnFormulas;
     CheckBox        aBtnNullVals;
-    GroupBox        aGbPrint;
 
+    FixedLine       aFlSep;
+    FixedLine       aFlPageDir;
     RadioButton     aBtnTopDown;
     RadioButton     aBtnLeftRight;
     FixedBitmap     aBmpPageDir;
@@ -112,13 +110,12 @@ private:
     Bitmap          aImgTopDown;
     CheckBox        aBtnPageNo;
     NumericField    aEdPageNo;
-    GroupBox        aGbPageDir;
 
+    FixedLine       aFlScale;
     RadioButton     aBtnScaleAll;
     RadioButton     aBtnScalePageNum;
     NumericField    aEdScaleAll;
     NumericField    aEdScalePageNum;
-    GroupBox        aGbScale;
 
 #ifdef _TPTABLE_CXX
 private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,31 +61,30 @@
 #include "sc.hrc" // ->RID_SCDLG_PIVOT_LAYOUT
 
 #define BTN_OK                  1
-#define BTN_CANCEL              1
-#define BTN_HELP                1
-#define BTN_MORE                1
+#define BTN_CANCEL              2
+#define BTN_HELP                3
+#define BTN_MORE                4
 
-#define GB_LAYOUT               1
-#define WND_HSCROLL             1
+#define FL_LAYOUT               10
+#define WND_COL                 11
+#define WND_ROW                 12
+#define WND_DATA                13
+#define WND_SELECT              14
+#define WND_FIELD               15
+#define WND_HSCROLL             16
 
-#define WND_COL                 10
-#define WND_ROW                 11
-#define WND_DATA                12
-#define WND_SELECT              13
-#define WND_FIELD               14
+#define PTR_FIELD               18
+#define FT_INFO                 19
 
-#define PTR_FIELD               1
-#define FT_INFO                 1
-
-#define GB_OUTPUT               2
-#define FT_OUTAREA              2
-#define LB_OUTAREA              1
-#define ED_OUTAREA              1
-#define RB_OUTAREA              1
-#define BTN_IGNEMPTYROWS        3
-#define BTN_DETECTCAT           4
-#define BTN_TOTALCOL            5
-#define BTN_TOTALROW            6
+#define FL_OUTPUT               20
+#define FT_OUTAREA              21
+#define LB_OUTAREA              22
+#define ED_OUTAREA              23
+#define RB_OUTAREA              24
+#define BTN_IGNEMPTYROWS        25
+#define BTN_DETECTCAT           26
+#define BTN_TOTALCOL            27
+#define BTN_TOTALROW            28
 
 #define PIVOTSTR_SUM            1
 #define PIVOTSTR_COUNT          2

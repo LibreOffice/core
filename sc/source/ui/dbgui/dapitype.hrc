@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #define BTN_SELECTION   4
 #define BTN_DATABASE    5
 #define BTN_EXTERNAL    6
-#define GB_FRAME        7
+#define FL_FRAME        7
 
 #define FT_SERVICE      8
 #define LB_SERVICE      9

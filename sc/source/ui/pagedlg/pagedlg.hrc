@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 15:03:15 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 //================================================
 // TabPage: Tabelle
 
+#define FL_SEP              1
+
 #define BTN_GRID            10
 #define BTN_HEADER          11
 #define BTN_NOTES           12
@@ -81,7 +83,7 @@
 #define BTN_DRAWINGS        15
 #define BTN_FORMULAS        16
 #define BTN_NULLVALS        17
-#define GB_PRINT            19
+#define FL_PRINT            19
 
 #define BTN_TOPDOWN         20
 #define BTN_LEFTRIGHT       21
@@ -90,14 +92,14 @@
 #define IMG_TOPDOWN         24
 #define BTN_PAGENO          25
 #define ED_PAGENO           26
-#define GB_PAGEDIR          29
+#define FL_PAGEDIR          29
 
 #define BTN_SCALENONE       30
 #define BTN_SCALEALL        31
 #define ED_SCALEALL         32
 #define BTN_SCALEPAGENUM    33
 #define ED_SCALEPAGENUM     34
-#define GB_SCALE            39
+#define FL_SCALE            39
 
 //================================================
 // Dialog: Druckbereiche

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -90,10 +87,10 @@
 class ScDataPilotSourceTypeDlg : public ModalDialog
 {
 private:
+    FixedLine       aFlFrame;
     RadioButton     aBtnSelection;
     RadioButton     aBtnDatabase;
     RadioButton     aBtnExternal;
-    GroupBox        aGbFrame;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -111,6 +108,7 @@ public:
 class ScDataPilotServiceDlg : public ModalDialog
 {
 private:
+    FixedLine       aFlFrame;
     FixedText       aFtService;
     ListBox         aLbService;
     FixedText       aFtSource;
@@ -121,7 +119,6 @@ private:
     Edit            aEdUser;
     FixedText       aFtPasswd;
     Edit            aEdPasswd;
-    GroupBox        aGbFrame;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

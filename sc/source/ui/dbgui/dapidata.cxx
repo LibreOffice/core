@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 16:28:49 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     aCbObject       ( this, ScResId( CB_OBJECT ) ),
     aFtType         ( this, ScResId( FT_OBJTYPE ) ),
     aLbType         ( this, ScResId( LB_OBJTYPE ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) )
+    aFlFrame        ( this, ScResId( FL_FRAME ) )
 {
     FreeResource();
 

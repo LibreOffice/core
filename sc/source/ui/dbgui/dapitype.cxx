@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnabl
     aBtnSelection   ( this, ScResId( BTN_SELECTION ) ),
     aBtnDatabase    ( this, ScResId( BTN_DATABASE ) ),
     aBtnExternal    ( this, ScResId( BTN_EXTERNAL ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) )
+    aFlFrame        ( this, ScResId( FL_FRAME ) )
 {
     if (!bEnableExternal)
         aBtnExternal.Disable();
@@ -133,7 +133,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
     aEdUser         ( this, ScResId( ED_USER ) ),
     aFtPasswd       ( this, ScResId( FT_PASSWD ) ),
     aEdPasswd       ( this, ScResId( ED_PASSWD ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) )
+    aFlFrame        ( this, ScResId( FL_FRAME ) )
 {
     long nCount = rServices.getLength();
     const rtl::OUString* pArray = rServices.getConstArray();
