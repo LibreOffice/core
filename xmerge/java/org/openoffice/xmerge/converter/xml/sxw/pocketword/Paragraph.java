@@ -409,9 +409,26 @@ class Paragraph implements PocketWordConstants {
                 }
             }
 
-
+            /*
+             * C4 xx seems to indicate a control code.  C4 00 indicates the end
+             * of a paragraph; C4 04 indicates a tab space.  Only these two
+             * have been seen so far.
+             */
             if (data[i] == (byte)0xC4) {
+                /*
+                 * Redundant nodes are sometimes added to the last paragraph
+                 * because a new sequence is being processed when the flag is
+                 * set.
+                 *
+                 * To avoid this, do nothing with the last paragraph unless no
+                 * text has been added for it already.  In that case, add the
+                 * empty text segment being process to ensure that all
+                 * paragraphs have at least one text segment.
+                 */
                 if (data[i + 1] == (byte)0x00) {
+                    if (isLastParagraph && textSegments.size() > 0) {
+                        return;
+                    }
                     addTextSegment(sb.toString(), ts);
                     return;
                 }
