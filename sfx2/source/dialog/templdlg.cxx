@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-24 11:22:46 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,8 +1733,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             pTreeBox->SetFont( aFmtLb.GetFont() );
 
             pTreeBox->SetPosSizePixel(aFmtLb.GetPosPixel(), aFmtLb.GetSizePixel());
-            pTreeBox->SetNodeBitmaps(Image(SfxResId(BMP_COLLAPSED)),
-                                     Image(SfxResId(BMP_EXPANDED)));
+            pTreeBox->SetNodeDefaultImages();
             pTreeBox->SetSelectHdl(
                 LINK(this, SfxCommonTemplateDialog_Impl, FmtSelectHdl));
             ((StyleTreeListBox_Impl*)pTreeBox)->
