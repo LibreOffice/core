@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testjavavm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-05 09:48:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 
-#if defined(W32)
-#define LIBJEN    "jen.dll"
-#elif defined(UNX)
-#define LIBJEN    "libjen.so"
-#endif
-
 
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 {
@@ -117,6 +111,11 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     sal_Int8 arId[16];
     rtl_getGlobalProcessId((sal_uInt8*) arId);
     Any anyVM = xVM->getJavaVM( Sequence<sal_Int8>(arId, 16));
+    if ( ! anyVM.hasValue())
+    {
+        OSL_ENSURE(0,"could not get Java VM");
+        return sal_False;
+    }
 
     sal_Bool b= xreg11->isThreadAttached();
     xreg11->registerThread();
@@ -214,7 +213,8 @@ int __cdecl main( int argc, char * argv[] )
 
 
         OUString sLibLoader( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary"));
-        OUString sJenLib( RTL_CONSTASCII_USTRINGPARAM( LIBJEN ));
+        OUString sJenLib(
+            RTL_CONSTASCII_USTRINGPARAM( "javavm.uno" SAL_DLLEXTENSION ) );
         xImplReg->registerImplementation(
             sLibLoader, sJenLib, Reference< XSimpleRegistry >() );
 
