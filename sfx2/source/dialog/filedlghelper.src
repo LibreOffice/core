@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:54:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ czech ] = "Aktuální verze";
     Text[ hebrew ] = "‮גרסה נוכחית‬";
     Text[ hindi ] = "वर्तमान आवर्तन";
+    Text[ slovak ] = "Aktuálna verzia";
 };
 
 String STR_SFX_EXPLORERFILE_EXPORT
@@ -126,6 +127,7 @@ String STR_SFX_EXPLORERFILE_EXPORT
     Text[ hebrew ] = "‮יצוא‬";
     Text[ portuguese_brazilian ] = "Export";
     Text[ hindi ] = "Export";
+    Text[ slovak ] = "Exportovať";
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
@@ -156,6 +158,7 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
@@ -186,6 +189,7 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "~जोड़ो";
+    Text[ slovak ] = "Vlož~iť";
 };
 
 String STR_SFX_IMPORT_ALL
@@ -218,6 +222,7 @@ String STR_SFX_IMPORT_ALL
     Text[ czech ] = "<Všechny formáty>";
     Text[ hebrew ] = "‮<כל הצורות>‬";
     Text[ hindi ] = "<सब रचनें>";
+    Text[ slovak ] = "<Všetky formáty>";
 };
 
 String STR_CB_AUTO_EXTENSION
@@ -248,6 +253,7 @@ String STR_CB_AUTO_EXTENSION
     Text[ czech ] = "Automatická přípona k souboru";
     Text[ hebrew ] = "‮סיומת אוטומטית לשם קובץ‬";
     Text[ hindi ] = "~स्वचालित फाइल नाम का विस्तार";
+    Text[ slovak ] = "~Automatická prípona súboru";
 };
 
 String STR_CB_SELECTION
@@ -279,6 +285,7 @@ String STR_CB_SELECTION
     Text[ czech ] = "Výběr";
     Text[ hebrew ] = "‮בחירה‬";
     Text[ hindi ] = "~चुनाव";
+    Text[ slovak ] = "~Výber";
 };
 
 String STR_CB_INSERT_AS_LINK
@@ -311,6 +318,7 @@ String STR_CB_INSERT_AS_LINK
     Text[ czech ] = "Odkaz";
     Text[ hebrew ] = "‮קישור‬";
     Text[ hindi ] = "~लिंक";
+    Text[ slovak ] = "~Odkaz";
 };
 
 String STR_CB_SHOW_PREVIEW
@@ -343,6 +351,7 @@ String STR_CB_SHOW_PREVIEW
     Text[ czech ] = "Náhled";
     Text[ hebrew ] = "‮תצוגה מקדימה‬";
     Text[ hindi ] = "पूर्व~दृश्य";
+    Text[ slovak ] = "~Náhľad";
 };
 
 String STR_CB_READONLY
@@ -373,6 +382,7 @@ String STR_CB_READONLY
     Text[ czech ] = "Pouze ke čtení";
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "~केवल-पढने केलिए";
+    Text[ slovak ] = "Iba na čí~tanie";
 };
 
 String STR_CB_PASSWORD
@@ -403,6 +413,7 @@ String STR_CB_PASSWORD
     Text[ czech ] = "Uložit s heslem";
     Text[ hebrew ] = "‮שמירה עם סיסמה‬";
     Text[ hindi ] = "~कूटशब्द सहित संचित करो";
+    Text[ slovak ] = "Uložiť s ~heslom";
 };
 
 String STR_CB_FILTER_OPTIONS
@@ -433,6 +444,7 @@ String STR_CB_FILTER_OPTIONS
     Text[ czech ] = "Upravit nastavení filtru";
     Text[ hebrew ] = "‮עריכת מאפייני סינון‬";
     Text[ hindi ] = "~फिल्टर निर्धारण का संपादन";
+    Text[ slovak ] = "Upraviť nastavenie ~filtra";
 };
 
 String STR_PB_PLAY
@@ -463,6 +475,7 @@ String STR_PB_PLAY
     Text[ czech ] = "Přehrát";
     Text[ hebrew ] = "‮נגן‬";
     Text[ hindi ] = "~बजाओ";
+    Text[ slovak ] = "~Prehrať";
 };
 
 String STR_PB_STOP
@@ -493,6 +506,7 @@ String STR_PB_STOP
     Text[ czech ] = "Zastavit";
     Text[ hebrew ] = "‮עצירה‬";
     Text[ hindi ] = "रो~को";
+    Text[ slovak ] = "~Zastaviť";
 };
 
 String STR_PB_OPEN
@@ -523,6 +537,7 @@ String STR_PB_OPEN
     Text[ czech ] = "Otevřít";
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "~खोलो";
+    Text[ slovak ] = "~Otvoriť";
 };
 
 String STR_PB_SAVE
@@ -553,6 +568,7 @@ String STR_PB_SAVE
     Text[ czech ] = "Uložit";
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "~संचित करो";
+    Text[ slovak ] = "~Uložiť";
 };
 
 String STR_LB_IMAGE_TEMPLATE
@@ -583,6 +599,7 @@ String STR_LB_IMAGE_TEMPLATE
     Text[ czech ] = "Styl:";
     Text[ hebrew ] = "‮סגנון:‬";
     Text[ hindi ] = "शैली:";
+    Text[ slovak ] = "Štýl:";
 };
 
 String STR_LB_TEMPLATES
@@ -614,6 +631,7 @@ String STR_LB_TEMPLATES
     Text[ czech ] = "Šablony:";
     Text[ hebrew ] = "‮תבניות:‬";
     Text[ hindi ] = "~नमूनें:";
+    Text[ slovak ] = "Ša~blóny:";
 };
 
 String STR_LB_VERSION
@@ -644,9 +662,12 @@ String STR_LB_VERSION
     Text[ czech ] = "Verze:";
     Text[ hebrew ] = "‮גירסה:‬";
     Text[ hindi ] = "~आवर्तन:";
+    Text[ slovak ] = "~Verzia:";
 };
 
 //******************************************************************** EOF
+
+
 
 
 
