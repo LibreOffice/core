@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-10 20:31:33 $
+ *  last change: $Author: rt $ $Date: 2001-04-11 18:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10430,7 +10430,7 @@ String RID_PLUGINTOOLBOX
 {
     Text = "PlugInleiste" ;
     Text [ ENGLISH ] = "Plugin toolbox" ;
-    Text [ english_us ] = "Plug-In Bar" ;
+    Text [ english_us ] = "Plug-in Bar" ;
     Text [ italian ] = "Barra degli oggetti per i PlugIn" ;
     Text [ spanish ] = "Barra de Plug-ins" ;
     Text [ french ] = "Barre de Plug-ins" ;
