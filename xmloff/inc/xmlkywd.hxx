@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 09:59:58 $
+ *  last change: $Author: cmc $ $Date: 2001-01-11 13:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,6 +1353,7 @@ XML_CONSTASCII_ACTION( sXML_stretch_from_bottom, "stretch-from-bottom" );
 XML_CONSTASCII_ACTION( sXML_stretch_from_left, "stretch-from-left" );
 XML_CONSTASCII_ACTION( sXML_stretch_from_right, "stretch-from-right" );
 XML_CONSTASCII_ACTION( sXML_stretch_from_top, "stretch-from-top" );
+XML_CONSTASCII_ACTION( sXML_stretchy, "stretchy" );
 XML_CONSTASCII_ACTION( sXML_strict , "strict" );
 XML_CONSTASCII_ACTION( sXML_string, "string");
 XML_CONSTASCII_ACTION( sXML_string_value, "string-value");
