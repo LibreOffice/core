@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:54:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,8 +913,10 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
 
     if ( m_pData->m_pViewShell )
     {
-        m_pData->m_pViewShell->DiscardClients_Impl();
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
+        if ( pFrame )
+            pFrame->GetFrame()->SetIsClosing_Impl();
+        m_pData->m_pViewShell->DiscardClients_Impl();
         m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
         if ( pFrame )
         {
@@ -1124,6 +1126,8 @@ BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
             ::com::sun::star::awt::KeyEvent aEvent;
             ImplInitKeyEvent( aEvent, *rEvent.GetKeyEvent() );
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            if ( rEvent.GetWindow() )
+                aEvent.Source = rEvent.GetWindow()->GetComponentInterface();
             while (pIterator.hasMoreElements())
             {
                 try
@@ -1147,6 +1151,8 @@ BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
         {
             ::com::sun::star::awt::MouseEvent aEvent;
             ImplInitMouseEvent( aEvent, *rEvent.GetMouseEvent() );
+            if ( rEvent.GetWindow() )
+                aEvent.Source = rEvent.GetWindow()->GetComponentInterface();
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
             while (pIterator.hasMoreElements())
             {
