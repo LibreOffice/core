@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:50:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ french ] = "~S�parateur de champ" ;
         Text [ dutch ] = "~Veldbegrenzing" ;
         Text [ spanish ] = "Separador de campos" ;
-        Text [ danish ] = "Feltseparator" ;
+        Text [ danish ] = "~Feltseparator" ;
         Text [ swedish ] = "~F�ltavgr�nsare" ;
         Text [ finnish ] = "~Kent�n erotin" ;
         Text [ english_us ] = "~Field delimiter" ;
@@ -116,6 +116,8 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ hebrew ] = "~Feldtrenner";
         Text[ hindi ] = "~क्षेत्र परिसीमित करनेवाला";
         Text[ slovak ] = "Oddeľovač ~poľa";
+        Text[ hungarian ] = "Mező~elválasztó";
+        Text[ slovenian ] = "Ločilo ~polj";
     };
     ComboBox ED_FIELDSEP
     {
@@ -136,7 +138,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ french ] = "S�parateur de ~texte" ;
         Text [ dutch ] = "~Tekstbegrenzing" ;
         Text [ spanish ] = "S~eparador de texto" ;
-        Text [ danish ] = "Tekstseparator" ;
+        Text [ danish ] = "~Tekstseparator" ;
         Text [ swedish ] = "~Textavgr�nsare" ;
         Text [ finnish ] = "~Tekstin erottimet" ;
         Text [ english_us ] = "~Text delimiter" ;
@@ -156,6 +158,8 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ hebrew ] = "~Texttrenner";
         Text[ hindi ] = "~टेक्स्ट् परिसीमित करनेवाला";
         Text[ slovak ] = "Oddeľovač ~textu";
+        Text[ hungarian ] = "~Szöveghatároló";
+        Text[ slovenian ] = "Ločilo ~besedila";
     };
     ComboBox ED_TEXTSEP
     {
@@ -176,7 +180,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ french ] = "~Jeu de caract�res" ;
         Text [ dutch ] = "~Tekenset" ;
         Text [ spanish ] = "J~uego de caracteres" ;
-        Text [ danish ] = "Tegns�t" ;
+        Text [ danish ] = "T~egns�t" ;
         Text [ swedish ] = "Te~ckenupps�ttning" ;
         Text [ finnish ] = "~Merkist�" ;
         Text [ english_us ] = "~Character set" ;
@@ -196,6 +200,8 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
         Text[ slovak ] = "~Znaková sada";
+        Text[ hungarian ] = "~Karakterkészlet";
+        Text[ slovenian ] = "~Nabor znakov";
     };
     ListBox DDLB_FONT
     {
@@ -246,6 +252,8 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ hebrew ] = "Feldoptionen";
         Text[ hindi ] = "क्षेत्र विकल्प";
         Text[ slovak ] = "Voľby poľa";
+        Text[ hungarian ] = "Mezőbeállítások";
+        Text[ slovenian ] = "Možnosti polja";
     };
     CheckBox CB_FIXEDWIDTH
     {
@@ -263,7 +271,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ spanish ] = "~Ancho de columna fijo";
         Text[ finnish ] = "Fixed text ~width";
         Text[ italian ] = "Ampiezza colonna fissa";
-        Text[ danish ] = "Fixed text ~width";
+        Text[ danish ] = "Fast ~kolonnebredde";
         Text[ swedish ] = "Fast kolumn~bredd";
         Text[ polish ] = "Fixed text ~width";
         Text[ japanese ] = "指定された列幅(~W)";
@@ -279,6 +287,8 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ thai ] = "Fixed column ~width";
         Text[ hindi ] = "Fixed column ~width";
         Text[ slovak ] = "~Pevná šírka stĺpca";
+        Text[ hungarian ] = "Rögzített ~oszlopszélesség";
+        Text[ slovenian ] = "Fiksna ~širina stolpca";
     };
     OKButton BTN_OK
     {
@@ -312,7 +322,10 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text[ hebrew ] = "Datei Importieren";
     Text[ hindi ] = "फाइल को निर्यात करो";
     Text[ slovak ] = "Importovať súbor";
+    Text[ hungarian ] = "Fájl importálása";
+    Text[ slovenian ] = "Uvozi datoteko";
 };
+
 
 
 
