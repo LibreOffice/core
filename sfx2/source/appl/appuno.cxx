@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:01:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1738,8 +1738,12 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
             }
             else if ( pSh && pSh->GetMedium() )
             {
+                pSh->AdjustMacroMode( String() );
                 SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                if ( pUpdateDocItem && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE )
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                if ( pUpdateDocItem && pMacroExecModeItem
+                  && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
+                  && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
                     return ERRCODE_IO_ACCESSDENIED;;
             }
 
