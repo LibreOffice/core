@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 10:57:16 $
+ *  last change: $Author: fme $ $Date: 2002-11-19 13:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,24 +1675,21 @@ void SwBorderAttrs::_CalcRight()
 
 long SwBorderAttrs::CalcRight( const SwFrm* pCaller )
 {
-    if ( pCaller->IsRightToLeft() )
-        nRight = CalcRightLine() + rLR.GetRight() +
-                 ( rLR.GetTxtFirstLineOfst() < 0 ?
-                   rLR.GetTxtFirstLineOfst() :
-                   0 );
-    else
-        nRight = CalcRightLine() + rLR.GetRight();
+    nRight = CalcRightLine() +
+             ( pCaller->IsRightToLeft() ?
+               rLR.GetLeft() :
+               rLR.GetRight() );
 
     return nRight;
 }
 
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
-    long nLeft;
-    if ( pCaller->IsRightToLeft() )
-        nLeft = rLR.GetTxtLeft() + CalcLeftLine();
-    else
-        nLeft = rLR.GetLeft() + CalcLeftLine();
+    long nLeft = CalcLeftLine() +
+                 ( pCaller->IsRightToLeft() ?
+                   rLR.GetRight() :
+                   rLR.GetLeft() );
+
 #ifdef NUM_RELSPACE
     if ( pCaller->IsTxtFrm() )
         nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
