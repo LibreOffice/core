@@ -5,10 +5,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sync
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
@@ -192,12 +189,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 
 ..\drafts\com\sun\star\geometry\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
 ..\drafts\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
-..\drafts\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
-..\drafts\com\sun\star\frame\status\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
-..\drafts\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\drafts\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
 ..\drafts\com\sun\star\i18n\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
-..\drafts\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 ..\drafts\com\sun\star\sheet\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 ..\drafts\com\sun\star\table\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
 ..\drafts\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
