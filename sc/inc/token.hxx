@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-09-27 17:17:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,20 +463,40 @@ public:
 class SingleDoubleRefModifier
 {
     ComplRefData    aDub;
-    SingleRefData&  rS;
-    ComplRefData&   rD;
-    BOOL            bSingle;
+    SingleRefData*  pS;
+    ComplRefData*   pD;
+
+                // not implemented, prevent usage
+                SingleDoubleRefModifier( const SingleDoubleRefModifier& );
+        SingleDoubleRefModifier& operator=( const SingleDoubleRefModifier& );
 
 public:
-                SingleDoubleRefModifier( SingleRefData& r )
-                        : rS( r ), rD( aDub ), bSingle( TRUE )
-                    { aDub.Ref1 = aDub.Ref2 = rS; }
-                SingleDoubleRefModifier( ComplRefData& r )
-                        : rD( r ), rS( r.Ref1 ), bSingle( FALSE )
-                    {}
+                SingleDoubleRefModifier( ScToken& rT )
+                    {
+                        if ( rT.GetType() == svSingleRef )
+                        {
+                            pS = &rT.GetSingleRef();
+                            aDub.Ref1 = aDub.Ref2 = *pS;
+                            pD = &aDub;
+                        }
+                        else
+                        {
+                            pS = 0;
+                            pD = &rT.GetDoubleRef();
+                        }
+                    }
+                SingleDoubleRefModifier( SingleRefData& rS )
+                    {
+                        pS = &rS;
+                        aDub.Ref1 = aDub.Ref2 = *pS;
+                        pD = &aDub;
+                    }
                 ~SingleDoubleRefModifier()
-                    { if ( bSingle ) rS = rD.Ref1; }
-    inline  ComplRefData& Ref() { return rD; }
+                    {
+                        if ( pS )
+                            *pS = (*pD).Ref1;
+                    }
+    inline  ComplRefData& Ref() { return *pD; }
 };
 
 class SingleDoubleRefProvider
