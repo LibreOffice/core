@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:08:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,6 +871,7 @@ sal_Bool SfxMedium::TryStorage()
     if ( aStorage.Is() )
         return sal_True;
 
+    // this code will be removed when binary filter components are available!
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr( ::comphelper::getProcessServiceFactory() );
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XArchiver >
             xPacker( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.util.Archiver" ) ), ::com::sun::star::uno::UNO_QUERY );
@@ -883,7 +884,7 @@ sal_Bool SfxMedium::TryStorage()
     ::rtl::OUString aExtraData = xPacker->getExtraData( aPath );
     const ::rtl::OUString aSig1( DEFINE_CONST_UNICODE( "private:" ) );
     String aTmp( '?' );
-    aTmp += pFilter->GetFilterContainer()->GetName();
+    aTmp += String::CreateFromAscii("simpress");//pFilter->GetFilterContainer()->GetName();
     const ::rtl::OUString aSig2( aTmp );
     sal_Int32 nIndex1 = aExtraData.indexOf( aSig1 );
     sal_Int32 nIndex2 = aExtraData.indexOf( aSig2 );
@@ -934,33 +935,7 @@ sal_Bool SfxMedium::TryStorage()
     }
 
     return aStorage.Is();
-}
-
-ErrCode SfxMedium::Unpack_Impl( const String& rDest )
-{
-    ErrCode nRet = ERRCODE_NONE;
-    if ( pImp->pTempDir )
-    {
-/*
-        DirEntry aDestEntry( rDest );
-        Dir aDir( pImp->pTempDir->GetName(), FSYS_KIND_FILE );
-        sal_uInt16 nCount = aDir.Count();
-        for ( sal_uInt16 n=0; n<nCount; n++ )
-        {
-            DirEntry aDest( aDestEntry.GetPath() );
-            DirEntry aTmp = aDir[n];
-            aDest += aTmp.GetName();
-            if ( aDir[n] == DirEntry( GetPhysicalName() ) )
-                continue;
-
-            nRet = aTmp.CopyTo( aDest, FSYS_ACTION_COPYFILE );
-            if ( nRet != ERRCODE_NONE )
-                break;
-        }
- */
-    }
-
-    return nRet;
+    return sal_False;
 }
 
 //------------------------------------------------------------------
@@ -2089,12 +2064,6 @@ SfxMedium::GetInteractionHandler()
     return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 }
 
-//------------------------------------------------------------------
-
-void SfxMedium::SetFilter( const SfxObjectFactory& rFact, const String & rFilter )
-{
-    SetFilter(  rFact.GetFilterContainer()->GetFilter(rFilter) );
-}
 //----------------------------------------------------------------
 
 void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool bResetOrig )
@@ -2323,31 +2292,11 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
     pImp( new SfxMedium_Impl( this )),
     pSet(0)
 {
-    SfxApplication* pApp = SFX_APP();
-    sal_uInt32 nFormat = pStorage->GetFormat();
-    if( !nFormat )
-    {
-#ifdef DBG_UTIL
-        if( aLogicName.Len() )
-            DBG_ERROR( "Unbekanntes StorageFormat, versuche eigenes Format" );
-#endif
-        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->
-            GetFilter( 0 );
-    }
-    else
-        pFilter = pApp->GetFilterMatcher().GetFilter4ClipBoardId( nFormat, 0, 0 );
+    String aType = SfxFilter::GetTypeFromStorage( *pStorage );
+    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
+    DBG_ASSERT( pFilter, "No Filter for storage found!" );
 
     Init_Impl();
-
-    if( !pFilter && nFormat )
-    {
-        pApp->GetFilterMatcher().GetFilter4Content( *this, &pFilter );  // #91292# PowerPoint does not support an OleComp stream,
-        if ( !pFilter )                                                 // so GetFilter4ClipBoardId is not able to detect the format,
-        {                                                               // for such cases we try to get the filter by GetFilter4Content
-            DBG_ERROR( "No Filter for storage found!" );
-            pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->GetFilter( 0 );
-        }
-    }
 }
 
 //------------------------------------------------------------------
