@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 08:48:20 $
+ *  last change: $Author: jbu $ $Date: 2001-01-08 09:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,16 +104,18 @@ namespace io_acceptor
         SocketAcceptor *m_pSocket;
         Mutex m_mutex;
         OUString m_sLastDescription;
+        sal_Bool m_bInAccept;
 
         Reference<XMultiServiceFactory> _xMultiServiceFactory;
         Reference<XAcceptor>            _xAcceptor;
     };
 
 
-    OAcceptor::OAcceptor(Reference< XMultiServiceFactory > xMultiServiceFactory) :
-        m_pPipe( 0 ),
-        m_pSocket( 0 ),
-        _xMultiServiceFactory(xMultiServiceFactory)
+    OAcceptor::OAcceptor(Reference< XMultiServiceFactory > xMultiServiceFactory)
+        : m_pPipe( 0 )
+        ,m_pSocket( 0 )
+        ,_xMultiServiceFactory(xMultiServiceFactory)
+        , m_bInAccept( sal_False )
     {}
 
     OAcceptor::~OAcceptor()
@@ -196,6 +198,25 @@ namespace io_acceptor
         }
     }
 
+    struct BeingInAccept
+    {
+        BeingInAccept( sal_Bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
+            : m_pFlag( pFlag )
+            {
+                  if( *m_pFlag )
+                  {
+                      OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "AlreadyAcceptingException :" ) );
+                      sMessage += sConnectionDescription;
+                      throw AlreadyAcceptingException( sMessage , Reference< XInterface > () );
+                  }
+                  *m_pFlag = sal_True;
+            }
+        ~BeingInAccept()
+            {
+                *m_pFlag = sal_False;
+            }
+        sal_Bool *m_pFlag;
+    };
 
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )
         throw( AlreadyAcceptingException,
@@ -207,6 +228,8 @@ namespace io_acceptor
         OString tmp = OUStringToOString(sConnectionDescription, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("acceptor %s\n", tmp.getStr());
 #endif
+        // if there is a thread alread accepting in this object, throw an exception.
+        struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
 
         Reference< XConnection > r;
         if( m_sLastDescription.getLength() &&
@@ -222,6 +245,11 @@ namespace io_acceptor
         {
             // setup the acceptor
             TokenContainer container( sConnectionDescription );
+            if( ! container.getTokenCount() )
+            {
+                throw ConnectionSetupException( OUString( RTL_CONSTASCII_USTRINGPARAM( "empty connection string" ) ),
+                                                Reference< XInterface > () );
+            }
 
             if( 0 == container.getToken(0).compareToAscii("pipe") )
             {
