@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
+ *  last change: $Author: aw $ $Date: 2001-04-19 16:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,10 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FILLGRADIENTNAME:
             case CTF_FILLHATCHNAME:
             case CTF_FILLBITMAPNAME:
-            case CTF_FILLTRANSNAME:
+// #85953# take out this case to allow writing empty
+// sXML_transparency_name entries. This is used to represent
+// disabled FillTransparencyItems.
+//          case CTF_FILLTRANSNAME:
                 {
                     if( !mbIsInAutoStyles )
                     {
