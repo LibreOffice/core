@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-01-05 18:42:20 $
+ *  last change:$Date: 2004-04-21 12:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ import util.DynamicClassLoader;
 public class java_fat implements TestBase {
     public static boolean debug = false;
     public static boolean keepdocument = false;
+    public static boolean logging = true;
 
     public boolean executeTest(lib.TestParameters param) {
         DynamicClassLoader dcl = new DynamicClassLoader();
@@ -115,6 +116,7 @@ public class java_fat implements TestBase {
         Vector exclusions = null;
         boolean retValue = true;
         debug = param.getBool("DebugIsActive");
+        logging = param.getBool("LoggingIsActive");
         keepdocument = param.getBool("KeepDocument");
         if (keepdocument) System.setProperty("KeepDocument","true");
         if (ExclusionFile != null) {
@@ -122,12 +124,14 @@ public class java_fat implements TestBase {
         }
 
         //get Job-Descriptions
-        System.out.print("Getting Descriptions for Job: " + job + " from ");
+        System.out.println("Getting Descriptions for Job: " + job);
 
         DescEntry[] entries = dg.getDescriptionFor(job,
                                                    (String) param.get(
                                                            "DescriptionPath"),
                                                    debug);
+
+        System.out.println();
 
         if (entries == null) {
             System.out.println("Couldn't get Description for Job");
@@ -189,7 +193,7 @@ public class java_fat implements TestBase {
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
                 entry.UserDefinedParams = param;
-                sumObj.initialize(entry, true);
+                sumObj.initialize(entry, logging);
                 sumObj.summary(entry);
 
                 continue;
@@ -199,7 +203,7 @@ public class java_fat implements TestBase {
 
             LogWriter log = (LogWriter) dcl.getInstance(
                                     (String) param.get("LogWriter"));
-            log.initialize(entry, true);
+            log.initialize(entry, logging);
             entry.UserDefinedParams = param;
 
             TestEnvironment tEnv = null;
@@ -232,7 +236,7 @@ public class java_fat implements TestBase {
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
                 entry.UserDefinedParams = param;
-                sumObj.initialize(entry, true);
+                sumObj.initialize(entry, logging);
                 sumObj.summary(entry);
 
                 continue;
@@ -261,7 +265,7 @@ public class java_fat implements TestBase {
                 LogWriter ifclog = (LogWriter) dcl.getInstance(
                                            (String) param.get("LogWriter"));
 
-                ifclog.initialize(entry.SubEntries[j], true);
+                ifclog.initialize(entry.SubEntries[j], logging);
                 entry.SubEntries[j].UserDefinedParams = param;
                 entry.SubEntries[j].Logger = ifclog;
 
@@ -296,7 +300,7 @@ public class java_fat implements TestBase {
                     System.out.println("**** " + iae.getMessage() + " ****");
                     Summarizer.summarizeDown(entry.SubEntries[j],
                                              iae.getMessage());
-                } catch (java.lang.RuntimeException e) {
+               } catch (java.lang.RuntimeException e) {
                     helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
                                                        "AppProvider");
 
@@ -304,6 +308,7 @@ public class java_fat implements TestBase {
                         office.closeExistingOffice(param, true);
                         shortWait(5000);
                     }
+
 
                     tEnv = getEnv(entry, param);
                     ifc = (MultiMethodTest) dcl.getInstance(
@@ -314,8 +319,7 @@ public class java_fat implements TestBase {
                     } else {
                         res = null;
                     }
-                }
-
+               }
                 if (res != null) {
                     for (int k = 0; k < entry.SubEntries[j].SubEntryCount; k++) {
                         if (res.hasMethod(
@@ -331,7 +335,7 @@ public class java_fat implements TestBase {
 
                 LogWriter sumIfc = OutProducerFactory.createOutProducer(param);
                 entry.SubEntries[j].UserDefinedParams = param;
-                sumIfc.initialize(entry.SubEntries[j], true);
+                sumIfc.initialize(entry.SubEntries[j], logging);
                 sumIfc.summary(entry.SubEntries[j]);
             }
 
@@ -347,7 +351,7 @@ public class java_fat implements TestBase {
 
             LogWriter sumObj = OutProducerFactory.createOutProducer(param);
 
-            sumObj.initialize(entry, true);
+            sumObj.initialize(entry, logging);
             sumObj.summary(entry);
         }
 
@@ -416,7 +420,7 @@ public class java_fat implements TestBase {
 
         LogWriter log = (LogWriter) dcl.getInstance(
                                 (String) param.get("LogWriter"));
-        log.initialize(entry, true);
+        log.initialize(entry, logging);
         entry.UserDefinedParams = param;
         tCase.setLogWriter((PrintWriter) log);
 
