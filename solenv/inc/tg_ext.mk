@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-13 11:44:11 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -186,10 +186,6 @@ $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_
 .ELSE			# "$(GUI)"=="WNT"
     @$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="WNT"
-
-.IF "$(GUI)$(USE_SHELL)"=="WNT4nt"
-my4ver:=$(shell +echo %_4ver)
-.ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
 
 #patch
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
