@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextEmbeddedObjects.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:28 $
+ *  last change:$Date: 2003-05-27 13:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.text.XTextDocument;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextEmbeddedObjectsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -90,7 +91,7 @@ public class SwXTextEmbeddedObjects extends TestCase {
      *
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDocument.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:29 $
+ *  last change:$Date: 2003-05-27 13:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public class SwXTextDocument extends TestCase {
 
         try {
             log.println( "creating a textdocument" );
-            xTextDoc = WriterTools.createTextDoc( Param.getMSF() );
+            xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory)Param.getMSF() );
 
             log.println( "    adding TextTable" );
             the_table = SOfficeFactory.createTextTable(xTextDoc,6,4);
@@ -143,7 +143,7 @@ public class SwXTextDocument extends TestCase {
             SOfficeFactory.insertTextContent(xTextDoc,(XTextContent) oTC);
 
             log.println( "creating a second textdocument" );
-            xSecondTextDoc = WriterTools.createTextDoc( Param.getMSF() );
+            xSecondTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory)Param.getMSF() );
 
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
