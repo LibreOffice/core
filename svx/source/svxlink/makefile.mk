@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,31 +71,22 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES=\
-    linkmgr.cxx		\
-    fileobj.cxx
 
 SLOFILES=\
         $(SLO)$/linkmgr.obj	\
         $(SLO)$/fileobj.obj
 
-SRCFILES=	\
+SRS1NAME=$(TARGET)
+SRC1FILES=	\
         linkmgr.src
 
 .IF "$(GUI)" == "WNT"
 NOOPTFILES=\
     $(SLO)$/fileobj.obj
-.ENDIF
-
 .ENDIF
 
 # ==========================================================================
