@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-26 11:22:36 $
+ *  last change: $Author: os $ $Date: 2002-05-03 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2648,6 +2648,16 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     return 0;
 }
 
+/* -----------------------------03.11.00 10:56--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void lcl_Move(Window& rWin, sal_Int32 nDiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
+}
+
 /*-----------------13.11.96 13.15-------------------
 
 --------------------------------------------------*/
@@ -2772,6 +2782,31 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     {
         aAltNameFT.Hide();
         aAltNameED.Hide();
+        //move all controls one step up
+        Window* aWindows[] =
+        {
+            &aPrevFT,
+            &aPrevED,
+            &aNextFT,
+            &aNextED,
+            &aNamesFL,
+            &aProtectContentCB,
+            &aProtectFrameCB,
+            &aProtectSizeCB,
+            &aProtectFL,
+            &aEditInReadonlyCB,
+            &aPrintFrameCB,
+            &aTextFlowFT,
+            &aTextFlowLB,
+            &aExtFL,
+            0
+        };
+        sal_Int32 nOffset = aAltNameED.GetPosPixel().Y() - aNameED.GetPosPixel().Y();
+        sal_Int32 nIdx = 0;
+        while(aWindows[nIdx])
+        {
+            lcl_Move(*aWindows[nIdx++], nOffset);
+        }
     }
     else
     {
@@ -2915,15 +2950,6 @@ IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 
     return 0;
 }
-/* -----------------------------03.11.00 10:56--------------------------------
-
- ---------------------------------------------------------------------------*/
-void lcl_Move(Window& rWin, sal_Int32 nDiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
-    rWin.SetPosPixel(aPos);
-}
 //-----------------------------------------------------------------------------
 void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
 {
@@ -2941,16 +2967,22 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
         aNamesFL.Show(FALSE);
 
         sal_Int32 nDiff = aExtFL.GetPosPixel().Y() - aNamesFL.GetPosPixel().Y();
-
-        lcl_Move(aProtectContentCB, nDiff);
-        lcl_Move(aProtectFrameCB, nDiff);
-        lcl_Move(aProtectSizeCB, nDiff);
-        lcl_Move(aProtectFL, nDiff);
-
-        lcl_Move(aEditInReadonlyCB, nDiff);
-        lcl_Move(aPrintFrameCB, nDiff);
-        lcl_Move(aExtFL, nDiff);
-
+        Window* aWindows[] =
+        {
+            &aProtectContentCB,
+            &aProtectFrameCB,
+            &aProtectSizeCB,
+            &aProtectFL,
+            &aEditInReadonlyCB,
+            &aPrintFrameCB,
+            &aExtFL,
+            &aTextFlowFT,
+            &aTextFlowLB,
+            0
+        };
+        sal_Int32 nIdx = 0;
+        while(aWindows[nIdx])
+            lcl_Move(*aWindows[nIdx++], nDiff);
     }
 }
 
