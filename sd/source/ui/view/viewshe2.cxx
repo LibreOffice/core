@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:03:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #include "ViewShell.hxx"
 #include "ViewShellHint.hxx"
@@ -1028,7 +1032,18 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         Size aDrawSize = aRect.GetSize();
 
         // TODO/LEAN: getMapUnit may switch object to running state
-        awt::Size aSz = pObj->GetObjRef()->getVisualAreaSize( pSdClient->GetAspect() );
+        awt::Size aSz;
+        try
+        {
+            aSz = pObj->GetObjRef()->getVisualAreaSize( pSdClient->GetAspect() );
+        }
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            OSL_ENSURE ( sal_False, "Can not get visual area size!\n" );
+            aSz.Width = 5000;
+            aSz.Height = 5000;
+        }
+
         Size aObjAreaSize( aSz.Width, aSz.Height );
 
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( pObj->GetObjRef()->getMapUnit( pSdClient->GetAspect() ) );
