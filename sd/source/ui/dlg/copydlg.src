@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_COPY
         TabStop = TRUE ;
         QuickHelpText [ english_us ] = "Values from Selection" ;
         QuickHelpText [ portuguese_brazilian ] = "Werte von Selektion aufnehmen" ;
-        QuickHelpText [ swedish ] = "Värden från urval" ;
+        QuickHelpText [ swedish ] = "Använd värden från markering" ;
         QuickHelpText [ danish ] = "Optag værdier fra markering" ;
         QuickHelpText [ italian ] = "Aggiungi i valori della selezione" ;
         QuickHelpText [ spanish ] = "Valores seleccionados" ;
@@ -191,7 +191,7 @@ ModalDialog DLG_COPY
         SpinSize = 5 ;
         CustomUnitText [ english_us ] = "Degrees" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ italian ] = "Gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
@@ -222,7 +222,7 @@ ModalDialog DLG_COPY
         Text [ finnish ] = "K~opioita" ;
         Text [ danish ] = "Antal kopier" ;
         Text [ french ] = "Nombre de co~pies" ;
-        Text [ swedish ] = "~Antal kopior" ;
+        Text [ swedish ] = "Antal ~kopior" ;
         Text [ dutch ] = "~Aantal kopieën" ;
         Text [ spanish ] = "Número de c~opias" ;
         Text [ english_us ] = "Number of ~copies" ;
@@ -285,7 +285,7 @@ ModalDialog DLG_COPY
         Text[ chinese_simplified ] = "~X Öá";
         Text[ russian ] = "Îñü ~X";
         Text[ polish ] = "Oœ X";
-        Text[ japanese ] = "XŽ²(~X)";
+        Text[ japanese ] = "~XŽ²";
         Text[ chinese_traditional ] = "~X ¶b";
         Text[ arabic ] = "ÇáãÍæÑ Ó";
         Text[ greek ] = "¢îïíáò X";
@@ -431,7 +431,7 @@ ModalDialog DLG_COPY
         Text [ finnish ] = "Ko~rkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
-        Text [ swedish ] = "~Höjd" ;
+        Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "~Height" ;
@@ -459,7 +459,7 @@ ModalDialog DLG_COPY
         Text [ finnish ] = "Liike" ;
         Text [ danish ] = "Flytning" ;
         Text [ french ] = "Déplacement" ;
-        Text [ swedish ] = "Förskjutning" ;
+        Text [ swedish ] = "Placering" ;
         Text [ dutch ] = "Verplaatsing" ;
         Text [ spanish ] = "Desplazamiento" ;
         Text [ english_us ] = "Placement" ;
@@ -555,7 +555,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Inizio" ;
         Text [ spanish ] = "~Comienzo" ;
         Text [ french ] = "~Début" ;
-        Text [ swedish ] = "~Start" ;
+        Text [ swedish ] = "St~art" ;
         Text [ danish ] = "Start" ;
         Text [ portuguese ] = "~Início" ;
         Text [ portuguese_brazilian ] = "~Anfang" ;
