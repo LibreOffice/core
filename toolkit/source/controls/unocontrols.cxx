@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 11:22:52 $
+ *  last change: $Author: mt $ $Date: 2001-06-06 08:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,6 +1228,7 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEALIGN );
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 05:53:22 $
+ *  last change: $Author: mt $ $Date: 2001-06-06 08:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
 #endif
+// #ifndef _COM_SUN_STAR_AWT_IMAGEALIGN_HPP_
+// #include <com/sun/star/awt/ImageAlign.hpp>
+// #endif
 
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
@@ -316,6 +319,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_DECIMALACCURACY:      aDefault <<= (sal_Int16) 2; break;
             case BASEPROPERTY_LINECOUNT:            aDefault <<= (sal_Int16) 5; break;
             case BASEPROPERTY_ALIGN:                aDefault <<= (sal_Int16) PROPERTY_ALIGN_LEFT; break;
+            case BASEPROPERTY_IMAGEALIGN:           aDefault <<= (sal_Int16) 1 /*ImageAlign::TOP*/; break;
 
             case BASEPROPERTY_DATEMAX:              aDefault <<= (sal_Int32) Date( 31, 12, 2200 ).GetDate();    break;
             case BASEPROPERTY_DATEMIN:              aDefault <<= (sal_Int32) Date( 1, 1, 1900 ).GetDate();  break;
