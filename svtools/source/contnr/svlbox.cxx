@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-09 07:50:53 $
+ *  last change: $Author: pb $ $Date: 2002-04-23 07:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "svlbox.hxx"
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -93,9 +97,8 @@
 #ifndef _SVLBOXITM_HXX
 #include "svlbitm.hxx"
 #endif
-#ifndef _SVTOOLS_ACCESSIBLELISTBOX_HXX_
-#include "accessiblelistbox.hxx"
-#endif
+
+using namespace ::drafts::com::sun::star::accessibility;
 
 // Drag&Drop
 static SvLBox* pDDSource = NULL;
@@ -705,9 +708,9 @@ SvLBoxItem* SvLBoxEntry::GetFirstItem( USHORT nId )
     return 0;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvLBoxEntry::CreateAccessibleEntry( void* pParentPath )
+::com::sun::star::uno::Reference< XAccessible > SvLBoxEntry::CreateAccessibleEntry( void* pParentPath )
 {
-    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
+    return ::com::sun::star::uno::Reference< XAccessible >();
 }
 
 void SvLBoxEntry::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
@@ -1265,6 +1268,51 @@ void SvLBox::SelectAll( BOOL /* bSelect */ , BOOL /* bPaint */ )
     DBG_CHKTHIS(SvLBox,0);
 }
 
+SvLBoxEntry* SvLBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
+{
+    SvLBoxEntry* pEntry = NULL;
+    SvLBoxEntry* pParent = NULL;
+    for( ::std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
+    {
+        pEntry = GetEntry( pParent, *pItem );
+        if ( !pEntry )
+            break;
+        pParent = pEntry;
+    }
+
+    return pEntry;
+}
+
+void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const
+{
+    if ( pEntry )
+    {
+        SvLBoxEntry* pParentEntry = GetParent( pEntry );
+        while ( TRUE )
+        {
+            ULONG i, nCount = GetLevelChildCount( pParentEntry );
+            for ( i = 0; i < nCount; ++i )
+            {
+                SvLBoxEntry* pTemp = GetEntry( pParentEntry, i );
+                DBG_ASSERT( pEntry, "invalid entry" );
+                if ( pEntry == pTemp )
+                {
+                    _rPath.push_front( (sal_Int32)i );
+                    break;
+                }
+            }
+
+            if ( pParentEntry )
+            {
+                pEntry = pParentEntry;
+                pParentEntry = GetParent( pParentEntry );
+            }
+            else
+                break;
+        }
+    }
+}
+
 ULONG SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
 {
     ULONG nCount = 0;
@@ -1756,23 +1804,22 @@ Link SvLBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvLBox::CreateAccessible()
+::com::sun::star::uno::Reference< XAccessible > SvLBox::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "SvLBox::::CreateAccessible - accessible parent not found" );
-
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
-    if ( pParent )
-    {
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccParent = pParent->GetAccessible();
-        if ( xAccParent.is() )
-            xAccessible = new AccessibleListBox( *this, xAccParent );
-    }
-    return xAccessible;
+    return ::com::sun::star::uno::Reference< XAccessible >();
 }
 
 void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if ( IsEnabled() )
+        rStateSet.AddState( AccessibleStateType::ENABLED );
+    if ( GetSelectionMode() == MULTIPLE_SELECTION )
+        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+    if ( HasFocus() )
+        rStateSet.AddState( AccessibleStateType::FOCUSED );
+    if ( IsReallyVisible() )
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
 }
 
 Rectangle SvLBox::GetBoundingRect( SvLBoxEntry* pEntry )

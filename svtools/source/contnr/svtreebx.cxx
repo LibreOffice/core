@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
+ *  last change: $Author: pb $ $Date: 2002-04-23 07:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,14 @@ class TabBar;
 #ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
 #endif
+#ifndef _SVTOOLS_ACCESSIBLELISTBOX_HXX_
+#include "accessiblelistbox.hxx"
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+
+using namespace ::drafts::com::sun::star::accessibility;
 
 /*
     Bugs/ToDo
@@ -2412,3 +2420,36 @@ BOOL SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
 
     return pImp->bContextMenuHandling;
 }
+
+::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
+{
+    Window* pParent = GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
+
+    ::com::sun::star::uno::Reference< XAccessible > xAccessible;
+    if ( pParent )
+    {
+        ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        if ( xAccParent.is() )
+            xAccessible = new svt::AccessibleListBox( *this, xAccParent );
+    }
+    return xAccessible;
+}
+
+void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
+    SvLBox::FillAccessibleStateSet( rStateSet );
+}
+
+void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
+    SvLBox::FillAccessibleStateSet( rStateSet );
+}
+
+Rectangle SvTreeListBox::GetBoundingRect( SvLBoxEntry* pEntry )
+{
+    Point aPos = GetEntryPos( pEntry );
+    Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
+    return aRect;
+}
+
