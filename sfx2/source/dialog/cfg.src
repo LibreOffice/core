@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:43:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,17 +251,17 @@ TabPage TP_CONFIG_ACCEL
 {
     HelpId = HID_CONFIG_ACCEL ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 282 , 205 ) ;
+    Size = MAP_APPFONT ( 244 , 258 ) ;
     PushButton BTN_ACC_CHANGE
     {
-        Pos = MAP_APPFONT ( 226 , 40 ) ;
+        Pos = MAP_APPFONT ( 188 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_CHANGE
     };
     PushButton BTN_ACC_REMOVE
     {
-        Pos = MAP_APPFONT ( 226 , 57 ) ;
+        Pos = MAP_APPFONT ( 188 , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -269,21 +269,21 @@ TabPage TP_CONFIG_ACCEL
     };
     RadioButton RB_OFFICE
     {
-        Pos = MAP_APPFONT ( 226 , 6 ) ;
+        Pos = MAP_APPFONT ( 188 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "%PRODUCTNAME" ;
     };
     RadioButton RB_MODULE
     {
-        Pos = MAP_APPFONT ( 226 , 19 ) ;
+        Pos = MAP_APPFONT ( 188 , 19 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "$(MODULE)" ;
     };
     FixedLine GRP_ACC_KEYBOARD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text [ de ] = "Tastenkombinationen" ;
+        Size = MAP_APPFONT ( 176 , 8 ) ;
+        Text [ de ]  = "Tastenkombinationen" ;
         Group = TRUE ;
         Text [ en-US ] = "Shortcut keys";
     };
@@ -291,22 +291,22 @@ TabPage TP_CONFIG_ACCEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 202 , 90 ) ;
+        Size = MAP_APPFONT ( 164 , 120 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_ACCELCONFIG_LISTBOX ;
     };
     FixedLine GRP_ACC_FUNCTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
-        Size = MAP_APPFONT ( 214 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 140 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         Group = TRUE ;
         GROUPBOX_TEXT_FUNCTIONS
     };
     FixedText TXT_ACC_GROUP
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 151 ) ;
+        Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_GROUP
@@ -314,30 +314,30 @@ TabPage TP_CONFIG_ACCEL
     Control BOX_ACC_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 65 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 55 , 87 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGGROUP_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_FUNCTION
     {
-        Pos = MAP_APPFONT ( 83 , 121 ) ;
-        Size = MAP_APPFONT ( 75 , 8 ) ;
+        Pos = MAP_APPFONT ( 73 , 151 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_FUNCTION
     };
     Control BOX_ACC_FUNCTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 131 ) ;
-        Size = MAP_APPFONT ( 75 , 64 ) ;
+        Pos = MAP_APPFONT ( 73 , 161 ) ;
+        Size = MAP_APPFONT ( 57 , 87 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_KEY
     {
-        Pos = MAP_APPFONT ( 164 , 121 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 136 , 151 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text [ de ] = "~Tasten" ;
         Text [ en-US ] = "~Keys" ;
         Left = TRUE ;
@@ -346,13 +346,13 @@ TabPage TP_CONFIG_ACCEL
     ListBox BOX_ACC_KEY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 164 , 131 ) ;
-        Size = MAP_APPFONT ( 50 , 64 ) ;
+        Pos = MAP_APPFONT ( 136 , 161 ) ;
+        Size = MAP_APPFONT ( 40 , 87 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_RESET
     {
-        Pos = MAP_APPFONT ( 226 , 189 ) ;
+        Pos = MAP_APPFONT ( 188 , 242 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -360,7 +360,7 @@ TabPage TP_CONFIG_ACCEL
     };
     PushButton BTN_LOAD
     {
-        Pos = MAP_APPFONT ( 226 , 155 ) ;
+        Pos = MAP_APPFONT ( 188 , 208 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -368,7 +368,7 @@ TabPage TP_CONFIG_ACCEL
     };
     PushButton BTN_SAVE
     {
-        Pos = MAP_APPFONT ( 226 , 172 ) ;
+        Pos = MAP_APPFONT ( 188 , 225 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
