@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 18:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <svtools/zforlist.hxx>
 #include <tools/solmath.hxx>
+#include <tools/debug.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -74,6 +75,7 @@
 #include "rangeseq.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
+#include "cell.hxx"
 
 using namespace com::sun::star;
 
@@ -269,7 +271,22 @@ BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
 
 //------------------------------------------------------------------------
 
-BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+double lcl_GetValueFromCell( ScBaseCell& rCell )
+{
+    //! ScBaseCell member function?
+
+    CellType eType = rCell.GetCellType();
+    if ( eType == CELLTYPE_VALUE )
+        return ((ScValueCell&)rCell).GetValue();
+    else if ( eType == CELLTYPE_FORMULA )
+        return ((ScFormulaCell&)rCell).GetValue();      // called only if result is value
+
+    DBG_ERROR( "GetValueFromCell: wrong type" );
+    return 0;
+}
+
+BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
+                                        BOOL bAllowNV )
 {
     USHORT nTab = rRange.aStart.Tab();
     USHORT nStartCol = rRange.aStart.Col();
@@ -278,6 +295,7 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     String aDocStr;
+    BOOL bHasErrors = FALSE;
 
     uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
     uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
@@ -287,20 +305,31 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
         uno::Any* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            if ( pDoc->HasValueData( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab ) )
-                pColAry[nCol] <<= (double) pDoc->GetValue(
-                    ScAddress( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab ) );
-            else
+            uno::Any& rElement = pColAry[nCol];
+
+            ScAddress aPos( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab );
+            ScBaseCell* pCell = pDoc->GetCell( aPos );
+            if ( pCell )
             {
-                pDoc->GetString( (USHORT)(nStartCol+nCol), (USHORT)(nStartRow+nRow), nTab, aDocStr );
-                pColAry[nCol] <<= rtl::OUString( aDocStr );
+                if ( pCell->GetCellType() == CELLTYPE_FORMULA &&
+                        ((ScFormulaCell*)pCell)->GetErrCode() != 0 )
+                {
+                    // if NV is allowed, leave empty for errors
+                    bHasErrors = TRUE;
+                }
+                else if ( pCell->HasValueData() )
+                    rElement <<= (double) lcl_GetValueFromCell( *pCell );
+                else
+                    rElement <<= rtl::OUString( pCell->GetStringData() );
             }
+            else
+                rElement <<= rtl::OUString();       // empty: empty string
         }
         pRowAry[nRow] = aColSeq;
     }
 
     rAny <<= aRowSeq;
-    return TRUE;        //! check for errors
+    return bAllowNV || !bHasErrors;
 }
 
 
