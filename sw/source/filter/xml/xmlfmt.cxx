@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:29:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,12 +749,15 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     String sName;
-    SwStyleNameMapper::FillUIName( GetMasterPageName(),
+    // --> OD 2005-02-01 #i40788# - first determine the display name of the
+    // page style, then map this name to the corresponding user interface name.
+    sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
+                                             GetMasterPageName() );
+    SwStyleNameMapper::FillUIName( sName,
                                    sName,
                                    GET_POOLID_PAGEDESC,
                                    sal_True);
-    sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
-                                             sName );
+    // <--
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
