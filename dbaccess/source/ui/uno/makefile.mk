@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.4 $
+ #  $Revision: 1.5 $
  #
- #  last change: $Author: oj $ $Date: 2002-03-04 13:08:57 $
+ #  last change: $Author: kz $ $Date: 2003-08-25 15:04:00 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -74,7 +74,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # ... resource files ............................
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         dbinteraction.src
 
 # ... object files ............................
@@ -94,6 +95,12 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.4.110.1  2003/07/10 14:21:10  hjs
+ #	#108794# replace SRCFILES with SRC1FILES
+ #	
+ #	Revision 1.4  2002/03/04 13:08:57  oj
+ #	#97043# two new files
+ #	
  #	Revision 1.3  2001/08/17 09:21:14  fs
  #	#91038# +unofilter
  #	
