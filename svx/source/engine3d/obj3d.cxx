@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mh $ $Date: 2001-07-31 11:56:47 $
+ *  last change: $Author: aw $ $Date: 2001-09-20 16:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4489,7 +4489,14 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
 
         // Geometrie ausgeben
         if(bDrawObject)
-            pBase3D->DrawPolygonGeometry(GetDisplayGeometry());
+        {
+            // #92030# for E3dPolygonObj, take flag at created DisplayGeometry into account
+            // which may not allow this object to be drawn filled
+            if(!GetDisplayGeometry().IsOutline())
+            {
+                pBase3D->DrawPolygonGeometry(GetDisplayGeometry());
+            }
+        }
 
         // Outline ausgeben
         if(bDrawOutline && pBase3D->GetLightGroup())
