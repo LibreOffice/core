@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:05:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,7 +989,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             aSz.Height = aRect.GetHeight();
             xObj->setVisualAreaSize( pObj->GetAspect(), aSz );
 
-            SetVerbs( xObj->getSupportedVerbs() );
+            GetViewShellBase().SetVerbs( xObj->getSupportedVerbs() );
 
             if( aName.EqualsAscii( "StarChart" ))
             {
