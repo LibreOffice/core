@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:08:15 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
+#endif
+#ifndef _PASTEDLG_HXX
+#include <so3/pastedlg.hxx>
 #endif
 
 #pragma hdrstop
@@ -625,6 +628,22 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                         }
                     }
                 }
+            }
+
+            SotFormatStringId nFormat;
+            bool bHasFormat = false;
+            nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+            bHasFormat = aDataHelper.HasFormat (nFormat);
+            if ( ! bHasFormat)
+            {
+                nFormat = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
+                bHasFormat = aDataHelper.HasFormat (nFormat);
+            }
+            if (bHasFormat)
+            {
+                String sName,sSource;
+                if (SvPasteObjectDialog::GetEmbeddedName (aDataHelper, sName, sSource, nFormat))
+                    aItem.AddClipbrdFormat (nFormat, sName);
             }
 
             rSet.Put( aItem );
