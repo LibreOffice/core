@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2002-02-28 19:35:19 $
+ *  last change: $Author: er $ $Date: 2002-03-11 15:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2388,7 +2388,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         bTimePart = TRUE;
                         bExp = TRUE;                    // missbraucht fuer A/P
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
-                        nTypeArray[i] = SYMBOLTYPE_STRING;
                         nPos += sStrArray[i].Len();
                         i++;
                     }
