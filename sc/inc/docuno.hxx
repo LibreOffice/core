@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:20:35 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawTrGradTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xChartDataProv;
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
