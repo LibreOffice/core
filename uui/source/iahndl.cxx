@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:52:00 $
+ *  last change: $Author: kso $ $Date: 2001-04-18 13:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,8 @@ void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
+    bool bSavePassword
+        = rInfo.GetIsPersistentPassword() || rInfo.GetIsSavePassword();
 
     sal_uInt16 nFlags = 0;
     if (rInfo.GetPath().Len() == 0)
@@ -883,6 +885,9 @@ void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm)
         nFlags |= LF_NO_ACCOUNT;
     if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
         nFlags |= LF_USERNAME_READONLY;
+
+    if (!bSavePassword)
+        nFlags |= LF_NO_SAVEPASSWORD;
 
     ResMgr * pManager = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
     LoginDialog * pDialog = new LoginDialog(0, nFlags, rInfo.GetServer(),
@@ -895,11 +900,15 @@ void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm)
     else
         pDialog->ClearPassword();
     pDialog->SetPassword(rInfo.GetPassword());
-    pDialog->SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
+
+    if (bSavePassword)
+    {
+        pDialog->SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
                                            RID_SAVE_PASSWORD :
                                            RID_KEEP_PASSWORD,
                                        pManager));
-    pDialog->SetSavePassword(rInfo.GetIsSavePassword());
+        pDialog->SetSavePassword(rInfo.GetIsSavePassword());
+    }
 
     rInfo.SetResult(pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                    ERRCODE_BUTTON_CANCEL);
