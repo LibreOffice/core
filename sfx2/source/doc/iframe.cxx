@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:54:49 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     {
         ::rtl::OUString aURL;
         aAny >>= aURL;
-        maFrmDescr.SetURL( aURL );
+        maFrmDescr.SetURL( String(aURL) );
     }
     else if ( aPropertyName.equalsAscii("FrameName") )
     {
