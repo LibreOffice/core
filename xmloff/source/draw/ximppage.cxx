@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-25 12:48:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_forms ) ) )
     {
-        pContext = new XMLFormsContext( GetImport(), nPrefix, rLocalName );
+        pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
     }
     else
     {
