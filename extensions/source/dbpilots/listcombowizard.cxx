@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:41:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,7 @@ namespace dbp
         try
         {
             // for quoting identifiers, we need the connection meta data
-            Reference< XConnection > xConn;
-            getContext().xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+            Reference< XConnection > xConn(getContext().xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))),UNO_QUERY);
             DBG_ASSERT(xConn.is(), "OListComboWizard::implApplySettings: no connection, unable to quote!");
             Reference< XDatabaseMetaData > xMetaData;
             if (xConn.is())
@@ -231,10 +230,14 @@ namespace dbp
             // do some quotings
             if (xMetaData.is())
             {
+                ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
                 if (isListBox()) // only when we have a listbox this should be not empty
-                    getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField,::dbtools::eInDataManipulation);
-                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable,::dbtools::eInDataManipulation);
-                getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField,::dbtools::eInDataManipulation);
+                    getSettings().sLinkedListField = quoteName(sQuoteString, getSettings().sLinkedListField);
+                sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+
+                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+                getSettings().sListContentField = quoteName(sQuoteString, getSettings().sListContentField);
             }
 
             // ListSourceType: SQL
@@ -417,14 +420,14 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentTableSelection::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OContentTableSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
-        if (!rSettings.sListContentTable.Len() && (CR_TRAVEL_PREVIOUS != _eReason))
+        if (!rSettings.sListContentTable.Len() && (IWizardPage::CR_TRAVEL_PREVIOUS != _eReason))
             // need to select a table
             return sal_False;
 
@@ -495,7 +498,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentFieldSelection::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OContentFieldSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
@@ -573,7 +576,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OLinkFieldsPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OLinkFieldsPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
