@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace ::com::sun::star;
 
