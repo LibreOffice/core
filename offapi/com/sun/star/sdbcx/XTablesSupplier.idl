@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTablesSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** provides for access to a container of tables, typically used for a database
     definition object.
  */
-interface XTablesSupplier: com::sun::star::uno::XInterface
+published interface XTablesSupplier: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbcx::XTablesSupplier::getTables

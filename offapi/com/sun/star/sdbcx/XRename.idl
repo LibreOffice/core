@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRename.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     This is a very desirable feature which is not supported by all databases. There is no
     standard SQL statement provided for this feature.
  */
-interface XRename: com::sun::star::uno::XInterface
+published interface XRename: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbcx::XRename::rename
