@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2001-05-02 15:54:50 $
+#   last change: $Author: vg $ $Date: 2001-05-08 14:04:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.16 $ ';
+$id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -270,7 +270,7 @@ sub BuildPrj {
             while ($Dependencies =~ /,(\w+)/) {
                 $Dependencies = $';
             };
-            $Dependencies =~ /(\s)(\S+)(\s)/;
+            $Dependencies =~ /(\s+)(\S+)(\s+)/;
             $DirAlias = $2;
             if (!CheckPlatform($Platform)) {
                 $DeadDependencies{$DirAlias} = 1;
@@ -284,7 +284,7 @@ sub BuildPrj {
             $PathHash{$DirAlias} = $Dir;
         };
     };
-    close (PrjBuildFile);
+    close PrjBuildFile;
     %DepsArchive = %LocalDepsHash;
     foreach $Dir (keys %DeadDependencies) {
         if (!IsHashNative($Dir)) {
@@ -525,7 +525,7 @@ sub GetDependenciesArray {
     @Dependencies = ();
     $DepString = $_[0];
     while (!($DepString =~ /^NULL/)) {
-        $DepString =~ /(\S+)(\s)/;
+        $DepString =~ /(\S+)(\s+)/;
         $ParentPrj = $1;
         $DepString = $';
         if ($ParentPrj =~ /(\S+)(\.)(\w)/) {
