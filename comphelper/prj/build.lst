@@ -1,4 +1,4 @@
-ph	comphelper	:	cppuhelper ucbhelper offuh vos NULL
+ph	comphelper	:	cppuhelper ucbhelper offuh vos salhelper NULL
 ph	comphelper								usr1	-	all	ph_mkout NULL
 ph	comphelper\source\container				nmake	-	all	ph_container NULL
 ph	comphelper\source\eventattachermgr		nmake	-	all	ph_evtatmgr NULL
