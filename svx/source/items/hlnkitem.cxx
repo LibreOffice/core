@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 13:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,9 @@ BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
+            rVal <<= ::rtl::OUString(sIntName.GetBuffer());
+        break;
+        case MID_HLINK_TEXT   :
             rVal <<= ::rtl::OUString(sName.GetBuffer());
         break;
         case MID_HLINK_URL:
@@ -429,6 +432,11 @@ BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
+            if(!(rVal >>= aStr))
+                return sal_False;
+            sIntName = aStr.getStr();
+        break;
+        case MID_HLINK_TEXT   :
             if(!(rVal >>= aStr))
                 return sal_False;
             sName = aStr.getStr();
