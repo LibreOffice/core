@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
+#include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
+#endif
 
 #include <algorithm>
 #include <iterator>
@@ -98,7 +101,8 @@ namespace
 
 enum
 {
-    PROP_DIAGRAM_REL_POS
+    PROP_DIAGRAM_REL_POS,
+    PROP_DIAGRAM_SCENE_PROPERTIES
 };
 
 void lcl_AddPropertiesToVector(
@@ -112,9 +116,9 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "TransformationMatrix" ),
-                  PROP_DIAGRAM_REL_POS,
-                  ::getCppuType( reinterpret_cast< const drawing::HomogenMatrix * >(0)),
+        Property( C2U( "SceneProperties" ),
+                  PROP_DIAGRAM_SCENE_PROPERTIES,
+                  ::getCppuType( reinterpret_cast< const chart2::SceneDescriptor * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -122,9 +126,23 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::helper::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_REL_POS ));
-    rOutMap[ PROP_DIAGRAM_REL_POS ] =
-        uno::makeAny( drawing::HomogenMatrix() );
+    uno::Sequence< chart2::LightSource > aLights( 1 );
+    aLights[0].nDiffuseColor = 0xcccccc;  // grey80
+    aLights[0].aDirection = drawing::Direction3D( 1, 1, 1 );
+    aLights[0].bSpecular = false;
+
+    chart2::SceneDescriptor aSceneDescr(
+        /* aDirection */         ::com::sun::star::drawing::Direction3D( 0.0, 1.0, 0.0 ),
+        /* fRotationAngle */     20.0,
+        /* fRelativeHeight */    1.0,
+        /* fRelativeDepth */     1.0,
+        /* nAmbientLightColor */ 0x666666, // grey40
+        /* aLightSources */      aLights,
+        /* aShadeMode */         drawing::ShadeMode_SMOOTH );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_SCENE_PROPERTIES ));
+    rOutMap[ PROP_DIAGRAM_SCENE_PROPERTIES ] =
+        uno::makeAny( aSceneDescr );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 12:31:00 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 10:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,8 @@ void DataPointProperties::AddDefaultsToMap(
         uno::makeAny( sal_Int32( 0x00000000 ));  // black
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_STYLE ));
     rOutMap[ PROP_DATAPOINT_BORDER_STYLE ] =
-        uno::makeAny( drawing::LineStyle_SOLID );
+//         uno::makeAny( drawing::LineStyle_SOLID );
+        uno::makeAny( drawing::LineStyle_NONE );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_WIDTH ));
     rOutMap[ PROP_DATAPOINT_BORDER_WIDTH ] =
         uno::makeAny( sal_Int32( 0 ) );

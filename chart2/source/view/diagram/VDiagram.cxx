@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-25 17:15:16 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
+#include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
 #endif
 
 //.............................................................................
@@ -266,7 +269,15 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ), aAnyLightColor_1 );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ), uno::makeAny(drawing::Direction3D(1,1,1)) );
 
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny(drawing::ShadeMode_PHONG) ); //FLAT, PHONG, SMOOTH, DRAFT
+            uno::Reference< beans::XPropertySet > xModelDiaProp( m_xDiagram, uno::UNO_QUERY );
+            SceneDescriptor aSceneDescr;
+            if( xModelDiaProp.is() &&
+                ( xModelDiaProp->getPropertyValue( C2U( "SceneProperties" )) >>= aSceneDescr ))
+            {
+                xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny( aSceneDescr.aShadeMode ));
+            }
+            else
+                xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny(drawing::ShadeMode_FLAT) ); //FLAT, PHONG, SMOOTH, DRAFT
 
             //D3DSceneTwoSidedLighting
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )
