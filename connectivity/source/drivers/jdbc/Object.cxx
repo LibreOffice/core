@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 09:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
     }
     catch (Exception& e)
     {
-        isExceptionOccured(pEnv,sal_True);
+        if ( pEnv )
+            isExceptionOccured(pEnv,sal_True);
         result = -1;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 09:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,9 @@ jobject connectivity::XNameAccess2Map(JNIEnv *pEnv,const Reference< ::com::sun::
 // -----------------------------------------------------------------------------
 sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
 {
-    OSL_ENSURE(pEnv,"Java env not valid! Prepare for GPF. For performace reason there is not check for NULL here. :-(");
+    if ( !pEnv )
+        return sal_False;
+
     jthrowable pThrowable = pEnv->ExceptionOccurred();
     sal_Bool bRet = pThrowable != NULL;
     if ( pThrowable )
