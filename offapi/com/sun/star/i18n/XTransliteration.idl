@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: bustamam $ $Date: 2001-06-29 22:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,51 @@ interface XTransliteration: com::sun::star::uno::XInterface
      After that he or she search [A-Ia-i] pattern in some content.
   */
   sequence <string>  transliterateRange ([in] string str1, [in] string str2);
+
+
+
+  /** compares 2 sub-strings
+
+                @param s1
+                        first String
+
+                @param off1
+                        offset (from 0) of the first substring
+
+                @param len1
+                        length (from offset) of the first substring
+
+                @param s2
+                        second String
+
+                @param off2
+                        offset (from 0) of the second substring
+
+                @param len2
+                        length (from offset) of the second substring
+
+                @returns
+                        1 if the first string is more than second string
+                        0 if the first string is equals to second string
+                        -1 if the first string is less than second string
+   */
+   long compareSubstring([in] string s1, [in] long off1, [in] long len1,
+                         [in] string s2, [in] long off2, [in] long len2);
+
+   /** compares 2 strings
+
+                @param s1
+                        first String
+
+                @param s2
+                        second String
+
+                @returns
+                        1 if the first string is more than second string
+                        0 if the first string is equals to second string
+                        -1 if the first string is less than second string
+   */
+   long compareString([in] string s1, [in] string s2);
 
 };
 
