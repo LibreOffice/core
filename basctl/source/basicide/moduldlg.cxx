@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:06:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 
 #include <memory>
-
-#ifndef _SFX_IPFRM_HXX
-#include <sfx2/ipfrm.hxx>
-#endif
 
 #include <ide_pch.hxx>
 
@@ -643,20 +639,13 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
     if ( pButton == &aEditButton )
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-        }
-        else
-        {
-            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-            SFX_APP()->ExecuteSlot( aRequest );
-        }
+        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+        SFX_APP()->ExecuteSlot( aRequest );
+
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) == 2 )
