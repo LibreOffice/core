@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:58:27 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,10 @@ namespace pcr
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
             &m_xIntrospecteeAsProperty, ::getCppuType(&m_xIntrospecteeAsProperty));
+
+        registerProperty(PROPERTY_CURRENTPAGE, OWN_PROPERTY_ID_CURRENTPAGE,
+            PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
+            &m_sPageSelection, ::getCppuType(&m_sPageSelection));
     }
 
     //------------------------------------------------------------------------
@@ -442,14 +446,72 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    IMPL_LINK(OPropertyBrowserController, OnPageActivation, void*, EMPTYARG)
+    {
+        syncViewToProperty();
+        return 0L;
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::syncViewToProperty()
+    {
+        if (!haveView())
+            return;
+
+        ::rtl::OUString sOldSelection = m_sPageSelection;
+
+        m_sPageSelection = ::rtl::OUString();
+
+        const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
+        if ((sal_uInt16)-1 != nCurrentPage)
+            if (nCurrentPage == m_nGenericPageId)
+                m_sPageSelection = ::rtl::OUString::createFromAscii("Generic");
+            else if (nCurrentPage == m_nDataPageId)
+                m_sPageSelection = ::rtl::OUString::createFromAscii("Data");
+            else if (nCurrentPage == m_nEventPageId)
+                m_sPageSelection = ::rtl::OUString::createFromAscii("Events");
+
+        if (sOldSelection != m_sPageSelection)
+        {   // fire the property change
+            Any aOldValue; aOldValue <<= sOldSelection;
+            Any aNewValue; aNewValue <<= m_sPageSelection;
+            sal_Int32 nHandle = OWN_PROPERTY_ID_CURRENTPAGE;
+            fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::syncPropertyToView()
+    {
+        sal_uInt16 nNewPage = (sal_uInt16)-1;
+        if (0 == m_sPageSelection.compareToAscii("Generic"))
+            nNewPage = m_nGenericPageId;
+        else if (0 == m_sPageSelection.compareToAscii("Data"))
+            nNewPage = m_nDataPageId;
+        else if (0 == m_sPageSelection.compareToAscii("Events"))
+            nNewPage = m_nEventPageId;
+
+        if (haveView())
+            m_pView->activatePage(nNewPage);
+
+        // just in case ...
+        syncViewToProperty();
+    }
+
+    //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
     {
         OPropertyBrowserController_PropertyBase1::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
 
-        if (1 == _nHandle)
+        switch (_nHandle)
         {
-            // it was my introspectee
-            bindToObject(m_xIntrospecteeAsProperty);
+            case OWN_PROPERTY_ID_INTROSPECTEDOBJECT:
+                // it was my introspectee
+                bindToObject(m_xIntrospecteeAsProperty);
+                break;
+            case OWN_PROPERTY_ID_CURRENTPAGE:
+                syncPropertyToView();
+                break;
         }
     }
 
@@ -461,6 +523,7 @@ namespace pcr
 
         m_pView = new OPropertyBrowserView(m_xORB, _pParentWin);
         m_pView->setActiveController(this);
+        m_pView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,
         // and this disposal _deletes_ the view, so it would be deadly if we use our m_pView member
@@ -481,8 +544,12 @@ namespace pcr
         if (!haveView())
             return;
         Property aProp = getIntrospecteeProperty(_rEvent.PropertyName);
-        ::rtl::OUString sNewValue = AnyToString(_rEvent.NewValue, aProp, _rEvent.PropertyHandle);
-        getPropertyBox()->SetPropertyValue(_rEvent.PropertyName, sNewValue);
+        if (aProp.Name.getLength())
+        {
+            DBG_ASSERT(aProp.Name == _rEvent.PropertyName, "OPropertyBrowserController::_propertyChanged: getIntrospecteeProperty returned nonsense!");
+            ::rtl::OUString sNewValue = AnyToString(_rEvent.NewValue, aProp, aProp.Handle);
+            getPropertyBox()->SetPropertyValue(_rEvent.PropertyName, sNewValue);
+        }
     }
 
     //------------------------------------------------------------------------
@@ -560,11 +627,15 @@ namespace pcr
         ::rtl::OUString aStrVal;
         try
         {
-            Property aProp = getIntrospecteeProperty(_rPropName);
-            if(m_xPropValueAccess.is())
+            if (m_xPropValueAccess.is())
             {
-                Any aVal( m_xPropValueAccess->getPropertyValue(_rPropName ) );
-                aStrVal = AnyToString(aVal, aProp, m_pPropertyInfo->getPropertyId(_rPropName));
+                Property aProp = getIntrospecteeProperty(_rPropName);
+                DBG_ASSERT(aProp.Name.getLength(), "OPropertyBrowserController::GetPropertyValue: invalid property name!");
+                if (aProp.Name.getLength())
+                {
+                    Any aVal( m_xPropValueAccess->getPropertyValue(_rPropName ) );
+                    aStrVal = AnyToString(aVal, aProp, m_pPropertyInfo->getPropertyId(_rPropName));
+                }
             }
         }
 
@@ -581,10 +652,6 @@ namespace pcr
     {
         try
         {
-            sal_uInt16 nActivePage = 0;
-            if (haveView())
-                nActivePage = m_pView->getActivaPage();
-
             // stop inspecting the old object
             stopIntrospection();
 
@@ -663,9 +730,7 @@ namespace pcr
             {
                 getPropertyBox()->Show();
                 // activate the old page
-                if (0 == nActivePage)
-                    nActivePage = 1;
-                m_pView->activatePage(nActivePage);
+                syncPropertyToView();
             }
         }
 
@@ -895,6 +960,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/05 08:58:27  fs
+ *  #83468# +m_nClassId
+ *
  *  Revision 1.4  2001/01/24 14:14:18  fs
  *  bindToObject: pass non-form-related objects to setObject, too
  *

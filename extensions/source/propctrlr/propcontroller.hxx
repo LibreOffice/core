@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:58:27 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace pcr
     struct OLineDescriptor;
 
 #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT  1
+#define OWN_PROPERTY_ID_CURRENTPAGE         2
 
     //========================================================================
     //= OPropertyBrowserController
@@ -190,6 +191,7 @@ namespace pcr
         OPropertyBrowserView*                       m_pView;
 
         ::rtl::OUString     m_sStandard;
+        ::rtl::OUString     m_sPageSelection;
 
     protected:
         // the inspected object
@@ -330,6 +332,9 @@ namespace pcr
         sal_uInt32 GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
 
+        void syncPropertyToView();
+        void syncViewToProperty();
+
         // good candidates for (onClicked-)callbacks, again ....
         void ChangeFontProperty(const ::rtl::OUString& rName);
         void ChangeEventProperty(const ::rtl::OUString& rName);
@@ -345,6 +350,9 @@ namespace pcr
         ::rtl::OUString convertSimpleToString(const ::com::sun::star::uno::Any& _rValue);
 
         sal_Bool Construct(Window* _pParentWin);
+
+    private:
+        DECL_LINK(OnPageActivation, void*);
     };
 
 //............................................................................
@@ -356,6 +364,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/05 08:58:27  fs
+ *  #83468# +m_nClassId
+ *
  *  Revision 1.2  2001/01/12 14:44:49  fs
  *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
  *
