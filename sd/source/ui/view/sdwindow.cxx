@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:06:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
 #endif
-
+#include "WindowUpdater.hxx"
 
 
 #define SCROLL_LINE_FACT   0.05     // Faktor fuer Zeilenscrolling
@@ -141,7 +141,41 @@ SdWindow::SdWindow(Window* pParent) :
 
 SdWindow::~SdWindow()
 {
+    if (pViewShell != NULL)
+    {
+        ::sd::WindowUpdater* pWindowUpdater = pViewShell->GetWindowUpdater();
+        if (pWindowUpdater != NULL)
+            pWindowUpdater->UnregisterWindow (this);
+    }
 }
+
+
+
+
+void SdWindow::SetViewShell(SdViewShell* pViewSh)
+{
+    ::sd::WindowUpdater* pWindowUpdater = NULL;
+    // Unregister at device updater of old view shell.
+    if (pViewShell != NULL)
+    {
+        pWindowUpdater = pViewShell->GetWindowUpdater();
+        if (pWindowUpdater != NULL)
+            pWindowUpdater->UnregisterWindow (this);
+    }
+
+    pViewShell = pViewSh;
+
+    // Register at device updater of new view shell
+    if (pViewShell != NULL)
+    {
+        pWindowUpdater = pViewShell->GetWindowUpdater();
+        if (pWindowUpdater != NULL)
+            pWindowUpdater->RegisterWindow (this);
+    }
+}
+
+
+
 
 /*************************************************************************
 |*
