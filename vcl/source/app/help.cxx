@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:30:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ BOOL HelpTextWindow::RegisterAccessibleParent()
     // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
     // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
     // answer important accessibility request
-    if( mpBorderWindow && mpBorderWindow->ImplRegisterAccessibleNativeFrame() )
+    if( mpBorderWindow  )
     {
         ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
         return TRUE;
@@ -595,10 +595,6 @@ BOOL HelpTextWindow::RegisterAccessibleParent()
 
 void HelpTextWindow::RevokeAccessibleParent()
 {
-    if( !mpBorderWindow )
-        return;
-    else
-        mpBorderWindow->ImplRevokeAccessibleNativeFrame();
 }
 
 // =======================================================================
@@ -685,7 +681,6 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
             pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
         pSVData->maHelpData.mbKeyboardHelp = FALSE;
-        pHelpWin->RevokeAccessibleParent();
         pHelpWin->Hide();
         delete pHelpWin;
     }
