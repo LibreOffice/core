@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 14:02:26 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,33 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         rtl::OString aStr( bff1 );  // build a string from the densified buffer;
         delete[] bff1;
 
+//      // Now determine the order
+// #define NAMECOUNT 16
+// #define UNREACHABLEPLACE 100000;
+//      /**
+//       *  The available names cannot be determined from LINKNAMES at current,
+//       *  because LINKNAMES is a serialized Java-object
+//       *  Always update LINKNAMES if index.xsl or default.xsl are modified.
+//       */
+//      rtl::OString LN[NAMECOUNT];
+//      LN[0] = "text:span";
+//      LN[1] = "help:help-text";
+//      LN[2] = "help:to-be-embedded";
+//      LN[3] = "headingheading";
+//      LN[4] = "office:body";
+//      LN[5] = "text:p";
+//      LN[6] = "office:document";
+//      LN[7] = "help:link";
+//      LN[8] = "help:key-word";
+//      LN[9] = "table:table";
+//      LN[10] = "table:table-header-row";
+//      LN[11] = "table:table-row";
+//      LN[12] = "table:table-cell";
+//      LN[13] = "text:unordered-list";
+//      LN[14] = "text:ordered-list";
+//      LN[15] = "text:list-item";
         // Now determine the order
+
 #define NAMECOUNT 16
 #define UNREACHABLEPLACE 100000;
         /**
@@ -265,24 +291,24 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
          *  because LINKNAMES is a serialized Java-object
          *  Always update LINKNAMES if index.xsl or default.xsl are modified.
          */
-        rtl::OString LN[NAMECOUNT];
-        LN[0] = "text:span";
-        LN[1] = "help:help-text";
-        LN[2] = "help:to-be-embedded";
-        LN[3] = "headingheading";
-        LN[4] = "office:body";
-        LN[5] = "text:p";
-        LN[6] = "office:document";
-        LN[7] = "help:link";
-        LN[8] = "help:key-word";
-        LN[9] = "table:table";
-        LN[10] = "table:table-header-row";
-        LN[11] = "table:table-row";
-        LN[12] = "table:table-cell";
-        LN[13] = "text:unordered-list";
-        LN[14] = "text:ordered-list";
-        LN[15] = "text:list-item";
 
+        rtl::OString LN[NAMECOUNT];
+        LN[0] = "helpdocument";
+        LN[1] = "body";
+        LN[2] = "title";
+        LN[3] = "table";
+        LN[4] = "tablecell";
+        LN[5] = "tablerow";
+        LN[6] = "list";
+        LN[7] = "listitem";
+        LN[8] = "item";
+        LN[9] = "emph";
+        LN[10] = "paragraph";
+        LN[11] = "section";
+        LN[12] = "bookmark";
+        LN[13] = "bookmark_value";
+        LN[14] = "ahelp";
+        LN[15] = "link";
 
         // Determine index in file
         int idx[NAMECOUNT];
