@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2001-07-05 13:27:32 $
+#   last change: $Author: vg $ $Date: 2001-07-06 09:11:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.28 $ ';
+$id_str = ' $Revision: 1.29 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -242,10 +242,10 @@ sub GetParentsString {
 sub HowToBuild {
     my ($i);
     foreach $i (0 .. $#ARGV) {
-        if ($ARGV[$i] =~ /^-all/) {
+        if ($ARGV[$i] =~ /^-all$/) {
             splice(@ARGV, $i, 1);
             return 1;
-        } elsif ($ARGV[$i] =~ /^-from/) {
+        } elsif ($ARGV[$i] =~ /^-from$/) {
             $build_from = $ARGV[$i + 1];
             splice(@ARGV, $i, 2);
             return 1;
@@ -480,7 +480,6 @@ sub PickPrjToBuild {
     $DepsHash = shift;
     $Prj = FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
-    #print "$Prj\n";
     return $Prj;
 };
 
@@ -575,7 +574,6 @@ sub FindIndepPrj {
 };
 
 
-
 #
 # Check if given entry is HASH-native, that is not a user-defined data
 #
@@ -605,7 +603,7 @@ sub GetDependenciesArray {
             $ParentPrj = $`;
             if (($prj_platform{$ParentPrj} ne $1) &&
                 ($prj_platform{$ParentPrj} ne 'all')) {
-                print "$ParentPrj\.$1 is a wrong used alias!\n";
+                print "$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent\n";
                 exit (1);
             };
             if (&CheckPlatform($1)) {
