@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:19:18 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String STR_NONAME
     Text[ greek ] = "Δίχως όνομα";
     Text[ korean ] = "Α¦ΈρΎψΐ½";
     Text[ turkish ] = "Adsύz";
+    Text[ catalan ] = "Sin nombre";
 };
 
 String STR_NONE
@@ -111,6 +112,7 @@ String STR_NONE
     Text[ greek ] = "- Κανένα -";
     Text[ korean ] = "- Ύψΐ½ -";
     Text[ turkish ] = "- Yok -";
+    Text[ catalan ] = "- Ninguno -";
 };
 
 String STR_CLOSE
@@ -137,6 +139,7 @@ String STR_CLOSE
     Text[ greek ] = "Κλείσιμο";
     Text[ korean ] = "΄έ±β";
     Text[ turkish ] = "Kapat";
+    Text[ catalan ] = "Cerrar";
 };
 
 String STR_STYLE_FILTER_AUTO
@@ -163,6 +166,7 @@ String STR_STYLE_FILTER_AUTO
     TEXT[ greek ] = "Αυτόματα";
     TEXT[ korean ] = "ΐΪµΏ";
     TEXT[ turkish ] = "Otomatik";
+    TEXT[ catalan ] = "Automαtico";
 };
 
 String STR_STYLE_FILTER_USED
@@ -189,6 +193,7 @@ String STR_STYLE_FILTER_USED
     TEXT[ greek ] = "Εφαρμοσμένα πρότυπα";
     TEXT[ korean ] = "»ηΏλµΘ΅΅ΐ―Ηό.";
     TEXT[ turkish ] = "Kullanύlan biηimler";
+    TEXT[ catalan ] = "Estilos utilizados";
 };
 
 
@@ -217,6 +222,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ greek ] = "Στυλ χρήστη";
     TEXT[ korean ] = "»ηΏλΐΪ Α¤ΐΗ ΐ―Ηό";
     TEXT[ turkish ] = "Kullanύcύ tanύmlύ biηimler";
+    TEXT[ catalan ] = "Estilos del usuario";
 };
 
 String STR_STYLE_FILTER_ALL
@@ -243,6 +249,7 @@ String STR_STYLE_FILTER_ALL
     TEXT[ greek ] = "Όλα τα πρότυπα";
     TEXT[ korean ] = "Έπµη ΐ―Ηό";
     TEXT[ turkish ] = "Tόm biηimler";
+    TEXT[ catalan ] = "Todos los estilos";
 };
 
 String STR_STANDARD
@@ -267,6 +274,7 @@ String STR_STANDARD
     Text[ chinese_traditional ] = "ΌΠ·Η";
     Text[ arabic ] = "ήνΗΣν";
     Text[ turkish ] = "Standart";
+    Text[ catalan ] = "Predeterminado";
 };
 
 String STR_FILTERNAME_ALL
@@ -293,6 +301,7 @@ String STR_FILTERNAME_ALL
     TEXT[ greek ] = "<Όλα>";
     TEXT[ korean ] = "<ΐόΊΞ>";
     TEXT[ turkish ] = "<Tόmό>";
+    TEXT[ catalan ] = "<Todos>";
 };
 
 String STR_HUMAN_APPNAME
@@ -322,6 +331,7 @@ String STR_BYTES
     Text[ greek ] = "Bytes";
     Text[ korean ] = "ΉΩΐΜΖ®";
     Text[ turkish ] = "Byte";
+    Text[ catalan ] = "Bytes";
 };
 
 String STR_KB
@@ -346,6 +356,7 @@ String STR_KB
     Text[ greek ] = "KB";
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
+    Text[ catalan ] = "KB";
 };
 
 String STR_MB
@@ -370,6 +381,7 @@ String STR_MB
     Text[ greek ] = "MB";
     Text[ korean ] = "MB";
     Text[ turkish ] = "MB";
+    Text[ catalan ] = "MB";
 };
 
 
@@ -395,6 +407,7 @@ String STR_GB
     Text[ greek ] = "GB";
     Text[ korean ] = "GB";
     Text[ turkish ] = "GB";
+    Text[ catalan ] = "GB";
 };
 
 String STR_UNDO
@@ -422,6 +435,7 @@ String STR_UNDO
     Text[ greek ] = "Αναίρεση: ";
     Text[ korean ] = "½ΗΗΰΓλΌÒ: ";
     Text[ turkish ] = "Geri al: ";
+    Text[ catalan ] = "Deshacer: ";
 };
 
 String STR_REDO
@@ -446,6 +460,7 @@ String STR_REDO
     Text[ greek ] = "Επαναφορά: ";
     Text[ korean ] = "΄Ω½Γ ½ΗΗΰ(~D):";
     Text[ turkish ] = "~Yinele: ";
+    Text[ catalan ] = "Restaurar: ";
 };
 
 String STR_REPEAT
@@ -470,6 +485,7 @@ String STR_REPEAT
     Text[ greek ] = "Επανάληψη: ";
     Text[ korean ] = "Έ¶ΑφΈ·΅΅Έν·Ι(~R):";
     Text[ turkish ] = "Son ~komutu yinele: ";
+    Text[ catalan ] = "~Ϊltimo comando: ";
 };
 
 String RID_STR_NEW_TASK
@@ -494,6 +510,7 @@ String RID_STR_NEW_TASK
     Text[ greek ] = "Νέα εργασία";
     Text[ korean ] = "»υ·ΞΏξ ΐΫΎχ";
     Text[ turkish ] = "Yeni gφrev";
+    Text[ catalan ] = "Nueva tarea";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -522,5 +539,6 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ korean ] = "Έπµη Ί―°ζΐ» ΓλΌÒ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ arabic ] = "εα ΚΡνΟ ΡέΦ ία ΗαΚΫννΡΗΚΏ";
     Message[ turkish ] = "Tόm deπiώiklikleri iptal et?";
+    Message[ catalan ] = "ΏCancelar todos los cambios?";
 };
 
