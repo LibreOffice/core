@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ public:
     BOOL            DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi );
 
     BOOL            SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi );
+
+    BOOL            SetLayoutRTL( USHORT nTab, BOOL bRTL, BOOL bApi );
 
     BOOL            SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges,
                                     USHORT nTab, ScSizeMode eMode, USHORT nSizeTwips,
