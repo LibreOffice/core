@@ -24139,3 +24139,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?ImpLimitToWorkArea@SdrExchangeView@@IBEEAAVPoint@@PBVSdrPageView@@@Z
 ?WriteBlibStoreEntry@EscherGraphicProvider@@QAEEAAVSvStream@@KEK@Z
 ?GetMechanismFromUI@SvxSSOTabPage@@AAE?AW4MechType@1@XZ
+?SetPosAndSize@?%O:\SRC665\src\svx\source\fmcomp\gridctrl.cxx3207324637@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRC665\src\svx\source\fmcomp\fmgridcl.cxx10217768@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
