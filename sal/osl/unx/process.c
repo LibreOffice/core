@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-20 16:08:14 $
+ *  last change: $Author: mhu $ $Date: 2001-07-29 18:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2007,14 +2007,14 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
         {
             strcpy(Path, pDir);
             strcat(Path, "/");
-            rtl_freeMemory(pDir);
+            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
             pDir = strdup(".");
         }
 
         if ((strlen(pDir) > 0) &&
             ((stat(pDir, &status) < 0) || (! S_ISDIR(status.st_mode))))
         {
-            rtl_freeMemory(pDir);
+            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
             return sal_False;
         }
     }
@@ -2043,7 +2043,7 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
         if (((dir = opendir(pBuffer)) == NULL) ||
             (STAT_PARENT(pBuffer, &parent) < 0))
         {
-            rtl_freeMemory(pDir);
+            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
             rtl_freeMemory(pBuffer);
 
             return sal_False;
@@ -2055,7 +2055,7 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
             {
                 if ((entry = readdir(dir)) == NULL)
                 {
-                    rtl_freeMemory(pDir);
+                    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
                     rtl_freeMemory(pBuffer);
 
                     return sal_False;
@@ -2083,7 +2083,7 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
                 {
                     rtl_freeMemory(full);
 
-                    rtl_freeMemory(pDir);
+                    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
                     rtl_freeMemory(pBuffer);
 
                     return sal_False;
@@ -2112,7 +2112,7 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
         strcat(pBuffer, "/..");
     }
 
-    rtl_freeMemory(pDir);
+    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
     rtl_freeMemory(pBuffer);
 
     if (strlen(Path) < MaxLen)
