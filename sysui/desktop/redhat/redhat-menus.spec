@@ -3,7 +3,7 @@ Name: openofficeorg-redhat-menus
 Version: 2.0
 Release: 1
 Group: Office
-Copyright: LGPL / SISSL
+License: LGPL, SISSL
 AutoReqProv: no
 Requires: openofficeorg-core01
 Conflicts: suse-release
