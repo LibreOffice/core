@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 20:05:13 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 20:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,7 +732,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                             SvxDrawPage* pPageObj = new SvxFmDrawPage( pPage );
 
                             uno::Reference<drawing::XDrawPage> xPage = pPageObj;
-                            uno::Reference<drawing::XShape> xShape = pPageObj->_CreateShape( pObj );
+                            uno::Reference<drawing::XShape> xShape( pPageObj->getUnoShape, uno::UNO_QUERY ));
                             if (xShape.is())
                                 pShapes->add(xShape);
                         }
