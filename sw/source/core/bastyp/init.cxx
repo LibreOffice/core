@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:31:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,10 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+// OD 2004-05-05 #i28701#
+#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
+#include <fmtwrapinfluenceonobjpos.hxx>
+#endif
 
 
 extern void _FrmFinit();
@@ -612,7 +616,8 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     // --> collapsing borders FME 2005-05-27 #i29550#
     { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
     // <-- collapsing
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY2
+    // OD 2004-05-04 #i28701#
+    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY5
@@ -884,9 +889,10 @@ void _InitCore()
     // --> collapsing borders FME 2005-05-27 #i29550#
     aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, FALSE );
     // <-- collapsing
-
+    // OD 2004-05-04 #i28701#
+    aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
+            new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED );
 // FrmAttr-Dummies
-    aAttrTab[ RES_FRMATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY2 );
     aAttrTab[ RES_FRMATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY3 );
     aAttrTab[ RES_FRMATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY4 );
     aAttrTab[ RES_FRMATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY5 );
