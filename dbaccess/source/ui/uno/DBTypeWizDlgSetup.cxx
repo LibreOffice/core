@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:10:02 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
+#endif
 #ifndef DBAUI_DBTYPEWIZDLGSETUP_HXX
 #include "DBTypeWizDlgSetup.hxx"
 #endif
@@ -113,6 +116,21 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
     Reference < XInitialization > xDBWizardInit(xDBWizard, UNO_QUERY);
 
     xDBWizardInit->initialize(aSequence);
+
+    try
+    {
+        Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
+            UNO_QUERY);
+        if ( xDocEventBroadcaster.is() )
+        {
+            ::com::sun::star::document::EventObject aEvent(xDBContext, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) );
+            xDocEventBroadcaster->notifyEvent(aEvent);
+        }
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+    }
     Reference <com::sun::star::ui::dialogs::XExecutableDialog> xDBWizardExecute( xDBWizard, UNO_QUERY );
     xDBWizardExecute->execute();
     return xDBWizard;
