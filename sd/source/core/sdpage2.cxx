@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@
 #include "glob.hrc"
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
-#include "sdiocmpt.hxx"
+//#include "sdiocmpt.hxx"
 #include "pglink.hxx"
-#include "strmname.h"
+//#include "strmname.h"
 #include "anminfo.hxx"
 
 #ifdef MAC
@@ -362,326 +362,7 @@ void SdPage::EndListenOutlineText()
     }
 }
 
-/*************************************************************************
-|*
-|* schreibt Member der SdPage
-|*
-\************************************************************************/
-
-//BFS02void SdPage::WriteData(SvStream& rOut) const
-//BFS02{
-//BFS02 FmFormPage::WriteData( rOut );
-//BFS02 // #90477# rOut.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
-//BFS02 rOut.SetStreamCharSet(GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion()));
-//BFS02
-//BFS02 if ( pModel->IsStreamingSdrModel() )
-//BFS02 {
-//BFS02     // Es wird nur das SdrModel gestreamt, nicht das SdDrawDocument!
-//BFS02     // Anwendungsfall: svdraw Clipboard-Format
-//BFS02     return;
-//BFS02 }
-//BFS02
-//BFS02 // letzter Parameter ist die aktuelle Versionsnummer des Codes
-//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, 7);
-//BFS02
-//BFS02 BOOL bDummy = TRUE;
-//BFS02 BOOL bManual = ( PRESCHANGE_MANUAL == ePresChange ); // nur der Kompat.halber
-//BFS02
-//BFS02 rOut<<bDummy;                      // ehem. bTemplateMode
-//BFS02 rOut<<bDummy;                      // ehem. bBackgroundMode
-//BFS02 rOut<<bDummy;                      // ehem. bOutlineMode
-//BFS02
-//BFS02 UINT16 nUI16Temp = (UINT16) eAutoLayout;
-//BFS02 rOut << nUI16Temp;
-//BFS02
-//BFS02 // Selektionskennung ist nicht persistent, wird nicht geschrieben
-//BFS02
-//BFS02 ULONG nULTemp;
-//BFS02 nULTemp = (ULONG)eFadeSpeed;
-//BFS02 rOut << nULTemp;
-//BFS02 nULTemp = (ULONG)eFadeEffect;
-//BFS02 rOut << nULTemp;
-//BFS02 rOut << bManual;
-//BFS02 rOut << nTime;
-//BFS02 rOut << bSoundOn;
-//BFS02 rOut << bExcluded;
-//BFS02 rOut.WriteByteString( aLayoutName );
-//BFS02
-//BFS02 // Liste der Praesentationsobjekt abspeichern
-//BFS02 UINT32 nUserCallCount = 0;
-//BFS02 UINT32 nCount = (UINT32)maPresObjList.size();
-//BFS02 UINT32 nValidCount = nCount;
-//BFS02 UINT32 nObj;
-//BFS02
-//BFS02 // NULL-Pointer rauszaehlen. Eigentlich haben die nichts in der Liste
-//BFS02 // verloren, aber es gibt leider Kundenfiles, in denen so was vorkommt.
-//BFS02 PresentationObjectList::const_iterator aIter = maPresObjList.begin();
-//BFS02 for (nObj = 0; nObj < nCount; nObj++)
-//BFS02 {
-//BFS02     SdrObject* pObj = (*aIter++).mpObject;
-//BFS02     if (!pObj)
-//BFS02         nValidCount--;
-//BFS02 }
-//BFS02 rOut << nValidCount;
-//BFS02
-//BFS02 aIter = maPresObjList.begin();
-//BFS02 for (nObj = 0; nObj < nCount; nObj++)
-//BFS02 {
-//BFS02     SdrObject* pObj = (*aIter++).mpObject;
-//BFS02     if (pObj)
-//BFS02     {
-//BFS02        rOut << pObj->GetOrdNum();
-//BFS02
-//BFS02        if ( ( (SdPage*) pObj->GetUserCall() ) == this)
-//BFS02        {
-//BFS02            nUserCallCount++;
-//BFS02        }
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 nUI16Temp = (UINT16)ePageKind;
-//BFS02 rOut << nUI16Temp;
-//BFS02
-//BFS02 // Liste der Praesentationsobjekt abspeichern,
-//BFS02 // welche einen UserCall auf die Seite haben
-//BFS02 rOut << nUserCallCount;
-//BFS02
-//BFS02 aIter = maPresObjList.begin();
-//BFS02 for (nObj = 0; nObj < nCount; nObj++)
-//BFS02 {
-//BFS02     SdrObject* pObj = (*aIter++).mpObject;
-//BFS02
-//BFS02     if ( pObj && ( (SdPage*) pObj->GetUserCall() ) == this)
-//BFS02     {
-//BFS02         rOut << pObj->GetOrdNum();
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 // #90477# INT16 nI16Temp = ::GetStoreCharSet( gsl_getSystemTextEncoding() );  // .EXEs vor 303 werten den aus
-//BFS02 INT16 nI16Temp = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
-//BFS02
-//BFS02 rOut << nI16Temp;
-//BFS02
-//BFS02 rOut.WriteByteString( INetURLObject::AbsToRel(aSoundFile,
-//BFS02                                               INetURLObject::WAS_ENCODED,
-//BFS02                                               INetURLObject::DECODE_UNAMBIGUOUS));
-//BFS02 rOut.WriteByteString( INetURLObject::AbsToRel(aFileName,
-//BFS02                                               INetURLObject::WAS_ENCODED,
-//BFS02                                               INetURLObject::DECODE_UNAMBIGUOUS));
-//BFS02 rOut.WriteByteString( aBookmarkName );
-//BFS02
-//BFS02 UINT16 nPaperBinTemp = nPaperBin;
-//BFS02 rOut << nPaperBinTemp;
-//BFS02
-//BFS02 UINT16 nOrientationTemp = (UINT16) eOrientation;
-//BFS02 rOut << nOrientationTemp;
-//BFS02
-//BFS02 UINT16 nPresChangeTemp = (UINT16) ePresChange; // ab 370 (IO-Version 7)
-//BFS02 rOut << nPresChangeTemp;
-//BFS02}
-
-/*************************************************************************
-|*
-|* liest Member der SdPage
-|*
-\************************************************************************/
-
-//BFS02void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS02{
-//BFS02 FmFormPage::ReadData( rHead, rIn );
-//BFS02
-//BFS02 // #90477# rIn.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
-//BFS02 rIn.SetStreamCharSet(GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion()));
-//BFS02
-//BFS02 if ( pModel->IsStreamingSdrModel() )
-//BFS02 {
-//BFS02     // Es wird nur das SdrModel gestreamt, nicht das SdDrawDocument!
-//BFS02     // Anwendungsfall: svdraw Clipboard-Format
-//BFS02     return;
-//BFS02 }
-//BFS02
-//BFS02 SdIOCompat aIO(rIn, STREAM_READ);
-//BFS02
-//BFS02 BOOL bDummy;
-//BFS02 BOOL bManual;
-//BFS02
-//BFS02 rIn>>bDummy;                      // ehem. bTemplateMode
-//BFS02 rIn>>bDummy;                      // ehem. bBackgroundMode
-//BFS02 rIn>>bDummy;                      // ehem. bOutlineMode
-//BFS02
-//BFS02 UINT16 nAutoLayout;
-//BFS02 rIn>>nAutoLayout;
-//BFS02 eAutoLayout = (AutoLayout) nAutoLayout;
-//BFS02
-//BFS02 // Selektionskennung ist nicht persistent, wird nicht gelesen
-//BFS02
-//BFS02 ULONG nULTemp;
-//BFS02 rIn >> nULTemp; eFadeSpeed  = (FadeSpeed)nULTemp;
-//BFS02 rIn >> nULTemp; eFadeEffect = (presentation::FadeEffect)nULTemp;
-//BFS02 rIn >> bManual;
-//BFS02 rIn >> nTime;
-//BFS02 rIn >> bSoundOn;
-//BFS02 rIn >> bExcluded;
-//BFS02 rIn.ReadByteString( aLayoutName );
-//BFS02
-//BFS02 // Liste der Praesentationsobjekt einlesen
-//BFS02 if (IsObjOrdNumsDirty())        // Ordnungsnummern muessen dafuer stimmen
-//BFS02     RecalcObjOrdNums();
-//BFS02
-//BFS02 UINT32 nCount;
-//BFS02 UINT32 nOrdNum;
-//BFS02 UINT32 nObj;
-//BFS02
-//BFS02 rIn >> nCount;
-//BFS02 std::vector< SdrObject* > aPresObjList;
-//BFS02
-//BFS02 for(nObj = 0; nObj < nCount; nObj++)
-//BFS02 {
-//BFS02     rIn >> nOrdNum;
-//BFS02     SdrObject* pObj = GetObj(nOrdNum);
-//BFS02
-//BFS02     aPresObjList.push_back(pObj);
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=1 eingelesen
-//BFS02 if (aIO.GetVersion() >= 1)
-//BFS02 {
-//BFS02     UINT16 nPageKind;
-//BFS02     rIn >> nPageKind;
-//BFS02     ePageKind = (PageKind) nPageKind;
-//BFS02 }
-//BFS02
-//BFS02 for(nObj = 0; nObj < aPresObjList.size(); nObj++ )
-//BFS02 {
-//BFS02     PresObjKind ePresKind = PRESOBJ_NONE;
-//BFS02
-//BFS02     SdrObject* pObj = aPresObjList[nObj];
-//BFS02     SdrObjKind eSdrObjKind = (SdrObjKind) pObj->GetObjIdentifier();
-//BFS02
-//BFS02     switch( eSdrObjKind )
-//BFS02     {
-//BFS02     case OBJ_TITLETEXT:
-//BFS02         ePresKind = PRESOBJ_TITLE;
-//BFS02         break;
-//BFS02     case OBJ_OUTLINETEXT:
-//BFS02         ePresKind = PRESOBJ_OUTLINE;
-//BFS02         break;
-//BFS02     case OBJ_TEXT:
-//BFS02         if( ePageKind == PK_NOTES )
-//BFS02             ePresKind = PRESOBJ_NOTES;
-//BFS02         else
-//BFS02             ePresKind = PRESOBJ_TEXT;
-//BFS02         break;
-//BFS02     case OBJ_RECT:
-//BFS02         ePresKind = PRESOBJ_BACKGROUND;
-//BFS02         break;
-//BFS02     case OBJ_GRAF:
-//BFS02         ePresKind = PRESOBJ_GRAPHIC;
-//BFS02         break;
-//BFS02     case OBJ_OLE2:
-//BFS02         ePresKind = PRESOBJ_OBJECT;
-//BFS02         break;
-//BFS02     case OBJ_PAGE:
-//BFS02         if( ePageKind == PK_NOTES )
-//BFS02             ePresKind = PRESOBJ_PAGE;
-//BFS02         else
-//BFS02             ePresKind = PRESOBJ_HANDOUT;
-//BFS02         break;
-//BFS02     }
-//BFS02     InsertPresObj( pObj, ePresKind );
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=2 eingelesen
-//BFS02 if (aIO.GetVersion() >=2)
-//BFS02 {
-//BFS02     UINT32 nUserCallCount;
-//BFS02     UINT32 nUserCallOrdNum;
-//BFS02     rIn >> nUserCallCount;
-//BFS02     for (UINT32 nObj = 0; nObj < nUserCallCount; nObj++)
-//BFS02     {
-//BFS02         rIn >> nUserCallOrdNum;
-//BFS02         SdrObject* pObj = GetObj(nUserCallOrdNum);
-//BFS02
-//BFS02         if (pObj)
-//BFS02             pObj->SetUserCall(this);
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=3 eingelesen
-//BFS02 if (aIO.GetVersion() >=3)
-//BFS02 {
-//BFS02     INT16 nCharSet;
-//BFS02     rIn >> nCharSet;    // nur Einlesen, Konvertierung ab 303 durch Stream
-//BFS02
-//BFS02     // #90477# eCharSet = (CharSet) nCharSet;
-//BFS02     eCharSet = (CharSet)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
-//BFS02
-//BFS02     String aSoundFileRel;
-//BFS02     rIn.ReadByteString( aSoundFileRel );
-//BFS02     INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aSoundFileRel, FALSE,
-//BFS02                                                      INetURLObject::WAS_ENCODED,
-//BFS02                                                      INetURLObject::DECODE_UNAMBIGUOUS));
-//BFS02     aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=4 eingelesen
-//BFS02 if (aIO.GetVersion() >=4)
-//BFS02 {
-//BFS02     String aFileNameRel;
-//BFS02     rIn.ReadByteString( aFileNameRel );
-//BFS02     INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aFileNameRel, FALSE,
-//BFS02                                                      INetURLObject::WAS_ENCODED,
-//BFS02                                                      INetURLObject::DECODE_UNAMBIGUOUS));
-//BFS02     aFileName = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-//BFS02
-//BFS02     rIn.ReadByteString( aBookmarkName );
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=5 eingelesen
-//BFS02 if (aIO.GetVersion() >=5)
-//BFS02 {
-//BFS02     UINT16 nPaperBinTemp;
-//BFS02     rIn >> nPaperBinTemp;
-//BFS02     nPaperBin = nPaperBinTemp;
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=6 eingelesen
-//BFS02 if (aIO.GetVersion() >=6)
-//BFS02 {
-//BFS02     UINT16 nOrientationTemp;
-//BFS02     rIn >> nOrientationTemp;
-//BFS02     eOrientation = (Orientation) nOrientationTemp;
-//BFS02 }
-//BFS02 else
-//BFS02 {
-//BFS02     // In aelteren Versionen wird die Orientation aus der Seitengroesse bestimmt
-//BFS02     Size aPageSize(GetSize());
-//BFS02
-//BFS02     if (aPageSize.Width() > aPageSize.Height())
-//BFS02     {
-//BFS02         eOrientation = ORIENTATION_LANDSCAPE;
-//BFS02     }
-//BFS02     else
-//BFS02     {
-//BFS02         eOrientation = ORIENTATION_PORTRAIT;
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 // ab hier werden Daten der Versionen >=7 eingelesen
-//BFS02 if( aIO.GetVersion() >= 7 )
-//BFS02 {
-//BFS02     UINT16 nPresChangeTemp;
-//BFS02     rIn >> nPresChangeTemp;
-//BFS02     ePresChange = (PresChange) nPresChangeTemp;
-//BFS02 }
-//BFS02 else
-//BFS02     ePresChange = ( bManual ? PRESCHANGE_MANUAL : PRESCHANGE_AUTO );
-//BFS02}
-
-
-
-/*************************************************************************
-|*
+/*
 |* Neues Model setzen
 |*
 \************************************************************************/
@@ -695,8 +376,6 @@ void SdPage::SetModel(SdrModel* pNewModel)
 
     ConnectLink();
 }
-
-
 
 /*************************************************************************
 |*
@@ -719,8 +398,6 @@ FASTBOOL SdPage::IsReadOnly() const
 
     return (bReadOnly);
 }
-
-
 
 /*************************************************************************
 |*
@@ -776,7 +453,6 @@ void SdPage::DisconnectLink()
     }
 }
 
-
 /*************************************************************************
 |*
 |* Copy-Ctor
@@ -800,8 +476,11 @@ SdPage::SdPage(const SdPage& rSrcPage) :
     }
 
     bSelected           = FALSE;
-    eFadeSpeed          = rSrcPage.eFadeSpeed;
-    eFadeEffect         = rSrcPage.eFadeEffect;
+    mnTransitionType    = rSrcPage.mnTransitionType;
+    mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
+    mbTransitionDirection = rSrcPage.mbTransitionDirection;
+    mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
+    mfTransitionDuration = rSrcPage.mfTransitionDuration;
     ePresChange         = rSrcPage.ePresChange;
     nTime               = rSrcPage.nTime;
     bSoundOn            = rSrcPage.bSoundOn;
@@ -916,4 +595,3 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
         ((SvXMLAttrContainerItem*)pItem)->QueryValue( rAttributes, 0 );
     }
 }
-
