@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #define _HIERARCHYPROVIDER_HXX
 
+#include <hash_map>
+
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
@@ -90,22 +92,51 @@ namespace hierarchy_ucp {
 #define HIERARCHY_LINK_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-link"
 
-#define HIERARCHY_ROOT_FOLDER_URL \
-                HIERARCHY_URL_SCHEME ":/"
-#define HIERARCHY_ROOT_FOLDER_URL_LENGTH ( HIERARCHY_URL_SCHEME_LENGTH + 2 )
+//=========================================================================
+
+struct ConfigProviderMapEntry
+{
+    com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory > xConfigProvider;
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess > xRootReadAccess;
+    bool bTriedToGetRootReadAccess;  // #82494#
+
+    ConfigProviderMapEntry() : bTriedToGetRootReadAccess( false ) {}
+};
+
+struct equalString
+{
+    bool operator()(
+        const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+    {
+        return !!( rKey1 == rKey2 );
+    }
+};
+
+struct hashString
+{
+    size_t operator()( const rtl::OUString & rName ) const
+    {
+        return rName.hashCode();
+    }
+};
+
+typedef std::hash_map
+<
+    rtl::OUString,  // servcie specifier
+    ConfigProviderMapEntry,
+    hashString,
+    equalString
+>
+ConfigProviderMap;
 
 //=========================================================================
 
 class HierarchyContentProvider : public ::ucb::ContentProviderImplHelper,
                                  public com::sun::star::lang::XInitialization
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >
-            m_xConfigProvider;
-    com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >
-            m_xRootConfigReadNameAccess;
-    sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
+    ConfigProviderMap m_aConfigProviderMap;
 
 public:
     HierarchyContentProvider(
@@ -138,16 +169,12 @@ public:
                ::com::sun::star::uno::RuntimeException );
 
     // Non-Interface methods
-    static rtl::OUString encodeURL( const rtl::OUString& rURL );
-    static rtl::OUString encodeSegment( const rtl::OUString& rSegment );
-    static rtl::OUString decodeSegment( const rtl::OUString& rSegment );
-
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory >
-    getConfigProvider();
+    getConfigProvider( const rtl::OUString & rServiceSpecifier );
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
-    getRootConfigReadNameAccess();
+    getRootConfigReadNameAccess( const rtl::OUString & rServiceSpecifier );
 };
 
 } // namespace hierarchy_ucp

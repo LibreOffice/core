@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-namespace com { namespace sun { namespace star {
-    namespace util {
-        class XChangesBatch;
-        class XStringEscape;
-    }
-    namespace container {
-        class XHierarchicalNameAccess;
-    }
-} } }
+namespace com { namespace sun { namespace star { namespace container {
+    class XHierarchicalNameAccess;
+} } } }
 
 namespace hierarchy_ucp
 {
@@ -106,6 +100,7 @@ class HierarchyContentProvider;
 
 class HierarchyEntry
 {
+    ::rtl::OUString m_aServiceSpecifier;
     ::rtl::OUString m_aName;
     ::rtl::OUString m_aPath;
     ::osl::Mutex    m_aMutex;

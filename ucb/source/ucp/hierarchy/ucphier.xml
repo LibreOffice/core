@@ -59,7 +59,7 @@
     <type> com.sun.star.beans.XPropertySetInfoChangeNotifier   </type>
     <type> com.sun.star.container.XChild                       </type>
     <type> com.sun.star.container.XHierarchicalNameAccess      </type>
-    <type> com.sun.star.container.XNameAccess                  </type>
+    <type> com.sun.star.container.XNameContainer               </type>
     <type> com.sun.star.lang.XComponent                        </type>
     <type> com.sun.star.lang.XInitialization                   </type>
     <type> com.sun.star.lang.XMultiServiceFactory              </type>
@@ -92,5 +92,6 @@
     <type> com.sun.star.ucb.XPersistentPropertySet             </type>
     <type> com.sun.star.uno.XWeak                              </type>
     <type> com.sun.star.util.XChangesBatch                     </type>
+    <type> com.sun.star.util.XChangesNotifier                  </type>
     <type> com.sun.star.util.XStringEscape                     </type>
 </module-description>

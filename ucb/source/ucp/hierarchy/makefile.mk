@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 08:18:54 $
+#   last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,8 +85,9 @@ SLOFILES=\
     $(SLO)$/hierarchycontent.obj		\
     $(SLO)$/hierarchycontentcaps.obj	\
     $(SLO)$/hierarchydatasupplier.obj	\
-    $(SLO)$/hierarchyurlcode.obj		\
-    $(SLO)$/dynamicresultset.obj
+        $(SLO)$/dynamicresultset.obj            \
+        $(SLO)$/hierarchydatasource.obj         \
+        $(SLO)$/hierarchyuri.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-06 08:35:20 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,29 +72,29 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
 #endif
+#ifndef _HIERARCHYDATASOURCE_HXX
+#include "hierarchydatasource.hxx"
+#endif
 
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
-                           const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
+                           const rtl::OUString & rImplementationName,
+                           uno::Sequence< rtl::OUString > const & rServiceNames )
 {
-    OUString aKeyName( OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
-    Reference< XRegistryKey > xKey;
+    uno::Reference< registry::XRegistryKey > xKey;
     try
     {
-        xKey = static_cast< XRegistryKey * >(
+        xKey = static_cast< registry::XRegistryKey * >(
                                     pRegistryKey )->createKey( aKeyName );
     }
-    catch ( InvalidRegistryException const & )
+    catch ( registry::InvalidRegistryException const & )
     {
     }
 
@@ -109,7 +109,7 @@ static sal_Bool writeInfo( void * pRegistryKey,
         {
             xKey->createKey( rServiceNames[ n ] );
         }
-        catch ( InvalidRegistryException const & )
+        catch ( registry::InvalidRegistryException const & )
         {
             bSuccess = sal_False;
             break;
@@ -137,7 +137,15 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
     writeInfo( pRegistryKey,
                HierarchyContentProvider::getImplementationName_Static(),
-               HierarchyContentProvider::getSupportedServiceNames_Static() );
+               HierarchyContentProvider::getSupportedServiceNames_Static() ) &&
+
+    //////////////////////////////////////////////////////////////////////
+    // Hierarchy Data Source.
+    //////////////////////////////////////////////////////////////////////
+
+    writeInfo( pRegistryKey,
+               HierarchyDataSource::getImplementationName_Static(),
+               HierarchyDataSource::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================
@@ -146,9 +154,10 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
 
-    Reference< XMultiServiceFactory > xSMgr(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-    Reference< XSingleServiceFactory > xFactory;
+    uno::Reference< lang::XMultiServiceFactory > xSMgr(
+            reinterpret_cast< lang::XMultiServiceFactory * >(
+                pServiceManager ) );
+    uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
     // Hierarchy Content Provider.
@@ -158,6 +167,16 @@ extern "C" void * SAL_CALL component_getFactory(
                 compareToAscii( pImplName ) == 0 )
     {
         xFactory = HierarchyContentProvider::createServiceFactory( xSMgr );
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Hierarchy Data Source.
+    //////////////////////////////////////////////////////////////////////
+
+    else if ( HierarchyDataSource::getImplementationName_Static().
+                compareToAscii( pImplName ) == 0 )
+    {
+        xFactory = HierarchyDataSource::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////

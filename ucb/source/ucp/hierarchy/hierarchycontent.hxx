@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@ class HierarchyContent : public ::ucb::ContentImplHelper,
     ContentKind                m_eKind;
     ContentState               m_eState;
     HierarchyContentProvider*  m_pProvider;
+    bool                       m_bCheckedReadOnly;
+    bool                       m_bIsReadOnly;
 
 private:
     HierarchyContent(
@@ -186,6 +188,8 @@ private:
 
     void setKind( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier );
+
+    bool isReadOnly();
 
     sal_Bool isFolder() const { return ( m_eKind > LINK ); }
 
