@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_javafilter.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:21:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ End
 Module gid_Module_Optional_Javafilter_Palm_Aportisdoc
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_PALM_APORTISDOC);
     ParentID = gid_Module_Optional_Javafilter_Palm;
-    Files = ( gid_File_Oo_Office_Filter_Palm_Pkg, gid_File_Jar_Aportisdoc );
+    Files = ( gid_File_Jar_Aportisdoc, gid_File_Registry_Spool_Oo_TypeDetection_Palm_Filters_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Palm_Types_Xcu );
     Minimal = NO;
     Default = NO;
     Styles (en-US) = ();
@@ -124,7 +124,7 @@ End
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_WORD);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
-    Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pocketword,gid_File_Oo_Office_Filter_Pocketword_Pkg );
+    Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pocketword,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Filters_Xcu );
     Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
@@ -139,7 +139,7 @@ End
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_EXCEL);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
-    Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pexcel,gid_File_Oo_Office_Filter_Pocketexcel_Pkg );
+    Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pexcel,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu );
     Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
