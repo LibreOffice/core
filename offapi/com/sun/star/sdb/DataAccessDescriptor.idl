@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAccessDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:34:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,33 @@ published service DataAccessDescriptor
 {
     /** specifies the name of the datasource to access.
 
-        <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given,
-        then an <member>ActiveConnection</member> is reuqired.</p>
+        <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given
+        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are emtpy, then an <member>ActiveConnection</member> is reuqired.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
      */
     [optional, property] string DataSourceName;
+
+    /** specifies the URL of the database file.
+
+        <p>This database location is usually used to create a <type>Connection</type>. If no DatabaseLocation is given
+        and the <member>ConnectionResource</member> is emtpy, then an <member>ActiveConnection</member> is reuqired.</p>
+
+        @see com::sun::star::sdb::DatabaseContext
+        @see ActiveConnection
+     */
+    [optional, property] string DatabaseLocation;
+
+    /** specifies the database URL which locates a database driver.
+
+        <p>This database URL is usually used to create a <type>Connection</type>. If no ConnectionResource is given,
+        then an <member>ActiveConnection</member> is reuqired.</p>
+
+        @see com::sun::star::sdb::DatabaseContext
+        @see ActiveConnection
+     */
+    [optional, property] string ConnectionResource;
 
     /** is a connection to use.
 
