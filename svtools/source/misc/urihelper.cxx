@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-03-07 16:01:31 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 12:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
@@ -131,54 +134,66 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
     if (rTheRelURIRef.Len() != 0 && rTheRelURIRef.GetChar(0) == '#')
         return toUniString(rTheRelURIRef);
 
-    bool bWasAbsolute;
-    INetURLObject
-        aAbsURIRef(rTheBaseURIRef.smartRel2Abs(rTheRelURIRef, bWasAbsolute,
-                                               bIgnoreFragment,
-                                               eEncodeMechanism, eCharset,
-                                               bRelativeNonURIs, eStyle));
-    if (bCheckFileExists && !bWasAbsolute
-        && (aAbsURIRef.GetProtocol() == INET_PROT_FILE
-            || aAbsURIRef.GetProtocol() == INET_PROT_VND_SUN_STAR_WFS))
+    INetURLObject aAbsURIRef;
+    if (rTheBaseURIRef.HasError())
+        aAbsURIRef.
+            SetSmartURL(rTheRelURIRef, eEncodeMechanism, eCharset, eStyle);
+    else
     {
-        INetURLObject aNonFileURIRef;
-        aNonFileURIRef.SetSmartURL(rTheRelURIRef, eEncodeMechanism, eCharset,
-                                   eStyle);
-        if (!aNonFileURIRef.HasError()
-            && aNonFileURIRef.GetProtocol() != INET_PROT_FILE)
+        bool bWasAbsolute;
+        aAbsURIRef = rTheBaseURIRef.smartRel2Abs(rTheRelURIRef,
+                                                 bWasAbsolute,
+                                                 bIgnoreFragment,
+                                                 eEncodeMechanism,
+                                                 eCharset,
+                                                 bRelativeNonURIs,
+                                                 eStyle);
+        if (bCheckFileExists
+            && !bWasAbsolute
+            && (aAbsURIRef.GetProtocol() == INET_PROT_FILE
+                || aAbsURIRef.GetProtocol() == INET_PROT_VND_SUN_STAR_WFS))
         {
-            bool bMaybeFile = false;
-            if (rMaybeFileHdl.IsSet())
+            INetURLObject aNonFileURIRef;
+            aNonFileURIRef.SetSmartURL(rTheRelURIRef,
+                                       eEncodeMechanism,
+                                       eCharset,
+                                       eStyle);
+            if (!aNonFileURIRef.HasError()
+                && aNonFileURIRef.GetProtocol() != INET_PROT_FILE)
             {
-                UniString aFilePath(toUniString(rTheRelURIRef));
-                bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
-            }
-            if (!bMaybeFile)
-            {
-                sal_Bool bExists = false;
-                try
+                bool bMaybeFile = false;
+                if (rMaybeFileHdl.IsSet())
                 {
-                    ::ucb::Content(
-                                aAbsURIRef.
-                                    GetMainURL(INetURLObject::NO_DECODE),
-                                uno::Reference<
-                                    com::sun::star::ucb::XCommandEnvironment >
-                                        ()).
-                            getPropertyValue(rtl::OUString(
-                                                 RTL_CONSTASCII_USTRINGPARAM(
-                                                     "Exists")))
-                        >>= bExists;
+                    UniString aFilePath(toUniString(rTheRelURIRef));
+                    bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
                 }
-                catch (com::sun::star::ucb::ContentCreationException const &)
+                if (!bMaybeFile)
                 {
-                    DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
+                    //TODO! there is no property "Exists," is there?
+                    sal_Bool bExists = false;
+                    try
+                    {
+                        ::ucb::Content(aAbsURIRef.
+                                           GetMainURL(
+                                               INetURLObject::NO_DECODE),
+                                       0).
+                                getPropertyValue(
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                      "Exists")))
+                            >>= bExists;
+                    }
+                    catch (com::sun::star::ucb::ContentCreationException const
+                               &)
+                    {
+                        DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
+                    }
+                    catch (uno::Exception const &)
+                    {
+                        DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
+                    }
+                    if (!bExists)
+                        aAbsURIRef = aNonFileURIRef;
                 }
-                catch (uno::Exception const &)
-                {
-                    DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
-                }
-                if (!bExists)
-                    aAbsURIRef = aNonFileURIRef;
             }
         }
     }
