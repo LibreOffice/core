@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:00:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,7 @@ public:
 
                                 // Use this only in the XML import,
                                 // takes ownership of cell.
-            void                SetNewCell( ScBaseCell* pNewCell, ScDocument* pDoc );
+            void                SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted );
 
                                 // These functions should be protected but for
                                 // the XML import they are public.
