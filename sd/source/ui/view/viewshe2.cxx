@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,6 @@
 #ifndef _SCH_DLL_HXX //autogen
 #include <sch/schdll.hxx>
 #endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
-#ifndef _SMDLL_HXX //autogen
-#include <starmath/smdll.hxx>
-#endif
-#ifndef SC_SCDLL_HXX //autogen
-#include <sc/scdll.hxx>
-#endif
 #ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
 #endif
@@ -121,14 +112,9 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#include <sot/clsids.hxx>
+
 #include "misc.hxx"
-
-#ifdef STARIMAGE_AVAILABLE
-#ifndef _SIMDLL_HXX
-#include <sim2/simdll.hxx>
-#endif
-#endif
-
 #include "strings.hrc"
 #include "app.hrc"
 
@@ -1048,37 +1034,24 @@ BOOL SdViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         * Leeres OLE-Objekt mit OLE-Objekt versehen
         **********************************************************/
         SvInPlaceObjectRef aNewIPObj;
-        SvStorageRef aStor = new SvStorage( String(), STREAM_STD_READWRITE);
-
         String aName = pObj->GetProgName();
 
         if( aName.EqualsAscii( "StarChart" ))
         {
-            aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
+            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
         }
         else if( aName.EqualsAscii( "StarOrg" ))
         {
             // z.Z noch Nummer vom StarChart!
-            aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
+            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
         }
         else if( aName.EqualsAscii( "StarCalc" ))
         {
-            aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             ScModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
+            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SC_CLASSID ) );
         }
-#ifdef STARIMAGE_AVAILABLE
-        else if( aName.EqualsAscii( "StarImage" ))
-        {
-            aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
-        }
-#endif
         else if( aName.EqualsAscii( "StarMath" ))
         {
-            aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SmModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
+            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SM_CLASSID ) );
         }
         else
         {
