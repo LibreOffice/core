@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:22 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: oj $ $Date: 2002-08-19 07:47:22 $ $Revision: 1.19 $
+ // $Author: kz $ $Date: 2002-09-05 13:53:10 $ $Revision: 1.20 $
  //
  //---------------------------------------------------------------------------
 
@@ -99,10 +99,10 @@ ModalDialog DLG_ROWHEIGHT
         Text [ english_us ] = "~Height" ;
         Text [ italian ] = "Alte~zza" ;
         Text [ spanish ] = "~Altura" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ swedish ] = "H~öjd" ;
-        Text [ danish ] = "Højde" ;
+        Text [ danish ] = "H~øjde" ;
         Text [ portuguese_brazilian ] = "H?e" ;
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "é«˜åº¦(~H)";
@@ -114,8 +114,9 @@ ModalDialog DLG_ROWHEIGHT
         Text[ greek ] = "¾~øïò";
         Text[ korean ] = "ë†’ì´(~H)";
         Text[ turkish ] = "Yükseklik";
-        Text[ catalan ] = "~Altura";
+        Text[ catalan ] = "~Alçada";
         Text[ finnish ] = "~Korkeus";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
     };
     MetricField MF_VALUE
     {
@@ -142,21 +143,22 @@ ModalDialog DLG_ROWHEIGHT
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "~Áõôüìáôá";
         Text[ dutch ] = "~Automatisch";
-        Text[ french ] = "~Automatique";
+        Text[ french ] = "Automatique";
         Text[ spanish ] = "~Automático";
-        Text[ italian ] = "~Automatico";
-        Text[ danish ] = "Automatisk";
+        Text[ italian ] = "Automatico";
+        Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "~Automatiskt";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "~Standardwert";
         Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ(~A)";
+        Text[ korean ] = "ìë™(~A)";
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ turkish ] = "Otomatik";
-        Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "A~utomaattinen";
+        Text[ catalan ] = "~Automàtic";
+        Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     OKButton PB_OK
     {
@@ -195,8 +197,9 @@ ModalDialog DLG_ROWHEIGHT
     Text[ greek ] = "¾øïò ãñáììŞò";
     Text[ korean ] = "í–‰ ë†’ì´";
     Text[ turkish ] = "Satır yüksekliği";
-    Text[ catalan ] = "Altura de fila";
+    Text[ catalan ] = "Alçada de la fila";
     Text[ finnish ] = "Rivin korkeus";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¹à¸–à¸§";
 };
 ModalDialog DLG_COLWIDTH
 {
@@ -216,11 +219,11 @@ ModalDialog DLG_COLWIDTH
         Text [ ENGLISH ] = "Width" ;
         Text [ english_us ] = "~Width" ;
         Text [ italian ] = "~Larghezza" ;
-        Text [ spanish ] = "An~cho" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
         Text [ dutch ] = "~Breedte" ;
         Text [ swedish ] = "~Bredd" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ portuguese_brazilian ] = "Breite" ;
         Text [ portuguese ] = "~Largura" ;
         Text[ chinese_simplified ] = "å®½åº¦(~W)";
@@ -232,8 +235,9 @@ ModalDialog DLG_COLWIDTH
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "Genişlik";
-        Text[ catalan ] = "An~cho";
-        Text[ finnish ] = "Le~veys";
+        Text[ catalan ] = "~Amplada";
+        Text[ finnish ] = "~Leveys";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField MF_VALUE
     {
@@ -260,21 +264,22 @@ ModalDialog DLG_COLWIDTH
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "~Áõôüìáôá";
         Text[ dutch ] = "~Automatisch";
-        Text[ french ] = "~Automatique";
+        Text[ french ] = "Automatique";
         Text[ spanish ] = "~Automático";
-        Text[ italian ] = "~Automatico";
-        Text[ danish ] = "Automatisk";
+        Text[ italian ] = "Automatico";
+        Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "~Automatiskt";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "~Standardwert";
         Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ(~A)";
+        Text[ korean ] = "ìë™(~A)";
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ turkish ] = "Otomatik";
-        Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "A~utomaattinen";
+        Text[ catalan ] = "~Automàtic";
+        Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     OKButton PB_OK
     {
@@ -313,8 +318,9 @@ ModalDialog DLG_COLWIDTH
     Text[ greek ] = "ĞëÜôïò óôŞëçò";
     Text[ korean ] = "ì—´ ë„ˆë¹„";
     Text[ turkish ] = "Sütun genişliği";
-    Text[ catalan ] = "Ancho de columna";
+    Text[ catalan ] = "Amplada de la columna";
     Text[ finnish ] = "Sarakkeen leveys";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸‚à¸­à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 
 
