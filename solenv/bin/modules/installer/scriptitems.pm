@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cp $ $Date: 2004-08-05 17:05:04 $
+#   last change: $Author: rt $ $Date: 2004-08-12 09:00:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -343,9 +343,11 @@ sub replace_setup_variables
 
     # string $buildid, which is used to replace the setup variable <buildid>
 
-    # doesn't contain buildid if not built without "-m $LAST_MINOR"
-    # my $buildidstring = $installer::globals::build . $installer::globals::minor . "(Build:" . $installer::globals::buildid . ")";
-    my $buildidstring = $installer::globals::build . $ENV{LAST_MINOR} . "(Build:" . $installer::globals::buildid . ")";
+    my $localminor = "";
+    if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
+    else { $localminor = $installer::globals::minor; }
+
+    my $buildidstring = $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . ")";
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
