@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-11 11:15:29 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 11:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4301,8 +4301,9 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPol
     TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
 
     // build BaseRect
+    Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
     Rectangle aBaseRect(
-        Point(FRound(aTranslate.X()), FRound(aTranslate.Y())),
+        aPoint,
         Size(FRound(aScale.X()), FRound(aScale.Y())));
 
     // set BaseRect

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-11 11:15:29 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 11:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2151,7 +2151,9 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     aGeo.RecalcTan();
 
     // build and set BaseRect (use scale)
-    Rectangle aBaseRect(Point(), Size(FRound(aScale.X()), FRound(aScale.Y())));
+    Point aPoint = Point();
+    Size  aSize(FRound(aScale.X()), FRound(aScale.Y()));
+    Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
     // shear?
