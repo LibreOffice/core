@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 09:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,12 +1478,33 @@ void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                 long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
                                 ScPreviewLocationData& rLocationData )
 {
+    //  get MapMode for drawing objects (same MapMode as in ScOutputData::DrawingLayer)
+
+    Point aLogPos = OutputDevice::LogicToLogic(Point(nScrX,nScrY), aOffsetMode, aLogicMode);
+    long nLogStX = aLogPos.X();
+    long nLogStY = aLogPos.Y();
+
+    USHORT nCol, nRow;
+    Point aOffset;
+    for (nCol=0; nCol<nX1; nCol++)
+        aOffset.X() -= pDoc->GetColWidth( nCol, nPrintTab );
+    for (nRow=0; nRow<nY1; nRow++)
+        aOffset.Y() -= pDoc->GetRowHeight( nRow, nPrintTab );
+
+    Point aMMOffset( aOffset );
+    aMMOffset.X() = (long)(aMMOffset.X() * HMM_PER_TWIPS);
+    aMMOffset.Y() = (long)(aMMOffset.Y() * HMM_PER_TWIPS);
+    aMMOffset += Point( nLogStX, nLogStY );
+    MapMode aDrawMapMode( MAP_100TH_MM, aMMOffset, aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
+
+    //  get pixel rectangle
+
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
     long nPosX = nScrX - nOneX;
-    for (USHORT nCol=nX1; nCol<=nX2; nCol++)
+    for (nCol=nX1; nCol<=nX2; nCol++)
     {
         USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
         if (nDocW)
@@ -1491,7 +1512,7 @@ void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     }
 
     long nPosY = nScrY - nOneY;
-    for (USHORT nRow=nY1; nRow<=nY2; nRow++)
+    for (nRow=nY1; nRow<=nY2; nRow++)
     {
         USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
         if (nDocH)
@@ -1499,7 +1520,8 @@ void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     }
 
     Rectangle aCellRect( nScrX, nScrY, nPosX, nPosY );
-    rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ), bRepCol, bRepRow );
+    rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ),
+                                bRepCol, bRepRow, aDrawMapMode );
 }
 
 void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,

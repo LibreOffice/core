@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 07:56:26 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 09:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #endif
 
 
+#define SC_PREVIEW_MAXRANGES    4
+
 class Window;
 class String;
 class Point;
@@ -125,6 +127,9 @@ class ScPreviewLocationData
     Window*     pWindow;
     ScDocument* pDoc;
     MapMode     aCellMapMode;
+    MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];
+    Rectangle   aDrawRectangle[SC_PREVIEW_MAXRANGES];
+    USHORT      nDrawRanges;
     USHORT      nPrintTab;
     List        aEntries;
 
@@ -138,7 +143,8 @@ public:
     void    SetCellMapMode( const MapMode& rMapMode );
     void    SetPrintTab( USHORT nNew );
     void    Clear();
-    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow );
+    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
+                            const MapMode& rDrawMap );
     void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
     void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow );
     void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
@@ -149,6 +155,9 @@ public:
 
     //  Get info on visible columns/rows in the visible area
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
+
+    USHORT  GetDrawRanges() const   { return nDrawRanges; }
+    void    GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode ) const;
 
     BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
     BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;

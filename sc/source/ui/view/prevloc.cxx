@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 07:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 09:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,9 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
 
 ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, Window* pWin ) :
     pDoc( pDocument ),
-    pWindow( pWin )
+    pWindow( pWin ),
+    nDrawRanges( 0 ),
+    nPrintTab( 0 )
 {
 }
 
@@ -232,12 +234,23 @@ void ScPreviewLocationData::Clear()
         pEntry = aEntries.Next();
     }
     aEntries.Clear();
+
+    nDrawRanges = 0;
 }
 
-void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow )
+void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
+                                            const MapMode& rDrawMap )
 {
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
     aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow ) );
+
+    DBG_ASSERT( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
+    if ( nDrawRanges < SC_PREVIEW_MAXRANGES )
+    {
+        aDrawRectangle[nDrawRanges] = rRect;
+        aDrawMapMode[nDrawRanges] = rDrawMap;
+        ++nDrawRanges;
+    }
 }
 
 void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol )
@@ -282,6 +295,16 @@ void ScPreviewLocationData::AddNoteText( const Rectangle& rRect, const ScAddress
 }
 
 //------------------------------------------------------------------
+
+void ScPreviewLocationData::GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode ) const
+{
+    DBG_ASSERT( nPos < nDrawRanges, "wrong position" );
+    if ( nPos < nDrawRanges )
+    {
+        rPixelRect = aDrawRectangle[nPos];
+        rMapMode = aDrawMapMode[nPos];
+    }
+}
 
 ScPreviewLocationEntry* lcl_GetEntryByPosition( const List& rEntries, const Point& rPos, ScPreviewLocationType eType )
 {
