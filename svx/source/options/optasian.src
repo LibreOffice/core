@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:38:40 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "~V鋝tlig text och interpunktion";
         Text[ polish ] = "Tekst i interpunkcja zachodnia";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
-        Text[ japanese ] = "敿妏塸帤偲嬫愗傝暥帤(~T)";
+        Text[ japanese ] = "敿妏塸帤偲嬫愗傝婰崋(~T)";
         Text[ korean ] = "舅颇邯 巩磊 咆胶飘客 备滴痢(~T)";
         Text[ chinese_simplified ] = "西文和标点符号(~T)";
         Text[ chinese_traditional ] = "﹁ゅ㎝夹翴才腹(~T)";
@@ -466,6 +466,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Proxy";
     Text[ finnish ] = "V鋖ityspalvelin";
 };
+
 
 
 
