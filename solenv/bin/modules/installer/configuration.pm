@@ -2,9 +2,9 @@
 #
 #   $RCSfile: configuration.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:25:24 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:14:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -517,6 +517,7 @@ sub insert_into_config_file
     elsif ( $styles =~ /CFG_NUMERIC/ ) { $valuetype = "int"; }
     elsif ( $styles =~ /CFG_BOOLEAN/ ) { $valuetype = "boolean"; }
     elsif ( $styles =~ /CFG_STRINGLIST/ ) { $valuetype = "string-list"; }
+#   elsif ( $styles =~ /CFG_STRINGLIST/ ) { $valuetype = "string-list oor:separator=\"\|\""; }
     else
     {
         installer::exiter::exit_program("ERROR: Unknown configuration value type: $styles", "insert_into_config_file");
@@ -590,6 +591,19 @@ sub insert_into_config_file
 
     $value =~ s/^\s*\<//;
     $value =~ s/\>\s*$//;
+
+    # Fake: substituting german umlauts
+
+    $value =~ s/\ä/ae/;
+    $value =~ s/\ö/oe/;
+    $value =~ s/\ü/ue/;
+    $value =~ s/\Ä/AE/;
+    $value =~ s/\Ö/OE/;
+    $value =~ s/\Ü/UE/;
+
+    # Fake: to be removed after integration of JBs CWS
+
+    if ( $value eq 'com.sun.star.comp.sdbc.ODBCDriver|com.sun.star.comp.sdbc.JDBCDriver|com.sun.star.comp.sdbcx.adabas.ext.ODriver' ) { $value =~ s/\|/ /g; }
 
     my $newvalueline;
 
