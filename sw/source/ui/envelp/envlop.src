@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 21:14:44 $
+ *  last change: $Author: kz $ $Date: 2002-04-30 09:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog DLG_ENV
                 Text[ turkish ] = "Zarf";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sobre";
+                Text[ thai ] = "ซองจดหมาย";
             };
             PageItem
             {
@@ -142,6 +143,7 @@ TabDialog DLG_ENV
                 Text[ arabic ] = "�������";
                 Text[ catalan ] = "Formato";
                 Text[ finnish ] = "Muoto";
+                Text[ thai ] = "รูปแบบ";
             };
             PageItem
             {
@@ -171,6 +173,7 @@ TabDialog DLG_ENV
                 Text[ turkish ] = "Yaz�c�";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Impresora";
+                Text[ thai ] = "เครื่องพิมพ์";
             };
         };
     };
@@ -202,6 +205,7 @@ TabDialog DLG_ENV
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nsertar";
+        Text[ thai ] = "แ~ทรก";
     };
     String ST_CHANGE
     {
@@ -231,6 +235,7 @@ TabDialog DLG_ENV
         Text[ turkish ] = "D~e�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
+        Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     Text[ chinese_simplified ] = "信封";
     Text[ russian ] = "�������";
@@ -243,6 +248,7 @@ TabDialog DLG_ENV
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
+    Text[ thai ] = "ซองจดหมาย";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -280,6 +286,7 @@ TabPage TP_ENV_ENV
         Text[ turkish ] = "Al�c�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Destinatario";
+        Text[ thai ] = "ผู้รั~บจดหมาย";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -320,6 +327,7 @@ TabPage TP_ENV_ENV
         Text[ turkish ] = "Veritaban�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de datos";
+        Text[ thai ] = "ฐานข้อมูล";
     };
     ListBox LB_DATABASE
     {
@@ -356,6 +364,7 @@ TabPage TP_ENV_ENV
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tabla";
         Text[ finnish ] = "Taulukko";
+        Text[ thai ] = "ตาราง";
     };
     ListBox LB_TABLE
     {
@@ -400,6 +409,7 @@ TabPage TP_ENV_ENV
         Text[ turkish ] = "Veritaban� alan�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campo base de datos";
+        Text[ thai ] = "เขตข้อมูลของ~ฐานข้อมูล";
     };
     ListBox LB_DBFIELD
     {
@@ -438,6 +448,7 @@ TabPage TP_ENV_ENV
         Text[ turkish ] = "G�nderen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~emitente";
+        Text[ thai ] = "~ผู้ส่ง";
     };
     MultiLineEdit EDT_SEND
     {
@@ -484,6 +495,7 @@ String STR_DOC_TITLE
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
+    Text[ thai ] = "ซองจดหมาย";
 };
 
 
