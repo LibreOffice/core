@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 10:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
     ByteString aStr( "circle " );
 
     AppendCERNCoords( aCenter, aStr );
-    aStr += nRadius;
+    aStr += ByteString::CreateFromInt32(nRadius);
     aStr += ' ';
     AppendCERNURL( aStr );
 
