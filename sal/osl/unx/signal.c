@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 11:22:23 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,38 @@ static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum,
 /* Call crash reporter  */
 /*****************************************************************************/
 
+/* Helper function to encode and write a string to a stream */
+
+static int fputs_xml( const char *string, FILE *stream )
+{
+    int result = 0;
+
+    while ( result >= 0 && *string )
+    {
+        switch( *string )
+        {
+        case '&':
+            result = fputs( "&amp;", stream );
+            break;
+        case '<':
+            result = fputs( "&lt;", stream );
+            break;
+        case '>':
+            result = fputs( "&gt;", stream );
+            break;
+        default:
+            result = fputc( *string, stream );
+            break;
+        }
+
+        string++;
+    }
+
+    return result;
+}
+
+/* Create intermediate files and run crash reporter */
+
 static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
@@ -479,11 +511,14 @@ static int ReportCrash( int Signal )
 
                             if ( dl_info.dli_sname && dl_info.dli_saddr )
                             {
-                                fprintf( stackout, " (%s + 0x%x)",
-                                    dl_info.dli_sname,
+                                fputs( " (", stackout );
+                                fputs_xml( dl_info.dli_sname, stackout );
+                                fprintf( stackout, " + 0x%x)",
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr );
-                                fprintf( xmlout, " ordinal=\"%s+0x%x\"",
-                                    dl_info.dli_sname,
+
+                                fputs( " ordinal=\"", xmlout );
+                                fputs_xml( dl_info.dli_sname, xmlout );
+                                fprintf( xmlout, "+0x%x\"",
                                     (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
                             }
 
@@ -513,11 +548,22 @@ static int ReportCrash( int Signal )
                 }
 
 #if defined( LINUX )
-                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d -xml %s -chksum %s -stack %s", getpid(), Signal, pXMLTempName, pChecksumTempName, pStackTempName );
-#elif defined ( SOLARIS ) && defined( SPARC )
-                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d -xml %s -chksum %s", getpid(), Signal, pXMLTempName, pChecksumTempName );
+                if ( pXMLTempName && pChecksumTempName && pStackTempName )
+                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                        "crash_report -p %d -s %d -xml %s -chksum %s -stack %s",
+                        getpid(),
+                        Signal,
+                        pXMLTempName,
+                        pChecksumTempName,
+                        pStackTempName );
+#elif defined ( SOLARIS )
+                if ( pXMLTempName && pChecksumTempName )
+                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                        "crash_report -p %d -s %d -xml %s -chksum %s",
+                        getpid(),
+                        Signal,
+                        pXMLTempName,
+                        pChecksumTempName );
 #endif
 
 #else /* defined INCLUDE BACKTRACE */
