@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-21 15:42:21 $
+ *  last change: $Author: kr $ $Date: 2001-07-30 10:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ void SjApplet2_Impl::init(Window * pParentWin,
         aVMPtr >>= nP;
         _pJVM = (JavaVM*)nP;
     }
+
+    if(!_pJVM) // did we get a vm?
+        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("sjapplet_impl.cxx: couldn't get a java vm")), Reference<XInterface>());
 
       TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
 

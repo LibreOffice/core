@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-10 13:56:22 $
+ *  last change: $Author: kr $ $Date: 2001-07-30 10:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,38 +98,56 @@ SjApplet2::~SjApplet2()
 //=========================================================================
 void SjApplet2::Init(Window * pParentWin, const INetURLObject & rDocBase, const SvCommandList & rCmdList)
 {
-    _pImpl->init(pParentWin, getProcessServiceFactory(), rDocBase, rCmdList);
+    try {
+        if(_pImpl)
+            _pImpl->init(pParentWin, getProcessServiceFactory(), rDocBase, rCmdList);
+    }
+    catch(RuntimeException & runtimeException) {
+#ifdef DEBUG
+        OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_TRACE("sjapplet.cxx: SjApplet2::Init - exception occurred: %s\n", message.getStr());
+#endif
+
+        delete _pImpl;
+        _pImpl = 0;
+    }
 }
 
 //=========================================================================
 void SjApplet2::setSizePixel( const Size & rSize )
 {
-    _pImpl->setSize(rSize);
+    if(_pImpl)
+        _pImpl->setSize(rSize);
 }
 
 void SjApplet2::appletRestart()
 {
-    _pImpl->restart();
+    if(_pImpl)
+        _pImpl->restart();
 }
 
 void SjApplet2::appletReload()
 {
-    _pImpl->reload();
+    if(_pImpl)
+        _pImpl->reload();
 }
 
 void SjApplet2::appletStart()
 {
-    _pImpl->start();
+    if(_pImpl)
+        _pImpl->start();
 }
 
 void SjApplet2::appletStop()
 {
-    _pImpl->stop();
+    if(_pImpl)
+        _pImpl->stop();
 }
 
 void SjApplet2::appletClose()
 {
-    _pImpl->close();
+    if(_pImpl)
+        _pImpl->close();
 }
 
 // Fuer SO3, Wrapper fuer Applet liefern
