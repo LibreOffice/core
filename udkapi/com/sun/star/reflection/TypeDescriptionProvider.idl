@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:57:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ published service TypeDescriptionProvider
     /** Interface for creating enumerations for type descriptions supported
         by this <type>TypeDescriptionProvider</type>
 
-    @since OOo1.1.2
+    @since OOo 1.1.2
     */
     [optional] interface XTypeDescriptionEnumerationAccess;
 };
