@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:45:30 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,63 +360,63 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     const SfxItemSet* pFlySet)
 {
-    SwFrmFmt* pFmt = 0;
-    if( !(nIniFlags & WW8FL_NO_OLE ))
+    ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
+    GrafikCtor();
+
+    Graphic aGraph;
+    SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet);
+
+    // create flyset
+    SfxItemSet* pTempSet = 0;
+    if (!pFlySet)
     {
-        Graphic aGraph;
-        SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet);
+        pTempSet = new SfxItemSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1);
 
-        // create flyset
-        SfxItemSet* pTempSet = 0;
-        if( !pFlySet )
+        pFlySet = pTempSet;
+
+        // Abstand/Umrandung raus
+        if (!mbNewDoc)
+            Reader::ResetFrmFmtAttrs( *pTempSet );
+
+        SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+        aAnchor.SetAnchor( pPaM->GetPoint() );
+        pTempSet->Put( aAnchor );
+
+        const Size aSizeTwip = OutputDevice::LogicToLogic(
+            aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
+
+        pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
+            aSizeTwip.Height() ) );
+        pTempSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+
+        if( pSFlyPara )
         {
-            pTempSet = new SfxItemSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
-                RES_FRMATR_END-1);
-
-            pFlySet = pTempSet;
-
-            // Abstand/Umrandung raus
-            if (!mbNewDoc)
-                Reader::ResetFrmFmtAttrs( *pTempSet );
-
-            SwFmtAnchor aAnchor( FLY_IN_CNTNT );
-            aAnchor.SetAnchor( pPaM->GetPoint() );
-            pTempSet->Put( aAnchor );
-
-            const Size aSizeTwip = OutputDevice::LogicToLogic(
-                aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
-
-            pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
-                aSizeTwip.Height() ) );
-            pTempSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
-
-            if( pSFlyPara )
-            {
-                // OLE im Rahmen ?  ok, Rahmen auf Bildgroesse vergroessern (
-                // nur wenn Auto-Breite )
-                pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
-            }
+            // OLE im Rahmen ?  ok, Rahmen auf Bildgroesse vergroessern (
+            // nur wenn Auto-Breite )
+            pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
         }
-
-        if (pRet)       // Ole-Object wurde eingefuegt
-        {
-            if (pRet->ISA(SdrOle2Obj))
-            {
-                pFmt = InsertOle(*((SdrOle2Obj*)pRet),*pFlySet);
-                delete pRet;        // das brauchen wir nicht mehr
-            }
-            else
-                pFmt = rDoc.Insert(*pPaM, *pRet, pFlySet);
-        }
-        else if (
-                    GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
-                    GRAPHIC_BITMAP == aGraph.GetType()
-                )
-        {
-            pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,0);
-        }
-        delete pTempSet;
     }
+
+    SwFrmFmt* pFmt = 0;
+    if (pRet)       // Ole-Object wurde eingefuegt
+    {
+        if (pRet->ISA(SdrOle2Obj))
+        {
+            pFmt = InsertOle(*((SdrOle2Obj*)pRet),*pFlySet);
+            delete pRet;        // das brauchen wir nicht mehr
+        }
+        else
+            pFmt = rDoc.Insert(*pPaM, *pRet, pFlySet);
+    }
+    else if (
+                GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
+                GRAPHIC_BITMAP == aGraph.GetType()
+            )
+    {
+        pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,0);
+    }
+    delete pTempSet;
     return pFmt;
 }
 
@@ -449,103 +449,94 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     const Graphic* pGrf, const SfxItemSet* pFlySet )
 {
     SdrObject* pRet = 0;
-    if( !(nIniFlags & WW8FL_NO_OLE ))
+    ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
+
+    long nX=0, nY=0;                // nX, nY is graphic size
+    bool bOleOk = true;
+
+    String aSrcStgName = '_';
+    // ergibt Name "_4711"
+    aSrcStgName += String::CreateFromInt32( nObjLocFc );
+
+    SvStorageRef xSrc0 = pStg->OpenStorage(CREATE_CONST_ASC(SL::aObjectPool));
+
+    if (pGrf)
     {
-        ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
+        rGraph = *pGrf;
+        const Size aSizeTwip = OutputDevice::LogicToLogic(
+            rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
+        nX = aSizeTwip.Width();
+        nY = aSizeTwip.Height();
+    }
+    else
+    {
+        SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
+            STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
-        ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
+        GDIMetaFile aWMF;
 
-        long nX=0, nY=0;                // nX, nY is graphic size
-        bool bOleOk = true;
-
-        String aSrcStgName = '_';
-        // ergibt Name "_4711"
-        aSrcStgName += String::CreateFromInt32( nObjLocFc );
-
-        SvStorageRef xSrc0 = pStg->OpenStorage(CREATE_CONST_ASC(
-            SL::aObjectPool));
-
-        if (pGrf)
+        if (ImportOleWMF(xSrc1,aWMF,nX,nY))
+            rGraph = Graphic( aWMF );
+        else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
         {
-            rGraph = *pGrf;
+            // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
             const Size aSizeTwip = OutputDevice::LogicToLogic(
                 rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
             nX = aSizeTwip.Width();
             nY = aSizeTwip.Height();
+            // PICT: kein WMF da -> Grafik statt OLE
+            bOleOk = false;
         }
-        else
+    }       // StorageStreams wieder zu
+
+
+    Rectangle aRect(0, 0, nX, nY);
+
+    if (pFlySet)
+    {
+        if (const SwFmtFrmSize* pSize =
+            (const SwFmtFrmSize*)pFlySet->GetItem(RES_FRM_SIZE, false))
         {
-            SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
-                STREAM_READWRITE| STREAM_SHARE_DENYALL );
-
-            GDIMetaFile aWMF;
-
-            if (ImportOleWMF(xSrc1,aWMF,nX,nY))
-                rGraph = Graphic( aWMF );
-            else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
-            {
-                // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
-                const Size aSizeTwip = OutputDevice::LogicToLogic(
-                    rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
-                nX = aSizeTwip.Width();
-                nY = aSizeTwip.Height();
-                // PICT: kein WMF da -> Grafik statt OLE
-                bOleOk = false;
-            }
-        }       // StorageStreams wieder zu
-
-
-        Rectangle aRect(0, 0, nX, nY);
-
-        if (pFlySet)
-        {
-            if (const SwFmtFrmSize* pSize =
-                (const SwFmtFrmSize*)pFlySet->GetItem(RES_FRM_SIZE, false))
-            {
-                aRect.SetSize(pSize->GetSize());
-            }
+            aRect.SetSize(pSize->GetSize());
         }
+    }
 
-        SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
-            STREAM_READWRITE| STREAM_SHARE_DENYALL );
+    SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
+        STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
-        if (!(bIsHeader || bIsFooter))
+    if (!(bIsHeader || bIsFooter))
+    {
+        uno::Reference< drawing::XShape > xRef;
+        if (pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
         {
-            //Can't put them in headers/footers :-(
-            if(!pFormImpl)
-                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-            uno::Reference< drawing::XShape > xRef;
-            if (pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
-            {
-                pRet = GetSdrObjectFromXShape(xRef);
-                pRet->SetLogicRect(aRect);
-                return pRet;
-            }
+            pRet = GetSdrObjectFromXShape(xRef);
+            pRet->SetLogicRect(aRect);
+            return pRet;
         }
+    }
 
-        if (GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
-            GRAPHIC_BITMAP == rGraph.GetType())
+    if (GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
+        GRAPHIC_BITMAP == rGraph.GetType())
+    {
+        ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
+
+        if (bOleOk)
         {
-            ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
-
-            if (bOleOk)
+            ULONG nOldPos = pDataStream->Tell();
+            pDataStream->Seek(STREAM_SEEK_TO_END);
+            SvStream *pTmpData = 0;
+            if (nObjLocFc < pDataStream->Tell())
             {
-                ULONG nOldPos = pDataStream->Tell();
-                pDataStream->Seek(STREAM_SEEK_TO_END);
-                SvStream *pTmpData = 0;
-                if (nObjLocFc < pDataStream->Tell())
-                {
-                    pTmpData = pDataStream;
-                    pTmpData->Seek( nObjLocFc );
-                }
-
-                SvStorageRef xDst0( rDoc.GetDocShell()->GetStorage() );
-
-                pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                    aSrcStgName, xSrc0, xDst0, rGraph, aRect, pTmpData,
-                    SwMSDffManager::GetFilterFlags());
-                pDataStream->Seek( nOldPos );
+                pTmpData = pDataStream;
+                pTmpData->Seek( nObjLocFc );
             }
+
+            SvStorageRef xDst0( rDoc.GetDocShell()->GetStorage() );
+
+            pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
+                aSrcStgName, xSrc0, xDst0, rGraph, aRect, pTmpData,
+                SwMSDffManager::GetFilterFlags());
+            pDataStream->Seek( nOldPos );
         }
     }
     return pRet;
