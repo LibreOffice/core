@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,14 +1068,16 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
             if (pSectionExport->IsMuteSection(xCurrentTextSection))
             {
                 while (rContEnum->hasMoreElements() &&
-                       pSectionExport->IsMuteSection(xTxtCntnt, sal_True))
+                       pSectionExport->IsInSection( xCurrentTextSection,
+                                                    xTxtCntnt, sal_True ))
                 {
                     Any aAny = rContEnum->nextElement();
                     aAny >>= xTxtCntnt;
                 }
                 // the first non-mute element still needs to be processed
                 bHoldElement =
-                    ! pSectionExport->IsMuteSection(xTxtCntnt, sal_False);
+                    ! pSectionExport->IsInSection( xCurrentTextSection,
+                                                   xTxtCntnt, sal_False );
             }
             else
                 exportParagraph( xTxtCntnt, bAutoStyles, bProgress,

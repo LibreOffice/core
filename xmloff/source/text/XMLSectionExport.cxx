@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ XMLSectionExport::XMLSectionExport(
         sUserIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_user_index)),
         sIndexBody(RTL_CONSTASCII_USTRINGPARAM(sXML_index_body)),
         sIndexTitle(RTL_CONSTASCII_USTRINGPARAM(sXML_index_title)),
+        sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
+        sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
         sEmpty()
 {
 }
@@ -1693,8 +1695,8 @@ sal_Bool XMLSectionExport::IsMuteSection(
 
     // a section is mute if
     // 1) it exists
-    // 2) it is (or is contained in) a linked section
-    // 3) the SaveLinkedSections flag (at the export) is false
+    // 2) the SaveLinkedSections flag (at the export) is false
+    // 3) the IsGlobalDocumentSection property is true
 
     if ( (!rExport.IsSaveLinkedSections()) && rSection.is() )
     {
@@ -1707,18 +1709,8 @@ sal_Bool XMLSectionExport::IsMuteSection(
             Reference<XPropertySet> xPropSet(aSection, UNO_QUERY);
             if (xPropSet.is())
             {
-                Any aAny = xPropSet->getPropertyValue(sFileLink);
-                SectionFileLink aFileLink;
-                aAny >>= aFileLink;
-
-                aAny = xPropSet->getPropertyValue(sLinkRegion);
-                OUString sRegionName;
-                aAny >>= sRegionName;
-
-                // section is linked if any string is non-zero
-                bRet |= (aFileLink.FileURL.getLength() > 0) ||
-                    (aFileLink.FilterName.getLength() > 0) ||
-                    (sRegionName.getLength() > 0);
+                Any aAny = xPropSet->getPropertyValue(sIsGlobalDocumentSection);
+                bRet |= *(sal_Bool*)aAny.getValue();
 
                 // early out if result is known
                 if (bRet)
@@ -1736,8 +1728,6 @@ sal_Bool XMLSectionExport::IsMuteSection(
     const Reference<XTextContent> & rSection,
     sal_Bool bDefault)
 {
-    OUString sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection"));
-
     // default: like default argument
     sal_Bool bRet = bDefault;
 
@@ -1751,6 +1741,38 @@ sal_Bool XMLSectionExport::IsMuteSection(
             aAny >>= xSection;
 
             bRet = IsMuteSection(xSection);
+        }
+        // else: return default
+    }
+    // else: return default
+
+    return bRet;
+}
+
+sal_Bool XMLSectionExport::IsInSection(
+    const Reference<XTextSection> & rEnclosingSection,
+    const Reference<XTextContent> & rContent,
+    sal_Bool bDefault)
+{
+    // default: like default argument
+    sal_Bool bRet = bDefault;
+
+    Reference<XPropertySet> xPropSet(rContent, UNO_QUERY);
+    if (xPropSet.is())
+    {
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
+        {
+            Any aAny = xPropSet->getPropertyValue(sTextSection);
+            Reference<XTextSection> xSection;
+            aAny >>= xSection;
+
+            // now walk chain of text sections
+            do
+            {
+                bRet = (rEnclosingSection == xSection);
+                xSection = xSection->getParentSection();
+            }
+            while (!bRet && xSection.is());
         }
         // else: return default
     }

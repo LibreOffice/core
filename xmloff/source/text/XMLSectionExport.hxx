@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ class XMLSectionExport
     const ::rtl::OUString sIndexBody;
     const ::rtl::OUString sIndexTitle;
 
+    const ::rtl::OUString sTextSection;
+    const ::rtl::OUString sIsGlobalDocumentSection;
+
     const ::rtl::OUString sEmpty;
 
     SvXMLExport& rExport;
@@ -223,6 +226,18 @@ public:
     sal_Bool IsMuteSection(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rSection,
+        /// return value if this content doesn't support the section property
+        sal_Bool bDefault);
+
+    /**
+     * Determine whether rContent is contained in rEnclosingSection. If the
+     * current section of rContent can not be determined, return bDefault.
+     */
+    sal_Bool IsInSection(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextSection > & rEnclosingSection,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextContent > & rContent,
         /// return value if this content doesn't support the section property
         sal_Bool bDefault);
 
