@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:20 $
+ *  last change: $Author: gt $ $Date: 2002-08-29 12:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ Image IMG_ONE_LEFT_H
     };
     MaskColor = Color
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
 };
 
@@ -91,9 +91,9 @@ Image IMG_ALL_LEFT_H
     };
     MaskColor = Color
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
 };
 
@@ -105,9 +105,9 @@ Image IMG_ONE_RIGHT_H
     };
     MaskColor = Color
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
 };
 
@@ -119,9 +119,9 @@ Image IMG_ALL_RIGHT_H
     };
     MaskColor = Color
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
 };
 
@@ -308,9 +308,9 @@ ModalDialog DLG_DBASE_INDEXES
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
             };
         };
     };
@@ -327,9 +327,9 @@ ModalDialog DLG_DBASE_INDEXES
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
             };
         };
     };
@@ -346,9 +346,9 @@ ModalDialog DLG_DBASE_INDEXES
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
             };
         };
     };
@@ -365,9 +365,9 @@ ModalDialog DLG_DBASE_INDEXES
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
             };
         };
     };
@@ -392,6 +392,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2002/08/19 07:47:20  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.21  2002/06/13 12:49:00  kz
  *  Merge SRX642: 13.06.02 - 14:48:31
  *
