@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:42 $
+ *  last change: $Author: dbo $ $Date: 2003-06-02 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Reflection::ConstructorInfo * m_default_ctor_uno_MethodAttribute;
     ::System::Reflection::ConstructorInfo * get_ctor_uno_MethodAttribute();
     ::System::Type * m_type_Any;
-    ::System::Type * m_type_Any_ref;
     ::System::Reflection::FieldInfo * m_field_Any_VOID;
     void emit_Any_boxed_ctor(
         ::System::Reflection::Emit::TypeBuilder * type_builder,

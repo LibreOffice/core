@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2003-05-08 12:40:59 $
+ *  last change: $Author: dbo $ $Date: 2003-06-02 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,6 @@ void TypeEmitter::emit_Any_boxed_ctor(
             m_type_Any = type_builder->CreateType();
         }
         m_field_Any_VOID = m_type_Any->GetField( S"VOID" );
-        m_type_Any_ref = get_type( S"uno.Any&", true );
     }
     return m_type_Any;
 }
@@ -1051,10 +1050,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     {
                         FieldInfo * field = fields[ pos ];
                         all_member_names[ member_pos ] = field->get_Name();
-                        ::System::Type * field_type = field->get_FieldType();
-                        if (field_type->get_FullName()->Equals( S"uno.Any" ))
-                            field_type = m_type_Any_ref;
-                        all_param_types[ member_pos ] = field_type;
+                        all_param_types[ member_pos ] = field->get_FieldType();
                         ++member_pos;
                     }
                 }
@@ -1095,8 +1091,6 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             members[ member_pos ] =
                 type_builder->DefineField(
                     field_name, field_type, FieldAttributes::Public );
-            if (field_type->get_FullName()->Equals( S"uno.Any" ))
-                field_type = m_type_Any_ref;
             // add to all_members
             all_member_names[ all_members_length + member_pos ] = field_name;
             all_param_types[ all_members_length + member_pos ] = field_type;
@@ -1205,10 +1199,6 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         {
             ctor_code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
             emit_ldarg( ctor_code, member_pos + base_members_length +1 );
-            ::System::Type * type = all_param_types[
-                all_members_length - members_length + member_pos ];
-            if (type->get_FullName()->Equals( S"uno.Any&" ))
-                ctor_code->Emit( Emit::OpCodes::Ldobj, m_type_Any );
             ctor_code->Emit( Emit::OpCodes::Stfld, members[ member_pos ] );
         }
         ctor_code->Emit( Emit::OpCodes::Ret );
@@ -1358,7 +1348,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     parameters[ params_pos ];
                 ::System::Type * param_type = get_type( xParam->getType() );
                 ::System::String * param_type_name = param_type->get_FullName();
-                if (xParam->isOut() || param_type_name->Equals( S"uno.Any" ))
+                if (xParam->isOut())
                 {
                     param_type = get_type(
                         ::System::String::Concat(
@@ -1451,9 +1441,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 parameters = new ::System::Type * __gc [ 1 ];
                 ::System::String * attribute_type_name =
                       attribute_type->get_FullName();
-                parameters[ 0 ] = (attribute_type_name->Equals( S"uno.Any" )
-                                   ? m_type_Any_ref
-                                   : attribute_type);
+                parameters[ 0 ] = attribute_type;
                 method_builder =
                     type_builder->DefineMethod(
                         ustring_to_String( OUSTR("set") +
@@ -1593,7 +1581,6 @@ TypeEmitter::TypeEmitter(
       m_type_Exception( 0 ),
       m_type_RuntimeException( 0 ),
       m_type_Any( 0 ),
-      m_type_Any_ref( 0 ),
       m_field_Any_VOID( 0 ),
       m_ctor_uno_MethodAttribute( 0 ),
       m_default_ctor_uno_MethodAttribute( 0 ),
