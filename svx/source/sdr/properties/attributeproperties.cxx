@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:47:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,11 @@
 
 #ifndef _SVDPAGE_HXX
 #include <svdpage.hxx>
+#endif
+
+// #114265#
+#ifndef _SFXSMPLHINT_HXX
+#include <svtools/smplhint.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -331,6 +336,7 @@ namespace sdr
                 // set item
                 if(pItem)
                 {
+                    // force ItemSet
                     GetObjectItemSet();
                     mpItemSet->Put(*pItem);
 
@@ -343,7 +349,7 @@ namespace sdr
             }
             else
             {
-                // clear item
+                // clear item if ItemSet exists
                 if(mpItemSet)
                 {
                     mpItemSet->ClearItem(nWhich);
@@ -370,6 +376,9 @@ namespace sdr
         {
             // call parent
             DefaultProperties::PreProcessSave();
+
+            // force ItemSet
+            GetObjectItemSet();
 
             // prepare SetItems for storage
             const SfxItemSet& rSet = *mpItemSet;
@@ -768,7 +777,15 @@ namespace sdr
             // #111111#
             // When it's the BackgroundObject, set the MasterPage to changed to
             // get a refresh for the evtl. changed BackgroundStyle
-            if(GetSdrObject().IsMasterPageBackgroundObject())
+
+            // #114265#
+            // To only invalidate the page when the StyleSheet change happens,
+            // some more rigid testing is necessary.
+            const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
+
+            if(pSimpleHint
+                && pSimpleHint->GetId() == SFX_HINT_DATACHANGED
+                && GetSdrObject().IsMasterPageBackgroundObject())
             {
                 GetSdrObject().GetPage()->ActionChanged();
             }
