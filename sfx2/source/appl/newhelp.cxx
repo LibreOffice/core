@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 13:38:25 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 11:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,8 +1159,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
 
-    SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-
     aToolBox.InsertItem( TBI_INDEX, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX ) ) );
     aToolBox.SetQuickHelpText( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
     aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
@@ -1169,8 +1167,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
     aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
     aToolBox.SetQuickHelpText( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
-/*! aToolBox.InsertItem( TBI_CONTEXT, Image( SfxResId(IMG_HELP_TOOLBOX_CONTEXT) ) );
-    aToolBox.SetQuickHelpText( TBI_CONTEXT, DEFINE_CONST_UNICODE("Context") );*/
     aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
     aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
     aToolBox.InsertItem( TBI_BOOKMARKS, Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
@@ -1505,6 +1501,14 @@ void SfxHelpWindow_Impl::SetFactory( const String& rFactory, sal_Bool bStart )
 
 // -----------------------------------------------------------------------
 
+void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
+{
+    INetURLObject aObj( rURL );
+    SetFactory( aObj.GetHost(), sal_True );
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
 {
     switch ( nActionId )
@@ -1604,38 +1608,6 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
             }
             break;
         }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void SfxHelpWindow_Impl::FirstOpenMessage()
-{
-    Update();
-    URL aURL;
-    aURL.Complete = SvtPathOptions().GetWorkPath();
-    aURL.Complete += DEFINE_CONST_UNICODE("/dummy.htm");
-    PARSE_URL( aURL );
-    Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
-    if ( xDisp.is() )
-    {
-        Sequence < PropertyValue > aArgs( 2 );
-        aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
-        BOOL bReadOnly = TRUE;
-        aArgs[0].Value <<= bReadOnly;
-
-        SvStream* pStream = new SvCacheStream;
-        String aMsg( SfxResId( STR_HELP_FIRST_MESSAGE ) );
-        String aHtml( SfxResId( STR_HELP_FIRST_HTML ) );
-        aHtml.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), aMsg );
-        ByteString aHtmlStr( aHtml, RTL_TEXTENCODING_UTF8 );
-        *pStream << aHtmlStr.GetBuffer();
-        SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
-        Reference < ::com::sun::star::io::XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
-        aArgs[1].Name = String( DEFINE_CONST_UNICODE("InputStream") );
-        aArgs[1].Value <<= xStream;
-
-        xDisp->dispatch( aURL, aArgs );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-21 08:27:19 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 11:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,10 +527,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
             else
             {
                 pHlpWin->setContainerWindow( xTask->getContainerWindow() );
-//                pHlpWin->SetFactory( aHelpModuleName, sal_True );
+                pHlpWin->SetHelpURL( rURL );
                 xTask->getContainerWindow()->setVisible( sal_True );
-
-                pHlpWin->FirstOpenMessage();
             }
         }
     }
@@ -545,9 +543,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
                                 DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
         if ( xDispatch.is() )
-        {
             xDispatch->dispatch( aURL, aProps );
-        }
 
         return TRUE;
     }
