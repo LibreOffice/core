@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-09 10:03:16 $
+ *  last change: $Author: obr $ $Date: 2001-04-09 10:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
     /* the static global mutex instance */
     static oslMutexImpl globalMutexImpl = {
         PTHREAD_MUTEX_INITIALIZER,
-        PTHREAD_NONE,
+        PTHREAD_NONE_INIT,
         0
     };
 
