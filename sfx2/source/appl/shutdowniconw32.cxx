@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-20 15:51:11 $
+ *  last change: $Author: pb $ $Date: 2001-08-29 09:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ static HMENU createSystrayMenu( )
         pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPRESS_URL ) ) ), pos, true );
     addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
         pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
-    addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEXT_TEMPLATE,
+    addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_OPEN,   0, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, false );
