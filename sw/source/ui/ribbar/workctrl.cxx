@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:23:21 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::frame;
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxInsertCtrl, SfxImageItem);
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxBoolItem );
@@ -228,36 +227,16 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
 
 SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
 {
-//  USHORT nWinResId, nTbxResId;
     if(GetSlotId() == FN_INSERT_CTRL)
     {
         OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
         createAndPositionSubToolBar( aToolBarResStr );
-//      nWinResId = RID_INSERT_CTRL;
-//      nTbxResId = TBX_INSERT;
     }
     else /* FN_INSERT_OBJ_CTRL */
     {
         OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertobjectbar" ));
         createAndPositionSubToolBar( aToolBarResStr );
-//      nWinResId = RID_INSERT_OBJ_CTRL;
-//      nTbxResId = TBX_OBJ_INSERT;
     }
-/*
-    WindowAlign eAlign = WINDOWALIGN_TOP;
-    if(GetToolBox().IsHorizontal())
-        eAlign = WINDOWALIGN_LEFT;
-    SwPopupWindowTbxMgr *pWin = new SwPopupWindowTbxMgr( GetId(),
-                                    eAlign,
-                                    SW_RES(nWinResId),
-                                    SW_RES(nTbxResId),
-                                    GetBindings());
-
-    pWin->StartPopupMode(&GetToolBox(), TRUE);
-    pWin->StartSelection();
-    pWin->Show();
-    return pWin;
-*/
     return NULL;
 }
 
@@ -467,7 +446,6 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
                 pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertFieldCtrl" );
         }
         Dispatch( rtl::OUString::createFromAscii( pChar ),aArgs );
-//        GetBindings().Execute( nId );
     }
     else
     {
@@ -694,15 +672,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     }
     else
     {
-/*
-        const SfxPoolItem* aItems[2];
-*/
         SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
-/*
-        aItems[0] = &aNext;
-        aItems[1] = NULL;
-        GetBindings().ExecuteSynchron(FN_SCROLL_NEXT_PREV,aItems, 0L);
-*/
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollNextPrev" ));
@@ -917,10 +887,6 @@ void    SwZoomBox_Impl::Select()
             nZoom = MAXZOOM;
 
         SfxUInt16Item aItem( nSlotId, nZoom );
-/*
-        rBindings.GetDispatcher()->Execute(
-            nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-*/
         if ( FN_PREVIEW_ZOOM == nSlotId )
         {
             Any a;
@@ -1041,5 +1007,3 @@ Window* SwPreviewZoomControl::CreateItemWindow( Window *pParent )
     SwZoomBox_Impl* pRet = new SwZoomBox_Impl( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
     return pRet;
 }
-
-
