@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:31:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,9 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
         bReturn = StartExecute();
         aSDF.Close();
     }
-
+    else{
+        printf("ERROR: Can't create file %s\n", rDestinationFile.GetBuffer() );
+    }
     nMode = LOCALIZE_NONE;
     return bReturn;
 }
