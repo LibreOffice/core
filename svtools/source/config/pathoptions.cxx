@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 16:20:17 $
+ *  last change: $Author: pb $ $Date: 2000-12-04 12:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,9 @@ private:
     const String&   GetPath( StrPtr pPtr );
     void            SetPath( StrPtr pPtr, const String& rNewPath );
 
+    rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
+    rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
+
 public:
                     SvtPathOptions_Impl();
 
@@ -351,6 +354,74 @@ void SvtPathOptions_Impl::SetPath( StrPtr pPtr, const String& rNewPath )
     ::osl::MutexGuard aGuard( m_aMutex );
     this->*pPtr = rNewPath;
     SetModified();
+}
+
+// -----------------------------------------------------------------------
+
+OUString SvtPathOptions_Impl::SubstituteAndConvert( const rtl::OUString& rPath )
+{
+    OUString aPath = SubstVar( rPath );
+    OUString aSysPath;
+    if ( FileBase::getSystemPathFromNormalizedPath( aPath, aSysPath ) == FileBase::E_None )
+        aPath = aSysPath;
+    return aPath;
+}
+
+//-------------------------------------------------------------------------
+
+OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
+{
+    OUString aTmp, aPath = rPath;
+    sal_Int32 nIdx = -1;
+
+    if ( FileBase::getNormalizedPathFromFileURL( aPath, aTmp )  == FileBase::E_None )
+    {
+        nIdx = aPath.indexOf( m_aProgURL );
+        while ( nIdx != -1 )
+        {
+            aPath = aPath.replaceAt( nIdx, m_aProgURL.Len(), SUBSTITUTE_PROGURL );
+            nIdx = aPath.indexOf( m_aProgURL );
+        }
+        nIdx = aPath.indexOf( m_aUserURL );
+        while ( nIdx != -1 )
+        {
+            aPath = aPath.replaceAt( nIdx, m_aUserURL.Len(), SUBSTITUTE_USERURL );
+            nIdx = aPath.indexOf( m_aUserURL );
+        }
+        nIdx = aPath.indexOf( m_aInstURL );
+        while ( nIdx != -1 )
+        {
+            aPath = aPath.replaceAt( nIdx, m_aInstURL.Len(), SUBSTITUTE_INSTURL );
+            nIdx = aPath.indexOf( m_aInstURL );
+        }
+    }
+    else
+    {
+        if ( FileBase::normalizePath( aPath, aTmp )  == FileBase::E_None )
+        {
+            aPath = aTmp;
+            nIdx = aPath.indexOf( m_aProgPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aProgPath.Len(), SUBSTITUTE_PROGPATH );
+                nIdx = aPath.indexOf( m_aProgPath );
+            }
+            nIdx = aPath.indexOf( m_aUserPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aUserPath.Len(), SUBSTITUTE_USERPATH );
+                nIdx = aPath.indexOf( m_aUserPath );
+            }
+            nIdx = aPath.indexOf( m_aInstPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aInstPath.Len(), SUBSTITUTE_INSTPATH );
+                nIdx = aPath.indexOf( m_aInstPath );
+            }
+        }
+    }
+
+    return aPath;
 }
 
 // -----------------------------------------------------------------------
@@ -671,18 +742,17 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 
 // -----------------------------------------------------------------------
 
-SvtPathOptions_Impl::SvtPathOptions_Impl() :
-#if SUPD < 614
-    ConfigItem( ASCII_STR("Office.Common/Path") )
-#else
-    ConfigItem( ASCII_STR("Office.Common/Path/Current") )
-#endif
+SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Current") )
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
     Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
+    OUString aTmp;
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
-        m_aInstPath = aOfficePath;
+    {
+        FileBase::normalizePath( aOfficePath, aTmp );
+        m_aInstPath = aTmp;
+    }
     else
         DBG_ERRORFILE( "wrong any type" );
 
@@ -692,11 +762,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         m_aInstURL = aOfficePath;
         if ( !m_aInstURL.Len() )
         {
-            rtl::OUString aRet;
-            ::rtl::OUString aTmp;
-            FileBase::normalizePath( m_aInstPath, aTmp );
-            FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
-            m_aInstURL = aRet;
+            FileBase::getFileURLFromNormalizedPath( m_aInstPath, aTmp );
+            m_aInstURL = aTmp;
         }
     }
     else
@@ -705,7 +772,10 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
     OUString aUserPath;
     if ( aAny >>= aUserPath )
-        m_aUserPath = aUserPath;
+    {
+        FileBase::normalizePath( aUserPath, aTmp );
+        m_aUserPath = aTmp;
+    }
     else
         DBG_ERRORFILE( "wrong any type" );
 
@@ -715,11 +785,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         m_aUserURL = aUserPath;
         if ( !m_aUserURL.Len() )
         {
-            rtl::OUString aRet;
-            ::rtl::OUString aTmp;
-            FileBase::normalizePath( m_aUserPath, aTmp );
-            FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
-            m_aUserURL = aRet;
+            FileBase::getFileURLFromNormalizedPath( m_aUserPath, aTmp );
+            m_aUserURL = aTmp;
         }
     }
     else
@@ -731,23 +798,16 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     sal_Int32 lastIndex = aProgName.lastIndexOf('/');
     if ( lastIndex >= 0 )
     {
-        OUString aTemp = aProgName.copy( 0, lastIndex );
-        OUString aTmp;
-        FileBase::getFileURLFromNormalizedPath( aTemp, aTmp );
+        m_aProgPath = aProgName.copy( 0, lastIndex );
+        FileBase::getFileURLFromNormalizedPath( m_aProgPath, aTmp );
         m_aProgURL = aTmp;
-        FileBase::getSystemPathFromNormalizedPath( aTemp, aTmp );
-        m_aProgPath = aTmp;
     }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
     Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
-#if SUPD < 613
-        m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr, '_' );
-#else
         m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr );
-#endif
     else
     {
         DBG_ERRORFILE( "wrong any type" );
@@ -772,7 +832,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     {
                         // multi pathes
                         if ( pValues[nProp] >>= aTempStr )
-                            aFullPath = SubstVar( aTempStr );
+                            aFullPath = SubstituteAndConvert( aTempStr );
                         else
                         {
                             DBG_ERRORFILE( "any operator >>= failed" );
@@ -790,7 +850,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                             sal_Int32 nCount = aList.getLength();
                             for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
                             {
-                                aTempStr = SubstVar( aList[ nPosition ] );
+                                aTempStr = SubstituteAndConvert( aList[ nPosition ] );
                                 aFullPath += aTempStr;
                                 if ( nPosition < nCount-1 )
                                     aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
@@ -919,12 +979,14 @@ void SvtPathOptions_Impl::Commit()
                 sal_Int32 nPos = 0;
                 Sequence < OUString > aList( nCount );
                 while ( STRING_NOTFOUND != nIdx )
-                    aList[nPos++] = OUString( aFullPath.GetToken( 0, ';', nIdx ) );
+                    aList[nPos++] = UsePathVariables( aFullPath.GetToken( 0, ';', nIdx ) );
                 pValues[nProp] <<= aList;
             }
         }
         else
-            pValues[nProp] <<= aTempStr;
+        {
+            pValues[nProp] <<= UsePathVariables( aTempStr );
+        }
     }
     PutProperties( aNames, aValues );
 }
@@ -1325,8 +1387,8 @@ String SvtPathOptions::SubstituteVariable( const String& rVar )
 BOOL IniFileExists_Impl( const String rURL )
 {
     INetURLObject aObj( rURL, INET_PROT_FILE );
-    rtl::OUString aTmp( aObj.GetMainURL() );
-    rtl::OUString aResult;
+    OUString aTmp( aObj.GetMainURL() );
+    OUString aResult;
     if ( FileBase::getNormalizedPathFromFileURL( aTmp, aResult )  == FileBase::E_None )
     {
         FileBase::RC err = Directory::create( aResult );
@@ -1440,7 +1502,7 @@ void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
 ::rtl::OUString SAL_CALL PathService::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.PathService");
+    return OUString::createFromAscii("com.sun.star.comp.svtools.PathService");
 }
 
 sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -1454,8 +1516,8 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
+    Sequence< OUString > aRet(1);
+    *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
 
