@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-19 10:16:58 $
+ *  last change: $Author: dbo $ $Date: 2001-03-21 12:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,10 +304,6 @@ void MyApp::Main()
     try
     {
         ::comphelper::setProcessServiceFactory( xMSF );
-#if SUPD < 626
-        InitExtVclToolkit();
-#endif
-        Application::RegisterUnoServices();
 
         Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
