@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,6 +1520,7 @@ XclImpChart* XclImpObjectManager::ReplaceChartData( XclImpStream& rStrm, XclChar
             pNewChart = new XclImpChartPie( *pChart, rStrm );
         break;
         case ctNet:
+        case ctNetArea:
             pNewChart = new XclImpChartRadar( *pChart );
         break;
         case ctScatter:
