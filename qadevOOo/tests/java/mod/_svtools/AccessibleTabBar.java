@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBar.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:33:23 $
+ *  last change:$Date: 2003-09-08 12:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,46 +58,41 @@
  *
  *
  ************************************************************************/
-
 package mod._svtools;
 
 import java.io.PrintWriter;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
-import util.DesktopTools;
 import util.SOfficeFactory;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleContext;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
 
 public class AccessibleTabBar extends TestCase {
-
     XComponent xDoc;
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xCalcDoc");
 
         if (xDoc != null) {
-            xDoc.dispose();
+            closeDoc(xDoc);
         }
     }
 
@@ -120,22 +115,27 @@ public class AccessibleTabBar extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-        PrintWriter log) {
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
+        if (xDoc != null) {
+            closeDoc(xDoc);
+        }
 
-        if (xDoc != null) xDoc.dispose();
+        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
 
         try {
-            log.println( "creating a document" );
-            xDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class,SOF.createCalcDoc(null));
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a document");
+            xDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+                                                          SOF.createCalcDoc(
+                                                                  null));
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
         shortWait();
@@ -143,39 +143,39 @@ public class AccessibleTabBar extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
-
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        //at.printAccessibleTree(log,xRoot);
+        //at.printAccessibleTree(log, xRoot);
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        final XWindow aWin = xWindow;
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                aWin.setPosSize(100,100, 500, 500, PosSize.POSSIZE);
+            }
+        });
 
         return tEnv;
     }
@@ -186,10 +186,22 @@ public class AccessibleTabBar extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.currentThread().sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e);
         }
     }
 
+    protected void closeDoc(XComponent xDoc) {
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                    XCloseable.class, xDoc);
+
+        try {
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("Couldn't close document " + e.getMessage());
+        } catch (java.lang.NullPointerException e) {
+            log.println("Couldn't close document " + e.getMessage());
+        }
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceCtrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:33:01 $
+ *  last change:$Date: 2003-09-08 12:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,27 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._svtools;
 
 import java.io.PrintWriter;
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.awt.XExtendedToolkit;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -86,10 +69,27 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
-import com.sun.star.util.XURLTransformer;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -115,7 +115,6 @@ import com.sun.star.accessibility.XAccessibleSelection;
  * @see ifc.accessibility._XAccessibleSelection
  */
 public class AccessibleIconChoiceCtrl extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
     XAccessibleAction accCloseButton = null;
@@ -124,8 +123,9 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+        (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -133,15 +133,14 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("closing HyperlinkDialog");
 
         try {
             if (accCloseButton != null) {
                 accCloseButton.doAccessibleAction(0);
             }
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
         }
 
@@ -174,108 +173,136 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
-
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xTextDoc != null) {
+            xTextDoc.dispose();
+        }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a text document" );
+            log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
-            queryInterface(XDispatchProvider.class, secondController);
+        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                          XDispatchProvider.class,
+                                          secondController);
 
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer)UnoRuntime.queryInterface
-                (XURLTransformer.class, transf);
+            XInterface transf = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
+                                                   .createInstance("com.sun.star.util.URLTransformer");
+            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+                                XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e );
+            throw new StatusException("Couldn't create URLTransformer", e);
         }
 
         XDispatch getting = null;
-        log.println( "opening HyperlinkDialog" );
+        log.println("opening HyperlinkDialog");
+
         URL[] url = new URL[1];
         url[0] = new URL();
         url[0].Complete = ".uno:HyperlinkDialog";
         urlTransf.parseStrict(url);
         getting = aProv.queryDispatch(url[0], "", 0);
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
         shortWait();
 
         XInterface oObj = null;
+
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
+                                      .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.TREE);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
         XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PUSH_BUTTON, "Close");
+                                                                       AccessibleRole.PUSH_BUTTON,
+                                                                       "Close");
 
-        accCloseButton = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class, closeButton);
+        accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
+                                 XAccessibleAction.class, closeButton);
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+                            new Boolean(false));
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+                            new Boolean(true));
 
-        final XAccessibleSelection selection = (XAccessibleSelection)
-            (XAccessibleSelection)UnoRuntime.queryInterface
-            (XAccessibleSelection.class, oObj);
+        String[] expectedStateNames = new String[] {
+            "com.sun.star.accessibility.AccessibleStateType.ENABLED",
+            "com.sun.star.accessibility.AccessibleStateType.FOCUSABLE",
+            "com.sun.star.accessibility.AccessibleStateType.SHOWING",
+            "com.sun.star.accessibility.AccessibleStateType.VISIBLE",
+            "com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS",
+        };
+
+        short[] expectedStates = new short[] {
+            com.sun.star.accessibility.AccessibleStateType.ENABLED,
+            com.sun.star.accessibility.AccessibleStateType.FOCUSABLE,
+            com.sun.star.accessibility.AccessibleStateType.SHOWING,
+            com.sun.star.accessibility.AccessibleStateType.VISIBLE,
+            com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS,
+        };
+
+        tEnv.addObjRelation("expectedStateNames", expectedStateNames);
+        tEnv.addObjRelation("expectedStates", expectedStates);
+
+        final XAccessibleSelection selection = (XAccessibleSelection) (XAccessibleSelection) UnoRuntime.queryInterface(
+                                                                              XAccessibleSelection.class,
+                                                                              oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    try {
-                        selection.selectAccessibleChild(1);
-                        selection.selectAccessibleChild(0);
-                    } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-                    }
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    selection.selectAccessibleChild(1);
+                    selection.selectAccessibleChild(0);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                 }
-            });
+            }
+        });
 
         return tEnv;
     }
@@ -286,10 +313,9 @@ public class AccessibleIconChoiceCtrl extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.currentThread().sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e);
         }
     }
-
 }
