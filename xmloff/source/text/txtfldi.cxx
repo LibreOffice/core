@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:02:12 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 
 #ifndef _XMLOFF_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
 #include "XMLStringBufferImportContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
@@ -2768,12 +2772,36 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
         XMLTextFieldImportContext(rImport, rHlp, sAPI_macro,
                                   nPrfx, sLocalName),
         sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
-        sPropertyMacro(RTL_CONSTASCII_USTRINGPARAM(sAPI_macro)),
+        sPropertyMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
         sMacro(),
         sDescription(),
         bDescriptionOK(sal_False)
 {
 }
+
+SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList> & xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
+         IsXMLToken( rLocalName, XML_EVENTS ) )
+    {
+        // create events context and remember it!
+        pContext = new XMLEventsImportContext(
+            GetImport(), nPrefix, rLocalName );
+        xEventContext = pContext;
+        bValid = sal_True;
+    }
+    else
+        pContext = SvXMLImportContext::CreateChildContext(
+            nPrefix, rLocalName, xAttrList);
+
+    return pContext;
+}
+
 
 void XMLMacroFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
@@ -2797,11 +2825,74 @@ void XMLMacroFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= sMacro;
-    xPropertySet->setPropertyValue(sPropertyMacro, aAny);
+    OUString sOnClick(RTL_CONSTASCII_USTRINGPARAM("OnClick"));
+    OUString sPropertyMacroLibrary(RTL_CONSTASCII_USTRINGPARAM("MacroLibrary"));
 
     aAny <<= (bDescriptionOK ? sDescription : GetContent());
     xPropertySet->setPropertyValue(sPropertyHint, aAny);
+
+    // if we have an events child element, we'll look for the OnClick
+    // event if not, it may be an old (pre-638i) document. Then, we'll
+    // have to look at the name attribute.
+    OUString sMacroName;
+    OUString sLibraryName;
+
+    if ( xEventContext.Is() )
+    {
+        // get event sequence
+        XMLEventsImportContext* pEvents =
+            (XMLEventsImportContext*)&xEventContext;
+        Sequence<PropertyValue> aValues;
+        pEvents->GetEventSequence( sOnClick, aValues );
+
+        const PropertyValue* pValues = aValues.getConstArray();
+        sal_Int32 nLength = aValues.getLength();
+        for( sal_Int32 i = 0; i < nLength; i++ )
+        {
+            if ( aValues[i].Name.equalsAsciiL( "ScriptType",
+                                               sizeof("ScriptType")-1 ) )
+            {
+                // ignore ScriptType
+            }
+            else if ( aValues[i].Name.equalsAsciiL( "Library",
+                                                    sizeof("Library")-1 ) )
+            {
+                aValues[i].Value >>= sLibraryName;
+            }
+            else if ( aValues[i].Name.equalsAsciiL( "MacroName",
+                                                    sizeof("MacroName")-1 ) )
+            {
+                aValues[i].Value >>= sMacroName;
+            }
+        }
+    }
+    else
+    {
+        // disassemble old-style macro-name: Everything before the
+        // third-last dot is the library
+        sal_Int32 nPos = sMacro.getLength() + 1;    // the loop starts with nPos--
+        const sal_Unicode* pBuf = sMacro.getStr();
+        for( sal_Int32 i = 0; (i < 3) && (nPos > 0); i++ )
+        {
+            nPos--;
+            while ( (pBuf[nPos] != '.') && (nPos > 0) )
+                nPos--;
+        }
+
+        if (nPos > 0)
+        {
+            sLibraryName = sMacro.copy(0, nPos);
+            sMacroName = sMacro.copy(nPos+1);
+        }
+        else
+            sMacroName = sMacro;
+    }
+
+    aAny <<= sMacroName;
+    xPropertySet->setPropertyValue(sPropertyMacroName, aAny);
+
+    aAny <<= sLibraryName;
+    xPropertySet->setPropertyValue(sPropertyMacroLibrary, aAny);
 }
 
 

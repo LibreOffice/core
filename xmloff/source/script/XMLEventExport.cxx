@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-25 13:51:29 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,54 +195,18 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     for(sal_Int32 i = 0; i < nCount; i++)
     {
         // translate name
-        if (aNameTranslationMap.count(aNames[i]))
+        NameMap::iterator aIter = aNameTranslationMap.find(aNames[i]);
+        if (aIter != aNameTranslationMap.end())
         {
-            OUString sXmlName = aNameTranslationMap[aNames[i]];
+            OUString& rXmlName = aIter->second;
 
             // get PropertyValues for this event
             Any aAny = rAccess->getByName( aNames[i] );
             Sequence<PropertyValue> aValues;
             aAny >>= aValues;
 
-            // search for EventType value and then delegate to EventHandler
-            sal_Int32 nValues = aValues.getLength();
-            for(sal_Int32 nVal = 0; nVal < nValues; nVal++)
-            {
-                if (sEventType.equals(aValues[nVal].Name))
-                {
-                    // found! Now find handler and delegate
-                    OUString sType;
-                    aValues[nVal].Value >>= sType;
-
-                    if (aHandlerMap.count(sType))
-                    {
-                        if (! bStarted)
-                        {
-                            // OK, we have't yet exported the enclosing
-                            // element. So we do that now.
-                            bStarted = sal_True;
-                            StartElement(bWhitespace);
-                        }
-
-                        // delegate to proper ExportEventHandler
-                        aHandlerMap[sType]->Export(rExport, sXmlName,
-                                                   aValues, bWhitespace);
-                    }
-                    else
-                    {
-                        if (! sType.equalsAsciiL("None", sizeof("None")-1))
-                        {
-                            DBG_ERROR("unknown event type returned by API");
-                            // unknown type -> error (ignore)
-                        }
-                        // else: we ignore None fields
-                    }
-
-                    // early out: we don't need to look for another type
-                    break;
-                }
-                // else: we only care for EventType -> ignore
-            }
+            // now export the current event
+            ExportEvent( aValues, rXmlName, bWhitespace, bStarted );
         }
         else
         {
@@ -257,6 +221,87 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
         EndElement(bWhitespace);
     }
 }
+
+/// export a singular event and wirte <office:events> container
+void XMLEventExport::ExportSingleEvent(
+    Sequence<PropertyValue>& rEventValues,
+    const OUString& rEventName,
+    sal_Bool bUseWhitespace )
+{
+    // translate the name
+    NameMap::iterator aIter = aNameTranslationMap.find(rEventName);
+    if (aIter != aNameTranslationMap.end())
+    {
+        OUString& rXmlName = aIter->second;
+
+        // export the event ...
+        sal_Bool bStarted = sal_False;
+        ExportEvent( rEventValues, rXmlName, bUseWhitespace, bStarted );
+
+        // ... and close the container element (if necessary)
+        if (bStarted)
+        {
+            EndElement(bUseWhitespace);
+        }
+    }
+    else
+    {
+        // unknown name!
+        DBG_ERROR("unknown event name");
+    }
+}
+
+
+/// export a single event
+void XMLEventExport::ExportEvent(
+    Sequence<PropertyValue>& rEventValues,
+    const OUString& rXmlName,
+    sal_Bool bUseWhitespace,
+    sal_Bool& rExported )
+{
+    // search for EventType value and then delegate to EventHandler
+    sal_Int32 nValues = rEventValues.getLength();
+    const PropertyValue* pValues = rEventValues.getConstArray();
+
+    for(sal_Int32 nVal = 0; nVal < nValues; nVal++)
+    {
+        if (sEventType.equals(pValues[nVal].Name))
+        {
+            // found! Now find handler and delegate
+            OUString sType;
+            pValues[nVal].Value >>= sType;
+
+            if (aHandlerMap.count(sType))
+            {
+                if (! rExported)
+                {
+                    // OK, we have't yet exported the enclosing
+                    // element. So we do that now.
+                    rExported = sal_True;
+                    StartElement(bUseWhitespace);
+                }
+
+                // delegate to proper ExportEventHandler
+                aHandlerMap[sType]->Export(rExport, rXmlName,
+                                           rEventValues, bUseWhitespace);
+            }
+            else
+            {
+                if (! sType.equalsAsciiL("None", sizeof("None")-1))
+                {
+                    DBG_ERROR("unknown event type returned by API");
+                    // unknown type -> error (ignore)
+                }
+                // else: we ignore None fields
+            }
+
+            // early out: we don't need to look for another type
+            break;
+        }
+        // else: we only care for EventType -> ignore
+    }
+}
+
 
 void XMLEventExport::StartElement(sal_Bool bWhitespace)
 {

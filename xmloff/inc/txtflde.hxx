@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,10 @@ protected:
                        sal_Bool bAddSpace = sal_False); /// add blanks around
                                                         /// element?
 
-
+    /// export a macro (as used in the macro field)
+    void ExportMacro( const ::com::sun::star::uno::Reference<
+                          ::com::sun::star::beans::XPropertySet> & rPropSet,
+                      const ::rtl::OUString& rContent);
 
     /// export a boolean attribute
     void ProcessBoolean(

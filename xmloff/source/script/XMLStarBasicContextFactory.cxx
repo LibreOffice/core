@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,21 +149,15 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
     // EventType
     aValues[0].Name = sEventType;
-    Any aEventTypeAny;
-    aEventTypeAny <<= sStarBasic;
-    aValues[0].Value = aEventTypeAny;
+    aValues[0].Value <<= sStarBasic;
 
     // library name
     aValues[1].Name = sLibrary;
-    Any aLibAny;
-    aLibAny <<= sLibraryVal;
-    aValues[1].Value = aLibAny;
+    aValues[1].Value <<= sLibraryVal;
 
     // macro name
     aValues[2].Name = sMacroName;
-    Any aMacroAny;
-    aMacroAny <<= sMacroNameVal;
-    aValues[2].Value = aMacroAny;
+    aValues[2].Value <<= sMacroNameVal;
 
     // add values for event now
     rEvents->AddEventValues(rApiEventName, aValues);

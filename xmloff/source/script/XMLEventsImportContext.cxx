@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,29 @@ void XMLEventsImportContext::SetEvents(
         }
         aCollectEvents.clear();
     }
+}
+
+sal_Bool XMLEventsImportContext::GetEventSequence(
+    const OUString& rName,
+    Sequence<PropertyValue> & rSequence )
+{
+    // search through the vector
+    // (This shouldn't take a lot of time, since this method should only get
+    //  called if only one (or few) events are being expected)
+
+    // iterate over vector until end or rName is found;
+    EventsVector::iterator aIter = aCollectEvents.begin();
+    while( (aIter != aCollectEvents.end()) && (aIter->first != rName) )
+    {
+        aIter++;
+    }
+
+    // if we're not at the end, set the sequence
+    sal_Bool bRet = (aIter != aCollectEvents.end());
+    if (bRet)
+        rSequence = aIter->second;
+
+    return bRet;
 }
 
 void XMLEventsImportContext::AddEventValues(

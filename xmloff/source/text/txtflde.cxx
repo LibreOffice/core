@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
@@ -1551,11 +1555,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
 
     case FIELD_ID_MACRO:
-        ProcessString(XML_NAME, GetStringProperty(sPropertyMacro, rPropSet));
-        ProcessString(XML_DESCRIPTION,
-                      GetStringProperty(sPropertyHint, rPropSet),
-                      sPresentation);
-        ExportElement(XML_EXECUTE_MACRO, sPresentation);
+        ExportMacro( rPropSet, sPresentation );
         break;
 
     case FIELD_ID_REF_SEQUENCE:
@@ -2085,6 +2085,48 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
         // always export content
         GetExport().GetDocHandler()->characters(sContent);
     }
+}
+
+void XMLTextFieldExport::ExportMacro(
+    const Reference<XPropertySet> & rPropSet,
+    const OUString& rContent )
+{
+    // some strings we'll need
+    OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ));
+    OUString sStarBasic( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ));
+    OUString sLibrary( RTL_CONSTASCII_USTRINGPARAM( "Library" ));
+    OUString sMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
+    OUString sOnClick( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ));
+    OUString sPropertyMacroLibrary( RTL_CONSTASCII_USTRINGPARAM( "MacroLibrary" ));
+    OUString sPropertyMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
+
+
+    // the description attribute
+    ProcessString(XML_DESCRIPTION,
+                  GetStringProperty(sPropertyHint, rPropSet),
+                  rContent);
+
+    // the element
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                              XML_EXECUTE_MACRO, sal_False, sal_False );
+
+    // the <office:events>-macro:
+
+    // 1) build sequence of PropertyValues
+    Sequence<PropertyValue> aSeq(3);
+    PropertyValue* pArr = aSeq.getArray();
+    pArr[0].Name = sEventType;
+    pArr[0].Value <<= sStarBasic;
+    pArr[1].Name = sLibrary;
+    pArr[1].Value = rPropSet->getPropertyValue( sPropertyMacroLibrary );
+    pArr[2].Name = sMacroName;
+    pArr[2].Value = rPropSet->getPropertyValue( sPropertyMacroName );
+
+    // 2) export the sequence
+    GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, sal_False );
+
+    // and finally, the field presentation
+    GetExport().GetDocHandler()->characters(rContent);
 }
 
 /// export all data-style related attributes

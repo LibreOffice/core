@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,10 +1094,13 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 {
 
     const ::rtl::OUString sPropertyHint;
-    const ::rtl::OUString sPropertyMacro;
+    const ::rtl::OUString sPropertyMacroName;
+    const ::rtl::OUString sPropertyLibraryName;
 
-    ::rtl::OUString sMacro;
     ::rtl::OUString sDescription;
+    SvXMLImportContextRef xEventContext;
+
+    ::rtl::OUString sMacro; // macro for old documents (pre 638i)
 
     sal_Bool bMacroOK;
     sal_Bool bDescriptionOK;
@@ -1112,6 +1115,13 @@ public:
                                const ::rtl::OUString& sLocalName);
 
 protected:
+
+    /// for <office:events> children
+    virtual SvXMLImportContext *CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
