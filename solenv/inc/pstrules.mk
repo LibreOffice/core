@@ -8,8 +8,8 @@
 #*                      in makefile.mk
 #*
 #*    Ersterstellung    HJS 20.07.99
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-31 11:16:54 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-02-02 12:01:50 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/pstrules.mkv  $
 #*
@@ -80,7 +80,7 @@ $(SLO)$/sxl_%.obj : %.cxx
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(SECOND_BUILD)"!=""
-.IF "$($(SECOND_BUILD)OBJFILES)"!=""
+.IF "$($(SECOND_BUILD)_OBJFILES)"!=""
 
 #$(SECOND_BUILD)CDEFS=-DSVX_LIGHT
 
@@ -133,9 +133,9 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.c
 .ENDIF
 .ENDIF
 
-.ENDIF			# "$($(SECOND_BUILD)OBJFILES)"!=""
+.ENDIF			# "$($(SECOND_BUILD)_OBJFILES)"!=""
 
-.IF "$($(SECOND_BUILD)SLOFILES)"!=""
+.IF "$($(SECOND_BUILD)_SLOFILES)"!=""
 
 $(SLO)$/$(SECOND_BUILD)_%.obj : %.cxx
     @echo ------------------------------
@@ -181,7 +181,7 @@ $(SLO)$/$(SECOND_BUILD)_%.obj :  %.c
 .ENDIF
 .ENDIF
 
-.ENDIF			# "$($(SECOND_BUILD)SLOFILES)"!=""
+.ENDIF			# "$($(SECOND_BUILD)_SLOFILES)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -196,20 +196,21 @@ SCP_PRODUCT_TYPE*=FAT
 $(PAR)$/%.par : 
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
 .IF "$(GUI)"=="OS2"
-    $(CC) /P+ /Pe+ /Pd+ $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/$(*:b).pre
+    $(CC) /P+ /Pe+ /Pd+ $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .IF "$(GUI)"=="WNT"
-    $(CC) /EP $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/$(*:b).pre
+    $(CC) /EP $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
-    cpp.lcc -+ -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)$/$(*:b).pre
+    cpp.lcc -+ -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ELSE
-    $(CC) -E -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -x c++ $(*:b).scp > $(MISC)$/$(*:b).pre
+    $(CC) -E -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -x c++ $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .ENDIF
-    +scpcomp -s $(MISC)$/$(*:b).pre -o $@
+    +scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 
 .ENDIF			# "$(PARFILES)"!=""
 
