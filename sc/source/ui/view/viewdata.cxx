@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:05:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2395,7 +2395,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
                     Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
                                     Point( pExtTab->nSplitX, pExtTab->nSplitY ),
                                     MapMode( MAP_TWIP ) );  //! Zoom?
-                    if ( pDocShell )
+                    // #109648# - the test for use of printer metrics for text formatting here
+                    // effectively results in the nFactor = 1.0 regardless of the Option setting.
+                    if ( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                     {
                         double nFactor = pDocShell->GetOutputFactor();
                         aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
