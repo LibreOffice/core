@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:04:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ polish ] = "~Wymiana (EPSI)";
         Text[ portuguese_brazilian ] = "~Interc�mbio (EPSI)";
         Text[ japanese ] = "インターチェンジ(EPS~I)";
-        Text[ korean ] = "인터체인지 (EPS~I)";
+        Text[ korean ] = "인터체인지 (EPSI)(~I)";
         Text[ chinese_simplified ] = "互换(EPS~I)";
         Text[ chinese_traditional ] = "互換(EPS~I)";
         Text[ arabic ] = "~Interchange (EPSI)";
@@ -547,6 +547,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ hindi ] = "EPS निर्यात विकल्प";
     Text[ slovak ] = "Voľby pre export EPS";
 };
+
 
 
 
