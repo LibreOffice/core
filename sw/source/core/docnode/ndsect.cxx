@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:12:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,6 +1316,10 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetHidden( TRUE );
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
         pNewSect->SetProtect( TRUE );
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
+        pNewSect->SetEditInReadonly( TRUE );
+    // <--
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
     rNds._Copy( aRg, aInsPos, FALSE );
