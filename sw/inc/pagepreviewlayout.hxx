@@ -35,26 +35,26 @@ class SwPagePreviewLayout
 private:
     friend class ViewShell;
 
-    /// number of horizontal and vertical twips for spacing between the pages.
+    // number of horizontal and vertical twips for spacing between the pages.
     const SwTwips mnXFree;
     const SwTwips mnYFree;
 
-    /// view shell the print preview is generated for.
+    // view shell the print preview is generated for.
     ViewShell& mrParentViewShell;
-    /// top layout frame of the layout for accessing the pages
+    // top layout frame of the layout for accessing the pages
     const SwRootFrm& mrLayoutRootFrm;
 
-    /// boolean indicating, if the layout information (number of columns and rows)
-    /// are valid.
+    // boolean indicating, if the layout information (number of columns and rows)
+    // are valid.
     bool        mbLayoutInfoValid;
-    /// boolean indicating, if the the calculated print preview layout sizes
-    /// ( windows size in twips, maximal page size, column width, row height,
-    ///   width and height of a print preview page, size of the print preview
-    ///   document ) are valid
+    // boolean indicating, if the the calculated print preview layout sizes
+    // ( windows size in twips, maximal page size, column width, row height,
+    //   width and height of a print preview page, size of the print preview
+    //   document ) are valid
     bool        mbLayoutSizesValid;
-    /// boolean indicating, if the the paint information ( physical number of
-    ///   start page, start column and row, paint offsets, rectangle visible of
-    ///   the print preview document.
+    // boolean indicating, if the the paint information ( physical number of
+    //   start page, start column and row, paint offsets, rectangle visible of
+    //   the print preview document.
     bool        mbPaintInfoValid;
 
     Size        maWinSize;
@@ -62,7 +62,9 @@ private:
     sal_uInt16  mnRows;
     sal_uInt16  mnPages;
     // OD 19.02.2003 #107369# - new flag for leaving blank left-top-corner
-    bool        mbLeaveLeftTopBlank;
+    // OD 2004-03-05 #i18143# - the book preview is controlled by this flag
+    bool        mbBookPreview;
+    bool        mbBookPreviewModeToggled;
 
     Size        maMaxPageSize;
     Rectangle   maPreviewDocRect;
@@ -278,13 +280,6 @@ public:
         @param _rPxWinSize
         input parameter - window size in which the preview will be displayed and
         for which the scaling will be calculated.
-
-        @param _orMaxPageSize
-        output parameter - maximal size in width and height of all pages
-
-        @param _orPreviewDocSize
-        output parameter - size of the document in the proposed preview layout
-        included the spacing between the pages.
 
         @param _bCalcScale
         input parameter - control, if method should calculate the needed
@@ -616,6 +611,16 @@ public:
         if the page is in the current preview pages vector, otherwise 0.
     */
     sal_uInt16 GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const;
+
+    /** enable/disable book preview
+
+        OD 2004-03-04 #i18143#
+
+        @author OD
+    */
+    bool SetBookPreviewMode( const bool  _bEnableBookPreview,
+                             sal_uInt16& _onStartPageNum,
+                             Rectangle&  _orDocPreviewPaintRect );
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
