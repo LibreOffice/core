@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:37:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
 #endif
-#ifndef _DBAUI_COMMONPAGES_HXX_
-#include "commonpages.hxx"
-#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -100,9 +97,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
-#include "dbadmin.hxx"
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -149,8 +143,9 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
-
-#define RET_ALL     10
+#ifndef _DBAUI_TABLESSINGLEDLG_HXX_
+#include "TablesSingleDlg.hxx"
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -158,8 +153,6 @@ namespace dbaui
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::ucb;
-    using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::sdb;
@@ -174,60 +167,41 @@ namespace dbaui
     //= OTableSubscriptionPage
     //========================================================================
     //------------------------------------------------------------------------
-    OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,OContainerListener( m_aNotifierMutex )
         ,m_aTables              (this, ResId(FL_SEPARATOR1))
-        ,m_aActions             (this, ResId(TLB_ACTIONS))
-        ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION),sal_False)
+        ,m_aTablesList          (this, NULL,ResId(CTL_TABLESUBSCRIPTION),sal_False)
         ,m_aExplanation         (this, ResId(FT_FILTER_EXPLANATION))
-        ,m_aColumnsLine         (this, ResId(FL_SEPARATOR2))
-        ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
         ,m_bCheckedAll          ( sal_False )
         ,m_bCatalogAtStart      ( sal_True )
-        ,m_pAdminDialog         ( NULL )
-        ,m_bCanAddTables        ( sal_False )
-        ,m_bCanDropTables       ( sal_False )
-        ,m_bConnectionWriteable ( sal_False )
+        ,m_pTablesDlg(_pTablesDlg)
     {
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
-        m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
-
-        m_aActions.SetSelectHdl(LINK(this, OTableSubscriptionPage, OnToolboxClicked));
-        lcl_removeToolboxItemShortcuts(m_aActions);
 
         // initialize the TabListBox
         m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
         m_aTablesList.SetDragDropMode( 0 );
         m_aTablesList.EnableInplaceEditing( sal_False );
         m_aTablesList.SetWindowBits(WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
-        m_aTablesList.SetSelectHdl(LINK(this, OTableSubscriptionPage, OnTreeEntrySelected));
-        m_aTablesList.SetDeselectHdl(LINK(this, OTableSubscriptionPage, OnTreeEntrySelected));
 
         m_aTablesList.Clear();
 
         FreeResource();
 
-        setToolBox(&m_aActions);
-
         m_aTablesList.SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
         m_aTablesList.SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
-
-        enableToolBoxAcceleration( &m_aActions );
-        addToolboxAccelerator( ID_DROP_TABLE, KeyCode( KEY_DELETE ) );
     }
 
     //------------------------------------------------------------------------
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
-        setToolBox(NULL);
         // just to make sure that our connection will be removed
         try
         {
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-        m_bConnectionWriteable = m_bCanAddTables = m_bCanDropTables = sal_False;
 
         retireNotifiers();
     }
@@ -240,14 +214,7 @@ namespace dbaui
         if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
             m_aTablesList.notifyHiContrastChanged();
-        }
-        else if ( nType == STATE_CHANGE_TEXT )
-        {
-            // The physical toolbar changed its outlook and shows another logical toolbar!
-            // We have to set the correct high contrast mode on the new tbx manager.
-            //  checkImageList();
         }
     }
     // -----------------------------------------------------------------------------
@@ -260,7 +227,6 @@ namespace dbaui
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
             m_aTablesList.notifyHiContrastChanged();
         }
     }
@@ -307,13 +273,6 @@ namespace dbaui
         }
         m_aNotifiers.clear( );
     }
-
-    //------------------------------------------------------------------------
-    SfxTabPage* OTableSubscriptionPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
-    {
-        return ( new OTableSubscriptionPage( pParent, rAttrSet ) );
-    }
-
     //------------------------------------------------------------------------
     void OTableSubscriptionPage::implCheckTables(const Sequence< ::rtl::OUString >& _rTables)
     {
@@ -364,7 +323,7 @@ namespace dbaui
             }
 
             // the schema entry
-            SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, pCatalog);
+            SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!pSchema && sSchema.getLength())
                 // the table (resp. its schema) refered in this filter entry does not exist anymore
                 continue;
@@ -375,7 +334,7 @@ namespace dbaui
                 continue;
             }
 
-            SvLBoxEntry* pEntry = m_aTablesList.GetEntryPosByName(sName, pSchema);
+            SvLBoxEntry* pEntry = m_aTablesList.GetEntryPosByName(sName, pSchema ? pSchema : (pCatalog ? pCatalog : pRootEntry) );
             if (pEntry)
                 m_aTablesList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
         }
@@ -407,150 +366,23 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        bValid = bValid && m_xCurrentConnection.is();
-        bReadonly = bReadonly || !bValid;
-
-        m_aTables.Enable(!bReadonly);
-        m_aActions.Enable(!bReadonly);
-        m_aTablesList.Enable(!bReadonly);
-        m_aExplanation.Enable(!bReadonly);
-        m_aColumnsLine.Enable(!bReadonly);
-        m_aSuppressVersionColumns.Enable(!bReadonly);
-
-        // get the current table filter
-        SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSuppress, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
-        Sequence< ::rtl::OUString > aTableFilter;
-        sal_Bool bSuppressVersionColumns = sal_True;
-        if (pTableFilter)
-            aTableFilter = pTableFilter->getList();
-        if (pSuppress)
-            bSuppressVersionColumns = pSuppress->GetValue();
-
-        implCompleteTablesCheck( aTableFilter );
-
-        // expand the first entry by default
-        SvLBoxEntry* pExpand = m_aTablesList.getAllObjectsEntry();
-        while (pExpand)
-        {
-            m_aTablesList.Expand(pExpand);
-            pExpand = m_aTablesList.FirstChild(pExpand);
-            if (pExpand && m_aTablesList.NextSibling(pExpand))
-                pExpand = NULL;
-        }
-
-        // update the toolbox according the the current selection and check state
-        implUpdateToolbox();
-
-        if (!bValid)
-            m_aSuppressVersionColumns.Check(!bSuppressVersionColumns);
-        if (_bSaveValue)
-            m_aSuppressVersionColumns.SaveValue();
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
-    {
-        SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
-        SvLBoxEntry* pEntry = m_aTablesList.First();
-        while (pEntry)
-        {
-            m_aTablesList.SetCheckButtonState( pEntry, eState);
-            pEntry = m_aTablesList.Next(pEntry);
-        }
-
-        if (_bCheck && m_aTablesList.getAllObjectsEntry())
-            m_aTablesList.checkWildcard(m_aTablesList.getAllObjectsEntry());
-    }
-
-    //------------------------------------------------------------------------
-    int OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
-    {
-        int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
-
-        // dispose the connection, we don't need it anymore, so we're not wasting resources
-        try
-        {
-            ::comphelper::disposeComponent(m_xCurrentConnection);
-        }
-        catch (RuntimeException&) { }
-        m_bConnectionWriteable = m_bCanAddTables = m_bCanDropTables = sal_False;
-
-        retireNotifiers();
-
-        return nResult;
-    }
-
-    //------------------------------------------------------------------------
-    namespace {
-        static void lcl_addHint( String& _rItemText, sal_Bool _bActuallyNeedHint, const String& _rHint )
-        {
-            xub_StrLen nCurrentHintPos = _rItemText.SearchAscii( "  " );
-            sal_Bool bHaveHint = ( STRING_NOTFOUND != nCurrentHintPos );
-
-            if ( bHaveHint )
-            {   // remove the hint in any case - even if there currently is one, the new one may be different
-                _rItemText = _rItemText.Copy( 0, nCurrentHintPos );
-                bHaveHint = sal_False;
-            }
-
-            if ( !bHaveHint && _bActuallyNeedHint )
-            {
-                _rItemText.AppendAscii( "  " );
-                _rItemText += _rHint;
-            }
-        }
-        static void lcl_updateHint( ToolBox& _rTB, sal_uInt16 _nItemId, sal_Bool _bNeedHint, sal_uInt16 _nHintId )
-        {
-            // the current item text
-            String sText = _rTB.GetItemText( _nItemId );
-            // the hint (add or remove)
-            lcl_addHint( sText, _bNeedHint, String( ModuleRes( _nHintId ) ) );
-            // set as new item text
-            _rTB.SetItemText( _nItemId, sText );
-        }
-    }
-    //........................................................................
-    void OTableSubscriptionPage::implAdjustToolBoxTexts()
-    {
-        // in general, if the connection is read-only, all is disabled
-        lcl_updateHint( m_aActions, ID_NEW_TABLE_DESIGN,    !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
-        lcl_updateHint( m_aActions, ID_DROP_TABLE,          !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
-        lcl_updateHint( m_aActions, ID_EDIT_TABLE,          !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
-
-        if ( m_bConnectionWriteable )
-        {   // for add and drop, in case the connection is writeable in general, there are more options
-            lcl_updateHint( m_aActions, ID_DROP_TABLE, !m_bCanDropTables, STR_HINT_CONNECTION_NOT_CAPABLE );
-            lcl_updateHint( m_aActions, ID_EDIT_TABLE, !m_bCanAddTables, STR_HINT_CONNECTION_NOT_CAPABLE );
-        }
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
-    {
-        DBG_ASSERT(!m_xCurrentConnection.is(), "OTableSubscriptionPage::ActivatePage: already have an active connection! ");
-
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
-        getFlags(_rSet, bValid, bReadonly);
-
         // get the name of the data source we're working for
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
         DBG_ASSERT(pNameItem, "OTableSubscriptionPage::ActivatePage: missing the name attribute!");
-        m_sDSName = pNameItem->GetValue();
+        String sDSName = pNameItem->GetValue();
 
-        if (bValid)
+        if (bValid && sDSName.Len() && !m_xCurrentConnection.is() )
         {   // get the current table list from the connection for the current settings
 
             // the PropertyValues for the current dialog settings
             Sequence< PropertyValue > aConnectionParams;
-            DBG_ASSERT(m_pAdminDialog, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
-            if (m_pAdminDialog)
+            DBG_ASSERT(m_pTablesDlg, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
+            if ( m_pTablesDlg )
             {
-                if (!m_pAdminDialog->getCurrentSettings(aConnectionParams))
+                if (!m_pTablesDlg->getCurrentSettings(aConnectionParams))
                 {
-                    OGenericAdministrationPage::ActivatePage(_rSet);
                     m_aTablesList.Clear();
+                    m_pTablesDlg->endExecution();
                     return;
                 }
             }
@@ -573,94 +405,44 @@ namespace dbaui
             // fill the table list with this connection information
             SQLExceptionInfo aErrorInfo;
             // the current DSN
-            if(!m_xCurrentConnection.is())
+            String sURL;
+            if ( m_pTablesDlg )
+                sURL = m_pTablesDlg->getConnectionURL();
+
+            try
             {
-                String sURL;
-                SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-                sURL = pUrlItem->GetValue();
+                WaitObject aWaitCursor(this);
+                m_aTablesList.GetModel()->SetSortMode(SortAscending);
+                m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
-                try
+                Reference< XDriver > xDriver;
+                m_aTablesList.setORB(m_xORB);
+                m_xCurrentConnection = m_aTablesList.UpdateTableList( sURL, aConnectionParams, xDriver );
+                if ( m_xCurrentConnection.is() )
                 {
-                    WaitObject aWaitCursor(this);
-                    m_aTablesList.GetModel()->SetSortMode(SortAscending);
-                    m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
-
-                    Reference< XDriver > xDriver;
-                    m_xCurrentConnection = m_aTablesList.UpdateTableList( sURL, aConnectionParams, xDriver );
-                    if ( m_xCurrentConnection.is() )
-                    {
-                        if (m_pAdminDialog)
-                            m_pAdminDialog->successfullyConnected();
-                    }
-
-                    // collect some meta data about the connection
-                    Reference< XDatabaseMetaData > xMetaData;
-                    if ( m_xCurrentConnection.is() )
-                        xMetaData = m_xCurrentConnection->getMetaData();
-
-                    // is the connection writeable in general?
-                    m_bConnectionWriteable = xMetaData.is() && !xMetaData->isReadOnly();
-
-                    // for other infos we need to check the tables supplier
-                    Reference< XTablesSupplier > xSuppTables( m_xCurrentConnection, UNO_QUERY );
-                    if ( !xSuppTables.is() )
-                    {
-                        Reference< XDataDefinitionSupplier > xDataDefSupp( xDriver, UNO_QUERY );
-                        if ( xDataDefSupp.is() )
-                            xSuppTables = xSuppTables.query( xDataDefSupp->getDataDefinitionByConnection( m_xCurrentConnection ) );
-                    }
-
-                    if ( !xSuppTables.is() )
-                    {   // assume that we can do anything
-                        // The point is, we have a low-level connection here, not necessarily an SDB level connection
-                        // But when the user connects later on (using the XDataSource of a data source), (s)he gets
-                        // a SDB level connection which may support adding and dropping tables, though the underlying
-                        // low level connection isn't
-                        m_bCanDropTables = sal_True;
-                        m_bCanAddTables = sal_True;
-                    }
-                    else
-                    {
-                        // can we drop tables?
-                        Reference< XDrop > xDropTables;
-                        if ( xSuppTables.is() )
-                            xDropTables = xDropTables.query( xSuppTables->getTables() );
-                        m_bCanDropTables = xDropTables.is();
-
-                        // can we add tables?
-                        Reference< XAppend > xAppendTables;
-                        if ( xSuppTables.is() )
-                            xAppendTables = xAppendTables.query( xSuppTables->getTables() );
-                        m_bCanAddTables = xAppendTables.is();
-                    }
+                    if (m_pTablesDlg)
+                        m_pTablesDlg->successfullyConnected();
                 }
-                catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-                catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-                catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
-                catch(Exception&)
-                {
-                    OSL_ENSURE(0,"Exception catched!");
-                }
-
-                // adjust the toolbox texts according
-                implAdjustToolBoxTexts();
             }
+            catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error);
+                OSQLMessageBox aMessageBox(GetParent()->GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error);
                 aMessageBox.Execute();
                 m_aTables.Enable(sal_False);
-                m_aActions.Enable(sal_False);
                 m_aTablesList.Enable(sal_False);
                 m_aExplanation.Enable(sal_False);
-                m_aColumnsLine.Enable(sal_False);
-                m_aSuppressVersionColumns.Enable(sal_False);
                 m_aTablesList.Clear();
 
-                if (m_pAdminDialog)
-                    m_pAdminDialog->clearPassword();
+                if ( m_pTablesDlg )
+                {
+                    m_pTablesDlg->clearPassword();
+                    m_pTablesDlg->endExecution();
+                }
             }
             else
             {
@@ -689,86 +471,71 @@ namespace dbaui
             }
         }
 
-        // if we're (resp. the dialog) is in a mode where only editing of a single data source is allowed ...
-        const sal_Bool bAnySingleEditMode = ( ODbAdminDialog::omFull != m_pAdminDialog->getMode() );
-        const sal_Bool bPreviouslySingleEditMode = !m_aActions.IsVisible();
-        if ( bAnySingleEditMode != bPreviouslySingleEditMode )
+        bValid = bValid && m_xCurrentConnection.is();
+        bReadonly = bReadonly || !bValid;
+
+        // get the current table filter
+        SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSuppress, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
+        Sequence< ::rtl::OUString > aTableFilter;
+        sal_Bool bSuppressVersionColumns = sal_True;
+        if (pTableFilter)
+            aTableFilter = pTableFilter->getList();
+        if (pSuppress)
+            bSuppressVersionColumns = pSuppress->GetValue();
+
+        implCompleteTablesCheck( aTableFilter );
+
+        // expand the first entry by default
+        SvLBoxEntry* pExpand = m_aTablesList.getAllObjectsEntry();
+        while (pExpand)
         {
-            // ... we don't offer the toolbox to the user
-            m_aActions.Show( !bAnySingleEditMode );
-
-            // resize the listbox (below the toolbox) accordingly
-            Size aSize = m_aTablesList.GetSizePixel();
-            Point aPos = m_aTablesList.GetPosPixel();
-
-            sal_Int32 nResizeY = m_aTablesList.GetPosPixel().Y() - m_aActions.GetPosPixel().Y();
-
-            aPos.Y() -= nResizeY;
-            aSize.Height() += nResizeY;
-
-            m_aTablesList.SetPosSizePixel( aPos, aSize );
+            m_aTablesList.Expand(pExpand);
+            pExpand = m_aTablesList.FirstChild(pExpand);
+            if (pExpand && m_aTablesList.NextSibling(pExpand))
+                pExpand = NULL;
         }
 
-        OGenericAdministrationPage::ActivatePage(_rSet);
+        // update the toolbox according the the current selection and check state
+        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( OTableSubscriptionPage, OnTreeEntrySelected, void*, NOTINTERESTEDIN )
+    void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
     {
-        implUpdateToolbox();
-        return 0L;
+        SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
+        SvLBoxEntry* pEntry = m_aTablesList.First();
+        while (pEntry)
+        {
+            m_aTablesList.SetCheckButtonState( pEntry, eState);
+            pEntry = m_aTablesList.Next(pEntry);
+        }
+
+        if (_bCheck && m_aTablesList.getAllObjectsEntry())
+            m_aTablesList.checkWildcard(m_aTablesList.getAllObjectsEntry());
     }
 
+    //------------------------------------------------------------------------
+    int OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
+    {
+        int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
+
+        // dispose the connection, we don't need it anymore, so we're not wasting resources
+        try
+        {
+            ::comphelper::disposeComponent(m_xCurrentConnection);
+        }
+        catch (RuntimeException&) { }
+
+        retireNotifiers();
+
+        return nResult;
+    }
     //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, Control*, _pControl )
     {
-        implUpdateToolbox();
         return OnControlModified(_pControl);
     }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::implUpdateToolbox()
-    {
-        // is the page connected?
-        sal_Bool bConnected = m_xCurrentConnection.is();
-
-        // is there _any_ selected entry
-        SvLBoxEntry* pSelected = m_aTablesList.FirstSelected();
-        sal_Bool bSelectedAnything = (NULL != pSelected);
-
-        // is exactly one entry selected?
-        sal_Bool bSelectedOne = (NULL != pSelected) && (NULL == m_aTablesList.NextSelected(pSelected));
-
-        // are there tables only?
-        sal_Bool bLeafsOnly = bSelectedAnything;
-        // all tables which are selected are checked, too?
-        sal_Bool bAllLeafsChecked = bSelectedAnything;
-        while (pSelected)
-        {
-            if (0 != m_aTablesList.GetChildCount(pSelected))
-                // it's a container which is selected here
-                bLeafsOnly = sal_False;
-            else
-            {   // it's a leaf (ergo a table or view)
-                SvButtonState eState = m_aTablesList.GetCheckButtonState(pSelected);
-                OSL_ENSURE(SV_BUTTON_TRISTATE != eState, "OTableSubscriptionPage::implUpdateToolbox: a tristate table?");
-                bAllLeafsChecked = bAllLeafsChecked && (SV_BUTTON_CHECKED == eState);
-            }
-
-            pSelected = m_aTablesList.NextSelected(pSelected);
-        }
-
-        Reference< XDatabaseMetaData > xMetaData;
-        if ( m_xCurrentConnection.is() )
-            xMetaData = m_xCurrentConnection->getMetaData();
-
-        // TODO: disable the EDIT for views
-
-        m_aActions.EnableItem(ID_NEW_TABLE_DESIGN,  bConnected && m_bCanAddTables  && m_bConnectionWriteable);
-        m_aActions.EnableItem(ID_DROP_TABLE,        bConnected && m_bCanDropTables && m_bConnectionWriteable &&                 bLeafsOnly && bAllLeafsChecked);
-        m_aActions.EnableItem(ID_EDIT_TABLE,        bConnected &&                     m_bConnectionWriteable && bSelectedOne && bLeafsOnly && bAllLeafsChecked);
-    }
-
     //------------------------------------------------------------------------
     void OTableSubscriptionPage::collectEntryPaths(StringArray& _rFillInPaths, EntryPredicateCheck _pPredicateCheck)
     {
@@ -977,9 +744,6 @@ namespace dbaui
         SvLBoxEntry* pFocusEntry = getEntryFromPath(pMySettings->sFocusEntry);
         if (pFocusEntry)
             m_aTablesList.SetCurEntry(pFocusEntry);
-
-        if (pMySettings->nDelayedToolboxAction)
-            onToolBoxAction(pMySettings->nDelayedToolboxAction);
     }
 
     //------------------------------------------------------------------------
@@ -1030,216 +794,6 @@ namespace dbaui
 
         return sComposedName;
     }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::dropSelection()
-    {
-        DBG_ASSERT(!m_pAdminDialog->isCurrentModified(), "OTableSubscriptionPage::dropSelection: invalid call!");
-
-        // get a connection for the data source we're working for
-        Reference< XConnection > xConnection;
-        ODatasourceConnector aConnector(m_xORB, GetParent());
-        xConnection = aConnector.connect(m_sDSName);
-
-        if (!xConnection.is())
-            // handled by the connector (should have shown an error message)
-            return;
-
-        Reference< XTablesSupplier > xSuppTables(xConnection, UNO_QUERY);
-        Reference< XNameAccess > xTables;
-        if (xSuppTables.is())
-            xTables = xSuppTables->getTables();
-
-        Reference< XDrop > xDropTable(xTables, UNO_QUERY);
-        if (!xDropTable.is())
-        {
-            String sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-            ErrorBox aError(GetParent(), WB_OK, sMessage);
-            aError.Execute();
-            return;
-        }
-        else
-        {
-            sal_Bool bConfirm = sal_True;
-            ::std::vector< void* > aSelection;
-            SvLBoxEntry* pSelected = m_aTablesList.FirstSelected();
-            while (pSelected)
-            {
-                aSelection.push_back(pSelected);
-                pSelected = m_aTablesList.NextSelected(pSelected);
-            }
-
-            if ( !aSelection.empty() )
-            {
-                ::std::vector< void* >::const_iterator aLast = aSelection.end();
-                --aLast;
-
-                for (   ::std::vector< void* >::const_iterator aLoop = aSelection.begin();
-                        aLoop != aSelection.end();
-                        ++aLoop
-                    )
-                {
-                    SvLBoxEntry* pSelected = static_cast<SvLBoxEntry*>(*aLoop);
-                    // the composed table name
-                    String sCompleteTableName = getComposedEntryName(pSelected);
-
-                    // let the user confirm this
-                    sal_Int32 nResult = RET_YES;
-                    if (bConfirm)
-                    {
-                        // let the user confirm this
-                        String sMessage(ModuleRes(STR_QUERY_DELETE_TABLE));
-                        sMessage.SearchAndReplace(String::CreateFromAscii("%1"), sCompleteTableName);
-
-                        QueryBox aAsk(GetParent(), WB_YES_NO | WB_DEF_YES, sMessage);
-                        aAsk.SetText(String(ModuleRes(STR_TITLE_CONFIRM_DELETION)));
-
-                        // add an "all" button
-                        if ( aLast != aLoop )
-                        {
-                            aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
-                            aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
-                        }
-
-                        nResult = aAsk.Execute();
-                    }
-
-                    if ((RET_YES == nResult) || (RET_ALL == nResult))
-                    {
-                        SQLExceptionInfo aErrorInfo;
-                        try
-                        {
-                            xDropTable->dropByName(sCompleteTableName);
-
-                            // remove the entry from the list
-                            m_aTablesList.GetModel()->Remove(pSelected);
-                        }
-                        catch(SQLContext& e) { aErrorInfo = e; }
-                        catch(SQLWarning& e) { aErrorInfo = e; }
-                        catch(SQLException& e) { aErrorInfo = e; }
-                        catch(Exception&)
-                        {
-                            DBG_ERROR("OTableSubscriptionPage::dropSelection: suspicious exception caught!");
-                        }
-                        if (aErrorInfo.isValid())
-                            showError(aErrorInfo, GetParent(), m_xORB);
-                    }
-
-                    if (RET_ALL == nResult)
-                        bConfirm = sal_False;
-                }
-            }
-        }
-
-        ::comphelper::disposeComponent(xConnection);
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::onToolBoxAction(sal_uInt16 _nId)
-    {
-        if (m_pAdminDialog->isCurrentModified())
-        {
-            // get the current view settings
-            OTablePageViewSettings* pMySettings = new OTablePageViewSettings;
-            fillViewSettings(pMySettings);
-            pMySettings->nDelayedToolboxAction = _nId;
-
-            OPageSettings* pTypedSettings = pMySettings;
-
-            if (!prepareConnectionAction(m_pAdminDialog, m_aActions.GetItemText(_nId), &pTypedSettings))
-                return;
-        }
-
-        // get the name of the selected entry
-        SvLBoxEntry* pSelected;
-        String sSelectedEntry;
-        if ((ID_DROP_TABLE == _nId) || (ID_EDIT_TABLE == _nId))
-        {
-            pSelected = m_aTablesList.FirstSelected();
-            if (!pSelected)
-            {
-                DBG_ERROR("OTableSubscriptionPage::onToolBoxAction: to be called if at least one entry is selected!");
-                return;
-            }
-
-            if ((m_aTablesList.NextSelected(pSelected)) && (ID_DROP_TABLE != _nId))
-            {
-                DBG_ERROR("OTableSubscriptionPage::onToolBoxAction: EDIT can't be applied to more than one table!");
-                return;
-            }
-
-            sSelectedEntry = getComposedEntryName(pSelected);
-        }
-
-        switch (_nId)
-        {
-            case ID_NEW_TABLE_DESIGN:
-            {
-                OTableDesignAccess aDispatcher(m_xORB);
-                Reference< XComponent > xComp = aDispatcher.create(m_sDSName, Reference< XConnection >());
-                OSL_ENSURE( xComp.is(), "OTableSubscriptionPage::onToolBoxAction: could not load the component!" );
-
-                if ( xComp.is() )
-                {   // successfully loaded
-
-                    // add a container listener to the tables container the component is about to extend ....
-                    try
-                    {
-                        // get the property set of the controller we just loaded
-                        Reference< XPropertySet > xCompProps( xComp, UNO_QUERY );
-                        Reference< XPropertySetInfo > xPSI;
-                        if ( xCompProps.is() ) xPSI = xCompProps->getPropertySetInfo();
-                        OSL_ENSURE( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ),
-                            "OTableSubscriptionPage::onToolBoxAction: invalid controller!" );
-
-                        // get the connection the controller is working with
-                        if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ) )
-                        {
-                            Reference< XTablesSupplier > xSuppTables;
-                            xCompProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xSuppTables;
-                            OSL_ENSURE( xSuppTables.is(), "OTableSubscriptionPage::onToolBoxAction: the controller has an invalid connection!" );
-                            if ( xSuppTables.is() )
-                            {
-                                Reference< XContainer > xTables( xSuppTables->getTables(), UNO_QUERY );
-                                OSL_ENSURE( xTables.is(), "OTableSubscriptionPage::onToolBoxAction: invalid tables container!" );
-                                // create a notifier for the container so we know if a table is inserted
-                                if ( xTables.is() )
-                                {
-                                    OContainerListenerAdapter* pNotifier = new OContainerListenerAdapter( this, xTables );
-                                    pNotifier->acquire( );
-                                    m_aNotifiers.push_back( pNotifier );
-                                }
-                            }
-                        }
-                    }
-                    catch( const Exception& )
-                    {
-                    }
-                }
-            }
-            break;
-
-            case ID_EDIT_TABLE:
-            {
-                OTableDesignAccess aDispatcher(m_xORB);
-                aDispatcher.edit(m_sDSName, sSelectedEntry, Reference< XConnection >());
-            }
-            break;
-
-            case ID_DROP_TABLE:
-                dropSelection();
-                break;
-
-        }
-    }
-
-    //------------------------------------------------------------------------
-    IMPL_LINK( OTableSubscriptionPage, OnToolboxClicked, void*, NOTINTERESTEDIN )
-    {
-        onToolBoxAction(m_aActions.GetCurItemId());
-        return 0L;
-    }
-
     //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {
@@ -1381,7 +935,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    BOOL OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);
@@ -1407,9 +961,6 @@ namespace dbaui
             _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
         }
 
-        if (m_aSuppressVersionColumns.IsChecked() != m_aSuppressVersionColumns.GetSavedValue())
-            _rCoreAttrs.Put( SfxBoolItem(DSID_SUPPRESSVERSIONCL, !m_aSuppressVersionColumns.IsChecked()) );
-
         return sal_True;
     }
 
@@ -1427,7 +978,7 @@ namespace dbaui
         // update the checks from the table filter set on the data source
         try
         {
-            Reference< XPropertySet > xDS = m_pAdminDialog->getCurrentDataSource();
+            Reference< XPropertySet > xDS = m_pTablesDlg->getCurrentDataSource();
             if ( xDS.is() )
             {
                 Sequence< ::rtl::OUString > aTableFilter;
@@ -1485,7 +1036,18 @@ namespace dbaui
         }
         // not interested in
     }
-
+    // -----------------------------------------------------------------------
+    void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+    }
+    // -----------------------------------------------------------------------
+    void OTableSubscriptionPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        _rControlList.push_back(new ODisableWrapper<OTableTreeListBox>(&m_aTablesList));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aTables));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aExplanation));
+    }
+    // -----------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
