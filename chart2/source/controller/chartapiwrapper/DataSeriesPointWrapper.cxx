@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:36 $
+ *  last change: $Author: bm $ $Date: 2003-12-19 15:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "macros.hxx"
 #include "InlineContainer.hxx"
 #include "algohelper.hxx"
+#include "RegressionCurveHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -77,6 +78,16 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
+#include <com/sun/star/chart/ChartErrorCategory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
+#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTREGRESSIONCURVETYPE_HPP_
+#include <com/sun/star/chart/ChartRegressionCurveType.hpp>
 #endif
 
 #include "LineProperties.hxx"
@@ -104,7 +115,18 @@ static const ::rtl::OUString lcl_aServiceName(
 enum
 {
     PROP_SERIES_ATTACHED_AXIS,
-    PROP_SERIES_DATA_CAPTION
+    PROP_SERIES_DATA_CAPTION,
+
+    PROP_SERIES_STAT_BEGIN,
+    PROP_SERIES_CONST_ERROR_LOW = PROP_SERIES_STAT_BEGIN,
+    PROP_SERIES_CONST_ERROR_HIGH,
+    PROP_SERIES_MEAN_VALUE,
+    PROP_SERIES_ERROR_CATEGORY,
+    PROP_SERIES_PERCENT_ERROR,
+    PROP_SERIES_ERROR_MARGIN,
+    PROP_SERIES_ERROR_INDICATOR,
+    PROP_SERIES_REGRESSION_CURVES,
+    PROP_SERIES_STAT_END = PROP_SERIES_REGRESSION_CURVES
 };
 
 typedef ::std::map< sal_Int32, ::rtl::OUString > lcl_PropertyMapType;
@@ -157,6 +179,56 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // Statistics
+    rOutProperties.push_back(
+        Property( C2U( "ConstantErrorLow" ),
+                  PROP_SERIES_CONST_ERROR_LOW,
+                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ConstantErrorHigh" ),
+                  PROP_SERIES_CONST_ERROR_HIGH,
+                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "MeanValue" ),
+                  PROP_SERIES_MEAN_VALUE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ErrorCategory" ),
+                  PROP_SERIES_ERROR_CATEGORY,
+                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorCategory * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "PercentageError" ),
+                  PROP_SERIES_PERCENT_ERROR,
+                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ErrorMargin" ),
+                  PROP_SERIES_ERROR_MARGIN,
+                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ErrorIndicator" ),
+                  PROP_SERIES_ERROR_INDICATOR,
+                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorIndicatorType * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "RegressionCurves" ),
+                  PROP_SERIES_REGRESSION_CURVES,
+                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartRegressionCurveType * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -168,6 +240,16 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_DATA_CAPTION ));
     rOutMap[ PROP_SERIES_DATA_CAPTION ] =
         uno::makeAny( sal_Int32( ::com::sun::star::chart::ChartDataCaption::NONE ) );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_CONST_ERROR_LOW ));
+    rOutMap[ PROP_SERIES_CONST_ERROR_LOW ] =
+        uno::makeAny( double( 0.0 ));
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_CONST_ERROR_HIGH ));
+    rOutMap[ PROP_SERIES_CONST_ERROR_HIGH ] =
+        uno::makeAny( double( 0.0 ));
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_MEAN_VALUE ));
+    rOutMap[ PROP_SERIES_MEAN_VALUE ] =
+        uno::makeAny( sal_False );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
@@ -325,6 +407,13 @@ void SAL_CALL DataSeriesPointWrapper::getFastPropertyValue
     if( ! m_xParentProperties.is())
         return;
 
+    if( nHandle >= PROP_SERIES_STAT_BEGIN &&
+        nHandle <= PROP_SERIES_STAT_END )
+    {
+        getStatisticsPropertyValue( rValue, nHandle );
+        return;
+    }
+
     lcl_PropertyMapType & rMap( lcl_GetPropertyMapFilled());
     lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
     if( aIt == rMap.end())
@@ -342,10 +431,17 @@ void SAL_CALL DataSeriesPointWrapper::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
     throw (uno::Exception)
 {
+    // /--
+    MutexGuard aGuard( GetMutex());
+
     if( m_xParentProperties.is())
     {
-        // /--
-        MutexGuard aGuard( GetMutex());
+        if( nHandle >= PROP_SERIES_STAT_BEGIN &&
+            nHandle <= PROP_SERIES_STAT_END )
+        {
+            setStatisticsPropertyValue_NoBroadcast( nHandle, rValue );
+            return;
+        }
 
         lcl_PropertyMapType & rMap( lcl_GetPropertyMapFilled());
         lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
@@ -384,10 +480,96 @@ void SAL_CALL DataSeriesPointWrapper::setFastPropertyValue_NoBroadcast(
                     uno::makeAny( chart2::TransparencyStyle_LINEAR ));
             }
         }
-        // \--
     }
     else
         OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    // \--
+}
+
+void SAL_CALL DataSeriesPointWrapper::getStatisticsPropertyValue
+    ( uno::Any& rValue,
+      sal_Int32 nHandle ) const
+{
+    OSL_ASSERT( m_xParentProperties.is());
+
+    if( nHandle == PROP_SERIES_REGRESSION_CURVES ||
+        nHandle == PROP_SERIES_MEAN_VALUE )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCont( m_xParentProperties, uno::UNO_QUERY );
+        if( xRegCont.is())
+        {
+            if( nHandle == PROP_SERIES_MEAN_VALUE )
+                rValue <<= RegressionCurveHelper::hasMeanValueLine( xRegCont );
+            else
+            {
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xErrorBarProp;
+        if(( m_xParentProperties->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
+           xErrorBarProp.is())
+        {
+            switch( nHandle )
+            {
+                case PROP_SERIES_CONST_ERROR_LOW:
+                case PROP_SERIES_CONST_ERROR_HIGH:
+                case PROP_SERIES_ERROR_CATEGORY:
+                case PROP_SERIES_PERCENT_ERROR:
+                case PROP_SERIES_ERROR_MARGIN:
+                case PROP_SERIES_ERROR_INDICATOR:
+                    break;
+            }
+        }
+    }
+}
+
+void SAL_CALL DataSeriesPointWrapper::setStatisticsPropertyValue_NoBroadcast(
+    sal_Int32 nHandle, const uno::Any& rValue )
+    throw (uno::Exception)
+{    OSL_ASSERT( m_xParentProperties.is());
+
+    if( nHandle == PROP_SERIES_REGRESSION_CURVES ||
+        nHandle == PROP_SERIES_MEAN_VALUE )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCont( m_xParentProperties, uno::UNO_QUERY );
+        if( xRegCont.is())
+        {
+            sal_Bool bValue;
+            if( (nHandle == PROP_SERIES_MEAN_VALUE) &&
+                (rValue >>= bValue))
+            {
+                bool bHasMVL = RegressionCurveHelper::hasMeanValueLine( xRegCont );
+                if( bHasMVL && ! bValue )
+                    RegressionCurveHelper::removeMeanValueLine( xRegCont );
+                else if( ! bHasMVL && bValue )
+                    RegressionCurveHelper::addMeanValueLine(
+                        xRegCont, uno::Reference< uno::XComponentContext >(), m_xParentProperties );
+            }
+            else
+            {
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xErrorBarProp;
+        if(( m_xParentProperties->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
+           xErrorBarProp.is())
+        {
+            switch( nHandle )
+            {
+                case PROP_SERIES_CONST_ERROR_LOW:
+                case PROP_SERIES_CONST_ERROR_HIGH:
+                case PROP_SERIES_ERROR_CATEGORY:
+                case PROP_SERIES_PERCENT_ERROR:
+                case PROP_SERIES_ERROR_MARGIN:
+                case PROP_SERIES_ERROR_INDICATOR:
+                    break;
+            }
+        }
+    }
 }
 
 // --------------------------------------------------------------------------------
