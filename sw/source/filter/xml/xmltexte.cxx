@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-30 13:59:19 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,12 +255,14 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_CONDITION,
                                 sBuffer.makeStringAndClear() );
-                    const String& rName =
-                        SwStyleNameMapper::GetProgName(
+                    String aString;
+                    SwStyleNameMapper::FillProgName(
                                     rCond.GetTxtFmtColl()->GetName(),
-                                    GET_POOLID_TXTCOLL );
+                                    aString,
+                                    GET_POOLID_TXTCOLL,
+                                    sal_True);
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                XML_APPLY_STYLE_NAME, rName );
+                                XML_APPLY_STYLE_NAME, aString );
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                               XML_MAP, sal_True, sal_True );
                 }

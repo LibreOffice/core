@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:16:55 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,9 +182,11 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             const SwPageDesc *pPageDesc =
                 ((const SwFmtPageDesc *)pItem)->GetPageDesc();
             if( pPageDesc )
-                sName = SwStyleNameMapper::GetProgName(
+                SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
-                                    GET_POOLID_PAGEDESC );
+                                    sName,
+                                    GET_POOLID_PAGEDESC,
+                                    sal_True);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, sName );
         }
     }

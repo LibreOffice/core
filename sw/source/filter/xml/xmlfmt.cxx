@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:16:09 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,13 +527,17 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         return;
 
     sal_uInt16 nCount = pConditions->Count();
+    String aString;
+    OUString sName;
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
-        const OUString& rName =
-                SwStyleNameMapper::GetUIName( pCond->GetApplyStyle(),
-                                             GET_POOLID_TXTCOLL  );
-        SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( rName );
+        SwStyleNameMapper::FillUIName( pCond->GetApplyStyle(),
+                                      aString,
+                                      GET_POOLID_TXTCOLL,
+                                      sal_True);
+        sName = aString;
+        SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
         ASSERT( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
         if( pCondColl )
@@ -737,8 +741,11 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    String sName( SwStyleNameMapper::GetUIName( GetMasterPageName(),
-                                               GET_POOLID_PAGEDESC ) );
+    String sName;
+    SwStyleNameMapper::FillUIName( GetMasterPageName(),
+                                   sName,
+                                   GET_POOLID_PAGEDESC,
+                                   sal_True);
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
