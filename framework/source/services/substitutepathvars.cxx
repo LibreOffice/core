@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@
 #define REPLACELENGTH_WORK              7
 #define REPLACELENGTH_HOME              7
 #define REPLACELENGTH_TEMP              7
+#define REPLACELENGTH_PATH              7
 #define REPLACELENGTH_INSTPATH          11
 #define REPLACELENGTH_PROGPATH          11
 #define REPLACELENGTH_USERPATH          11
@@ -306,6 +307,7 @@ static FixedVariable aFixedVarTable[] =
     { VARIABLE_WORK,        PREDEFVAR_WORK,         REPLACELENGTH_WORK          },  // Special variable (transient)!
     { VARIABLE_HOME,        PREDEFVAR_HOME,         REPLACELENGTH_HOME          },
     { VARIABLE_TEMP,        PREDEFVAR_TEMP,         REPLACELENGTH_TEMP          },
+    { VARIABLE_PATH,        PREDEFVAR_PATH,         REPLACELENGTH_PATH          },
     { VARIABLE_LANG,        PREDEFVAR_LANG,         REPLACELENGTH_LANG          },
     { VARIABLE_LANGID,      PREDEFVAR_LANGID,       REPLACELENGTH_LANGID        },
     { VARIABLE_VLANG,       PREDEFVAR_VLANG,        REPLACELENGTH_VLANG         },
@@ -377,6 +379,11 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyL
     m_bHostRetrieved( sal_False ),
     m_bOSRetrieved( sal_False )
 {
+    // Enable notification mechanism
+    // We need it to get information about changes outside these class on our configuration branch
+    Sequence< rtl::OUString > aNotifySeq( 1 );
+    aNotifySeq[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SharePoints" ));
+    EnableNotification( aNotifySeq, sal_True );
 }
 
 SubstitutePathVariables_Impl::~SubstitutePathVariables_Impl()
@@ -732,7 +739,8 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
     // Sort predefined/fixed variable to path length
     for ( i = 0; i < PREDEFVAR_COUNT; i++ )
     {
-        if ( i != PREDEFVAR_WORKDIRURL )
+        if (( i != PREDEFVAR_WORKDIRURL ) &&
+            ( i != PREDEFVAR_PATH ))
         {
             // Special path variables, don't include into automatic resubstituion search!
             // $(workdirurl) is not allowed to resubstitute! This variable is the value of path settings entry
@@ -835,7 +843,37 @@ rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 
 rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
 {
-    return rtl::OUString::createFromAscii( getenv( "path" ) );
+    const PATH_EXTEND_FACTOR = 120;
+
+    rtl::OUString aRetStr;
+    const char*   pEnv = getenv( "PATH" );
+
+    if ( pEnv )
+    {
+        rtl::OUString       aTmp;
+        rtl::OUString       aPathList( pEnv, strlen( pEnv ), gsl_getSystemTextEncoding() );
+        rtl::OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );
+
+        sal_Bool  bAppendSep = sal_False;
+        sal_Int32 nToken = 0;
+        do
+        {
+            ::rtl::OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
+            if (sToken.getLength())
+            {
+                osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
+                if ( bAppendSep )
+                    aPathStrBuffer.appendAscii( ";" ); // Office uses ';' as path separator
+                aPathStrBuffer.append( aTmp );
+                bAppendSep = sal_True;
+            }
+        }
+        while(nToken>=0);
+
+        aRetStr = aPathStrBuffer.makeStringAndClear();
+    }
+
+    return aRetStr;
 }
 
 rtl::OUString SubstitutePathVariables::GetLanguageString( LanguageType aLanguageType ) const
@@ -1478,6 +1516,9 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // anymore because the path settings service has this value! It can deliver this value more
     // quickly than the substitution service!
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = m_aWorkPathHelper.GetWorkPath();
+
+    // Set $(path) variable
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
 
     // Set $(temp)
     osl::FileBase::getTempDirURL( aTmp );
