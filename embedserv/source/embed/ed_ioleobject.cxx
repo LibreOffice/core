@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
+ *  last change: $Author: abi $ $Date: 2003-04-01 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ STDMETHODIMP EmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 
 STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
+    m_pDocHolder->setTitle(
+        rtl::OUString(
+            (sal_Unicode*)szContainerObj));
+//              RTL_CONSTASCII_USTRINGPARAM(szContainerObj));
     return S_OK;
 }
 

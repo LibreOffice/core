@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-31 13:50:04 $
+ *  last change: $Author: abi $ $Date: 2003-04-01 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseAble.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -295,9 +301,86 @@ void DocumentHolder::show()
                 0,
                 aSeq);
         }
+        setTitle(m_aDocumentNamePart);
     }
 }
 
+
+void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
+{
+    if(m_xFrame.is())
+    {
+        if(m_aFilterName.getLength() == 0)
+        {
+            rtl::OUString aFilterName;
+            uno::Sequence<beans::PropertyValue> aSeq;
+            if(m_xDocument.is())
+            {
+                aSeq =
+                    m_xDocument->getArgs();
+                for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
+                {
+                    if(aSeq[j].Name ==
+                       rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM("FilterName")))
+                    {
+                        aSeq[j].Value >>= aFilterName;
+                        break;
+                    }
+                }
+            }
+
+            if(aFilterName.getLength())
+            {
+                uno::Reference<container::XNameAccess> xNameAccess(
+                    m_xFactory->createInstance(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.document.FilterFactory"))),
+                    uno::UNO_QUERY);
+                try {
+                    if(xNameAccess.is() &&
+                       (xNameAccess->getByName(aFilterName) >>= aSeq))
+                    {
+                        for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
+                            if(aSeq[j].Name ==
+                               rtl::OUString(
+                                   RTL_CONSTASCII_USTRINGPARAM("UIName")))
+                            {
+                                aSeq[j].Value >>= m_aFilterName;
+                                break;
+                            }
+                    }
+                }
+                catch(const uno::Exception& ) {
+                    // nothing better to do here
+                    m_aFilterName = aFilterName;
+                }
+            }
+        }
+        // set the title
+        uno::Reference<beans::XPropertySet> xPropSet(
+            m_xFrame,uno::UNO_QUERY);
+        if(xPropSet.is()) {
+            uno::Any aAny;
+            static const sal_Unicode u[] = { ' ','(',0 };
+            static const sal_Unicode c[] = { ')',0 };
+            rtl::OUString aTotalName(m_aFilterName);
+            aTotalName += rtl::OUString(u);
+            aTotalName += aDocumentName;
+            aTotalName += rtl::OUString(c);
+            aAny <<= aTotalName;
+            try {
+                xPropSet->setPropertyValue(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+                    aAny);
+            }
+            catch( const uno::Exception& ) {
+            }
+        }
+    }
+
+    m_aDocumentNamePart = aDocumentName;
+}
 
 void DocumentHolder::hide()
 {

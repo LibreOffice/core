@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:09:43 $
+ *  last change: $Author: abi $ $Date: 2003-04-01 13:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
+    ::rtl::OUString m_aDocumentNamePart,m_aFilterName;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
 
 public:
@@ -109,6 +111,8 @@ public:
     void CloseDocument();
     void CloseFrame();
     void FreeOffice();
+
+    void setTitle(const rtl::OUString& aDocumentName);
 
     void show();
 
