@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-07 18:36:45 $
+ *  last change: $Author: jbu $ $Date: 2000-10-09 10:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,9 +304,7 @@ public:
      */
     inline void SAL_CALL clear();
 
-#ifndef UNX
     typedef key keyType;
-#endif
 private:
     ::std::hash_map< key , void* , hashImpl , equalImpl > *m_pMap;
     ::osl::Mutex &  rMutex;
@@ -324,10 +322,10 @@ private:
  * to the four members. The access to the members must be guarded with
  * rMutex.
  *
- * @author      Markus Meyer
- * @since       03/12/98
+ * The additional template parameter keyType has been added, because gcc
+ * can't compile addListener( const container::keyType &key ).
  */
-template < class container >
+template < class container , class keyType >
 struct OBroadcastHelperVar
 {
     /** The shared mutex. */
@@ -353,11 +351,7 @@ struct OBroadcastHelperVar
     /**
      * adds a listener threadsafe.
      **/
-#ifndef UNX
-    inline void addListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
-#else
-    inline void addListener( const ::com::sun::star::uno::Type &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
-#endif
+    inline void addListener( const keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSHURE( !bInDispose, "do not add listeners in the dispose call" );
@@ -369,11 +363,7 @@ struct OBroadcastHelperVar
     /**
      * removes a listener threadsafe
      **/
-#ifndef UNX
-    inline void removeListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
-#else
-    inline void removeListener( const ::com::sun::star::uno::Type &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
-#endif
+    inline void removeListener( const keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSHURE( !bDisposed, "object is disposed" );
@@ -387,11 +377,7 @@ struct OBroadcastHelperVar
      *         was not created, null was returned. This can be used to optimize
      *         performance ( construction of an event object can be avoided ).
      ***/
-#ifndef UNX
-    inline OInterfaceContainerHelper * SAL_CALL getContainer( const container::keyType &key ) const
-#else
-    inline OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type &key ) const
-#endif
+    inline OInterfaceContainerHelper * SAL_CALL getContainer( const keyType &key ) const
     {
         return aLC.getContainer( key );
     }
@@ -417,7 +403,7 @@ typedef OMultiTypeInterfaceContainerHelperVar<
     hashType_Impl,
     std::equal_to< ::com::sun::star::uno::Type > > OMultiTypeInterfaceContainerHelper;
 
-typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper > OBroadcastHelper;
+typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper , OMultiTypeInterfaceContainerHelper::keyType > OBroadcastHelper;
 
 }
 
