@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:53:06 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,9 +337,93 @@ public class Type {
      * @since UDK1.0
      */
     public Class getZClass() {
-        if (_class != null) {
-            return _class;
-        } else switch (_typeClass.getValue()) {
+        synchronized (this) {
+            if (_class == null) {
+                _class = determineClass();
+            }
+        }
+        return _class;
+    }
+
+    /**
+     * Gives the type description of this type.
+     *
+     * @return the type description; may be <code>null</code>
+     *
+     * @since UDK3.0
+     */
+    public ITypeDescription getTypeDescription() {
+        return _iTypeDescription;
+    }
+
+    /**
+     * Sets the type description for this type.
+     *
+     * @param typeDescription the type description
+     *
+     * @since UDK3.0
+     */
+    public void setTypeDescription(ITypeDescription typeDescription) {
+        _iTypeDescription = typeDescription;
+    }
+
+    /**
+     * Determines whether this UNO type is a supertype of another UNO type.
+     *
+     * UNO only defines the following supertype relations:
+     * (1)  A struct type t1 is a supertype of a struct type t2, if either t1
+     * and t2 are the same, or t1 is a direct or indirect parent of t2.
+     * (2)  An exception type t1 is a supertype of an exception type t2, if
+     * either t1 and t2 are the same, or t1 is a direct or indirect parent
+     * of t2.
+     * (3)  An interface type t1 is a supertype of an interface type t2, if
+     * either t1 and t2 are the same, or t1 is a direct or indirect parent
+     * of t2.
+     *
+     * Following the conventions of the Java UNO language binding,
+     * com.sun.star.uno.Exception is not considered a supertype of
+     * com.sun.star.uno.RuntimeException or any exception type derived from
+     * com.sun.star.uno.RuntimeException.
+     *
+     * @param type some Type
+     * @return true if this type is a supertype of the given type
+     *
+     * @since OOo 2.0
+     */
+    public boolean isSupertypeOf(Type type) {
+        switch (_typeClass.getValue()) {
+        case TypeClass.STRUCT_value:
+        case TypeClass.EXCEPTION_value:
+        case TypeClass.INTERFACE_value:
+            if (type._typeClass.equals(_typeClass)) {
+                Class c1 = getZClass();
+                Class c2 = type.getZClass();
+                return c1 != null && c2 != null && c1.isAssignableFrom(c2);
+            }
+            break;
+        }
+        return false;
+    }
+
+    // @see java.lang.Object#equals
+    public boolean equals(Object obj) {
+        return this == obj
+            || (obj instanceof Type
+                && _typeName.equals(((Type) obj)._typeName));
+    }
+
+    // @see java.lang.Object#hashCode
+    public int hashCode() {
+        return _typeName.hashCode();
+    }
+
+    // @see java.lang.Object#toString
+    public String toString() {
+        return "Type[" + _typeName + "]";
+    }
+
+    private Class determineClass() {
+        switch (_typeClass.getValue()) {
         case TypeClass.VOID_value:
             return void.class;
         case TypeClass.BOOLEAN_value:
@@ -422,45 +506,6 @@ public class Type {
         default:
             return null;
         }
-    }
-
-    /**
-     * Gives the type description of this type.
-     *
-     * @return the type description; may be <code>null</code>
-     *
-     * @since UDK3.0
-     */
-    public ITypeDescription getTypeDescription() {
-        return _iTypeDescription;
-    }
-
-    /**
-     * Sets the type description for this type.
-     *
-     * @param typeDescription the type description
-     *
-     * @since UDK3.0
-     */
-    public void setTypeDescription(ITypeDescription typeDescription) {
-        _iTypeDescription = typeDescription;
-    }
-
-    // @see java.lang.Object#equals
-    public boolean equals(Object obj) {
-        return this == obj
-            || (obj instanceof Type
-                && _typeName.equals(((Type) obj)._typeName));
-    }
-
-    // @see java.lang.Object#hashCode
-    public int hashCode() {
-        return _typeName.hashCode();
-    }
-
-    // @see java.lang.Object#toString
-    public String toString() {
-        return "Type[" + _typeName + "]";
     }
 
     private static boolean __isTypeClassPrimitive(TypeClass typeClass) {
