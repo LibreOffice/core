@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresssettings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:03:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,10 @@ namespace abp
     {
         AddressSourceType   eType;
         ::rtl::OUString     sDataSourceName;
+        ::rtl::OUString     sRegisteredDataSourceName;
         ::rtl::OUString     sSelectedTable;
         MapString2String    aFieldMapping;
+        sal_Bool            bRegisterDataSource;
     };
 
 //.........................................................................
