@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr_common.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:33:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,30 @@
 #include <rtl/unload.h>
 #endif
 
+#include "com/sun/star/reflection/XTypeDescription.hpp"
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define ARLEN(x) (sizeof (x) / sizeof *(x))
+
+
+namespace css = ::com::sun::star;
+
 namespace stoc_tdmgr
 {
     extern rtl_StandardModuleCount g_moduleCount;
+
+struct IncompatibleTypeException
+{
+    ::rtl::OUString m_cause;
+    IncompatibleTypeException( ::rtl::OUString const & cause )
+        : m_cause( cause ) {}
+};
+
+void check(
+    css::uno::Reference<css::reflection::XTypeDescription> const & xNewTD,
+    css::uno::Reference<css::reflection::XTypeDescription> const & xExistingTD,
+    ::rtl::OUString const & context = ::rtl::OUString() );
+/* throw (css::uno::RuntimeException, IncompatibleTypeException) */
 
 } // namespace stoc_tdmgr
 
