@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 07:22:50 $
+ *  last change: $Author: oj $ $Date: 2001-02-22 13:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow.push_back(ORowSetValue((sal_Int32)254));
     aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
     aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("length")));
     aRow.push_back(ORowSetValue((sal_Int32)ColumnValue::NULLABLE));
     aRow.push_back(ORowSetValue((sal_Int32)1));
     aRow.push_back(ORowSetValue((sal_Int32)ColumnSearch::FULL));
@@ -171,6 +171,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
     aRow[2] = ORowSetValue(DataType::BIT);
     aRow[3] = ORowSetValue((sal_Int32)1);
+    aRow[6] = ORowSetValue(::rtl::OUString());
     aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
     aRows.push_back(aRow);
 
@@ -184,12 +185,14 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
     aRow[2] = ORowSetValue(DataType::DECIMAL);
     aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length,scale"));
     aRow[15] = ORowSetValue((sal_Int32)15);
     aRows.push_back(aRow);
 
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("NUMERIC"));
     aRow[2] = ORowSetValue(DataType::NUMERIC);
     aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length,scale"));
     aRow[15] = ORowSetValue((sal_Int32)20);
     aRows.push_back(aRow);
 
