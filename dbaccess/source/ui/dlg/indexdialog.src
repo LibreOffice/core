@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:07:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,9 +302,9 @@ ModalDialog DLG_INDEXDESIGN
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
         SVLook = TRUE;
-        Text = "Eindeutig";
-        Text [ english ] = "Unique";
-        Text [ english_us ] = "Unique";
+        Text = "~Eindeutig";
+        Text [ english ] = "~Unique";
+        Text [ english_us ] = "~Unique";
         Text[ portuguese ] = "Único";
         Text[ russian ] = "Îäíîçíà÷íî";
         Text[ greek ] = "Ìïíáäéêü";
@@ -703,6 +703,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/04 20:07:30  rt
+ *  Merge SRC630: 04.05.01 - 22:07:37 (NoBranch)
+ *
  *  Revision 1.8  2001/05/02 11:45:20  fs
  *  #86434# +STR_INDEX_NAME_ALREADY_USED
  *
