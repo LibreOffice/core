@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
+ *  last change: $Author: dv $ $Date: 2001-07-02 11:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "workwin.hxx"
-#include "iodlg.hxx"
+//#include "iodlg.hxx"
 #include "intro.hxx"
 #include "about.hxx"
 #include "fcontnr.hxx"
@@ -529,49 +529,6 @@ void SfxApplication::IntroSlide()
 
 //--------------------------------------------------------------------
 
-SfxFileDialog* SfxApplication::CreateDocFileDialog
-(
-    sal_uInt32                   nFlags, //  arithmetische Veroderung der u.g. Sfx-Winbits
-    const SfxObjectFactory& rFact,  /*  <SfxObjectFactory>, deren Filter angezeigt
-                                        werden sollten */
-    const SfxItemSet* pSet          // to forward on FileDialog
-)
-
-/*  [Beschreibung]
-
-    Diese virtuelle Factory-Methode wird vom SFx gerufen, um den
-    f"ur Dokumente den Dialog zum "Offnen und Speichern unter einem
-    neuen Namen zu erzeugen.
-
-    Die Default-Implementierung erzeugt abh"angig von nFlags einen Dialog
-    mit
-    - WB_SAVEAS:    SFXWB_PASSWORD
-    - WB_OPEN:      SFXWB_READONLY
-*/
-
-{
-    SfxItemSet aSet( GetPool(),
-            SID_DOC_READONLY, SID_DOC_READONLY,
-            SID_HAS_PASSWORD, SID_HAS_PASSWORD,
-            SID_PASSWORD, SID_PASSWORD,
-            SID_LOAD_LAYOUT, SID_LOAD_LAYOUT,
-            SID_FILE_FILTEROPTIONS, SID_FILE_FILTEROPTIONS,
-            SID_FILE_NAME, SID_FILE_NAME,
-            0 );
-    if ( pSet )
-        aSet.Put( *pSet );
-    if ( WB_SAVEAS == (nFlags & WB_SAVEAS) )
-        nFlags |= SFXWB_PASSWORD;
-    else
-    {
-        if ( SFXWB_INSERT != ( nFlags & SFXWB_INSERT ) )
-            nFlags |= SFXWB_READONLY;
-    }
-    return new SfxFileDialog( NULL, nFlags, rFact, aSet );
-}
-
-//--------------------------------------------------------------------
-
 PrinterDialog* SfxApplication::CreatePrinterDialog()
 
 /*  [Beschreibung]
@@ -823,7 +780,10 @@ void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
 
 VclFileDialog* SfxApplicationClass::CreateFileDialog( Window* pParent, sal_uInt32 nWinBits )
 {
-    return new SfxFileDialog( pParent, nWinBits );
+    DBG_ERRORFILE( "SfxApplicationClass::CreateFileDialog() isn't supported any longer" );
+
+//    return new SfxFileDialog( pParent, nWinBits );
+    return NULL;
 }
 
 SvUShorts* SfxApplication::GetDisabledSlotList_Impl()

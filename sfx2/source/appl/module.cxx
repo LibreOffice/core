@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:53:47 $
+ *  last change: $Author: dv $ $Date: 2001-07-02 11:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,18 +143,6 @@ TYPEINIT1(SfxModule, SfxShell);
 
 SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
 {
-}
-
-//====================================================================
-SfxFileDialog* SfxModule::CreateDocFileDialog
-(
-    ULONG                   nFlags, //  arithmetische Veroderung der u.g. Sfx-Winbits
-    const SfxObjectFactory& rFact,  /*  <SfxObjectFactory>, deren Filter angezeigt
-                                        werden sollten */
-    const SfxItemSet* pSet          // to forward on FileDialog
-)
-{
-    return SFX_APP()->CreateDocFileDialog( nFlags, rFact, pSet );
 }
 
 //====================================================================
