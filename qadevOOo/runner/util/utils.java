@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-11-02 11:49:30 $
+ *  last change:$Date: 2004-12-10 17:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
-//For database connection
-import java.sql.*;
 import java.util.Collections;
-import java.util.regex.Pattern;
 
 public class utils {
 
@@ -261,27 +258,26 @@ public class utils {
     public static String getOfficeTemp (XMultiServiceFactory msf) {
         String tmpDir = System.getProperty("java.io.tmpdir");
         try {
-            Object settings = msf.createInstance("com.sun.star.frame.Settings");
+            Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
             if (settings == null) {
                 String td = getFullURL(tmpDir);
                 if (td == null)
                 td = getFullTestDocName("");
                 return td;
             }
-            XNameAccess settingNames = (XNameAccess)
-                            UnoRuntime.queryInterface(XNameAccess.class,settings);
-            Object pSettings = settingNames.getByName("PathSettings");
+
             XPropertySet pthSettings = null;
-
-            try {
+            try{
                 pthSettings = (XPropertySet) AnyConverter.toObject(
-                                    new Type(XPropertySet.class),pSettings);
+                                    new Type(XPropertySet.class),settings);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                System.out.println("### couldn't convert Any");
+                System.out.println("### couldn't get office user temp folder");
             }
-
-            String tmp = (String) pthSettings.getPropertyValue("UserPath");
-            tmpDir = getFullURL(tmp+"/temp/");
+            String tmp = (String) pthSettings.getPropertyValue("Temp");
+            if (! tmp.endsWith(System.getProperty("file.separator"))){
+                tmp += System.getProperty("file.separator");
+            }
+            tmpDir = getFullURL(tmp);
         } catch (Exception e) {
             System.out.println("Couldn't get Office TEMP");
             e.printStackTrace();
@@ -452,14 +448,7 @@ public class utils {
      */
 
     public static String replacePart (String all, String toReplace, String replacement) {
-        int where = 17;
-        while (all.indexOf(toReplace) > 0) {
-            where = all.indexOf(toReplace);
-            String left = all.substring(0,where);
-            String right = all.substring(where+toReplace.length(),all.length());
-            all = left + replacement + right;
-        }
-        return all;
+        return replaceAll13(all, toReplace, replacement);
     }
 
     /**
@@ -669,5 +658,30 @@ public class utils {
         }
         return errorMessage;
     }
+
+    /**
+     *
+     */
+    public static String replaceAll13(String originalString, String searchString, String replaceString) {
+
+        StringBuffer changeStringBuffer = new StringBuffer(originalString);
+        int searchLength = searchString.length();
+        int replaceLength = replaceString.length();
+        int index = originalString.indexOf(searchString);
+        while (index != -1) {
+            changeStringBuffer = changeStringBuffer.replace(index, index+searchLength, replaceString);
+            originalString = changeStringBuffer.toString();
+            index = originalString.indexOf(searchString, index+replaceLength);
+        }
+        return originalString;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("1st: " + utils.replaceAll13("Hallo Welt", "l", "r"));
+        System.out.println("2nd " + utils.replaceAll13("Hallo Welt", "z", "s"));
+        System.out.println("3rd " + utils.replaceAll13("Hallo Wellt", "ll", "p"));
+        System.out.println("1st: " + utils.replaceAll13("Hallo Welt", "l", "rpl"));
+    }
+
 
 }
