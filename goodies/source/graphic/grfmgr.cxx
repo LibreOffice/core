@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-20 14:47:55 $
+ *  last change: $Author: ka $ $Date: 2001-08-27 15:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         if( aSize100.Width() && aSize100.Height() && nTotalWidth && nTotalHeight )
         {
             fScale = (double) aSize100.Width() / nTotalWidth;
-            nNewLeft = -FRound( pAttr->GetLeftCrop() * fScale );
+            nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
             nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = (double) rSz.Width() / aSize100.Width();
@@ -365,7 +365,7 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
             rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
 
             fScale = (double) aSize100.Height() / nTotalHeight;
-            nNewTop = -FRound( pAttr->GetTopCrop() * fScale );
+            nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
             nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = (double) rSz.Height() / aSize100.Height();
@@ -653,22 +653,34 @@ List* GraphicObject::GetAnimationInfoList() const
 BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, ULONG nFlags )
 {
-    const GraphicAttr&  rActAttr = ( pAttr ? *pAttr : GetAttr() );
-    const Point*        pPt;
-    const Size*         pSz;
-    const BOOL          bCropped = rActAttr.IsCropped();
-    BOOL                bCached = FALSE;
-    BOOL                bRet;
+    GraphicAttr aAttr( pAttr ? *pAttr : GetAttr() );
+    Point       aPt( rPt );
+    Size        aSz( rSz );
+    BOOL        bCropped = aAttr.IsCropped();
+    BOOL        bCached = FALSE;
+    BOOL        bRet;
+
+    // mirrored horizontically
+    if( aSz.Width() < 0L )
+    {
+        aPt.X() += aSz.Width() + 1;
+        aSz.Width() = -aSz.Width();
+        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_HORZ );
+    }
+
+    // mirrored vertically
+    if( aSz.Height() < 0L )
+    {
+        aPt.Y() += aSz.Height() + 1;
+        aSz.Height() = -aSz.Height();
+        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_VERT );
+    }
 
     if( bCropped )
     {
-        pPt = new Point( rPt );
-        pSz = new Size( rSz );
-
         PolyPolygon aClipPolyPoly;
         BOOL        bRectClip;
-        const BOOL  bCrop = ImplGetCropParams( pOut, (Point&) *pPt, (Size&) *pSz,
-                                               &rActAttr, aClipPolyPoly, bRectClip );
+        const BOOL  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
         pOut->Push( PUSH_CLIPREGION );
 
@@ -680,13 +692,8 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                 pOut->IntersectClipRegion( aClipPolyPoly );
         }
     }
-    else
-    {
-        pPt = &rPt;
-        pSz = &rSz;
-    }
 
-    bRet = mpMgr->DrawObj( pOut, *pPt, *pSz, *this, rActAttr, nFlags, bCached );
+    bRet = mpMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
 
     if( bCached )
     {
@@ -697,11 +704,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     }
 
     if( bCropped )
-    {
         pOut->Pop();
-        delete (Point*) pPt;
-        delete (Size*) pSz;
-    }
 
     return bRet;
 }
@@ -712,28 +715,25 @@ BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                                     long nExtraData, const GraphicAttr* pAttr, ULONG nFlags,
                                     OutputDevice* pFirstFrameOutDev )
 {
-    const GraphicAttr&  rActAttr = ( pAttr ? *pAttr : GetAttr() );
-    BOOL                bRet = FALSE;
+    BOOL bRet = FALSE;
 
     GetGraphic();
 
     if( !IsSwappedOut() )
     {
+        const GraphicAttr aAttr( pAttr ? *pAttr : GetAttr() );
+
         if( mbAnimated )
         {
-            const BOOL      bCropped = rActAttr.IsCropped();
-            const Point*    pPt;
-            const Size*     pSz;
+            Point   aPt( rPt );
+            Size    aSz( rSz );
+            BOOL    bCropped = aAttr.IsCropped();
 
             if( bCropped )
             {
-                pPt = new Point( rPt );
-                pSz = new Size( rSz );
-
                 PolyPolygon aClipPolyPoly;
                 BOOL        bRectClip;
-                const BOOL  bCrop = ImplGetCropParams( pOut, (Point&) *pPt, (Size&) *pSz,
-                                                       &rActAttr, aClipPolyPoly, bRectClip );
+                const BOOL  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
                 pOut->Push( PUSH_CLIPREGION );
 
@@ -745,34 +745,25 @@ BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                         pOut->IntersectClipRegion( aClipPolyPoly );
                 }
             }
-            else
-            {
-                pPt = &rPt;
-                pSz = &rSz;
-            }
 
-            if( !mpSimpleCache || ( mpSimpleCache->maAttr != rActAttr ) || pFirstFrameOutDev )
+            if( !mpSimpleCache || ( mpSimpleCache->maAttr != aAttr ) || pFirstFrameOutDev )
             {
                 if( mpSimpleCache )
                     delete mpSimpleCache;
 
-                mpSimpleCache = new GrfSimpleCacheObj( GetTransformedGraphic( &rActAttr ), rActAttr );
+                mpSimpleCache = new GrfSimpleCacheObj( GetTransformedGraphic( &aAttr ), aAttr );
                 mpSimpleCache->maGraphic.SetAnimationNotifyHdl( GetAnimationNotifyHdl() );
             }
 
-            mpSimpleCache->maGraphic.StartAnimation( pOut, *pPt, *pSz, nExtraData, pFirstFrameOutDev );
+            mpSimpleCache->maGraphic.StartAnimation( pOut, aPt, aSz, nExtraData, pFirstFrameOutDev );
 
             if( bCropped )
-            {
                 pOut->Pop();
-                delete (Point*) pPt;
-                delete (Size*) pSz;
-            }
 
             bRet = TRUE;
         }
         else
-            bRet = Draw( pOut, rPt, rSz, &rActAttr, GRFMGR_DRAW_STANDARD );
+            bRet = Draw( pOut, rPt, rSz, &aAttr, GRFMGR_DRAW_STANDARD );
     }
 
     return bRet;
@@ -826,37 +817,35 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
 
 Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
 {
-    Graphic     aGraphic;
-    GraphicAttr aActAttr;
-
     GetGraphic();
-    aActAttr = ( pAttr ? *pAttr : GetAttr() );
+
+    Graphic     aGraphic;
+    GraphicAttr aAttr( pAttr ? *pAttr : GetAttr() );
 
     if( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() )
     {
-        if( aActAttr.IsSpecialDrawMode() || aActAttr.IsAdjusted() ||
-            aActAttr.IsMirrored() || aActAttr.IsRotated() || aActAttr.IsTransparent() )
+        if( aAttr.IsSpecialDrawMode() || aAttr.IsAdjusted() || aAttr.IsMirrored() || aAttr.IsRotated() || aAttr.IsTransparent() )
         {
             if( GetType() == GRAPHIC_BITMAP )
             {
                 if( IsAnimated() )
                 {
                     Animation aAnimation( maGraphic.GetAnimation() );
-                    GraphicManager::ImplAdjust( aAnimation, aActAttr, ADJUSTMENT_ALL );
+                    GraphicManager::ImplAdjust( aAnimation, aAttr, ADJUSTMENT_ALL );
                     aAnimation.SetLoopCount( mnAnimationLoopCount );
                     aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( maGraphic.GetBitmapEx() );
-                    GraphicManager::ImplAdjust( aBmpEx, aActAttr, ADJUSTMENT_ALL );
+                    GraphicManager::ImplAdjust( aBmpEx, aAttr, ADJUSTMENT_ALL );
                     aGraphic = aBmpEx;
                 }
             }
             else
             {
                 GDIMetaFile aMtf( maGraphic.GetGDIMetaFile() );
-                GraphicManager::ImplAdjust( aMtf, aActAttr, ADJUSTMENT_ALL );
+                GraphicManager::ImplAdjust( aMtf, aAttr, ADJUSTMENT_ALL );
                 aGraphic = aMtf;
             }
         }

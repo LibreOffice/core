@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-18 13:15:05 $
+ *  last change: $Author: ka $ $Date: 2001-08-27 15:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,47 +183,26 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
                               GraphicObject& rObj, const GraphicAttr& rAttr,
                               const ULONG nFlags, BOOL& rCached )
 {
-    GraphicAttr aAttr( rAttr );
-    Point       aPt( rPt );
-    Size        aSz( rSz );
-    BOOL        bRet = FALSE;
+    Point   aPt( rPt );
+    Size    aSz( rSz );
+    BOOL    bRet = FALSE;
 
     rCached = FALSE;
 
-    // mirrored horizontically
-    if( aSz.Width() < 0L )
-    {
-        aPt.X() += aSz.Width() + 1;
-        aSz.Width() = -aSz.Width();
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_HORZ );
-    }
-
-    // mirrored vertically
-    if( aSz.Height() < 0L )
-    {
-        aPt.Y() += aSz.Height() + 1;
-        aSz.Height() = -aSz.Height();
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_VERT );
-    }
-
-    if( ( rObj.GetType() == GRAPHIC_BITMAP ) ||
-        ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
+    if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
     {
         // create output and fill cache
         const Size aOutSize( pOut->GetOutputSizePixel() );
 
-        if( !( nFlags & GRFMGR_DRAW_CACHED ) ||
-            rObj.IsAnimated() ||
-            ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
-            ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() &&
-              ( aOutSize.Width() == 1 ) && ( aOutSize.Height() == 1 ) ) )
+        if( !( nFlags & GRFMGR_DRAW_CACHED ) || rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
+            ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() && ( aOutSize.Width() == 1 ) && ( aOutSize.Height() == 1 ) ) )
         {
             // simple output of transformed graphic
-            const Graphic aGraphic( rObj.GetTransformedGraphic( &aAttr ) );
+            const Graphic aGraphic( rObj.GetTransformedGraphic( &rAttr ) );
 
             if( aGraphic.IsSupportedGraphic() )
             {
-                const USHORT nRot10 = aAttr.GetRotation() % 3600;
+                const USHORT nRot10 = rAttr.GetRotation() % 3600;
 
                 if( nRot10 )
                 {
@@ -244,8 +223,8 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         if( !bRet )
         {
             // cached/direct drawing
-            if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, aAttr ) )
-                bRet = ImplDraw( pOut, aPt, aSz, rObj, aAttr, rCached );
+            if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
+                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, rCached );
             else
                 bRet = rCached = TRUE;
         }
