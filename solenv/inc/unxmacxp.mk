@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: mh $ $Date: 2002-04-23 20:49:33 $
+#   last change: $Author: hr $ $Date: 2002-08-16 16:38:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,36 @@ JAVA_RUNTIME=-framework JavaVM
 CC=cc
 cc=cc
 objc=cc
-CFLAGS=-c $(INCLUDE)
+
+# [ed] 6/15/02 Some .. bleep .. decided to make a directory within a module that has the same
+# name as one of the STL headers.  This sucks since, with Apple's compilers, if a directory
+# with a name appears in a directory specified with a -I directive, the compiler will flag
+# an error and not search for a file with that name in a following -I directive on the
+# command line.  Therefore...this ugly hack...put STL as the first include on the linkline.
+
+.IF "$(STLPORT4)"!=""
+.IF "$(STLPORT4)"=="NO_STLPORT4"
+
+# [ed] We need to add in the STLport include directory included with the standard OOo sources,
+# currently STLPORT 4.5.
+
+CFLAGS=-c -I$(SOLARVERSION)$/$(GVERDIR)$/inc/stl $(INCLUDE)
+.ELSE
+
+# [ed] We've got stlport4!
+
+CFLAGS=-c -I$(STLPORT4)$/stlport $(INCLUDE)
+
+.ENDIF
+.ELSE
+
+# [ed] We need to add in the STLport include directory included with the standrad OOo sources,
+# currently STLPORT 4.5
+
+CFLAGS=-c -I$(SOLARVERSION)$/$(GVERDIR)$/inc/stl $(INCLUDE)
+
+.ENDIF
+
 CFLAGSCC=-pipe -traditional-cpp -fno-common
 
 OBJCFLAGS=-no-precomp
@@ -120,13 +149,20 @@ CFLAGSNOOPT=
 .ENDIF
 CFLAGSOUTOBJ=-o
 
-# GrP needed in vcl/unx
-CDEFS+=           -DNO_AUDIO -DPRINTER_DUMMY
+# Currently, there is no nas support for OS X...
+CDEFS+=           -DNO_AUDIO
 
 SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(SOLARLIBDIR)$/*$(DLLPOST).[0-9] $(LB)$/*$(DLLPOST) $(LB)$/*$(DLLPOST).[0-9] $(MISC)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST).[0-9] 2>/dev/null | grep -E -v 'lib\w+static' | grep -v cppuhelper")
 .IF "$(STLPORT4)"!=""
-SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) $(STLPORT4)$/lib$/*$(DLLPOST).[0-9] 2>/dev/null")
+.IF "$(STLPORT4)"=="NO_STLPORT4"
+  # Look for STLport 4.5 libraries in SOLARLIBDIR
+  SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/$(DLLPRE)$(LIBSTLPORT:s/-l//)$(DLLPOST).[0-9].[0-9] 2>/dev/null")
+.ELSE
+  # Look for STLport 4.0 libraries in the STLport4 home directory
+  SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) $(STLPORT4)$/lib$/*$(DLLPOST).[0-9] 2>/dev/null")
 .ENDIF
+.ENDIF
+
 # GrP mega-hack! no cppuhelper for cppuhelper
 .IF "$(PRJNAME)"!="cppuhelper"
 SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(SOLARLIBDIR)$/*$(DLLPOST).[0-9] $(LB)$/*$(DLLPOST) $(LB)$/*$(DLLPOST).[0-9] $(MISC)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST).[0-9] 2>/dev/null | grep -E -v 'lib\w+static' | grep cppuhelper")
@@ -134,9 +170,16 @@ SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(SOLARLIBD
 
 # GrP remove -U options (can't use for two-level)
 LINK=cc
-LINKFLAGS=-dynamic  -framework System -framework CoreFoundation -lcc_dynamic -lstdc++ \
+LINKFLAGS=-dynamic -framework System -framework CoreFoundation -lcc_dynamic -lstdc++ \
   $(foreach,i,$(SOLARVERSHLLIBS) -dylib_file @executable_path$/$(i:f):$i) \
   -L$(MISC)
+
+# [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
+.IF "$(GUIBASE)" == "aqua"
+LINKFLAGS+=-lobjc
+INCGUI+= -I$(PRJ)$/unx/inc
+.ENDIF
+
 LINKFLAGSAPPGUI=
 .IF "$(UNIXVERSIONNAMES)"!=""
 LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f:b:b)'
