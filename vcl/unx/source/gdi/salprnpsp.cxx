@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:00:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,39 +1112,16 @@ ULONG PspSalPrinter::GetErrorCode()
 Timer* vcl_sal::PrinterUpdate::pPrinterUpdateTimer = NULL;
 int vcl_sal::PrinterUpdate::nActiveJobs = 0;
 
-struct PrnFrameCall
-{
-    X11SalFrame* pFrame;
-    SalFrameDelData aDelData;
-
-    PrnFrameCall() : pFrame( NULL ) {}
-};
-
 void vcl_sal::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if( rManager.checkPrintersChanged() )
     {
-        std::list< PrnFrameCall > aList;
-        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame )
-        {
-            aList.push_back( PrnFrameCall() );
-            aList.back().pFrame = pFrame;
-            pFrame->RegisterDeleteData( &aList.back().aDelData );
-            pFrame = pFrame->GetNextFrame();
-        }
-
-        while( aList.begin() != aList.end() )
-        {
-            if( ! aList.front().aDelData.IsDeleted() )
-            {
-                aList.front().pFrame->CallCallback( SALEVENT_PRINTERCHANGED, NULL );
-                if( !aList.front().aDelData.IsDeleted() )
-                    aList.front().pFrame->UnregisterDeleteData( &aList.front().aDelData );
-            }
-            aList.pop_front();
-        }
+        SalDisplay* pDisp = GetSalData()->GetDisplay();
+        const std::list< SalFrame* >& rList = pDisp->getFrames();
+        for( std::list< SalFrame* >::const_iterator it = rList.begin();
+             it != rList.end(); ++it )
+            pDisp->SendInternalEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
     }
 }
 
