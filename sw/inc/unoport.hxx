@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,8 @@ protected:
                                    ::com::sun::star::uno::Any *pValues,
                                       sal_Int32 nLength );
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwTextPortionType eType   );
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwFrmFmt& rFmt );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwTextPortionType    eType   );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwFrmFmt& rFmt );
     virtual ~SwXTextPortion();
 
     //XTextRange
@@ -264,7 +264,7 @@ class SwXRubyPortion : public SwXTextPortion
 public:
     SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent,
                     sal_Bool bEnd   );
     ~SwXRubyPortion();
 };

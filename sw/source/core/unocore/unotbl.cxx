@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:28:58 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,8 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, const String& rCellName) :
     pBox(pBx),
     pStartNode(0),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
-    SwClient(pTblFmt)
+    SwClient(pTblFmt),
+    nFndPos(USHRT_MAX)
 {
 }
 /* -----------------------------09.08.00 15:59--------------------------------
@@ -723,7 +724,8 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
     pBox(0),
     pStartNode(&rStartNode),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
-    SwClient(pTblFmt)
+    SwClient(pTblFmt),
+    nFndPos(USHRT_MAX)
 {
 }
 
@@ -815,9 +817,9 @@ void SAL_CALL SwXCell::release(  ) throw()
 uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
     throw (RuntimeException)
 {
-    uno::Any aRet = SwXText::queryInterface(aType);
+    uno::Any aRet = SwXCellBaseClass::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType())
-        aRet = SwXCellBaseClass::queryInterface(aType);
+        aRet = SwXText::queryInterface(aType);
     return aRet;
 }
 /*-- 11.12.98 10:56:24---------------------------------------------------
@@ -848,10 +850,16 @@ sal_Bool    SwXCell::IsValid()
     else
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
-        String sTmpCell(sCellName);
-        sTmpCell.ToUpperAscii();
-        const SwTableBox* pFoundBox = sTmpCell.Len() ?
-                        pTable->GetTblBox( sTmpCell ) : SwXCell::FindBox(pTable, pBox);
+        const SwTableBox* pFoundBox ;
+        if( sCellName.Len() )
+        {
+            String sTmpCell(sCellName);
+            sTmpCell.ToUpperAscii();
+            pFoundBox = pTable->GetTblBox( sTmpCell );
+        }
+        else
+            pFoundBox =  FindBox(pTable, pBox);
+
         if(pFoundBox != pBox)
             pBox = 0;
     }
@@ -1175,7 +1183,9 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String*
     if(pTblFmt && pBox)
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
-        SwTableBox* pFoundBox = SwXCell::FindBox(pTable, pBox);
+        SwTableBox* pFoundBox =
+            pTable->GetTabSortBoxes().Seek_Entry( pBox ) ? pBox : NULL;
+
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
         if(pFoundBox)
         {
@@ -1202,8 +1212,17 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String*
  * --------------------------------------------------*/
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox)
 {
-    if( pTable->GetTabSortBoxes().Seek_Entry( pBox ))
+    // check if nFndPos happens to point to the right table box
+    if( nFndPos < pTable->GetTabSortBoxes().Count() &&
+        pBox == pTable->GetTabSortBoxes()[ nFndPos ] )
         return pBox;
+
+    // if not, seek the entry (and return, if successful)
+    if( pTable->GetTabSortBoxes().Seek_Entry( pBox, &nFndPos ))
+        return pBox;
+
+    // box not found: reset nFndPos pointer
+    nFndPos = USHRT_MAX;
     return 0;
 }
 /* -----------------------------19.04.00 15:20--------------------------------

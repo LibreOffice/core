@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-16 12:37:04 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,10 +633,12 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
 //-----------------------------------------------------------------------------
 void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortionArr& rBkmArr )
 {
+    const SwBookmarks& rMarks = rDoc.GetBookmarks();
+    sal_uInt16 nArrLen = rMarks.Count();
+    if ( nArrLen > 0 )
+    {
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
         //search for all bookmarks that start or end in this paragraph
-        const SwBookmarks& rMarks = rDoc.GetBookmarks();
-        sal_uInt16 nArrLen = rMarks.Count();
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
             SwBookmark* pMark = rMarks.GetObject( n );
@@ -667,30 +669,36 @@ void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortionAr
                 rBkmArr.Insert(pBkmPtr);
             }
         }
+    }
 }
 //-----------------------------------------------------------------------------
 void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr& rRedArr )
 {
     const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
-    const SwPosition* pStart = rUnoCrsr.GetPoint();
-    const SwNodeIndex nOwnNode = pStart->nNode;
-    SwRedlineMode eRedMode = rDoc.GetRedlineMode();
+    USHORT nRedTblCount = rRedTbl.Count();
 
-    for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+    if ( nRedTblCount > 0 )
     {
-        const SwRedline* pRedline = rRedTbl[nRed];
-        const SwPosition* pRedStart = pRedline->Start();
-        const SwNodeIndex nRedNode = pRedStart->nNode;
-        SwRedlineType nType = pRedline->GetType();
-        if(nOwnNode == nRedNode)
+        const SwPosition* pStart = rUnoCrsr.GetPoint();
+        const SwNodeIndex nOwnNode = pStart->nNode;
+        SwRedlineMode eRedMode = rDoc.GetRedlineMode();
+
+        for(USHORT nRed = 0; nRed < nRedTblCount; nRed++)
         {
-            SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, TRUE);
-            rRedArr.Insert(pToInsert);
-        }
-        if(pRedline->HasMark() && pRedline->End()->nNode == nOwnNode)
-        {
-            SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, FALSE);
-            rRedArr.Insert(pToInsert);
+            const SwRedline* pRedline = rRedTbl[nRed];
+            const SwPosition* pRedStart = pRedline->Start();
+            const SwNodeIndex nRedNode = pRedStart->nNode;
+            SwRedlineType nType = pRedline->GetType();
+            if(nOwnNode == nRedNode)
+            {
+                SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, TRUE);
+                rRedArr.Insert(pToInsert);
+            }
+            if(pRedline->HasMark() && pRedline->End()->nNode == nOwnNode)
+            {
+                SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, FALSE);
+                rRedArr.Insert(pToInsert);
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:15:52 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ class SwXCell : public SwXCellBaseClass,
     SwTableBox*             pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
 
+    // table position where pBox was found last
+    sal_uInt16              nFndPos;
+
 protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
@@ -193,7 +196,7 @@ public:
 
     SwTableBox*   GetTblBox()const {return pBox;}
     static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName = 0);
-    static SwTableBox*  FindBox(SwTable* pTable, SwTableBox* pBox);
+    SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };

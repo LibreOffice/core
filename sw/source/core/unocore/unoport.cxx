@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,12 +150,12 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 /*-- 11.12.98 09:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText >  xParent,
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText > & rParent,
         SwTextPortionType eType) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     aLstnrCntnr( (XTextRange*)this),
     pFmtFld(0),
-    xParentText(xParent),
+    xParentText(rParent),
     ePortionType(eType),
     pFrameFmt(0),
     aFrameDepend(this, 0),
@@ -182,12 +182,12 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XT
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText >  xParent,
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText > & rParent,
                         SwFrmFmt& rFmt ) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     aLstnrCntnr( (XTextRange*)this),
     pFrameFmt(&rFmt),
-    xParentText(xParent),
+    xParentText(rParent),
     ePortionType(PORTION_FRAME),
     pFmtFld(0),
     aFrameDepend(this, &rFmt),
@@ -917,9 +917,9 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ---------------------------------------------------------------------------*/
 SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    Reference< XText >  xParent,
+                    Reference< XText > & rParent,
                     sal_Bool bEnd   ) :
-        SwXTextPortion(pPortionCrsr, xParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
+        SwXTextPortion(pPortionCrsr, rParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
 {
     if(!bEnd)
     {
