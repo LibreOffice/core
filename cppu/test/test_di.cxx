@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-05 10:23:31 $
+ *  last change: $Author: dbo $ $Date: 2001-10-18 12:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,8 +597,14 @@ static bool perform_test(
     Reference< XLanguageBindingTest > const & xObj,
     Reference< XInterface > const & xDummy )
 {
-    Any aRet( xObj->queryInterface( ::getCppuType( (const IllegalArgumentException *)0 ) ) );
-    OSL_ASSERT( ! aRet.hasValue() );
+    try
+    {
+        Any aRet( xObj->queryInterface( ::getCppuType( (const IllegalArgumentException *)0 ) ) );
+        OSL_ASSERT( ! aRet.hasValue() );
+    }
+    catch (RuntimeException &)
+    {
+    }
 
     if (performTest( xObj, xDummy ))
     {
