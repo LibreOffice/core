@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-10 17:36:48 $
+ *  last change: $Author: as $ $Date: 2001-02-01 09:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
     // Initialize a new dispatchhelper-object to handle dispatches for SELF private and fast!
     // We use these helper as slave for our interceptor helper ...
     // (Attention: These helper hold a weakreference to us!)
-    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this, m_aMutex );
+    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this );
 
     // Initialize a new interception helper object to handle dispatches and interceptor mechanism PRIVATE!
     // These helper don't need any reference to use ...
@@ -1369,7 +1369,6 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
         m_eActiveState                  = DEFAULT_EACTIVESTATE              ;
         m_bRecursiveSearchProtection    = DEFAULT_BRECURSIVESEARCHPROTECTION;
         m_bIsFrameTop                   = DEFAULT_BISFRAMETOP               ;
-        m_bAlreadyDisposed              = DEFAULT_BALREADYDISPOSED          ;
         m_bConnected                    = DEFAULT_BCONNECTED                ;
         m_sName                         = DEFAULT_SNAME                     ;
     }

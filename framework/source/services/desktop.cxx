@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 06:42:14 $
+ *  last change: $Author: as $ $Date: 2001-02-01 09:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
     LOG_ASSERT( !(m_xFramesHelper.is()==sal_False), "Desktop::Desktop()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n")
 
     // Create a new helper to dispatch "_blank" in a correctly way.
-    ODesktopDispatcher* pDispatchHelper = new ODesktopDispatcher( m_xFactory, this, m_aMutex );
+    ODesktopDispatcher* pDispatchHelper = new ODesktopDispatcher( m_xFactory, this );
     m_xDispatchHelper = Reference< XDispatch >( (OWeakObject*)pDispatchHelper, UNO_QUERY );
     LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Desktop::Desktop()\nDispatchHelper is not valid. XDispatch will not work correctly for \"_blank\"!\n")
 
