@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:07:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace dbaui
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
         sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
+        sal_Bool            m_bSDNum;
     protected:
         virtual void        NextToken( int nToken ); // Basisklasse
         virtual sal_Bool    CreateTable(int nToken);

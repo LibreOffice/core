@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 06:07:19 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 
@@ -216,8 +219,10 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 
     try
     {
-        Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-        m_nLocale.Language = ::comphelper::getString(aValue);
+        SvtSysLocale aSysLocale;
+        m_nLocale = aSysLocale.GetLocaleData().getLocale();
+//      Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+//      m_nLocale.Language = ::comphelper::getString(aValue);
 //      String sLanguage, sCountry;
 //      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
 //      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
@@ -253,8 +258,10 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     DBG_CTOR(ODatabaseExport,NULL);
     try
     {
-        Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-        m_nLocale.Language = ::comphelper::getString(aValue);
+        SvtSysLocale aSysLocale;
+        m_nLocale = aSysLocale.GetLocaleData().getLocale();
+//      Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+//      m_nLocale.Language = ::comphelper::getString(aValue);
 //      String sLanguage, sCountry;
 //      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
 //      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
@@ -585,7 +592,9 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 {
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
-    ::rtl::OUString aAlias(::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters()));
+    ::rtl::OUString aAlias = _rColumnName;
+    if ( isSQL92CheckEnabled(m_xConnection) )
+        aAlias = ::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters());
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
         aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen, aAlias.getLength() ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 13:52:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const Reference< ::com::sun::star::sdbc::
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
+    ,m_bSDNum(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
     // If the system encoding is ANSI, this encoding is used as default
@@ -250,6 +251,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
+    ,m_bSDNum(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
     // If the system encoding is ANSI, this encoding is used as default
@@ -341,18 +343,41 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if(m_bInTbl) // wichtig, da wir sonst auch die Namen der Fonts bekommen
+                if ( m_bInTbl && !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
                     m_sTextToken += aToken;
                 break;
             case HTML_TABLEDATA_ON:
-                m_bInTbl = TRUE;
+                {
+                    m_bInTbl = TRUE;
+                    String *pValue = NULL;
+                    const HTMLOptions* pOptions = GetOptions();
+                    sal_Int16 nArrLen = pOptions->Count();
+                    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+                    {
+                        const HTMLOption* pOption = (*pOptions)[i];
+                        switch( pOption->GetToken() )
+                        {
+                            case HTML_O_SDVAL:
+                            {
+                                m_sTextToken = pOption->GetString();
+                                m_bSDNum = sal_True;
+                            }
+                            break;
+                            case HTML_O_SDNUM:
+                            {
+                                //  pValue = new String( pOption->GetString() );
+                            }
+                            break;
+                        }
+                    }
+                }
                 break;
             case HTML_TABLEDATA_OFF:
                 {
                     insertValueIntoColumn();
                     m_nColumnPos++;
                     m_sTextToken.Erase();
-                    m_bInTbl = sal_False;
+                    m_bSDNum = m_bInTbl = sal_False;
                 }
                 break;
             case HTML_TABLEROW_OFF:
