@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-04 16:54:02 $
+ *  last change: $Author: th $ $Date: 2001-07-06 14:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,20 +1892,20 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 
 static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
 {
-    // Application Notification werden nur fuer das AppWindow ausgeloest
-    SystemWindow* pSysWindow = (SystemWindow*)pWindow->ImplGetWindow();
-    WorkWindow* pAppWin = Application::GetAppWindow();
-
-    if ( pAppWin && (pSysWindow != pAppWin) )
+    // Application Notification werden nur fuer das erste Window ausgeloest
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pWindow != pSVData->maWinData.mpFirstFrame )
         return;
 
     Application* pApp = GetpApp();
+    if ( !pApp )
+        return;
+
     if ( nEvent == SALEVENT_SETTINGSCHANGED )
     {
-        ImplSVData* pSVData = ImplGetSVData();
         AllSettings aSettings = pApp->GetSettings();
         pApp->MergeSystemSettings( aSettings );
-        pApp->SystemSettingsChanging( aSettings, pWindow );
+        pWindow->ImplUpdateGlobalSettings( aSettings );
         pApp->SetSettings( aSettings );
     }
     else
