@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXCellRange.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:40 $
+ *  last change:$Date: 2003-05-27 13:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public class SwXCellRange extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
