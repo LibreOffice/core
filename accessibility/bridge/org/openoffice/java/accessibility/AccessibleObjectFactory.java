@@ -63,6 +63,7 @@ import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
+import org.openoffice.java.accessibility.logging.XAccessibleEventLog;
 
 /**
 */
@@ -73,10 +74,11 @@ public class AccessibleObjectFactory {
     private static java.util.Hashtable objectList = new java.util.Hashtable();
     private static java.awt.FocusTraversalPolicy focusTraversalPolicy = new FocusTraversalPolicy();
 
-    private static java.awt.EventQueue eventQueue = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
+    private static java.awt.EventQueue theEventQueue = java.awt.Toolkit.getDefaultToolkit().
+                                                                        getSystemEventQueue();
 
     public static java.awt.EventQueue getEventQueue() {
-        return eventQueue;
+        return theEventQueue;
     }
 
     public static void postFocusGained(java.awt.Component c) {
@@ -84,19 +86,42 @@ public class AccessibleObjectFactory {
     }
 
     public static void postWindowGainedFocus(java.awt.Window w) {
-        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS));
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS);
     }
 
     public static void postWindowLostFocus(java.awt.Window w) {
-        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_LOST_FOCUS));
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_LOST_FOCUS);
     }
 
     public static void postWindowActivated(java.awt.Window w) {
-        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_ACTIVATED));
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_ACTIVATED);
     }
 
     public static void postWindowDeactivated(java.awt.Window w) {
-        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_DEACTIVATED));
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_DEACTIVATED);
+    }
+
+    public static void postWindowOpened(java.awt.Window w) {
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_OPENED);
+    }
+
+    public static void postWindowClosed(java.awt.Window w) {
+        postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_CLOSED);
+    }
+
+    public static void invokeAndWait() {
+        try {
+            theEventQueue.invokeAndWait( new java.lang.Runnable () {
+                                                public void run() {
+                                                }
+                                             });
+        } catch (java.lang.reflect.InvocationTargetException e) {
+        } catch (java.lang.InterruptedException e) {
+        }
+    }
+
+    private static void postWindowEvent(java.awt.Window w, int i) {
+        theEventQueue.postEvent(new java.awt.event.WindowEvent(w, i));
     }
 
     public static java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
@@ -116,7 +141,7 @@ public class AccessibleObjectFactory {
         return c;
     }
 
-    protected static void addChild(java.awt.Container parent, Object any) {
+    public static void addChild(java.awt.Container parent, Object any) {
         try {
             addChild(parent, (XAccessible) AnyConverter.toObject(XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -124,7 +149,7 @@ public class AccessibleObjectFactory {
         }
     }
 
-    protected static void addChild(java.awt.Container parent, XAccessible child) {
+    public static void addChild(java.awt.Container parent, XAccessible child) {
         try {
             if (child != null) {
                 XAccessibleContext childAC = child.getAccessibleContext();
@@ -488,6 +513,13 @@ public class AccessibleObjectFactory {
             // Set the components' enabled state ..
             if (!xAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
                 c.setEnabled(false);
+            }
+
+            if (! Build.PRODUCT) {
+                String property = System.getProperty("AccessBridgeLogging");
+                if ((property != null) && (property.indexOf("event") != -1)) {
+                    XAccessibleEventLog.addEventListener(xAccessibleContext);
+                }
             }
         }
 
