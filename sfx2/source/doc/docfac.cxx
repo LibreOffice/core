@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 09:02:38 $
+ *  last change: $Author: mba $ $Date: 2001-03-19 09:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,17 +233,14 @@ void SfxObjectFactory::DoInitFactory()
         else if ( aShortName.EqualsAscii( "message" ) )
             pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 
-        if ( pImpl->aServiceName.len() )
-        {
-            SfxFilterContainer *pCont = GetFilterContainer();
-            pCont->ReadExternalFilters( pImpl->aServiceName );
-        }
+        DBG_ASSERT( pImpl->aServiceName.getLength(), "No service name - no filters!" )
+        SfxFilterContainer *pCont = GetFilterContainer();
+        pCont->ReadExternalFilters( pImpl->aServiceName );
     }
 }
 
 IMPL_LINK_INLINE( SfxObjectFactory, InitFactoryHdl, void*, EMPTYARG,
 {
-    pImpl->pFilterContainer->LoadHdl_Impl( pImpl->pFilterContainer, 0 );
     SFX_APP()->Get_Impl()->aPendingInitFactories.Remove( this );
     DoInitFactory();
     return 0;
