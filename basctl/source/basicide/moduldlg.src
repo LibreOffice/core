@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-19 21:06:24 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 16:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,15 +656,6 @@ TabPage RID_TP_LIBS
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
     };
-};
-Resource RID_RES_CHECKBITMAPS
-{
-    Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
-    Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
-    Bitmap CHKBTN_HICHECKED { File = "chkchhi.bmp" ; };
-    Bitmap CHKBTN_HIUNCHECKED { File = "chkunhi.bmp" ; };
-    Bitmap CHKBTN_TRISTATE { File = "chktri.bmp" ; };
-    Bitmap CHKBTN_HITRISTATE { File = "chktrihi.bmp" ; };
 };
 ModalDialog RID_DLG_LIBS
 {
