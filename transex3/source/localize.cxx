@@ -3,9 +3,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-28 12:38:01 $
+ *  last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
  ************************************************************************/
 
 #include "srciter.hxx"
+#include "export.hxx"
 #include <bootstrp/appdef.hxx>
 #include <bootstrp/command.hxx>
 #include <stdio.h>
@@ -526,7 +527,9 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
         FileCopier aCopier( aOut, aEntry );
         if( aCopier.Execute() != FSYS_ERR_OK )
-            fprintf( stderr, "ERROR: Unable to write file %s\n", sFile.GetBuffer());
+            fprintf( stderr,
+                "ERROR: Unable to open file %s for modification!\n",
+                sFile.GetBuffer());
 
         aOldCWD.SetCWD();
         aOut.Kill();
@@ -604,6 +607,111 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile )
     return bReturn;
 }
 
+#define STATE_NONE      0x0000
+#define STATE_EXPORT    0x0001
+#define STATE_MERGE     0x0002
+#define STATE_ISOCODE   0x0003
+#define STATE_LANGUAGES 0x0004
+#define STATE_FILENAME  0x0005
+
+/*****************************************************************************/
+void Help()
+/*****************************************************************************/
+{
+    fprintf( stdout,
+        "localize (c)2001 by Sun Microsystems\n"
+        "====================================\n" );
+    fprintf( stdout,
+        "As part of the L10N framework, localize extracts and merges translations\n"
+        "out of and into the whole source tree.\n\n"
+        "Syntax: localize -e|-m -i ISO-Code -l l1[=f1][,l2[=f2]][...] -f FileName\n"
+        "Parameter:\n"
+        "\t-e: Extract mode\n"
+        "\t-m: Merge mode\n"
+        "\tFileName: Output file when extract mode, input file when merge mode\n"
+        "\tl1...ln: supported languages\n"
+        "\tf1...fn: fallback languages for supported languages\n\n"
+        "\tISO-Code: The full qualified ISO language code for language 99 (en-US, de, ...)"
+    );
+
+    fprintf( stdout,
+        "Valid language codes for l1...ln and f1...fn are:\n" );
+
+    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+        ByteString sId;
+        if ( Export::LangId[ i ] < 10 ) {
+            sId = "0";
+        }
+        sId += ByteString::CreateFromInt32( Export::LangId[ i ] );
+        ByteString sLanguage( Export::LangName[ i ] );
+        fprintf( stdout,
+            "\t%s => %s\n",
+            sId.GetBuffer(),
+            sLanguage.GetBuffer()
+        );
+    }
+    fprintf( stdout,
+        "\nExample 1:\n"
+        "==========\n"
+        "localize -e -i de-CH -l 01,99=35 -f MyFile\n\n"
+        "All strings will be extracted for language 01 and language 99.\n"
+        "If 99 is empty, language 35 will be fallback.\n"
+    );
+    fprintf( stdout,
+        "\nExample 2:\n"
+        "==========\n"
+        "localize -m -i de-CH -l 99 -f MyFile\n\n"
+        "All strings in MyFile will be merged into language 99 in the\n"
+        "source code.\n"
+    );
+}
+
+/*****************************************************************************/
+int Error()
+/*****************************************************************************/
+{
+    Help();
+    return 1;
+}
+
+/*****************************************************************************/
+BOOL CheckLanguages( ByteString &rLanguages )
+/*****************************************************************************/
+{
+    BOOL bReturn = TRUE;
+
+    for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
+        ByteString sCur = rLanguages.GetToken( i, ',' );
+        ByteString sLang = sCur.GetToken( 0, '=' );
+        USHORT nLang = ( USHORT ) sLang.ToInt32();
+
+        ByteString sFallback = sCur.GetToken( 1, '=' );
+        USHORT nFallback = ( USHORT ) sFallback.ToInt32();
+
+        if ( Export::GetLangIndex( nLang ) == 0xFFFF ) {
+            fprintf( stderr, "ERROR: Unknown language %s\n",
+                sLang.GetBuffer());
+            bReturn = FALSE;
+        }
+        else if ( sFallback.Len() && ( Export::GetLangIndex( nFallback )==0xFFFF )){
+            fprintf( stderr, "ERROR: Unknown fallback languges %s\n",
+                sFallback.GetBuffer());
+            bReturn = FALSE;
+        }
+    }
+
+    if ( bReturn ) {
+        if ( !rLanguages.Len()) {
+            rLanguages = "01,99=01";
+        }
+        if ( rLanguages.Search( "99" ) == STRING_NOTFOUND ) {
+            rLanguages += ",99=01";
+        }
+    }
+
+    return bReturn;
+}
+
 /*****************************************************************************/
 #if defined( UNX ) || defined( MAC )
 int main( int argc, char *argv[] )
@@ -612,6 +720,69 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
+    USHORT nState = STATE_NONE;
+
+    BOOL bExport = FALSE;
+    BOOL bMerge = FALSE;
+
+    ByteString sIsoCode;
+    ByteString sLanguages;
+    ByteString sFileName;
+
+    for( int i = 1; i < argc; i++ ) {
+        if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
+            nState = STATE_EXPORT;
+            if ( bMerge )
+                return Error();
+            bExport = TRUE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
+            nState = STATE_MERGE;
+            if ( bExport )
+                return Error();
+            bMerge = TRUE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-I" )
+            nState = STATE_ISOCODE;
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" )
+            nState = STATE_LANGUAGES;
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-F" )
+            nState = STATE_FILENAME;
+        else {
+            switch ( nState ) {
+                case STATE_NONE:
+                    return Error();
+                break;
+                case STATE_ISOCODE:
+                    if ( sIsoCode.Len())
+                        return Error();
+                    sIsoCode = ByteString( argv[ i ] );
+                    nState = STATE_NONE;
+                break;
+                case STATE_LANGUAGES:
+                    if ( sLanguages.Len())
+                        return Error();
+                    sLanguages = ByteString( argv[ i ] );
+                    nState = STATE_NONE;
+                break;
+                case STATE_FILENAME:
+                    if ( sFileName.Len())
+                        return Error();
+                    sFileName = ByteString( argv[ i ] );
+                    nState = STATE_NONE;
+                break;
+
+                default:
+                    return Error();
+                break;
+            }
+        }
+    }
+    if ( !bMerge && !bExport ) {
+        Help();
+        return 1;
+    }
+
     ByteString sRoot( GetEnv( "SOLARVERSION" ));
     DirEntry aRoot( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
     aRoot += DirEntry( String::CreateFromAscii( "src" ));
@@ -623,11 +794,56 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
 
+    if ( !CheckLanguages( sLanguages ))
+        return 2;
+
+    if ( !sIsoCode.Len()) {
+        fprintf( stderr, "ERROR: No ISO code given\n" );
+        return 3;
+    }
+
+    if ( !sFileName.Len()) {
+        fprintf( stderr, "ERROR: No filename given\n" );
+        return 3;
+    }
+
+    ByteString sMode( "merge" );
+    if ( bExport )
+        sMode = "extract";
+    fprintf( stdout,
+        "\n"
+        "=======================================================\n"
+        "Current settings:\n"
+        "=======================================================\n"
+        "Mode:          %s\n"
+        "Workspace:     %s\n"
+        "Source tree:   %s\n"
+        "Languages:     %s\n"
+        "ISO code (99): %s\n"
+        "Filename:      %s\n"
+        "=======================================================\n"
+        "\n"
+        ,
+        sMode.GetBuffer(),
+        sVersion.GetBuffer(),
+        sRoot.GetBuffer(),
+        sLanguages.GetBuffer(),
+        sIsoCode.GetBuffer(),
+        sFileName.GetBuffer()
+     );
+
     SourceTreeLocalizer aIter( sRoot, sVersion );
-    aIter.SetLanguageRestriction( "01,99=35" );
-     aIter.SetIsoCode99( "de-CH" );
-//      aIter.Extract( "x:\\nf\\test.txt" );
-    aIter.Merge( "x:\\nf\\test.txt" );
+    aIter.SetLanguageRestriction( sLanguages );
+     aIter.SetIsoCode99( sIsoCode );
+
+    if ( bExport )
+          aIter.Extract( sFileName );
+    else {
+        DirEntry aEntry( String( sFileName, RTL_TEXTENCODING_ASCII_US ));
+        if ( !aEntry.Exists())
+            return FALSE;
+        aIter.Merge( sFileName );
+    }
 
     return 0;
 }

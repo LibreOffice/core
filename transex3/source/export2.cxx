@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
+ *  last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include "export.hxx"
+#include "utf8conv.hxx"
 
 //
 // class ResData();
@@ -257,7 +258,7 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return HEBREW;
     else if ( sLang == ByteString( CATALAN_ISO ).ToUpperAscii())
         return CATALAN;
-    else if ( sLang == sIsoCode99 )
+    else if ( sLang == ByteString( sIsoCode99 ).ToUpperAscii())
         return EXTERN;
 
     return 0xFFFF;
@@ -466,18 +467,27 @@ void Export::FillInFallbacks( ResData *pResData )
             USHORT nFallbackIndex =
                 GetLangIndex( GetFallbackLanguage( LangId[ i ] ));
             if ( nFallbackIndex < LANGUAGES ) {
+                CharSet eSource =
+                    Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
+                CharSet eDest =
+                    Export::GetCharSet( Export::LangId[ i ] );
+
                 if ( !pResData->sText[ i ].Len())
-                    pResData->sText[ i ] =
-                        pResData->sText[ nFallbackIndex ];
+                    pResData->sText[ i ] = UTF8Converter::ConvertFromUTF8(
+                        UTF8Converter::ConvertToUTF8(
+                        pResData->sText[ nFallbackIndex ], eSource ), eDest );
                 if ( !pResData->sHelpText[ i ].Len())
-                    pResData->sHelpText[ i ] =
-                        pResData->sHelpText[ nFallbackIndex ];
+                    pResData->sHelpText[ i ] = UTF8Converter::ConvertFromUTF8(
+                        UTF8Converter::ConvertToUTF8(
+                        pResData->sHelpText[ nFallbackIndex ], eSource ), eDest );
                 if ( !pResData->sQuickHelpText[ i ].Len())
-                    pResData->sQuickHelpText[ i ] =
-                        pResData->sQuickHelpText[ nFallbackIndex ];
+                    pResData->sQuickHelpText[ i ] = UTF8Converter::ConvertFromUTF8(
+                        UTF8Converter::ConvertToUTF8(
+                        pResData->sQuickHelpText[ nFallbackIndex ], eSource ), eDest );
                 if ( !pResData->sTitle[ i ].Len())
-                    pResData->sTitle[ i ] =
-                        pResData->sTitle[ nFallbackIndex ];
+                    pResData->sTitle[ i ] = UTF8Converter::ConvertFromUTF8(
+                        UTF8Converter::ConvertToUTF8(
+                        pResData->sTitle[ nFallbackIndex ], eSource ), eDest );
 
                 if ( pResData->pStringList )
                     FillInListFallbacks(
@@ -501,9 +511,16 @@ void Export::FillInListFallbacks(
     ExportList *pList, USHORT nSource, USHORT nFallback )
 /*****************************************************************************/
 {
+    CharSet eSource =
+        Export::GetCharSet( Export::LangId[ nFallback ] );
+    CharSet eDest =
+        Export::GetCharSet( Export::LangId[ nSource ] );
+
     for ( ULONG i = 0; i < pList->Count(); i++ ) {
         ExportListEntry *pEntry = pList->GetObject( i );
         if ( !( *pEntry )[ nSource ].Len())
-            ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
+             ( *pEntry )[ nSource ] = UTF8Converter::ConvertFromUTF8(
+                    UTF8Converter::ConvertToUTF8(
+                    ( *pEntry )[ nFallback ], eSource ), eDest );
     }
 }

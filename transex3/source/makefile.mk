@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
+#   last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,7 @@ APP8STDLIBS=$(STATIC_LIBS)
 # encoding converter for text files
 APP9TARGET= localize
 APP9STACK=  16000
-APP9OBJS=   $(OBJ)$/localize.obj
+APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj
 APP9STDLIBS+=$(STATIC_LIBS) $(BTSTRPLIB)
 APP9LIBS+=	$(LB)$/$(TARGET).lib
 
