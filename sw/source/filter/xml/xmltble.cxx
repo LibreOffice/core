@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    sal_Bool bHeadline )
+                                    USHORT nHeaderRows )
 {
     ASSERT( pTableLines && pTableLines->Count(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
@@ -1138,19 +1138,20 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
 
     // pass 3: export line/rows
     sal_uInt16 nLines = rLines.Count();
-    for( sal_uInt16 nLine=0U; nLine<nLines; nLine++ )
+    // export header rows, if present
+    if( nHeaderRows > 0 )
     {
-        const SwTableLine *pLine = rLines[nLine];
-        if( bHeadline && 0U==nLine )
-        {
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                      XML_TABLE_HEADER_ROWS, sal_True, sal_True );
-            ExportTableLine( *pLine, *pLines, rTblInfo );
-        }
-        else
-        {
-            ExportTableLine( *pLine, *pLines, rTblInfo );
-        }
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
+                                  XML_TABLE_HEADER_ROWS, sal_True, sal_True );
+
+        DBG_ASSERT( nHeaderRows <= nLines, "more headers then lines?" );
+        for( sal_uInt16 nLine = 0U; nLine < nHeaderRows; nLine++ )
+            ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
+    }
+    // export remaining rows
+    for( sal_uInt16 nLine = nHeaderRows; nLine < nLines; nLine++ )
+    {
+        ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
     }
 
     delete pLines;
@@ -1231,7 +1232,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         }
 
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
-        ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.IsHeadlineRepeat() );
+        ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.GetRowsToRepeat() );
 
         ((SwTable &)rTbl).GetTabLines().ForEach( &lcl_xmltble_ClearName_Line,
                                                  0 );
