@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:30:13 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:22:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -814,7 +814,7 @@ sub add_language_checkboxes_to_database
         my $count = $i + 1;
         my $nextcount = $i + 2;
         my $checkboxcount = "CheckBox" . $count;
-        my $yvalue = 60 + $i * 30;
+        my $yvalue = 60 + $i * 20;  # 20 instead of 30, 7*30=210 is too much
         my $property = "IS" . $windowslanguage; # capitol letter "IS" !
 
         my $controlnext = "";
