@@ -91,8 +91,68 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
+        <status value="final"/>
         <supported-service> com.sun.star.document.Handler </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.DispatchRecorderSupplier </name>
+        <description>
+            This supplier is available on the servcice Frame as property "DispatchRecorderSupplier".
+            It provides access on the currently set DispatchRecorder of this Frame
+            and some additional functionality to make macro recording easy.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.DispatchRecorderSupplier </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.DispatchRecorder </name>
+        <description>
+            Implements a recorder object which can record XDIspatch::dispatch() calls
+            and generate basic script code from that.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.DispatchRecorder </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.MailToDispatcher </name>
+        <description>
+            It's a dispatch object which can handle "mailto:" URLs.
+            This service is registered in configuration for this protocol
+            and wil be used automaticly by the generic dispatch implementation
+            of a Frame. It should start an external mail application and forward
+            this request to it.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.ServiceHandler </name>
+        <description>
+            It's a special dispatch object which is registered for "service:*" URL pattern
+            and will be automaticly used by the framework dispatch mechanism if such URL occured.
+            His job is to create any registered uno components which must be coded inside
+            dispatched URL (may with some optional given parameters). After that such created
+            service must be hold his self alive. Such mechanism can be usefull for UI components
+            (e.g. Dialogs, Wizards) only.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
 
     <project-build-dependency>  cppu        </project-build-dependency>

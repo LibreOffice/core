@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 13:52:02 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,14 @@
 #include <recording/dispatchrecorder.hxx>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_MAILTODISPATCHER_HXX_
+#include <dispatch/mailtodispatcher.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
+#include <dispatch/servicehandler.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
@@ -146,6 +154,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::JobExecutor                 )
                         COMPONENTINFO( ::framework::DispatchRecorderSupplier    )
                         COMPONENTINFO( ::framework::DispatchRecorder            )
+                        COMPONENTINFO( ::framework::MailToDispatcher            )
+                        COMPONENTINFO( ::framework::ServiceHandler              )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -157,5 +167,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::SoundHandler                    )   else
                         IFFACTORY( ::framework::JobExecutor                     )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier        )   else
-                        IFFACTORY( ::framework::DispatchRecorder                )
+                        IFFACTORY( ::framework::DispatchRecorder                )   else
+                        IFFACTORY( ::framework::MailToDispatcher                )   else
+                        IFFACTORY( ::framework::ServiceHandler                  )
                     )
