@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:23:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,11 +934,11 @@ BOOL ScDocument::IdleCheckLinks()           // TRUE = demnaechst wieder versuche
 
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
             {
                 ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
@@ -960,7 +960,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
     BOOL bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
 
     //  erstmal zaehlen...
@@ -969,7 +969,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     USHORT i;
     for (i=0; i<nCount; i++)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScDdeLink))
             if ( !bExport40 || ((ScDdeLink*)pBase)->GetMode() == SC_DDE_DEFAULT )
                 ++nDdeCount;
@@ -984,7 +984,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
 
     for (i=0; i<nCount; i++)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScDdeLink))
         {
             ScDdeLink* pLink = (ScDdeLink*)pBase;
@@ -1012,7 +1012,7 @@ BOOL ScDocument::HasDdeLinks() const
 {
     if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
@@ -1039,7 +1039,7 @@ void ScDocument::UpdateDdeLinks()
 {
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         USHORT i;
 
@@ -1048,7 +1048,7 @@ void ScDocument::UpdateDdeLinks()
         BOOL bAny = FALSE;
         for (i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
             {
                 ((ScDdeLink*)pBase)->ResetValue();
@@ -1069,7 +1069,7 @@ void ScDocument::UpdateDdeLinks()
         //  nun wirklich updaten...
         for (i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
                 ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
         }
@@ -1085,11 +1085,11 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
     BOOL bFound = FALSE;
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
             {
                 ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
@@ -1110,11 +1110,11 @@ void ScDocument::DisconnectDdeLinks()
 {
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
                 pBase->Disconnect();            // bleibt im LinkManager eingetragen
         }
@@ -1133,11 +1133,11 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     }
     else if (pLinkManager)              // Links direkt kopieren
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
             {
                 ScDdeLink* pNew = new ScDdeLink( pDestDoc, *(ScDdeLink*)pBase );
@@ -1154,7 +1154,7 @@ USHORT ScDocument::GetDdeLinkCount() const
     USHORT nDdeCount = 0;
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
@@ -1178,12 +1178,12 @@ ScDdeLink* lclGetDdeLink(
 {
     if( pLinkManager )
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         if( pnDdePos ) *pnDdePos = 0;
         for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::so3::SvBaseLink* pLink = *rLinks[ nIndex ];
+            ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
             {
                 if( (pDdeLink->GetAppl() == rAppl) &&
@@ -1205,12 +1205,12 @@ ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
 {
     if( pLinkManager )
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         USHORT nDdeIndex = 0;       // counts only the DDE links
         for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::so3::SvBaseLink* pLink = *rLinks[ nIndex ];
+            ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
             {
                 if( nDdeIndex == nDdePos )
@@ -1301,7 +1301,7 @@ BOOL ScDocument::HasAreaLinks() const
 {
     if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScAreaLink))
@@ -1315,11 +1315,11 @@ void ScDocument::UpdateAreaLinks()
 {
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
                 pBase->Update();
         }
@@ -1331,11 +1331,11 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
 {
     if (pLinkManager)
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
+            ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 ScAreaLink* pLink = (ScAreaLink*) pBase;
@@ -1364,7 +1364,7 @@ void ScDocument::SaveAreaLinks(SvStream& rStream) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
 
     //  erstmal zaehlen...
@@ -1384,7 +1384,7 @@ void ScDocument::SaveAreaLinks(SvStream& rStream) const
 
     for (i=0; i<nCount; i++)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
         {
             ScAreaLink* pLink = (ScAreaLink*)pBase;
