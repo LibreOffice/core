@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:55:05 $
+ *  last change: $Author: gt $ $Date: 2001-09-04 11:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,13 +217,17 @@ private:
     ComboBox        aSearchLB;
     ListBox         aSearchTmplLB;
     FixedInfo       aSearchAttrText;
+#if SUPD < 641 || defined( GT_DEBUG )
     MultiLineEdit   aSearchFormatsED;
+#endif
 
     FixedText       aReplaceText;
     ComboBox        aReplaceLB;
     ListBox         aReplaceTmplLB;
     FixedInfo       aReplaceAttrText;
+#if SUPD < 641 || defined( GT_DEBUG )
     MultiLineEdit   aReplaceFormatsED;
+#endif
 
     PushButton      aSearchAllBtn;
     PushButton      aSearchBtn;
