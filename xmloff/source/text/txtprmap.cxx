@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 09:50:32 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "",            DRAW,   visible_area_top,       XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_TOP ),
     M_E( "",            DRAW,   visible_area_width,     XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_WIDTH ),
     M_E( "",            DRAW,   visible_area_height,    XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_HEIGHT ),
-    M_E( "",            DRAW,   draw_aspect,            XML_TYPE_NUMBER16|MID_FLAG_NO_PROPERTY, CTF_OLE_DRAW_ASPECT ),
+    M_E( "",            DRAW,   draw_aspect,            XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_NO_PROPERTY, CTF_OLE_DRAW_ASPECT ),
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     { 0, 0, 0, 0 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-27 10:55:29 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,8 +1412,10 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_fixed ) ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_line_height ) ) );
+        break;
     case XML_TYPE_TEXT_VERTICAL_ALIGN:
         pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, 0 );
+        break;
     }
 
     return pHdl;

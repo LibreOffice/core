@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-10 09:20:19 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,6 +891,7 @@ XML_CONSTASCII_ACTION( sXML_hyphenation_ladder_count, "hyphenation-ladder-count"
 XML_CONSTASCII_ACTION( sXML_hyphenation_push_char_count, "hyphenation-push-char-count" );
 XML_CONSTASCII_ACTION( sXML_hyphenation_remain_char_count, "hyphenation-remain-char-count" );
 XML_CONSTASCII_ACTION( sXML_i, "i" );
+XML_CONSTASCII_ACTION( sXML_icon, "icon" );
 XML_CONSTASCII_ACTION( sXML_id, "id" );
 XML_CONSTASCII_ACTION( sXML_ident, "ident");
 XML_CONSTASCII_ACTION( sXML_identifier, "identifier" );
@@ -1691,6 +1692,7 @@ XML_CONSTASCII_ACTION( sXML_textual, "textual" );
 XML_CONSTASCII_ACTION( sXML_thick, "thick" );
 XML_CONSTASCII_ACTION( sXML_thin, "thin" );
 XML_CONSTASCII_ACTION( sXML_three_dimensional, "three-dimensional" );
+XML_CONSTASCII_ACTION( sXML_thumbnail, "thumbnail" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_major_inner, "tick-marks-major-inner" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_major_outer, "tick-marks-major-outer" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_minor_inner, "tick-marks-minor-inner" );

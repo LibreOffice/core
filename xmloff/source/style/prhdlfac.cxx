@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:01:06 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _XMLOFF_XMLRECTANGLEMEMBERSHANDLER_HXX
 #include "XMLRectangleMembersHandler.hxx"
+#endif
+#ifndef _XMLOFF_DRAWASPECTHDL_HXX
+#include "DrawAspectHdl.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -424,6 +427,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 pPropHdl = new XMLEnumPropertyHdl(
                     aXML_HorizontalAdjust_Enum,
                     ::getCppuType((const text::HorizontalAdjust*)0) );
+                break;
+            case XML_TYPE_TEXT_DRAW_ASPECT:
+                pPropHdl = new DrawAspectHdl;
                 break;
         }
 

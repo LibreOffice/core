@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: cl $ $Date: 2001-04-30 09:01:06 $
+#   last change: $Author: mib $ $Date: 2001-05-10 10:07:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -161,7 +161,8 @@ CXXFILES = \
         XMLBitmapLogicalSizePropertyHandler.cxx \
         durationhdl.cxx \
         VisAreaExport.cxx \
-        VisAreaContext.cxx
+        VisAreaContext.cxx \
+        DrawAspectHdl.cxx
 
 
 SLOFILES =	\
@@ -248,7 +249,8 @@ SLOFILES =	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj	\
         $(SLO)$/durationhdl.obj	\
         $(SLO)$/VisAreaExport.obj \
-        $(SLO)$/VisAreaContext.obj
+        $(SLO)$/VisAreaContext.obj \
+        $(SLO)$/DrawAspectHdl.obj
 
 # --- Tagets -------------------------------------------------------
 
