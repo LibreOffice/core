@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:26:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
     SdrObject* pObj = NULL;
     ErrCode nErr = ERRCODE_NONE;
 
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
         pObj = rMarkList.GetMark(0)->GetObj();
@@ -419,9 +419,9 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                         (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                     Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
 
-                    if ( pView->HasMarkedObj() )
+                    if ( pView->AreObjectsMarked() )
                     {
-                        const SdrMarkList& rMarkList = pView->GetMarkList();
+                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
                         if (rMarkList.GetMarkCount() == 1)
                         {
