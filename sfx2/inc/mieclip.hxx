@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,20 @@
 #ifndef _MIECLIP_HXX
 #define _MIECLIP_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -74,7 +84,7 @@ class SvStream;
 class SotDataObject;
 class SvData;
 
-class MSE40HTMLClipFormatObj
+class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
 {
     SvStream* pStrm;
     String sBaseURL;
@@ -84,8 +94,8 @@ public:
     ~MSE40HTMLClipFormatObj();
 
 //JP 31.01.2001: old interfaces
-    BOOL GetData( SotDataObject& );
-    BOOL GetData( SvData& );
+    SAL_DLLPRIVATE BOOL GetData( SotDataObject& );
+    SAL_DLLPRIVATE BOOL GetData( SvData& );
 //JP 31.01.2001: the new one
     SvStream* IsValid( SvStream& );
 
