@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscerror.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:51:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #define ERR_FILEFORMAT      0x0109  // Return
 #define ERR_FILESIZE        0x010A  // Return
 #define ERR_RENAMEFILE      0x010B  // Return
+#define ERR_NOIMAGE         0x010C  // Return
 
 #define ERR_RSCRANGE        0x0200  // Return
 #define ERR_RSCRANGE_OUTDEFSET  (ERR_RSCRANGE +1 )
