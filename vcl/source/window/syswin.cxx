@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-03-23 12:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 BOOL SystemWindow::Close()
 {
-    if ( mpFrameData )
+    if ( mbFrame && mpFrameData )
     {
         try
         {
