@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:44:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 00:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ polish ] = "Dok³adne wyszukiwanie";
         Text[ portuguese_brazilian ] = "Igua~lar Caixa";
         Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ(~T)";
-        Text[ korean ] = "»ó¼¼ÇÏ°Ô Ã£±â(~T)";
+        Text[ korean ] = "»ó¼¼ÇÏ°Ô Ã£±â";
         Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
         Text[ chinese_traditional ] = "ºë½T·j´M(~T)";
         Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
@@ -976,7 +976,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "¥ş³¡´À¥N(~L)";
         Text[ arabic ] = "ÇÓÊÈÏÇá Çáßá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç üëùí";
-        Text[ korean ] = "¸ğµÎ ¹Ù²Ù±â(~L)";
+        Text[ korean ] = "¸ğµÎ ¹Ù²Ù±â";
         Text[ turkish ] = "Tümünü değiş~tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar t~odo";
@@ -1006,7 +1006,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "´À¥N(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "¹Ù²Ù±â(~R)";
+        Text[ korean ] = "¹Ù²Ù±â";
         Text[ turkish ] = "Deği~ştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reemplazar";
@@ -1201,6 +1201,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
