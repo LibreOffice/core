@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:10:58 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 15:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,11 +229,8 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
         return false;
     }
 
-    rtl::OUStringBuffer aPipe;
-    aPipe.appendAscii(RTL_CONSTASCII_STRINGPARAM("ucb_plugin"));
-    rtl::OUString aUserIdent;
-    vos::OSecurity().getUserIdent(aUserIdent);
-    aPipe.append(aUserIdent);
+    rtl::OUString aPipe;
+    vos::OSecurity().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
     if (rPortalConnect.getLength() != 0)
@@ -250,7 +247,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     aArgs[1]
         <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
     aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
-    aArgs[3] <<= aPipe.makeStringAndClear();
+    aArgs[3] <<= aPipe;
     aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
     aArgs[5] <<= aPortal.makeStringAndClear();
 
