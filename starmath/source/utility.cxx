@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:04:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,12 @@ const String ImportString( const ByteString& rByteString )
     while( STRING_NOTFOUND != ( nPreStart =
                                     aString.SearchAscii( PRE_TE, nPreStart )) )
     {
+        if (aString.EqualsAscii( "<?>", nPreStart, 3 ))
+        {
+            nPreStart += 3;   // restart look-up after current found position
+            continue;
+        }
+
         //
         // convert 'unknown character' to unicode character
         //
