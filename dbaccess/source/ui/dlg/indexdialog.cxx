@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 14:50:18 $
+ *  last change: $Author: oj $ $Date: 2001-11-05 10:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,11 +724,9 @@ namespace dbaui
             OIndexCollection::iterator aPreviouslySelected = static_cast<OIndexCollection::iterator>(m_pPreviousSelection->GetUserData());
 
             // the unique flag
+            aPreviouslySelected->bUnique = m_aUnique.IsChecked();
             if (m_aUnique.GetSavedValue() != m_aUnique.GetState())
-            {
                 aPreviouslySelected->setModified(sal_True);
-                aPreviouslySelected->bUnique = m_aUnique.IsChecked();
-            }
 
             // the fields
             m_pFields->commitTo(aPreviouslySelected->aFields);
@@ -884,6 +882,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/23 14:50:18  fs
+ *  #86860# OnIndexSelected: don't cancel the editing of the previously selected index
+ *
  *  Revision 1.10  2001/05/11 16:23:16  fs
  *  #86862# allow reset for new indexes - mapped a drop without confirmation
  *
