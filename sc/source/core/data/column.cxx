@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:57:44 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ BOOL ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
 }
 
 
-void ScColumn::MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const
+void ScColumn::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, BOOL bDeep ) const
 {
     SCROW nTop;
     SCROW nBottom;
@@ -327,14 +327,14 @@ void ScColumn::MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMar
     {
         ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
         while (aMarkIter.Next( nTop, nBottom ))
-            pAttrArray->MergePatternArea( nTop, nBottom, ppSet, bDeep );
+            pAttrArray->MergePatternArea( nTop, nBottom, rState, bDeep );
     }
 }
 
 
-void ScColumn::MergePatternArea( SfxItemSet** ppSet, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const
+void ScColumn::MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const
 {
-    pAttrArray->MergePatternArea( nRow1, nRow2, ppSet, bDeep );
+    pAttrArray->MergePatternArea( nRow1, nRow2, rState, bDeep );
 }
 
 
