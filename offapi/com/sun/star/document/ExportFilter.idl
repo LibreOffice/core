@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExportFilter.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 11:13:35 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 21:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,72 +83,72 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 
-/** filter for exports
+/** filter for exports.
  */
 service ExportFilter
 {
     //-------------------------------------------------------------------------
-    /** filter interface
+    /** filter interface.
 
         <p>
-        These interface is used to filter a document at saving time.
+        This interface is used to filter a document at saving time.
          </p>
      */
     interface com::sun::star::document::XFilter;
 
     //-------------------------------------------------------------------------
-    /** set document for these filter
+    /** set document for this filter.
 
         <p>
-        The document can used as target of filter output.
+        The document can used as the target of a filter output.
         </p>
      */
     interface ::com::sun::star::document::XExporter;
 
     //-------------------------------------------------------------------------
-    /** support initialization of filter with his own configuration!
+    /** support initialization of filter with his own configuration.
         <p>
-        A filter must support a readonly access to his own configuration.
-        But a readonly properties couldn't be set ...
-        That's the reason for these interface!
+        A filter must support a readonly access to his own configuration, but
+        readonly properties couldn't be set.
+        That is the reason for this interface.
         All Anys of given sequence are from Type <type>PropertyValue</type>.
         </p>
      */
     [optional] interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** readonly(!) access to filter configuration
+    /** readonly access to filter configuration.
 
         <p>
-        These interface support a readonly access to our internal configuration of THESE filter.
-        The filter himself get his configuration about <type>XInitialization</type> at creation by using
-        the <type>FilterFactory</type>!
+        This interface supports readonly access to our internal configuration of this filter.
+        The filter gets the configuration about <type>XInitialization</type> at creation by   using
+        the <type>FilterFactory</type>.
          </p>
      */
     interface com::sun::star::beans::XPropertySet;
 
-    /// filter is registered for these type
+    /// filter is registered for this type.
     [property, readonly]    string  Type;
 
-    /// localized name of filter to show it at UI elements
+    /// localized name of filter to show at UI elements.
     [property, readonly]    string  UIName;
 
-    /// service name which present the document
+    /// service name which presents the document.
     [property, readonly]    string  DocumentService;
 
-    /// service name of these filter implementation
+    /// service name of this filter implementation.
     [property, readonly]    string  FilterService;
 
-    /// flags to describe the filter
+    /// flags to describe the filter.
     [property, readonly]    string  Flags;
 
-    /// additional informations with private structure!
+    /// additional information with private structure.
     [property, readonly]    string  UserData;
 
-    /// version number of file format
+    /// version number of file format.
     [property, readonly]    string  FileFormatVersion;
 
-    /// name of suitable template
+    /// name of suitable template.
     [property, readonly]    string  TemplateName;
 };
 
