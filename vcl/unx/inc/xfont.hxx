@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:14:27 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 16:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,23 @@ typedef unsigned short sal_MultiByte;
 class ImplFontMetricData;
 class ExtendedXlfd;
 
+#ifdef ENABLE_CTL
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif // _SV_SALLAYOUT_HXX
+
+class X11FontLayout : public GenericSalLayout
+{
+public:
+    X11FontLayout( const ImplLayoutArgs& rArgs )
+    : GenericSalLayout( rArgs )
+    {}
+};
+#endif // ENABLE_CTL
+
 struct VerticalTextItem
 {
-      BOOL              mbFixed;
+    BOOL                mbFixed;
     XFontStruct*        mpXFontStruct;
     const sal_Unicode*  mpString;
     int                 mnLength;
@@ -132,7 +146,6 @@ struct VerticalTextItem
 class ExtendedFontStruct : public SvRefBase
 {
     private:
-
         Display*            mpDisplay;
         unsigned short      mnPixelSize;
         sal_Size            mnDefaultWidth;
@@ -171,6 +184,10 @@ class ExtendedFontStruct : public SvRefBase
         sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
         ULONG               GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+
+#ifdef ENABLE_CTL
+        X11FontLayout*      LayoutText( const ImplLayoutArgs& );
+#endif // ENABLE_CTL
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting

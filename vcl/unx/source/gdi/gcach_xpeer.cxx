@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-20 15:30:38 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 17:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderFreeGlyphs" );
     if( !pFunc ) return;
-    pXRenderFreeGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
-    pFunc = dlsym( pRenderLib, "XRenderCompositeString16" );
+    pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderCompositeString32" );
     if( !pFunc ) return;
-    pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
+    pXRenderCompositeString32       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderCreatePicture" );
     if( !pFunc ) return;
     pXRenderCreatePicture           = (Picture(*)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*))pFunc;

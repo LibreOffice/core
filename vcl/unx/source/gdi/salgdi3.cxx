@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-22 14:37:00 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 17:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
     // translate unicode to glyph ids and make sure they are already on the server
-    unsigned short* pGlyphString = (unsigned short*)alloca( 2*nLength );
+    unsigned int* pGlyphString = (unsigned short*)alloca( 4*nLength );
     for( int i = 0; i < nLength; ++i )
     {
         const int nGlyphIndex = pGlyph[i];
@@ -1024,7 +1024,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     if( pDXAry == NULL )
     {
         // draw the whole string
-        (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
+        (*aX11GlyphPeer.pXRenderCompositeString32)( pDisplay, PictOpOver,
             aSrc, aDst, 0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
     }
     else
@@ -1033,7 +1033,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
         // draw the string glyph by glyph
         for( int i = 0; i < nLength; ++i )
         {
-            (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
+            (*aX11GlyphPeer.pXRenderCompositeString32)( pDisplay, PictOpOver,
                 aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), pGlyphString+i, 1 );
             aPos = Point(nX,nY) + pFont->TransformPoint( Point(pDXAry[i],0) );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:22:10 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 17:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,4 +633,38 @@ GetVerticalClass( sal_Unicode nChar )
     }
     return VCLASS_ROTATE;
 }
+
+#ifdef ENABLE_CTL
+#include <salgdi.hxx>
+
+X11FontLayout* ExtendedFontStruct::LayoutText( const ImplLayoutArgs& rArgs )
+{
+    int nGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+    GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
+
+    bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
+
+    long nWidth = 0;
+    Point aNewPos( 0, 0);
+    for( int i = 0; i < nGlyphCount; ++i )
+    {
+        int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
+        sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+
+        long nGlyphWidth;
+        GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
+        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
+            GlyphItem::CLUSTER_START, nGlyphWidth );
+        nWidth += nGlyphWidth;
+
+        aNewPos = Point( nWidth, 0 );
+    }
+
+    X11FontLayout* pLayout = new X11FontLayout( rArgs );
+    pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
+    pLayout->SetOrientation( 0 ); //### TODO
+    pLayout->SetWantFallback( false );
+}
+
+#endif // ENABLE_CTL
 
