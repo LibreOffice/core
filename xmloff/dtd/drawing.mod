@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.6 2000-11-09 13:58:09 cl Exp $
+	$Id: drawing.mod,v 1.7 2000-11-13 14:06:44 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,6 +62,7 @@
 <!ENTITY % draw-viewbox "svg:viewBox CDATA #REQUIRED">
 <!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED">
 <!ENTITY % shapeId "CDATA" >
+<!ENTITY % draw-text "(text:p|text:unordered-list|text:ordered-list)*">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -70,14 +71,14 @@
 <!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED presentation:placeholder (true|false) #IMPLIED">
 
 <!-- Drawing shapes -->
-<!ELEMENT draw:rect (text:p)*>
+<!ELEMENT draw:rect %draw-text;>
 <!ATTLIST draw:rect %draw-position; >
 <!ATTLIST draw:rect %draw-size; >
 <!ATTLIST draw:rect %draw-style-name; >
 <!ATTLIST draw:rect %draw-transform; >
 <!ATTLIST draw:rect draw:corner-radius %nonNegativeLength; #IMPLIED>
 
-<!ELEMENT draw:line (text:p)*>
+<!ELEMENT draw:line %draw-text;>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
 <!ATTLIST draw:line svg:y1 %length; #REQUIRED>
 <!ATTLIST draw:line svg:x2 %length; #REQUIRED>
@@ -85,7 +86,7 @@
 <!ATTLIST draw:line %draw-style-name; >
 <!ATTLIST draw:line %draw-transform; >
 
-<!ELEMENT draw:polyline (text:p)* >
+<!ELEMENT draw:polyline %draw-text; >
 <!ATTLIST draw:polyline %draw-position; >
 <!ATTLIST draw:polyline %draw-size; >
 <!ATTLIST draw:polyline %draw-viewbox; >
@@ -93,7 +94,7 @@
 <!ATTLIST draw:polyline %draw-style-name; >
 <!ATTLIST draw:polyline %draw-transform; >
 
-<!ELEMENT draw:polygon (text:p*) >
+<!ELEMENT draw:polygon %draw-text; >
 <!ATTLIST draw:polygon %draw-position; >
 <!ATTLIST draw:polygon %draw-size; >
 <!ATTLIST draw:polygon %draw-viewbox; >
@@ -101,7 +102,7 @@
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
 
-<!ELEMENT draw:path (text:p)* >
+<!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
 <!ATTLIST draw:path %draw-size; >
 <!ATTLIST draw:path %draw-viewbox; >
@@ -109,14 +110,14 @@
 <!ATTLIST draw:path %draw-style-name; >
 <!ATTLIST draw:path %draw-transform; >
 
-<!ELEMENT draw:circle (text:p)* >
+<!ELEMENT draw:circle %draw-text; >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
 <!ATTLIST draw:circle svg:cy %length; #REQUIRED >
 <!ATTLIST draw:circle svg:r %nonNegativeLength; #REQUIRED >
 <!ATTLIST draw:circle %draw-style-name; >
 <!ATTLIST draw:circle %draw-transform; >
 
-<!ELEMENT draw:ellipse (text:p)* >
+<!ELEMENT draw:ellipse %draw-text; >
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
 <!ATTLIST draw:ellipse svg:cy %length; #REQUIRED >
 <!ATTLIST draw:ellipse svg:rx %length; #REQUIRED >
@@ -124,7 +125,7 @@
 <!ATTLIST draw:ellipse %draw-style-name; >
 <!ATTLIST draw:ellipse %draw-transform; >
 
-<!ELEMENT draw:connector (text:p)*>
+<!ELEMENT draw:connector %draw-text;>
 <!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
 <!ATTLIST draw:connector %draw-style-name;>
 <!ATTLIST draw:connector draw:start-x %coordinate; #IMPLIED>
@@ -145,14 +146,14 @@
 <!ATTLIST draw:page-thumbnail %draw-style-name; >
 <!ATTLIST draw:page-thumbnail %presentation-class; >
 
-<!ELEMENT text:text-box (text:p)*>
+<!ELEMENT text:text-box %draw-text;>
 <!ATTLIST text:text-box %draw-position; >
 <!ATTLIST text:text-box %draw-size; >
 <!ATTLIST text:text-box %draw-style-name; >
 <!ATTLIST text:text-box %presentation-class; >
 <!ATTLIST text:text-box %draw-transform; >
 
-<!ELEMENT draw:caption (text:p)*>
+<!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
 <!ATTLIST draw:caption %draw-size; >
 <!ATTLIST draw:caption %draw-style-name; >
@@ -160,7 +161,7 @@
 <!ATTLIST draw:caption draw:caption-point-x %coordinate; #IMPLIED>
 <!ATTLIST draw:caption draw:caption-point-y %coordinate; #IMPLIED>
 
-<!ELEMENT draw:measure (text:p)*>
+<!ELEMENT draw:measure %draw-text;>
 <!ATTLIST draw:measure %draw-position; >
 <!ATTLIST draw:measure %draw-size; >
 <!ATTLIST draw:measure %draw-style-name; >
