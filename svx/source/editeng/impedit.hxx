@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:10:04 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,7 @@ public:
 
     // text conversion functions
     void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, INT32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
-    String              ImpConvert( EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange );
+    void                ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
 
