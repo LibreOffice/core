@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-22 07:40:10 $
+ *  last change: $Author: jl $ $Date: 2002-07-12 10:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifdef UNX
 #include <signal.h>
 #endif
-
+#include <setjmp.h>
 #include <string.h>
 #include <time.h>
 
@@ -98,9 +98,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+//#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-
+//#include <com/sun/star/java/JavaInitializationException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
@@ -147,6 +148,10 @@ using namespace com::sun::star::container;
 using namespace rtl;
 using namespace cppu;
 using namespace osl;
+
+static void  abort_handler();
+jmp_buf jmpmark;
+sal_Bool g_bInGetJavaVM;
 
 namespace stoc_javavm {
 
@@ -329,7 +334,14 @@ static void getINetPropsFromConfig(JVM * pjvm,
     JavaVM * OCreatorThread::createJavaVM(const JVM & jvm ) throw(RuntimeException) {
         _jvm = jvm;
 
-        if (!_pJVM) {
+        if (!_pJVM )
+        {
+            // If a call to createJavaVM failed before then the thread was already created
+            // and we must not create a new one because the Thread::create may only be called
+            // once per Thread instance .We use the cast operator (extractor) to find out
+            // if there is already a thread handle, that is, the thread was called before.
+            if( (oslThread)(*(Thread*) this))
+                throw _runtimeException;
             create();
 
             _start_Condition.set();
@@ -1389,10 +1401,21 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
         sal_uInt16 cprops= jvm.getProperties().size();
 
         JavaVMInitArgs vm_args2;
-        JavaVMOption * options= new JavaVMOption[cprops + 1];
+
+        // we have "addOpt" additional properties to those kept in the JVM struct
+        sal_Int32 addOpt=2;
+        JavaVMOption * options= new JavaVMOption[cprops + addOpt];
         OString sClassPath= OString("-Djava.class.path=") + vm_args.classpath;
         options[0].optionString= (char*)sClassPath.getStr();
         options[0].extraInfo= NULL;
+
+        // We set an abort handler which is called when the VM calls _exit during
+        // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
+        // all some directories of the Java installation. This is necessary for
+        // linux j2re1.3, 1.4 and Solaris j2re1.3. With a j2re1.4 on Solaris the
+        // LD_LIBRARY_PATH need not to be set anymore.
+        options[1].optionString= "abort";
+        options[1].extraInfo= (void* )abort_handler;
 
         OString * arProps= new OString[cprops];
 
@@ -1411,28 +1434,60 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
                 arProps[x]= OString("-D") + vm_args.properties[x];
             else
                 arProps[x]= vm_args.properties[x];
-            options[x+1].optionString= (char*)arProps[x].getStr();
-            options[x+1].extraInfo= NULL;
+            options[x+addOpt].optionString= (char*)arProps[x].getStr();
+            options[x+addOpt].extraInfo= NULL;
         }
         vm_args2.version= 0x00010002;
         vm_args2.options= options;
-        vm_args2.nOptions= cprops + 1;
+        vm_args2.nOptions= cprops + addOpt;
         vm_args2.ignoreUnrecognized= JNI_TRUE;
 
-        err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args2);
-        // Necessary to make debugging work. This thread will be suspended when this function
-        // returns.
-        if( err == 0)
-            pJavaVM->DetachCurrentThread();
+        /* We set a global flag which is used by the abort handler in order to
+           determine whether it is  should use longjmp to get back into this function.
+           That is, the abort handler determines if it is on the same stack as this function
+           and then jumps back into this function.
+        */
+        g_bInGetJavaVM= sal_True;
+        int jmpval= setjmp( jmpmark );
+        /* If jmpval is not "0" then this point was reached by a longjmp in the
+           abort_handler, which was called indirectly by JNI_CreateVM.
+        */
+        if( jmpval == 0)
+        {
+            //returns negative number on failure
+            err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args2);
+
+            g_bInGetJavaVM= sal_False;
+            // Necessary to make debugging work. This thread will be suspended when this function
+            // returns.
+            if( err == 0)
+                pJavaVM->DetachCurrentThread();
+        }
+        else
+            // set err to a positive number, so as or recognize that an abort (longjmp)
+            //occurred
+             err= 1;
 
         delete [] options;
         delete [] arProps;
     }
-    if(err) {
-        OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - can not create vm, cause of err:"));
-        message += OUString::valueOf((sal_Int32)err);
+    if(err != 0) {
+        OUString message;
+        if( err < 0)
+        {
+            message= OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "JavaVirtualMachine_Impl::createJavaVM - can not create VM, cause of err:"));
+            message += OUString::valueOf((sal_Int32)err);
+        }
+        else if( err > 0)
+            message= OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "JavaVirtualMachine_Impl::createJavaVM - can not create VM, abort handler was called"));
 
-        throw RuntimeException(message, Reference<XInterface>());
+//          JavaInitializationException initExc( message, Reference<XInterface>());
+//          WrappedTargetRuntimeException wrappedExc;
+//          wrappedExc.TargetException <<= initExc;
+//      throw wrappedExc;
+        throw RuntimeException( message, Reference<XInterface>());
     }
 
     return pJavaVM;
@@ -1699,4 +1754,12 @@ void * SAL_CALL component_getFactory(
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
+}
+
+void abort_handler()
+{
+    fprintf( stderr, "JavaVM: JNI_CreateJavaVM called _exit, caught by abort_handler in javavm.cxx\n");
+    // If we are within JNI_CreateJavaVM then we jump back into getJavaVM
+    if( g_bInGetJavaVM )
+        longjmp( jmpmark, 0);
 }
