@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:57:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "¬˚‚Ó‰";
         Text[ polish ] = "Wyjúcie";
         Text[ japanese ] = "èoóÕ";
-        Text[ chinese_traditional ] = "øÈ•X";
+        Text[ chinese_traditional ] = "∂◊•X";
         Text[ arabic ] = "«·≈Œ—«Ã";
         Text[ greek ] = "≈Ó·„˘„ﬁ";
         Text[ korean ] = "√‚∑¬";
@@ -830,4 +830,5 @@ ModalDialog DLG_MAILMERGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta en serie";
 };
+
 
