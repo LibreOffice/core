@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-26 17:06:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef SC_APPOPTIO_HXX
 #define SC_APPOPTIO_HXX
 
-
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
@@ -75,6 +74,10 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -83,8 +86,7 @@
 #include "optutil.hxx"
 #endif
 
-
-class ScAppOptions
+class SC_DLLPUBLIC ScAppOptions
 {
 public:
                 ScAppOptions();
