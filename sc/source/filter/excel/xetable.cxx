@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:43 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 
 #include <map>
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
@@ -544,13 +548,13 @@ XclExpSingleCellBase::XclExpSingleCellBase(
 
 XclExpSingleCellBase::XclExpSingleCellBase( const XclExpRoot& rRoot,
         sal_uInt16 nRecId, sal_uInt32 nContSize, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId ) :
+        const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId ) :
     XclExpCellBase( nRecId, 2, nXclCol, nXclRow ),
     maXFId( nForcedXFId ),
     mnContSize( nContSize )
 {
     if( GetXFId() == EXC_XFID_NOTFOUND )
-        SetXFId( rRoot.GetXFBuffer().Insert( pPattern ) );
+        SetXFId( rRoot.GetXFBuffer().Insert( pPattern, nScript ) );
 }
 
 sal_uInt16 XclExpSingleCellBase::GetLastXclCol() const
@@ -593,7 +597,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell, 256, 256 )
 XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, nXclCol, nXclRow, pPattern, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, nXclCol, nXclRow,
+        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
     mfValue( fValue )
 {
 }
@@ -610,7 +615,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell, 256, 256 )
 XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow, pPattern, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
+        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
     mbValue( bValue )
 {
 }
@@ -627,7 +633,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
 XclExpErrorCell::XclExpErrorCell(
         const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow, pPattern, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
+        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
     mnErrCode( nErrCode )
 {
 }
@@ -646,10 +653,8 @@ XclExpLabelCell::XclExpLabelCell(
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, const ScStringCell& rCell ) :
     XclExpSingleCellBase( EXC_ID_LABEL, 0, nXclCol, nXclRow, nForcedXFId )
 {
-    String aText;
-    rCell.GetString( aText );
     sal_uInt16 nMaxLen = (rRoot.GetBiff() >= xlBiff8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
-    XclExpStringRef xText = XclExpStringHelper::CreateString( rRoot, aText, EXC_STR_DEFAULT, nMaxLen );
+    XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, EXC_STR_DEFAULT, nMaxLen );
     Init( rRoot, pPattern, xText );
 }
 
@@ -660,7 +665,7 @@ XclExpLabelCell::XclExpLabelCell(
     XclExpSingleCellBase( EXC_ID_LABEL, 0, nXclCol, nXclRow, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() >= xlBiff8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
-    XclExpStringRef xText = XclExpStringHelper::CreateString( rRoot, rCell, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen );
+    XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen );
     Init( rRoot, pPattern, xText );
 }
 
@@ -672,16 +677,18 @@ bool XclExpLabelCell::IsMultiLineText() const
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
         const ScPatternAttr* pPattern, XclExpStringRef xText )
 {
-    DBG_ASSERT( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
+    DBG_ASSERT( xText.is() && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
     mxText = xText;
     mnSstIndex = 0;
 
     // create the cell format
     sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
+    DBG_ASSERT( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - missing first font" );
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
         bool bForceLineBreak = mxText->IsWrapped();
-        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, nXclFont, bForceLineBreak ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithFont(
+            pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
 
     // initialize the record contents
@@ -773,7 +780,8 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
                 (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) )
             nAltScNumFmt = rNumFmtBfr.GetStandardFormat();
 
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nAltScNumFmt ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt(
+            pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nAltScNumFmt ) );
     }
 
     // *** Convert the formula token array *** --------------------------------
@@ -838,16 +846,16 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
 
     size_t nFmlaSize = maFmlaData.empty() ? 5 : maFmlaData.size();
     SetContSize( static_cast< sal_uInt32 >( 16 + nFmlaSize ) );
-    mbFirstAddRec = mxAddRec && (mxAddRec->GetUsedCount() == 1);
+    mbFirstAddRec = mxAddRec.is() && (mxAddRec->GetUsedCount() == 1);
 }
 
 void XclExpFormulaCell::Save( XclExpStream& rStrm )
 {
     XclExpSingleCellBase::Save( rStrm );
     // additional records
-    if( mxAddRec && mbFirstAddRec )
+    if( mxAddRec.is() && mbFirstAddRec )
         mxAddRec->Save( rStrm );
-    if( mxStringRec )
+    if( mxStringRec.is() )
         mxStringRec->Save( rStrm );
 }
 
@@ -900,12 +908,12 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
     // flags
     sal_uInt16 nFlags = EXC_FORMULA_DEFAULTFLAGS;
-    if( mxAddRec )
+    if( mxAddRec.is() )
         ::set_flag( nFlags, EXC_FORMULA_SHARED, mxAddRec->GetRecId() == EXC_ID_SHRFMLA );
     rStrm << nFlags << sal_uInt32( 0 );
 
     // formula token array
-    if( mxAddRec )
+    if( mxAddRec.is() )
     {
         mxAddRec->WriteCellTokenArray( rStrm, GetXclCol(), GetXclRow() );
     }
@@ -1024,9 +1032,10 @@ void XclExpMultiCellBase::AppendXFId( const XclExpMultiXFId& rXFId )
 }
 
 void XclExpMultiCellBase::AppendXFId( const XclExpRoot& rRoot,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt16 nCount )
+        const ScPatternAttr* pPattern, sal_uInt16 nScript, sal_uInt32 nForcedXFId, sal_uInt16 nCount )
 {
-    sal_uInt32 nXFId = (nForcedXFId == EXC_XFID_NOTFOUND) ? rRoot.GetXFBuffer().Insert( pPattern ) : nForcedXFId;
+    sal_uInt32 nXFId = (nForcedXFId == EXC_XFID_NOTFOUND) ?
+        rRoot.GetXFBuffer().Insert( pPattern, nScript ) : nForcedXFId;
     AppendXFId( XclExpMultiXFId( nXFId, nCount ) );
 }
 
@@ -1096,7 +1105,7 @@ XclExpBlankCell::XclExpBlankCell( const XclExpRoot& rRoot,
     XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, nXclCol, nXclRow )
 {
     DBG_ASSERT( nXclCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
-    AppendXFId( rRoot, pPattern, nForcedXFId, nLastXclCol - nXclCol + 1 );
+    AppendXFId( rRoot, pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId, nLastXclCol - nXclCol + 1 );
 }
 
 bool XclExpBlankCell::TryMerge( const XclExpCellBase& rCell )
@@ -1130,7 +1139,7 @@ XclExpRkCell::XclExpRkCell(
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_Int32 nRkValue ) :
     XclExpMultiCellBase( EXC_ID_RK, EXC_ID_MULRK, 4, nXclCol, nXclRow )
 {
-    AppendXFId( rRoot, pPattern, nForcedXFId );
+    AppendXFId( rRoot, pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId );
     maRkValues.push_back( nRkValue );
 }
 
@@ -1342,7 +1351,9 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     SCTAB nScTab = GetCurrScTab();
 
     // column default format
-    maXFId.mnXFId = GetXFBuffer().Insert( rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ) );
+    maXFId.mnXFId = GetXFBuffer().Insert(
+        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ),
+        ::com::sun::star::i18n::ScriptType::WEAK );
 
     // column width
     USHORT nScWidth = rDoc.GetColWidth( nScCol, nScTab );
@@ -1768,7 +1779,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos )
 
     // try to merge with previous cell, insert the new cell if not successful
     XclExpCellRef xPrevCell = maCellList.GetRecord( nPos - 1 );
-    if( xPrevCell && xPrevCell->TryMerge( *xCell ) )
+    if( xPrevCell.is() && xPrevCell->TryMerge( *xCell ) )
         xCell = xPrevCell;
     else
         maCellList.InsertRecord( xCell, nPos++ );
@@ -1776,7 +1787,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos )
 
     // try to merge with following cell, remove it if successful
     XclExpCellRef xNextCell = maCellList.GetRecord( nPos );
-    if( xNextCell && xCell->TryMerge( *xNextCell ) )
+    if( xNextCell.is() && xCell->TryMerge( *xNextCell ) )
         maCellList.RemoveRecord( nPos );
 }
 
@@ -2137,7 +2148,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         }
 
         // insert the cell into the current row
-        if( xCell )
+        if( xCell.is() )
             maRowBfr.AppendCell( xCell );
 
         // notes
@@ -2158,7 +2169,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
-                sal_uInt32 nXFId = xCell ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
+                sal_uInt32 nXFId = xCell.is() ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
                 mxMergedcells->AppendRange( aScRange, nXFId );
             }
 
