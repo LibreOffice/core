@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:28:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,14 +210,13 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 aPropsToSet[0].Name = ::rtl::OUString::createFromAscii( "URL" );
                 aPropsToSet[0].Value <<= aURL;
             }
-            // TODO: fill in aPropsToSet
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
                 if ( aDescr[nInd].Name.equalsAscii( "InteractionHandler" )
                   || aDescr[nInd].Name.equalsAscii( "Password" )
-                  || aDescr[nInd].Name.equalsAscii( "RepairPackage" ) )
-                  // || aDescr[nInd].Name.equalsAscii( "StatusIndicator" ) ) // TODO: may be should be changed to ProgressHandler
+                  || aDescr[nInd].Name.equalsAscii( "RepairPackage" )
+                  || aDescr[nInd].Name.equalsAscii( "StatusIndicator" ) )
                   // || aDescr[nInd].Name.equalsAscii( "Unpacked" ) // TODO:
                 {
                     aPropsToSet.realloc( ++nNumArgs );
