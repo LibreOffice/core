@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:17:42 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
         pObj->GetSubList()->InsertObject( pSdrShape );
+        pSdrShape->SetModel(pObj->GetModel());
 
         // #85922# It makes no sense to set the layer asked
         // from the group object since these is an iteration
@@ -300,6 +301,9 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         // and have nothing to do with grouping at all.
         // pSdrShape->SetLayer(pObj->GetLayer());
 
+        // Establish connection between new SdrObject and its wrapper before
+        // inserting the new shape into the group.  There a new wrapper
+        // would be created when this connection would not already exist.
         if(pShape)
             pShape->Create( pSdrShape, pPage );
 
