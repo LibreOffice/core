@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *  last change: $Author: aw $ $Date: 2001-05-14 14:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ class SdXMLExport : public SvXMLExport
     sal_Int32                   mnDocMasterPageCount;
     sal_Int32                   mnDocDrawPageCount;
     sal_uInt32                  mnShapeStyleInfoIndex;
+    sal_uInt32                  mnObjectCount;
 
     // temporary infos
     ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
@@ -169,6 +170,8 @@ class SdXMLExport : public SvXMLExport
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
+    // #82003#
+    virtual void _ExportMeta();
 
     void ImpPrepPageMasterInfos();
     void ImpPrepDrawMasterInfos();
@@ -189,6 +192,9 @@ class SdXMLExport : public SvXMLExport
 
     void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
     void exportPresentationSettings();
+
+    // #82003# helper function for recursive object count
+    sal_uInt32 ImpRecursiveObjectCount( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes);
 
 protected:
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
