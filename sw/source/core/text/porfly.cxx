@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-19 12:38:41 $
+ *  last change: $Author: aw $ $Date: 2000-11-25 18:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,8 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             }
             Point aDiff = aRelPos + aBase - pSdrObj->GetSnapRect().TopLeft();
             pSdrObj->ImpSetAnchorPos( aBase );
-            pSdrObj->NbcMove( Size( aDiff.X(), aDiff.Y() ) );
+            // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
+            pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
         }
     }
     else
