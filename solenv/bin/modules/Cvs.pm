@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
+#   last change: $Author: rt $ $Date: 2003-10-27 13:10:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -448,6 +448,32 @@ sub status
             $sticky_date, $sticky_options);
 }
 
+# Return a diff between two revision of an archive.
+sub diff
+{
+    my $self       = shift;
+    my $rev1       = shift;
+    my $rev2       = shift;
+    my $options    = shift || '';
+
+    my $file = $self->name();
+    my ($nofile, $unkowntagfailure, $unkownrevfailure, $connectionfailure);
+
+    open (CVSDIFF, "$self->{CVS_BINARY} diff $options -r$rev1 -r$rev2 $file 2>&1 |");
+    my @diff = <CVSDIFF>;
+    close(CVSDIFF);
+
+    foreach (@diff){
+        /\[diff aborted\]: connect to/ && ++$connectionfailure;
+        /cvs \[server aborted\]: no such tag \w+/ && ++$unkowntagfailure;
+        /cvs server: tag [\d\.]+ is not in file $file/ && ++$unkownrevfailure;
+    }
+
+    return 'connectionfailure' if $connectionfailure;
+    return 'unkowntagfailiure' if $unkowntagfailure;
+    return 'unkownrevfailiure' if $unkownrevfailure;
+    return wantarray ? @diff : \@diff;
+}
 #### private methods ####
 sub parse_log
 {
