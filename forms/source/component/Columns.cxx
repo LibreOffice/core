@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: fs $ $Date: 2000-09-19 14:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -262,19 +262,21 @@ staruno::Sequence<staruno::Type> SAL_CALL OGridColumn::getTypes() throw(staruno:
 //------------------------------------------------------------------
 staruno::Any SAL_CALL OGridColumn::queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException)
 {
-    staruno::Any aReturn = OComponentHelper::queryAggregation(_rType);
+    staruno::Any aReturn;
+    // though our aggregate may be an XFormComponent or an XServiceInfo, we aren't anymore
+    if  (   _rType.equals(::getCppuType(static_cast< staruno::Reference< starform::XFormComponent >* >(NULL)))
+        ||  _rType.equals(::getCppuType(static_cast< staruno::Reference< starlang::XServiceInfo >* >(NULL)))
+        )
+        return aReturn;
 
+    aReturn = OComponentHelper::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType,
             static_cast<starcontainer::XChild*>(this),
-            static_cast<starlang::XUnoTunnel*>(this),
-            static_cast<starform::XFormComponent*>(NULL),
-                // though our aggregate may be an XFormComponent, we aren't anymore
-            static_cast<starlang::XServiceInfo*>(NULL)
-                // though our aggregate may be an XServiceInfo, we aren't anymore
+            static_cast<starlang::XUnoTunnel*>(this)
         );
 
     if (!aReturn.hasValue() && m_xAggregate.is())
