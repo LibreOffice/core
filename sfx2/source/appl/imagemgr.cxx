@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:53:01 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 11:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,6 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         }
     }
 
-    return SvFileInformationManager::GetImage( aObj, bBig );
+    return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
 }
 
