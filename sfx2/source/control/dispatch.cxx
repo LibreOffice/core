@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:48:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #include "app.hxx"
 #include "hintpost.hxx"
 #include "slotserv.hxx"
-#include "ipfrm.hxx"
-#include "interno.hxx"
+#include "ipclient.hxx"
+//#include "interno.hxx"
 #include "sfxtypes.hxx"
 #include "macrconf.hxx"
 #include "virtmenu.hxx"
@@ -124,7 +124,6 @@
 #include "mnumgr.hxx"
 #include "childwin.hxx"
 #include "docfac.hxx"
-#include "ipenv.hxx"
 #include "msgpool.hxx"
 #include "module.hxx"
 #include "tbxconf.hxx"
@@ -132,6 +131,7 @@
 #include "sfxuno.hxx"
 #include "cfgmgr.hxx"
 #include "docfile.hxx"
+#include "workwin.hxx"
 
 //==================================================================
 DBG_NAME(SfxDispatcherFlush);
@@ -917,7 +917,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI )
         DBG_ASSERT( pImp->bActive, "Deactivate-Fehler" );
         pImp->bActive = sal_False;
 
-        if ( pImp->pFrame && !pImp->pFrame->IsA(TYPE(SfxInPlaceFrame)) )
+        if ( pImp->pFrame && !(pImp->pFrame->GetObjectShell()->IsInPlaceActive() ) )
         {
             SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
             if ( pWorkWin )
@@ -1688,10 +1688,9 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pBindings->DENTERREGISTRATIONS();
 
     // Test auf InPlaceFrame und speziell internes InPlace
-    SfxInPlaceFrame *pIPFrame = PTR_CAST ( SfxInPlaceFrame, pImp->pFrame);
-    sal_Bool bIsIPOwner = (pIPFrame && pIPFrame->GetObjectShell()->GetInPlaceObject()->GetIPClient()->Owner());
-    SvInPlaceClient *pClient = pImp->pFrame ? pImp->pFrame->GetViewShell()->GetIPClient() : NULL;
-    if ( bUIActive && !pIPFrame && ( !pClient || !pClient->GetProtocol().IsUIActive() ) )
+    sal_Bool bIsIPActive = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+    SfxInPlaceClient *pClient = pImp->pFrame ? pImp->pFrame->GetViewShell()->GetUIActiveClient() : NULL;
+    if ( bUIActive && /* !bIsIPActive && */ ( !pClient || !pClient->IsObjectUIActive() ) )
     {
         SetMenu_Impl();
 //        pAppMenu = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
@@ -1704,31 +1703,38 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
 
     // der SfxInternalFrame oder SfxTopViewFrame, zu dem ich geh"ore
-    SfxViewFrame *pAct =
-        bIsIPOwner ?
+    /*SfxViewFrame *pAct =
+        bIsIPActive ?
         pImp->pFrame->GetParentViewFrame_Impl() :
-        pImp->pFrame;
+        pImp->pFrame;*/
 
     // Ich kontrolliere die StatusBar einer Task auch wenn ich nicht aktiv bin, aber
     // zu einem internem InPlaceFrame oder einem anderen ViewFrame innerhalb der Task geh"ore
-    SfxFrame *pTask = pAct ? pAct->GetFrame()->GetTopFrame() : NULL;
+    //SfxFrame *pTask = pAct ? pAct->GetFrame()->GetTopFrame() : NULL;
 
     SfxWorkWindow *pTaskWin = NULL;
-    sal_Bool bSet = sal_True;
+    /*sal_Bool bSet = sal_True;
     if ( pImp->pFrame && pImp->pFrame->GetViewShell() )
     {
-        SvInPlaceClient *pClient = pImp->pFrame->GetViewShell()->GetIPClient();
-        if ( pClient && pClient->GetProtocol().IsUIActive() )
+        SfxInPlaceClient *pClient = pImp->pFrame->GetViewShell()->GetUIActiveClient();
+        if ( pClient && pClient->IsObjectUIActive() )
             bSet = sal_False;
-    }
+    }*/
 
-    if ( pTask && bSet )
+    //if ( pTask && bSet )
     {
-        pTaskWin = pTask->GetWorkWindow_Impl();
-        //pTaskWin->ResetStatusBar_Impl();
+// <<<<<<< dispatch.cxx
+        //pTaskWin = pTask->GetWorkWindow_Impl();
+        pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
+        pTaskWin->ResetStatusBar_Impl();
     }
-
-    pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->ResetStatusBar_Impl();
+// =======
+//      pTaskWin = pTask->GetWorkWindow_Impl();
+//        //pTaskWin->ResetStatusBar_Impl();
+//    }
+//
+//    pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->ResetStatusBar_Impl();
+// >>>>>>> 1.27
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
@@ -1754,11 +1760,11 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pActDispat = pActDispat->pImp->pParent;
     }
 
-    if ( !pIPFrame && !IsAppDispatcher() && bIsActive )
+    if ( !bIsIPActive && !IsAppDispatcher() && bIsActive )
         CollectTools_Impl( pWorkWin );
 
     // Jetzt rekursiv die Dispatcher abklappern
-    _Update_Impl( bUIActive, !pIPFrame, bIsIPOwner, pAppMenu, bSet ? pTaskWin : NULL );
+    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, pAppMenu, pTaskWin );
     if ( bUIActive || bIsActive )
     {
         pWorkWin->UpdateObjectBars_Impl();
@@ -1911,13 +1917,14 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
         for ( nNo = 0; pIFace && nNo<pIFace->GetObjectBarCount(); ++nNo )
         {
             sal_uInt16 nPos = pIFace->GetObjectBarPos(nNo);
-            if ( ( nPos & SFX_POSITION_MASK ) == 0 )
-            {
-                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
-                    xTask( pImp->pFrame->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-                if ( !xTask->isTop() )
-                    continue;
-            }
+            // TODO/LATER: looks like for function bar it is not correct, should it be removed completely?
+            // if ( ( nPos & SFX_POSITION_MASK ) == 0 )
+            // {
+                // ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+                //     xTask( pImp->pFrame->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                // if ( !xTask->isTop() )
+                //    continue;
+            // }
 
             if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
                 continue;
@@ -1967,7 +1974,8 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
 
         if ( bUIActive || bIsActive )
         {
-            SfxConfigManager* pMgr = pImp->pFrame->GetObjectShell()->GetConfigManager();
+//REMOVE                SfxConfigManager* pMgr = pImp->pFrame->GetObjectShell()->GetConfigManager();
+            SfxConfigManager* pMgr = NULL;
             SfxInterface* pIFace = pImp->pFrame->GetObjectShell()->GetInterface();
             USHORT nMask = SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_STANDARD;
             if ( !pMgr )
@@ -1975,7 +1983,6 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
                 pMgr = SFX_APP()->GetConfigManager_Impl();
                 pIFace = SFX_APP()->GetInterface();
                 nMask = SFX_VISIBILITY_SERVER | SFX_VISIBILITY_STANDARD;
-
             }
         }
 
@@ -2054,9 +2061,6 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
     {
         SfxDispatcher *pActDispat = pTaskWin->GetBindings().GetDispatcher_Impl();
         SfxDispatcher *pDispat = this;
-        if ( bIsIPOwner && pImp->pFrame )
-            pDispat = pImp->pFrame->GetParentViewFrame_Impl()->GetDispatcher();
-
         while ( pActDispat && !bIsTaskActive )
         {
             if ( pDispat == pActDispat )
@@ -2548,7 +2552,7 @@ sal_Bool SfxDispatcher::_FindServer
         {
             // Slot geh"ort zum Container?
             FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->ISA( SfxInPlaceFrame );
+            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
@@ -2559,7 +2563,7 @@ sal_Bool SfxDispatcher::_FindServer
             if ( !bIsServerShell )
             {
                 SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
-                bIsServerShell = !pViewSh || !pViewSh->GetIPClient();
+                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
             }
 
             // Shell geh"ort zum Container?
@@ -3456,7 +3460,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         {
             // Slot geh"ort zum Container?
             FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->ISA( SfxInPlaceFrame );
+            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
@@ -3467,7 +3471,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
             if ( !bIsServerShell )
             {
                 SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
-                bIsServerShell = !pViewSh || !pViewSh->GetIPClient();
+                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
             }
 
             // Shell geh"ort zum Container?
