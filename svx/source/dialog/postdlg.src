@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:27:08 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_POSTIT
     Text [ ENGLISH ] = "Note" ;
     Text [ norwegian ] = "Merknad" ;
     Text [ italian ] = "Nota" ;
-    Text [ portuguese_brazilian ] = "Observação" ;
+    Text [ portuguese_brazilian ] = "Observa??o" ;
     Text [ portuguese ] = "Observação" ;
     Text [ finnish ] = "Huomautus" ;
     Text [ danish ] = "Note" ;
@@ -167,7 +167,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conteúdo" ;
+        Text [ portuguese_brazilian ] = "Conte?o" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
@@ -178,7 +178,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Treœæ";
+        Text[ polish ] = "Tre?æ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -250,7 +250,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ English ] = "Edit Note" ;
         Text [ norwegian ] = "Rediger Merknad" ;
         Text [ italian ] = "Modifica nota" ;
-        Text [ portuguese_brazilian ] = "Editar Observação" ;
+        Text [ portuguese_brazilian ] = "Editar Observa??o" ;
         Text [ portuguese ] = "Editar anotação" ;
         Text [ finnish ] = "Muokkaa huomautusta" ;
         Text [ danish ] = "Rediger note" ;
@@ -278,7 +278,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ English ] = "Insert Note" ;
         Text [ norwegian ] = "Sett inn Merknad" ;
         Text [ italian ] = "Inserisci nota" ;
-        Text [ portuguese_brazilian ] = "Inserir Observação" ;
+        Text [ portuguese_brazilian ] = "Inserir Observa??o" ;
         Text [ portuguese ] = "Inserir anotação" ;
         Text [ finnish ] = "Lisää huomautus" ;
         Text [ danish ] = "Indsæt note" ;
