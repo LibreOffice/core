@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kso $ $Date: 2000-11-29 14:05:51 $
+#   last change: $Author: sb $ $Date: 2000-12-04 17:14:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -222,6 +222,7 @@ IDLFILES=\
     XRecycler.idl\
     XRemoteContentProviderAcceptor.idl\
     XRemoteContentProviderDistributor.idl\
+    XRemoteContentProviderDoneListener.idl\
     XRemoteContentProviderSupplier.idl\
     XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl\
