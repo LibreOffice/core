@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-09-08 12:26:31 $
+dnl * Date: $Date: 2004-09-08 15:23:49 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.67 $ )
+AC_REVISION( $Revision: 1.68 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -77,6 +77,11 @@ AC_ARG_ENABLE(debug,
                           plus extra debugging code.  Extra large build!
                           (enables -g compiler flag and dmake debug=true)
 ],,)
+AC_ARG_ENABLE(dbgutil,
+[  --enable-dbgutil:       Include additional debugging utilities, such as
+                          assertions, object counting, etc. Larger build.
+                          Independent from --enable-debug
+],,)
 AC_ARG_ENABLE(crashdump,
 [  --enable-crashdump:     Enable the crashdump feature code. This option
                           implicitly activates --enable-symbols.
@@ -97,13 +102,52 @@ AC_ARG_ENABLE(rpath,
 AC_ARG_WITH(system-zlib,
 [  --with-system-zlib      Use zlib already on system
 ],,)
-AC_ARG_WITH(stlport4-home,
-[  --with-stlport4-home    The location that STLport4 is installed in. The STL
+AC_ARG_WITH(system-jpeg,
+[  --with-system-jpeg      Use jpeg already on system
+],,)
+AC_ARG_WITH(system-expat,
+[  --with-system-expat     Use expat already on system
+],,)
+AC_ARG_WITH(system-freetype,
+[  --with-system-freetype  Use freetype already on system
+],,)
+AC_ARG_WITH(system-libxml,
+[  --with-system-libxml    Use libxml already on system
+],,)
+AC_ARG_WITH(system-python,
+[  --with-system-python    Use python already on system
+],,)
+AC_ARG_WITH(system-icu,
+[  --with-system-icu       Use icu already on system
+],,)
+AC_ARG_WITH(system-db3,
+[  --with-system-db3       Use berkley ver 3 db already on system
+],,)
+AC_ARG_WITH(system-sablot,
+[  --with-system-sablot    Use sablot already on system
+],,)
+AC_ARG_WITH(system-odbc,
+[  --with-system-odbc-headers      Use the odbc headers already on system
+],,)
+AC_ARG_WITH(system-curl,
+[  --with-system-curl      Use curl already on system
+],,)
+AC_ARG_WITH(system-nas,
+[  --with-system-nas      Use nas already on system
+],,)
+AC_ARG_WITH(system-neon,
+[  --with-system-neon      Use neon 0.23.x already on system
+],,)
+AC_ARG_WITH(stlport4,
+[  --with-stlport4         The location that STLport4 is installed in. The STL
                           header files are assumed to be in stlport4-home/stlport
                           and the STLport4 library in stlport4-home/lib.
 
-                          Usage: --with-stlport4-home=<absolute path to stlport4 home>
-],,)
+                          Usage: --with-stlport4=<absolute path to stlport4 home>
+
+                          Warning!!, --without-stlport4 is possible with gcc >= 3.3.3, 
+                          but will break ABI compatability
+], WITH_STLPORT=$withval , WITH_STLPORT=yes)
 AC_ARG_WITH(jdk-home,
 [  --with-jdk-home         if you have installed JDK 1.3, on your system,
                           please supply the path here.
@@ -323,7 +367,10 @@ AC_MSG_CHECKING([the operating system])
 _os=`uname`
 if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
    _os="WINNT"
-   CygwinVer="true"
+   CygwinVer=`uname -r | $AWK -F. '{ print $1$2 }'`
+   if test "$CygwinVer" -lt "15"; then
+      AC_MSG_ERROR([found $_os. You need at least Cygwin V1.5.x])
+   fi
 else
    CygwinVer="false"
 fi
@@ -461,6 +508,22 @@ fi
 AC_SUBST(ENABLE_DEBUG)
 
 dnl ===================================================================
+dnl Set the ENABLE_DBGUTIL variable
+dnl ===================================================================
+if test -n "$enable_dbgutil"; then
+   PROEXT=""
+   PRODUCT=""
+   PROFULLSWITCH=""
+else
+   PRODUCT="full"
+   PROFULLSWITCH="product=full"
+   PROEXT=".pro"
+fi
+AC_SUBST(PRODUCT)
+AC_SUBST(PROFULLSWITCH)
+AC_SUBST(PROEXT)
+
+dnl ===================================================================
 dnl First setting is whether to include symbols into final build.
 dnl ===================================================================
 if test -n "$enable_symbols" ; then
@@ -525,12 +588,11 @@ dnl ===================================================================
 dnl WINNT uses either 4nt or tcsh, all other O/S use tcsh.
 dnl The following sets the with_use_shell variable.
 dnl ===================================================================
-if test $_os = "WINNT" -a $CygwinVer = "true"; then
+if test $_os = "WINNT"; then
+   dnl We might want to switch the default to tcsh soon.
    if test "$with_use_shell" = "0"; then
       with_use_shell="4nt"
    fi
-   if test `uname -r | $AWK -F. '{ print $1$2 }'` -ge "13"; then
-      CygwinVer="1"
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
    dnl ===================================================================
@@ -550,12 +612,6 @@ link, and copy the program to the name of the link.])
             WITH_MINGWIN="yes"
          fi
       fi
-   else
-      CygwinVer="b"
-   fi
-   if test "$with_use_shell" != "4nt" -a "$CygwinVer" != "1"; then
-      AC_MSG_ERROR([install Cygwin V1.3.x and tcsh if you don't use 4NT])
-   fi
    dnl ===================================================================
    dnl If using Mingwin32 then don't use 4NT
    dnl ===================================================================
@@ -567,16 +623,12 @@ link, and copy the program to the name of the link.])
       fi
    fi
 else 
-   if test "$_os" = "WINNT"; then
-      with_use_shell="4nt"
-   else
    dnl ===================================================================
    dnl All other operating systems use tcsh.
    dnl ===================================================================
       if test "$with_use_shell" = "0"; then
             with_use_shell="tcsh"
       fi
-   fi
 fi
 USE_SHELL="$with_use_shell"
 AC_SUBST(USE_SHELL)
@@ -638,7 +690,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" = "3"; then
-      USE_GCC3="TRUE"
       if test "$_gcc_longver"  -eq "030203"; then
 		 if test "$ENABLE_SYMBOLS" = "SMALL"; then
            AC_MSG_ERROR([version "$_gcc_version" gives internal error with small.])
@@ -649,7 +700,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    fi
    AC_MSG_RESULT([checked (gcc $_gcc_version)])
 fi  
-AC_SUBST(USE_GCC3)
 
 dnl ===================================================================
 dnl Search all the common names for GNU make
@@ -817,22 +867,17 @@ if test "$_os" = "WINNT"; then
    			AC_PATH_PROG(CC, cl.exe)
    		fi
   		if test -e "$CC"; then
-			# Don't use filenames with spaces AND the old cygwin b20
-			if test "$CygwinVer" = "1"; then
-				# This gives us a posix path with 8.3 filename restrictions
-				CC=`cygpath -d "$CC"`
-				CC=`cygpath -u "$CC"`
-			fi
+			# This gives us a posix path with 8.3 filename restrictions
+			CC=`cygpath -d "$CC"`
+			CC=`cygpath -u "$CC"`
 			# Remove /cl.exe from CC case insensitive
-			COMPATH=`echo $CC | $SED 's@/[[cC]][[lL]\.[eE]][[xX]][[eE]]@@'`
-			# Please set INCLUDE in your environement if you use the old cygwin b20
-			if test "$CygwinVer" = "1"; then
-				export INCLUDE=`cygpath -d "$COMPATH/../Include"`
-			fi
-			AC_MSG_RESULT([found.])
+			AC_MSG_RESULT([found ($CC)])
+			COMPATH=`echo $CC | $SED 's@/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+			export INCLUDE=`cygpath -d "$COMPATH/../Include"`
 			dnl  Check which Microsoft C/C++ compiler is found
 			AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
-			CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft.*..\\...\\...../ {
+dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out.         
+			CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
 							x = match( \\\$0, /..\\...\\...../ )
 							CCversion = substr( \\\$0, RSTART, RLENGTH)
 							tokencount = split (CCversion,vertoken,\".\")
@@ -841,7 +886,7 @@ if test "$_os" = "WINNT"; then
 							}
 							}"`
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
-			if test "$CCNUMVER" -ge "001300103077"; then
+			if test "$CCNUMVER" -ge "001300103000"; then
 				COMEX=10
 			else
 				if test "$CCNUMVER" -ge "001300000000"; then
@@ -948,7 +993,7 @@ dnl Check if cups/cups.h is available on
 dnl ===================================================================
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
     AC_CHECK_HEADER(cups/cups.h, [],
-                    [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev-dev or cups???-devel missing?])], [])
+                    [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev or cups???-devel missing?])], [])
 fi
 
 dnl ===================================================================
@@ -977,6 +1022,48 @@ fi
 dnl Autoconf 2.53 can do this test for cl.exe, 2.13 can't!
 if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
    AC_PROG_CXX
+fi
+
+dnl check if we are using a buggy version of g++ (currently 3.4.0, 3.4.1 and trunk)
+if test "$GXX" = "yes"; then
+   AC_MSG_CHECKING([the GNU C++ compiler version])
+
+   _gpp_version=`$CXX -dumpversion`
+   _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
+   _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
+
+   if test "$_gpp_major" = "3"; then
+      if test "$_gpp_minor" = "4"; then
+cat > conftest.cxx << EOF
+extern "C" void abort (void);
+extern "C" void exit (int status);
+
+enum E { E0, E1, E2, E3, E4, E5 };
+
+void
+test (enum E e)
+{
+  if (e == E2 || e == E3 || e == E1)
+  exit (1);
+}
+
+int
+main (void)
+{
+  test (E4);
+  test (E5);
+  test (E0);
+  return 0;
+}
+EOF
+         $CXX -O2 -o conftest conftest.cxx && ./conftest
+         if test $? -ne 0 ;  then
+            AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents OpenOffice.org from being compiled correctly
+please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])
+         fi
+      fi
+   fi
+   AC_MSG_RESULT([checked (g++ $_gpp_version)])
 fi
 
 dnl ===================================================================
@@ -1063,7 +1150,7 @@ fi
 dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
 dnl *************************************************************
-AC_MSG_CHECKING([try to compile exception code])
+AC_MSG_CHECKING([exception type])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_CACHE_VAL(exceptions_type, [AC_TRY_LINK(
@@ -1077,7 +1164,7 @@ extern "C" void __sjthrow(void) __attribute__ ((__noreturn__));
 	[exceptions_type="dwarf2"])
 ])
 
-AC_MSG_RESULT(Exceptions type: $exceptions_type)
+AC_MSG_RESULT($exceptions_type)
 AC_LANG_RESTORE
 EXCEPTIONS="$exceptions_type"
 AC_SUBST(EXCEPTIONS)
@@ -1213,60 +1300,85 @@ else
 dnl ===================================================================
 dnl Checks for STLPORT4
 dnl ===================================================================
-  AC_MSG_CHECKING([for STLport4 headers])
-  if test -d "$with_stlport4_home"; then
-	STLPORT4=$with_stlport4_home
-        if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
-           AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport4 headers not found.]))
-        else
-           dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
-           if test -f "$STLPORT4/stlport/hash_map"; then
-              AC_MSG_RESULT([checked.])
-           else
-              AC_MSG_ERROR([STLport4 headers not found.])
-           fi
-        fi
-        if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
-		AC_MSG_CHECKING([for STLport4 libraries])
-		if test "$_os" = "SunOS"; then
-			if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
-				AC_MSG_RESULT([checked])
-			else
-				AC_MSG_ERROR([STLport4 libraries not found])
-			fi
-		elif test "$_os" = "Darwin"; then
-			if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
-				AC_MSG_RESULT([checked])
-			else
-				AC_MSG_ERROR([STLport4 libraries not found])
-			fi
-		elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-			if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
-				AC_MSG_RESULT([checked])
-			else
-				if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-					AC_MSG_RESULT([checked])
-				else
-					AC_MSG_ERROR([STLport4 libraries not found])
-				fi
-			fi
-		else
-			if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-				AC_MSG_RESULT([checked])
-			else
-				AC_MSG_ERROR([STLport4 libraries not found])
-			fi
-		fi
-	fi
-  else
-	AC_MSG_RESULT([using internal stlport.])
-  fi
+   AC_MSG_CHECKING([for STLport4 headers])
+   STLPORT4=""
+   USE_SYSTEM_STL=""
+   if test "$WITH_STLPORT" = "yes"; then
+      AC_MSG_RESULT([using internal stlport.])
+   elif test "$WITH_STLPORT" = "no"; then
+      AC_MSG_RESULT([use system STL instead, Warning breaks your ABI compatability!])
+      USE_SYSTEM_STL="YES"
+   else
+      STLPORT4=$WITH_STLPORT
+      if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+         AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport4 headers not found.]))
+      else
+         dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
+         if test -f "$STLPORT4/stlport/hash_map"; then
+            AC_MSG_RESULT([checked.])
+         else
+            AC_MSG_ERROR([STLport4 headers not found.])
+         fi
+      fi
+      if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+         AC_MSG_CHECKING([for STLport4 libraries])
+         if test "$_os" = "SunOS"; then
+		      if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
+			      AC_MSG_RESULT([checked])
+		      else
+			      AC_MSG_ERROR([STLport4 libraries not found])
+		      fi
+	      elif test "$_os" = "Darwin"; then
+		      if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
+			      AC_MSG_RESULT([checked])
+		      else
+			      AC_MSG_ERROR([STLport4 libraries not found])
+		      fi
+	      elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
+		      if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
+			      AC_MSG_RESULT([checked])
+			   else
+				   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
+					   AC_MSG_RESULT([checked])
+				   else
+					   AC_MSG_ERROR([STLport4 libraries not found])
+				   fi
+			   fi
+		   else
+			   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
+				   AC_MSG_RESULT([checked])
+			   else
+				   AC_MSG_ERROR([STLport4 libraries not found])
+			   fi
+		   fi
+	   fi
+   fi
 fi
 
-if test -z "$STLPORT4"; then 
-   STLPORT4="NO_STLPORT4"
+if test -z "$STLPORT4"; then
+  STLPORT4="NO_STLPORT4"
 fi
 AC_SUBST(STLPORT4)
+AC_SUBST(USE_SYSTEM_STL)
+
+dnl ===================================================================
+dnl hash_map hackery
+dnl ===================================================================
+if test "$USE_SYSTEM_STL" = "YES"; then
+   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
+   AC_LANG_SAVE
+   AC_LANG_CPLUSPLUS
+   AC_TRY_COMPILE([#include <ext/hash_map>
+using namespace __gnu_cxx;
+],[hash_map<int, int> t; return 0;],
+  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
+   AC_LANG_RESTORE
+   if test "$ac_cv_cxx_have_ext_hash_map" == "no"; then
+      AC_MSG_ERROR([Can't find hash_map. Try with stlport enabled])
+   else
+      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
+   fi
+fi
 
 dnl ===================================================================
 dnl Java support enable
@@ -1489,14 +1601,233 @@ AC_MSG_CHECKING([which zlib to use])
 if test -n "$with_system_zlib"; then
     AC_MSG_RESULT([external])
     SYSTEM_ZLIB=YES
-    AC_MSG_CHECKING([for zlib.h])
-    AC_TRY_COMPILE([#include "zlib.h"], [],
-        [AC_MSG_RESULT(found)], [AC_MSG_ERROR(zlib not found. install zlib)])
+    AC_CHECK_HEADER(zlib.h, [],
+        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
+    AC_CHECK_LIB(z, deflate, [ ZLIB=-lz ],
+        [AC_MSG_ERROR(zlib not found or functional)], [])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ZLIB=NO
 fi
 AC_SUBST(SYSTEM_ZLIB)
+
+dnl ===================================================================
+dnl Check for system jpeg
+dnl ===================================================================
+AC_MSG_CHECKING([which jpeg to use])
+if test -n "$with_system_jpeg"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_JPEG=YES
+    AC_CHECK_HEADER(jpeglib.h, [],
+        [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
+    # TODO: add lib check here
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_JPEG=NO
+fi
+AC_SUBST(SYSTEM_JPEG)
+
+dnl ===================================================================
+dnl Check for system expat
+dnl ===================================================================
+AC_MSG_CHECKING([which expat to use])
+if test -n "$with_system_expat"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_EXPAT=YES
+    AC_CHECK_HEADER(expat.h, [].
+        [AC_MSG_ERROR(expat.h not found. install expat)], [])
+    # TODO: add lib check here
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_EXPAT=NO
+fi
+AC_SUBST(SYSTEM_EXPAT)
+
+dnl ===================================================================
+dnl Check for system freetype
+dnl ===================================================================
+AC_MSG_CHECKING([which freetype to use])
+if test -n "$with_system_freetype"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_FREETYPE=YES
+    PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_FREETYPE=NO
+fi
+AC_SUBST(SYSTEM_FREETYPE)
+AC_SUBST(FREETYPE_CFLAGS)
+AC_SUBST(FREETYPE_LIBS)
+
+dnl ===================================================================
+dnl Check for system libxml
+dnl ===================================================================
+AC_MSG_CHECKING([which libxml to use])
+if test -n "$with_system_libxml"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBXML=YES
+    PKG_CHECK_MODULES( LIBXML, libxml-2.0 >= 2.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBXML=NO
+fi
+AC_SUBST(SYSTEM_LIBXML)
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
+
+dnl ===================================================================
+dnl Check for system python
+dnl ===================================================================
+AC_MSG_CHECKING([which python to use])
+if test -n "$with_system_python"; then
+   SYSTEM_PYTHON=YES
+   AC_MSG_RESULT([external])
+   AM_PATH_PYTHON([2.2])
+
+   python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
+   python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
+   PYTHON_CFLAGS="-I$python_include"
+   PYTHON_LIBS="-lpython$python_version"
+   
+   dnl check if the headers really work:
+   save_CPPFLAGS="$CPPFLAGS"
+   CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
+   AC_TRY_CPP(Python.h, , AC_MSG_ERROR([Python headers not found.]))
+   CPPFLAGS="$save_CPPFLAGS"
+else
+   SYSTEM_PYTHON=NO
+   AC_MSG_RESULT([internal])
+fi
+AC_SUBST(SYSTEM_PYTHON)
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
+
+dnl ===================================================================
+dnl Check for system berkley db
+dnl ===================================================================
+AC_MSG_CHECKING([which db to use])
+if test -n "$with_system_db3"; then
+    SYSTEM_DB3=YES
+    AC_MSG_RESULT([external])
+    AC_LANG(C++)
+    AC_CHECK_HEADER(db3/db_cxx.h, [],
+                    [AC_MSG_ERROR([db3/db_cxx.h could not be found. install devel db3 libraries])], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_DB3=NO
+fi
+AC_SUBST(SYSTEM_DB3)
+
+dnl ===================================================================
+dnl Check for system sablot
+dnl ===================================================================
+AC_MSG_CHECKING([which sablot to use])
+if test -n "$with_system_sablot"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_SABLOT=YES
+
+   AC_PATH_PROG( SABLOTCONFIG, sablot-config)
+   if test -z "$SABLOTCONFIG"; then
+      AC_MSG_ERROR([install sablot to run this script])
+   fi
+
+   SABLOT_LIBS=`$SABLOTCONFIG --libs`
+   SABLOT_LIBS="-lsablot $SABLOT_LIBS"
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_SABLOT=NO
+fi
+AC_SUBST(SYSTEM_SABLOT)
+AC_SUBST(SABLOT_LIBS)
+
+dnl ===================================================================
+dnl Check for system curl
+dnl ===================================================================
+AC_MSG_CHECKING([which curl to use])
+if test -n "$with_system_curl"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_CURL=YES
+
+   AC_PATH_PROG( CURLCONFIG, curl-config)
+   if test -z "$CURLCONFIG"; then
+      AC_MSG_ERROR([install curl to run this script])
+   fi
+
+   CURL_LIBS=`$CURLCONFIG --libs`
+   CURL_CFLAGS=`$CURLCONFIG --cflags`
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_CURL=NO
+fi
+AC_SUBST(SYSTEM_CURL)
+AC_SUBST(CURL_CFLAGS)
+AC_SUBST(CURL_LIBS)
+
+dnl ===================================================================
+dnl Check for system odbc
+dnl ===================================================================
+AC_MSG_CHECKING([which odbc headers to use])
+if test -n "$with_system_odbc_headers"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_ODBC_HEADERS=YES
+
+   AC_CHECK_HEADER(sqlext.h, [],
+      [AC_MSG_ERROR(odbc not found. install odbc)], [])
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_ODBC_HEADERS=NO
+fi
+AC_SUBST(SYSTEM_ODBC_HEADERS)
+
+dnl ===================================================================
+dnl Check for system mozille
+dnl ===================================================================
+AC_MSG_CHECKING([which mozilla to use])
+if test -n "$with_system_mozilla"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MOZILLA=YES
+    PKG_CHECK_MODULES( MOZILLA, mozilla-xpcom )
+    PKG_CHECK_MODULES( MOZILLABASE, mozilla-nspr )
+    MOZILLA_ADDRBOOK_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/addrbook/g"`
+    MOZILLA_RDF_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/rdf/g"`
+    MOZILLA_MSGBASE_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/msgbase/g"`
+    MOZILLA_XPCOM_OBSOLETE_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/xpcom_obsolete/g"`
+    MOZILLA_PREF_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/pref/g"`
+    MOZILLA_MIME_CFLAGS=`echo $MOZILLABASE_CFLAGS | $SED -e "s/nspr/mime/g"`
+    MOZILLA_CFLAGS="$MOZILLA_CFLAGS $MOZILLA_ADDRBOOK_CFLAGS $MOZILLA_RDF_CFLAGS $MOZILLA_MSGBASE_CFLAGS $MOZILLA_XPCOM_OBSOLETE_CFLAGS $MOZILLA_PREF_CFLAGS $MOZILLA_MIME_CFLAGS"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_MOZILLA=NO
+fi
+AC_SUBST(SYSTEM_MOZILLA)
+AC_SUBST(MOZILLA_CFLAGS)
+AC_SUBST(MOZILLA_LIBS)
+
+
+dnl ===================================================================
+dnl Check for system icu
+dnl ===================================================================
+AC_MSG_CHECKING([which icu to use])
+if test -n "$with_system_icu"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_ICU=YES
+   AC_MSG_CHECKING([for unicode/rbbi.h])
+   AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
+   AC_PATH_PROG(SYSTEM_GENBRK, genbrk)
+   if test -z "$SYSTEM_GENBRK"; then
+      AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
+   fi
+   AC_PATH_PROG(SYSTEM_GENCCODE, genccode)
+   if test -z "$SYSTEM_GENCCODE"; then
+      AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
+   fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_ICU=NO
+fi
+AC_SUBST(SYSTEM_ICU)
+AC_SUBST(SYSTEM_GENBRK)
+AC_SUBST(SYSTEM_GENCCODE)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
@@ -1574,6 +1905,67 @@ AC_SUBST(XINC)
 XLIB="$x_libraries"
 AC_SUBST(XLIB)
 
+dnl ==================================================================
+dnl Check for system nas
+dnl ===================================================================
+AC_MSG_CHECKING([which nas to use])
+if test -n "$with_system_nas" -o -n "$with_system_libs"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_NAS=YES
+    AC_CHECK_HEADER(audio/audiolib.h, [ NAS_INCLUDES=/usr/include ],
+        [
+             CFLAGS=-I/usr/X11R6/include
+             AC_CHECK_HEADER(audio/audiolib.h,
+                 [ NAS_INCLUDES=/usr/X11R6/include ],
+                 [ AC_MSG_ERROR(no. install nas) ], []
+             )
+        ], []
+    )
+    AC_CHECK_LIB(audio, AuOpenServer, [],
+        [AC_MSG_ERROR(nas not found or functional)], [-L$XLIB -lXt])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_NAS=NO
+fi
+AC_SUBST(SYSTEM_NAS)
+AC_SUBST(NAS_INCLUDES)
+
+dnl ===================================================================
+dnl Check for system neon
+dnl ===================================================================
+AC_MSG_CHECKING([which neon to use])
+if test -z "$without_system_neon"; then
+    if test -n "$with_system_neon" -o -n "$with_system_libs"; then
+        AC_MSG_RESULT([external])
+        AC_PATH_PROG(NEON_CONFIG, neon-config, no)
+        AC_MSG_CHECKING([whether neon version is 0.23.x])
+        # check whether we have 0.23.x. 0.24.x is API-incompatible....
+        NEON_VER=$($NEON_CONFIG --version | $AWK '{print $2}' \
+            | cut -d"." -f1,2)
+        if test "$NEON_VER" = "0.23"; then
+            AC_MSG_RESULT([yes])
+            SYSTEM_NEON=YES
+            NEON_CFLAGS="$($NEON_CONFIG --cflags) -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
+            NEON_LIBS=$($NEON_CONFIG --libs)
+        else
+            AC_MSG_ERROR([no. neon 0.24.x is API-incompatible. use 0.23.x])
+        fi
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_NEON=NO
+        NEON_LIBS=-lneon
+        NEON_CFLAGS=
+    fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_NEON=NO
+    NEON_LIBS=-lneon
+    NEON_CFLAGS=
+fi
+AC_SUBST(SYSTEM_NEON)
+AC_SUBST(NEON_LIBS)
+AC_SUBST(NEON_CFLAGS)
+
 dnl ***************************************
 dnl testing libc version for Linux...
 dnl ***************************************
@@ -1630,7 +2022,8 @@ else
    AC_MSG_CHECKING([the bison version])
    _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
     _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
-    if test "$_bison_longver" -ge 1875 ; then
+    # Accept newer than 1.875 or older(equal) than 1.75
+    if test "$_bison_longver" -ge 1875 -o "$_bison_longver" -le 1075; then
        if test "$_bison_version" = "1.875" ; then
           AC_MSG_WARN([suspect ($BISON $_bison_version)])
           echo "Suspect ($BISON $_bison_version) suggest upgrade" >> warn
@@ -1638,7 +2031,7 @@ else
           AC_MSG_RESULT([checked ($BISON $_bison_version)])
        fi
     else
-       AC_MSG_ERROR([failed ($BISON $_bison_version need 1.875+)])
+       AC_MSG_ERROR([failed ($BISON $_bison_version need 1.875+ (or 1.75 and older))])
     fi
 fi
 AC_PATH_PROG(FLEX, flex)
