@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-12-10 17:03:34 $
+ *  last change:$Date: 2005-02-24 17:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package mod._dbaccess;
 
 //import com.sun.star.awt.XControl;
@@ -71,19 +70,27 @@ import lib.TestParameters;
 import util.DesktopTools;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
+import lib.StatusException;
+import util.SOfficeFactory;
 
 public class OQueryDesign extends TestCase {
 
-    XDesktop Desk;
-    XFrame Frame;
+    private XDesktop Desk;
+    private XFrame Frame;
+    private final String sDataSourceName = "Bibliography";
 
     /**
      * Disposes the document, if exists, created in
@@ -134,7 +141,48 @@ public class OQueryDesign extends TestCase {
 
         shortWait();
 
-        Frame = Desk.getCurrentFrame();
+        Object oDBC = null;
+        XMultiServiceFactory xMSF;
+
+        try {
+            xMSF = (XMultiServiceFactory)Param.getMSF();
+            oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
+        }
+        catch( com.sun.star.uno.Exception e ) {
+            throw new StatusException("Could not instantiate DatabaseContext", e) ;
+        }
+
+        Object oDataSource = null;
+        try{
+            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+            oDataSource = xNA.getByName(sDataSourceName);
+        } catch ( com.sun.star.container.NoSuchElementException e){
+            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
+        } catch ( com.sun.star.lang.WrappedTargetException e){
+            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
+        }
+
+        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, oDataSource);
+
+        Frame = xMod.getCurrentController().getFrame();
+
+         // get an instance of Frame
+        Object oFrame = null;
+        XTextDocument xTextDoc = null;;
+        SOfficeFactory SOF = null;
+
+        SOF = SOfficeFactory.getFactory( xMSF );
+        try {
+            log.println( "creating a textdocument" );
+            xTextDoc = SOF.createTextDoc( null );
+        } catch ( com.sun.star.uno.Exception e ) {
+            e.printStackTrace( log );
+            throw new StatusException( "Couldn�t create document", e );
+        }
+
+        XModel xDocMod = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+
+        XFrame xTextFrame  = xDocMod.getCurrentController().getFrame();
 
         Object[] params = new Object[3];
         param1 = new PropertyValue();
@@ -143,28 +191,87 @@ public class OQueryDesign extends TestCase {
         params[0] = param1;
         param2 = new PropertyValue();
         param2.Name = "Frame";
-        param2.Value = Frame;
+        param2.Value = xTextFrame;
         params[1] = param2;
         PropertyValue param3 = new PropertyValue();
         param3.Name = "QueryDesignView";
         param3.Value = new Boolean(true);
         params[2] = param3;
 
-        oObj = Frame.getController();
+        Object[] ExceptionParams = new Object[3];
+        ExceptionParams = params;
+        ((PropertyValue) ExceptionParams[1]).Value = Frame;
 
+        oObj = Frame.getController();
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         //Adding ObjRelations for XInitialization
         tEnv.addObjRelation("XInitialization.args", params);
 
+        tEnv.addObjRelation("XInitialization.ExceptionArgs", params);
+
         tEnv.addObjRelation("Frame", Frame);
 
-        log.println("ImplementationName"+util.utils.getImplName(oObj));
+        tEnv.addObjRelation("XInitialization.xIni", getUnititializedObj(Param));
+
+        log.println("ImplementationName: "+util.utils.getImplName(oObj));
 
         return tEnv;
 
     } // finish method getTestEnvironment
+
+    private XInitialization getUnititializedObj(TestParameters Param){
+        // creating an object wihch ist not initialized
+
+        // get a model of a DataSource
+        Object oDBC = null;
+        XMultiServiceFactory xMSF;
+
+        try {
+            xMSF = (XMultiServiceFactory)Param.getMSF();
+            oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
+        }
+        catch( com.sun.star.uno.Exception e ) {
+            throw new StatusException("Could not instantiate DatabaseContext", e) ;
+        }
+
+        Object oDataSource = null;
+        try{
+            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+            oDataSource = xNA.getByName(sDataSourceName);
+        } catch ( com.sun.star.container.NoSuchElementException e){
+            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
+        } catch ( com.sun.star.lang.WrappedTargetException e){
+            throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
+        }
+
+        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, oDataSource);
+
+        // get an intaces of QueryDesign
+        Object oQueryDesign = null;
+        try{
+            oQueryDesign = xMSF.createInstance("com.sun.star.sdb.QueryDesign");
+        }catch( com.sun.star.uno.Exception e ) {
+            throw new StatusException("Could not instantiate QueryDesign", e) ;
+        }
+
+        XController xCont = (XController) UnoRuntime.queryInterface(XController.class, oQueryDesign);
+
+        // marry them all
+        xCont.attachModel(xMod);
+        xMod.connectController(xCont);
+        try{
+            xMod.setCurrentController(xCont);
+        } catch (com.sun.star.container.NoSuchElementException e){
+            throw new StatusException("Could not set controller", e) ;
+        }
+
+        //xCont.attachFrame(xFrame);
+
+        return (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oQueryDesign);
+
+    }
 
     /**
     * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
