@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-27 20:07:30 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 16:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // configuration keys
 String KEY_PREVIEW
 {
-    Text = "Preview";
+    Text = "Vorschau";
     Text[ language_user1 ] = " ";
     Text[ english_us ] = "EPS preview image";
     Text[ portuguese ] = "Previsualização";
@@ -90,7 +90,7 @@ String KEY_PREVIEW
 };
 String KEY_VERSION
 {
-    Text = "Version";
+    Text = "EPS-Version";
     Text[ language_user1 ] = " ";
     Text[ english_us ] = "EPS version";
     Text[ portuguese ] = "Versão";
@@ -115,7 +115,7 @@ String KEY_VERSION
 };
 String KEY_COLOR
 {
-    Text = "ColorFormat";
+    Text = "Farbformat";
     Text[ language_user1 ] = " ";
     Text[ english_us ] = "EPS color format";
     Text[ portuguese ] = "Formato de cor EPS";
@@ -140,7 +140,7 @@ String KEY_COLOR
 };
 String KEY_COMPR
 {
-    Text = "CompressionMode";
+    Text = "Komprimierung";
     Text[ language_user1 ] = " ";
     Text[ english_us ] = "EPS compression mode";
     Text[ portuguese ] = "ModoCompressão";
