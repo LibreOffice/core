@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basegfxfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,9 @@
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include "implpolypolygon.hxx"
-#include "implbitmap.hxx"
-#include "impltext.hxx"
+#include <implpolypolygon.hxx>
+#include <implbitmap.hxx>
+#include <impltext.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -178,6 +178,26 @@ namespace cppcanvas
         return BitmapSharedPtr(
             new internal::ImplBitmap( rCanvas,
                                       xCanvas->getDevice()->createCompatibleBitmap(
+                                          ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
+    }
+
+    BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
+                                                       const ::basegfx::B2ISize& rSize ) const
+    {
+        OSL_ENSURE( rCanvas.get() != NULL &&
+                    rCanvas->getUNOCanvas().is(),
+                    "BaseGfxFactory::createBitmap(): Invalid canvas" );
+
+        if( rCanvas.get() == NULL )
+            return BitmapSharedPtr();
+
+        uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
+        if( !xCanvas.is() )
+            return BitmapSharedPtr();
+
+        return BitmapSharedPtr(
+            new internal::ImplBitmap( rCanvas,
+                                      xCanvas->getDevice()->createCompatibleAlphaBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
     }
 
