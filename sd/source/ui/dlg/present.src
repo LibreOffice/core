@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:13:40 $
+ *  last change: $Author: sj $ $Date: 2002-07-12 09:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ModalDialog DLG_START_PRESENTATION
     HelpID = SID_PRESENTATION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 248 , 177 ) ;
+    Size = MAP_APPFONT ( 256, 177 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation : Bildschirmprõsentation */
     Text = "Bildschirmpräsentation" ;
     Text [ ENGLISH ] = "Start Presentation" ;
@@ -92,28 +92,28 @@ ModalDialog DLG_START_PRESENTATION
 
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 192 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 200, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 192 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 200, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 192 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 200, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
 
     FixedLine GRP_RANGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 179 , 8 ) ;
+        Size = MAP_APPFONT ( 187, 8 ) ;
         Text = "Umfang" ;
         Text [ ENGLISH ] = "Range" ;
         Text [ norwegian ] = "Verdimengde" ;
@@ -202,8 +202,8 @@ ModalDialog DLG_START_PRESENTATION
     ListBox LB_DIAS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 24 ) ;
-        Size = MAP_APPFONT ( 113 , 80 ) ;
+        Pos = MAP_APPFONT ( 72, 24 ) ;
+        Size = MAP_APPFONT ( 121, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          //DDExtraWidth = TRUE;
@@ -241,7 +241,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 32, 53 ) ;
-        Size = MAP_APPFONT ( 147 , 80 ) ;
+        Size = MAP_APPFONT ( 155, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -452,7 +452,7 @@ ModalDialog DLG_START_PRESENTATION
     FixedLine GRP_OPTIONS
     {
         Pos = MAP_APPFONT ( 102 , 73 ) ;
-        Size = MAP_APPFONT ( 140, 8 );
+        Size = MAP_APPFONT ( 148, 8 );
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -481,7 +481,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_MANUEL
     {
         Pos = MAP_APPFONT ( 108 , 84 ) ;
-        Size = MAP_APPFONT ( 121 , 12 ) ;
+        Size = MAP_APPFONT ( 139 , 12 ) ;
         Text = "Diawechsel ~manuell" ;
         Text [ ENGLISH ] = "~Manual advance" ;
         Text [ norwegian ] = "~+++Manuell framgangsmåte" ;
@@ -511,7 +511,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_MOUSEPOINTER
     {
         Pos = MAP_APPFONT ( 108, 96 ) ;
-        Size = MAP_APPFONT ( 121, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         Text = "Maus~zeiger sichtbar" ;
         Text [ ENGLISH ] = "Mousepointer ~visible" ;
         Text [ norwegian ] = "Musepeker ~synlig" ;
@@ -541,7 +541,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_PEN
     {
         Pos = MAP_APPFONT ( 108, 108 ) ;
-        Size = MAP_APPFONT ( 121, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         Text = "Mauszeiger als ~Stift" ;
         Text [ ENGLISH ] = "Mousepointer ~Pen" ;
         Text [ norwegian ] = "Musepeker ~Penn" ;
@@ -571,7 +571,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_NAVIGATOR
     {
         Pos = MAP_APPFONT ( 108, 120 ) ;
-        Size = MAP_APPFONT ( 121, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         Text = "~Navigator sichtbar" ;
         Text [ ENGLISH ] = "~Navigator visible" ;
         TabStop = TRUE ;
@@ -600,7 +600,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_ANIMATION_ALLOWED
     {
         Pos = MAP_APPFONT ( 108, 132 ) ;
-        Size = MAP_APPFONT ( 121, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         TabStop = TRUE ;
         Text = "Animati~onen zulassen" ;
         Text [ ENGLISH ] = "Animati~ons allowed" ;
@@ -629,7 +629,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_CHANGE_PAGE
     {
         Pos = MAP_APPFONT ( 108, 144 ) ;
-        Size = MAP_APPFONT ( 121, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         Text = "Diawechsel bei ~Klick auf Hintergrund" ;
         Text [ ENGLISH ] = "Change slides on mouse ~click" ;
         TabStop = TRUE ;
@@ -658,7 +658,7 @@ ModalDialog DLG_START_PRESENTATION
     CheckBox CBX_ALWAYS_ON_TOP
     {
         Pos = MAP_APPFONT ( 108, 156 ) ;
-        Size = MAP_APPFONT ( 131, 12 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Präsentation immer im ~Vordergrund : Prõsentation immer im ~Vordergrund */
         Text = "Bildschirmpräsentation immer im ~Vordergrund" ;
         Text [ ENGLISH ] = "Presentation always on ~top" ;
