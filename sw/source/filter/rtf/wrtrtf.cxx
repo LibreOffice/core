@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-03 17:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
+#endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -874,9 +877,47 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     rWrt.Strm() << sRTF_FCHARSET;
     rWrt.OutULong( nChSet );
 
+#ifdef _WITH_ALTERNATIV_NAMES
+    String sFntNm( GetFontToken( rFont.GetFamilyName(), 0 )),
+           sAltNm( GetFontToken( rFont.GetFamilyName(), 1 ));
+
+//JP 27.6.2001: hack for WinWord - in other case they can't use alternative
+//              fontnames - don't ask me why.
+
     rWrt.Strm() << ' ';
-    RTFOutFuncs::Out_String( rWrt.Strm(), rFont.GetFamilyName(), DEF_ENCODING,
-                            rWrt.bWriteHelpFmt ) << ";}";
+    RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
+                                rWrt.bWriteHelpFmt );
+    if( sAltNm.Len() )
+    {
+        OutComment( rWrt, sRTF_FALT) << ' ';
+        RTFOutFuncs::Out_String( rWrt.Strm(), sAltNm, DEF_ENCODING,
+                                    rWrt.bWriteHelpFmt ) << '}';
+    }
+#else
+    String sFamilyNm( ::GetFontToken( rFont.GetFamilyName(), 0 ));
+/*  if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
+    {
+        String sTmp( ::GetSubsFontName( sFamilyNm,
+                                        SUBSFONT_MS | SUBSFONT_ONLYONE ));
+        if( sTmp.Len() )
+            sFamilyNm = sTmp;
+    }
+*/
+    //JP 3.7.2001: hack - so that WW can show CJK documents correct, if no
+    //                      font exist.
+    if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
+    {
+        // mostly the MS fonts are the second one ;-)
+        String sTmp( ::GetFontToken( rFont.GetFamilyName(), 1 ));
+        if( sTmp.Len() )
+            ( sFamilyNm += ';' ) += sTmp;
+    }
+    rWrt.Strm() << ' ';
+    RTFOutFuncs::Out_String( rWrt.Strm(), sFamilyNm, DEF_ENCODING,
+                                rWrt.bWriteHelpFmt );
+#endif
+
+    rWrt.Strm() << ";}";
 }
 
 void SwRTFWriter::OutRTFFontTab()
