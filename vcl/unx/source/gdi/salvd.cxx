@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:00:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                        long nDX, long nDY,
-                                                       USHORT nBitCount )
+                                                       USHORT nBitCount, const SystemGraphicsData *pData )
 {
     X11SalVirtualDevice *pVDev = new X11SalVirtualDevice();
     if( !nBitCount && pGraphics )
