@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2001-09-06 11:59:04 $
+#   last change: $Author: kz $ $Date: 2001-09-25 09:15:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 .IF "$(COM)" == "MSC"
@@ -90,6 +88,7 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/except.obj
+
 NOOPTFILES= \
     $(SLO)$/except.obj
 
@@ -107,6 +106,8 @@ SHL1OBJS= \
 SHL1STDLIBS= \
     $(CPPULIB)			\
     $(SALLIB)
+
+DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
