@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:41:25 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de páginas:" ;
         Text [ english_us ] = "Number of Pages:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ò³Êı£º";
+        Text[ chinese_simplified ] = "é¡µæ•°ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
         Text[ polish ] = "Liczba stron:";
-        Text[ japanese ] = "Íß°¼Ş‘”:";
-        Text[ chinese_traditional ] = "­¶¼Æ¡G";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç·æ•°:";
+        Text[ chinese_traditional ] = "é æ•¸ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
         Text[ greek ] = "Áñéèìüò óåëßäùí:";
-        Text[ korean ] = "ÂÊ ¼ö:";
+        Text[ korean ] = "ìª½ ìˆ˜:";
         Text[ turkish ] = "Sayfa:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de páginas:";
@@ -116,14 +116,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de tablas:" ;
         Text [ english_us ] = "Number of Tables:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "±í¸ñÊıÄ¿£º";
+        Text[ chinese_simplified ] = "è¡¨æ ¼æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî òàáëèö:";
         Text[ polish ] = "Liczba tabel:";
-        Text[ japanese ] = "•\\”:";
-        Text[ chinese_traditional ] = "ªí®æ¼Æ¥Ø¡G";
+        Text[ japanese ] = "è¡¨æ•°:";
+        Text[ chinese_traditional ] = "è¡¨æ ¼æ•¸ç›®ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÌÏÇæá:";
         Text[ greek ] = "Áñéèìüò ğéíÜêùí:";
-        Text[ korean ] = "Ç¥ °³¼ö:";
+        Text[ korean ] = "í‘œ ê°œìˆ˜:";
         Text[ turkish ] = "Tablo:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de tablas:";
@@ -146,14 +146,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de imágenes:" ;
         Text [ english_us ] = "Number of Graphics:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Í¼ĞÎÊıÄ¿£º";
+        Text[ chinese_simplified ] = "å›¾å½¢æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ğèñóíêîâ:";
         Text[ polish ] = "Liczba grafik:";
-        Text[ japanese ] = "}‚Ì”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ¹Ï§Î¡G";
+        Text[ japanese ] = "å›³ã®æ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® åœ–å½¢ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÑÓæãÇÊ:";
         Text[ greek ] = "Áñéèìüò ãñáöéêşí:";
-        Text[ korean ] = "±×·¡ÇÈ °³¼ö:";
+        Text[ korean ] = "ê·¸ë˜í”½ ê°œìˆ˜:";
         Text[ turkish ] = "Grafik:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de imágenes:";
@@ -176,14 +176,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de objetos OLE:" ;
         Text [ english_us ] = "Number of OLE Objects:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "OLE ¶ÔÏóÊıÄ¿£º";
+        Text[ chinese_simplified ] = "OLE å¯¹è±¡æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî îáúåêòîâ OLÅ:";
         Text[ polish ] = "Liczba obiektów OLE:";
-        Text[ japanese ] = "OLEµÌŞ¼Şª¸Ä‚Ì”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø OLE-ª«¥ó¡G";
+        Text[ japanese ] = "OLEï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® OLE-ç‰©ä»¶ï¼š";
         Text[ arabic ] = "ÚÏÏ ßÇÆäÇÊ OLE:";
         Text[ greek ] = "Áñéèìüò áíôéêåéìİíùí OLE:";
-        Text[ korean ] = "OLE °³Ã¼ °³¼ö:";
+        Text[ korean ] = "OLE ê°œì²´ ê°œìˆ˜:";
         Text[ turkish ] = "OLE nesneleri:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de objetos OLE:";
@@ -206,14 +206,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de párrafos:" ;
         Text [ english_us ] = "Number of Paragraphs:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¶ÎÂäÊıÄ¿£º";
+        Text[ chinese_simplified ] = "æ®µè½æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî àáçàöåâ:";
         Text[ polish ] = "Liczba akapitów:";
-        Text[ japanese ] = "’i—”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ¬q¸¨¡G";
+        Text[ japanese ] = "æ®µè½æ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® æ®µè½ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáİŞÑÇÊ:";
         Text[ greek ] = "Áñéèìüò ğáñáãñÜöùí:";
-        Text[ korean ] = "´Ü¶ô °³¼ö:";
+        Text[ korean ] = "ë‹¨ë½ ê°œìˆ˜:";
         Text[ turkish ] = "Paragraf:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de párrafos:";
@@ -236,14 +236,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de palabras:" ;
         Text [ english_us ] = "Number of Words:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "µ¥´ÊÊıÄ¿£º";
+        Text[ chinese_simplified ] = "å•è¯æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñëîâ:";
         Text[ polish ] = "Liczba s³ów:";
-        Text[ japanese ] = "Œê”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ¦r¡G";
+        Text[ japanese ] = "èªæ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® å­—ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáßáãÇÊ:";
         Text[ greek ] = "Áñéèìüò ëİîåùí:";
-        Text[ korean ] = "´Ü¾î ¼ö:";
+        Text[ korean ] = "ë‹¨ì–´ ìˆ˜:";
         Text[ turkish ] = "Sözcük:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de palabras:";
@@ -264,14 +264,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Sepa~rador" ;
         Text [ french ] = "~Séparateur" ;
         Text [ dutch ] = "~Scheidingsteken" ;
-        Text[ chinese_simplified ] = "·Ö¸ô·û";
+        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦";
         Text[ russian ] = "Ğàçäåëèòåëü";
         Text[ polish ] = "Separator";
-        Text[ japanese ] = "‹æØ‚è‹L†";
-        Text[ chinese_traditional ] = "³s¦r²Å";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·";
+        Text[ chinese_traditional ] = "é€£å­—ç¬¦";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞÀÚ";
+        Text[ korean ] = "êµ¬ë¶„ì";
         Text[ turkish ] = "~Ayırma işareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sepa~rador";
@@ -302,14 +302,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de caracteres:" ;
         Text [ english_us ] = "Number of Characters:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "×Ö·ûÊıÄ¿£º";
+        Text[ chinese_simplified ] = "å­—ç¬¦æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî çíàêîâ:";
         Text[ polish ] = "Liczba znaków:";
-        Text[ japanese ] = "•¶š”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ¦r¤¸¡G";
+        Text[ japanese ] = "æ–‡å­—æ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® å­—å…ƒï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ:";
         Text[ greek ] = "Áñéèìüò ÷áñáêôŞñùí:";
-        Text[ korean ] = "¹®ÀÚ ¼ö:";
+        Text[ korean ] = "ë¬¸ì ìˆ˜:";
         Text[ turkish ] = "Karakter:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de caracteres:";
@@ -329,14 +329,14 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de líneas:" ;
         Text [ french ] = "Nombre de lignes :" ;
         Text [ dutch ] = "Aantal regels:" ;
-        Text[ chinese_simplified ] = "ĞĞÊı£º";
+        Text[ chinese_simplified ] = "è¡Œæ•°ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñòğîê:";
         Text[ polish ] = "Liczba wierszy:";
-        Text[ japanese ] = "s”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ¦æ¡G";
+        Text[ japanese ] = "è¡Œæ•°:";
+        Text[ chinese_traditional ] = "æ•¸ç›® è¡Œï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÃÓØÑ:";
         Text[ greek ] = "Áñéèìüò ãñáììşí:";
-        Text[ korean ] = "Çà °³¼ö:";
+        Text[ korean ] = "í–‰ ê°œìˆ˜:";
         Text[ turkish ] = "Satır:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de líneas:";
@@ -406,20 +406,21 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "~Actualizar" ;
         Text [ french ] = "~Actualiser" ;
         Text [ dutch ] = "~Actualiseren" ;
-        Text[ chinese_simplified ] = "¸üĞÂ(~U)";
+        Text[ chinese_simplified ] = "æ›´æ–°(~U)";
         Text[ russian ] = "Îáíîâèòü";
         Text[ polish ] = "Aktualizuj";
-        Text[ japanese ] = "XV(~U)";
-        Text[ chinese_traditional ] = "§ó·s(~U)";
+        Text[ japanese ] = "æ›´æ–°(~U)";
+        Text[ chinese_traditional ] = "æ›´æ–°(~U)";
         Text[ arabic ] = "ÊÍÏíË";
         Text[ greek ] = "~Åíçìİñùóç";
-        Text[ korean ] = "¾÷µ¥ÀÌÆ®(~U)";
+        Text[ korean ] = "ì—…ë°ì´íŠ¸(~U)";
         Text[ turkish ] = "~Güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar";
         Text[ finnish ] = "~Päivitä";
     };
 };
+
 
 
 
