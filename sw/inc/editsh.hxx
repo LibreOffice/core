@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:30:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ public:
     // setzt Undoklammerung auf, liefert nUndoId der Klammerung
     USHORT StartUndo( USHORT nUndoId = 0, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
-    USHORT EndUndo( USHORT nUndoId = 0 );
+    USHORT EndUndo( USHORT nUndoId = 0, const SwRewriter * pRewriter = 0 );
     // liefert die Id der letzten undofaehigen Aktion zurueck
     // fuellt ggf. VARARR mit User-UndoIds
     USHORT GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
