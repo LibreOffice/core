@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:04 $
+#   last change: $Author: kz $ $Date: 2004-02-25 15:57:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,6 @@ SLOFILES =	\
         $(SLO)$/glosdoc.obj \
         $(SLO)$/glossary.obj \
         $(SLO)$/glshell.obj \
-        $(SLO)$/hdftctrl.obj \
         $(SLO)$/insfnote.obj \
         $(SLO)$/insrule.obj \
         $(SLO)$/linenum.obj \
