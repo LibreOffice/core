@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:27:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ public:
 
     //import interface
     USHORT              GetHandlePosition() const;
+    virtual String GetDescription() const;
 };
 
 // --- inlines -----------------------------------------------------------
