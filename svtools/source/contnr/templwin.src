@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ String STR_SVT_NEWDOC
     Text[ turkish ] = "New Document";
     Text[ arabic ] = "New Document";
     Text[ catalan ] = "New Document";
+    Text[ thai ] = "เอกสารใหม่";
 };
 
 Image IMG_SVT_NEWDOC
@@ -129,6 +130,7 @@ String STR_SVT_MYDOCS
     Text[ turkish ] = "My Documents";
     Text[ arabic ] = "My Documents";
     Text[ catalan ] = "My Documents";
+    Text[ thai ] = "My Documents";
 };
 
 Image IMG_SVT_MYDOCS
@@ -160,6 +162,7 @@ String STR_SVT_TEMPLATES
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "Templates";
     Text[ catalan ] = "Templates";
+    Text[ thai ] = "แม่แบบ";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -191,6 +194,7 @@ String STR_SVT_SAMPLES
     Text[ arabic ] = "Samples";
     Text[ catalan ] = "Samples";
     Text[ finnish ] = "Mallit";
+    Text[ thai ] = "ตัวอย่าง";
 };
 
 Image IMG_SVT_SAMPLES
@@ -231,6 +235,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ arabic ] = "Back";
             Text[ catalan ] = "Back";
             Text[ finnish ] = "Edellinen";
+            Text[ thai ] = "กลับไป";
         };
         ToolBoxItem
         {
@@ -258,6 +263,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Higher";
             Text[ finnish ] = "Taso yl�sp�in";
+            Text[ thai ] = "ขึ้นหนึ่งระดับ";
         };
         ToolBoxItem
         {
@@ -289,6 +295,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ arabic ] = "Print";
             Text[ catalan ] = "Print";
             Text[ finnish ] = "Tulosta";
+            Text[ thai ] = "พิมพ์";
         };
     };
 };
@@ -357,6 +364,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
             Text[ catalan ] = "Docinfo";
+            Text[ thai ] = "คุณสมบัติเอกสาร";
         };
         ToolBoxItem
         {
@@ -385,6 +393,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
             Text[ catalan ] = "Preview";
+            Text[ thai ] = "แสดงตัวอย่าง";
         };
     };
 };
@@ -430,7 +439,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
     Text[ japanese ] = "テンプレートとドキュメント";
-    Text[ korean ] = "스타일과 문서";
+    Text[ korean ] = "템플릿과 문서";
     Text[ chinese_simplified ] = "样式和文档";
     Text[ chinese_traditional ] = "樣式和文件";
     Text[ turkish ] = "Templates and Documents";
@@ -468,6 +477,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ arabic ] = "Manage...";
         Text[ catalan ] = "Manage...";
         Text[ finnish ] = "~J�rjest�";
+        Text[ thai ] = "จัดระเบี~ยบ...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
@@ -494,6 +504,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ arabic ] = "Edit";
         Text[ catalan ] = "Edit";
         Text[ finnish ] = "~Muokkaa";
+        Text[ thai ] = "แ~ก้ไข";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
@@ -521,6 +532,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ arabic ] = "Open";
         Text[ catalan ] = "Open";
         Text[ finnish ] = "~Avaa";
+        Text[ thai ] = "เ~ปิด";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -532,6 +544,7 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 267, 214 );
         Size = MAP_APPFONT( 50, 14 );
     };
+    Text[ thai ] = "Templates and Documents";
 };
 
 StringArray STRARY_SVT_DOCINFO
@@ -866,7 +879,22 @@ StringArray STRARY_SVT_DOCINFO
         < "Assumpte" ; DI_THEME ; > ;
         < "Mida" ; DI_SIZE ; > ;
     };
-};
+ItemList [ thai ] =
+    {
+         < "Title" ; DI_TITLE ; > ;
+        < "By" ; DI_FROM ; > ;
+        < "Date" ; DI_DATE ; > ;
+        < "Keywords" ; DI_KEYWORDS ; > ;
+        < "Description" ; DI_DESCRIPTION ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
+        < "Modified on" ; DI_MODIFIEDDATE ; > ;
+        < "Modified by" ; DI_MODIFIEDBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
+        < "Subject" ; DI_THEME ; > ;
+        < "Size" ; DI_SIZE ; > ;
+    };
+    };
 
 
 
