@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: gt $ $Date: 2001-02-21 11:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
 #include "xcl97exp.hxx"
 #include "xcl97esc.hxx"
-#include "xcladdinnametrans.hxx"
+#include "XclAddInNameTrans.hxx"
 
 #include "document.hxx"
 #include "filtopt.hxx"
