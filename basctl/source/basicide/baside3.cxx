@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 14:03:07 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
     if( rKEvt.GetKeyCode() == KEY_BACKSPACE )
     {
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BACKSPACE );
@@ -536,16 +536,18 @@ BOOL DialogWindow::RenameDialog( const String& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update( 0 );
 }
 
 void DialogWindow::UpdateBrowser()
 {
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
 }

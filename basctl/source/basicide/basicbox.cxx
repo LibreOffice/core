@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,14 @@
 #pragma hdrstop
 
 #include <basidesh.hrc>
+#include <basidesh.hxx>
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 #include <basobj.hxx>
 
 #include <basicbox.hxx>
 #include <iderid.hxx>
+#include <iderdll.hxx>
 #include <bastypes.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL( LibBoxControl, SfxStringItem );
@@ -311,9 +313,9 @@ void BasicLibBox::NotifyIDE()
         aLib = GetSelectEntry();
 
     SfxStringItem aLibName( SID_BASICIDE_ARG_LIBNAME, aLib );
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
     {
         pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,

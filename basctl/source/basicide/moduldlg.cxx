@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:55:30 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,12 @@
 #include <moduldlg.hrc>
 #include <moduldlg.hxx>
 #include <basidesh.hrc>
+#include <basidesh.hxx>
 #include <bastypes.hxx>
 #include <basobj.hxx>
 #include <baside2.hrc>
 #include <sbxitem.hxx>
+#include <iderdll.hxx>
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
@@ -138,9 +140,9 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
             DBG_ERROR( aBStr.GetBuffer() );
         }
 
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_SBXRENAMED,
@@ -333,9 +335,9 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
     DBG_ASSERT( pSourceBasic, "Woher kommt das Object?" );
 
     // get dispatcher
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
     if ( bMove )    // move
     {
@@ -457,9 +459,9 @@ OrganizeDialog::OrganizeDialog( Window* pParent )
     aTabCtrl.SetCurPageId( RID_TP_MOD );
     ActivatePageHdl( &aTabCtrl );
 
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
     {
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
@@ -680,13 +682,16 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
 {
     if ( pButton == &aEditButton )
     {
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
         }
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) == 2 )
@@ -821,9 +826,9 @@ void ObjectPage::NewModule()
                 {
                     ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
                     SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
-                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if( pDispatcher )
                     {
                         pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
@@ -875,9 +880,9 @@ void ObjectPage::NewDialog()
                 {
                     Reference< io::XInputStreamProvider > xISP( BasicIDE::CreateDialog( pShell, aLibName, aDlgName ) );
                     SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aDlgName, BASICIDE_TYPE_DIALOG );
-                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if( pDispatcher )
                     {
                         pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
@@ -923,9 +928,9 @@ void ObjectPage::DeleteCurrent()
         aBasicBox.GetModel()->Remove( pCurEntry );
         if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
             aBasicBox.Select( aBasicBox.GetCurEntry() );
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_SBXDELETED,

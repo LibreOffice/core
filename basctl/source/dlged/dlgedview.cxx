@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:14:38 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include "propbrw.hxx"
 #endif
 
+#include <basidesh.hxx>
+#include <iderdll.hxx>
 
 TYPEINIT1( DlgEdView, SdrView );
 
@@ -85,13 +87,12 @@ void DlgEdView::MarkListHasChanged()
 {
     SdrView::MarkListHasChanged();
 
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
 
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update( this );
-
 }
 
 //----------------------------------------------------------------------------

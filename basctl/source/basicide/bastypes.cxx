@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 13:37:14 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,9 +541,9 @@ void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_MODULEDLG );
@@ -573,9 +573,9 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
             aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, FALSE );
         }
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( aPopup.Execute( this, aPos ) );
@@ -719,9 +719,9 @@ void __EXPORT BasicIDETabBar::EndRenaming()
     {
         SfxUInt16Item aID( SID_BASICIDE_ARG_TABID, GetEditPageId() );
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_NAMECHANGEDONTAB,

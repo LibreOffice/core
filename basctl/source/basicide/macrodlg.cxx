@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:52:23 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <macrodlg.hxx>
 #include <macrodlg.hrc>
 #include <basidesh.hrc>
+#include <basidesh.hxx>
 #include <baside2.hrc>      // ID's fuer Imagese
 #include <basobj.hxx>
 
@@ -148,10 +149,9 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     aDescrEdit.SetAccHdl( LINK( this, MacroChooser, EditAccHdl ) );
     aDescrEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_ESCAPE ) );
 
-
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
     {
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
@@ -374,9 +374,9 @@ void MacroChooser::DeleteMacro()
     DBG_ASSERT( pMethod, "DeleteMacro: Kein Macro !" );
     if ( pMethod && QueryDelMacro( pMethod->GetName(), this ) )
     {
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
@@ -681,9 +681,9 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
     // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
     if ( pButton == &aRunButton )
     {
@@ -710,8 +710,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-                pCurFrame = SfxViewFrame::Current();
-                pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
             }
             EndDialog( MACRO_EDIT );
@@ -749,9 +750,15 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     aInfoItem.SetMethod( pMethod->GetName() );
                     aInfoItem.SetModule( pMethod->GetModule()->GetName() );
                     aInfoItem.SetLib( pMethod->GetModule()->GetParent()->GetName() );
-                    if( pDispatcher )
+                    if ( pDispatcher )
                     {
                         pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+                    }
+                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                    pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                    if ( pDispatcher )
+                    {
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
                     }
                     StoreMacroDescription();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:46:17 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,9 +469,8 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( i )    // sonst 'Alle', also leer
                     aLib = *pStrings->GetObject( i );
                 SfxStringItem aLibName( SID_BASICIDE_ARG_LIBNAME, aLib );
-                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                SfxViewFrame* pViewFrame = GetViewFrame();
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
                 {
                     pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
@@ -1284,9 +1283,8 @@ void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
 IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
 {
     BOOL bDone = TRUE;
-    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+    SfxViewFrame* pViewFrame = GetViewFrame();
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( !pDispatcher )
         return FALSE;
     switch ( pAccel->GetCurKeyCode().GetCode() )

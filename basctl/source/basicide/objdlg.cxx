@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <objdlg.hxx>
 #include <bastypes.hxx>
 #include <basidesh.hrc>
+#include <basidesh.hxx>
 #include <moptions.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
@@ -136,9 +137,9 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( aSbxItem.GetType() == BASICIDE_TYPE_METHOD )
         {
-            SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-            DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-            SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
@@ -255,9 +256,9 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
     {
         case TBITEM_SHOW:
         {
-            SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-            DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-            SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
@@ -265,6 +266,9 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
             SbxItem aSbxItem = aMacroTreeList.GetSbxItem( pCurEntry );
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if ( aSbxItem.GetType() == BASICIDE_TYPE_MODULE ||
                  aSbxItem.GetType() == BASICIDE_TYPE_DIALOG ||
                  aSbxItem.GetType() == BASICIDE_TYPE_METHOD )

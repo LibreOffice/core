@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,11 @@
 
 // #define ITEMID_SEARCH SID_SEARCH_ITEM
 #define _SVX_NOIDERESIDS
-#include <basidesh.hrc>
 #include <brkdlg.hxx>
 #include <brkdlg.hrc>
+#include <basidesh.hxx>
+#include <basidesh.hrc>
+#include <iderdll.hxx>
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -251,9 +253,9 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-            SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-            DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-            SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
@@ -278,9 +280,10 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
             aComboBox.SetText( aComboBox.GetEntry( nEntry ) );
-            SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-            DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-            SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );

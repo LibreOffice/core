@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:54:32 $
+ *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <moduldlg.hrc>
 #include <moduldlg.hxx>
 #include <basidesh.hrc>
+#include <basidesh.hxx>
 #include <bastypes.hxx>
 #include <basobj.hxx>
 #include <baside2.hrc>
@@ -412,9 +413,9 @@ void LibPage::NewLib()
                 String aModName = BasicIDE::CreateModuleName( pShell, aLibName );
                 ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
-                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
                 {
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
@@ -627,9 +628,9 @@ void LibPage::DeleteCurrent()
         // inform BasicIDE
         String aLib( CreateMgrAndLibStr( aCurBasMgr, aLibName ) );
         SfxStringItem aLibItem( SID_BASICIDE_ARG_LIBNAME, aLib );
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_LIBREMOVED,
@@ -743,9 +744,9 @@ void LibPage::ActivateCurrentLibSettings()
                 String aLib( CreateMgrAndLibStr( aCurBasMgr, aLibName ) );
                 SfxStringItem aLibItem( SID_BASICIDE_ARG_LIBNAME, aLib );
 
-                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if ( bChecked )
                 {
                     pBasMgr->LoadLib( nLib );
