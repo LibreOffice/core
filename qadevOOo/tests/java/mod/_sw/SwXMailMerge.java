@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-09-08 12:46:48 $
+ *  last change:$Date: 2004-07-23 10:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,17 @@ import util.utils;
 
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.task.XJob;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XNamingService;
 
 /**
 * Here <code>com.sun.star.text.MailMerge</code> service is tested.<p>
@@ -109,7 +112,6 @@ public class SwXMailMerge extends TestCase {
         XInterface oObj = null;
         XInterface oRowSet = null;
         Object oConnection = null;
-        XConnection oXConnection = null;
         XJob Job = null;
 
         try {
@@ -164,20 +166,7 @@ public class SwXMailMerge extends TestCase {
         XResultSet oResultSet = (XResultSet)
                            UnoRuntime.queryInterface(XResultSet.class, oRowSet);
 
-        //wait(200)
 
-
-        try {
-            oConnection = oRowSetProps.getPropertyValue("ActiveConnection");
-        } catch (com.sun.star.beans.UnknownPropertyException e){
-            throw new StatusException("Can't get active connection", e);
-        }
-        catch (com.sun.star.lang.WrappedTargetException e) {
-            throw new StatusException("Can't get active connection", e);
-        }
-        oXConnection = (XConnection)
-                    UnoRuntime.queryInterface(XConnection.class, oConnection);
-        // </create XResultSet>
 
 
         // <create Bookmarks>
@@ -196,16 +185,17 @@ public class SwXMailMerge extends TestCase {
         XPropertySet oObjProps = (XPropertySet)
                             UnoRuntime.queryInterface(XPropertySet.class, oObj);
         try {
+            oObjProps.setPropertyValue("ActiveConnection", getLocalXConnection(Param));
             oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
             oObjProps.setPropertyValue("Command", cDataCommand);
             oObjProps.setPropertyValue("CommandType", new Integer(com.sun.star.sdb.CommandType.TABLE));
             oObjProps.setPropertyValue("OutputType", new Short(com.sun.star.text.MailMergeType.FILE));
             oObjProps.setPropertyValue("DocumentURL", cTestDoc);
             oObjProps.setPropertyValue("OutputURL", cOutputURL);
-            System.out.println("OUTPUT: "+cOutputURL);
             oObjProps.setPropertyValue("FileNamePrefix", "Author");
             oObjProps.setPropertyValue("FileNameFromColumn", new Boolean(false));
             oObjProps.setPropertyValue("Selection", new Object[0]);
+
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             throw new StatusException("Can't set properties on oObj", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
@@ -251,7 +241,7 @@ public class SwXMailMerge extends TestCase {
 //  vXJobArg1[7] = new NamedValue("Selection", sel);
 
         // third Arguments
-           vXJobArg2[0] = new NamedValue("ActiveConnection", oXConnection);
+           vXJobArg2[0] = new NamedValue("ActiveConnection", getLocalXConnection(Param));
     vXJobArg2[1] = new NamedValue("DataSourceName", cDataSourceName);
         vXJobArg2[2] = new NamedValue("Command", cDataCommand);
         vXJobArg2[3] = new NamedValue("CommandType",
@@ -271,13 +261,73 @@ public class SwXMailMerge extends TestCase {
         vXJobArgs[3] = vXJobArg3;
 
 
-       Job = (XJob) UnoRuntime.queryInterface(XJob.class, oObj);
+        Job = (XJob) UnoRuntime.queryInterface(XJob.class, oObj);
+        try{
+            Job.execute(vXJobArg2);
+        } catch ( com.sun.star.lang.IllegalArgumentException e){
+            System.out.println(e.toString());
+        } catch (  com.sun.star.uno.Exception e){
+            System.out.println(e.toString());
+        }
 
+
+        // <create XResultSet>
+        try {
+            oRowSet = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
+                ("com.sun.star.sdb.RowSet");
+        } catch (com.sun.star.uno.Exception e) {
+            throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
+        }
+        oRowSetProps = (XPropertySet)
+                        UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
+        xRowSet = (XRowSet)
+                        UnoRuntime.queryInterface(XRowSet.class, oRowSet);
+        try {
+            oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
+            oRowSetProps.setPropertyValue("Command",cDataCommand);
+            oRowSetProps.setPropertyValue("CommandType", new Integer(com.sun.star.sdb.CommandType.TABLE));
+        } catch (com.sun.star.beans.UnknownPropertyException e) {
+            throw new StatusException("Can't set properties on oRowSet", e);
+        } catch (com.sun.star.beans.PropertyVetoException e) {
+            throw new StatusException("Can't set properties on oRowSet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            throw new StatusException("Can't set properties on oRowSet", e);
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            throw new StatusException("Can't set properties on oRowSet", e);
+        }
+        try {
+            xRowSet.execute();
+        } catch (com.sun.star.sdbc.SQLException e) {
+            throw new StatusException("Can't execute oRowSet", e);
+        }
+
+        oResultSet = (XResultSet)
+                           UnoRuntime.queryInterface(XResultSet.class, oRowSet);
+
+        XResultSet oMMXResultSet = null;
+        try {
+            oMMXResultSet = (XResultSet)
+                           UnoRuntime.queryInterface(XResultSet.class,
+                               ( (XInterface)
+                                ( (XMultiServiceFactory)
+                                Param.getMSF()).createInstance("com.sun.star.sdb.RowSet")));
+
+        } catch (com.sun.star.uno.Exception e) {
+            throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
+        }
         // </create object relations>
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
 
         // <adding object relations>
+
+        // com.sun.star.sdb.DataAccessDescriptor
+        tEnv.addObjRelation("DataAccessDescriptor.XResultSet", oResultSet);
+        tEnv.addObjRelation("DataAccessDescriptor.XConnection", getRemoteXConnection(Param));
+
+        // com.sun.star.text.MailMaerge
+        tEnv.addObjRelation("MailMerge.XConnection", getRemoteXConnection(Param));
+        tEnv.addObjRelation("MailMerge.XResultSet", oMMXResultSet);
 
         // com.sun.star.text.XMailMergeBroadcaster
         tEnv.addObjRelation( "executeArgs", vXJobArg0);
@@ -297,6 +347,103 @@ public class SwXMailMerge extends TestCase {
         //tEnv.addObjRelation("Acceptor.Port", new Integer(curPort)) ;
 
         return tEnv ;
+    }
+
+    private XConnection getRemoteXConnection(TestParameters Param){
+        int uniqueSuffix = 0 ;
+        XNamingService xDBContextNameServ = null ;
+        String databaseName = null ;
+        XDataSource oXDataSource = null;
+        Object oInterface = null;
+        XMultiServiceFactory xMSF = null ;
+
+        try {
+            xMSF = (XMultiServiceFactory)Param.getMSF();
+            oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
+
+            xDBContextNameServ = (XNamingService)
+                UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
+
+            // retrieving temp directory for database
+            String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
+
+            tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
+
+            // Creating new DBase data source in the TEMP directory
+            XInterface newSource = (XInterface) xMSF.createInstance
+                ("com.sun.star.sdb.DataSource") ;
+
+            XPropertySet xSrcProp = (XPropertySet)
+                UnoRuntime.queryInterface(XPropertySet.class, newSource);
+
+            xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
+
+            databaseName = "NewDatabaseSource" + uniqueSuffix ;
+
+            // make sure that the DatabaseContext isn't already registered
+            try {
+                xDBContextNameServ.revokeObject(databaseName) ;
+            } catch (com.sun.star.uno.Exception e) {
+                log.println("Nothing to be removed - OK");
+            }
+
+            // registering source in DatabaseContext
+            xDBContextNameServ.registerObject(databaseName, newSource) ;
+
+            oInterface = newSource ;
+        }
+        catch( com.sun.star.uno.Exception e ) {
+            log.println("Service not available" );
+            throw new StatusException("Service not available", e) ;
+        }
+
+        if (oInterface == null) {
+            log.println("Service wasn't created") ;
+            throw new StatusException("Service wasn't created",
+                new NullPointerException()) ;
+        }
+
+        oXDataSource = (XDataSource)
+                UnoRuntime.queryInterface(XDataSource.class, oInterface) ;
+
+        try{
+            return oXDataSource.getConnection("","");
+        } catch (com.sun.star.sdbc.SQLException e){
+            throw new StatusException("could not get connection",e);
+        }
+
+
+    }
+
+    private XConnection getLocalXConnection(TestParameters Param){
+        XInterface oDataCont = null;
+        try {
+            oDataCont = (XInterface)( (XMultiServiceFactory) Param.getMSF()).createInstance
+                                   ("com.sun.star.sdb.DatabaseContext");
+        } catch(com.sun.star.uno.Exception e) {
+            throw new StatusException("Couldn't create instance of 'com.sun.star.sdb.DatabaseContext'", e);
+        }
+        XNameAccess xNADataCont = (XNameAccess)
+            UnoRuntime.queryInterface(XNameAccess.class, oDataCont);
+
+        String[] dataNames = xNADataCont.getElementNames();
+
+        try{
+
+            Object oDataBase = xNADataCont.getByName(dataNames[0]);
+            XDataSource xDataSource = (XDataSource)
+                UnoRuntime.queryInterface(XDataSource.class, oDataBase);
+
+            return xDataSource.getConnection("","");
+
+        } catch ( com.sun.star.container.NoSuchElementException e){
+            throw new StatusException("Couldn't get registered data base", e);
+        } catch (  com.sun.star.lang.WrappedTargetException e){
+            throw new StatusException("Couldn't get registered data base", e);
+        } catch (   com.sun.star.sdbc.SQLException e){
+            throw new StatusException("Couldn't get XConnection from registered data base", e);
+        }
+
     }
 
 }
