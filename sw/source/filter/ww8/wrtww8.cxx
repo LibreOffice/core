@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 12:36:51 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 13:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
@@ -2117,6 +2120,12 @@ ULONG SwWW8Writer::StoreDoc()
 #endif
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
+
+    if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
+        pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
+    {
+        pFib->lid = pLang->GetLanguage();
+    }
 
     if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
         pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
