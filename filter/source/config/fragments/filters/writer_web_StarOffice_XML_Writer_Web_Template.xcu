@@ -1,15 +1,10 @@
     <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXMLVWEB</value></prop>
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>writer_web_StarOffice_XML_Writer_Web_Template</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>CXMLVWEB</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">%productname% %formatversion% HTML-Dokumentvorlage</value>
-            <value xml:lang="en-US">%productname% %formatversion% HTML Template</value>
-            <value xml:lang="x-translate">%productname% %formatversion% HTML Template</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
     </node>
