@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: mav $ $Date: 2002-05-29 15:53:17 $
+#   last change: $Author: mav $ $Date: 2002-06-21 08:26:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ IDLFILES=\
     LinkTarget.idl\
     LinkTargets.idl\
     MediaDescriptor.idl\
+    MacroExecMode.idl\
     OfficeDocument.idl\
     RedlineDisplayType.idl \
     StandaloneDocumentInfo.idl\
