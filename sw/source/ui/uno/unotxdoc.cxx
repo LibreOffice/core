@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 16:00:58 $
+ *  last change: $Author: tl $ $Date: 2002-08-27 07:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,8 +275,8 @@ using ::rtl::OUString;
 using ::osl::FileBase;
 
 #ifdef MACOSX
-static cppu::ClassData26 cppu::ImplHelper26::s_aCD;
-static cppu::ClassData26 cppu::WeakImplHelper26::s_aCD;
+static cppu::ClassData27 cppu::ImplHelper27::s_aCD;
+static cppu::ClassData27 cppu::WeakImplHelper27::s_aCD;
 #endif
 
 /* -----------------------------17.01.01 15:43--------------------------------
@@ -2343,6 +2343,37 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
         case 0:default:break;
     }
     return aAny;
+}
+/* -----------------------------23.08.02 16:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
+        const uno::Any& aSelection,
+        const uno::Sequence< beans::PropertyValue >& xOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    return 0;
+}
+/* -----------------------------23.08.02 16:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
+        sal_Int32 nRenderer,
+        const uno::Any& aSelection,
+        const uno::Sequence< beans::PropertyValue >& xOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    return uno::Sequence< beans::PropertyValue >();
+}
+/* -----------------------------23.08.02 16:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SAL_CALL SwXTextDocument::render(
+        sal_Int32 nRenderer,
+        const uno::Any& aSelection,
+        const uno::Sequence< beans::PropertyValue >& xOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
 }
 /* -----------------------------20.06.00 09:54--------------------------------
 

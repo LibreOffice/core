@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 15:52:56 $
+ *  last change: $Author: tl $ $Date: 2002-08-27 07:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XLINKUPDATE_HPP_
 #include <com/sun/star/util/XLinkUpdate.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
+#include <com/sun/star/view/XRenderable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -184,18 +187,18 @@
 
 #ifndef MACOSX
 // GrP Mac OS X internal compiler error; revisit with gcc3
-#define __IFC26 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
-Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26
+#define __IFC27 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
+Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27
 
-#define __CLASS_IFC26 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
+#define __CLASS_IFC27 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
 class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12, class Ifc13, class Ifc14, class Ifc15, class Ifc16, \
 class Ifc17, class Ifc18, class Ifc19, class Ifc20, class Ifc21, class Ifc22, class Ifc23, class Ifc24,\
-class Ifc25, class Ifc26
+class Ifc25, class Ifc26, class Ifc27
 
-#define __PUBLIC_IFC26 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
+#define __PUBLIC_IFC27 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
 public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc18, \
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
-public Ifc25, public Ifc26
+public Ifc25, public Ifc26, public Ifc27
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -204,7 +207,7 @@ public Ifc25, public Ifc26
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #include <cppuhelper/implbase_ex_pre.hxx>
 #endif
-#define __IFC_EX_TYPE_INIT26( class_cast ) \
+#define __IFC_EX_TYPE_INIT27( class_cast ) \
     __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
     __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
     __IFC_EX_TYPE_INIT( class_cast, 5 ), __IFC_EX_TYPE_INIT( class_cast, 6 ), \
@@ -217,11 +220,12 @@ public Ifc25, public Ifc26
     __IFC_EX_TYPE_INIT( class_cast, 19 ), __IFC_EX_TYPE_INIT( class_cast, 20 ), \
     __IFC_EX_TYPE_INIT( class_cast, 21 ), __IFC_EX_TYPE_INIT( class_cast, 22 ), \
     __IFC_EX_TYPE_INIT( class_cast, 23 ), __IFC_EX_TYPE_INIT( class_cast, 24 ), \
-    __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 )
+    __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 27 )
 #ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 #include <cppuhelper/implbase_ex_post.hxx>
 #endif
-__DEF_IMPLHELPER_EX( 26 )
+__DEF_IMPLHELPER_EX( 27 )
 
 #endif
 
@@ -246,22 +250,22 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
 
 namespace cppu
 {
-    struct ClassData26 : public ClassDataBase
+    struct ClassData27 : public ClassDataBase
     {
-        Type_Offset arType2Offset[ 26 ];
-        ClassData26( ) SAL_THROW( () )
-            : ClassDataBase( 26 )
+        Type_Offset arType2Offset[ 27 ];
+        ClassData27( ) SAL_THROW( () )
+            : ClassDataBase( 27 )
             {}
     };
 
-    class SAL_NO_VTABLE ImplHelperBase26
+    class SAL_NO_VTABLE ImplHelperBase27
         : public ::com::sun::star::lang::XTypeProvider
         , public ::com::sun::star::text::XTextDocument, public ::com::sun::star::text::XLineNumberingProperties, public ::com::sun::star::text::XChapterNumberingSupplier, public ::com::sun::star::text::XFootnotesSupplier,
 public ::com::sun::star::text::XEndnotesSupplier, public ::com::sun::star::util::XReplaceable, public ::com::sun::star::text::XPagePrintable, public ::com::sun::star::text::XReferenceMarksSupplier, public ::com::sun::star::text::XTextTablesSupplier,
 public ::com::sun::star::text::XTextFramesSupplier, public ::com::sun::star::text::XBookmarksSupplier, public ::com::sun::star::text::XTextSectionsSupplier, public ::com::sun::star::text::XTextGraphicObjectsSupplier, public ::com::sun::star::text::XTextEmbeddedObjectsSupplier,
 public ::com::sun::star::text::XTextFieldsSupplier, public ::com::sun::star::style::XStyleFamiliesSupplier, public ::com::sun::star::lang::XServiceInfo, public ::com::sun::star::drawing::XDrawPageSupplier, public ::com::sun::star::text::XDocumentIndexesSupplier,
 public ::com::sun::star::beans::XPropertySet, public ::com::sun::star::beans::XPropertyState, public ::com::sun::star::document::XLinkTargetSupplier, public ::com::sun::star::document::XRedlinesSupplier, public ::com::sun::star::util::XRefreshable,
-public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoTunnel
+public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoTunnel, public ::com::sun::star::view::XRenderable
     {
     protected:
         ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () )
@@ -325,6 +329,8 @@ public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoT
                                              (char *)(::com::sun::star::util::XLinkUpdate *)this - pBase );
                         rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ),
                                              (char *)(::com::sun::star::lang::XUnoTunnel *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::view::XRenderable > *)0 ),
+                                             (char *)(::com::sun::star::view::XRenderable *)this - pBase );
                         rCD.bOffsetsInit = sal_True;
                     }
                 }
@@ -333,28 +339,28 @@ public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoT
     };
 
 
-    class SAL_NO_VTABLE ImplHelper26
-        : public ImplHelperBase26
+    class SAL_NO_VTABLE ImplHelper27
+        : public ImplHelperBase27
     {
-        static ClassData26 s_aCD;
+        static ClassData27 s_aCD;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).query( rType, (ImplHelperBase26 *)this ); }
+            { return getClassData( s_aCD ).query( rType, (ImplHelperBase27 *)this ); }
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
             { return getClassData( s_aCD ).getTypes(); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return getClassData( s_aCD ).getImplementationId(); }
     };
 
-    class SAL_NO_VTABLE WeakImplHelper26
+    class SAL_NO_VTABLE WeakImplHelper27
         : public ::cppu::OWeakObject
-        , public ImplHelperBase26
+        , public ImplHelperBase27
     {
-        static ClassData26 s_aCD;
+        static ClassData27 s_aCD;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
             {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase26 *)this ) );
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase27 *)this ) );
                 return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
             }
         virtual void SAL_CALL acquire() throw ()
@@ -367,17 +373,17 @@ public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoT
             { return getClassData( s_aCD ).getImplementationId(); }
     };
 
-    class SAL_NO_VTABLE WeakAggImplHelper26
+    class SAL_NO_VTABLE WeakAggImplHelper27
         : public ::cppu::OWeakAggObject
-        , public ImplHelperBase26
+        , public ImplHelperBase27
     {
-        static ClassData26 s_aCD;
+        static ClassData27 s_aCD;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
             { return OWeakAggObject::queryInterface( rType ); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
             {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase26 *)this ) );
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase27 *)this ) );
                 return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
             }
         virtual void SAL_CALL acquire() throw ()
@@ -401,10 +407,10 @@ public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoT
 
 }
 
-typedef cppu::WeakImplHelper26 SwXTextDocumentBaseClass;
+typedef cppu::WeakImplHelper27 SwXTextDocumentBaseClass;
 #else
 
-typedef cppu::WeakImplHelper26
+typedef cppu::WeakImplHelper27
 <
     ::com::sun::star::text::XTextDocument,
     ::com::sun::star::text::XLineNumberingProperties,
@@ -431,7 +437,8 @@ typedef cppu::WeakImplHelper26
     ::com::sun::star::document::XRedlinesSupplier,
     ::com::sun::star::util::XRefreshable,
     ::com::sun::star::util::XLinkUpdate,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::view::XRenderable
 >
 SwXTextDocumentBaseClass;
 
@@ -631,6 +638,11 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
 
     // ::com::sun::star::util::XLinkUpdate,
     virtual void SAL_CALL updateLinks(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::view::XRenderable
+    virtual sal_Int32 SAL_CALL getRendererCount( const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //
     void                        Invalidate();
