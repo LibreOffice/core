@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-27 06:25:44 $
+ *  last change: $Author: dv $ $Date: 2001-06-27 08:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,8 @@ OUString FileDialogHelper_Impl::getPath() const
 
     if ( mxFileDlg.is() )
         aPath = mxFileDlg->getDisplayDirectory();
-    else
+
+    if ( !aPath.getLength() )
         aPath = maPath;
 
     return aPath;
