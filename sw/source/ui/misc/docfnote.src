@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:53:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ TabDialog DLG_DOC_FOOTNOTE
         };
     };
     Text[ chinese_simplified ] = "Йи¶ЁЧўЅЕ";
-    Text[ russian ] = "Установка сносок";
+    Text[ russian ] = "Настройка сносок";
     Text[ polish ] = "Ustawienie przypisуw dolnych";
     Text[ japanese ] = "‹r’Ќ‚МђЭ’и";
     Text[ chinese_traditional ] = "і]©wµщё}";
