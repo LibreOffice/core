@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:09:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,10 +289,7 @@ DECLARE_TABLE( SwTxtNodeTable, SwTxtNode* )
 
 class SwNumRuleInfo : public SwMsgPoolItem
 {
-    static SwTxtNodeTable aDummyList;
-
-    SwTxtNodeTable * pList;
-    SwDoc * pDoc;
+    SwTxtNodeTable aList;
     const String& rName;
 public:
     SwNumRuleInfo( const String& rRuleName );
@@ -305,7 +302,7 @@ public:
     // #111955#
     void MakeList( SwDoc& rDoc, BOOL bOutline = FALSE );
 
-    const SwTxtNodeTable& GetList() const;
+    const SwTxtNodeTable& GetList() const { return aList; }
 };
 
 class SwNRuleLowerLevel : public SwMsgPoolItem
