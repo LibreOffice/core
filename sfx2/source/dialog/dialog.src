@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:26:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ String STR_BASEFMT
     Text [ ENGLISH ] = "Base format" ;
     Text [ norwegian ] = "Basis  format" ;
     Text [ italian ] = "Formato di base" ;
-    Text [ portuguese_brazilian ] = "Formato Básico" ;
+    Text [ portuguese_brazilian ] = "Formato B?sico" ;
     Text [ portuguese ] = "Formato ~básico" ;
     Text [ finnish ] = "Perusmuoto" ;
     Text [ danish ] = "Basisformat" ;
@@ -229,7 +229,7 @@ CheckBox CB_READ_ONLY
     Text [ ENGLISH ] = "~Read only" ;
     Text [ norwegian ] = "~Skrivebeskyttet" ;
     Text [ italian ] = "~Sola lettura" ;
-    Text [ portuguese_brazilian ] = "~Só leitura" ;
+    Text [ portuguese_brazilian ] = "~S?leitura" ;
     Text [ portuguese ] = "~Só leitura" ;
     Text [ finnish ] = "~Vain luku" ;
     Text [ danish ] = "Skrivebeskyttet" ;
@@ -350,7 +350,7 @@ PushButton BTN_STANDARD
     Text [ english_us ] = "~Home" ;
     Text[ chinese_simplified ] = "±ê×¼(~H)";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€(~H)";
     Text[ chinese_traditional ] = "¼Ğ·Ç(~H)";
     Text[ arabic ] = "ŞíÇÓí";
@@ -366,7 +366,7 @@ String STR_PATH_NOT_FOUND1
     Text [ English ] = "The directory '" ;
     Text [ norwegian ] = "The directory '" ;
     Text [ italian ] = "La cartella" ;
-    Text [ portuguese_brazilian ] = "O diretório" ;
+    Text [ portuguese_brazilian ] = "O diret?io" ;
     Text [ portuguese ] = "O directório '" ;
     Text [ finnish ] = "Hakemistoa " ;
     Text [ danish ] = "Biblioteket '" ;
@@ -393,7 +393,7 @@ String STR_PATH_NOT_FOUND2
     Text [ English ] = "' does not exist." ;
     Text [ norwegian ] = "' does not exist." ;
     Text [ italian ] = "' non esiste." ;
-    Text [ portuguese_brazilian ] = "' não existe." ;
+    Text [ portuguese_brazilian ] = "' n?o existe." ;
     Text [ portuguese ] = "' não existe." ;
     Text [ finnish ] = " ei ole" ;
     Text [ danish ] = "' eksisterer ikke." ;
@@ -422,7 +422,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ English ] = "Password doesn't match." ;
     MESSAGE [ norwegian ] = "Passord passer ikke." ;
     MESSAGE [ italian ] = "La password non corrisponde." ;
-    MESSAGE [ portuguese_brazilian ] = "A senha não combina." ;
+    MESSAGE [ portuguese_brazilian ] = "A senha n?o combina." ;
     MESSAGE [ portuguese ] = "A senha não é válida." ;
     MESSAGE [ finnish ] = "Virheellinen salasana." ;
     MESSAGE [ danish ] = "Ugyldig adgangskode" ;
@@ -505,7 +505,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
     Message [ ENGLISH ] = "This name is already in use." ;
     Message [ norwegian ] = "Dette navnet er allerede i bruk." ;
     Message [ italian ] = "Questo nome è già utilizzato per un modello." ;
-    Message [ portuguese_brazilian ] = "Este nome já está sendo usado." ;
+    Message [ portuguese_brazilian ] = "Este nome j? est? sendo usado." ;
     Message [ portuguese ] = "Este nome já está a ser usado para um modelo." ;
     Message [ finnish ] = "Nimi on jo käytössä." ;
     Message [ danish ] = "Navnet er allerede i brug som navn på en typografi." ;
@@ -534,7 +534,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message [ ENGLISH ] = "Style doesn't exist." ;
     Message [ norwegian ] = "Mal finnes ikke." ;
     Message [ italian ] = "Il modello non esiste." ;
-    Message [ portuguese_brazilian ] = "O estilo não existe." ;
+    Message [ portuguese_brazilian ] = "O estilo n?o existe." ;
     Message [ portuguese ] = "Este modelo não existe." ;
     Message [ finnish ] = "Tätä tyyliä ei ole olemassa." ;
     Message [ danish ] = "Denne typografi eksisterer ikke." ;
@@ -563,7 +563,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message [ ENGLISH ] = "Style cannot be used as a parent; it would cause a circular connection." ;
     Message [ norwegian ] = "Mal kan ikke brukes som forelder+++ be used as a parent; den vil forårsake en sirkulær forbindelse." ;
     Message [ italian ] = "Impossibile usare lo stile come principale;\ncauserebbe una connessione circolare." ;
-    Message [ portuguese_brazilian ] = "O estilo não pode ser usado como superior;\nisto provocaria uma conex o circular." ;
+    Message [ portuguese_brazilian ] = "O estilo n?o pode ser usado como superior;\nisto provocaria uma conex o circular." ;
     Message [ portuguese ] = "Este modelo não pode ser usado como modelo-base,\numa vez que provocaria uma referência recursiva." ;
     Message [ finnish ] = "Mallipohjaa ei voi tallentaa perusmallipohjana.\nTästä seuraisi rekursiivinen viite." ;
     Message [ danish ] = "Denne skabelon kan ikke bruges som basisskabelon, \nda dette ville forårsage en rekursion." ;
@@ -590,7 +590,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE [ English ] = "Name is alreafy used by a default style.\nPlease choose another Name." ;
     MESSAGE [ norwegian ] = "Navnet er allerede I bruk av en standardstil.\nVelg et annet navn." ;
     MESSAGE [ italian ] = "Il nome è già usato da uno stile predefinito.\nScegliere un altro nome." ;
-    MESSAGE [ portuguese_brazilian ] = "O nome já está sendo usado por um estilo padr o.\nEscolha outro Nome." ;
+    MESSAGE [ portuguese_brazilian ] = "O nome j? est? sendo usado por um estilo padr o.\nEscolha outro Nome." ;
     MESSAGE [ portuguese ] = "O nome já está a ser usado por um estilo padrão.\nEscolha outro nome por favor." ;
     MESSAGE [ finnish ] = "Nimi on jo määritetty oletustyylille.\nValitse toinen nimi." ;
     MESSAGE [ danish ] = "Navnet er allerede i brug som navn på en standardtypografi.\nVælg venligst et andet navn." ;
@@ -601,7 +601,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE [ english_us ] = "Name already exists as a default Style.\nPlease choose another name." ;
     MESSAGE[ chinese_simplified ] = "Õâ¸öÃû³ÆÊÇÒ»¸ö±ê×¼ÑùÊ½µÄÃû³Æ¡£\nÇëÊ¹ÓÃÆäËûÒ»¸öÃû³Æ¡£";
     MESSAGE[ russian ] = "İòî èìÿ óæå ïğèñâîåíî îäíîìó ñòèëş ïî óìîë÷àíèş.\nÏğèñâîéòå, ïîæàëóéñòà, äğóãîå èìÿ.";
-    MESSAGE[ polish ] = "Ta nazwa jest ju¿ nazw¹ stylu domyœlnego .\nProszê wybierz inn¹ nazwê.";
+    MESSAGE[ polish ] = "Ta nazwa jest ju¿ nazw¹ stylu domy?lnego .\nProszê wybierz inn¹ nazwê.";
     MESSAGE[ japanese ] = "‚±‚Ì–¼‘O‚Í‚·‚Å‚É•W€½À²Ù–¼‚Åg‚í‚ê‚Ä‚¢‚Ü‚·B\n•Ê‚Ì–¼‘O‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
     MESSAGE[ chinese_traditional ] = "³o­Ó¦WºÙ¬O¤@­Ó¼Ğ·Ç¼Ë¦¡ªº¦WºÙ¡C\n½Ğ±z±Ä¥Î¨ä¥L¤@­Ó¦WºÙ¡C";
     MESSAGE[ arabic ] = "åĞÇ ÇáÇÓã ãæÌæÏ ãÓÈŞÇğ ßÇÓã äãØ ÇİÊÑÇÖí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
@@ -619,7 +619,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message [ ENGLISH ] = "Style already exists. Overwrite?" ;
     Message [ norwegian ] = "Mal finnes allerede. Skriv over?" ;
     Message [ italian ] = "Il modello esiste già. Sovrascrivere?" ;
-    Message [ portuguese_brazilian ] = "O estilo já existe. Sobregravar?" ;
+    Message [ portuguese_brazilian ] = "O estilo j? existe. Sobregravar?" ;
     Message [ portuguese ] = "O modelo já existe. Sobregravar?" ;
     Message [ finnish ] = "Tyyli on jo olemassa. Korvataanko?" ;
     Message [ danish ] = "Typografi eksisterer allerede. Skal den overskrives?" ;
@@ -646,7 +646,7 @@ String STR_DELETE_STYLE
     Text [ English ] = "Do you really want to delete the style $1?" ;
     Text [ portuguese ] = "Eliminar realmente o estilo $1?" ;
     Text [ english_us ] = "Do you really want to delete Style $1?" ;
-    Text [ portuguese_brazilian ] = "Wollen Sie die Vorlage $1 wirklich löschen?" ;
+    Text [ portuguese_brazilian ] = "Wollen Sie die Vorlage $1 wirklich l?chen?" ;
     Text [ swedish ] = "Vill Du verkligen radera mallen $1?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette typografi $1?" ;
     Text [ italian ] = "Eliminare veramente il modello $1 ?" ;
@@ -678,7 +678,7 @@ String STR_DELETE_STYLE_USED
     Text [ swedish ] = "Du raderar en använd formatmall!\n" ;
     Text [ danish ] = "Du sletter en anvendt typografi!\n" ;
     Text [ portuguese ] = "Está a eliminar um estilo usado!\n" ;
-    Text [ portuguese_brazilian ] = "Sie löschen eine benutzte Vorlage!\n" ;
+    Text [ portuguese_brazilian ] = "Sie l?chen eine benutzte Vorlage!\n" ;
     Text[ chinese_simplified ] = "ÄúÒªÉ¾³ıµÄÊÇÒ»¸öÊ¹ÓÃµÄÑùÊ½£¡\n";
     Text[ russian ] = "Âû óäàëÿåòå èñïîëüçóåìûé ñòèëü!\n";
     Text[ polish ] = "Usuwasz zastosowany styl!\n";
@@ -807,7 +807,7 @@ String STR_BASICMACROS
     TEXT [ ENGLISH ] = "BASIC Macros" ;
     TEXT [ norwegian ] = "Basis Makroer" ;
     TEXT [ italian ] = "Macro di BASIC" ;
-    TEXT [ portuguese_brazilian ] = "Macros Básico" ;
+    TEXT [ portuguese_brazilian ] = "Macros B?sico" ;
     TEXT [ portuguese ] = "Macros BASIC" ;
     TEXT [ finnish ] = "BASIC-makrot" ;
     TEXT [ danish ] = "BASIC-makroer" ;
@@ -945,7 +945,7 @@ ModalDialog RID_URLOPEN
     Text [ portuguese ] = "Entrar URL" ;
     Text[ chinese_simplified ] = "ÊäÈë URL";
     Text[ russian ] = "Ââåñòè URL";
-    Text[ polish ] = "WprowadŸ URL";
+    Text[ polish ] = "Wprowad? URL";
     Text[ japanese ] = "URL“ü—Í";
     Text[ chinese_traditional ] = "¿é¤J URL";
     Text[ arabic ] = "ÅÏÎÇá URL";
