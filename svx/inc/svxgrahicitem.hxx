@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxgrahicitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:47:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,13 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #include <vcl/graph.hxx>
 
-class SvxGraphicItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
 {
     Graphic         aGraphic;
 
