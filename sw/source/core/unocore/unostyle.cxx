@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:07:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
-    if(nIndex >= STYLE_FAMILY_COUNT)
+    if(nIndex < 0 || nIndex >= STYLE_FAMILY_COUNT)
         throw lang::IndexOutOfBoundsException();
     if(IsValid())
     {
@@ -2755,7 +2755,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
             if ( pMap->nWID == FN_UNO_FOLLOW_STYLE || pMap->nWID == FN_UNO_NUM_RULES )
                 throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Cannot reset: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pMap->nFlags & PropertyAttribute::READONLY )
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             pTargetFmt->ResetAttr ( pMap->nWID );
         }
