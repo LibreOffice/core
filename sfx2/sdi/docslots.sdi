@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-07-10 16:24:38 $ $Revision: 1.6 $
+    $Author: cd $ $Date: 2002-08-26 07:29:54 $ $Revision: 1.7 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -285,6 +285,16 @@ shell SfxObjectShell
         StateMethod = GetState_Impl ;
     ]
     SID_EXPORTDOC
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_EXPORTDOCASPDF
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_DIRECTEXPORTDOCASPDF
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
