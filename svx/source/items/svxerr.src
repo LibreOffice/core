@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:30:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Resource RID_SVXERRCTX
         Text [ spanish ] = "$(ERR) al ejecutar el diccionario de sinónimos." ;
         Text [ french ] = "$(ERR) lors de l'exécution du dictionnaire des synonymes" ;
         Text [ dutch ] = "$(ERR) bij het uitvoeren van de thesaurus." ;
-        Text [ swedish ] = "$(ERR) vid användandet av synonymordboken." ;
+        Text [ swedish ] = "$(ERR) vid användning av synonymordboken." ;
         Text [ danish ] = "$(ERR) ved brug af synonymordbogen." ;
         Text [ portuguese ] = "$(ERR) ao executar o dicionário de sinónimos." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Ausführen des Thesaurus." ;
@@ -95,6 +95,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Eþanlamlýlar kullanýmý sýrasýnda $(ERR).";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al ejecutar el diccionario de sinónimos.";
+        Text[ finnish ] = "$(ERR) suoritettaessa synonyymisanastohakua.";
     };
     String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
     {
@@ -124,6 +125,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Yazým denetimi sýrasýnda $(ERR).";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al ejecutar la revisión ortográfica.";
+        Text[ finnish ] = "$(ERR) suoritettaessa oikeinkirjoituksen tarkistusta.";
     };
     String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
     {
@@ -136,7 +138,7 @@ Resource RID_SVXERRCTX
         Text [ spanish ] = "$(ERR) al ejecutar la separación silábica." ;
         Text [ french ] = "$(ERR) lors de l'exécution de la césure." ;
         Text [ dutch ] = "$(ERR) bij het uitvoeren van de woordafbreking" ;
-        Text [ swedish ] = "$(ERR) vid utförandet av avstavningen." ;
+        Text [ swedish ] = "$(ERR) när avstavningen utfördes." ;
         Text [ danish ] = "$(ERR) under køring af orddelingen." ;
         Text [ portuguese ] = "$(ERR) ao executar a divisão silábica." ;
         Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Trennhilfe." ;
@@ -153,6 +155,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Heceleme yardýmýný yürütme sýrasýnda $(ERR).";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al ejecutar la separación silábica.";
+        Text[ finnish ] = "$(ERR) suoritettaessa tavutusta.";
     };
     String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
     {
@@ -165,7 +168,7 @@ Resource RID_SVXERRCTX
         Text [ spanish ] = "$(ERR) al crear un diccionario." ;
         Text [ french ] = "$(ERR) lors de la création d'un dictionnaire" ;
         Text [ dutch ] = "$(ERR) bij het maken van een woordenboek" ;
-        Text [ swedish ] = "$(ERR) vid skapandet av en ordbok." ;
+        Text [ swedish ] = "$(ERR) när en ordbok skapades." ;
         Text [ danish ] = "$(ERR) under oprettelse af en ordbog." ;
         Text [ portuguese ] = "$(ERR) ao criar dicionário." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines Wörterbuches." ;
@@ -182,6 +185,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Sözlük oluþturma sýrasýnda $(ERR).";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al crear un diccionario.";
+        Text[ finnish ] = "$(ERR) luotaessa sanastoa.";
     };
     String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
     {
@@ -192,7 +196,7 @@ Resource RID_SVXERRCTX
         Text [ spanish ] = "$(ERR) al definir un atributo de fondo." ;
         Text [ french ] = "$(ERR) lors du paramétrage de l'attribut d'arrière-plan" ;
         Text [ dutch ] = "$(ERR) bij het maken van een achtergrondattribuut" ;
-        Text [ swedish ] = "$(ERR) vid fastställandet av bakgrundsattributen." ;
+        Text [ swedish ] = "$(ERR) när ett bakgrundsattribut definierades." ;
         Text [ danish ] = "$(ERR) under indstilling af et baggrundsattribut." ;
         Text [ portuguese ] = "$(ERR) ao definir atributo do plano de fundo." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Festlegen eines Hintergrundattributes." ;
@@ -209,6 +213,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Artalan özniteliklerinin tanýmlanmasý sýrasýnda $(ERR) .";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al definir un atributo de fondo.";
+        Text[ finnish ] = "$(ERR) määritettäessä taustamääritettä.";
     };
     String ERRCTX_SVX_IMPORT_GRAPHIC&ERRCODE_RES_MASK
     {
@@ -219,7 +224,7 @@ Resource RID_SVXERRCTX
         Text [ spanish ] = "$(ERR) al cargar una imagen." ;
         Text [ french ] = "$(ERR) lors du chargement d'un graphique" ;
         Text [ dutch ] = "$(ERR) bij het laden van een afbeelding" ;
-        Text [ swedish ] = "$(ERR) vid laddning av en grafik." ;
+        Text [ swedish ] = "$(ERR) vid laddning av ett grafikobjekt." ;
         Text [ danish ] = "$(ERR) under indlæsning af en grafik." ;
         Text [ portuguese ] = "$(ERR) ao carregar imagem." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden einer Grafik." ;
@@ -236,6 +241,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Grafik yükleme sýrasýnda $(ERR).";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar una imagen.";
+        Text[ finnish ] = "$(ERR) ladattaessa kuvia.";
     };
 };
  // Error-Code ------------------------------------------------------------
@@ -269,6 +275,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Ayarlanan dile iliþkin eþanlamlýlar mevcut deðil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay ningún diccionario de sinónimos disponible para el idioma seleccionado.\nExamine por favor su instalación e instale en caso dado el idioma deseado.";
+        Text[ finnish ] = "Nykyiselle kielelle ei ole käytettävissä oikeinkirjoituksen tarkistusohjelmaa.\nTarkista asennetut osat ja asenna haluttu kieli";
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
@@ -298,6 +305,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "$(ARG1) yazým denetiminde kullanýlamýyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) no disponible para la revisión ortográfica.\n Examine por favor su instalación e instale en caso dado el idioma deseado.";
+        Text[ finnish ] = "$(ARG1) ei ole käytettävissä oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -327,6 +335,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Yazým denetimi iþlevi kullanýlamýyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La revisión ortográfica no está disponible.";
+        Text[ finnish ] = "Oikeinkirjoituksen tarkistus ei ole käytettävissä.";
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -356,6 +365,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Heceleme yardýmý mevcut deðil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La ayuda para la separación silábica no está disponible.";
+        Text[ finnish ] = "Tavutusta ei ole käytettävissä.";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -385,6 +395,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Özel sözlük $(ARG1) okunamýyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es posible leer el diccionario personal $(ARG1).";
+        Text[ finnish ] = "Mukautettua sanastoa $(ARG1) ei voida lukea.";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
     {
@@ -414,6 +425,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Özel sözlük $(ARG1) oluþturulamýyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede crear el diccionario personal $(ARG1).";
+        Text[ finnish ] = "Mukautettua sanastoa $(ARG1) ei voida luoda.";
     };
     String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -441,6 +453,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Grafik $(ARG1) bulunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo encontrar la imagen $(ARG1).";
+        Text[ finnish ] = "Kuvaa $(ARG1) ei löytynyt.";
     };
     String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
     {
@@ -452,7 +465,7 @@ Resource RID_SVXERRCODE
         TEXT[ dutch ] = "Niet-gekoppelde afbeelding kon niet worden geladen";
         TEXT[ french ] = "Une image (non liée) n'a pas pu être chargée.";
         TEXT[ spanish ] = "No se pudo cargar una imagen no vinculada";
-        TEXT[ swedish ] = "En grafik utan länk kunde inte laddas";
+        TEXT[ swedish ] = "Ett grafikobjekt utan länk kunde inte laddas";
         TEXT[ russian ] = "Çàãðóçèòü íå ïðèâÿçàííóþ ãðàôèêó íå óäàåòñÿ";
         TEXT[ italian ] = "Non è stato possibile caricare un'immagine non collegata";
         TEXT[ danish ] = "Det var ikke muligt at indlæse en ikke-kædet grafik";
@@ -465,6 +478,7 @@ Resource RID_SVXERRCODE
         TEXT[ arabic ] = "ÊÚÐÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
         TEXT[ turkish ] = "Baðlantý oluþturulmamýþ bir grafik yüklenemedi";
         TEXT[ catalan ] = "No se pudo cargar una imagen no vinculada";
+        TEXT[ finnish ] = "Linkittämätöntä grafiikkaa ei voitu ladata";
     };
     String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
     {
@@ -489,6 +503,7 @@ Resource RID_SVXERRCODE
         TEXT[ arabic ] = "áÇ ÊæÌÏ áÛÉ Úáì ÇáßÇÆä ÇáãõÍÏÏ.";
         TEXT[ turkish ] = "Seçilen sözcük için dil belirlenmedi.";
         TEXT[ catalan ] = "No hay idioma determinado para la entrada seleccionada";
+        TEXT[ finnish ] = "Valitulle termille ei ole määritetty kieltä.";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -514,6 +529,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "áã íÊã ÊÍãíá ØÈÞÉ ÇáÇÓÊãÇÑÉ¡ ÅÐ ÊÚÐÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) baþlatýlamadýðý için, form düzeyi yüklenemedi.";
         Text[ catalan ] = "No se cargó la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ finnish ] = "Lomakekerrosta ei ladattu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -538,6 +554,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "áã íÊã ßÊÇÈÉ ØÈÞÉ ÇáÇÓÊãÇÑÉ¡ ÅÐ ÊÚÐÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) baþlatýlamadýðý için, form düzeyi yazýlamadý.";
         Text[ catalan ] = "No se pudo escribir la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ finnish ] = "Lomakekerrosta ei kirjoitettu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -562,6 +579,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÞÑÇÁÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÊÍãíá ØÈÞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öðeleri okunurken bir hata oluþtu. Form düzeyi yüklenemedi.";
         Text[ catalan ] = "Ha ocurrido un error al leer los controles de formulario. No se cargó la capa de formulario.";
+        Text[ finnish ] = "Lomakeohjaimia luettaessa ilmeni virhe. Lomakekerrosta ei ole ladattu";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -586,6 +604,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÍÝÙ ØÈÞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öðeleri yazýlýrken bir hata oluþtu. Form düzeyi kaydedilemedi.";
         Text[ catalan ] = "Ha ocurrido un error al escribir los controles de formulario. No se guardó la capa de formulario.";
+        Text[ finnish ] = "Lomakeohjaimia kirjoitettaessa ilmeni virhe. Lomakekerrosta ei ole tallennettu";
     };
     String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -610,6 +629,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚÐÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
         Text[ turkish ] = "Madde iþaretleri okunurken hata oluþtu. Bu nedenle tüm madde iþaretleri yüklenemedi.";
         Text[ catalan ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
+        Text[ finnish ] = "Luettelomerkkiä luettaessa on ilmennyt virhe. Kaikkia luettelomerkkejä ei ladattu.";
     };
 
     String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
@@ -637,6 +657,7 @@ Resource RID_SVXERRCODE
         TEXT[ turkish ] = "Basic Code belgesindeki tüm deðiþiklikler kaybolacak. Bunun yerine orjinal VBA Macrocode kaydedilecek.";
         TEXT[ arabic ] = "ÓæÝ ÊÖíÚ ßÇÝÉ ÇáÊÚÏíáÇÊ ÇáÊí Êã ÅÏÎÇáåÇ Úáì  Basic Code ÇáãÓÊäÏ¡ æÓæÝ íÊã ÍÝÙ VBA Macro Code ÈÏáÇð ãäåÇ.";
         TEXT[ catalan ] = "Se perderán todas las modificaciones del Basic Code del documento. En su lugar se guardará el código macro VBA original.";
+        TEXT[ finnish ] = "Kaikki Basic-koodin muutokset on menetetty. Alkuperäinen VBA-makrokoodi tallennetaan.";
     };
 
     String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
@@ -662,6 +683,7 @@ Resource RID_SVXERRCODE
         TEXT[ turkish ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
         TEXT[ arabic ] = "áä íÊã ÍÝÙ ÇáÜ  VBA Basic CodeÇáÃÕáí ÇáãæÌæÏ Ýí ÇáãÓÊäÏ.";
         TEXT[ catalan ] = "No se guardará el Basic Code VBA incluido en el documento.";
+        TEXT[ finnish ] = "Asiakirjan alkuperäistä VBA-peruskoodia ei tallenneta.";
     };
 };
  // ********************************************************************** EOF
