@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:53:02 $
+ *  last change: $Author: ka $ $Date: 2001-11-06 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <math.h>
 #include <vcl/metaact.hxx>   // fuer TakeContour
 #include <vcl/cvtsvm.hxx>
+#include <vcl/line.hxx>
 #include <tools/bigint.hxx>
 #include <vector>
 #include "svdobj.hxx"
@@ -2214,7 +2215,7 @@ void SdrObject::ImpDrawLineGeometry(
 
             if(rLineGeometry.DoForceTwoPixel())
             {
-                PolyPolygon aPolyPolyPixel = rXOut.GetOutDev()->LogicToPixel(aLinePoly);
+                PolyPolygon aPolyPolyPixel( rXOut.GetOutDev()->LogicToPixel(aLinePoly) );
                 BOOL bWasEnabled = rXOut.GetOutDev()->IsMapModeEnabled();
                 rXOut.GetOutDev()->EnableMapMode(FALSE);
                 UINT16 a;
@@ -2241,8 +2242,34 @@ void SdrObject::ImpDrawLineGeometry(
             }
             else
             {
-                for(UINT16 a=0;a<aLinePoly.Count();a++)
-                    rXOut.GetOutDev()->DrawPolyLine(aLinePoly[a]);
+                for( UINT16 a = 0; a < aLinePoly.Count(); a++ )
+                {
+                    const Polygon&  rPoly = aLinePoly[ a ];
+                    BOOL            bDrawn = FALSE;
+
+                    if( rPoly.GetSize() == 2 )
+                    {
+                        const Line  aLine( rXOut.GetOutDev()->LogicToPixel( rPoly[ 0 ] ),
+                                           rXOut.GetOutDev()->LogicToPixel( rPoly[ 1 ] ) );
+
+                        if( aLine.GetLength() > 16000 )
+                        {
+                            Rectangle   aOutRect( Point(), rXOut.GetOutDev()->GetOutputSizePixel() );
+                            Line        aIntersection;
+
+                            if( aLine.Intersection( aOutRect, aIntersection ) )
+                            {
+                                rXOut.GetOutDev()->DrawLine( rXOut.GetOutDev()->PixelToLogic( aIntersection.GetStart() ),
+                                                             rXOut.GetOutDev()->PixelToLogic( aIntersection.GetEnd() ) );
+                            }
+
+                            bDrawn = TRUE;
+                        }
+                    }
+
+                    if( !bDrawn )
+                        rXOut.GetOutDev()->DrawPolyLine( rPoly );
+                }
             }
         }
     }
