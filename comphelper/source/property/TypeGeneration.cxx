@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,7 @@ namespace comphelper
             case CPPUTYPE_REFRESULTSET:     pType = &::getCppuType( (Reference< sdbc::XResultSet >*)0);    break;
             case CPPUTYPE_REFCONNECTION:    pType = &::getCppuType( (Reference< sdbc::XConnection >*)0);    break;
             case CPPUTYPE_REFMODEL:         pType = &::getCppuType( (Reference< frame::XModel >*)0);    break;
+            case CPPUTYPE_REFCOMPONENT:     pType = &::getCppuType( (Reference< lang::XComponent >*)0 ); break;
 
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
