@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 10:06:45 $
+#   last change: $Author: obo $ $Date: 2004-07-05 15:57:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ SLOFILES=   \
             $(SLO)$/unowrapper.obj 					\
             $(SLO)$/vclunohelper.obj				\
             $(SLO)$/externallock.obj				\
-            $(SLO)$/characterattributeshelper.obj
+            $(SLO)$/characterattributeshelper.obj   \
+            $(SLO)$/imagealign.obj
 
 # --- Targets ------------------------------------------------------
 
