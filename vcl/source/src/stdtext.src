@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ spanish ] = "No se pudo cargar un componente (%s).\nInicie por favor el programa de instalación y ejecute una Reparación.";
     Text[ italian ] = "Impossibile caricare il componente (%s).\nRiavviate il setup e eseguite la riparazione.";
     Text[ danish ] = "Det var ikke muligt at indlæse en komponent (%s).\nStart venligst installationsprogrammet (Setup) og udfør en reparation.";
-    Text[ swedish ] = "Komponenten (%s) kunde inte laddas.\nVar vänlig och starta setupen och gör en reparation.";
+    Text[ swedish ] = "Det gick inte att ladda en komponent (%s).\nStarta setupprogrammet och gör en reparation.";
     Text[ polish ] = "Sk³adnika (%s) nie mo¿na za³adowaæ.\nProszê rozpocznij program instalacyjny i przeprowadŸ naprawê.";
     Text[ portuguese_brazilian ] = "The component (%s) could not be loaded.\nPlease start setup with the option -repair.";
     Text[ japanese ] = "ºİÎß°ÈİÄ(%s)‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğŠJn‚µ‚ÄC•œ‚ğÀs‚µ‚Ä‰º‚³‚¢B";
