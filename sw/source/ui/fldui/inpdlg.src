@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ ModalDialog DLG_FLD_INPUT
     Text[ catalan ] = "Campo de entrada";
     Text[ finnish ] = "Syöttökenttä";
 };
+
 
 
 
