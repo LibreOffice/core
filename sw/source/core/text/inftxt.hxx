@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,11 @@ protected:
     SvUShorts* pKanaComp;
 
     ViewShell    *pVsh;
+
+    // pOut is the output device, pRef is the device used for formatting
     OutputDevice *pOut;
-    OutputDevice *pWin;
-    OutputDevice *pPrt;
+    OutputDevice *pRef;
+
     SwFont *pFnt;
     SwUnderlineFont *pUnderFnt; // Font for underlining
     SwTxtFrm *pFrm;
@@ -250,12 +252,10 @@ protected:
     sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
-    void _NoteAnimation();
     void CtorInit( SwTxtFrm *pFrm, SwFont *pFnt = 0,
                    const xub_StrLen nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
     SwTxtSizeInfo() {}
-    void _SelectOut();
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const XubString &rTxt,
@@ -308,25 +308,20 @@ public:
 
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
+
     inline OutputDevice *GetOut() { return pOut; }
     inline const OutputDevice *GetOut() const { return pOut; }
     inline void SetOut( OutputDevice* pNewOut ) { pOut = pNewOut; }
-    inline OutputDevice *GetWin() { return pWin; }
-    inline const OutputDevice *GetWin() const { return pWin; }
-    inline OutputDevice *GetPrt() { return pPrt; }
-    inline const OutputDevice *GetPrt() const { return pPrt; }
-    inline void SetWin( OutputDevice *pNewWin );
-    inline void SetPrt( OutputDevice *pNewPrt );
-    inline void SetPrtOut() { pOut = pPrt; bOnWin = sal_False; }
-    inline void SetWinOut() { pOut = pWin; bOnWin = sal_True; }
+
+    inline OutputDevice *GetRefDev() { return pRef; }
+    inline const OutputDevice *GetRefDev() const { return pRef; }
+
     inline SwFont *GetFont() { return pFnt; }
     inline const SwFont *GetFont() const { return pFnt; }
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     void SelectFont();
     inline void SetUnderFnt( SwUnderlineFont* pNew ) { pUnderFnt = pNew; }
     inline SwUnderlineFont* GetUnderFnt() const { return pUnderFnt; }
-    inline void SelectOut() const
-    { if( pVsh ) ((SwTxtSizeInfo*)this)->_SelectOut(); }
 
     inline const  SwViewOption &GetOpt() const { return *pOpt; }
     inline const XubString &GetTxt() const { return *pTxt; }
@@ -376,8 +371,8 @@ public:
     inline sal_Bool IsNoSymbol() const
     { return RTL_TEXTENCODING_SYMBOL != pFnt->GetCharSet( pFnt->GetActual() ); }
 
-    inline void NoteAnimation() const
-        { if( OnWin() ) ((SwTxtSizeInfo*)this)->_NoteAnimation(); }
+    void NoteAnimation() const;
+
     // Home is where Your heart is...
     inline SwTxtFrm *GetTxtFrm() { return pFrm; }
     inline const SwTxtFrm *GetTxtFrm() const { return pFrm; }
@@ -866,20 +861,6 @@ inline KSHORT SwTxtSizeInfo::GetAscent() const
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
     return ((SwFont*)GetFont())->GetHeight( pVsh, GetOut() );
-}
-
-inline void SwTxtSizeInfo::SetWin( OutputDevice *pNewWin )
-{
-    if( pOut == pWin )
-        pOut = pNewWin;
-    pWin = pNewWin;
-}
-
-inline void SwTxtSizeInfo::SetPrt( OutputDevice *pNewPrt )
-{
-    if( pOut == pPrt )
-        pOut = pNewPrt;
-    pPrt = pNewPrt;
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
