@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:34:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ catalan ] = "~Cerca";
         Text[ thai ] = "~หา";
         Text[ slovak ] = "~Nájsť";
+        Text[ hindi ] = "~अन्वेषण";
     };
 
     ListBox LB_SUGGESTIONS
@@ -143,6 +144,11 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ thai ] = "รูปแบบ";
         Text[ slovak ] = "Formát";
+        Text[ czech ] = "Formát";
+        Text[ danish ] = "Format";
+        Text[ catalan ] = "Format";
+        Text[ hindi ] = "रचना";
+        Text[ polish ] = "Format";
     };
 
     RadioButton RB_SIMPLE_CONVERSION
@@ -164,6 +170,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "韓文/漢字(~H)";
         Text[ slovak ] = "~Hangul/Hanja";
         Text[ portuguese_brazilian ] = "Hangul/Hanja";
+        Text[ greek ] = "~Hangul/Hanja";
+        Text[ dutch ] = "~Hangul/Hanja";
+        Text[ finnish ] = "~Hangul/Hanja";
+        Text[ czech ] = "~Hangul/Hanja";
+        Text[ danish ] = "~Hangul/Hanja";
+        Text[ arabic ] = "~Hangul/Hanja";
+        Text[ hebrew ] = "~Hangul/Hanja";
+        Text[ catalan ] = "~Hangul/Hanja";
+        Text[ hindi ] = "~Hangul/Hanja";
+        Text[ portuguese ] = "~Hangul/Hanja";
+        Text[ russian ] = "~Hangul/Hanja";
+        Text[ polish ] = "~Hangul/Hanja";
+        Text[ turkish ] = "~Hangul/Hanja";
+        Text[ thai ] = "~Hangul/Hanja";
     };
 
     RadioButton RB_HANJA_HANGUL_BRACKETED
@@ -183,6 +203,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "漢字(韓文)(~G)";
         Text[ slovak ] = "Hanja (Han~gul)";
         Text[ portuguese_brazilian ] = "Hanja (Hangul)";
+        Text[ greek ] = "Hanja (Han~gul)";
+        Text[ dutch ] = "Hanja (Han~gul)";
+        Text[ finnish ] = "Hanja (Han~gul)";
+        Text[ czech ] = "Hanja (Han~gul)";
+        Text[ danish ] = "Hanja (Han~gul)";
+        Text[ arabic ] = "Hanja (Han~gul)";
+        Text[ hebrew ] = "Hanja (Han~gul)";
+        Text[ catalan ] = "Hanja (Han~gul)";
+        Text[ hindi ] = "Hanja (Han~gul)";
+        Text[ portuguese ] = "Hanja (Han~gul)";
+        Text[ russian ] = "Hanja (Han~gul)";
+        Text[ polish ] = "Hanja (Han~gul)";
+        Text[ turkish ] = "Hanja (Han~gul)";
+        Text[ thai ] = "Hanja (Han~gul)";
     };
 
     RadioButton RB_HANGUL_HANJA_BRACKETED
@@ -202,6 +236,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "韓文(漢字)(~U)";
         Text[ slovak ] = "Hang~ul (Hanja)";
         Text[ portuguese_brazilian ] = "Hangul (Hanja)";
+        Text[ greek ] = "Hang~ul (Hanja)";
+        Text[ dutch ] = "Hang~ul (Hanja)";
+        Text[ finnish ] = "Hang~ul (Hanja)";
+        Text[ czech ] = "Hang~ul (Hanja)";
+        Text[ danish ] = "Hang~ul (Hanja)";
+        Text[ arabic ] = "Hang~ul (Hanja)";
+        Text[ hebrew ] = "Hang~ul (Hanja)";
+        Text[ catalan ] = "Hang~ul (Hanja)";
+        Text[ hindi ] = "Hang~ul (Hanja)";
+        Text[ portuguese ] = "Hang~ul (Hanja)";
+        Text[ russian ] = "Hang~ul (Hanja)";
+        Text[ polish ] = "Hang~ul (Hanja)";
+        Text[ turkish ] = "Hang~ul (Hanja)";
+        Text[ thai ] = "Hang~ul (Hanja)";
     };
 
     RadioButton RB_HANGUL_HANJA_ABOVE
@@ -222,6 +270,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "韓文(~L)";
         Text[ slovak ] = "Hangu~l";
         Text[ portuguese_brazilian ] = "Hangul";
+        Text[ greek ] = "Hangu~l";
+        Text[ dutch ] = "Hangu~l";
+        Text[ finnish ] = "Hangu~l";
+        Text[ czech ] = "Hangu~l";
+        Text[ danish ] = "Hangu~l";
+        Text[ arabic ] = "Hangu~l";
+        Text[ hebrew ] = "Hangu~l";
+        Text[ catalan ] = "Hangu~l";
+        Text[ hindi ] = "Hangu~l";
+        Text[ portuguese ] = "Hangu~l";
+        Text[ russian ] = "Hangu~l";
+        Text[ polish ] = "Hangu~l";
+        Text[ turkish ] = "Hangu~l";
+        Text[ thai ] = "Hangu~l";
     };
 
     RadioButton RB_HANGUL_HANJA_BELOW
@@ -242,6 +304,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "韓文(~U)";
         Text[ slovak ] = "Hang~ul";
         Text[ portuguese_brazilian ] = "Hangul";
+        Text[ greek ] = "Hang~ul";
+        Text[ dutch ] = "Hang~ul";
+        Text[ finnish ] = "Hang~ul";
+        Text[ czech ] = "Hang~ul";
+        Text[ danish ] = "Hang~ul";
+        Text[ arabic ] = "Hang~ul";
+        Text[ hebrew ] = "Hang~ul";
+        Text[ catalan ] = "Hang~ul";
+        Text[ hindi ] = "Hang~ul";
+        Text[ portuguese ] = "Hang~ul";
+        Text[ russian ] = "Hang~ul";
+        Text[ polish ] = "Hang~ul";
+        Text[ turkish ] = "Hang~ul";
+        Text[ thai ] = "Hang~ul";
     };
 
     RadioButton RB_HANJA_HANGUL_ABOVE
@@ -262,6 +338,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "漢字(~J)";
         Text[ slovak ] = "Han~ja";
         Text[ portuguese_brazilian ] = "Hanja";
+        Text[ greek ] = "Han~ja";
+        Text[ dutch ] = "Han~ja";
+        Text[ finnish ] = "Han~ja";
+        Text[ czech ] = "Han~ja";
+        Text[ danish ] = "Han~ja";
+        Text[ arabic ] = "Han~ja";
+        Text[ hebrew ] = "Han~ja";
+        Text[ catalan ] = "Han~ja";
+        Text[ hindi ] = "Han~ja";
+        Text[ portuguese ] = "Han~ja";
+        Text[ russian ] = "Han~ja";
+        Text[ polish ] = "Han~ja";
+        Text[ turkish ] = "Han~ja";
+        Text[ thai ] = "Han~ja";
     };
 
     RadioButton RB_HANJA_HANGUL_BELOW
@@ -282,6 +372,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "漢字(~N)";
         Text[ slovak ] = "Ha~nja";
         Text[ portuguese_brazilian ] = "Hanja";
+        Text[ greek ] = "Ha~nja";
+        Text[ dutch ] = "Ha~nja";
+        Text[ finnish ] = "Ha~nja";
+        Text[ czech ] = "Ha~nja";
+        Text[ danish ] = "Ha~nja";
+        Text[ arabic ] = "Ha~nja";
+        Text[ hebrew ] = "Ha~nja";
+        Text[ catalan ] = "Ha~nja";
+        Text[ hindi ] = "Ha~nja";
+        Text[ portuguese ] = "Ha~nja";
+        Text[ russian ] = "Ha~nja";
+        Text[ polish ] = "Ha~nja";
+        Text[ turkish ] = "Ha~nja";
+        Text[ thai ] = "Ha~nja";
     };
 
     FixedText FT_CONVERSION
@@ -301,6 +405,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "轉換";
         Text[ slovak ] = "Konverzia";
         Text[ portuguese_brazilian ] = "Convers�o";
+        Text[ greek ] = "Conversion";
+        Text[ dutch ] = "Conversion";
+        Text[ finnish ] = "Conversion";
+        Text[ czech ] = "Konverze";
+        Text[ danish ] = "Conversion";
+        Text[ arabic ] = "Conversion";
+        Text[ hebrew ] = "Conversion";
+        Text[ catalan ] = "Conversion";
+        Text[ hindi ] = "Conversion";
+        Text[ portuguese ] = "Conversion";
+        Text[ russian ] = "Conversion";
+        Text[ polish ] = "Conversion";
+        Text[ turkish ] = "Conversion";
+        Text[ thai ] = "Conversion";
     };
 
     CheckBox CB_HANGUL_ONLY
@@ -320,6 +438,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "僅漢字(~O)";
         Text[ slovak ] = "~Len Hangul";
         Text[ portuguese_brazilian ] = "Somente Hangul";
+        Text[ greek ] = "Hangul ~only";
+        Text[ dutch ] = "Hangul ~only";
+        Text[ finnish ] = "Hangul ~only";
+        Text[ czech ] = "Pouze Hangul";
+        Text[ danish ] = "Hangul ~only";
+        Text[ arabic ] = "Hangul ~only";
+        Text[ hebrew ] = "Hangul ~only";
+        Text[ catalan ] = "Hangul ~only";
+        Text[ hindi ] = "Hangul ~only";
+        Text[ portuguese ] = "Hangul ~only";
+        Text[ russian ] = "Hangul ~only";
+        Text[ polish ] = "Hangul ~only";
+        Text[ turkish ] = "Hangul ~only";
+        Text[ thai ] = "Hangul ~only";
     };
 
     CheckBox CB_HANJA_ONLY
@@ -339,6 +471,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "僅漢字(~Y)";
         Text[ slovak ] = "Len ~Hanja";
         Text[ portuguese_brazilian ] = "Somente Hanja";
+        Text[ greek ] = "Hanja onl~y";
+        Text[ dutch ] = "Hanja onl~y";
+        Text[ finnish ] = "Hanja onl~y";
+        Text[ czech ] = "Pouze Hanja";
+        Text[ danish ] = "Hanja onl~y";
+        Text[ arabic ] = "Hanja onl~y";
+        Text[ hebrew ] = "Hanja onl~y";
+        Text[ catalan ] = "Hanja onl~y";
+        Text[ hindi ] = "Hanja onl~y";
+        Text[ portuguese ] = "Hanja onl~y";
+        Text[ russian ] = "Hanja onl~y";
+        Text[ polish ] = "Hanja onl~y";
+        Text[ turkish ] = "Hanja onl~y";
+        Text[ thai ] = "Hanja onl~y";
     };
 
     // this element is only for determining where our radio button group ends (in both directions)
@@ -366,6 +512,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "替換單個字(~Y)";
         Text[ slovak ] = "Nah~radiť po znakoch";
         Text[ portuguese_brazilian ] = "Substitui��o caracter por caracter";
+        Text[ greek ] = "Replace b~y character";
+        Text[ dutch ] = "Replace b~y character";
+        Text[ finnish ] = "Replace b~y character";
+        Text[ czech ] = "Nahradit po znacích";
+        Text[ danish ] = "Replace b~y character";
+        Text[ arabic ] = "Replace b~y character";
+        Text[ hebrew ] = "Replace b~y character";
+        Text[ catalan ] = "Replace b~y character";
+        Text[ hindi ] = "Replace b~y character";
+        Text[ portuguese ] = "Replace b~y character";
+        Text[ russian ] = "Replace b~y character";
+        Text[ polish ] = "Replace b~y character";
+        Text[ turkish ] = "Replace b~y character";
+        Text[ thai ] = "Replace b~y character";
     };
 
     String STR_HANGUL
@@ -385,6 +545,17 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ thai ] = "ภาษาฮังกุล";
         Text[ slovak ] = "Hangul";
         Text[ portuguese_brazilian ] = "Hangul";
+        Text[ greek ] = "Hangul";
+        Text[ dutch ] = "Hangul";
+        Text[ finnish ] = "Hangul";
+        Text[ czech ] = "Hangul";
+        Text[ danish ] = "Hangul";
+        Text[ arabic ] = "Hangul";
+        Text[ catalan ] = "Hangul";
+        Text[ hindi ] = "हानगल";
+        Text[ portuguese ] = "Hangul";
+        Text[ polish ] = "Hangul";
+        Text[ turkish ] = "Hangul";
     };
 
     String STR_HANJA
@@ -401,6 +572,20 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ chinese_traditional ] = "漢字";
         Text[ slovak ] = "Hanja";
         Text[ portuguese_brazilian ] = "Hanja";
+        Text[ greek ] = "Hanja";
+        Text[ dutch ] = "Hanja";
+        Text[ finnish ] = "Hanja";
+        Text[ czech ] = "Hanja";
+        Text[ danish ] = "Hanja";
+        Text[ arabic ] = "Hanja";
+        Text[ hebrew ] = "Hanja";
+        Text[ catalan ] = "Hanja";
+        Text[ hindi ] = "Hanja";
+        Text[ portuguese ] = "Hanja";
+        Text[ russian ] = "Hanja";
+        Text[ polish ] = "Hanja";
+        Text[ turkish ] = "Hanja";
+        Text[ thai ] = "Hanja";
     };
     Text[ french ] = "Conversion Hangul/Hanja";
     Text[ spanish ] = "Conversi�n de Hangul/Hanja";
@@ -412,7 +597,23 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     Text[ chinese_traditional ] = "韓文/漢字 轉換";
     Text[ slovak ] = "Hangul/Hanja Konverzia";
     Text[ portuguese_brazilian ] = "Convers�o Hangul/Hanja";
+    Text[ greek ] = "Hangul/Hanja Conversion";
+    Text[ dutch ] = "Hangul/Hanja Conversion";
+    Text[ finnish ] = "Hangul/Hanja Conversion";
+    Text[ czech ] = "Konverze Hangul/Hanja";
+    Text[ danish ] = "Hangul/Hanja Conversion";
+    Text[ arabic ] = "Hangul/Hanja Conversion";
+    Text[ hebrew ] = "Hangul/Hanja Conversion";
+    Text[ catalan ] = "Hangul/Hanja Conversion";
+    Text[ hindi ] = "Hangul/Hanja Conversion";
+    Text[ portuguese ] = "Hangul/Hanja Conversion";
+    Text[ russian ] = "Hangul/Hanja Conversion";
+    Text[ polish ] = "Hangul/Hanja Conversion";
+    Text[ turkish ] = "Hangul/Hanja Conversion";
+    Text[ thai ] = "Hangul/Hanja Conversion";
 };
+
+
 
 
 
