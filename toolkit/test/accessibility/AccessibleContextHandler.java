@@ -5,6 +5,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XIndexAccess;
 import java.util.HashMap;
 
+import tools.NameProvider;
+
 class AccessibleContextHandler
     extends NodeHandler
 {

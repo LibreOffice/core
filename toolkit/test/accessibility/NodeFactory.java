@@ -1,6 +1,8 @@
 import com.sun.star.accessibility.*;
 import java.util.Vector;
 
+import tools.NameProvider;
+
 /** This singleton class creates nodes for given accessible objects.
 */
 class NodeFactory

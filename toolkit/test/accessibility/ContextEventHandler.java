@@ -6,6 +6,8 @@ import com.sun.star.uno.AnyConverter;
 
 import java.io.PrintStream;
 
+import tools.NameProvider;
+
 class ContextEventHandler
     extends EventHandler
 {

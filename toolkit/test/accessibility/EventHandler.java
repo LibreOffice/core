@@ -5,6 +5,7 @@ import com.sun.star.uno.UnoRuntime;
 
 import java.io.PrintStream;
 
+import tools.NameProvider;
 
 /** Base class for handling of accessibility events.
 */

@@ -6,6 +6,7 @@ import com.sun.star.accessibility.XAccessibleRelationSet;
 import com.sun.star.accessibility.AccessibleRelationType;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
+import tools.NameProvider;
 
 class AccessibleRelationHandler
     extends NodeHandler
