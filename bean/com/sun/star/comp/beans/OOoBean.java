@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:18:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,6 @@ public class OOoBean
     int nOOoStartTimeOut = 60000;
     int nOOoCallTimeOut =   3000;
     int nOOoCheckCycle =    1000;
-
-    // used slot ids
-    public final static short   SID_TOGGLEMENUBAR   = 6661;
-    public final static short   SID_TOGGLEOBJECTBAR = 5905;
-    public final static short   SID_TOGGLETOOLBAR   = 5909;
-    public final static short   SID_TOGGLEMAINBAR   = 5910;
-    public final static short   SID_TOGGLESTATUSBAR = 5920;
 
     // This member contains the connection to an OOo instance if established.
     private transient OfficeConnection      iConnection;
@@ -420,6 +413,21 @@ public class OOoBean
         {
             CallWatchThread aCallWatchThread =
                 new CallWatchThread( nOOoCallTimeOut, "clear" );
+            //By closing the frame we avoid that dialogs are displayed, for example when
+            //the document is modified.
+            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
+                UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
+            if ( xCloseable != null )
+            {
+                try
+                {
+                    xCloseable.close(true);
+                }
+                catch (com.sun.star.util.CloseVetoException exc)
+                { // a print job may be running
+                }
+            }
+
             aDocument = null;
             xDispatcher = null;
             aFrame = null;
@@ -545,6 +553,10 @@ public class OOoBean
 
         @throws com.sun.star.lang.NoConnectionException
             if no connection can be established.
+
+        @throws com.sun.star.util.CloseVetoException
+            if the currently displayed document cannot be closed because it is
+            still be used, for example it is printed.
      */
     public void loadFromURL(
             final String aURL,
@@ -553,7 +565,8 @@ public class OOoBean
             // @requirement FUNC.CON.LOST/0.2
             NoConnectionException,
             java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException
+            com.sun.star.lang.IllegalArgumentException,
+            com.sun.star.util.CloseVetoException
     {
         dbgPrint( "loadFromURL()" );
 
@@ -623,19 +636,27 @@ public class OOoBean
                     // Avoid Dialog 'Document changed' while reloading
                     if ( aDocument != null )
                     {
+                        try {
+                            aDocument.setModified(false);
+                        } catch (com.sun.star.beans.PropertyVetoException ep) {
+                            //it dosn't make sense to throw the exception here. The interface does not
+                            //offer a way to add/remove respective listeners.
+                        } catch (com.sun.star.lang.DisposedException ed) {
+                            // can be disposed if user closed document via UI
+                        }
+
                         com.sun.star.frame.XController xOldController = null;
-                        if ( aFrame != null && aFrame.getController() != null )
+                        if ( aFrame != null )
                             xOldController = aFrame.getController();
+
                         try
                         {
+
                             if ( aFrame != null && xOldController != null )
-                                xOldController.suspend(true);
-                            if ( aDocument != null )
-                                try {
-                                    // can be disposed if user closed document via UI
-                                    aDocument.setModified(false);
-                                }
-                                catch (  com.sun.star.lang.DisposedException aExc ) {}
+                                if (xOldController.suspend(true) == false)
+                                    throw new com.sun.star.util.CloseVetoException(
+                                            "Dokument is still being used and cannot be closed.", this);
+
                         }
                         catch (java.lang.IllegalStateException exp)
                         {}
@@ -648,8 +669,9 @@ public class OOoBean
                             new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
                             com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
                                     //String fn = aFRame.getName();
+
                     com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(
-                        aURL, /*aFrame.getName()*/"_self", com.sun.star.frame.FrameSearchFlag.ALL, aArgs );
+                        aURL, /*aFrame.getName()*/"_self", 0, aArgs );
 
                     // nothing loaded?
                     if ( xComponent == null && aDocument != null )
@@ -717,7 +739,8 @@ public class OOoBean
             // @requirement FUNC.CON.LOST/0.2
             NoConnectionException,
             java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException
+            com.sun.star.lang.IllegalArgumentException,
+            com.sun.star.util.CloseVetoException
     {
         // wrap Java stream into UNO stream
                 /*
@@ -768,7 +791,8 @@ public class OOoBean
             // @requirement FUNC.CON.LOST/0.2
             NoConnectionException,
             java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException
+            com.sun.star.lang.IllegalArgumentException,
+            com.sun.star.util.CloseVetoException
     {
         // wrap byte arrray into UNO stream
         com.sun.star.io.XInputStream xStream =
@@ -1042,8 +1066,11 @@ public class OOoBean
             If false, the tool bar is disabled,
             If true, the tool bar is visible.
      */
+//    protected boolean setToolVisible( String aProperty, String aResourceURL,
+//              short nSlotID, String aSlotArgName, boolean bOldValue, boolean bNewValue )
     protected boolean setToolVisible( String aProperty, String aResourceURL,
-                short nSlotID, String aSlotArgName, boolean bOldValue, boolean bNewValue )
+        boolean bOldValue, boolean bNewValue )
+
         throws
             java.lang.InterruptedException
     {
@@ -1108,11 +1135,13 @@ public class OOoBean
     {
         try
         {
-            bMenuBarVisible = setToolVisible( "MenuBarVisible", "private:resource/menubar/menubar",
-                    SID_TOGGLEMENUBAR, "MenuBarVisible", bMenuBarVisible, bVisible );
+            bMenuBarVisible = setToolVisible( "MenuBarVisible",
+                    "private:resource/menubar/menubar", bMenuBarVisible, bVisible );
         }
         catch ( java.lang.InterruptedException aExc )
-        { bMenuBarVisible = bVisible; }
+        {
+            bMenuBarVisible = bVisible;
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -1134,7 +1163,7 @@ public class OOoBean
     //--------------------------------------------------------------------------
     /*  Sets the main function bar visibilty.
 
-        Initially the menu bar is visible.
+        Initially the standard bar is visible.
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
@@ -1148,11 +1177,13 @@ public class OOoBean
     {
         try
         {
-            bStandardBarVisible = setToolVisible( "StandardBarVisible", "private:resource/toolbar/standardbar",
-                    SID_TOGGLEMAINBAR, "FunctionBarVisible", bStandardBarVisible, bVisible );
+            bStandardBarVisible = setToolVisible( "StandardBarVisible",
+                    "private:resource/toolbar/standardbar", bStandardBarVisible, bVisible );
         }
         catch ( java.lang.InterruptedException aExc )
-        { bMenuBarVisible = bVisible; }
+        {
+            bMenuBarVisible = bVisible;
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -1174,7 +1205,7 @@ public class OOoBean
     //--------------------------------------------------------------------------
     /*  Sets the tool function bar visibilty.
 
-        Initially the menu bar is visible.
+        Initially the tool bar is visible.
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
@@ -1188,11 +1219,13 @@ public class OOoBean
     {
         try
         {
-            bToolBarVisible = setToolVisible( "ToolBarVisible", "private:resource/toolbar/toolbar",
-                    SID_TOGGLETOOLBAR, "ToolBarVisible", bToolBarVisible, bVisible );
+            bToolBarVisible = setToolVisible( "ToolBarVisible",
+                    "private:resource/toolbar/toolbar", bToolBarVisible, bVisible );
         }
         catch ( java.lang.InterruptedException aExc )
-        { bMenuBarVisible = bVisible; }
+        {
+            bMenuBarVisible = bVisible;
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -1214,7 +1247,7 @@ public class OOoBean
     //--------------------------------------------------------------------------
     /*  Sets the status function bar visibilty.
 
-        Initially the menu bar is visible.
+        Initially the status bar is visible.
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
@@ -1228,11 +1261,13 @@ public class OOoBean
     {
         try
         {
-            bStatusBarVisible = setToolVisible( "StatusBarVisible", "private:resource/statusbar/statusbar",
-                    SID_TOGGLESTATUSBAR, "StatusBarVisible", bStatusBarVisible, bVisible );
+            bStatusBarVisible = setToolVisible( "StatusBarVisible",
+                    "private:resource/statusbar/statusbar", bStatusBarVisible, bVisible );
         }
         catch ( java.lang.InterruptedException aExc )
-        { bMenuBarVisible = bVisible; }
+        {
+            bMenuBarVisible = bVisible;
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -1442,168 +1477,7 @@ public class OOoBean
         }
     }
 
-    //---------------------------------------------------------------------------
-    /** Helper class to watch calls into OOo with a timeout.
-     */
-    protected class CallWatchThread extends Thread
-    {
-        Thread aWatchedThread;
-        String aTag;
-        boolean bAlive;
-        long nTimeout;
-
-        CallWatchThread( long nTimeout, String aTag )
-        {
-            this.aWatchedThread = Thread.currentThread();
-            this.nTimeout = nTimeout;
-            this.aTag = aTag;
-            setDaemon( true );
-            dbgPrint( "CallWatchThread(" + this + ").start(" + aTag + ")" );
-            start();
-        }
-
-        void cancel()
-            throws java.lang.InterruptedException
-        {
-            dbgPrint( "CallWatchThread(" + this + ".cancel(" + aTag + ")" );
-            if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
-                throw new RuntimeException( "wrong thread" );
-            aWatchedThread = null;
-            if ( interrupted() )
-                throw new InterruptedException();
-        }
-
-        synchronized void restart()
-            throws java.lang.InterruptedException
-        {
-            dbgPrint( "CallWatchThread(" + this + ".restart(" + aTag + ")" );
-            if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
-                throw new RuntimeException( "wrong thread" );
-            bAlive = true;
-            if ( interrupted() )
-                throw new InterruptedException();
-            notify();
-        }
-
-        public void run()
-        {
-            dbgPrint( "CallWatchThread(" + this + ".run(" + aTag + ") ***** STARTED *****" );
-            long n = 0;
-            while ( aWatchedThread != null )
-            {
-                dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") running #" + ++n );
-                synchronized(this)
-                {
-                    bAlive = false;
-
-                    // wait a while
-                    try { wait( nTimeout ); }
-                    catch ( java.lang.InterruptedException aExc )
-                    {
-                        bAlive = false;
-                    }
-
-                    // watched thread seems to be dead (not answering)?
-                    if ( !bAlive && aWatchedThread != null )
-                    {
-                        dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") interrupting" );
-                        aWatchedThread.interrupt();
-                        aWatchedThread = null;
-                    }
-                }
-            }
-
-            dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") terminated" );
-        }
-    };
-
-    //---------------------------------------------------------------------------
-    /**
-     * This class reprecents an office slot command.
-     */
-    public class OfficeCommand
-    {
-        private short mSlot;
-        private java.util.List mProps = new java.util.ArrayList();
-
-        /**
-         * Constructor.
-         *
-         * @param slot The office slot identifier.
-         * @param args The arguments of the office slot command.
-         */
-        public OfficeCommand(short slot, com.sun.star.beans.PropertyValue args[])
-        {
-            mSlot   = slot;
-            for (int idx = 0; idx < args.length; idx += 1) {
-                mProps.add(args[idx]);
-            }
-        }
-
-        /**
-         * Constructor.
-         *
-         * @param slot The office slot identifier.
-         */
-        public OfficeCommand(short slot)
-        {
-            mSlot   = slot;
-        }
-
-        /**
-         * Appends an office slot command parameter.
-         *
-         * @param name The parameter name.
-         * @param value The parameter value.
-         */
-        public synchronized void appendParameter(String name, Object value)
-        {
-            mProps.add(new com.sun.star.beans.PropertyValue(name, 0, value,
-                com.sun.star.beans.PropertyState.DIRECT_VALUE));
-        }
-
-        /**
-         * Executes the command on the specified office instance.
-         *
-         * @param office The office instance which is the target of the command.
-         */
-        public synchronized void execute()
-            throws com.sun.star.comp.beans.NoConnectionException
-        {
-            // avoid conflicts with connect/disconnect...
-            synchronized(OOoBean.this)
-            {
-                // ... do the job
-                com.sun.star.util.URL[] aURL =
-                    new com.sun.star.util.URL[1];
-                aURL[0] = new com.sun.star.util.URL(
-                    "slot:" + Short.toString(mSlot),
-                    "",         // string Main
-                    "",         // string Protocol
-                    "",         // string User
-                    "",         // string Password
-                    "",         // string Server
-                    (short)0,   // short Port
-                    "",         // string Path
-                    "",         // string Name
-                    "",         // string Arguments
-                    "");        // string Mark
-                xURLTransformer.parseSmart(aURL, "slot");
-
-                // workaround bug in dispatch
-                aURL[0].Complete    = aURL[0].Main;
-                com.sun.star.frame.XDispatch xDispatcher
-                        = getFrame().queryDispatch( aURL[0], "", 0);
-                xDispatcher.dispatch(aURL[0],
-                        (com.sun.star.beans.PropertyValue[])mProps.toArray(
-                        new com.sun.star.beans.PropertyValue[mProps.size()]));
-            }
-
-            // Good things come to those who wait...
-            notifyAll();
-        }
-    }
-};
+}
 
 
 
