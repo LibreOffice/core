@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 16:11:51 $
+ *  last change: $Author: fs $ $Date: 2001-09-11 15:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ private:
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
+    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
 
     sal_Int32               m_nCurrentDeletedDataSource;
     sal_Int16               m_nPostApplyPage;           // the page to be activated after an async apply operation
@@ -256,6 +257,9 @@ protected:
     virtual short Ok();
 
 protected:
+    sal_Bool    isUIEnabled() const { return m_bUIEnabled; }
+    sal_Bool    disabledUI() { m_bUIEnabled = sal_False; }
+
     /// select a (scheduled-to-be-)deleted data source, given by it's access key
     void implSelectDeleted(sal_Int32 _nKey);
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
@@ -302,11 +306,8 @@ protected:
         AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
     /** apply all changes made
-        @param  _bActivateOnSuccess
-            Set to <TRUE/> if you want the method to activage the current page upon successfully applying everything.
-            (This is needed sometimes to correctly re-initialize the current page)
     */
-    ApplyResult implApplyChanges(const sal_Bool _bActivateOnSuccess = sal_True);
+    ApplyResult implApplyChanges();
 
     /** extracts the connection type from the given set<p/>
         The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
@@ -366,6 +367,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/08/30 16:11:51  fs
+ *  #88427# +OnValidateName
+ *
  *  Revision 1.23  2001/08/14 14:08:55  fs
  *  #86945# +getCurrentDataSource
  *
