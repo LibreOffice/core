@@ -220,6 +220,24 @@ Dim CurFieldString as String
 End Function
 
 
+&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension 
+&apos; and delivers the Index where it is found.
+Function GetIndexInMultiArray(SearchList(), SearchValue, SearchIndex as Integer) as Integer
+Dim i as integer
+Dim MaxIndex as Integer
+Dim CurFieldValue
+	MaxIndex = Ubound(SearchList(),1)
+	For i = Lbound(SearchList()) to MaxIndex
+		CurFieldValue = SearchList(i,SearchIndex)
+		If CurFieldValue = SearchValue Then
+			GetIndexInMultiArray() = i
+			Exit Function
+		End if
+	Next
+	GetIndexInMultiArray() = -1
+End Function
+
+
 &apos; Replaces the string &quot;OldReplace&quot; through the String &quot;NewReplace&quot; in the String
 &apos; &apos;BigString&apos;
 Function ReplaceString(ByVal Bigstring, NewReplace, OldReplace as String)  as String
