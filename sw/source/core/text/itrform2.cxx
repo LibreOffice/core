@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-27 06:16:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-29 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                    // 2. Multi Portion
                      ( pPor->IsMultiPortion() &&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
-                       rInf.GetReformatStart() < rInf.GetIdx() + pPor->GetLen() )
+                       rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
                    )
                 )
             // we store the beginning of the critical portion as our
@@ -1301,6 +1301,11 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         if ( pFlyStart )
             delete pFlyStart;
     }
+    else
+        // Special case: We do not allow an optimitation of the repaint
+        // area, but during formatting the repaint offset is set to indicate
+        // a maximum value for the offset. This value has to be reset:
+        GetInfo().SetPaintOfst( 0 );
 
     // This corrects the start of the reformat range if something has
     // moved to the next line. Otherwise IsFirstReformat in AllowRepaintOpt
