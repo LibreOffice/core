@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:29:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aUpPB.SetClickHdl(aUpDownHdl);
     m_aDownPB.SetClickHdl(aUpDownHdl);
     m_aAlignToBodyCB.SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));
-
+    m_aAlignToBodyCB.Check();
 }
 /*-- 15.04.2004 08:17:11---------------------------------------------------
 
