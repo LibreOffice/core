@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:21:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@ inline char * oustring2char( const ::rtl::OUString & str )
 */
 inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
 {
-    printf( "#%s #printUString_u# ", msg );
-    printf( "%s\n", oustring2char( str ) );
+    t_print("#%s #printUString_u# ", msg );
+    t_print("%s\n", oustring2char( str ) );
 }
 
 /** get the local host name.
@@ -192,7 +192,7 @@ inline ::rtl::OUString getThisHostname( void )
         strcpy( hostname, hptr->h_name );
     }
 
-    printf("# hostname is %s \n", hostname );
+    t_print("hostname is %s \n", hostname );
     aUString = ::rtl::OUString::createFromAscii( (const sal_Char *) hostname );
 #endif
     return aUString;
@@ -213,7 +213,7 @@ inline ::rtl::OUString getIPbyName( rtl::OString const& str_name )
         //if there are more than one IPs on the same machine, we select one
         for (; *addrptr; addrptr++)
         {
-            printf("#Local IP Address: %s\n", inet_ntoa(**addrptr));
+            t_print("#Local IP Address: %s\n", inet_ntoa(**addrptr));
             aUString = ::rtl::OUString::createFromAscii( (sal_Char *) (inet_ntoa(**addrptr)) );
         }
     }
@@ -251,7 +251,7 @@ inline ::rtl::OUString outputError( const ::rtl::OUString & returnVal, const ::r
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    printf( "# wait %d seconds. ", _nSec );
+    t_print("# wait %d seconds. ", _nSec );
     fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -260,29 +260,29 @@ void thread_sleep( sal_Int32 _nSec )
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     usleep(_nSec * 100000);
 #endif
-    printf( "# done\n" );
+    t_print("# done\n" );
 }
 
 /** print Boolean value.
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "YES!\n" ): printf( "NO!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
 }
 
 /** print content of a ByteSequence.
 */
 inline void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-     printf( "#ByteSequence is: " );
+     t_print("#ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
         if ( bsByteSeq[i] < 0 )
-            printf("%d ",  256 + bsByteSeq[i] );
+            t_print("%d ",  256 + bsByteSeq[i] );
         else
-            printf("%d ",  bsByteSeq[i] );
+            t_print("%d ",  bsByteSeq[i] );
     }
-    printf( " .\n" );
+    t_print(" .\n" );
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.
@@ -316,18 +316,18 @@ inline ::rtl::ByteSequence UStringIPToByteSequence( ::rtl::OUString aUStr )
 */
 inline void printSocketResult( oslSocketResult eResult )
 {
-    printf( "#printSocketResult# " );
+    t_print("#printSocketResult# " );
     if (!eResult)
     switch (eResult)
     {
         case osl_Socket_Ok:
-            printf( "client connected\n");
+            t_print("client connected\n");
             break;
         case osl_Socket_Error:
-            printf("got an error ... exiting\r\n\r\n" );
+            t_print("got an error ... exiting\r\n\r\n" );
             break;
         case osl_Socket_TimedOut:
-            printf( "timeout\n");
+            t_print("timeout\n");
             break;
     }
 }
@@ -357,7 +357,7 @@ protected:
                   csConnectorSocket.send( pTestString2, 10);
               }
               else
-                  printf( "# ClientSocketThread: connect failed! \n");
+                  t_print("# ClientSocketThread: connect failed! \n");
          //     terminate();
         //}
         csConnectorSocket.close();
@@ -366,7 +366,7 @@ protected:
 
     void SAL_CALL onTerminated( )
     {
-        //printf( "# normally terminate this thread %d!\n",  m_id );
+        //t_print("# normally terminate this thread %d!\n",  m_id );
     }
 
 public:
@@ -375,13 +375,13 @@ public:
         csConnectorSocket( )
     {
         m_id = getIdentifier( );
-        //printf( "# successfully creat this client thread %d!\n",  m_id );
+        //t_print("# successfully creat this client thread %d!\n",  m_id );
     }
 
     ~ClientSocketThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: client thread not terminated.\n" );
+            t_print("# error: client thread not terminated.\n" );
     }
 
 };
@@ -407,13 +407,13 @@ protected:
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
         if  ( sal_True != bOK1 )
         {
-            printf( "# ServerSocketThread: AcceptorSocket bind address failed.\n" ) ;
+            t_print("# ServerSocketThread: AcceptorSocket bind address failed.\n" ) ;
             break;
         }
         sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
         if  ( sal_True != bOK2 )
         {
-            printf( "# ServerSocketThread: AcceptorSocket listen address failed.\n" ) ;
+            t_print("# ServerSocketThread: AcceptorSocket listen address failed.\n" ) ;
             break;
         }
 
@@ -422,13 +422,13 @@ protected:
         oslSocketResult eResult = asAcceptorSocket.acceptConnection( ssStreamConnection );
         if (eResult != osl_Socket_Ok )
         {
-            printf("# ServerSocketThread: acceptConnection failed! \n");
+            t_print("ServerSocketThread: acceptConnection failed! \n");
             break;
         }
             sal_Int32 nReadNumber1 = ssStreamConnection.recv( pReadBuffer, 11 );
             sal_Int32 nReadNumber2 = ssStreamConnection.recv( pReadBuffer + nReadNumber1, 11 );
             pReadBuffer[nReadNumber1 + nReadNumber2] = '\0';
-            //printf( "# read buffer content: %s\n", pReadBuffer );
+            //t_print("# read buffer content: %s\n", pReadBuffer );
             break;
         }
         ssStreamConnection.close();
@@ -438,7 +438,7 @@ protected:
 
     void SAL_CALL onTerminated( )
     {
-        //printf( "# normally terminate this server thread %d!\n",  m_id );
+        //t_print("# normally terminate this server thread %d!\n",  m_id );
     }
 
 public:
@@ -447,13 +447,13 @@ public:
     ServerSocketThread( )
     {
         m_id = getIdentifier( );
-        //printf( "# successfully creat this server thread %d!\n",  m_id );
+        //t_print("# successfully creat this server thread %d!\n",  m_id );
     }
 
     ~ServerSocketThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: server thread not terminated.\n" );
+            t_print("# error: server thread not terminated.\n" );
     }
 };
 
@@ -467,8 +467,9 @@ class ValueCheckProvider
 
 public:
     ValueCheckProvider()
-            :m_pBuffer(NULL),
+            :
              m_bFoundFailure(false),
+            m_pBuffer(NULL),
              m_nBufferSize(0)
         {
         }
@@ -514,10 +515,10 @@ public:
 /** Client Socket Thread, served as a temp little client to communicate with server.
 */
 
-class ClientReadSocketThread : public Thread
+class ReadSocketThread : public Thread
 {
-    ValueCheckProvider m_aValues;
     int m_nValue;
+    ValueCheckProvider m_aValues;
 
 protected:
     oslThreadIdentifier m_id;
@@ -541,7 +542,7 @@ protected:
               }
               else
             {
-                  printf( "# ClientReadSocketThread: connect failed! \n");
+            t_print("# ReadSocketThread: connect failed! \n");
             }
         //      terminate();
         //}
@@ -552,27 +553,28 @@ protected:
 
     void SAL_CALL onTerminated( )
     {
-        //printf( "# normally terminate this thread %d!\n",  m_id );
+        //t_print("# normally terminate this thread %d!\n",  m_id );
     }
 
 public:
     sal_uInt32 getCount() {return m_aValues.getBufferSize();}
     bool       isOk() {return m_aValues.isFailure() == true ? false : true;}
 
-    ClientReadSocketThread(sal_Int32 _nBufferSize, int _nValue ):
+    ReadSocketThread(sal_Int32 _nBufferSize, int _nValue )
+            :
         saTargetSocketAddr( aHostIp1, IP_PORT_MYPORT10 ),
         csConnectorSocket( ),
         m_nValue( _nValue )
     {
         m_id = getIdentifier( );
-        //printf( "# successfully creat this client thread %d!\n",  m_id );
+        //t_print("# successfully creat this client thread %d!\n",  m_id );
         m_aValues.createBuffer(_nBufferSize, 0);
     }
 
-    ~ClientReadSocketThread( )
+    ~ReadSocketThread( )
         {
             if ( isRunning( ) )
-                printf( "# error: client thread not terminated.\n" );
+                t_print("# error: client thread not terminated.\n" );
             m_aValues.freeBuffer();
         }
 
@@ -580,7 +582,7 @@ public:
 
 /** Server Socket Thread, write a file which is large
 */
-class ServerWriteSocketThread : public Thread
+class WriteSocketThread : public Thread
 {
     ValueCheckProvider m_aValues;
 
@@ -602,13 +604,13 @@ protected:
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
             if  ( sal_True != bOK1 )
             {
-                printf( "# ServerWriteSocketThread: AcceptorSocket bind address failed. \n" ) ;
+                t_print("# WriteSocketThread: AcceptorSocket bind address failed. \n" ) ;
                 break;
             }
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             if  ( sal_True != bOK2 )
             {
-                printf( "# ServerWriteSocketThread: AcceptorSocket listen address failed. \n" ) ;
+                t_print("# WriteSocketThread: AcceptorSocket listen address failed. \n" ) ;
                 break;
             }
             // blocking mode, if read/recv failed, block until success
@@ -617,35 +619,9 @@ protected:
             oslSocketResult eResult = asAcceptorSocket.acceptConnection( ssStreamConnection );
             if (eResult != osl_Socket_Ok )
             {
-                printf("# ServerWriteSocketThread: acceptConnection failed! \n");
+                t_print("WriteSocketThread: acceptConnection failed! \n");
                 break;
             }
-
-
-// LLA: removed, due to the fact, this is to error prone
-// LLA:             char * pSrcRoot = getenv("SOURCE_ROOT");
-// LLA:             // LLA: This is absolute wrong!
-// LLA:             // strcat( pSrcRoot, "/sal/inc/osl/file.hxx");
-// LLA:             rtl::OString sSrcRoot(pSrcRoot);
-// LLA:             sSrcRoot += "/sal/inc/osl/file.hxx";
-// LLA:
-// LLA:             ::rtl::OUString sFilePath = ::rtl::OUString::createFromAscii( sSrcRoot.getStr() );
-// LLA: #ifdef WNT
-// LLA:             while (sFilePath.lastIndexOf('/') != -1)
-// LLA:                 sFilePath = sFilePath.replace('/',(sal_Unicode)'\\');
-// LLA: #endif
-// LLA:             FILE *stream;
-// LLA:             sal_uInt64     nCount_read;
-// LLA:             sal_Char       buffer_read[FILE_READ];
-// LLA:
-// LLA:             if( (stream = fopen( oustring2char( sFilePath ), "r+t" )) != NULL )
-// LLA:             {
-// LLA:                 /* Attempt to read in 25 characters */
-// LLA:                 nCount_read = fread( buffer_read, sizeof( char ), FILE_READ, stream );
-// LLA:                 fclose( stream );
-// LLA:             }
-// LLA:             else
-// LLA:                 printf( "# File $SRC_ROOT/sal/inc/osl/file.hxx could not be opened\n" );
 
             sal_Int32 nReadNumber1 = ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
             break;
@@ -656,28 +632,29 @@ protected:
 
     void SAL_CALL onTerminated( )
     {
-        //printf( "# normally terminate this server thread %d!\n",  m_id );
+        //t_print("# normally terminate this server thread %d!\n",  m_id );
     }
 
 public:
     // public to check if data transmition is OK
-    ServerWriteSocketThread(sal_Int32 _nBufferSize, int _nValue )
+    WriteSocketThread(sal_Int32 _nBufferSize, int _nValue )
     {
         m_id = getIdentifier( );
-        //printf( "# successfully creat this server thread %d!\n",  m_id );
+        //t_print("# successfully creat this server thread %d!\n",  m_id );
 
         m_aValues.createBuffer(_nBufferSize, _nValue);
     }
 
-    ~ServerWriteSocketThread( )
+    ~WriteSocketThread( )
         {
             if ( isRunning( ) )
-                printf( "# error: server thread not terminated.\n" );
+                t_print("# error: server thread not terminated.\n" );
             m_aValues.freeBuffer();
         }
 
 };
 
+// -----------------------------------------------------------------------------
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
 {
@@ -694,13 +671,13 @@ protected:
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
         if  ( sal_True != bOK1 )
         {
-            printf( "# AcceptorSocket bind address failed.\n" ) ;
+            t_print("# AcceptorSocket bind address failed.\n" ) ;
             return;
         }
         sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
         if  ( sal_True != bOK2 )
         {
-            printf( "# AcceptorSocket listen address failed.\n" ) ;
+            t_print("# AcceptorSocket listen address failed.\n" ) ;
             return;
         }
 
@@ -710,7 +687,7 @@ protected:
         if (eResult != osl_Socket_Ok )
         {
             bOK = sal_True;
-            printf("# AcceptorThread: acceptConnection failed! \n");
+            t_print("AcceptorThread: acceptConnection failed! \n");
         }
     }
 public:
@@ -727,7 +704,7 @@ public:
         if ( isRunning( ) )
         {
             asAcceptorSocket.shutdown();
-            printf( "# error: Acceptor thread not terminated.\n" );
+            t_print("# error: Acceptor thread not terminated.\n" );
         }
     }
 };
@@ -751,7 +728,7 @@ public:
     {
         if ( isRunning( ) )
         {
-            printf( "# error: CloseSocketThread not terminated.\n" );
+            t_print("# error: CloseSocketThread not terminated.\n" );
         }
     }
 };
@@ -1053,7 +1030,7 @@ namespace osl_SocketAddr
         {
             ::osl::SocketAddr saSocketAddr( aHostIp2, IP_PORT_INVAL );
 
-            //printf("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
+            //t_print("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
 
             CPPUNIT_ASSERT_MESSAGE( "test for getPort( ) function: give an invalid port to a SocketAddr, get the port to see if it can detect. it did not pass in (W32).",
                                     saSocketAddr.getPort( )>=1 && saSocketAddr.getPort( ) <= 65535 );
@@ -1116,7 +1093,7 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( "bind SocketAddr failed", bOK1 == sal_True );
 
             sal_Int32 newPort = sSocket.getLocalPort();
-            //printf("#new port is %d\n", newPort );
+            //t_print("#new port is %d\n", newPort );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort() function: port number should be in 1 ~ 65535, set port 0, it should be converted to a port number between 1024~65535.",
                                     ( 1024 <= newPort ) && ( 65535 >= newPort ) && ( bOK == sal_True ) );
@@ -1128,7 +1105,7 @@ namespace osl_SocketAddr
             ::osl::SocketAddr saSocketAddr( aHostIp1, IP_PORT_FTP);
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_INVAL );
             //on Linux, getPort return 34463
-            //printf("#Port number is %d \n", saSocketAddr.getPort( ));
+            //t_print("#Port number is %d \n", saSocketAddr.getPort( ));
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort( ) function: set an address with invalid port. it should return error or convert it to a valid port.",
                                      ( ( 1 <= saSocketAddr.getPort( ) ) && ( 65535 >= saSocketAddr.getPort( ) ) &&( bOK == sal_True ) ) ||
@@ -1369,7 +1346,7 @@ namespace osl_SocketAddr
             oslSocketAddr poslSocketAddr = saSocketAddr.getHandle( );
 
             sal_Bool bOK = ( saSocketAddr == poslSocketAddr );
-            //printf("getSocketAddrHandle_002\n");
+            //t_print("getSocketAddrHandle_002\n");
             CPPUNIT_ASSERT_MESSAGE( "test for getHandle() function: use getHandle() function as an intermediate way to create identical address.",
                                       sal_True == bOK );
         }
@@ -1619,7 +1596,7 @@ namespace osl_Socket
             oslSocket sHandleIpx = osl_createSocket( osl_Socket_FamilyIpx, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
             CPPUNIT_ASSERT_MESSAGE( " family osl_Socket_FamilyIpx socket create failed! ", sHandleIpx != NULL);
             ::osl::Socket sSocket( sHandleIpx );        //, SAL_NO_ACQUIRE );
-            printf("#Type is %d \n", sSocket.getType( ) );
+            t_print("#Type is %d \n", sSocket.getType( ) );
 
             CPPUNIT_ASSERT_MESSAGE(" test for create new Socket instance that family is osl_Socket_FamilyIpx",
                                     osl_Socket_TypeStream == sSocket.getType( ) );
@@ -2530,7 +2507,7 @@ namespace osl_Socket
             // on Linux, the value of option is 1, on Solaris, it's 16, but it's not important the exact value,
             // just judge it is zero or not!
             sal_Bool bOK = ( 0  !=  *pGetBuffer );
-            printf("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
 
             // toggle check, set to 0
             *pbDontRouteSet = 0;
@@ -2542,7 +2519,7 @@ namespace osl_Socket
 
             sal_Bool bOK2 = ( 0  ==  *pGetBuffer );
 
-            printf("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
 
 // LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
 // LLA:             *pbDontTouteSet = sal_True;
@@ -2585,7 +2562,7 @@ namespace osl_Socket
             sal_Int32 n1 = asAcceptorSocket.getOption( osl_Socket_OptionLinger,  &aLingerGet, nBufferLen );
                     CPPUNIT_ASSERT_MESSAGE( "getOption (SO_LINGER) function failed.", ( n1 == nBufferLen ) );
 
-            //printf("#setOption_002: getOption is %d \n", aLingerGet.l_linger);
+            //t_print("#setOption_002: getOption is %d \n", aLingerGet.l_linger);
             sal_Bool bOK = ( 7  ==  aLingerGet.l_linger );
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check. ",
                 sal_True == bOK );
@@ -2611,7 +2588,7 @@ namespace osl_Socket
             asAcceptorSocket.setOption( osl_Socket_OptionDontRoute, 1 ); //sal_True );
             sal_Bool bOK = ( 0  !=  asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
 
-            printf("# setOption_simple_001(): getoption is %d \n", asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
+            t_print("setOption_simple_001(): getoption is %d \n", asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
                                       ( sal_True == bOK ) );
         }
@@ -3049,8 +3026,8 @@ namespace osl_StreamSocket
         void write_read(sal_Int32 _nBufferSize, int _nValue)
         {
             //client sent two strings, and server received, check the order and value
-            ServerWriteSocketThread myServerThread(_nBufferSize, _nValue);
-            ClientReadSocketThread myClientThread(_nBufferSize, _nValue);
+            WriteSocketThread myServerThread(_nBufferSize, _nValue);
+            ReadSocketThread myClientThread(_nBufferSize, _nValue);
             myServerThread.create( );
 //          thread_sleep( 1 );
             myClientThread.create( );
@@ -3064,8 +3041,8 @@ namespace osl_StreamSocket
             sal_uInt32 nLength = myClientThread.getCount();
             bool       bIsOk   = myClientThread.isOk(); // check if the values are right.
 
-            printf("# Length:=%d\n", nLength);
-            printf("#  bIsOk:=%d\n", bIsOk);
+            t_print("Length:=%d\n", nLength);
+            t_print(" bIsOk:=%d\n", bIsOk);
 
             CPPUNIT_ASSERT_MESSAGE(" test for write/read values with two threads: send data from server, check readed data in client.",
                                     nLength == _nBufferSize && bIsOk == true);
@@ -3117,11 +3094,11 @@ protected:
               sal_Int32 nWrite2 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
             thread_sleep( 2 );
               sal_Int32 nWrite3 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
-              printf("# nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
+              t_print("nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
               //thread_sleep( 1 );
           }
           else
-              printf( "# SendClientThread: connect failed! \n");
+              t_print("# SendClientThread: connect failed! \n");
 
         csConnectorSocket.close();
         free( pTimeout );
@@ -3193,7 +3170,7 @@ protected:
 
             sal_Int32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
             sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 + nRead2, 12 );
-            printf("# after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", nRead1, nRead2, nRead3 );
+            t_print("after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", nRead1, nRead2, nRead3 );
             mySendThread.join();
 
             ssConnectionSocket.close();
@@ -3239,7 +3216,7 @@ protected:
             sal_Int32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
             // still can read
             sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
-            printf("# after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", nRead1, nWrite, nRead3 );
+            t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", nRead1, nWrite, nRead3 );
             mySendThread.join();
             ssConnectionSocket.close();
             asSocket.close();
@@ -3501,7 +3478,7 @@ namespace osl_AcceptorSocket
             //when accepting, assign another socket to the socket, the thread will not be closed, so is blocking
             asSocketAssign = asSocket;
 
-            printf("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
+            t_print("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
 
             asSocketAssign.shutdown();
             myAcceptorThread.join();
@@ -3679,7 +3656,7 @@ public:
     ~TalkerThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: TalkerThread not terminated normally.\n" );
+            t_print("# error: TalkerThread not terminated normally.\n" );
     }
 };
 
@@ -3697,12 +3674,12 @@ protected:
         dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
         if ( dsSocket.bind( saLocalSocketAddr ) == sal_False )
         {
-            printf("# DatagramSocket bind failed \n");
+            t_print("DatagramSocket bind failed \n");
             return;
         }
         //blocking mode: default
         sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        printf("# After recvFrom, nRecv is %d\n", nRecv);
+        t_print("After recvFrom, nRecv is %d\n", nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -3720,7 +3697,7 @@ public:
     ~ListenerThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: ListenerThread not terminated normally.\n" );
+            t_print("# error: ListenerThread not terminated normally.\n" );
     }
 
 };
@@ -3748,7 +3725,7 @@ public:
             myTalkThread.create();
             sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
             myTalkThread.join();
-            //printf("#received buffer is %s# \n", pReadBuffer);
+            //t_print("#received buffer is %s# \n", pReadBuffer);
 
             sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
 
@@ -3772,7 +3749,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo failed: nSend <= 0.", nSend > 0);
 
             myListenThread.join();
-            //printf("#received buffer is %s# \n", myListenThread.pRecvBuffer);
+            //t_print("#received buffer is %s# \n", myListenThread.pRecvBuffer);
 
             sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
 
@@ -3807,7 +3784,7 @@ public:
             myThread.create();
             sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
             myThread.join();
-            //printf("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
+            //t_print("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
                  nRecv2 == -1 );
         }
