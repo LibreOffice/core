@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 12:49:13 $
+ *  last change: $Author: obr $ $Date: 2001-11-12 14:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 extern "C" {
 #endif
 
+/** Counter with atomic in-/decrease operations
+*/
 typedef sal_Int32 oslInterlockedCount;
 
 /** Increments the count variable addressed by pCount.

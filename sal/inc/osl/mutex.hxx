@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-07-06 10:00:48 $
+ *  last change: $Author: obr $ $Date: 2001-11-12 14:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 
 namespace osl
 {
-
+    /** A mutual exclusion synchronization object
+    */
     class Mutex {
         oslMutex mutex;
 
@@ -82,6 +83,7 @@ namespace osl
     public:
         /** Create a thread-local mutex.
             @return 0 if the mutex could not be created, otherwise a handle to the mutex.
+            @seealso ::osl_createMutex()
         */
         Mutex()
         {
@@ -89,6 +91,7 @@ namespace osl
         }
 
         /** Release the OS-structures and free mutex data-structure.
+            @seealso ::osl_destroyMutex()
         */
         ~Mutex()
         {
@@ -96,7 +99,8 @@ namespace osl
         }
 
         /** Acquire the mutex, block if already acquired by another thread.
-            @return False if system-call fails.
+            @return sal_False if system-call fails.
+            @seealso ::osl_acquireMutex()
         */
         sal_Bool acquire()
         {
@@ -104,7 +108,8 @@ namespace osl
         }
 
         /** Try to acquire the mutex without blocking.
-            @return False if it could not be acquired.
+            @return sal_False if it could not be acquired.
+            @seealso ::osl_tryToAcquireMutex()
         */
         sal_Bool tryToAcquire()
         {
@@ -112,19 +117,28 @@ namespace osl
         }
 
         /** Release the mutex.
-            @return False if system-call fails.
+            @return sal_False if system-call fails.
+            @seealso ::osl_releaseMutex()
         */
         sal_Bool release()
         {
             return osl_releaseMutex(mutex);
         }
 
+        /** Returns a global static mutex object.
+            The global and static mutex object can be used to initialize other
+            static objects in a thread safe manner.
+            @return the global mutex object
+            @seealso ::osl_getGlobalMutex()
+        */
         static Mutex * getGlobalMutex()
         {
             return (Mutex *)osl_getGlobalMutex();
         }
     };
 
+    /** A helper class for mutex objects and interfaces.
+    */
     template<class T>
     class Guard
     {
@@ -132,23 +146,29 @@ namespace osl
         T * pT;
     public:
 
+        /** Acquires the object specified as parameter.
+        */
         Guard(T * pT) : pT(pT)
         {
             pT->acquire();
         }
 
+        /** Acquires the object specified as parameter.
+        */
         Guard(T & t) : pT(&t)
         {
             pT->acquire();
         }
 
-        /** Releases mutex. */
+        /** Releases the mutex or interface. */
         ~Guard()
         {
             pT->release();
         }
     };
 
+    /** A helper class for mutex objects and interfaces.
+    */
     template<class T>
     class ClearableGuard
     {
@@ -156,24 +176,30 @@ namespace osl
         T * pT;
     public:
 
+        /** Acquires the object specified as parameter.
+        */
         ClearableGuard(T * pT) : pT(pT)
         {
             pT->acquire();
         }
 
+        /** Acquires the object specified as parameter.
+        */
         ClearableGuard(T & t) : pT(&t)
         {
             pT->acquire();
         }
 
-        /** Releases mutex. */
+        /** Releases the mutex or interface if not already released by clear().
+        */
         ~ClearableGuard()
         {
             if (pT)
                 pT->release();
         }
 
-        /** Releases mutex. */
+        /** Releases the mutex or interface.
+        */
         void clear()
         {
             if(pT)
@@ -184,22 +210,30 @@ namespace osl
         }
     };
 
+    /** A helper class for mutex objects and interfaces.
+    */
     template< class T >
     class ResettableGuard : public ClearableGuard< T >
     {
     protected:
         T* pResetT;
     public:
+        /** Acquires the object specified as parameter.
+        */
         ResettableGuard( T* pT ) :
                 ClearableGuard<T>( pT ),
                 pResetT( pT )
         {}
 
+        /** Acquires the object specified as parameter.
+        */
         ResettableGuard( T& rT ) :
                 ClearableGuard<T>( rT ),
                 pResetT( &rT )
         {}
 
+        /** Re-aquires the mutex or interface.
+        */
         void reset()
         {
             if( pResetT )
