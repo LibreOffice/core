@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-24 11:01:29 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ struct WW8PLCFxDesc
     WW8PLCFx* pPLCFx;
     UShortStk* pIdStk;  // Speicher fuer Attr-Id fuer Attr-Ende(n)
     const BYTE* pMemPos;// wo liegen die Sprm(s)
-    const BYTE* pOrigMemPos;
+    long nOrigSprmsLen;
 
     long nStartPos;
     long nEndPos;

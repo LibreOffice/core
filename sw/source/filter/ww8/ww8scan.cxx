@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-24 11:01:28 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3246,7 +3246,6 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
     rDesc.nOrigStartPos = rDesc.nStartPos;
-    rDesc.pOrigMemPos = rDesc.pMemPos;
     if (GetDoingDrawTextBox())
         return;
 
@@ -3309,6 +3308,7 @@ void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
 
     rDesc.bFirstSprm = TRUE;
     AdjustEnds( rDesc );
+    rDesc.nOrigSprmsLen = rDesc.nSprmsLen;
 }
 
 void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
@@ -3319,28 +3319,10 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
     ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
-    if( rDesc.nStartPos != LONG_MAX )
-    {
-        /*
-        ##516##, ##517##
-        Idea being that there is something that spans the end of a document
-        and the beginning of a subdocument, or the end of a sub and the
-        beginning of the next sub. So we force it to happen at the beginning
-        of this subdocument, basically we're only talking about a piece
-        change.
-        */
-        if (rDesc.nCpOfs > rDesc.nStartPos)
-            rDesc.nStartPos = 0;
-        else
-            rDesc.nStartPos -= rDesc.nCpOfs;
-    }
-    if( rDesc.nEndPos != LONG_MAX )
-    {
-        ASSERT(rDesc.nCpOfs <= rDesc.nEndPos,
-            "oh oh, so much for the subdocument piece theory");
-        rDesc.nEndPos -= rDesc.nCpOfs;
-    }
+    rDesc.ReduceByOffset();
+
     rDesc.bFirstSprm = TRUE;
+    rDesc.nOrigSprmsLen = rDesc.nSprmsLen;
 }
 
 static USHORT GetId( BYTE nVersion, const WW8PLCFxDesc* p )
@@ -4035,7 +4017,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
             pPLCFx->SetDirty(FALSE);
             aD.ReduceByOffset();
             rSave.nStartCp = aD.nStartPos;
-            rSave.nPLCFxMemOfs = pMemPos - pOrigMemPos;
+            rSave.nPLCFxMemOfs = nOrigSprmsLen - nSprmsLen;
         }
     }
 }
