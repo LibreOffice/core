@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,9 @@ namespace configmgr
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }
 
-            void parse(SaxHandler const & _xHandler)
-                throw (uno::Exception);
+            void parse(SaxHandler const & _xHandler);
+            // throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+
         private:
             ServiceFactory   m_xServiceFactory;
             sax::InputSource m_aInputSource;
