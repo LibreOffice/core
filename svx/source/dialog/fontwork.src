@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:06:16 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 09:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 71 , 30 ) ;
         Border = TRUE ;
+        TabStop = TRUE ;
     };
     ToolBox TBX_STYLE
     {
@@ -400,7 +401,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Centrado";
-                Text[ finnish ] = "Keskell?";
+                Text[ finnish ] = "Keskell‰";
             };
             ToolBoxItem
             {
@@ -523,11 +524,11 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "ÈñìÈöî";
         QuickHelpText[ arabic ] = "«·„”«›…";
         QuickHelpText[ greek ] = "¡¸ÛÙ·ÛÁ";
-        QuickHelpText[ korean ] = "Í∞ÑÍ≤©";
+        QuickHelpText[ korean ] = "Í∞ÑÍ≤©!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
         QuickHelpText[ catalan ] = "Distancia";
-        QuickHelpText[ finnish ] = "Et?isyys!";
+        QuickHelpText[ finnish ] = "Et‰isyys!";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -571,11 +572,11 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "Á∏ÆÊéí";
         QuickHelpText[ arabic ] = "«·≈“«Õ…";
         QuickHelpText[ greek ] = "≈ÛÔ˜ﬁ";
-        QuickHelpText[ korean ] = "Îì§Ïó¨Ïì∞Í∏∞";
+        QuickHelpText[ korean ] = "Îì§Ïó¨Ïì∞Í∏∞!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
         QuickHelpText[ catalan ] = "SangrÌa";
-        QuickHelpText[ finnish ] = "Sisenn?!";
+        QuickHelpText[ finnish ] = "Sisenn‰!";
     };
     ToolBox TBX_SHADOW
     {
@@ -830,7 +831,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ turkish ] = "Abstand X";
         CustomUnitText[ catalan ] = "Grados";
         QuickHelpText[ catalan ] = "Distancia X";
-        QuickHelpText[ finnish ] = "Et?isyys X!";
+        QuickHelpText[ finnish ] = "Et‰isyys X!";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -887,14 +888,14 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "¡¸ÛÙ·ÛÁ Y";
-        QuickHelpText[ korean ] = "Í∞ÑÍ≤© Y";
+        QuickHelpText[ korean ] = "Í∞ÑÍ≤© Y!";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand Y";
         CustomUnitText[ catalan ] = "%";
         QuickHelpText[ catalan ] = "Distancia Y";
         CustomUnitText[ finnish ] = "%";
-        QuickHelpText[ finnish ] = "Et?isyys Y!";
+        QuickHelpText[ finnish ] = "Et‰isyys Y!";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -973,12 +974,12 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "Èô∞ÂΩ±È°èËâ≤";
         QuickHelpText[ arabic ] = "·Ê‰ «·Ÿ·";
         QuickHelpText[ greek ] = "Shadow Color";
-        QuickHelpText[ korean ] = "ÏùåÏòÅÏÉâ";
+        QuickHelpText[ korean ] = "ÏùåÏòÅÏÉâ!";
         Text[ greek ] = "◊Ò˛Ï· ÛÍÈ‹Ú";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
         QuickHelpText[ catalan ] = "Color sombra";
-        QuickHelpText[ finnish ] = "Varjon v?ri!";
+        QuickHelpText[ finnish ] = "Varjon v‰ri!";
     };
     Text[ chinese_simplified ] = "ÁæéÂ∑•Â≠ó‰Ωì";
     Text[ russian ] = "FontWork";
@@ -1409,13 +1410,3 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttity?bjekti";
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
