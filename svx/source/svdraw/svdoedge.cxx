@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:56:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,6 +840,11 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // from another SdrEdgeObj. Do not calculate again to avoid loop.
         // Also, do not change bEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
+    }
+    // #i43068#
+    else if(GetModel() && GetModel()->isLocked())
+    {
+        // avoid re-layout during imports/API call sequences
     }
     else
     {
