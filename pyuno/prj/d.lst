@@ -1,6 +1,9 @@
 ..\%__SRC%\lib\libpyuno.so %_DEST%\lib%_EXT%\libpyuno.so
+..\%__SRC%\lib\libpyuno.dylib %_DEST%\lib%_EXT%\libpyuno.dylib
 ..\%__SRC%\lib\pyuno.so %_DEST%\lib%_EXT%\pyuno.so
+..\%__SRC%\lib\pyuno.dylib %_DEST%\lib%_EXT%\pyuno.dylib
 ..\%__SRC%\lib\pythonloader.uno.so %_DEST%\lib%_EXT%\pythonloader.uno.so
+..\%__SRC%\lib\pythonloader.uno.dylib %_DEST%\lib%_EXT%\pythonloader.uno.dylib
 ..\%__SRC%\lib\unohelper.py %_DEST%\lib%_EXT%\unohelper.py
 ..\%__SRC%\lib\pythonloader.py %_DEST%\lib%_EXT%\pythonloader.py
 ..\%__SRC%\lib\uno.py %_DEST%\lib%_EXT%\uno.py
