@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:26:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 15:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
                 xLayoutManager->showElement(PROGRESS_RESOURCE);
