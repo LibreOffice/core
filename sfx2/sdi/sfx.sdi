@@ -6934,7 +6934,7 @@ SfxBoolItem SaveAs SID_SAVEASDOC
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
+    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -8730,10 +8730,7 @@ SfxBoolItem ExportTo SID_EXPORTDOC
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -8742,9 +8739,10 @@ SfxBoolItem ExportTo SID_EXPORTDOC
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
+
 //--------------------------------------------------------------------------
 SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
-(SfxStringItem URL SID_FILE_NAME )
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8757,10 +8755,7 @@ SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -8771,7 +8766,7 @@ SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
 ]
 
 SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
-(SfxStringItem URL SID_FILE_NAME)
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8784,10 +8779,7 @@ SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
