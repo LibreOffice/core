@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-25 12:40:35 $
+#   last change: $Author: rt $ $Date: 2005-01-27 09:21:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,7 +111,7 @@ if (!((defined($ENV{UPDATER})) and ($ENV{UPDATER} eq "YES") and !defined($ENV{CW
     $is_protocol_test = 0;
 }
 
-if ($^O =~ /$cygwin/) {
+if (($gui eq "WNT") and ($ENV{USE_SHELL} ne "4nt")) {
     $gui = $cygwin;
 }
 
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.11 $ ';
+$id_str = ' $Revision: 1.12 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -464,7 +464,6 @@ sub doTest {
     createPath("$basicpath", $error_copyBasic);
     $Command = "$COPY_DIR \"$standardbasicpath\"* \"$basicpath\"";
     execute_Command ($Command, $error_copyBasic, $show_Message, $command_withoutOutput);
-
 
     # patching bootstrap (error 11)
 
@@ -822,6 +821,7 @@ sub patch_bootstrap {
     my ($sourcefile, $destfile) = @_;
     my (@convert_split, $line);
     my ($Error) = 1;
+    my ($lineend);
 
     if ($is_debug) {
         print "patching bootstrap $sourcefile ...\n";
@@ -832,10 +832,21 @@ sub patch_bootstrap {
 
     open OUTFILE, ">$sourcefile" or return errorFromOpen ($sourcefile);
     open INFILE, "<$destfile" or return errorFromOpen ($destfile);
+    binmode(OUTFILE);
+    binmode(INFILE);
     while(<INFILE>) {
         $line = $_;
 
         if ( $line =~ /UserInstallation/ ) {
+            if ($line =~ /(\r\n)/) {
+                $lineend = $1;
+            }
+            elsif ($line =~ /(\n)/) {
+                $lineend = $1;
+            }
+            else {
+                $lineend = $/;
+            }
             @convert_split = split "=", $line;
             $line = $convert_split[0];
             $line .= "=";
@@ -845,7 +856,7 @@ sub patch_bootstrap {
             else {
                 $line .= ConvertToFileURL($userinstallpath_without);
             }
-            $line .= $/;
+            $line .= $lineend;
         }
         print OUTFILE "$line";
 
