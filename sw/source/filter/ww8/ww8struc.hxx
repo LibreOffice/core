@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:46:37 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,6 @@ struct WW8_STD
             // the UPEs are not stored on the file; they are a cache of the based-on
         // chain
     // char grupe[];
-public:
-    enum Limits {STI_USER = 0x0FFE};
 };
 
 /*
