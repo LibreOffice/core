@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:24:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,6 +1355,11 @@ void SfxMedium::CloseStorage()
 void SfxMedium::CanDisposeStorage_Impl( sal_Bool bDisposeStorage )
 {
     pImp->bDisposeStorage = bDisposeStorage;
+}
+
+sal_Bool SfxMedium::WillDisposeStorageOnClose_Impl()
+{
+    return pImp->bDisposeStorage;
 }
 
 //------------------------------------------------------------------
