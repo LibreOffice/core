@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragGestureEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 09:55:32 $
+ *  last change: $Author: arellano $ $Date: 2001-07-17 16:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ interface XDragSource;
      method when a particular DragGestureRecognizer detects that a platform
      dependent drag initiating gesture has occurred on the Component that it is
      tracking.
+
+    <!-- Editor: Should Component be capitalized? -->
 */
 
 struct DragGestureEvent: com::sun::star::lang::EventObject
@@ -89,6 +91,8 @@ struct DragGestureEvent: com::sun::star::lang::EventObject
 
     //-------------------------------------------------------------------------
     /** the x coordinate where the drag originated in Component coords.
+
+    <!-- Editor: Is "coords" an actual term or the abbreviation of coordinates? -->
      */
 
     long DragOriginX;
@@ -108,8 +112,8 @@ struct DragGestureEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** the last event comprising the gesture.
 
-    <p> the initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
-    if it is not the implementation should either react accordingly or
+    <p> The initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
+    If it is not, the implementation should either react accordingly or
     presume that the left mouse button was clicked. </p>
     */
 
