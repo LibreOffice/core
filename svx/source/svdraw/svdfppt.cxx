@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:06:12 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,18 +682,20 @@ SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
-    bNotesMaster        ( FALSE ),
-    bHandoutMaster      ( FALSE ),
-    bStarDrawFiller     ( FALSE ),
-    pHeaderFooterEntry  ( NULL ),
-    pSolverContainer    ( NULL ),
-    pPresentationObjects( NULL ),
-    pStyleSheet         ( NULL ),
-    pBObj               ( NULL ),
-    bBObjIsTemporary    ( sal_True ),
-    ePageKind           ( PPT_MASTERPAGE ),
-    nDrawingDgId        ( 0xffffffff ),
-    nBackgroundOffset   ( 0 )
+    bNotesMaster            ( FALSE ),
+    bHandoutMaster          ( FALSE ),
+    bStarDrawFiller         ( FALSE ),
+    pHeaderFooterEntry      ( NULL ),
+    pSolverContainer        ( NULL ),
+    pPresentationObjects    ( NULL ),
+    pStyleSheet             ( NULL ),
+    pBObj                   ( NULL ),
+    bBObjIsTemporary        ( sal_True ),
+    ePageKind               ( PPT_MASTERPAGE ),
+    nDrawingDgId            ( 0xffffffff ),
+    nBackgroundOffset       ( 0 ),
+    nSlidePersistStartOffset( 0 ),
+    nSlidePersistEndOffset  ( 0 )
 {
 }
 
@@ -1637,17 +1639,25 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
             pNotePages  =new PptSlidePersistList;
             USHORT nPageListNum = 0;
             DffRecordHeader* pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText );
+            PptSlidePersistEntry* pPreviousPersist = NULL;
             while ( pSlideListWithTextHd && ( nPageListNum < 3 ) )
             {
                 pSlideListWithTextHd->SeekToContent( rStCtrl );
                 PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
-                while ( SeekToRec( rStCtrl, PPT_PST_SlidePersistAtom, pSlideListWithTextHd->GetRecEndFilePos() ) )
+                sal_uInt32 nSlideListWithTextHdEndOffset = pSlideListWithTextHd->GetRecEndFilePos();
+                while ( SeekToRec( rStCtrl, PPT_PST_SlidePersistAtom, nSlideListWithTextHdEndOffset ) )
                 {
+                    if ( pPreviousPersist )
+                        pPreviousPersist->nSlidePersistEndOffset = rStCtrl.Tell();
                     PptSlidePersistEntry* pE = new PptSlidePersistEntry;
                     rStCtrl >> pE->aPersistAtom;
+                    pE->nSlidePersistStartOffset = rStCtrl.Tell();
                     pE->ePageKind = PptPageKind( nPageListNum );
                     pPageList->C40_INSERT( PptSlidePersistEntry, pE, pPageList->Count() );
+                    pPreviousPersist = pE;
                 }
+                if ( pPreviousPersist )
+                    pPreviousPersist->nSlidePersistEndOffset = nSlideListWithTextHdEndOffset;
                 pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText, SEEK_FROM_CURRENT );
                 nPageListNum++;
             }
@@ -6507,17 +6517,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 }
                 if ( bStatus )
                 {
-                    DffRecordManager& rDocRecMan = rSdrPowerPointImport.aDocRecManager;
-                    DffRecordHeader* pHd;
-                    for ( pHd = rDocRecMan.First(); pHd; pHd = rDocRecMan.Next() )
-                    {
-                        if ( ( pHd->nRecType == PPT_PST_SlideListWithText ) && ( pHd->nRecInstance == nInstance ) )
-                            break;
-                    }
-                    if ( !pHd )
-                        bStatus = FALSE;
-
-                    UINT32 nSlideId = rSdrPowerPointImport.GetAktPageId();
+                    sal_uInt32 nSlideId = rSdrPowerPointImport.GetAktPageId();
                     if ( !nSlideId )
                         bStatus = FALSE;
                     else
@@ -6558,26 +6558,18 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             rIn.Seek( nOldPos );
                         }
                         // now pHd points to the right SlideListWithText Container
-                        PptSlidePersistAtom aSlidePersistAtom;
-                        pHd->SeekToContent( rIn );
-                        while ( rIn.Tell() < pHd->GetRecEndFilePos() )
-                        {
-                            rIn >> aClientTextBoxHd;
-                            if ( aClientTextBoxHd.nRecType == PPT_PST_SlidePersistAtom )
-                            {
-                                aClientTextBoxHd.SeekToBegOfRecord( rIn );
-                                rIn >> aSlidePersistAtom;
-                                if ( aSlidePersistAtom.nSlideId == nSlideId )
-                                    break;
-                            }
-                            aClientTextBoxHd.SeekToEndOfRecord( rIn );
-                        }
-                        if ( rIn.Tell() >= pHd->GetRecEndFilePos() )
-                            bStatus = FALSE;
+                        PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.eAktPageKind );
+                        PptSlidePersistEntry* pE = NULL;
+                        if ( pPageList && ( rSdrPowerPointImport.nAktPageNum < pPageList->Count() ) )
+                            pE = (*pPageList)[ rSdrPowerPointImport.nAktPageNum ];
+                        if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
+                            bStatus = sal_False;
                         else
-                        {   // now we got the right page and are searching for the right
+                        {
+                            rIn.Seek( pE->nSlidePersistStartOffset );
+                            // now we got the right page and are searching for the right
                             // TextHeaderAtom
-                            while ( rIn.Tell() < pHd->GetRecEndFilePos() )
+                            while ( rIn.Tell() < pE->nSlidePersistEndOffset )
                             {
                                 rIn >> aClientTextBoxHd;
                                 if ( aClientTextBoxHd.nRecType == PPT_PST_TextHeaderAtom )
@@ -6590,7 +6582,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 }
                                 aClientTextBoxHd.SeekToEndOfRecord( rIn );
                             }
-                            if ( rIn.Tell() > pHd->GetRecEndFilePos() )
+                            if ( rIn.Tell() > pE->nSlidePersistEndOffset )
                                 bStatus = FALSE;
                             else
                             {   // patching the RecordHeader
@@ -6601,7 +6593,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                 // we have to calculate the correct record len
                                 DffRecordHeader aTmpHd;
-                                while ( rIn.Tell() < pHd->GetRecEndFilePos() )
+                                while ( rIn.Tell() < pE->nSlidePersistEndOffset )
                                 {
                                     rIn >> aTmpHd;
                                     if ( ( aTmpHd.nRecType == PPT_PST_SlidePersistAtom ) || ( aTmpHd.nRecType == PPT_PST_TextHeaderAtom ) )
