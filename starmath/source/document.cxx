@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 10:58:51 $
+ *  last change: $Author: tl $ $Date: 2001-07-12 10:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,8 +1146,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
     case SID_INSERT_FORMULA:
         {
             SfxMedium *pMedium = SFX_APP()->
-                    InsertDocumentDialog(SFXWB_INSERT | WB_OPEN | WB_3DLOOK,
-                                         SmDocShell::Factory());
+                    InsertDocumentDialog( 0, SmDocShell::Factory() );
 
             if (pMedium != NULL)
             {
