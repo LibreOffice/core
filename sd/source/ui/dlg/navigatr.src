@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:42:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ swedish ] = "Draläge" ;
-                Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+                Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
                 Text[ japanese ] = "ÄŞ×¯¸Ş Ó°ÄŞ";
