@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,12 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             nBorder = nPageWidth - aTabCols.GetLeftMin() +
                               DOCUMENTBORDER - aColItem.GetRight();
 
-            if ( nPageWidth >= aTabCols.GetLeftMin() + aTabCols.GetRight() )
+#ifdef DEBUG
+            long nTmp1 = DOCUMENTBORDER + nPageWidth;
+            long nTmp2 = aTabCols.GetLeftMin() + nBorder;
+#endif
+
+            if ( aColItem.GetRight() > 0 )
                 aTabCols.SetRight( nBorder );
 
             // Tabcols der Reihe nach
