@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:05:24 $
+ *  last change: $Author: hdu $ $Date: 2000-11-22 10:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,18 +90,23 @@
 
 // class SvxShowCharSet --------------------------------------------------
 
+long SvxShowCharSet::nSelectedIndex = 0;
+
 #define SBWIDTH 16
 
 SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
-
     Control( pParent, rResId ),
-    aVscrollSB( this, WB_VERT),
-    nSelectedIndex( FirstInMap())
+    aVscrollSB( this, WB_VERT)
 {
+    if( nSelectedIndex > LastInMap() )
+        nSelectedIndex = LastInMap();
+    if( nSelectedIndex < FirstInMap() )
+        nSelectedIndex = FirstInMap();
+
     aOrigSize = GetOutputSizePixel();
     aOrigPos = GetPosPixel();
 
-    SetStyle( GetStyle() | WB_CLIPCHILDREN);
+    SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
     aVscrollSB.EnableDrag( TRUE);
     // other aVscroll settings depend on selected font => see SetFont
@@ -438,16 +443,16 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
-    return MapIndexToUnicode( nSelectedIndex);
+    return MapIndexToUnicode( nSelectedIndex );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
-    sal_Unicode cSelectedChar = MapIndexToUnicode( nSelectedIndex);
-    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView())
-        cSelectedChar = MapIndexToUnicode( FirstInView());
+    sal_Unicode cSelectedChar = MapIndexToUnicode( nSelectedIndex );
+    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView() )
+        cSelectedChar = MapIndexToUnicode( FirstInView() );
 
     Font aFont = rFont;
 
@@ -457,7 +462,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     Control::SetFont( aFont );
 
     // hide scrollbar when there is nothing to scroll
-    BOOL bNeedVscroll = (LastInMap()-FirstInMap()+1 > ROW_COUNT*COLUMN_COUNT);
+    BOOL bNeedVscroll = ( LastInMap()-FirstInMap()+1 > ROW_COUNT*COLUMN_COUNT );
 
     nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
     nY = aOrigSize.Height() / ROW_COUNT;
@@ -465,7 +470,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     if( bNeedVscroll)
     {
         aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT);
-        aVscrollSB.SetRangeMin( 0);
+        aVscrollSB.SetRangeMin( 0 );
         int nLastRow = (LastInMap() - FirstInMap() + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetRangeMax( nLastRow);
         aVscrollSB.SetPageSize( ROW_COUNT-1);
@@ -478,9 +483,9 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     SetPosPixel( aNewPos);
     SetOutputSizePixel( aNewSize);
 
-    int nMapIndex = UnicodeToMapIndex( cSelectedChar);
-    SelectIndex( nMapIndex);
-    aVscrollSB.Show( bNeedVscroll);
+    int nMapIndex = UnicodeToMapIndex( cSelectedChar );
+    SelectIndex( nMapIndex );
+    aVscrollSB.Show( bNeedVscroll );
 
     Invalidate();
 }
