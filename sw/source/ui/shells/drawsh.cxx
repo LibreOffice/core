@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:07:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #pragma hdrstop
 
+#include <tools/shl.hxx>
 
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
