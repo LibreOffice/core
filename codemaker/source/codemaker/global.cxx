@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:09:10 $
+ *  last change: $Author: obo $ $Date: 2003-10-22 09:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,15 @@ FileStream::FileStream(const OString& name, FileAccessMode mode)
 {
     if ( name.getLength() > 0 )
     {
-        oslFileError ret =  osl_File_E_None;
-        if ((ret = osl_openFile(convertToFileUrl(name).pData, &m_file, checkAccessMode(mode))) == osl_File_E_None)
+        sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
+                           osl_File_Attribute_OwnRead |
+                           osl_File_Attribute_GrpWrite |
+                           osl_File_Attribute_GrpRead |
+                           osl_File_Attribute_OthRead;
+
+        OUString sUrl(convertToFileUrl(name));
+        if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None &&
+            osl_setFileAttributes(sUrl.pData, uAttr) == osl_File_E_None)
             m_name = name;
         else
             m_file = NULL;
@@ -361,11 +368,19 @@ void FileStream::createTempFile(const OString& sPath)
 
     sTmpPath = convertToFileUrl(sTmp);
 
-    oslFileError ret =  osl_File_E_None;
-    if ((ret = osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData)) == osl_File_E_None) {
-        OUString sSysTmpName;
-        FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
-        m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
+    sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
+                       osl_File_Attribute_OwnRead |
+                       osl_File_Attribute_GrpWrite |
+                       osl_File_Attribute_GrpRead |
+                       osl_File_Attribute_OthRead;
+
+    if (osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData) == osl_File_E_None) {
+        if (osl_setFileAttributes(sTmpName.pData, uAttr) == osl_File_E_None) {
+            OUString sSysTmpName;
+            FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
+            m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
+        } else
+            m_file = NULL;
     } else
         m_file = NULL;
 }
