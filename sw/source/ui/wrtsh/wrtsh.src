@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:21:56 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,26 +843,26 @@ String STR_INSERT_CHART
 {
     Text = "StarChart einfügen" ;
     Text [ English ] = "Insert StartChart" ;
-    Text [ portuguese ] = "Inserir StarOffice Chart" ;
-    Text [ english_us ] = "Insert StarOffice Chart" ;
-    Text [ portuguese_brazilian ] = "StarOffice Chart einfügen" ;
-    Text [ swedish ] = "Infoga StarOffice Chart" ;
-    Text [ danish ] = "Indsæt StarOffice Chart" ;
-    Text [ italian ] = "Inserisci StarOffice Chart " ;
-    Text [ spanish ] = "Insertar StarOffice Chart" ;
-    Text [ french ] = "Insérer un diagramme StarOffice Chart" ;
-    Text [ dutch ] = "StarOffice Chart invoegen" ;
-    Text[ chinese_simplified ] = "²åÈë StarOffice Chart";
-    Text[ russian ] = "Âñòàâèòü StarOffice Chart";
-    Text[ polish ] = "Wstaw StarOffice Chart";
-    Text[ japanese ] = "StarOffice Chart‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J StarOffice Chart";
-    Text[ arabic ] = "ÅÏÑÇÌ StarOffice Chart";
-    Text[ dutch ] = "StarOffice Chart invoegen";
-    Text[ chinese_simplified ] = "²åÈë StarOffice Chart";
-    Text[ greek ] = "ĞñïóèŞêç StarOffice Chart";
-    Text[ korean ] = "StarOffice Â÷Æ® »ğÀÔ";
-    Text[ turkish ] = "StarOffice Chart ekle";
+    Text [ portuguese ] = "Inserir %PRODUCTNAME Chart" ;
+    Text [ english_us ] = "Insert %PRODUCTNAME Chart" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Chart einfügen" ;
+    Text [ swedish ] = "Infoga %PRODUCTNAME Chart" ;
+    Text [ danish ] = "Indsæt %PRODUCTNAME Chart" ;
+    Text [ italian ] = "Inserisci %PRODUCTNAME Chart " ;
+    Text [ spanish ] = "Insertar %PRODUCTNAME Chart" ;
+    Text [ french ] = "Insérer un diagramme %PRODUCTNAME Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME Chart invoegen" ;
+    Text[ chinese_simplified ] = "²åÈë %PRODUCTNAME Chart";
+    Text[ russian ] = "Âñòàâèòü %PRODUCTNAME Chart";
+    Text[ polish ] = "Wstaw %PRODUCTNAME Chart";
+    Text[ japanese ] = "%PRODUCTNAME Chart‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J %PRODUCTNAME Chart";
+    Text[ arabic ] = "ÅÏÑÇÌ %PRODUCTNAME Chart";
+    Text[ dutch ] = "%PRODUCTNAME Chart invoegen";
+    Text[ chinese_simplified ] = "²åÈë %PRODUCTNAME Chart";
+    Text[ greek ] = "ĞñïóèŞêç %PRODUCTNAME Chart";
+    Text[ korean ] = "%PRODUCTNAME Â÷Æ® »ğÀÔ";
+    Text[ turkish ] = "%PRODUCTNAME Chart ekle";
     Text[ language_user1 ] = " ";
 };
 String STR_INSERTFLY
@@ -1223,7 +1223,7 @@ String STR_INSNUM
     TEXT[ dutch ] = "Nummering invoegen";
     TEXT[ chinese_simplified ] = "²åÈë±àºÅ";
     TEXT[ greek ] = "ĞñïóèŞêç áñßèìçóçò";
-    TEXT[ korean ] = "¹øÈ£ »ğÀÔ";
+    TEXT[ korean ] = "¹øÈ£ ¸Å±â±â »ğÀÔ";
     TEXT[ turkish ] = "Numaralama ekle";
     TEXT[ language_user1 ] = " ";
 };
@@ -1329,7 +1329,7 @@ String STR_NUMORNONUM
     Text[ dutch ] = "Nummer aan/uit";
     Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë±àºÅ";
     Text[ greek ] = "Áñéèìüò Íáé/¼÷é";
-    Text[ korean ] = "¹øÈ£ ÀÛµ¿/ÇØÁ¦";
+    Text[ korean ] = "¹øÈ£ Àû¿ë/ºñÀû¿ë";
     Text[ turkish ] = "Numara açık/kapalı";
     Text[ language_user1 ] = " ";
 };
@@ -1433,7 +1433,7 @@ String STR_SETNUMRULESTART
     Text[ dutch ] = "Nieuwe nummering";
     Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
     Text[ greek ] = "Åğáíåêêßíçóç áñßèìçóçò";
-    Text[ korean ] = "¹øÈ£ ´Ù½Ã ½ÃÀÛ";
+    Text[ korean ] = "¹øÈ£ ¸Å±â±â ´Ù½Ã ½ÃÀÛ";
     Text[ turkish ] = "Numaralamayı yeniden başlat";
     Text[ language_user1 ] = " ";
 };
