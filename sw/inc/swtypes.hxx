@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:49:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ const BYTE OLD_MAXLEVEL = 5;
 const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
 const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
 const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx
-const BYTE NO_INIT      = 202;  //Ehemals numrule.hxx
+//const BYTE NO_INIT        = 202;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
 // DAMIT entfaellt das NO_NUM !!!!
