@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:30:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1608,18 +1608,18 @@ void ScTable::UnlockTable()
 }
 
 
-void ScTable::MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const
+void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, BOOL bDeep ) const
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].MergeSelectionPattern( ppSet, rMark, bDeep );
+        aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
 }
 
 
-void ScTable::MergePatternArea( SfxItemSet** ppSet, SCCOL nCol1, SCROW nRow1,
+void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2, BOOL bDeep ) const
 {
     for (SCCOL i=nCol1; i<=nCol2; i++)
-        aCol[i].MergePatternArea( ppSet, nRow1, nRow2, bDeep );
+        aCol[i].MergePatternArea( rState, nRow1, nRow2, bDeep );
 }
 
 
