@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:17:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ String STR_LAYER_MEASURELINES
     Text [ italian ] = "Linee di quotatura" ;
     Text [ spanish ] = "Líneas de dimensiones" ;
     Text [ french ] = "Lignes de cote" ;
-    Text [ portuguese_brazilian ] = "Maßlinien" ;
+    Text [ portuguese_brazilian ] = "Ma?linien" ;
     Text [ portuguese ] = "Linhas de dimensão" ;
     Text[ chinese_simplified ] = "¶¨³ß¶ÈÏß";
     Text[ russian ] = "Ëèíèè ğàçìåğà";
@@ -214,7 +214,7 @@ String STR_PAGE
     Text [ ENGLISH ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "P gina" ;
+    Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Dia" ;
     Text [ danish ] = "Side" ;
@@ -386,7 +386,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text [ ENGLISH ] = "Second Outlinelevel " ;
     Text [ norwegian ] = "Second Outlinelevel " ;
     Text [ italian ] = "Secondo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Segundo N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Segundo N?vel de Esbo?o" ;
     Text [ portuguese ] = "Segundo nível do esquema" ;
     Text [ finnish ] = "Toinen jäsennystaso" ;
     Text [ danish ] = "Andet dispositionsniveau" ;
@@ -415,7 +415,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text [ ENGLISH ] = "Third Outlinelevel " ;
     Text [ norwegian ] = "Third Outlinelevel " ;
     Text [ italian ] = "Terzo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Terceiro N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Terceiro N?vel de Esbo?o" ;
     Text [ portuguese ] = "Terceiro nível do esquema" ;
     Text [ finnish ] = "Kolmas jäsennystaso" ;
     Text [ danish ] = "Tredje dispositionsniveau" ;
@@ -444,7 +444,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text [ ENGLISH ] = "Fourth Outlinelevel " ;
     Text [ norwegian ] = "Fourth Outlinelevel " ;
     Text [ italian ] = "Quarto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Quarto N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Quarto N?vel de Esbo?o" ;
     Text [ portuguese ] = "Quarto nível do esquema" ;
     Text [ finnish ] = "Neljäs jäsennystaso" ;
     Text [ danish ] = "Fjerde dispositionsniveau" ;
@@ -474,7 +474,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text [ ENGLISH ] = "Fifth Outlinelevel " ;
     Text [ norwegian ] = "Fifth Outlinelevel " ;
     Text [ italian ] = "Quinto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Quinto N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Quinto N?vel de Esbo?o" ;
     Text [ portuguese ] = "Quinto nível do esquema" ;
     Text [ finnish ] = "Viides jäsennystaso" ;
     Text [ danish ] = "Femte dispositionsniveau" ;
@@ -503,7 +503,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text [ ENGLISH ] = "Sixth Outlinelevel " ;
     Text [ norwegian ] = "Sixth Outlinelevel " ;
     Text [ italian ] = "Sesto livello struttura" ;
-    Text [ portuguese_brazilian ] = "Sexto N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Sexto N?vel de Esbo?o" ;
     Text [ portuguese ] = "Sexto nível do esquema" ;
     Text [ finnish ] = "Kuudes jäsennystaso" ;
     Text [ danish ] = "Sjette dispositionsniveau" ;
@@ -532,7 +532,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text [ ENGLISH ] = "Seventh Outlinelevel " ;
     Text [ norwegian ] = "Seventh Outlinelevel " ;
     Text [ italian ] = "Settimo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Sétimo N¡vel l de Esboço" ;
+    Text [ portuguese_brazilian ] = "S?timo N?vel l de Esbo?o" ;
     Text [ portuguese ] = "Sétimo nível do esquema" ;
     Text [ finnish ] = "Seitsemäs jäsennystaso" ;
     Text [ danish ] = "Syvende dispositionsniveau" ;
@@ -561,7 +561,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text [ ENGLISH ] = "Eigth Outlinelevel " ;
     Text [ norwegian ] = "Eigth Outlinelevel " ;
     Text [ italian ] = "Ottavo livello struttura" ;
-    Text [ portuguese_brazilian ] = "Oitavo N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Oitavo N?vel de Esbo?o" ;
     Text [ portuguese ] = "Oitavo nível do esquema" ;
     Text [ finnish ] = "Kahdeksas jäsennystaso" ;
     Text [ danish ] = "Ottende dispositionsniveau" ;
@@ -590,7 +590,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text [ ENGLISH ] = "Ninth Outlinelevel " ;
     Text [ norwegian ] = "Ninth Outlinelevel " ;
     Text [ italian ] = "Nono livello struttura" ;
-    Text [ portuguese_brazilian ] = "Nono N¡vel de Esboço" ;
+    Text [ portuguese_brazilian ] = "Nono N?vel de Esbo?o" ;
     Text [ portuguese ] = "Nono nível do esquema" ;
     Text [ finnish ] = "Yhdeksäs jäsennystaso" ;
     Text [ danish ] = "Niende dispositionsniveau" ;
@@ -674,7 +674,7 @@ String STR_PRESOBJ_TITLE
     /* ### ACHTUNG: Neuer Text in Resource? Titel durch Klicken hinzufügen : Titel durch Klicken hinzuf³gen */
     Text = "Titel durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add a title" ;
-    Text [ portuguese_brazilian ] = "Titel durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Titel durch Doppelklicken hinzuf?en" ;
     Text [ english_us ] = "Click to add title" ;
     Text [ portuguese ] = "Inserir texto com clique duplo" ;
     Text [ swedish ] = "Lägg till rubrik genom att klicka" ;
@@ -703,7 +703,7 @@ String STR_PRESOBJ_OUTLINE
     /* ### ACHTUNG: Neuer Text in Resource? Gliederung durch Klicken hinzufügen : Gliederung durch Klicken hinzuf³gen */
     Text = "Gliederung durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add an outline" ;
-    Text [ portuguese_brazilian ] = "Gliederung durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Gliederung durch Doppelklicken hinzuf?en" ;
     Text [ english_us ] = "Click to add an outline" ;
     Text [ portuguese ] = "Clique para inserir esquema" ;
     Text [ swedish ] = "Lägg till disposition genom att klicka" ;
@@ -732,7 +732,7 @@ String STR_PRESOBJ_TEXT
     /* ### ACHTUNG: Neuer Text in Resource? Text durch Klicken hinzufügen : Text durch Klicken hinzuf³gen */
     Text = "Text durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add text" ;
-    Text [ portuguese_brazilian ] = "Text durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Text durch Doppelklicken hinzuf?en" ;
     Text [ english_us ] = "Click to add text" ;
     Text [ portuguese ] = "Inserir texto com clique duplo" ;
     Text [ swedish ] = "Klicka för att lägga till text" ;
@@ -761,7 +761,7 @@ String STR_PRESOBJ_NOTESTEXT
     /* ### ACHTUNG: Neuer Text in Resource? Notizen durch Klicken hinzufügen : Notizen durch Klicken hinzuf³gen */
     Text = "Notizen durch Klicken hinzufügen" ;
     Text [ ENGLISH ] = "Click to add notes" ;
-    Text [ portuguese_brazilian ] = "Notizen durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Notizen durch Doppelklicken hinzuf?en" ;
     Text [ english_us ] = "Click to add notes" ;
     Text [ portuguese ] = "Clique para inserir anotações" ;
     Text [ swedish ] = "Lägg till anteckningar genom att klicka" ;
@@ -797,7 +797,7 @@ String STR_PRESOBJ_GRAPHIC
     Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till grafik genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj grafik ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Graphik durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Graphik durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir gráfico com duplo clique" ;
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼ĞÎ";
     Text[ russian ] = "Äîáàâèòü ğèñóíîê äâîéíûì ùåë÷êîì";
@@ -826,7 +826,7 @@ String STR_PRESOBJ_OBJECT
     Text [ dutch ] = "Dubbelklik om object toe te voegen" ;
     Text [ swedish ] = "Lägg till objekt genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj objekt ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Objekt durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Objekt durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir objecto com clique duplo" ;
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê¼ÓÈë¶ÔÏó";
     Text[ russian ] = "Äîáàâèòü îáúåêò äâîéíûì ùåë÷êîì";
@@ -855,7 +855,7 @@ String STR_PRESOBJ_CHART
     Text [ french ] = "Double-clic pour insérer un diagramme" ;
     Text [ swedish ] = "Lägg till diagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj diagram ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Diagramm durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Diagramm durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir gráfico com clique duplo" ;
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼±í";
     Text[ russian ] = "Äîáàâèòü äèàãğàììó äâîéíûì ùåë÷êîì";
@@ -884,7 +884,7 @@ String STR_PRESOBJ_ORGCHART
     Text [ dutch ] = "Dubbelklik om organisatiediagram toe te voegen" ;
     Text [ swedish ] = "Lägg till organisationsdiagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj organisationsdiagram ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Organisationsdiagramm durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Organisationsdiagramm durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir gráfico de organização com clique duplo" ;
     Text[ chinese_simplified ] = "Ë«»÷Êó±êĞÂÔö×éÖ¯Í¼±í";
     Text[ russian ] = "Äîáàâèòü îğãàíèçàöèîííóş äèàãğàììó äâîéíûì ùåë÷êîì ìûøè";
@@ -913,7 +913,7 @@ String STR_PRESOBJ_TABLE
     Text [ dutch ] = "Dubbelklik om werkblad toe te voegen" ;
     Text [ swedish ] = "Dubbelklicka för att lägga till tabell" ;
     Text [ danish ] = "Tilføj regneark ved at dobbeltklikke" ;
-    Text [ portuguese_brazilian ] = "Tabelle durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Tabelle durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir folha de cálculo com clique duplo" ;
     Text[ chinese_simplified ] = "ÇëÄúË«»÷Êó±êĞÂÔö¹¤×÷±í";
     Text[ russian ] = "Äîáàâèòü òàáëèöó äâîéíûì ùåë÷êîì";
@@ -965,7 +965,7 @@ String STR_OUTLINEVIEWSHELL
     Text [ ENGLISH ] = "Outline mode" ;
     Text [ norwegian ] = "Outline mode" ;
     Text [ italian ] = "Modo struttura" ;
-    Text [ portuguese_brazilian ] = "Modo Esboço" ;
+    Text [ portuguese_brazilian ] = "Modo Esbo?o" ;
     Text [ portuguese ] = "Modo Esquema" ;
     Text [ finnish ] = "Jäsennysnäkymä" ;
     Text [ danish ] = "Dispositionsmodus" ;
@@ -1082,7 +1082,7 @@ String STR_BEZIEROBJECTBARSHELL
     Text [ ENGLISH ] = "Bézier mode" ;
     Text [ norwegian ] = "B,zier mode" ;
     Text [ italian ] = "Modo Bézier" ;
-    Text [ portuguese_brazilian ] = "Modo Bézier" ;
+    Text [ portuguese_brazilian ] = "Modo B?zier" ;
     Text [ portuguese ] = "Modo Bézier" ;
     Text [ finnish ] = "Bézier-tila" ;
     Text [ danish ] = "Beziermodus" ;
@@ -1196,7 +1196,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text [ ENGLISH ] = "standard" ;
     Text [ norwegian ] = "standard" ;
     Text [ italian ] = "Standard" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
+    Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Koti" ;
     Text [ danish ] = "Standard" ;
@@ -1207,7 +1207,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -1253,7 +1253,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text [ ENGLISH ] = "standard" ;
     Text [ norwegian ] = "standard" ;
     Text [ italian ] = "Standard" ;
-    Text [ portuguese_brazilian ] = "padrão" ;
+    Text [ portuguese_brazilian ] = "padr?o" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Vakio" ;
     Text [ danish ] = "Standard" ;
@@ -1264,7 +1264,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -1312,7 +1312,7 @@ String STR_UNDO_MOVEPAGES
     Text [ ENGLISH ] = "Move pages" ;
     Text [ norwegian ] = "Move pages" ;
     Text [ italian ] = "Sposta pagine" ;
-    Text [ portuguese_brazilian ] = "Move os p ginas" ;
+    Text [ portuguese_brazilian ] = "Move os p?ginas" ;
     Text [ portuguese ] = "Mover páginas" ;
     Text [ finnish ] = "Siirrä dioja" ;
     Text [ danish ] = "Flyt sider" ;
@@ -1385,7 +1385,7 @@ String STR_POOLSHEET_MEASURE
     Text [ italian ] = "Linea di quotatura" ;
     Text [ spanish ] = "Línea de dimensiones" ;
     Text [ french ] = "Ligne de cote" ;
-    Text [ portuguese_brazilian ] = "Maßlinie" ;
+    Text [ portuguese_brazilian ] = "Ma?linie" ;
     Text [ portuguese ] = "Linha de dimensão" ;
     Text[ chinese_simplified ] = "³ß´çÏß";
     Text[ russian ] = "Ëèíèÿ ğàçìåğà";
@@ -1474,7 +1474,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text [ french ] = "Objet sans remplissage" ;
     Text [ swedish ] = "Objekt utan fyllning" ;
     Text [ danish ] = "Objekt uden fyld" ;
-    Text [ portuguese_brazilian ] = "Objekt ohne Füllung" ;
+    Text [ portuguese_brazilian ] = "Objekt ohne F?lung" ;
     Text [ portuguese ] = "Objecto não preenchido" ;
     Text[ chinese_simplified ] = "²»ÌîÉ«µÄ¶ÔÏó";
     Text[ russian ] = "Îáúåêò áåç çàëèâêè";
@@ -1535,7 +1535,7 @@ String STR_POOLSHEET_TEXTBODY
     Text [ dutch ] = "Tekstblok" ;
     Text [ swedish ] = "Brödtext" ;
     Text [ danish ] = "Brødtekst" ;
-    Text [ portuguese_brazilian ] = "Textkörper" ;
+    Text [ portuguese_brazilian ] = "Textk?per" ;
     Text [ portuguese ] = "Corpo do texto" ;
     Text[ chinese_simplified ] = "ÕıÎÄ";
     Text[ russian ] = "Îñíîâíîé òåêñò";
@@ -1568,7 +1568,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text [ dutch ] = "Tekstblok uitgevuld" ;
     Text [ swedish ] = "Marginaljustera brödtext" ;
     Text [ danish ] = "Lige margener i brødtekst" ;
-    Text [ portuguese_brazilian ] = "Textkörper Blocksatz" ;
+    Text [ portuguese_brazilian ] = "Textk?per Blocksatz" ;
     Text [ portuguese ] = "Corpo do texto justificado" ;
     Text[ chinese_simplified ] = "ÕıÎÄ×óÓÒ¶ÔÆë";
     Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ïî øèğèíå";
@@ -1601,7 +1601,7 @@ String STR_POOLSHEET_TEXTBODY_INDENT
     Text [ french ] = "Alinéa" ;
     Text [ swedish ] = "Brödtext indrag" ;
     Text [ danish ] = "Brødtekst indrykning" ;
-    Text [ portuguese_brazilian ] = "Textkörper Einzug" ;
+    Text [ portuguese_brazilian ] = "Textk?per Einzug" ;
     Text [ portuguese ] = "Abrir parágrafo" ;
     Text[ chinese_simplified ] = "ÕıÎÄËõ½ø";
     Text[ russian ] = "Ïåğâàÿ ñòğîêà ñ îòñòóïîì";
@@ -1718,7 +1718,7 @@ String STR_POOLSHEET_HEADLINE
     Text [ french ] = "Titre" ;
     Text [ swedish ] = "Överskrift" ;
     Text [ danish ] = "Overskrift" ;
-    Text [ portuguese_brazilian ] = "Überschrift" ;
+    Text [ portuguese_brazilian ] = "?berschrift" ;
     Text [ portuguese ] = "Título" ;
     Text[ chinese_simplified ] = "´ó±êÌâ";
     Text[ russian ] = "Çàãîëîâîê";
@@ -1751,7 +1751,7 @@ String STR_POOLSHEET_HEADLINE1
     Text [ dutch ] = "Kop1" ;
     Text [ swedish ] = "Överskrift1" ;
     Text [ danish ] = "Overskrift1" ;
-    Text [ portuguese_brazilian ] = "Überschrift1" ;
+    Text [ portuguese_brazilian ] = "?berschrift1" ;
     Text [ portuguese ] = "Título1" ;
     Text[ chinese_simplified ] = "´ó±êÌâ 1";
     Text[ russian ] = "Çàãîëîâîê1";
@@ -1784,7 +1784,7 @@ String STR_POOLSHEET_HEADLINE2
     Text [ dutch ] = "Kop2" ;
     Text [ swedish ] = "Överskrift2" ;
     Text [ danish ] = "Overskrift2" ;
-    Text [ portuguese_brazilian ] = "Überschrift2" ;
+    Text [ portuguese_brazilian ] = "?berschrift2" ;
     Text [ portuguese ] = "Título2" ;
     Text[ chinese_simplified ] = "´ó±êÌâ 2";
     Text[ russian ] = "Çàãîëîâîê2";
@@ -2062,7 +2062,7 @@ String STR_PRESOBJ_IMAGE
     Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till bild genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj billede via dobbeltklik" ;
-    Text [ portuguese_brazilian ] = "Bild durch Doppelklicken hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Bild durch Doppelklicken hinzuf?en" ;
     Text [ portuguese ] = "Inserir imagem com clique duplo" ;
     Text[ chinese_simplified ] = "Í¨¹ıË«»÷²åÈëÍ¼Ïñ";
     Text[ russian ] = "Äîáàâèòü êàğòèíêó äâîéíûì ùåë÷êîì";
@@ -2094,7 +2094,7 @@ String STR_POOLSHEET_ARROW
     Text [ spanish ] = "Flecha" ;
     Text [ danish ] = "Pil" ;
     Text [ swedish ] = "Pil" ;
-    Text [ finnish ] = "Arrow" ;
+    Text [ finnish ] = "Pfeil" ;
     Text [ english_us ] = "Arrow" ;
     Text[ chinese_simplified ] = "¼ıÍ·";
     Text[ russian ] = "Ñòğåëêà";
