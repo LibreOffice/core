@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2002-09-20 12:37:33 $
+#   last change: $Author: obo $ $Date: 2002-10-10 13:47:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,8 @@ GEN_HID=TRUE
 # --- Allgemein ----------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=  $(SLB)$/appl.lib		\
-            $(SLB)$/explorer.lib	\
+
+LIB1FILES=  $(SLB)$/explorer.lib	\
             $(SLB)$/doc.lib			\
             $(SLB)$/view.lib		\
             $(SLB)$/control.lib		\
@@ -97,8 +97,7 @@ HELPIDFILES=\
 
 .IF "$(GUI)"!="UNX"
 LIB2TARGET= $(LB)$/$(TARGET).lib
-LIB2FILES=  $(LB)$/appl.lib       \
-            $(LB)$/isfx.lib
+LIB2FILES=   $(LB)$/isfx.lib
 .ENDIF
 
 SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
