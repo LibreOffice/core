@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:44:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _EDITSH_HXX
 #define _EDITSH_HXX
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -255,6 +254,9 @@ public:
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( sal_uInt32 nType );
+
+    // count words in current selection
+    void CountWords( SwDocStat& rStat ) const;
 
     // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
     // versteckte Bereiche, versteckte Absaetze
