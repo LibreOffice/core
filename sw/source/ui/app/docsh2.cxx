@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:45:48 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,8 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#include <sfx2/fcontnr.hxx>
 
 #include <sw3io.hxx>
 
@@ -914,10 +916,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                         SfxObjectFactory &rFact = GetFactory();
+                        SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
+                        SfxFilterMatcherIter aIter( &aMatcher );
                         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                        for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
+                        const SfxFilter* pFlt = aIter.First();
+                        while( pFlt )
                         {
-                            const SfxFilter* pFlt = rFact.GetFilter( i );
                             if( pFlt && pFlt->IsAllowedAsTemplate() )
                             {
                                 const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
@@ -927,6 +931,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
                                 xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
 
+                            pFlt = aIter.Next();
                         }
 
                         if( ERRCODE_NONE == aDlgHelper.Execute() )
@@ -1579,20 +1584,14 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 
     if (nVersion == SOFFICE_FILEFORMAT_31)
     {
-//        *pClassName       = SvGlobalName(0xDC5C7E40L, 0xB35C, 0x101B, 0x99, 0x61,
-//                                     0x04, 0x02, 0x1C, 0x00, 0x70,0x02);
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_30 );
-
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_30;
         pAppName->AssignAscii( "Swriter 3.1" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_31);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_40)
     {
-//        *pClassName       = SvGlobalName(0xDC5C7E40L, 0xB35C, 0x101B, 0x99, 0x61,
-//                                     0x04, 0x02, 0x1C, 0x00, 0x70,0x02);
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_40 );
-
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_40;
         pAppName->AssignAscii( "StarWriter 4.0" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_40);
@@ -1605,8 +1604,11 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     }
     else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
+        *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
+        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
+
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
 
