@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:35:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#include <rtl/logfile.hxx>
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -123,6 +125,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGSUBSTITUTION_HPP_
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #endif
+
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -293,7 +297,7 @@ struct FactoryInfo
         ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
         ::rtl::OUString     getEmptyDocumentURL () const { return sEmptyDocumentURL;  };
         ::rtl::OUString     getDefaultFilter    () const { return sDefaultFilter;     };
-        sal_Bool            isDefaultFilterReadonly(  ) const { return bDefaultFilterReadonly; }
+        sal_Bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
 
         //---------------------------------------------------------------------------------------------------------
@@ -457,7 +461,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
-         SvtModuleOptions_Impl();
+         SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass);
         ~SvtModuleOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
@@ -487,6 +491,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
                                                     const ::rtl::OUString&              sAttributes);
         void            SetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ,
                                                     const ::rtl::OUString&              sFilter    );
+        void            MakeReadonlyStatesAvailable();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -505,6 +510,8 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     //-------------------------------------------------------------------------------------------------------------
     private:
         FactoryInfoList     m_lFactories;
+        sal_Bool            m_bReadOnlyStatesWellKnown;
+        SvtModuleOptions*   m_pOutsideClass;
 };
 
 //_________________________________________________________________________________________________________________
@@ -525,14 +532,14 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
-SvtModuleOptions_Impl::SvtModuleOptions_Impl()
+SvtModuleOptions_Impl::SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass)
     :   ::utl::ConfigItem( ROOTNODE_FACTORIES )
+    ,   m_bReadOnlyStatesWellKnown( sal_False )
+    ,   m_pOutsideClass( pOutsideClass )
 {
     // First initialize list of factory infos! Otherwise we couldnt gurantee right working of these class.
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
-    {
         m_lFactories[nFactory].free();
-    }
 
     // Get name list of all existing set node names in configuration to read her properties in impl_Read().
     // These list is a list of long names of our factories.
@@ -1064,9 +1071,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
     // Expand every set node name in lFactories to full qualified pathes to his properties
     // and get right values from configuration.
     const css::uno::Sequence< ::rtl::OUString > lProperties = impl_ExpandSetNames( lFactories  );
-    const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties      ( lProperties );
-    com::sun::star::uno::Sequence< sal_Bool > lReadonlyStates =
-                                    GetReadOnlyStates(lProperties);
+    const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties( lProperties );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -1088,10 +1093,10 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
     sal_Int32                   nNodeCount      = lFactories.getLength();
     FactoryInfo*                pInfo           = NULL                  ;
     SvtModuleOptions::EFactory  eFactory                                ;
-    ::rtl::OUString             sFactoryName                            ;
+
     for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
     {
-        sFactoryName = lFactories[nSetNode];
+        const ::rtl::OUString& sFactoryName = lFactories[nSetNode];
         if( ClassifyFactoryByName( sFactoryName, eFactory ) == sal_True )
         {
             ::rtl::OUString sTemp;
@@ -1113,9 +1118,6 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
                 pInfo->initEmptyDocumentURL( sTemp );
             if (lValues[nPropertyStart+PROPERTYHANDLE_DEFAULTFILTER   ] >>= sTemp)
                 pInfo->initDefaultFilter( sTemp );
-
-            pInfo->setDefaultFilterReadonly(lReadonlyStates[nPropertyStart+PROPERTYHANDLE_DEFAULTFILTER]);
-
             if (lValues[nPropertyStart+PROPERTYHANDLE_ICON] >>= nTemp)
                 pInfo->initIcon( nTemp );
         }
@@ -1123,6 +1125,40 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
     }
 }
 
+//*****************************************************************************************************************
+void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
+{
+    if (m_bReadOnlyStatesWellKnown)
+        return;
+
+    css::uno::Sequence< ::rtl::OUString > lFactories = GetNodeNames(::rtl::OUString());
+    sal_Int32 c = lFactories.getLength();
+    sal_Int32 i = 0;
+    for (i=0; i<c; ++i)
+    {
+        ::rtl::OUStringBuffer sPath(256);
+        sPath.append(lFactories[i]             );
+        sPath.append(PATHSEPERATOR             );
+        sPath.append(PROPERTYNAME_DEFAULTFILTER);
+
+        lFactories[i] = sPath.makeStringAndClear();
+    }
+
+    css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);
+    for (i=0; i<c; ++i)
+    {
+        ::rtl::OUString&            rFactoryName = lFactories[i];
+        SvtModuleOptions::EFactory  eFactory                    ;
+
+        if (!ClassifyFactoryByName(rFactoryName, eFactory))
+            continue;
+
+        FactoryInfo& rInfo = m_lFactories[eFactory];
+        rInfo.setDefaultFilterReadonly(lReadonlyStates[i]);
+    }
+
+    m_bReadOnlyStatesWellKnown = sal_True;
+}
 
 //*****************************************************************************************************************
 //  initialize static member
@@ -1151,7 +1187,11 @@ SvtModuleOptions::SvtModuleOptions()
     ++m_nRefCount;
     if( m_nRefCount == 1 )
     {
-        m_pDataContainer = new SvtModuleOptions_Impl;
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtModuleOptions_Impl::ctor()");
+        m_pDataContainer = new SvtModuleOptions_Impl(this);
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_MODULEOPTIONS);
     }
 }
 
@@ -1231,6 +1271,7 @@ sal_Bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 sal_Bool SvtModuleOptions::IsDefaultFilterReadonly( EFactory eFactory   ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    m_pDataContainer->MakeReadonlyStatesAvailable();
     return m_pDataContainer->IsDefaultFilterReadonly( eFactory );
 }
 //*****************************************************************************************************************
