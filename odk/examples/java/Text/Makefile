@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:17:16 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:18:27 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -114,15 +114,15 @@ $(EXAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR) $(APP5_JAR) $(
 	@echo -
 	@echo Please use one of the following commands to execute the examples!
 	@echo ------
-	@echo make BookmarkInsertion.run
-	@echo make HardFormatting.run
-	@echo make StyleCreation.run
-	@echo make StyleInitialization.run
-	@echo make SWriter.run
-	@echo make TextDocumentStructure.run
-	@echo make TextReplace.run
-	@echo make WriterSelector.run
-	@echo make GraphicsInserter.run
+	@echo $(MAKE) BookmarkInsertion.run
+	@echo $(MAKE) HardFormatting.run
+	@echo $(MAKE) StyleCreation.run
+	@echo $(MAKE) StyleInitialization.run
+	@echo $(MAKE) SWriter.run
+	@echo $(MAKE) TextDocumentStructure.run
+	@echo $(MAKE) TextReplace.run
+	@echo $(MAKE) WriterSelector.run
+	@echo $(MAKE) GraphicsInserter.run
 	@echo --------
 	@echo The GraphicsInserter needs parameters. Please use the following command to 
 	@echo start the demo if you do not want the default parameters specified in the 
