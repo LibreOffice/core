@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:37:20 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 08:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,10 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
         const OTypeInfo* pOldType = m_pActFieldDescr->getTypeInfo();
         if(_pType != pOldType)
         {
+            // reset type depending information
+            m_pActFieldDescr->SetFormatKey(0);
+            m_pActFieldDescr->SetDefaultValue(::rtl::OUString());
+
             sal_Bool bForce = _bForce || pOldType == NULL || pOldType->nType != _pType->nType;
             switch(_pType->nType)
             {
