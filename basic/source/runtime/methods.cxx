@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2004-09-30 13:27:47 $
+ *  last change: $Author: kz $ $Date: 2004-09-30 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,11 +268,9 @@ String getFullPath( const String& aRelPath )
 
     // #80204 Try first if it already is a valid URL
     INetURLObject aURLObj( aRelPath );
-    if (!aURLObj.HasError() && aURLObj.GetProtocol() != INET_PROT_GENERIC)
-    {
-        aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-    else
+    aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+
+    if( !aFileURL.getLength() )
     {
         File::getFileURLFromSystemPath( aRelPath, aFileURL );
     }
