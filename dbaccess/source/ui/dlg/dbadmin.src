@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:35:01 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,6 +1293,16 @@ TabPage PAGE_GENERAL
         Text[ korean ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ turkish ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ thai ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ english_us ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ greek ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ dutch ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ french ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ finnish ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ danish ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ chinese_simplified ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ chinese_traditional ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ arabic ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ catalan ] = "To adjust the settings, go to the MySQL tab page.";
     };
 };
 
@@ -2142,6 +2152,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "Type of connection";
         Text[ turkish ] = "Type of connection";
         Text[ thai ] = "Type of connection";
+        Text[ english_us ] = "Type of connection";
+        Text[ greek ] = "Type of connection";
+        Text[ dutch ] = "Type of connection";
+        Text[ french ] = "Type of connection";
+        Text[ finnish ] = "Type of connection";
+        Text[ danish ] = "Type of connection";
+        Text[ chinese_simplified ] = "Type of connection";
+        Text[ chinese_traditional ] = "Type of connection";
+        Text[ arabic ] = "Type of connection";
+        Text[ catalan ] = "Type of connection";
     };
 
     RadioButton RB_USEMYODBC
@@ -2161,6 +2181,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "Use existing My~ODBC data source";
         Text[ turkish ] = "Use existing My~ODBC data source";
         Text[ thai ] = "Use existing My~ODBC data source";
+        Text[ english_us ] = "Use existing My~ODBC data source";
+        Text[ greek ] = "Use existing My~ODBC data source";
+        Text[ dutch ] = "Use existing My~ODBC data source";
+        Text[ french ] = "Use existing My~ODBC data source";
+        Text[ finnish ] = "Use existing My~ODBC data source";
+        Text[ danish ] = "Use existing My~ODBC data source";
+        Text[ chinese_simplified ] = "Use existing My~ODBC data source";
+        Text[ chinese_traditional ] = "Use existing My~ODBC data source";
+        Text[ arabic ] = "Use existing My~ODBC data source";
+        Text[ catalan ] = "Use existing My~ODBC data source";
     };
 
     RadioButton RB_USECONNECTORJ3
@@ -2181,6 +2211,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "Use Connector/~J3";
         Text[ turkish ] = "Use Connector/~J3";
         Text[ thai ] = "Use Connector/~J3";
+        Text[ english_us ] = "Use Connector/~J3";
+        Text[ greek ] = "Use Connector/~J3";
+        Text[ dutch ] = "Use Connector/~J3";
+        Text[ french ] = "Use Connector/~J3";
+        Text[ finnish ] = "Use Connector/~J3";
+        Text[ danish ] = "Use Connector/~J3";
+        Text[ chinese_simplified ] = "Use Connector/~J3";
+        Text[ chinese_traditional ] = "Use Connector/~J3";
+        Text[ arabic ] = "Use Connector/~J3";
+        Text[ catalan ] = "Use Connector/~J3";
     };
 
     FixedText FT_JDBCDRIVERCLASS
@@ -2200,6 +2240,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "MySQL JDBC d~river class";
         Text[ turkish ] = "MySQL JDBC d~river class";
         Text[ thai ] = "MySQL JDBC d~river class";
+        Text[ english_us ] = "MySQL JDBC d~river class";
+        Text[ greek ] = "MySQL JDBC d~river class";
+        Text[ dutch ] = "MySQL JDBC d~river class";
+        Text[ french ] = "MySQL JDBC d~river class";
+        Text[ finnish ] = "MySQL JDBC d~river class";
+        Text[ danish ] = "MySQL JDBC d~river class";
+        Text[ chinese_simplified ] = "MySQL JDBC d~river class";
+        Text[ chinese_traditional ] = "MySQL JDBC d~river class";
+        Text[ arabic ] = "MySQL JDBC d~river class";
+        Text[ catalan ] = "MySQL JDBC d~river class";
     };
     Edit ET_JDBCDRIVERCLASS
     {
@@ -2226,6 +2276,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "General";
         Text[ turkish ] = "General";
         Text[ thai ] = "General";
+        Text[ english_us ] = "General";
+        Text[ greek ] = "General";
+        Text[ dutch ] = "General";
+        Text[ french ] = "General";
+        Text[ finnish ] = "General";
+        Text[ danish ] = "General";
+        Text[ chinese_simplified ] = "General";
+        Text[ chinese_traditional ] = "General";
+        Text[ arabic ] = "General";
+        Text[ catalan ] = "General";
     };
 
     FixedText FT_CONNECTURL
@@ -2246,6 +2306,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "~Data source URL";
         Text[ turkish ] = "~Data source URL";
         Text[ thai ] = "~Data source URL";
+        Text[ english_us ] = "~Data source URL";
+        Text[ greek ] = "~Data source URL";
+        Text[ dutch ] = "~Data source URL";
+        Text[ french ] = "~Data source URL";
+        Text[ finnish ] = "~Data source URL";
+        Text[ danish ] = "~Data source URL";
+        Text[ chinese_simplified ] = "~Data source URL";
+        Text[ chinese_traditional ] = "~Data source URL";
+        Text[ arabic ] = "~Data source URL";
+        Text[ catalan ] = "~Data source URL";
     };
     Edit ET_CONNECTURL
     {
@@ -2281,6 +2351,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "~User name";
         Text[ turkish ] = "~User name";
         Text[ thai ] = "~User name";
+        Text[ english_us ] = "~User name";
+        Text[ greek ] = "~User name";
+        Text[ dutch ] = "~User name";
+        Text[ french ] = "~User name";
+        Text[ finnish ] = "~User name";
+        Text[ danish ] = "~User name";
+        Text[ chinese_simplified ] = "~User name";
+        Text[ chinese_traditional ] = "~User name";
+        Text[ arabic ] = "~User name";
+        Text[ catalan ] = "~User name";
     };
     Edit ET_USERNAME
     {
@@ -2307,6 +2387,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "Password r~equired";
         Text[ turkish ] = "Password r~equired";
         Text[ thai ] = "Password r~equired";
+        Text[ english_us ] = "Password r~equired";
+        Text[ greek ] = "Password r~equired";
+        Text[ dutch ] = "Password r~equired";
+        Text[ french ] = "Password r~equired";
+        Text[ finnish ] = "Password r~equired";
+        Text[ danish ] = "Password r~equired";
+        Text[ chinese_simplified ] = "Password r~equired";
+        Text[ chinese_traditional ] = "Password r~equired";
+        Text[ arabic ] = "Password r~equired";
+        Text[ catalan ] = "Password r~equired";
     };
     FixedText FT_CHARSET
     {
@@ -2325,6 +2415,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "~Character set";
         Text[ turkish ] = "~Character set";
         Text[ thai ] = "~Character set";
+        Text[ english_us ] = "~Character set";
+        Text[ greek ] = "~Character set";
+        Text[ dutch ] = "~Character set";
+        Text[ french ] = "~Character set";
+        Text[ finnish ] = "~Character set";
+        Text[ danish ] = "~Character set";
+        Text[ chinese_simplified ] = "~Character set";
+        Text[ chinese_traditional ] = "~Character set";
+        Text[ arabic ] = "~Character set";
+        Text[ catalan ] = "~Character set";
     };
     ListBox LB_CHARSET
     {
@@ -2352,6 +2452,16 @@ TabPage PAGE_MYSQL
         Text[ korean ] = "<host>:<3306>/<DBNAME>";
         Text[ turkish ] = "<host>:<3306>/<DBNAME>";
         Text[ thai ] = "<host>:<3306>/<DBNAME>";
+        Text[ english_us ] = "<host>:<3306>/<DBNAME>";
+        Text[ greek ] = "<host>:<3306>/<DBNAME>";
+        Text[ dutch ] = "<host>:<3306>/<DBNAME>";
+        Text[ french ] = "<host>:<3306>/<DBNAME>";
+        Text[ finnish ] = "<host>:<3306>/<DBNAME>";
+        Text[ danish ] = "<host>:<3306>/<DBNAME>";
+        Text[ chinese_simplified ] = "<host>:<3306>/<DBNAME>";
+        Text[ chinese_traditional ] = "<host>:<3306>/<DBNAME>";
+        Text[ arabic ] = "<host>:<3306>/<DBNAME>";
+        Text[ catalan ] = "<host>:<3306>/<DBNAME>";
     };
 
 };
@@ -4252,6 +4362,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.118  2002/12/05 10:35:01  kz
+ *  Merge SRX644: 12/05/02 - 11:31:03
+ *
  *  Revision 1.117  2002/11/26 07:52:34  oj
  *  #105424# change string
  *
