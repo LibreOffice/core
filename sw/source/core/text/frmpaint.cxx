@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-29 10:21:23 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,13 +523,13 @@ SwRect SwTxtFrm::Paint()
              pRepaint->Right( l );
         pRepaint->SetOfst( 0 );
         aRet = *pRepaint;
-    }
-    ResetRepaint();
 
 #ifdef VERTICAL_LAYOUT
-    if ( IsVertical() )
-        SwitchHorizontalToVertical( aRet );
+        if ( IsVertical() )
+            SwitchHorizontalToVertical( aRet );
 #endif
+    }
+    ResetRepaint();
 
     return aRet;
 }
