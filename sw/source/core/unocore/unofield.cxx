@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:52:29 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,6 +1484,8 @@ void SwXTextField::attachToRange(
                              TYP_HIDDENTXTFLD :
                                 TYP_CONDTXTFLD);
                 ((SwHiddenTxtField*)pFld)->SetValue(m_pProps->bBool1);
+                Any aVal; aVal <<= (OUString)m_pProps->sPar4;
+                pFld->PutValue(aVal, FIELD_PROP_PAR4 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_HIDDEN_PARA:
