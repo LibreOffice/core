@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:11:11 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:08:17 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -177,17 +177,17 @@ $(SAMPLE_NAME) : $(COMP_REGISTERFLAG) $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(A
 	@echo -
 	@echo Please use the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
-	@echo make $(APP4_NAME).run
-	@echo make $(APP5_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) $(APP4_NAME).run
+	@echo $(MAKE) $(APP5_NAME).run
 	@echo --------
 	@echo The Chart add-in component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo Load the "$(QM)AddInChart.ods$(QM)" document in your office to see the new chart type,
 	@echo and see the example description.
 	@echo -
-	@echo make AddInChart.ods.load
+	@echo $(MAKE) AddInChart.ods.load
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(SAMPLE_CLASS_OUT)/%.jar
