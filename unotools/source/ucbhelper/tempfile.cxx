@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:40:14 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <unotools/tempfile.hxx>
+#include <tools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
@@ -88,6 +89,7 @@ struct TempFile_Impl
                     : pStream(0)
                     {}
 };
+
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 String ConstructTempDir_Impl( const String* pParent )
@@ -126,12 +128,22 @@ String ConstructTempDir_Impl( const String* pParent )
         }
     }
 
+#if 1
+    if ( !aName.Len() )
+    {
+        // if no parent or invalid parent : use system directory
+        if ( !aTempNameBase_Impl.getLength() )
+            aTempNameBase_Impl = TempFile::GetTempNameBaseDirectory();
+        aName = aTempNameBase_Impl;
+    }
+#else
     if ( !aName.Len() )
     {
         // if no parent or invalid parent : use default directory
         DBG_ASSERT( aTempNameBase_Impl.getLength(), "No TempDir!" );
         aName = aTempNameBase_Impl;
     }
+#endif
 
     // Make sure that directory ends with a separator
     sal_Int32 i = aName.Len();
