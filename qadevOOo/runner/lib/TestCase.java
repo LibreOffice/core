@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestCase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-13 17:33:38 $
+ *  last change:$Date: 2004-11-02 11:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,11 @@ public abstract class TestCase {
                 tEnv.setTestCase(this);
             }
         } catch (Exception e) {
-            System.out.println("Exception while getting Environment "+e.getMessage());
+            String message = e.getMessage();
+            if (message == null)
+                message = e.toString();
+            System.out.println("Exception while getting Environment "+message);
+            e.printStackTrace();
         }
         return tEnv;
     }
