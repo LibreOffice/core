@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implspritecanvas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,12 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#include "implspritecanvas.hxx"
-#include "implcustomsprite.hxx"
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_INTERPOLATIONMODE_HPP_
+#include <drafts/com/sun/star/rendering/InterpolationMode.hpp>
+#endif
+
+#include <implspritecanvas.hxx>
+#include <implcustomsprite.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -77,28 +81,63 @@ namespace cppcanvas
 {
     namespace internal
     {
+        ImplSpriteCanvas::TransformationArbiter::TransformationArbiter() :
+            maTransformation()
+        {
+        }
+
+        void ImplSpriteCanvas::TransformationArbiter::setTransformation( const ::basegfx::B2DHomMatrix& rViewTransform )
+        {
+            maTransformation = rViewTransform;
+        }
+
+        ::basegfx::B2DHomMatrix ImplSpriteCanvas::TransformationArbiter::getTransformation() const
+        {
+            return maTransformation;
+        }
+
+
         ImplSpriteCanvas::ImplSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :
             ImplCanvas( uno::Reference< rendering::XCanvas >(rCanvas,
                                                              uno::UNO_QUERY) ),
             ImplBitmapCanvas( uno::Reference< rendering::XBitmapCanvas >(rCanvas,
                                                                          uno::UNO_QUERY) ),
-            mxSpriteCanvas( rCanvas )
+            mxSpriteCanvas( rCanvas ),
+            mpTransformArbiter( new TransformationArbiter() )
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas(): Invalid canvas" );
+        }
+
+        ImplSpriteCanvas::ImplSpriteCanvas(const ImplSpriteCanvas& rOrig) :
+            ImplCanvas( rOrig ),
+            ImplBitmapCanvas( rOrig ),
+            mxSpriteCanvas( rOrig.getUNOSpriteCanvas() ),
+            mpTransformArbiter( new TransformationArbiter() )
+        {
+            OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas( const ImplSpriteCanvas& ): Invalid canvas" );
+
+            mpTransformArbiter->setTransformation( getTransformation() );
         }
 
         ImplSpriteCanvas::~ImplSpriteCanvas()
         {
         }
 
-        bool ImplSpriteCanvas::updateScreen() const
+        void ImplSpriteCanvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
+        {
+            mpTransformArbiter->setTransformation( rMatrix );
+
+            ImplCanvas::setTransformation( rMatrix );
+        }
+
+        bool ImplSpriteCanvas::updateScreen( bool bUpdateAll ) const
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::updateScreen(): Invalid canvas" );
 
             if( !mxSpriteCanvas.is() )
                 return false;
 
-            return mxSpriteCanvas->updateScreen();
+            return mxSpriteCanvas->updateScreen( bUpdateAll );
         }
 
         CustomSpriteSharedPtr ImplSpriteCanvas::createCustomSprite( const ::basegfx::B2DSize& rSize ) const
@@ -110,7 +149,8 @@ namespace cppcanvas
 
             return CustomSpriteSharedPtr(
                 new ImplCustomSprite( mxSpriteCanvas,
-                                      mxSpriteCanvas->createCustomSprite( ::basegfx::unotools::size2DFromB2DSize(rSize) ) ) );
+                                      mxSpriteCanvas->createCustomSprite( ::basegfx::unotools::size2DFromB2DSize(rSize) ),
+                                      mpTransformArbiter ) );
         }
 
         SpriteSharedPtr ImplSpriteCanvas::createClonedSprite( const SpriteSharedPtr& rSprite ) const
@@ -128,10 +168,20 @@ namespace cppcanvas
 
             return SpriteSharedPtr(
                 new ImplSprite( mxSpriteCanvas,
-                                mxSpriteCanvas->createClonedSprite( rSprite->getUNOSprite() ) ) );
+                                mxSpriteCanvas->createClonedSprite( rSprite->getUNOSprite() ),
+                                mpTransformArbiter ) );
         }
 
-        SpriteCanvasSharedPtr ImplSpriteCanvas::cloneSpriteCanvas() const
+        SpriteSharedPtr ImplSpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& rAnimationBitmaps,
+                                                                   sal_Int8                                                     nInterpolationMode )
+        {
+            return SpriteSharedPtr( new internal::ImplSprite( mxSpriteCanvas,
+                                                              mxSpriteCanvas->createSpriteFromBitmaps( rAnimationBitmaps,
+                                                                                                       rendering::InterpolationMode::NEAREST_NEIGHBOR ),
+                                                              mpTransformArbiter ) );
+        }
+
+        CanvasSharedPtr ImplSpriteCanvas::clone() const
         {
             return SpriteCanvasSharedPtr( new ImplSpriteCanvas( *this ) );
         }
