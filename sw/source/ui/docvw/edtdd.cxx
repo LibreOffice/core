@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void SwEditWin::StartExecuteDrag()
     //erreichbar waere.
     SwDataExchangeRef aRef( new SwDataExchange( rView.GetWrtShell() ) );
     SW_MOD()->pDragDrop = aRef;
-    aRef->Copy( TRUE );
+    aRef->DragAndDrop_Copy();
 
     DBG_TRACE("SW: Vor ExecuteDrag" );
 
@@ -587,6 +587,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:35  hr
+    initial import
+
     Revision 1.174  2000/09/18 16:05:23  willem.vandorp
     OpenOffice header added.
 
