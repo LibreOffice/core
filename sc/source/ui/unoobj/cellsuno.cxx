@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 11:41:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 14:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,8 +1103,13 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
         ScMarkData aMark;
         aMark.MarkFromRangeList( aRanges, FALSE );
 
+        // only for clearContents: EDITATTR is only used if no contents are deleted
+        USHORT nDelFlags = nContentFlags & IDF_ALL;
+        if ( ( nContentFlags & IDF_EDITATTR ) && ( nContentFlags & IDF_CONTENTS ) == 0 )
+            nDelFlags |= IDF_EDITATTR;
+
         ScDocFunc aFunc(*pDocShell);
-        aFunc.DeleteContents( aMark, nContentFlags, TRUE, TRUE );
+        aFunc.DeleteContents( aMark, nDelFlags, TRUE, TRUE );
     }
     // sonst ist nichts zu tun
 }
