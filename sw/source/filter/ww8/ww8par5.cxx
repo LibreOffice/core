@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
+ *  last change: $Author: cmc $ $Date: 2002-10-29 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3024,6 +3024,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
     eF_ResT eRet = FLD_OK;
     String sURL, sTarget, sMark;
     bool bDataImport = false;
+    //HYPERLINk "filename" [switches]
+    bool bOptions=false;
 
     rStr.EraseTrailingChars( 1 );
 
@@ -3032,35 +3034,40 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
         long nRet;
         _ReadFieldParams aReadParam( rStr );
         while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+        {
             switch( nRet )
             {
-            case -2:
-                if (!sURL.Len())
-                    ConvertFFileName(sURL, aReadParam.GetResult());
-                break;
+                case -2:
+                    if (!sURL.Len() & !bOptions)
+                        ConvertFFileName(sURL, aReadParam.GetResult());
+                    break;
 
-            case 'n':
-                sTarget.ASSIGN_CONST_ASC( "_blank" );
-                break;
+                case 'n':
+                    sTarget.ASSIGN_CONST_ASC( "_blank" );
+                    bOptions = true;
+                    break;
 
-            case 'l':
-                nRet = aReadParam.SkipToNextToken();
-                if( -2 == nRet )
-                {
-                    sMark = aReadParam.GetResult();
-                    if( sMark.Len() && '"' == sMark.GetChar( sMark.Len()-1 ))
-                        sMark.Erase( sMark.Len() - 1 );
+                case 'l':
+                    nRet = aReadParam.SkipToNextToken();
+                    bOptions = true;
+                    if( -2 == nRet )
+                    {
+                        sMark = aReadParam.GetResult();
+                        if( sMark.Len() && '"' == sMark.GetChar( sMark.Len()-1 ))
+                            sMark.Erase( sMark.Len() - 1 );
 
-                }
-                break;
+                    }
+                    break;
 
-            case 'h':
-            case 'm':
-            case 's':
-            case 't':
-                ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
-                break;
+                case 'h':
+                case 'm':
+                case 's':
+                case 't':
+                    ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                    bOptions = true;
+                    break;
             }
+        }
     }
 
     // das Resultat uebernehmen
