@@ -1,0 +1,183 @@
+/*************************************************************************
+ *
+ *  $RCSfile: module_graphicfilter.ulf,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:19:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT]
+de = "Grafikfilter"
+en-US = "Graphics Filters"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT]
+de = "Einige optionale Grafik-Filter, die notwendig sind, um Fremdgrafiken in Ihre Dokumente einzubinden."
+en-US = "Several optional graphics filters required to embed external graphics in your documents."
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_ADOBE]
+de = "Adobe Photoshop Importfilter"
+en-US = "Adobe Photoshop Import Filter"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_ADOBE]
+de = "Adobe Photoshop Importfilter"
+en-US = "Adobe Photoshop Import Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_TGA]
+de = "TGA Import"
+en-US = "TGA Import"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_TGA]
+de = "TGA TrueVision TARGA Importfilter"
+en-US = "TGA TrueVision TARGA Import Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_EPS]
+de = "EPS Im- und Exportfilter"
+en-US = "EPS Import/Export Filter"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_EPS]
+de = "Encapsulated Postscript Im- und Exportfilter"
+en-US = "Encapsulated Postscript Import/Export Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_XPM]
+de = "XPM-Exportfilter"
+en-US = "XPM Export Filter"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_XPM]
+de = "XPM-Export Filter"
+en-US = "XPM Export Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_PBMP]
+de = "Portable Bitmap Im- und Export"
+en-US = "Portable Bitmap Import/Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_PBMP]
+de = "Portable Bitmap Im- und Exportfilter"
+en-US = "Portable Bitmap Import/Export Filters"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_SUNRST]
+de = "SUN-Rasterfile Im- und Export"
+en-US = "SUN Rasterfile Import/Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_SUNRST]
+de = "SUN-Rasterfile Im- und Exportfilter"
+en-US = "SUN Rasterfile Import/Export Filters"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_ACAD]
+de = "AutoCAD Import"
+en-US = "AutoCAD Import"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_ACAD]
+de = "AutoCAD Importfilter"
+en-US = "AutoCAD Import Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_KODAC]
+de = "Kodak Photo-CD Import"
+en-US = "Kodak Photo-CD Import"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_KODAC]
+de = "Kodak Photo-CD Importfilter"
+en-US = "Kodak Photo-CD Import Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_MACPICT]
+de = "Mac-Pict Im- und Export"
+en-US = "Mac-Pict Import/Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_MACPICT]
+de = "Mac-Pict Im- und Exportfilter"
+en-US = "Mac-Pict Import/Export Filters"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_OS2META]
+de = "OS/2 Metafile Im- und Export"
+en-US = "OS/2 Metafile Import/Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_OS2META]
+de = "OS/2 Metafile Im- und Exportfilter"
+en-US = "OS/2 Metafile Import/Export Filters"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_PCX]
+de = "PCX Import"
+en-US = "PCX Import"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_PCX]
+de = "Z-Soft PCX Import"
+en-US = "Z-Soft PCX Import"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_TIFF]
+de = "TIFF Import/Export"
+en-US = "TIFF Import/Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_TIFF]
+de = "TIFF Im- und Exportfilter"
+en-US = "TIFF Import and Export Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_SVG]
+de = "SVG Export"
+en-US = "SVG Export"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_SVG]
+de = "SVG Exportfilter"
+en-US = "SVG Export Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_FLASH]
+de = "Macromedia Flash (SWF)"
+en-US = "Macromedia Flash (SWF)"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_FLASH]
+de = "Macromedia Flash (SWF) Exportfilter"
+en-US = "Macromedia Flash (SWF) Export Filter"
+
+
+
