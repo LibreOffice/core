@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:43:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,15 +144,6 @@
 
 #include "xcl97rec.hxx"
 
-
-
-//------------------------------------------------------------- class ExcCell -
-
-UINT32          ExcCell::nCellCount = 0UL;
-ScProgress*     ExcCell::pPrgrsBar = NULL;
-#ifdef DBG_UTIL
-INT32           ExcCell::_nRefCount = 0L;
-#endif
 
 
 //--------------------------------------------------------- class ExcDummy_00 -
@@ -615,27 +606,19 @@ ExcCell::ExcCell(
         const ULONG nAltNumForm ) :
     aPos( rPos )
 {
-    if( pPrgrsBar )
-        pPrgrsBar->SetState( GetCellCount() );
-    IncCellCount();
+    if( rRootData.pPrgrsBar )
+        rRootData.pPrgrsBar->SetState( rRootData.nCellCount );
+    ++rRootData.nCellCount;
 
     DBG_ASSERT( rRootData.pCellMerging, "ExcCell::ExcCell - missing cell merging list" );
 
     if( !rRootData.pCellMerging->FindMergeBaseXF( aPos, mnXFId ) )
         mnXFId = rRootData.pER->GetXFBuffer().Insert( pAttr, nAltNumForm );
-
-#ifdef DBG_UTIL
-    _nRefCount++;
-#endif
 }
 
 
 ExcCell::~ExcCell()
 {
-#ifdef DBG_UTIL
-    _nRefCount--;
-    DBG_ASSERT( _nRefCount >= 0, "*ExcCell::~ExcCell(): Das war mindestens einer zuviel!" );
-#endif
 }
 
 
@@ -647,9 +630,10 @@ sal_uInt32 ExcCell::GetXFId() const
 
 void ExcCell::SaveCont( XclExpStream& rStrm )
 {
-    if( pPrgrsBar )
-        pPrgrsBar->SetState( GetCellCount() );
-    IncCellCount();
+    RootData& rRD = *rStrm.GetRoot().mpRD;
+    if( rRD.pPrgrsBar )
+        rRD.pPrgrsBar->SetState( rRD.nCellCount );
+    ++rRD.nCellCount;
 
     sal_uInt16 nXF = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnXFId );
     rStrm << ( UINT16 ) aPos.Row() << ( UINT16 ) aPos.Col() << nXF;
@@ -745,9 +729,9 @@ ExcRKMulRK::ExcRKMulRK(
         sal_Int32 nValue ) :
     ExcCell( rPos, pAttr, rRootData )
 {
-    if( ExcCell::pPrgrsBar )
-        ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
-    ExcCell::IncCellCount();
+    if( rRootData.pPrgrsBar )
+        rRootData.pPrgrsBar->SetState( rRootData.nCellCount );
+    ++rRootData.nCellCount;
 
     ExcRKMulRKEntry* pNewCont = new ExcRKMulRKEntry;
     pNewCont->mnXFId = mnXFId;  // from ExcCell
@@ -764,9 +748,9 @@ ExcRKMulRK* ExcRKMulRK::Extend(
 {
     if( aPos.Row() == rPos.Row() && aPos.Col() + maEntryList.Count() == rPos.Col() )
     {// extendable
-        if( ExcCell::pPrgrsBar )
-            ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
-        ExcCell::IncCellCount();
+        if( rRootData.pPrgrsBar )
+            rRootData.pPrgrsBar->SetState( rRootData.nCellCount );
+        ++rRootData.nCellCount;
 
         ExcRKMulRKEntry* pNewCont = new ExcRKMulRKEntry;
 
@@ -792,8 +776,9 @@ sal_uInt32 ExcRKMulRK::GetXFId() const
 
 void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
 {
-    if( ExcCell::pPrgrsBar )
-        ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
+    RootData& rRD = *rStrm.GetRoot().mpRD;
+    if( rRD.pPrgrsBar )
+        rRD.pPrgrsBar->SetState( rRD.nCellCount );
 
     ExcRKMulRKEntry* pCurr = maEntryList.First();
     DBG_ASSERT( pCurr, "ExcRKMulRK::SaveDiff - list empty" );
@@ -804,7 +789,7 @@ void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
     {
         sal_uInt16 nXF = rXFBuffer.GetXFIndex( pCurr->mnXFId );
         rStrm << (UINT16) aPos.Row() << (UINT16) aPos.Col() << nXF << pCurr->mnValue;
-        ExcCell::IncCellCount();
+        ++rRD.nCellCount;
     }
     else
     {
@@ -815,7 +800,7 @@ void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
             sal_uInt16 nXF = rXFBuffer.GetXFIndex( pCurr->mnXFId );
             rStrm << nXF << pCurr->mnValue;
             pCurr = maEntryList.Next();
-            ExcCell::IncCellCount();
+            ++rRD.nCellCount;
             nLastCol++;
         }
 
