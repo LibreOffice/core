@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:53:42 $
+ *  last change: $Author: bm $ $Date: 2000-12-15 17:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         aSize = xDiaShape->getSize();
         aPosition = xDiaShape->getPosition();
     }
-
+    rtl::OUString sAutoStyleName;
 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -296,7 +296,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 GetImport().GetMM100UnitConverter().convertMeasure( aSize.Height, aValue );
                 break;
             case XML_TOK_PA_STYLE_NAME:
-                msAutoStyleName = aValue;
+                sAutoStyleName = aValue;
                 break;
         }
     }
@@ -307,12 +307,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         xDiaShape->setSize( aSize );
         xDiaShape->setPosition( aPosition );
     }
-}
 
-void SchXMLPlotAreaContext::EndElement()
-{
     // set properties
-    if( msAutoStyleName.getLength())
+    if( sAutoStyleName.getLength())
     {
         uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
         if( xProp.is())
@@ -321,7 +318,7 @@ void SchXMLPlotAreaContext::EndElement()
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
@@ -846,7 +843,7 @@ void SchXMLSeriesContext::EndElement()
         {
             try
             {
-                mrImportHelper.ResizeChartData( mnSeriesIndex + 1 );
+                mrImportHelper.ResizeChartData( mnSeriesIndex + mrDomainOffset + 1 );
                 xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
             }
             catch( lang::IndexOutOfBoundsException )
