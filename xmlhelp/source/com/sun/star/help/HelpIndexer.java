@@ -216,8 +216,20 @@ public class HelpIndexer {
 
                        _urlHandler.setMode( null );
                       byte[] embResolved = getSourceDocument( url );
-                    //System.out.println( new String( embResolved ) );
-                     InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
+//                  InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
+
+                    ByteArrayInputStream inbyte = new ByteArrayInputStream(embResolved);
+                    InputStreamReader inread;
+                    try
+                    {
+                        inread = new InputStreamReader( inbyte,"UTF8" );
+                    }
+                    catch( UnsupportedEncodingException e )
+                    {
+                        inread = new InputStreamReader( inbyte );
+                    }
+                     InputSource in = new InputSource( inread );
+
                       in.setEncoding( "UTF8" );
                     Document docResolved = null;
                     try
@@ -228,6 +240,7 @@ public class HelpIndexer {
                     {
                         if( docResolved == null )
                             System.err.println( "Nullpointer" );
+
                         System.err.println( e.getMessage() );
                     }
 
@@ -253,7 +266,6 @@ public class HelpIndexer {
                     int idx = url.indexOf( '?' );
                     if( idx != -1 )
                          url = url.substring( 0,idx );
-
                     System.out.println( url );
                       builder.indexDocument( new URL( url ),"" );
                 }
@@ -286,12 +298,12 @@ public class HelpIndexer {
         }
         catch (FileNotFoundException fnfe)
         {
-            System.err.println("HelpAccess: " + fnfe.toString());
+            System.err.println("HelpAccess: " + fnfe.getMessage() );
             System.exit(1);
         }
           catch( java.lang.Exception e )
         {
-             System.out.println( "any other exception" );
+             System.out.println( "any other exception" + e.getMessage() );
          }
        }
 
@@ -436,8 +448,6 @@ public class HelpIndexer {
                       StringDbt key = new StringDbt( list[i] );
                     StringDbt value = new StringDbt( data.getString() );
                      table.put( null,key,value,0);
-
-                    // System.out.println( list[i] + " " + data.getString() );
                 }
                  table.close( 0 );
             }
