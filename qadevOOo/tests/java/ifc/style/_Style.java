@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Style.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:50 $
+ *  last change:$Date: 2004-03-19 14:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.style.Style
 */
 public class _Style extends MultiPropertyTest {
+
+    public void _FollowStyle() {
+        String style = (String)tEnv.getObjRelation("FollowStyle");
+        if (style == null) style = "Heading 1";
+        testProperty("FollowStyle", style, "Heading 2");
+    }
 
 }  // finish class _Style
 
