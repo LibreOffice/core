@@ -5,8 +5,8 @@
 #*	  Beschreibung		Ausnahmen fuer die StarView-Projekte
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hr $ $Date: 2000-09-20 14:43:17 $
-#*	  $Revision: 1.1.1.1 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2001-02-15 13:47:17 $
+#*	  $Revision: 1.2 $
 #*
 #*	  $Logfile:   pvcs.data1:solar:inc:sc.mkv  $
 #*
@@ -20,10 +20,11 @@
 # PCHs werden nur in den ..._1st Verzeichnissen aufgenommen
 EXCDEPN=segdefs.hxx
 EXCDEPNPCH=core_pch.hxx;filt_pch.hxx;ui_pch.hxx
+# done by protecting define now
 .IF "$(GUI)" != "MAC"
-MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
+#MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
 .ELSE
-MKDEPFLAGS+=-E:"$(EXCDEPN);$(EXCDEPNPCH)"
+#MKDEPFLAGS+=-E:"$(EXCDEPN);$(EXCDEPNPCH)"
 .ENDIF
 
 .IF "$(GUI)" == "WIN"
