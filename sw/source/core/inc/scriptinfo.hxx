@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:29:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ typedef std::list< xub_StrLen > PositionList;
 class SwScanner
 {
     XubString aWord;
-    const SwWrongList* pWrong;
     const SwTxtNode& rNode;
     xub_StrLen nStartPos;
     xub_StrLen nEndPos;
@@ -97,27 +96,25 @@ class SwScanner
     xub_StrLen nLen;
     LanguageType aCurrLang;
     USHORT nWordType;
-    BOOL bReverse;
     BOOL bStart;
-    BOOL bIsOnlineSpell;
     BOOL bClip;
 
 public:
-    SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng, USHORT nWordType,
-               xub_StrLen nStartPos, xub_StrLen nEndPos, BOOL bRev, BOOL bOS,
-               BOOL bClip = FALSE );
+    SwScanner( const SwTxtNode& rNd, USHORT nWordType,
+               xub_StrLen nStart, xub_StrLen nEnde );
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
     // ! bReverse
     BOOL NextWord();
-    BOOL NextWord( LanguageType aLang );
 
     const XubString& GetWord() const    { return aWord; }
 
     xub_StrLen GetBegin() const         { return nBegin; }
     xub_StrLen GetEnd() const           { return nBegin + nLen; }
     xub_StrLen GetLen() const           { return nLen; }
+
+    LanguageType GetCurrentLanguage() const {return aCurrLang;}
 };
 
 /*************************************************************************
