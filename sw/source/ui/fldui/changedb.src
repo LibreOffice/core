@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:23:08 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ chinese_simplified ] = "ΤΪΥβΈφ¶Τ»°ΏςΔΪΔϊΔάΉ»ΚΉΣΓÒ»ΈφΖδΛϋΚύΎέΏβΐ΄΄ϊΜζΔϊµ±Η°±ΰΌ­µΔΞΔµµΛωΚΉΣΓµΔΚύΎέΏβ΅£ΓΏ΄ΞΔϊΦ»ΔάΧφÒ»ΟξΈόΈΔ΅£ΤΪΧσ·½µΔΑΠµ¥ΔΪΔϊΏΙÒΤ½ψΠΠ¶ΰΦΨΡ΅Τρ΅£";
         Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να ανταλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε για το έγγραφο σας μέσω των πεδίων βάσεων δεδομένων, με άλλες βάσεις δεδομένων. Επιτρέπεται μόνο μια αλλαγή ανά εργάσιμη ημέρα. Στο αριστερό τμήμα μπορούν να γίνουν πολλαλές επιλογές.";
         Text[ korean ] = "ΐΜ ΄λΘ­»σΐΪΏ΅Ό­, ±ΝΗΟ΄Β Ή®Ό­Ώ΅Ό­ µ¥ΐΜΕΝΊ£ΐΜ½ΊΏ΅ ΑΆ±ΩΗΟ°Ε³ª ±³Θ―ΗΟ΄Β µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµεΈ¦ »ηΏλΗΟ½ΗΌφ ΐΦ½ΐ΄Ο΄Ω.ΗΡΉψΏ΅ ΗΡΉψ Ί―°ζΐΜ ΈΈµιΎξ  Αύ΄Ο΄Ω. ΏήΒΚΐΗ Έ®½ΊΖ® »σΏ΅Ό­, ΄ΩΑί Ό±ΕΓΐΜ °΅΄ΙΗΥ΄Ο΄Ω.";
-        Text[ turkish ] = "Bu diyalogda, belgenizdeki veritabanύ alanlarύ yoluyla eriώtiπiniz veritabanlarύnύ baώkalarύ ile deπiώtirebilirsiniz. Her iώlemde yalnύzca tek bir deπiώiklik yapύlabilir. Soldaki listede birden fazla seηim yapύlabilir.";
+        Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanύ alanlarύ yoluyla eriώtiπiniz veritabanlarύnύ baώkalarύ ile deπiώtirebilirsiniz. Her iώlemde yalnύzca tek bir deπiώiklik yapύlabilir. Soldaki listede birden fazla seηim yapύlabilir.";
         Text[ language_user1 ] = " ";
     };
     FixedText FT_USEDDB
