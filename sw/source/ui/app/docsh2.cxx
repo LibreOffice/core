@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:11:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,12 +173,8 @@
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/storage.hxx>
+#include <sot/clsids.hxx>
 
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
@@ -310,10 +306,10 @@
 
 #include <sfx2/fcontnr.hxx>
 
-#include <sw3io.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
 #include "swabstdlg.hxx" //CHINA001
+
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -1568,7 +1564,7 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
     Beschreibung:
  --------------------------------------------------------------------*/
 
-::so3::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {
     return pDoc->CreateLinkSource( rItem );
 }
@@ -1582,32 +1578,9 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion ) const
+                                   sal_Int32 nVersion ) const
 {
-    SfxInPlaceObject::FillClass(pClassName, pClipFormat, pAppName, pLongUserName,
-                                pUserName, nVersion);
-
-    if (nVersion == SOFFICE_FILEFORMAT_31)
-    {
-        *pClassName     = SvGlobalName( SO3_SW_CLASSID_30 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_30;
-        pAppName->AssignAscii( "Swriter 3.1" );
-        *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_31);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_40)
-    {
-        *pClassName     = SvGlobalName( SO3_SW_CLASSID_40 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_40;
-        pAppName->AssignAscii( "StarWriter 4.0" );
-        *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_40);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_50)
-    {
-        *pClassName     = SvGlobalName( SO3_SW_CLASSID_50 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_50;
-        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_50);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_60)
+    if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
@@ -1630,7 +1603,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 
 void SwDocShell::SetModified( BOOL bSet )
 {
-    SfxInPlaceObject::SetModified( bSet );
+    SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified() && !pDoc->IsInCallModified() )
     {
         EnableSetModified( FALSE );
@@ -1727,8 +1700,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
     sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
-    delete pIo;
-    pIo = 0;
+
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
@@ -1848,8 +1820,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     if( aMed.IsStorage() )
     {
         ULONG nVersion = pFlt ? pFlt->GetVersion() : 0;
-        if( nVersion )
-            aMed.GetStorage()->SetVersion( (long)nVersion );
         pRead = nVersion >= SOFFICE_FILEFORMAT_60 ? ReadXML : ReadSw3;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
