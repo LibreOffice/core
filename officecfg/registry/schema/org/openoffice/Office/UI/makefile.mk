@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 14:08:15 $
+#   last change: $Author: obo $ $Date: 2004-11-17 14:09:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ XCSFILES= \
     ChartCommands.xcs \
     DbuCommands.xcs \
     BaseWindowState.xcs \
+    DbBrowserWindowState.xcs \
     DrawImpressCommands.xcs \
     GenericCommands.xcs \
     MathCommands.xcs \
