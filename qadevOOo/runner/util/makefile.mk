@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Date: 2004-07-23 13:42:50 $
+#   last change: $Date: 2004-11-02 11:48:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ JAVAFILES =	AccessibilityTools.java	\
             ShapeDsc.java			\
             SOfficeFactory.java		\
             StyleFamilyDsc.java		\
+            PropertyName.java		\
             SysUtils.java           \
             TableDsc.java			\
             TextSectionDsc.java		\
