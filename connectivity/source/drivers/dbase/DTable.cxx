@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:05:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ BOOL ODbaseTable::ReadMemoHeader()
     (*m_pMemoStream) >> m_aMemoHeader.db_next;
     switch (m_aHeader.db_typ)
     {
-        case dBaseIIIMemo:  // dBase III: feste Blockgröße
+        case dBaseIIIMemo:  // dBase III: feste Blockgroesse
         case dBaseIVMemo:
             // manchmal wird aber auch dBase3 dBase4 Memo zugeordnet
             m_pMemoStream->Seek(20L);
@@ -461,7 +461,7 @@ BOOL ODbaseTable::ReadMemoHeader()
                 m_aMemoHeader.db_typ  = MemodBaseIV;
             else if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size == 512)
             {
-                // nun gibt es noch manche Dateien, die verwenden eine Gößenangabe,
+                // nun gibt es noch manche Dateien, die verwenden eine Groessenangabe,
                 // sind aber dennoch dBase Dateien
                 char sHeader[4];
                 m_pMemoStream->Seek(m_aMemoHeader.db_size);
@@ -964,7 +964,7 @@ void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::
     throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 //------------------------------------------------------------------
-// erzeugt grundsätzlich dBase IV Datei Format
+// erzeugt grundsaetzlich dBase IV Datei Format
 BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 {
     bCreateMemo = sal_False;
@@ -985,13 +985,13 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
     (*m_pFileStream) << (BYTE) aDate.GetMonth();
     (*m_pFileStream) << (BYTE) aDate.GetDay();
-    (*m_pFileStream) << 0L;                                                                                                     // Anzahl der Datensätze
+    (*m_pFileStream) << 0L;                                                                                                     // Anzahl der Datensaetze
     (*m_pFileStream) << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);                // Kopfinformationen,
-                                                                        // pColumns erhält immer eine Spalte mehr
-    (*m_pFileStream) << (USHORT) 0;                                                                                     // Satzlänge wird später bestimmt
+                                                                        // pColumns erhaelt immer eine Spalte mehr
+    (*m_pFileStream) << (USHORT) 0;                                                                                     // Satzlaenge wird spaeter bestimmt
     m_pFileStream->Write(aBuffer, 20);
 
-    USHORT nRecLength = 1;                                                                                          // Länge 1 für deleted flag
+    USHORT nRecLength = 1;                                                                                          // Laenge 1 fuer deleted flag
     sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
 
@@ -1074,14 +1074,14 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 {
                     throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid precision for column: ")), aName);
                 }
-                (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
+                (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlaenge
                 nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
                 (*m_pFileStream) << (BYTE)0;                                                                //Nachkommastellen
                 break;
             case 'F':
             case 'N':
                 OSL_ENSURE(nPrecision >=  nScale,
-                           "ODbaseTable::Create: Feldlänge muß größer Nachkommastellen sein!");
+                           "ODbaseTable::Create: Feldlaenge muss groesser Nachkommastellen sein!");
                 if (nPrecision <  nScale)
                 {
                     throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision is less than scale for column: ")), aName);
@@ -1127,7 +1127,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
     (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
     m_pFileStream->Seek(10L);
-    (*m_pFileStream) << nRecLength;                                     // satzlänge nachträglich eintragen
+    (*m_pFileStream) << nRecLength;                                     // Satzlaenge nachtraeglich eintragen
 
     if (bCreateMemo)
     {
@@ -1138,10 +1138,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 }
 
 //------------------------------------------------------------------
-// erzeugt grundsätzlich dBase III Datei Format
+// erzeugt grundsaetzlich dBase III Datei Format
 BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
-    // Makro zum Filehandling fürs Erzeugen von Tabellen
+    // Makro zum Filehandling fuers Erzeugen von Tabellen
     m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
@@ -1239,7 +1239,7 @@ BOOL ODbaseTable::DropImpl()
 //------------------------------------------------------------------
 BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
 {
-    // Buffer mit Leerzeichen füllen
+    // Buffer mit Leerzeichen fuellen
     AllocBuffer();
     memset(m_pBuffer, ' ', m_aHeader.db_slng);
 
@@ -1264,10 +1264,10 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
 
         if (!WriteBuffer())
         {
-            m_pFileStream->SetStreamSize(nFileSize);                // alte Größe restaurieren
+            m_pFileStream->SetStreamSize(nFileSize);                // alte Groesse restaurieren
 
             if (HasMemoFields() && m_pMemoStream)
-                m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Größe restaurieren
+                m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Groesse restaurieren
             m_nFilePos = nTempPos;                              // Fileposition restaurieren
         }
         else
@@ -1280,7 +1280,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
             if (bFlush)
                 m_pFileStream->Flush();
 
-            // bei Erfolg # erhöhen
+            // bei Erfolg # erhoehen
             m_aHeader.db_anz++;
             *rRow[0] = m_nFilePos;                              // BOOKmark setzen
             m_nFilePos = nTempPos;
@@ -1295,7 +1295,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
 //------------------------------------------------------------------
 BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
-    // Buffer mit Leerzeichen füllen
+    // Buffer mit Leerzeichen fuellen
     AllocBuffer();
 
     // Auf gewuenschten Record positionieren:
@@ -1312,7 +1312,7 @@ BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const R
     if (!UpdateBuffer(rRow, pOrgRow,_xCols) || !WriteBuffer())
     {
         if (HasMemoFields() && m_pMemoStream)
-            m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Größe restaurieren
+            m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Groesse restaurieren
     }
     else
     {
