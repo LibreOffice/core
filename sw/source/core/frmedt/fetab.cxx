@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:05:20 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,10 @@
 #endif
 
 #include <node.hxx> // #i23726#
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
@@ -1728,10 +1732,10 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt, bool* pbRow ) const
         {
             for ( USHORT i = 0; !pFrm && i < pPage->GetSortedObjs()->Count(); ++i )
             {
-                const SdrObject *pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
+                SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+                if ( pObj->ISA(SwFlyFrm) )
                 {
-                    pFrm = lcl_FindFrm( ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm(),
+                    pFrm = lcl_FindFrm( static_cast<SwFlyFrm*>(pObj),
                                         rPt, nFuzzy, pbRow );
                 }
             }
