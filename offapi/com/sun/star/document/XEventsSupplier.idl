@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventsSupplier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
+ *  last change: $Author: mi $ $Date: 2001-02-15 14:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,23 +71,19 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 /** gives access to a list of URLs bound to events of this object.
- */
+*/
 [ uik(E2280200-33D6-11D1-AABE00A0-249D5590), ident( "XEventSupplier", 1.0 ) ]
 interface XEventsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** offers a list of event handlers which are be bound to events of
-        this object.
+//-------------------------------------------------------------------------
+/** offers a list of event handlers which are be bound to events of
+    this object.
 
-        @returns
-            an <type>Events</type> object.
-     */
-    com::sun::star::container::XNameReplace getEvents();
+    @returns
+        an <type>Events</type> object.
+ */
+com::sun::star::container::XNameReplace getEvents();
 };
-
-//=============================================================================
-
-typedef XEventsSupplier XEventSupplier;
 
 //=============================================================================
 
@@ -96,6 +92,9 @@ typedef XEventsSupplier XEventSupplier;
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/24 16:26:20  mi
+    compiles now
+
     Revision 1.1  2001/01/24 13:21:26  mi
     stored document events and runtime document events structurally unified
 
