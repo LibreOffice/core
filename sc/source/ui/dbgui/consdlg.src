@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:36:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,13 +150,13 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Soma" ; Default ; > ;
             < "Contagem" ; Default ; > ;
             < "MÈdia" ; Default ; > ;
-            < "M·x" ; Default ; > ;
-            < "MÌn" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
             < "Produto" ; Default ; > ;
-            < "Contar (somente n˙meros)" ; Default ; > ;
+            < "Contagem  (somente n˙meros)" ; Default ; > ;
             < "DesvPad (amostra)" ; Default ; > ;
-            < "DesvPadN (populaÁ„o)" ; Default ; > ;
-            < "Vari‚ncia (amostra)" ; Default ; > ;
+            < "DesvPadP (populaÁ„o)" ; Default ; > ;
+            < "Var (amostra)" ; Default ; > ;
             < "VarP (populaÁ„o)" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -680,7 +680,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "~Source data area" ;
         Text [ norwegian ] = "~KildedataomrÂder" ;
         Text [ italian ] = "Area dati di sorgente" ;
-        Text [ portuguese_brazilian ] = "¡~rea da origem dos dados" ;
+        Text [ portuguese_brazilian ] = "¡~rea de origem dos dados" ;
         Text [ portuguese ] = "~¡rea dos dados fonte" ;
         Text [ finnish ] = "L‰hdetietoalue" ;
         Text [ danish ] = "KildedataomrÂde" ;
@@ -764,7 +764,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ japanese ] = "Ë°å„ÅÆÈ†ÖÁõÆÊ¨Ñ(~R)";
         Text[ chinese_traditional ] = "ÂàóÊ®ôÁ±§(~R)";
         Text[ arabic ] = "⁄‰«ÊÌ‰ «·’›Ê›";
-        Text[ greek ] = "≈È„Ò·ˆﬁ „Ò·ÏÏﬁÚ";
+        Text[ greek ] = "≈ÈÛﬁÏ·ÌÛÁ „Ò·ÏÏﬁÚ";
         Text[ korean ] = "Ìñâ Î†àÏù¥Î∏î(~R)";
         Text[ turkish ] = "~Sat˝r etikerleri";
         Text[ language_user1 ] = " ";
@@ -783,7 +783,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "by colum~ns" ;
         Text [ norwegian ] = "etter kolonn~er" ;
         Text [ italian ] = "~Intestazioni colonne" ;
-        Text [ portuguese_brazilian ] = "CabeÁalhos das c~olunas" ;
+        Text [ portuguese_brazilian ] = "RÛtulos das c~olunas" ;
         Text [ portuguese ] = "~CabeÁalhos de colunas" ;
         Text [ finnish ] = "~Sarakeotsikot" ;
         Text [ danish ] = "Kolonneoverskrifter" ;
@@ -1032,6 +1032,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ hindi ] = "‡§è‡§ï‡§§‡•ç‡§∞‡§ø‡§§ ‡§ï‡§∞‡•ã";
     Text[ slovak ] = "Konsolidova≈•";
 };
+
 
 
 
