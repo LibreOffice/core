@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
+ *  last change: $Author: abi $ $Date: 2001-11-27 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       IsVolume( rtl::OUString::createFromAscii( "IsVolume" ) ),
       IsRemoveable( rtl::OUString::createFromAscii( "IsRemoveable" ) ),
       IsRemote( rtl::OUString::createFromAscii( "IsRemote" ) ),
+      IsHidden( rtl::OUString::createFromAscii( "IsHidden" ) ),
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
       FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
@@ -336,6 +337,17 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
     // Remote
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemote,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+    // Remote
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsHidden,
                                              -1 ,
                                              getCppuType( static_cast< sal_Bool* >( 0 ) ),
                                              uno::Any(),
@@ -2286,6 +2298,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             it1->setValue( emptyAny );
     }
 
+
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
     {
         it1 = properties.find( MyProperty( IsReadOnly ) );
@@ -2296,6 +2309,34 @@ shell::commit( const shell::ContentMap::iterator& it,
             it1->setValue( aAny );
         }
     }
+
+
+    it1 = properties.find( MyProperty( IsHidden ) );
+    if( it1 != properties.end() )
+    {
+        if( aFileStatus.isValid( FileStatusMask_Attributes ) )
+        {
+            sal_uInt64 Attr = aFileStatus.getAttributes();
+            sal_Bool ishidden = ( Attr & Attribute_Hidden ) != 0;
+            aAny <<= ishidden;
+            it1->setValue( aAny );
+        }
+        else
+            it1->setValue( emptyAny );
+    }
+
+
+    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
+    {
+        it1 = properties.find( MyProperty( IsHidden ) );
+        if( it1 != properties.end() )
+        {
+            sal_Bool ishidden = false;
+            aAny <<= ishidden;
+            it1->setValue( aAny );
+        }
+    }
+
 
     it1 = properties.find( MyProperty( DateModified ) );
     if( it1 != properties.end() )
