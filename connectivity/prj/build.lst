@@ -7,8 +7,8 @@ cn	connectivity\source\cpool				nmake	-	all	cn_cpool cn_types NULL
 cn	connectivity\source\resource			nmake	-	all	cn_res NULL
 cn	connectivity\source\sdbcx				nmake	-	all	cn_sdbcx NULL
 cn	connectivity\source\drivers\ado			nmake	-	w	cn_ado cn_dbtools NULL
-cn	connectivity\source\drivers\mozaddressbook\mozillasrc		nmake	-	all	cn_file NULL
-cn	connectivity\source\drivers\mozaddressbook	nmake	-	all	cn_mozillasrc NULL
+cn	connectivity\source\drivers\mozaddressbook\mozillasrc		nmake	-	all	cn_mozillasrc cn_file NULL
+cn	connectivity\source\drivers\mozaddressbook	nmake	-	all	cn_mozillaadb cn_mozillasrc NULL
 cn	connectivity\source\drivers\calc		nmake	-	all	cn_calc cn_file NULL
 cn	connectivity\source\drivers\odbc		nmake	-	all	cn_odbc cn_dbtools NULL
 cn	connectivity\source\drivers\jdbc		nmake	-	all	cn_jdbc cn_dbtools NULL
