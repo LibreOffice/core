@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-22 09:59:37 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 08:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4821,6 +4821,57 @@ void Window::DataChanged( const DataChangedEvent& )
 
 // -----------------------------------------------------------------------
 
+void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
+{
+    // #82968# notify event listeners for mouse and key events seperately and
+    // not in PreNotify ( as for focus listeners )
+    // this allows for procesing those events internally first and pass it to
+    // the toolkit later
+
+    if( rNEvt.GetType() == EVENT_MOUSEMOVE )
+    {
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+        {
+            if ( rNEvt.GetWindow() == this )
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
+            else
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+        }
+    }
+    else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
+    {
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+        {
+            if ( rNEvt.GetWindow() == this )
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
+            else
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+        }
+    }
+    else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    {
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+        {
+            if ( rNEvt.GetWindow() == this )
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
+            else
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+        }
+    }
+    else if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+            ImplCallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
+    }
+    else if( rNEvt.GetType() == EVENT_KEYUP )
+    {
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+            ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 long Window::PreNotify( NotifyEvent& rNEvt )
 {
     { // Klammerung, da in diesem Handler das Window zerstoert werden darf
@@ -4857,6 +4908,11 @@ long Window::PreNotify( NotifyEvent& rNEvt )
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
                 ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
         }
+
+        // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseEventListeners() )!
+        //    see also ImplHandleMouseEvent(), ImplHandleKey()
+
+        /*
         else if( rNEvt.GetType() == EVENT_MOUSEMOVE )
         {
             if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
@@ -4897,6 +4953,7 @@ long Window::PreNotify( NotifyEvent& rNEvt )
             if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
                 ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
         }
+        */
     }
 
     return bDone;

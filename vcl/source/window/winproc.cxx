@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-14 13:20:36 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 08:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                 if ( pChild )
                     pChild->ImplAddDel( &aDelData2 );
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
+                {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
+                    // #82968#
+                    if( !aDelData.IsDelete() )
+                        aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNLeaveEvt );
+                }
 
                 pWindow->mpFrameData->mpMouseMoveWin = NULL;
                 pWindow->mpFrameData->mbInMouseMove = FALSE;
@@ -862,10 +867,15 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                 pChild->MouseButtonUp( aMEvt );
             }
         }
+
+        // #82968#
+        if ( !aDelData.IsDelete() )
+            aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
     }
 
     if ( aDelData.IsDelete() )
         return 1;
+
 
     if ( nSVEvent == EVENT_MOUSEMOVE )
         pChild->mpFrameData->mbInMouseMove = FALSE;
@@ -1123,6 +1133,9 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             pChild->mbKeyUp = FALSE;
             pChild->KeyUp( aKEvt );
         }
+        // #82968#
+        if( !aDelData.IsDelete() )
+            aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
     }
     else
         bPreNotify = TRUE;
