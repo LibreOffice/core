@@ -2065,7 +2065,7 @@ SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = TRUE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
@@ -3254,133 +3254,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem GrafFilterInvert SID_GRAFFILTER_INVERT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem GrafFilterRemoveNoise SID_GRAFFILTER_REMOVENOISE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem GrafFilterSharpen SID_GRAFFILTER_SHARPEN
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem GrafFilterSmooth SID_GRAFFILTER_SMOOTH
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-TbxImageItem GrafFilterToolbox SID_GRAFTBX_FILTERS
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
 ]
 
 //--------------------------------------------------------------------------
@@ -6701,10 +6574,10 @@ SfxVoidItem SwitchLayer SID_SWITCHLAYER
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
@@ -6726,10 +6599,10 @@ SfxVoidItem SwitchPage SID_SWITCHPAGE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
