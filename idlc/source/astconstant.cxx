@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:34:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,13 @@ sal_Bool AstConstant::dumpBlob(
     OString name = getLocalName();
 
     OUString type;
-    OUString fileName;
     if ( getNodeType() != NT_enum_val )
     {
         type = OStringToOUString(exprTypeToString(getConstValueType()), RTL_TEXTENCODING_UTF8);
-        fileName = OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8);
     }
 
     rBlob.setFieldData(
-        index, getDocumentation(), fileName,
+        index, getDocumentation(), OUString(),
         RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
         OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
     if (str)
