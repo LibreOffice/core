@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:08:25 $
+ *  last change: $Author: pb $ $Date: 2001-08-30 07:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
 
 
     aRightLb.SelectAll( FALSE );
-    aLeftLb.GrabFocus();
+    aRightLb.GrabFocus();
 }
 
 //=========================================================================
