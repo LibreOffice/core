@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compatibility.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:06:12 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_USEOURTABSTOPS     COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS
 #define PROPERTYNAME_NOEXTLEADING       COMPATIBILITY_PROPERTYNAME_NOEXTLEADING
 #define PROPERTYNAME_USELINESPACING     COMPATIBILITY_PROPERTYNAME_USELINESPACING
+#define PROPERTYNAME_ADDTABLESPACING    COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING
 
-#define PROPERTYCOUNT               8
+#define PROPERTYCOUNT               9
 
 #define OFFSET_NAME                 0
 #define OFFSET_MODULE               1
@@ -131,6 +132,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_USEOURTABSTOPS       5
 #define OFFSET_NOEXTLEADING         6
 #define OFFSET_USELINESPACING       7
+#define OFFSET_ADDTABLESPACING      8
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -145,13 +147,13 @@ struct SvtCompatibilityEntry
         SvtCompatibilityEntry() :
             bUsePrtMetrics( false ), bAddSpacing( false ),
             bAddSpacingAtPages( false ), bUseOurTabStops( false ),
-            bNoExtLeading( false ), bUseLineSpacing( false ) {}
+            bNoExtLeading( false ), bUseLineSpacing( false ), bAddTableSpacing( false ) {}
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
                 bUsePrtMetrics( false ), bAddSpacing( false ),
                 bAddSpacingAtPages( false ), bUseOurTabStops( false ),
-                bNoExtLeading( false ), bUseLineSpacing( false ) {}
+                bNoExtLeading( false ), bUseLineSpacing( false ), bAddTableSpacing( false ) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -159,6 +161,7 @@ struct SvtCompatibilityEntry
         inline void     SetUseOurTabStops( bool _bSet ) { bUseOurTabStops = _bSet; }
         inline void     SetNoExtLeading( bool _bSet ) { bNoExtLeading = _bSet; }
         inline void     SetUseLineSpacing( bool _bSet ) { bUseLineSpacing = _bSet; }
+        inline void     SetAddTableSpacing( bool _bSet ) { bAddTableSpacing = _bSet; }
 
     public:
         OUString    sName;
@@ -169,6 +172,7 @@ struct SvtCompatibilityEntry
         bool        bUseOurTabStops;
         bool        bNoExtLeading;
         bool        bUseLineSpacing;
+        bool        bAddTableSpacing;
 };
 
 /*-****************************************************************************************************************
@@ -209,6 +213,7 @@ class SvtCompatibility
             lProperties[ OFFSET_USEOURTABSTOPS ].Name = PROPERTYNAME_USEOURTABSTOPS;
             lProperties[ OFFSET_NOEXTLEADING ].Name = PROPERTYNAME_NOEXTLEADING;
             lProperties[ OFFSET_USELINESPACING ].Name = PROPERTYNAME_USELINESPACING;
+            lProperties[ OFFSET_ADDTABLESPACING ].Name = PROPERTYNAME_ADDTABLESPACING;
 
             for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
                   pItem != pList->end(); ++pItem )
@@ -221,6 +226,7 @@ class SvtCompatibility
                 lProperties[ OFFSET_USEOURTABSTOPS ].Value <<= pItem->bUseOurTabStops;
                 lProperties[ OFFSET_NOEXTLEADING ].Value <<= pItem->bNoExtLeading;
                 lProperties[ OFFSET_USELINESPACING ].Value <<= pItem->bUseLineSpacing;
+                lProperties[ OFFSET_ADDTABLESPACING ].Value <<= pItem->bAddTableSpacing;
                 lResult[ nStep ] = lProperties;
                 ++nStep;
             }
@@ -318,7 +324,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bAddSpacingAtPages,
                                                             bool _bUseOurTabStops,
                                                             bool _bNoExtLeading,
-                                                            bool _bUseLineSpacing );
+                                                            bool _bUseLineSpacing,
+                                                            bool _bAddTableSpacing );
 
         inline bool                             IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
         inline bool                             IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
@@ -326,6 +333,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool                             IsUseOurTabStops() const { return m_aDefOptions.bUseOurTabStops; }
         inline bool                             IsNoExtLeading() const { return m_aDefOptions.bNoExtLeading; }
         inline bool                             IsUseLineSpacing() const { return m_aDefOptions.bUseLineSpacing; }
+        inline bool                             IsAddTableSpacing() const { return m_aDefOptions.bAddTableSpacing; }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -416,6 +424,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bUseOurTabStops;
         lValues[ nPosition++ ] >>= aItem.bNoExtLeading;
         lValues[ nPosition++ ] >>= aItem.bUseLineSpacing;
+        lValues[ nPosition++ ] >>= aItem.bAddTableSpacing;
         m_aOptions.AppendEntry( aItem );
 
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
@@ -472,6 +481,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOURTABSTOPS - 1      ].Name = sNode + PROPERTYNAME_USEOURTABSTOPS;
         lPropertyValues[ OFFSET_NOEXTLEADING - 1        ].Name = sNode + PROPERTYNAME_NOEXTLEADING;
         lPropertyValues[ OFFSET_USELINESPACING - 1      ].Name = sNode + PROPERTYNAME_USELINESPACING;
+        lPropertyValues[ OFFSET_ADDTABLESPACING - 1     ].Name = sNode + PROPERTYNAME_ADDTABLESPACING;
 
         lPropertyValues[ OFFSET_MODULE - 1              ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1       ].Value <<= aItem.bUsePrtMetrics;
@@ -480,6 +490,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOURTABSTOPS - 1      ].Value <<= aItem.bUseOurTabStops;
         lPropertyValues[ OFFSET_NOEXTLEADING - 1        ].Value <<= aItem.bNoExtLeading;
         lPropertyValues[ OFFSET_USELINESPACING - 1      ].Value <<= aItem.bUseLineSpacing;
+        lPropertyValues[ OFFSET_ADDTABLESPACING - 1     ].Value <<= aItem.bAddTableSpacing;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -515,7 +526,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
                                                 bool _bAddSpacingAtPages,
                                                 bool _bUseOurTabStops,
                                                 bool _bNoExtLeading,
-                                                bool _bUseLineSpacing )
+                                                bool _bUseLineSpacing,
+                                                bool _bAddTableSpacing )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -524,6 +536,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
     aItem.SetUseOurTabStops( _bUseOurTabStops );
     aItem.SetNoExtLeading( _bNoExtLeading );
     aItem.SetUseLineSpacing( _bUseLineSpacing );
+    aItem.SetAddTableSpacing( _bAddTableSpacing );
     m_aOptions.AppendEntry( aItem );
     SetModified();
 }
@@ -579,6 +592,9 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
         ++nDestStep;
         lDestination[nDestStep] = sFixPath;
         lDestination[nDestStep] += PROPERTYNAME_USELINESPACING;
+        ++nDestStep;
+        lDestination[nDestStep] = sFixPath;
+        lDestination[nDestStep] += PROPERTYNAME_ADDTABLESPACING;
         ++nDestStep;
     }
 }
@@ -644,12 +660,13 @@ void SvtCompatibilityOptions::AppendItem( const ::rtl::OUString& sName,
                                           bool bAddSpacingAtPages,
                                           bool bUseOurTabStops,
                                           bool bNoExtLeading,
-                                          bool bUseLineSpacing )
+                                          bool bUseLineSpacing,
+                                          bool bAddTableSpacing )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->AppendItem(
-        sName, sModule, bUsePrtMetrics, bAddSpacing,
-        bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading, bUseLineSpacing );
+        sName, sModule, bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
+        bUseOurTabStops, bNoExtLeading, bUseLineSpacing, bAddTableSpacing );
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
@@ -686,6 +703,12 @@ bool SvtCompatibilityOptions::IsUseLineSpacing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsUseLineSpacing();
+}
+
+bool SvtCompatibilityOptions::IsAddTableSpacing() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsAddTableSpacing();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
