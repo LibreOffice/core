@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:42:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ using namespace ::rtl;
 
 sal_Bool AstModule::dump(RegistryKey& rKey)
 {
+    OUString emptyStr;
     RegistryKey localKey;
     if ( getNodeType() == NT_root )
     {
@@ -123,8 +124,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
 
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(),
-            OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), typeClass,
+            getDocumentation(), emptyStr, typeClass,
             m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
@@ -149,7 +149,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                                 (RegValue)pBlob, aBlobSize))
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
@@ -163,13 +163,9 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
         if ( getNodeType() == NT_constants )
             typeClass = RT_TYPE_CONSTANTS;
 
-        rtl::OUString fileName;
-        if (getNodeType() == NT_constants) {
-            fileName = OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8);
-        }
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(), fileName, typeClass, m_bPublished,
+            getDocumentation(), emptyStr, typeClass, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0, 0, 0,
             0);
 
@@ -178,7 +174,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
 
         if ( getNodeType() != NT_root )
         {
-            if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+            if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                                     (RegValue)pBlob, aBlobSize))
             {
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
@@ -193,6 +189,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
 
 sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 {
+    OUString emptyStr;
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
@@ -204,9 +201,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 
     typereg::Writer aBlob(
         m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-        getDocumentation(),
-        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-        RT_TYPE_TYPEDEF, m_bPublished,
+        getDocumentation(), emptyStr, RT_TYPE_TYPEDEF, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, 0, 0, 0);
     aBlob.setSuperTypeName(
         0,
@@ -216,7 +211,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
+    if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -229,9 +224,10 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 
 sal_Bool AstService::dump(RegistryKey& rKey)
 {
+    OUString emptyStr;
     typereg_Version version = m_bPublished
         ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0;
-    rtl::OString superName;
+    OString superName;
     sal_uInt16 constructors = 0;
     sal_uInt16 properties = 0;
     sal_uInt16 references = 0;
@@ -262,7 +258,8 @@ sal_Bool AstService::dump(RegistryKey& rKey)
                 if (!idlc()->getOptions()->isValid("-C")) {
                     return true;
                 }
-                superName = static_cast< AstServiceMember * >(*i)->
+//                superName = static_cast< AstServiceMember * >(*i)->
+                superName = ((AstServiceMember *)(*i))->
                     getRealService()->getRelativName();
                 break;
             }
@@ -295,8 +292,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         return false;
     }
     typereg::Writer writer(
-        version, getDocumentation(),
-        rtl::OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
+        version, getDocumentation(), emptyStr,
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
         m_bPublished,
         rtl::OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
@@ -314,19 +310,21 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     {
         switch ((*i)->getNodeType()) {
         case NT_operation:
-            static_cast< AstOperation * >(*i)->dumpBlob(
+//           static_cast< AstOperation * >(*i)->dumpBlob(
+            ((AstOperation *)(*i))->dumpBlob(
                 writer, constructorIndex++);
             break;
 
         case NT_property:
-            static_cast< AstAttribute * >(*i)->dumpBlob(
+//            static_cast< AstAttribute * >(*i)->dumpBlob(
+            ((AstAttribute *)(*i))->dumpBlob(
                 writer, propertyIndex++, 0);
             break;
 
         case NT_interface_member:
             {
-                AstInterfaceMember * decl = static_cast< AstInterfaceMember *>(
-                    *i);
+//               AstInterfaceMember * decl = static_cast< AstInterfaceMember *>(*i);
+                AstInterfaceMember * decl = (AstInterfaceMember *)(*i);
                 writer.setReferenceData(
                     referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
                     (decl->isOptional()
@@ -339,7 +337,8 @@ sal_Bool AstService::dump(RegistryKey& rKey)
 
         case NT_service_member:
             if (getNodeType() == NT_service) {
-                AstServiceMember * decl = static_cast< AstServiceMember * >(*i);
+//              AstServiceMember * decl = static_cast< AstServiceMember * >(*i);
+                AstServiceMember * decl = (AstServiceMember *)(*i);
                 writer.setReferenceData(
                     referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
                     (decl->isOptional()
@@ -352,7 +351,8 @@ sal_Bool AstService::dump(RegistryKey& rKey)
 
         case NT_observes:
             {
-                AstObserves * decl = static_cast< AstObserves * >(*i);
+//              AstObserves * decl = static_cast< AstObserves * >(*i);
+                AstObserves * decl = (AstObserves *)(*i);
                 writer.setReferenceData(
                     referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
                     RT_ACCESS_INVALID,
@@ -364,7 +364,8 @@ sal_Bool AstService::dump(RegistryKey& rKey)
 
         case NT_needs:
             {
-                AstNeeds * decl = static_cast< AstNeeds * >(*i);
+//              AstNeeds * decl = static_cast< AstNeeds * >(*i);
+                AstNeeds * decl = (AstNeeds *)(*i);
                 writer.setReferenceData(
                     referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
                     RT_ACCESS_INVALID,
@@ -383,14 +384,14 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     }}
     if (m_defaultConstructor) {
         writer.setMethodData(
-            constructorIndex++, rtl::OUString(), RT_MODE_TWOWAY,
-            rtl::OUString(), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
+            constructorIndex++, emptyStr, RT_MODE_TWOWAY,
+            emptyStr, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
             0, 0);
     }
     sal_uInt32 size;
     void const * blob = writer.getBlob(&size);
     if (localKey.setValue(
-            rtl::OUString(), RG_VALUETYPE_BINARY, const_cast< void * >(blob),
+            emptyStr, RG_VALUETYPE_BINARY, const_cast< void * >(blob),
             size))
     {
         fprintf(
@@ -449,8 +450,7 @@ sal_Bool AstAttribute::dumpBlob(
         accessMode |= RT_ACCESS_REMOVEABLE;
     }
 
-    rtl::OUString name(
-        OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
+    OUString name(OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
     rBlob.setFieldData(
         index, getDocumentation(), OUString(), accessMode, name,
         OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
