@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 12:46:04 $
+ *  last change: $Author: dv $ $Date: 2001-07-13 13:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,28 +79,25 @@
 #define FILEVIEW_SHOW_ALL           0x0070
 
 class ViewTabListBox_Impl;
+class SvtFileView_Impl;
 class SvLBoxEntry;
+class HeaderBar;
 
 class SvtFileView : public Control
 {
 private:
-    ViewTabListBox_Impl*    mpView;
-    sal_Bool                mbOnlyFolder;
-    sal_Bool                mbAutoResize;
-    String                  maViewURL;
-    String                  maAllFilter;
-    String                  maCurrentFilter;
-    Image                   maFolderImage;
-    Link                    maOpenDoneLink;
+    SvtFileView_Impl*       mpImp;
 
     void                    OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+
+    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
 
 public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
     SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags );
     ~SvtFileView();
 
-    const String&           GetViewURL() const { return maViewURL; }
+    const String&           GetViewURL() const;
     String                  GetURL( SvLBoxEntry* pEntry ) const;
     String                  GetCurrentURL() const;
 
@@ -122,7 +119,7 @@ public:
 
     void                    SetSelectHdl( const Link& rHdl );
     void                    SetDoubleClickHdl( const Link& rHdl );
-    void                    SetOpenDoneHdl( const Link& rHdl ) { maOpenDoneLink = rHdl; }
+    void                    SetOpenDoneHdl( const Link& rHdl );
 
     ULONG                   GetSelectionCount() const;
     SvLBoxEntry*            FirstSelected() const;
