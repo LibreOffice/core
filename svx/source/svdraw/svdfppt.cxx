@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-12 10:30:43 $
+ *  last change: $Author: sj $ $Date: 2001-02-12 12:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4592,6 +4592,13 @@ void PPTCharPropSet::SetFont( UINT16 nFont )
     }
 }
 
+void PPTCharPropSet::SetColor( sal_uInt32 nColor )
+{
+    ImplMakeUnique();
+    pCharSet->mnColor = nColor;
+    pCharSet->mnAttrSet |= 1 << PPT_CharAttr_FontColor;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PPTRuler::PPTRuler() :
@@ -6443,6 +6450,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 }
                                                                 ((SvxURLField*)(pSet->mpFieldItem)->GetField())->SetRepresentation( pSet->maString );
                                                                 pSet->maString = String();
+                                                                pSet->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
                                                                 if ( pBefCPS )
                                                                 {
                                                                     nCharPropAdd++;
