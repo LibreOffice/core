@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-24 11:07:28 $
+ *  last change: $Author: mba $ $Date: 2002-04-25 08:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,6 @@ BOOL IsItemHidden_Impl( USHORT nItemId, int bOleServer, int bMac )
 
 void SfxVirtualMenu::Construct_Impl()
 {
-    pImageControl = new SfxMenuImageControl_Impl( SID_IMAGE_ORIENTATION, *pBindings, this );
     pWindowMenu = NULL;
     pPickMenu = NULL;
     bIsActive = FALSE;
@@ -225,6 +224,7 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pItems(0),
     pBindings(&rBindings),
     pResMgr(0),
+    pImageControl(0),
     nLocks(0), pAutoDeactivate(0), bHelpInitialized( bWithHelp ),
     bWasHighContrast( FALSE )
 {
@@ -252,6 +252,7 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pItems(0),
     pBindings(&rBindings),
     pResMgr(0),
+    pImageControl(0),
     nLocks(0), pAutoDeactivate(0),  bHelpInitialized( bWithHelp ),
     bWasHighContrast( FALSE )
 {
@@ -377,6 +378,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
+    pImageControl = new SfxMenuImageControl_Impl( SID_IMAGE_ORIENTATION, *pBindings, this );
 
     // Update high contrast state
     bWasHighContrast = IsHiContrastMode();
