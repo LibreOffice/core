@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layhelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 07:57:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ class SwLayCacheImpl : public SvULongs
     SvXub_StrLens aOffset;
     SvUShorts aType;
     SwPageFlyCache aFlyCache;
+    sal_Bool bUseFlyCache;
     void Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset );
 
 public:
@@ -117,6 +118,8 @@ public:
 
     USHORT GetFlyCount() const { return aFlyCache.Count(); }
     SwFlyCache *GetFlyCache( USHORT nIdx ) const { return aFlyCache[ nIdx ]; }
+
+    sal_Bool IsUseFlyCache() const { return bUseFlyCache; }
 };
 
 /*************************************************************************
@@ -197,7 +200,7 @@ public:
 #define SW_LAYCACHE_IO_REC_FLY      'F'
 
 #define SW_LAYCACHE_IO_VERSION_MAJOR    1
-#define SW_LAYCACHE_IO_VERSION_MINOR    0
+#define SW_LAYCACHE_IO_VERSION_MINOR    1
 
 class SwLayCacheIoImpl
 {
