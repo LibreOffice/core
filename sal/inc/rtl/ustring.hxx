@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:49:08 $
+ *  last change: $Author: th $ $Date: 2001-05-09 15:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef _RTL_USTRING_HXX_
 #define _RTL_USTRING_HXX_
+
+#ifdef __cplusplus
 
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
@@ -507,7 +509,7 @@ public:
         else
         {
             rtl_uString* pNew = 0;
-            rtl_uString_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, getLength()-beginIndex );
+            rtl_uString_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, getLength()-beginIndex );
             return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
         }
     }
@@ -528,7 +530,7 @@ public:
         else
         {
             rtl_uString* pNew = 0;
-            rtl_uString_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, count );
+            rtl_uString_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, count );
             return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
         }
     }
@@ -545,7 +547,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newConcat( &pNew, pData, str.pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     friend OUString operator+( const OUString& rStr1, const OUString& rStr2  )

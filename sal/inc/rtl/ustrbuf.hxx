@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: th $ $Date: 2001-05-09 15:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,9 @@
 #ifndef _RTL_USTRBUF_H_
 #include <rtl/ustrbuf.h>
 #endif
-#ifndef _RTL_USTRING_
-#ifdef __BORLANDC__
-#include <rtl/wstring.>
-#else
-#include <rtl/ustring>
-#endif /*__BORLANDC__*/
-#endif /*_RTL_USTRING_*/
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
+#endif
 
 #ifdef __cplusplus
 
@@ -202,7 +198,7 @@ public:
     OUString makeStringAndClear()
     {
         OUString aRet( pData );
-        RTL_USTRING_NEW(&pData);
+        rtl_uString_new(&pData);
         nCapacity = 0;
         return aRet;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strbuf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: th $ $Date: 2001-05-09 15:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ public:
     OString makeStringAndClear()
     {
         OString aRet( pData );
-        RTL_STRING_NEW(&pData);
+        rtl_string_new(&pData);
         nCapacity = 0;
         return aRet;
     }
@@ -660,12 +660,12 @@ public:
     }
 private:
     /**
-         A pointer to the data structur which contains the data.
+        A pointer to the data structur which contains the data.
      */
     rtl_String * pData;
 
     /**
-         The len of the pData->buffer.
+        The len of the pData->buffer.
      */
     sal_Int32       nCapacity;
 };

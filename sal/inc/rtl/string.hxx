@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:52:13 $
+ *  last change: $Author: th $ $Date: 2001-05-09 15:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ public:
         else
         {
             rtl_String* pNew = 0;
-            rtl_string_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, getLength()-beginIndex );
+            rtl_string_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, getLength()-beginIndex );
             return OString( pNew, (DO_NOT_ACQUIRE*)0 );
         }
     }
@@ -514,7 +514,7 @@ public:
         else
         {
             rtl_String* pNew = 0;
-            rtl_string_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, count );
+            rtl_string_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, count );
             return OString( pNew, (DO_NOT_ACQUIRE*)0 );
         }
     }
