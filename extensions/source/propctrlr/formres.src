@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:54:50 $
+ *  last change: $Author: obo $ $Date: 2001-11-22 23:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ japanese ] = "ã“ã‚Œã‚‰ã¯ã™ã¹ã¦ $control_class$ $control_name$ ã«ï¾—ï¾ï¾ï¾™ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã¨ã—ã¦å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã‚‹ï½ºï¾ï¾„ï¾›ï½°ï¾™ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã§ã™ã€‚";
         Text[ korean ] = "ì´ í•„ë“œëŠ” $control_class$ $control_name$ì— ë¼ë²¨ í•„ë“œë¡œ ì§€ì •ë  ìˆ˜ ìˆëŠ” ëª¨ë“  ì»¨íŠ¸ë¡¤ í•„ë“œì…ë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "è¿™äº›æ˜¯å¯æŒ‡å®šå½“ä½œæ ‡ç­¾å­—æ®µ $control_class$ $control_name$ çš„æ‰€æœ‰æ§åˆ¶ã€‚";
-        Text[ chinese_traditional ] = "é€™äº›æ˜¯å…¨éƒ¨çš„æ§è£½é …ï¼Œå®ƒå€‘èƒ½å¤ è¢«ç•¶ä½œåˆ†é¡ $control_class$  $control_name$ æ¨™ç±¤æ¬„ä½ã€‚";
+        Text[ chinese_traditional ] = "é€™äº›æ˜¯å…¨éƒ¨çš„æ§åˆ¶é …ï¼Œå®ƒå€‘èƒ½å¤ è¢«ç•¶ä½œåˆ†é¡ $control_class$  $control_name$ æ¨™ç±¤æ¬„ä½ã€‚";
         Text[ arabic ] = "ßÇäÊ åĞå åí ßÇİÉ ÚäÇÕÑ ÇáÊÍßã ÇáÊí íãßä ÇÓÊÎÏÇãåÇ ßÍŞá ÚäæäÉ áÜ $control_class$ $control_name$.";
         Text[ turkish ] = "$control_class$ $control_name$ için etiket alanı olarak atanabilecek tüm komut öğeleri bunlar.";
         Text[ language_user1 ] = " ";
@@ -498,7 +498,7 @@ String RID_STR_PROPTITLE_HIDDENCONTROL
     Text[ japanese ] = "éš ã—ï½ºï¾ï¾„ï¾›ï½°ï¾™";
     Text[ korean ] = "ìˆ¨ê²¨ì§„ ì»¨íŠ¸ë¡¤ í•„ë“œ";
     Text[ chinese_simplified ] = "éšå…¥çš„æ§åˆ¶";
-    Text[ chinese_traditional ] = "éš±å…¥çš„æ§è£½é …";
+    Text[ chinese_traditional ] = "éš±å…¥çš„æ§åˆ¶é …";
     Text[ turkish ] = "Hidden Control";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÎİí";
     Text[ finnish ] = "Piilotettu ohjausobjekti";
@@ -523,7 +523,7 @@ String RID_STR_PROPTITLE_UNKNOWNCONTROL
     Text[ japanese ] = "ï½ºï¾ï¾„ï¾›ï½°ï¾™(ç¨®é¡ã¯ä¸æ˜)";
     Text[ korean ] = "ì»¨íŠ¸ë¡¤ í•„ë“œ (ì•Œë ¤ì ¸ ìˆì§€ ì•ŠëŠ” í˜•ì‹)";
     Text[ chinese_simplified ] = "æ§åˆ¶(ä¸æ˜çš„ç±»å‹)";
-    Text[ chinese_traditional ] = "æ§è£½é …(ä¸æ˜çš„é¡å‹)";
+    Text[ chinese_traditional ] = "æ§åˆ¶é …(ä¸æ˜çš„é¡å‹)";
     Text[ turkish ] = "Control (unknown type)";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã (ÛíÑ ãÚÑæİ ÇáäæÚ)";
     Text[ finnish ] = "Ohjain (tuntematon tyyppi)";
@@ -546,7 +546,7 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ russian ] = "Ãğàôè÷åñêèé ıëåìåíò óïğàâëåíèÿ";
     Text[ polish ] = "Graficzne pole kontrolne";
     Text[ japanese ] = "ï½²ï¾’ï½°ï½¼ï¾ï½ºï¾ï¾„ï¾›ï½°ï¾™";
-    Text[ chinese_traditional ] = "åœ–å¼æ§è£½é …";
+    Text[ chinese_traditional ] = "åœ–å¼æ§åˆ¶é …";
     Text[ greek ] = "Ãñáöéêü ğåäßï åëİã÷ïõ";
     Text[ korean ] = "ì´ë¯¸ì§€ ì»¨íŠ¸ë¡¤ í•„ë“œ";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÑÓæã";
@@ -728,7 +728,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ russian ] = "İëåìåíò óïğàâëåíèÿ òàáëèö ";
     Text[ polish ] = "Pole kontrolne tabeli ";
     Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ï½ºï¾ï¾„ï¾›ï½°ï¾™ ";
-    Text[ chinese_traditional ] = "è¡¨æ ¼æ§è£½é … ";
+    Text[ chinese_traditional ] = "è¡¨æ ¼æ§åˆ¶é … ";
     Text[ greek ] = "Ğåäßï åëİã÷ïõ ğßíáêá ";
     Text[ korean ] = "í‘œ ì»¨íŠ¸ë¡¤ í•„ë“œ ";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ÎÇÕ ÈÇáÌÏÇæá";
@@ -4668,7 +4668,7 @@ String RID_STR_DATE
     Text[ french ] = "Date";
     Text[ spanish ] = "Fecha";
     Text[ finnish ] = "Date";
-    Text[ italian ] = "Date";
+    Text[ italian ] = "Data";
     Text[ danish ] = "Date";
     Text[ swedish ] = "Datum";
     Text[ polish ] = "Date";
@@ -4693,7 +4693,7 @@ String RID_STR_STATE
     Text[ french ] = "Statut";
     Text[ spanish ] = "Estado";
     Text[ finnish ] = "State";
-    Text[ italian ] = "State";
+    Text[ italian ] = "Stato";
     Text[ danish ] = "State";
     Text[ swedish ] = "Status";
     Text[ polish ] = "State";
@@ -4718,7 +4718,7 @@ String RID_STR_TIME
     Text[ french ] = "Heure";
     Text[ spanish ] = "Hora";
     Text[ finnish ] = "Time";
-    Text[ italian ] = "Time";
+    Text[ italian ] = "Ora";
     Text[ danish ] = "Time";
     Text[ swedish ] = "Tid";
     Text[ polish ] = "Time";
@@ -4743,7 +4743,7 @@ String RID_STR_SCALEIMAGE
     Text[ french ] = "Échelle";
     Text[ spanish ] = "Escala";
     Text[ finnish ] = "Scaling";
-    Text[ italian ] = "Scaling";
+    Text[ italian ] = "Scala";
     Text[ danish ] = "Scaling";
     Text[ swedish ] = "Skala";
     Text[ polish ] = "Scaling";
@@ -4768,7 +4768,7 @@ String RID_STR_PUSHBUTTONTYPE
     Text[ french ] = "Type de bouton";
     Text[ spanish ] = "Tipo de botón";
     Text[ finnish ] = "Button type";
-    Text[ italian ] = "Button type";
+    Text[ italian ] = "Tipo di pulsante";
     Text[ danish ] = "Button type";
     Text[ swedish ] = "Typ av kommandoknapp";
     Text[ polish ] = "Button type";
@@ -4793,7 +4793,7 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ french ] = "Standard;OK;Annuler;Aide";
     Text[ spanish ] = "Predeterminado;Aceptar;Cancelar;Ayuda";
     Text[ finnish ] = "Standard;OK;Cancel;Help";
-    Text[ italian ] = "Standard;OK;Cancel;Help";
+    Text[ italian ] = "Standard;OK;Annulla;?";
     Text[ danish ] = "Standard;OK;Cancel;Help";
     Text[ swedish ] = "Standard;OK;Avbryt;Hjälp";
     Text[ polish ] = "Standard;OK;Cancel;Help";
@@ -4811,16 +4811,58 @@ String RID_STR_UNABLETOCONNECT
     Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergestellt werden.";
     Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ portuguese ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ russian ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ greek ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ dutch ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ french ] = "Impossible d'établir la connexion à la source de données \"$name$\" !";
+    Text[ spanish ] = "No se pudo establecer la conexión a la fuente de datos \"$name$\" ";
+    Text[ finnish ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati \"$name$\".";
+    Text[ danish ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ swedish ] = "Det gick inte att ansluta till datakällan \"$name$\".";
+    Text[ polish ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ \"$name$\" ã¸ã¯æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ chinese_simplified ] = "æ— æ³•å’Œæ•°æ®æº \"$name$\" å»ºç«‹è¿æ¥ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ°è³‡æ–™æº \"$name$\" ã€‚";
+    Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
 };
 String RID_STR_TEXT
 {
     Text = "Text" ;
     Text [ ENGLISH ] = "Text" ;
+    Text[ english_us ] = "text ";
+    Text[ portuguese ] = "Texto";
+    Text[ russian ] = "Òåêñò";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ dutch ] = "Tekst";
+    Text[ french ] = "Texte";
+    Text[ spanish ] = "Texto";
+    Text[ finnish ] = "Teksti";
+    Text[ italian ] = "Testo";
+    Text[ danish ] = "Tekst";
+    Text[ swedish ] = "Text";
+    Text[ polish ] = "Tekst";
+    Text[ portuguese_brazilian ] = "Text";
+    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„";
+    Text[ korean ] = "í…ìŠ¤íŠ¸";
+    Text[ chinese_simplified ] = "æ–‡å­—";
+    Text[ chinese_traditional ] = "æ–‡å­—";
+    Text[ turkish ] = "Metin";
+    Text[ arabic ] = "ÇáäÕ";
+    Text[ catalan ] = "Text";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36  2001/11/13 22:54:50  kz
+ *  Merge SRC641: 13.11.01 - 22:54:26
+ *
  *  Revision 1.35  2001/11/08 17:39:12  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
@@ -4929,6 +4971,7 @@ String RID_STR_TEXT
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
