@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-12 09:51:06 $
+#   last change: $Author: hr $ $Date: 2000-11-13 15:23:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,8 @@ NO_BSYMBOLIC=TRUE
 # ------------------------------------------------------------------
 
 #CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
 
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc
