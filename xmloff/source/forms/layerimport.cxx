@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:09:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,12 @@
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
@@ -439,7 +442,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     Reference< XMultiServiceFactory > OFormLayerXMLImport_Impl::getServiceFactory()
     {
-        return ::comphelper::getProcessServiceFactory();
+        // #110680#
+        // return ::comphelper::getProcessServiceFactory();
+        return m_rImporter.getServiceFactory();
     }
 
     //---------------------------------------------------------------------
