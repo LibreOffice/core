@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 13:41:48 $
+ *  last change: $Author: mh $ $Date: 2001-09-28 16:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace osl {
         */
         ~Profile()
         {
-            sal_Bool err = osl_closeProfile(profile);
+            osl_closeProfile(profile);
         }
 
 
