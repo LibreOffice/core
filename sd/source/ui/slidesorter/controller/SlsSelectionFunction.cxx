@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:44:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,6 +739,11 @@ void SelectionFunction::SetCurrentPageAndSwitchView (
 }
 
 #define ANY_MODIFIER(code) code|NO_MODIFIER:case code|SHIFT_MODIFIER: case code|CONTROL_MODIFIER
+#define ANY_PAGE(code) code|NOT_OVER_PAGE:case code|OVER_UNSELECTED_PAGE: case code|OVER_SELECTED_PAGE
+#define ANY_PAGE_AND_MODIFIER(code)         \
+         ANY_PAGE(code|NO_MODIFIER):        \
+    case ANY_PAGE(code|SHIFT_MODIFIER):     \
+    case ANY_PAGE(code|CONTROL_MODIFIER)
 
 /** This method consists of two parts:
     1. Create a numeric code that describes the relevant information of the
@@ -888,30 +893,27 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
         // Rectangle selection.
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE | NO_MODIFIER:
             DeselectAllPages();
-            OSL_TRACE("start rectangle selection");
             StartRectangleSelection(aMouseModelPosition);
             break;
 
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE | SHIFT_MODIFIER:
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE | CONTROL_MODIFIER:
-            OSL_TRACE("start rectangle selection2");
             StartRectangleSelection(aMouseModelPosition);
             break;
 
-        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | NOT_OVER_PAGE):
-        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | OVER_SELECTED_PAGE):
-        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | OVER_UNSELECTED_PAGE):
-            OSL_TRACE("update rectangle selection");
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE):
+        case ANY_PAGE_AND_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE):
             mrController.GetScrollBarManager().AutoScroll(aMousePosition);
             UpdateRectangleSelection(aMouseModelPosition);
             break;
 
-        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | NO_MODIFIER:
+        case ANY_PAGE(BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | NO_MODIFIER):
             ProcessRectangleSelection(false);
             break;
 
-        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | SHIFT_MODIFIER:
-        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | CONTROL_MODIFIER:
+        case ANY_PAGE(BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | SHIFT_MODIFIER):
+        case ANY_PAGE(BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | RECTANGLE_VISIBLE | CONTROL_MODIFIER):
             ProcessRectangleSelection(true);
             break;
 
@@ -952,12 +954,10 @@ void SelectionFunction::DeselectAllPages (void)
 
 void SelectionFunction::StartRectangleSelection (const Point& rMouseModelPosition)
 {
-    mbRectangleSelection = true;
     OSL_TRACE("starting  rectangle selection at %d %d",
         rMouseModelPosition.X(), rMouseModelPosition.Y());
 
     mrController.GetView().GetOverlay().GetSelectionRectangleOverlay().Start(rMouseModelPosition);
-    //    mrController.GetView().BegEncirclement (aMouseModelPosition);
 }
 
 
@@ -965,8 +965,8 @@ void SelectionFunction::StartRectangleSelection (const Point& rMouseModelPositio
 
 void SelectionFunction::UpdateRectangleSelection (const Point& rMouseModelPosition)
 {
+    mbRectangleSelection = true;
     mrController.GetView().GetOverlay().GetSelectionRectangleOverlay().Update(rMouseModelPosition);
-    //    mrController.GetView().MovEncirclement(rMouseModelPosition);
 }
 
 
@@ -1155,18 +1155,23 @@ void SelectionFunction::UpdateSubstitution (const Point& rMouseModelPosition)
 
 void SelectionFunction::GotoNextPage (int nOffset)
 {
-    SdPage* pPage = mrController.GetViewShell().GetActualPage();
-    sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
-    nIndex += nOffset;
-    USHORT nPageCount = mrController.GetModel().GetPageCount();
+    SdPage* pPage = mrController.GetActualPage();
+    if (pPage != NULL)
+    {
+        sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
+        nIndex += nOffset;
+        USHORT nPageCount = mrController.GetModel().GetPageCount();
 
-    if (nIndex >= nPageCount)
-        nIndex = nPageCount - 1;
-    if (nIndex < 0)
-        nIndex = 0;
+        if (nIndex >= nPageCount)
+            nIndex = nPageCount - 1;
+        if (nIndex < 0)
+            nIndex = 0;
 
-    mrController.GetFocusManager().SetFocusedPage(nIndex);
-    mrController.GetPageSelector().SetCurrentPage(nIndex);
+        mrController.GetFocusManager().SetFocusedPage(nIndex);
+        mrController.GetPageSelector().DeselectAllPages();
+        mrController.GetPageSelector().SelectPage(nIndex);
+        mrController.GetPageSelector().SetCurrentPage(nIndex);
+    }
 }
 
 
