@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:01:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ static oslFileError osl_create_temp_file_impl_(
 
     rtl_uStringbuffer_newFromStr_WithLength(
         &tmp_file_path,
-        rtl_uString_getStr(pustr_base_directory),
+        rtl_uString_getStr((rtl_uString*)pustr_base_directory),
         len_base_dir);
 
     rtl_uStringbuffer_ensureCapacity(
