@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-12 12:21:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,18 +70,21 @@
 
 class SdPPTFilter : public SdFilter
 {
-    SvMemoryStream*         pBas;
-
 public:
-
-                            SdPPTFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
-                            ~SdPPTFilter();
+    SdPPTFilter (
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress);
+    virtual ~SdPPTFilter (void);
 
     virtual sal_Bool        Import();
     virtual sal_Bool        Export();
 
     // these methods are necassary for the export to PowerPoint
     void                    PreSaveBasic();         // restaures the original basic storage
+
+private:
+    SvMemoryStream*         pBas;
 };
 
 #endif // _SD_PPTWRP_HXX
