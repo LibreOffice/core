@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:45:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,18 +386,39 @@ namespace comphelper
     //--------------------------------------------------------------------
     OAccessibleWrapper::~OAccessibleWrapper( )
     {
+        implEnsureDisposeInDtor();
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
+    {
+        return (Reference< XAccessibleContext >)m_aContext;
+    }
+
+    //--------------------------------------------------------------------
+    OAccessibleContextWrapper* OAccessibleWrapper::createAccessibleContext( const Reference< XAccessibleContext >& _rxInnerContext )
+    {
+        return new OAccessibleContextWrapper( getORB(), _rxInnerContext, this, m_xParentAccessible );
     }
 
     //--------------------------------------------------------------------
     Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContext(  ) throw (RuntimeException)
     {
-        Reference< XAccessibleContext > xInnerContext = m_xInner->getAccessibleContext( );
-        if ( xInnerContext.is() )
+        // see if the context is still alive (we cache it)
+        Reference< XAccessibleContext > xContext = (Reference< XAccessibleContext >)m_aContext;
+        if ( !xContext.is() )
         {
-            OSL_ENSURE( xInnerContext.is(), "OAccessibleWrapper::getAccessibleContext: invalid inner context!" );
-            return new OAccessibleContextWrapper( getORB(), xInnerContext, this, m_xParentAccessible );
+            // create a new context
+            Reference< XAccessibleContext > xInnerContext = m_xInner->getAccessibleContext( );
+            if ( xInnerContext.is() )
+            {
+                xContext = createAccessibleContext( xInnerContext );
+                // cache it
+                m_aContext = WeakReference< XAccessibleContext >( xContext );
+            }
         }
-        return Reference< XAccessibleContext >();
+
+        return xContext;
     }
 
     //=========================================================================
@@ -441,12 +462,7 @@ namespace comphelper
         m_pChildMapper->release();
         m_pChildMapper = NULL;
 
-        if ( !rBHelper.bDisposed )
-        {
-            acquire();  // du prevent duplicate dtor calls
-            dispose();
-        }
-        m_xInner.clear();
+        implEnsureDisposeInDtor();
     }
 
     //--------------------------------------------------------------------
@@ -544,8 +560,9 @@ namespace comphelper
         {
             if ( 0 == AccessibleEventNotifier::removeEventListener( m_nNotifierClient, _rxListener ) )
             {
-                AccessibleEventNotifier::revokeClient( m_nNotifierClient );
+                AccessibleEventNotifier::TClientId nId( m_nNotifierClient );
                 m_nNotifierClient = 0;
+                AccessibleEventNotifier::revokeClient( nId );
             }
         }
     }
@@ -614,14 +631,14 @@ namespace comphelper
             // dispose the child cache/map
             m_pChildMapper->dispose();
 
-            // dispose our inner context
-            // before we do this, remove ourself as listener - else in disposing( EventObject ), we
-            // would dispose ourself a second time
-            Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
+            // let the base class dispose the inner object
+            // before we do this, remove ourself as listener
+            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster > xBroadcaster( m_xInner, ::com::sun::star::uno::UNO_QUERY );
             OSL_ENSURE( xBroadcaster.is(), "OAccessibleContextWrapper::disposing(): inner context is no broadcaster!" );
             if ( xBroadcaster.is() )
                 xBroadcaster->removeEventListener( this );
-            ::comphelper::disposeComponent( m_xInner );
+
+            OAccessibleContextWrapper_Base::disposing();
         }
         // --- </mutex lock> -----------------------------------------
 
@@ -632,14 +649,8 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleContextWrapper::disposing( const EventObject& _rEvent )  throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        Reference< XAccessibleContext > xSource( _rEvent.Source, UNO_QUERY );
-        if ( xSource.get() == m_xInner.get() )
-        {   // it's our inner context which is dying -> dispose ourself
-            dispose();
-        }
-        else
-            OSL_ENSURE( sal_False, "OAccessibleContextWrapper::disposing(EventObject): where did this come from?" );
+        // simply disambiguate this
+        OAccessibleContextWrapper_Base::disposing( _rEvent );
     }
 
 //.............................................................................
