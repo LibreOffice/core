@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-09 13:30:12 $
+ *  last change: $Author: pb $ $Date: 2002-08-30 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
             return DND_ACTION_COPY;
     }
 
-    return DND_ACTION_NONE;
+    return SvTreeListBox::AcceptDrop( rEvt );
 }
 
 //-------------------------------------------------------------------------
@@ -343,7 +343,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
 
         if ( !bFormatFound )
-            PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteError ) );
+            return SvTreeListBox::ExecuteDrop( rEvt );
     }
 
     return nRet;
