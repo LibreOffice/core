@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 12:57:15 $
+ *  last change: $Author: fs $ $Date: 2002-08-19 11:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1682,6 +1682,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 119 , 28 ) ;
         Border = TRUE ;
         Sort = TRUE ;
+        // #98647# ---------------------------------------------
+        AutoHScroll = TRUE;
+
     };
     PushButton PB_SCRIPT_DELETE
     {
