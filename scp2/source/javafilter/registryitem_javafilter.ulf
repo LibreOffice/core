@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ *  $RCSfile: registryitem_javafilter.ulf,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:21:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+[STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C_]
+de = "Pocket Excel"
+en-US = "Pocket Excel"
+
+[STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C__PEGASUSFILTER_DESCRIPTION]
+de = "Pocket Excel Workbook"
+en-US = "Pocket Excel Workbook"
+
+[STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020_]
+de = "%PRODUCTNAME Writer"
+en-US = "%PRODUCTNAME Writer"
+
+[STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020__PEGASUSFILTER_DESCRIPTION]
+de = "%PRODUCTNAME Writer XML Dokument"
+en-US = "%PRODUCTNAME Writer XML Document"
+
+[STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C_]
+de = "%PRODUCTNAME Calc"
+en-US = "%PRODUCTNAME Calc"
+
+[STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C__PEGASUSFILTER_DESCRIPTION]
+de = "%PRODUCTNAME Calc XML Dokument"
+en-US = "%PRODUCTNAME Calc XML Document"
+
+[STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439_]
+de = "Pocket Word"
+en-US = "Pocket Word"
+
+[STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439__PEGASUSFILTER_DESCRIPTION]
+de = "Pocket Word Dokument - Pocket PC"
+en-US = "Pocket Word Document - Pocket PC"
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_CLASSPATH]
+de = "Die %PRODUCTNAME-Filter für mobile Geräte können nicht gefunden werden."
+en-US = "The %PRODUCTNAME mobile device filters cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_CLASSPATH]
+de = "Die %PRODUCTNAME-Filter für mobile Geräte können nicht gefunden werden."
+en-US = "The %PRODUCTNAME mobile device filters cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVA]
+de = "Eine Installation von Java 1.4 kann nicht gefunden werden."
+en-US = "A Java 1.4 installation cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVA]
+de = "Eine Installation von Java 1.4 kann nicht gefunden werden."
+en-US = "A Java 1.4 installation cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVAINIT]
+de = "Ein Fehler ist während der Initialisierung der Java-Laufzeitumgebung aufgetreten."
+en-US = "There was an error while initializing the Java Runtime Environment."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVAINIT]
+de = "Ein Fehler ist während der Initialisierung der Java-Laufzeitumgebung aufgetreten."
+en-US = "There was an error while initializing the Java Runtime Environment."
+
+
+
