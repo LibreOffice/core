@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:06:46 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 07:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    ///=====   internal  ======================================================
+
+    void ChangeEditMode();
 
 private:
     ScTabViewShell* mpViewShell;
