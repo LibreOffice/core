@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:36:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 
             //  char cChar;
             ::rtl::OUString aStr;
-            while ( nLength >= STRING_MAXLEN )
+            while ( nLength > STRING_MAXLEN )
             {
                 ByteString aBStr;
                 aBStr.Expand(STRING_MAXLEN);
@@ -248,15 +248,18 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
                 nLength -= STRING_MAXLEN;
             }
-            ByteString aBStr;
-            aBStr.Expand(nLength);
-            m_pMemoStream->Read(aBStr.AllocBuffer(nLength),nLength);
-            //  aBStr.ReleaseBufferAccess();
+            if ( nLength )
+            {
+                ByteString aBStr;
+                aBStr.Expand(nLength);
+                m_pMemoStream->Read(aBStr.AllocBuffer(nLength),nLength);
+                //  aBStr.ReleaseBufferAccess();
 
-            aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
 
-
-            aVariable = aStr;
+            }
+            if ( aStr.getLength() )
+                aVariable = aStr;
         }
     }
     return sal_True;
