@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-24 15:11:01 $
+ *  last change: $Author: rt $ $Date: 2001-07-27 08:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@
 #include <vcl/print.hxx>
 #endif
 #ifndef _SVX_SVXFONT_HXX
-#include <svx/svxfont.hxx>
+#include <svxfont.hxx>
 #endif
 
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
