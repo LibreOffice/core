@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:52:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_CLIPBOARD
 #define SD_SLIDESORTER_CLIPBOARD
 
@@ -149,6 +148,12 @@ private:
         drag-and-drop operation is completed.
     */
     PageList maPagesToSelect;
+
+    /** When pages are moved or copied then the selection of the slide
+        sorter has to be updated.  This flag is used to remember whether the
+        selection has to be updated or can stay as it is (FALSE).
+    */
+    bool mbUpdateSelectionPending;
 
     void CreateSlideTransferable (
         ::Window* pWindow,
