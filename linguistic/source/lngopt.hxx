@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:38 $
+ *  last change: $Author: tl $ $Date: 2000-11-22 15:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ class LinguOptions
 
         // misc options (non-service specific)
         INT16   nDefaultLanguage;
+        INT16   nDefaultLanguage_CJK;
+        INT16   nDefaultLanguage_CTL;
 
         // spelling options (non-service specific)
         BOOL    bIsSpellSpecial;
@@ -184,6 +186,10 @@ class LinguOptions
 
 
     //! uses default assignment-operator
+
+    BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage,
+            ::com::sun::star::uno::Any &rOld,
+            const ::com::sun::star::uno::Any &rVal);
 
 public:
     LinguOptions();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:38 $
+ *  last change: $Author: tl $ $Date: 2000-11-22 15:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,15 @@ static const OUString LanguageToCfgLocaleStr( INT16 nLanguage )
     return aRes;
 }
 
+
+static INT16 CfgAnyToLanguage( const Any &rVal )
+{
+    OUString aTmp;
+    rVal >>= aTmp;
+    return CfgLocaleStrToLanguage( aTmp );
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -181,6 +190,9 @@ static void GetSeqLangSvcList( const Any &rVal )
                         for (INT32 j = 0;  j < nSvcs;  ++j)
                         {
                             OUString aImplName( pSvcName[i] );
+
+                            // TL TODO: services needs to be set when new
+                            // configuration dialogue is available
                         }
                     }
                 }
@@ -192,6 +204,29 @@ static void GetSeqLangSvcList( const Any &rVal )
 
 static void GetSeqLangSvc( const Any &rVal )
 {
+    Reference< XNameAccess > xNameAcc;
+    rVal >>= xNameAcc;
+    if (xNameAcc.is())
+    {
+        const Sequence< OUString > aNames( xNameAcc->getElementNames() );
+        INT32 nLen = aNames.getLength();
+        if (nLen)
+        {
+            const OUString *pName = aNames.getConstArray();
+            for (INT32 i = 0;  i < nLen;  ++i)
+            {
+                Any aTmp( xNameAcc->getByName( pName[i] ) );
+                if (aTmp.hasValue())
+                {
+                    OUString aImplName;
+                    aTmp >>= aImplName;
+
+                    // TL TODO: service needs to be set when new
+                    // configuration dialogue is available
+                }
+            }
+        }
+    }
 }
 
 
@@ -205,6 +240,9 @@ LinguOptions::LinguOptionsData::LinguOptionsData() :
     nDefaultLanguage = ::GetSystemLanguage();
     if( nDefaultLanguage == LANGUAGE_SYSTEM )
         nDefaultLanguage = System::GetLanguage();
+
+    nDefaultLanguage_CJK = LANGUAGE_NONE;
+    nDefaultLanguage_CTL = LANGUAGE_NONE;
 
     // general options
     bIsGermanPreReform      = FALSE;
@@ -266,7 +304,9 @@ Sequence< OUString > LinguOptions::LinguOptionsData::GetPropertyNames()
         "ExternalLinguistic/IsUseStandardThesaurus",    // 21
         "ServiceManager/SpellCheckerList",              // 22
         "ServiceManager/ThesaurusList",                 // 23
-        "ServiceManager/HyphenatorList"                 // 24
+        "ServiceManager/HyphenatorList",                // 24
+        "General/DefaultLocale_CJK",                    // 25
+        "General/DefaultLocale_CTL"                     // 26
     };
 
     INT32 nCount =  sizeof(aPropNames) / sizeof(aPropNames[0]);
@@ -299,13 +339,7 @@ BOOL LinguOptions::LinguOptionsData::LoadConfig()
             {
                 switch (i)
                 {
-                    case  0:
-                    {
-                        OUString aTmp;
-                        rVal >>= aTmp;
-                        nDefaultLanguage = CfgLocaleStrToLanguage( aTmp );
-                        break;
-                    }
+                    case  0: nDefaultLanguage = CfgAnyToLanguage( rVal );   break;
                     case  1: rVal >>= aActiveDics;  break;
                     case  2: rVal >>= bIsUseDictionaryList; break;
                     case  3: rVal >>= bIsIgnoreControlCharacters;   break;
@@ -330,6 +364,8 @@ BOOL LinguOptions::LinguOptionsData::LoadConfig()
                     case 22: GetSeqLangSvcList( rVal ); break;
                     case 23: GetSeqLangSvcList( rVal ); break;
                     case 24: GetSeqLangSvc( rVal ); break;
+                    case 25: nDefaultLanguage_CJK = CfgAnyToLanguage( rVal );   break;
+                    case 26: nDefaultLanguage_CTL = CfgAnyToLanguage( rVal );   break;
                     default:
                         DBG_ERROR( "unexpected case" );
                 }
@@ -363,6 +399,7 @@ BOOL LinguOptions::LinguOptionsData::SaveConfig()
             {
                 OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage ) );
                 rVal = makeAny( aTmp );
+                break;
             }
             case  1: rVal = makeAny( aActiveDics ); break;
             case  2: rVal.setValue( &bIsUseDictionaryList, rBOOL ); break;
@@ -388,6 +425,18 @@ BOOL LinguOptions::LinguOptionsData::SaveConfig()
             case 22: break;
             case 23: break;
             case 24: break;
+            case 25:
+            {
+                OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage_CJK ) );
+                rVal = makeAny( aTmp );
+                break;
+            }
+            case 26:
+            {
+                OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage_CTL ) );
+                rVal = makeAny( aTmp );
+                break;
+            }
             default:
                 DBG_ERROR( "unexpected case" );
         }
@@ -444,6 +493,25 @@ LinguOptions::~LinguOptions()
 }
 
 
+BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal)
+{
+    BOOL bRes = FALSE;
+
+    Locale  aNew;
+    rVal >>= aNew;
+    INT16 nNew = LocaleToLanguage( aNew );
+    if (nNew != rLanguage)
+    {
+        Locale  aLocale( CreateLocale( rLanguage ) );
+        rOld.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+        rLanguage = nNew;
+        bRes = TRUE;
+    }
+
+    return bRes;
+}
+
+
 BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -478,16 +546,17 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         case WID_HYPH_MIN_WORD_LENGTH :     pnVal = &pData->nHyphMinWordLength; break;
         case WID_DEFAULT_LOCALE :
         {
-            Locale  aNew;
-            rVal >>= aNew;
-            INT16 nNew = LocaleToLanguage( aNew );
-            if (nNew != pData->nDefaultLanguage)
-            {
-                Locale  aLocale( CreateLocale( pData->nDefaultLanguage ) );
-                rOld.setValue( &aLocale, ::getCppuType((Locale*)0 ));
-                pData->nDefaultLanguage = nNew;
-                bRes = TRUE;
-            }
+            bRes = SetLocale_Impl( pData->nDefaultLanguage, rOld, rVal );
+            break;
+        }
+        case WID_DEFAULT_LOCALE_CJK :
+        {
+            bRes = SetLocale_Impl( pData->nDefaultLanguage_CJK, rOld, rVal );
+            break;
+        }
+        case WID_DEFAULT_LOCALE_CTL :
+        {
+            bRes = SetLocale_Impl( pData->nDefaultLanguage_CTL, rOld, rVal );
             break;
         }
         default :
@@ -562,6 +631,18 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
             rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
             break;
         }
+        case WID_DEFAULT_LOCALE_CJK :
+        {
+            Locale aLocale( CreateLocale( pData->nDefaultLanguage_CJK ) );
+            rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+            break;
+        }
+        case WID_DEFAULT_LOCALE_CTL :
+        {
+            Locale aLocale( CreateLocale( pData->nDefaultLanguage_CTL ) );
+            rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+            break;
+        }
         default :
         {
             DBG_ERROR("lng : unknown WID");
@@ -581,6 +662,8 @@ struct WID_Name
     const char  *pPropertyName;
 };
 
+//! order of entries is import (see LinguOptions::GetName)
+//! since the WID is used as index in this table!
 WID_Name aWID_Name[] =
 {
     WID_IS_GERMAN_PRE_REFORM,           UPN_IS_GERMAN_PRE_REFORM,
@@ -604,7 +687,9 @@ WID_Name aWID_Name[] =
     WID_IS_STANDARD_SPELL_CHECKER,      UPN_IS_STANDARD_SPELL_CHECKER,
     WID_IS_STANDARD_THESAURUS,          UPN_IS_STANDARD_THESAURUS,
     WID_OTHER_LINGU_INDEX,              UPN_OTHER_LINGU_INDEX,
-    WID_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE
+    WID_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE,
+    WID_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK,
+    WID_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL
 };
 
 
@@ -689,6 +774,10 @@ static SfxItemPropertyMap aLinguProps[] =
     { MAP_CHAR_LEN(UPN_DEFAULT_LANGUAGE),           WID_DEFAULT_LANGUAGE,
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },
     { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE),             WID_DEFAULT_LOCALE,
+            &::getCppuType( (Locale* )0),       0, 0 },
+    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CJK),         WID_DEFAULT_LOCALE,
+            &::getCppuType( (Locale* )0),       0, 0 },
+    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CTL),         WID_DEFAULT_LOCALE,
             &::getCppuType( (Locale* )0),       0, 0 },
     { MAP_CHAR_LEN(UPN_HYPH_MIN_LEADING),           WID_HYPH_MIN_LEADING,
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngprops.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:29 $
+ *  last change: $Author: tl $ $Date: 2000-11-22 15:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@
 // and more likely used in other modules only)
 #define UPN_DEFAULT_LANGUAGE                "DefaultLanguage"
 #define UPN_DEFAULT_LOCALE                  "DefaultLocale"
+#define UPN_DEFAULT_LOCALE_CJK              "DefaultLocale_CJK"
+#define UPN_DEFAULT_LOCALE_CTL              "DefaultLocale_CTL"
 #define UPN_IS_HYPH_AUTO                    "IsHyphAuto"
 #define UPN_IS_HYPH_SPECIAL                 "IsHyphSpecial"
 #define UPN_IS_SPELL_AUTO                   "IsSpellAuto"
@@ -121,6 +123,8 @@
 #define WID_IS_STANDARD_THESAURUS           19
 #define WID_OTHER_LINGU_INDEX               20
 #define WID_DEFAULT_LANGUAGE                21
+#define WID_DEFAULT_LOCALE_CJK              22
+#define WID_DEFAULT_LOCALE_CTL              23
 
 
 // UNO property handles
