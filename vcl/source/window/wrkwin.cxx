@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:22:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,13 +333,6 @@ void WorkWindow::ImplSetFrameState( ULONG aFrameState )
     aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
     aState.mnState  = aFrameState; //SAL_FRAMESTATE_MAXIMIZED;
     mpFrame->SetWindowState( &aState );
-
-    // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
-    // mit der richtigen Groesse rechnen
-    long nNewWidth;
-    long nNewHeight;
-    pWindow->mpFrame->GetClientSize( nNewWidth, nNewHeight );
-    ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
 
@@ -364,3 +357,22 @@ BOOL WorkWindow::Close()
     return bCanClose;
 }
 
+void WorkWindow::Maximize( BOOL bMaximize )
+{
+    ImplSetFrameState( bMaximize ? SAL_FRAMESTATE_MAXIMIZED : SAL_FRAMESTATE_NORMAL );
+}
+
+BOOL WorkWindow::IsMaximized()
+{
+    BOOL bRet = FALSE;
+
+    SalFrameState aState;
+    if( mpFrame->GetWindowState( &aState ) )
+    {
+        if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED          |
+                              SAL_FRAMESTATE_MAXIMIZED_HORZ     |
+                              SAL_FRAMESTATE_MAXIMIZED_VERT ) )
+            bRet = TRUE;
+    }
+    return bRet;
+}
