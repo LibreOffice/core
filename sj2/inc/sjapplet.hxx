@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:02 $
+ *  last change: $Author: kr $ $Date: 2001-04-10 13:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,24 +64,13 @@
 
 #include <tools/string.hxx>
 
-// **************************************************************
-//class stardiv_applet_AppletViewerPanel;
-//  class stardiv_applet_AppletExecutionContext;
-//  class java_awt_Frame;
-//  class com_sun_star_comp_jawt_peer_EmbeddedFrame;
-//  class java_awt_Window;
-//  class XubString;
-//  class SjJSbxObject;
-
-//#include <jni.h>
-
 class INetURLObject;
 class Size;
 class SjJScriptAppletObject;
 class SvCommandList;
 class Window;
 
-struct SjApplet2ImplStruct;
+struct SjApplet2_Impl;
 
 enum SjNetAccess
 {
@@ -90,8 +79,7 @@ enum SjNetAccess
 
 class SjApplet2
 {
-    Window              * _pParentWin;
-    SjApplet2ImplStruct * _pImpl;
+    SjApplet2_Impl * _pImpl;
 
 public:
     static void settingsChanged(void);

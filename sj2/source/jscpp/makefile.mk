@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+#   last change: $Author: kr $ $Date: 2001-04-10 13:56:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,10 +86,12 @@ UNOTYPES= \
 
 CXXFILES=	\
     sjapplet.cxx							\
+    sjapplet_impl.cxx
 
 
 SLOFILES=	\
     $(SLO)$/sjapplet.obj						\
+    $(SLO)$/sjapplet_impl.obj
 
 # .IF "$(GUI)"=="WNT"
 # SLOFILES +=	$(SLO)$/sun_awt_windows_package.obj

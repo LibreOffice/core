@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-09 11:50:39 $
+ *  last change: $Author: kr $ $Date: 2001-04-10 13:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.Toolkit;
+import java.awt.Window;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +96,7 @@ import com.sun.star.lib.sandbox.CodeSource;
 public final class AppletExecutionContext extends ExecutionContext
         implements AppletStub, LiveConnectable
 {
-    private static final boolean DEBUG = true; // Enable / disable debug output
+    private static final boolean DEBUG = false; // Enable / disable debug output
 
     private Applet _applet;
     private Container _container;
@@ -143,8 +144,6 @@ public final class AppletExecutionContext extends ExecutionContext
     }
 
     public void init() {
-        if(DEBUG) System.err.println("#####" + getClass().getName() + ".init()");
-
         _baseURL = null;
 
         try {
@@ -194,6 +193,8 @@ public final class AppletExecutionContext extends ExecutionContext
           _documentProxy.addExecutionContext(this, _className);
 
         super.init(nm, ClassContextProxy.create(_baseURL, null, null));
+
+        if(DEBUG) System.err.println("#####" + getClass().getName() + ".init: _className=" + _className + " _baseURL=" + _baseURL);
     }
 
     void sDispose(long timeout) {
@@ -273,6 +274,9 @@ public final class AppletExecutionContext extends ExecutionContext
             synchronized(_className) {
                 _applet = (Applet)appletClass.newInstance();
                 _applet.setStub(this);
+
+                appletResize(_container.getSize().width, _container.getSize().height);
+
                 _className.notifyAll();
             }
         }
@@ -309,6 +313,8 @@ public final class AppletExecutionContext extends ExecutionContext
     }
 
     protected void xdestroy() {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".xdestroy");
+
         _applet.destroy();
         _applet.setVisible(false);
         _applet.setStub(null);
@@ -317,8 +323,14 @@ public final class AppletExecutionContext extends ExecutionContext
     }
 
     protected void xdispose() {
-        if(_container != null)
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".xdispose");
+
+        if(_container != null) {
             _container.remove(_applet);
+
+            if(_container instanceof Window)
+                ((Window)_container).dispose();
+        }
 
         _applet = null;
     }
@@ -349,7 +361,9 @@ public final class AppletExecutionContext extends ExecutionContext
      * Methods for AppletStub interface
      */
     public void appletResize(int width, int height) {
-        _applet.setSize(new java.awt.Dimension(width, height));
+        _container.setSize(width, height);
+        if(_applet != null)
+            _applet.setSize(width, height);
     }
 
     public AppletContext getAppletContext() {
