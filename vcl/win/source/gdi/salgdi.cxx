@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:44:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,6 +1679,10 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
             if ( ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
             {
                 OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
+
+                // reserve place for a USHORT
+                aBuf.append( "aa" );
+
                 // #107797# Write out EPS encapsulation header
                 // ----------------------------------------------------------------------------------
 
@@ -1691,8 +1695,6 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 // work around that, except from scanning and
                 // interpreting the EPS for unused identifiers.
 
-                // reserve place for a USHORT
-                aBuf.append( "aa" );
                 // append the real text
                 aBuf.append( "\n\n/b4_Inc_state_salWin save def\n"
                              "/dict_count_salWin countdictstack def\n"
@@ -1710,6 +1712,52 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "    false setstrokeadjust false setoverprint\n"
                              "  } if\n"
                              "} if\n\n" );
+
+
+                // #i10737# Apply clipping manually
+                // ----------------------------------------------------------------------------------
+
+                // Windows seems to ignore any clipping at the HDC,
+                // when followed by a POSTSCRIPT_PASSTHROUGH
+
+                // Check whether we've got a clipping, consisting of
+                // exactly one rect (other cases should be, but aren't
+                // handled currently)
+
+                // TODO: Handle more than one rectangle here (take
+                // care, the buffer can handle only POSTSCRIPT_BUFSIZE
+                // characters!)
+                if ( mhRegion != 0 &&
+                     mpStdClipRgnData != NULL &&
+                     mpClipRgnData == mpStdClipRgnData &&
+                     mpClipRgnData->rdh.nCount == 1 )
+                {
+                    RECT* pRect = &(mpClipRgnData->rdh.rcBound);
+
+                    aBuf.append( "\nnewpath\n" );
+                    aBuf.append( pRect->left );
+                    aBuf.append( " " );
+                    aBuf.append( pRect->top );
+                    aBuf.append( " moveto\n" );
+                    aBuf.append( pRect->right );
+                    aBuf.append( " " );
+                    aBuf.append( pRect->top );
+                    aBuf.append( " lineto\n" );
+                    aBuf.append( pRect->right );
+                    aBuf.append( " " );
+                    aBuf.append( pRect->bottom );
+                    aBuf.append( " lineto\n" );
+                    aBuf.append( pRect->left );
+                    aBuf.append( " " );
+                    aBuf.append( pRect->bottom );
+                    aBuf.append( " lineto\n"
+                                 "closepath\n"
+                                 "clip\n"
+                                 "newpath\n" );
+                }
+
+                // #107797# Write out buffer
+                // ----------------------------------------------------------------------------------
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
                 Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
