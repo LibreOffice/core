@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 13:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2951,4 +2951,312 @@ IMPL_LINK( SvxCharExtPage, AutoPosHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
+// class SvxCharPage -----------------------------------------------------
+
+SvxCharPage::SvxCharPage( Window* pParent, const SfxItemSet& rInSet ) :
+
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_NAME ), rInSet ),
+
+    m_aWestLine             ( this, ResId( FL_WEST ) ),
+    m_aWestFontNameFT       ( this, ResId( FT_WEST_NAME ) ),
+    m_aWestFontNameLB       ( this, ResId( LB_WEST_NAME ) ),
+    m_aWestFontStyleFT      ( this, ResId( FT_WEST_STYLE ) ),
+    m_aWestFontStyleLB      ( this, ResId( LB_WEST_STYLE ) ),
+    m_aWestFontSizeFT       ( this, ResId( FT_WEST_SIZE ) ),
+    m_aWestFontSizeLB       ( this, ResId( LB_WEST_SIZE ) ),
+    m_aWestFontLanguageFT   ( this, ResId( FT_WEST_LANG ) ),
+    m_aWestFontLanguageLB   ( this, ResId( LB_WEST_LANG ) ),
+
+    m_aEastLine             ( this, ResId( FL_EAST ) ),
+    m_aEastFontNameFT       ( this, ResId( FT_EAST_NAME ) ),
+    m_aEastFontNameLB       ( this, ResId( LB_EAST_NAME ) ),
+    m_aEastFontStyleFT      ( this, ResId( FT_EAST_STYLE ) ),
+    m_aEastFontStyleLB      ( this, ResId( LB_EAST_STYLE ) ),
+    m_aEastFontSizeFT       ( this, ResId( FT_EAST_SIZE ) ),
+    m_aEastFontSizeLB       ( this, ResId( LB_EAST_SIZE ) ),
+    m_aEastFontLanguageFT   ( this, ResId( FT_EAST_LANG ) ),
+    m_aEastFontLanguageLB   ( this, ResId( LB_EAST_LANG ) ),
+
+    m_aPreviewLine          ( this, ResId( FL_CHAR_PREVIEW ) ),
+    m_aPreviewWin           ( this, ResId( WIN_CHAR_PREVIEW ) ),
+    m_aFontTypeFT           ( this, ResId( FT_CHAR_FONTTYPE ) ),
+
+    m_aSeparateLine         ( this, ResId( FL_SEPARATE ) ),
+
+    m_aColorLine            ( this, ResId( FL_COLOR2 ) ),
+    m_aColorLB              ( this, ResId( LB_COLOR2 ) )
+
+{
+    FreeResource();
+
+    m_aSeparateLine.SetStyle( m_aSeparateLine.GetStyle() | WB_VERT );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPage::ActivatePage( const SfxItemSet& rSet )
+{
+}
+
+// -----------------------------------------------------------------------
+
+int SvxCharPage::DeactivatePage( SfxItemSet* pSet )
+{
+    if ( pSet )
+        FillItemSet( *pSet );
+    return LEAVE_PAGE;
+}
+
+// -----------------------------------------------------------------------
+
+SfxTabPage* SvxCharPage::Create( Window* pParent, const SfxItemSet& rSet )
+{
+    return new SvxCharPage( pParent, rSet );
+}
+
+// -----------------------------------------------------------------------
+
+USHORT* SvxCharPage::GetRanges()
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharPage::FillItemSet( SfxItemSet& rSet )
+{
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPage::Reset( const SfxItemSet& rSet )
+{
+}
+
+// class SvxCharEffectsPage ----------------------------------------------
+
+SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSet ) :
+
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet ),
+
+    m_aUnderlineFT          ( this, ResId( FT_UNDERLINE ) ),
+    m_aUnderlineLB          ( this, ResId( LB_UNDERLINE ) ),
+    m_aColorFT              ( this, ResId( FT_UNDERLINE_COLOR ) ),
+    m_aColorLB              ( this, ResId( LB_UNDERLINE_COLOR ) ),
+    m_aStrikeoutFT          ( this, ResId( FT_STRIKEOUT ) ),
+    m_aStrikeoutLB          ( this, ResId( LB_STRIKEOUT ) ),
+    m_aIndividualWordsBtn   ( this, ResId( CB_INDIVIDUALWORDS ) ),
+    m_aEmphasisFT           ( this, ResId( FT_EMPHASIS ) ),
+    m_aEmphasisLB           ( this, ResId( LB_EMPHASIS ) ),
+    m_aPositionFT           ( this, ResId( FT_POSITION ) ),
+    m_aPositionLB           ( this, ResId( LB_POSITION ) ),
+    m_aEffectsFT            ( this, ResId( FT_EFFECTS ) ),
+    m_aEffectsLB            ( this, ResId( LB_EFFECTS ) ),
+
+    m_aPreviewLine          ( this, ResId( FL_EFFECTS_PREVIEW ) ),
+    m_aPreviewWin           ( this, ResId( WIN_EFFECTS_PREVIEW ) ),
+    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) )
+
+{
+    FreeResource();
+
+    m_aEffectsLB.InsertEntry( DEFINE_CONST_UNICODE("Schattiert" ) );
+    m_aEffectsLB.CheckEntryPos( 0, TRUE );
+    m_aEffectsLB.InsertEntry( DEFINE_CONST_UNICODE("Gravur" ) );
+    m_aEffectsLB.CheckEntryPos( 1, FALSE );
+    m_aEffectsLB.InsertEntry( DEFINE_CONST_UNICODE("Grossbuchstaben" ) );
+    m_aEffectsLB.CheckEntryPos( 2, FALSE );
+    m_aEffectsLB.InsertEntry( DEFINE_CONST_UNICODE("Blinkend" ) );
+    m_aEffectsLB.CheckEntryPos( 3, FALSE );
+
+    m_aEffectsLB.SetHighlightRange();
+    m_aEffectsLB.SelectEntryPos( 0 );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharEffectsPage::ActivatePage( const SfxItemSet& rSet )
+{
+}
+
+// -----------------------------------------------------------------------
+
+int SvxCharEffectsPage::DeactivatePage( SfxItemSet* pSet )
+{
+    if ( pSet )
+        FillItemSet( *pSet );
+    return LEAVE_PAGE;
+}
+
+// -----------------------------------------------------------------------
+
+SfxTabPage* SvxCharEffectsPage::Create( Window* pParent, const SfxItemSet& rSet )
+{
+    return new SvxCharEffectsPage( pParent, rSet );
+}
+
+// -----------------------------------------------------------------------
+
+USHORT* SvxCharEffectsPage::GetRanges()
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
+{
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
+{
+}
+
+// class SvxCharPositionPage ---------------------------------------------
+
+SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
+
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet ),
+
+    m_aPositionLine     ( this, ResId( FL_POSITION ) ),
+    m_aHighPosBtn       ( this, ResId( RB_HIGHPOS ) ),
+    m_aNormalPosBtn     ( this, ResId( RB_NORMALPOS ) ),
+    m_aLowPosBtn        ( this, ResId( RB_LOWPOS ) ),
+    m_aHighLowFT        ( this, ResId( FT_HIGHLOW ) ),
+    m_aHighLowEdit      ( this, ResId( ED_HIGHLOW ) ),
+    m_aFontSizeFT       ( this, ResId( FT_FONTSIZE ) ),
+    m_aFontSizeEdit     ( this, ResId( ED_FONTSIZE ) ),
+    m_aFontSizeBtn      ( this, ResId( CB_FONTSIZE ) ),
+
+    m_aKerningLine      ( this, ResId( FL_KERNING2 ) ),
+    m_aKerningLB        ( this, ResId( LB_KERNING2 ) ),
+    m_aKerningFT        ( this, ResId( FT_KERNING2 ) ),
+    m_aKerningEdit      ( this, ResId( ED_KERNING2 ) ),
+    m_aPairKerningBtn   ( this, ResId( CB_PAIRKERNING ) ),
+
+    m_aPreviewLine      ( this, ResId( FL_POS_PREVIEW ) ),
+    m_aPreviewWin       ( this, ResId( WIN_POS_PREVIEW ) ),
+    m_aFontTypeFT       ( this, ResId( FT_POS_FONTTYPE ) )
+
+{
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
+{
+}
+
+// -----------------------------------------------------------------------
+
+int SvxCharPositionPage::DeactivatePage( SfxItemSet* pSet )
+{
+    if ( pSet )
+        FillItemSet( *pSet );
+    return LEAVE_PAGE;
+}
+
+// -----------------------------------------------------------------------
+
+SfxTabPage* SvxCharPositionPage::Create( Window* pParent, const SfxItemSet& rSet )
+{
+    return new SvxCharPositionPage( pParent, rSet );
+}
+
+// -----------------------------------------------------------------------
+
+USHORT* SvxCharPositionPage::GetRanges()
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
+{
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
+{
+}
+
+// class SvxCharAsianPage ------------------------------------------------
+
+SvxCharAsianPage::SvxCharAsianPage( Window* pParent, const SfxItemSet& rInSet ) :
+
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_ASIAN ), rInSet ),
+
+    m_aSwitchOnLine ( this, ResId( FL_SWITCHON ) ),
+    m_aTwoLinesBtn  ( this, ResId( CB_TWOLINES ) ),
+
+    m_aEncloseLine  ( this, ResId( FL_ENCLOSE ) ),
+    m_aBeginCharFT  ( this, ResId( FT_BEGINCHAR ) ),
+    m_aBeginCharLB  ( this, ResId( ED_BEGINCHAR ) ),
+    m_aEndCharFT    ( this, ResId( FT_ENDCHAR ) ),
+    m_aEndCharLB    ( this, ResId( ED_ENDCHAR ) ),
+
+    m_aPreviewLine  ( this, ResId( FL_ASIAN_PREVIEW ) ),
+    m_aPreviewWin   ( this, ResId( WIN_ASIAN_PREVIEW ) ),
+    m_aFontTypeFT   ( this, ResId( FT_ASIAN_FONTTYPE ) )
+
+{
+    FreeResource();
+
+    Size aSize = m_aBeginCharLB.GetSizePixel();
+    aSize.Height() = m_aBeginCharLB.CalcSize( 1, 2 ).Height();
+    m_aBeginCharLB.SetSizePixel( aSize );
+    aSize = m_aEndCharLB.GetSizePixel();
+    aSize.Height() = m_aEndCharLB.CalcSize( 1, 2 ).Height();
+    m_aEndCharLB.SetSizePixel( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharAsianPage::ActivatePage( const SfxItemSet& rSet )
+{
+}
+
+// -----------------------------------------------------------------------
+
+int SvxCharAsianPage::DeactivatePage( SfxItemSet* pSet )
+{
+    if ( pSet )
+        FillItemSet( *pSet );
+    return LEAVE_PAGE;
+}
+
+// -----------------------------------------------------------------------
+
+SfxTabPage* SvxCharAsianPage::Create( Window* pParent, const SfxItemSet& rSet )
+{
+    return new SvxCharAsianPage( pParent, rSet );
+}
+
+// -----------------------------------------------------------------------
+
+USHORT* SvxCharAsianPage::GetRanges()
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharAsianPage::FillItemSet( SfxItemSet& rSet )
+{
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharAsianPage::Reset( const SfxItemSet& rSet )
+{
+}
 

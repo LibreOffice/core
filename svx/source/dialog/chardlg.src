@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:26:50 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2410,4 +2410,546 @@ String RID_SVXSTR_COLOR_USER
     Text[ turkish ] = "Kullanýcý";
     Text[ language_user1 ] = " ";
 };
+
+// RID_SVXPAGE_CHAR_NAME ----------------------------------------------------
+
+TabPage RID_SVXPAGE_CHAR_NAME
+{
+//! HelpId = HID_FORMAT_CHAR_STD ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedLine FL_WEST
+    {
+        Pos = MAP_APPFONT( 3, 3 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Schriftart für westlichen Text";
+    };
+    FixedText FT_WEST_NAME
+    {
+        Pos = MAP_APPFONT( 6, 15 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Schriftart";
+    };
+    ComboBox LB_WEST_NAME
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 28 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_WEST_STYLE
+    {
+        Pos = MAP_APPFONT( 77, 15 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "S~chriftschnitt";
+    };
+    ComboBox LB_WEST_STYLE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 77, 28 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fett" ;
+            "Fett Kursiv" ;
+        };
+    };
+    FixedText FT_WEST_SIZE
+    {
+        Pos = MAP_APPFONT( 148, 15 );
+        Size = MAP_APPFONT( 40, 10 );
+        Text = "Sch~riftgrad";
+    };
+    MetricBox LB_WEST_SIZE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 148, 28 );
+        Size = MAP_APPFONT( 40, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_WEST_LANG
+    {
+        Pos = MAP_APPFONT( 194, 15 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "S~prache";
+    };
+    ListBox LB_WEST_LANG
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 194, 28 );
+        Size = MAP_APPFONT( 60, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedLine FL_EAST
+    {
+        Pos = MAP_APPFONT( 3, 45 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Schriftart für asiatischen Text";
+    };
+    FixedText FT_EAST_NAME
+    {
+        Pos = MAP_APPFONT( 6, 57 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "Schr~iftart";
+    };
+    ComboBox LB_EAST_NAME
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 70 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_EAST_STYLE
+    {
+        Pos = MAP_APPFONT( 77, 57 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "Schri~ftschnitt";
+    };
+    ComboBox LB_EAST_STYLE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 77, 70 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fett" ;
+            "Fett Kursiv" ;
+        };
+    };
+    FixedText FT_EAST_SIZE
+    {
+        Pos = MAP_APPFONT( 148, 57 );
+        Size = MAP_APPFONT( 40, 10 );
+        Text = "Schrif~tgrad";
+    };
+    MetricBox LB_EAST_SIZE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 148, 70 );
+        Size = MAP_APPFONT( 40, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_EAST_LANG
+    {
+        Pos = MAP_APPFONT( 194, 57 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "Sprach~e";
+    };
+    ListBox LB_EAST_LANG
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 194, 70 );
+        Size = MAP_APPFONT( 60, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedLine FL_CHAR_PREVIEW
+    {
+        Pos = MAP_APPFONT( 3, 87 );
+        Size = MAP_APPFONT( 188, 10 );
+        Text = "Vorschau";
+    };
+    Window WIN_CHAR_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 182 , 23 ) ;
+    };
+    FixedText FT_CHAR_FONTTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Size = MAP_APPFONT ( 182 , 10 ) ;
+        Text = "01234567890123456789012345678901234567890123456789";
+    };
+    FixedLine FL_SEPARATE
+    {
+        Pos = MAP_APPFONT( 190, 93 );
+        Size = MAP_APPFONT( 4, 40 );
+    };
+    FixedLine FL_COLOR2
+    {
+        Pos = MAP_APPFONT( 192, 87 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "Schriftfarbe";
+    };
+    ListBox LB_COLOR2
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 196, 104 );
+        Size = MAP_APPFONT( 60, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+};
+
+// RID_SVXPAGE_CHAR_EFFECTS ---------------------------------------------------
+
+TabPage RID_SVXPAGE_CHAR_EFFECTS
+{
+//! HelpId = HID_FORMAT_CHAR_STD ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedText FT_UNDERLINE
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Unterstreichung";
+    };
+    ListBox LB_UNDERLINE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 15 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_UNDERLINE_COLOR
+    {
+        Pos = MAP_APPFONT( 77, 3 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Farbe";
+    };
+    ListBox LB_UNDERLINE_COLOR
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 77, 15 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_STRIKEOUT
+    {
+        Pos = MAP_APPFONT( 6, 31 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Durchstreichung";
+    };
+    ListBox LB_STRIKEOUT
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 43 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    CheckBox CB_INDIVIDUALWORDS
+    {
+        Pos = MAP_APPFONT( 77, 44 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Wortweise";
+        TabStop = TRUE;
+    };
+    FixedText FT_EMPHASIS
+    {
+        Pos = MAP_APPFONT( 6, 59 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Betonungszeichen";
+    };
+    ListBox LB_EMPHASIS
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 71 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT( 77, 59 );
+        Size = MAP_APPFONT( 65, 10 );
+        Text = "~Position";
+    };
+    ListBox LB_POSITION
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 77, 71 );
+        Size = MAP_APPFONT( 65, 48 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_EFFECTS
+    {
+        Pos = MAP_APPFONT( 154, 3 );
+        Size = MAP_APPFONT( 100, 10 );
+        Text = "Au~szeichnungen";
+    };
+    Control LB_EFFECTS
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 154, 16 );
+        Size = MAP_APPFONT( 100, 69 );
+        TabStop = TRUE;
+    };
+    FixedLine FL_EFFECTS_PREVIEW
+    {
+        Pos = MAP_APPFONT( 3, 87 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Vorschau";
+    };
+    Window WIN_EFFECTS_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 248 , 23 ) ;
+    };
+    FixedText FT_EFFECTS_FONTTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text = "01234567890123456789012345678901234567890123456789";
+    };
+};
+
+// RID_SVXPAGE_CHAR_POSITION ------------------------------------------------
+
+TabPage RID_SVXPAGE_CHAR_POSITION
+{
+//! HelpId = HID_FORMAT_CHAR_STD ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedLine FL_POSITION
+    {
+        Pos = MAP_APPFONT( 3, 3 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Position";
+    };
+    RadioButton RB_HIGHPOS
+    {
+        Pos = MAP_APPFONT( 6, 16 );
+        Size = MAP_APPFONT( 57, 10 );
+        Text = "H~och";
+        TabStop = TRUE;
+    };
+    RadioButton RB_NORMALPOS
+    {
+        Pos = MAP_APPFONT( 6, 30 );
+        Size = MAP_APPFONT( 57, 10 );
+        Text = "~Normal";
+        TabStop = TRUE;
+    };
+    RadioButton RB_LOWPOS
+    {
+        Pos = MAP_APPFONT( 6, 45 );
+        Size = MAP_APPFONT( 57, 10 );
+        Text = "~Tief";
+        TabStop = TRUE;
+    };
+    FixedText FT_HIGHLOW
+    {
+        Pos = MAP_APPFONT( 69, 16 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "Ho~ch/Tief um";
+    };
+    MetricField ED_HIGHLOW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 132, 15 );
+        Size = MAP_APPFONT( 24, 12 );
+        TabStop = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_FONTSIZE
+    {
+        Pos = MAP_APPFONT( 69, 30 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "~Schriftgröße rel.";
+    };
+    MetricField ED_FONTSIZE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 132, 29 );
+        Size = MAP_APPFONT( 24, 12 );
+        TabStop = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    CheckBox CB_FONTSIZE
+    {
+        Pos = MAP_APPFONT( 162, 30 );
+        Size = MAP_APPFONT( 92, 10 );
+        Text = "A~utomatisch";
+        TabStop = TRUE;
+    };
+    FixedLine FL_KERNING2
+    {
+        Pos = MAP_APPFONT( 3, 57 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Laufweite";
+    };
+    ListBox LB_KERNING2
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 69 );
+        Size = MAP_APPFONT ( 72 , 24 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Predeterminado" ; Default ; > ;
+            < "Expandido" ; Default ; > ;
+            < "Condensado" ; Default ; > ;
+        };
+    };
+    FixedText FT_KERNING2
+    {
+        Pos = MAP_APPFONT( 81, 70 );
+        Size = MAP_APPFONT( 33, 10 );
+        Text = "u~m";
+    };
+    MetricField ED_KERNING2
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 114, 69 );
+        Size = MAP_APPFONT( 42, 12 );
+        TabStop = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 1 ;
+        Unit = FUNIT_POINT ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_PAIRKERNING
+    {
+        Pos = MAP_APPFONT( 162, 70 );
+        Size = MAP_APPFONT( 92, 10 );
+        Text = "~Paarweises Kerning";
+        TabStop = TRUE;
+    };
+    FixedLine FL_POS_PREVIEW
+    {
+        Pos = MAP_APPFONT( 3, 87 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Vorschau";
+    };
+    Window WIN_POS_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 248 , 23 ) ;
+    };
+    FixedText FT_POS_FONTTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text = "01234567890123456789012345678901234567890123456789";
+    };
+};
+
+TabPage RID_SVXPAGE_CHAR_ASIAN
+{
+//! HelpId = HID_FORMAT_CHAR_STD ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedLine FL_SWITCHON
+    {
+        Pos = MAP_APPFONT( 3, 3 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Zweizeilig";
+    };
+    CheckBox CB_TWOLINES
+    {
+        Pos = MAP_APPFONT( 6, 15 );
+        Size = MAP_APPFONT( 248, 10 );
+        Text = "Z~weizeillig pro Zeile schreiben";
+        TabStop = TRUE;
+    };
+    FixedLine FL_ENCLOSE
+    {
+        Pos = MAP_APPFONT( 3, 27 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Einschließende Zeichen";
+    };
+    FixedText FT_BEGINCHAR
+    {
+        Pos = MAP_APPFONT( 6, 39 );
+        Size = MAP_APPFONT( 90, 10 );
+        Text = "A~nfangszeichen";
+    };
+    ListBox ED_BEGINCHAR
+    {
+        Pos = MAP_APPFONT( 6, 52 );
+        Size = MAP_APPFONT( 90, 33 );
+        TabStop = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            "(Keines)";
+            "(";
+            "[";
+            "<";
+            "{";
+            "Weitere Zeichen...";
+        };
+    };
+    FixedText FT_ENDCHAR
+    {
+        Pos = MAP_APPFONT( 102, 39 );
+        Size = MAP_APPFONT( 90, 10 );
+        Text = "~Endzeichen";
+    };
+    ListBox ED_ENDCHAR
+    {
+        Pos = MAP_APPFONT( 102, 52 );
+        Size = MAP_APPFONT( 90, 33 );
+        TabStop = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            "(Keines)";
+            ")";
+            "]";
+            ">";
+            "}";
+            "Weitere Zeichen...";
+        };
+    };
+    FixedLine FL_ASIAN_PREVIEW
+    {
+        Pos = MAP_APPFONT( 3, 87 );
+        Size = MAP_APPFONT( 254, 10 );
+        Text = "Vorschau";
+    };
+    Window WIN_ASIAN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 248 , 30 ) ;
+    };
+    FixedText FT_ASIAN_FONTTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Hide = TRUE;
+        Text = "01234567890123456789012345678901234567890123456789";
+    };
+};
+
  // ********************************************************************** EOF
+

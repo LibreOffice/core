@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 13:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ SvxSearchFormatDialog::SvxSearchFormatDialog( Window* pParent,
 {
     AddTabPage( RID_SVXPAGE_CHAR_STD,       SvxCharStdPage::Create, 0 );
     AddTabPage( RID_SVXPAGE_CHAR_EXT,       SvxCharExtPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR,           SvxCharPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS,   SvxCharEffectsPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_POSITION,  SvxCharPositionPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_ASIAN,     SvxCharAsianPage::Create, 0 );
     AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,  SvxStdParagraphTabPage::Create, 0 );
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH,SvxParaAlignTabPage::Create, 0 );
     AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH,  SvxExtParagraphTabPage::Create, 0 );
