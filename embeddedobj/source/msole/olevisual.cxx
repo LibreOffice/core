@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:55:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
@@ -136,24 +140,40 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( m_pOleComponent )
+    // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize
+    if ( m_nObjectState == embed::EmbedStates::LOADED
+      && ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
     {
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-            throw embed::WrongStateException(
-                                    ::rtl::OUString::createFromAscii( "The object has no model!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        try {
+            changeState( embed::EmbedStates::RUNNING );
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ASSERT( "The object should not be resized without activation!\n" );
+        }
+    }
 
-        m_pOleComponent->SetExtent( aSize, nAspect ); // will throw an exception in case of failure
+    if ( m_pOleComponent && m_nObjectState != embed::EmbedStates::LOADED )
+    {
+        try {
+            m_pOleComponent->SetExtent( aSize, nAspect ); // will throw an exception in case of failure
+        }
+        catch( uno::Exception& )
+        {
+            // some objects do not allow to set the size even in running state
+            m_bHasSizeToSet = sal_True;
+        }
     }
     else
 #endif
     {
-        // cache the values
-        m_aCachedSize = aSize;
-
-        // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-        //                          uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        m_bHasSizeToSet = sal_True;
     }
+
+    // cache the values
+    m_bHasCachedSize = sal_True;
+    m_aCachedSize = aSize;
+    m_nCachedAspect = nAspect;
 }
 
 awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
@@ -171,24 +191,61 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( m_pOleComponent )
+    if ( m_pOleComponent && !m_bHasSizeToSet )
     {
-        // TODO/LATER: the caching should be used also
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-            throw embed::WrongStateException(
-                                    ::rtl::OUString::createFromAscii( "The object has no model!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        try
+        {
+            m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+            m_nCachedAspect = nAspect;
+            m_bHasCachedSize = sal_True;
+            return m_aCachedSize;
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+            // there is no OLEcache for the aspect
+            // the internal cache will be used, if any
 
-        return m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+            if ( !m_bHasCachedSize )
+            {
+                // there is no internal cache
+                // try to switch the object to RUNNONG state and request the value again
+                try {
+                    changeState( embed::EmbedStates::RUNNING );
+                }
+                catch( uno::Exception& )
+                {
+                    OSL_ASSERT( "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
+                    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                }
+
+                m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+                m_nCachedAspect = nAspect;
+                m_bHasCachedSize = sal_True;
+                return m_aCachedSize;
+            }
+            else
+            {
+                OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
+                return m_aCachedSize;
+            }
+        }
     }
     else
 #endif
     {
         // return cached value
-        return m_aCachedSize;
-
-        // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-        //                          uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        if ( m_bHasCachedSize )
+        {
+            OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
+            return m_aCachedSize;
+        }
+        else
+        {
+            OSL_ASSERT( "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
+            throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        }
     }
 }
 
@@ -222,9 +279,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     else if ( m_pOleComponent )
     {
         if ( m_nObjectState == embed::EmbedStates::LOADED )
-            throw embed::WrongStateException(
-                                    ::rtl::OUString::createFromAscii( "The object has no model!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+            changeState( embed::EmbedStates::RUNNING );
 
         datatransfer::DataFlavor aDataFlavor(
                 ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
@@ -254,8 +309,6 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    // TODO/LATER: ??? OLE objects should be always controlled in pixels,
-    //             internally a workaround with scaling based on visual representation will be used
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
