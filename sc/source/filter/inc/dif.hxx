@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dif.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ class ScPatternAttr;
 class DifColumn : private List
 {
 private:
-    friend DifAttrCache;
+    friend class DifAttrCache;
     struct ENTRY
     {
         UINT32          nNumFormat;
