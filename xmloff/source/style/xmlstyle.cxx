@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:24:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _CNTRSRT_HXX
@@ -185,18 +182,17 @@ using namespace ::xmloff::token;
 static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
-    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER,    XML_TOK_STYLE_PAGE_MASTER          },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER          },
     { XML_NAMESPACE_TEXT,   XML_LIST_STYLE,     XML_TOK_TEXT_LIST_STYLE            },
     { XML_NAMESPACE_TEXT,   XML_OUTLINE_STYLE,  XML_TOK_TEXT_OUTLINE               },
     { XML_NAMESPACE_STYLE,  XML_DEFAULT_STYLE,  XML_TOK_STYLE_DEFAULT_STYLE        },
     { XML_NAMESPACE_DRAW,   XML_GRADIENT,       XML_TOK_STYLES_GRADIENTSTYLES      },
     { XML_NAMESPACE_DRAW,   XML_HATCH,          XML_TOK_STYLES_HATCHSTYLES         },
     { XML_NAMESPACE_DRAW,   XML_FILL_IMAGE,     XML_TOK_STYLES_BITMAPSTYLES        },
-    { XML_NAMESPACE_DRAW,   XML_TRANSPARENCY,   XML_TOK_STYLES_TRANSGRADIENTSTYLES },
+    { XML_NAMESPACE_DRAW,   XML_OPACITY,    XML_TOK_STYLES_TRANSGRADIENTSTYLES },
     { XML_NAMESPACE_DRAW,   XML_MARKER,         XML_TOK_STYLES_MARKERSTYLES        },
     { XML_NAMESPACE_DRAW,   XML_STROKE_DASH,    XML_TOK_STYLES_DASHSTYLES        },
-    { XML_NAMESPACE_TEXT,   XML_FOOTNOTES_CONFIGURATION,    XML_TOK_TEXT_FOOTNOTE_CONFIG },
-    { XML_NAMESPACE_TEXT,   XML_ENDNOTES_CONFIGURATION,     XML_TOK_TEXT_ENDNOTE_CONFIG },
+    { XML_NAMESPACE_TEXT,   XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG },
     { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
     { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG },
     XML_TOKEN_MAP_END
@@ -230,6 +226,10 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
             aName = rValue;
+        }
+        else if( IsXMLToken( rLocalName, XML_DISPLAY_NAME ) )
+        {
+            aDisplayName = rValue;
         }
         else if( IsXMLToken( rLocalName, XML_PARENT_STYLE_NAME ) )
         {
@@ -373,9 +373,6 @@ class SvXMLStylesContext_Impl
     SvXMLStyleContexts_Impl aStyles;
     SvXMLStyleIndices_Impl  *pIndices;
 
-    OUString    sId;
-    OUString    sParentHRef;
-
 #ifndef PRODUCT
     sal_uInt32 nIndexCreated;
 #endif
@@ -404,12 +401,6 @@ public:
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
                                       const OUString& rName,
                                       sal_Bool bCreateIndex ) const;
-
-    void SetId( const OUString& rId ) { sId = rId; }
-    const OUString& GetId() { return sId; }
-
-    void SetParentHRef( const OUString& rHRef ) { sParentHRef = rHRef; }
-    const OUString& GetParentHRef() { return sParentHRef; }
 };
 
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl() :
@@ -581,26 +572,12 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                 pStyle = new SvxXMLListStyleContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList, sal_True );
                 break;
-            case XML_TOK_TEXT_FOOTNOTE_CONFIG:
+            case XML_TOK_TEXT_NOTE_CONFIG:
 #ifndef SVX_LIGHT
                 pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
                                                                    nPrefix,
                                                                    rLocalName,
-                                                                   xAttrList,
-                                                                   sal_False);
-#else
-                // create default context to skip content
-                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
-#endif // #ifndef SVX_LIGHT
-                break;
-
-            case XML_TOK_TEXT_ENDNOTE_CONFIG:
-#ifndef SVX_LIGHT
-                pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
-                                                                   nPrefix,
-                                                                   rLocalName,
-                                                                   xAttrList,
-                                                                   sal_True);
+                                                                   xAttrList);
 #else
                 // create default context to skip content
                 pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
@@ -679,11 +656,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XML_STYLE_FAMILY_TEXT_SECTION:
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
-            break;
-
-        case XML_STYLE_FAMILY_CONTROL_ID:
-            pStyle = const_cast< SvXMLImport& >( GetImport() ).GetFormImport()->createControlStyleContext(
-                nPrefix, rLocalName, xAttrList, *this, nFamily );
             break;
 
         case XML_STYLE_FAMILY_TEXT_RUBY:
@@ -777,10 +749,6 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     {
         nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
     }
-    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME) ) )
-    {
-        nFamily = XML_STYLE_FAMILY_CONTROL_ID;
-    }
 
     return nFamily;
 }
@@ -861,13 +829,6 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = xPageImpPropMapper;
         break;
-#ifndef SVX_LIGHT
-#if SUPD>615 || defined(PRIV_DEBUG)
-    case XML_STYLE_FAMILY_CONTROL_ID:
-        xMapper = const_cast<SvXMLImport&>(GetImport()).GetFormImport()->getStylePropertyMapper().getBodyPtr();
-        break;
-#endif
-#endif // #ifndef SVX_LIGHT
     }
 
     return xMapper;
@@ -948,20 +909,6 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
     sParaStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphStyle" ) ),
     sTextStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterStyle" ) )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( XML_NAMESPACE_NONE == nPrefix &&
-            IsXMLToken( aLocalName, XML_ID ) )
-        {
-            pImpl->SetId( xAttrList->getValueByIndex( i ) );
-        }
-    }
 }
 
 
@@ -977,30 +924,19 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
-        IsXMLToken( rLocalName, XML_USE_STYLES ) )
+    SvXMLStyleContext *pStyle =
+        CreateStyleChildContext( nPrefix, rLocalName, xAttrList );
+//      DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
+    if( pStyle )
     {
-        OUString sHRef;
-        pContext = new SvXMLUseStylesContext( GetImport(), nPrefix, rLocalName,
-                                              xAttrList, sHRef );
-        pImpl->SetParentHRef( sHRef );
+        if( !pStyle->IsTransient() )
+            pImpl->AddStyle( pStyle );
+        pContext = pStyle;
     }
     else
     {
-        SvXMLStyleContext *pStyle =
-            CreateStyleChildContext( nPrefix, rLocalName, xAttrList );
-//      DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
-        if( pStyle )
-        {
-            if( !pStyle->IsTransient() )
-                pImpl->AddStyle( pStyle );
-            pContext = pStyle;
-        }
-        else
-        {
-            pContext = new SvXMLImportContext( GetImport(), nPrefix,
-                                               rLocalName );
-        }
+        pContext = new SvXMLImportContext( GetImport(), nPrefix,
+                                           rLocalName );
     }
 
     return pContext;
@@ -1070,16 +1006,6 @@ void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
 }
 
 
-const OUString& SvXMLStylesContext::GetId() const
-{
-    return pImpl->GetId();
-}
-
-const OUString& SvXMLStylesContext::GetParentHRef() const
-{
-    return pImpl->GetParentHRef();
-}
-
 const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
                                   sal_uInt16 nFamily,
                                   const OUString& rName,
@@ -1087,42 +1013,3 @@ const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
 {
     return pImpl->FindStyleChildContext( nFamily, rName, bCreateIndex );
 }
-
-// ---------------------------------------------------------------------
-
-SvXMLUseStylesContext::SvXMLUseStylesContext(
-        SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-        OUString& rHRef ) :
-    SvXMLImportContext( rImp, nPrfx, rLName )
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( XML_NAMESPACE_XLINK == nPrefix &&
-            IsXMLToken( aLocalName, XML_HREF ) )
-        {
-            rHRef = xAttrList->getValueByIndex( i );
-            // TODO: Hack!
-            if( rImp.GetLocator().is() )
-            {
-                // RelToAbs leaves "#foo" util::URL's untouched
-                INetURLObject aBaseURL( rImp.GetLocator()->getSystemId() );
-                INetURLObject aURL;
-                if( aBaseURL.GetNewAbsURL( rHRef, &aURL ) )
-                    rHRef = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-            }
-        }
-    }
-}
-
-SvXMLUseStylesContext::~SvXMLUseStylesContext()
-{
-}
-
-
