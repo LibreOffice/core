@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,12 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 // --> collapsing borders FME 2005-05-27 #i29550#
     pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, TRUE ) );
 // <-- collapsing
+
+    // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
+    // at the document instance, the document is modified. Thus, reset this
+    // status here. Note: In method <SubInitNew()> this is also done.
+    pDoc->ResetModified();
+    // <--
 
     return bRet;
 }
