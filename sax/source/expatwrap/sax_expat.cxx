@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-15 16:33:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,9 @@ OUString XmlNChar2OUString( const XML_Char *p , int nLen )
 OUString XmlChar2OUString( const XML_Char *p )
 {
     if( p ) {
-        for( int nLen = 0 ; p[nLen] ; nLen ++ );
+        int nLen;
+        for( nLen = 0 ; p[nLen] ; nLen ++ )
+            ;
          return XmlNChar2OUString( p , nLen );
      }
      else return OUString();
