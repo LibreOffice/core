@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:42:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,7 +1689,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
     SlotName = "Vertikal spiegeln";
     SlotName [ english ] =  "Vertikal spiegeln";
-    SlotName[ english_us ] = "Flip Vertical";
+    SlotName[ english_us ] = "Flip Vertically";
     SlotName[ portuguese ] = "Reflectir na vertical";
     SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     SlotName[ dutch ] = "Verticaal spiegelen";
@@ -1698,7 +1698,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ italian ] = "Rispecchia verticalmente";
     SlotName[ danish ] = "Spejlvend vandret";
     SlotName[ swedish ] = "Spegelvänd vertikalt";
-    SlotName[ polish ] = "Przerzuæ w pionie";
+    SlotName[ polish ] = "Odbij w pionie";
     SlotName[ portuguese_brazilian ] = "GraphicFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
     SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
@@ -1717,7 +1717,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
     SlotName = "Horizontal spiegeln";
     SlotName [ english ] =  "Horizontal spiegeln";
-    SlotName[ english_us ] = "Flip Horizontal";
+    SlotName[ english_us ] = "Flip Horizontally";
     SlotName[ portuguese ] = "Reflectir na horizontal";
     SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
     SlotName[ dutch ] = "Horizontaal spiegelen";
@@ -1726,7 +1726,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ italian ] = "Rispecchia orizzontalmente";
     SlotName[ danish ] = "Spejlvend lodret";
     SlotName[ swedish ] = "Spegelvänd horisontellt";
-    SlotName[ polish ] = "Przerzuæ w poziomie";
+    SlotName[ polish ] = "Odbij w poziomie";
     SlotName[ portuguese_brazilian ] = "FlipImageVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
     SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
@@ -2454,7 +2454,7 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName[ italian ] = "Rispecchia sulle pagine pari";
     SlotName[ danish ] = "Spejlvend på lige sider";
     SlotName[ swedish ] = "Spegelvänd på jämna sidor";
-    SlotName[ polish ] = "Przerzuæ na parzystych stronach";
+    SlotName[ polish ] = "Odbij na parzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorOnEvenPages";
     SlotName[ japanese ] = "‹ô”Íß°¼Ş‚É”½“]";
     SlotName[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ";
@@ -3070,7 +3070,7 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ italian ] = "Rispecchia le immagini sulle pagine pari";
     SlotName[ danish ] = "Spejlvend grafik på lige sider";
     SlotName[ swedish ] = "Spegelvänd grafik på jämna sidor";
-    SlotName[ polish ] = "Przerzuæ grafikê na nieparzystych stronach";
+    SlotName[ polish ] = "Odbij grafikê na nieparzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorGraphicOnEvenPages";
     SlotName[ japanese ] = "}‚ğ‹ô”Íß°¼Ş‚É”½“]";
     SlotName[ chinese_simplified ] = "Í¼ĞÎ·­×ªµ½Å¼ÊıÒ³Ãæ";
@@ -4970,7 +4970,7 @@ SfxSlotInfo FN_NUM_BULLET_DOWN
     SlotName[ swedish ] = "En nivå nedåt";
     SlotName[ polish ] = "Jeden poziom w dó³";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberLevelDown";
-    SlotName[ japanese ] = "1ÚÍŞÙ‰º‚Ö";
+    SlotName[ japanese ] = "ÚÍŞÙ‰º‚°";
     SlotName[ chinese_simplified ] = "ÏòÏÂÒ»¼¶";
     SlotName[ chinese_traditional ] = "¦V¤U¤@¯Å";
     SlotName[ arabic ] = "ãÓÊæì æÇÍÏ áÃÓİá";
@@ -4998,7 +4998,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
     SlotName[ swedish ] = "Flytta nedåt";
     SlotName[ polish ] = "Przesuñ w dó³";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberContentOneDown";
-    SlotName[ japanese ] = "‰º•û‚ÖˆÚ“®";
+    SlotName[ japanese ] = "‰º‚Ö";
     SlotName[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯";
     SlotName[ chinese_traditional ] = "¦V¤U²¾°Ê";
     SlotName[ arabic ] = "ÅÒÇÍÉ áÃÓİá";
@@ -5026,7 +5026,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ swedish ] = "Flytta uppåt";
     SlotName[ polish ] = "Przesuñ do góry";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberContentOneUp";
-    SlotName[ japanese ] = "ã•û‚ÖˆÚ“®";
+    SlotName[ japanese ] = "ã‚Ö";
     SlotName[ chinese_simplified ] = "ÏòÉÏÒÆ¶¯";
     SlotName[ chinese_traditional ] = "¦V¤W²¾°Ê";
     SlotName[ arabic ] = "ÅÒÇÍÉ áÃÚáì";
@@ -5138,7 +5138,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ swedish ] = "Nedåt med undernivåer";
     SlotName[ polish ] = "Przenieœ w dó³ z podpunktami";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberDownSublevels";
-    SlotName[ japanese ] = "ÚÍŞÙ‰º‚°";
+    SlotName[ japanese ] = "»ÌŞÚÍŞÙ‚Æ‹¤‚ÉÚÍŞÙ‰º‚°";
     SlotName[ chinese_simplified ] = "Á¬Í¬·Ö¼¶ÏòÏÂ";
     SlotName[ chinese_traditional ] = "³s¦P¤À¯Å¦V¤U";
     SlotName[ arabic ] = "Åáì ÃÓİá ÈÇáäŞÇØ ÇáİÑÚíÉ";
@@ -5166,7 +5166,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ swedish ] = "Flytta nedåt med undernivåer";
     SlotName[ polish ] = "Przenieœ w dó³ z podpunktami";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberContentOneDownSubItems";
-    SlotName[ japanese ] = "ÚÍŞÙ‰º‚°";
+    SlotName[ japanese ] = "»ÌŞÚÍŞÙ‚Æ‹¤‚É‰º‚Ö";
     SlotName[ chinese_simplified ] = "Á¬Í¬·Ö¼¶ÏòÏÂÒÆ¶¯";
     SlotName[ chinese_traditional ] = "³s¦P¤ÀÂI¦V¤U²¾°Ê";
     SlotName[ arabic ] = "ÅÒÇÍÉ Åáì ÃÓİá ÈÇáäŞÇØ ÇáİÑÚíÉ";
@@ -5194,7 +5194,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ swedish ] = "Flytta uppåt med undernivåer";
     SlotName[ polish ] = "Przenieœ w górê z podpunktami";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberContentOneUpSubItems";
-    SlotName[ japanese ] = "ÚÍŞÙã‚°";
+    SlotName[ japanese ] = "»ÌŞÚÍŞÙ‚Æ‹¤‚Éã‚Ö";
     SlotName[ chinese_simplified ] = "Á¬Í¬·Ö¼¶ÏòÉÏÒÆ¶¯";
     SlotName[ chinese_traditional ] = "³s¦P¤À¯Å¦V¤W²¾°Ê";
     SlotName[ arabic ] = "ÅÒÇÍÉ Åáì ÃÚáì ÈÇáäŞÇØ ÇáİÑÚíÉ";
@@ -5222,7 +5222,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ swedish ] = "Uppåt med undernivåer";
     SlotName[ polish ] = "Przenieœ w górê z podpunktami";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberUpSubLevels";
-    SlotName[ japanese ] = "ÚÍŞÙã‚°";
+    SlotName[ japanese ] = "»ÌŞÚÍŞÙ‚Æ‹¤‚ÉÚÍŞÙã‚°";
     SlotName[ chinese_simplified ] = "Á¬Í¬·Ö¼¶ÏòÉÏ";
     SlotName[ chinese_traditional ] = "³s¦P¤À¯Å¦V¤W";
     SlotName[ arabic ] = "Åáì ÃÚáì ÈÇáäŞÇØ ÇáİÑÚíÉ";
@@ -5278,7 +5278,7 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ swedish ] = "En nivå uppåt";
     SlotName[ polish ] = "Jeden poziom do góry";
     SlotName[ portuguese_brazilian ] = "BuletsAndNumberLevelUp";
-    SlotName[ japanese ] = "1ÚÍŞÙ ã‚Ö";
+    SlotName[ japanese ] = "ÚÍŞÙã‚°";
     SlotName[ chinese_simplified ] = "ÏòÉÏÒ»¼¶";
     SlotName[ chinese_traditional ] = "¦V¤W¤@¯Å";
     SlotName[ arabic ] = "ãÓÊæì æÇÍÏ áÃÚáì";
@@ -6440,7 +6440,7 @@ SfxSlotInfo FN_REDLINE_PROTECT
 {
     SlotName = "Änderungsaufzeichnung schützen";
     SlotName [ english ] =  "Protect changes trace mode";
-    SlotName[ english_us ] = "Protect record of changes";
+    SlotName[ english_us ] = "Protect Record of Changes";
     SlotName[ language_user1 ] = " ";
     SlotName[ portuguese ] = "Proteger histórico das modificações";
     SlotName[ russian ] = "Protect changes trace mode";
@@ -7779,7 +7779,7 @@ SfxSlotInfo FN_TABLE_INSERT_COL
 {
     SlotName = "Spalte einfügen";
     SlotName [ english ] =  "Spalte einfügen";
-    SlotName[ english_us ] = "Insert Columns";
+    SlotName[ english_us ] = "Insert Column";
     SlotName[ portuguese ] = "Inserir coluna";
     SlotName[ russian ] = "Âñòàâèòü êîëîíêó";
     SlotName[ dutch ] = "Kolom invoegen";
@@ -7807,7 +7807,7 @@ SfxSlotInfo FN_TABLE_INSERT_ROW
 {
     SlotName = "Zeile einfügen";
     SlotName [ english ] =  "Zeile einfügen";
-    SlotName[ english_us ] = "Insert Rows";
+    SlotName[ english_us ] = "Insert Row";
     SlotName[ portuguese ] = "Inserir linha";
     SlotName[ russian ] = "Âñòàâèòü ñòğîêó";
     SlotName[ dutch ] = "Rij invoegen";
@@ -8647,7 +8647,7 @@ SfxSlotInfo FN_TOOL_HMIRROR
 {
     SlotName = "Horizontal spiegeln";
     SlotName [ english ] =  "Horizontal spiegeln";
-    SlotName[ english_us ] = "Flip Horizontal";
+    SlotName[ english_us ] = "Flip Horizontally";
     SlotName[ portuguese ] = "Reflectir na horizontal";
     SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
     SlotName[ dutch ] = "Horizontaal spiegelen";
@@ -8656,7 +8656,7 @@ SfxSlotInfo FN_TOOL_HMIRROR
     SlotName[ italian ] = "Rispecchia orizzontalmente";
     SlotName[ danish ] = "Spejlvend vandret";
     SlotName[ swedish ] = "Spegelvänd horisontellt";
-    SlotName[ polish ] = "Przerzuæ w poziomie";
+    SlotName[ polish ] = "Odbij w poziomie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
     SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
@@ -8703,7 +8703,7 @@ SfxSlotInfo FN_TOOL_VMIRROR
 {
     SlotName = "Vertikal spiegeln";
     SlotName [ english ] =  "Vertikal spiegeln";
-    SlotName[ english_us ] = "Flip Vertical";
+    SlotName[ english_us ] = "Flip Vertically";
     SlotName[ portuguese ] = "Reflectir na vertical";
     SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     SlotName[ dutch ] = "Verticaal spiegelen";
@@ -8712,7 +8712,7 @@ SfxSlotInfo FN_TOOL_VMIRROR
     SlotName[ italian ] = "Rispecchia verticalmente";
     SlotName[ danish ] = "Spejlvend lodret";
     SlotName[ swedish ] = "Spegelvänd vertikalt";
-    SlotName[ polish ] = "Przerzuæ w pionie";
+    SlotName[ polish ] = "Odbij w pionie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
     SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
@@ -9575,6 +9575,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiä";
 };
+
 
 
 
