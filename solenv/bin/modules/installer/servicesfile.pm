@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:29:34 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:53:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -414,10 +414,13 @@ sub register_all_components
         }
     }
 
-    if ( $#unocomponents > -1 ) { $error_occured = register_unocomponents(\@unocomponents, $regcompfileref, $servicesfile); }
-    if ( $#javacomponents > -1 ) { $error_occured = register_javacomponents(\@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+    $uno_error_occured = 0;
+    $java_error_occured = 0;
 
-    if ( $error_occured ) { $registererrorflag = 1; }
+    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents(\@unocomponents, $regcompfileref, $servicesfile); }
+    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents(\@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+
+    if ( $uno_error_occured || $java_error_occured ) { $registererrorflag = 1; }
 
     return $registererrorflag;
 }
@@ -737,6 +740,8 @@ sub create_services_rdb
         {
             $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "witherror");
             push(@installer::globals::removedirs, $servicesdir);
+            # and exiting the packaging process
+            installer::exiter::exit_program("ERROR: Could not register all components!", "create_services_rdb");
         }
         else
         {
