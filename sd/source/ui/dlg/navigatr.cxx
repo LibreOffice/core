@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:22:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,16 +158,9 @@ SdNavigatorWin::SdNavigatorWin(
     pPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, pBindings );
     pDocList = new List();
 
-    aSize = GetOutputSizePixel();
-    // Da es jetzt kein SetMinOutputSizePixel mehr gibt:
-    aMinSize = aSize;
-    aMinSize.Height() -= 40;
-    ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( aMinSize );
+    ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
 
-    // ToolBox (Groesse anpassen funktioniert sowieso nicht!)
     Size aTbxSize( aToolbox.CalcWindowSizePixel() );
-    aTbxSize.Width() = aSize.Width() - 6; //Rand
-    aTbxSize.Height() += 1;  // AF: Work arround for #105145#
     aToolbox.SetOutputSizePixel( aTbxSize );
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
@@ -175,18 +168,41 @@ SdNavigatorWin::SdNavigatorWin(
     pBindings->GetImageManager()->RegisterToolBox( &aToolbox, SFX_TOOLBOX_CHANGEOUTSTYLE );
 
     // TreeListBox
+    // set position below toolbox
+    long nListboxYPos = aToolbox.GetPosPixel().Y() + aToolbox.GetSizePixel().Height() + 4;
+    aTlbObjects.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aTlbObjects.SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
     aTlbObjects.SetSelectionMode( SINGLE_SELECTION );
+    // set focus to listbox, otherwise it is in the toolbox which is only useful
+    // for keyboard navigation
+    aTlbObjects.GrabFocus();
 
     // DragTypeListBox
     aLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
+    // set position below treelistbox
+    nListboxYPos = aTlbObjects.GetPosPixel().Y() + aTlbObjects.GetSizePixel().Height() + 4;
+    aLbDocs.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+
+    // set min outputsize after all sizes are known
+    long nFullHeight = nListboxYPos + aLbDocs.GetSizePixel().Height() + 4;
+    aSize = GetOutputSizePixel();
+    if( aSize.Height() < nFullHeight )
+    {
+        aSize.Height() = nFullHeight;
+        SetOutputSizePixel( aSize );
+    }
+    aMinSize = aSize;
+    long nMinWidth = 2*aToolbox.GetPosPixel().X() + aTbxSize.Width(); // never clip the toolbox
+    if( nMinWidth > aMinSize.Width() )
+        aMinSize.Width() = nMinWidth;
+    aMinSize.Height() -= 40;
+    ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( aMinSize );
 
     // InitTlb; Wird ueber Slot initiiert
     SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
     pBindings->GetDispatcher()->Execute(
         SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-    ApplyImageList();
 }
 
 // -----------------------------------------------------------------------
