@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,22 +124,18 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
-#define TABLE_TYPE  1
-#define VIEW_TYPE   2
-#define FOLDER_TYPE 3
-
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, sal_Bool _bHiContrast,WinBits nWinStyle,sal_Bool _bVirtualRoot )
-    :OMarkableTreeListBox(pParent,nWinStyle)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, sal_Bool _bHiContrast,WinBits nWinStyle,sal_Bool _bVirtualRoot )
+    :OMarkableTreeListBox(pParent,_rxORB,nWinStyle)
     ,m_bVirtualRoot(_bVirtualRoot)
 {
     notifyHiContrastChanged();
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot)
-    :OMarkableTreeListBox(pParent,rResId)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId ,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot)
+    :OMarkableTreeListBox(pParent,_rxORB,rResId)
     ,m_bVirtualRoot(_bVirtualRoot)
 {
     notifyHiContrastChanged();
@@ -147,8 +143,6 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_
 // -----------------------------------------------------------------------------
 void OTableTreeListBox::notifyHiContrastChanged()
 {
-    OMarkableTreeListBox::notifyHiContrastChanged();
-
     sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
     m_aTableImage = Image(ModuleRes(bHiContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON));
     m_aViewImage = Image(ModuleRes(bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON));
@@ -184,57 +178,6 @@ void OTableTreeListBox::notifyHiContrastChanged()
         pEntryLoop = Next(pEntryLoop);
     }
 }
-//------------------------------------------------------------------------
-void OTableTreeListBox::Command( const CommandEvent& rEvt )
-{
-    sal_Bool bHandled = sal_False;
-    switch( rEvt.GetCommand() )
-    {
-        case COMMAND_CONTEXTMENU:
-        {
-            // die Stelle, an der geklickt wurde
-            Point ptWhere;
-            if (rEvt.IsMouseEvent())
-            {
-                ptWhere = rEvt.GetMousePosPixel();
-                SvLBoxEntry* ptClickedOn = GetEntry(ptWhere);
-                if (ptClickedOn == NULL)
-                    break;
-                if ( !IsSelected(ptClickedOn) )
-                {
-                    SelectAll(sal_False);
-                    Select(ptClickedOn, sal_True);
-                    SetCurEntry(ptClickedOn);
-                }
-            }
-            else
-                ptWhere = GetEntryPos(GetCurEntry());
-
-
-            SvLBoxEntry* pCurrent = GetCurEntry();
-            if (!pCurrent)
-                break;
-
-            SvSortMode eSortMode = GetModel()->GetSortMode();
-            PopupMenu aContextMenu(ModuleRes(MENU_TABLETREE_POPUP));
-            switch( aContextMenu.Execute( this, ptWhere ) )
-            {
-                case MID_SORT_ASCENDING:
-                    GetModel()->SetSortMode(SortAscending);
-                    break;
-                case MID_SORT_DECENDING:
-                    GetModel()->SetSortMode(SortDescending);
-                    break;
-            }
-            if(eSortMode != GetModel()->GetSortMode())
-                GetModel()->Resort();
-        }
-        break;
-        default:
-            SvTreeListBox::Command( rEvt );
-    }
-}
-
 //------------------------------------------------------------------------
 Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUString& _rConnectionURL,
     const Sequence< PropertyValue > _rProperties, Reference< XDriver >& _rxCreator ) throw(SQLException)
@@ -361,7 +304,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUStri
                 xTables = xTableSupp->getTables();
 
                 // get the views supplier and the views
-                xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+                xViewSupp.set(xTableSupp,UNO_QUERY);
                 if (xViewSupp.is())
                     xViews = xViewSupp->getViews();
 
@@ -410,11 +353,11 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         {
             String sRootEntryText;
             if (!_rViews.getLength())
-                sRootEntryText = String(ModuleRes(STR_ALL_TABLES));
+                sRootEntryText  =String(ModuleRes(STR_ALL_TABLES));
             else if (!_rTables.getLength())
-                sRootEntryText = String(ModuleRes(STR_ALL_VIEWS));
+                sRootEntryText  =String(ModuleRes(STR_ALL_VIEWS));
             else
-                sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
+                sRootEntryText  =String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
             pAllObjects = InsertEntry(sRootEntryText,NULL,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
         }
 
@@ -451,7 +394,8 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 *pCurrentTable,
                 bIsView ? m_aViewImage : m_aTableImage,
                 pAllObjects,
-                bIsView ? VIEW_TYPE : TABLE_TYPE
+                bIsView ? VIEW_TYPE : TABLE_TYPE,
+                sal_False
             );
         }
     }
@@ -554,12 +498,13 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::implAddEntry(
+SvLBoxEntry* OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxConnMetaData,
         const ::rtl::OUString& _rTableName,
         const Image& _rImage,
         SvLBoxEntry* _pParentEntry,
-        sal_Int32 _nType
+        sal_Int32 _nType,
+        sal_Bool _bCheckName
     )
 {
     // split the complete name into it's components
@@ -584,12 +529,14 @@ void OTableTreeListBox::implAddEntry(
         _pParentEntry = pSchema;
     }
 
-    if (!GetEntryPosByName(sName, _pParentEntry))
-        InsertEntry(sName, _rImage, _rImage, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(_nType));
+    SvLBoxEntry* pRet = NULL;
+    if ( !_bCheckName || !GetEntryPosByName(sName, _pParentEntry))
+        pRet = InsertEntry(sName, _rImage, _rImage, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(_nType));
+    return pRet;
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName, const Any& _rObject )
+SvLBoxEntry* OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName, const Any& _rObject )
 {
     try
     {
@@ -599,21 +546,22 @@ void OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, con
         if (!xMeta.is())
         {
             DBG_ERROR( "OTableTreeListBox::addedTable: invalid connection!" );
-            return;
+            return NULL;
         }
 
         // add the entry
-        implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry(),TABLE_TYPE );
+        return implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry(),TABLE_TYPE );
             // TODO: the image
     }
     catch( const Exception& )
     {
         DBG_ERROR( "OTableTreeListBox::addedTable: caught an exception!" );
     }
+    return NULL;
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
+SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
 {
     try
     {
@@ -623,10 +571,46 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
         if (!xMeta.is())
         {
             DBG_ERROR( "OTableTreeListBox::removedTable: invalid connection!" );
-            return;
+            return NULL;
         }
 
-        // TODO
+        // split the complete name into it's components
+        ::rtl::OUString sCatalog, sSchema, sName;
+        qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
+
+        SvLBoxEntry* pParent = getAllObjectsEntry();
+        SvLBoxEntry* pCat = NULL;
+        SvLBoxEntry* pSchema = NULL;
+        if ( sCatalog.getLength() )
+        {
+            pCat = GetEntryPosByName(sCatalog, pParent);
+            if ( pCat )
+                pParent = pCat;
+        }
+
+        if ( sSchema.getLength() )
+        {
+            pSchema = GetEntryPosByName(sSchema, pParent);
+            if ( pSchema )
+                pParent = pSchema;
+        }
+
+        return GetEntryPosByName(sName, pParent);
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "OTableTreeListBox::removedTable: caught an exception!" );
+    }
+    return NULL;
+}
+//------------------------------------------------------------------------
+void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
+{
+    try
+    {
+        SvLBoxEntry* pEntry = getEntryByQualifiedName(_rxConn,_rName);
+        if ( pEntry )
+            GetModel()->Remove(pEntry);
     }
     catch( const Exception& )
     {
