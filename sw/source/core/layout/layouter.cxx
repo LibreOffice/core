@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:10:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@ public:
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFtnFrm* pFtn );
-    void Collect( SwFtnFrm* pFtn );
     const SwSectionFrm* GetSect() { return pSect; }
     void InsertEndnotes();
     BOOL HasEndnotes() const { return pEndArr && pEndArr->Count(); }
@@ -163,10 +162,6 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
     if( !pEndArr )
         pEndArr = new SvPtrarr( 5, 5 );  // deleted from the SwLayouter
     pEndArr->Insert( (VoidPtr)pFtn, pEndArr->Count() );
-}
-
-void SwEndnoter::Collect( SwFtnFrm* pFtn )
-{
 }
 
 void SwEndnoter::InsertEndnotes()
