@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:15:38 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #define ITEMID_VERJUSTIFY       0
 #define ITEMID_ORIENTATION      0
 #define ITEMID_WIDOWS           0
+#define ITEMID_DOUBLE           0
 
 #include "eetext.hxx"
 #ifndef _EEITEM_HXX //autogen
@@ -139,6 +140,9 @@
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
+#endif
+#ifndef _SVX_CHRTITEM_HXX
+#include <svx/chrtitem.hxx>
 #endif
 
 #include <svtools/globalnameitem.hxx>
