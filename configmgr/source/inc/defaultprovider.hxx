@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace configmgr
         */
         virtual std::auto_ptr<ISubtree> requestDefaultData(configuration::AbsolutePath const& aSubtreePath,
                                                             const vos::ORef < OOptions >& _xOptions,
-                                                            sal_Int16 nMinLevels) throw (uno::Exception) = 0;
+                                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
     };
 
     //==========================================================================
@@ -140,7 +140,7 @@ namespace configmgr
         */
         virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath,
                                             const vos::ORef < OOptions >& _xOptions,
-                                            sal_Int16 nMinLevels) throw (uno::Exception) = 0;
+                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
 
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include <options.hxx>
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -125,10 +128,10 @@ namespace configmgr
         /// load the tree named by a path using certain options and requiring a specific loading depth - return it yielding ownership
         virtual std::auto_ptr<ISubtree> loadSubtree(AbsolutePath const& aSubtreePath,
                                                       const vos::ORef < OOptions >& _xOptions,
-                                                      sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
+                                                      sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  ) = 0;
 
         /// update the stored data according to a changes list
-        virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception) = 0;
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
 
     };
 
@@ -151,30 +154,30 @@ namespace configmgr
         */
         virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath,
                                           const vos::ORef < OOptions >& _xOptions,
-                                          sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
+                                          sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  ) = 0;
 
         /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
         */
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath,
                                   const vos::ORef < OOptions >& _xOptions,
-                                  sal_Int16 nMinLevels = ALL_LEVELS) throw() = 0;
+                                  sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW() = 0;
 
         /// update the managed data according to a changes list - update the changes list accordingly with old values
-        virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception) = 0;
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
 
         // notification
-        virtual void notifyUpdate(TreeChangeList const& aChanges ) throw (uno::RuntimeException) = 0;
+        virtual void notifyUpdate(TreeChangeList const& aChanges ) CFG_UNO_THROW_RTE(  ) = 0;
 
         // bookkeeping support
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
-                                    const vos::ORef < OOptions >& _xOptions ) throw () = 0;
+                                    const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW() = 0;
 
         /** data for the given options may not be used any more
             <p>all clients of such data must be disposed</p>
             <p>If the locale is not set, the whole user has become invalid</p>
         */
-        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw () = 0;
+        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW() = 0;
 
 
     };
@@ -191,7 +194,7 @@ namespace configmgr
         virtual ::std::auto_ptr<INode> requestTemplateInstance(
                                             Name const& aName, Name const& aModule,
                                             const vos::ORef < OOptions >& _xOptions
-                                        ) throw (uno::Exception) = 0;
+                                        ) CFG_UNO_THROW_ALL( ) = 0;
 
     };
 

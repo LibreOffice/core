@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
 #define CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
+
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -121,10 +125,10 @@ namespace configmgr
             bool isValid() const { return !! m_aProxy.is(); }
 
         /// tries to load default data into the specified tree
-            bool fetchDefaultData(Tree const& _aTree) const SAL_THROW((uno::Exception));
+            bool fetchDefaultData(Tree const& _aTree) const CFG_UNO_THROW_ALL();
 
         /// tries to load a default instance of the specified node
-            std::auto_ptr<ISubtree> getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const SAL_THROW((uno::Exception));
+            std::auto_ptr<ISubtree> getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
 
         };
 
