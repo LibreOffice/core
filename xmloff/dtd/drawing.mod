@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.11 2000-11-23 19:48:03 cl Exp $
+	$Id: drawing.mod,v 1.12 2000-11-26 19:54:15 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -142,14 +142,15 @@
 <!ATTLIST draw:ellipse %draw-end-position; >
 
 <!ELEMENT draw:connector %draw-text;>
+<!ATTLIST draw:connector draw:type draw:type (standard|lines|line|curve) "standard">
 <!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
 <!ATTLIST draw:connector %draw-style-name;>
-<!ATTLIST draw:connector draw:start-x %coordinate; #IMPLIED>
-<!ATTLIST draw:connector draw:start-y %coordinate; #IMPLIED>
+<!ATTLIST draw:connector svg:x1 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:y1 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:x2 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:y2 %coordinate; #REQUIRED>
 <!ATTLIST draw:connector draw:start-shape %shapeId; #IMPLIED>
 <!ATTLIST draw:connector draw:start-glue-point %integer; #IMPLIED>
-<!ATTLIST draw:connector draw:end-x %coordinate; #IMPLIED>
-<!ATTLIST draw:connector draw:end-y %coordinate; #IMPLIED>
 <!ATTLIST draw:connector draw:end-shape %shapeId; #IMPLIED>
 <!ATTLIST draw:connector draw:end-glue-point %integer; #IMPLIED>
 <!ATTLIST draw:connector %zindex;>
@@ -179,9 +180,11 @@
 <!ATTLIST draw:caption %zindex;>
 
 <!ELEMENT draw:measure %draw-text;>
-<!ATTLIST draw:measure %draw-position; >
+<!ATTLIST draw:connector svg:x1 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:y1 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:x2 %coordinate; #REQUIRED>
+<!ATTLIST draw:connector svg:y2 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure %draw-end-position; >
-<!ATTLIST draw:measure %draw-size; >
 <!ATTLIST draw:measure %draw-style-name; >
 <!ATTLIST draw:measure %draw-transform; >
 <!ATTLIST draw:measure %zindex;>
@@ -276,6 +279,23 @@
 <!ATTLIST style:properties draw:shadow-offset-y %length; #IMPLIED>
 <!ATTLIST style:properties draw:shadow-color %color; #IMPLIED>
 <!ATTLIST style:properties draw:shadow-transparency CDATA #IMPLIED>
+
+<!-- connector attributes -->
+<!ATTLIST style:properties draw:end-line-spacing-horizontal %distance; #IMPLIED>
+<!ATTLIST style:properties draw:end-line-spacing-vertical %distance; #IMPLIED>
+<!ATTLIST style:properties draw:end-line-spacing-horizontal %distance; #IMPLIED>
+<!ATTLIST style:properties draw:end-line-spacing-vertical %distance; #IMPLIED>
+
+<!-- measure attributes -->
+<!ATTLIST style:properties draw:line-distance %distance; #IMPLIED>
+<!ATTLIST style:properties draw:guide-overhang %distance; #IMPLIED>
+<!ATTLIST style:properties draw:guide-distance %distance; #IMPLIED>
+<!ATTLIST style:properties draw:start-guide %distance; #IMPLIED>
+<!ATTLIST style:properties draw:end-guide %distance; #IMPLIED>
+<!ATTLIST style:properties draw:placing (below|atop) #IMPLIED>
+<!ATTLIST style:properties draw:parallel %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:text-position-vertical (left|center|right|auto) #IMPLIED
+<!ATTLIST style:properties draw:text-position-horizontal (top|center|bottom|auto) #IMPLIED>
 
 <!-- Drawing page -->
 <!ELEMENT draw:page ((%shapes;)*,presentation:notes?)>
