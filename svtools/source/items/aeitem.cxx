@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-22 18:25:41 $
+ *  last change: $Author: mav $ $Date: 2002-11-27 09:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rTe
 
 SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich, USHORT nVal):
     SfxEnumItem(nWhich, nVal),
-    pValues( 0 )
+    pValues( 0 ),
+    pDisabledValues( 0 )
 {
     DBG_CTOR(SfxAllEnumItem, 0);
     InsertValue( nVal );
@@ -108,7 +109,8 @@ SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich, USHORT nVal):
 
 SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, SvStream &rStream ):
     SfxEnumItem(nWhich, rStream),
-    pValues( 0 )
+    pValues( 0 ),
+    pDisabledValues( 0 )
 {
     DBG_CTOR(SfxAllEnumItem, 0);
     InsertValue( GetValue() );
@@ -119,7 +121,8 @@ SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, SvStream &rStream ):
 
 SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich):
     SfxEnumItem(nWhich, 0),
-    pValues( 0 )
+    pValues( 0 ),
+    pDisabledValues( 0 )
 {
     DBG_CTOR(SfxAllEnumItem, 0);
 }
@@ -129,13 +132,15 @@ SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich):
 
 SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     SfxEnumItem(rCopy),
-    pValues(0)
+    pValues(0),
+    pDisabledValues( 0 )
 {
     DBG_CTOR(SfxAllEnumItem, 0);
     if ( !rCopy.pValues )
         return;
 
     pValues = new SfxAllEnumValueArr;
+
     for ( USHORT nPos = 0; nPos < rCopy.pValues->Count(); ++nPos )
     {
         SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
@@ -143,6 +148,16 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
         pVal->aText = rCopy.pValues->GetObject(nPos)->aText;
         const SfxAllEnumValue_Impl *pTemp = pVal;
         pValues->Insert( pTemp, nPos );
+    }
+
+    if( rCopy.pDisabledValues )
+    {
+        pDisabledValues = new SvUShorts;
+        for ( USHORT nPos = 0; nPos < rCopy.pDisabledValues->Count(); ++nPos )
+        {
+            pDisabledValues->Insert( rCopy.pDisabledValues->GetObject(nPos),
+                                     nPos );
+        }
     }
 }
 
