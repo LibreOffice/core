@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:58:21 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,36 @@ void SwViewImp::InvalidateAccessibleCaretPosition( const SwFrm *pFrm )
         GetAccessibleMap().InvalidateCaretPosition( pFrm );
 }
 
+void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells )
+{
+    if( bAllShells )
+    {
+        ViewShell *pVSh = GetShell();
+        ViewShell *pTmp = pVSh;
+        do
+        {
+            if( pTmp->Imp()->IsAccessible() )
+                pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE );
+            pTmp = (ViewShell *)pTmp->GetNext();
+        } while ( pTmp != pVSh );
+    }
+    else if( IsAccessible() )
+    {
+        GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE );
+    }
+}
+
+void SwViewImp::InvalidateAccessibleOpaqueState()
+{
+    ViewShell *pVSh = GetShell();
+    ViewShell *pTmp = pVSh;
+    do
+    {
+        if( pTmp->Imp()->IsAccessible() )
+            pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_OPAQUE );
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
 
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()
 {

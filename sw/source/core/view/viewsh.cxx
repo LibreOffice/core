@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-15 11:46:13 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,6 +2118,10 @@ void ViewShell::SetReadonlyOption(BOOL bSet)
         }
         else if ( GetWin() )
             GetWin()->Invalidate();
+#ifdef ACCESSIBLE_LAYOUT
+        if( Imp()->IsAccessible() )
+            Imp()->InvalidateAccessibleEditableState( sal_False );
+#endif
     }
 }
 
