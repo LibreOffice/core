@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
+ *  last change: $Author: er $ $Date: 2001-07-10 12:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,23 +146,7 @@ String TransliterationWrapper::transliterate(
     {
         try
         {
-            sal_Bool bLoad = bFirstCall;
-            bFirstCall = sal_False;
-
-            if( nLanguage != nLang )
-            {
-                nLanguage = nLang;
-                String aLangStr, aCtryStr;
-                if( LANGUAGE_NONE == nLanguage )
-                    nLanguage = LANGUAGE_SYSTEM;
-                ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
-                aLocale.Language = aLangStr;
-                aLocale.Country = aCtryStr;
-                if( !bLoad )
-                    bLoad = needLanguageForTheMode();
-            }
-            if( bLoad )
-                xTrans->loadModule( (TransliterationModules)nType, aLocale );
+            loadModuleIfNeeded( nLang );
 
             Sequence <long> aOffset;
             if( !pOffset )
@@ -185,3 +169,99 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
            TransliterationModules_IGNORE_CASE == nType;
 }
 
+
+void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
+{
+    sal_Bool bLoad = bFirstCall;
+    bFirstCall = sal_False;
+
+    if( nLanguage != nLang )
+    {
+        nLanguage = nLang;
+        String aLangStr, aCtryStr;
+        if( LANGUAGE_NONE == nLanguage )
+            nLanguage = LANGUAGE_SYSTEM;
+        ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
+        aLocale.Language = aLangStr;
+        aLocale.Country = aCtryStr;
+        if( !bLoad )
+            bLoad = needLanguageForTheMode();
+    }
+    if( bLoad )
+    {
+        try
+        {
+            if ( xTrans.is() )
+                xTrans->loadModule( (TransliterationModules)nType, aLocale );
+        }
+        catch ( Exception& e )
+        {
+#ifndef PRODUCT
+            ByteString aMsg( "loadModuleIfNeeded: Exception caught\n" );
+            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+        }
+    }
+}
+
+
+sal_Bool TransliterationWrapper::equals(
+    const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+    const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const
+{
+    try
+    {
+        if ( xTrans.is() )
+            return xTrans->equals( rStr1, nPos1, nCount1, nMatch1, rStr2, nPos2, nCount2, nMatch2 );
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "equals: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return sal_False;
+}
+
+
+sal_Int32 TransliterationWrapper::compareSubstring(
+    const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
+    const String& rStr2, sal_Int32 nOff2, sal_Int32 nLen2 ) const
+{
+    try
+    {
+        if ( xTrans.is() )
+            return xTrans->compareSubstring( rStr1, nOff1, nLen1, rStr2, nOff2, nLen2 );
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "compareSubstring: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return 0;
+}
+
+
+sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const String& rStr2 ) const
+{
+    try
+    {
+        if ( xTrans.is() )
+            return xTrans->compareString( rStr1, rStr2 );
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "compareString: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return 0;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:25:32 $
+ *  last change: $Author: er $ $Date: 2001-07-10 12:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,24 @@ public:
 
     sal_Bool needLanguageForTheMode() const;
 
+    /** set a new language and load the corresponding transliteration module if
+        needed for the mode set with nType in the ctor */
+    void loadModuleIfNeeded( sal_uInt16 nLang );
+
     // Wrapper implementations of class Transliteration
     String transliterate( const String& rStr, sal_uInt16 nLanguage,
                         xub_StrLen nStart, xub_StrLen nEnd,
                         ::com::sun::star::uno::Sequence <long>* pOffset );
+
+    sal_Bool equals(
+        const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+        const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
+
+    sal_Int32 compareSubstring(
+        const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
+        const String& rStr2, sal_Int32 nOff2, sal_Int32 nLen2 ) const;
+
+    sal_Int32 compareString( const String& rStr1, const String& rStr2 ) const;
 };
 
 // ............................................................................

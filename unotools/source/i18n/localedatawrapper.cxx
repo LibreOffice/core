@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-07-09 17:28:09 $
+ *  last change: $Author: er $ $Date: 2001-07-10 12:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,11 @@ uno::Sequence< lang::Locale > LocaleDataWrapper::xInstalledLocales =
     uno::Sequence< lang::Locale >(0);
 uno::Sequence< sal_uInt16 > LocaleDataWrapper::xInstalledLanguageTypes =
     uno::Sequence< sal_uInt16 >(0);
+
+#if SUPD < 638
+//! only for testing
+::utl::ReadWriteMutex LocaleDataWrapper::aMutex;
+#endif
 
 
 LocaleDataWrapper::LocaleDataWrapper(
