@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:06:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,8 @@ sal_uInt32 SwXMLWriter::_Write()
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
     xInfoSet->setPropertyValue( sPropName,
                             makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
+    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() &&
+         !pStg->IsRoot() )
     {
         OUString aName( pStg->GetName() );
         if( aName.getLength() )
