@@ -66,23 +66,23 @@ ALLDPC: \
 .IF "$(debug)"==""
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(TARGET).dpw
-    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s#$/slo$/#$/dso$/# | $(SED) s\#$/obj$/\#$/dbo$/\# > $(MISC)$/$(TARGET).dpw
+    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s\#$/slo$/\#$/dso$/\# | $(SED) s\#$/obj$/\#$/dbo$/\# > $(MISC)$/$(TARGET).dpw
 .ELSE
     @+-$(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
-    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s\#$/$/slo$/$/\#$/$/dso$/$/\# > $(TEMP)$/$(TARGET).dpt
-    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s\#$/$/obj$/$/\#$/$/dbo$/$/\# > $(MISC)$/$(TARGET).dpw
+    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s#$/$/slo$/$/#$/$/dso$/$/# > $(TEMP)$/$(TARGET).dpt
+    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s#$/$/obj$/$/#$/$/dbo$/$/# > $(MISC)$/$(TARGET).dpw
     @+-$(RM) $(TEMP)$/$(TARGET).dpt >& $(NULLDEV)
 .ENDIF
 .ELSE			# "$(debug)"==""
 .IF "$(GUI)"=="UNX"
     @+$(COPY) $(MISC)$/$(TARGET).dpc $(MISC)$/$(TARGET).dpw
     @+-$(RM) $(MISC)$/$(TARGET).dpc
-    @$(TYPE)  $(MISC)$/$(TARGET).dpw | $(SED) s#$/dso$/#$/slo$/# | $(SED) s\#$/dbo$/\#$/obj$/\# > $(MISC)$/$(TARGET).dpc
+    @$(TYPE)  $(MISC)$/$(TARGET).dpw | $(SED) s\#$/dso$/\#$/slo$/\# | $(SED) s\#$/dbo$/\#$/obj$/\# > $(MISC)$/$(TARGET).dpc
 .ELSE
     @+$(COPY) $(MISC)$/$(TARGET).dpc $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
-    @$(TYPE) $(MISC)$/$(TARGET).dpw | $(SED) s\#$/$/dso$/$/\#$/$/slo$/$/\# > $(TEMP)$/$(TARGET).dpt
-    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s\#$/$/dbo$/$/\#$/$/obj$/$/\# > $(MISC)$/$(TARGET).dpc
+    @$(TYPE) $(MISC)$/$(TARGET).dpw | $(SED) s#$/$/dso$/$/#$/$/slo$/$/# > $(TEMP)$/$(TARGET).dpt
+    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s#$/$/dbo$/$/#$/$/obj$/$/# > $(MISC)$/$(TARGET).dpc
     @+-$(RM) $(TEMP)$/$(TARGET).dpt >& $(NULLDEV)
 .ENDIF
 .ENDIF			# "$(debug)"==""
