@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:12:47 $
+ *  last change: $Author: gt $ $Date: 2001-02-13 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,10 @@ public:
     long                    GetCallerPos() const        { return nCallerPos; }
     const String&           GetDescription() const      { return aDescription; }
     USHORT                  GetCategory() const         { return nCategory; }
+
+                            // dummy implementation
+    String                  GetExcelName( LanguageType eDestLang ) const            { return aOriginalName; }
+    BOOL                    HasFunctionalityOf( const String& rExcelName ) const    { return FALSE; }
 };
 
 //------------------------------------------------------------------------
@@ -292,6 +296,50 @@ void ScUnoAddInCollection::Initialize()
     }
 
     bInitialized = TRUE;        // with or without functions
+}
+
+BOOL ScUnoAddInCollection::GetExcelName( const String& r, LanguageType e, String& rRet )
+{
+    if (!bInitialized)
+        Initialize();
+
+    if (nFuncCount > 0)
+    {
+        ScUnoAddInFuncData* p;
+        for (long i=0; i<nFuncCount; i++)
+        {
+            p = ppFuncData[i];
+            if ( p && p->GetOriginalName() == r )
+            {
+                rRet = p->GetExcelName( e );
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+BOOL ScUnoAddInCollection::GetCalcName( const String& r, String& rRet )
+{
+    if (!bInitialized)
+        Initialize();
+
+    if (nFuncCount > 0)
+    {
+        ScUnoAddInFuncData* p;
+        for (long i=0; i<nFuncCount; i++)
+        {
+            p = ppFuncData[i];
+            if ( p && p->HasFunctionalityOf( r ) )
+            {
+                rRet = p->GetOriginalName();
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
 }
 
 USHORT lcl_GetCategory( const String& rName )

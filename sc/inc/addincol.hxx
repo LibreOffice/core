@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:47 $
+ *  last change: $Author: gt $ $Date: 2001-02-13 14:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 
 class String;
 class SfxObjectShell;
@@ -130,6 +133,10 @@ public:
 
     long                GetFuncCount();
     BOOL                FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
+
+    BOOL                GetExcelName( const String& rCalcName, LanguageType eDestLang, String& rRetExcelName );
+    BOOL                GetCalcName( const String& rExcelName, String& rRetCalcName );
+                                // both leave rRet... unchanged, if no matching name is found
 };
 
 
