@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: sb $ $Date: 2002-11-07 09:54:47 $
+#   last change: $Author: obo $ $Date: 2002-11-19 10:21:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,7 @@ SHL1STDLIBS+=-init InitLibrary -term ExitLibrary
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
 # libposix4.so (SunOS 5.6) -> librt.so (SunOS >= 5.7)
-SHL1STDLIBS= -lpthread -lposix4
+SHL1STDLIBS= -lpthread -lposix4 -lsocket -lnsl -ldl
 .IF "$(COM)" == "C50"
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
