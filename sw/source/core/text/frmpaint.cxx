@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 09:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ class SwExtraPainter
 {
     SwSaveClip aClip;
     SwRect aRect;
+#ifdef VERTICAL_LAYOUT
+    const SwTxtFrm* pTxtFrm;
+#endif
     ViewShell *pSh;
     SwFont* pFnt;
     const SwLineNumberInfo &rLineInf;
@@ -181,9 +184,15 @@ public:
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     const SwLineNumberInfo &rLnInf, const SwRect &rRct, MSHORT nStart,
     SwHoriOrient eHor, sal_Bool bLnNm )
+#ifdef VERTICAL_LAYOUT
+    : pTxtFrm( pFrm), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ), aRect( rRct ),
+      aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
+      nLineNr( 1L ), bLineNum( bLnNm )
+#else
     : pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ), aRect( rRct ),
       aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
       nLineNr( 1L ), bLineNum( bLnNm )
+#endif
 {
     if( pFrm->IsUndersized() )
     {
@@ -208,6 +217,9 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->GetDoc() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
+#ifdef VERTICAL_LAYOUT
+        pFnt->SetVertical( 0, pFrm->IsVertical() );
+#endif
         nLineNr += pFrm->GetAllLines() - pFrm->GetThisLines();
         LineNumberPosition ePos = rLineInf.GetPos();
         if( ePos != LINENUMBER_POS_LEFT && ePos != LINENUMBER_POS_RIGHT )
@@ -274,6 +286,9 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
+#ifdef VERTICAL_LAYOUT
+    aDrawInf.SetFrm( pTxtFrm );
+#endif
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, pSh->GetOut() ) > nMax;
     SwFont* pTmpFnt;
@@ -306,7 +321,11 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
             if( aRct.Intersection( aRect ).IsEmpty() )
                 bPaint = sal_False;
             else
+#ifdef VERTICAL_LAYOUT
+                aClip.ChgClip( aRect, pTxtFrm );
+#else
                 aClip.ChgClip( aRect );
+#endif
         }
     }
     else if( bGoLeft )
@@ -335,7 +354,11 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
                 return;
+#ifdef VERTICAL_LAYOUT
+            aClip.ChgClip( aRect, pTxtFrm );
+#else
             aClip.ChgClip( aRect );
+#endif
         }
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
@@ -363,6 +386,15 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
         ViewShell *pSh = GetShell();
+
+#ifdef VERTICAL_LAYOUT
+        SWAP_IF_NOT_SWAPPED( this )
+        SwRect rOldRect( rRect );
+
+        if ( IsVertical() )
+            SwitchVerticalToHorizontal( (SwRect&)rRect );
+#endif
+
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect,
             rLineNum.GetStartValue(), eHor, bLineNum );
 
@@ -388,7 +420,15 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                       aLine.GetCurr()->HasCntnt() ) )
                     aExtra.IncLineNr();
                 if( !aLine.Next() )
+#ifdef VERTICAL_LAYOUT
+                {
+                    (SwRect&)rRect = rOldRect;
+                    UNDO_SWAP( this )
                     return;
+                }
+#else
+                    return;
+#endif
             }
 
             long nBottom = rRect.Bottom();
@@ -445,6 +485,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             else if( bRedLine )
                 aExtra.PaintRedline( Frm().Top()+Prt().Top(), Prt().Height() );
         }
+
+#ifdef VERTICAL_LAYOUT
+        (SwRect&)rRect = rOldRect;
+        UNDO_SWAP( this )
+#endif
     }
 }
 
@@ -670,11 +715,10 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         ASSERT( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
 
+        SWAP_IF_NOT_SWAPPED( this )
+
         if ( IsVertical() )
-        {
             SwitchVerticalToHorizontal( (SwRect&)rRect );
-            ((SwTxtFrm*)this)->SwapWidthAndHeight();
-        }
 #endif
 
         ViewShell *pSh = GetShell();
@@ -748,8 +792,7 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
             rRepaint.Clear();
 
 #ifdef VERTICAL_LAYOUT
-    if ( IsVertical() )
-        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+    UNDO_SWAP( this )
     (SwRect&)rRect = aOldRect;
 
     ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
