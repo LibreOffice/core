@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-12 10:32:50 $
+ *  last change: $Author: nf $ $Date: 2000-12-12 15:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2521,129 +2521,129 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
     StringList [ language_user1 ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ portuguese ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ russian ] =
     {
-            < "Îáû÷íûé" ;
-        < "Êóðñèâ" ;
-        < "Æèðíûé" ;
-        < "Æèðíûé êóðñèâ" ;
+         "Îáû÷íûé" ;
+         "Êóðñèâ" ;
+         "Æèðíûé" ;
+         "Æèðíûé êóðñèâ" ;
     };
     StringList [ greek ] =
     {
-            < "ÊáíïíéêÜ" ;
-        < "ÐëÜãéá" ;
-        < "¸íôïíá" ;
-        < "ÐëÜãéá ¸íôïíá" ;
+         "ÊáíïíéêÜ" ;
+         "ÐëÜãéá" ;
+         "¸íôïíá" ;
+         "ÐëÜãéá ¸íôïíá" ;
     };
     StringList [ dutch ] =
     {
-            < "Normaal" ;
-        < "Cursief" ;
-        < "Vet" ;
-        < "Vet cursief" ;
+         "Normaal" ;
+         "Cursief" ;
+         "Vet" ;
+         "Vet cursief" ;
     };
     StringList [ french ] =
     {
-            < "Normal" ;
-        < "Italique" ;
-        < "Gras" ;
-        < "Italique gras" ;
+         "Normal" ;
+         "Italique" ;
+         "Gras" ;
+         "Italique gras" ;
     };
     StringList [ spanish ] =
     {
-            < "Normal" ;
-        < "Cursiva" ;
-        < "Negrita" ;
-        < "Negrita cursiva" ;
+         "Normal" ;
+         "Cursiva" ;
+         "Negrita" ;
+         "Negrita cursiva" ;
     };
     StringList [ italian ] =
     {
-            < "Normale" ;
-        < "Corsivo" ;
-        < "Grassetto" ;
-        < "Grassetto corsivo" ;
+         "Normale" ;
+         "Corsivo" ;
+         "Grassetto" ;
+         "Grassetto corsivo" ;
     };
     StringList [ danish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ swedish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fet" ;
-        < "Fet kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fet" ;
+         "Fet kursiv" ;
     };
     StringList [ polish ] =
     {
-            < "Zwyk³a" ;
-        < "Kursywa" ;
-        < "Pogrubienie" ;
-        < "Kursywa pogrubiona" ;
+         "Zwyk³a" ;
+         "Kursywa" ;
+         "Pogrubienie" ;
+         "Kursywa pogrubiona" ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ japanese ] =
     {
-            < "•W€" ;
-        < "ŽÎ‘Ì" ;
-        < "‘¾Žš" ;
-        < "‘¾ŽšŽÎ‘Ì" ;
+         "•W€" ;
+         "ŽÎ‘Ì" ;
+         "‘¾Žš" ;
+         "‘¾ŽšŽÎ‘Ì" ;
     };
     StringList [ korean ] =
     {
-            < "º¸Åë" ;
-        < "ÀÌÅÅ¸¯Ã¼" ;
-        < "±½Àº" ;
-        < "ÀÌÅÅ¸¯Ã¼ (±½Àº)" ;
+         "º¸Åë" ;
+         "ÀÌÅÅ¸¯Ã¼" ;
+         "±½Àº" ;
+         "ÀÌÅÅ¸¯Ã¼ (±½Àº)" ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "ÆÕÍ¨" ;
-        < "Ð±Ìå" ;
-        < "´ÖÌå" ;
-        < "´ÖÐ±Ìå" ;
+         "ÆÕÍ¨" ;
+         "Ð±Ìå" ;
+         "´ÖÌå" ;
+         "´ÖÐ±Ìå" ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "´¶³q" ;
-        < "±×Åé" ;
-        < "²ÊÅé" ;
-        < "²Ê±×Åé" ;
+         "´¶³q" ;
+         "±×Åé" ;
+         "²ÊÅé" ;
+         "²Ê±×Åé" ;
     };
     StringList [ turkish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ arabic ] =
     {
-            < "ÚÇÏí" ;
-        < "ãÇÆá" ;
-        < "ÚÑíÖ" ;
-        < "ÚÑíÖ ãÇÆá" ;
+         "ÚÇÏí" ;
+         "ãÇÆá" ;
+         "ÚÑíÖ" ;
+         "ÚÑíÖ ãÇÆá" ;
     };
     };
     FixedText FT_WEST_SIZE
@@ -2814,129 +2814,129 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
     StringList [ language_user1 ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ portuguese ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ russian ] =
     {
-            < "Îáû÷íûé" ;
-        < "Êóðñèâ" ;
-        < "Æèðíûé" ;
-        < "Æèðíûé êóðñèâ" ;
+         "Îáû÷íûé" ;
+         "Êóðñèâ" ;
+         "Æèðíûé" ;
+         "Æèðíûé êóðñèâ" ;
     };
     StringList [ greek ] =
     {
-            < "ÊáíïíéêÜ" ;
-        < "ÐëÜãéá" ;
-        < "¸íôïíá" ;
-        < "ÐëÜãéá ¸íôïíá" ;
+         "ÊáíïíéêÜ" ;
+         "ÐëÜãéá" ;
+         "¸íôïíá" ;
+         "ÐëÜãéá ¸íôïíá" ;
     };
     StringList [ dutch ] =
     {
-            < "Normaal" ;
-        < "Cursief" ;
-        < "Vet" ;
-        < "Vet cursief" ;
+         "Normaal" ;
+         "Cursief" ;
+         "Vet" ;
+         "Vet cursief" ;
     };
     StringList [ french ] =
     {
-            < "Normal" ;
-        < "Italique" ;
-        < "Gras" ;
-        < "Italique gras" ;
+         "Normal" ;
+         "Italique" ;
+         "Gras" ;
+         "Italique gras" ;
     };
     StringList [ spanish ] =
     {
-            < "Normal" ;
-        < "Cursiva" ;
-        < "Negrita" ;
-        < "Negrita cursiva" ;
+         "Normal" ;
+         "Cursiva" ;
+         "Negrita" ;
+         "Negrita cursiva" ;
     };
     StringList [ italian ] =
     {
-            < "Normale" ;
-        < "Corsivo" ;
-        < "Grassetto" ;
-        < "Grassetto corsivo" ;
+         "Normale" ;
+         "Corsivo" ;
+         "Grassetto" ;
+         "Grassetto corsivo" ;
     };
     StringList [ danish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ swedish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fet" ;
-        < "Fet kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fet" ;
+         "Fet kursiv" ;
     };
     StringList [ polish ] =
     {
-            < "Zwyk³a" ;
-        < "Kursywa" ;
-        < "Pogrubienie" ;
-        < "Pogrubiona kursywa" ;
+         "Zwyk³a" ;
+         "Kursywa" ;
+         "Pogrubienie" ;
+         "Pogrubiona kursywa" ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ japanese ] =
     {
-            < "•W€" ;
-        < "ŽÎ‘Ì" ;
-        < "‘¾Žš" ;
-        < "‘¾ŽšŽÎ‘Ì" ;
+         "•W€" ;
+         "ŽÎ‘Ì" ;
+         "‘¾Žš" ;
+         "‘¾ŽšŽÎ‘Ì" ;
     };
     StringList [ korean ] =
     {
-            < "º¸Åë" ;
-        < "ÀÌÅÅ¸¯Ã¼" ;
-        < "±½Àº" ;
-        < "ÀÌÅÅ¸¯Ã¼ (±½Àº)" ;
+         "º¸Åë" ;
+         "ÀÌÅÅ¸¯Ã¼" ;
+         "±½Àº" ;
+         "ÀÌÅÅ¸¯Ã¼ (±½Àº)" ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "ÆÕÍ¨" ;
-        < "Ð±Ìå" ;
-        < "´ÖÌå" ;
-        < "´ÖÐ±Ìå" ;
+         "ÆÕÍ¨" ;
+         "Ð±Ìå" ;
+         "´ÖÌå" ;
+         "´ÖÐ±Ìå" ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "´¶³q" ;
-        < "±×Åé" ;
-        < "²ÊÅé" ;
-        < "²Ê±×Åé" ;
+         "´¶³q" ;
+         "±×Åé" ;
+         "²ÊÅé" ;
+         "²Ê±×Åé" ;
     };
     StringList [ turkish ] =
     {
-            < "Normal" ;
-        < "Kursiv" ;
-        < "Fett" ;
-        < "Fett Kursiv" ;
+         "Normal" ;
+         "Kursiv" ;
+         "Fett" ;
+         "Fett Kursiv" ;
     };
     StringList [ arabic ] =
     {
-            < "ÚÇÏí" ;
-        < "ãÇÆá" ;
-        < "ÚÑíÖ" ;
-        < "ÚÑíÖ ãÇÆá" ;
+         "ÚÇÏí" ;
+         "ãÇÆá" ;
+         "ÚÑíÖ" ;
+         "ÚÑíÖ ãÇÆá" ;
     };
     };
     FixedText FT_EAST_SIZE
