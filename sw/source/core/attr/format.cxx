@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:13:59 $
+ *  last change: $Author: od $ $Date: 2002-08-28 12:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,6 +688,34 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     }
 }
 
+/** SwFmt::IsBackgroundTransparent - for feature #99657#
 
+    OD 22.08.2002
+    Virtual method to determine, if background of format is transparent.
+    Default implementation returns false. Thus, subclasses have to overload
+    method, if the specific subclass can have a transparent background.
 
+    @author OD
 
+    @return false, default implementation
+*/
+const sal_Bool SwFmt::IsBackgroundTransparent() const
+{
+    return sal_False;
+}
+
+/** SwFmt::IsShadowTransparent - for feature #99657#
+
+    OD 22.08.2002
+    Virtual method to determine, if shadow of format is transparent.
+    Default implementation returns false. Thus, subclasses have to overload
+    method, if the specific subclass can have a transparent shadow.
+
+    @author OD
+
+    @return false, default implementation
+*/
+const sal_Bool SwFmt::IsShadowTransparent() const
+{
+    return sal_False;
+}
