@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 07:15:09 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 12:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@
 
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
+#endif
+
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 
 #include <svx/svdoutl.hxx>
@@ -502,6 +506,16 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
             }
         }
+    }
+
+    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
+    {
+        svx::ColorConfig aConfig;
+        svx::ColorConfigValue aGridValue( aConfig.GetColorValue( svx::DRAWGRID ) );
+
+        SetGridVisible( aGridValue.bIsVisible );
+        SetGridColor( Color( aGridValue.nColor ) );
+
     }
 
     SdView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-26 11:13:43 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 12:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc)
         SetGridFine( pFrameView->GetGridFine() );
         SetSnapGrid( pFrameView->GetSnapGrid() );
         SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
-        SetGridVisible( pFrameView->IsGridVisible() );
+//      SetGridVisible( pFrameView->IsGridVisible() );
         SetGridFront( pFrameView->IsGridFront() );
         SetSnapAngle( pFrameView->GetSnapAngle() );
         SetGridSnap( pFrameView->IsGridSnap() );
@@ -541,7 +541,7 @@ void FrameView::Update(SdOptions* pOptions)
     if (pOptions)
     {
         bRuler = pOptions->IsRulerVisible();
-        SetGridVisible( pOptions->IsGridVisible() );
+//      SetGridVisible( pOptions->IsGridVisible() );
         SetSnapAngle( pOptions->GetAngle() );
         SetGridSnap( pOptions->IsUseGridSnap() );
         SetBordSnap( pOptions->IsSnapBorder()  );
