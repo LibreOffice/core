@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:22:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #include <actctrl.hxx>
 #endif
 
-#include "textcontrolcombo.hxx"
+#ifndef _TEXTCONTROLCOMBO_HXX
+#include <textcontrolcombo.hxx>
+#endif
 
 class SwWrtShell;
 class SwTableAutoFmt;
