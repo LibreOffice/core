@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:13:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,33 +70,36 @@
 #include <rtl/logfile.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
-#include <drafts/com/sun/star/geometry/RealSize2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
+#include <com/sun/star/geometry/RealSize2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
-#include <drafts/com/sun/star/geometry/RealPoint2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
-#include <drafts/com/sun/star/geometry/RealRectangle2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAP_HPP__
-#include <drafts/com/sun/star/rendering/XBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
+#include <com/sun/star/rendering/XBitmap.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
-#include <drafts/com/sun/star/geometry/RealBezierSegment2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP__
-#include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP__
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
@@ -146,7 +149,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace vclcanvas
 {
@@ -188,6 +190,13 @@ namespace vclcanvas
             }
             else
             {
+                uno::Reference< lang::XUnoTunnel > xTunnel( xBitmap, uno::UNO_QUERY );
+                if( xTunnel.is() )
+                {
+                    sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
+                    if( nPtr )
+                        return BitmapEx( *(BitmapEx*)nPtr );
+                }
                 // TODO(F1): extract pixel from XBitmap interface
                 ENSURE_AND_THROW( false,
                                   "bitmapExFromXBitmap(): could not extract bitmap" );
@@ -296,19 +305,27 @@ namespace vclcanvas
             ::canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                          rViewState,
                                                          rRenderState);
-            aTransform.set(0,2,0.0);
-            aTransform.set(1,2,0.0);
 
             const Size                  aBmpSize( rBitmap.GetSizePixel() );
             ::basegfx::B2DRectangle     aDestRect;
 
             bool bCopyBack( false );
 
+            // calc effective transformation for bitmap
             ::canvas::tools::calcTransformedRectBounds( aDestRect,
                                                         ::basegfx::B2DRectangle(0,
                                                                                 0,
                                                                                 aBmpSize.Width(),
                                                                                 aBmpSize.Height()),
+                                                        aTransform );
+
+            // re-center bitmap, such that it's left, top border is
+            // aligned with (0,0). The method takes the given
+            // rectangle, and calculates a transformation that maps
+            // this rectangle unscaled to the origin.
+            ::basegfx::B2DHomMatrix aLocalTransform;
+            ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
+                                                        aDestRect,
                                                         aTransform );
 
             const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
@@ -349,6 +366,9 @@ namespace vclcanvas
 
             const Size aDestBmpSize( ::basegfx::fround( aDestRect.getMaxX() ),
                                      ::basegfx::fround( aDestRect.getMaxY() ) );
+
+            if( aDestBmpSize.Width() == 0 || aDestBmpSize.Height() == 0 )
+                return BitmapEx();
 
             Bitmap aDstBitmap( aDestBmpSize, aSrcBitmap.GetBitCount(), &pReadAccess->GetPalette() );
             Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
