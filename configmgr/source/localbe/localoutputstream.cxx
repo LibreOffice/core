@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_INSUFFICIENTACCESSRIGHTSEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
+#endif
+
 namespace configmgr { namespace localbe {
 
 //==============================================================================
@@ -74,56 +78,150 @@ namespace configmgr { namespace localbe {
 //------------------------------------------------------------------------------
 
 LocalOutputStream::LocalOutputStream(const rtl::OUString& aFileUrl)
-    throw (io::IOException)
-: mFileUrl(aFileUrl), mTemporaryFileUrl(mFileUrl), mWriteFile(NULL) {
+    throw (backend::BackendAccessException, uno::RuntimeException)
+: mFileUrl(aFileUrl)
+, mTemporaryFileUrl(mFileUrl)
+, mWriteFile(NULL)
+{
     // First, ensure the directory where the file is supposed to be
     // put exists.
     mTemporaryFileUrl += rtl::OUString::createFromAscii("_tmp") ;
     rtl::OUString parentDirectory = FileHelper::getParentDir(aFileUrl) ;
 
-    if (!FileHelper::mkdirs(parentDirectory)) {
+    if (osl::File::RC errorCode = FileHelper::mkdirs(parentDirectory))
+    {
         rtl::OUStringBuffer message ;
+        message.appendAscii("Cannot create directory \"") ;
+        message.append(parentDirectory).appendAscii("\". Error is ") ;
+        message.append(FileHelper::createOSLErrorString(errorCode));
+        message.appendAscii(" [").append(sal_Int32(errorCode)).appendAscii("].") ;
 
-        message.appendAscii("Impossible to create directory '") ;
-        message.append(parentDirectory).appendAscii("'") ;
-        throw io::IOException(message.makeStringAndClear(), NULL) ;
+        rtl::OUString const sIOMsg = message.makeStringAndClear();
+        uno::Any ioe = uno::makeAny(io::IOException(sIOMsg,0));
+
+        switch (errorCode)
+        {
+        case osl::File::E_ACCES:
+        case osl::File::E_ROFS:
+            message.appendAscii("Configuration LocalOutputStream - No Write Access: ");
+            message.append(sIOMsg);
+            throw backend::InsufficientAccessRightsException(message.makeStringAndClear(), NULL, ioe) ;
+
+        case osl::File::E_None: OSL_ASSERT(!"can't happen");
+        default:
+            message.appendAscii("Configuration LocalOutputStream - IO Error: ");
+            message.append(sIOMsg);
+            throw backend::BackendAccessException(message.makeStringAndClear(), NULL, ioe) ;
+        }
     }
-    FileHelper::removeFile(mTemporaryFileUrl) ;
-    mWriteFile = new osl::File(mTemporaryFileUrl) ;
-    osl::FileBase::RC errorCode = mWriteFile->open(OpenFlag_Write |
-                                                   OpenFlag_Create) ;
 
-    if (errorCode != osl_File_E_None)
+    osl::File::remove(mTemporaryFileUrl) ;
+    mWriteFile = new osl::File(mTemporaryFileUrl) ;
+
+    if (osl::File::RC errorCode = mWriteFile->open(OpenFlag_Write |  OpenFlag_Create) )
     {
         delete mWriteFile, mWriteFile = NULL;
-        throw io::IOException(FileHelper::createOSLErrorString(errorCode),NULL) ;
+
+        rtl::OUStringBuffer message ;
+        message.appendAscii("Cannot open file \"") ;
+        message.append(mTemporaryFileUrl).appendAscii("\" for writing. ");
+        message.appendAscii("Error is ").append(FileHelper::createOSLErrorString(errorCode));
+        message.appendAscii(" [").append(sal_Int32(errorCode)).appendAscii("].") ;
+
+        rtl::OUString const sIOMsg = message.makeStringAndClear();
+        uno::Any ioe = uno::makeAny(io::IOException(sIOMsg,0));
+
+        switch (errorCode)
+        {
+        case osl::File::E_EXIST: // take inability to remove as indicator of missing rights
+        case osl::File::E_ACCES:
+        case osl::File::E_ROFS:
+            message.appendAscii("Configuration LocalOutputStream - No Write Access: ");
+            message.append(sIOMsg);
+            throw backend::InsufficientAccessRightsException(message.makeStringAndClear(), NULL, ioe) ;
+
+        case osl::File::E_None: OSL_ASSERT(!"can't happen");
+        default:
+            message.appendAscii("Configuration LocalOutputStream - IO Error: ");
+            message.append(sIOMsg);
+            throw backend::BackendAccessException(message.makeStringAndClear(), NULL, ioe) ;
+        }
     }
     mTemporaryFile = new OSLOutputStreamWrapper(*mWriteFile) ;
 }
 //------------------------------------------------------------------------------
 
-LocalOutputStream::~LocalOutputStream(void)
+LocalOutputStream::~LocalOutputStream()
 {
-    this->closeOutput();
-    delete mWriteFile;
-
+    try
+    {
+        this->closeOutput();
     //  if (mWriteFile)  FileHelper::removeFile(mTemporaryFileUrl) ;
+    }
+    catch (uno::Exception&)
+    {
+        OSL_ENSURE(false,"Exception from closing LocalOutputStream ignored.");
+    }
+
+    delete mWriteFile;
 }
 //------------------------------------------------------------------------------
 
 void LocalOutputStream::finishOutput()
+    throw (backend::BackendAccessException, uno::RuntimeException)
 {
     if (mWriteFile)
+    try
     {
         this->closeOutput();
         delete mWriteFile, mWriteFile = NULL;
 
         FileHelper::replaceFile(mFileUrl, mTemporaryFileUrl) ;
     }
+    catch (io::IOException& ioe)
+    {
+        rtl::OUStringBuffer message ;
+        message.appendAscii("Configuration LocalOutputStream - IO Error: ");
+        message.appendAscii("Cannot finish output to \"").append(mTemporaryFileUrl) ;
+        message.appendAscii("\" or copy the result to \"").append(mFileUrl).appendAscii("\". ");
+        message.appendAscii("Error is \"").append(ioe.Message).appendAscii("\". ");
+        throw backend::BackendAccessException(message.makeStringAndClear(), *this, uno::makeAny(ioe));
+    }
 }
 //------------------------------------------------------------------------------
 
-void SAL_CALL LocalOutputStream::closeOutput(void)
+inline
+uno::Reference<io::XOutputStream> LocalOutputStream::getOutputFile()
+{
+    if (!mTemporaryFile.is())
+    {
+        throw io::NotConnectedException(
+            rtl::OUString::createFromAscii("LocalOutputStream: no output file."),
+            *this);
+    }
+    return mTemporaryFile;
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL LocalOutputStream::writeBytes(const uno::Sequence<sal_Int8>& aData)
+    throw (io::NotConnectedException,
+            io::BufferSizeExceededException,
+            io::IOException, uno::RuntimeException)
+{
+    getOutputFile()->writeBytes(aData) ;
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL LocalOutputStream::flush()
+    throw (io::NotConnectedException,
+            io::BufferSizeExceededException,
+            io::IOException, uno::RuntimeException)
+{
+    getOutputFile()->flush() ;
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL LocalOutputStream::closeOutput()
     throw (io::NotConnectedException, io::BufferSizeExceededException,
             io::IOException, uno::RuntimeException)
 {
