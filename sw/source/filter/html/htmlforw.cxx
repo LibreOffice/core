@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 12:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,7 +1264,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const Float*)0) )
+            if( aTmp.getValueType() == ::getCppuType((const float*)0) )
 
             {
                 float nHeight = *(float*)aTmp.getValue();
@@ -1300,7 +1300,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const Float*)0) )
+            if( aTmp.getValueType() == ::getCppuType((const float*)0) )
             {
                 FontWeight eWeight =
                     VCLUnoHelper::ConvertFontWeight( *(float*)aTmp.getValue() );
@@ -1587,11 +1587,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.2 2000-10-20 13:43:01 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.3 2001-03-23 12:39:50 jl Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:43:01  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 
