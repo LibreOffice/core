@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:38:16 $
+ *  last change: $Author: avy $ $Date: 2001-08-22 08:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace dbaui
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
-
+    protected:
         class FormErrorHelper
         {
             SbaXDataBrowserController*  m_pOwner;
