@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_DOCUMENTSAVEREQUEST_HPP_
+#include <com/sun/star/sdb/DocumentSaveRequest.hpp>
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -148,6 +151,11 @@ namespace dbaui
                     const ::com::sun::star::sdb::ParametersRequest& _rParamRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
+        /// handle document save requests
+        void    implHandle(
+                    const ::com::sun::star::sdb::DocumentSaveRequest& _rParamRequest,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+
         /// known continuation types
         enum Continuation
         {
@@ -156,7 +164,8 @@ namespace dbaui
             RETRY,
             ABORT,
             SUPPLY_AUTHENTICATION,
-            SUPPLY_PARAMETERS
+            SUPPLY_PARAMETERS,
+            SUPPLY_DOCUMENTSAVE
         };
         /** check if a given continuation sequence contains a given continuation type<p/>
             @return     the index within <arg>_rContinuations</arg> of the first occurence of a continuation
