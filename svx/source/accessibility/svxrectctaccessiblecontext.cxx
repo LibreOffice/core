@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 14:46:14 $
+ *  last change: $Author: gt $ $Date: 2002-03-20 09:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,17 +751,28 @@ void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEv
 
         aGuard.clear();
 
-        sal_uInt32                                          nLength( aListeners.getLength() );
+        sal_uInt32                          nLength( aListeners.getLength() );
         if( nLength )
         {
-            const Reference< XInterface >*      pInterfaces = aListeners.getConstArray();
-            try
-            {
-                for( sal_uInt32 i = nLength ; i ; --i, ++pInterfaces )
-                    ( static_cast< XAccessibleEventListener* >( pInterfaces->get() ) )->notifyEvent( rEvent );
-            }
-            catch( RuntimeException& )
-            {
+            const Reference< XInterface >*  pInterfaces = aListeners.getConstArray();
+            sal_uInt32                      i = nLength;
+
+            while( i )
+            {   // double while because of performance lack of try-catch in loop
+                try
+                {
+                    while( i )
+                    {
+                        ( static_cast< XAccessibleEventListener* >( pInterfaces->get() ) )->notifyEvent( rEvent );
+                        --i;
+                        ++pInterfaces;
+                    }
+                }
+                catch( RuntimeException& )
+                {
+                    --i;
+                    ++pInterfaces;
+                }
             }
         }
     }
@@ -769,43 +780,50 @@ void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEv
 
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()
 {
+    if( !rBHelper.bDisposed )
     {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-        mpRepr = NULL;      // object dies with representation
-
-        SvxRectCtlChildAccessibleContext**  p = mpChilds;
-        for( int i = MAX_NUM_OF_CHILDS ; i ; --i, ++p )
         {
-            SvxRectCtlChildAccessibleContext*   pChild = *p;
-            if( pChild )
+            ::osl::MutexGuard   aGuard( m_aMutex );
+            mpRepr = NULL;      // object dies with representation
+
+            SvxRectCtlChildAccessibleContext**  p = mpChilds;
+            for( int i = MAX_NUM_OF_CHILDS ; i ; --i, ++p )
             {
-                pChild->dispose();
-                pChild->release();
-                *p = NULL;
+                SvxRectCtlChildAccessibleContext*   pChild = *p;
+                if( pChild )
+                {
+                    pChild->dispose();
+                    pChild->release();
+                    *p = NULL;
+                }
             }
+
+            delete[] mpChilds;
+            mpChilds = NULL;
         }
 
-        delete[] mpChilds;
-        mpChilds = NULL;
+        const Reference< XInterface >   xSource( *this );
+        Any                             aDefunc;
+        aDefunc <<= AccessibleStateType::DEFUNC;
+        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT, Any(), aDefunc ) );
 
-        if( mpEventListeners )
         {
-            lang::EventObject   aEvent;
-            aEvent.Source = static_cast< cppu::OWeakObject* >( this );
+            ::osl::MutexGuard   aGuard( m_aMutex );
 
-            mpEventListeners->disposeAndClear( aEvent );
-            delete mpEventListeners;
+            if( mpEventListeners )
+            {
+                lang::EventObject   aEvent;
+                aEvent.Source = static_cast< cppu::OWeakObject* >( this );
 
-            mpEventListeners = NULL;
+                mpEventListeners->disposeAndClear( aEvent );
+                delete mpEventListeners;
+
+                mpEventListeners = NULL;
+            }
+
+            mxParent = Reference< XAccessible >();
         }
-
-        mxParent = Reference< XAccessible >();
     }
-
-    const Reference< XInterface >   xSource( *this );
-    Any                             aDefunc;
-    aDefunc <<= AccessibleStateType::DEFUNC;
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT, Any(), aDefunc ) );
 }
 
 Rectangle SvxRectCtlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( RuntimeException )
