@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-28 23:40:27 $
+#   last change: $Author: pluby $ $Date: 2001-03-01 08:39:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -449,7 +449,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL$(TNR)VERSIONMAP) $@

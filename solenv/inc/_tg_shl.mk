@@ -349,7 +349,7 @@ $(SHL1TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL1VERSIONMAP) $@
@@ -723,7 +723,7 @@ $(SHL2TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL2VERSIONMAP) $@
@@ -1097,7 +1097,7 @@ $(SHL3TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL3VERSIONMAP) $@
@@ -1471,7 +1471,7 @@ $(SHL4TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL4VERSIONMAP) $@
@@ -1845,7 +1845,7 @@ $(SHL5TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL5VERSIONMAP) $@
@@ -2219,7 +2219,7 @@ $(SHL6TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL6VERSIONMAP) $@
@@ -2593,7 +2593,7 @@ $(SHL7TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL7VERSIONMAP) $@
@@ -2967,7 +2967,7 @@ $(SHL8TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL8VERSIONMAP) $@
@@ -3341,7 +3341,7 @@ $(SHL9TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL9VERSIONMAP) $@
@@ -3715,7 +3715,7 @@ $(SHL10TARGETN) : \
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
     @echo "Rerunning static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
 .ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL10VERSIONMAP) $@
