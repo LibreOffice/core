@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 14:59:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
@@ -278,7 +282,6 @@ SdXMLShapeContext::SdXMLShapeContext(
     mbIsUserTransformed(FALSE),
     mxAttrList(xAttrList),
     mnZOrder(-1),
-    mnShapeId(-1),
     maPosition(0, 0),
     maSize(1, 1)
 {
@@ -521,8 +524,11 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             xImp->shapeWithZIndexAdded( xShape, mnZOrder );
         }
 
-        if( mnShapeId != -1 )
-            xImp->createShapeId( xShape, mnShapeId );
+        if( maShapeId.getLength() )
+        {
+            uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
+            GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
+        }
 
         // #91065# count only if counting for shape import is enabled
         if(GetImport().GetShapeImport()->IsHandleProgressBarEnabled())
@@ -824,7 +830,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         }
         else if( IsXMLToken( rLocalName, XML_ID ) )
         {
-            mnShapeId = rValue.toInt32();
+            maShapeId = rValue;
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
@@ -1720,9 +1726,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     maStart(0,0),
     maEnd(1,1),
     mnType( (USHORT)drawing::ConnectorType_STANDARD ),
-    mnStartShapeId(-1),
     mnStartGlueId(-1),
-    mnEndShapeId(-1),
     mnEndGlueId(-1),
     mnDelta1(0),
     mnDelta2(0),
@@ -1747,7 +1751,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
     {
         if( IsXMLToken( rLocalName, XML_START_SHAPE ) )
         {
-            mnStartShapeId = rValue.toInt32();
+            maStartShapeId = rValue;
             return;
         }
         if( IsXMLToken( rLocalName, XML_START_GLUE_POINT ) )
@@ -1757,7 +1761,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
         }
         if( IsXMLToken( rLocalName, XML_END_SHAPE ) )
         {
-            mnEndShapeId = rValue.toInt32();
+            maEndShapeId = rValue;
             return;
         }
         if( IsXMLToken( rLocalName, XML_END_GLUE_POINT ) )
@@ -1827,8 +1831,8 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
     // is not guaranteed, but it's definitely safe to not add empty connectors.
     sal_Bool bDoAdd(sal_True);
 
-    if(    -1 == mnStartShapeId
-        && -1 == mnEndShapeId
+    if(    0 == maStartShapeId.getLength()
+        && 0 == maEndShapeId.getLength()
         && maStart.X == maEnd.X
         && maStart.Y == maEnd.Y
         && 0 == mnDelta1
@@ -1847,10 +1851,10 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
         if(mxShape.is())
         {
             // add connection ids
-            if( mnStartShapeId != -1 )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, mnStartShapeId, mnStartGlueId );
-            if( mnEndShapeId != -1 )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, mnEndShapeId, mnEndGlueId );
+            if( maStartShapeId.getLength() )
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, maStartShapeId, mnStartGlueId );
+            if( maEndShapeId.getLength() )
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, maEndShapeId, mnEndGlueId );
 
             uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
             if( xProps.is() )
