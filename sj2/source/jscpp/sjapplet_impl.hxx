@@ -16,6 +16,8 @@ class INetURLObject;
 class SvCommandList;
 class Size;
 
+struct EmbeddedWindow;
+
 struct SjApplet2_Impl {
     Window              * _pParentWin;
 
@@ -23,12 +25,7 @@ struct SjApplet2_Impl {
     jobject     _joAppletExecutionContext;
     jclass      _jcAppletExecutionContext;
 
-    jmethodID _jmAppletExecutionContext_resize;
-    jmethodID _jmAppletExecutionContext_restart;
-    jmethodID _jmAppletExecutionContext_reload;
-    jmethodID _jmAppletExecutionContext_sendStart;
-    jmethodID _jmAppletExecutionContext_sendStop;
-    jmethodID _jmAppletExecutionContext_shutdown;
+    EmbeddedWindow * _pEmbeddedWindow;
 
     com::sun::star::uno::Reference<com::sun::star::java::XJavaVM>                   _xJavaVM;
     com::sun::star::uno::Reference<com::sun::star::java::XJavaThreadRegister_11>    _xJavaThreadRegister_11;
@@ -47,7 +44,4 @@ struct SjApplet2_Impl {
     void start() throw(com::sun::star::uno::RuntimeException);
     void stop() throw(com::sun::star::uno::RuntimeException);
     void close() throw(com::sun::star::uno::RuntimeException);
-
-
-    void testJavaException(JNIEnv * pEnv) throw(com::sun::star::uno::RuntimeException);
 };

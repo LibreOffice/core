@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-30 10:26:37 $
+ *  last change: $Author: kr $ $Date: 2001-08-08 14:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,35 @@
  *
  ************************************************************************/
 
-#include "sjapplet_impl.hxx"
+#ifdef UNX
+#include <cstdarg>
+#include <jni.h>
 
-//  #include <windows.h>
+#define String XLIB_String
+#define Window XLIB_Window
+#define Time XLIB_Time
+#define Font XLIB_Font
+#define KeyCode XLIB_KeyCode
+#define Region XLIB_Region
+#define Cursor XLIB_Cursor
+#include <jawt_md.h>
+#undef String
+#undef Window
+#undef Time
+#undef Font
+#undef KeyCode
+#undef Region
+#undef Cursor
+#endif
+
+#include "sjapplet_impl.hxx"
 
 #define HWND int
 
 #include <rtl/ustring>
 #include <rtl/process.h>
+#include <osl/module.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
@@ -79,10 +100,10 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-
 #include <jnihelp.hxx>
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::sj2;
 using namespace ::utl;
 
@@ -90,15 +111,211 @@ using namespace ::com::sun::star::java;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
+
+static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::RuntimeException)
+{
+    jthrowable jtThrowable = pEnv->ExceptionOccurred();
+    if(jtThrowable) { // is it a java exception ?
+        pEnv->ExceptionClear();
+
+          jclass jcThrowable = pEnv->FindClass("java/lang/Throwable");
+          jmethodID jmThrowable_getMessage = pEnv->GetMethodID(jcThrowable, "getMessage", "()Ljava/lang/String;");
+
+          jstring jsMessage = (jstring)pEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage);
+
+          const jchar * jcMessage = pEnv->GetStringChars(jsMessage, NULL);
+          OUString ouMessage(jcMessage);
+          pEnv->ReleaseStringChars(jsMessage, jcMessage);
+
+          throw RuntimeException(ouMessage, Reference<XInterface>());
+    }
+}
+
+#ifdef UNX
+struct EmbeddedWindow {
+    jobject _joWindow;
+    ::osl::Module  _jawt;
+
+    EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException);
+    void dispose(JNIEnv * pEnv);
+};
+
+EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
+{
+    // create a canvas
+    jclass jcCanvas = pEnv->FindClass("java/awt/Canvas");                                                      testJavaException(pEnv);
+    jmethodID jmCanvas_rinit = pEnv->GetMethodID(jcCanvas, "<init>", "()V" );                                  testJavaException(pEnv);
+
+    jobject joCanvas = pEnv->AllocObject(jcCanvas);                                                            testJavaException(pEnv);
+    pEnv->CallVoidMethod(joCanvas, jmCanvas_rinit);                                                            testJavaException(pEnv);
+
+    jmethodID jmCanvas_setSize = pEnv->GetMethodID(jcCanvas, "setSize", "(II)V" );                             testJavaException(pEnv);
+    pEnv->CallVoidMethod(joCanvas, jmCanvas_setSize, 50, 50);                                                  testJavaException(pEnv);
+
+    jmethodID jmCanvas_show = pEnv->GetMethodID(jcCanvas, "show", "()V" );                                     testJavaException(pEnv);
+    pEnv->CallVoidMethod(joCanvas, jmCanvas_show);                                                             testJavaException(pEnv);
+
+
+    // create window and add the canvas
+    jclass jcFrame  = pEnv->FindClass("java/awt/Frame");                                                       testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V" );                                    testJavaException(pEnv);
+
+    jobject joFrame = pEnv->AllocObject(jcFrame);                                                              testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                                                              testJavaException(pEnv);
+
+    jclass jcWindow = pEnv->FindClass("java/awt/Window");                                                      testJavaException(pEnv);
+    jmethodID jmWindow_rinit = pEnv->GetMethodID(jcWindow, "<init>", "(Ljava/awt/Frame;)V" );                  testJavaException(pEnv);
+
+    jobject joWindow = pEnv->NewGlobalRef(pEnv->AllocObject(jcWindow));                                        testJavaException(pEnv);
+    pEnv->CallVoidMethod(joWindow, jmWindow_rinit, joFrame);                                                   testJavaException(pEnv);
+
+    jmethodID jmWindow_setLayout = pEnv->GetMethodID(jcWindow, "setLayout", "(Ljava/awt/LayoutManager;)V");    testJavaException(pEnv);
+    pEnv->CallVoidMethod(joWindow, jmWindow_setLayout, 0);                                                     testJavaException(pEnv);
+
+    jmethodID jmWindow_setSize = pEnv->GetMethodID(jcWindow, "setSize", "(II)V");                              testJavaException(pEnv);
+    pEnv->CallVoidMethod(joWindow, jmWindow_setSize, 1, 1);                                                    testJavaException(pEnv);
+
+    jmethodID jmWindow_add = pEnv->GetMethodID(jcWindow, "add", "(Ljava/awt/Component;)Ljava/awt/Component;"); testJavaException(pEnv);
+    pEnv->CallObjectMethod(joWindow, jmWindow_add, joCanvas);                                                  testJavaException(pEnv);
+
+    jmethodID jmWindow_show = pEnv->GetMethodID(jcWindow, "show", "()V");                                      testJavaException(pEnv);
+    pEnv->CallVoidMethod(joWindow, jmWindow_show);                                                             testJavaException(pEnv);
+
+
+
+
+    typedef jboolean (JNICALL * fptr_JAWT_GetAWT)( JNIEnv * env, JAWT * awt );
+    fptr_JAWT_GetAWT s_fGetAWT = 0;
+
+    _jawt.load(OUString(RTL_CONSTASCII_USTRINGPARAM("libjawt.so")));
+
+    OUString aSymName( RTL_CONSTASCII_USTRINGPARAM("JAWT_GetAWT") );
+    s_fGetAWT = (fptr_JAWT_GetAWT)_jawt.getSymbol(aSymName);
+    if(!s_fGetAWT) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - JAWT_GetAWT not found")), Reference<XInterface>());
+
+    JAWT awt;
+    awt.version = JAWT_VERSION_1_3;
+    if ((*s_fGetAWT)(pEnv, &awt) == JNI_FALSE)
+        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - wrong awt version")), Reference<XInterface>());
+
+    // get the drawing surface
+    JAWT_DrawingSurface * ds = (*awt.GetDrawingSurface)(pEnv, joCanvas);
+    if (!ds)
+        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurface")), Reference<XInterface>());
+
+    jint lock = 0;
+    JAWT_DrawingSurfaceInfo * dsi = NULL;
+    JAWT_X11DrawingSurfaceInfo * dsi_x11 = NULL;
+    try {
+        lock = ds->Lock(ds); // lock the drawing surface
+        if ((lock & JAWT_LOCK_ERROR))
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't lock DrawingSurface")), Reference<XInterface>());
+
+        dsi = ds->GetDrawingSurfaceInfo(ds); // get the drawing surface info
+        if (!dsi)
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurfaceInfo")), Reference<XInterface>());
+
+        // get the platform-specific drawing info and reparent
+        JAWT_X11DrawingSurfaceInfo * dsi_x11 = (JAWT_X11DrawingSurfaceInfo *)dsi->platformInfo;
+        Widget widget = XtWindowToWidget(dsi_x11->display, dsi_x11->drawable);
+        if (!widget)
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurface widget")), Reference<XInterface>());
+
+        Widget parentWidget = widget;
+        Widget axasxasxa = 0;
+        while(XtParent(parentWidget)) {
+            axasxasxa = parentWidget;
+            parentWidget = XtParent(parentWidget);
+        }
+
+        XReparentWindow(dsi_x11->display, XtWindow(axasxasxa), pEnvData->aWindow, 0, 0);
+
+        ds->FreeDrawingSurfaceInfo(dsi);
+        ds->Unlock(ds);
+        awt.FreeDrawingSurface(ds);
+    }
+    catch(...) {
+        if(dsi)
+            ds->FreeDrawingSurfaceInfo(dsi);
+
+        if (!(lock & JAWT_LOCK_ERROR))
+            ds->Unlock(ds);
+
+        awt.FreeDrawingSurface(ds);
+
+        throw;
+    }
+
+    jmethodID jmWindow_removeAll = pEnv->GetMethodID(jcWindow, "removeAll", "()V"); testJavaException(pEnv);
+    pEnv->CallVoidMethod(joWindow, jmWindow_removeAll);                             testJavaException(pEnv);
+
+    _joWindow = pEnv->NewGlobalRef(joWindow);
+}
+
+#else
+
+struct EmbeddedWindow {
+    jobject _joWindow;
+
+    EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException);
+    void dispose(JNIEnv * pEnv);
+};
+
+
+#ifdef WNT
+EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
+{
+    jclass jcFrame = pEnv->FindClass("sun/awt/windows/WEmbeddedFrame");     testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(I)V"); testJavaException(pEnv);
+
+    jobject joFrame = pEnv->AllocObject(jcFrame);                           testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->hWnd);     testJavaException(pEnv);
+
+    _joWindow = pEnv->NewGlobalRef(joFrame);
+}
+
+#else
+
+EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
+{
+    jclass jcFrame = pEnv->FindClass("java/awt/Frame");                     testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V");  testJavaException(pEnv);
+    joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                           testJavaException(pEnv);
+
+    _joWindow = pEnv->NewGlobalRef(joFrame);
+}
+
+#endif
+
+#endif
+
+void EmbeddedWindow::dispose(JNIEnv * pEnv)
+{
+    jclass jcWindow = pEnv->FindClass("java/awt/Window");                        testJavaException(pEnv);
+    jmethodID jmWindow_dispose = pEnv->GetMethodID(jcWindow, "dispose", "()V" ); testJavaException(pEnv);
+
+    pEnv->CallVoidMethod(_joWindow, jmWindow_dispose);                           testJavaException(pEnv);
+    pEnv->DeleteGlobalRef(_joWindow);
+
+    _joWindow = 0;
+}
+
+
+
 SjApplet2_Impl::SjApplet2_Impl()  throw(com::sun::star::uno::RuntimeException)
     :   _pJVM(NULL),
         _joAppletExecutionContext(0),
         _jcAppletExecutionContext(0)
+
 {}
 
 SjApplet2_Impl::~SjApplet2_Impl() throw() {
     if (_joAppletExecutionContext) {
         TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
+
+        _pEmbeddedWindow->dispose(jenv.pEnv);
+        delete _pEmbeddedWindow;
 
         jenv.pEnv->DeleteGlobalRef(_joAppletExecutionContext);
         jenv.pEnv->DeleteGlobalRef(_jcAppletExecutionContext);
@@ -113,20 +330,21 @@ void SjApplet2_Impl::init(Window * pParentWin,
 {
     _pParentWin = pParentWin;
 
+
     // Java URL erzeugen
-    OUString url = OUString::createFromAscii("file:///");
-//      OUString url = rDocBase.GetMainURL();
+    OUString url = rDocBase.GetMainURL();
 
-//      if (url.getLength()) {
-//          //WorkAround, weil Java mit dem | nicht zurecht kommt
-//          if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
-//              OUString tmp = url.copy(0, 9);
-//              tmp += OUString(INET_DELIM_TOKEN);
-//              tmp += url.copy(10);
+    if (url.getLength()) {
+        //WorkAround, weil Java mit dem | nicht zurecht kommt
+        if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
+            OUString tmp = url.copy(0, 9);
+            tmp += OUString(INET_DELIM_TOKEN);
+            tmp += url.copy(10);
 
-//              url = tmp;
-//          }
-//      }
+            url = tmp;
+        }
+    }
+
     _xJavaVM = Reference<XJavaVM>(smgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
     _xJavaThreadRegister_11 = Reference<XJavaThreadRegister_11>(_xJavaVM, UNO_QUERY);
 
@@ -155,13 +373,6 @@ void SjApplet2_Impl::init(Window * pParentWin,
 
     _jcAppletExecutionContext = jenv.pEnv->FindClass("stardiv/applet/AppletExecutionContext");                             testJavaException(jenv.pEnv);
     _jcAppletExecutionContext = (jclass)jenv.pEnv->NewGlobalRef(_jcAppletExecutionContext );                               testJavaException(jenv.pEnv);
-
-    _jmAppletExecutionContext_resize    = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "appletResize", "(II)V");      testJavaException(jenv.pEnv);
-    _jmAppletExecutionContext_restart   = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "restart", "()V");             testJavaException(jenv.pEnv);
-    _jmAppletExecutionContext_reload    = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "reload", "()V");              testJavaException(jenv.pEnv);
-    _jmAppletExecutionContext_sendStart = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "sendStart", "()V");           testJavaException(jenv.pEnv);
-    _jmAppletExecutionContext_sendStop  = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "sendStop", "()V");            testJavaException(jenv.pEnv);
-    _jmAppletExecutionContext_shutdown  = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "shutdown", "()V");            testJavaException(jenv.pEnv);
 
     jclass jcURL = jenv.pEnv->FindClass("java/net/URL");                                                                   testJavaException(jenv.pEnv);
     jmethodID jmURL_rinit = jenv.pEnv->GetMethodID(jcURL, "<init>", "(Ljava/lang/String;)V");                              testJavaException(jenv.pEnv);
@@ -194,36 +405,8 @@ void SjApplet2_Impl::init(Window * pParentWin,
         jenv.pEnv->CallObjectMethod(joParameters, jmHashtable_put, jsCommand, jsArg);                                      testJavaException(jenv.pEnv);
     }
 
-    jclass jcFrame = 0;
-    jobject joFrame = 0;
-
-#if defined(WNT)
-    if (WINDOW_SYSTEMCHILDWINDOW == pParentWin->GetType())
-    {
-        const SystemEnvData * pCD = ((SystemChildWindow*) pParentWin)->GetSystemData();
-        if (pCD) {
-            jcFrame = jenv.pEnv->FindClass("sun/awt/windows/WEmbeddedFrame");                                              testJavaException(jenv.pEnv);
-            jmethodID jmFrame_rinit = jenv.pEnv->GetMethodID(jcFrame, "<init>", "(I)V");                                   testJavaException(jenv.pEnv);
-            joFrame = jenv.pEnv->AllocObject(jcFrame);                                                                     testJavaException(jenv.pEnv);
-            jenv.pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pCD->hWnd);                                            testJavaException(jenv.pEnv);
-        }
-    }
-#else
-#if defined(TUNX)
-    jcFrame = jenv.pEnv->FindClass("sun/awt/motif/MEmbeddedFrame");                                                        testJavaException(jenv.pEnv);
-    jmethodID jmFrame_rinit = jenv.pEnv->GetMethodID(jcFrame, "<init>", "(J)V");                                           testJavaException(jenv.pEnv);
-    joFrame = jenv.pEnv->AllocObject(jcFrame);                                                                             testJavaException(jenv.pEnv);
-    jenv.pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong)pParentWin->GetSystemData()->pWidget);                        testJavaException(jenv.pEnv);
-#else
-    jcFrame = jenv.pEnv->FindClass("java/awt/Frame");                                                                      testJavaException(jenv.pEnv);
-    jmethodID jmFrame_rinit = jenv.pEnv->GetMethodID(jcFrame, "<init>", "()V");                                            testJavaException(jenv.pEnv);
-    joFrame = jenv.pEnv->AllocObject(jcFrame);                                                                             testJavaException(jenv.pEnv);
-    jenv.pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                                                                     testJavaException(jenv.pEnv);
-#endif
-#endif
-
-    jmethodID jmFrame_show = jenv.pEnv->GetMethodID(jcFrame, "show", "()V");                                               testJavaException(jenv.pEnv);
-    jenv.pEnv->CallVoidMethod(joFrame, jmFrame_show);                                                                      testJavaException(jenv.pEnv);
+    SystemEnvData const * pEnvData  = ((SystemChildWindow *)pParentWin)->GetSystemData();
+    _pEmbeddedWindow = new EmbeddedWindow(jenv.pEnv, pEnvData);
 
     jmethodID jmAppletExecutionContext_rinit = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "<init>",
                                                           "(Ljava/net/URL;Ljava/util/Hashtable;Ljava/awt/Container;J)V");  testJavaException(jenv.pEnv);
@@ -232,8 +415,8 @@ void SjApplet2_Impl::init(Window * pParentWin,
 
     _joAppletExecutionContext = jenv.pEnv->AllocObject(_jcAppletExecutionContext);                                         testJavaException(jenv.pEnv);
     _joAppletExecutionContext = jenv.pEnv->NewGlobalRef(_joAppletExecutionContext);                                        testJavaException(jenv.pEnv);
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_rinit, joDocBase, joParameters, joFrame,
-                              (jlong)0);                                                                                   testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_rinit,
+                              joDocBase, joParameters, _pEmbeddedWindow->_joWindow, (jlong)0);                             testJavaException(jenv.pEnv);
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_init);                                   testJavaException(jenv.pEnv);
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_startUp);                                testJavaException(jenv.pEnv);
 }
@@ -241,38 +424,52 @@ void SjApplet2_Impl::init(Window * pParentWin,
 void SjApplet2_Impl::setSize(const Size & rSize) throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_resize, (jint)rSize.Width(),
-                              (jint)rSize.Height());                                                                       testJavaException(jenv.pEnv);
+
+    _pParentWin->SetSizePixel(rSize);
+
+    jmethodID jmAppletExecutionContext_resize = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "appletResize", "(II)V");  testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_resize, (jint)rSize.Width(),
+                              (jint)rSize.Height());                                                                         testJavaException(jenv.pEnv);
 }
 
 void SjApplet2_Impl::restart() throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_restart);                               testJavaException(jenv.pEnv);
+
+    jmethodID jmAppletExecutionContext_restart = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "restart", "()V");     testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_restart);                                 testJavaException(jenv.pEnv);
 }
 
 void SjApplet2_Impl::reload() throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_reload);                                testJavaException(jenv.pEnv);
+
+    jmethodID jmAppletExecutionContext_reload = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "reload", "()V"); testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_reload);                          testJavaException(jenv.pEnv);
 }
 
 void SjApplet2_Impl::start() throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_sendStart);                             testJavaException(jenv.pEnv);
+
+    jmethodID jmAppletExecutionContext_sendStart = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "sendStart", "()V"); testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_sendStart);                             testJavaException(jenv.pEnv);
 }
 
 void SjApplet2_Impl::stop() throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_sendStop);                              testJavaException(jenv.pEnv);
+
+    jmethodID jmAppletExecutionContext_sendStop = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "sendStop", "()V"); testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_sendStop);                            testJavaException(jenv.pEnv);
 }
 
 void SjApplet2_Impl::close() throw(com::sun::star::uno::RuntimeException)
 {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
-    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, _jmAppletExecutionContext_shutdown);                              testJavaException(jenv.pEnv);
+
+    jmethodID jmAppletExecutionContext_shutdown  = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "shutdown", "()V"); testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_shutdown);                             testJavaException(jenv.pEnv);
 
     if( _pParentWin )
     {
@@ -289,22 +486,3 @@ void SjApplet2_Impl::close() throw(com::sun::star::uno::RuntimeException)
     }
 }
 
-void SjApplet2_Impl::testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::RuntimeException)
-{
-    jthrowable jtThrowable = pEnv->ExceptionOccurred();
-    if(jtThrowable) { // is it a java exception ?
-        pEnv->ExceptionDescribe();
-        pEnv->ExceptionClear();
-
-        jclass jcThrowable = pEnv->FindClass("java/lang/Throwable");
-        jmethodID jmThrowable_getMessage = pEnv->GetMethodID(jcThrowable, "getMessage", "()V");
-
-        jstring jsMessage = (jstring)pEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage);
-
-        const jchar * jcMessage = pEnv->GetStringChars(jsMessage, NULL);
-        OUString ouMessage(jcMessage);
-        pEnv->ReleaseStringChars(jsMessage, jcMessage);
-
-        throw RuntimeException(ouMessage, Reference<XInterface>());
-    }
-}
