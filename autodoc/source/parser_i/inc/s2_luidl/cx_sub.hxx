@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_sub.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:44:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ class Cx_Base : public ::TkpContext
     void                SetToken(
                             DYN Token *         let_dpToken )
                                                 { pNewToken = let_dpToken; }
+    Token_Receiver &    Receiver()              { return rReceiver; }
+
   private:
     // DATA
     Token_Receiver &    rReceiver;
