@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:57:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ String RID_SVXSTR_HMERR_CHECKINSTALL
     TEXT[ japanese ] = "‚Ν½ΝίΩΑª―Έ‚Ιg—p‚Ε‚«‚ά‚Ή‚ρB\nΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΑª―Έ‚µ‚Δ\nκ‡‚Ι‚ζ‚Α‚Δ‚Ν‚²σ–]‚ΜΎκ‚π²έ½Δ°Ω‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     TEXT[ chinese_traditional ] = " µLªk΄£¨Ρ«χΌgΐΛ¬d¥\\―ΰ΅C\n½ΠΐΛ¬d¦wΈΛªΊµ{¦΅΅M­Y¦³¥²­n΅M\n½Π±z¦wΈΛ­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
     TEXT[ arabic ] = "ΫνΡ γΚζέΡΙ ααΚΟήνή ΗαΕγαΗΖν. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
-    TEXT[ greek ] = "δεν είναι διαθέσιμος για τον έλεγχο. \nΠαρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, \nεκτελέστε την εγκατάσταση της γλώσσας που επιθυ? ";
+    TEXT[ greek ] = "δεν είναι διαθέσιμος για τον έλεγχο. \nΠαρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, \nεκτελέστε την εγκατάσταση της γλώσσας που επιθ";
     TEXT[ korean ] = " ΈΒΓγΉύ °Λ»ηΈ¦ ΐΜΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. \n »ηΏλΐΪΐΗ Ό³Δ΅ »σΕΒΈ¦ Α΅°ΛΗΡ ΄Ωΐ½, \nΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
     TEXT[ turkish ] = "denetlenemiyor. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yόkleyin.";
     TEXT[ language_user1 ] = " ";
@@ -489,13 +489,13 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT [ spanish ] = "No existe un diccionario de sinσnimos para el idioma seleccionado. \nCompruebe por favor su instalaciσn\n e instale, si es necesario, el idioma deseado" ;
     TEXT [ english_us ] = "No thesaurus is available for the selected language. \nPlease check your installation and install the desired language\n" ;
     TEXT[ chinese_simplified ] = "ΔϊΙθ¶¨µΔΣοΡΤΓ»ΣΠΈ½ΌΣ΄ΚµδΉ¦Δά΅£\nΗλΔϊΌμ²ιµΔ°²Χ°³ΜΠς΅£\nΘηΣΠ±ΨÒª£¬ΗλΔϊ°²Χ°ÒªΚΉΣΓµΔΣοΡΤ°ζ±Ύ΅£";
-    TEXT[ russian ] = "Òεηΰσπσρ δλÿ βϋαπΰννξγξ ÿηϋκΰ νε δξρςσοεν. \nΟπξβεπόςε, οξζΰλσιρςΰ, Βΰψσ θνρςΰλλÿφθώ θ β ρλσχΰε νεξαυξδθμξρςθ\nθνρςΰλλθπσιςε ζελΰεμϋι ÿηϋκ";
+    TEXT[ russian ] = "Òεηΰσπσρ δλÿ βϋαπΰννξγξ ÿηϋκΰ νε δξρςσοεν. \nΟπξβεπόςε, οξζΰλσιρςΰ, Βΰψσ θνρςΰλλÿφθώ θ β ρλσχΰε νεξαυξδθμξρςθ\nθνρςΰλλθπσιςε ζελΰεμϋι ÿηϋ";
     TEXT[ polish ] = "Tezaurus jest niedostκpny dla wybranego jκzyka. \nProszκ sprawdziζ instalacjκ i zainstalowaζ \newentualnie potrzebny jκzyk.";
     TEXT[ japanese ] = "‘I‘π‚µ‚½Ύκ‚Ε—ήκ«“T‚Νg—p‚Ε‚«‚ά‚Ή‚ρB\nΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΑª―Έ‚µ‚ΔA\n•K—v‚Θ‚η‚ΞAσ–]‚ΜΎκ‚π²έ½Δ°Ω‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     TEXT[ chinese_traditional ] = "±z³]©wªΊ»y¨¥ª©¥»¨S¦³ªώ¥[µό¨ε¥\\―ΰ΅C\n½Π±zΐΛ¬d¦wΈΛªΊµ{¦΅΅C\n­Y¦³¥²­n΅M½Π±z¦wΈΛ­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
     TEXT[ arabic ] = "αΗ νζΜΟ ήΗγζΣ γΡΗΟέΗΚ ααΫΙ ΗαΚν Κγ ΚΝΟνΟεΗ. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅\nΛγ ΗαήνΗγ ΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
-    TEXT[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί,\n εκτελέστε την εγκα ";
-    TEXT[ korean ] = "Ό³Α¤µΘ ΎπΎξΏ΅ ΄λΗΡ µΏΐΗΎξ»ηΐόΐ» »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. \nΌ³Δ΅ »σΕΒΈ¦ Α΅°ΛΗΡ ΄Ωΐ½ \nΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
+    TEXT[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί,\n εκτελέστε την εγκ";
+    TEXT[ korean ] = "Ό³Α¤µΘ ΎπΎξΏ΅ ΄λΗΡ µΏΐΗΎξ»ηΐόΐ» »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. \nΌ³Δ΅ »σΕΒΈ¦ Α΅°ΛΗΡ ΄Ωΐ½ \nΗΚΏδΗΟ΄ΩΈι ΏψΗΟ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
     TEXT[ turkish ] = "Ayarlanan dil iηin eώ anlamlύlar sφzlόπό mevcut deπil. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yόkleyin.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No existe un diccionario de sinσnimos para el idioma seleccionado. \nCompruebe por favor su instalaciσn\n e instale, si es necesario, el idioma deseado";
@@ -542,7 +542,7 @@ String RID_SVXSTR_DIC_ERR_FULL
     Text[ polish ] = "S³ownik jest przepe³niony.";
     Text[ portuguese_brazilian ] = "The dictionary is already full.";
     Text[ japanese ] = "«‘‚Ν‚·‚Ε‚Ι‚Ά‚Α‚Ο‚Ά‚Ε‚·B";
-    Text[ korean ] = "»ηΐόΐΊ ΐΜΉΜ ²Λ Βχ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "»ηΐόΐΜ ΐΜΉΜ ²Λ Βχ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "΄ΚµδÒΡΒϊ΅£";
     Text[ chinese_traditional ] = "¦r¨ε¤wΊ΅΅C";
     Text[ arabic ] = "ΗαήΗγζΣ γγΚαΖ ΘΗαέΪα.";
@@ -577,5 +577,6 @@ String RID_SVXSTR_DIC_ERR_READONLY
 };
 
  // ********************************************************************** EOF
+
 
 
