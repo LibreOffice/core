@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2399,6 +2399,18 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
     return pImpEditEngine->CreateTransferable( aSel );
+}
+
+void EditEngine::EnableVerboseTextComments( BOOL bEnable )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->EnableVerboseTextComments( bEnable );
+}
+
+BOOL EditEngine::IsVerboseTextComments() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->IsVerboseTextComments();
 }
 
 // =====================================================================
