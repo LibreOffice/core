@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:38:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ public:
     static String   GetDifFilterName();
     static BOOL     HasAutomaticTableName( const String& rFilter );
 
-    DECL_LINK( RefreshDBDataHdl, ScDBData* );
+    DECL_LINK( RefreshDBDataHdl, ScRefreshTimer* );
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(sal_Bool bRet);
