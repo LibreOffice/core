@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-12 15:21:44 $
+ *  last change: $Author: er $ $Date: 2001-07-26 16:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,11 +211,13 @@
 #include <svtools/urlbmk.hxx>
 #include <so3/clsids.hxx>
 #include <sot/formats.hxx>
-#include <vcl/exchange.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
+#endif
 
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"
@@ -422,7 +424,7 @@ void ScViewFunc::PasteFromSystem()
 
 //      if (pClipObj.Is())
         {
-            ULONG nBiff = Exchange::RegisterFormatName(
+            ULONG nBiff = SotExchange::RegisterFormatName(
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
 
                 //  als erstes SvDraw-Model, dann Grafik

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-09 13:21:35 $
+ *  last change: $Author: er $ $Date: 2001-07-26 16:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #include <vcl/sound.hxx>
 #include <vcl/system.hxx>
 #include <offmgr/app.hxx>
-#include <vcl/exchange.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 

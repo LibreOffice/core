@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
+ *  last change: $Author: er $ $Date: 2001-07-26 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,13 @@
 #include <sfx2/app.hxx>
 #include <svtools/saveopt.hxx>
 #include <so3/svstor.hxx>
-#include <vcl/exchange.hxx>
 #include <tools/globname.hxx>
 //#include <segmentc.hxx>
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
 #endif
 
 // wenn definiert, erzeugt Excel-Import nur Dumps ueber die DBG_TRACE-Funktion
@@ -304,7 +306,7 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
             // CompObj schreiben
             SvGlobalName        aName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00,
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-            UINT32              nClip = Exchange::RegisterFormatName( _STRING( pClipboard ) );
+            UINT32              nClip = SotExchange::RegisterFormatName( _STRING( pClipboard ) );
             pStorage->SetClass( aName, nClip, _STRING( pClassName ) );
             xStStream->Commit();
         }

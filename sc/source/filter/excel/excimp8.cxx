@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-26 10:45:20 $
+ *  last change: $Author: er $ $Date: 2001-07-26 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,9 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/exchange.hxx>
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
+#endif
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -1774,7 +1776,7 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
         SvGlobalName    aName( 0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77,
                                     0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
-        UINT32              nClip = Exchange::RegisterFormatName( _STRING( "Embedded Object" ) );
+        UINT32              nClip = SotExchange::RegisterFormatName( _STRING( "Embedded Object" ) );
 //      pStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
         xStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
 
