@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:20:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue;}
     namespace xml { namespace sax { class XDocumentHandler; } }
@@ -76,7 +80,8 @@ namespace com { namespace sun { namespace star {
 class ManifestExport
 {
 public:
-    ManifestExport(com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > xHandler, const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList);
+    ManifestExport(com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > xHandler, const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList );
 };
 
 #endif
+
