@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-08 14:10:17 $
+ *  last change: $Author: obr $ $Date: 2002-08-09 15:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,7 @@
  *
  ************************************************************************/
 
-
 package org.openoffice.accessibility;
-
 
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
@@ -73,6 +71,7 @@ import com.sun.star.uno.*;
 import com.sun.star.comp.loader.FactoryHelper;
 
 import org.openoffice.accessibility.internal.*;
+import org.openoffice.java.accessibility.*;
 
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.bridge.XAccessibleTopWindowMap;
@@ -84,10 +83,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class AccessBridge {
 
-    static private final boolean DEBUG = true;
-
     static public class _AccessBridge implements XAccessibleTopWindowMap {
-
         static private final String _serviceName = "drafts.com.sun.star.accessibility.bridge.AccessBridge";
         private XMultiServiceFactory _xMultiServiceFactory;
 
@@ -96,7 +92,7 @@ public class AccessBridge {
         private Method revokeVirtualFrame = null;
 
         public _AccessBridge(XMultiServiceFactory xMultiServiceFactory) {
-             _xMultiServiceFactory = xMultiServiceFactory;
+            _xMultiServiceFactory = xMultiServiceFactory;
 
             frameMap = new java.util.Hashtable();
 
@@ -129,25 +125,41 @@ public class AccessBridge {
                 }
 
                 catch(ClassNotFoundException e) {
-                    // This is quite normal on
+                    // This is quite normal on systems that aren't used by disabled persons.
+                }
+
+                // Redirect output to log file on Windows for stdout / stderr are not visible
+                if( Build.DEBUG ) {
+                    try {
+                        java.io.PrintStream log = new java.io.PrintStream(
+                            new java.io.FileOutputStream("AccessBridge.log")
+                        );
+
+                        System.setOut(log);
+                        System.setErr(log);
+                    }
+
+                    catch(java.io.FileNotFoundException e) {
+                    }
                 }
             }
         }
 
         /*
-         * XAccessibleNativeFrameMap
-         */
+        * XAccessibleNativeFrameMap
+        */
 
         public void registerAccessibleNativeFrame(Object any, XAccessible xAccessible, XTopWindow xTopWindow ){
             try {
                 Integer handle = new Integer(AnyConverter.toInt(any));
 
                 // Add the window fake object as top window listener to receive activate/deactivate events
-                WindowFake w = new WindowFake(xAccessible);
+                WindowFake w = new WindowFake(xAccessible, registerVirtualFrame == null);
                 xTopWindow.addTopWindowListener(w);
 
-                if(DEBUG)
-                    System.out.println( "register native frame: " + handle );
+                if(Build.DEBUG) {
+                    System.out.println("register native frame: " + handle);
+                }
 
                 // Remember the accessible object associated to this frame
                 synchronized(frameMap) {
@@ -192,8 +204,9 @@ public class AccessBridge {
                 }
 
                 if(w != null) {
-                    if(DEBUG)
-                        System.out.println( "revoke native frame: " + handle );
+                    if(Build.DEBUG) {
+                        System.out.println("revoke native frame: " + handle);
+                    }
 
                     // If running on Windows, register this frame to the access bridge
                     if(revokeVirtualFrame != null) {
@@ -228,29 +241,21 @@ public class AccessBridge {
         XSingleServiceFactory xSingleServiceFactory = null;
 
         if (implName.equals(AccessBridge.class.getName()) ) {
-
             // Initialize toolkit to register at Java <-> Windows access bridge
             java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
 
-            if(DEBUG) {
-                try {
-                    java.io.PrintStream log = new java.io.PrintStream( new java.io.FileOutputStream( "AccessBridge.log" ) );
-                    System.setOut( log );
-                    System.setErr( log );
-                }
-
-                catch(java.io.FileNotFoundException e) {
-                }
-            }
-
             try {
-                XInterface instance = (XInterface) multiFactory.createInstance("org.openoffice.accessibility.internal.RemoteAccessBridge");
+                XInterface instance = (XInterface) multiFactory.createInstance(
+                    "org.openoffice.accessibility.internal.RemoteAccessBridge"
+                );
 
                 if(instance != null) {
-                    WindowFake.infoProvider = (XAccessibilityInformationProvider)
+                    XAccessibilityInformationProvider infoProvider = (XAccessibilityInformationProvider)
                         UnoRuntime.queryInterface(XAccessibilityInformationProvider.class, instance);
 
-                    if(WindowFake.infoProvider == null) {
+                    if(infoProvider != null) {
+                        AccessibleObjectFactory.getDefault().setInformationProvider(infoProvider);
+                    } else {
                         System.err.println("InfoProvider does not implement XAccessibleInformationProvider.");
                     }
                 } else {
@@ -262,7 +267,11 @@ public class AccessBridge {
                 System.err.println(e.getMessage());
             }
 
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(_AccessBridge.class, _AccessBridge._serviceName, multiFactory, regKey);
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(_AccessBridge.class,
+                _AccessBridge._serviceName,
+                multiFactory,
+                regKey
+            );
         }
 
         return xSingleServiceFactory;
