@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:20:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SLOFILES =	\
         $(SLO)$/privsplt.obj	\
         $(SLO)$/dwfunctr.obj
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         parawin.src \
         formdlgs.src \
         dwfunctr.src
