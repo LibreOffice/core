@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-10 14:20:57 $
+ *  last change: $Author: mhu $ $Date: 2001-07-18 13:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,10 +896,61 @@ void SvFileStream::ResetError()
 
 void SvFileStream::SetSize (ULONG nSize)
 {
-  if ( IsOpen() )
+    if (IsOpen())
     {
-    if ( ftruncate ( pInstanceData->nHandle, (off_t) nSize ) == -1 )
-      SetError ( ::GetSvError( errno ));
+        int fd = pInstanceData->nHandle;
+        if (::ftruncate (fd, (off_t)nSize) < 0)
+        {
+            // Save original error.
+            ULONG nError = ::GetSvError (errno);
+
+            // Check against current size. Fail upon 'shrink'.
+            struct stat aStat;
+            if (::fstat (fd, &aStat) < 0)
+            {
+                SetError (nError);
+                return;
+            }
+            if ((0 <= nSize) && (nSize <= aStat.st_size))
+            {
+                // Failure upon 'shrink'. Return original error.
+                SetError (nError);
+                return;
+            }
+
+            // Save current position.
+            ULONG nCurPos = (ULONG)::lseek (fd, (off_t)0, SEEK_CUR);
+            if (nCurPos == (ULONG)(-1))
+            {
+                SetError (nError);
+                return;
+            }
+
+            // Try 'expand' via 'lseek()' and 'write()'.
+            if (::lseek (fd, (off_t)(nSize - 1), SEEK_SET) < 0)
+            {
+                SetError (nError);
+                return;
+            }
+            if (::write (fd, (char*)"", (size_t)1) < 0)
+            {
+                // Failure. Restore saved position.
+                if (::lseek (fd, (off_t)nCurPos, SEEK_SET) < 0)
+                {
+                    // Double failure.
+                }
+
+                SetError (nError);
+                return;
+            }
+
+            // Success. Restore saved position.
+            if (::lseek (fd, (off_t)nCurPos, SEEK_SET) < 0)
+            {
+                SetError (nError);
+                return;
+            }
+        }
     }
 }
 
