@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextField.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 /** A <type scope="com::sun::star::form::component">TextField</type> is a <type>TextContent</type> which fades its
     textual representation into the text range to which it is anchored.
  */
-service TextField
+published service TextField
 {
     // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
