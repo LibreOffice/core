@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:45:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Umfang";
         Text[ hindi ] = "Range";
         Text[ slovak ] = "Oblasť";
+        Text[ hungarian ] = "Tartomány";
+        Text[ slovenian ] = "Obseg";
     };
     RadioButton RBT_ALL
     {
@@ -155,7 +157,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese_brazilian ] = "~Todos os slides" ;
         Text [ portuguese ] = "~Todos os diapositivos" ;
         Text [ finnish ] = "Kaikki ~diat" ;
-        Text [ danish ] = "Alle dias" ;
+        Text [ danish ] = "Alle ~dias" ;
         Text [ french ] = "Toutes les diapos" ;
         Text [ swedish ] = "~Alla diabilder" ;
         Text [ dutch ] = "~Alle dia's" ;
@@ -178,6 +180,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "~Alle Dias";
         Text[ hindi ] = "~सब स्लइडस";
         Text[ slovak ] = "Všetky ~snímky";
+        Text[ hungarian ] = "Ö~sszes dia";
+        Text[ slovenian ] = "Vsi ~diapozitivi";
     };
     RadioButton RBT_AT_DIA
     {
@@ -190,7 +194,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese_brazilian ] = "A ~partir de:" ;
         Text [ portuguese ] = "A ~partir de:" ;
         Text [ finnish ] = "A~lkaen diasta:" ;
-        Text [ danish ] = "Fra dias" ;
+        Text [ danish ] = "~Fra:" ;
         Text [ french ] = "� partir de " ;
         Text [ swedish ] = "Fr�n ~diabild" ;
         Text [ dutch ] = "Vana~f dia" ;
@@ -213,6 +217,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Ab ~Dia";
         Text[ hindi ] = "~से:";
         Text[ slovak ] = "~Od:";
+        Text[ hungarian ] = "~Kezdő dia:";
+        Text[ slovenian ] = "~Od:";
     };
     ListBox LB_DIAS
     {
@@ -234,7 +240,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ english_us ] = "~Custom Slide Show" ;
         Text [ portuguese_brazilian ] = "Apres~enta��o de Slides Personalizada" ;
         Text [ swedish ] = "~Individuell presentation" ;
-        Text [ danish ] = "Individuel pr�sentation" ;
+        Text [ danish ] = "~Brugerdefineret pr�sentation" ;
         Text [ italian ] = "Presentazione su schermo personalizzata" ;
         Text [ spanish ] = "Presentaci�n personalizada" ;
         Text [ french ] = "Pr�sentation � l'�cran personnalis�e" ;
@@ -256,6 +262,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "~Individuelle Bildschirmpräsentation";
         Text[ hindi ] = "~स्लइड प्रस्तुति को व्यवस्था करो";
         Text[ slovak ] = "~Vlastná prezentácia";
+        Text[ hungarian ] = "~Testreszabott diavetítés";
+        Text[ slovenian ] = "Diaprojekcija ~po meri";
     };
     ListBox LB_CUSTOMSHOW
     {
@@ -279,7 +287,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ french ] = "Type";
         Text[ spanish ] = "Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "V�RDITYPE";
+        Text[ danish ] = "Type";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Tipo";
@@ -298,6 +306,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "Type";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     RadioButton RBT_STANDARD
     {
@@ -313,7 +323,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ french ] = "Par d�faut";
         Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "Standard";
-        Text[ danish ] = "Standard";
+        Text[ danish ] = "Standar~d";
         Text[ swedish ] = "S~tandard";
         Text[ polish ] = "~Domy�lnie";
         Text[ portuguese_brazilian ] = "~Padr�o";
@@ -332,6 +342,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "‮ברירת מגדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzí";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     RadioButton RBT_WINDOW
     {
@@ -347,7 +359,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ french ] = "~Fen�tre";
         Text[ spanish ] = "~Ventana";
         Text[ italian ] = "Fi~nestra";
-        Text[ danish ] = "Vindue";
+        Text[ danish ] = "Vind~ue";
         Text[ swedish ] = "~F�nster";
         Text[ polish ] = "O~kno";
         Text[ portuguese_brazilian ] = "~Janela";
@@ -366,6 +378,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "‮חלונות‬";
         Text[ hindi ] = "~विन्डो";
         Text[ slovak ] = "~Okno";
+        Text[ hungarian ] = "~Ablak";
+        Text[ slovenian ] = "~Okno";
     };
     RadioButton RBT_AUTO
     {
@@ -400,6 +414,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "A~uto";
         Text[ hindi ] = "~स्वचालित";
         Text[ slovak ] = "A~utomatický";
+        Text[ hungarian ] = "A~utomatikus";
+        Text[ slovenian ] = "Sa~modejno";
     };
 /*
     FixedText FT_PAUSE
@@ -463,6 +479,8 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ hebrew ] = "Pausendauer";
         QuickHelpText[ hindi ] = "विराम की कालावधि";
         QuickHelpText[ slovak ] = "Dĺžka pauzy";
+        QuickHelpText[ hungarian ] = "A szünet időtartama";
+        QuickHelpText[ slovenian ] = "Trajanje pavze";
     };
     CheckBox CBX_AUTOLOGO
     {
@@ -497,6 +515,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "~Logo einblenden";
         Text[ hindi ] = "~संकेत दिखाओ";
         Text[ slovak ] = "Zobraziť ~logo";
+        Text[ hungarian ] = "~Logó megjelenítése";
+        Text[ slovenian ] = "Pokaži ~logotip";
     };
 
     FixedLine GRP_OPTIONS
@@ -532,6 +552,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     CheckBox CBX_MANUEL
     {
@@ -544,7 +566,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese_brazilian ] = "Mudar os slides ~manualmente" ;
         Text [ portuguese ] = "Transi��o ~manual de diapositivos" ;
         Text [ finnish ] = "Manuaalinen dianvai~hto" ;
-        Text [ danish ] = "Manuel diasovergang" ;
+        Text [ danish ] = "Skift dias ~manuelt" ;
         Text [ french ] = "Transition manuelle" ;
         Text [ swedish ] = "~Manuell diabildsv�xling" ;
         Text [ dutch ] = "Dia's handma~tig wisselen" ;
@@ -567,6 +589,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Diawechsel ~manuell";
         Text[ hindi ] = "~स्लइडों को हाथ से बदलो";
         Text[ slovak ] = "Meniť snímky r~učne";
+        Text[ hungarian ] = "~Diaváltás kézzel";
+        Text[ slovenian ] = "Ro~čno menjaj diapozitive";
     };
     CheckBox CBX_MOUSEPOINTER
     {
@@ -602,6 +626,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Maus~zeiger sichtbar";
         Text[ hindi ] = "~मौस का सूचक दण्ड दृष्टिगोचर";
         Text[ slovak ] = "~Viditeľný kurzor myši";
+        Text[ hungarian ] = "Az egérmutató ~látható";
+        Text[ slovenian ] = "Miškin kazalec ~viden";
     };
     CheckBox CBX_PEN
     {
@@ -637,6 +663,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Mauszeiger als ~Stift";
         Text[ hindi ] = "मौस सूचकदण्ड ~कलम जैसे";
         Text[ slovak ] = "Kurzor myši ako ~pero";
+        Text[ hungarian ] = "~Rajzolás az egérmutatóval";
+        Text[ slovenian ] = "Miškin kazalec kot ~pero";
     };
     CheckBox CBX_NAVIGATOR
     {
@@ -651,7 +679,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ spanish ] = "Ver ~Navegador" ;
         Text [ french ] = "~Navigateur visible" ;
         Text [ swedish ] = "~Navigator synlig" ;
-        Text [ danish ] = "Navigator synlig" ;
+        Text [ danish ] = "~Navigator synlig" ;
         Text [ portuguese ] = "~Navegador v�sivel" ;
         Text [ portuguese_brazilian ] = "~Navegador vis�vel" ;
         Text[ chinese_simplified ] = "显示助手(~N)";
@@ -671,6 +699,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "~Navigator sichtbar";
         Text[ hindi ] = "~दृष्टिगोचर नाविगेटर";
         Text[ slovak ] = "~Navigátor viditeľný";
+        Text[ hungarian ] = "~Navigátor látható";
+        Text[ slovenian ] = "Kr~mar viden";
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
@@ -682,7 +712,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ english_us ] = "~Animations allowed" ;
         Text [ portuguese_brazilian ] = "A~nima��es permitidas" ;
         Text [ swedish ] = "Till�t animati~oner" ;
-        Text [ danish ] = "Tillad animationer" ;
+        Text [ danish ] = "~Tillad animationer" ;
         Text [ italian ] = "Permetti animazioni" ;
         Text [ spanish ] = "Permitir animaci~ones" ;
         Text [ french ] = "Autoriser les animati~ons" ;
@@ -705,6 +735,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Animati~onen zulassen";
         Text[ hindi ] = "~हूलास स्वीकृत";
         Text[ slovak ] = "~Animácie povolené";
+        Text[ hungarian ] = "An~imációk engedélyezve";
+        Text[ slovenian ] = "~Animacije dovoljene";
     };
     CheckBox CBX_CHANGE_PAGE
     {
@@ -719,7 +751,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ french ] = "Transition : clic sur l'arri�re-plan" ;
         Text [ dutch ] = "Dia~wissel per klik op achtergrond" ;
         Text [ swedish ] = "Diav�xling vid ~klick p� bakgrunden" ;
-        Text [ danish ] = "Diasovergang ved klik p� baggrunden" ;
+        Text [ danish ] = "Skift dias ved ~klik p� baggrunden" ;
         Text [ portuguese ] = "Transi��o diapos.: clique plano de ~fundo" ;
         Text [ portuguese_brazilian ] = "Mudar os slides clicando no plano de ~fundo" ;
         Text[ chinese_simplified ] = "单击背景，更换演示文稿页面(~K)";
@@ -739,6 +771,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Diawechsel bei ~Klick auf Hintergrund";
         Text[ hindi ] = "पृष्ठभाग ~में क्लिक करते हुए स्लइडस बदलो";
         Text[ slovak ] = "Meniť snímky ~klikaním na pozadie";
+        Text[ hungarian ] = "Diaváltás ~háttérre kattintással";
+        Text[ slovenian ] = "Menjaj diapozitive s ~klikanjem na ozadje";
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
@@ -774,6 +808,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ hebrew ] = "Bildschirmpräsentation immer im ~Vordergrund";
         Text[ hindi ] = "प्रस्तुति ~हमेशा ऊपर में";
         Text[ slovak ] = "Prezentácia vž~dy navrchu";
+        Text[ hungarian ] = "Bemutató mindig ~felül";
+        Text[ slovenian ] = "Predstavitev vedn~o na vrhu";
     };
     Text[ chinese_traditional ] = "放映簡報投影片";
     Text[ arabic ] = "����� ��� ������";
@@ -787,7 +823,10 @@ ModalDialog DLG_START_PRESENTATION
     Text[ hebrew ] = "Bildschirmpräsentation";
     Text[ hindi ] = "स्लइड दिखाओ";
     Text[ slovak ] = "Prezentácia";
+    Text[ hungarian ] = "Diavetítés";
+    Text[ slovenian ] = "Diaprojekcija";
 };
+
 
 
 
