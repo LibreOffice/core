@@ -251,16 +251,16 @@
     <menu:menu menu:id=".uno:SlideShowMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Presentation" menu:helpid="10157" menu:label="" />
+            <menu:menuitem menu:id=".uno:PresentationDialog" menu:helpid="27339" menu:label="" />
             <menu:menuitem menu:id=".uno:RehearseTimings" menu:helpid="10159" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PresentationDialog" menu:helpid="27339" menu:label="" />
-            <menu:menuitem menu:id=".uno:CustomShowDialog" menu:helpid="27365" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SlideChangeWindow" menu:helpid="27334" menu:label="" />
-            <menu:menuitem menu:id=".uno:HideSlide" menu:helpid="10161" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:EffectWindow" menu:helpid="27328" menu:label="" />
             <menu:menuitem menu:id=".uno:AnimationEffects" menu:helpid="27063" menu:label="" />
+            <!--menu:menuitem menu:id=".uno:CustomAnimationSchemes" menu:helpid="27333" menu:label="" / -->
+            <menu:menuitem menu:id=".uno:CustomAnimation" menu:helpid="27328" menu:label="" />
+            <menu:menuitem menu:id=".uno:SlideChangeWindow" menu:helpid="27334" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:HideSlide" menu:helpid="10161" menu:label="" />
+            <menu:menuitem menu:id=".uno:CustomShowDialog" menu:helpid="27365" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:WindowList" menu:label="" >
