@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:31:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-11 10:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,17 +250,6 @@ void GtkSalFrame::InitCommon()
         delete m_aGraphics[i].pGraphics;
         m_aGraphics[i].pGraphics = NULL;
     }
-    m_aLastKeyPress.type                = GDK_KEY_PRESS;
-    m_aLastKeyPress.window              = NULL;
-    m_aLastKeyPress.send_event          = 0;
-    m_aLastKeyPress.time                = 0;
-    m_aLastKeyPress.state               = 0;
-    m_aLastKeyPress.keyval              = 0;
-    m_aLastKeyPress.length              = 0;
-    m_aLastKeyPress.string              = NULL;
-    m_aLastKeyPress.hardware_keycode    = 0;
-    m_aLastKeyPress.group               = 0;
-
 
     m_aPrevKeyPresses.clear();
     m_nPrevKeyPresses = 0;
