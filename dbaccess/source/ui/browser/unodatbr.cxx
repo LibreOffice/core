@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 14:05:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 16:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,27 +408,30 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     if (getBrowserView())
         getBrowserView()->setTreeView(NULL);
 
-    // clear the user data of the tree model
-    SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
-    while (pEntryLoop)
+    if (m_pTreeModel)
     {
-        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
-        if(pData)
+        // clear the user data of the tree model
+        SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+        while (pEntryLoop)
         {
-            Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
-            if(xCon.is())
+            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+            if(pData)
             {
-                Reference< XComponent >  xComponent(xCon, UNO_QUERY);
-                if (xComponent.is())
+                Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
+                if(xCon.is())
                 {
-                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                    xComponent->removeEventListener(xEvtL);
+                    Reference< XComponent >  xComponent(xCon, UNO_QUERY);
+                    if (xComponent.is())
+                    {
+                        Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                        xComponent->removeEventListener(xEvtL);
+                    }
+                    ::comphelper::disposeComponent(pData->xObject);
                 }
-                ::comphelper::disposeComponent(pData->xObject);
+                delete pData;
             }
-            delete pData;
+            pEntryLoop = m_pTreeModel->Next(pEntryLoop);
         }
-        pEntryLoop = m_pTreeModel->Next(pEntryLoop);
     }
     m_pCurrentlyDisplayed = NULL;
     // clear the tree model
