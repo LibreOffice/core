@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,8 +325,8 @@ void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     pDocSh->CalcOutputFactor();
 
-                    USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
-                    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                    SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
                 }
                 pObjSh = SfxObjectShell::GetNext( *pObjSh );
@@ -1429,8 +1429,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             {
                 ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
                 pDocSh->CalcOutputFactor();
-                USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
-                for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
             }
             pObjSh = SfxObjectShell::GetNext( *pObjSh );
@@ -1836,12 +1836,12 @@ BOOL ScModule::IsFormulaMode()
     return bIsFormula;
 }
 
-void lcl_MarkedTabs( const ScMarkData& rMark, USHORT& rStartTab, USHORT& rEndTab )
+void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
 {
     if (rMark.GetSelectCount() > 1)
     {
         BOOL bFirst = TRUE;
-        for (USHORT i=0; i<=MAXTAB; i++)
+        for (SCTAB i=0; i<=MAXTAB; i++)
             if (rMark.GetTableSelect(i))
             {
                 if (bFirst)
@@ -1872,8 +1872,8 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
         {
             if ( nCurRefDlgId == SID_OPENDLG_CONSOLIDATE && pMarkData )
             {
-                USHORT nStartTab = aNew.aStart.Tab();
-                USHORT nEndTab   = aNew.aEnd.Tab();
+                SCTAB nStartTab = aNew.aStart.Tab();
+                SCTAB nEndTab   = aNew.aEnd.Tab();
                 lcl_MarkedTabs( *pMarkData, nStartTab, nEndTab );
                 aNew.aStart.SetTab(nStartTab);
                 aNew.aEnd.SetTab(nEndTab);
