@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryIds.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:13:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,16 +70,14 @@ namespace sd {
     with a certain view instead of first create a default view and
     then switch to the desired view.
 */
-enum ImpressFactoryIds
+enum ViewShellFactoryIds
 {
     IMPRESS_FACTORY_ID = 1,
-    OUTLINE_FACTORY_ID = 2,
-    PRESENTATION_FACTORY_ID = 3
-};
-
-enum DrawFactoryIds
-{
-    DRAW_FACTORY_ID = 1
+    DRAW_FACTORY_ID = 1,
+    SLIDE_SORTER_FACTORY_ID = 2,
+    OUTLINE_FACTORY_ID = 3,
+    PRESENTATION_FACTORY_ID = 4,
+    PREVIEW_FACTORY_ID = 5
 };
 
 } // end of namespace sd
