@@ -20,17 +20,17 @@
 
         <xsl:if test="not(info/desc)">
             <!-- print TPF's path to current node -->
-            <xsl:message terminate="no">
+            <xsl:message terminate="yes">
 
                 <!-- print linefeed -->
                 <xsl:text>&#10;</xsl:text>
 
-                <xsl:text>WARNING: No info/desc element specified</xsl:text>
+                <xsl:text>ERROR: No info/desc element specified</xsl:text>
     
                 <!-- print linefeed -->
                 <xsl:text>&#10;</xsl:text>
 
-                <xsl:text>         - path: </xsl:text>
+                <xsl:text>       - path: </xsl:text>
                 <xsl:for-each select="ancestor-or-self::*"><xsl:text>/</xsl:text>
                     <xsl:value-of select="local-name(.)"/>
                     <xsl:choose>
@@ -42,7 +42,7 @@
                 <!-- print linefeed -->
                 <xsl:text>&#10;</xsl:text>
 
-                <xsl:text>         - author: </xsl:text>
+                <xsl:text>       - author: </xsl:text>
                 <xsl:for-each select="ancestor-or-self::*">
                     <!-- print element name -->
                     <xsl:if test="info/author">
