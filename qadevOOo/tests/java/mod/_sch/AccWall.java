@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccWall.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-09-08 12:22:26 $
+ *  last change: $Date: 2004-11-02 12:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ public class AccWall extends TestCase {
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         XAccessibleContext cont = at.getAccessibleObjectForRole(
                 xRoot, AccessibleRole.SHAPE, "", "AccWall");
