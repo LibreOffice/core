@@ -2,9 +2,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:32:35 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:19:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,6 +128,9 @@ sub get_file_component_name
     $componentname =~ s/_optional_/_opt_/g;
     $componentname =~ s/_packages/_pack/g;
     $componentname =~ s/_menubar/_mb/g;
+    $componentname =~ s/_common_/_cm_/g;
+    $componentname =~ s/_export_/_exp_/g;
+    $componentname =~ s/_table_/_tb_/g;
     $componentname =~ s/_sofficecfg_/_sc_/g;
     $componentname =~ s/_startmodulecommands_/_smc_/g;
     $componentname =~ s/_drawimpresscommands_/_dic_/g;
@@ -178,7 +181,7 @@ sub generate_unique_filename_for_filetable
 
         if ( $onefile->{'uniquename'} ) { $uniquename = $onefile->{'uniquename'}; }
 
-        if ($uniquename eq $uniquefilename)
+        if (lc($uniquename) eq lc($uniquefilename)) # case insensitve comparison !
         {
             $alreadyexists = 1;
             last;
@@ -216,7 +219,7 @@ sub generate_unique_filename_for_filetable
 
                 if ( $onefile->{'uniquename'} ) { $uniquename = $onefile->{'uniquename'}; }
 
-                if ($uniquename eq $uniquefilename)
+                if (lc($uniquename) eq lc($uniquefilename)) # case insensitive comparison !
                 {
                     $alreadyexists = 1;
                     last;
