@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:06:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,15 @@ FASTBOOL SdrCaptionObj::HasSpecialDrag() const
 FASTBOOL SdrCaptionObj::BegDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl=rDrag.GetHdl();
+
+    // #109992#
+    // If this is a CaptionObj, set the flags bEndDragChangesAttributes
+    // and bEndDragChangesGeoAndAttributes to create an undo action which
+    // contains geo and attr changes. Joe seems to have added this as a fix
+    // for a similar occurring problem.
+    rDrag.SetEndDragChangesAttributes(TRUE);
+    rDrag.SetEndDragChangesGeoAndAttributes(TRUE);
+
     if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
         return SdrRectObj::BegDrag(rDrag);
     } else {
@@ -793,33 +802,39 @@ void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
     const Rectangle aOriginalTextRect(GetLogicRect());
     const Point aTailPoint = GetTailPos();
 
-    if(aTailPoint.X() < aOriginalTextRect.Left())
+    // #109992#
+    // This compares only make sense when aOriginalTextRect and the
+    // aTailPoint contain useful data. Thus, test it before usage.
+    if(!aOriginalTextRect.IsEmpty())
     {
-        const sal_Int32 nDist = aOriginalTextRect.Left() - aTailPoint.X();
-        aNewSnapRect.Left() = aNewSnapRect.Left() + nDist;
-    }
-    else if(aTailPoint.X() > aOriginalTextRect.Right())
-    {
-        const sal_Int32 nDist = aTailPoint.X() - aOriginalTextRect.Right();
-        aNewSnapRect.Right() = aNewSnapRect.Right() - nDist;
-    }
+        if(aTailPoint.X() < aOriginalTextRect.Left())
+        {
+            const sal_Int32 nDist = aOriginalTextRect.Left() - aTailPoint.X();
+            aNewSnapRect.Left() = aNewSnapRect.Left() + nDist;
+        }
+        else if(aTailPoint.X() > aOriginalTextRect.Right())
+        {
+            const sal_Int32 nDist = aTailPoint.X() - aOriginalTextRect.Right();
+            aNewSnapRect.Right() = aNewSnapRect.Right() - nDist;
+        }
 
-    if(aTailPoint.Y() < aOriginalTextRect.Top())
-    {
-        const sal_Int32 nDist = aOriginalTextRect.Top() - aTailPoint.Y();
-        aNewSnapRect.Top() = aNewSnapRect.Top() + nDist;
-    }
-    else if(aTailPoint.Y() > aOriginalTextRect.Bottom())
-    {
-        const sal_Int32 nDist = aTailPoint.Y() - aOriginalTextRect.Bottom();
-        aNewSnapRect.Bottom() = aNewSnapRect.Bottom() - nDist;
-    }
+        if(aTailPoint.Y() < aOriginalTextRect.Top())
+        {
+            const sal_Int32 nDist = aOriginalTextRect.Top() - aTailPoint.Y();
+            aNewSnapRect.Top() = aNewSnapRect.Top() + nDist;
+        }
+        else if(aTailPoint.Y() > aOriginalTextRect.Bottom())
+        {
+            const sal_Int32 nDist = aTailPoint.Y() - aOriginalTextRect.Bottom();
+            aNewSnapRect.Bottom() = aNewSnapRect.Bottom() - nDist;
+        }
 
-    // make sure rectangle is correctly defined
-    ImpJustifyRect(aNewSnapRect);
+        // make sure rectangle is correctly defined
+        ImpJustifyRect(aNewSnapRect);
 
-    // #86616#
-    SdrRectObj::NbcSetSnapRect(aNewSnapRect);
+        // #86616#
+        SdrRectObj::NbcSetSnapRect(aNewSnapRect);
+    }
 }
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const
