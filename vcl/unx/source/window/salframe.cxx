@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-13 15:02:52 $
+ *  last change: $Author: cp $ $Date: 2001-08-14 08:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2382,6 +2382,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
     if(     hWM_Parent == pDisplay_->GetRootWindow()
         ||  hWM_Parent == hForeignParent_
+        ||  pEvent->parent == pDisplay_->GetRootWindow()
         || ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
     {
         // Reparenting before Destroy
