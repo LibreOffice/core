@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:25:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,16 +85,8 @@
 #define STR_ASK_DEL_BITMAP          SID_SD_STRING_START+10
 #define STR_ASK_CHANGE_BITMAP       SID_SD_STRING_START+11
 
-#define STR_LINESTYLE               SID_SD_STRING_START+12
-#define STR_DESC_LINESTYLE          SID_SD_STRING_START+13
-#define STR_DEL_LINESTYLE           SID_SD_STRING_START+14
-#define STR_ASK_DEL_LINESTYLE       SID_SD_STRING_START+15
 #define STR_ASK_CHANGE_LINESTYLE    SID_SD_STRING_START+16
 
-#define STR_INVISIBLE               SID_SD_STRING_START+17
-#define STR_COLOR                   SID_SD_STRING_START+18
-#define STR_HATCH                   SID_SD_STRING_START+19
-#define STR_CHANGE                  SID_SD_STRING_START+20
 #define STR_ADD                     SID_SD_STRING_START+21
 
 // Texts for search and replace info and question boxes.
@@ -104,3 +96,13 @@
 #define STR_SAR_WRAP_BACKWARD       SID_SD_STRING_START+25
 #define STR_SAR_WRAP_FORWARD_DRAW   SID_SD_STRING_START+26
 #define STR_SAR_WRAP_BACKWARD_DRAW  SID_SD_STRING_START+27
+
+#define STR_SOLID                   SID_SD_STRING_START+0
+#define STR_LINESTYLE               SID_SD_STRING_START+12
+#define STR_DESC_LINESTYLE          SID_SD_STRING_START+13
+#define STR_DEL_LINESTYLE           SID_SD_STRING_START+14
+#define STR_ASK_DEL_LINESTYLE       SID_SD_STRING_START+15
+#define STR_INVISIBLE               SID_SD_STRING_START+17
+#define STR_COLOR                   SID_SD_STRING_START+18
+#define STR_HATCH                   SID_SD_STRING_START+19
+#define STR_CHANGE                  SID_SD_STRING_START+20
