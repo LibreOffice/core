@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2002-07-18 09:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,8 @@ SvxLineEndWindow::SvxLineEndWindow( USHORT nId, const String& rWndTitle, SfxBind
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
-    bPopupMode      ( TRUE )
-
+    bPopupMode      ( TRUE ),
+    mbInResize      ( false )
 {
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
     const SfxPoolItem*  pItem   = NULL;
@@ -608,19 +608,26 @@ void SvxLineEndWindow::FillValueSet()
 
 void SvxLineEndWindow::Resize()
 {
-    if ( !IsRollUp() )
+    // since we change the size inside this call, check if we
+    // are called recursive
+    if( !mbInResize )
     {
-        aLineEndSet.SetColCount( nCols );
-        aLineEndSet.SetLineCount( nLines );
+        mbInResize = true;
+        if ( !IsRollUp() )
+        {
+            aLineEndSet.SetColCount( nCols );
+            aLineEndSet.SetLineCount( nLines );
 
-        SetSize();
+            SetSize();
 
-        Size aSize = GetOutputSizePixel();
-        aSize.Width()  -= 4;
-        aSize.Height() -= 4;
-        aLineEndSet.SetPosSizePixel( Point( 2, 2 ), aSize );
+            Size aSize = GetOutputSizePixel();
+            aSize.Width()  -= 4;
+            aSize.Height() -= 4;
+            aLineEndSet.SetPosSizePixel( Point( 2, 2 ), aSize );
+        }
+        //SfxPopupWindow::Resize();
+        mbInResize = false;
     }
-    //SfxPopupWindow::Resize();
 }
 
 // -----------------------------------------------------------------------

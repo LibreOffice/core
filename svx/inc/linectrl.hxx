@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: cl $ $Date: 2002-07-18 08:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ private:
     ULONG           nLineEndWidth;
     Size            aBmpSize;
     BOOL            bPopupMode;
+    bool            mbInResize;
 
     DECL_LINK( SelectHdl, void * );
     void            FillValueSet();
