@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:59:21 $
+ *  last change: $Author: obo $ $Date: 2003-04-02 15:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,7 +1180,7 @@ void main()
         }
         pValues++;
     }
-<<<<<<< xmlimp.cxx
+//<<<<<<< xmlimp.cxx
 
     // finally, treat the non-default cases
     if( ! bPrinterIndependentLayout )
