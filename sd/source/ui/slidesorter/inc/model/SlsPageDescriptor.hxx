@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageDescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:21:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ public:
     void SetFocus (void);
     void RemoveFocus (void);
 
-    view::PageObjectViewObjectContact* GetViewObjectContact (void);
+    view::PageObjectViewObjectContact* GetViewObjectContact (void) const;
 
     void SetViewObjectContact (
         view::PageObjectViewObjectContact* pViewObjectContact);
