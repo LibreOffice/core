@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:25:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11847,7 +11847,7 @@ SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
 ]
 
 //--------------------------------------------------------------------------
-SvxOrientationItem AlignmentOrientation SID_ATTR_ALIGN_ORIENTATION
+SfxBoolItem AlignmentStacked SID_ATTR_ALIGN_STACKED
 
 [
     /* flags: */
