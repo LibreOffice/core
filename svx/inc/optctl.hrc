@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:35:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,11 @@
 #ifndef _SVX_OPTCTL_HRC
 #define _SVX_OPTCTL_HRC
 
+#include <svtools/controldims.hrc>
+
 #define FL_SEQUENCECHECKING     10
 #define CB_SEQUENCECHECKING     11
+#define CB_RESTRICTED           12
 
 #define FL_CURSORCONTROL        20
 #define FT_MOVEMENT             21
@@ -72,6 +75,17 @@
 #define FL_GENERAL              30
 #define FT_NUMERALS             31
 #define LB_NUMERALS             32
+
+#define EXTRA_SPACE_Y           16
+#define ROW_0                   (RSC_SP_TBPG_INNERBORDER_TOP)
+#define ROW_1                   (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_2                   (ROW_1+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_3                   (ROW_2+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_Y+EXTRA_SPACE_Y)
+#define ROW_4                   (ROW_3+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_5                   (ROW_4+(RSC_CD_RADIOBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define ROW_6                   (ROW_5+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_Y+EXTRA_SPACE_Y)
+#define ROW_7                   (ROW_6+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_8                   (ROW_7+(RSC_CD_DROPDOWN_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
 
 #endif // #ifndef _SVX_OPTCTL_HRC
 
