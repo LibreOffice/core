@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:38:33 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #include <bulitem.hxx>
 #include "polysc3d.hxx"
 #include "extrud3d.hxx"
-
+#include "svdoashp.hxx"
 #ifndef _EEITEMID_HXX
 #include "eeitemid.hxx"
 #endif
@@ -948,8 +948,18 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     }
 }
 
+/* ProcessObject is called from ImplSdPPTImport::ProcessObj to hanlde all application specific things,
+   such as the import of text, animation effects, header footer and placeholder.
+
+   The parameter pOriginalObj is the object as it was imported by our general escher import, it must either
+   be deleted or it can be returned to be inserted into the sdr page.
+*/
 SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
+    if ( pOriginalObj && pOriginalObj->ISA( SdrObjCustomShape ) )
+        pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( TRUE ) );
+
+    // we are initializing our return value with the object that was imported by our escher import
     SdrObject* pRet = pOriginalObj;
     ProcessData& rData = *((ProcessData*)pData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
@@ -1021,18 +1031,23 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
     }
     if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE ) && ( rPersistEntry.bNotesMaster == FALSE ) )
-    {   // bPageObj
+    {
         USHORT nPageNum = pSdrModel->GetPageCount();
         if ( nPageNum > 0 )
             nPageNum--;
+
+        // replacing the object which we will return with a SdrPageObj
         delete pRet;
-        pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage(nPageNum));
+        pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum ));
     }
     else
     {
+        // try to load some ppt text
         PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, &rObjData );
         if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
         {
+            // and if the text object is not empty, it must be applied to pRet, the object we
+            // initially got from our escher import
             INT32 nTextRotationAngle = 0;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
@@ -1065,17 +1080,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             if ( pRet )
             {
-                BOOL bDeleteSource = FALSE;
-                if ( ( ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )
-                                + ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) ) == 0 )
-                {
-                    bDeleteSource = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )         // fit shape to text
-                                                && ( rObjData.eShapeType == mso_sptRectangle );
-                }
-                if ( aTextObj.GetOEPlaceHolderAtom() )              // we are not allowed to get
-                    bDeleteSource = TRUE;                                                       // grouped placeholder objects
-                if ( bDeleteSource  && ( pRet->ISA( SdrGrafObj ) == FALSE )
-                        && ( pRet->ISA( SdrObjGroup ) == FALSE )
+                BOOL bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != 0;
+                if ( bDeleteSource  && ( pRet->ISA( SdrGrafObj ) == FALSE )     // we are not allowed to get
+                        && ( pRet->ISA( SdrObjGroup ) == FALSE )                // grouped placeholder objects
                             && ( pRet->ISA( SdrOle2Obj ) == FALSE ) )
                     delete pRet, pRet = NULL;
             }
@@ -1270,9 +1277,29 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             SdrObject* pTObj = NULL;
             sal_Bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
             sal_Bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
-            if ( bWordWrap || ( eTextKind != OBJ_RECT ) )
+
+            if ( pRet && pRet->ISA( SdrObjCustomShape ) )
+            {
+                bAutoGrowHeight = bFitShapeToText;
+                if ( bWordWrap )
+                    bAutoGrowWidth = sal_False;
+                else
+                    bAutoGrowWidth = sal_True;
+                pTObj = pRet;
+                pRet = NULL;
+            }
+            else
             {
                 pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
+                pTObj->SetModel( pSdrModel );
+                SfxItemSet aSet( pSdrModel->GetItemPool() );
+                ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                pTObj->SetMergedItemSet( aSet );
+                if ( eTextKind != OBJ_RECT )
+                {
+                    pTObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+                    pTObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+                }
                 if ( bVerticalText )
                 {
                     bAutoGrowWidth = bFitShapeToText;   // bFitShapeToText; can't be used, because we cut the text if it is too height,
@@ -1284,44 +1311,41 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     bAutoGrowHeight = sal_True;         // bFitShapeToText; can't be used, because we cut the text if it is too height,
                 }
             }
-            else
-            {
-                pTObj = new SdrRectObj();
-                bAutoGrowHeight = bAutoGrowWidth = bFitShapeToText;
-            }
-            pTObj->SetModel( pSdrModel );
-            SfxItemSet aSet( pSdrModel->GetItemPool() );
-            if ( !pRet )
-                ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
-            else if ( !((SdrRectObj*)pTObj)->IsTextFrame() )
-            {
-                aSet.Put( XLineStyleItem( XLINE_NONE ) );
-                aSet.Put( XFillStyleItem( XFILL_NONE ) );
-            }
-            aSet.Put( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+            pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
-             aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-            aSet.Put( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+        if ( !pTObj->ISA( SdrObjCustomShape ) )
+        {
+             pTObj->SetMergedItem( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+            pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+        }
+        else
+        {
+            pTObj->SetMergedItem( SdrTextWordWrapItem( bWordWrap ) );
+            pTObj->SetMergedItem( SdrTextAutoGrowSizeItem( bFitShapeToText ) );
+        }
 
-            aSet.Put( SdrTextVertAdjustItem( eTVA ) );
-            aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+            pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
+            pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
 
             if ( nMinFrameHeight < 0 )
                 nMinFrameHeight = 0;
-            aSet.Put( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
+        if ( !pTObj->ISA( SdrObjCustomShape ) )
+            pTObj->SetMergedItem( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
             if ( nMinFrameWidth < 0 )
                 nMinFrameWidth = 0;
-            aSet.Put( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
+        if ( !pTObj->ISA( SdrObjCustomShape ) )
+            pTObj->SetMergedItem( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
             // Abstaende an den Raendern der Textbox setzen
-            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-            aSet.Put( SdrTextRightDistItem( nTextRight ) );
-            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
-            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-            aSet.Put( SdrTextFixedCellHeightItem( TRUE ) );
-            pTObj->SetMergedItemSet( aSet );
-            pTObj->SetSnapRect( rTextRect );
+            pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );
+            pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
+            pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
+            pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
+            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( TRUE ) );
+
+            if ( !pTObj->ISA( SdrObjCustomShape ) )
+                pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
             {
@@ -1331,7 +1355,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                    snaprect of the object. Then we will use
                    ADJUST_CENTER instead of ADJUST_BLOCK.
                 */
-                if ( !bFitShapeToText && !bWordWrap )
+                if ( !pTObj->ISA( SdrObjCustomShape ) && !bFitShapeToText && !bWordWrap )
                 {
                     SdrTextObj* pText = PTR_CAST( SdrTextObj, pTObj );
                     if ( pText )
@@ -1364,17 +1388,24 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
                 nAngle += nTextRotationAngle;
 
-                if ( rObjData.nSpFlags & SP_FFLIPV )
+                if ( pTObj->ISA( SdrObjCustomShape ) )
                 {
-                    double a = 18000 * nPi180;
-                    pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
+
                 }
-                if ( rObjData.nSpFlags & SP_FFLIPH )
-                    nAngle = 36000 - nAngle;
-                if ( nAngle )
+                else
                 {
-                    double a = nAngle * nPi180;
-                    pTObj->NbcRotate( rObjData.rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
+                    if ( rObjData.nSpFlags & SP_FFLIPV )
+                    {
+                        double a = 18000 * nPi180;
+                        pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
+                    }
+                    if ( rObjData.nSpFlags & SP_FFLIPH )
+                        nAngle = 36000 - nAngle;
+                    if ( nAngle )
+                    {
+                        double a = nAngle * nPi180;
+                        pTObj->NbcRotate( rObjData.rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
+                    }
                 }
                 if ( pRet )
                 {
