@@ -22540,3 +22540,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetSdrView@AccessibleShapeTreeInfo@accessibility@@QAEXPAVSdrView@@@Z
 ?SetViewForwarder@AccessibleShapeTreeInfo@accessibility@@QAEXPBVIAccessibleViewForwarder@2@@Z
 ?SetWindow@AccessibleShapeTreeInfo@accessibility@@QAEXPAVWindow@@@Z
+?GetFocus@FmFieldWin@@UAEXXZ
