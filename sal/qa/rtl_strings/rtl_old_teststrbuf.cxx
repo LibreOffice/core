@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_old_teststrbuf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 09:19:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,6 @@ void oldtests::test_OUStringBuffer()
     OUString s3(OUString::createFromAscii("Noch'n RTL OUString"));
     OUStringBuffer b3(s3);
     sal_Char aAsciiStr[] = " mit appendetem ASCII\n";
-    //sal_Char aAsciiStr[] = " mit angefügtem ASCII";
     b3.appendAscii( aAsciiStr );
     s3 = OUString::createFromAscii("Noch'n RTL OUString mit appendetem ASCII\n");
     TEST_ENSURE( b3.getStr() == s3 , "test_OWStringBuffer error 13");
