@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-23 14:35:14 $
+ *  last change: $Author: mib $ $Date: 2002-11-26 13:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 // aNew.SetAuto();
 
                 // Tabellen kennen jetzt auch Umbrueche
-                if( 0 != ( pTblNd = pNode->FindTableNode() ) )
+                if( 0 == (nFlags & SETATTR_APICALL) &&
+                    0 != ( pTblNd = pNode->FindTableNode() ) )
                 {
                     // dann am Tabellen Format setzen
                     SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
@@ -739,7 +740,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         // Tabellen kennen jetzt auch Umbrueche
         const SvxFmtBreakItem* pBreak;
-        if( pNode && 0 != (pTblNd = pNode->FindTableNode() ) &&
+        if( pNode && 0 == (nFlags & SETATTR_APICALL) &&
+            0 != (pTblNd = pNode->FindTableNode() ) &&
             SFX_ITEM_SET == aOtherSet.GetItemState( RES_BREAK,
                         FALSE, (const SfxPoolItem**)&pBreak ) )
         {

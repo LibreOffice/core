@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:21:02 $
+ *  last change: $Author: mib $ $Date: 2002-11-26 13:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,9 @@ enum SetAttrMode
     SETATTR_NOTXTATRCHR     = 0x0004,   // bei Attr ohne Ende kein 0xFF einfuegen
     SETATTR_NOHINTADJUST    = 0x0008,   // keine Zusammenfassung von Bereichen.
     SETATTR_NOFORMATATTR    = 0x0010,   // nicht zum FormatAttribut umwandeln
-    SETATTR_DONTCHGNUMRULE  = 0x0020    // nicht die NumRule veraendern
+    SETATTR_DONTCHGNUMRULE  = 0x0020,   // nicht die NumRule veraendern
+    SETATTR_APICALL         = 0x0040    // called from API (all UI related
+                                        // functionality will be disabled)
 };
 
 //Umrechnung Twip<-> 1/100 mm fuer UNO
