@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <math.h>
 
@@ -2528,6 +2529,25 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
     return pRet;
 }
 
+static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
+{
+    MapMode aPrefMapMode(rGraf.GetPrefMapMode());
+    if (aPrefMapMode == aWanted)
+        return rGraf.GetPrefSize();
+    Size aRetSize;
+    if (aPrefMapMode == MAP_PIXEL)
+    {
+        aRetSize = Application::GetDefaultDevice()->PixelToLogic(
+            rGraf.GetPrefSize(), aWanted);
+    }
+    else
+    {
+        aRetSize = Application::GetDefaultDevice()->LogicToLogic(
+            rGraf.GetPrefSize(), rGraf.GetPrefMapMode(), aWanted);
+    }
+    return aRetSize;
+}
+
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rectangle& aBoundRect, const DffObjData& rObjData ) const
 {
     SdrObject* pRet = NULL;
@@ -2591,14 +2611,8 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                 sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
                 sal_Bool    bUseCropAttributes = ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0; // we do not support cropping attributes on ole objects
 
-                if ( bUseCropAttributes )
-                {
-                    MapMode aPrefMapMode( aGraf.GetPrefMapMode() );
-                    if ( aPrefMapMode == MAP_PIXEL )
-                        aCropSize = Application::GetDefaultDevice()->PixelToLogic( aGraf.GetPrefSize(), MAP_100TH_MM );
-                    else
-                        aCropSize = Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM );
-                }
+                if (bUseCropAttributes)
+                    aCropSize = lcl_GetPrefSize(aGraf, MAP_100TH_MM);
                 else
                 {
                     aCropBitmap = aGraf.GetBitmapEx();
@@ -3566,8 +3580,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     SdrObject* pGroup = new SdrObjGroup;
                     pGroup->GetSubList()->NbcInsertObject( pObj );
                     pGroup->GetSubList()->NbcInsertObject( pTextObj );
-                    pOrgObj = pObj;
-                    pObj    = pGroup;
+                    if (pOrgObj == pObj)
+                        pOrgObj = pGroup;
+                    else
+                        pOrgObj = pObj;
+                    pObj = pGroup;
                 }
             }
         }
@@ -4843,21 +4860,17 @@ const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& 
     if( GRAPHIC_BITMAP == rGrf.GetType() )
     {
         Point aPt;
-        MapMode aMM( MAP_100TH_MM );
-
-        const Size aSz( OutputDevice::LogicToLogic(
-                                rGrf.GetPrefSize(),
-                                rGrf.GetPrefMapMode(),
-                                aMM ));
+        const Size aSz(lcl_GetPrefSize(rGrf, MAP_100TH_MM));
 
         VirtualDevice aVirtDev;
         aVirtDev.EnableOutput( FALSE );
+        MapMode aMM(MAP_100TH_MM);
         aVirtDev.SetMapMode( aMM );
 
         rMtf.Record( &aVirtDev );
         rGrf.Draw( &aVirtDev, aPt, aSz );
         rMtf.Stop();
-        rMtf.SetPrefMapMode( aMM );
+        rMtf.SetPrefMapMode(aMM);
         rMtf.SetPrefSize( aSz );
 
         pMtf = &rMtf;
@@ -4954,15 +4967,17 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
 
                             xDoc->DoLoad( pMed );
 
-                            //JP 26.10.2001: Bug 93374 / 91928
-                            // the writer objects need the correct visarea
+                            // JP 26.10.2001: Bug 93374 / 91928 the writer
+                            // objects need the correct visarea needs the
+                            // correct visarea, but this is not true for
+                            // PowerPoint (see bugdoc 94908b)
+                            // SJ: 19.11.2001 bug 94908, also chart objects
+                            // needs the correct visarea
                             if( sStarName.EqualsAscii( "swriter" )
-                                || sStarName.EqualsAscii( "scalc" ) )   // SJ: 19.11.2001 bug 94908, also chart objects
-                            {                                           // needs the correct visarea, but this is not
-                                Size aSz( OutputDevice::LogicToLogic(   // true for PowerPoint (see bugdoc 94908b)
-                                                rGrf.GetPrefSize(),
-                                                rGrf.GetPrefMapMode(),
-                                        MapMode( xIPObj->GetMapUnit() ) ) );
+                                || sStarName.EqualsAscii( "scalc" ) )
+                            {
+                                Size aSz(lcl_GetPrefSize(rGrf,
+                                    MapMode(xIPObj->GetMapUnit())));
                                 // don't modify the object
                                 xIPObj->EnableSetModified( FALSE );
                                 xIPObj->SetVisArea( Rectangle(
@@ -5096,8 +5111,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             if( xInplaceObj.Is() )
             {
                 // VisArea am OutplaceObject setzen!!
-                Size aSz( OutputDevice::LogicToLogic( rGrf.GetPrefSize(),
-                    rGrf.GetPrefMapMode(), MapMode( xInplaceObj->GetMapUnit() ) ) );
+                Size aSz(lcl_GetPrefSize(rGrf,
+                    MapMode(xInplaceObj->GetMapUnit())));
                 // modifiziert wollen wir nicht werden
                 xInplaceObj->EnableSetModified( FALSE );
                 xInplaceObj->SetVisArea( Rectangle( Point(), aSz ));
@@ -5183,4 +5198,4 @@ sal_Bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Referen
     return bRetValue;
 }
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
