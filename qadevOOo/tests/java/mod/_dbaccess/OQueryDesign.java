@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 11:43:09 $
+ *  last change:$Date: 2004-08-02 17:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,11 @@ public class OQueryDesign extends TestCase {
 
         oObj = Frame.getController();
 
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        //adding objRelation for XController
+        tEnv.addObjRelation ("FirstModel", Frame.getController ().getModel());
 
         //Adding ObjRelations for XInitialization
         tEnv.addObjRelation("XInitialization.args", params);
