@@ -812,3 +812,4 @@ DestroyRemoteControl
 ?DbgSetPrintTestTool@@YAXP6AXPBD@Z@Z
 ?TestToolDebugPrint@@YAXPBD@Z
 ?osl_TestToolDebugPrint@@YAXPBD@Z
+?GetWindow@CellController@svt@@QBEAAVControl@@XZ
