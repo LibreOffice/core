@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedLine FL_TABPOS_VERT
     {
@@ -164,6 +165,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     Window WIN_TABLEFT
     {
@@ -202,6 +204,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "दाहि~ना";
+        Text[ slovak ] = "Vp~ravo";
     };
     Window WIN_TABRIGHT
     {
@@ -240,6 +243,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Na střed";
         Text[ hebrew ] = "‮ממורכז‬";
         Text[ hindi ] = "केन्द्रि~त";
+        Text[ slovak ] = "Na ~stred";
     };
     Window WIN_TABCENTER
     {
@@ -278,6 +282,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Desítkově ";
         Text[ hebrew ] = "‮עשרוני‬";
         Text[ hindi ] = "दशां~श";
+        Text[ slovak ] = "De~siatkovo";
     };
     Window WIN_TABDECIMAL
     {
@@ -316,6 +321,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Znak";
         Text[ hebrew ] = "‮תו‬";
         Text[ hindi ] = "~अक्षर";
+        Text[ slovak ] = "~Znak";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -356,6 +362,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     FixedLine FL_TABTYPE_VERT
     {
@@ -396,6 +403,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Žádný";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "को~ई नहीं";
+        Text[ slovak ] = "Žia~dny";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -447,6 +455,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Znak";
         Text[ hebrew ] = "‮תו‬";
         Text[ hindi ] = "अक्षर";
+        Text[ slovak ] = "Znak";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -487,6 +496,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Vyplnit znakem";
         Text[ hebrew ] = "‮תו מילוי‬";
         Text[ hindi ] = "अक्षर भरो";
+        Text[ slovak ] = "Vyplniť znakom";
     };
     PushButton BTN_NEW
     {
@@ -520,6 +530,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
+        Text[ slovak ] = "~Nový";
     };
     PushButton BTN_DELALL
     {
@@ -553,6 +564,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Smazat vše";
         Text[ hebrew ] = "‮מחיקת הכל‬";
         Text[ hindi ] = "~सब मिटाओ";
+        Text[ slovak ] = "Zmazať ~všetko";
     };
     PushButton BTN_DEL
     {
@@ -586,6 +598,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     String ST_LEFTTAB_ASIAN
     {
@@ -614,6 +627,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ portuguese_brazilian ] = "~Left/Top";
         Text[ thai ] = "~Left/Top";
         Text[ hindi ] = "~Left/Top";
+        Text[ slovak ] = "~Vľavo/Hore";
     };
     String ST_RIGHTTAB_ASIAN
     {
@@ -642,6 +656,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ portuguese_brazilian ] = "Righ~t/Bottom";
         Text[ thai ] = "Righ~t/Bottom";
         Text[ hindi ] = "Righ~t/Bottom";
+        Text[ slovak ] = "Vp~ravo/Dole";
     };
     Text[ chinese_simplified ] = "制表符";
     Text[ russian ] = "���������";
@@ -658,8 +673,11 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ czech ] = "Tabulátory";
     Text[ hebrew ] = "‮טאבים‬";
     Text[ hindi ] = "टॉब्स";
+    Text[ slovak ] = "Tabulátory";
 };
  // ********************************************************************** EOF
+
+
 
 
 
