@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:30:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <malloc.h>
+#include <sal/alloca.h>
 #include <rtl/alloc.h>
 
 #include <uno/data.h>
