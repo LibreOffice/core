@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 08:26:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ void Desktop::Init()
         //  check whether we need to print cmdline help
         if ( pCmdLineArgs->IsHelp() ) {
             displayCmdlineHelp();
-            exit(0);
+            _exit(0);
         }
 #endif
         // start ipc thread only for non-remote offices
@@ -1386,6 +1386,13 @@ void Desktop::Main()
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 
+        // if we need to display the OEM dialog, we need to do it here
+        if (!pCmdLineArgs->IsQuickstart() && !Desktop::CheckOEM())
+        {
+               //Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
+            return;
+        }
+
         if (pCmdLineArgs->IsEmpty())
         {
             ::desktop::Desktop::bSuppressOpenDefault = sal_True;
@@ -1747,12 +1754,6 @@ void Desktop::OpenClients()
     SvtInternalOptions  aInternalOptions;
 
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
-
-    // if we need to display the OEM dialog, we need to do it here
-    if (!pArgs->IsQuickstart() && !Desktop::CheckOEM())
-    {
-        Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
-    }
 
     if (!pArgs->IsQuickstart()) {
         sal_Bool bShowHelp = sal_False;
