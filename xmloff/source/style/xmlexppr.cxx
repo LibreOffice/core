@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 08:55:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
                                             UniReference< XMLPropertySetMapper > maPropMapper, const sal_Bool bDefault)
 {
     MyToFilterPropertyList::iterator aItr = aProps.begin();
-    MyPropertyStates aProps;
+    MyPropertyStates aPropsList;
     for(sal_uInt32 i = 0; i < nCount; i++, aItr++ )
     {
         if( pStates[i] == PropertyState_DIRECT_VALUE )
@@ -350,7 +350,7 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
                     xPropSet->getPropertyValue( aItr->sApiName ) );
             if (!bDefault || (bDefault && ((maPropMapper->GetEntryFlags( *aIndexItr ) &
                     MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)))
-                aPropStates.push_back( aNewProperty );
+                aPropsList.AddPropertyState( aNewProperty );
             if (aItr->nCount > 1)
             {
                 aIndexItr++;
@@ -360,14 +360,14 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
                             MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)))
                     {
                         aNewProperty.mnIndex = *aIndexItr;
-                        aProps.AddPropertyState( aNewProperty );
+                        aPropsList.AddPropertyState( aNewProperty );
                     }
                     aIndexItr++;
                 }
             }
         }
     }
-    aProps.FillPropertyStateVector(aPropStates);
+    aPropsList.FillPropertyStateVector(aPropStates);
 }
 
 vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
