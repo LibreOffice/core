@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 08:09:25 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 14:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,9 @@ BOOL SvxFramesComboBox::GetCurrentFrameNames ()
 |*
 |************************************************************************/
 
-SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses ) :
-  SfxURLBox         ( pParent, eSmart ),
+<<<<<<< hltpbase.cxx
+SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses )
+: SvtURLBox         ( pParent, eSmart ),
   DropTargetHelper  ( this ),
   mbAccessAddress   (bAddresses)
 {
@@ -309,19 +310,19 @@ String SvxHyperURLBox::GetAllEmailNamesFromDragItem( USHORT nItem )
 
 void SvxHyperURLBox::Select()
 {
-    SfxURLBox::Select();
+    SvtURLBox::Select();
 }
 void SvxHyperURLBox::Modify()
 {
-    SfxURLBox::Modify();
+    SvtURLBox::Modify();
 }
 long SvxHyperURLBox::Notify( NotifyEvent& rNEvt )
 {
-    return SfxURLBox::Notify( rNEvt );
+    return SvtURLBox::Notify( rNEvt );
 }
 long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 {
-    return SfxURLBox::PreNotify( rNEvt );
+    return SvtURLBox::PreNotify( rNEvt );
 }
 
 //########################################################################
