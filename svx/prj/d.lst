@@ -586,6 +586,7 @@ hedabu: ..\inc\dataaccessdescriptor.hxx %_DEST%\inc%_EXT%\svx\dataaccessdescript
 hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 hedabu: ..\inc\UnoNamespaceMap.hxx %_DEST%\inc%_EXT%\svx\UnoNamespaceMap.hxx
 hedabu: ..\inc\unomaster.hxx %_DEST%\inc%_EXT%\svx\unomaster.hxx
+hedabu: ..\inc\frmdiritem.hxx %_DEST%\inc%_EXT%\svx\frmdiritem.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-12-12 16:12:10 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 18:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #define ITEMID_FMTKEEP  0
 #define ITEMID_LINE     0
 #define ITEMID_BRUSH    0
+#define ITEMID_FRAMEDIR 0
 
 
 #ifndef _ARGS_HXX //autogen
@@ -138,6 +139,7 @@
 #include "bolnitem.hxx"
 #include "brshitem.hxx"
 #include "backgrnd.hxx"
+#include "frmdiritem.hxx"
 
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
@@ -253,6 +255,8 @@ TYPEINIT1_AUTOFACTORY(SvxBoxInfoItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxFmtBreakItem, SfxEnumItem);
 TYPEINIT1_AUTOFACTORY(SvxFmtKeepItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxLineItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxFrameDirectionItem, SfxUInt16Item);
+
 
 // class SvxPaperBinItem ------------------------------------------------
 
@@ -3845,4 +3849,100 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
     return pItem;
 }
 
+#ifdef WNT
+#pragma optimize ( "", on )
+#endif
+
+
+// class SvxFrameDirectionItem ----------------------------------------------
+
+SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
+                                            USHORT nWhich )
+    : SfxUInt16Item( nWhich, nValue )
+{
+}
+
+SvxFrameDirectionItem::~SvxFrameDirectionItem()
+{
+}
+
+int SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal types" );
+
+    return GetValue() == ((SvxFrameDirectionItem&)rCmp).GetValue();
+}
+
+SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
+{
+    return new SvxFrameDirectionItem( *this );
+}
+
+SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, USHORT nVer ) const
+{
+    sal_uInt16 nValue;
+    rStrm >> nValue;
+    return new SvxFrameDirectionItem( (SvxFrameDirection)nValue, Which() );
+}
+
+SvStream& SvxFrameDirectionItem::Store( SvStream & rStrm, USHORT nIVer ) const
+{
+    sal_uInt16 nValue = GetValue();
+    rStrm << nValue;
+    return rStrm;
+}
+
+USHORT SvxFrameDirectionItem::GetVersion( USHORT nFVer ) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
+    SfxItemPresentation ePres,
+    SfxMapUnit eCoreMetric,
+    SfxMapUnit ePresMetric,
+    String &rText,
+    const IntlWrapper *  ) const
+{
+    SfxItemPresentation eRet = ePres;
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        rText = SVX_RESSTR( RID_SVXITEMS_FRMDIR_BEGIN + GetValue() );
+        break;
+
+    default:
+        eRet = SFX_ITEM_PRESENTATION_NONE;
+    }
+    return eRet;
+}
+
+sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
+                                             BYTE )
+{
+    sal_Bool bRet;
+    sal_Int16 nVal = -1;
+    rVal >>= nVal;
+    if( nVal >= FRMDIR_HORI_LEFT_TOP && nVal <= FRMDIR_ENVIRONMENT )
+    {
+        bRet = sal_True;
+        SetValue( (SvxFrameDirection)nVal );
+    }
+    else
+        bRet = sal_False;
+    return bRet;
+}
+
+sal_Bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                            BYTE ) const
+{
+    sal_Int16 nValue = GetValue();
+    rVal <<= nValue;
+    return sal_True;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-19 18:05:39 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 18:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8658,6 +8658,32 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
     Text[ arabic ] = "text alignment bottom";
     Text[ catalan ] = "text alignment bottom";
     Text[ finnish ] = "Tekstin tasaus alareunan mukaan";
+};
+
+String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
+{
+    Text = "Textfluss horizontal von links";
+    Text [ English ] = "text flow horizontal from left";
+};
+String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
+{
+    Text = "Textfluss horizontal von rechts";
+    Text [ English ] = "text flow horizontal from right";
+};
+String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
+{
+    Text = "Textfluss vertikal von rechts";
+    Text [ English ] = "text flow vertical from right";
+};
+String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
+{
+    Text = "Textfluss vertikal von links";
+    Text [ English ] = "text flow vertical from left";
+};
+String RID_SVXITEMS_FRMDIR_ENVIRONMENT
+{
+    Text = "Textfluss aus der Umgebung";
+    Text [ English ] = "text flow from environment";
 };
 
  // ********************************************************************** EOF
