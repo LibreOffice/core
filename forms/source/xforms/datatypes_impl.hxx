@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatypes_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:51:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,127 +103,8 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 
 //--------------------------------------------------------------------
 template< typename VALUE_TYPE >
-OComparableType< VALUE_TYPE >::OComparableType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
-    :OXSDDataType( _rName, _nTypeClass )
+OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    :OValueLimitedType_Base( _rName, _nTypeClass )
 {
-}
-
-//--------------------------------------------------------------------
-template< typename VALUE_TYPE >
-void OComparableType< VALUE_TYPE >::initializeClone( const OXSDDataType& _rCloneSource )
-{
-    OXSDDataType::initializeClone( _rCloneSource );
-    initializeTypedClone( static_cast< const OComparableType& >( _rCloneSource ) );
-}
-
-//--------------------------------------------------------------------
-template< typename VALUE_TYPE >
-void OComparableType< VALUE_TYPE >::initializeTypedClone( const OComparableType& _rCloneSource )
-{
-    m_aMaxInclusive   = _rCloneSource.m_aMaxInclusive;
-    m_aMaxExclusive   = _rCloneSource.m_aMaxExclusive;
-    m_aMinInclusive   = _rCloneSource.m_aMinInclusive;
-    m_aMinExclusive   = _rCloneSource.m_aMinExclusive;
-}
-
-//--------------------------------------------------------------------
-template< typename VALUE_TYPE >
-void OComparableType< VALUE_TYPE >::registerProperties()
-{
-    OXSDDataType::registerProperties();
-
-    REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE,   m_aMaxInclusive,   VALUE_TYPE );
-    REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE,   m_aMaxExclusive,   VALUE_TYPE );
-    REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE,   m_aMinInclusive,   VALUE_TYPE );
-    REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE,   m_aMinExclusive,   VALUE_TYPE );
-}
-
-//--------------------------------------------------------------------
-template< typename VALUE_TYPE >
-bool OComparableType< VALUE_TYPE >::_getValue( const ::rtl::OUString& rValue, double& fValue )
-{
-    // convert to double
-    rtl_math_ConversionStatus eStatus;
-    sal_Int32 nEnd;
-    double f = ::rtl::math::stringToDouble(
-        rValue, sal_Unicode('.'), sal_Unicode(0), &eStatus, &nEnd );
-
-    // error checking...
-    bool bReturn = false;
-    if( eStatus == rtl_math_ConversionStatus_Ok
-        && nEnd == rValue.getLength() )
-    {
-        bReturn = true;
-        fValue = f;
-    }
-    return bReturn;
-}
-
-//--------------------------------------------------------------------
-// validate min-/max facets
-// to be used by validate(..) and explainInvalid(..) methods
-template< typename VALUE_TYPE >
-sal_uInt16 OComparableType< VALUE_TYPE >::_validate( const ::rtl::OUString& rValue )
-{
-    sal_uInt16 nReason = OXSDDataType::_validate( rValue );
-    if( nReason == 0 )
-    {
-
-        // convert value and check format
-        double nDoubleLimit = 0;
-        double f;
-        if( ! _getValue( rValue, f ) )
-            nReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
-
-        // check range
-        else if( ( m_aMaxInclusive >>= nDoubleLimit ) && f > nDoubleLimit )
-            nReason = RID_STR_XFORMS_VALUE_MAX_INCL;
-        else if( ( m_aMaxExclusive >>= nDoubleLimit ) && f >= nDoubleLimit)
-            nReason = RID_STR_XFORMS_VALUE_MAX_EXCL;
-        else if( ( m_aMinInclusive >>= nDoubleLimit ) && f < nDoubleLimit )
-            nReason = RID_STR_XFORMS_VALUE_MIN_INCL;
-        else if( ( m_aMinExclusive >>= nDoubleLimit ) && f <= nDoubleLimit)
-            nReason = RID_STR_XFORMS_VALUE_MIN_EXCL;
-    }
-    return nReason;
-}
-
-//--------------------------------------------------------------------
-template< typename VALUE_TYPE >
-::rtl::OUString OComparableType< VALUE_TYPE >::_explainInvalid( sal_uInt16 nReason )
-{
-    ::rtl::OUStringBuffer sInfo;
-    switch( nReason )
-    {
-    case 0:
-        // nothing to do!
-        break;
-
-    case RID_STR_XFORMS_VALUE_IS_NOT_A:
-        sInfo.append( getName() );
-        break;
-
-    case RID_STR_XFORMS_VALUE_MAX_INCL:
-        sInfo.append( typedValueAsString( m_aMaxInclusive ) );
-        break;
-
-    case RID_STR_XFORMS_VALUE_MAX_EXCL:
-        sInfo.append( typedValueAsString( m_aMaxExclusive ) );
-        break;
-
-    case RID_STR_XFORMS_VALUE_MIN_INCL:
-        sInfo.append( typedValueAsString( m_aMinInclusive ) );
-        break;
-
-    case RID_STR_XFORMS_VALUE_MIN_EXCL:
-        sInfo.append( typedValueAsString( m_aMinExclusive ) );
-        break;
-
-    default:
-        OSL_ENSURE( false, "OComparableType::_explainInvalid: unknown reason!" );
-        break;
-    }
-
-    return sInfo.makeStringAndClear();
 }
 
