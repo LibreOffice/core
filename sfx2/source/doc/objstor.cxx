@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 09:58:00 $
+ *  last change: $Author: mav $ $Date: 2002-07-24 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/storinfo.hxx>
+#include <shell/systemshell.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -837,7 +838,21 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
 
     if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
+    {
         GetpApp()->HideStatusText();
+
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
+        if( bOk && pMedium->GetOrigURL().Len()
+         && !( pAsTempItem && pAsTempItem->GetValue() )
+         && !( pPreviewItem && pPreviewItem->GetValue() )
+         && !( pHiddenItem && pHiddenItem->GetValue() ) )
+        {
+            INetURLObject aUrl( pMedium->GetOrigURL() );
+            SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ) );
+        }
+    }
 
     return bOk;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 15:13:19 $
+ *  last change: $Author: mav $ $Date: 2002-07-24 14:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#include <shell/systemshell.hxx>
 
 // ----------------------------------------------------------------------------
 
@@ -471,6 +472,8 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             SfxStringEncode( aURL.GetPass() ) );
 
                     pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
+
+                    SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ) );
                 }
                 break;
             }
