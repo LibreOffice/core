@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-13 02:49:09 $
+#   last change: $Author: pluby $ $Date: 2001-02-17 09:23:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,25 +87,14 @@ OBJFILES=	\
 #		$(OBJ)$/test_Cincludes.obj
 #		$(OBJ)$/test_sec.obj	\
 
-# gcc on Mac OS X optimizes out some temporary variables when optimization is
-# turned on for compiling 
-.IF "$(OS)"=="MACOSX"
-NOOPTFILES+=$(OBJFILES)
-.IF "$(NOOPT_FLAG)"!=""
-CFLAGSNOOPT=
-.ENDIF
-.ENDIF
-
 APP1TARGET=	testcppu
 APP1OBJS=	\
         $(OBJ)$/testcppu.obj	\
         $(OBJ)$/test_di.obj	
 #		$(OBJ)$/test_sec.obj
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP1OBJS+=$(OBJ)$/staticmbtest.obj
 .ENDIF
 

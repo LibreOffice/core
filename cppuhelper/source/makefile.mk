@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 15:26:49 $
+#   last change: $Author: pluby $ $Date: 2001-02-17 09:23:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,15 +126,6 @@ SLOFILES=	\
         $(SLO)$/factory.obj		\
         $(SLO)$/component.obj		\
         $(SLO)$/shlib.obj
-
-# gcc on Mac OS X optimizes out some temporary variables when optimization is
-# turned on for compiling
-.IF "$(OS)"=="MACOSX"
-NOOPTFILES+=$(SLOFILES)
-.IF "$(NOOPT_FLAG)"!=""
-CFLAGSNOOPT=
-.ENDIF
-.ENDIF
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
