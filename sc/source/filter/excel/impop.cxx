@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-30 12:22:26 $
+ *  last change: $Author: gt $ $Date: 2000-11-30 10:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
+#include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 
 #if defined( WNT ) || defined( WIN )
@@ -600,7 +601,7 @@ void ImportExcel::Name25( void )
         const BOOL      bHidden = TRUEBOOL( nOpt & EXC_NAME_HIDDEN );
         const BOOL      bBuildIn = TRUEBOOL( nOpt & EXC_NAME_BUILTIN );
 
-        sal_Char        cFirstNameChar = aName.GetChar( 0 );
+        sal_Char        cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
         const BOOL      bPrintArea = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTAREA );
         const BOOL      bPrintTitles = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
 
@@ -1504,6 +1505,10 @@ void ImportExcel::Setup( void )
         else
             aSize = SvxPaperInfo::GetPaperSize( pSvxPS[ nPaperSize ] );
 
+        if( aSize.nA == 0 || aSize.nB == 0 )
+            // now try default from printer
+            aSize = SvxPaperInfo::GetPaperSize( pD->GetPrinter() );
+
         if( bLandscape )
         {
             long    nTmp;
@@ -1875,7 +1880,7 @@ void ImportExcel::Name34( void )
 
     // Namen einlesen
     String              aName( ASSTOSTR( ReadString( aIn, nLenName ) ) );
-    sal_Char            cFirstNameChar = aName.GetChar( 0 );
+    sal_Char            cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
 
     const UINT32        nFormStart = aIn.Tell();
 
@@ -2336,7 +2341,7 @@ void ImportExcel::ReadExcString( StringInfoLen eLen, ByteString& aString )
     }
 
     if( nBytesLeft < nLaenge )  // hack for Applix rubbish, never needed before!
-        nLaenge = nBytesLeft;
+        nLaenge = ( UINT16 ) nBytesLeft;
 
     AppendString( aIn, aString, nLaenge );
     nBytesLeft -= nLaenge;
