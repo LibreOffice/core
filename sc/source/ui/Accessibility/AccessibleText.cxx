@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 16:48:44 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 14:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,11 @@ Point ScPreviewViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& 
     {
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            return pWindow->LogicToPixel( rPoint, rMapMode );
+        {
+            MapMode aMapMode(pWindow->GetMapMode().GetMapUnit());
+            Point aPoint2( OutputDevice::LogicToLogic( rPoint, rMapMode, aMapMode) );
+            return pWindow->LogicToPixel(aPoint2);
+        }
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
@@ -339,7 +343,15 @@ Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& 
     {
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            return pWindow->PixelToLogic( rPoint, rMapMode );
+        {
+            MapMode aMapMode(pWindow->GetMapMode());
+            aMapMode.SetOrigin(Point());
+            Point aPoint1( pWindow->PixelToLogic( rPoint ) );
+            Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
+                                                       aMapMode.GetMapUnit(),
+                                                       rMapMode ) );
+            return aPoint2;
+        }
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
@@ -382,18 +394,15 @@ Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) cons
 
     sal_Int32 nX(aPos.getX());
     sal_Int32 nY(aPos.getY());
-    if (nX < 0 || nY < 0)
-    {
-        if (nX < 0)
-            nX = -nX;
-        if (nY < 0)
-            nY = -nY;
-    }
-    else
-    {
+
+    if (nX > 0)
         nX = 0;
+    else if (nX < 0)
+        nX = -nX;
+    if (nY > 0)
         nY = 0;
-    }
+    else if (nY < 0)
+        nY = -nY;
     aVisArea.SetPos(Point(nX, nY));
 
     return aVisArea;
