@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:22:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 18:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,8 @@ static void __dbg_memory_usage (memory_stat * total)
 
 #if OSL_DEBUG_LEVEL > 1
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 1)
-#else #if OSL_DEBUG_LEVEL > 0
+#else
+#if OSL_DEBUG_LEVEL > 0
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 0)
 #endif /* OSL_DEBUG_LEVEL */
 
