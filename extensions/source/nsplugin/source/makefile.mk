@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-11-26 16:00:07 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:01:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,11 +72,12 @@ USE_DEFFILE=TRUE
 .INCLUDE :  	settings.mk
 
 .IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_GTK)" == ""
+.IF "$(ENABLE_GTK)"==""
 
 dummy:
     @echo GTK disabled - nothing to build
-.ENDIF
+
+.ELSE           # "$(ENABLE_GTK)"==""
 .IF "$(OS)"=="LINUX"
 INC+= -DNP_LINUX
 .ENDIF
@@ -87,6 +88,7 @@ CFLAGS+=$(PKGCONFIG_CFLAGS)
 .IF "$(GUI)"=="WNT"
 INC+= -DENGLISH
 .ENDIF
+.ENDIF          # "$(ENABLE_GTK)"==""
 # --- Files -------------------------------------
 
 SLOFILES=       $(SLO)$/npshell.obj \
