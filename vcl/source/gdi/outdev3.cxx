@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-20 10:02:04 $
+ *  last change: $Author: pl $ $Date: 2001-11-21 13:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef _SV_EDIT_HXX
 #include <edit.hxx>
+#endif
+#ifndef _OSL_FILE_H
+#include <osl/file.h>
 #endif
 
 #include <unohelp.hxx>
@@ -6120,7 +6123,6 @@ void OutputDevice::SetFont( const Font& rNewFont )
     DBG_CHKOBJ( &rNewFont, Font, NULL );
 
     Font aFont( rNewFont );
-
     if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
                        DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
                        DRAWMODE_GHOSTEDFILL) )
@@ -7490,17 +7492,16 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
             if ( !aStr.Len() && (nStyle & TEXT_DRAW_CLIP) )
                 aStr += rOrigStr.GetChar( 0 );
         }
-        else if ( nStyle & (TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS) )
+        else if ( nStyle & TEXT_DRAW_PATHELLIPSIS )
         {
-            static sal_Char const   aPathSepChars[] = "\\/:";
-            static sal_Char const   aNewsSepChars[] = ".";
-            const sal_Char*         pSepChars;
-
-            if ( nStyle & TEXT_DRAW_PATHELLIPSIS )
-                pSepChars = aPathSepChars;
-            else
-                pSepChars = aNewsSepChars;
-
+            rtl::OUString aPath( rOrigStr );
+            rtl::OUString aAbbreviatedPath;
+            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, NULL );
+            aStr = aAbbreviatedPath;
+        }
+        else if ( nStyle & TEXT_DRAW_NEWSELLIPSIS )
+        {
+            static sal_Char const   pSepChars[] = ".";
             // Letztes Teilstueck ermitteln
             xub_StrLen nLastContent = aStr.Len();
             while ( nLastContent )
