@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:23:00 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ using namespace ::com::sun::star::registry;
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard();
+extern "C" void SAL_CALL createRegistryInfo_OListComboWizard();
 
 //---------------------------------------------------------------------------------------
 
@@ -82,6 +83,7 @@ extern "C" void SAL_CALL dbp_initializeModule()
     if (!s_bInit)
     {
         createRegistryInfo_OGroupBoxWizard();
+        createRegistryInfo_OListComboWizard();
         ::dbp::OModule::setResourceFilePrefix("dbp");
         s_bInit = sal_True;
     }
@@ -142,6 +144,9 @@ extern "C" void* SAL_CALL component_getFactory(
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:23:00  fs
+ *  initial checkin - form control auto pilots
+ *
  *  Revision 1.1  2001/02/12 07:11:01  fs
  *  initial checkin - importing StarOffice 5.2 database files
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:21:45 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace dbp
     {
     protected:
         FixedLine       m_aData;
+        FixedText       m_aExplanation;
         FixedText       m_aDatasourceLabel;
         ListBox         m_aDatasource;
         FixedText       m_aTableLabel;
@@ -102,11 +103,19 @@ namespace dbp
         // TabPage overridables
         void ActivatePage();
 
+        // OWizardPage overridables
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
+        DECL_LINK( OnListboxDoubleClicked, ListBox* );
 
         void implCollectDatasource();
         void implFillTables();
+
+        // OControlWizardPage overridables
+        virtual sal_Bool determineNextButtonState();
     };
 
 //.........................................................................
@@ -119,6 +128,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:21:45  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 11:02:03  fs
  ************************************************************************/

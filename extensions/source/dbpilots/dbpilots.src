@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:22:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,45 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Hide            = TRUE;
 };
 
+ModalDialog RID_DLG_LISTCOMBOWIZARD
+{
+    Text = "AutoPilot Listenfeld";
+    Text [ english ] = "Auto Pilot List field";
+    Text [ english_us ] = "Auto Pilot List field";
+    Text[ portuguese ] = "AutoPiloto- Caixa de listagem";
+    Text[ russian ] = "Àâòîïèëîò ñïèñêà";
+    Text[ dutch ] = "AutPiloot Keuzelijst";
+    Text[ french ] = "AutoPilote Zone de liste";
+    Text[ spanish ] = "AutoPiloto Listado";
+    Text[ italian ] = "Pilota automatico Casella di riepilogo";
+    Text[ danish ] = "AutoPilot rulleliste";
+    Text[ swedish ] = "AutoPilot listruta";
+    Text[ polish ] = "AutoPilot Pole listy";
+    Text[ portuguese_brazilian ] = "Create group";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä Ø½ÄÌ¨°ÙÄŞ";
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
+    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²M³æÄæ¦ì";
+    Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí Ü ãÑÈÚ ŞÇÆãÉ";
+    Text[ dutch ] = "AutPiloot Keuzelijst";
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
+    Text[ greek ] = "AutoPilot Ğåäßï ëßóôáò";
+    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸ñ·Ï ÇÊµå";
+    Text[ turkish ] = "OtoPilot Liste alanı";
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+};
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:22:40  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/

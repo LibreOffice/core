@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:24:59 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,22 @@
 #ifndef _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_
 #include "groupboxwiz.hxx"
 #endif
+#ifndef _EXTENSIONS_DBP_LISTCOMBOWIZARD_HXX_
+#include "listcombowizard.hxx"
+#endif
 
 // the registration methods
 extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard()
 {
     static ::dbp::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard, ::dbp::OGroupBoxSI >
+    > aAutoRegistration;
+}
+
+extern "C" void SAL_CALL createRegistryInfo_OListComboWizard()
+{
+    static ::dbp::OMultiInstanceAutoRegistration<
+        ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard, ::dbp::OListComboSI >
     > aAutoRegistration;
 }
 
@@ -101,6 +111,23 @@ namespace dbp
         return aReturn;
     }
 
+    //=====================================================================
+    //= OListComboSI
+    //=====================================================================
+    //---------------------------------------------------------------------
+    ::rtl::OUString OListComboSI::getImplementationName() const
+    {
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbp.OListComboWizard");
+    }
+
+    //---------------------------------------------------------------------
+    Sequence< ::rtl::OUString > OListComboSI::getServiceNames() const
+    {
+        Sequence< ::rtl::OUString > aReturn(1);
+        aReturn[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ListComboBoxAutoPilot");
+        return aReturn;
+    }
+
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
@@ -108,6 +135,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:24:59  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:24:18  fs
  ************************************************************************/

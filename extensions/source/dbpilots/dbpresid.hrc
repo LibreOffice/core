@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpresid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:22:51 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,16 +80,25 @@
 // dialogs
 
 #define RID_DLG_GROUPBOXWIZARD          ( RID_DIALOG_START +  1 )
+#define RID_DLG_LISTCOMBOWIZARD         ( RID_DIALOG_START +  2 )
 
 //========================================================================
 // tab pages
 
-#define RID_PAGE_TABLESELECTION         ( RID_PAGE_START +  1 )
-#define RID_PAGE_GROUPRADIOSELECTION    ( RID_PAGE_START +  2 )
-#define RID_PAGE_DEFAULTFIELDSELECTION  ( RID_PAGE_START +  3 )
-#define RID_PAGE_OPTIONVALUES           ( RID_PAGE_START +  4 )
-#define RID_PAGE_OPTION_DBFIELD         ( RID_PAGE_START +  5 )
-#define RID_PAGE_OPTIONS_FINAL          ( RID_PAGE_START +  6 )
+#define RID_PAGE_TABLESELECTION             ( RID_PAGE_START +  1 )
+#define RID_PAGE_GROUPRADIOSELECTION        ( RID_PAGE_START +  2 )
+#define RID_PAGE_DEFAULTFIELDSELECTION      ( RID_PAGE_START +  3 )
+#define RID_PAGE_OPTIONVALUES               ( RID_PAGE_START +  4 )
+#define RID_PAGE_OPTION_DBFIELD             ( RID_PAGE_START +  5 )
+#define RID_PAGE_OPTIONS_FINAL              ( RID_PAGE_START +  6 )
+#define RID_PAGE_LCW_CONTENTSELECTION_TABLE ( RID_PAGE_START +  7 )
+#define RID_PAGE_LCW_CONTENTSELECTION_FIELD ( RID_PAGE_START +  8 )
+#define RID_PAGE_LCW_FIELDLINK              ( RID_PAGE_START +  9 )
+
+//========================================================================
+// ErrorBox
+
+#define RID_ERR_INVALID_FORM_CONNECTION     ( RID_ERRORBOX_START +  1 )
 
 //========================================================================
 // local ids
@@ -102,6 +111,7 @@
 #define FL_OPTIONVALUES             3
 #define FL_DATABASEFIELD_EXPL       4
 #define FL_NAMEIT                   5
+#define FL_FRAME                    6
 
 //........................................................................
 // FixedText
@@ -117,6 +127,13 @@
 #define FT_DATABASEFIELD_QUEST       9
 #define FT_NAMEIT                   10
 #define FT_THATSALL                 11
+#define FT_SELECTTABLE_LABEL        12
+#define FT_TABLEFIELDS              13
+#define FT_DISPLAYEDFIELD           14
+#define FT_CONTENTFIELD_INFO        15
+#define FT_VALUELISTFIELD           16
+#define FT_TABLEFIELD               17
+#define FT_EXPLANATION              18
 
 //........................................................................
 // ListBox
@@ -126,6 +143,8 @@
 #define LB_RADIOBUTTONS             3
 #define LB_DEFSELECTIONFIELD        3
 #define LB_STOREINFIELD             4
+#define LB_SELECTTABLE              5
+#define LB_SELECTFIELD              6
 
 //........................................................................
 // Edit
@@ -133,6 +152,7 @@
 #define ET_RADIOLABELS              1
 #define ET_OPTIONVALUE              2
 #define ET_NAMEIT                   3
+#define ET_DISPLAYEDFIELD           4
 
 //........................................................................
 // PushButton
@@ -148,6 +168,17 @@
 #define RB_STOREINFIELD_YES         3
 #define RB_STOREINFIELD_NO          4
 
+//........................................................................
+// ComboBox
+
+#define CMB_VALUELISTFIELD          1
+#define CMB_TABLEFIELD              2
+
+//........................................................................
+// String
+
+#define STR_FIELDINFO_LISTBOX       1
+#define STR_FIELDINFO_COMBOBOX      2
 
 //========================================================================
 // defines
@@ -169,6 +200,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:22:51  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:48:02  fs
  ************************************************************************/

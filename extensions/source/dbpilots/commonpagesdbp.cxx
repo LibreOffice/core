@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:21:36 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -120,6 +123,7 @@ namespace dbp
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
         ,m_aData            (this, ResId(FL_DATA))
+        ,m_aExplanation     (this, ResId(FT_EXPLANATION))
         ,m_aDatasourceLabel (this, ResId(FT_DATASOURCE))
         ,m_aDatasource      (this, ResId(LB_DATASOURCE))
         ,m_aTableLabel      (this, ResId(FT_TABLE))
@@ -131,6 +135,7 @@ namespace dbp
 
         m_aDatasource.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
         m_aTable.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_aTable.SetDoubleClickHdl(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
 
         m_aDatasource.SetDropDownLineCount(10);
     }
@@ -143,6 +148,76 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
+    sal_Bool OTableSelectionPage::determineNextButtonState()
+    {
+        if (!OControlWizardPage::determineNextButtonState())
+            return sal_False;
+
+        if (0 == m_aDatasource.GetSelectEntryCount())
+            return sal_False;
+
+        if (0 == m_aTable.GetSelectEntryCount())
+            return sal_False;
+
+        return sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    void OTableSelectionPage::initializePage()
+    {
+        OControlWizardPage::initializePage();
+
+        const OControlWizardContext& rContext = getContext();
+        try
+        {
+            ::rtl::OUString sDataSourceName;
+            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+            m_aDatasource.SelectEntry(sDataSourceName);
+
+            implFillTables();
+
+            ::rtl::OUString sTableName;
+            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
+            m_aTable.SelectEntry(sTableName);
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OTableSelectionPage::initializePage: caught an exception!");
+        }
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OTableSelectionPage::commitPage(COMMIT_REASON _eReason)
+    {
+        if (!OControlWizardPage::commitPage(_eReason))
+            return sal_False;
+
+        const OControlWizardContext& rContext = getContext();
+        try
+        {
+            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("DataSourceName"), makeAny(::rtl::OUString(m_aDatasource.GetSelectEntry())));
+            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("Command"), makeAny(::rtl::OUString(m_aTable.GetSelectEntry())));
+            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("CommandType"), makeAny((sal_Int32)CommandType::TABLE));
+
+            updateContext();
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OTableSelectionPage::commitPage: caught an exception!");
+        }
+
+        return sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox*, _pBox )
+    {
+        if (_pBox->GetSelectEntryCount())
+            getDialog()->travelNext();
+        return 0L;
+    }
+
+    //---------------------------------------------------------------------
     IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
     {
         if (&m_aDatasource == _pBox)
@@ -152,6 +227,9 @@ namespace dbp
         else
         {
         }
+
+        implCheckNextButton();
+
         return 0L;
     }
 
@@ -186,27 +264,30 @@ namespace dbp
         Any aSQLException;
         try
         {
-            // obtain the DS object
-            Reference< XCompletedConnection > xDatasource;
-            m_xDSContext->getByName(m_aDatasource.GetSelectEntry()) >>= xDatasource;
-
-            // connect
-            Reference< XConnection > xConn;
-            if (xDatasource.is())
-                xConn = xDatasource->connectWithCompletion(xHandler);
-            else
-                DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
-
-            // get the tables
-            Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
-            if (xSupplTables.is())
+            ::rtl::OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
+            if (sCurrentDatasource.getLength())
             {
-                Reference< XNameAccess > xTables(xSupplTables->getTables(), UNO_QUERY);
-                if (xTables.is())
-                    aTableNames = xTables->getElementNames();
-            }
+                // obtain the DS object
+                Reference< XCompletedConnection > xDatasource;
+                Reference< XConnection > xConn;
+                if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
+                {   // connect
+                    xConn = xDatasource->connectWithCompletion(xHandler);
+                }
+                else
+                    DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
 
-            // TODO: dispose the connection ... event better: share it with the other pages ...
+                // get the tables
+                Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
+                if (xSupplTables.is())
+                {
+                    Reference< XNameAccess > xTables(xSupplTables->getTables(), UNO_QUERY);
+                    if (xTables.is())
+                        aTableNames = xTables->getElementNames();
+                }
+
+                // TODO: dispose the connection ... event better: share it with the other pages ...
+            }
         }
         catch(SQLContext& e) { aSQLException <<= e; }
         catch(SQLWarning& e) { aSQLException <<= e; }
@@ -228,35 +309,17 @@ namespace dbp
         }
 
         // insert the table names into the list
-        const ::rtl::OUString* pTables = aTableNames.getConstArray();
-        const ::rtl::OUString* pEnd = pTables + aTableNames.getLength();
-        for (; pTables != pEnd; ++pTables)
-            m_aTable.InsertEntry(*pTables);
+        fillListBox(m_aTable, aTableNames);
     }
 
     //---------------------------------------------------------------------
     void OTableSelectionPage::implCollectDatasource()
     {
-        Reference< XMultiServiceFactory > xORB = getServiceFactory();
         try
         {
-            DBG_ASSERT(xORB.is(), "OTableSelectionPage::implCollectDatasource: invalid service factory!");
-
-            Reference< XInterface > xContext;
-            if (xORB.is())
-                xContext = xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext"));
-            DBG_ASSERT(xContext.is(), "OTableSelectionPage::implCollectDatasource: invalid database context!");
-
-            m_xDSContext = Reference< XNameAccess >(xContext, UNO_QUERY);
-            DBG_ASSERT(m_xDSContext.is() || !xContext.is(), "OTableSelectionPage::implCollectDatasource: invalid database context (missing the XNameAccess)!");
+            m_xDSContext = getContext().xDatasourceContext;
             if (m_xDSContext.is())
-            {
-                Sequence< ::rtl::OUString > aNames = m_xDSContext->getElementNames();
-                const ::rtl::OUString* pLoop = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pLoop + aNames.getLength();
-                for (; pLoop != pEnd; ++pLoop)
-                    m_aDatasource.InsertEntry(String(*pLoop));
-            }
+                fillListBox(m_aDatasource, m_xDSContext->getElementNames());
         }
         catch (Exception&)
         {
@@ -271,6 +334,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:21:36  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 11:03:33  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:23:55 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,8 @@
 #ifndef _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_
 #include "groupboxwiz.hxx"
 #endif
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
-#include "dbpresid.hrc"
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
-#include "componentmodule.hxx"
-#endif
 #ifndef _EXTENSIONS_DBP_COMMONPAGESDBP_HXX_
 #include "commonpagesdbp.hxx"
-#endif
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
-#include "dbpresid.hrc"
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
-#include "componentmodule.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -106,6 +94,7 @@ namespace dbp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::form;
     using namespace ::svt;
 
     //=====================================================================
@@ -118,14 +107,13 @@ namespace dbp
         ,m_bVisitedDefault(sal_False)
         ,m_bVisitedDB(sal_False)
     {
-        SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
-        ShowButtonFixedLine(sal_True);
-        defaultButton(WZB_NEXT);
-        enableButtons(WZB_FINISH, sal_False);
-
         initControlSettings(&m_aSettings);
+    }
 
-        ActivatePage();
+    //---------------------------------------------------------------------
+    sal_Bool OGroupBoxWizard::approveControlType(sal_Int16 _nClassId)
+    {
+        return FormComponentType::GROUPBOX == _nClassId;
     }
 
     //---------------------------------------------------------------------
@@ -613,12 +601,7 @@ namespace dbp
         OMaybeListSelectionPage::initializePage();
 
         // fill the fields page
-        m_aStoreWhere.Clear();
-        const OControlWizardContext& rContext = getContext();
-        const ::rtl::OUString* pFieldLoop = rContext.aFieldNames.getConstArray();
-        const ::rtl::OUString* pLoopEnd = pFieldLoop + rContext.aFieldNames.getLength();
-        for (;pFieldLoop != pLoopEnd; ++pFieldLoop)
-            m_aStoreWhere.InsertEntry(*pFieldLoop);
+        fillListBox(m_aStoreWhere, getContext().aFieldNames);
 
         const OOptionGroupSettings& rSettings = getSettings();
         implInitialize(rSettings.sDBField);
@@ -680,6 +663,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:23:55  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:41:21  fs
  ************************************************************************/

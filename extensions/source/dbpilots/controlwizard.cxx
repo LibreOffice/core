@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:22:07 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,17 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 
 //.........................................................................
@@ -118,6 +124,19 @@ namespace dbp
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::sheet;
+    using namespace ::com::sun::star::form;
+    using namespace ::svt;
+
+    //=====================================================================
+    //= OAccessRegulator
+    //=====================================================================
+    struct OAccessRegulator
+    {
+        friend class OControlWizardPage;
+
+    protected:
+        OAccessRegulator() { }
+    };
 
     //=====================================================================
     //= OControlWizardPage
@@ -135,6 +154,12 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
+    void OControlWizardPage::updateContext()
+    {
+        getDialog()->updateContext(OAccessRegulator());
+    }
+
+    //---------------------------------------------------------------------
     const OControlWizardContext& OControlWizardPage::getContext()
     {
         return getDialog()->getContext();
@@ -144,6 +169,28 @@ namespace dbp
     Reference< XMultiServiceFactory > OControlWizardPage::getServiceFactory()
     {
         return getDialog()->getServiceFactory();
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< ::rtl::OUString >& _rItems, sal_Bool _bClear)
+    {
+        if (_bClear)
+            _rList.Clear();
+        const ::rtl::OUString* pItems = _rItems.getConstArray();
+        const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
+        for (;pItems < pEnd; ++pItems)
+            _rList.InsertEntry(*pItems);
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< ::rtl::OUString >& _rItems, sal_Bool _bClear)
+    {
+        if (_bClear)
+            _rList.Clear();
+        const ::rtl::OUString* pItems = _rItems.getConstArray();
+        const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
+        for (;pItems < pEnd; ++pItems)
+            _rList.InsertEntry(*pItems);
     }
 
     //=====================================================================
@@ -157,6 +204,46 @@ namespace dbp
     {
         m_aContext.xObjectModel = _rxObjectModel;
         initContext();
+
+        SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
+        ShowButtonFixedLine(sal_True);
+        defaultButton(WZB_NEXT);
+        enableButtons(WZB_FINISH, sal_False);
+    }
+
+    //---------------------------------------------------------------------
+    OControlWizard::~OControlWizard()
+    {
+    }
+
+    //---------------------------------------------------------------------
+    short OControlWizard::Execute()
+    {
+        // get the class id of the control we're dealing with
+        sal_Int16 nClassId = FormComponentType::CONTROL;
+        try
+        {
+            getContext().xObjectModel->getPropertyValue(::rtl::OUString::createFromAscii("ClassId")) >>= nClassId;
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OControlWizard::activate: could not obtain the class id!");
+        }
+        if (!approveControlType(nClassId))
+        {
+            // TODO: MessageBox or exception
+            return RET_CANCEL;
+        }
+
+        ActivatePage();
+
+        return OControlWizard_Base::Execute();
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizard::ActivatePage()
+    {
+        OControlWizard_Base::ActivatePage();
     }
 
     //---------------------------------------------------------------------
@@ -268,6 +355,34 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
+    void OControlWizard::implGetDSContext()
+    {
+        Reference< XMultiServiceFactory > xORB = getServiceFactory();
+        try
+        {
+            DBG_ASSERT(xORB.is(), "OControlWizard::implGetDSContext: invalid service factory!");
+
+            Reference< XInterface > xContext;
+            if (xORB.is())
+                xContext = xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext"));
+            DBG_ASSERT(xContext.is(), "OControlWizard::implGetDSContext: invalid database context!");
+
+            m_aContext.xDatasourceContext = Reference< XNameAccess >(xContext, UNO_QUERY);
+            DBG_ASSERT(m_aContext.xDatasourceContext.is() || !xContext.is(), "OControlWizard::implGetDSContext: invalid database context (missing the XNameAccess)!");
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OControlWizard::implGetDSContext: invalid database context!");
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizard::updateContext(const OAccessRegulator&)
+    {
+        initContext();
+    }
+
+    //---------------------------------------------------------------------
     void OControlWizard::initContext()
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OGroupBoxWizard::initContext: have no control model to work with!");
@@ -284,6 +399,9 @@ namespace dbp
 
         try
         {
+            // get the datasource context
+            implGetDSContext();
+
             // first, determine the form the control belongs to
             implDetermineForm();
 
@@ -318,7 +436,8 @@ namespace dbp
                             if (xSupplyTables.is() && xSupplyTables->getTables().is() && xSupplyTables->getTables()->hasByName(sObjectName))
                             {
                                 Reference< XColumnsSupplier >  xSupplyColumns;
-                                xSupplyTables->getTables()->getByName(sObjectName) >>= xSupplyColumns;
+                                m_aContext.xObjectContainer = xSupplyTables->getTables();
+                                m_aContext.xObjectContainer->getByName(sObjectName) >>= xSupplyColumns;
                                 DBG_ASSERT(xSupplyColumns.is(), "OControlWizard::initContext: invalid table columns!");
                                 xColumns = xSupplyColumns->getColumns();
                             }
@@ -330,7 +449,8 @@ namespace dbp
                             if (xSupplyQueries.is() && xSupplyQueries->getQueries().is() && xSupplyQueries->getQueries()->hasByName(sObjectName))
                             {
                                 Reference< XColumnsSupplier >  xSupplyColumns;
-                                xSupplyQueries->getQueries()->getByName(sObjectName) >>= xSupplyColumns;
+                                m_aContext.xObjectContainer = xSupplyQueries->getQueries();
+                                m_aContext.xObjectContainer->getByName(sObjectName) >>= xSupplyColumns;
                                 DBG_ASSERT(xSupplyColumns.is(), "OControlWizard::initContext: invalid query columns!");
                                 xColumns  = xSupplyColumns->getColumns();
                             }
@@ -374,12 +494,16 @@ namespace dbp
         // the only thing we have at the moment is the label
         try
         {
-            // the label of the control
-            ::rtl::OUString sControlLabel(_pSettings->sControlLabel);
-            m_aContext.xObjectModel->setPropertyValue(
-                ::rtl::OUString::createFromAscii("Label"),
-                makeAny(sControlLabel)
-            );
+            ::rtl::OUString sLabelPropertyName = ::rtl::OUString::createFromAscii("Label");
+            Reference< XPropertySetInfo > xInfo = m_aContext.xObjectModel->getPropertySetInfo();
+            if (xInfo.is() && xInfo->hasPropertyByName(sLabelPropertyName))
+            {
+                ::rtl::OUString sControlLabel(_pSettings->sControlLabel);
+                m_aContext.xObjectModel->setPropertyValue(
+                    ::rtl::OUString::createFromAscii("Label"),
+                    makeAny(sControlLabel)
+                );
+            }
         }
         catch(Exception&)
         {
@@ -397,10 +521,14 @@ namespace dbp
         // initialize some settings from the control model give
         try
         {
-            // the label of the control
-            ::rtl::OUString sControlLabel;
-            m_aContext.xObjectModel->getPropertyValue(::rtl::OUString::createFromAscii("Label")) >>= sControlLabel;
-            _pSettings->sControlLabel = sControlLabel;
+            ::rtl::OUString sLabelPropertyName = ::rtl::OUString::createFromAscii("Label");
+            Reference< XPropertySetInfo > xInfo = m_aContext.xObjectModel->getPropertySetInfo();
+            if (xInfo.is() && xInfo->hasPropertyByName(sLabelPropertyName))
+            {
+                ::rtl::OUString sControlLabel;
+                m_aContext.xObjectModel->getPropertyValue(sLabelPropertyName) >>= sControlLabel;
+                _pSettings->sControlLabel = sControlLabel;
+            }
         }
         catch(Exception&)
         {
@@ -409,8 +537,36 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    OControlWizard::~OControlWizard()
+    sal_Bool OControlWizard::needDatasourceSelection()
     {
+        // lemme see ...
+        return (0 == getContext().aFieldNames.getLength());
+            // if we got fields, the data source is valid ...
+//      try
+//      {
+//          // first, we need a valid data source name
+//          ::rtl::OUString sDataSourceName;
+//          m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+//          if (m_aContext.xDatasourceContext.is() && m_aContext.xDatasourceContext->hasByName(sDataSourceName))
+//          {   // at least the data source name is valid ...
+//              // then, a CommandType "table" would be nice ...
+//              sal_Int32 nCommandType = CommandType::COMMAND;
+//              m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
+//              if (CommandType::TABLE == nCommandType)
+//              {   // okay ....
+//                  // now the table itself should be valid
+//                  ::rtl::OUString sTableName;
+//                  m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
+//                  if (m_aContext.xObjectContainer.is() && m_aContext.xObjectContainer->hasByName(sTableName))
+//                      return sal_False;
+//              }
+//          }
+//      }
+//      catch(Exception&)
+//      {
+//          DBG_ERROR("OControlWizard::needDatasourceSelection: caught an exception while checking the form settings!");
+//      }
+//      return sal_True;
     }
 
 //.........................................................................
@@ -420,6 +576,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:22:07  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:02:44  fs
  ************************************************************************/

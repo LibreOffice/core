@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:24:04 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,6 @@
 #ifndef _EXTENSIONS_DBP_CONTROLWIZARD_HXX
 #include "controlwizard.hxx"
 #endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _EXTENSIONS_DBP_DBPTYPES_HXX_
-#include "dbptypes.hxx"
-#endif
 
 //.........................................................................
 namespace dbp
@@ -126,6 +111,8 @@ namespace dbp
         virtual sal_Bool        leaveState(sal_uInt16 _nState);
 
         virtual sal_Bool onFinish(sal_Int32 _nResult);
+
+        virtual sal_Bool approveControlType(sal_Int16 _nClassId);
 
     protected:
         void createRadios();
@@ -313,6 +300,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:24:04  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:39:33  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:21:55 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ TabPage RID_PAGE_TABLESELECTION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text = "Daten";
-    Text [ english ] = "Daten";
-    Text [ english_us ] = "Daten";
+    Text [ english ] = "Data";
+    Text [ english_us ] = "Data";
 
     FixedLine FL_DATA
     {
@@ -79,9 +79,25 @@ TabPage RID_PAGE_TABLESELECTION
         Text [ english ] = "Data";
         Text [ english_us ] = "Data";
     };
-    FixedText FT_DATASOURCE
+    FixedText FT_EXPLANATION
     {
         Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 21 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\n"
+            "Bitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\n"
+            "Bitte beachten Sie, daß die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
+        Text [ english ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\n"
+            "Please choose a data source and a table.\n\n\n"
+            "Please note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text [ english_us ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\n"
+            "Please choose a data source and a table.\n\n\n"
+            "Please note that the settings made on this page will take effect immediately upon leaving the page.";
+    };
+    FixedText FT_DATASOURCE
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , 8) ;
         Group = TRUE;
         Text = "~Datenquelle:";
@@ -90,7 +106,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     ListBox LB_DATASOURCE
     {
-        Pos = MAP_APPFONT ( 7 , 26  ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , 14 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
@@ -99,7 +115,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 7, 46 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 46 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 14 , 8) ;
         Group = TRUE;
         Text = "~Tabelle:";
@@ -108,7 +124,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     ListBox LB_TABLE
     {
-        Pos = MAP_APPFONT ( 7, 57  ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 57  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 6 - 57 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
@@ -119,6 +135,9 @@ TabPage RID_PAGE_TABLESELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:21:55  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
