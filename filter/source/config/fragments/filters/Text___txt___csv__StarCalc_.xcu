@@ -1,4 +1,4 @@
-    <node oor:name="Text - txt - csv (StarCalc)" oor:op="replace">
+    <node oor:name="Text - txt - csv (StarCalc)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>calc_Text_txt_csv_StarCalc</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">テキスト CSV</value>
             <value xml:lang="es">Texto CSV</value>
             <value xml:lang="tr">Metin CVS</value>
-            <value xml:lang="ru">Текст CSV</value>
+            <value xml:lang="ru">Тек�?т CSV</value>
             <value xml:lang="th">Text CSV</value>
             <value xml:lang="x-comment">Text CSV</value>
             <value xml:lang="ca">Text CSV</value>
-            <value xml:lang="el">Κείμενο χωρισμένο με κόμματα</value>
+            <value xml:lang="el">Κείμενο χω�?ισμένο με κόμματα</value>
             <value xml:lang="zh-CN">文字 CSV</value>
             <value xml:lang="pt">Texto CSV</value>
             <value xml:lang="cs">Text CSV</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">Text CSV</value>
             <value xml:lang="da">Tekst CSV</value>
             <value xml:lang="de">Text CSV</value>
-            <value xml:lang="ko">텍스트 CSV</value>
+            <value xml:lang="ko">�?스트 CSV</value>
             <value xml:lang="nl">Tekst CSV</value>
             <value xml:lang="pt-BR">Text - txt - csv (StarOffice Calc)</value>
             <value xml:lang="it">Testo CSV</value>
