@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:21:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,56 @@ private:
     double  nValue;
 };
 
+
+// ============================================================================
+
+/** Member ID for "page scale to width" value in QueryValue() and PutValue(). */
+const BYTE SC_MID_PAGE_SCALETO_WIDTH    = 1;
+/** Member ID for "page scale to height" value in QueryValue() and PutValue(). */
+const BYTE SC_MID_PAGE_SCALETO_HEIGHT   = 2;
+
+
+/** Contains the "scale to width/height" attribute in page styles. */
+class ScPageScaleToItem : public SfxPoolItem
+{
+public:
+                                TYPEINFO();
+
+    /** Default c'tor sets the width and height to 0. */
+    explicit                    ScPageScaleToItem();
+    explicit                    ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight );
+
+    virtual                     ~ScPageScaleToItem();
+
+    virtual ScPageScaleToItem*  Clone( SfxItemPool* = 0 ) const;
+
+    virtual int                 operator==( const SfxPoolItem& rCmp ) const;
+
+    inline sal_uInt16           GetWidth() const { return mnWidth; }
+    inline sal_uInt16           GetHeight() const { return mnHeight; }
+    inline bool                 IsValid() const { return mnWidth || mnHeight; }
+
+    inline void                 SetWidth( sal_uInt16 nWidth ) { mnWidth = nWidth; }
+    inline void                 SetHeight( sal_uInt16 nHeight ) { mnHeight = nHeight; }
+    inline void                 Set( sal_uInt16 nWidth, sal_uInt16 nHeight )
+                                    { mnWidth = nWidth; mnHeight = nHeight; }
+    inline void                 SetInvalid() { mnWidth = mnHeight = 0; }
+
+    virtual SfxItemPresentation GetPresentation(
+                                    SfxItemPresentation ePresentation,
+                                    SfxMapUnit, SfxMapUnit,
+                                    XubString& rText,
+                                    const IntlWrapper* = 0 ) const;
+
+    virtual BOOL                QueryValue( ::com::sun::star::uno::Any& rAny, BYTE nMemberId = 0 ) const;
+    virtual BOOL                PutValue( const ::com::sun::star::uno::Any& rAny, BYTE nMemberId = 0 );
+
+private:
+    sal_uInt16                  mnWidth;
+    sal_uInt16                  mnHeight;
+};
+
+// ============================================================================
 
 #endif
 
