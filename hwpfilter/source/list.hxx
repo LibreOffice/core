@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:37:50 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,8 @@ const int LinkedList<T>::remove( T* pItem )
     ASSERT( pItem != NULL );
 
     int i = 0;
-    list_t::iterator aIter = maList.begin();
-    list_t::iterator aEnd = maList.end();
+    typename list_t::iterator aIter = maList.begin();
+    typename list_t::iterator aEnd = maList.end();
     while( aIter != aEnd  && *aIter != pItem )
     {
         i++;
