@@ -116,6 +116,7 @@ public class StatusWindow extends JFrame
                     cancelButton.setText( "Close" );
         }
         update( getGraphics() );
+        mainWindow.update( mainWindow.getGraphics() );
     }
 
 
