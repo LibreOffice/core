@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:21:43 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ Menu MN_READONLY_POPUP
             Text [ spanish ] = "Desactivar ~Plug-ins" ;
             Text [ french ] = "Désactiver les ~Plug-Ins" ;
             Text [ dutch ] = "~PlugIns uitschakelen" ;
-            Text [ swedish ] = "Stäng av ~PlugIns" ;
+            Text [ swedish ] = "Stäng av ~plug-ins" ;
             Text [ danish ] = "Sluk ~PlugIns" ;
             Text [ portuguese ] = "Desactivar ~PlugIns" ;
             Text [ portuguese_brazilian ] = "~PlugIns ausschalten" ;
