@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 18:09:01 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:40:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,23 +74,25 @@ PACKAGE=com$/sun$/star$/embed
 
 IDLFILES=\
     Aspects.idl\
-    BorderWidths.idl\
     ElementModes.idl\
     EmbedStates.idl\
     EmbedVerbs.idl\
     EmbedMisc.idl\
-    EmbedMapModes.idl\
+    EmbedMapUnits.idl\
     EmbedUpdateModes.idl\
     EmbeddedObjectDescriptor.idl\
     EntryInitModes.idl\
+    InsertedObjectInfo.idl\
     Storage.idl\
     StorageStream.idl\
     StorageFactory.idl\
     VerbAttributes.idl\
+    VisualRepresentation.idl\
     VerbDescriptor.idl\
     XPersistanceHolder.idl\
     XEmbeddedObject.idl\
     XVisualObject.idl\
+    XCommonEmbedPersist.idl\
     XEmbedPersist.idl\
     XLinkageSupport.idl\
     XClassifiedObject.idl\
@@ -102,6 +104,7 @@ IDLFILES=\
     XLinkFactory.idl\
     XEncryptionProtectedSource.idl\
     XInplaceClient.idl\
+    XInsertObjectDialog.idl\
     XWindowSupplier.idl\
     XTransactedObject.idl\
     XTransactionBroadcaster.idl\
@@ -116,6 +119,7 @@ IDLFILES=\
     XHatchWindow.idl\
     XPackageStructureCreator.idl\
     UnreachableStateException.idl\
+    UseBackupException.idl\
     WrongStateException.idl\
     ObjectSaveVetoException.idl\
     InvalidStorageException.idl\
