@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-10 10:18:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ FactoryImpl::~FactoryImpl() SAL_THROW( () )
 
     (*m_pConverter->release)( m_pConverter );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( m_receiver2adapters.empty(), "### still adapters out there!?" );
 #endif
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
