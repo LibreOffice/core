@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:22:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,10 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
+
+    // Don't crash even when we don't have access to i18n service
+    if ( !xCharClass.is() )
+        return FALSE;
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
 
