@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:09:23 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,8 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
 
     // commit element type storage
     Reference< XTransactedObject > xTransactedObject( xStorage, UNO_QUERY );
-    xTransactedObject->commit();
+    if ( xTransactedObject.is() )
+        xTransactedObject->commit();
 
     // mark UIElementType as not modified if we store to our own storage
     if ( bResetModifyState )
@@ -804,7 +805,8 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                     if ( bCommitSubStorage )
                     {
                         Reference< XTransactedObject > xTransactedObject( xSubStorage, UNO_QUERY );
-                        xTransactedObject->commit();
+                        if ( xTransactedObject.is() )
+                            xTransactedObject->commit();
                     }
                 }
             }
@@ -1319,7 +1321,8 @@ void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exce
 
         m_bModified = false;
         Reference< XTransactedObject > xTransactedObject( m_xDocConfigStorage, UNO_QUERY );
-        xTransactedObject->commit();
+        if ( xTransactedObject.is() )
+            xTransactedObject->commit();
     }
 }
 
@@ -1351,7 +1354,8 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
         }
 
         Reference< XTransactedObject > xTransactedObject( Storage, UNO_QUERY );
-        xTransactedObject->commit();
+        if ( xTransactedObject.is() )
+            xTransactedObject->commit();
     }
 }
 
