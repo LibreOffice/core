@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RunnerService.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-31 17:01:51 $
+ *  last change:$Date: 2004-05-03 08:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ package org.openoffice;
 import share.LogWriter;
 import stats.InternalLogWriter;
 import lib.TestParameters;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 import base.TestBase;
 import helper.AppProvider;
 import helper.ClParser;
@@ -83,6 +83,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.beans.NamedValue;
 
 import java.util.Vector;
+
 /**
  * The main class, will call ClParser and CfgParser to <br>
  * fill the TestParameters.<br>
@@ -257,15 +258,17 @@ public class RunnerService implements XJob, XServiceInfo,
             while (enum.hasMoreElements()) {
                 String entry = enum.nextElement().toString();
                 if (entry.endsWith(".csv")) {
+
                     String module = null;
                     String object = null;
 
                     int startIndex = entry.indexOf("objdsc/") + 7;
-                    int endIndex = entry.indexOf('.');
+                    int endIndex = entry.lastIndexOf('/');
+/*                    int endIndex = entry.indexOf('.');
                     module = entry.substring(startIndex, endIndex);
                     startIndex = 0;
-                    endIndex = module.lastIndexOf('/');
-                    module = module.substring(startIndex, endIndex);
+                    endIndex = module.lastIndexOf('/'); */
+                    module = entry.substring(startIndex, endIndex);
 
                     // special cases
                     if (entry.indexOf("/file/") != -1 || entry.indexOf("/xmloff/") != -1) {
