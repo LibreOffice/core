@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-22 15:34:01 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 14:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Int16       m_nTabIndex;
         sal_Int32       m_nStep;
         ::rtl::OUString m_aTag;
-        ::rtl::OUString m_aHelpText;
         // </properties>
 
         sal_Bool        m_bCloneable;
@@ -250,6 +249,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/22 15:34:01  tbe
+ *  added HelpText property
+ *
  *  Revision 1.7  2001/03/08 16:43:34  tbe
  *  OPropertyStateHelper overridables
  *
