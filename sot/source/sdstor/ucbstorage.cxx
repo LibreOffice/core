@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
+ *  last change: $Author: ab $ $Date: 2001-11-15 10:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2102,7 +2102,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
         else
         {
             // stream is opened the first time
-            pImp->OpenStream( pElement, nMode, bDirect );
+            pImp->OpenStream( pElement, nMode, bDirect, pKey );
 
             // if name has been changed before creating the stream: set name!
             pElement->m_xStream->m_aName = rEleName;
