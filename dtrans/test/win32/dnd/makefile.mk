@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-08 15:09:52 $
+#   last change: $Author: jl $ $Date: 2001-02-08 17:12:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,7 +115,8 @@ APP1OBJS=	$(OBJ)$/dndTest.obj	\
             $(OBJ)$/atlwindow.obj \
             $(OBJ)$/targetlistener.obj \
             $(OBJ)$/implhelper.obj		\
-            $(OBJ)$/transferable.obj
+            $(OBJ)$/transferable.obj	\
+            $(OBJ)$/sourcelistener.obj
 
 LIBCIMT=msvcrtd.lib
             

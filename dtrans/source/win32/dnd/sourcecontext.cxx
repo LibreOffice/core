@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 17:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,24 +158,28 @@ void SourceContext::fire_dragDropEnd( sal_Bool success, sal_Int8 effect)
 
 void SourceContext::fire_dropActionChanged( sal_Int8 dropAction, sal_Int8 userAction)
 {
-    DragSourceDragEvent e;
-    e.DropAction= dropAction;
-    e.UserAction= userAction;
-    e.DragSource= m_dragSource;
-    e.DragSourceContext= static_cast<XDragSourceContext*>( this);
-    e.Source= Reference<XInterface>( static_cast<XDragSourceContext*>( this), UNO_QUERY);
-
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
-        getCppuType( (Reference<XDragSourceListener>* )0 ) );
-
-    if( pContainer)
+    if( m_currentAction != dropAction)
     {
-        OInterfaceIteratorHelper iter( *pContainer);
-        while( iter.hasMoreElements())
+        m_currentAction= dropAction;
+        DragSourceDragEvent e;
+        e.DropAction= dropAction;
+        e.UserAction= userAction;
+        e.DragSource= m_dragSource;
+        e.DragSourceContext= static_cast<XDragSourceContext*>( this);
+        e.Source= Reference<XInterface>( static_cast<XDragSourceContext*>( this), UNO_QUERY);
+
+        OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
+            getCppuType( (Reference<XDragSourceListener>* )0 ) );
+
+        if( pContainer)
         {
-            Reference<XDragSourceListener> listener(
-                static_cast<XDragSourceListener*>( iter.next()));
-            listener->dropActionChanged( e);
+            OInterfaceIteratorHelper iter( *pContainer);
+            while( iter.hasMoreElements())
+            {
+                Reference<XDragSourceListener> listener(
+                    static_cast<XDragSourceListener*>( iter.next()));
+                listener->dropActionChanged( e);
+            }
         }
     }
 }

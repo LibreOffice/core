@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 17:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void SAL_CALL DragSource::executeDrag( const DragGestureEvent& trigger,
     //Fire event
     sal_Int8 action= hrDoDragDrop == DRAGDROP_S_DROP ? dndOleDropEffectsToActions( dropEffect) : ACTION_NONE;
     m_pcurrentContext_impl->fire_dragDropEnd( hrDoDragDrop == DRAGDROP_S_DROP ? sal_True : sal_False,
-                                              ACTION_NONE);
+                                              action);
     // Destroy SourceContextslkfgj
     m_currentContext= 0;
     // Destroy the XTransferable wrapper
@@ -324,6 +324,9 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
         }
     }
 
+    // fire dropActionChanged event.
+    // this is actually done by the context, which also detects whether the action
+    // changed at all
     sal_Int8 dropAction= fEscapePressed ? ACTION_NONE :
                   ( m_sourceActions & dndOleKeysToAction( grfKeyState));
     sal_Int8 userAction= fEscapePressed ? ACTION_NONE :

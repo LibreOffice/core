@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 15:09:35 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 17:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ CComModule _Module;
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
 #include "transferable.hxx"
+#include "sourcelistener.hxx"
 
 
 #include "atlwindow.hxx"
@@ -161,7 +162,8 @@ DWORD WINAPI MTAFunc(LPVOID pParams)
             0,
             0,
             data.transferable,
-            Reference<XDragSourceListener>());
+            Reference<XDragSourceListener>( static_cast<XDragSourceListener*>
+                ( new DragSourceListener())));
 
 
     CoUninitialize();

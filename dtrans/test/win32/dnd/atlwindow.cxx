@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 15:09:05 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 17:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "atlwindow.hxx"
 #include "targetlistener.hxx"
+#include "sourcelistener.hxx"
 #include "transferable.hxx"
 #include <map>
 
@@ -119,7 +120,6 @@ LRESULT AWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     // Prepare the EDIT control
-
     m_hwndEdit = CreateWindowA(
         "EDIT",     // predefined class
         NULL,       // no window title
@@ -144,7 +144,6 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szMTAWin);
     else
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szSTAWin);
-//        (LPARAM) lpszTrouble);
 
 
     // create the DragSource
@@ -198,12 +197,14 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     if(m_xDragSource.is())
     {
 
+        //Get the Text out of the Edit window
         int length= (int)::SendMessageA( m_hwndEdit, WM_GETTEXTLENGTH, 0, 0);
         char * pBuffer= new char[length + 1];
         ZeroMemory( pBuffer, length + 1);
         ::SendMessageA( m_hwndEdit, WM_GETTEXT, length, (LPARAM) pBuffer);
 
 
+        // call XDragSource::executeDrag from an MTA
         if( m_isMTA )
         {
             DWORD mtaThreadId;
@@ -226,7 +227,7 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                 0,
                 0,
                 data,
-                Reference<XDragSourceListener>());
+                Reference<XDragSourceListener>( static_cast<XDragSourceListener*>(new DragSourceListener() ) ) );
         }
 
         delete[] pBuffer;

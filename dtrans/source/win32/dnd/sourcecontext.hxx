@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 17:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,16 @@ using namespace ::com::sun::star::lang;
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.
 // The functions dragEnter, dragExit and dragOver are not supported
-// currently
+// currently.
+// An instance of SourceContext only lives as long as the drag and drop
+// operation lasts.
 class SourceContext: public MutexDummy,
                      public WeakComponentImplHelper1<XDragSourceContext>
 {
     DragSource* m_pDragSource;
     Reference<XDragSource> m_dragSource;
-
+    // the action ( copy, move etc)
+    sal_Int8 m_currentAction;
 
     SourceContext();
     SourceContext( const SourceContext&);
