@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:46:00 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "À¯Çü(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo de campo";
     };
     ListBox LB_FUNCTYPE
     {
@@ -137,6 +138,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se~lección";
     };
     ListBox LB_FUNCSELECTION
     {
@@ -174,6 +176,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~ormato";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -208,6 +211,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No~mbre";
     };
     Edit ED_FUNCNAME
     {
@@ -245,6 +249,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "°ª(~V)";
         Text[ turkish ] = "D~eðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Valor";
     };
     Edit ED_FUNCVALUE
     {
@@ -281,6 +286,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "±× ´ÙÀ½";
         Text[ turkish ] = "O halde";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Entonces";
     };
     Edit ED_FUNCCOND1
     {
@@ -318,6 +324,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "±âÅ¸";
         Text[ turkish ] = "Yoksa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Si no";
     };
     Edit ED_FUNCCOND2
     {
@@ -357,6 +364,7 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "¸ÅÅ©·Î(~M)...";
         Text[ turkish ] = "M~akro...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "M~acro...";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
@@ -377,4 +385,5 @@ TabPage TP_FLD_FUNC
     Text[ korean ] = "ÇÔ¼ö";
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones";
 };
