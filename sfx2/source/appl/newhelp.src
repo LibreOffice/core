@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-06 09:20:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ TabPage TP_HELP_SEARCH
         Pos = MAP_APPFONT ( 6, 34 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Nur in Titeln suchen" ;
-        Text [ english_us ] = "Search in ~headings only";
+        Text [ english_us ] = "Find ~headings only";
         Text[ portuguese ] = "~Procurar só título";
         Text[ russian ] = "~Èñêàòü òîëüêî çàãîëîâêè";
         Text[ greek ] = "~Search headings only";
@@ -538,7 +538,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ italian ] = "Testo sorgente HTML";
     Text[ danish ] = "HTML-kildetekst";
     Text[ swedish ] = "HTML-källtext";
-    Text[ polish ] = "Tekst ?ród³owy HTML";
+    Text[ polish ] = "Tekst Ÿród³owy HTML";
     Text[ portuguese_brazilian ] = "FramesetSource";
     Text[ japanese ] = "HTML ¿°½Ã·½Ä";
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
@@ -582,4 +582,5 @@ String STR_HELP_FIRST_HTML
 {
     Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
 };
+
 
