@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:13:54 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ String STR_BEZIEROBJECTBARSHELL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Béziermodus : BÚziermodus */
     Text [ de ] = "Béziermodus" ;
-    Text [ en-US ] = "Bézier mode" ;
+    Text [ en-US ] = "BÃ©zier mode" ;
     Text [ x-comment ] = " ";
 };
 String STR_APPLICATIONOBJECTBAR
