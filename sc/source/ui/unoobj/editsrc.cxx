@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-21 17:47:44 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,14 @@ SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
         //  default font must be set, independently of document
         //  -> use global pool from module
 
-        Font aDefFont;
-        ((const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN)).GetFont(aDefFont);
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        EditEngine::SetFontInfoInItemSet( aDefaults, aDefFont );
+        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
+        rPattern.FillEditItemSet( &aDefaults );
+        //  FillEditItemSet adjusts font height to 1/100th mm,
+        //  but for header/footer twips is needed, as in the PatternAttr:
+        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
+        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
+        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
         pHdrEngine->SetDefaults( aDefaults );
 
         ScHeaderFieldData aData;

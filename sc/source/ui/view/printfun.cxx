@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 21:21:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ long ScPrintFunc::TextHeight( const EditTextObject* pObject )
         return 0;
 
 //  pEditEngine->SetPageNo( nTotalPages );
-    pEditEngine->SetText( *pObject );
+    pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
 
     return (long) pEditEngine->GetTextHeight();
 }
@@ -1563,12 +1563,6 @@ void ScPrintFunc::MakeEditEngine()
 {
     if (!pEditEngine)
     {
-        Font aDefFont;
-        ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aDefFont);
-        //  #69193# dont use font color, because background color is not used
-        //! there's no way to set the background for note pages
-        aDefFont.SetColor( COL_BLACK );
-
         //  can't use document's edit engine pool here,
         //  because pool must have twips as default metric
         pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
@@ -1582,7 +1576,16 @@ void ScPrintFunc::MakeEditEngine()
         //  Default-Set fuer Ausrichtung
         pEditDefaults = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
 
-        EditEngine::SetFontInfoInItemSet( *pEditDefaults, aDefFont );
+        const ScPatternAttr& rPattern = (const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
+        rPattern.FillEditItemSet( pEditDefaults );
+        //  FillEditItemSet adjusts font height to 1/100th mm,
+        //  but for header/footer twips is needed, as in the PatternAttr:
+        pEditDefaults->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
+        pEditDefaults->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
+        pEditDefaults->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
+        //  #69193# dont use font color, because background color is not used
+        //! there's no way to set the background for note pages
+        pEditDefaults->ClearItem( EE_CHAR_COLOR );
     }
 
     pEditEngine->SetData( aFieldData );     // Seitennummer etc. setzen
