@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 13:46:50 $
+ *  last change: $Author: nn $ $Date: 2001-08-13 16:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,8 +569,8 @@ void ScModule::GetState( SfxItemSet& rSet )
                 }
                 break;
             case SID_ATTR_LANGUAGE:
-            case SID_ATTR_CHAR_CJK_LANGUAGE:
-            case SID_ATTR_CHAR_CTL_LANGUAGE:
+            case ATTR_CJK_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CJK_LANGUAGE
+            case ATTR_CTL_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CTL_LANGUAGE
                 {
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
@@ -578,8 +578,8 @@ void ScModule::GetState( SfxItemSet& rSet )
                     {
                         LanguageType eLatin, eCjk, eCtl;
                         pDoc->GetLanguage( eLatin, eCjk, eCtl );
-                        LanguageType eLang = ( nWhich == SID_ATTR_CHAR_CJK_LANGUAGE ) ? eCjk :
-                                            ( ( nWhich == SID_ATTR_CHAR_CTL_LANGUAGE ) ? eCtl : eLatin );
+                        LanguageType eLang = ( nWhich == ATTR_CJK_FONT_LANGUAGE ) ? eCjk :
+                                            ( ( nWhich == ATTR_CTL_FONT_LANGUAGE ) ? eCtl : eLatin );
                         rSet.Put( SvxLanguageItem( eLang, nWhich ) );
                     }
                 }
