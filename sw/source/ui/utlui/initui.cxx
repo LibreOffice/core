@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -289,8 +286,6 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
         for(USHORT i = 0; i < AUTH_FIELD_END; i++)
         {
             String*  pTmp = new String(SW_RES(STR_AUTH_FIELD_START + i));
-            //remove short cuts
-            pTmp->EraseAllChars('~');
             pAuthFieldNameList->Insert(pTmp, pAuthFieldNameList->Count());
         }
     }
