@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
+ *  last change: $Author: dl $ $Date: 2001-06-22 11:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,6 +1571,7 @@ void SdOutlineView::FillOutliner()
                 OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
                 if (pOPO)
                 {
+                    pOPO->SetVertical( FALSE );
                     pOutliner->AddText(*pOPO);
                     pPara = pOutliner->GetParagraph( pOutliner->GetParagraphCount() - 1 );
                     // Man sollte meinen, dass folgendes Statement unnoetig sei,
@@ -1633,6 +1634,7 @@ void SdOutlineView::FillOutliner()
                 if (pOPO)
                 {
                     ULONG nParaCount1 = pOutliner->GetParagraphCount();
+                    pOPO->SetVertical( FALSE );
                     pOutliner->AddText(*pOPO);
                     if (bSubTitle)
                     {
