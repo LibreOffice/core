@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: container_XChild.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:45:55 $ 
+'*  last change:$Date: 2003-10-06 13:20:38 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -65,9 +65,14 @@
 '*************************************************************************
 '*************************************************************************
 
+'*************************************************************************
+' This Interface/Service test depends on the followingobject relations
+' variables, which must be specified in the object creation:
 
+'      ObjectRelation: oObjRelation(0).Name = "cannotSwitchParent"
+'      ObjectRelation: oObjRelation(0).Value = "configmgr: BasicElement::setParent: cannot move Entry"
 
-
+'*************************************************************************
 
 Sub RunTest()
 
@@ -87,9 +92,15 @@ On Error Goto ErrHndl
 
     Test.StartMethod("setParent()")
     bOK = true
-    oXInterface = oObj.getParent()
-    vRaises = oObj.setParent(oXInterface)
-    bOK = bOK AND isEmpty(vRaises)
+    Dim cObjRelation as Variant
+    cObjRelation = utils.getObjectRelation("cannotSwitchParent")
+    if isNull(cObjRelation) then
+        oXInterface = oObj.getParent()
+        vRaises = oObj.setParent(oXInterface)
+        bOK = bOK AND isEmpty(vRaises)
+    else
+        out.Log(cObjRelation)
+    end if
     Test.MethodTested("setParent()", bOK)
 
 
