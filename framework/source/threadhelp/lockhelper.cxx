@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-19 08:25:36 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
     ,   m_pSolarMutex       ( NULL )
     ,   m_pFairRWLock       ( NULL )
     ,   m_pShareableOslMutex( NULL )
+    ,   m_bDummySolarMutex  ( sal_False )
 {
     m_eLockType = implts_getLockType();
     switch( m_eLockType )
@@ -134,7 +135,8 @@ LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
         case E_SOLARMUTEX   :   {
                                     if( pSolarMutex == NULL )
                                     {
-                                        m_pSolarMutex = new ::vos::OMutex;
+                                        m_pSolarMutex      = new ::vos::OMutex;
+                                        m_bDummySolarMutex = sal_True;
                                     }
                                     else
                                     {
@@ -184,6 +186,11 @@ LockHelper::~LockHelper()
     }
     if( m_pSolarMutex != NULL )
     {
+        if (m_bDummySolarMutex)
+        {
+            delete static_cast<vos::OMutex*>(m_pSolarMutex);
+            m_bDummySolarMutex = sal_False;
+        }
         m_pSolarMutex = NULL;
     }
     if( m_pFairRWLock != NULL )
