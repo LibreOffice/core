@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-11 15:10:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-23 14:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,18 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
 
-    SfxItemSet aDelSet( GetAttrPool(), aTxtNodeSetRange );
+    USHORT __FAR_DATA aResetableSetRange[] = {
+        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+        RES_PARATR_BEGIN, RES_PARATR_END-1,
+        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+        RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+        RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+        0
+    };
+
+    SfxItemSet aDelSet( GetAttrPool(), aResetableSetRange );
     if( pAttrs && pAttrs->Count() )
     {
         for( USHORT n = pAttrs->Count(); n; )
