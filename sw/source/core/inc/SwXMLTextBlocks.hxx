@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 11:07:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 11:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ public:
 
 public:
     SwDoc* GetDoc() const { return pDoc; }
-    void  SetDoc( SwDoc * pNewDoc);
+    //void  SetDoc( SwDoc * pNewDoc);
     ULONG StartPutBlock( const String& rShort, const String& rPackageName );
     ULONG PutBlock( SwPaM& rPaM, const String& rLong );
     ULONG GetBlockText( const String& rShort, String& rText );
