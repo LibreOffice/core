@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:27:42 $
+#   last change: $Author: hr $ $Date: 2004-12-14 17:10:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # Disable optimization for SunCC (funny loops
 # when parsing e.g. "x+width/2")
-.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+.IF "$(OS)"=="SOLARISS" && "$(COM)"!="GCC"
 NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
 .ENDIF
 
