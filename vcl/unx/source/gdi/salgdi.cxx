@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:09:37 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 
         rDPIX = pDisplay->GetResolution().A();
         rDPIY = pDisplay->GetResolution().B();
-        if ( rDPIY < 96 )
+        if( !pDisplay->GetExactResolution() && rDPIY < 96 )
         {
             rDPIX = Divide( rDPIX * 96, rDPIY );
             rDPIY = 96;
