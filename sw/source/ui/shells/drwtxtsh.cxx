@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:51:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
     switch (rReq.GetSlot())
     {
         case FN_INSERT_SYMBOL:  // Sonderzeichen einfuegen
-            InsertSymbol();
+            InsertSymbol(rReq);
             break;
 
         case SID_SELECTALL:
@@ -747,27 +747,69 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
     Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
 
-void SwDrawTextShell::InsertSymbol()
+void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
-    SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
-
-    // Wenn Zeichen selektiert ist kann es angezeigt werden
-    // pDLg->SetFont( );
-    // pDlg->SetChar( );
-    USHORT nResult = pDlg->Execute();
+    if(!pOLV)
+        return;
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem = 0;
+    if( pArgs )
+        pArgs->GetItemState(GetPool().GetWhich(FN_INSERT_SYMBOL), FALSE, &pItem);
 
     String sSym;
-
-    Font aFont;
-
-    if( nResult == RET_OK )
+    String sFontName;
+    if ( pItem )
     {
-        aFont = pDlg->GetCharFont();
-        sSym  = pDlg->GetCharacters();
+        sSym = ((const SfxStringItem*)pItem)->GetValue();
+        const SfxPoolItem* pFtItem = NULL;
+        pArgs->GetItemState( GetPool().GetWhich(FN_PARAM_1), FALSE, &pFtItem);
+        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        if ( pFontItem )
+            sFontName = pFontItem->GetValue();
     }
-    delete( pDlg );
 
-    if( sSym.Len() && pOLV )
+    SfxItemSet aSet(pOLV->GetAttribs());
+    USHORT nScript = pOLV->GetSelectedScriptType();
+    SvxFontItem aSetDlgFont;
+    {
+        SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
+        aSetItem.GetItemSet().Put( aSet, FALSE );
+        const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
+        if( pI )
+            aSetDlgFont = *(SvxFontItem*)pI;
+        else
+            aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
+                        SID_ATTR_CHAR_FONT,
+                        GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
+    }
+
+
+    Font aFont(sFontName, Size(1,1));
+    if(!sSym.Len())
+    {
+        SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+        Font aDlgFont( pDlg->GetCharFont() );
+        SwViewOption aOpt(*GetShell().GetViewOptions());
+        String sSymbolFont = aOpt.GetSymbolFont();
+        if(sSymbolFont.Len())
+            aDlgFont.SetName(sSymbolFont);
+        else
+            aDlgFont.SetName( aSetDlgFont.GetFamilyName() );
+
+        // Wenn Zeichen selektiert ist kann es angezeigt werden
+        pDlg->SetFont( aDlgFont );
+        USHORT nResult = pDlg->Execute();
+        if( nResult == RET_OK )
+        {
+            aFont = pDlg->GetCharFont();
+            sSym  = pDlg->GetCharacters();
+            aOpt.SetSymbolFont(aFont.GetName());
+            SW_MOD()->ApplyUsrPref(aOpt, &GetView());
+        }
+        delete( pDlg );
+    }
+
+    if( sSym.Len() )
     {
         // nicht flackern
         pOLV->HideCursor();
@@ -811,6 +853,11 @@ void SwDrawTextShell::InsertSymbol()
         // ab jetzt wieder anzeigen
         pOutliner->SetUpdateMode(TRUE);
         pOLV->ShowCursor();
+
+        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_SYMBOL), sSym ) );
+        if(aFont.GetName().Len())
+            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aFont.GetName() ) );
+        rReq.Done();
     }
 }
 
