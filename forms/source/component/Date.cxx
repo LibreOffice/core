@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:08:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ using namespace dbtools;
 namespace frm
 {
 //.........................................................................
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -144,7 +146,7 @@ Sequence<Type> ODateModel::_getTypes()
 DBG_NAME( ODateModel )
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_False, sal_True )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True )
                         // use the old control name for compytibility reasons
             ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
@@ -196,14 +198,19 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 4 );
+    aSupported.realloc( nOldLen + 8 );
     ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
     *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
 
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
     *pStoreTo++ = FRM_SUN_COMPONENT_DATEFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_DATEFIELD;
+    *pStoreTo++ = BINDABLE_DATABASE_DATE_FIELD;
 
     return aSupported;
 }
@@ -310,7 +317,7 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
         {
             try
             {
-                starutil::Date aDate;
+                util::Date aDate;
                 if ( !( aControlValue >>= aDate ) )
                 {
                     sal_Int32 nAsInt(0);
@@ -322,7 +329,7 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
                     m_xColumnUpdate->updateDate( aDate );
                 else
                 {
-                    starutil::DateTime aDateTime = m_xColumn->getTimestamp();
+                    util::DateTime aDateTime = m_xColumn->getTimestamp();
                     aDateTime.Day = aDate.Day;
                     aDateTime.Month = aDate.Month;
                     aDateTime.Year = aDate.Year;
@@ -355,7 +362,7 @@ Any ODateModel::translateControlValueToValidatableValue( ) const
 //------------------------------------------------------------------------------
 Any ODateModel::translateDbColumnToControlValue()
 {
-    starutil::Date aDate = m_xColumn->getDate();
+    util::Date aDate = m_xColumn->getDate();
     if (m_xColumn->wasNull())
         m_aSaveValue.clear();
     else
@@ -378,6 +385,15 @@ Any ODateModel::getDefaultForReset() const
     }
 
     return aValue;
+}
+
+//------------------------------------------------------------------------------
+sal_Bool ODateModel::approveValueBinding( const Reference< binding::XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "ODateModel::approveValueBinding: invalid binding!" );
+
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< util::Date* >( NULL ) ) );
 }
 
 //.........................................................................
