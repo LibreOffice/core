@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:07 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ FloatingWindow RID_TBXCONTROLS
     Text [ spanish ] = "Campos de control" ;
     Text [ french ] = "Champs de contrôle" ;
     Text [ dutch ] = "Besturingselementen" ;
-    Text [ portuguese_brazilian ] = "Kontrollfelder" ;
+    Text [ portuguese_brazilian ] = "Controles" ;
     Text [ portuguese ] = "Campos de controlo" ;
     String RID_TOOLBOX
     {
@@ -92,34 +92,40 @@ FloatingWindow RID_TBXCONTROLS
         Text [ spanish ] = "Campos de control" ;
         Text [ french ] = "Champs de contrôle" ;
         Text [ portuguese ] = "Campos de controlo" ;
-        Text [ portuguese_brazilian ] = "Kontrollfelder" ;
+        Text [ portuguese_brazilian ] = "Controles" ;
         Text[ chinese_simplified ] = "æ§åˆ¶";
         Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
-        Text[ polish ] = "Pola kontrolne";
+        Text[ polish ] = "Formanty";
         Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
         Text[ chinese_traditional ] = "æ§åˆ¶é …";
         Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
         Text[ greek ] = "Ğåäßá åëİã÷ïõ";
         Text[ korean ] = "ì»¨íŠ¸ë¡¤";
-        Text[ turkish ] = "Komut alanları";
+        Text[ turkish ] = "Kontroller";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Controls";
         Text[ finnish ] = "Ohjausobjektit";
         Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡";
+        Text[ czech ] = "OvlÃ¡dacÃ­ prvky";
+        Text[ hebrew ] = "â€®×›×¤×ª×•×¨×™ ×©×œ×™×˜×”â€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
     };
     Text[ chinese_simplified ] = "æ§åˆ¶";
     Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
-    Text[ polish ] = "Pola kontrolne";
+    Text[ polish ] = "Formanty";
     Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
     Text[ chinese_traditional ] = "æ§åˆ¶é …";
     Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
     Text[ greek ] = "Ğåäßá åëİã÷ïõ";
     Text[ korean ] = "ì»¨íŠ¸ë¡¤";
-    Text[ turkish ] = "Komut alanları";
+    Text[ turkish ] = "Kontroller";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Controls";
     Text[ finnish ] = "Ohjausobjektit";
     Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡";
+    Text[ czech ] = "OvlÃ¡dacÃ­ prvky";
+    Text[ hebrew ] = "â€®×›×¤×ª×•×¨×™ ×©×œ×™×˜×”â€¬";
+    Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
 };
 ToolBox RID_TOOLBOX
 {
@@ -143,7 +149,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Kommandoknapp" ;
             Text [ danish ] = "Knap" ;
             Text [ portuguese ] = "Botão" ;
-            Text [ portuguese_brazilian ] = "CommandButton" ;
+            Text [ portuguese_brazilian ] = "Botão" ;
             /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
             Text[ chinese_simplified ] = "å‘½ä»¤æŒ‰é’®";
             Text[ russian ] = "Êíîïêà";
@@ -153,11 +159,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ÒÑ";
             Text[ greek ] = "Ğåäßï åğéëïãŞò";
             Text[ korean ] = "ë²„íŠ¼";
-            Text[ turkish ] = "Komut düğmesi";
+            Text[ turkish ] = "Düğme";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botó d'ordre";
             Text[ finnish ] = "Painike";
             Text[ thai ] = "à¸›à¸¸à¹ˆà¹ˆà¸¡";
+            Text[ czech ] = "TlaÄÃ­tko";
+            Text[ hebrew ] = "SchaltflÃ¤che";
+            Text[ hindi ] = "à¤†à¤œà¥à¤à¤¾ à¤¬à¤Ÿà¤¨";
         };
         ToolBoxItem
         {
@@ -174,7 +183,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Kryssruta" ;
             Text [ danish ] = "Afkrydsningsfelt" ;
             Text [ portuguese ] = "Caixa de verificação" ;
-            Text [ portuguese_brazilian ] = "CheckBox" ;
+            Text [ portuguese_brazilian ] = "Caixa de Verificação" ;
             /* ### ACHTUNG: Neuer Text in Resource? CheckBox einfügen : CheckBox einf³gen */
             Text[ chinese_simplified ] = "å¤é€‰æ¡†";
             Text[ russian ] = "Ôëàæîê";
@@ -184,11 +193,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ greek ] = "Ğåäßï óŞìáíóçò";
             Text[ korean ] = "í™•ì¸ë€";
-            Text[ turkish ] = "Seçme kutusu";
+            Text[ turkish ] = "Kontrol Kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Quadre de verificació";
             Text[ finnish ] = "Valintaruutu";
             Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸à¸²à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢";
+            Text[ czech ] = "ZaÅ¡krtÃ¡vacÃ­ polÃ­Äko";
+            Text[ hebrew ] = "â€®×ª×™×‘×ª ×¡×™××•×Ÿâ€¬";
+            Text[ hindi ] = "à¤šà¥‡à¤• à¤¬à¥‰à¤•à¥à¤¸";
         };
         ToolBoxItem
         {
@@ -205,7 +217,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Etikettfält" ;
             Text [ danish ] = "Etiketfelt" ;
             Text [ portuguese ] = "Campo de etiqueta" ;
-            Text [ portuguese_brazilian ] = "Label" ;
+            Text [ portuguese_brazilian ] = "Campo de rótulo" ;
             /* ### ACHTUNG: Neuer Text in Resource? Label einfügen : Label einf³gen */
             Text[ chinese_simplified ] = "æ ‡ç­¾å­—æ®µ";
             Text[ russian ] = "Ïîëå ïîäïèñè";
@@ -215,11 +227,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ";
             Text[ greek ] = "Ğåäßï åğéãñáöŞò";
             Text[ korean ] = "ë ˆì´ë¸” í•„ë“œ";
-            Text[ turkish ] = "Etiket";
+            Text[ turkish ] = "Etiket alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Etiqueta";
             Text[ finnish ] = "Selitekenttä";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
+            Text[ czech ] = "Popisek";
+            Text[ hebrew ] = "Beschriftungsfeld";
+            Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²";
         };
         ToolBoxItem
         {
@@ -236,7 +251,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Listruta" ;
             Text [ danish ] = "Rulleliste" ;
             Text [ portuguese ] = "Caixa de listagem" ;
-            Text [ portuguese_brazilian ] = "ListBox" ;
+            Text [ portuguese_brazilian ] = "Caixa de Listagem" ;
             /* ### ACHTUNG: Neuer Text in Resource? ListBox einfügen : ListBox einf³gen */
             Text[ chinese_simplified ] = "åˆ—è¡¨æ¡†";
             Text[ russian ] = "Ñïèñîê";
@@ -251,6 +266,9 @@ ToolBox RID_TOOLBOX
             Text[ catalan ] = "Quadre de llista";
             Text[ finnish ] = "Luetteloruutu";
             Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸£à¸²à¸¢à¸à¸²à¸£";
+            Text[ czech ] = "Seznam";
+            Text[ hebrew ] = "â€®×ª×™×‘×ª ×¨×©×™××”â€¬";
+            Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ à¤¬à¥‰à¤•à¥à¤¸";
         };
         ToolBoxItem
         {
@@ -267,7 +285,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Horisontell rullningslist" ;
             Text [ danish ] = "Vandret rullepanel" ;
             Text [ portuguese ] = "Barra de deslocamento horiz." ;
-            Text [ portuguese_brazilian ] = "HScrollBar" ;
+            Text [ portuguese_brazilian ] = "Barra de Rolagem Horizontal" ;
             /* ### ACHTUNG: Neuer Text in Resource? Horizontale ScrollBar einfügen : Horizontale ScrollBar einf³gen */
             Text[ chinese_simplified ] = "æ°´å¹³å‘æ»šåŠ¨æ ";
             Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
@@ -277,11 +295,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
             Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
             Text[ korean ] = "ìˆ˜í‰ ìŠ¤í¬ë¡¤ ë§‰ëŒ€";
-            Text[ turkish ] = "Yatay kaydırma çubuğu";
+            Text[ turkish ] = "Yatay Kaydırma Çubuğu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de desplaçament horitzontal";
             Text[ finnish ] = "Vaakavierityspalkki";
             Text[ thai ] = "à¹à¸–à¸šà¹€à¸¥à¸·à¹ˆà¸­à¸™à¹à¸™à¸§à¸™à¸­à¸™";
+            Text[ czech ] = "VodorovnÃ½ posuvnÃ­k";
+            Text[ hebrew ] = "Horizontale Bildlaufleiste";
+            Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¸à¥à¤•à¥à¤°à¥‰à¤² à¤ªà¤Ÿà¥à¤Ÿà¥€";
         };
         ToolBoxItem
         {
@@ -298,21 +319,24 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Grupperingsram" ;
             Text [ danish ] = "Gruppeboks" ;
             Text [ portuguese ] = "Caixa de grupo" ;
-            Text [ portuguese_brazilian ] = "FrameControl" ;
+            Text [ portuguese_brazilian ] = "Caixa de Grupo" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
             Text[ chinese_simplified ] = "å°ç»„æ¡†";
             Text[ russian ] = "Ãğóïïîâîé áëîê";
-            Text[ polish ] = "Ramka grupy";
+            Text[ polish ] = "Pole grupy";
             Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—æ ";
             Text[ chinese_traditional ] = "ç¾¤çµ„æ–¹å¡Š";
             Text[ arabic ] = "FrameControl";
             Text[ greek ] = "Ğëáßóéï ïìáäïğïßçóçò";
             Text[ korean ] = "ê·¸ë£¹ ìƒì";
-            Text[ turkish ] = "FrameControl";
+            Text[ turkish ] = "Çoklu Kutu";
             Text[ language_user1 ] = "; German should be \"Rahmen\"";
             Text[ catalan ] = "Control del marc";
             Text[ finnish ] = "Ryhmäruutu";
             Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸—à¸µà¹ˆà¸ˆà¸±à¸”à¹€à¸›à¹‡à¸™à¸à¸¥à¸¸à¹ˆà¸¡";
+            Text[ czech ] = "SeskupenÃ­";
+            Text[ hebrew ] = "â€®×ª×™×‘×ª ×§×‘×•×¦×”â€¬";
+            Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤® à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
         };
         ToolBoxItem
         {
@@ -333,15 +357,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Vandret linje";
             Text[ swedish ] = "Horisontell linje";
             Text[ polish ] = "Linia pozioma";
-            Text[ portuguese_brazilian ] = "HFixedLine";
+            Text[ portuguese_brazilian ] = "Linha Horizontal";
             Text[ japanese ] = "æ¨ªç·š";
             Text[ korean ] = "ê°€ë¡œì„ ";
             Text[ chinese_simplified ] = "æ°´å¹³çº¿æ¡";
             Text[ chinese_traditional ] = "æ°´å¹³ç·š";
-            Text[ turkish ] = "HFixedLine";
+            Text[ turkish ] = "Düşey Çizgi";
             Text[ arabic ] = "HFixedLine";
             Text[ catalan ] = "Línia fixa horitzontal";
             Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹à¸™à¸§à¸™à¸­à¸™";
+            Text[ czech ] = "VodorovnÃ¡ ÄÃ¡ra";
+            Text[ hebrew ] = "â€®×§×• ××•×¤×§×™â€¬";
+            Text[ hindi ] = "Horizontal Line";
         };
         ToolBoxItem
         {
@@ -362,15 +389,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Datofelt";
             Text[ swedish ] = "Datumfält";
             Text[ polish ] = "Pole daty";
-            Text[ portuguese_brazilian ] = "DateField";
+            Text[ portuguese_brazilian ] = "Campo de Data";
             Text[ japanese ] = "æ—¥ä»˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "ë‚ ì§œ í•„ë“œ";
             Text[ chinese_simplified ] = "æ—¥æœŸå­—æ®µ";
             Text[ chinese_traditional ] = "æ—¥æœŸæ¬„ä½";
-            Text[ turkish ] = "DateField";
+            Text[ turkish ] = "Tarih Alanı";
             Text[ arabic ] = "DateField";
             Text[ catalan ] = "Camp de dades";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸§à¸±à¸™à¸—à¸µà¹ˆ";
+            Text[ czech ] = "Pole pro datum";
+            Text[ hebrew ] = "â€®×©×“×” ×ª××¨×™×šâ€¬";
+            Text[ hindi ] = "Date Field";
         };
         ToolBoxItem
         {
@@ -390,16 +420,19 @@ ToolBox RID_TOOLBOX
             Text[ italian ] = "Campo  numerico";
             Text[ danish ] = "Numerisk felt";
             Text[ swedish ] = "Numeriskt fält";
-            Text[ polish ] = "Pole numeryczne";
-            Text[ portuguese_brazilian ] = "NumericField";
+            Text[ polish ] = "Pole liczbowe";
+            Text[ portuguese_brazilian ] = "Campo Numérico";
             Text[ japanese ] = "ç•ªå·ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "ìˆ«ì í•„ë“œ";
             Text[ chinese_simplified ] = "æ•°å­—å­—æ®µ";
             Text[ chinese_traditional ] = "æ•¸å­—æ¬„ä½";
-            Text[ turkish ] = "NumericField";
+            Text[ turkish ] = "Sayısal Alan";
             Text[ arabic ] = "NumericField";
             Text[ catalan ] = "Camp numèric";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸•à¸±à¸§à¹€à¸¥à¸‚";
+            Text[ czech ] = "ÄŒÃ­selnÃ© pole";
+            Text[ hebrew ] = "Numerisches Feld";
+            Text[ hindi ] = "Numeric Field";
         };
         ToolBoxItem
         {
@@ -419,16 +452,19 @@ ToolBox RID_TOOLBOX
             Text[ italian ] = "Campo formattato";
             Text[ danish ] = "Formateret felt";
             Text[ swedish ] = "Formaterat fält";
-            Text[ polish ] = "Pole sformatowane";
-            Text[ portuguese_brazilian ] = "FormattedField";
+            Text[ polish ] = "Pole formatowane";
+            Text[ portuguese_brazilian ] = "Campo Formatado";
             Text[ japanese ] = "æ›¸å¼è¨­å®šã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "ì„œì‹ ìˆëŠ” í•„ë“œ";
             Text[ chinese_simplified ] = "æ ¼å¼åŒ–çš„å­—æ®µ";
             Text[ chinese_traditional ] = "æ ¼å¼åŒ–çš„å­—æ®µ";
-            Text[ turkish ] = "FormattedField";
+            Text[ turkish ] = "Formatlanmış Alan";
             Text[ arabic ] = "FormattedField";
             Text[ catalan ] = "Camp formatat";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸²à¸£à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
+            Text[ czech ] = "FormÃ¡tovanÃ© pole";
+            Text[ hebrew ] = "â€®×©×“×” ××¢×•×¦×‘â€¬";
+            Text[ hindi ] = "Formatted Field";
         };
         ToolBoxItem
         {
@@ -449,15 +485,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Filudvalg";
             Text[ swedish ] = "Filurval";
             Text[ polish ] = "Wybór plików";
-            Text[ portuguese_brazilian ] = "FileControl";
+            Text[ portuguese_brazilian ] = "Seleção de Arquivo";
             Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ";
             Text[ korean ] = "íŒŒì¼ ì„ íƒ";
             Text[ chinese_simplified ] = "é€‰æ‹©æ–‡ä»¶";
             Text[ chinese_traditional ] = "é¸å–æª”æ¡ˆ";
-            Text[ turkish ] = "FileControl";
+            Text[ turkish ] = "DosyaKontrolü";
             Text[ arabic ] = "FileControl";
             Text[ catalan ] = "Fitxer de control";
             Text[ thai ] = "à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¹à¸Ÿà¹‰à¸¡";
+            Text[ czech ] = "VÃ½bÄ›r souboru";
+            Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×§×•×‘×¥â€¬";
+            Text[ hindi ] = "File Selection";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -469,7 +508,7 @@ ToolBox RID_TOOLBOX
             Text [ english_us ] = "Properties" ;
             Text [ norwegian ] = "Browser" ;
             Text [ italian ] = "Proprietà" ;
-            Text [ portuguese_brazilian ] = "Paginar" ;
+            Text [ portuguese_brazilian ] = "Propriedades" ;
             Text [ portuguese ] = "Propriedades" ;
             Text [ finnish ] = "Ominaisuudet" ;
             Text [ danish ] = "Egenskaber" ;
@@ -489,6 +528,9 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Propietats";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+            Text[ czech ] = "Vlastnosti";
+            Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+            Text[ hindi ] = "Properties";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -509,16 +551,19 @@ ToolBox RID_TOOLBOX
             Text[ italian ] = "Campo di controllo immagine";
             Text[ danish ] = "Grafisk kontrolelement";
             Text[ swedish ] = "Grafiskt kontrollfält";
-            Text[ polish ] = "Graficzne pole kontrolne";
-            Text[ portuguese_brazilian ] = "ImageControl";
+            Text[ polish ] = "Formant obrazkowy";
+            Text[ portuguese_brazilian ] = "Controle de Imagem";
             Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
             Text[ korean ] = "ì´ë¯¸ì§€ ì»¨íŠ¸ë¡¤";
             Text[ chinese_simplified ] = "å›¾å½¢æ§åˆ¶";
             Text[ chinese_traditional ] = "åœ–å¼æ§åˆ¶é …";
-            Text[ turkish ] = "ImageControl";
+            Text[ turkish ] = "Resim Kontrolü";
             Text[ arabic ] = "ImageControl";
             Text[ catalan ] = "Control d'imatge";
             Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡à¸ à¸²à¸";
+            Text[ czech ] = "OvlÃ¡dacÃ­ pole obrÃ¡zku";
+            Text[ hebrew ] = "Grafisches Kontrollfeld";
+            Text[ hindi ] = "Image Control";
         };
         ToolBoxItem
         {
@@ -535,11 +580,11 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Alternativfält" ;
             Text [ danish ] = "Alternativfelt" ;
             Text [ portuguese ] = "Botão de opção" ;
-            Text [ portuguese_brazilian ] = "OptionButton" ;
+            Text [ portuguese_brazilian ] = "Botão de Opção" ;
             /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
             Text[ chinese_simplified ] = "é€‰é¡¹å­—æ®µ";
             Text[ russian ] = "Êíîïêà âûáîğà âàğèàíòîâ";
-            Text[ polish ] = "Pole opcji";
+            Text[ polish ] = "Przycisk opcji";
             Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒœãƒƒã‚¯ã‚¹";
             Text[ chinese_traditional ] = "é¸é …æ¬„ä½";
             Text[ arabic ] = "ÒÑ ÎíÇÑ";
@@ -550,6 +595,9 @@ ToolBox RID_TOOLBOX
             Text[ catalan ] = "Botó d'opció";
             Text[ finnish ] = "Valintanappi";
             Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡à¹€à¸¥à¸·à¸­à¸";
+            Text[ czech ] = "TlaÄÃ­tko volby";
+            Text[ hebrew ] = "â€®×›×¤×ª×•×¨ ×‘×—×™×¨×”â€¬";
+            Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª à¤¬à¤Ÿà¤¨";
         };
         ToolBoxItem
         {
@@ -566,7 +614,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Textfält" ;
             Text [ danish ] = "Tekstfelt" ;
             Text [ portuguese ] = "Caixa de texto" ;
-            Text [ portuguese_brazilian ] = "TextBox" ;
+            Text [ portuguese_brazilian ] = "Caixa de Texto" ;
             /* ### ACHTUNG: Neuer Text in Resource? Edit einfügen : Edit einf³gen */
             Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†";
             Text[ russian ] = "Òåêñòîâîå ïîëå";
@@ -581,6 +629,9 @@ ToolBox RID_TOOLBOX
             Text[ catalan ] = "Camp de text";
             Text[ finnish ] = "Tekstikehys";
             Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+            Text[ czech ] = "TextovÃ© pole";
+            Text[ hebrew ] = "â€®×ª×™×‘×ª ×˜×§×¡×˜â€¬";
+            Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤¬à¥‰à¤•à¥à¤¸";
         };
         ToolBoxItem
         {
@@ -597,7 +648,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Kombinationsfält" ;
             Text [ danish ] = "Kombinationsboks" ;
             Text [ portuguese ] = "Caixa de combinação" ;
-            Text [ portuguese_brazilian ] = "ComboBox" ;
+            Text [ portuguese_brazilian ] = "Caixa de Combinação" ;
             /* ### ACHTUNG: Neuer Text in Resource? ComboBox einfügen : ComboBox einf³gen */
             Text[ chinese_simplified ] = "ç»„åˆæ¡†";
             Text[ russian ] = "Ïîëå ñî ñïèñêîì";
@@ -607,11 +658,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
             Text[ greek ] = "Ğåäßï óõíäõáóìïı";
             Text[ korean ] = "ì½¤ë³´ ìƒì";
-            Text[ turkish ] = "Kombinasyon alanı";
+            Text[ turkish ] = "Kombinasyon Kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Quadre combinat";
             Text[ finnish ] = "Yhdistelmäruutu";
             Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸„à¸­à¸¡à¹‚à¸šà¹‰";
+            Text[ czech ] = "KombinovanÃ© pole";
+            Text[ hebrew ] = "Kombinationsfeld";
+            Text[ hindi ] = "à¤•à¥‰à¤®à¥à¤¬à¥‹ à¤¬à¥‰à¤•à¥à¤¸";
         };
         ToolBoxItem
         {
@@ -628,7 +682,7 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Vertikal rullningslist" ;
             Text [ danish ] = "Lodret rullepanel" ;
             Text [ portuguese ] = "Barra de deslocamento vert." ;
-            Text [ portuguese_brazilian ] = "VScrollBar" ;
+            Text [ portuguese_brazilian ] = "Barra de Rolagem Vertical" ;
             /* ### ACHTUNG: Neuer Text in Resource? Vertikale ScrollBar einfügen : Vertikale ScrollBar einf³gen */
             Text[ chinese_simplified ] = "å‚ç›´æ»šåŠ¨æ ";
             Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
@@ -638,11 +692,14 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
             Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
             Text[ korean ] = "ìˆ˜ì§ ìŠ¤í¬ë¡¤ ë§‰ëŒ€";
-            Text[ turkish ] = "Dikey kaydırma çubuğu";
+            Text[ turkish ] = "Dikey Kaydırma Çubuğu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de desplaçament vertical";
             Text[ finnish ] = "Pystyvierityspalkki";
             Text[ thai ] = "à¹à¸–à¸šà¹€à¸¥à¸·à¹ˆà¸­à¸™à¸ªà¸–à¸²à¸™à¸°à¹à¸™à¸§à¸•à¸±à¹‰à¹‰à¸‡";
+            Text[ czech ] = "SvislÃ½ posuvnÃ­k";
+            Text[ hebrew ] = "â€®×¤×¡ ×’×œ×™×œ×” ×× ×›×™â€¬";
+            Text[ hindi ] = "à¤²à¤‚à¤¬à¤°à¥‚à¤ª à¤¸à¥à¤•à¥à¤°à¥‰à¤² à¤ªà¤Ÿà¥à¤Ÿà¥€";
         };
         ToolBoxItem
         {
@@ -663,15 +720,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Statuslinje";
             Text[ swedish ] = "Förloppsindikator";
             Text[ polish ] = "Pasek postêpu";
-            Text[ portuguese_brazilian ] = "ProgressBar";
+            Text[ portuguese_brazilian ] = "Barra de Progresso";
             Text[ japanese ] = "é€²è¡Œã‚°ãƒ©ãƒ•";
             Text[ korean ] = "ì§„í–‰ í‘œì‹œì¤„";
             Text[ chinese_simplified ] = "è¿›å±•æ–¹æ¡†";
             Text[ chinese_traditional ] = "é€²å±•æ–¹å¡Š";
-            Text[ turkish ] = "ProgressBar";
+            Text[ turkish ] = "Süreç Çubuğu";
             Text[ arabic ] = "ProgressBar";
             Text[ catalan ] = "Barra de progrés";
             Text[ thai ] = "à¹à¸–à¸šà¹à¸ªà¸”à¸‡à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²";
+            Text[ czech ] = "Panel prÅ¯bÄ›hu";
+            Text[ hebrew ] = "Fortschrittsbalken";
+            Text[ hindi ] = "Progress Bar";
         };
         ToolBoxItem
         {
@@ -692,15 +752,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Lodret linje";
             Text[ swedish ] = "Vertikal linje";
             Text[ polish ] = "Linia pionowa";
-            Text[ portuguese_brazilian ] = "VFixedLine";
+            Text[ portuguese_brazilian ] = "Linha Vertical";
             Text[ japanese ] = "ç¸¦ç·š";
             Text[ korean ] = "ì„¸ë¡œì„ ";
             Text[ chinese_simplified ] = "å‚ç›´çº¿æ¡";
             Text[ chinese_traditional ] = "å‚ç›´ç·š";
-            Text[ turkish ] = "VFixedLine";
+            Text[ turkish ] = "Yatay Çizgi";
             Text[ arabic ] = "VFixedLine";
             Text[ catalan ] = "Línia fixa vertical";
             Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
+            Text[ czech ] = "SvislÃ¡ ÄÃ¡ra";
+            Text[ hebrew ] = "Vertikale Linie";
+            Text[ hindi ] = "Vertical Line";
         };
         ToolBoxItem
         {
@@ -721,15 +784,18 @@ ToolBox RID_TOOLBOX
             Text[ danish ] = "Klokkeslætsfelt";
             Text[ swedish ] = "Tidsfält";
             Text[ polish ] = "Pole godziny";
-            Text[ portuguese_brazilian ] = "TimeField";
+            Text[ portuguese_brazilian ] = "Campo da Hora";
             Text[ japanese ] = "æ™‚åˆ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "ì‹œê°„ í•„ë“œ";
             Text[ chinese_simplified ] = "æ—¶é—´å­—æ®µ";
             Text[ chinese_traditional ] = "æ™‚é–“æ¬„ä½";
-            Text[ turkish ] = "TimeField";
+            Text[ turkish ] = "Zaman Alanı";
             Text[ arabic ] = "TimeField";
             Text[ catalan ] = "Camp de temps";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸§à¸¥à¸²";
+            Text[ czech ] = "Pole pro Äas";
+            Text[ hebrew ] = "â€®×©×“×” ×©×¢×”â€¬";
+            Text[ hindi ] = "Time Field";
         };
         ToolBoxItem
         {
@@ -749,16 +815,19 @@ ToolBox RID_TOOLBOX
             Text[ italian ] = "Campo valuta";
             Text[ danish ] = "Valutafelt";
             Text[ swedish ] = "Valutafält";
-            Text[ polish ] = "Pole waluty";
-            Text[ portuguese_brazilian ] = "CurrencyField";
+            Text[ polish ] = "Pole walutowe";
+            Text[ portuguese_brazilian ] = "Campo Monetário";
             Text[ japanese ] = "é€šè²¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "í†µí™” í•„ë“œ";
             Text[ chinese_simplified ] = "è´§å¸å­—æ®µ";
             Text[ chinese_traditional ] = "è²¨å¹£æ¬„ä½";
-            Text[ turkish ] = "CurrencyField";
+            Text[ turkish ] = "Para birimi Alanı";
             Text[ arabic ] = "CurrencyField";
             Text[ catalan ] = "Camp de moneda";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸à¸¸à¸¥à¹€à¸‡à¸´à¸™";
+            Text[ czech ] = "MÄ›novÃ© pole";
+            Text[ hebrew ] = "â€®×©×“×” ××˜×‘×¢â€¬";
+            Text[ hindi ] = "Currency Field";
         };
         ToolBoxItem
         {
@@ -775,19 +844,22 @@ ToolBox RID_TOOLBOX
             Text[ french ] = "Champ masqué";
             Text[ spanish ] = "Campo enmascarado";
             Text[ finnish ] = "Kuviokenttä";
-            Text[ italian ] = "Campo modello";
+            Text[ italian ] = "Campo a maschera";
             Text[ danish ] = "Maskeret felt";
             Text[ swedish ] = "Maskerat fält";
-            Text[ polish ] = "Pole maski";
-            Text[ portuguese_brazilian ] = "PatternField";
+            Text[ polish ] = "Pole wzorca";
+            Text[ portuguese_brazilian ] = "Campo de Padrão";
             Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
             Text[ korean ] = "íŒ¨í„´ í•„ë“œ";
             Text[ chinese_simplified ] = "æ©ç å­—æ®µ";
             Text[ chinese_traditional ] = "é®ç½©æ¬„ä½";
-            Text[ turkish ] = "PatternField";
+            Text[ turkish ] = "Maskelenmiş Alan";
             Text[ arabic ] = "PatternField";
             Text[ catalan ] = "Camp de patró";
             Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸¥à¸§à¸”à¸¥à¸²à¸¢";
+            Text[ czech ] = "Pole vzorku";
+            Text[ hebrew ] = "â€®×©×“×” ×ª×‘× ×™×ªâ€¬";
+            Text[ hindi ] = "Pattern Field";
         };
         ToolBoxItem
         {
@@ -819,6 +891,9 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Opcions";
             Text[ thai ] = "à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸";
+            Text[ czech ] = "Vybrat";
+            Text[ hebrew ] = "â€®×‘×—×™×¨×”â€¬";
+            Text[ hindi ] = "Select";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -830,7 +905,7 @@ ToolBox RID_TOOLBOX
             Text [ english_us ] = "Activate Test Mode" ;
             Text [ norwegian ] = "Activate testmode" ;
             Text [ italian ] = "Attiva modo testo" ;
-            Text [ portuguese_brazilian ] = "Ativar modoteste" ;
+            Text [ portuguese_brazilian ] = "Ativar Modo de Teste" ;
             Text [ portuguese ] = "Activar modo Teste" ;
             Text [ finnish ] = "Aktivoi testitila" ;
             Text [ danish ] = "Aktiver testmodus" ;
@@ -850,9 +925,22 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Activar el mode de prova";
             Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¹‚à¸«à¸¡à¸”à¸—à¸”à¸ªà¸­à¸š";
+            Text[ czech ] = "Aktivovat testovacÃ­ reÅ¾im";
+            Text[ hebrew ] = "Testmodus aktivieren";
+            Text[ hindi ] = "à¤œà¤¾à¤à¤š à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¤‚à¤šà¤¾à¤²à¤¿à¤¤ à¤•à¤°à¥‹";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
