@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 15:51:01 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,11 +422,11 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
 //------------------------------------------------------------------------------
 sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode)
 {
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, makeAny(m_aAlignment));
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, makeAny(m_aWidth));
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT, makeAny(m_aFormatKey));
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_RELPOSITION, makeAny(m_aRelativePosition));
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_HIDDEN, makeAny(m_bHidden));
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, m_aAlignment);
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, m_aWidth);
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT, m_aFormatKey);
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_RELPOSITION, m_aRelativePosition);
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_HIDDEN, ::cppu::bool2any(m_bHidden));
     return sal_True;
 }
 
@@ -444,7 +444,7 @@ void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode)
     m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
     m_aFormatKey        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT);
     m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
-    _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN) >>= m_bHidden;
+    m_bHidden           = ::cppu::any2bool(_rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN));
 }
 
 //============================================================
