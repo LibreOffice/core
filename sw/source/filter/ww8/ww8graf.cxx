@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:52:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
             nChanged = nOrigLen - aString.Len();
         }
         for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
-            aIter->Adjust(nChanged);
+            aIter2->Adjust(nChanged);
         }
 
     /*
