@@ -11425,3 +11425,15 @@ _TI2?AVbad_alloc@std@@
 ?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0xe14a361e@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
 ?isAsciiLetter@?A0xe14a361e@xmloff@@YA_NG@Z
 ?toUpperAscii@?A0xe14a361e@xmloff@@YAGG@Z
+??0StringCompare@?A0xfd98aae3@xmloff@@QAE@ABU012@@Z
+??0StringCompare@?A0xfd98aae3@xmloff@@QAE@ABVOUString@rtl@@@Z
+??1StringCompare@?A0xfd98aae3@xmloff@@QAE@XZ
+??RStringCompare@?A0xfd98aae3@xmloff@@QAE_NABVOUString@rtl@@@Z
+?__find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0xfd98aae3@xmloff@@ABUrandom_access_iterator_tag@1@@Z
+?find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0xfd98aae3@xmloff@@@Z
+?getDocument@?A0xfd98aae3@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getDrawPage@?A0xfd98aae3@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXDrawPage@drawing@star@sun@com@@@?A0xfd98aae3@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0xfd98aae3@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?isAsciiLetter@?A0xfd98aae3@xmloff@@YA_NG@Z
+?toUpperAscii@?A0xfd98aae3@xmloff@@YAGG@Z
