@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:16:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text [ italian ] = "Formattazione automatica" ;
     Text [ portuguese_brazilian ] = "Formatação Automática" ;
     Text [ portuguese ] = "AutoFormato" ;
-    Text [ finnish ] = "Automaattimuoto" ;
+    Text [ finnish ] = "Automaattinen muotoilu" ;
     Text [ danish ] = "AutoFormat" ;
     Text [ french ] = "AutoFormat" ;
     Text [ swedish ] = "Autoformat" ;
@@ -91,7 +91,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmatar" ;
-        Text [ finnish ] = "~Muoto" ;
+        Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "Cell~format" ;
@@ -193,7 +193,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "~Bordo" ;
         Text [ portuguese_brazilian ] = "~Borda" ;
         Text [ portuguese ] = "~Contornos" ;
-        Text [ finnish ] = "~Reunaviiva" ;
+        Text [ finnish ] = "~Reunat" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "~Bordure" ;
         Text [ swedish ] = "~Inramning" ;
@@ -286,7 +286,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "~Allineamento" ;
         Text [ portuguese_brazilian ] = "Orien~tação" ;
         Text [ portuguese ] = "~Alinhamento" ;
-        Text [ finnish ] = "S~uunta" ;
+        Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
         Text [ french ] = "~Alignement" ;
         Text [ swedish ] = "~Justering" ;
@@ -317,7 +317,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
         Text [ portuguese ] = "Formato" ;
-        Text [ finnish ] = "Mu~odot" ;
+        Text [ finnish ] = "Muotoilu" ;
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Formatage" ;
         Text [ swedish ] = "Formatering" ;
@@ -359,7 +359,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "E~xtra" ;
         Text [ portuguese_brazilian ] = "~Mais" ;
         Text [ portuguese ] = "~Opções" ;
-        Text [ finnish ] = "~Enemmän" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Flere" ;
         Text [ french ] = "~Options" ;
         Text [ swedish ] = "F~ler" ;
@@ -468,6 +468,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ turkish ] = "Yeniden~adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar ~nombre";
+        Text[ finnish ] = "~Nimeä uudelleen";
     };
     HelpButton BTN_HELP
     {
@@ -483,7 +484,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Aggiungi formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Acrescentar Formato automático" ;
         Text [ portuguese ] = "Adicionar AutoFormato" ;
-        Text [ finnish ] = "Lisää automaattimuoto" ;
+        Text [ finnish ] = "Lisää automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
         Text [ french ] = "Ajouter AutoFormat" ;
         Text [ swedish ] = "Lägg till autoformat" ;
@@ -537,7 +538,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Cancella formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Apagar Formato Automático" ;
         Text [ portuguese ] = "Eliminar AutoFormato" ;
-        Text [ finnish ] = "Poista automaattimuoto" ;
+        Text [ finnish ] = "Poista automaattinen muotoilu" ;
         Text [ danish ] = "Slet AutoFormat" ;
         Text [ french ] = "Supprimer l'AutoFormat" ;
         Text [ swedish ] = "Radera Autoformat" ;
@@ -564,7 +565,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Questa formattazione automatica verrà cancellata:" ;
         Text [ portuguese_brazilian ] = "Esta formatação Automática ser  apagada:" ;
         Text [ portuguese ] = "Será eliminado o seguinte AutoFormato:" ;
-        Text [ finnish ] = "Poistettava automaattimuoto:" ;
+        Text [ finnish ] = "Seuraava automaattisen muotoilun merkintä poistetaan:" ;
         Text [ danish ] = "Følgende AutoFormat slettes:" ;
         Text [ french ] = "L'AutoFormat suivant va être supprimé :" ;
         Text [ swedish ] = "Följande autoformat raderas:" ;
@@ -607,6 +608,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ turkish ] = "Otomatik formatlamayý yeniden adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar nombre del AutoFormato";
+        Text[ finnish ] = "Nimeä automaattinen muotoilu uudelleen";
     };
     String STR_BTN_CLOSE
     {
@@ -834,7 +836,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Nome specificato non valido.\nImpossibile creare la Formattazione automatica desiderata.\nScegliete un altro nome." ;
         Text [ portuguese_brazilian ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
         Text [ portuguese ] = "Indicou um nome incorrecto.\nO AutoFormato desejado não pode ser criado.\nTente de novo usando um nome diferente." ;
-        Text [ finnish ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
+        Text [ finnish ] = "Olet syöttänyt virheellisen nimen.\nHaluttua automaattista muotoilua ei voitu luoda. \nYritä uudelleen käyttämällä eri nimeä." ;
         Text [ danish ] = "Du har indtastet et ugyldigt navn.\nDet var ikke muligt at oprette AutoFormatet.\nVælg venligst et andet navn." ;
         Text [ french ] = "Vous avez saisi un nom non valide.\nL'AutoFormat n'a pas ou être éffectué.\nIndiquez un autre nom." ;
         Text [ swedish ] = "Du har angett ett ogiltigt namn.\nDet gick inte att skapa autoformatet.\nVälj ett annat namn." ;
