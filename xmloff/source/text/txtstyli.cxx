@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2004-07-15 17:09:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ void XMLTextStyleContext::FillPropertySet(
             rPropSet->setPropertyValue( sCollapsingBorders,
                 (aContextIDs[2].nIndex == -1)
                 ? makeAny( false )
-                : GetProperties()[aContextIDs[1].nIndex].maValue );
+                : GetProperties()[aContextIDs[2].nIndex].maValue );
         }
 
 
