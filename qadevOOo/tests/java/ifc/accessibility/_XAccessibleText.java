@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-03-31 13:34:50 $
+ *  last change:$Date: 2003-03-31 14:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,13 @@ public class _XAccessibleText extends MultiMethodTest {
     protected void before() {
         Object xat = tEnv.getObjRelation("XAccessibleText");
 
+        XAccessibleComponent component = null;
+
         if (xat != null) {
             oObj = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, xat);
+            component = (XAccessibleComponent)
+                UnoRuntime.queryInterface(
+                    XAccessibleComponent.class, xat);
         }
 
         text = (String)tEnv.getObjRelation("XAccessibleText.Text");
@@ -143,9 +148,11 @@ public class _XAccessibleText extends MultiMethodTest {
 
         editOnly = (String)tEnv.getObjRelation("EditOnly");
 
-        XAccessibleComponent component = (XAccessibleComponent)
-            UnoRuntime.queryInterface(
-                XAccessibleComponent.class, tEnv.getTestObject());
+        if (component == null) {
+            component = (XAccessibleComponent)
+                UnoRuntime.queryInterface(
+                    XAccessibleComponent.class, tEnv.getTestObject());
+        }
 
         bounds = component.getBounds();
 
