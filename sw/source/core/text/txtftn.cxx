@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     if( pTxtFtn )
     {
         SwScriptInfo aScriptInfo;
-        SwAttrIter aIter( (SwTxtNode&)pTxtFtn->GetTxtNode(), &aScriptInfo );
+        SwAttrIter aIter( (SwTxtNode&)pTxtFtn->GetTxtNode(), aScriptInfo );
         aIter.Seek( *pTxtFtn->GetStart() );
         // Achtung: Wenn die Kriterien, nach denen der FtnReferenz-Font
         // auf den FtnNumerierungsfont wirkt, geaendert werden, muss die
@@ -1004,7 +1004,7 @@ XubString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     ASSERT( pPage, "GetPageNumber: Homeless TxtFrm" );
     MSHORT nVirtNum = pPage->GetVirtPageNum();
-    const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
+    const SwNumType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
 }
 
