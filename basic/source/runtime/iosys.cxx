@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 13:39:22 $
+ *  last change: $Author: ab $ $Date: 2001-06-13 14:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,7 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
         aOut.Erase( 0, n1 );
         while( aOut.GetBuffer()[0] == '\n' || aOut.GetBuffer()[0] == '\r' )
             aOut.Erase( 0, 1 );
-        String aStr( s, RTL_TEXTENCODING_ASCII_US );
+        String aStr( s, gsl_getSystemTextEncoding() );
         if( !MessBox( GetpApp()->GetDefModalDialogParent(),
                       WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                       String(), aStr ).Execute() )
