@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2001-12-14 16:08:14 $
+ *  last change: $Author: cl $ $Date: 2002-01-08 14:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,16 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
@@ -222,6 +230,8 @@ public:
 
     SfxObjectShellLock GetDocument();
 
+    /** closes the current preview docshell */
+    void CloseDocShell();
 
     /** @descr  Extract form the history list of recently used files the
             impress files and insert them into a listbox.
@@ -413,7 +423,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
 //  m_aPageListFile('?'),
     m_bUserDataDirty(FALSE),
     m_aAssistentFunc(5),
-    m_aThread (NULL)
+    m_aThread (NULL),
+    xDocShell (NULL)
 {
     m_aPageListFile += sal_Unicode('?'),
     m_bTemplatesReady = FALSE;
@@ -630,6 +641,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
 
 AssistentDlgImpl::~AssistentDlgImpl()
 {
+    CloseDocShell();
+
     DeletePassords();
 
     // #89432#
@@ -713,6 +726,22 @@ AssistentDlgImpl::~AssistentDlgImpl()
     std::vector<String*>::iterator  I2;
     for (I2=m_aOpenFilesList.begin(); I2!=m_aOpenFilesList.end(); I2++)
         delete *I2;
+}
+
+void AssistentDlgImpl::CloseDocShell()
+{
+    if(xDocShell.Is())
+    {
+        uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
+        if( xModel.is() )
+        {
+            xModel->dispose();
+        }
+        else
+            xDocShell->DoClose();
+//      xDocShell->OwnerLock(FALSE);
+        xDocShell = NULL;
+    }
 }
 
 void AssistentDlgImpl::EndDialog( long nResult )
@@ -979,7 +1008,10 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     else
         DBG_ERROR("Keine Vorlage fuer den Autopiloten? [CL]");
 
-    return xDocShell;
+    SfxObjectShellLock xRet = xDocShell;
+    xDocShell = NULL;
+
+    return xRet;
 }
 
 void AssistentDlgImpl::LeavePage()
@@ -1380,8 +1412,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         if( !xDocShell.Is() || m_aDocFile.Len() != 0 ||
             (m_aDocFile.Len() == 0 && m_aLayoutFile.Len() != 0 && aLayoutFile.Len() == 0 ))
         {
-            if(xDocShell.Is())
-                xDocShell->Clear();
+            CloseDocShell();
 
             SdDrawDocShell* pNewDocSh;
             xDocShell = pNewDocSh = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, FALSE);
@@ -1413,8 +1444,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
     }
     else
     {
-        if(xDocShell.Is())
-            xDocShell.Clear();
+        CloseDocShell();
 
         Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( m_pWindow );
@@ -1435,16 +1465,19 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         }
         else
         {
-            SfxStringItem aFile( SID_FILE_NAME, aDocFile );
-            SfxStringItem aReferer( SID_REFERER, aEmptyStr );
-            SfxBoolItem aView( SID_VIEW, FALSE );
-            SfxBoolItem aPreview( SID_PREVIEW, bDocPreview );
-
             SfxObjectShell* pShell = NULL;
 
+            const String aTargetStr( RTL_CONSTASCII_USTRINGPARAM("_default") );
+
+            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
+            aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
+            aReq.AppendItem( SfxStringItem( SID_REFERER, aEmptyStr ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, aTargetStr ) );
+            aReq.AppendItem( SfxBoolItem( SID_VIEW, FALSE ) );
+            aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
+
             const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                                      SfxViewFrame::Current()->GetDispatcher()->Execute(
-                                        SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aView, &aPreview, 0L );
+                SFX_APP()->ExecuteSlot( aReq );
 
             if( pRet && pRet->GetObjectShell() )
                 xDocShell = pRet->GetObjectShell();
@@ -1478,22 +1511,6 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             if( lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, aEmptyStr, TRUE, pSet ) )
                 ErrorHandler::HandleError(lErr);
             SavePassword( xDocShell, aLayoutFile );
-        }
-        else
-        {
-            SfxStringItem aFile( SID_FILE_NAME, aDocFile );
-            SfxStringItem aReferer( SID_REFERER, aEmptyStr );
-            SfxBoolItem aView( SID_VIEW, FALSE );
-            SfxBoolItem aPreview( SID_PREVIEW, bDocPreview );
-
-            SfxObjectShell* pShell = NULL;
-
-            const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                                      SfxViewFrame::Current()->GetDispatcher()->Execute(
-                                        SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aView, &aPreview, 0L );
-
-            if( pRet && pRet->GetObjectShell() )
-                xDocShell = pRet->GetObjectShell();
         }
 
         Application::SetDefDialogParent( pParent );
