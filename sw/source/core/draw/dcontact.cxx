@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 12:22:56 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,8 +398,13 @@ bool CheckControlLayer( const SdrObject *pObj )
     {
         const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
         for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
+        {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
-                return false;
+            {
+                // OD 21.08.2003 #i18447# - return correct value ;-)
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -855,13 +860,9 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         {
             //((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
             //                            RemoveObject( GetMaster()->GetOrdNum() );
-            SwDoc* pWriterDoc = ((SwFrmFmt*)pRegisteredIn)->GetDoc();
-            if ( pWriterDoc->IsVisibleLayerId( GetMaster()->GetLayer() ) )
-            {
-                SdrLayerID nInvisibleLayerId =
-                    pWriterDoc->GetInvisibleLayerIdByVisibleOne( GetMaster()->GetLayer() );
-                GetMaster()->SetLayer( nInvisibleLayerId );
-            }
+            // OD 21.08.2003 #i18447# - in order to consider group object correct
+            // use new method <SwDrawContact::MoveObjToInvisibleLayer(..)>
+            MoveObjToInvisibleLayer( GetMaster() );
         }
     }
 }
@@ -1047,7 +1048,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     //     in header/footer.
                     const bool bAdd = ( !pFrm->IsCntntFrm() ||
                                         !((SwCntntFrm*)pFrm)->IsFollow() ) &&
-                                      ( !CheckControlLayer( GetMaster() ) ||
+                                      ( !::CheckControlLayer( GetMaster() ) ||
                                         !pFrm->FindFooterOrHeader() );
 
                     if( bAdd )
@@ -1163,12 +1164,9 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         {
             GetMaster()->SetAnchorPos( GetAnchor()->GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
     }
-        if ( !pDrawFrmFmt->GetDoc()->IsVisibleLayerId( GetMaster()->GetLayer() ) )
-        {
-            SdrLayerID nVisibleLayerId =
-                pDrawFrmFmt->GetDoc()->GetVisibleLayerIdByInvisibleOne( GetMaster()->GetLayer() );
-            GetMaster()->SetLayer( nVisibleLayerId );
-        }
+        // OD 21.08.2003 #i18447# - in order to consider group object correct
+        // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
+        MoveObjToVisibleLayer( GetMaster() );
     }
 }
 
@@ -1314,6 +1312,125 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
         ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
                                     RemoveObject( GetMaster()->GetOrdNum() );
     */
+}
+
+/** method to move drawing object to corresponding visible layer
+
+    OD 21.08.2003 #i18447#
+
+    @author OD
+*/
+void SwDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
+{
+    _MoveObjToLayer( true, _pDrawObj );
+}
+
+/** method to move drawing object to corresponding invisible layer
+
+    OD 21.08.2003 #i18447#
+
+    @author OD
+*/
+void SwDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
+{
+    _MoveObjToLayer( false, _pDrawObj );
+}
+
+/** method to move object to visible/invisible layer
+
+    OD 21.08.2003 #i18447#
+    implementation for the public method <MoveObjToVisibleLayer(..)>
+    and <MoveObjToInvisibleLayer(..)>
+
+    @author OD
+*/
+void SwDrawContact::_MoveObjToLayer( const bool _bToVisible,
+                                     SdrObject* _pDrawObj )
+{
+    if ( !_pDrawObj )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
+        return;
+    }
+
+    if ( !pRegisteredIn )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
+        return;
+    }
+
+    SwDoc* pWriterDoc = static_cast<SwFrmFmt*>(pRegisteredIn)->GetDoc();
+    if ( !pWriterDoc )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
+        return;
+    }
+
+    SdrLayerID nToHellLayerId =
+        _bToVisible ? pWriterDoc->GetHellId() : pWriterDoc->GetInvisibleHellId();
+    SdrLayerID nToHeavenLayerId =
+        _bToVisible ? pWriterDoc->GetHeavenId() : pWriterDoc->GetInvisibleHeavenId();
+    SdrLayerID nToControlLayerId =
+        _bToVisible ? pWriterDoc->GetControlsId() : pWriterDoc->GetInvisibleControlsId();
+    SdrLayerID nFromHellLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleHellId() : pWriterDoc->GetHellId();
+    SdrLayerID nFromHeavenLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleHeavenId() : pWriterDoc->GetHeavenId();
+    SdrLayerID nFromControlLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleControlsId() : pWriterDoc->GetControlsId();
+
+    if ( _pDrawObj->ISA( SdrObjGroup ) )
+    {
+        // determine layer for group object
+        {
+            // proposed layer of a group object is the hell layer
+            SdrLayerID nNewLayerId = nToHellLayerId;
+            if ( ::CheckControlLayer( _pDrawObj ) )
+            {
+                // it has to be the control layer, if one of the member
+                // is a control
+                nNewLayerId = nToControlLayerId;
+            }
+            else if ( _pDrawObj->GetLayer() == pWriterDoc->GetHeavenId() ||
+                      _pDrawObj->GetLayer() == pWriterDoc->GetInvisibleHeavenId() )
+            {
+                // it has to be the heaven layer, if method <GetLayer()> reveals
+                // a heaven layer
+                nNewLayerId = nToHeavenLayerId;
+            }
+            // set layer at group object, but do *not* broadcast and
+            // no propagation to the members.
+            // Thus, call <NbcSetLayer(..)> at super class
+            _pDrawObj->SdrObject::NbcSetLayer( nNewLayerId );
+        }
+
+        // call method recursively for group object members
+        const SdrObjList* pLst =
+                static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
+        if ( pLst )
+        {
+            for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
+            {
+                _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
+            }
+        }
+    }
+    else
+    {
+        const SdrLayerID nLayerIdOfObj = _pDrawObj->GetLayer();
+        if ( nLayerIdOfObj == nFromHellLayerId )
+        {
+            _pDrawObj->SetLayer( nToHellLayerId );
+        }
+        else if ( nLayerIdOfObj == nFromHeavenLayerId )
+        {
+            _pDrawObj->SetLayer( nToHeavenLayerId );
+        }
+        else if ( nLayerIdOfObj == nFromControlLayerId )
+        {
+            _pDrawObj->SetLayer( nToControlLayerId );
+        }
+    }
 }
 
 // =============================================================================
