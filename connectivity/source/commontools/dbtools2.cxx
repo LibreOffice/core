@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 08:59:53 $
+ *  last change: $Author: oj $ $Date: 2002-12-12 10:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,21 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             static const ::rtl::OUString sREFERENCE = ::rtl::OUString::createFromAscii("REFERENCE");
             static const ::rtl::OUString sDROP      = ::rtl::OUString::createFromAscii("DROP");
             // after creation the set is positioned before the first record, per definitionem
+#ifdef DBG_UTIL
+            Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
+            if ( xSup.is() )
+            {
+                Reference< XResultSetMetaData > xRsMetaData = xSup->getMetaData();
+                if ( xRsMetaData.is() )
+                {
+                    sal_Int32 nCount = xRsMetaData->getColumnCount();
+                    for (sal_Int32 i=1; i<=nCount; ++i)
+                    {
+                        ::rtl::OUString sColumnName = xRsMetaData->getColumnName(i);
+                    }
+                }
+            }
+#endif
 
             ::rtl::OUString sPrivilege, sGrantee;
             while ( xPrivileges->next() )
