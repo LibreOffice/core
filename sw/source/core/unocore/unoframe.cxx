@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-27 13:52:45 $
+ *  last change: $Author: os $ $Date: 2000-11-08 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,11 +1894,22 @@ uno::Reference< XTextCursor >  SwXTextFrame::createTextCursor(void) throw( Runti
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, aPos, CURSOR_FRAME, pFmt->GetDoc());
+        SwPaM aPam(pFmt->GetCntnt().GetCntntIdx()->GetNode());
+        aPam.Move(fnMoveForward, fnGoNode);
+        SwTableNode* pTblNode = aPam.GetNode()->FindTableNode();
+        SwCntntNode* pCont = 0;
+        while( pTblNode )
+        {
+            aPam.GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+            pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
+            pTblNode = pCont->FindTableNode();
+        }
+        if(pCont)
+            aPam.GetPoint()->nContent.Assign(pCont, 0);
+
+        SwXTextCursor* pXCrsr = new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc());
         aRef =  (XWordCursor*)pXCrsr;
         SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
@@ -2625,6 +2636,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/27 13:52:45  mib
+    #79648#: Conversion to twip for crop property
+
     Revision 1.5  2000/10/24 14:26:56  os
     #79738# new graphic property: ContourPolyPolygon
 
