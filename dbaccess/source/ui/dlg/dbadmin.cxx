@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:08:33 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,22 +1256,22 @@ void ODbAdminDialog::removeDetailPages()
         m_aCurrentDetailPages.pop();
     }
 }
+
 // -----------------------------------------------------------------------------
-void ODbAdminDialog::addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc)
+void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)
 {
     // open our own resource block, as the page titles are strings local to this block
     OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
-    AddTabPage(_nPageId, String(ResId(_nTextId)), pCreateFunc, 0, sal_False, 1);
+    AddTabPage(_nPageId, String(ResId(_nTextId)), _pCreateFunc, 0, sal_False, 1);
     m_aCurrentDetailPages.push(_nPageId);
 }
+
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
     // doe have to reset the "password required" flag to false? (in case the datasource does not support passwords)
     sal_Bool bResetPasswordRequired = sal_False;
-    CreateTabPage pCreateFunc;
-    USHORT nPageId = -1,nTextId;
     _pTabPage->enableConnectionURL();
 
     // remove all current detail pages
@@ -1281,41 +1281,37 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     switch (_pTabPage->GetSelectedType())
     {
         case DST_DBASE:
-            nPageId     = PAGE_DBASE;
-            nTextId     = STR_PAGETITLE_DBASE;
-            pCreateFunc = ODbaseDetailsPage::Create;
+            addDetailPage(PAGE_DBASE, STR_PAGETITLE_DBASE, ODbaseDetailsPage::Create);
+            bResetPasswordRequired = sal_True;
+            break;
 
-            bResetPasswordRequired = sal_True;
-            break;
         case DST_JDBC:
-            nPageId     = PAGE_JDBC;
-            nTextId     = STR_PAGETITLE_JDBC;
-            pCreateFunc = OJdbcDetailsPage::Create;
+            addDetailPage(PAGE_JDBC, STR_PAGETITLE_JDBC, OJdbcDetailsPage::Create);
             break;
+
         case DST_ADO:
-            nPageId     = PAGE_ADO;
-            nTextId     = STR_PAGETITLE_ADO;
-            pCreateFunc = OAdoDetailsPage::Create;
+            addDetailPage(PAGE_ADO, STR_PAGETITLE_ADO, OAdoDetailsPage::Create);
             break;
+
         case DST_TEXT:
-            nPageId     = PAGE_TEXT;
-            nTextId     = STR_PAGETITLE_TEXT;
-            pCreateFunc = OTextDetailsPage::Create;
+            addDetailPage(PAGE_TEXT, STR_PAGETITLE_TEXT, OTextDetailsPage::Create);
             bResetPasswordRequired = sal_True;
             break;
+
         case DST_ODBC:
-            nPageId     = PAGE_ODBC;
-            nTextId     = STR_PAGETITLE_ODBC;
-            pCreateFunc = OOdbcDetailsPage::Create;
+            addDetailPage(PAGE_ODBC, STR_PAGETITLE_ODBC, OOdbcDetailsPage::Create);
             break;
+
         case DST_ADABAS:
-            nPageId     = TAB_PAG_ADABAS_SETTINGS;
-            nTextId     = STR_PAGETITLE_ADABAS_STATISTIC;
-            pCreateFunc = OAdabasAdminSettings::Create;
             // for adabas we have more than one page
-            addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
+            // CAUTION: the order of inserting pages matters.
+            // the major detail page should be inserted last always (thus, it becomes the first page after
+            // the general page)
             addDetailPage(TAB_PAGE_USERADMIN, STR_PAGETITLE_USERADMIN, OUserAdmin::Create);
+            addDetailPage(TAB_PAG_ADABAS_SETTINGS, STR_PAGETITLE_ADABAS_STATISTIC, OAdabasAdminSettings::Create);
+            addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
             break;
+
         case DST_ADDRESSBOOK:
             if(getDatasourceType(*GetExampleSet()) == DST_ADDRESSBOOK)
             {
@@ -1328,8 +1324,6 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             _pTabPage->disableConnectionURL();
             break;
     }
-    if ((sal_uInt16)-1 != nPageId)
-        addDetailPage(nPageId,nTextId,pCreateFunc);
 
     if (bResetPasswordRequired)
     {
@@ -2660,6 +2654,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.59  2001/06/20 07:08:33  oj
+ *  #88434# new page for user admin
+ *
  *  Revision 1.58  2001/06/14 14:18:10  fs
  *  #88242# corrected adding/removing detail pages
  *
