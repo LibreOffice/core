@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:04:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,6 @@ Window DLG_NAVIGATION_PI
                 /* ### ACHTUNG: Neuer Text in Resource? Vorwärts : Vorwõrts */
                 Text [ de ] = "Vorwärts" ;
                 Text [ en-US ] = "Forward" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
             };
             ToolBoxItem
             {
