@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 16:18:20 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,14 @@ TYPEINIT1(ScTableLink, ::so3::SvBaseLink);
 //------------------------------------------------------------------------
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
-                            const String& rFilter, const String& rOpt):
+                            const String& rFilter, const String& rOpt,
+                            ULONG nRefresh ):
     ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
     pDocShell(pDocSh),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
+    nRefreshDelay(nRefresh),
     bInCreate( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
@@ -113,12 +115,14 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
 }
 
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
-                            const String& rFilter, const String& rOpt):
+                            const String& rFilter, const String& rOpt,
+                            ULONG nRefresh ):
     ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
     pDocShell((ScDocShell*)pShell),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
+    nRefreshDelay(nRefresh),
     bInCreate( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
@@ -134,7 +138,7 @@ __EXPORT ScTableLink::~ScTableLink()
     USHORT nCount = pDoc->GetTableCount();
     for (USHORT nTab=0; nTab<nCount; nTab++)
         if (pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab)==aFileName)
-            pDoc->SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty );
+            pDoc->SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
 }
 
 BOOL __EXPORT ScTableLink::Edit(Window* pParent)
@@ -168,7 +172,7 @@ void __EXPORT ScTableLink::DataChanged( const String&,
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
-            Refresh(aFile,aFilter);         // nicht doppelt laden!
+            Refresh( aFile, aFilter, NULL, nRefreshDelay ); // don't load twice
     }
 }
 
@@ -197,7 +201,7 @@ BOOL ScTableLink::IsUsed() const
 }
 
 BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
-                            const String* pNewOptions)
+                            const String* pNewOptions, ULONG nNewRefresh )
 {
     //  Dokument laden
 
@@ -277,7 +281,8 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
                 pDoc->CopyToDocument(aRange, IDF_ALL, FALSE, pUndoDoc);
                 pUndoDoc->TransferDrawPage( pDoc, nTab, nTab );
-                pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName, aOptions, aTabName );
+                pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
+                    aOptions, aTabName, nRefreshDelay );
             }
 
             //  Tabellenname einer ExtDocRef anpassen
@@ -319,8 +324,11 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 bNotFound = TRUE;
             }
 
-            if ( bNewUrlName || rNewFilter != aFilterName || aNewOpt != aOptions || pNewOptions )
-                pDoc->SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt, aTabName );
+            if ( bNewUrlName || rNewFilter != aFilterName ||
+                    aNewOpt != aOptions || pNewOptions ||
+                    nNewRefresh != nRefreshDelay )
+                pDoc->SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
+                    aTabName, nNewRefresh );
         }
     }
 

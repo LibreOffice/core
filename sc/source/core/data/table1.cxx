@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,13 +277,14 @@ void ScTable::SetScenario( BOOL bFlag )
 
 void ScTable::SetLink( BYTE nMode,
                         const String& rDoc, const String& rFlt, const String& rOpt,
-                        const String& rTab )
+                        const String& rTab, ULONG nRefreshDelay )
 {
     nLinkMode = nMode;
     aLinkDoc = rDoc;        // Datei
     aLinkFlt = rFlt;        // Filter
     aLinkOpt = rOpt;        // Filter-Optionen
     aLinkTab = rTab;        // Tabellenname in Quelldatei
+    nLinkRefreshDelay = nRefreshDelay;  // refresh delay in seconds, 0==off
 }
 
 USHORT ScTable::GetOptimalColWidth( USHORT nCol, OutputDevice* pDev,

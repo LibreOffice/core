@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:59:50 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ private:
     String  aDocName;
     String  aFltName;
     String  aOptions;
+    ULONG   nRefreshDelay;
     USHORT  nCount;
     USHORT* pTabs;
     BYTE*   pModes;

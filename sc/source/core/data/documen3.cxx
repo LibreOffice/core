@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-05 19:43:02 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,12 +435,19 @@ const String& ScDocument::GetLinkTab( USHORT nTab ) const
     return EMPTY_STRING;
 }
 
-void ScDocument::SetLink( USHORT nTab, BYTE nMode, const String& rDoc,
-                            const String& rFilter, const String& rOptions,
-                            const String& rTabName )
+ULONG ScDocument::GetLinkRefreshDelay( USHORT nTab ) const
 {
     if (nTab<=MAXTAB && pTab[nTab])
-        pTab[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName );
+        return pTab[nTab]->GetLinkRefreshDelay();
+    return 0;
+}
+
+void ScDocument::SetLink( USHORT nTab, BYTE nMode, const String& rDoc,
+                            const String& rFilter, const String& rOptions,
+                            const String& rTabName, ULONG nRefreshDelay )
+{
+    if (nTab<=MAXTAB && pTab[nTab])
+        pTab[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay );
 }
 
 BOOL ScDocument::HasLink( const String& rDoc,
@@ -477,11 +484,13 @@ BOOL ScDocument::LinkEmptyTab( USHORT& rTab, const String& aDocTab,
     }
     rTab = GetTableCount() - 1;
 
+    ULONG nRefreshDelay = 0;
+
     BOOL bWasThere = HasLink( aFileName, aFilterName, aOptions );
-    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName );
+    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
     if ( !bWasThere )       // Link pro Quelldokument nur einmal eintragen
     {
-        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions );
+        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
@@ -527,11 +536,13 @@ BOOL ScDocument::LinkExternalTab( USHORT& rTab, const String& aDocTab,
     else
         return FALSE;
 
+    ULONG nRefreshDelay = 0;
+
     BOOL bWasThere = HasLink( aFileName, aFilterName, aOptions );
-    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName );
+    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
     if ( !bWasThere )       // Link pro Quelldokument nur einmal eintragen
     {
-        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions );
+        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );

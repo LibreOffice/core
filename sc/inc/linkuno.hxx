@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:44:23 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ private:
 
     ScTableLink*            GetLink_Impl() const;
     void                    Refreshed_Impl();
+    void                    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
 
 public:
                             ScSheetLinkObj(ScDocShell* pDocSh, const String& rName);
@@ -203,6 +204,8 @@ public:
     void                    setFilter(const ::rtl::OUString& Filter);
     ::rtl::OUString         getFilterOptions(void) const;
     void                    setFilterOptions(const ::rtl::OUString& FilterOptions);
+    sal_Int32               getRefreshDelay(void) const;
+    void                    setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,14 @@ void ScXMLTableSourceContext::EndElement()
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
                     nLinkMode = SC_LINK_VALUE;
 
-                pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(), nLinkMode, aFileString, aFilterString, aOptString, aSheetString );
+//!!!!!!!
+//! TODO: (erAck 17.04.01) store and load refresh delay
+//!!!!!!!
+                ULONG nLinkRefreshDelay = 0;
+
+                pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
+                    nLinkMode, aFileString, aFilterString, aOptString,
+                    aSheetString, nLinkRefreshDelay );
             }
         }
     }

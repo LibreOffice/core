@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,12 +515,16 @@ void ScDocShell::UpdateLinks()
             String aDocName = aDocument.GetLinkDoc(i);
             String aFltName = aDocument.GetLinkFlt(i);
             String aOptions = aDocument.GetLinkOpt(i);
+            ULONG nRefresh  = aDocument.GetLinkRefreshDelay(i);
             BOOL bThere = FALSE;
             for (USHORT j=0; j<i && !bThere; j++)               // im Dokument mehrfach?
                 if (aDocument.IsLinked(j)
                         && aDocument.GetLinkDoc(j) == aDocName
                         && aDocument.GetLinkFlt(j) == aFltName
                         && aDocument.GetLinkOpt(j) == aOptions)
+                        // Ignore refresh delay in compare, it should be the
+                        // same for identical links and we don't want dupes
+                        // if it ain't.
                     bThere = TRUE;
 
             if (!bThere)                                        // schon als Filter eingetragen?
@@ -534,7 +538,7 @@ void ScDocShell::UpdateLinks()
             }
             if (!bThere)
             {
-                ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions );
+                ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
                 pLink->SetInCreate( TRUE );
                 pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName );
                 pLink->Update();

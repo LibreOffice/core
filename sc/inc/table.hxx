@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:48:27 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ private:
     String          aLinkFlt;
     String          aLinkOpt;
     String          aLinkTab;
+    ULONG           nLinkRefreshDelay;
     BYTE            nLinkMode;
 
     // Seitenformatvorlage
@@ -232,9 +233,10 @@ public:
     const String& GetLinkFlt() const                        { return aLinkFlt; }
     const String& GetLinkOpt() const                        { return aLinkOpt; }
     const String& GetLinkTab() const                        { return aLinkTab; }
+    ULONG       GetLinkRefreshDelay() const                 { return nLinkRefreshDelay; }
 
-    void        SetLink( BYTE nMode, const String& rDoc, const String& rFlt, const String& rOpt,
-                            const String& rTab );
+    void        SetLink( BYTE nMode, const String& rDoc, const String& rFlt,
+                        const String& rOpt, const String& rTab, ULONG nRefreshDelay );
 
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:45:14 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ private:
     String      aFileName;
     String      aFilterName;
     String      aOptions;
+    ULONG       nRefreshDelay;  // refresh delay in seconds; 0 = off
     BOOL        bInCreate;
     BOOL        bAddUndo;
     BOOL        bDoPaint;
@@ -88,9 +89,9 @@ private:
 public:
     TYPEINFO();
     ScTableLink( ScDocShell* pDocSh, const String& rFile,
-                    const String& rFilter, const String& rOpt);
+                    const String& rFilter, const String& rOpt, ULONG nRefresh );
     ScTableLink( SfxObjectShell* pShell, const String& rFile,
-                    const String& rFilter, const String& rOpt);
+                    const String& rFilter, const String& rOpt, ULONG nRefresh );
     virtual ~ScTableLink();
     virtual void Closed();
     virtual void DataChanged( const String& rMimeType,
@@ -99,14 +100,16 @@ public:
     virtual BOOL Edit(Window* pParent);
 
     BOOL    Refresh(const String& rNewFile, const String& rNewFilter,
-                    const String* pNewOptions = NULL);
+                    const String* pNewOptions /* = NULL */, ULONG nNewRefresh );
     void    SetInCreate(BOOL bSet)      { bInCreate = bSet; }
     void    SetAddUndo(BOOL bSet)       { bAddUndo = bSet; }
     void    SetPaint(BOOL bSet)         { bDoPaint = bSet; }
+    void    SetRefreshDelay(ULONG nRefresh)     { nRefreshDelay = nRefresh; }
 
     const String& GetFileName() const   { return aFileName; }
     const String& GetFilterName() const { return aFilterName; }
     const String& GetOptions() const    { return aOptions; }
+    ULONG           GetRefreshDelay() const { return nRefreshDelay; }
 
     BOOL    IsUsed() const;
 };

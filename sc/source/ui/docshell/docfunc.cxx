@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:48:47 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,7 +1980,8 @@ BOOL ScDocFunc::DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi )
         if (bWasLinked)
             pUndoDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), pDoc->GetLinkDoc(nTab),
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
-                                pDoc->GetLinkTab(nTab) );
+                                pDoc->GetLinkTab(nTab),
+                                pDoc->GetLinkRefreshDelay(nTab) );
 
         if ( pDoc->IsScenario(nTab) )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,9 +618,10 @@ public:
     const String&   GetLinkFlt( USHORT nTab ) const;
     const String&   GetLinkOpt( USHORT nTab ) const;
     const String&   GetLinkTab( USHORT nTab ) const;
+    ULONG           GetLinkRefreshDelay( USHORT nTab ) const;
     void            SetLink( USHORT nTab, BYTE nMode, const String& rDoc,
                             const String& rFilter, const String& rOptions,
-                            const String& rTabName );
+                            const String& rTabName, ULONG nRefreshDelay );
     BOOL            HasLink( const String& rDoc,
                             const String& rFilter, const String& rOptions ) const;
     BOOL            LinkEmptyTab( USHORT& nTab, const String& aDocTab,
