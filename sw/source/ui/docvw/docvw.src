@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:40:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1540,10 +1540,12 @@ String STR_TABLE_COL_ADJUST
 {
     Text = "Tabellenspalte �ndern" ;
     Text [ english_us ] = "Adjust table column" ;
+    Text[ chinese_simplified ] = "调整表格列";
 };
 String STR_TABLE_ROW_ADJUST
 {
     Text = "Tabellenzeile �ndern" ;
     Text [ english_us ] = "Adjust table row" ;
+    Text[ chinese_simplified ] = "调整表格行";
 };
 
