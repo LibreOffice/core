@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 12:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,6 @@
 #endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
-#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -233,9 +230,9 @@ sal_Bool ODbaseIndex::openIndexFile()
         ::rtl::OUString sFile = getCompletePath();
         if(UCBContentHelper::Exists(sFile))
         {
-            m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-            if(!m_pFileStream)
-                m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+            m_pFileStream = OFileTable::createStream_simpleError(sFile, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            if (!m_pFileStream)
+                m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
             if(m_pFileStream)
             {
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -595,7 +592,7 @@ BOOL ODbaseIndex::CreateImpl()
 //  }
 
     // create the index file
-    m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_pFileStream)
         throw SQLException(::rtl::OUString::createFromAscii("Could not access index file!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 

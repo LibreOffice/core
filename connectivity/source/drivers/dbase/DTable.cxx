@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 15:13:25 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 12:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,6 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
-#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -332,6 +329,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                 ,m_bWriteableMemo(sal_False)
 {
 }
+
 // -----------------------------------------------------------------------------
 void ODbaseTable::construct()
 {
@@ -350,10 +348,10 @@ void ODbaseTable::construct()
         "ODbaseTable::ODbaseTable: invalid extension!");
         // getEntry is expected to ensure the corect file name
 
-    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( sFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+    m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
     if (!(m_bWriteable = (NULL != m_pFileStream)))
-        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( sFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+        m_pFileStream = createStream_simpleError( sFileName, STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
 
     if(m_pFileStream)
     {
@@ -371,9 +369,9 @@ void ODbaseTable::construct()
             // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
             // allerdings koennen keine Updates durchgefuehrt werden
             // jedoch die Operation wird ausgefuehrt
-            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
             if (!(m_bWriteableMemo = (NULL != m_pMemoStream)))
-                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
             if (m_pMemoStream)
                 ReadMemoHeader();
         }
@@ -821,7 +819,7 @@ BOOL ODbaseTable::CreateImpl()
         if (aContent.isDocument())
         {
             // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-            SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(INetURLObject::NO_DECODE),STREAM_READ);
+            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE),STREAM_READ);
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
@@ -907,7 +905,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     bCreateMemo = sal_False;
     Date aDate;                                     // aktuelles Datum
 
-    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
 
     if (!m_pFileStream)
         return sal_False;
@@ -1084,7 +1082,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // Makro zum Filehandling fürs Erzeugen von Tabellen
-    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
         return sal_False;
@@ -1910,7 +1908,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     // we only have to bind the values which we need to copy into the new table
     for(OValueVector::iterator aIter = aRow->begin(); aIter != aRow->end();++aIter)
         aIter->setBound(sal_True);
-    if(nPos && nPos < aRow->size())
+    if(nPos && (nPos < (sal_Int32)aRow->size()))
         (*aRow)[nPos].setBound(sal_False);
 
 

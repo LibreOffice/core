@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:40 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
-#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
@@ -393,10 +390,10 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
 
     String aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+    m_pFileStream = createStream_simpleError( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
     if(!m_pFileStream)
-        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+        m_pFileStream = createStream_simpleError( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
 
     if(m_pFileStream)
     {
