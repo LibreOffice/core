@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-05 16:54:06 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 13:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2607,8 +2607,17 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
     if ( bUseVirtDev )
     {
         Rectangle aClipRecPixel( pOutWin->LogicToPixel( aClipRec ) );
-        aClipRecPixel.Right() += 1; // falls abgerundet!
-        aClipRecPixel.Bottom() += 1;    // falls abgerundet!
+        if ( !IsVertical() )
+        {
+            // etwas mehr, falls abgerundet!
+            aClipRecPixel.Right() += 1;
+            aClipRecPixel.Bottom() += 1;
+        }
+        else
+        {
+            aClipRecPixel.Left() -= 1;
+            aClipRecPixel.Bottom() += 1;
+        }
 
         // Wenn aClipRecPixel > XXXX, dann invalidieren ?!
 
