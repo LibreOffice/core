@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:25:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ IMPL_LINK( PrintDialog, ImplPropertiesHdl, void*, EMPTYARG )
 {
     if ( !TEMPPRINTER() )
         TEMPPRINTER() = new Printer( mpPrinter->GetJobSetup() );
-    TEMPPRINTER()->Setup();
+    TEMPPRINTER()->Setup( this );
 
     return 0;
 }
@@ -415,6 +415,7 @@ IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
 bool PrintDialog::ImplGetFilename()
 {
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    static OUString aOldFile;
     if( xFactory.is() )
     {
         Sequence< Any > aTempl( 1 );
@@ -456,11 +457,20 @@ bool PrintDialog::ImplGetFilename()
             {
                 DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
             }
+
+            if( aOldFile.getLength() )
+            {
+                INetURLObject aUrl( aOldFile, INET_PROT_FILE );
+                xFilePicker->setDefaultName( aUrl.GetLastName() );
+                aUrl.CutLastName();
+                xFilePicker->setDisplayDirectory( aUrl.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+            }
+
             if( xFilePicker->execute() == ExecutableDialogResults::OK )
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
-                maFiPrintFile.SetText( aObj.PathToFileName() );
+                maFiPrintFile.SetText( aOldFile = aObj.PathToFileName() );
                 return true;
             }
             return false;
@@ -477,10 +487,14 @@ bool PrintDialog::ImplGetFilename()
     aDlg.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
     aDlg.SetDefaultExt( String( RTL_CONSTASCII_USTRINGPARAM( "ps" ) ) );
 #endif
+
+    if( aOldFile.getLength() )
+        aDlg.SetPath( aOldFile );
+
     if( aDlg.Execute() )
     {
         String aTargetFile = aDlg.GetPath();
-        maFiPrintFile.SetText( aTargetFile );
+        maFiPrintFile.SetText( aOldFile = aTargetFile );
         return true;
     }
 
