@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-20 13:03:12 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:57:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,12 +80,6 @@ CFLAGS += -DWINVER=0x0400
 SLOFILES=	$(SLO)$/salframe.obj	\
             $(SLO)$/salmenu.obj     \
             $(SLO)$/salobj.obj
-
-.IF "$(UPDATER)"=="YES"
-OBJFILES=	$(OBJ)$/salframe.obj	\
-            $(OBJ)$/salmenu.obj     \
-            $(OBJ)$/salobj.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
