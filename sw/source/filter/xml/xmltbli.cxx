@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:20:45 $
+ *  last change: $Author: mib $ $Date: 2001-03-14 07:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,12 +555,14 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
                 new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
                                        xAttrList, GetTable() );
             pContext = pTblContext;
-            InsertContent( pTblContext );
+            if( GetTable()->IsValid() )
+                InsertContent( pTblContext );
         }
     }
     else
     {
-        InsertContentIfNotThere();
+        if( GetTable()->IsValid() )
+            InsertContentIfNotThere();
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
                         XML_TEXT_TYPE_CELL  );
@@ -574,13 +576,16 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
 
 void SwXMLTableCellContext_Impl::EndElement()
 {
-    if( bHasTextContent )
+    if( GetTable()->IsValid() )
     {
-        GetImport().GetTextImport()->DeleteParagraph();
-    }
-    else if( !bHasTableContent )
-    {
-        InsertContentIfNotThere();
+        if( bHasTextContent )
+        {
+            GetImport().GetTextImport()->DeleteParagraph();
+        }
+        else if( !bHasTableContent )
+        {
+            InsertContentIfNotThere();
+        }
     }
 }
 
@@ -778,12 +783,14 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             aStyleName = rValue;
         }
     }
-    GetTable()->InsertRow( aStyleName, bInHead );
+    if( GetTable()->IsValid() )
+        GetTable()->InsertRow( aStyleName, bInHead );
 }
 
 void SwXMLTableRowContext_Impl::EndElement()
 {
-    GetTable()->FinishRow();
+    if( GetTable()->IsValid() )
+        GetTable()->FinishRow();
 }
 
 SwXMLTableRowContext_Impl::~SwXMLTableRowContext_Impl()
@@ -800,7 +807,7 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
     {
         if( rLocalName.compareToAscii( sXML_table_cell ) == 0 )
         {
-            if( GetTable()->IsInsertCellPossible() )
+            if( !GetTable()->IsValid() || GetTable()->IsInsertCellPossible() )
                 pContext = new SwXMLTableCellContext_Impl( GetSwImport(),
                                                            nPrefix,
                                                            rLocalName,
@@ -1170,9 +1177,19 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     {
         xTable->initialize( 1, 1 );
 
-        xTextContent = Reference< XTextContent >( xTable, UNO_QUERY );
-        GetImport().GetTextImport()->InsertTextContent( xTextContent );
+        try
+        {
+            xTextContent = Reference< XTextContent >( xTable, UNO_QUERY );
+            GetImport().GetTextImport()->InsertTextContent( xTextContent );
+        }
+        catch( IllegalArgumentException& )
+        {
+            xTable = 0;
+        }
+    }
 
+    if( xTable.is() )
+    {
         Reference<XUnoTunnel> xTableTunnel( xTable, UNO_QUERY);
         if( xTableTunnel.is() )
         {
@@ -1247,12 +1264,13 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_HEADER_COLS:
         bHeader = sal_True;
     case XML_TOK_TABLE_COLS:
-        pContext = new SwXMLTableColsContext_Impl( GetSwImport(), nPrefix,
-                                                   rLocalName, xAttrList,
-                                                   this, bHeader );
+        if( IsValid() )
+            pContext = new SwXMLTableColsContext_Impl( GetSwImport(), nPrefix,
+                                                       rLocalName, xAttrList,
+                                                       this, bHeader );
         break;
     case XML_TOK_TABLE_COL:
-        if( IsInsertColPossible() )
+        if( IsValid() && IsInsertColPossible() )
             pContext = new SwXMLTableColContext_Impl( GetSwImport(), nPrefix,
                                                       rLocalName, xAttrList,
                                                       this );
@@ -1272,14 +1290,17 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         break;
     case XML_TOK_OFFICE_DDE_SOURCE:
         // save context for later processing (discard old context, if approp.)
-        if (pDDESource != NULL)
+        if( IsValid() )
         {
-            pDDESource->ReleaseRef();
+            if (pDDESource != NULL)
+            {
+                pDDESource->ReleaseRef();
+            }
+            pDDESource = new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
+                                                        rLocalName );
+            pDDESource->AddRef();
+            pContext = pDDESource;
         }
-        pDDESource = new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
-                                                    rLocalName );
-        pDDESource->AddRef();
-        pContext = pDDESource;
         break;
     }
 
@@ -2384,7 +2405,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
 
 void SwXMLTableContext::EndElement()
 {
-    if( !xParentTable.Is() )
+    if( IsValid() && !xParentTable.Is() )
     {
         MakeTable();
         GetImport().GetTextImport()->SetCursor( xOldCursor );

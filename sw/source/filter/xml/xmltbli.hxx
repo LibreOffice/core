@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 10:39:13 $
+ *  last change: $Author: mib $ $Date: 2001-03-14 07:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ public:
     sal_Bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
     sal_Bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
     sal_Bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
-
+    sal_Bool IsValid() const { return pTableNode != 0; }
 
     void InsertCell( const ::rtl::OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
