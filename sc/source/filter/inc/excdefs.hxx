@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-16 09:26:40 $
+ *  last change: $Author: dr $ $Date: 2002-10-14 12:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,7 @@ enum XclEscapement
 #define EXC_OBJT_PICT               0x08
 #define EXC_OBJT_POLYGON            0x09
 #define EXC_OBJT_NOTE               0x19
+#define EXC_OBJT_DRAWING            0x1E
 
 // (0x007E) RK ================================================================
 
