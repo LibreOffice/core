@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-14 14:07:15 $
+ *  last change: $Author: pl $ $Date: 2002-10-16 13:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
     {
         GetSalData()->pFirstFrame_->maFrameData.ShutDown();
     }
+    return 0;
 }
 
 void SessionManagerClient::DieProc(
