@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-31 20:54:10 $
+ *  last change: $Author: pluby $ $Date: 2001-01-05 21:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,20 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
+#endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
+#endif
 
 // ==================================================================
 
 SalBitmap::SalBitmap() :
-        mhPixMap( 0 ),
+        mpVirDev( 0 ),
         mnBitCount( 0 )
 {
 }
@@ -87,42 +96,73 @@ SalBitmap::~SalBitmap()
 
 BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
-    maSize = rSize;
-    mnBitCount = nBitCount;
-    return TRUE;
+    ImplSVData* pSVData = ImplGetSVData();
+    BOOL bRet = FALSE;
+
+    // Stub code: we can only handle 32 bit pixel depth's right now
+    nBitCount = 32;
+
+    if ( rSize.Width() && rSize.Height() )
+    {
+        // Create a SalVirtualDevice
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( NULL,
+            rSize.Width(), rSize.Height(), nBitCount );
+
+        if ( mpVirDev )
+        {
+            mnBitCount = nBitCount;
+            maSize = rSize;
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
 }
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBitmap )
+BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
 {
-    maSize = rSalBitmap.maSize;
-    mnBitCount = 1;
-    return TRUE;
+    BOOL bRet = FALSE;
+
+    if ( Create( rSalBmp, rSalBmp.mnBitCount ) )
+        bRet = TRUE;
+
+    return bRet;
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    maSize = rSalBmp.maSize;
-    mnBitCount = rSalBmp.mnBitCount;
-    return TRUE;
+    return Create( rSalBmp );
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 {
-    maSize = rSalBmp.maSize;
-    mnBitCount = nNewBitCount;
-    return TRUE;
+    BOOL bRet = FALSE;
+
+    if ( Create( rSalBmp.maSize, nNewBitCount, BitmapPalette() ) )
+    {
+        // Not yet implemented: Copy pixels from rSalBmp.mpVirDev to mpVirDev
+
+        bRet = TRUE;
+    }
+
+    return bRet;
 }
 
 // ------------------------------------------------------------------
 
 void SalBitmap::Destroy()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if ( mpVirDev )
+        pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
+
     maSize = Size();
     mnBitCount = 0;
 }
@@ -131,16 +171,41 @@ void SalBitmap::Destroy()
 
 BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 {
-    BitmapBuffer *pBuffer = new BitmapBuffer();
+    BitmapBuffer *pBuffer = NULL;
 
-    // Stub code: we have not yet written any interfaces to native bitmaps.
-    pBuffer->mnFormat = BMP_FORMAT_BOTTOM_UP | BMP_FORMAT_1BIT_MSB_PAL;
-    pBuffer->mnWidth = maSize.Width();
-    pBuffer->mnHeight = maSize.Height();
-    pBuffer->mnScanlineSize = AlignedWidth4Bytes( pBuffer->mnWidth * mnBitCount );
-    pBuffer->mnFormat |= BMP_FORMAT_16BIT_TC_MASK;
-    pBuffer->maColorMask = ColorMask( 0x7b00, 0x03e0, 0x001f);
-    pBuffer->mpBits = new BYTE[ pBuffer->mnScanlineSize * pBuffer->mnHeight ];
+    if ( mpVirDev )
+    {
+        // Get the SalGraphics which contains the GWorld we will draw to
+        SalGraphics *pGraphics = GetGraphics();
+
+        if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+        {
+            PixMapHandle hPixMap = NULL;
+
+            hPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+
+            if ( hPixMap )
+            {
+                pBuffer = new BitmapBuffer();
+
+                // Lock the GWorld so that the calling functions can write to
+                // this buffer
+                LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+
+                pBuffer->mnBitCount = (**hPixMap).pixelSize;
+                pBuffer->mnWidth = mpVirDev->maVirDevData.mnWidth;
+                pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
+                pBuffer->mnBitCount = (**hPixMap).pixelSize;
+                pBuffer->mnScanlineSize = GetPixRowBytes( hPixMap );
+                pBuffer->mpBits = (BYTE *)GetPixBaseAddr( hPixMap );
+                pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN | BMP_FORMAT_32BIT_TC_MASK;
+            }
+
+            // Release the SalGraphics so that others can get a handle to it
+            // in future GetGraphics() calls
+            ReleaseGraphics( pGraphics );
+        }
+    }
 
     return pBuffer;
 }
@@ -149,5 +214,43 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
 void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 {
-    delete pBuffer;
+    SalGraphics *pGraphics = NULL;
+
+    if ( mpVirDev )
+    {
+        // Get the SalGraphics which contains the GWorld we used as the buffer
+        SalGraphics *pGraphics = GetGraphics();
+
+        if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+        {
+            // Unlock the GWorld so that this GWorld can be reused
+            UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+
+            // Release the SalGraphics so that others can get a handle to it
+            // in future GetGraphics() calls
+            ReleaseGraphics( pGraphics );
+        }
+    }
+
+    if ( pBuffer )
+        delete pBuffer;
 }
+
+// ------------------------------------------------------------------
+
+SalGraphics* SalBitmap::GetGraphics()
+{
+    if ( mpVirDev )
+        return mpVirDev->GetGraphics();
+    else
+        return NULL;
+}
+
+// ------------------------------------------------------------------
+
+void SalBitmap::ReleaseGraphics( SalGraphics* pGraphics )
+{
+    if ( mpVirDev )
+        mpVirDev->ReleaseGraphics( pGraphics );
+}
+
