@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-25 17:18:28 $
+ *  last change: $Author: as $ $Date: 2002-11-26 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the filtername that was chosen to load the document.</desc>
+                    <desc xml:lang="en-US">Specifies the filtername that was choosen to load the document.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
@@ -762,12 +762,24 @@
 				<author>AS</author>
 			</info>
 			<prop oor:name="ServiceName" oor:type="xs:string">
+                <info>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+                </info>
 			</prop>
 			<prop oor:name="UserInteraction" oor:type="xs:boolean">
+                <info>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+                </info>
 			</prop>
 			<prop oor:name="AllowAsync" oor:type="xs:boolean">
+                <info>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+                </info>
 			</prop>
 			<group oor:name="ExecutionArguments" oor:extensible="true">
+                <info>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+                </info>
 			</group>
 		</group>
 	</templates>
@@ -1592,8 +1604,16 @@
 					<desc xml:lang="en-US">Describes the range and current size of the history list.</desc>
 				</info>
 				<constraints>
-					<minInclusive oor:value="0"/>
-					<maxInclusive oor:value="100"/>
+                    <minInclusive oor:value="0">
+                        <info>
+                            <desc xml:lang="en-US">It's the min range for the history size.</desc>
+                        </info>
+                    </minInclusive>
+                    <maxInclusive oor:value="100">
+                        <info>
+                            <desc xml:lang="en-US">It's the max range for the history size.</desc>
+                        </info>
+                    </maxInclusive>
 				</constraints>
 				<value>100</value>
 			</prop>
@@ -1603,8 +1623,16 @@
 					<desc xml:lang="en-US">Describes the range and current size of the picklist shown inside the menu.</desc>
 				</info>
 				<constraints>
-					<minInclusive oor:value="0"/>
-					<maxInclusive oor:value="9"/>
+                    <minInclusive oor:value="0">
+                        <info>
+                            <desc xml:lang="en-US">It's the min range for the picklist size.</desc>
+                        </info>
+                    </minInclusive>
+                    <maxInclusive oor:value="9">
+                        <info>
+                            <desc xml:lang="en-US">It's the max range for the picklist size.</desc>
+                        </info>
+                    </maxInclusive>
 				</constraints>
 				<value>4</value>
 			</prop>
@@ -4880,16 +4908,20 @@
 		</group>
 		<group oor:name="Startup">
 			<info>
+                <deprecated>Use cfg package Jobs instead of this.</deprecated>
 				<author>AS</author>
+                <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 			</info>
 			<set oor:name="Run" oor:node-type="JobDescription">
 				<info>
-					<deprecated>Use cfg package Jobs instead of this.</deprecated>
+                    <deprecated>Use cfg package Jobs instead of this.</deprecated>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</set>
 			<set oor:name="RunOnce" oor:node-type="JobDescription">
 				<info>
 					<deprecated>Use cfg package Jobs instead of this.</deprecated>
+                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</set>
 		</group>
