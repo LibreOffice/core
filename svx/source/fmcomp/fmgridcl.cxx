@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-20 14:10:56 $
+ *  last change: $Author: oj $ $Date: 2001-01-19 08:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,14 @@ void FmGridControl::DeleteSelectedRows()
     BeginCursorAction();
 
     // now delete the row
-    Sequence <sal_Int32> aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
+    Sequence <sal_Int32> aDeletedRows;
+    try
+    {
+        aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
+    }
+    catch(SQLException&)
+    {
+    }
 
     // how many rows are deleted?
     sal_Int32 nDeletedRows = 0;
