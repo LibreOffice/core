@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-29 14:27:18 $
+ *  last change: $Author: bm $ $Date: 2001-06-13 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,6 +943,9 @@ void SchXMLAxisContext::EndElement()
     if( msAutoStyleName.getLength() &&
         xProp.is())
     {
+        // #88077# AutoOrigin 'on' is default
+        xProp->setPropertyValue( rtl::OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
+
         const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
         if( pStylesCtxt )
         {
