@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:15:04 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,6 @@ using namespace ::rtl;
 
 #define ERROR RuntimeException()
 
-static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
-
 Calendar_gregorian::Calendar_gregorian()
 {
         cCalendar = "com.sun.star.i18n.Calendar_gregorian";
@@ -93,6 +91,7 @@ Calendar_gregorian::Calendar_gregorian(Era *_eraArray)
 
 void SAL_CALL Calendar_gregorian::init(Era *_eraArray) throw(RuntimeException)
 {
+        UErrorCode status;
         body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
         if (!body || !U_SUCCESS(status)) throw ERROR;
         eraArray = _eraArray;
@@ -197,6 +196,7 @@ Calendar_gregorian::getUniqueID() throw(RuntimeException)
 void SAL_CALL
 Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException)
 {
+        UErrorCode status;
         body->setTime(timeInDays * U_MILLIS_PER_DAY, status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
         getValue();
@@ -209,6 +209,7 @@ Calendar_gregorian::getDateTime() throw(RuntimeException)
             setValue();
             getValue();
         }
+        UErrorCode status;
         double r = body->getTime(status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
         return r / U_MILLIS_PER_DAY;
@@ -295,6 +296,29 @@ Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value ) throw(Runt
 void SAL_CALL
 Calendar_gregorian::setValue() throw(RuntimeException)
 {
+        // #i17222# always submit zone info (somehow ICU needs it for the DST
+        // stuff to work right), and correct DST glitch.
+        // See also localtime/gmtime conversion pitfalls at
+        // http://www.erack.de/download/timetest.c
+        if ( !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET)) )
+        {
+            UErrorCode status;
+            sal_Int32 value = body->get( icu::Calendar::ZONE_OFFSET, status = U_ZERO_ERROR);
+            if ( U_SUCCESS(status) )
+            {
+                fieldSet |= (1 << CalendarFieldIndex::ZONE_OFFSET);
+                fieldValue[CalendarFieldIndex::ZONE_OFFSET] = value / 60000;
+            }
+        }
+        bool bNeedDST = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
+        sal_Int32 nValDST = 0;
+        if ( bNeedDST )
+        {
+            UErrorCode status;
+            nValDST = body->get( icu::Calendar::DST_OFFSET, status = U_ZERO_ERROR);
+            if ( !U_SUCCESS(status) )
+                nValDST = 0;
+        }
         memcpy(fieldSetValue, fieldValue, sizeof(fieldValue));
         mapToGregorian();
         for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++) {
@@ -305,11 +329,40 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                     body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
             }
         }
+        if ( bNeedDST )
+        {
+            UErrorCode status;
+            sal_Int32 value = body->get( icu::Calendar::DST_OFFSET, status = U_ZERO_ERROR);
+            if ( !U_SUCCESS(status) )
+                value = nValDST;
+            if ( value != nValDST )
+            {
+                // Due to different DSTs, resulting date values may differ if
+                // DST is onset at 00:00 and the very onsetRule date was
+                // submitted with DST off => date-1 23:00, for example, which
+                // is not what we want.
+                // Resubmit all values, this time including DST => date 01:00
+                fieldSet |= (1 << CalendarFieldIndex::DST_OFFSET);
+                fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
+                    fieldValue[CalendarFieldIndex::DST_OFFSET] = value / 60000;
+                for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++)
+                {
+                    if (fieldSet & (1 << fieldIndex))
+                    {
+                        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
+                            body->set(fieldNameConverter(fieldIndex), (sal_Int32) fieldSetValue[fieldIndex] * 60000);
+                        else
+                            body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
+                    }
+                }
+            }
+        }
 }
 
 void SAL_CALL Calendar_gregorian::getValue() throw(RuntimeException)
 {
         for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++) {
+            UErrorCode status;
             sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) ) throw ERROR;
 
@@ -342,6 +395,7 @@ void SAL_CALL
 Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value ) throw(RuntimeException)
 {
         // since ZONE and DST could not be add, we don't need to convert value here
+        UErrorCode status;
         body->add(fieldNameConverter(fieldIndex), value, status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
         getValue();
