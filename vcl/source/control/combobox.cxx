@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: pl $ $Date: 2002-03-21 10:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
             aPrefSz.Width() = nWidth;
         mpFloatWin->SetPrefSize( aPrefSz );
 
-        if ( IsAutoSizeEnabled() )
+        if ( IsAutoSizeEnabled() && ! (nFlags & WINDOW_POSSIZE_DROPDOWN) )
             nHeight = mnDDHeight;
     }
 
