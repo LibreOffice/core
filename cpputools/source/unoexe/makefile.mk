@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:18 $
+#   last change: $Author: dbo $ $Date: 2001-05-04 14:05:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(OUT)$/inc
+CPPUMAKERFLAGS+= -C
 
 UNOTYPES= \
      com.sun.star.uno.TypeClass \
