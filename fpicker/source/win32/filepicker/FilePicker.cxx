@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 15:01:13 $
+ *  last change: $Author: tra $ $Date: 2002-02-22 09:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ sal_Int16 SAL_CALL CFilePicker::execute( ) throw(RuntimeException)
 {
     OSL_ASSERT(0 != m_pImpl.get());
 
-    sal_Int16 ret = 0;
+    sal_Int16 ret;
 
     if (m_aAsyncEventNotifier.start())
     {
@@ -455,6 +455,10 @@ sal_Int16 SAL_CALL CFilePicker::execute( ) throw(RuntimeException)
     else
     {
         OSL_ENSURE(sal_False, "Could not start event notifier thread!");
+
+        throw RuntimeException(
+            OUString::createFromAscii("Error executing dialog"),
+            static_cast<XFilePicker*>(this));
     }
 
     return ret;
