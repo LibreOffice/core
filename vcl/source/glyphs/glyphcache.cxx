@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-22 17:25:48 $
+ *  last change: $Author: hdu $ $Date: 2000-11-24 17:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,10 @@ void GlyphCache::ClearFontPath()
 
 void GlyphCache::AddFontPath( const String& rFontPath )
 {
+#ifndef NO_FREETYPE_FONTS
     if( !pFtManager )
         return;
 
-#ifndef NO_FREETYPE_FONTS
     for( xub_StrLen nBreaker1 = 0, nBreaker2 = 0; nBreaker2 != STRING_LEN; nBreaker1 = nBreaker2 + 1 )
     {
         nBreaker2 = rFontPath.Search( ';', nBreaker1 );
@@ -183,7 +183,8 @@ long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
 {
     long nCount = VirtDevServerFont::FetchFontList( pList );
 #ifndef NO_FREETYPE_FONTS
-    nCount += pFtManager->FetchFontList( pList );
+    if( pFtManager )
+        nCount += pFtManager->FetchFontList( pList );
 #endif // NO_FREETYPE_FONTS
     return nCount;
 }
