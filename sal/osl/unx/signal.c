@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:21:23 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 11:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 /* system headers */
 #include "system.h"
 
-#define MAX_STACK_FRAMES 64
+#define MAX_STACK_FRAMES 256
 
 #ifdef LINUX
 #include <execinfo.h>
@@ -90,6 +90,7 @@
 #include <osl/mutex.h>
 #include <osl/signal.h>
 #include <osl/process.h>
+#include <rtl/digest.h>
 
 
 #define ACT_IGNORE  1
@@ -99,7 +100,6 @@
 #define ACT_HIDE    5
 
 #define MAX_PATH_LEN    2048
-#define MAX_FRAME_COUNT 64
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -279,6 +279,50 @@ static sal_Bool DeInitSignal()
 }
 
 /*****************************************************************************/
+/* Generate MD5 checksum    */
+/*****************************************************************************/
+
+static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
+{
+    sal_uInt32  nBytesProcessed = 0;
+
+    FILE *fp = fopen( filename, "r" );
+
+    if ( fp )
+    {
+        rtlDigest digest = rtl_digest_createMD5();
+
+        if ( digest )
+        {
+            size_t          nBytesRead;
+            sal_uInt8       buffer[4096];
+            rtlDigestError  error = rtl_Digest_E_None;
+
+            while ( rtl_Digest_E_None == error &&
+                0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
+            {
+                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
+                nBytesProcessed += nBytesRead;
+            }
+
+            if ( rtl_Digest_E_None == error )
+            {
+                error = rtl_digest_getMD5( digest, pChecksum, nChecksumLen );
+            }
+
+            if ( rtl_Digest_E_None != error )
+                nBytesProcessed = 0;
+
+            rtl_digest_destroyMD5( digest );
+        }
+
+        fclose( fp );
+    }
+
+    return nBytesProcessed;
+}
+
+/*****************************************************************************/
 /* Call crash reporter  */
 /*****************************************************************************/
 
@@ -320,17 +364,19 @@ static int ReportCrash( int Signal )
                 char szShellCmd[512];
                 char *pXMLTempName = NULL;
                 char *pStackTempName = NULL;
+                char *pChecksumTempName = NULL;
 
 #ifdef INCLUDE_BACKTRACE
                 char szXMLTempNameBuffer[L_tmpnam];
+                char szChecksumTempNameBuffer[L_tmpnam];
                 char szStackTempNameBuffer[L_tmpnam];
 
-                void *stackframes[1024];
+                void *stackframes[MAX_STACK_FRAMES];
                 int  iFrame;
                 int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
 
-                FILE *xmlout, *stackout;
-                int fdxml, fdstk;
+                FILE *xmlout, *stackout, *checksumout;
+                int fdxml, fdstk, fdchksum;
 
                 strncpy( szXMLTempNameBuffer, P_tmpdir, sizeof(szXMLTempNameBuffer) );
                 strncat( szXMLTempNameBuffer, "/crxmlXXXXXX", sizeof(szXMLTempNameBuffer) );
@@ -338,19 +384,27 @@ static int ReportCrash( int Signal )
                 strncpy( szStackTempNameBuffer, P_tmpdir, sizeof(szStackTempNameBuffer) );
                 strncat( szStackTempNameBuffer, "/crstkXXXXXX", sizeof(szStackTempNameBuffer) );
 
+                strncpy( szChecksumTempNameBuffer, P_tmpdir, sizeof(szChecksumTempNameBuffer) );
+                strncat( szChecksumTempNameBuffer, "/crchkXXXXXX", sizeof(szChecksumTempNameBuffer) );
+
                 fdxml = mkstemp(szXMLTempNameBuffer);
                 fdstk = mkstemp(szStackTempNameBuffer);
+                fdchksum = mkstemp(szChecksumTempNameBuffer);
 
                 xmlout = fdopen( fdxml , "w" );
                 stackout = fdopen( fdstk , "w" );
+                checksumout = fdopen( fdchksum, "w" );
 
                 pXMLTempName = szXMLTempNameBuffer;
                 pStackTempName = szStackTempNameBuffer;
+                pChecksumTempName = szChecksumTempNameBuffer;
 
 
-                if ( xmlout && stackout )
+                if ( xmlout && stackout && checksumout )
                 {
                     fprintf( xmlout, "<errormail:Stack type=\"%s\">\n", STACKTYPE );
+
+                    fprintf( checksumout, "<errormail:Checksums type=\"MD5\">\n" );
 
                     for ( iFrame = 0; iFrame < nFrames; iFrame++ )
                     {
@@ -386,6 +440,25 @@ static int ReportCrash( int Signal )
                             }
                             else
                                 dli_fname = dl_info.dli_fname;
+
+                            /* create checksum of library on stack */
+                            if ( dli_fname )
+                            {
+                                sal_uInt8   checksum[RTL_DIGEST_LENGTH_MD5];
+
+                                sal_uInt32 nBytesProcessed = calc_md5_checksum(
+                                    dl_info.dli_fname, checksum, sizeof(checksum) );
+                                if ( nBytesProcessed )
+                                {
+                                    int i;
+
+                                    fprintf( checksumout, "<errormail:Checksum sum=\"0x" );
+                                    for ( i = 0; i < 16; fprintf( checksumout, "%02X", checksum[i++] ) );
+                                    fprintf( checksumout, "\" bytes=\"%d\" file=\"%s\"/>\n",
+                                        nBytesProcessed,
+                                        dli_fname );
+                                }
+                            }
 
                             if ( dl_info.dli_fbase && dl_info.dli_fname )
                             {
@@ -426,22 +499,25 @@ static int ReportCrash( int Signal )
                     }
 
                     fprintf( xmlout, "</errormail:Stack>\n" );
+                    fprintf( checksumout, "</errormail:Checksums>\n" );
 
                     fclose( stackout );
                     fclose( xmlout );
+                    fclose( checksumout );
                 }
                 else
                 {
                     pXMLTempName = NULL;
                     pStackTempName = NULL;
+                    pChecksumTempName = NULL;
                 }
 
 #if defined( LINUX )
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d -xml %s -stack %s", getpid(), Signal, pXMLTempName, pStackTempName );
+                "crash_report -p %d -s %d -xml %s -chksum %s -stack %s", getpid(), Signal, pXMLTempName, pChecksumTempName, pStackTempName );
 #elif defined ( SOLARIS ) && defined( SPARC )
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d -xml %s", getpid(), Signal, pXMLTempName );
+                "crash_report -p %d -s %d -xml %s -chksum %s", getpid(), Signal, pXMLTempName, pChecksumTempName );
 #endif
 
 #else /* defined INCLUDE BACKTRACE */
@@ -457,6 +533,9 @@ static int ReportCrash( int Signal )
 
                 if ( pStackTempName )
                     unlink( pStackTempName );
+
+                if ( pChecksumTempName )
+                    unlink( pChecksumTempName );
 
                 if ( -1 != ret )
                 {
@@ -477,7 +556,7 @@ static int ReportCrash( int Signal )
 
 static void PrintStack( int sig )
 {
-    void *buffer[MAX_FRAME_COUNT];
+    void *buffer[MAX_STACK_FRAMES];
 #ifndef MACOSX
     int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
 #endif
