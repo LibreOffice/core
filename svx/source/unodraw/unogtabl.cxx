@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unogtabl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:13:46 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getElementNames(  )
 
         if( pItem )
         {
+            if( pItem->GetName().Len() == 0 )
+                pItem->SetName( pItem->CreateStandardName( mpPool, XATTR_FILLGRADIENT ) );
+
             pStrings[nSurrogate] = pItem->GetName();
 
             DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillGradientItem in pool should have a name !");

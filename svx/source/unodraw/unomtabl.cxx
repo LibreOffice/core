@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:14:13 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
 
         if( pEndItem )
         {
+            if( pEndItem->GetName().Len() == 0 )
+                pEndItem->SetName( pEndItem->CreateStandardName( mpPool, XATTR_LINEEND ) );
+
             pStrings[nSurrogate] = pEndItem->GetName();
 
             DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineEndItem in pool should have a name !");
@@ -288,6 +291,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
 
         if( pStartItem )
         {
+            if( pStartItem->GetName().Len() == 0 )
+                pStartItem->SetName( pStartItem->CreateStandardName( mpPool, XATTR_LINESTART ) );
+
             pStrings[nSurrogate+nEndCount] = pStartItem->GetName();
 
             DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineStartItem in pool should have a name !");

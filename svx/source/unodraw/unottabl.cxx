@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:14:13 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getElementNames(  )
     const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE) : 0;
     uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
-    const XFillFloatTransparenceItem *pItem;
+    XFillFloatTransparenceItem *pItem;
 
     for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
@@ -252,6 +252,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getElementNames(  )
 
         if( pItem )
         {
+            if( pItem->GetName().Len() == 0 )
+                pItem->SetName( pItem->CreateStandardName( mpPool, XATTR_FILLFLOATTRANSPARENCE ) );
+
             pStrings[nSurrogate] = pItem->GetName();
             DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillFloatTransparenceItem in pool should have a name !");
         }
