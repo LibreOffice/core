@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-15 11:04:07 $
+ *  last change: $Author: sab $ $Date: 2001-03-15 13:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
     sal_Int32 nLength = aProps.getLength();
     if (nLength)
     {
-        if (rName.getLength())
+        if (bNameAccess)
             rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
         SvXMLElementExport aEntryElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_entry, sal_True, sal_True);
         for (sal_Int32 i = 0; i < nLength; i++)
@@ -281,6 +281,7 @@ void XMLSettingsExportHelper::exportNameAccess(
                 "wrong NameAccess" );
     if(aNamed->hasElements())
     {
+        rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
         SvXMLElementExport aNamedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_named, sal_True, sal_True);
         uno::Sequence< rtl::OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
@@ -298,6 +299,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
     rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {
+        rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
         SvXMLElementExport aIndexedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_indexed, sal_True, sal_True);
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
