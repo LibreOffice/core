@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:27:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetParent( SCSTR( STR_STYLENAME_HEADLINE ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB1 );
     pSet = &pSheet->GetItemSet();
-    pSet->Put( SvxOrientationItem( SVX_ORIENTATION_BOTTOMTOP, ATTR_ORIENTATION ) );
+    pSet->Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
 
     //==========================================================
     // Seitenformat-Vorlagen:
