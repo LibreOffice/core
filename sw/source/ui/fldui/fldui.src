@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:58:19 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ String STR_JUMPEDITFLD
     Text [ portuguese_brazilian ] = "Plat~zhalter" ;
     Text[ chinese_simplified ] = "Í¨Åä·û";
     Text[ russian ] = "Ìåòêà-çàïîëíèòåëü";
-    Text[ polish ] = "Symbol wieloznaczny";
+    Text[ polish ] = "Znak-wype³niacz";
     Text[ japanese ] = "ÌßÚ°½ÎÙÀŞ(~P)";
     Text[ chinese_traditional ] = "³q°t²Å";
     Text[ arabic ] = "ÚäÕÑ äÇÆÈ";
@@ -3050,7 +3050,7 @@ String STR_COND
     TEXT[ chinese_traditional ] = "±ø¥ó(~C)";
     TEXT[ arabic ] = "ÔÑØ";
     TEXT[ greek ] = "¼ñïò";
-    TEXT[ korean ] = "Á¶°Ç";
+    TEXT[ korean ] = "Á¶°Ç(~C)";
     TEXT[ turkish ] = "Koşul";
     TEXT[ language_user1 ] = " ";
 };
@@ -3124,11 +3124,11 @@ String STR_INSTEXT
     TEXT[ chinese_simplified ] = "²åÈëÎÄ×Ö(~E)";
     TEXT[ russian ] = "Âñòàâèòü òåêñò";
     TEXT[ polish ] = "Wstaw tekst";
-    TEXT[ japanese ] = "‘}“ü‚·‚éÃ·½Ä";
+    TEXT[ japanese ] = "‘}“ü‚·‚éÃ·½Ä(~E)";
     TEXT[ chinese_traditional ] = "´¡¤J¤å¦r(~E)";
     TEXT[ arabic ] = "ÅÏÑÇÌ äÕ";
     TEXT[ greek ] = "ÅéóáãùãŞ êåéìİíïõ";
-    TEXT[ korean ] = "ÅØ½ºÆ® »ğÀÔ";
+    TEXT[ korean ] = "ÅØ½ºÆ® »ğÀÔ(~E)";
     TEXT[ turkish ] = "Metin ekle";
     TEXT[ language_user1 ] = " ";
 };
@@ -3154,7 +3154,7 @@ String STR_MACNAME
     TEXT[ chinese_traditional ] = "¥¨¶°¦WºÙ(~M)";
     TEXT[ arabic ] = "ÇÓã ÇáãÇßÑæ";
     TEXT[ greek ] = "¼íïìá ìáêñïåíôïëŞò";
-    TEXT[ korean ] = "¸ÅÅ©·Î ÀÌ¸§";
+    TEXT[ korean ] = "¸ÅÅ©·Î ÀÌ¸§(~M)";
     TEXT[ turkish ] = "Makro ~adı";
     TEXT[ language_user1 ] = " ";
 };
@@ -3180,7 +3180,7 @@ String STR_PROMPT
     TEXT[ chinese_traditional ] = "´£¥Ü(~R)";
     TEXT[ arabic ] = "ãáÇÍÙÉ";
     TEXT[ greek ] = "ÓõìâïõëŞ";
-    TEXT[ korean ] = "ÂüÁ¶";
+    TEXT[ korean ] = "ÂüÁ¶(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
 };
@@ -3200,10 +3200,10 @@ String STR_COMBCHRS_FT
     TEXT[ swedish ] = "Te~cken";
     TEXT[ polish ] = "Znaki";
     TEXT[ portuguese_brazilian ] = "Ch~aracters";
-    TEXT[ japanese ] = "•¶š";
+    TEXT[ japanese ] = "•¶š(~A)";
     TEXT[ korean ] = "Ch~aracters";
-    TEXT[ chinese_simplified ] = "×Ö·û";
-    TEXT[ chinese_traditional ] = "¦r¤¸";
+    TEXT[ chinese_simplified ] = "×Ö·û(~A)";
+    TEXT[ chinese_traditional ] = "¦r¤¸(~A)";
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "ÃÍÑİ";
 };
@@ -3255,7 +3255,7 @@ String STR_OFFSET
     TEXT[ chinese_traditional ] = "­×§ï(~F)";
     TEXT[ arabic ] = "ÊÕÍíÍ";
     TEXT[ greek ] = "Äéüñèùóç";
-    TEXT[ korean ] = "¼öÁ¤";
+    TEXT[ korean ] = "¼öÁ¤(~F)";
     TEXT[ turkish ] = "Düzeltme";
     TEXT[ language_user1 ] = " ";
 };
@@ -3355,7 +3355,7 @@ String STR_URLPROMPT
     Text[ chinese_traditional ] = "~URL";
     Text[ arabic ] = "URL~";
     Text[ greek ] = "URL";
-    Text[ korean ] = "URL";
+    Text[ korean ] = "~URL";
     Text[ turkish ] = "~URL";
     Text[ language_user1 ] = " ";
 };
