@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-28 09:11:52 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 09:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include "xmlstyli.hxx"
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
+#endif
+#ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
+#include "ViewSettingsSequenceDefines.hxx"
 #endif
 
 #ifndef _SC_XMLCONVERTER_HXX
@@ -2259,8 +2262,41 @@ void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Refer
 void SAL_CALL ScXMLImport::endDocument(void)
     throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
+    LockSolarMutex();
     if (getImportFlags() & IMPORT_CONTENT)
     {
+        if (GetModel().is())
+        {
+            uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
+            if (xViewDataSupplier.is())
+            {
+                uno::Reference<container::XIndexAccess> xIndexAccess = xViewDataSupplier->getViewData();
+                uno::Any aAny = xIndexAccess->getByIndex(0);
+                uno::Sequence< beans::PropertyValue > aSeq;
+                if (aAny >>= aSeq)
+                {
+                    sal_Int32 nCount (aSeq.getLength());
+                    for (sal_Int32 i = 0; i < nCount; ++i)
+                    {
+                        rtl::OUString sName(aSeq[i].Name);
+                        if (sName.compareToAscii(SC_ACTIVETABLE) == 0)
+                        {
+                            rtl::OUString sName;
+                            if(aSeq[i].Value >>= sName)
+                            {
+                                String sTabName(sName);
+                                sal_uInt16 nTab(0);
+                                if (pDoc->GetTable(sTabName, nTab))
+                                {
+                                    pDoc->SetVisibleTab(nTab);
+                                    i = nCount;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
             pDoc->CompileXML();
@@ -2273,6 +2309,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
         if (xActionLockable.is())
             xActionLockable->removeActionLock();
     }
+    UnlockSolarMutex();
 }
 
 // XEventListener
