@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
+        setToolBox(NULL);
         // just to make sure that our connection will be removed
         try
         {
