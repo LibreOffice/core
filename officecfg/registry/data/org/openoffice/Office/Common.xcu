@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:57:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,19 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Common" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data oor:name="Common" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="View">
+    <node oor:name="Dialog">
+      <prop oor:name="MiddleMouseButton" install:module="unx">
+        <value >2</value>
+      </prop>
+      <prop oor:name="MiddleMouseButton" install:module="wnt">
+        <value >1</value>
+      </prop>
+    </node>
     <node oor:name="Localisation">
       <prop oor:name="AutoMnemonic">
+        <value xml:lang="x-no-translate">true</value>
         <value xml:lang="en-US">true</value>
         <value xml:lang="de">true</value>
         <value xml:lang="ru">true</value>
@@ -85,6 +94,7 @@
         <value xml:lang="ar">false</value>
       </prop>
       <prop oor:name="DialogScale">
+        <value xml:lang="x-no-translate">0</value>
         <value xml:lang="en-US">10</value>
         <value xml:lang="de">0</value>
         <value xml:lang="ru">13</value>
@@ -103,6 +113,488 @@
         <value xml:lang="zh-TW">13</value>
         <value xml:lang="tr">13</value>
         <value xml:lang="ar">13</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Help">
+    <node oor:name="Registration">
+      <prop oor:name="URL">
+        <value>${REGISTRATIONURL}</value>
+      </prop>
+    </node>
+    <prop oor:name="System" install:module="unx">
+      <value>UNIX</value>
+    </prop>
+    <prop oor:name="System" install:module="wnt">
+      <value>WIN</value>
+    </prop>
+  </node>
+  <node oor:name="AutoCorrect">
+    <prop oor:name="ReplaceSingleQuote" install:module="korea">
+      <value>true</value>
+    </prop>
+  </node>
+  <node oor:name="I18N">
+    <node oor:name="CTL" install:module="ctl">
+      <prop oor:name="CTLFont">
+        <value >true</value>
+      </prop>
+    </node>
+    <node oor:name="CJK" install:module="cjk">
+      <prop oor:name="VerticalText">
+        <value >true</value>
+      </prop>
+      <prop oor:name="VerticalCallOut">
+        <value >true</value>
+      </prop>
+      <prop oor:name="Ruby">
+        <value >true</value>
+      </prop>
+      <prop oor:name="JapaneseFind">
+        <value >true</value>
+      </prop>
+      <prop oor:name="EmphasisMarks">
+        <value >true</value>
+      </prop>
+      <prop oor:name="DoubleLines">
+        <value >true</value>
+      </prop>
+      <prop oor:name="CJKFont">
+        <value >true</value>
+      </prop>
+      <prop oor:name="ChangeCaseMap">
+        <value >true</value>
+      </prop>
+      <prop oor:name="AsianTypography">
+        <value >true</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Menus">
+    <node oor:name="New">
+      <node oor:name="m0" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/swriter</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Textdokument</value>
+          <value xml:lang="en-US">~Text Document</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m1" oor:op="replace" install:module="calc">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/scalc</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Tab~ellendokument</value>
+          <value xml:lang="en-US">~Spreadsheet</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m2" oor:op="replace" install:module="impress">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/simpress?slot=6686</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Präsentation</value>
+          <value xml:lang="en-US">~Presentation</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m3" oor:op="replace" install:module="draw">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/sdraw</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Zeichnung</value>
+          <value xml:lang="en-US">~Drawing</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m4" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m5" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/swriter/web</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~HTML-Dokument</value>
+          <value xml:lang="en-US">~HTML Document</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m6" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/swriter/GlobalDocument</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Globaldokument</value>
+          <value xml:lang="en-US">M~aster Document</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m7" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m8" oor:op="replace" install:module="math">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/smath</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">F~ormel</value>
+          <value xml:lang="en-US">F~ormula</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m9" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/swriter?slot=21051</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Et~iketten</value>
+          <value xml:lang="en-US">~Labels</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3163</value>
+        </prop>
+      </node>
+      <node oor:name="m10" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/swriter?slot=21052</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Visitenkarten</value>
+          <value xml:lang="en-US">B~usiness Cards</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3163</value>
+        </prop>
+      </node>
+      <node oor:name="m11" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m12" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:5500</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Vorl~agen und Dokumente</value>
+          <value xml:lang="en-US">Templates a~nd Documents</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3242</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Wizard">
+      <node oor:name="m0" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >service:com.sun.star.wizards.letter.CallWizard?start</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Brief...</value>
+          <value xml:lang="en-US">~Letter...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m1" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10427</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Fax...</value>
+          <value xml:lang="en-US">~Fax...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m2" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10426</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Agenda...</value>
+          <value xml:lang="en-US">~Agenda...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m3" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10429</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Memo...</value>
+          <value xml:lang="en-US">~Memo...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m4" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+      </node>
+      <node oor:name="m5" oor:op="replace" install:module="impress">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10425</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Präsentation...</value>
+          <value xml:lang="en-US">~Presentation...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m6" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+      </node>
+      <node oor:name="m7" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >service:com.sun.star.wizards.web.CallWizard?start</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Web-Seite...</value>
+          <value xml:lang="en-US">~Web Page...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m10" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+      </node>
+      <node oor:name="m11" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >macro:///ImportWizard.Main.Main</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Dokumenten-~Konverter...</value>
+          <value xml:lang="en-US">Document ~Converter...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m12" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >macro:///Euro.AutoPilotRun.StartAutoPilot</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~Euro-Konverter...</value>
+          <value xml:lang="en-US">~Euro Converter...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m13" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:separator</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+      </node>
+      <node oor:name="m14" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10909</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">StarOffice 5.2 Datenbanken-Import...</value>
+          <value xml:lang="en-US">StarOffice 5.2 Database Import...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m15" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >slot:10934</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Adress-Datenquelle...</value>
+          <value xml:lang="en-US">Address Data Source...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m16" oor:op="replace" install:module="dicooo">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >macro:///Launcher.DicOOo.StartDicOOo</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Weitere Wörterbücher installieren...</value>
+          <value xml:lang="en-US">Install new dictionaries...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+      <node oor:name="m17" oor:op="replace" install:module="dicooo">
+        <prop oor:name="URL"  oor:type="xs:string">
+          <value >macro:///Launcher.FontOOo.StartFontOOo</value>
+        </prop>
+        <prop oor:name="Title">
+          <value>FontOOo Wizard...</value>
+          <value xml:lang="de">Schriftarten aus dem Internet installieren...</value>
+          <value xml:lang="en-US">Install fonts from the web...</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3216</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+  <node oor:name="OfficeObjects">
+    <node oor:name="Calc" oor:op="replace" install:module="calc">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Tabelle</value>
+        <value xml:lang="en-US">StarOffice 8 Spreadsheet</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >47BBB4CB-CE4C-4E80-A591-42D9AE74950F</value>
+      </prop>
+    </node>
+    <node oor:name="Chart" oor:op="replace">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Diagramm</value>
+        <value xml:lang="en-US">StarOffice 8 Chart</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >12DCAE26-281F-416F-A234-C3086127382E</value>
+      </prop>
+    </node>
+    <node oor:name="Draw" oor:op="replace" install:module="draw">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Zeichnung</value>
+        <value xml:lang="en-US">StarOffice 8 Drawing</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3</value>
+      </prop>
+    </node>
+    <node oor:name="Impress" oor:op="replace" install:module="impress">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Präsentation</value>
+        <value xml:lang="en-US">StarOffice 8 Presentation</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >9176E48A-637A-4D1F-803B-99D9BFAC1047</value>
+      </prop>
+    </node>
+    <node oor:name="Math" oor:op="replace" install:module="math">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Formel</value>
+        <value xml:lang="en-US">StarOffice 8 Formula</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >078B7ABA-54FC-457F-8551-6147E776A997</value>
+      </prop>
+    </node>
+    <node oor:name="Writer" oor:op="replace" install:module="writer">
+      <prop oor:name="Name">
+        <value xml:lang="de">StarOffice 8 Text</value>
+        <value xml:lang="en-US">StarOffice 8 Text</value>
+      </prop>
+      <prop oor:name="Key"  oor:type="xs:string">
+        <value >8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
       </prop>
     </node>
   </node>
