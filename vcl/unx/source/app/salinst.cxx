@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,10 @@
 #ifndef _SV_SALPRN_H
 #include <salprn.h>
 #endif
+#ifndef USE_PSPRINT
 #ifndef _VCL_SALCONFIG_HXX
 #include <salconfig.hxx>
+#endif
 #endif
 
 // -=-= C++ globals =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -184,7 +186,9 @@ final SalInstance *CreateSalInstance()
     // init instance (only one instance in this version !!!)
     pSalData->pFirstInstance_ = pInst;
 
+#ifndef USE_PSPRINT
     StartPrinterListening();
+#endif
 
     return pInst;
 }
@@ -196,9 +200,13 @@ final void DestroySalInstance( SalInstance *pInst )
     // reset instance (only one instance in this version !!!)
     if( pSalData->pFirstInstance_ == pInst )
     {
+#ifndef USE_PSPRINT
         StopPrinterListening();
+#endif
         pSalData->pFirstInstance_ = NULL;
+#ifndef USE_PSPRINT
         ::vcl_sal::XpDefaults::release();
+#endif
     }
 
     delete pInst;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-25 14:23:12 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,41 @@
 
 #ifndef _SV_SALPRN_H
 #define _SV_SALPRN_H
+
+#ifdef USE_PSPRINT
+
+#ifndef _PSPRINT_JOBDATA_HXX_
+#include <psprint/jobdata.hxx>
+#endif
+#ifndef _PSPRINT_PRINTERGFX_HXX_
+#include <psprint/printergfx.hxx>
+#endif
+#ifndef _PSPRINT_PRINTERJOB_HXX_
+#include <psprint/printerjob.hxx>
+#endif
+
+class SalGraphics;
+
+struct SalInfoPrinterData
+{
+    SalGraphics*            m_pGraphics;
+    ::psp::JobData          m_aJobData;
+    ::psp::PrinterGfx       m_aPrinterGfx;
+};
+
+struct SalPrinterData
+{
+    String                  m_aFileName;
+    String                  m_aFaxNr;
+    bool                    m_bFax;
+    SalGraphics*            m_pGraphics;
+    ::psp::PrinterJob       m_aPrintJob;
+    ::psp::JobData          m_aJobData;
+    ::psp::PrinterGfx       m_aPrinterGfx;
+};
+
+
+#else
 
 #ifndef _SALSTD_HXX
 #include <salstd.hxx>
@@ -127,6 +162,8 @@ public:
 // necessary to get changes in Xpdefaults
 void StartPrinterListening();
 void StopPrinterListening();
+
+#endif
 
 #endif // _SV_SALPRN_H
 

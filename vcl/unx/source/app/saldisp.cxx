@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,9 +559,11 @@ sal_GetServerVendor( Display *p_display )
         { vendor_none,        NULL,                               0 },
     };
 
+#ifndef USE_PSPRINT
     // handle xprinter separately, since it doesn´t implement ServerVendor()
     if ( ! XSalIsDisplay( p_display ) )
         return vendor_xprinter;
+#endif
 
     // handle regular server vendors
     char     *p_name   = ServerVendor( p_display );
@@ -725,7 +727,11 @@ final SalDisplay::SalDisplay( Display *display, Visual *pVisual,
     if( !pSalData->GetCurDisp() )
         pSalData->SetCurDisp( this );
 
+#ifndef USE_PSPRINT
     pXLib_    = XSalIsDisplay( pDisp_ ) ? pSalData->GetLib() : NULL;
+#else
+    pXLib_    = pSalData->GetLib();
+#endif
     nScreen_  = DefaultScreen( pDisp_ );
 
     if (!aColMap)
@@ -3508,7 +3514,11 @@ final SalColor SalColormap::GetColor( Pixel nPixel ) const
             return pVisual_->GetTCColor( nPixel );
 
         if( !pPalette_
+#ifndef USE_PSPRINT
             && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
+#else
+            && hColormap_
+#endif
 #ifdef PSEUDOCOLOR12
             && pVisual_->GetDepth() <= 12
 #else
@@ -3521,7 +3531,11 @@ final SalColor SalColormap::GetColor( Pixel nPixel ) const
     if( pPalette_ && nPixel < nUsed_ )
         return pPalette_[nPixel];
 
+#ifndef USE_PSPRINT
     if( !hColormap_ && !XSalIsPrinter( GetXDisplay() ) )
+#else
+    if( !hColormap_ )
+#endif
     {
         DBG_ASSERT( 1, "SalColormap::GetColor() !hColormap_\n" );
         return nPixel;
@@ -3572,7 +3586,11 @@ final Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     if( !pLookupTable_ )
     {
         if( !pPalette_
+#ifndef USE_PSPRINT
             && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
+#else
+            && hColormap_
+#endif
             && pVisual_
 #ifdef PSEUDOCOLOR12
             && pVisual_->GetDepth() <= 12
@@ -3587,7 +3605,11 @@ final Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                 if( pPalette_[i] == nSalColor )
                     return i;
 
+#ifndef USE_PSPRINT
         if( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
+#else
+        if( hColormap_ )
+#endif
         {
             // DirectColor, StaticColor, StaticGray, GrayScale (PseudoColor)
             XColor aColor;

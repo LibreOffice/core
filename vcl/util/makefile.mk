@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hdu $ $Date: 2000-11-10 17:25:07 $
+#   last change: $Author: cp $ $Date: 2000-11-17 18:34:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ USE_LDUMP2=TRUE
 .INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	sv.mk
+.INCLUDE :	makefile.pmk
 
 LDUMP=ldump2.exe
 
@@ -200,9 +201,16 @@ LIB1FILES+= \
             $(SLB)$/salapp.lib
 .ENDIF
 
+.IF "$(GUI)" == "UNX"
+.IF "$(PSPRINT)"!=""
+SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
+.ENDIF
+.ENDIF
+
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= ivcl
-SHL1STDLIBS=$(TOOLSLIB) 		\
+SHL1STDLIBS+=\
+            $(TOOLSLIB) 		\
             $(SOTLIB)			\
             $(VOSLIB)			\
             $(SALLIB)			\
@@ -551,11 +559,19 @@ $(MISC)$/$(SHL2TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
 .IF "$(GUI)"=="UNX"
 
 .IF "$(OS)"=="SOLARIS"
+.IF "$(PSPRINT)" == ""
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
+.ELSE
+SHL1STDLIBS += -lXm -lXt -lX11
+.ENDIF
 .ELIF "$(OS)"=="MACOSX"
 SHL1STDLIBS +=
 .ELSE
+.IF "$(PSPRINT)" == ""
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
+.ELSE
+SHL1STDLIBS += -lXaw -lXt -lX11
+.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"

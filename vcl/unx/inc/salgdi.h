@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:03:36 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.2 $  $Author: cp $  $Date: 2000-11-03 15:03:36 $   //
+// $Revision: 1.3 $  $Author: cp $  $Date: 2000-11-17 18:35:17 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -99,6 +99,12 @@ class   SalDisplay;
 class   SalFrame;
 class   SalVirtualDevice;
 class   SalPolyLine;
+class   SalPrinter;
+class   SalInfoPrinter;
+
+#ifdef USE_PSPRINT
+namespace psp { struct JobData; class PrinterGfx; }
+#endif
 
 #ifndef _SV_SALDISP_HXX
 typedef SalColormap        *SalColormapRef;
@@ -109,8 +115,15 @@ typedef SalColormap        *SalColormapRef;
 class SalGraphicsData
 {
     friend  class           SalGraphics;
+    friend  class           SalPrinter;
+    friend  class           SalInfoPrinter;
 
                             STDAPI( SalGraphicsData )
+
+#ifdef USE_PSPRINT
+            ::psp::JobData* m_pJobData;
+            ::psp::PrinterGfx* m_pPrinterGfx;
+#endif
 
             SalColormapRef  xColormap_;
             Drawable        hDrawable_;         // use
