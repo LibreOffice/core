@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-28 13:59:43 $
+ *  last change: $Author: ka $ $Date: 2001-09-28 14:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,15 @@ void SdPresViewShell::Activate( BOOL bIsMDIActivate )
         pFuSlideShow->StartShow();
         mbShowStarted = sal_True;
     }
+}
+
+// -----------------------------------------------------------------------------
+
+void SdPresViewShell::Paint( const Rectangle& rRect, SdWindow* pWin )
+{
+    // allow paints only if show is already started
+    if( mbShowStarted )
+        SdDrawViewShell::Paint( rRect, pWin );
 }
 
 // -----------------------------------------------------------------------------
