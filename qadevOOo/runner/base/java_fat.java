@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-26 08:17:46 $
+ *  last change:$Date: 2003-05-27 12:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,12 @@ public class java_fat implements TestBase {
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
         boolean retValue = true;
+        debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
 
         //get Job-Descriptions
         System.out.print("Getting Descriptions for Job: "+job+" from ");
         DescEntry[] entries = dg.getDescriptionFor(job,
-                (String) param.get("DescriptionPath"),true);
+                (String) param.get("DescriptionPath"),debug);
 
         if (entries == null ) {
             System.out.println("Couldn't get Description for Job");
