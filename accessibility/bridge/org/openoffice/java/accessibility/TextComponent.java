@@ -58,7 +58,7 @@
 package org.openoffice.java.accessibility;
 
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 /**
  */
@@ -70,7 +70,7 @@ public class TextComponent extends Component implements javax.accessibility.Acce
     protected TextComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext, XAccessibleStateSet xAccessibleStateSet) {
         super(xAccessible, xAccessibleContext);
         editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
-        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTILINE);
+        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE);
     }
 
     protected class AccessibleTextComponentListener extends AccessibleUNOComponentListener {
@@ -85,7 +85,7 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                     editable = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
                     break;
-                case AccessibleStateType.MULTILINE:
+                case AccessibleStateType.MULTI_LINE:
                     multiLine = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
                     break;
