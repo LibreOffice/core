@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:28:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "SlideSorterViewShell.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObject.hxx"
+#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "TextLogger.hxx"
 
 #include "Window.hxx"
@@ -105,10 +106,12 @@ namespace sd { namespace slidesorter { namespace view {
 ViewOverlay::ViewOverlay (SlideSorterViewShell& rViewShell)
     : mrViewShell (rViewShell),
       maSelectionRectangleOverlay(*this),
+      maMouseOverIndicatorOverlay(*this),
       maInsertionIndicatorOverlay(*this),
       maSubstitutionOverlay(*this),
       mbHasSavedState(false),
       mbSelectionRectangleWasVisible(false),
+      mbMouseOverIndicatorWasVisible(false),
       mbInsertionIndicatorWasVisible(false),
       mbSubstitutionDisplayWasVisible(false)
 {
@@ -127,6 +130,14 @@ ViewOverlay::~ViewOverlay (void)
 SelectionRectangleOverlay& ViewOverlay::GetSelectionRectangleOverlay (void)
 {
     return maSelectionRectangleOverlay;
+}
+
+
+
+
+MouseOverIndicatorOverlay& ViewOverlay::GetMouseOverIndicatorOverlay (void)
+{
+    return maMouseOverIndicatorOverlay;
 }
 
 
@@ -151,6 +162,7 @@ SubstitutionOverlay& ViewOverlay::GetSubstitutionOverlay (void)
 void ViewOverlay::Paint (void)
 {
     maSelectionRectangleOverlay.Paint();
+    maMouseOverIndicatorOverlay.Paint();
     maInsertionIndicatorOverlay.Paint();
     maSubstitutionOverlay.Paint();
 }
@@ -178,6 +190,7 @@ void ViewOverlay::HideAndSave (OverlayPaintType eType)
 {
     // Remember the current state of the visiblities of the overlays.
     mbSelectionRectangleWasVisible = maSelectionRectangleOverlay.IsShowing();
+    mbMouseOverIndicatorWasVisible = maMouseOverIndicatorOverlay.IsShowing();
     mbInsertionIndicatorWasVisible = maInsertionIndicatorOverlay.IsShowing();
     mbSubstitutionDisplayWasVisible = maSubstitutionOverlay.IsShowing();
 
@@ -203,8 +216,12 @@ void ViewOverlay::Restore (void)
     if (mbHasSavedState)
     {
         if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_PAINT)
+        {
             if (mbInsertionIndicatorWasVisible)
                 maInsertionIndicatorOverlay.Show();
+            if (mbMouseOverIndicatorWasVisible)
+                maMouseOverIndicatorOverlay.Show();
+        }
         if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_XOR)
         {
             if (mbSubstitutionDisplayWasVisible)
@@ -551,6 +568,54 @@ sal_Int32 InsertionIndicatorOverlay::GetInsertionPageIndex (void) const
 {
     return mnInsertionIndex;
 }
+
+
+
+
+//=====  MouseOverIndicatorOverlay  ===========================================
+
+MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
+    ViewOverlay& rViewOverlay)
+    : OverlayBase (rViewOverlay),
+      mpPageUnderMouse(NULL)
+{
+}
+
+
+
+
+void MouseOverIndicatorOverlay::SetSlideUnderMouse (
+    const model::PageDescriptor* pDescriptor)
+{
+    if (mpPageUnderMouse != pDescriptor)
+    {
+        ShowingModeGuard aGuard (*this);
+
+        mpPageUnderMouse = pDescriptor;
+    }
+}
+
+
+
+
+void MouseOverIndicatorOverlay::Paint (void)
+{
+    if (mpPageUnderMouse != NULL)
+    {
+        OutputDevice* pDevice = mrViewOverlay.GetViewShell()
+            .GetSlideSorterController().GetView().GetWindow();
+        PageObjectViewObjectContact* pContact
+            = mpPageUnderMouse->GetViewObjectContact();
+        if (pDevice != NULL
+            && pContact != NULL)
+        {
+            pContact->PaintFrame (*pDevice, mbIsShowing);
+        }
+    }
+}
+
+
+
 
 
 } } } // end of namespace ::sd::slidesorter::view
