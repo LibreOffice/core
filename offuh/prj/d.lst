@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun
 mkdir: %_DEST%\inc%_EXT%\com\sun\star
 
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\auth
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\accessibility
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\awt
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\bridge
@@ -74,12 +75,15 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
 
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\auth
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\awt
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\configuration
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\configuration\backend
 
 ..\%__SRC%\inc\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\com\sun\star\auth\*.hdl
 ..\%__SRC%\inc\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\com\sun\star\auth\*.hpp
+..\%__SRC%\inc\com\sun\star\accessibility\*.hpp %_DEST%\inc%_EXT%\com\sun\star\accessibility\*.hpp
+..\%__SRC%\inc\com\sun\star\accessibility\*.hdl %_DEST%\inc%_EXT%\com\sun\star\accessibility\*.hdl
 ..\%__SRC%\inc\com\sun\star\awt\*.hdl %_DEST%\inc%_EXT%\com\sun\star\awt\*.hdl
 ..\%__SRC%\inc\com\sun\star\awt\*.hpp %_DEST%\inc%_EXT%\com\sun\star\awt\*.hpp
 ..\%__SRC%\inc\com\sun\star\beans\*.hdl %_DEST%\inc%_EXT%\com\sun\star\beans\*.hdl
@@ -210,15 +214,14 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\awt
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hdl
 
-..\%__SRC%\inc\drafts\com\sun\star\accessibility\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\accessibility\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility\*.hdl
-
+..\%__SRC%\inc\drafts\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\auth\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\auth\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hdl
 
-..\%__SRC%\inc\drafts\com\sun\star\awt\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\awt\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\awt\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\awt\*.hdl
+..\%__SRC%\inc\drafts\com\sun\star\configuration\backend\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\configuration\backend\*.hdl
+..\%__SRC%\inc\drafts\com\sun\star\configuration\backend\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\configuration\backend\*.hpp
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
