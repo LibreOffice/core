@@ -7184,3 +7184,10 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ??0SfxSingleTabDialog@@QAE@PAVWindow@@ABVSfxItemSet@@G@Z
 ??0SfxSingleTabDialog@@QAE@PAVWindow@@GPBVSfxItemSet@@@Z
 ?Notify@SfxTabDialog@@MAEJAAVNotifyEvent@@@Z
+?Cast@SvPersist@@$4PPPPPPPM@PPPPPPKI@AEPAXPBVSotFactory@@@Z
+?GetInterface@SvPersist@@$4PPPPPPPM@PPPPPPKI@AEPAUIUnknown@@ABVSvGlobalName@@@Z
+?TestInvariant@SvPersist@@$4PPPPPPPM@PPPPPPKI@AEXE@Z
+?TestObjRef@SvPersist@@$4PPPPPPPM@PPPPPPKI@AEXE@Z
+?FillClass@SfxInPlaceObject@@$2PPPPPPPM@KE@BEXPAVSvGlobalName@@PAKPAVString@@22J@Z
+?FuzzyLock@SvObject@@$4PPPPPPPM@CM@AEGEEE@Z
+?FillClass@SfxFrameObject@@$2PPPPPPPM@HM@BEXPAVSvGlobalName@@PAKPAVString@@22J@Z
