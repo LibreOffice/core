@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:52:50 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,17 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
                 bCloseFrame = sal_True;
             else
 
-            // c2) there is no other (visible) frame open ...
+            // c2) if we close the current view ... but not all other views
+            //     to the same document, we must close the current frame only!
+            //     Because implts_closeView() suspended this view only - does not
+            //     close the frame.
+            if (
+                (!bCloseAllViewsToo                    ) &&
+                (aCheck2.m_lModelFrames.getLength() > 0)
+               )
+                bCloseFrame = sal_True;
+
+            // c3) there is no other (visible) frame open ...
             //     The help module will be ignored everytimes!
             //     But we have to decide if we must terminate the
             //     application or establish the backing mode now.
@@ -475,22 +485,10 @@ sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    // If allowed - inform user about modified documents or
-    // still running jobs (e.g. printing).
-    if (bAllowSuspend)
-    {
-        css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-        if (
-            (xController.is()               ) &&  // some views dont uses a controller .-( (e.g. the help window)
-            (!xController->suspend(sal_True))
-           )
-        {
-            return sal_False;
-        }
-    }
-
     // Close all views to the same document ... if forced to do so.
     // But dont touch our own frame here!
+    // We must do so ... because the may be following controller->suspend()
+    // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
     {
         css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
@@ -505,10 +503,24 @@ sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
         }
     }
 
-    // Make this frame "empty". Means close its view and controller.
-    return xFrame->setComponent(
-                css::uno::Reference< css::awt::XWindow >(),
-                css::uno::Reference< css::frame::XController >());
+    // If allowed - inform user about modified documents or
+    // still running jobs (e.g. printing).
+    if (bAllowSuspend)
+    {
+        css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+        if (
+            (xController.is()               ) &&  // some views dont uses a controller .-( (e.g. the help window)
+            (!xController->suspend(sal_True))
+           )
+        {
+            return sal_False;
+        }
+    }
+
+    // dont remove the component realy by e.g. calling setComponent(null, null).
+    // It's enough to suspend the controller.
+    // If we close the frame later this controller doesnt show the same dialog again.
+    return sal_True;
 }
 
 //-----------------------------------------------
