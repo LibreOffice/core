@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-03 07:57:30 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,25 +134,16 @@
 
 #define ERR_NOREGISTEREDDATASOURCES     RID_ERRORBOX_START +  0
 #define ERR_COULDNOTRESTOREDS           RID_ERRORBOX_START +  1
-#define ERR_QRY_TOO_MANY_COLUMNS        RID_ERRORBOX_START +  2
-#define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  3
-#define ERR_QRY_TOO_LONG_STATEMENT      RID_ERRORBOX_START +  4
-#define ERR_QRY_TOOCOMPLEX              RID_ERRORBOX_START +  5
-#define ERR_QRY_NOSELECT                RID_ERRORBOX_START +  6
-#define ERR_QRY_TOOMANYCOND             RID_ERRORBOX_START +  7
-#define ERR_QRY_SYNTAX                  RID_ERRORBOX_START +  8
-#define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  9
-#define ERR_QRY_TOO_MANY_TABLES         RID_ERRORBOX_START + 10
-#define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START + 11
-#define ERR_QRY_ILLEGAL_JOIN            RID_ERRORBOX_START + 12
-#define ERR_CANTADMINQUERIES            RID_ERRORBOX_START + 13
-#define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START + 14
-#define ERROR_INVALID_TABLE_NAME        RID_ERRORBOX_START + 15
-#define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START + 16
-#define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START + 17
-#define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 18
-#define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 19
-#define WARN_QRY_NATIVE                 RID_ERRORBOX_START + 20
+#define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
+#define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
+#define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START +  4
+#define ERR_CANTADMINQUERIES            RID_ERRORBOX_START +  5
+#define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START +  6
+#define ERROR_INVALID_TABLE_NAME        RID_ERRORBOX_START +  7
+#define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START +  8
+#define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START +  9
+#define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 10
+#define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 11
 
 
 //========================================================================
@@ -507,6 +498,19 @@
 #define STR_QUERY_DROP_ALL                  RID_STRING_START + 194
 #define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STRING_START + 195
 #define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STRING_START + 196
+#define STR_QRY_ILLEGAL_JOIN                RID_STRING_START + 197
+#define STR_QRY_TOO_LONG_STATEMENT          RID_STRING_START + 198
+#define STR_QRY_SYNTAX                      RID_STRING_START + 199
+#define STR_QRY_NATIVE                      RID_STRING_START + 200
+#define STR_QRY_TOO_MANY_TABLES             RID_STRING_START + 201
+#define STR_QRY_TOOMANYCOND                 RID_STRING_START + 202
+#define STR_QRY_TOO_MANY_COLUMNS            RID_STRING_START + 203
+#define STR_QRY_TOOCOMPLEX                  RID_STRING_START + 204
+#define STR_QRY_NOSELECT                    RID_STRING_START + 205
+#define STR_QRY_COLUMN_NOT_FOUND            RID_STRING_START + 206
+#define STR_QRY_JOIN_COLUMN_COMPARE         RID_STRING_START + 207
+#define STR_QRY_LIKE_LEFT_NO_COLUMN         RID_STRING_START + 208
+#define STR_QRY_CHECK_CASESENSITIVE         RID_STRING_START + 209
 
 
 //========================================================================
@@ -528,6 +532,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.72  2002/05/03 07:57:30  oj
+ *  #98772#
+ *
  *  Revision 1.64.8.4  2002/04/29 14:26:34  oj
  *  #98772# new images
  *
