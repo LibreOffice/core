@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ DYN TextToken * TCF_at_gloss(const char *) { return new Tok_at_gloss; }
 DYN TextToken * TCF_at_global(const char *) { return new Tok_at_global; }
 DYN TextToken * TCF_at_include(const char *) { return new Tok_at_include; }
 DYN TextToken * TCF_at_label(const char *) { return new Tok_at_label; }
+DYN TextToken * TCF_at_since(const char *) { return new Tok_at_since; }
 DYN TextToken * TCF_at_HTML(const char *) { return new Tok_at_HTML; }
 DYN TextToken * TCF_at_NOHTML(const char *) { return new Tok_at_NOHTML; }
 DYN TextToken * TCF_Whitespace(const char * i_sText);
@@ -453,6 +454,7 @@ Context_AdocStd::SetupStateMachine()
     aStateMachine.AddToken( "@param",   TCF_at_param,       A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@see",     TCF_at_see,         A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@seealso", TCF_at_see,         A_nAtTagDefStatus, goto_AtTag );
+    aStateMachine.AddToken( "@since",   TCF_at_since,       A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@tpl",     TCF_at_template,    A_nAtTagDefStatus, goto_AtTag );
     aStateMachine.AddToken( "@tplparam",
                                         TCF_at_template,    A_nAtTagDefStatus, goto_AtTag );
