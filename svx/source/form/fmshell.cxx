@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:14:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 nSlot);
             // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
             // geaendert hat
-            GetImpl()->SetSelection(GetFormView()->GetMarkList());
+            GetImpl()->SetSelection(GetFormView()->GetMarkedObjectList());
             break;
         case SID_FM_LEAVE_CREATE:
             m_nLastSlot = 0;
