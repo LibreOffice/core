@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-11-23 15:42:57 $
+#   last change: $Author: jl $ $Date: 2002-03-26 09:04:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ RDB= $(SOLARBINDIR)$/applicat.rdb
 JARFILES = ridl.jar jurt.jar
 
 JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime_Test.class
+    $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime_Test.class \
+    $(CLASSDIR)$/$(PACKAGE)$/AnyConverter_Test.class
 
 # --- Targets ------------------------------------------------------
 
