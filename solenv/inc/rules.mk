@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-08 15:17:09 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 11:57:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -392,7 +392,17 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.m
     @+-$(RM) $@ >& $(NULLDEV)
     makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
-   
+
+# dependency dummy for *.s files
+
+$(MISC)$/s_%.dpcc : %.s
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+
+
 # dependencies script files
 
 $(MISC)$/%.dpcc :
