@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #endif
 #if NF_TEST_CALENDAR
 #include <comphelper/processfactory.hxx>
-#include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/XExtendedCalendar.hpp>
 #endif
 
 
@@ -1328,7 +1328,7 @@ input for the following reasons:
     sal_Int16 nZO, nDST1, nDST2, nDST;
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
-    uno::Reference< ::drafts::com::sun::star::i18n::XExtendedCalendar > xCal(
+    uno::Reference< ::com::sun::star::i18n::XExtendedCalendar > xCal(
             xSMgr->createInstance( ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.i18n.LocaleCalendar" ) ) ),
