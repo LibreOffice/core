@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:52:37 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 10:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,22 @@ void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMult
 
     Reference< XComponent > xT( xToolkit, uno::UNO_QUERY );
     xT->dispose();
+
+    Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+    if (xProps.is())
+    {
+        try
+        {
+            Reference< lang::XComponent > xComp;
+            if (xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xComp)
+            {
+                xComp->dispose();
+            }
+        }
+        catch (beans::UnknownPropertyException &)
+        {
+        }
+    }
 }
 
 void MyWin::Paint( const Rectangle& r )
