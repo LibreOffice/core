@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:32:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,8 +566,8 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
     case OBJECT_CLIENT_FILE:
         {
             nType = FILETYPE_TEXT;      // falls noch nicht gesetzt
-            Window* pOld = Application::GetDefModalDialogParent();
-            Application::SetDefModalDialogParent( pParent );
+            Window* pOld = Application::GetDefDialogParent();
+            Application::SetDefDialogParent( pParent );
 
             const SfxObjectFactory* pFactory=0;
             SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
@@ -589,7 +589,7 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
             else
                 sFile.Erase();
 
-            Application::SetDefModalDialogParent( pOld );
+            Application::SetDefDialogParent( pOld );
         }
         break;
 
