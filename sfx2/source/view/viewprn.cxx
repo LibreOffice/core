@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 11:15:41 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 12:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,11 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef VCL
-#ifndef _PRNDLG_HXX //autogen
-#include <vcl/prndlg.hxx>
-#endif
-#else
 #ifndef _SV_PRINTDLG_HXX //autogen
 #include <svtools/printdlg.hxx>
 #endif
 #ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
-#endif
 #endif
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
@@ -109,6 +103,8 @@
 #include "sfxtypes.hxx"
 #include "docinf.hxx"
 #include "event.hxx"
+#include "docfile.hxx"
+#include "docfilt.hxx"
 
 #include "view.hrc"
 #include "helpid.hrc"
@@ -467,6 +463,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             return;
         }
 
+        // print on help?
+        String aHelpFilterName( DEFINE_CONST_UNICODE("writer_web_HTML_help") );
+        SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
+        const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
+        sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
+
         // brauchen wir den Dialog?
         if ( !rReq.GetArgs() && !bSilent && !rReq.IsAPI() )
         {
@@ -479,6 +481,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // Print-Dialog
                 pPrintDlg = CreatePrintDialog( NULL );
+                if ( bPrintOnHelp )
+                    pPrintDlg->DisableHelp();
 
                 // Zusaetze Button und Dialog?
                 if ( pImp->bHasPrintOptions )
@@ -538,10 +542,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
             // Printer-Setup-Dialog abr"aumen
             DELETEX(pOptBtn);
-    #ifndef VCL
-            if ( pPrintDlg )
-                pPrintDlg->SetSetupDialog(0);
-    #endif
             DELETEX(pPrintSetupDlg);
 
             // nur f"urs tats"achliche Drucken den Druck-Dialog behalten
@@ -559,8 +559,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         {
             // zum transportieren brauchen wir einen Dialog
             pPrintDlg = CreatePrintDialog( GetWindow() );
+            if ( bPrintOnHelp )
+                pPrintDlg->DisableHelp();
             pPrintDlg->SetPrinter( pPrinter );
-                    ::DisableRanges( *pPrintDlg, pPrinter );
+            ::DisableRanges( *pPrintDlg, pPrinter );
 
             // PrintFile
             SFX_REQUEST_ARG(rReq, pFileItem, SfxStringItem, SID_FILE_NAME, FALSE);
