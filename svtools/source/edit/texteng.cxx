@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:32:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,13 @@ void TextEngine::SetFont( const Font& rFont )
     if ( rFont != maFont )
     {
         maFont = rFont;
-        maTextColor = rFont.GetColor();
+        // #i40221# As the font's color now defaults to transparent (since i35764)
+        //  we have to choose a useful textcolor in this case.
+        // Otherwise maTextColor and maFont.GetColor() are both transparent....
+        if( rFont.GetColor() == COL_TRANSPARENT )
+            maTextColor = COL_BLACK;
+        else
+            maTextColor = rFont.GetColor();
 
         // Wegen Selektion keinen Transparenten Font zulassen...
         // (Sonst spaeter in ImplPaint den Hintergrund anders loeschen...)
