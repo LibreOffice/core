@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 14:25:42 $
+ *  last change: $Author: jp $ $Date: 2001-07-27 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ inline BYTE GetRealLevel( const BYTE nLvl )
 {
     return nLvl & (NO_NUMLEVEL - 1);
 }
-const sal_Unicode cBulletChar   = 0xF000 + 149; // Charakter fuer Aufzaehlungen
+const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
 class SwNumFmt : public SvxNumberFormat, public SwClient
 {
