@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:06:34 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #define BUG_110335 1
 
 /**************************************************************************
@@ -325,8 +324,6 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         }
         catch ( uno::Exception const & )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::queryInterface - caught exception." );
             return uno::Any();
         }
     }
@@ -359,8 +356,6 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::getTypes - caught exception." );
     }
 
     cppu::OTypeCollection * pCollection = 0;
@@ -480,7 +475,6 @@ rtl::OUString SAL_CALL Content::getContentType()
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( sal_False, "Content::getContentType - caught exception" );
     }
 
     if ( bFolder )
@@ -977,47 +971,35 @@ uno::Sequence< star::ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
-//  if ( isFolder() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
+    uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
 
-        // document.
-        aSeq.getArray()[ 0 ].Type
-            = rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes
-            = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-              | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
+    // document.
+    aSeq.getArray()[ 0 ].Type
+        = rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
+    aSeq.getArray()[ 0 ].Attributes
+        = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+          | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
 
-        beans::Property aProp;
-        m_pProvider->getProperty(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+    beans::Property aProp;
+    m_pProvider->getProperty(
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
 
-        uno::Sequence< beans::Property > aDocProps( 1 );
-        aDocProps.getArray()[ 0 ] = aProp;
-        aSeq.getArray()[ 0 ].Properties = aDocProps;
+    uno::Sequence< beans::Property > aDocProps( 1 );
+    aDocProps.getArray()[ 0 ] = aProp;
+    aSeq.getArray()[ 0 ].Properties = aDocProps;
 
-        // folder.
-        aSeq.getArray()[ 1 ].Type
-            = rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
-        aSeq.getArray()[ 1 ].Attributes
-            = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+    // folder.
+    aSeq.getArray()[ 1 ].Type
+        = rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
+    aSeq.getArray()[ 1 ].Attributes
+        = star::ucb::ContentInfoAttribute::KIND_FOLDER;
 
-        uno::Sequence< beans::Property > aFolderProps( 1 );
-        aFolderProps.getArray()[ 0 ] = aProp;
-        aSeq.getArray()[ 1 ].Properties = aFolderProps;
-        return aSeq;
-    }
-/*
-    else
-    {
-        OSL_ENSURE( sal_False,
-                    "queryCreatableContentsInfo called on non-folder object!" );
-
-        return Sequence< ContentInfo >( 0 );
-    }
-*/
+    uno::Sequence< beans::Property > aFolderProps( 1 );
+    aFolderProps.getArray()[ 0 ] = aProp;
+    aSeq.getArray()[ 1 ].Properties = aFolderProps;
+    return aSeq;
 }
 
 //=========================================================================
@@ -1026,65 +1008,55 @@ uno::Reference< star::ucb::XContent > SAL_CALL
 Content::createNewContent( const star::ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
 {
-//  if ( isFolder() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-          if ( !Info.Type.getLength() )
-            return uno::Reference< star::ucb::XContent >();
+    if ( !Info.Type.getLength() )
+        return uno::Reference< star::ucb::XContent >();
 
-          if ( ( !Info.Type.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
-                &&
-                ( !Info.Type.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM( WEBDAV_CONTENT_TYPE ) ) ) )
-            return uno::Reference< star::ucb::XContent >();
-
-        rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-
-          OSL_ENSURE( aURL.getLength() > 0,
-                      "WebdavContent::createNewContent - empty identifier!" );
-
-        if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += rtl::OUString::createFromAscii( "/" );
-
-          sal_Bool isCollection;
-          if ( Info.Type.equalsAsciiL(
+    if ( ( !Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
-        {
-            aURL += rtl::OUString::createFromAscii( "New_Collection" );
-            isCollection = sal_True;
-          }
-          else
-        {
-            aURL += rtl::OUString::createFromAscii( "New_Content" );
-            isCollection = sal_False;
-          }
+         &&
+         ( !Info.Type.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( WEBDAV_CONTENT_TYPE ) ) ) )
+        return uno::Reference< star::ucb::XContent >();
 
-        uno::Reference< star::ucb::XContentIdentifier > xId(
-                          new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
+    rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
-          // create the local content
-          try
-        {
-            return new ::webdav_ucp::Content( m_xSMgr,
-                                              m_pProvider,
-                                                xId,
-                                              m_xResAccess->getSessionFactory(),
-                                                isCollection );
-        }
-        catch ( star::ucb::ContentCreationException & )
-          {
-            return uno::Reference< star::ucb::XContent >();
-          }
-    }
-/*
-      else
+    OSL_ENSURE( aURL.getLength() > 0,
+                "WebdavContent::createNewContent - empty identifier!" );
+
+    if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
+        aURL += rtl::OUString::createFromAscii( "/" );
+
+    sal_Bool isCollection;
+    if ( Info.Type.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
     {
-        OSL_ENSURE( sal_False, "createNewContent called on non-folder object!" );
+        aURL += rtl::OUString::createFromAscii( "New_Collection" );
+        isCollection = sal_True;
+    }
+    else
+    {
+        aURL += rtl::OUString::createFromAscii( "New_Content" );
+        isCollection = sal_False;
+    }
+
+    uno::Reference< star::ucb::XContentIdentifier > xId(
+                    new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
+
+    // create the local content
+    try
+    {
+        return new ::webdav_ucp::Content( m_xSMgr,
+                                          m_pProvider,
+                                          xId,
+                                          m_xResAccess->getSessionFactory(),
+                                          isCollection );
+    }
+    catch ( star::ucb::ContentCreationException & )
+    {
         return uno::Reference< star::ucb::XContent >();
     }
-*/
 }
 
 //=========================================================================
