@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:26:25 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,9 +300,10 @@ XclImpEscherObj::XclImpEscherObj( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mnStrmBegin( 0 ),
     mnStrmEnd( 0 ),
-    mnScTab( rRoot.GetScTab() ),
+    mnScTab( rRoot.GetCurrScTab() ),
     mnObjId( EXC_OBJ_INVALID_ID ),
-    mbSkip( false )
+    mbSkip( false ),
+    mbPrintable( true )
 {
 }
 
@@ -312,9 +313,10 @@ XclImpEscherObj::XclImpEscherObj(
     XclImpRoot( rRoot ),
     mnStrmBegin( nStrmBegin ),
     mnStrmEnd( nStrmEnd ),
-    mnScTab( rRoot.GetScTab() ),
+    mnScTab( rRoot.GetCurrScTab() ),
     mnObjId( EXC_OBJ_INVALID_ID ),
-    mbSkip( false )
+    mbSkip( false ),
+    mbPrintable( true )
 {
 }
 
@@ -326,7 +328,8 @@ XclImpEscherObj::XclImpEscherObj( XclImpEscherObj& rSrcObj ) :
     mnStrmEnd( rSrcObj.mnStrmEnd ),
     mnScTab( rSrcObj.mnScTab ),
     mnObjId( rSrcObj.mnObjId ),
-    mbSkip( rSrcObj.mbSkip )
+    mbSkip( rSrcObj.mbSkip ),
+    mbPrintable( rSrcObj.mbPrintable )
 {
 }
 
@@ -346,8 +349,13 @@ void XclImpEscherObj::InitProgress( ScfProgressBar& rProgress )
 void XclImpEscherObj::Apply( ScfProgressBar& rProgress )
 {
     if( IsValid() )
+    {
         if( SdrPage* pPage = GetDoc().GetDrawLayer()->GetPage( mnScTab ) )
             pPage->InsertObject( mpSdrObj.release() );
+        // Trace if object is not printable.
+        if(!GetPrintable())
+            GetTracer().TraceObjectNotPrintable();
+    }
 }
 
 
@@ -860,7 +868,7 @@ XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj ) :
     XclImpEscherObj( rSrcObj )
 {
     mpChart.reset( new XclImpChart( *mpRD ) );
-    mpChart->nBaseTab = GetTab();
+    mpChart->nBaseTab = GetScTab();
 }
 
 void XclImpEscherChart::SetChartData( XclImpChart* pChart )
@@ -883,6 +891,35 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
     if( !pLinkData ) return;
 
     mpChart->CloseSourceData();
+
+    if(GetTracer().IsEnabled())
+    {
+        // Trace unsupported chart types.
+        if(mpChart->GetChartType() == ctUnknown)
+            GetTracer().TraceChartUnKnownType();
+
+        // Trace if chart range is not symmetrical.
+        if(!pLinkData->GetValidChartRange())
+            GetTracer().TraceChartRange();
+
+        // Trace if the axis intervals are automatically generated. In this
+        // case we may not get the same result. Ignore charts with no axis.
+        if(mpChart->GetChartType() != ctUnknown &&
+            mpChart->GetChartType() != ctPie &&
+              mpChart->GetChartType() != ctDonut)
+        {
+            if(const XclImpChart_ValueRange* pPrimaryAxis = mpChart->GetPrimaryAxisValueRange())
+            {
+                if(pPrimaryAxis->bAutoMin && pPrimaryAxis->bAutoMax &&
+                  pPrimaryAxis->bAutoMinor && pPrimaryAxis->bAutoMajor)
+                    GetTracer().TraceChartAxisAuto();
+            }
+        }
+
+        // Trace if chart object is not printable.
+        if(!GetPrintable())
+            GetTracer().TraceObjectNotPrintable();
+    }
 
     SfxObjectShell* pDocShell = GetDocShell();
     if( !pDocShell ) return;
@@ -955,6 +992,24 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 
 // Escher object data =========================================================
 
+XclImpEscherAnchor::XclImpEscherAnchor( USHORT nScTab )
+{
+    memset( this, 0x00, sizeof( XclImpEscherAnchor ) );
+    mnScTab = nScTab;
+}
+
+SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor )
+{
+    return rStrm
+        >> rAnchor.mnLCol >> rAnchor.mnLX
+        >> rAnchor.mnTRow >> rAnchor.mnTY
+        >> rAnchor.mnRCol >> rAnchor.mnRX
+        >> rAnchor.mnBRow >> rAnchor.mnBY;
+}
+
+
+// ----------------------------------------------------------------------------
+
 XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
     maAnchor( 0 )
 {
@@ -964,7 +1019,7 @@ XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
 void XclImpObjData::SetObj( XclImpEscherObj* pEscherObj )
 {
     mpEscherObj.reset( pEscherObj );
-    maAnchor.mnScTab = pEscherObj ? pEscherObj->GetTab() : 0;
+    maAnchor.mnScTab = pEscherObj ? pEscherObj->GetScTab() : 0;
 }
 
 bool XclImpObjData::ContainsStrmPos( sal_uInt32 nStrmPos ) const
@@ -1001,7 +1056,7 @@ void XclImpEscherObjList::ReplaceLastObj( XclImpEscherObj* pEscherObj )
         AppendObj( pEscherObj );
 }
 
-XclImpEscherObj* XclImpEscherObjList::GetObj( sal_uInt16 nScTab, sal_uInt16 nObjId ) const
+XclImpEscherObj* XclImpEscherObjList::GetObj( USHORT nScTab, sal_uInt16 nObjId ) const
 {
     if( nObjId != EXC_OBJ_INVALID_ID )
     {
@@ -1012,7 +1067,7 @@ XclImpEscherObj* XclImpEscherObjList::GetObj( sal_uInt16 nScTab, sal_uInt16 nObj
             sal_uInt32 nEnd = (nScTab + 1UL < nCacheSize) ? maObjCache[ nScTab + 1 ].mnListIndex : maObjDataList.Count();
             for( sal_uInt32 nIndex = maObjCache[ nScTab ].mnListIndex; nIndex < nEnd; ++nIndex )
                 if( XclImpEscherObj* pEscherObj = maObjDataList.GetObject( nIndex )->GetObj() )
-                    if( (pEscherObj->GetTab() == nScTab) && (pEscherObj->GetObjId() == nObjId) )
+                    if( (pEscherObj->GetScTab() == nScTab) && (pEscherObj->GetObjId() == nObjId) )
                         return pEscherObj;
         }
     }
@@ -1057,7 +1112,7 @@ void XclImpEscherObjList::UpdateCache()
 {
     if( const XclImpEscherObj* pEscherObj = GetLastObj() )
     {
-        sal_uInt16 nScTab = pEscherObj->GetTab();
+        USHORT nScTab = pEscherObj->GetScTab();
         sal_uInt32 nStrmPos = pEscherObj->GetStrmBegin();
 
         // #110252# ignore faked objects without corresponding Escher data (i.e. sheet-charts)
@@ -1405,12 +1460,12 @@ XclImpObjectManager::~XclImpObjectManager()
 {
 }
 
-const XclImpEscherObj* XclImpObjectManager::GetEscherObj( sal_uInt16 nScTab, sal_uInt16 nObjId ) const
+const XclImpEscherObj* XclImpObjectManager::GetEscherObj( USHORT nScTab, sal_uInt16 nObjId ) const
 {
     return maEscherObjList.GetObj( nScTab, nObjId );
 }
 
-XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( sal_uInt16 nScTab, sal_uInt16 nObjId )
+XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( USHORT nScTab, sal_uInt16 nObjId )
 {
     return maEscherObjList.GetObj( nScTab, nObjId );
 }
@@ -1459,7 +1514,7 @@ XclImpEscherTxo* XclImpObjectManager::GetEscherTxoAcc( sal_uInt32 nStrmPos )
     return const_cast< XclImpEscherTxo* >( GetEscherTxo( nStrmPos ) );
 }
 
-const XclImpEscherNote* XclImpObjectManager::GetEscherNote( sal_uInt16 nScTab, sal_uInt16 nObjId ) const
+const XclImpEscherNote* XclImpObjectManager::GetEscherNote( USHORT nScTab, sal_uInt16 nObjId ) const
 {
     const XclImpEscherObj* pEscherObj = GetEscherObj( nScTab, nObjId );
     return PTR_CAST( XclImpEscherNote, pEscherObj );
@@ -1741,7 +1796,7 @@ void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrO
     }
 }
 
-void XclImpObjectManager::SetSkipObj( sal_uInt16 nScTab, sal_uInt16 nObjId )
+void XclImpObjectManager::SetSkipObj( USHORT nScTab, sal_uInt16 nObjId )
 {
     maSkipObjVec.push_back( XclSkipObj( nScTab, nObjId ) );
 }
@@ -1751,8 +1806,8 @@ void XclImpObjectManager::Apply()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::Apply" );
 
     // mark objects to be skipped
-    for( XclSkipObjVec::const_iterator aIter = maSkipObjVec.begin(), aEnd = maSkipObjVec.end(); aIter != aEnd; ++aIter )
-        if( XclImpEscherObj* pEscherObj = maEscherObjList.GetObj( aIter->mnScTab, aIter->mnObjId ) )
+    for( XclSkipObjVec::const_iterator aIt = maSkipObjVec.begin(), aEnd = maSkipObjVec.end(); aIt != aEnd; ++aIt )
+        if( XclImpEscherObj* pEscherObj = maEscherObjList.GetObj( aIt->mnScTab, aIt->mnObjId ) )
             pEscherObj->SetSkip();
 
     // progress bar
@@ -1792,6 +1847,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
     rStrm >> nObjType >> nObjId >> nFlags;
 
     pEscherObj->SetObjId( nObjId );
+    pEscherObj->SetPrintable(::get_flag( nFlags, EXC_OBJ_CMO_PRINTABLE) );
 
     switch( nObjType )
     {
