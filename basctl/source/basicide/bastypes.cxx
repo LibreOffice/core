@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:52:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ USHORT __EXPORT IDEBaseWindow::GetSearchOptions()
 
 BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
     DockingWindow( pParent, WB_BORDER | WB_3DLOOK | WB_DOCKABLE | WB_MOVEABLE |
-                            WB_SIZEABLE /*| WB_HIDEWHENDEACTIVATE*/ | WB_ROLLABLE |
+                            WB_SIZEABLE | WB_ROLLABLE |
                             WB_DOCKABLE | WB_CLIPCHILDREN )
 {
 }
@@ -615,7 +615,7 @@ struct TabBarDDInfo
 
 
 BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
-    TabBar( pParent, WinBits( WB_SVLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
+    TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
     pCurrentLib = NULL;
     EnableEditMode( TRUE );
