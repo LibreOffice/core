@@ -21,7 +21,7 @@
 
 namespace utl
 {
-SV_DECL_REF( UcbLockBytes );
+SV_DECL_REF( UcbLockBytes )
 
 class UcbLockBytesHandler : public SvRefBase
 {
