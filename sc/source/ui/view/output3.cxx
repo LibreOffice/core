@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:03:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
 
             if(pPageView)
             {
-                pPageView->InitRedraw(nLayer, rRect, pDev, nPaintMode);
+                pPageView->DrawLayer(nLayer, rRect, pDev, nPaintMode);
             }
         }
     }
