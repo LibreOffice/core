@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 18:53:27 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,12 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
-
+#ifndef _SFX_PASSWD_HXX
+#include <sfx2/passwd.hxx>
+#endif
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -135,6 +140,7 @@
 #include "docoptio.hxx"
 #include "undostyl.hxx"
 #include "rangeseq.hxx"
+#include "chgtrack.hxx"
 
 //------------------------------------------------------------------
 
@@ -624,16 +630,26 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScDocument* pDoc = GetDocument();
                 if(pDoc!=NULL)
                 {
-                    if(pDoc->GetChangeTrack()!=NULL)
+                    BOOL bDo = TRUE;
+                    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+                    if ( pChangeTrack )
                     {
-                        WarningBox  aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_NO),
-                                ScGlobal::GetRscString( STR_END_REDLINING ) );
+                        WarningBox aBox( GetDialogParent(),
+                            WinBits(WB_YES_NO | WB_DEF_NO),
+                            ScGlobal::GetRscString( STR_END_REDLINING ) );
 
-                        if(aBox.Execute()==RET_YES)
+                        if( aBox.Execute() == RET_YES )
                         {
-                            pDoc->EndChangeTracking();
-                            PostPaintGridAll();
+                            if ( pChangeTrack->IsProtected() )
+                                bDo = ExecuteChangeProtectionDialog();
+                            if ( bDo )
+                            {
+                                pDoc->EndChangeTracking();
+                                PostPaintGridAll();
+                            }
                         }
+                        else
+                            bDo = FALSE;
                     }
                     else
                     {
@@ -643,30 +659,65 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         pDoc->SetChangeViewSettings(aChangeViewSet);
                     }
 
-                    //  update "accept changes" dialog
-                    //! notify all views
-
-                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                    if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
+                    if ( bDo )
                     {
-                        SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
-                        if (pChild)
+                        //  update "accept changes" dialog
+                        //! notify all views
+
+                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                        if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
                         {
-                            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+                            SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
+                            if (pChild)
+                            {
+                                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+                            }
                         }
+                        // Slots invalidieren
+                        if (pBindings)
+                            pBindings->InvalidateAll(FALSE);
+                        rReq.Done();
                     }
-                    // Slots invalidieren
-                    if (pBindings)
-                        pBindings->InvalidateAll(FALSE);
+                    else
+                        rReq.Ignore();
                 }
+            }
+            break;
+
+        case SID_CHG_PROTECT :
+            {
+                if ( ExecuteChangeProtectionDialog() )
+                    rReq.Done();
+                else
+                    rReq.Ignore();
             }
             break;
 
         case SID_DOCUMENT_MERGE:
         case SID_DOCUMENT_COMPARE:
             {
-                //! bei COMPARE eine Warnung, dass alte Changes verlorengehen ??!?!?
-
+                BOOL bDo = TRUE;
+                ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+                if ( pChangeTrack )
+                {
+                    if ( nSlot == SID_DOCUMENT_COMPARE )
+                    {   //! old changes trace will be lost
+                        WarningBox aBox( GetDialogParent(),
+                            WinBits(WB_YES_NO | WB_DEF_NO),
+                            ScGlobal::GetRscString( STR_END_REDLINING ) );
+                        if( aBox.Execute() == RET_YES )
+                            bDo = ExecuteChangeProtectionDialog( TRUE );
+                        else
+                            bDo = FALSE;
+                    }
+                    else    // merge might reject some actions
+                        bDo = ExecuteChangeProtectionDialog( TRUE );
+                }
+                if ( !bDo )
+                {
+                    rReq.Ignore();
+                    break;
+                }
                 SfxApplication* pApp = SFX_APP();
                 const SfxPoolItem* pItem;
                 SfxMedium* pMed = NULL;
@@ -890,6 +941,79 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
     }
 }
+
+
+//------------------------------------------------------------------
+
+BOOL ScDocShell::ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected )
+{
+    BOOL bDone = FALSE;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if ( pChangeTrack )
+    {
+        BOOL bProtected = pChangeTrack->IsProtected();
+        if ( bJustQueryIfProtected && !bProtected )
+            return TRUE;
+
+        String aTitle( ScResId( bProtected ? SCSTR_CHG_UNPROTECT : SCSTR_CHG_PROTECT ) );
+        String aText( ScResId( SCSTR_PASSWORD ) );
+        String aPassword;
+
+        SfxPasswordDialog* pDlg = new SfxPasswordDialog(
+            GetDialogParent(), &aText );
+        pDlg->SetText( aTitle );
+        pDlg->SetMinLen( 1 );
+        pDlg->SetHelpId( SID_CHG_PROTECT );
+        pDlg->SetEditHelpId( HID_CHG_PROTECT );
+        if ( !bProtected )
+            pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+        if ( pDlg->Execute() == RET_OK )
+            aPassword = pDlg->GetPassword();
+        delete pDlg;
+
+        if ( aPassword.Len() )
+        {
+            com::sun::star::uno::Sequence< sal_Int8 > aPass;
+            SvPasswordHelper::GetHashPassword( aPass, aPassword );
+            if ( bProtected )
+            {
+                if ( aPass == pChangeTrack->GetProtection() )
+                {
+                    if ( bJustQueryIfProtected )
+                        bDone = TRUE;
+                    else
+                        pChangeTrack->SetProtection(
+                            com::sun::star::uno::Sequence< sal_Int8 > (0) );
+                }
+                else
+                {
+                    InfoBox aBox( GetDialogParent(),
+                        String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                    aBox.Execute();
+                }
+            }
+            else
+                pChangeTrack->SetProtection( aPass );
+            if ( bProtected != pChangeTrack->IsProtected() )
+            {
+                //  update "accept changes" dialog
+                //! notify all views
+                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
+                {
+                    SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
+                    if ( pChild )
+                        ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+                }
+                bDone = TRUE;
+            }
+        }
+    }
+    else if ( bJustQueryIfProtected )
+        bDone = TRUE;
+    return bDone;
+}
+
 
 //------------------------------------------------------------------
 
@@ -1630,12 +1754,18 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
 
             case FID_CHG_RECORD:
+                    rSet.Put( SfxBoolItem( nWhich,
+                        aDocument.GetChangeTrack() != NULL ) );
+                break;
+
+            case SID_CHG_PROTECT:
                 {
-                    ScDocument* pDoc = GetDocument();
-                    if(pDoc->GetChangeTrack()!=NULL)
-                        rSet.Put( SfxBoolItem( nWhich, TRUE));
+                    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+                    if ( pChangeTrack )
+                        rSet.Put( SfxBoolItem( nWhich,
+                            pChangeTrack->IsProtected() ) );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, FALSE));
+                        rSet.DisableItem( nWhich );
                 }
                 break;
 

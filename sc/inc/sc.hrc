@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 17:58:38 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,8 @@
 
 #define HID_SC_TOOLBOX_GRAPHIC  ( HID_SC_TOOLBOX_START + 7 )
 
+#define HID_CHG_PROTECT         ( HID_SC_TOOLBOX_START + 8 )
+
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
 #define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )
@@ -446,6 +448,7 @@
 
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
 #define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
+#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -508,7 +511,6 @@
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
 // Funktionen ------------------------------------------------------------
-// noch nach Menues sortiert - besserer Vorschlag?
 
 
 //#define FID_PRINT_PREVIEW     (SC_FUNCTION_START)
@@ -1114,6 +1116,8 @@
 
 #define SCSTR_50_APPLICATION    (STR_START + 84)
 #define SCSTR_50_LONG_DOCNAME   (STR_START + 85)
+#define SCSTR_CHG_PROTECT       (STR_START + 86)
+#define SCSTR_CHG_UNPROTECT     (STR_START + 87)
 
 // Items
 

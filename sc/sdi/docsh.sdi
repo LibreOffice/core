@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Author: er $ $Date: 2001-04-25 14:01:57 $ $Revision: 1.2 $
  // $Logfile:   T:/sc/sdi/docsh.sdv  $ $Workfile:   docsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -96,6 +96,7 @@ interface TableDocument : OfficeDocument
     FID_CHG_RECORD          [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DOCUMENT_COMPARE    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DOCUMENT_MERGE      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CHG_PROTECT         [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SID_DELETE_SCENARIO     [ ExecMethod = Execute; ]
     SID_EDIT_SCENARIO       [ ExecMethod = Execute; ]
@@ -114,6 +115,9 @@ shell ScDocShell : SfxObjectShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:52  hr
+    initial import
+
     Revision 1.80  1999/08/24 14:12:28  ANK
     #68244# JumpToTable moved
 

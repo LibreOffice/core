@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-02-16 17:55:31 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,6 +1092,7 @@ class ScChangeTrack : public SfxListener
     static  const USHORT        nContentRowsPerSlot;
     static  const USHORT        nContentSlots;
 
+    com::sun::star::uno::Sequence< sal_Int8 >   aProtectPass;
             ScChangeActionTable aTable;
             ScChangeActionTable aGeneratedTable;
             ScChangeActionTable aPasteCutTable;
@@ -1443,6 +1444,12 @@ public:
             void                SetActionMax(ULONG nTempActionMax)
                                     { nActionMax = nTempActionMax; } // only to use in the XML import
 
+            void                SetProtection( const com::sun::star::uno::Sequence< sal_Int8 >& rPass )
+                                    { aProtectPass = rPass; }
+    com::sun::star::uno::Sequence< sal_Int8 >   GetProtection() const
+                                    { return aProtectPass; }
+            BOOL                IsProtected() const
+                                    { return aProtectPass.getLength() != 0; }
 };
 
 

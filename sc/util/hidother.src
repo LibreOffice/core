@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:38:11 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ hidspecial HID_SC_REN_AFMT_NAME  { HelpID = HID_SC_REN_AFMT_NAME; };
 hidspecial HID_SC_RENAME_AUTOFMT { HelpID = HID_SC_RENAME_AUTOFMT; };
 hidspecial HID_PASSWD_TABLE      { HelpID = HID_PASSWD_TABLE; };
 hidspecial HID_PASSWD_DOC        { HelpID = HID_PASSWD_DOC; };
+hidspecial HID_CHG_PROTECT       { HelpID = HID_CHG_PROTECT; };
 
 //  2. Seite Funktionsautopilot: nur als Unique-IDs
 

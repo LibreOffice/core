@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:36:22 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2151,6 +2151,54 @@ String SCSTR_UNPROTECTTAB
     Text[ greek ] = "ÊáôÜñãçóç ðñïóôáóßáò ðßíáêá";
     Text[ korean ] = "½ÃÆ® º¸È£ ÇØÁ¦";
     Text[ turkish ] = "Tablo korumasýný kaldýr";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CHG_PROTECT
+{
+    Text = "Aufzeichnung schützen" ;
+    Text [ ENGLISH ] = "Protect trace" ;
+    Text [ english_us ] = "Protect trace" ;
+    Text [ dutch ] = "Protect trace" ;
+    Text [ italian ] = "Protect trace" ;
+    Text [ spanish ] = "Protect trace" ;
+    Text [ french ] = "Protect trace" ;
+    Text [ swedish ] = "Protect trace" ;
+    Text [ danish ] = "Protect trace" ;
+    Text [ portuguese ] = "Protect trace" ;
+    Text [ portuguese_brazilian ] = "Protect trace" ;
+    Text[ chinese_simplified ] = "Protect trace";
+    Text[ russian ] = "Protect trace";
+    Text[ polish ] = "Protect trace";
+    Text[ japanese ] = "Protect trace";
+    Text[ chinese_traditional ] = "Protect trace";
+    Text[ arabic ] = "Protect trace";
+    Text[ greek ] = "Protect trace";
+    Text[ korean ] = "Protect trace";
+    Text[ turkish ] = "Protect trace";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CHG_UNPROTECT
+{
+    Text = "Aufzeichnungsschutz aufheben" ;
+    Text [ ENGLISH ] = "Unprotect trace" ;
+    Text [ english_us ] = "Unprotect trace" ;
+    Text [ dutch ] = "Unprotect trace" ;
+    Text [ italian ] = "Unprotect trace" ;
+    Text [ spanish ] = "Unprotect trace" ;
+    Text [ french ] = "Unprotect trace" ;
+    Text [ swedish ] = "Unprotect trace" ;
+    Text [ danish ] = "Unprotect trace" ;
+    Text [ portuguese ] = "Unprotect trace" ;
+    Text [ portuguese_brazilian ] = "Unprotect trace" ;
+    Text[ chinese_simplified ] = "Unprotect trace";
+    Text[ russian ] = "Unprotect trace";
+    Text[ polish ] = "Unprotect trace";
+    Text[ japanese ] = "Unprotect trace";
+    Text[ chinese_traditional ] = "Unprotect trace";
+    Text[ arabic ] = "Unprotect trace";
+    Text[ greek ] = "Unprotect trace";
+    Text[ korean ] = "Unprotect trace";
+    Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
 };
 String SCSTR_PASSWORD

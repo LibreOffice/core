@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 14:35:33 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,7 +973,7 @@ void ScAcceptChgDlg::UpdateView()
         pScChangeAction=pScChangeAction->GetNext();
     }
 
-    if(bTheFlag && !pDoc->IsDocEditable())
+    if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
         bTheFlag=FALSE;
 
     pTPView->EnableAccept(bTheFlag);
@@ -1702,7 +1702,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,ULONG nStartAction,
             pScChangeAction=pScChangeAction->GetNext();
         }
 
-        if(bTheFlag && !pDoc->IsDocEditable())
+        if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
             bTheFlag=FALSE;
 
         pTPView->EnableAccept(bTheFlag);
@@ -1943,8 +1943,9 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, pTi)
         }
     }
 
-    pTPView->EnableAccept(pDoc->IsDocEditable() && bAcceptFlag);
-    pTPView->EnableReject(pDoc->IsDocEditable() && bRejectFlag);
+    BOOL bEnable = pDoc->IsDocEditable() && !pDoc->GetChangeTrack()->IsProtected();
+    pTPView->EnableAccept( bAcceptFlag && bEnable );
+    pTPView->EnableReject( bRejectFlag && bEnable );
 
     return 0;
 }
