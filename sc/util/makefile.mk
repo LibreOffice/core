@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 18:07:00 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:23:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,10 +110,13 @@ SHL1TARGET= sc$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= sc.map
 SHL1IMPLIB= sci
 
-SHL1STDLIBS=        \
+# static libraries
+SHL1STDLIBS+= $(SCHLIB)
+
+# dynamic libraries
+SHL1STDLIBS+=       \
     $(BASICLIB)		\
     $(SFXLIB)		\
-    $(SFXDEBUGLIB)	\
     $(SO2LIB)		\
     $(SVMEMLIB)		\
     $(SVTOOLLIB)	\
@@ -121,14 +124,12 @@ SHL1STDLIBS=        \
     $(SVXLIB)		\
     $(GOODIESLIB)	\
     $(OFALIB)		\
-    $(SVLIB)		\
+    $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)	\
-    $(ONELIB)		\
     $(TKLIB)		\
-    $(UNOLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
     $(TOOLSLIB)		\
@@ -138,16 +139,11 @@ SHL1STDLIBS=        \
     $(DBTOOLSLIB)
 
 
-
 SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET) $(LIB4TARGET)
 
 .IF "$(GUI)"!="UNX"
 SHL1OBJS=   $(SLO)$/scdll.obj
-.ENDIF
-
-.IF "$(GUI)"=="UNX"
-SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -221,7 +217,7 @@ LIB5OBJFILES=$(OBJ)$/sclib.obj
 ALL:	\
     $(MISC)$/linkinc.ls \
     ALLTAR	\
-       ea
+    ea
 .ENDIF
 
 # --- Targets -------------------------------------------------------------
@@ -300,9 +296,9 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     echo  LIBRARY		INITINSTANCE TERMINSTANCE			>$@
     echo  DESCRIPTION   'ScDLL'                            >>$@
     echo  PROTMODE										   >>$@
-        @echo CODE        LOADONCALL 			              >>$@
+    @echo CODE        LOADONCALL 			              >>$@
     @echo DATA		  PRELOAD MULTIPLE NONSHARED					  >>$@
-        @echo EXPORTS                                                   >>$@
+    @echo EXPORTS                                                   >>$@
 .IF "$(COM)"!="ICC"
     @echo _CreateScDocShellDll @2                              >>$@
     @echo _CreateObjScDocShellDll @3                           >>$@
@@ -322,7 +318,7 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
 .ENDIF
 .ELSE
         @echo option DESCRIPTION 'ScDLL'                            >$@
-        @echo name $(BIN)$/$(SHL1TARGET).dll                         >>$@
+    @echo name $(BIN)$/$(SHL1TARGET).dll                         >>$@
     @echo CreateScDocShellDll_ @2      >>temp.def
     @echo CreateObjScDocShellDll_ @3   >>temp.def
     @echo InitScDll_ @4                    >>temp.def
