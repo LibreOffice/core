@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:05:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,10 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// multinomial.
-        double getMultinomial( [in] sequence< sequence< long > > aValList )
+        double getMultinomial(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< long > > aValList,
+                    [in] sequence< any > aOptVLst )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// seriessum.
