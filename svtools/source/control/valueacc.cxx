@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-29 08:53:29 $
+ *  last change: $Author: af $ $Date: 2002-11-20 16:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ void ValueSetItem::ClearAccessible()
 // ---------------
 
 ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
+    ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent )
 {
 }
@@ -351,7 +352,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
 void SAL_CALL ValueSetAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     if( rxListener.is() )
     {
@@ -376,7 +377,7 @@ void SAL_CALL ValueSetAcc::addEventListener( const uno::Reference< accessibility
 void SAL_CALL ValueSetAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     if( rxListener.is() )
     {
@@ -648,6 +649,40 @@ sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& r
 
     return nRet;
 }
+
+
+
+
+void SAL_CALL ValueSetAcc::disposing (void)
+{
+    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
+
+    {
+        // Make a copy of the list and clear the original.
+        ::osl::MutexGuard aGuard (m_aMutex);
+        aListenerListCopy = mxEventListeners;
+        mxEventListeners.clear();
+    }
+
+    // Inform all listeners that this objects is disposing.
+    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
+          aListenerIterator (aListenerListCopy.begin());
+    lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
+    while (aListenerIterator != aListenerListCopy.end())
+    {
+        try
+        {
+            (*aListenerIterator)->disposing (aEvent);
+        }
+        catch( uno::Exception& )
+        {
+            // Ignore exceptions.
+        }
+
+        ++aListenerIterator;
+    }
+}
+
 
 // ----------------
 // - ValueItemAcc -

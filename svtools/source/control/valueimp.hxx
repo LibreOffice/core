@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-29 08:53:29 $
+ *  last change: $Author: af $ $Date: 2002-11-20 16:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,14 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
@@ -166,21 +169,19 @@ DECLARE_LIST( ValueItemList, ValueSetItem* );
 // - ValueSetAcc -
 // ---------------
 
-class ValueSetAcc : public ::cppu::WeakImplHelper6< ::drafts::com::sun::star::accessibility::XAccessible,
-                                                    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-                                                    ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                                    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
-                                                    ::drafts::com::sun::star::accessibility::XAccessibleSelection,
-                                                    ::com::sun::star::lang::XUnoTunnel >
+typedef ::cppu::WeakComponentImplHelper6<
+    ::drafts::com::sun::star::accessibility::XAccessible,
+    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+    ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+    ::com::sun::star::lang::XUnoTunnel >
+    ValueSetAccComponentBase;
+
+class ValueSetAcc :
+    public ::comphelper::OBaseMutex,
+    public ValueSetAccComponentBase
 {
-private:
-
-    ::vos::OMutex                                                                                                           maMutex;
-    ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
-    ValueSet*                                                                                                               mpParent;
-
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
 public:
 
                         ValueSetAcc( ValueSet* pParent );
@@ -235,6 +236,18 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+
+private:
+    //    ::vos::OMutex                                                                                                           maMutex;
+    ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
+    ValueSet*                                                                                                               mpParent;
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+    /** Tell all listeners that the object is dying.  This callback is
+        usually called from the WeakComponentImplHelper class.
+    */
+    virtual void SAL_CALL disposing (void);
 };
 
 // ----------------
