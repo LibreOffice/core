@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:08:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,16 @@ void OStorage_Impl::Commit()
         // nothing was changed, but a new empty storage must be marked as commited one
         ReadContents();
         if ( !m_bIsRoot && !m_aChildrenList.size() )
+        {
+            // move properties to the destination package folder
+            uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( m_aMediaType ) );
+
             m_bCommited = sal_True;
+
+            if ( m_pParent )
+                m_pParent->SetModifiedInternally( sal_True );
+        }
 
         return;
     }
@@ -1182,7 +1191,6 @@ SotElement_Impl* OStorage_Impl::InsertStorage( ::rtl::OUString aName, sal_Int32 
     pNewElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xFactory );
 
     m_aChildrenList.push_back( pNewElement );
-    SetModifiedInternally( sal_True );
 
     return pNewElement;
 }
@@ -2167,6 +2175,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
         throw container::NoSuchElementException(); //???
 
     m_pImpl->RemoveElement( pElement );
+    m_pImpl->SetModifiedInternally( sal_True );
 }
 
 //-----------------------------------------------
@@ -2199,6 +2208,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
         throw container::NoSuchElementException(); //???
 
     pElement->m_aName = aNewName;
+    m_pImpl->SetModifiedInternally( sal_True );
 }
 
 //-----------------------------------------------
@@ -2275,6 +2285,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
     m_pImpl->CopyStorageElement( pElement, xDest, aNewName );
 
     m_pImpl->RemoveElement( pElement );
+    m_pImpl->SetModifiedInternally( sal_True );
 }
 
 void SAL_CALL OStorage::insertRawEncrStreamElement( const ::rtl::OUString& aStreamName,
