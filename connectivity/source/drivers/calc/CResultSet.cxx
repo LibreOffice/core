@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:26:36 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_True);
+    return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
@@ -158,7 +158,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_False);
+    Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_False);
 
     return relative(rows);
 }

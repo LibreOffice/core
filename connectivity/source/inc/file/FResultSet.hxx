@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:36:33 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef CONNECTIVITY_TSORTINDEX_HXX
 #include "TSortIndex.hxx"
 #endif
+#ifndef CONNECTIVITY_SKIPDELETEDSSET_HXX
+#include "TSkipDeletedSet.hxx"
+#endif
 
 namespace connectivity
 {
@@ -140,6 +143,7 @@ namespace connectivity
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OResultSet :  public  comphelper::OBaseMutex,
+                            public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::comphelper::OPropertyContainer,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
@@ -162,8 +166,9 @@ namespace connectivity
             TIntVector::iterator                    m_aEvaluateIter;
 
 
-            TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
-            ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
+//          TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
+//          ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
+            OSkipDeletedSet                         m_aSkipDeletedSet;
 
             ::vos::ORef<OKeySet>                    m_pFileSet;
             OKeySet::iterator                       m_aFileSetIter;
@@ -213,7 +218,7 @@ namespace connectivity
             void construct();
             sal_Bool evaluate();
 
-            BOOL ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
+            BOOL ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                 INT32 nOffset = 1,
                                 BOOL bRebind = TRUE,
                                 BOOL bEvaluate = TRUE,
@@ -222,7 +227,6 @@ namespace connectivity
             OKeyValue* GetOrderbyKeyValue(OValueRow _rRow);
             BOOL IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
 
-            sal_Bool moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
             // return true when the select statement is "select count(*) from table"
             sal_Bool isCount() const;
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
@@ -235,8 +239,7 @@ namespace connectivity
 
             using OResultSet_BASE::rBHelper;
 
-            BOOL Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
-            BOOL SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
+            BOOL Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
 
             // OPropertyArrayUsageHelper
@@ -371,6 +374,12 @@ namespace connectivity
                                    sal_Bool _bSetColumnMapping,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                                    ::std::vector<sal_Int32>& _rColMapping);
+
+            // IResultSetHelper
+            virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+            virtual sal_Int32 getDriverPos() const;
+            virtual sal_Bool deletedVisible() const;
+            virtual sal_Bool isRowDeleted() const;
         };
         // -------------------------------------------------------------------------
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)

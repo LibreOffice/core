@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: oj $ $Date: 2001-08-29 12:16:07 $
+#   last change: $Author: oj $ $Date: 2001-10-26 07:39:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,23 +72,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 # --- Files --------------------------------------------------------
-
-SLOFILES=\
-        $(SLO)$/TSortIndex.obj							\
-        $(SLO)$/TConnection.obj							\
-        $(SLO)$/conncleanup.obj							\
-        $(SLO)$/emptymetadata.obj						\
-        $(SLO)$/dbcharset.obj							\
-        $(SLO)$/dbtools.obj								\
-        $(SLO)$/dbexception.obj							\
-        $(SLO)$/dbconversion.obj						\
-        $(SLO)$/DateConversion.obj						\
-        $(SLO)$/CommonTools.obj							\
-        $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
-        $(SLO)$/FDatabaseMetaDataResultSet.obj			\
-        $(SLO)$/FValue.obj								\
-        $(SLO)$/TDatabaseMetaDataBase.obj
-
 EXCEPTIONSFILES=\
         $(SLO)$/TConnection.obj							\
         $(SLO)$/conncleanup.obj							\
@@ -99,7 +82,17 @@ EXCEPTIONSFILES=\
         $(SLO)$/DateConversion.obj						\
         $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
-        $(SLO)$/TDatabaseMetaDataBase.obj
+        $(SLO)$/TDatabaseMetaDataBase.obj				\
+        $(SLO)$/TSkipDeletedSet.obj
+
+SLOFILES=\
+        $(EXCEPTIONSFILES)								\
+        $(SLO)$/TSortIndex.obj							\
+        $(SLO)$/dbcharset.obj							\
+        $(SLO)$/dbconversion.obj						\
+        $(SLO)$/FValue.obj
+
+
 
 
 # --- Targets ------------------------------------------------------

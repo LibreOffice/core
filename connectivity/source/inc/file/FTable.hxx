@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
 #endif
+#ifndef CONNECTIVITY_TRESULTSETHELPER_HXX
+#include "TResultSetHelper.hxx"
+#endif
 
 namespace connectivity
 {
@@ -94,7 +97,7 @@ namespace connectivity
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
             ::vos::ORef<OSQLColumns>                            m_aColumns;
-            sal_Int32                                           m_nFilePos;                 // aktuelle FilePosition
+            sal_Int32                                           m_nFilePos;                 // aktuelle IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
             sal_Bool                                            m_bWriteable;   // svstream cann't say if we are writeable
@@ -105,18 +108,6 @@ namespace connectivity
             virtual void refreshColumns();
             virtual void refreshKeys();
             virtual void refreshIndexes();
-
-            enum FilePosition
-            {
-                FILE_NEXT       = 0,
-                FILE_PRIOR,
-                FILE_FIRST,
-                FILE_LAST,
-                FILE_RELATIVE,
-                FILE_ABSOLUTE,
-                FILE_BOOKMARK
-            };
-
         public:
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection);
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
@@ -137,7 +128,7 @@ namespace connectivity
             OConnection* getConnection() const { return m_pConnection;}
             virtual sal_Int32 getCurrentLastPos() const {return -1;}
 
-            virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
+            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) = 0;
 
             ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 10:28:09 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace connectivity::dbase;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     // ----------------------------------------------------------
     // Positionierung vorbereiten:
@@ -92,25 +92,25 @@ sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, s
 
     switch(eCursorPosition)
     {
-        case FILE_NEXT:
+        case IResultSetHelper::NEXT:
             ++m_nFilePos;
             break;
-        case FILE_PRIOR:
+        case IResultSetHelper::PRIOR:
             if (m_nFilePos > 0)
                 --m_nFilePos;
             break;
-        case FILE_FIRST:
+        case IResultSetHelper::FIRST:
             m_nFilePos = 1;
             break;
-        case FILE_LAST:
+        case IResultSetHelper::LAST:
             m_nFilePos = nNumberOfRecords;
             break;
-        case FILE_RELATIVE:
+        case IResultSetHelper::RELATIVE:
             m_nFilePos = (((sal_Int32)m_nFilePos) + nOffset < 0) ? 0L
                             : (sal_uInt32)(((sal_Int32)m_nFilePos) + nOffset);
             break;
-        case FILE_ABSOLUTE:
-        case FILE_BOOKMARK:
+        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::BOOKMARK:
             m_nFilePos = (sal_uInt32)nOffset;
             break;
     }
@@ -140,20 +140,20 @@ sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, s
 Error:
     switch(eCursorPosition)
     {
-        case FILE_PRIOR:
-        case FILE_FIRST:
+        case IResultSetHelper::PRIOR:
+        case IResultSetHelper::FIRST:
             m_nFilePos = 0;
             break;
-        case FILE_LAST:
-        case FILE_NEXT:
-        case FILE_ABSOLUTE:
-        case FILE_RELATIVE:
+        case IResultSetHelper::LAST:
+        case IResultSetHelper::NEXT:
+        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::RELATIVE:
             if (nOffset > 0)
                 m_nFilePos = nNumberOfRecords + 1;
             else if (nOffset < 0)
                 m_nFilePos = 0;
             break;
-        case FILE_BOOKMARK:
+        case IResultSetHelper::BOOKMARK:
             m_nFilePos = nTempPos;   // vorherige Position
     }
     //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
@@ -208,7 +208,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
                 {
-//                  String aText = String(SdbResId(STR_STAT_FILE_INVALID));
+//                  String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
 //                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
 //                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
 //                  aStatus.Set(SDB_STAT_ERROR,
@@ -222,7 +222,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             }
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
             {
-//              String aText = String(SdbResId(STR_STAT_FILE_INVALID));
+//              String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
 //              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
 //              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
 //              aStatus.Set(SDB_STAT_ERROR,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:08:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nCurrentPosition(0)
                         ,m_bShowDeleted(pStmt->getOwnConnection()->showDeleted())
                         ,m_pSQLAnalyzer(NULL)
+                        ,m_aSkipDeletedSet(this)
 {
     DBG_CTOR(OResultSet ,NULL);
     osl_incrementInterlockedCount( &m_refCount );
@@ -244,8 +245,7 @@ void OResultSet::clear()
     if(m_aInsertRow.isValid())
         m_aInsertRow->clear();
 
-    ::std::vector<TInt2IntMap::iterator>().swap(m_aBookmarksPositions);
-    TInt2IntMap().swap(m_aBookmarks);
+    m_aSkipDeletedSet.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
@@ -361,14 +361,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getRow called for deleted row");
 
-    sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
-    ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarks.find(nPos);
-    OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::getRow() invalid bookmark!");
-    return aFind->second;
-//  ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
-//  for(;aIter != aFind;++aIter,++nRowPos)
-//      ;
-//  return nRowPos;
+    return m_aSkipDeletedSet.getMappedPosition((*m_aRow)[0]);
 }
 // -------------------------------------------------------------------------
 
@@ -506,7 +499,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return SkipDeleted(OFileTable::FILE_FIRST,1,sal_True);
+    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,sal_True);
 }
 // -------------------------------------------------------------------------
 
@@ -515,28 +508,28 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
     // here I know definitely that I stand on the last record
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return SkipDeleted(OFileTable::FILE_LAST,1,sal_True);
+    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return SkipDeleted(OFileTable::FILE_ABSOLUTE,row,sal_True);
+    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return SkipDeleted(OFileTable::FILE_RELATIVE,row,sal_True);
+    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return SkipDeleted(OFileTable::FILE_PRIOR,0,sal_True);
+    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,sal_True);
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
@@ -595,11 +588,11 @@ sal_Bool OResultSet::evaluate()
         {
             if(m_aEvaluateIter == m_pEvaluationKeySet->end())
                 return sal_False;
-            bRet = m_pTable->seekRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),m_nRowPos);
+            bRet = m_pTable->seekRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),m_nRowPos);
             ++m_aEvaluateIter;
         }
         else
-            bRet = m_pTable->seekRow(OFileTable::FILE_NEXT,1,m_nRowPos);
+            bRet = m_pTable->seekRow(IResultSetHelper::NEXT,1,m_nRowPos);
         if(bRet)
         {
             if(m_pEvaluationKeySet)
@@ -622,7 +615,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return m_pTable ? SkipDeleted(OFileTable::FILE_NEXT,1,sal_True) : sal_False;
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::NEXT,1,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 
@@ -630,7 +623,6 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 
     return m_bWasNull;
 }
@@ -660,7 +652,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     // we know that we append new rows at the end
     // so we have to know where the end is
-    SkipDeleted(OFileTable::FILE_LAST,1,sal_False);
+    m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_False);
     m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     if(m_bRowInserted && m_pFileSet.isValid())
     {
@@ -669,7 +661,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         (*m_aInsertRow)[0] = sal_Int32(m_pFileSet->size());
         clearInsertRow();
 
-        m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
+        m_aSkipDeletedSet.insertNewPosition((*m_aRow)[0]);
     }
 }
 // -------------------------------------------------------------------------
@@ -705,14 +697,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
     {
         m_aRow->setDeleted(sal_True);
         // don't touch the m_pFileSet member here
-        TInt2IntMap::iterator aFind = m_aBookmarks.find(nPos);
-        OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::deleteRow() bookmark not found!");
-        TInt2IntMap::iterator aIter = aFind;
-        ++aIter;
-        for (; aIter != m_aBookmarks.end() ; ++aIter)
-            --(aIter->second);
-        m_aBookmarksPositions.erase(m_aBookmarksPositions.begin() + aFind->second-1);
-        m_aBookmarks.erase(nPos);
+        m_aSkipDeletedSet.deletePosition(nPos);
     }
 }
 // -------------------------------------------------------------------------
@@ -904,7 +889,7 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
 }
 
 //------------------------------------------------------------------
-BOOL OResultSet::ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
+BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                INT32 nFirstOffset,
                                BOOL bRebind,
                                BOOL bEvaluate,
@@ -913,7 +898,7 @@ BOOL OResultSet::ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::ExecuteRow: Analyzer isn't set!");
 
     // Fuer weitere Fetch-Operationen werden diese Angaben ggf. veraendert ...
-    OFileTable::FilePosition eCursorPosition = eFirstCursorPosition;
+    IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
     INT32  nOffset = nFirstOffset;
     UINT32 nLoopCount = 0;
 
@@ -921,7 +906,7 @@ again:
 
     // protect from reading over the end when someboby is inserting while we are reading
     // this method works only for dBase at the moment !!!!
-    if (eCursorPosition == OFileTable::FILE_NEXT && m_nFilePos == m_nLastVisitedPos)
+    if (eCursorPosition == IResultSetHelper::NEXT && m_nFilePos == m_nLastVisitedPos)
     {
         return sal_False;
     }
@@ -960,26 +945,26 @@ again:
             else if (m_pFileSet.isValid())
             {
                 OSL_ENSURE(//!m_pFileSet->IsFrozen() &&
-                            eCursorPosition == OFileTable::FILE_NEXT, "Falsche CursorPosition!");
-                eCursorPosition = OFileTable::FILE_NEXT;
+                            eCursorPosition == IResultSetHelper::NEXT, "Falsche CursorPosition!");
+                eCursorPosition = IResultSetHelper::NEXT;
                 nOffset = 1;
             }
-            else if (eCursorPosition == OFileTable::FILE_FIRST ||
-                     eCursorPosition == OFileTable::FILE_NEXT ||
-                     eCursorPosition == OFileTable::FILE_ABSOLUTE)
+            else if (eCursorPosition == IResultSetHelper::FIRST ||
+                     eCursorPosition == IResultSetHelper::NEXT ||
+                     eCursorPosition == IResultSetHelper::ABSOLUTE)
             {
-                eCursorPosition = OFileTable::FILE_NEXT;
+                eCursorPosition = IResultSetHelper::NEXT;
                 nOffset = 1;
             }
-            else if (eCursorPosition == OFileTable::FILE_LAST ||
-                     eCursorPosition == OFileTable::FILE_PRIOR)
+            else if (eCursorPosition == IResultSetHelper::LAST ||
+                     eCursorPosition == IResultSetHelper::PRIOR)
             {
-                eCursorPosition = OFileTable::FILE_PRIOR;
+                eCursorPosition = IResultSetHelper::PRIOR;
                 nOffset = 1;
             }
-            else if (eCursorPosition == OFileTable::FILE_RELATIVE)
+            else if (eCursorPosition == IResultSetHelper::RELATIVE)
             {
-                eCursorPosition = (nOffset >= 0) ? OFileTable::FILE_NEXT : OFileTable::FILE_PRIOR;
+                eCursorPosition = (nOffset >= 0) ? IResultSetHelper::NEXT : IResultSetHelper::PRIOR;
             }
             else
             {
@@ -1043,7 +1028,7 @@ again:
 }
 
 //-------------------------------------------------------------------
-BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
+BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
 
 //IgnoreDeletedRows:
@@ -1067,25 +1052,25 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
         {
             switch(eCursorPosition)
             {
-                case OFileTable::FILE_NEXT:
+                case IResultSetHelper::NEXT:
                     ++m_nRowPos;
                     break;
-                case OFileTable::FILE_PRIOR:
+                case IResultSetHelper::PRIOR:
                     if (m_nRowPos >= 0)
                         --m_nRowPos;
                     break;
-                case OFileTable::FILE_FIRST:
+                case IResultSetHelper::FIRST:
                     m_nRowPos = 0;
                     break;
-                case OFileTable::FILE_LAST:
+                case IResultSetHelper::LAST:
                     //  OSL_ENSURE(IsRowCountFinal(), "Fehler im Keyset!"); // muﬂ eingefroren sein, sonst Fehler beim SQLCursor
                     m_nRowPos = m_pFileSet->size() - 1;
                     break;
-                case OFileTable::FILE_RELATIVE:
+                case IResultSetHelper::RELATIVE:
                     m_nRowPos += nOffset;
                     break;
-                case OFileTable::FILE_ABSOLUTE:
-                case OFileTable::FILE_BOOKMARK:
+                case IResultSetHelper::ABSOLUTE:
+                case IResultSetHelper::BOOKMARK:
                     m_nRowPos = nOffset -1;
                     break;
             }
@@ -1094,7 +1079,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             // Der FileCursor ist auﬂerhalb des gueltigen Bereichs, wenn
             // a.) m_nRowPos < 1
             // b.) Ein KeySet besteht und m_nRowPos > m_pFileSet->size()
-            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != OFileTable::FILE_BOOKMARK && m_nRowPos >= (INT32)m_pFileSet->size() )) // && m_pFileSet->IsFrozen()
+            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= (INT32)m_pFileSet->size() )) // && m_pFileSet->IsFrozen()
             {
                 //  aStatus.Set(SQL_STAT_NO_DATA_FOUND);
                 goto Error;
@@ -1104,7 +1089,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                 if (m_nRowPos < (INT32)m_pFileSet->size())
                 {
                     // Fetch ueber Index
-                    ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_pFileSet)[m_nRowPos],TRUE,FALSE,bRetrieveData);
+                    ExecuteRow(IResultSetHelper::BOOKMARK,(*m_pFileSet)[m_nRowPos],TRUE,FALSE,bRetrieveData);
 
                     // now set the bookmark for outside
                     (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
@@ -1116,7 +1101,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                     {
                         m_aFileSetIter = m_pFileSet->end()-1;
                         //  m_pFileSet->SeekPos(m_pFileSet->size()-1);
-                        m_pTable->seekRow(OFileTable::FILE_BOOKMARK, *m_aFileSetIter, m_nFilePos);
+                        m_pTable->seekRow(IResultSetHelper::BOOKMARK, *m_aFileSetIter, m_nFilePos);
                     }
                     sal_Bool bOK = sal_True;
                     // Ermitteln der Anzahl weiterer Fetches
@@ -1130,16 +1115,16 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                             else if (m_nRowPos == 0)
                             {
                                 m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                                bOK = ExecuteRow(OFileTable::FILE_BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
                             }
                             else
                             {
                                 ++m_aEvaluateIter;
-                                bOK = ExecuteRow(OFileTable::FILE_BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
                             }
                         }
                         else
-                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE, FALSE);//bRetrieveData);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE, FALSE);//bRetrieveData);
                     }
 
                     if (bOK)
@@ -1169,23 +1154,23 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
         // Fetch des COUNT(*)
         switch (eCursorPosition)
         {
-            case OFileTable::FILE_NEXT:
+            case IResultSetHelper::NEXT:
                 ++m_nRowPos;
                 break;
-            case OFileTable::FILE_PRIOR:
+            case IResultSetHelper::PRIOR:
                 --m_nRowPos;
                 break;
-            case OFileTable::FILE_FIRST:
+            case IResultSetHelper::FIRST:
                 m_nRowPos = 0;
                 break;
-            case OFileTable::FILE_LAST:
+            case IResultSetHelper::LAST:
                 m_nRowPos = 0;
                 break;
-            case OFileTable::FILE_RELATIVE:
+            case IResultSetHelper::RELATIVE:
                 m_nRowPos += nOffset;
                 break;
-            case OFileTable::FILE_ABSOLUTE:
-            case OFileTable::FILE_BOOKMARK:
+            case IResultSetHelper::ABSOLUTE:
+            case IResultSetHelper::BOOKMARK:
                 m_nRowPos = nOffset - 1;
                 break;
         }
@@ -1223,20 +1208,20 @@ Error:
     {
         switch(eCursorPosition)
         {
-            case OFileTable::FILE_PRIOR:
-            case OFileTable::FILE_FIRST:
+            case IResultSetHelper::PRIOR:
+            case IResultSetHelper::FIRST:
                 m_nRowPos = -1;
                 break;
-            case OFileTable::FILE_LAST:
-            case OFileTable::FILE_NEXT:
-            case OFileTable::FILE_ABSOLUTE:
-            case OFileTable::FILE_RELATIVE:
+            case IResultSetHelper::LAST:
+            case IResultSetHelper::NEXT:
+            case IResultSetHelper::ABSOLUTE:
+            case IResultSetHelper::RELATIVE:
                 if (nOffset > 0)
                     m_nRowPos = (m_pFileSet.isValid()) ? m_pFileSet->size() : -1;
                 else if (nOffset < 0)
                     m_nRowPos = -1;
                 break;
-            case OFileTable::FILE_BOOKMARK:
+            case IResultSetHelper::BOOKMARK:
                 m_nRowPos = nTempPos;    // vorherige Position
         }
     }
@@ -1244,179 +1229,6 @@ Error:
     //  rMode = (!bShowDeleted && aStatus.IsSuccessful() && m_aRow->isDeleted()) ?  // keine Anzeige von gelˆschten S‰tzen
                 //  OCursor::SQL_MOD_INVALID : OCursor::SQL_MOD_NONE;
     return sal_False;
-}
-
-//------------------------------------------------------------------
-BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
-{
-    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
-    OSL_ENSURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
-
-    OFileTable::FilePosition eDelPosition = eCursorPosition;
-    INT32 nDelOffset = abs(nOffset);
-    BOOL bDataFound;
-    BOOL bDone = sal_True;
-
-    switch (eCursorPosition)
-    {
-        case OFileTable::FILE_ABSOLUTE:
-        case OFileTable::FILE_FIRST:                    // erster Satz nicht g¸ltig, gehe auf n‰chsten
-            eDelPosition = OFileTable::FILE_NEXT;
-            nDelOffset = 1;
-            break;
-        case OFileTable::FILE_LAST:
-            eDelPosition = OFileTable::FILE_PRIOR; // letzter Satz nicht g¸ltig, gehe auf vorherigen
-            nDelOffset = 1;
-            break;
-        case OFileTable::FILE_RELATIVE:
-            eDelPosition = (nOffset >= 0) ? OFileTable::FILE_NEXT : OFileTable::FILE_PRIOR;
-            break;
-    }
-
-    sal_Int32 nNewOffset    = nOffset;
-
-    if (eCursorPosition == OFileTable::FILE_ABSOLUTE)
-    {
-        return moveAbsolute(nOffset,bRetrieveData);
-    }
-    else if (eCursorPosition == OFileTable::FILE_LAST)
-    {
-        sal_Int32 nBookmark = 0;
-        sal_Int32 nCurPos = 1;
-        // first position on the last known row
-        if(m_aBookmarks.empty())
-        {
-            bDataFound = Move(OFileTable::FILE_FIRST, 1, bRetrieveData);
-            if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-                m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-        }
-        else
-        {
-            // I already have a bookmark so we can positioned on that and look if it is the last one
-            nBookmark = (*m_aBookmarksPositions.rbegin())->first;
-
-            bDataFound = Move(OFileTable::FILE_BOOKMARK, nBookmark, bRetrieveData);
-            OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"A bookmark should not be deleted!");
-            nCurPos    = (*m_aBookmarksPositions.rbegin())->second;
-        }
-
-
-        // and than move forward until we are after the last row
-        while(bDataFound)
-        {
-            bDataFound = Move(OFileTable::FILE_NEXT, 1, sal_False); // we don't need the data here
-            if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-            {   // we weren't on the last row we remember it and move on
-                ++nCurPos;
-                m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-            }
-            else if(!bDataFound && m_aBookmarks.size())
-            {
-                // i already know the last bookmark :-)
-                // now we only have to repositioning us to the last row
-                nBookmark = (*m_aBookmarksPositions.rbegin())->first;
-                bDataFound = Move(OFileTable::FILE_BOOKMARK, nBookmark, bRetrieveData);
-                break;
-            }
-        }
-        return bDataFound;
-    }
-    else if (eCursorPosition != OFileTable::FILE_RELATIVE)
-    {
-        bDataFound = Move(eCursorPosition, nOffset, bRetrieveData);
-        bDone = bDataFound && (m_bShowDeleted || !m_aRow->isDeleted());
-    }
-    else
-    {
-        bDataFound = Move(eDelPosition, 1, bRetrieveData);
-        if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-        {
-            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-            bDone = (--nDelOffset) == 0;
-        }
-        else
-            bDone = FALSE;
-    }
-    sal_Int32 nRowPos = m_nRowPos;
-
-    while (bDataFound && !bDone)            // solange iterieren bis man auf einem g¸ltigen Satz ist
-    {
-        bDataFound = Move(eDelPosition, 1, bRetrieveData);
-        if (eCursorPosition != OFileTable::FILE_RELATIVE)
-            bDone = bDataFound && (m_bShowDeleted || !m_aRow->isDeleted());
-        else if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-        {
-            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-            bDone = (--nDelOffset) == 0;
-        }
-        else
-            bDone = FALSE;
-    }
-
-    if(bDataFound && bDone && m_aBookmarks.find((sal_Int32)(*m_aRow)[0]) == m_aBookmarks.end())
-        m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-
-    return bDataFound;
-}
-// -------------------------------------------------------------------------
-sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
-{
-    sal_Bool bDataFound = sal_False;
-    sal_Int32 nNewOffset = _nOffset;
-    if(nNewOffset > 0)
-    {
-        if((sal_Int32)m_aBookmarks.size() < nNewOffset)
-        {
-            // bookmark isn't known yet
-            // start at the last position
-            sal_Int32 nCurPos = 0,nLastBookmark = 1;
-            OFileTable::FilePosition eFilePos = OFileTable::FILE_FIRST;
-            if(!m_aBookmarks.empty())
-            {
-                nLastBookmark   = (*m_aBookmarksPositions.rbegin())->first;
-                nCurPos         = (*m_aBookmarksPositions.rbegin())->second;
-                nNewOffset      = nNewOffset - nCurPos;
-                bDataFound      = Move(OFileTable::FILE_BOOKMARK, nLastBookmark, _bRetrieveData);
-            }
-            else
-            {
-                bDataFound = Move(OFileTable::FILE_FIRST, 1, _bRetrieveData );
-                if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-                {
-                    ++nCurPos;
-                    m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-                    --nNewOffset;
-                }
-            }
-            // now move to that row we need and don't count deleted rows
-            while (bDataFound && nNewOffset)
-            {
-                bDataFound = Move(OFileTable::FILE_NEXT, 1, _bRetrieveData);
-                if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
-                {
-                    ++nCurPos;
-                    m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
-                    --nNewOffset;
-                }
-            }
-        }
-        else
-        {
-            sal_Int32 nBookmark = m_aBookmarksPositions[nNewOffset-1]->first;
-            bDataFound = Move(OFileTable::FILE_BOOKMARK,nBookmark, _bRetrieveData);
-            OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"moveAbsolute row can't be deleted!");
-        }
-    }
-    else
-    {
-        ++nNewOffset;
-        bDataFound = SkipDeleted(OFileTable::FILE_LAST,1,nNewOffset == 0);
-
-        for(sal_Int32 i=nNewOffset+1;bDataFound && i <= 0;++i)
-            bDataFound = SkipDeleted(OFileTable::FILE_PRIOR,1,i == 0);
-
-    }
-    return bDataFound;
 }
 // -------------------------------------------------------------------------
 BOOL OResultSet::OpenImpl()
@@ -1521,9 +1333,9 @@ BOOL OResultSet::OpenImpl()
                     while (bOK)
                     {
                         if (m_pEvaluationKeySet)
-                            ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
                         else
-                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
 
                         if (bOK)
                         {
@@ -1649,12 +1461,12 @@ BOOL OResultSet::OpenImpl()
                     {
                         if (m_pEvaluationKeySet)
                         {
-                            ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
                             ++m_aEvaluateIter;
                             bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
                         }
                         else
-                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
                     }
 
                     // Sortiertes Keyset erzeugen
@@ -1708,7 +1520,7 @@ BOOL OResultSet::OpenImpl()
                             nPos = (*m_pFileSet)[j]; // aktuell zu lˆschender Key
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
-                                ExecuteRow(OFileTable::FILE_BOOKMARK,nPos,TRUE,FALSE);
+                                ExecuteRow(IResultSetHelper::BOOKMARK,nPos,TRUE,FALSE);
                                 *aSearchRow = *m_aRow;
                                 // jetzt den Rest nach doppelten durchsuchen
                                 INT32 nKey;
@@ -1716,7 +1528,7 @@ BOOL OResultSet::OpenImpl()
                                 for(INT32 i = j-1; i >= 0 ;i--)
                                 {
                                     nKey = (*m_pFileSet)[i];
-                                    ExecuteRow(OFileTable::FILE_BOOKMARK,nKey ,TRUE,FALSE);
+                                    ExecuteRow(IResultSetHelper::BOOKMARK,nKey ,TRUE,FALSE);
                                     if(!nWasAllwaysFound[i])
                                     {
                                         OValueVector::iterator aRowIter = m_aRow->begin();
@@ -1782,9 +1594,9 @@ BOOL OResultSet::OpenImpl()
                 while (bOK)
                 {
                     if (m_pEvaluationKeySet)
-                        ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
                     else
-                        bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
 
                     if (bOK)
                     {
@@ -1974,8 +1786,28 @@ void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OResultSet::fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex)
+sal_Bool OResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
 {
     return sal_False;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
+{
+    return Move(_eCursorPosition,_nOffset,_bRetrieveData);
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OResultSet::getDriverPos() const
+{
+    return (*m_aRow)[0];
+}
+// -----------------------------------------------------------------------------
+sal_Bool OResultSet::deletedVisible() const
+{
+    return m_bShowDeleted;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OResultSet::isRowDeleted() const
+{
+    return m_aRow->isDeleted();
 }
 // -----------------------------------------------------------------------------

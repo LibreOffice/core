@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:22:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,8 +449,11 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 ::rtl::OUString SAL_CALL OAdabasTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName = m_SchemaName;
-    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-    sName += sDot;
+    if(m_SchemaName.getLength())
+    {
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+        sName += sDot;
+    }
     sName += m_Name;
     return sName;
 }

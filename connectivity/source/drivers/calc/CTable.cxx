@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:01 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ sal_Int32 OCalcTable::getCurrentLastPos() const
     return m_nDataRows;
 }
 //------------------------------------------------------------------
-sal_Bool OCalcTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     // ----------------------------------------------------------
     // Positionierung vorbereiten:
@@ -783,25 +783,25 @@ sal_Bool OCalcTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
 
     switch(eCursorPosition)
     {
-        case FILE_NEXT:
+        case IResultSetHelper::NEXT:
             m_nFilePos++;
             break;
-        case FILE_PRIOR:
+        case IResultSetHelper::PRIOR:
             if (m_nFilePos > 0)
                 m_nFilePos--;
             break;
-        case FILE_FIRST:
+        case IResultSetHelper::FIRST:
             m_nFilePos = 1;
             break;
-        case FILE_LAST:
+        case IResultSetHelper::LAST:
             m_nFilePos = nNumberOfRecords;
             break;
-        case FILE_RELATIVE:
+        case IResultSetHelper::RELATIVE:
             m_nFilePos = (((sal_Int32)m_nFilePos) + nOffset < 0) ? 0L
                             : (sal_uInt32)(((sal_Int32)m_nFilePos) + nOffset);
             break;
-        case FILE_ABSOLUTE:
-        case FILE_BOOKMARK:
+        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::BOOKMARK:
             m_nFilePos = (sal_uInt32)nOffset;
             break;
     }
@@ -820,20 +820,20 @@ sal_Bool OCalcTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
 Error:
     switch(eCursorPosition)
     {
-        case FILE_PRIOR:
-        case FILE_FIRST:
+        case IResultSetHelper::PRIOR:
+        case IResultSetHelper::FIRST:
             m_nFilePos = 0;
             break;
-        case FILE_LAST:
-        case FILE_NEXT:
-        case FILE_ABSOLUTE:
-        case FILE_RELATIVE:
+        case IResultSetHelper::LAST:
+        case IResultSetHelper::NEXT:
+        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::RELATIVE:
             if (nOffset > 0)
                 m_nFilePos = nNumberOfRecords + 1;
             else if (nOffset < 0)
                 m_nFilePos = 0;
             break;
-        case FILE_BOOKMARK:
+        case IResultSetHelper::BOOKMARK:
             m_nFilePos = nTempPos;   // vorherige Position
     }
     //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);

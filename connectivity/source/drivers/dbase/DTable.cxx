@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 07:30:39 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
+#ifndef _UNOTOOLS_TEMPIFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
@@ -1990,7 +1990,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     OValueVector::iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
-        if(bOk = seekRow(FILE_BOOKMARK,nRowPos+1,nCurPos))
+        if(bOk = seekRow(IResultSetHelper::BOOKMARK,nRowPos+1,nCurPos))
         {
             if(bOk = fetchRow(aRow,m_aColumns.getBody(),sal_True,sal_True))
             {

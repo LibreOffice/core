@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:57:34 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
 #endif
+#ifndef CONNECTIVITY_SKIPDELETEDSSET_HXX
+#include "TSkipDeletedSet.hxx"
+#endif
 
 namespace connectivity
 {
@@ -142,6 +145,7 @@ namespace connectivity
         //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
 
         class OResultSet :  public  comphelper::OBaseMutex,
+                            public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
@@ -153,11 +157,13 @@ namespace connectivity
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+
             TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
             ORowSetValue                                m_aEmptyValue;  // needed for the getValue method when no prefetch is used
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
+            OSkipDeletedSet*                            m_pSkipDeletedSet;
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
@@ -172,6 +178,8 @@ namespace connectivity
             sal_Bool                                    m_bFreeHandle;
             sal_Bool                                    m_bInserting;
             sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
+            sal_Bool                                    m_bRowInserted;
+            sal_Bool                                    m_bRowDeleted;
 
             sal_Bool  isBookmarkable()          const;
             sal_Int32 getResultSetConcurrency() const;
@@ -189,7 +197,7 @@ namespace connectivity
             void releaseBuffer();
             void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             const ORowSetValue& getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize);
-
+            sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
 
 
             // OPropertyArrayUsageHelper
@@ -328,6 +336,12 @@ namespace connectivity
 
             // special methods
             sal_Int32 mapColumn(sal_Int32   column);
+
+            // IResultSetHelper
+            virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+            virtual sal_Int32 getDriverPos() const;
+            virtual sal_Bool deletedVisible() const;
+            virtual sal_Bool isRowDeleted() const;
         };
     }
 }

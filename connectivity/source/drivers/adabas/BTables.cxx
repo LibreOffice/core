@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,13 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
-    aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ")
-            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME))) + aQuote + sDot
-            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ");
+    ::rtl::OUString sSchema;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
+    if(sSchema.getLength())
+        aSql += ::dbtools::quoteName(aQuote, sSchema) + sDot;
+
+    aSql += aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
             + ::rtl::OUString::createFromAscii(" '")
             + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
             + ::rtl::OUString::createFromAscii("'");
@@ -202,9 +206,10 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
     Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
     Reference< XPropertySet > xColProp;
 
-    aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ")
-            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME))) + aQuote + sDot
-            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote  + sDot
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ");
+    if(sSchema.getLength())
+        aSql += ::dbtools::quoteName(aQuote, sSchema) + sDot;
+    aSql += aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote  + sDot
             + aQuote;
 
     for(sal_Int32 i=0;i<xColumns->getCount();++i)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ENoException.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "flat/EConnection.hxx"
 #endif
 
+using namespace connectivity;
 using namespace connectivity::flat;
 
 //------------------------------------------------------------------
@@ -199,7 +200,7 @@ sal_Bool OFlatTable::checkHeaderLine()
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     // ----------------------------------------------------------
@@ -210,12 +211,12 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
 
     switch(eCursorPosition)
     {
-        case FILE_FIRST:
+        case IResultSetHelper::FIRST:
             m_nFilePos = 0;
             m_nRowPos = 1;
             // run through
-        case FILE_NEXT:
-            if(eCursorPosition != FILE_FIRST)
+        case IResultSetHelper::NEXT:
+            if(eCursorPosition != IResultSetHelper::FIRST)
                 ++m_nRowPos;
             m_pFileStream->Seek(m_nFilePos);
             if (m_pFileStream->IsEof() || !checkHeaderLine())
@@ -234,7 +235,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
             }
             nCurPos = m_pFileStream->Tell();
             break;
-        case FILE_PRIOR:
+        case IResultSetHelper::PRIOR:
             --m_nRowPos;
             if(m_nRowPos > 0)
             {
@@ -253,7 +254,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
             break;
 
             break;
-        case FILE_LAST:
+        case IResultSetHelper::LAST:
             if(m_nMaxRowCount)
             {
                 m_nFilePos = m_aRowToFilePos.rbegin()->second;
@@ -268,24 +269,24 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
             }
             else
             {
-                while(seekRow(FILE_NEXT,1,nCurPos)) ; // run through after last row
+                while(seekRow(IResultSetHelper::NEXT,1,nCurPos)) ; // run through after last row
                 // now I know all
-                seekRow(FILE_PRIOR,1,nCurPos);
+                seekRow(IResultSetHelper::PRIOR,1,nCurPos);
             }
             break;
-        case FILE_RELATIVE:
+        case IResultSetHelper::RELATIVE:
             if(nOffset > 0)
             {
                 for(sal_Int32 i = 0;i<nOffset;++i)
-                    seekRow(FILE_NEXT,1,nCurPos);
+                    seekRow(IResultSetHelper::NEXT,1,nCurPos);
             }
             else if(nOffset < 0)
             {
                 for(sal_Int32 i = nOffset;i;++i)
-                    seekRow(FILE_PRIOR,1,nCurPos);
+                    seekRow(IResultSetHelper::PRIOR,1,nCurPos);
             }
             break;
-        case FILE_ABSOLUTE:
+        case IResultSetHelper::ABSOLUTE:
             {
                 if(nOffset < 0)
                     nOffset = m_nRowPos + nOffset;
@@ -314,7 +315,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
                         m_nRowPos   = m_aRowToFilePos.rbegin()->first;
                         nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
                         while(m_nRowPos != nOffset)
-                            seekRow(FILE_NEXT,1,nCurPos);
+                            seekRow(IResultSetHelper::NEXT,1,nCurPos);
                     }
                     else
                     {
@@ -333,7 +334,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
             }
 
             break;
-        case FILE_BOOKMARK:
+        case IResultSetHelper::BOOKMARK:
             m_pFileStream->Seek(nOffset);
             if (m_pFileStream->IsEof())
                 return sal_False;

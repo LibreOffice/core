@@ -1,0 +1,274 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TSkipDeletedSet.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:39:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef CONNECTIVITY_SKIPDELETEDSSET_HXX
+#include "TSkipDeletedSet.hxx"
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+using namespace connectivity;
+// -----------------------------------------------------------------------------
+OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
+    : m_pHelper(_pHelper)
+{
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
+{
+    OSL_ENSURE(_eCursorPosition != IResultSetHelper::BOOKMARK,"OSkipDeletedSet::SkipDeleted can't be called for BOOKMARK");
+
+    IResultSetHelper::Movement eDelPosition = _eCursorPosition;
+    sal_Int32 nDelOffset = abs(_nOffset);
+
+    switch (_eCursorPosition)
+    {
+        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::FIRST:                   // set the movement when positioning failed
+            eDelPosition = IResultSetHelper::NEXT;
+            nDelOffset = 1;
+            break;
+        case IResultSetHelper::LAST:
+            eDelPosition = IResultSetHelper::PRIOR; // lsat row is invalid so position before
+            nDelOffset = 1;
+            break;
+        case IResultSetHelper::RELATIVE:
+            eDelPosition = (_nOffset >= 0) ? IResultSetHelper::NEXT : IResultSetHelper::PRIOR;
+            break;
+    }
+
+    sal_Int32 nNewOffset    = _nOffset;
+    sal_Bool bDone          = sal_True;
+    sal_Bool bDataFound     = sal_False;
+
+    if (_eCursorPosition == IResultSetHelper::ABSOLUTE)
+    {
+        return moveAbsolute(_nOffset,_bRetrieveData);
+    }
+    else if (_eCursorPosition == IResultSetHelper::LAST)
+    {
+        sal_Int32 nBookmark = 0;
+        sal_Int32 nCurPos = 1;
+        // first position on the last known row
+        if(m_aBookmarks.empty())
+        {
+            bDataFound = m_pHelper->move(IResultSetHelper::FIRST, 0, _bRetrieveData);
+            if(bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+                m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+        }
+        else
+        {
+            // I already have a bookmark so we can positioned on that and look if it is the last one
+            nBookmark = (*m_aBookmarksPositions.rbegin())->first;
+
+            bDataFound = m_pHelper->move(IResultSetHelper::BOOKMARK, nBookmark, _bRetrieveData);
+            OSL_ENSURE((m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()),"A bookmark should not be deleted!");
+            nCurPos    = (*m_aBookmarksPositions.rbegin())->second;
+        }
+
+
+        // and than move forward until we are after the last row
+        while(bDataFound)
+        {
+            bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, sal_False); // we don't need the data here
+            if(bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+            {   // we weren't on the last row we remember it and move on
+                ++nCurPos;
+                m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+            }
+            else if(!bDataFound && m_aBookmarks.size())
+            {
+                // i already know the last bookmark :-)
+                // now we only have to repositioning us to the last row
+                nBookmark = (*m_aBookmarksPositions.rbegin())->first;
+                bDataFound = m_pHelper->move(IResultSetHelper::BOOKMARK, nBookmark, _bRetrieveData);
+                break;
+            }
+        }
+        return bDataFound;
+    }
+    else if (_eCursorPosition != IResultSetHelper::RELATIVE)
+    {
+        bDataFound = m_pHelper->move(_eCursorPosition, _nOffset, _bRetrieveData);
+        bDone = bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted());
+    }
+    else
+    {
+        bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
+        if (bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+        {
+            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+            bDone = (--nDelOffset) == 0;
+        }
+        else
+            bDone = sal_False;
+    }
+
+    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gültigen Satz ist
+    {
+        bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
+        if (_eCursorPosition != IResultSetHelper::RELATIVE)
+            bDone = bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted());
+        else if (bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+        {
+            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+            bDone = (--nDelOffset) == 0;
+        }
+        else
+            bDone = sal_False;
+    }
+
+    if(bDataFound && bDone && m_aBookmarks.find(m_pHelper->getDriverPos()) == m_aBookmarks.end())
+        m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+
+    return bDataFound;
+}
+// -------------------------------------------------------------------------
+sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
+{
+    sal_Bool bDataFound = sal_False;
+    sal_Int32 nNewOffset = _nOffset;
+    if(nNewOffset > 0)
+    {
+        if((sal_Int32)m_aBookmarks.size() < nNewOffset)
+        {
+            // bookmark isn't known yet
+            // start at the last position
+            sal_Int32 nCurPos = 0,nLastBookmark = 1;
+            IResultSetHelper::Movement eFilePos = IResultSetHelper::FIRST;
+            if(!m_aBookmarks.empty())
+            {
+                nLastBookmark   = (*m_aBookmarksPositions.rbegin())->first;
+                nCurPos         = (*m_aBookmarksPositions.rbegin())->second;
+                nNewOffset      = nNewOffset - nCurPos;
+                bDataFound      = m_pHelper->move(IResultSetHelper::BOOKMARK, nLastBookmark, _bRetrieveData);
+            }
+            else
+            {
+                bDataFound = m_pHelper->move(IResultSetHelper::FIRST, 0, _bRetrieveData );
+                if(bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+                {
+                    ++nCurPos;
+                    m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+                    --nNewOffset;
+                }
+            }
+            // now move to that row we need and don't count deleted rows
+            while (bDataFound && nNewOffset)
+            {
+                bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, _bRetrieveData);
+                if(bDataFound && (m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()))
+                {
+                    ++nCurPos;
+                    m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+                    --nNewOffset;
+                }
+            }
+        }
+        else
+        {
+            sal_Int32 nBookmark = m_aBookmarksPositions[nNewOffset-1]->first;
+            bDataFound = m_pHelper->move(IResultSetHelper::BOOKMARK,nBookmark, _bRetrieveData);
+            OSL_ENSURE((m_pHelper->deletedVisible() || !m_pHelper->isRowDeleted()),"moveAbsolute: row can't be deleted!");
+        }
+    }
+    else
+    {
+        ++nNewOffset;
+        bDataFound = skipDeleted(IResultSetHelper::LAST,0,nNewOffset == 0);
+
+        for(sal_Int32 i=nNewOffset+1;bDataFound && i <= 0;++i)
+            bDataFound = skipDeleted(IResultSetHelper::PRIOR,1,i == 0);
+
+    }
+    return bDataFound;
+}
+// -----------------------------------------------------------------------------
+void OSkipDeletedSet::clear()
+{
+    ::std::vector<TInt2IntMap::iterator>().swap(m_aBookmarksPositions);
+    TInt2IntMap().swap(m_aBookmarks);
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
+{
+    ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarks.find(_nPos);
+    OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::getRow() invalid bookmark!");
+    return aFind->second;
+}
+// -----------------------------------------------------------------------------
+void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
+{
+    m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(_nPos,m_aBookmarksPositions.size()+1)).first);
+}
+// -----------------------------------------------------------------------------
+void OSkipDeletedSet::deletePosition(sal_Int32 _nPos)
+{
+    TInt2IntMap::iterator aFind = m_aBookmarks.find(_nPos);
+    OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::deleteRow() bookmark not found!");
+    TInt2IntMap::iterator aIter = aFind;
+    ++aIter;
+    for (; aIter != m_aBookmarks.end() ; ++aIter)
+        --(aIter->second);
+    m_aBookmarksPositions.erase(m_aBookmarksPositions.begin() + aFind->second-1);
+    m_aBookmarks.erase(_nPos);
+}
+// -----------------------------------------------------------------------------
