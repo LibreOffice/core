@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-05-22 08:14:03 $
+ *  last change: $Author: af $ $Date: 2002-05-30 15:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,8 @@ void AccessibleDrawDocumentView::Init (void)
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
     {
-        mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
+        mpChildrenManager->AddAccessibleShape (
+            std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
         mpChildrenManager->Update ();
         mpChildrenManager->UpdateSelection ();
     }
@@ -247,11 +248,12 @@ AccessiblePageShape* AccessibleDrawDocumentView::CreateDrawPageShape (void)
                 aValue >>= aSize.Height;
                 xRectangle->setSize (aSize);
 
-                // Create the accessible object for the shape and set its
-                // name and description to something more meaningfull than
-                // "Rectangle..."
+                // Create the accessible object for the shape and
+                // initialize it.
                 pShape = new AccessiblePageShape (
                     xView->getCurrentPage(), this, maShapeTreeInfo);
+                if (pShape != NULL)
+                    pShape->Init();
             }
         }
     }
