@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 11:59:10 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 13:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,9 @@ void SmEditWindow::Paint(const Rectangle& rRect)
 void SmEditWindow::CreateEditView()
 {
     EditEngine *pEditEngine = GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+
+    //! pEditEngine and pEditView may be 0.
+    //! For example when the program is used by the document-converter
     if (!pEditView && pEditEngine)
     {
         pEditView = new EditView( pEditEngine, this );
