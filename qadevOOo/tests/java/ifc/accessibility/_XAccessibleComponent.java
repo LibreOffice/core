@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-04-28 12:22:40 $
+ *  last change:$Date: 2003-05-22 13:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ import lib.MultiMethodTest;
  *  <li><code> getLocationOnScreen()</code></li>
  *  <li><code> getSize()</code></li>
  *  <li><code> grabFocus()</code></li>
- *  <li><code> getAccessibleKeyBinding()</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleComponent
