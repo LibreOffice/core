@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:47:09 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 12:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,27 @@
 #include "dialog.hrc"
 #include "templdlg.hrc"
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
 
- // RID_TEMPLATE ----------------------------------------------------------
 ImageList DLG_STYLE_DESIGNER
 {
     ImageBitmap = Bitmap { File = "sc_tdlg.bmp" ; };
     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
     IdList =
     {
-        SID_STYLE_WATERCAN ; SID_STYLE_NEW_BY_EXAMPLE ;
+        SID_STYLE_WATERCAN ;
+        SID_STYLE_NEW_BY_EXAMPLE ;
+        SID_STYLE_UPDATE_BY_EXAMPLE ;
+    };
+    IdCount = { 3 ; };
+};
+ImageList IMG_LST_STYLE_DESIGNER_HC
+{
+    ImageBitmap = Bitmap { File = "sch_tdlg.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    IdList =
+    {
+        SID_STYLE_WATERCAN ;
+        SID_STYLE_NEW_BY_EXAMPLE ;
         SID_STYLE_UPDATE_BY_EXAMPLE ;
     };
     IdCount = { 3 ; };
@@ -97,8 +108,18 @@ ModalDialog RID_STYLECATALOG
     Text [ swedish ] = "Mallkatalog" ;
     Text [ finnish ] = "Tyyliluettelo" ;
     Text [ english_us ] = "Style Catalog" ;
+    Text[ chinese_simplified ] = "æ ·å¼ç›®å½•";
+    Text[ russian ] = "Ñïèñîê ñòèëåé";
+    Text[ polish ] = "Katalog stylów";
+    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®ã‚«ã‚¿ãƒ­ã‚°";
+    Text[ chinese_traditional ] = "æ¨£å¼ç›®éŒ„";
+    Text[ arabic ] = "ßÊÇáæÌ ÇáÃäãÇØ";
+    Text[ greek ] = "ÊáôÜëïãïò ğñïôığùí";
+    Text[ korean ] = "ìŠ¤íƒ€ì¼ ëª©ë¡";
+    Text[ turkish ] = "Biçim kataloğu";
+    Text[ catalan ] = "Catálogo de estilos";
+    Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸¥à¸±à¸à¸©à¸“à¸°";
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dialog hat Cancel oder OK - Button !
     OKButton BT_OK
     {
         DefButton = TRUE ;
@@ -140,13 +161,12 @@ ModalDialog RID_STYLECATALOG
         Text[ korean ] = "ê´€ë¦¬(~O)...";
         Text[ turkish ] = "~Yönet...";
         Text[ catalan ] = "~Administrar...";
+        Text[ thai ] = "~à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸š...";
     };
     PushButton BT_DEL
     {
         Pos = MAP_APPFONT ( 123 , 78 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen..." ;
         Text [ English ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
@@ -171,13 +191,12 @@ ModalDialog RID_STYLECATALOG
         Text[ korean ] = "ì‚­ì œ(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ catalan ] = "~Eliminar...";
+        Text[ thai ] = "~à¸¥à¸š...";
     };
     PushButton BT_EDIT
     {
         Pos = MAP_APPFONT ( 123 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~ndern... */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern... : ~ndern... */
         Text = "Än~dern..." ;
         Text [ English ] = "~Change..." ;
         Text [ norwegian ] = "~Change..." ;
@@ -202,6 +221,7 @@ ModalDialog RID_STYLECATALOG
         Text[ korean ] = "ë³€ê²½(~M)...";
         Text[ turkish ] = "~Değiştir...";
         Text[ catalan ] = "~Modificar...";
+        Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚...";
     };
     PushButton BT_NEW
     {
@@ -228,9 +248,10 @@ ModalDialog RID_STYLECATALOG
         Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
         Text[ arabic ] = "...ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "ìƒˆë¡œ(~N)...";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
         Text[ turkish ] = "~Yeni...";
         Text[ catalan ] = "~Nuevo...";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
     };
     HelpButton BT_HELP
     {
@@ -263,16 +284,6 @@ ModalDialog RID_STYLECATALOG
         Hide = TRUE ;
         DropDown = TRUE ;
     };
-    Text[ chinese_simplified ] = "æ ·å¼ç›®å½•";
-    Text[ russian ] = "Ñïèñîê ñòèëåé";
-    Text[ polish ] = "Katalog stylów";
-    Text[ japanese ] = "ï½½ï¾€ï½²ï¾™ã®ï½¶ï¾€ï¾›ï½¸ï¾";
-    Text[ chinese_traditional ] = "æ¨£å¼ç›®éŒ„";
-    Text[ arabic ] = "ßÊÇáæÌ ÇáÃäãÇØ";
-    Text[ greek ] = "ÊáôÜëïãïò ğñïôığùí";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼ ì¹´íƒˆë¡œê·¸";
-    Text[ turkish ] = "Biçim kataloğu";
-    Text[ catalan ] = "Catálogo de estilos";
 };
  // Strings ---------------------------------------------------------------
 String DLG_STYLE_DESIGNER
@@ -291,7 +302,7 @@ String DLG_STYLE_DESIGNER
     Text[ chinese_simplified ] = "å„ç±»æ ·å¼";
     Text[ russian ] = "Ñòèëèñò";
     Text[ polish ] = "Stylista";
-    Text[ japanese ] = "ï½½ï¾€ï½²ï¾˜ï½½ï¾„";
+    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒªã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "å„é¡æ¨£å¼";
     Text[ arabic ] = "ÇáãõÕãã";
     Text[ greek ] = "Stylist";
@@ -299,6 +310,7 @@ String DLG_STYLE_DESIGNER
     Text[ turkish ] = "Stylist";
     Text[ catalan ] = "Estilista";
     Text[ finnish ] = "Tyylityökalu";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸­à¸à¹à¸šà¸š";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
@@ -325,6 +337,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ korean ] = "ê³„ì¸µ";
     TEXT[ turkish ] = "Hiyerarşik";
     TEXT[ catalan ] = "Jerárquico";
+    TEXT[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸Šà¸±à¹‰à¸™";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
@@ -356,8 +369,6 @@ DockingWindow DLG_STYLE_DESIGNER
             {
                 HelpId = HID_TEMPLDLG_WATERCAN ;
                 Identifier = SID_STYLE_WATERCAN ;
-                /* ### ACHTUNG: Neuer Text in Resource? Gießkannenmodus : Gie˜kannenmodus */
-                /* ### ACHTUNG: Neuer Text in Resource? Gießkannenmodus : Gie˜kannenmodus */
                 Text = "Gießkannenmodus" ;
                 Text [ English ] = "Watercan" ;
                 Text [ norwegian ] = "Rammefyll" ;
@@ -368,21 +379,20 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ finnish ] = "Täyttömuodon laji" ;
                 Text [ danish ] = "Fyldmodus" ;
                 Text [ french ] = "Mode Remplir tout" ;
-                Text [ swedish ] = "Vattenkanneläge" ;
+                Text [ swedish ] = "Tilldelningsläge" ;
                 Text [ dutch ] = "Gietermodus" ;
                 Text [ spanish ] = "Modo regadera" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gießkannenmodus anwenden : Vorlagen im Gie˜kannenmodus anwenden */
-                /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gie˜kannenmodus anwenden : Vorlagen im GieÃkannenmodus anwenden */
                 Text[ chinese_simplified ] = "å……å¡«æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì çàëèâêè";
                 Text[ polish ] = "Tryb konewki";
-                Text[ japanese ] = "æ°´ã‚„ã‚Šï¾“ï½°ï¾„ï¾";
+                Text[ japanese ] = "æ°´ã‚„ã‚Šãƒ¢ãƒ¼ãƒ‰";
                 Text[ chinese_traditional ] = "å……å¡«æ¨¡å¼";
                 Text[ arabic ] = "æÖÚ ÇáÑÔÇÔÉ";
                 Text[ greek ] = "ÊáôÜóôáóç ãåìßóìáôïò";
                 Text[ korean ] = "ì±„ìš°ê¸°ëª¨ë“œ";
                 Text[ turkish ] = "Doldur kipi";
                 Text[ catalan ] = "Modo regadera";
+                Text[ thai ] = "à¹€à¸•à¸´à¸¡à¹‚à¸«à¸¡à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
             };
             ToolBoxItem
             {
@@ -398,19 +408,20 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ finnish ] = "Uusi tyyli valinnasta" ;
                 Text [ danish ] = "Ny typografi fra markeringen" ;
                 Text [ french ] = "Nouveau style à partir de la sélection" ;
-                Text [ swedish ] = "Ny formatmall från markering" ;
+                Text [ swedish ] = "Ny formatmall av markering" ;
                 Text [ dutch ] = "Nieuw opmaakprofiel uit selectie" ;
                 Text [ spanish ] = "Nuevo estilo a partir de selección" ;
                 Text[ chinese_simplified ] = "é€‰ä¸­çš„æ–°æ ·å¼";
                 Text[ russian ] = "Ñîçäàòü ñòèëü èç âûáğàííîãî";
                 Text[ polish ] = "Nowy styl z selekcji";
-                Text[ japanese ] = "é¸æŠï½½ï¾€ï½²ï¾™ã‹ã‚‰æ–°è¦ä½œæˆ";
-                Text[ chinese_traditional ] = "æ–°æ¨£å¼å¾é¸å–";
+                Text[ japanese ] = "é¸æŠã‚¹ã‚¿ã‚¤ãƒ«ã‹ã‚‰æ–°è¦ä½œæˆ";
+                Text[ chinese_traditional ] = "é¸å–çš„æ–°æ¨£å¼";
                 Text[ arabic ] = "äãØ ÌÏíÏ ãä ÇáÊÍÏíÏ";
                 Text[ greek ] = "Íİï ğñüôõğï áğü åğéëïãŞ";
-                Text[ korean ] = "ì„ íƒì— ìˆëŠ” ìƒˆ ìœ í˜•";
+                Text[ korean ] = "ì„ íƒì— ìˆëŠ” ìƒˆ í…œí”Œë¦¿";
                 Text[ turkish ] = "Yeni biçim seçimi";
                 Text[ catalan ] = "Nuevo estilo a partir de selección";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹ƒà¸«à¸¡à¹ˆà¸ˆà¸²à¸à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸";
             };
             ToolBoxItem
             {
@@ -432,24 +443,16 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ chinese_simplified ] = "æ›´æ–°æ ·å¼";
                 Text[ russian ] = "Îáíîâèòü ñòèëü";
                 Text[ polish ] = "Aktualizuj styl";
-                Text[ japanese ] = "ï½½ï¾€ï½²ï¾™ã®æ›´æ–°";
+                Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®æ›´æ–°";
                 Text[ chinese_traditional ] = "æ›´æ–°æ¨£å¼";
                 Text[ arabic ] = "ÊÍÏíË ÇáäãØ";
                 Text[ greek ] = "Åíçìİñùóç ğñïôığïõ";
-                Text[ korean ] = "ìœ í˜• ì—…ë°ì´íŠ¸";
+                Text[ korean ] = "í…œí”Œë¦¿ ì—…ë°ì´íŠ¸";
                 Text[ turkish ] = "Biçimi güncelle";
                 Text[ catalan ] = "Actualizar estilo";
+                Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¸¥à¸±à¸à¸©à¸“à¸°";
             };
         };
     };
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
 
