@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:57:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 09:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,134 +1032,139 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case( SID_ATTR_GRAF_CROP ):
         {
-            SdrGrafObj* pObj = (SdrGrafObj*) rView.GetMarkList().GetMark( 0 )->GetObj();
+            const SdrMarkList&  rMarkList = rView.GetMarkList();
 
-            if( pObj && pObj->ISA( SdrGrafObj ) &&
-                ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
-                ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
+            if( ( rMarkList.GetMarkCount() > 0 ) && rMarkList.GetMark( 0 ) )
             {
-                SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
-                const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
-                const MapMode       aMap100( MAP_100TH_MM );
-                const MapMode       aMapTwip( MAP_TWIP );
+                SdrGrafObj* pObj = (SdrGrafObj*) rMarkList.GetMark( 0 )->GetObj();
 
-                aGrfAttr.Put(pObj->GetMergedItemSet());
-                rPool.SetDefaultMetric( SFX_MAPUNIT_TWIP );
-
-                SfxItemSet  aCropDlgAttr( rPool,
-                                          SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
-                                          SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
-                                          SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                                          SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
-                                          SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_CROP, 0 );
-
-                aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
-                aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,
-                                               Size( OutputDevice::LogicToLogic(
-                                                     Size( 200000, 200000 ), aMap100, aMapTwip ) ) ) );
-                aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
-                                               pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
-
-                const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) aGrfAttr.Get( SDRATTR_GRAFCROP );
-                Size                    aLTSize( OutputDevice::LogicToLogic(
-                                                 Size( rCrop.GetLeft(), rCrop.GetTop() ), aMap100, aMapTwip ) );
-                Size                    aRBSize( OutputDevice::LogicToLogic(
-                                                 Size( rCrop.GetRight(), rCrop.GetBottom() ), aMap100, aMapTwip ) );
-
-                aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
-                                                   aRBSize.Width(), aRBSize.Height() ) );
-
-                SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
-                                                 aCropDlgAttr, 950 );
-                const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
-                //CHINA001 SfxTabPage*          pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
-                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet error!");//CHINA001
-                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
-                SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
-                //CHINA001 end
-                pTabPage->SetText( aCropStr );
-                aCropDialog.SetTabPage( pTabPage );
-
-                if( aCropDialog.Execute() == RET_OK )
+                if( pObj && pObj->ISA( SdrGrafObj ) &&
+                    ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
+                    ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
                 {
-                    const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
+                    SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
+                    const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
+                    const MapMode       aMap100( MAP_100TH_MM );
+                    const MapMode       aMapTwip( MAP_TWIP );
 
-                    if( pOutAttr )
+                    aGrfAttr.Put(pObj->GetMergedItemSet());
+                    rPool.SetDefaultMetric( SFX_MAPUNIT_TWIP );
+
+                    SfxItemSet  aCropDlgAttr( rPool,
+                                            SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
+                                            SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
+                                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                                            SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
+                                            SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_CROP, 0 );
+
+                    aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
+                    aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,
+                                                Size( OutputDevice::LogicToLogic(
+                                                        Size( 200000, 200000 ), aMap100, aMapTwip ) ) ) );
+                    aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
+                                                pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
+
+                    const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) aGrfAttr.Get( SDRATTR_GRAFCROP );
+                    Size                    aLTSize( OutputDevice::LogicToLogic(
+                                                    Size( rCrop.GetLeft(), rCrop.GetTop() ), aMap100, aMapTwip ) );
+                    Size                    aRBSize( OutputDevice::LogicToLogic(
+                                                    Size( rCrop.GetRight(), rCrop.GetBottom() ), aMap100, aMapTwip ) );
+
+                    aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
+                                                    aRBSize.Width(), aRBSize.Height() ) );
+
+                    SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
+                                                    aCropDlgAttr, 950 );
+                    const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
+                    //CHINA001 SfxTabPage*          pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
+                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "Dialogdiet error!");//CHINA001
+                    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
+                    DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
+                    SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
+                    //CHINA001 end
+                    pTabPage->SetText( aCropStr );
+                    aCropDialog.SetTabPage( pTabPage );
+
+                    if( aCropDialog.Execute() == RET_OK )
                     {
-                        aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP ) ) );
+                        const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
 
-                        // set crop attributes
-                        if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
+                        if( pOutAttr )
                         {
-                            const SdrGrafCropItem& rNewCrop = (const SdrGrafCropItem&) pOutAttr->Get( SDRATTR_GRAFCROP );
+                            aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP ) ) );
 
-                            aLTSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetLeft(), rNewCrop.GetTop() ), aMapTwip, aMap100 );
-                            aRBSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetRight(), rNewCrop.GetBottom() ), aMapTwip, aMap100 );
-                            aSet.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(), aRBSize.Width(), aRBSize.Height() ) );
-                        }
-
-                        // set new logic rect
-                        if( SFX_ITEM_SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
-                        {
-                            Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
-                            const Size& rGrfSize = ( (const SvxSizeItem&) pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
-                            Size        aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
-                            Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
-
-                            Rectangle aNewRect( aNewOrigin, aNewGrfSize );
-                            Point aOffset( (aNewGrfSize.Width() - aOldGrfSize.Width()) >> 1,
-                                           (aNewGrfSize.Height() - aOldGrfSize.Height()) >> 1 );
-
-                            // #106181# rotate snap rect before setting it
-                            const GeoStat& aGeo = pObj->GetGeoStat();
-
-                            if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
+                            // set crop attributes
+                            if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
                             {
-                                Polygon aPol(aNewRect);
+                                const SdrGrafCropItem& rNewCrop = (const SdrGrafCropItem&) pOutAttr->Get( SDRATTR_GRAFCROP );
 
-                                // also transform origin offset
-                                if (aGeo.nShearWink!=0)
-                                {
-                                    ShearPoly(aPol,
-                                              aNewRect.TopLeft(),
-                                              aGeo.nTan);
-                                    ShearPoint(aOffset, Point(0,0), aGeo.nTan);
-                                }
-                                if (aGeo.nDrehWink!=0)
-                                {
-                                    RotatePoly(aPol,
-                                               aNewRect.TopLeft(),
-                                               aGeo.nSin,aGeo.nCos);
-                                    RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
-                                }
-
-                                // apply offset
-                                aPol.Move( -aOffset.X(), -aOffset.Y() );
-                                aNewRect=aPol.GetBoundRect();
-                            }
-                            else
-                            {
-                                aNewRect.Move( -aOffset.X(), -aOffset.Y() );
+                                aLTSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetLeft(), rNewCrop.GetTop() ), aMapTwip, aMap100 );
+                                aRBSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetRight(), rNewCrop.GetBottom() ), aMapTwip, aMap100 );
+                                aSet.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(), aRBSize.Width(), aRBSize.Height() ) );
                             }
 
-                            if( !aSet.Count() )
-                                rView.SetMarkedObjRect( aNewRect );
-                            else
+                            // set new logic rect
+                            if( SFX_ITEM_SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
                             {
-                                rView.BegUndo( aUndoStr );
-                                rView.AddUndo( new SdrUndoGeoObj( *pObj ) );
-                                pObj->SetSnapRect( aNewRect );
-                                rView.SetAttributes( aSet );
-                                rView.EndUndo();
-                                aSet.ClearItem();
+                                Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
+                                const Size& rGrfSize = ( (const SvxSizeItem&) pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
+                                Size        aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
+                                Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
+
+                                Rectangle aNewRect( aNewOrigin, aNewGrfSize );
+                                Point aOffset( (aNewGrfSize.Width() - aOldGrfSize.Width()) >> 1,
+                                            (aNewGrfSize.Height() - aOldGrfSize.Height()) >> 1 );
+
+                                // #106181# rotate snap rect before setting it
+                                const GeoStat& aGeo = pObj->GetGeoStat();
+
+                                if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
+                                {
+                                    Polygon aPol(aNewRect);
+
+                                    // also transform origin offset
+                                    if (aGeo.nShearWink!=0)
+                                    {
+                                        ShearPoly(aPol,
+                                                aNewRect.TopLeft(),
+                                                aGeo.nTan);
+                                        ShearPoint(aOffset, Point(0,0), aGeo.nTan);
+                                    }
+                                    if (aGeo.nDrehWink!=0)
+                                    {
+                                        RotatePoly(aPol,
+                                                aNewRect.TopLeft(),
+                                                aGeo.nSin,aGeo.nCos);
+                                        RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
+                                    }
+
+                                    // apply offset
+                                    aPol.Move( -aOffset.X(), -aOffset.Y() );
+                                    aNewRect=aPol.GetBoundRect();
+                                }
+                                else
+                                {
+                                    aNewRect.Move( -aOffset.X(), -aOffset.Y() );
+                                }
+
+                                if( !aSet.Count() )
+                                    rView.SetMarkedObjRect( aNewRect );
+                                else
+                                {
+                                    rView.BegUndo( aUndoStr );
+                                    rView.AddUndo( new SdrUndoGeoObj( *pObj ) );
+                                    pObj->SetSnapRect( aNewRect );
+                                    rView.SetAttributes( aSet );
+                                    rView.EndUndo();
+                                    aSet.ClearItem();
+                                }
                             }
                         }
                     }
-                }
 
-                rPool.SetDefaultMetric( eOldMetric );
+                    rPool.SetDefaultMetric( eOldMetric );
+                }
             }
         }
         break;
