@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DLLComponentLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:26:15 $
+ *  last change:$Date: 2005-03-29 11:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,10 @@ public class DLLComponentLoader extends TestCase {
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;
+        XMultiServiceFactory xMSF = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.stoc.DLLComponentLoader" );
         }
@@ -126,18 +127,18 @@ public class DLLComponentLoader extends TestCase {
         // adding object relation for XImplementationLoader ifc test
         tEnv.addObjRelation("ImplementationLoader",
             "com.sun.star.loader.SharedLibrary") ;
-        String fs = System.getProperty("file.separator");
+        //String fs = System.getProperty("file.separator");
         String os = (String) Param.get("OS");
         if (os == null || os == "")
             throw new StatusException(
                 "Couldn't determine operating system for naming convention.",
                 new NullPointerException());
-        String name = "javaloader";
+        String name = "javaloader.uno";
         if (!os.equals("wntmsci"))
-            name = "lib" + name + ".so";
+            name = name + ".so";
         else
             name += ".dll";
-        String implURL = utils.getFullTestURL(os + "/" + name);
+        String implURL = utils.getOfficeURL(xMSF)+"/"+name;
         tEnv.addObjRelation("ImplementationUrl", implURL) ;
         log.println("looking for shared lib: " + implURL);
         tEnv.addObjRelation("ImplementationName",
