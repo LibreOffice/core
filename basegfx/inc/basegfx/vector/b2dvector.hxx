@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-11 09:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,16 @@ namespace basegfx
                 The Scalar value of the two involved 2D Vectors
             */
             double scalar( const B2DVector& rVec ) const;
+
+            /** Calculate the Angle with another 2D Vector
+
+                @param rVec
+                The second 2D Vector
+
+                @return
+                The Angle value of the two involved 2D Vectors in -pi/2 < return < pi/2
+            */
+            double angle( const B2DVector& rVec ) const;
 
             /** Transform vector by given transformation matrix.
 
