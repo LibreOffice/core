@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 12:48:52 $
+ *  last change: $Author: ama $ $Date: 2002-08-23 11:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1563,15 +1563,24 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                 break;
             case HORI_CENTER:
                 {
-                    const SwTwips nTmp = (nMax-nLeftOffset-nRightOffset - nWish) / 2;
-                    nLeft += nLeftOffset;
-                    nRight+= nRightOffset;
-                    if ( nTmp > nLeft )
-                        nLeft = nTmp;
-                    if ( nTmp > nRight )
-                        nRight = nTmp;
-                    nRight= Max( nRight, 0L );
-                    nLeft = Max( nLeft, 0L );
+                    if( nLeftOffset || nRightOffset )
+                    {
+                        const SwTwips nTmp = ( nMax - nLeftOffset - nRightOffset
+                                               - nWish) / 2;
+                        nLeft += nLeftOffset;
+                        nRight+= nRightOffset;
+                        if( nTmp > nLeft )
+                            nLeft = nTmp;
+                        if ( nTmp > nRight )
+                            nRight = nTmp;
+                        nRight= Max( nRight, 0L );
+                        nLeft = Max( nLeft, 0L );
+                    }
+                    else
+                    {
+                        nLeft = ( nMax - nWish ) / 2;
+                        nRight = nLeft;
+                    }
                 }
                 break;
             case HORI_FULL:
