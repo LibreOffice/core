@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-02-11 12:39:33 $
+ *  last change: $Author: os $ $Date: 2002-02-21 07:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,8 +905,8 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         ( nPos = aTextFlowBox.GetSelectEntryPos() ) !=
                                             aTextFlowBox.GetSavedValue() )
     {
-        sal_uInt32 nPos = (sal_uInt32)aTextFlowBox.GetEntryData( nPos );
-        rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nPos,
+        sal_uInt32 nDirection = (sal_uInt32)aTextFlowBox.GetEntryData( nPos );
+        rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection,
                                     GetWhich( SID_ATTR_FRAMEDIRECTION )));
         bModified = TRUE;
     }
