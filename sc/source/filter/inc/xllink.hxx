@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xllink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLLINK_HXX
 #define SC_XLLINK_HXX
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
 
 // Constants and Enumerations =================================================
 
@@ -76,7 +73,6 @@
 const sal_uInt16 EXC_ID_EXTERNSHEET         = 0x0017;
 const sal_uInt16 EXC_EXTSH_EXTERNAL         = 0xFFFE;     /// Addins, DDE, OLE.
 const sal_uInt16 EXC_EXTSH_DELETED          = 0xFFFF;     /// Deleted 3D reference.
-
 
 // (0x0018, 0x0218) NAME ------------------------------------------------------
 
@@ -114,7 +110,6 @@ const sal_Unicode EXC_BUILTIN_SHEETTITLE        = '\x0C';
 const sal_Unicode EXC_BUILTIN_AUTOFILTER        = '\x0D';
 const sal_Unicode EXC_BUILTIN_UNKNOWN           = '\x0E';
 
-
 // (0x0023) EXTERNNAME --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_EXTERNNAME          = 0x0023;
@@ -126,17 +121,14 @@ const sal_uInt16 EXC_EXTN_OLE_OR_DDE        = 0xFFFE;
 const sal_uInt16 EXC_EXTN_EXPDDE_STDDOC     = 0x7FEA;  /// for export
 const sal_uInt16 EXC_EXTN_EXPDDE            = 0x7FE2;  /// for export
 
-
 // (0x0059, 0x005A) XCT, CRN --------------------------------------------------
 
 const sal_uInt16 EXC_ID_XCT                 = 0x0059;
 const sal_uInt16 EXC_ID_CRN                 = 0x005A;
 
-
 // (0x013D) TABID -------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_TABID               = 0x013D;
-
 
 // (0x01AE) SUPBOOK -----------------------------------------------------------
 
