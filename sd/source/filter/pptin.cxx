@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-25 17:29:38 $
+ *  last change: $Author: sj $ $Date: 2001-02-08 16:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1856,7 +1856,7 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                         eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM;  // von unten dehnen
                     break;
                     case 0x1b:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_ROTATE;      // Rotieren
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_ROTATE;    // Rotieren
                     break;
                     case 0x1c:
                         eRetval = ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT;       // Spirale
