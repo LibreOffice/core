@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:12:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ String STR_SVT_STYLE_LIGHT
     Text[ korean ] = "°¡´Â";
     Text[ turkish ] = "İnce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Light";
 };
 
 String STR_SVT_STYLE_LIGHT_ITALIC
@@ -108,6 +109,7 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text[ korean ] = "°¡´Â ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "İnce italik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cursiva light";
 };
 
 String STR_SVT_STYLE_NORMAL
@@ -133,6 +135,7 @@ String STR_SVT_STYLE_NORMAL
     Text[ korean ] = "º¸Åë";
     Text[ turkish ] = "Normal";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Predeterminado";
 };
 
 String STR_SVT_STYLE_NORMAL_ITALIC
@@ -158,6 +161,7 @@ String STR_SVT_STYLE_NORMAL_ITALIC
     Text[ korean ] = "ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "İtalik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cursiva";
 };
 
 String STR_SVT_STYLE_BOLD
@@ -183,6 +187,7 @@ String STR_SVT_STYLE_BOLD
     Text[ korean ] = "±½°Ô";
     Text[ turkish ] = "Kalın";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Negrita";
 };
 
 String STR_SVT_STYLE_BOLD_ITALIC
@@ -208,6 +213,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text[ korean ] = "±½Àº ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "Kalın italik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cursiva negrita";
 };
 
 String STR_SVT_STYLE_BLACK
@@ -233,6 +239,7 @@ String STR_SVT_STYLE_BLACK
     Text[ greek ] = "Ìáıñï";
     Text[ korean ] = "°Ë°Ô";
     Text[ turkish ] = "Siyah";
+    Text[ catalan ] = "Black";
 };
 
 String STR_SVT_STYLE_BLACK_ITALIC
@@ -258,6 +265,7 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text[ greek ] = "ĞëÜãéá Ìáıñï";
     Text[ korean ] = "°Ë°Ô, ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "Siyah italik";
+    Text[ catalan ] = "Cursiva black";
 };
 
 /*
@@ -297,6 +305,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT[ korean ] = "ÇÁ¸°ÅÍ¿Í È­¸é¿¡´Â °°Àº ±Û²ÃÀÌ »ç¿ëµÉ °Í ÀÔ´Ï´Ù.";
     TEXT[ turkish ] = "Yazdırma ve ekranda görüntüleme için aynı yazıtipi kullanılacak.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Se usará la misma fuente en la impresora y en pantalla";
 };
 
 String STR_SVT_FONTMAP_PRINTERONLY
@@ -323,6 +332,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT[ greek ] = "ÃñáììáôïóåéñÜ åêôõğùôŞ. Ç åìöÜíéóç ôçò óôçí ïèüíç åßíáé äõíáôüí íá äéáöİñåé.";
     TEXT[ korean ] = "ÀÌ°ÍÀº ÇÁ¸°ÅÍ ±Û²ÃÀÔ´Ï´Ù. È­¸é ÀÌ¹ÌÁö´Â ÀÏºÎ ´Ù¸¦ ¼ö ÀÖ½À´Ï´Ù.";
     TEXT[ turkish ] = "Yazıcı yazıtipi. Ekrandaki görüntü biraz farklı olabilir.";
+    TEXT[ catalan ] = "Fuente de impresora. La imagen en pantalla podría ser diferente.";
 };
 
 String STR_SVT_FONTMAP_SCREENONLY
@@ -349,6 +359,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT[ greek ] = "ÃñáììáôïóåéñÜ ïèüíçò. Ç åìöÜíéóç ôçò óôçí åêôığùóç åßíáé äõíáôüí íá äéáöİñåé.";
     TEXT[ korean ] = "ÀÌ°ÍÀº È­¸é ±Û²Ã ÀÔ´Ï´Ù. ÇÁ¸°ÅÍ ÀÌ¹ÌÁö´Â ÀÏºÎ ´Ù¸¦ ¼ö ÀÖ½À´Ï´Ù.";
     TEXT[ turkish ] = "Ekran yazıtipi. Yazdırma biraz farklı olabilir.";
+    TEXT[ catalan ] = "Fuente de pantalla. La imagen en la impresora podría ser diferente.";
 };
 
 String STR_SVT_FONTMAP_SIZENOTAVAILABLE
@@ -373,6 +384,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
     TEXT[ arabic ] = "ÍÌã ÇáÎØ åĞÇ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi boyu yüklenmedi. Mevcut boylardan en uygun olanı kullanılacak.";
+    TEXT[ catalan ] = "Este tamaño de fuente no está instalado. Se usará el tamaño disponible más adecuado.";
 };
 
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
@@ -398,6 +410,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ arabic ] = "Óæİ íÊã ÊŞáíÏ äãØ ÇáÎØ åĞÇ¡ Ãæ Óæİ íÊã ÇÓÊÎÏÇã ÃŞÑÈ äãØğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi taklit edilecek ya da en uygun olan biçim kullanılacak.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Se imitará este estilo de fuente o se usará el más adecuado.";
 };
 
 String STR_SVT_FONTMAP_NOTAVAILABLE
@@ -422,4 +435,5 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
     TEXT[ arabic ] = "åĞÇ ÇáÎØ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
     TEXT[ turkish ] = "Bu yazıtipi yüklenmedi. Mevcut yazıtiplerinden en uygun olanı kullanılacak.";
+    TEXT[ catalan ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
 };
