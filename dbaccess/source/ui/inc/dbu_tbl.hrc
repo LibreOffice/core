@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_tbl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:53:13 $
+ *  last change: $Author: oj $ $Date: 2002-11-19 11:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,11 @@
 #define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STR_TBL_START + 45
 #define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_TBL_START + 46
 #define STR_TABLEDESIGN_TITLE               RID_STR_TBL_START + 47
+#define STR_NO_TYPE_INFO_AVAILABLE          RID_STR_TBL_START + 48
 
 // please adjust checking before insert new strings
 
-#if STR_TABLEDESIGN_TITLE > RID_STR_TBL_END
+#if STR_NO_TYPE_INFO_AVAILABLE > RID_STR_TBL_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 

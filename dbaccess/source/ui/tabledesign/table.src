@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:17:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-19 11:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2318,4 +2318,11 @@ String STR_HELP_AUTOINCREMENT_VALUE
     Text[ catalan ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ thai ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
 };
+
+String STR_NO_TYPE_INFO_AVAILABLE
+{
+    Text = "Es konnten keine Typinformationen von der Datenbank ermittelt werden.\nDer Tabellenentwurfmodus ist für diese Datenquelle nicht verfügbar.";
+    Text[ english ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+};
+
 

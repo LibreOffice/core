@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:55:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-19 11:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,13 +705,30 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
+    }
+    catch(const SQLException&)
+    {
+        OSL_ENSURE(sal_False, "OTableController::initialize: caught an exception!");
+    }
+
+    try
+    {
         ::dbaui::fillTypeInfo(getConnection(),m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);               // fill the needed type information
+    }
+    catch(const SQLException&)
+    {
+        OSQLMessageBox aErr(getView(),ModuleRes(STR_STAT_WARNING),ModuleRes(STR_NO_TYPE_INFO_AVAILABLE));
+        aErr.Execute();
+        throw;
+    }
+    try
+    {
         loadData();                 // fill the column information form the table
         getView()->initialize();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
     }
-    catch(SQLException&)
+    catch(const SQLException&)
     {
         OSL_ENSURE(sal_False, "OTableController::initialize: caught an exception!");
     }
