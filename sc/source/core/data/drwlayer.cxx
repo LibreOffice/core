@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:56:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,75 +2016,6 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
     return NULL;
 }
 
-Graphic ScDrawLayer::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )    // static
-{
-    uno::Reference< embed::XEmbeddedObject > xIPObj = pOle2Obj->GetObjRef();
-    Graphic aGraphic;
-
-    if ( xIPObj.is() )
-    {
-        try
-        {
-            svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-            uno::Reference< embed::XComponentSupplier > xCompSupplier( xIPObj, uno::UNO_QUERY );
-            DBG_ASSERT( xCompSupplier.is(), "The object must implement XComponentSupplier!" );
-            if ( xCompSupplier.is() )
-            {
-                uno::Reference< datatransfer::XTransferable > xTransfer( xCompSupplier, uno::UNO_QUERY );
-                DBG_ASSERT( xTransfer.is(), "The component does not implement XTransferable!" );
-                if ( xTransfer.is() )
-                {
-                    datatransfer::DataFlavor aDataFlavor(
-                        ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ),
-                        ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
-                        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-
-                    uno::Any aAny = xTransfer->getTransferData( aDataFlavor );
-                    uno::Sequence< sal_Int8 > aGDIData;
-                    if ( aAny >>= aGDIData )
-                    {
-                        SvMemoryStream aMemStm( aGDIData.getArray(), aGDIData.getLength(), STREAM_READ );
-                        aMemStm.ObjectOwnsMemory( sal_False );
-                        GDIMetaFile aGDIMtf;
-                        aGDIMtf.Read( aMemStm );
-                        aGraphic = Graphic( aGDIMtf );
-                    }
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {
-            //TODO: handle error?
-        }
-    }
-
-    return aGraphic;
-
-//REMOVE        SvInPlaceObjectRef  aIPObjRef = pOle2Obj->GetObjRef();
-//REMOVE        Graphic             aGraphic;
-//REMOVE
-//REMOVE        if ( aIPObjRef.Is() )
-//REMOVE        {
-//REMOVE            VirtualDevice   aVDev;
-//REMOVE            GDIMetaFile     aGDIMtf;
-//REMOVE            const MapMode   aMap100( MAP_100TH_MM );
-//REMOVE            const Size&     rSize = aIPObjRef->GetVisArea().GetSize();
-//REMOVE
-//REMOVE            aVDev.SetMapMode( aMap100 );
-//REMOVE            aGDIMtf.Record( &aVDev );
-//REMOVE
-//REMOVE            aIPObjRef->DoDraw( &aVDev, Point(), rSize, JobSetup() );
-//REMOVE
-//REMOVE            aGDIMtf.Stop();
-//REMOVE            aGDIMtf.WindStart();
-//REMOVE            aGDIMtf.SetPrefMapMode( aMap100 );
-//REMOVE            aGDIMtf.SetPrefSize( rSize );
-//REMOVE            aGraphic = Graphic( aGDIMtf );
-//REMOVE        }
-//REMOVE
-//REMOVE        return aGraphic;
-}
-
 // static:
 IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                                           const Point& rWinPoint, const Window& rCmpWnd )
@@ -2134,15 +2065,13 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
+            // TODO/LEAN: working with visual area needs running state
             uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-            uno::Reference< embed::XVisualObject > xVisObj( xIPObj, uno::UNO_QUERY );
-            DBG_ASSERT( !xIPObj.is() || xVisObj.is(), "If there is an embedded object it must implement XVisualObject!" );
-
-            if ( xVisObj.is() )
+            if ( xIPObj.is() )
             {
                 try {
                     svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-                    awt::Size aSize = xVisObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                    awt::Size aSize = xIPObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
                     aGraphSize = Size( aSize.Width, aSize.Height );
                     bObjSupported = TRUE;
                 }
