@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:10:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,8 +481,8 @@ BOOL ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const
 
     for (i=0; i<=MAXCOL; i++)               // Attribute testen
     {
-        SCROW nFirstRow,nLastRow;
-        if (aCol[i].HasVisibleAttr( nFirstRow,nLastRow, FALSE ))
+        SCROW nLastRow;
+        if (aCol[i].GetLastVisibleAttr( nLastRow ))
         {
             bFound = TRUE;
             nMaxX = i;
@@ -560,8 +560,8 @@ BOOL ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
 
     for (i=nStartCol; i<=nEndCol; i++)              // Attribute testen
     {
-        SCROW nFirstRow,nLastRow;
-        if (aCol[i].HasVisibleAttr( nFirstRow,nLastRow, FALSE ))
+        SCROW nLastRow;
+        if (aCol[i].GetLastVisibleAttr( nLastRow ))
         {
             bFound = TRUE;
             if (nLastRow > nMaxY)
@@ -591,8 +591,8 @@ BOOL ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     for (i=0; i<=MAXCOL; i++)                   // Attribute testen
     {
-        SCROW nFirstRow,nLastRow;
-        if (aCol[i].HasVisibleAttr( nFirstRow,nLastRow, TRUE ))
+        SCROW nFirstRow;
+        if (aCol[i].GetFirstVisibleAttr( nFirstRow ))
         {
             if (!bFound)
                 nMinX = i;
