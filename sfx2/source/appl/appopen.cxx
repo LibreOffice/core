@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-27 11:49:44 $
+ *  last change: $Author: pb $ $Date: 2001-05-07 11:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SVTOOLS_TEMPLDLG_HXX
+#include <svtools/templdlg.hxx>
 #endif
 
 #pragma hdrstop
@@ -881,6 +884,10 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
 
+    SvtDocumentTemplateDialog aDlg( GetTopWindow() );
+    aDlg.Execute();
+
+/* (pb) new by SvtDocumentTemplateDialog, see above
     // keine Parameter vom BASIC nur Factory angegeben?
     SFX_REQUEST_ARG(rReq, pTemplNameItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE);
     SFX_REQUEST_ARG(rReq, pTemplFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
@@ -1000,6 +1007,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         if ( pRet )
             rReq.SetReturnValue( *pRet );
     }
+*/
 }
 
 
