@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:49:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ polish ] = "Rozdzielczoζ [~DPI]:";
         Text[ japanese ] = "θ§£εƒεΊ¦ [~DPI]";
         Text[ greek ] = "Ανάλυση [~DPI]:";
-        Text[ korean ] = "ν•΄μƒλ„[~DPI]:";
+        Text[ korean ] = "ν•΄μƒλ„[DPI](~D):";
         Text[ chinese_traditional ] = "θ§£ζεΊ¦ [~DPI]";
         Text[ arabic ] = "ΗΣΚΘΗδΙ [~DPI]";
         Text[ turkish ] = "Ηφzόnόrlόk [~DPI]";
@@ -788,7 +788,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ arabic ] = "ΗαΜεΗÒ ΫνΡ γυΪΟ αΕδΤΗΑ γΪΗνδΙ. ΘΟαΗπ γδ εΠΗ΅ Σζέ νΚγ ΗΣΚΞΟΗγ γΣΝ ΪΗΟν ίγΪΗνδΙ. νγίδ Γδ νΣΚΫΡή Παί έΚΡΙ ΓΨζα ΘίΛνΡ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
     Text[ chinese_simplified ] = "θΏ™δΈªθ®Ύε¤‡ζ²΅ζ‰ιΆ„θ§εθƒ½γ€‚ι‡‡η”¨ζ™®ι€ζ‰«ζζ–ΉεΌιΆ„θ§ε―θƒ½ι€θ¦θΎƒι•Ώη„ζ—¶ι—΄γ€‚";
-    Text[ greek ] = "Η συσκευή δεν έχει ρυθμιστεί για την εμφάνιση προεπισκόπησης. Αντί αυτού χρησιμοποιείται μια κανονική σάρωση. Η διαδικασία αυτή μπορεί να ? ";
+    Text[ greek ] = "Η συσκευή δεν προσφέρει επιλογή προεπισκόπησης. Για αυτό στη θέση της προεπισκόπησης θα χρησιμοποιηθεί μια κανονική σάρωση. Αυτή η διαδικασία μπορεί να διαρκέσει αρκετά.";
     Text[ korean ] = "μ¥μΉλ” λ―Έλ¦¬ λ³΄κΈ° μµμ…μ„ μ κ³µν•μ§€ μ•μµλ‹λ‹¤. κ·Έ λ€μ‹  μΌλ° μ¤μΊ”μ΄ λ―Έλ¦¬ λ³΄κΈ°λ΅ μ‚¬μ©λ©λ‹λ‹¤. μ΄ μ‘λ™μ€ μ‹κ°„μ΄ λ” κ±Έλ¦΄ μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Cihaz φnizleme iώlevine desteklemiyor. Bunun yerine φnizleme olarak normal bir tarama gφrόntόsό kullanύlacak. Bu iώlem daha fazla zaman alabilir.";
     Text[ catalan ] = "El dispositiu no ofereix l'opciσ de previsualitzaciσ i, per tant, es procedirΰ a un escanejat normal. Aixς pot trigar forηa temps.";
@@ -820,7 +820,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ arabic ] = "ΚΪΠΡ ΚΛΘνΚ ΗαζΗΜεΙ SANE. αεΠΗ έΕδε γδ ΫνΡ Ηαγγίδ ΕΜΡΗΑ ΪγανΙ ΗαγΣΝ ΗαΦζΖν.";
     Text[ dutch ] = "Het SANE interface kan niet worden geοnitialiseerd. Scannen is niet mogelijk.";
     Text[ chinese_simplified ] = "ζ— ζ³•εε§‹ε– SANE η•ιΆγ€‚ζ— ζ³•ζ‰§θ΅ζ‰«ζδ½δΈγ€‚";
-    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση της διασύνδεσης SANE. Αδύνατον να γίνει σάρωση.";
+    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει εκκίνηση της διασύνδεσης SANE. Αδύνατον να γίνει σάρωση.";
     Text[ korean ] = "SANE μΈν„°νμ΄μ¤λ¥Ό μ΄κΈ°ν™”ν•μ§€ λª»ν•΄ μ¤μΊ” κ³Όμ •μ„ μ§„ν–‰ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "SANE arabirimi baώlatύlamadύ. Tarama iώlemi yόrόtόlemez.";
     Text[ catalan ] = "No s'ha pogut inicialitzar la interfνcie SANE. L'escanejat no ιs possible.";
@@ -831,6 +831,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ hindi ] = "SANE ΰ¤‡ΰ¤¨ΰ¥ΰ¤ΰ¤°ΰ¤«ΰ¥‡ΰ¤Έ ΰ¤•ΰ¥‹ ΰ¤‡ΰ¤¨ΰ¤Ώΰ¤¶ΰ¥ΰ¤―ΰ¤²ΰ¥ΰ¤ΰ¤Ό ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤ ΰ¤Έΰ¥ΰ¤•ΰ¥‰ΰ¤¨ΰ¤Ώΰ¤‚ΰ¤— ΰ¤Έΰ¤‚ΰ¤­ΰ¤µ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "NedΓ΅ sa inicializovaΕ¥ rozhranie SANE. Skenovanie nie je dostupnΓ©.";
 };
+
 
 
 
