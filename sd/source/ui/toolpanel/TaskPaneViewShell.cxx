@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:13:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include "ScrollPanel.hxx"
 #include "controls/MasterPagesPanel.hxx"
 #include "controls/MasterPagesSelector.hxx"
+#include "controls/CustomAnimationPanel.hxx"
+#include "controls/SlideTransitionPanel.hxx"
+#include "controls/AnimationSchemesPanel.hxx"
 #include "TitleToolBox.hxx"
 #include "ControlContainer.hxx"
 #include "FrameView.hxx"
@@ -85,6 +88,7 @@
 #include "app.hrc"
 #include "glob.hrc"
 #include "res_bmp.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "sdresid.hxx"
 #ifndef _SVX_DLG_CTRL_HXX
@@ -132,13 +136,16 @@ using namespace ::sd::toolpanel;
 
 
 //#define SHOW_TEST_PANEL
-#ifdef SHOW_TEST_PANEL
+//#ifdef SHOW_TEST_PANEL
 #include "TestPanel.hxx"
-#endif
+//#endif
 //#define SHOW_TEST_MENU
 #ifdef SHOW_TEST_MENU
 #include "TestMenu.hxx"
 #endif
+
+#include <vector>
+
 
 namespace sd { namespace toolpanel {
 
@@ -150,27 +157,78 @@ SFX_IMPL_INTERFACE(TaskPaneViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
 TYPEINIT1(TaskPaneViewShell, ViewShell);
 
 
+/** Inner implementation class of TaskPaneViewShell.
+*/
+class TaskPaneViewShell::Implementation
+{
+public:
+    static const sal_uInt32 mnInvalidId = 0xffffffff;
+
+    Implementation (void);
+    ~Implementation (void);
+
+    /** Here the panels are created that are shown in the task pane.
+    */
+    void Setup (ToolPanel* pToolPanel, ViewShellBase& rBase);
+
+    /** Make a new panel known to the translation table that translates
+        between internal indices as returned by
+        ControlContainer::AddControl() and public indices defined by
+        TaskPaneViewShell::PanelId.
+    */
+    void AddPanel (sal_uInt32 nInternalId, PanelId nPublicId);
+
+    /** Return the public id for the given internal one.
+        @return
+            When the given public id is not known then PID_UNKNOWN is
+            returned.
+    */
+    PanelId GetPublicId (sal_uInt32 nInternalId) const;
+
+    /** Return the internal id for the given public one.
+        @return
+            When the given public id is not known then mnInvalidId is
+            returned.
+    */
+    sal_uInt32 GetInternalId (PanelId nPublicId) const;
+
+private:
+    /** This map translates between internal indices returned by
+        ControlContainer::AddControl() and public indices defined by
+        TaskPaneViewShell::PanelId.
+    */
+    typedef ::std::vector<PanelId> InternalIdToPanelIdMap;
+    InternalIdToPanelIdMap maIndexMap;
+};
+
 namespace {
-    enum MenuId {
-        MID_UNLOCK_TASK_PANEL = 1,
-        MID_LOCK_TASK_PANEL = 2,
-        MID_CUSTOMIZE = 3,
-        MID_FIRST_CONTROL = 4,
-    };
+
+enum MenuId {
+    MID_UNLOCK_TASK_PANEL = 1,
+    MID_LOCK_TASK_PANEL = 2,
+    MID_CUSTOMIZE = 3,
+    MID_FIRST_CONTROL = 4,
+};
+
+} // end of anonymouse namespace
 
 
 
 
 
-void TestSetup (ToolPanel* pToolPanel, ViewShellBase& rBase)
+void TaskPaneViewShell::Implementation::Setup (
+    ToolPanel* pToolPanel,
+    ViewShellBase& rBase)
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
 
     // A sub tool panel with slide sorters.
     TreeNode* pSubPanel = new controls::MasterPagesPanel (pToolPanel, rBase);
-    pToolPanel->AddControl (
+    sal_uInt32 nId = pToolPanel->AddControl (
         ::std::auto_ptr<TreeNode>(pSubPanel),
-        SdResId(STR_TASKPANEL_MASTER_PAGE_TITLE));
+        SdResId(STR_TASKPANEL_MASTER_PAGE_TITLE),
+        HID_SD_SLIDE_DESIGNS);
+    AddPanel (nId, PID_MASTER_PAGES);
 
     // Layout Menu.
     ScrollPanel* pScrollPanel = new ScrollPanel (pToolPanel);
@@ -181,9 +239,37 @@ void TestSetup (ToolPanel* pToolPanel, ViewShellBase& rBase)
         false);
     pMenu->Expand(true);
     pScrollPanel->AddControl (::std::auto_ptr<TreeNode>(pMenu));
-    pToolPanel->AddControl (
+    nId = pToolPanel->AddControl (
         ::std::auto_ptr<TreeNode>(pScrollPanel),
-        SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
+        SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE),
+        HID_SD_SLIDE_LAYOUTS);
+    AddPanel (nId, PID_LAYOUT);
+
+/*
+    // AnimationSchemesPanel
+    TreeNode* pAnimationSchemesPanel = new controls::AnimationSchemesPanel(pToolPanel, rBase );
+    nId = pToolPanel->AddControl (
+        ::std::auto_ptr<TreeNode>(pAnimationSchemesPanel),
+        pAnimationSchemesPanel->GetWindow()->GetText());
+    AddPanel (nId, PID_ANIMATION_SCHEMES);
+*/
+    // CustomAnimationPanel
+    TreeNode* pCustomAnimationPanel = new controls::CustomAnimationPanel(pToolPanel, rBase );
+    nId = pToolPanel->AddControl (
+        ::std::auto_ptr<TreeNode>(pCustomAnimationPanel),
+        pCustomAnimationPanel->GetWindow()->GetText(),
+        HID_SD_CUSTOM_ANIMATIONS);
+
+    AddPanel (nId, PID_CUSTOM_ANIMATION);
+
+    // SlideTransitionPanel
+    TreeNode* pSlideTransitionPanel = new controls::SlideTransitionPanel(pToolPanel, rBase );
+    nId = pToolPanel->AddControl (
+        ::std::auto_ptr<TreeNode>(pSlideTransitionPanel),
+        pSlideTransitionPanel->GetWindow()->GetText(),
+        HID_SD_SLIDE_TRANSITIONS);
+
+    AddPanel (nId, PID_SLIDE_TRANSITION);
 
 #ifdef SHOW_COLOR_MENU
     // Test Menu.
@@ -211,8 +297,6 @@ void TestSetup (ToolPanel* pToolPanel, ViewShellBase& rBase)
 
 
 
-} // end of anonymouse namespace
-
 
 TaskPaneViewShell::TaskPaneViewShell (
     SfxViewFrame* pFrame,
@@ -220,11 +304,16 @@ TaskPaneViewShell::TaskPaneViewShell (
     ::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
-      mbIsInitialized (false),
+      mpImpl(NULL),
+      mpTaskPane(NULL),
+      mpTitleToolBox(NULL),
+      mbIsInitialized(false),
       mpSubShellManager(NULL),
       mnMenuId(0)
 {
     meShellType = ST_TASK_PANE;
+
+    mpImpl.reset (new Implementation());
 
     mpContentWindow->SetCenterAllowed (false);
 
@@ -233,6 +322,8 @@ TaskPaneViewShell::TaskPaneViewShell (
 
     GetParentWindow()->SetBackground(Wallpaper());
     mpContentWindow->SetBackground(Wallpaper());
+
+    GetParentWindow()->SetHelpId(HID_SD_TASK_PANE);
 
     PaneDockingWindow* pDockingWindow = static_cast<PaneDockingWindow*>(
         pParentWindow);
@@ -299,7 +390,7 @@ void TaskPaneViewShell::ArrangeGUIElements (void)
     if ( ! mbIsInitialized)
     {
         mbIsInitialized = true;
-        TestSetup (mpTaskPane.get(), GetViewShellBase());
+        mpImpl->Setup (mpTaskPane.get(), GetViewShellBase());
     }
 
     // Place the task pane.
@@ -528,6 +619,89 @@ DockingWindow* TaskPaneViewShell::GetDockingWindow (void)
     }
     return pDockingWindow;
 }
+
+
+
+
+void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
+{
+    sal_uInt32 nId (mpImpl->GetInternalId (nPublicId));
+    if (nId != Implementation::mnInvalidId)
+    {
+        // First make the control visible.  At least its title bar is then
+        // visible.
+        mpTaskPane->GetControlContainer().SetVisibilityState (
+            nId,
+            ControlContainer::VS_SHOW);
+
+        // Now expand it so that the whole control becomes visible.
+        mpTaskPane->GetControlContainer().SetExpansionState (
+            nId,
+            ControlContainer::ES_EXPAND);
+    }
+}
+
+
+
+
+//===== TaskPaneViewShell::Implementation =====================================
+
+TaskPaneViewShell::Implementation::Implementation (void)
+    : maIndexMap(
+        (InternalIdToPanelIdMap::size_type)PID__END,
+        PID_UNKNOWN)
+{
+}
+
+
+
+
+TaskPaneViewShell::Implementation::~Implementation (void)
+{
+}
+
+
+
+
+void TaskPaneViewShell::Implementation::AddPanel (
+    sal_uInt32 nInternalId,
+    PanelId nPublicId)
+{
+    maIndexMap[nInternalId] = nPublicId;
+}
+
+
+
+
+TaskPaneViewShell::PanelId
+    TaskPaneViewShell::Implementation::GetPublicId (
+        sal_uInt32 nInternalId) const
+{
+    if (nInternalId < maIndexMap.size())
+        return maIndexMap[nInternalId];
+    else
+        return PID_UNKNOWN;
+}
+
+
+
+
+sal_uInt32
+    TaskPaneViewShell::Implementation::GetInternalId (
+        TaskPaneViewShell::PanelId nPublicId) const
+{
+    sal_uInt32 nId = mnInvalidId;
+    for (sal_uInt32 nI=0; nI<maIndexMap.size(); nI++)
+        if (maIndexMap[nI] == nPublicId)
+        {
+            nId = nI;
+            break;
+        }
+
+    return nId;
+}
+
+
 
 
 } } // end of namespace ::sd::toolpanel
