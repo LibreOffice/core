@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ protected:
 
 public:
 
-    SwXMLImport();
+    SwXMLImport(sal_uInt16 nImportFlags = IMPORT_ALL);
 #ifdef XML_CORE_API
     SwXMLImport( SwDoc& rDoc, const SwPaM& rPaM, sal_Bool bLoadDoc,
                  sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,

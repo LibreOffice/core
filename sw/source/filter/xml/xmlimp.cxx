@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-14 16:35:00 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,8 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     return pContext;
 }
 
-SwXMLImport::SwXMLImport() :
+SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
+    SvXMLImport( nImportFlags ),
     bLoadDoc( sal_True ),
     bInsert( sal_False ),
     bBlock( sal_False ),
@@ -731,23 +732,95 @@ void SwXMLImport::ShowProgress( sal_Int32 nPercent )
     }
 }
 
-uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames()
-    throw()
-{
-    const OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Writer" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
+
+//
+// UNO component registration helper functions
+//
 
 OUString SAL_CALL SwXMLImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SwXMLImport" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName( SwXMLImport_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport;
+    return (cppu::OWeakObject*)new SwXMLImport(IMPORT_ALL);
+}
+
+OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLStylesImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SwXMLImportStyles_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName( SwXMLImportStyles_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLImport(
+        IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+        IMPORT_FONTDECLS );
+}
+
+OUString SAL_CALL SwXMLImportContent_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLContentImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SwXMLImportContent_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName( SwXMLImportContent_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLImport(
+        IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
+        IMPORT_FONTDECLS );
+}
+
+OUString SAL_CALL SwXMLImportMeta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLMetaImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SwXMLImportMeta_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName( SwXMLImportMeta_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
 }

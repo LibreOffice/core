@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-28 12:41:01 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,165 @@ int XMLReader::GetReaderType()
     return SW_STORAGE_READER | SW_STREAM_READER;
 }
 
+/// read a component (file + filter version)
+sal_Int32 ReadThroughComponent(
+    Reference<io::XInputStream> xInputStream,
+    Reference<XComponent> xModelComponent,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName,
+    Sequence<Any> rFilterArguments,
+    const OUString& rName,
+
+    // parameters for special modes
+    sal_Bool bBlockMode,
+    Reference<XTextRange> & rInsertTextRange,
+    sal_Bool bFormatsOnly,
+    sal_uInt16 nStyleFamilyMask,
+    sal_Bool bMergeStyles)
+{
+    DBG_ASSERT(xInputStream.is(), "input stream missing");
+    DBG_ASSERT(xModelComponent.is(), "document missing");
+    DBG_ASSERT(rFactory.is(), "factory missing");
+    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+
+    // prepare ParserInputSrouce
+    xml::sax::InputSource aParserInput;
+    aParserInput.sSystemId = rName;
+    aParserInput.aInputStream = xInputStream;
+
+    // get parser
+    Reference< xml::sax::XParser > xParser(
+        rFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        UNO_QUERY );
+    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    if( !xParser.is() )
+        return ERR_SWG_READ_ERROR;
+
+    // get filter
+    Reference< xml::sax::XDocumentHandler > xFilter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pFilterName), rFilterArguments),
+        UNO_QUERY );
+    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    if( !xFilter.is() )
+        return ERR_SWG_READ_ERROR;
+
+    // connect parser and filter
+    xParser->setDocumentHandler( xFilter );
+
+    // connect model and filter
+    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
+    xImporter->setTargetDocument( xModelComponent );
+
+    // prepare filter for special modes
+    if( bBlockMode || bFormatsOnly || rInsertTextRange.is() )
+    {
+        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
+        if (xFilterTunnel.is())
+        {
+            SwXMLImport* pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
+                SwXMLImport::getUnoTunnelId() );
+
+            if ( NULL != pFilter )
+            {
+                if ( bFormatsOnly )
+                    pFilter->setStyleInsertMode( nStyleFamilyMask,
+                                                 !bMergeStyles );
+
+                if ( rInsertTextRange.is() )
+                    pFilter->setTextInsertMode( rInsertTextRange );
+
+                if ( bBlockMode )
+                    pFilter->setBlockMode();
+            }
+        }
+    }
+
+    // finally, parser the stream
+    try
+    {
+        xParser->parseStream( aParserInput );
+    }
+    catch( xml::sax::SAXParseException& r )
+    {
+        String sErr( String::CreateFromInt32( r.LineNumber ));
+        sErr += ',';
+        sErr += String::CreateFromInt32( r.ColumnNumber );
+
+        return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+    }
+//  catch( xml::sax::SAXParseException& r )
+//  {
+//      return ERR_SWG_READ_ERROR;
+//  }
+    catch( xml::sax::SAXException& )
+    {
+        return ERR_SWG_READ_ERROR;
+    }
+    catch( io::IOException& )
+    {
+        return ERR_SWG_READ_ERROR;
+    }
+
+    // success!
+    return 0;
+}
+
+/// read a component (storage version)
+sal_Int32 ReadThroughComponent(
+    SvStorage* pStorage,
+    Reference<XComponent> xModelComponent,
+    const sal_Char* pStreamName,
+    const sal_Char* pCompatibilityStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName,
+    Sequence<Any> rFilterArguments,
+    const OUString& rName,
+
+    // parameters for special modes
+    sal_Bool bBlockMode,
+    Reference<XTextRange> & rInsertTextRange,
+    sal_Bool bFormatsOnly,
+    sal_uInt16 nStyleFamilyMask,
+    sal_Bool bMergeStyles)
+{
+    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+
+    // open stream (and set parser input)
+    OUString sStreamName = OUString::createFromAscii(pStreamName);
+    if (! pStorage->IsStream(sStreamName))
+    {
+        // stream name not found! Then try the compatibility name.
+
+        // do we even have an alternative name?
+        if ( NULL == pCompatibilityStreamName )
+            return ERR_SWG_READ_ERROR;
+
+        // if so, does the stream exist?
+        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
+        if (! pStorage->IsStream(sStreamName) )
+            return ERR_SWG_READ_ERROR;
+    }
+
+    // get input stream
+    SvStorageStreamRef xEventsStream;
+    xEventsStream = pStorage->OpenStream( sStreamName,
+                                          STREAM_READ | STREAM_NOCREATE );
+    xEventsStream->SetBufferSize( 16*1024 );
+    Reference<io::XInputStream> xInputStream =
+        new utl::OInputStreamWrapper( *xEventsStream );
+
+    // read from the stream
+    return ReadThroughComponent(
+        xInputStream, xModelComponent, rFactory, pFilterName, rFilterArguments,
+        rName, bBlockMode, rInsertTextRange, bFormatsOnly,
+        nStyleFamilyMask, bMergeStyles);
+}
+
+
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
@@ -155,11 +314,10 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     SvXMLGraphicHelper *pGraphicHelper = 0;
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+
+    // get the input stream (storage or stream)
     SvStorageStreamRef xDocStream;
-
-     xml::sax::InputSource aParserInput;
-    aParserInput.sSystemId = rName;
-
+    Reference<io::XInputStream> xInputStream;
     SvStorage *pStorage = 0;
     if( pMedium )
         pStorage = pMedium->GetStorage();
@@ -186,7 +344,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_READ | STREAM_NOCREATE );
         xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+        xInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
     else if( pMedium )
     {
@@ -210,70 +368,36 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
         xSource->setOutputStream( xPipeOutput );
 
-        aParserInput.aInputStream = Reference< io::XInputStream >( xPipe,
-                                                                   UNO_QUERY );
+        xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
     }
     else
     {
         pStrm->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *pStrm );
+        xInputStream = new utl::OInputStreamWrapper( *pStrm );
     }
 
-    // get parser
-    Reference< xml::sax::XParser > xParser(
-            xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
-            UNO_QUERY );
-    ASSERT( xParser.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-    if( !xParser.is() )
-        return ERR_SWG_READ_ERROR;
-
-    // get filter
-    Sequence < Any > aArgs( 2 );
-    Any *pArgs = aArgs.getArray();
-    *pArgs++ <<= xGraphicResolver;
-    *pArgs++ <<= xObjectResolver;
-    Reference< xml::sax::XDocumentHandler > xFilter(
-            xServiceFactory->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.office.sax.importer.Writer"),
-                aArgs ),
-            UNO_QUERY );
-    ASSERT( xFilter.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.importer.Writer service missing" );
-    if( !xFilter.is() )
-        return ERR_SWG_READ_ERROR;
-
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
-
-    // Get model
+    // Get the docshell, the model, and finally the model's component
     SwDocShell *pDocSh = rDoc.GetDocShell();
     ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
     if( !pDocSh )
         return ERR_SWG_READ_ERROR;
-
     Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
     ASSERT( xModelComp.is(),
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
 
-    // connect model and filter
-    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
-    xImporter->setTargetDocument( xModelComp );
+    // prepare filter arguments
+    Sequence<Any> aFilterArgs( 2 );
+    Any *pArgs = aFilterArgs.getArray();
+    *pArgs++ <<= xGraphicResolver;
+    *pArgs++ <<= xObjectResolver;
+    Sequence<Any> aEmptyArgs( 0 );
 
-    Reference<XUnoTunnel> xFilterTunnel;
-    SwXMLImport *pFilter = 0;
-    if( aOpt.IsFmtsOnly() || bInsertMode || IsBlockMode() )
-    {
-        xFilterTunnel = Reference<XUnoTunnel>( xFilter, UNO_QUERY );
-        pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
-                                            SwXMLImport::getUnoTunnelId() );
-    }
+    // prepare for special modes
+    sal_uInt16 nStyleFamilyMask = 0U;
     if( aOpt.IsFmtsOnly() )
     {
-        sal_uInt16 nStyleFamilyMask = 0U;
         if( aOpt.IsFrmFmts() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_FRAME;
         if( aOpt.IsPageDescs() )
@@ -282,22 +406,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             nStyleFamilyMask |= (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
         if( aOpt.IsNumRules() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
-
-        ASSERT( pFilter, "There is the filter?" );
-        pFilter->setStyleInsertMode( nStyleFamilyMask, !aOpt.IsMerge() );
     }
-    else if( bInsertMode )
+    Reference<XTextRange> xInsertTextRange = NULL;
+    if( bInsertMode )
     {
-        Reference < XTextRange > xTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                        0 );
-        ASSERT( pFilter, "There is the filter?" );
-        pFilter->setTextInsertMode( xTextRange );
-    }
-    else if( IsBlockMode() )
-    {
-        ASSERT( pFilter, "There is the filter?" );
-        pFilter->setBlockMode();
+        xInsertTextRange = SwXTextRange::CreateTextRangeFromPosition(
+            &rDoc, *rPaM.GetPoint(), 0 );
     }
 
     aOpt.ResetAllFmtsOnly();
@@ -305,96 +419,53 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     rDoc.AddLink(); // prevent deletion
     sal_uInt32 nRet = 0;
 
-    // parse
-    if( xSource.is() )
+    if ( NULL != pStorage )
     {
-        Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
-        xSourceControl->start();
+        // read storage streams
+
+        ReadThroughComponent(
+           pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+           "com.sun.star.comp.Writer.XMLContentImporter",
+           aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+           aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+
+        ReadThroughComponent(
+            pStorage, xModelComp, "styles.xml", "", xServiceFactory,
+            "com.sun.star.comp.Writer.XMLStylesImporter",
+            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+
+        ReadThroughComponent(
+            pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            "com.sun.star.comp.Writer.XMLMetaImporter",
+            aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+
+        if (IsBlockMode())
+            ReadThroughComponent(
+                pStorage, xModelComp, "atevents.xml", "AutoTextEvents.xml",
+                xServiceFactory,
+                "com.sun.star.comp.Writer.XMLAutotextEventsImporter",
+                aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
     }
-    try
+    else
     {
-        xParser->parseStream( aParserInput );
-    }
-    catch( xml::sax::SAXParseException& r )
-    {
-        String sErr( String::CreateFromInt32( r.LineNumber ));
-        sErr += ',';
-        sErr += String::CreateFromInt32( r.ColumnNumber );
+        // read plain file
 
-        nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-    }
-    catch( xml::sax::SAXException& r )
-    {
-        nRet = ERR_SWG_READ_ERROR;
-    }
-    catch( io::IOException& r )
-    {
-        nRet = ERR_SWG_READ_ERROR;
-    }
-
-    // import autotext events
-    if ((NULL != pStorage) && IsBlockMode())
-    {
-        OUString sStreamName(RTL_CONSTASCII_USTRINGPARAM(
-            "AutoTextEvents.xml"));
-        OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.office.sax.importer.AutoTextEventReader"));
-
-        // prepare ParserInputSrouce
-        xml::sax::InputSource aEventsParserInput;
-        aEventsParserInput.sSystemId = rName;
-
-        // open stream (and set parser input)
-        SvStorageStreamRef xEventsStream;
-        xEventsStream = pStorage->OpenStream( sStreamName,
-                                             STREAM_READ | STREAM_NOCREATE );
-        xEventsStream->SetBufferSize( 16*1024 );
-        aEventsParserInput.aInputStream =
-            new utl::OInputStreamWrapper( *xEventsStream );
-
-        // get parser
-        Reference< xml::sax::XParser > xEventsParser(
-            xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
-            UNO_QUERY );
-        ASSERT( xEventsParser.is(),
-                "Can't create parser" );
-        if( !xEventsParser.is() )
-            return ERR_SWG_READ_ERROR;
-
-        // get filter
-        Sequence < Any > aArgs( 0 );
-        Reference< xml::sax::XDocumentHandler > xEventsFilter(
-            xServiceFactory->createInstance(sServiceName), UNO_QUERY );
-        ASSERT( xEventsFilter.is(),
-                "Can't instantiate auto text events reader." );
-        if( !xEventsFilter.is() )
-            return ERR_SWG_READ_ERROR;
-
-        // connect parser and filter
-        xEventsParser->setDocumentHandler( xEventsFilter );
-
-        // connect model and filter
-        Reference < XImporter > xEventsImporter( xEventsFilter, UNO_QUERY );
-        xEventsImporter->setTargetDocument( xModelComp );
-
-        try
+        // parse
+        if( xSource.is() )
         {
-            xEventsParser->parseStream( aEventsParserInput );
+            Reference< io::XActiveDataControl > xSourceControl( xSource,
+                                                                UNO_QUERY );
+            xSourceControl->start();
         }
-        catch( xml::sax::SAXParseException& r )
-        {
-            nRet = ERR_SWG_READ_ERROR;
-        }
-        catch( xml::sax::SAXException& r )
-        {
-            nRet = ERR_SWG_READ_ERROR;
-        }
-        catch( io::IOException& r )
-        {
-            nRet = ERR_SWG_READ_ERROR;
-        }
+
+        ReadThroughComponent(
+            xInputStream, xModelComp, xServiceFactory,
+            "com.sun.star.comp.Writer.XMLImporter",
+            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
     }
 
     if( pGraphicHelper )

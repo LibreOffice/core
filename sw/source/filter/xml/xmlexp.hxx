@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ protected:
 
 public:
 
-    SwXMLExport();
+    SwXMLExport(sal_uInt16 nExportFlags = EXPORT_ALL);
 #ifdef XML_CORE_API
     SwXMLExport( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::frame::XModel > & rModel,
