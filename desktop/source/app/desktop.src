@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:12:06 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ chinese_simplified ] = "зњџжЇйќћеёёжЉ±ж­‰гЂ‚е€љж‰Ќзљ„ж“ЌдЅњеј•еЏ‘дє†дёЂдёЄж— жі•жЋ’й™¤зљ„й”™иЇЇгЂ‚\nдї®ж”№иї‡зљ„ж–‡д»¶е·Із»Џдїќе­гЂ‚\nењЁдё‹дёЂж¬ЎеђЇеЉЁзЁ‹еєЏж—¶еѕ€еЏЇиѓЅй‡Ќж–°жЃўе¤Ќиї™дє›ж–‡д»¶гЂ‚";
     Message[ russian ] = "Произошла неустранимая ошибка.\n\nВсе измененные файлы будут сохранены\nи их можно будет восстановить при следующем\nзапуске программы.";
     Message[ polish ] = "Wyst№piі nieodwracalny bі№d.\n\nWszystkie zmodyfikowane pliki zostaіy jednak\nzabezpieczone i zostan№ prawdopodobnie przywrуcone przy nastкpnym uruchomieniu programu.\n.";
-    Message[ japanese ] = "й™¤еЋ»гЃ§гЃЌгЃЄгЃ„г‚Ёгѓ©гѓјгЃЊз™єз”џгЃ—гЃѕгЃ—гЃџгЂ‚\n\nе¤‰ж›ґгЃ—гЃџгѓ•г‚Ўг‚¤гѓ«гЃЇгЃ™гЃ№гЃ¦дїќе­гЃ•г‚ЊгЃ¦гЃ„г‚‹гЃ®гЃ§\nж¬ЎгЃ®гѓ—гѓ­г‚°гѓ©гѓ иµ·е‹•гЃ§еѕ©е…ѓгЃ•г‚Њг‚‹гЃЇгЃљгЃ§гЃ™гЂ‚";
+    Message[ japanese ] = "дє€жњџгЃ—гЃЄгЃ„г‚Ёгѓ©гѓјгЃЊз™єз”џгЃ—гЃѕгЃ—гЃџгЂ‚\n\nе¤‰ж›ґгЃ—гЃџгѓ•г‚Ўг‚¤гѓ«гЃЇгЃ™гЃ№гЃ¦дїќе­гЃ•г‚ЊгЃ¦гЃ„г‚‹гЃ®гЃ§\nж¬ЎгЃ®гѓ—гѓ­г‚°гѓ©гѓ иµ·е‹•гЃ§еѕ©е…ѓгЃ•г‚Њг‚‹гЃЇгЃљгЃ§гЃ™гЂ‚";
     Message[ chinese_traditional ] = "зњџжЇйќћеёёжЉ±ж­‰гЂ‚е‰›ж‰Ќзљ„е‹•дЅњеј•з™јдє†дёЂеЂ‹з„Ўжі•жЋ’й™¤зљ„йЊЇиЄ¤гЂ‚\nе…€е‰Ќдї®ж”№йЃЋзљ„жЄ”жЎ€е·Із¶“е„Іе­гЂ‚\nењЁдё‹дёЂж¬Ўе•џе‹•зЁ‹ејЏж™‚еѕ€еЏЇиѓЅй‡Ќж–°жЃўеѕ©йЂ™дє›жЄ”жЎ€гЂ‚";
     Message[ arabic ] = "НПЛ ОШГ ЫнС ЮЗИб ббЕХбЗН.\n\nКг НЭЩ ЯЗЭЙ ЗбгбЭЗК ЗбКн Кг КЪПнбеЗЎ \nИНнЛ нгЯд ЗУКЪЗПКеЗ ЪдП ЕЪЗПЙ\n КФЫнб ЗбИСдЗгМ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
