@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:22:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,11 +805,6 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 #endif
             aLine.PaintDropPortion();
         }
-
-#ifdef USED
-        if( pSh && pSh->GetViewOptions()->IsTest2() )
-            aInf.GetTxtFly()->ShowContour( pOut );
-#endif
 
         if( rRepaint.HasArea() )
             rRepaint.Clear();
