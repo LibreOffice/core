@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,10 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
+//#define CONNECTIVITY_PROPERTY_NAME_SPACE file
+//#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+//#include "propertyids.hxx"
+//#endif
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -168,10 +169,7 @@ namespace connectivity
         public:
             OFILEOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>& _xColumn);
 
-            virtual sal_Bool isIndexed() const
-            {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(m_xColumn,::com::sun::star::uno::UNO_QUERY)->getPropertySetInfo()->hasPropertyByName(connectivity::PROPERTY_ISASCENDING);
-            }
+            virtual sal_Bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             TYPEINFO();
         };

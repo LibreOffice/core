@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: patrick.luby $ $Date: 2000-09-22 05:50:03 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 
 #if defined(WIN) || defined(WNT)
 
-//  #include <tools/prewin.h>
 #include <odbc/sqlext.h>
-//  #include <tools/postwin.h>
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */
