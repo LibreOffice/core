@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:31:13 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 21:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ String STR_LINKEDIT_TEXT
     Text [ italian ] = "Modifica collegamenti" ;
     Text [ portuguese_brazilian ] = "Editar liga??s" ;
     Text [ portuguese ] = "Editar ligações" ;
-    Text [ finnish ] = "Muokkaa linkkejä" ;
+    Text [ finnish ] = "Muokkaa linkkej?" ;
     Text [ danish ] = "Rediger kæder" ;
     Text [ french ] = "Édition de liens" ;
     Text [ swedish ] = "Redigera länkar" ;
@@ -152,7 +152,7 @@ String STR_PATH_NOT_FOUND1
     Text [ italian ] = "La cartella" ;
     Text [ portuguese_brazilian ] = "O diret?io" ;
     Text [ portuguese ] = "O directório '" ;
-    Text [ finnish ] = "Hakemisto '" ;
+    Text [ finnish ] = "Hakemistoa " ;
     Text [ danish ] = "Biblioteket '" ;
     Text [ french ] = "Le répertoire'" ;
     Text [ swedish ] = "Katalogen '" ;
@@ -181,7 +181,7 @@ String STR_PATH_NOT_FOUND2
     Text [ italian ] = "' non esiste." ;
     Text [ portuguese_brazilian ] = "' n?o existe." ;
     Text [ portuguese ] = "' não existe." ;
-    Text [ finnish ] = "Kohdetta ' ei ole." ;
+    Text [ finnish ] = " ei ole" ;
     Text [ danish ] = "' eksisterer ikke." ;
     Text [ french ] = "' n'existe pas." ;
     Text [ swedish ] = "' finns inte." ;
@@ -204,6 +204,7 @@ String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
 
 
 
