@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:51:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8745,6 +8745,9 @@ void Window::ImplDecModalCount()
 void Window::ImplNotifyIconifiedState( BOOL bIconified )
 {
     mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
+    // #109206# notify client window as well to have toolkit topwindow listeners notified
+    if( mpFrameWindow->mpClientWindow && mpFrameWindow != mpFrameWindow->mpClientWindow )
+        mpFrameWindow->mpClientWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
 }
 
 BOOL Window::HasActiveChildFrame()
