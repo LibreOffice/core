@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:05:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1867,7 +1867,6 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
                 sAutoMarkURL = sSaveAutoMarkURL;
             delete pAutoMarkDlg;
 
-            sAutoMarkURL = URIHelper::SmartRelToAbs( sAutoMarkURL );
         }
         break;
     }
