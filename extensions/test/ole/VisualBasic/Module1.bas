@@ -19,6 +19,7 @@ Sub Main()
 '============================================
 Dim tmpVar As Variant
 Dim ret As Variant
+Dim bError As Boolean
 ret = objOleTest.in_methodByte(10)
 Debug.Print TypeName(ret) & " " & CStr(ret)
 ret = objOleTest.in_methodFloat(3.14)
@@ -166,12 +167,26 @@ Debug.Print "out Any " & CStr(outString)
 '==========================================================
 ' COM obj
 Dim retObj As Object
-'OleTest calls a disposing on the object
+'OleTest receives a COM object that implements XEventListener
+'OleTest then calls a disposing on the object. The object then will be
+'asked if it has been called
+objEventListener.setQuiet True
+objEventListener.resetDisposing
 Set retObj = objOleTest.in_methodInvocation(objEventListener)
-'The returned object should be objEventListener, test it
+ret = objEventListener.disposingCalled
+If ret = False Then
+    MsgBox "Error"
+End If
+
+'The returned object should be objEventListener, test it by calling disposing
 ' takes an IDispatch as Param ( EventObject).To provide a TypeMismatch
 'we put in another IDispatch
-objEventListener.disposing objEventListener
+retObj.resetDisposing
+retObj.disposing objEventListener
+If retObj.disposingCalled = False Then
+    MsgBox "Error"
+End If
+
 
 ' out param gives out the OleTestComponent
 objOleTest.testout_methodXInterface retObj
@@ -213,6 +228,7 @@ For countvar = 0 To 2
     arrLong(countvar) = countvar + 10
     Debug.Print countvar
     Set arrObj(countvar) = CreateObject("VBasicEventListener.VBEventListener")
+    arrObj(countvar).setQuiet True
 Next
 
 'Arrays always contain VARIANTS
@@ -225,7 +241,11 @@ Next
 seq = objOleTest.methodXInterface(arrObj)
 For countvar = 0 To 2
     Dim tmp As Object
-        seq(countvar).disposing tmp
+    seq(countvar).resetDisposing
+    seq(countvar).disposing tmp
+    If seq(countvar).disposingCalled = False Then
+       MsgBox "Error"
+    End If
 Next
 
 'Get a sequence created in UNO, out param is Variant ( VT_BYREF|VT_VARIANT)
@@ -266,10 +286,138 @@ Dim key5
 For Each key5 In inoutVar
     Debug.Print CStr(key5)
 Next
-    
+
+'Multidimensional array
+'============================================================
+' Sequence< Sequence<long> > methodSequence( Sequence< Sequence long> >)
+' Real multidimensional array Array
+' 9 is Dim 1 (least significant) with C API
+Dim mulAr(9, 1) As Long
+Dim i As Long, j As Long
+For i = 0 To 1
+    For j = 0 To 9
+        mulAr(j, i) = i * 10 + j
+    Next j
+Next i
+
+Dim resMul As Variant
+resMul = objOleTest.methodSequence(mulAr)
+
+Dim countDim1 As Long
+Dim countDim2 As Long
+For countDim2 = 0 To 1
+    Dim arr
+    arr = resMul(countDim2)
+    For countDim1 = 0 To 9
+        Debug.Print arr(countDim1)
+        If arr(countDim1) <> mulAr(countDim1, countDim2) Then
+            MsgBox "Error Multidimensional Array"
+        End If
+    Next countDim1
+Next countDim2
+IsArray (resMul)
+
+'Array of VARIANTs containing arrays
+Dim mulAr2(1) As Variant
+Dim arr2(9) As Long
+For i = 0 To 1
+   ' Dim arr(9) As Long
+    For j = 0 To 9
+        arr2(j) = i * 10 + j
+    Next j
+    mulAr2(i) = arr2
+Next i
+
+resMul = 0
+resMul = objOleTest.methodSequence(mulAr2)
+arr = 0
+For countDim2 = 0 To 1
+    arr = resMul(countDim2)
+    tmpVar = mulAr2(countDim2)
+    For countDim1 = 0 To 9
+        Debug.Print arr(countDim1)
+        If arr(countDim1) <> tmpVar(countDim1) Then
+            MsgBox "Error Multidimensional Array"
+        End If
+    Next countDim1
+Next countDim2
+
+'Bridge_GetStruct
+'========================================================
+'Try to create a hidden document
+Dim objPropValue
+Set objPropValue = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
+'Set the members. If this fails then there is an Error
+objPropValue.Name = "hidden"
+objPropValue.Handle = -1
+objPropValue.Value = True
+
+'create a hidden document
+'Create the Desktop
+Dim objDesktop As Object
+Set objDesktop = objServiceManager.createInstance("com.sun.star.frame.Desktop")
+'Open a new empty writer document
+Dim args(0) As Object
+Set args(0) = objPropValue
+Dim objDocument As Object
+Set objDocument = objDesktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, args())
+'Create a text object
+Dim objText As Object
+Set objText = objDocument.GetText
+
+'Bridge_ImplementedInterfaces
+'=================================================
+' call an UNO function that takes an XEventListener interface
+'We provide a COM implementation (IDispatch) as EventListener
+objEventListener.resetDisposing
+objDocument.addEventListener objEventListener
+objDocument.dispose
+If objEventListener.disposingCalled = False Then
+    MsgBox "Error"
+End If
 
 
+'Bridge_GetValueObject
+'==================================================
+Dim objVal As Object
+Set objVal = objOleTest.Bridge_GetValueObject()
+Dim arrByte(9) As Byte
+For countvar = 0 To 9
+    arrByte(countvar) = countvar
+Next countvar
 
+objVal.Set "[]byte", arrByte
+ret = 0
+ret = objOleTest.methodByte(objVal)
+'Test if ret is the same array
+
+key = 0
+For Each key In ret
+    If ret(key) <> arrByte(key) Then
+        MsgBox "Error"
+    End If
+    Debug.Print ret(key)
+Next key
+
+
+objVal.InitInOutParam "[]byte", 10
+objOleTest.testinout_methodByte objVal
+
+ret = 0
+ret = objVal.Get()
+Debug.Print ret
+If ret <> 11 Then
+    MsgBox "error"
+End If
+
+objVal.InitOutParam
+objOleTest.testout_methodChar objVal 'Returns 'A' (65)
+ret = 0
+ret = objVal.Get()
+Debug.Print ret
+If ret <> 65 Then
+    MsgBox "error"
+End If
 
 
 
