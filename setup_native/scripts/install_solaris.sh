@@ -85,15 +85,22 @@ fi
 #
 
 COREPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-core*" -print`
-PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j3*" ! -name "*-gnome*" ! -name "*-cde*" ! -name "*-core*" -print`
+PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j3*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
 
 if [ -z "$COREPKG" ]
 then
     error "No core package found in directory $PACKAGE_PATH"
 fi
 
+# Do not install gnome-integration package on systems without GNOME
+pkginfo -q SUNWgnome-vfs
+if [ $? -eq 0 ]
+then
+  GNOMEPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-gnome*" -print`
+fi
+
 echo "Packages found:"
-for i in $COREPKG $PKGLIST; do
+for i in $COREPKG $PKGLIST $GNOMEPKG; do
   echo `basename $i`
 done
 
@@ -152,7 +159,7 @@ echo "Path to the installation   : " $MY_ROOT
 
 export LD_PRELOAD=$GETUID_SO
 
-for i in $COREPKG $PKGLIST; do
+for i in $COREPKG $PKGLIST $GNOMEPKG; do
   echo /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
   /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
 done
@@ -171,6 +178,10 @@ then
   rm -f $HOME/soffice
   ln -s $INSTALLDIR/program/soffice $HOME/soffice
 fi
+
+# patch the "bootstraprc" to create a self-containing installation
+mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
+sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
 
 echo
 echo "Installation done ..."
