@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-04 09:07:10 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 09:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,8 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
         {
             pOutliner->SetText( *pOutlinerParaObject );
 
-            if( pObj->IsEmptyPresObj() )
-                pObj->SetEmptyPresObj( FALSE );
+//          if( pObj->IsEmptyPresObj() )
+//              pObj->SetEmptyPresObj( FALSE );
         }
         else
         {
