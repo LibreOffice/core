@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 11:48:47 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 11:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
 
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
@@ -116,6 +113,9 @@
 #endif
 #ifndef _GRFATR_HXX
 #include <grfatr.hxx>
+#endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -414,19 +414,13 @@ BOOL SwDrawModeGrf::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SwDrawModeGrf::PutValue( const com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId  )
 {
-    sal_Int32 eVal;
-    try
-    {
-        eVal = comphelper::getEnumAsINT32(rVal);
-    }
-    catch(...) {}
+    sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
         SetEnumValue((USHORT)eVal);
         return TRUE;
     }
-    else
-        return FALSE;
+    return FALSE;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:52:46 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 11:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,60 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
+#include <com/sun/star/text/RelOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
+#include <com/sun/star/text/VertOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
+#include <com/sun/star/text/HorizontalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
+#include <com/sun/star/text/DocumentStatistic.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
+#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
+#include <com/sun/star/text/HoriOrientationFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
+#include <com/sun/star/text/NotePrintMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
+#include <com/sun/star/text/SizeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
+#include <com/sun/star/text/VertOrientationFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
+#include <com/sun/star/text/WrapTextMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
+#include <com/sun/star/text/XTextFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_INVALIDTEXTCONTENTEXCEPTION_HPP_
+#include <com/sun/star/text/InvalidTextContentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
+#include <com/sun/star/text/XTextContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _SVTOOLS_UNOIMAP_HXX
+#include <svtools/unoimap.hxx>
+#endif
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <svtools/sbxvar.hxx>
 #endif
@@ -90,15 +144,12 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
+
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
 #endif
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
-#endif
-
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
 #endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
@@ -214,12 +265,8 @@
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
 #endif
-
-#ifndef _CMDID_H
-#include <cmdid.h>
-#endif
-#ifndef _UNOMID_H
-#include <unomid.h>
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
 #endif
 #ifndef _UNOCOLL_HXX
 #include <unocoll.hxx>
@@ -227,64 +274,17 @@
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
-#include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
-#include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
-#include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
-#include <com/sun/star/text/DocumentStatistic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
-#include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/HoriOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
-#include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
-#include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/VertOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
-#include <com/sun/star/text/WrapTextMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
-#include <com/sun/star/text/XTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_INVALIDTEXTCONTENTEXCEPTION_HPP_
-#include <com/sun/star/text/InvalidTextContentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
-#include <com/sun/star/text/XTextContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
-#include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _SVTOOLS_UNOIMAP_HXX
-#include <svtools/unoimap.hxx>
-#endif
-#ifndef _SVTOOLS_UNOEVENT_HXX_
-#include <svtools/unoevent.hxx>
-#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _UNOMID_H
+#include <unomid.h>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1354,13 +1354,7 @@ BOOL SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_SURROUND_SURROUNDTYPE:
         {
-            sal_Int32 eVal;
-            try
-            {
-                eVal = comphelper::getEnumAsINT32(rVal);
-            }
-            catch(...) {}
-
+            sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
                 SetValue( eVal );
             else
@@ -1796,13 +1790,7 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_ANCHOR_ANCHORTYPE:
         {
             RndStdIds   eAnchor;
-            sal_Int32 eVal;
-            try
-            {
-                eVal = comphelper::getEnumAsINT32(rVal);
-            }
-            catch(...) {}
-            switch(eVal)
+            switch( SWUnoHelper::GetEnumAsInt32( rVal ) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
                     eAnchor = FLY_IN_CNTNT;
