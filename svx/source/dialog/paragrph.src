@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:53:04 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 22:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasemmalta" ;
         Text [ danish ] = "Fra venstre" ;
-        Text [ french ] = "De ~gauche" ;
+        Text [ french ] = "De gauche" ;
         Text [ swedish ] = "Från ~vänster" ;
         Text [ dutch ] = "Van ~links" ;
         Text [ spanish ] = "De i~zquierda" ;
@@ -139,7 +139,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikealta" ;
         Text [ danish ] = "Fra højre" ;
-        Text [ french ] = "De ~droite" ;
+        Text [ french ] = "De droite" ;
         Text [ swedish ] = "Från ~höger" ;
         Text [ dutch ] = "Van ~rechts" ;
         Text [ spanish ] = "De derec~ha" ;
@@ -233,7 +233,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ danish ] = "Automatisk" ;
         Text [ italian ] = "Automatico" ;
         Text [ spanish ] = "Auto~mático" ;
-        Text [ french ] = "~Automatique" ;
+        Text [ french ] = "Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
@@ -660,7 +660,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ danish ] = "på" ;
         Text [ italian ] = "~di" ;
         Text [ spanish ] = "~de" ;
-        Text [ french ] = "~De" ;
+        Text [ french ] = "De" ;
         Text [ dutch ] = "~van" ;
         Text [ portuguese ] = "de" ;
         Text[ chinese_simplified ] = "ç”±";
@@ -757,7 +757,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ english_us ] = "A~ctivate" ;
         Text [ italian ] = "~Considera" ;
         Text [ spanish ] = "Con~siderar" ;
-        Text [ french ] = "~Activer" ;
+        Text [ french ] = "Activer" ;
         Text [ dutch ] = "~Activeren" ;
         Text [ swedish ] = "~Ta hänsyn till" ;
         Text [ danish ] = "Aktiver" ;
@@ -938,7 +938,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ french ] = "Centré" ;
         Text [ swedish ] = "C~entrerat" ;
         Text [ dutch ] = "~Gecentreerd" ;
-        Text [ spanish ] = "~Centrado" ;
+        Text [ spanish ] = "Centrado" ;
         Text [ english_us ] = "~Center" ;
         Text[ chinese_simplified ] = "å±…ä¸­(~C)";
         Text[ russian ] = "Ïî öåíòğó";
@@ -994,7 +994,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ danish ] = "Sidste linje" ;
         Text [ italian ] = "Ultima riga" ;
         Text [ spanish ] = "Ú~ltima línea" ;
-        Text [ french ] = "~Dernière ligne" ;
+        Text [ french ] = "Dernière ligne" ;
         Text [ dutch ] = "~Laatste regel" ;
         Text [ portuguese ] = "~Última linha" ;
         Text[ chinese_simplified ] = "æœ€åä¸€è¡Œ(~L)";
@@ -1450,7 +1450,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ english_us ] = "A~utomatically" ;
         Text [ italian ] = "Auto~matico" ;
         Text [ spanish ] = "Au~tomático" ;
-        Text [ french ] = "Auto~matique" ;
+        Text [ french ] = "Automatique" ;
         Text [ swedish ] = "Auto~matisk" ;
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese ] = "Auto~maticamente" ;
@@ -1481,7 +1481,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "~mín." ;
         Text [ finnish ] = "~kohteessa" ;
         Text [ danish ] = "fra" ;
-        Text [ french ] = "~min." ;
+        Text [ french ] = "min." ;
         Text [ swedish ] = "~från" ;
         Text [ dutch ] = "~v.a." ;
         Text [ spanish ] = "~en" ;
@@ -1558,7 +1558,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "mí~n." ;
         Text [ finnish ] = "~kohteessa" ;
         Text [ danish ] = "fra" ;
-        Text [ french ] = "m~in." ;
+        Text [ french ] = "min." ;
         Text [ swedish ] = "f~rån" ;
         Text [ dutch ] = "v.~a." ;
         Text [ spanish ] = "e~n" ;
@@ -1769,7 +1769,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "~Coluna" ;
         Text [ finnish ] = "~Sarake" ;
         Text [ danish ] = "Spalte" ;
-        Text [ french ] = "~Colonne" ;
+        Text [ french ] = "Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ dutch ] = "~Kolom" ;
         Text [ spanish ] = "~Columna" ;
@@ -1799,7 +1799,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "An~tes" ;
         Text [ finnish ] = "En~nen" ;
         Text [ danish ] = "Før" ;
-        Text [ french ] = "A~vant" ;
+        Text [ french ] = "Avant" ;
         Text [ swedish ] = "Fö~re" ;
         Text [ dutch ] = "~voor" ;
         Text [ spanish ] = "De~lante" ;
@@ -2003,7 +2003,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ russian ] = "Áåç íà÷àëüíûõ âèñÿ÷èõ ñòğîê";
         Text[ greek ] = "Êáíüíáò ïñöáíïı";
         Text[ dutch ] = "Z~wevende regels: weduwen";
-        Text[ french ] = "Traitement des ~orphelines";
+        Text[ french ] = "Traitement des orphelines";
         Text[ spanish ] = "Ajuste de ~huérfanas";
         Text[ italian ] = "Controllo ~vedove";
         Text[ danish ] = "Horeunge-ordning";
@@ -2080,7 +2080,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ russian ] = "Áåç êîíöåâûõ âèñÿ÷èõ ñòğîê";
         Text[ greek ] = "Êáíüíáò ÷Ş~ñáò";
         Text[ dutch ] = "~Zwevende regels: wezen";
-        Text[ french ] = "Traitement des ~veuves";
+        Text[ french ] = "Traitement des veuves";
         Text[ spanish ] = "Ajuste de ~viudas";
         Text[ italian ] = "Controllo ~orfane";
         Text[ danish ] = "Fransk horeunge-ordning";
