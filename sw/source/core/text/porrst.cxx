@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-23 14:11:28 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,11 @@
 #endif
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx> // SwFontAccess
+#endif
+#ifdef VERTICAL_LAYOUT
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
@@ -477,9 +482,12 @@ sal_Bool SwTxtFrm::FormatEmpty()
             SwTwips nHeight = EmptyHeight();
 
 #ifdef VERTICAL_LAYOUT
-            const SwTwips nChg = IsVertical() ?
-                                 nHeight - Prt().SSize().Width() :
-                                 nHeight - Prt().SSize().Height();
+            GETGRID( FindPageFrm() )
+            if ( pGrid )
+                nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+
+            SWRECTFN( this )
+            const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
 #else
             const SwTwips nChg = nHeight - Prt().SSize().Height();
 #endif
