@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:33:57 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aBtnDetectCat   ( this, ScResId( BTN_DETECTCAT ) ),
         aBtnTotalCol    ( this, ScResId( BTN_TOTALCOL ) ),
         aBtnTotalRow    ( this, ScResId( BTN_TOTALROW ) ),
+        aBtnFilter      ( this, ScResId( BTN_FILTER ) ),
+        aBtnDrillDown   ( this, ScResId( BTN_DRILLDOWN ) ),
 
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
@@ -221,6 +223,8 @@ void __EXPORT ScDPLayoutDlg::Init()
     aBtnMore.AddWindow( &aBtnDetectCat );
     aBtnMore.AddWindow( &aBtnTotalCol );
     aBtnMore.AddWindow( &aBtnTotalRow );
+    aBtnMore.AddWindow( &aBtnFilter );
+    aBtnMore.AddWindow( &aBtnDrillDown );
     aBtnMore.AddWindow( &aFlAreas );
     aBtnMore.SetClickHdl( LINK( this, ScDPLayoutDlg, MoreClickHdl ) );
 
@@ -312,6 +316,17 @@ void __EXPORT ScDPLayoutDlg::Init()
     aBtnDetectCat   .Check( thePivotData.bDetectCategories );
     aBtnTotalCol    .Check( thePivotData.bMakeTotalCol );
     aBtnTotalRow    .Check( thePivotData.bMakeTotalRow );
+
+    if( const ScDPSaveData* pSaveData = xDlgDPObject->GetSaveData() )
+    {
+        aBtnFilter.Check( pSaveData->GetFilterButton() );
+        aBtnDrillDown.Check( pSaveData->GetDrillDown() );
+    }
+    else
+    {
+        aBtnFilter.Check();
+        aBtnDrillDown.Check();
+    }
 
     aWndPage.SetHelpId( HID_SC_DPLAY_PAGE );
     aWndCol.SetHelpId( HID_SC_DPLAY_COLUMN );
@@ -1344,6 +1359,8 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             aSaveData.SetRepeatIfEmpty( aBtnDetectCat.IsChecked() );
             aSaveData.SetColumnGrand( aBtnTotalCol.IsChecked() );
             aSaveData.SetRowGrand( aBtnTotalRow.IsChecked() );
+            aSaveData.SetFilterButton( aBtnFilter.IsChecked() );
+            aSaveData.SetDrillDown( aBtnDrillDown.IsChecked() );
 
             uno::Reference<sheet::XDimensionsSupplier> xSource = xDlgDPObject->GetSource();
 
