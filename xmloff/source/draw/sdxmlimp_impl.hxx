@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ protected:
 
 public:
     SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
-    ~SdXMLImport();
+    ~SdXMLImport() throw ();
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

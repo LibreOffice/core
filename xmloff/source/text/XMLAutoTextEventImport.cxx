@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ XMLAutoTextEventImport::XMLAutoTextEventImport() throw() :
 {
 }
 
-XMLAutoTextEventImport::~XMLAutoTextEventImport()
+XMLAutoTextEventImport::~XMLAutoTextEventImport() throw()
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:26 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ SchXMLImport::SchXMLImport( uno::Reference< frame::XModel > xModel,
     }
 }
 
-SchXMLImport::~SchXMLImport()
+SchXMLImport::~SchXMLImport() throw ()
 {
     // stop progress view
     if( mxStatusIndicator.is())

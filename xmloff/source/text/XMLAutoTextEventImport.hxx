@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class XMLAutoTextEventImport : public SvXMLImport
 public:
     XMLAutoTextEventImport() throw();
 
-    ~XMLAutoTextEventImport();
+    ~XMLAutoTextEventImport() throw();
 
     // XInitialization
     virtual void SAL_CALL initialize(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-11 05:17:45 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ private:
 public:
     XMLMetaImportComponent() throw();
 
-    ~XMLMetaImportComponent();
+    ~XMLMetaImportComponent() throw();
 
 
 protected:

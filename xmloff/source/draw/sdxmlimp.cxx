@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLImport::~SdXMLImport()
+SdXMLImport::~SdXMLImport() throw ()
 {
 // #80365# removed ending of progress bar here, this was an old implementation
 // and maybe removed on demand
