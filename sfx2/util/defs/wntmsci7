@@ -7161,3 +7161,6 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?GetHelp@SfxHelp@@SAPAV1@XZ
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUPropertyValue@beans@345@@Z
 ?s_pType_com_sun_star_beans_PropertyState@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4PropertyState@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?CreateHelpURL@SfxHelp@@SA?AVString@@KABV2@@Z
+?OpenHelpAgent@SfxHelp@@SAXPAVSfxFrame@@K@Z
+?set@?$Reference@VXStatusListener@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXStatusListener@frame@345@@Z
