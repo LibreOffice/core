@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:46:35 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-01-26 20:46:35 $
- // $Revision: 1.8 $
+ //     $Date: 2001-02-09 22:19:54 $
+ // $Revision: 1.9 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -402,7 +402,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ chinese_traditional ] = "³]©w¤ι΄Α/®Ι¶΅";
         QuickHelpText[ arabic ] = "ΦΘΨ ΗαΚΗΡνΞ/ΗαζήΚ";
         QuickHelpText[ greek ] = "Εισαγωγή ημερομηνίας/ώρας";
-        QuickHelpText[ korean ] = "Set Date/Time";
+        QuickHelpText[ korean ] = "³―Β¥/½Γ°£ Ό³Α¤!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -503,7 +503,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ chinese_traditional ] = "³]©w¤ι΄Α/®Ι¶΅";
         QuickHelpText[ arabic ] = "ΦΘΨ ΗαΚΗΡνΞ/ΗαζήΚ";
         QuickHelpText[ greek ] = "Εισαγωγή ημερομηνίας/ώρας";
-        QuickHelpText[ korean ] = "Set Date/Time";
+        QuickHelpText[ korean ] = "³―Β¥/½Γ°£ Ό³Α¤!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -661,7 +661,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ greek ] = "...";
         Text[ korean ] = "...";
         QuickHelpText[ greek ] = "Set Reference";
-        QuickHelpText[ korean ] = "Set Reference";
+        QuickHelpText[ korean ] = "ΒόΑ¶ Ό³Α¤!";
         Text[ turkish ] = "...";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
@@ -813,7 +813,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ portuguese_brazilian ] = "Alle ak~zeptieren" ;
         Text [ swedish ] = "A~cceptera alla" ;
         Text [ danish ] = "Accepter alle" ;
-        Text [ italian ] = "Accetta ~tutti" ;
+        Text [ italian ] = "Accetta ~tutto" ;
         Text [ spanish ] = "~Aceptar todo" ;
         Text [ french ] = "Tout a~ccepter" ;
         Text [ dutch ] = "Alle ac~cepteren" ;
@@ -840,7 +840,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ portuguese_brazilian ] = "Alle ab~lehnen" ;
         Text [ swedish ] = "A~vbφj alla" ;
         Text [ danish ] = "Forkast alle" ;
-        Text [ italian ] = "Rifiuta ~tutti" ;
+        Text [ italian ] = "Rifiuta ~tutto" ;
         Text [ spanish ] = "~Rechazar todo" ;
         Text [ french ] = "Tout r~efuser" ;
         Text [ dutch ] = "Alle ver~werpen" ;
