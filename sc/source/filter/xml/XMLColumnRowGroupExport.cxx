@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 12:26:19 $
+ *  last change: $Author: hr $ $Date: 2000-12-10 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ void ScMyOpenCloseColumnRowGroup::NewTable()
     aTableEnd.clear();
 }
 
-void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, sal_Int32 nEndField)
+void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, const sal_Int32 nEndField)
 {
     aTableStart.push_back(aGroup);
     aTableEnd.push_back(nEndField);
