@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-30 17:05:39 $
+ *  last change: $Author: iha $ $Date: 2002-10-01 08:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             pImp->aSplitSize.Height() = aMinSize.Height();
     }
 
-    if ( pInfo->aWinState.Len() && pInfo->aExtraString.Len() )
+    if ( pInfo->aExtraString.Len() )
     {
         // get information about alignment, split size and position in SplitWindow
         String aStr;
