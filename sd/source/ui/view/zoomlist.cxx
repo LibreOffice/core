@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomlist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 08:54:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "zoomlist.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -74,7 +76,11 @@
 
 #pragma hdrstop
 
-#include "zoomlist.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+
+namespace sd {
 
 #define MAX_ENTRYS  10
 
@@ -84,10 +90,10 @@
 |*
 \************************************************************************/
 
-ZoomList::ZoomList( SfxViewShell* pViewShell )
+ZoomList::ZoomList (ViewShell* pViewShell)
     : List(),
-    pViewSh( pViewShell ),
-    nCurPos(0)
+      mpViewShell (pViewShell),
+      mnCurPos(0)
 {
 }
 
@@ -129,17 +135,17 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
     }
     else if (nCount == 0)
     {
-        nCurPos = 0;
+        mnCurPos = 0;
     }
     else
     {
-        nCurPos++;
+        mnCurPos++;
     }
 
     Rectangle* pRect = new Rectangle(rRect);
-    Insert(pRect, nCurPos);
+    Insert(pRect, mnCurPos);
 
-    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
@@ -153,7 +159,7 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
 
 Rectangle ZoomList::GetCurrentZoomRect() const
 {
-    Rectangle aRect(*(Rectangle*) GetObject(nCurPos));
+    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
     return (aRect);
 }
 
@@ -165,19 +171,19 @@ Rectangle ZoomList::GetCurrentZoomRect() const
 
 Rectangle ZoomList::GetNextZoomRect()
 {
-    nCurPos++;
+    mnCurPos++;
     ULONG nCount = Count();
 
-    if (nCount > 0 && nCurPos > nCount - 1)
+    if (nCount > 0 && mnCurPos > nCount - 1)
     {
-        nCurPos = nCount - 1;
+        mnCurPos = nCount - 1;
     }
 
-    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(nCurPos));
+    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
     return (aRect);
 }
 
@@ -189,16 +195,16 @@ Rectangle ZoomList::GetNextZoomRect()
 
 Rectangle ZoomList::GetPreviousZoomRect()
 {
-    if (nCurPos > 0)
+    if (mnCurPos > 0)
     {
-        nCurPos--;
+        mnCurPos--;
     }
 
-    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(nCurPos));
+    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
     return (aRect);
 }
 
@@ -213,7 +219,7 @@ BOOL ZoomList::IsNextPossible() const
     BOOL bPossible = FALSE;
     ULONG nCount = Count();
 
-    if (nCount > 0 && nCurPos < nCount - 1)
+    if (nCount > 0 && mnCurPos < nCount - 1)
     {
         bPossible = TRUE;
     }
@@ -231,7 +237,7 @@ BOOL ZoomList::IsPreviousPossible() const
 {
     BOOL bPossible = FALSE;
 
-    if (nCurPos > 0)
+    if (mnCurPos > 0)
     {
         bPossible = TRUE;
     }
@@ -239,4 +245,4 @@ BOOL ZoomList::IsPreviousPossible() const
     return (bPossible);
 }
 
-
+} // end of namespace sd
