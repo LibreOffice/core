@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:13:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ namespace connectivity
 
             ADORecordset*                   m_pRecordSet;
             OStatement_Base*                m_pStmt;
-            ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             ::std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
@@ -185,11 +185,12 @@ namespace connectivity
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+            virtual ~OResultSet();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( ADORecordset* _pRecordSet,OStatement_Base* pStmt);
             OResultSet( ADORecordset* _pRecordSet);
-            ~OResultSet();
+
 
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
