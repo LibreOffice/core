@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:40:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,8 @@ class MenuConfiguration
         };
 
         MenuConfiguration(
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+            // #110897#-1 use const when giving a uno reference by reference
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
 
         virtual ~MenuConfiguration();
 
@@ -158,7 +159,8 @@ class MenuConfiguration
         static BOOL IsWindowListItemId( USHORT nId );
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_rxServiceManager;
+        // #110897#-1 do not hold the uno reference by reference
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_rxServiceManager;
 };
 
 }

@@ -20,6 +20,10 @@
 #include <vcl/toolbox.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 namespace framework
 {
@@ -78,10 +82,25 @@ SV_DECL_PTRARR_DEL( ToolBoxLayoutDescriptor, ToolBoxLayoutItemDescriptorPtr, 10,
 class ToolBoxConfiguration
 {
     public:
-        static sal_Bool LoadToolBox( SvStream& rInStream, ToolBoxDescriptor& aItems );
-        static sal_Bool StoreToolBox( SvStream& rOutStream, const ToolBoxDescriptor& aItems );
-        static sal_Bool LoadToolBoxLayout( SvStream& rInStream, ToolBoxLayoutDescriptor& aItems );
-        static sal_Bool StoreToolBoxLayout( SvStream& rOutStream, ToolBoxLayoutDescriptor& aItems );
+        // #110897#
+        static sal_Bool LoadToolBox(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rInStream, ToolBoxDescriptor& aItems );
+
+        // #110897#
+        static sal_Bool StoreToolBox(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rOutStream, const ToolBoxDescriptor& aItems );
+
+        // #110897#
+        static sal_Bool LoadToolBoxLayout(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rInStream, ToolBoxLayoutDescriptor& aItems );
+
+        // #110897#
+        static sal_Bool StoreToolBoxLayout(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rOutStream, ToolBoxLayoutDescriptor& aItems );
 };
 
 } // namespace framework
