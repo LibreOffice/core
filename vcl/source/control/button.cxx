@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:42:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2801,7 +2801,13 @@ void CheckBox::ImplCheck()
         eNewState = STATE_NOCHECK;
     meState = eNewState;
     ImplDrawCheckBoxState();
+
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
     Toggle();
+    if ( aDelData.IsDelete() )
+        return;
+    ImplRemoveDel( &aDelData );
     Click();
 }
 
