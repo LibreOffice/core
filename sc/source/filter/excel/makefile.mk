@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2003-05-21 07:57:27 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:29:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ SLOFILES =	\
         $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xlocx.obj					\
+        $(SLO)$/xltracer.obj				\
         $(SLO)$/xistream.obj				\
         $(SLO)$/xiroot.obj					\
         $(SLO)$/xihelper.obj				\
