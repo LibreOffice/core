@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigExamples.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:16:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -92,7 +92,7 @@ import com.sun.star.util.ChangesEvent;
 
    It accepts one command line parameter in the form of a connection string,
    if no connection string is specified it uses the default of
-   "socket,host=localhost,port=8100"
+   "socket,host=localhost,port=2083"
 */
 public class ConfigExamples
 {
@@ -105,11 +105,11 @@ public class ConfigExamples
     public static void main(String args[])
     {
         String sConnection;
-        // Get the connect string, defaulting to localhost, port 8100
+        // Get the connect string, defaulting to localhost, port 2083
         // if non supplied as command line arguments
         if( args.length == 0 )
         {
-            sConnection = "socket,host=localhost,port=8100";
+            sConnection = "socket,host=localhost,port=2083";
             System.out.println( "Using default connect string: " + sConnection );
         }
         else
