@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:32:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,6 @@
 #include "drawdoc.hxx"
 
 #include <memory>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -559,9 +558,9 @@ void CustomAnimationPane::updateLayout()
     if( (aFixedTextSize.Width() + aListBoxSize.Width() + aSize.Width() + 4 * aOffset.X()) > aPaneSize.Width() )
     {
         // y position for list box is below fixed text
-        aLBPos.Y() += nDeltaY;
+        aLBPos.Y() += aFixedTextSize.Height() + aOffset.Y();
 
-        // height of fixed text + list box
+        // height of fixed text + list box + something = 2 * list box
         nDeltaY <<= 1;
     }
     else
@@ -648,6 +647,21 @@ void CustomAnimationPane::updateLayout()
     aCursor.X() -= aOffset.X() + aSize.Width();
     mpPBMoveUp->SetPosPixel( aCursor );
 
+    // Place the change order label.
+    // Its width has to be calculated dynamically so that is can be
+    // displayed flush right without having too much space to the buttons
+    // with some languages or truncated text with others.
+    {
+        Size aOriginalTextSize (mpFTChangeOrder->GetSizePixel());
+        Rectangle aTextBox = GetTextRect (
+            Rectangle(
+                Point(0,aCursor.Y()),
+                Size(aCursor.X(),aOriginalTextSize.Height())),
+            mpFTChangeOrder->GetText());
+        // Don't make the fixed text smaller than specified in the resource.
+        int aTextWidth = ::std::max(aTextBox.GetWidth(),aOriginalTextSize.Width());
+        mpFTChangeOrder->SetSizePixel(Size(aTextWidth, aOriginalTextSize.Height()));
+    }
     aCursor.X() -= aOffset.X() + mpFTChangeOrder->GetSizePixel().Width();
     aCursor.Y() += (aSize.Height() - mpFTChangeOrder->GetSizePixel().Height()) >> 1;
     mpFTChangeOrder->SetPosPixel( aCursor );
@@ -1225,9 +1239,10 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
 
         // convert absolute time to percentage value
+        // This calculation is done in float to avoid some rounding artifacts.
         float fIterateInterval = (float)pEffect->getIterateInterval();
         if( pEffect->getDuration() )
-            fIterateInterval = (float)( fIterateInterval / pEffect->getDuration() );
+            fIterateInterval = (float)(fIterateInterval / pEffect->getDuration() );
         fIterateInterval *= 100.0;
         addValue( pSet, nHandleIterateInterval, makeAny( (double)fIterateInterval ) );
 
@@ -1528,7 +1543,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
                 }
                 else
                 {
-                    if( pEffect->getAudio().is() )
+                    if( pEffect->getAudio().is() || pEffect->getStopAudio() )
                     {
                         pEffect->removeAudio();
                         bChanged = true;
@@ -1854,6 +1869,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 }
             }
         }
+        mrBase.GetDocShell()->SetModified();
     }
 
     delete pDlg;
@@ -1886,6 +1902,7 @@ void CustomAnimationPane::onRemove()
         }
 
         maListSelection.clear();
+        mrBase.GetDocShell()->SetModified();
     }
 }
 
