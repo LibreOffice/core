@@ -1,6 +1,71 @@
 
 interface GraphSelection : Selection
 {
+    //  filters
+
+    SID_GRFFILTER
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_INVERT
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_SMOOTH
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_SHARPEN
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_REMOVENOISE
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_SOBEL
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_MOSAIC
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_EMBOSS
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_POSTER
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_POPART
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_SEPIA
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_SOLARIZE
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+
+    // other graphics functions
+
     SID_ATTR_GRAF_MODE
     [
         ExecMethod = Execute;
