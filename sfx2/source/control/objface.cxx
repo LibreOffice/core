@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:58:34 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,50 +176,16 @@ struct SfxInterface_Impl
     }
 };
 
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr, USHORT nInterface );
+
 //====================================================================
 
-class SfxIFConfig_Impl : public SfxConfigItem
-{
-friend class SfxInterface;
-    USHORT                  nCount;
-    SfxInterface*           pIFace;
-    SfxObjectUIArr_Impl*    pObjectBars;
-
-public:
-                    SfxIFConfig_Impl(USHORT nClassId, SfxInterface *pIF);
-                    ~SfxIFConfig_Impl();
-    int             Load(SvStream&);
-    BOOL            Store(SvStream&);
-    int             Load(SotStorage&);
-    BOOL            Store(SotStorage&);
-    String          GetStreamName() const
-                    { if (pIFace->HasName()) return pIFace->GetName();
-                        else return String(); }
-    void            UseDefault();
-    void            SaveDefaults(USHORT);
-};
-
-//-------------------------------------------------------------------------
-
-SfxIFConfig_Impl::SfxIFConfig_Impl(USHORT nClassId, SfxInterface *pIF) :
-    SfxConfigItem(SFX_ITEMTYPE_INTERFACE_START + nClassId, NULL ),
+SfxIFConfig_Impl::SfxIFConfig_Impl() :
     nCount(0),
-    pObjectBars(0),
-    pIFace(pIF)
+    pObjectBars(0)
 {
-//!MBA  ToDo! ConfigManager set to NULL
-//    SetInternal(TRUE);
-}
-
-//-------------------------------------------------------------------------
-
-void SfxIFConfig_Impl::SaveDefaults(USHORT nClassId)
-{
-    if ( pObjectBars )
-        return;
-
     pObjectBars = new SfxObjectUIArr_Impl;
-
+    SfxInterface* pIFace = SFX_APP()->SfxApplication::GetInterface();
     for (nCount=0; nCount < pIFace->pImpData->pObjectBars->Count(); nCount++)
     {
         SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(
@@ -227,7 +193,7 @@ void SfxIFConfig_Impl::SaveDefaults(USHORT nClassId)
             pIFace->GetObjectBarResId(nCount),
             pIFace->IsObjectBarVisible(nCount),
             pIFace->GetObjectBarFeature(nCount),
-            nClassId);
+            SFX_INTERFACE_SFXAPP );
 
         pObjectBars->Append(pUI);
         pUI->pName = new String(*pIFace->GetObjectBarName(nCount));
@@ -247,70 +213,34 @@ SfxIFConfig_Impl::~SfxIFConfig_Impl()
 }
 
 //-------------------------------------------------------------------------
-
-int SfxIFConfig_Impl::Load(SvStream& rStream)
+void SfxIFConfig_Impl::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
 {
-    for ( ;pIFace->pImpData->pObjectBars->Count(); )
-        pIFace->ReleaseObjectBar(pIFace->GetObjectBarResId(0).GetId());
-
-    USHORT n;
-    rStream >> n;
-
-    if ( n != nVersion)
-        return SfxConfigItem::WARNING_VERSION;
-
-    rStream >> n;
-    for (USHORT i=0; i<n; i++)
-    {
-        pIFace->LoadObjectBar(i, rStream);
-    }
-
-    return SfxConfigItem::ERR_OK;
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, SFX_INTERFACE_SFXAPP );
+    if ( pUI )
+        pObjectBars->Append(pUI);
 }
 
-//-------------------------------------------------------------------------
+USHORT SfxIFConfig_Impl::GetType()
+{
+    return SFX_ITEMTYPE_INTERFACE_START + SFX_INTERFACE_SFXAPP;
+}
 
 BOOL SfxIFConfig_Impl::Store(SvStream& rStream)
 {
     rStream << nVersion;
-
-    rStream << pIFace->pImpData->pObjectBars->Count();
-    USHORT nIFaceId = GetType() - SFX_ITEMTYPE_INTERFACE_START;
-
-    for (USHORT i=0; i<pIFace->pImpData->pObjectBars->Count(); i++)
+    rStream << pObjectBars->Count();
+    for (USHORT i=0; i<pObjectBars->Count(); i++)
     {
-        pIFace->StoreObjectBar(i, rStream);
+        rStream << ((*pObjectBars)[i]->nPos)
+                << (*pObjectBars)[i]->aResId.GetId()
+                << (*pObjectBars)[i]->nInterfaceId
+                << (USHORT) (*pObjectBars)[i]->bVisible;
+        rStream.WriteByteString(*(*pObjectBars)[i]->pName);
+        rStream << (*pObjectBars)[i]->nFeature;
     }
 
     return TRUE;
 }
-
-//-------------------------------------------------------------------------
-
-void SfxIFConfig_Impl::UseDefault()
-{
-    pIFace->UseDefault();
-    SetDefault( TRUE );
-}
-
-int SfxIFConfig_Impl::Load( SotStorage& rStorage )
-{
-    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxIFConfig_Impl::GetStreamName(), STREAM_STD_READ );
-    if ( xStream->GetError() )
-        return SfxConfigItem::ERR_READ;
-    else
-        return Load( *xStream );
-}
-
-BOOL SfxIFConfig_Impl::Store( SotStorage& rStorage )
-{
-    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxIFConfig_Impl::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
-    if ( xStream->GetError() )
-        return FALSE;
-    else
-        return Store( *xStream );
-}
-
 
 //====================================================================
 // ctor, registeres a new unit
@@ -366,11 +296,7 @@ void SfxInterface::Init()
     DBG_MEMTEST();
     DBG_CTOR(SfxInterface, 0);
 //    DBG_ASSERT(nCount, "Anzahl der Slot == NULL");
-
-    if ( nClassId )
-        pConfig = new SfxIFConfig_Impl(nClassId, this);
     pImpData = new SfxInterface_Impl;
-    pConfig->Initialize();
 }
 
 
@@ -623,21 +549,7 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 
 //--------------------------------------------------------------------
 
-
-void SfxInterface::LoadConfig()
-{
-    if ( pConfig )
-    {
-        pConfig->SaveDefaults(nClassId);
-
-        // Wenn die Application schon l"auft, wurde das Interface nachtr"aglich
-        // erzeugt und mu\s daher explizit initialisiert werden.
-        if ( Application::IsInExecute() )
-            pConfig->Initialize();
-    }
-}
-
-
+/*
 BOOL SfxInterface::IsDefault()
 {
     if (pConfig)
@@ -645,7 +557,6 @@ BOOL SfxInterface::IsDefault()
      else
         return TRUE;
 }
-
 
 void SfxInterface::UseDefault()
 {
@@ -677,6 +588,7 @@ void SfxInterface::UseDefault()
         }
     }
 }
+*/
 
 //--------------------------------------------------------------------
 
@@ -703,8 +615,7 @@ void SfxInterface::SetObjectBarName(const String& rName, USHORT nId)
         SfxObjectUI_Impl *pUI = (*pImpData->pObjectBars)[n];
         delete pUI->pName;
         pUI->pName = new String( rName );
-        if ( pConfig )
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
     }
 }
 
@@ -729,8 +640,7 @@ void SfxInterface::SetObjectBarPos(USHORT nPos, USHORT nId)
     else
     {
         (*pImpData->pObjectBars)[n]->nPos = nPos;
-        if (pConfig)
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
     }
 }
 
@@ -743,8 +653,14 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
 }
 
 
-void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
-        ULONG nFeature, const String *pStr )
+void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
+{
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, nClassId );
+    if ( pUI )
+        pImpData->pObjectBars->Append(pUI);
+}
+
+SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr, USHORT nClassId )
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
     {
@@ -758,7 +674,8 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
     if ( SFX_OBJECTBAR_APPLICATION == ( nPos & SFX_POSITION_MASK ) )
         // je nach Desktop oder Einzelapp nur die richtige registrieren
         if ( !( SFX_VISIBILITY_DESKTOP == ( nPos & SFX_VISIBILITY_DESKTOP ) ) )
-            return;
+            return NULL;
+
     nPos &= ~(USHORT)SFX_VISIBILITY_DESKTOP;
 
     if( nPos & SFX_VISIBILITY_SERVER )
@@ -767,8 +684,6 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
         nPos |= SFX_VISIBILITY_PLUGCLIENT;
 
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, TRUE, nFeature, nClassId);
-
-    pImpData->pObjectBars->Append(pUI);
 
     if (pStr == 0)
     {
@@ -785,8 +700,9 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
     }
     else
         pUI->pName = new String(*pStr);
-}
 
+    return pUI;
+}
 
 void SfxInterface::TransferObjectBar( USHORT nPos, USHORT nId, SfxInterface *pIFace,
         const String *pStr)
@@ -794,8 +710,7 @@ void SfxInterface::TransferObjectBar( USHORT nPos, USHORT nId, SfxInterface *pIF
     if ( !pIFace )
     {
         RegisterObjectBar( nPos, nId, pStr );
-        if (pConfig)
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
         return;
     }
 
@@ -821,12 +736,9 @@ void SfxInterface::TransferObjectBar( USHORT nPos, USHORT nId, SfxInterface *pIF
     else
         pUI->pName = new String(*pStr);
 
-    if (pConfig)
-        pConfig->SetDefault(FALSE);
-
+    DBG_ERROR("Useless configuration!");
     pIFace->ReleaseObjectBar(nId);
 }
-
 
 
 void SfxInterface::ReleaseObjectBar( USHORT nId )
@@ -850,8 +762,7 @@ void SfxInterface::ReleaseObjectBar( USHORT nId )
     {
         delete (*pImpData->pObjectBars)[n];
         pImpData->pObjectBars->Remove(n);
-        if (pConfig)
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
     }
 }
 
@@ -964,61 +875,6 @@ void SfxInterface::RegisterObjectMenu( USHORT nPos, const ResId& rResId )
 }
 
 //--------------------------------------------------------------------
-
-
-BOOL SfxInterface::StoreObjectBar(USHORT n, SvStream& rStream)
-{
-    rStream << ((*pImpData->pObjectBars)[n]->nPos)
-            << (*pImpData->pObjectBars)[n]->aResId.GetId()
-            << (*pImpData->pObjectBars)[n]->nInterfaceId
-            << (USHORT) (*pImpData->pObjectBars)[n]->bVisible;
-    rStream.WriteByteString(*(*pImpData->pObjectBars)[n]->pName);
-    rStream << (*pImpData->pObjectBars)[n]->nFeature;
-    return TRUE;
-}
-
-//--------------------------------------------------------------------
-
-
-int SfxInterface::LoadObjectBar(USHORT n, SvStream& rStream)
-{
-    DBG_ASSERT( pConfig, "LoadObjectBar ohne Config!" );
-
-    USHORT nId, nPos, nIFaceId, nVisible;
-    ULONG nFeature;
-    String aName;
-
-    rStream >> nPos >> nId >> nIFaceId >> nVisible;
-    rStream.ReadByteString(aName);
-
-    if ( nVersion > 4 )
-        rStream >> nFeature;
-
-    ResId aResId(nId);
-    RegisterObjectBar(nPos, aResId, nFeature, &aName );
-    (*pImpData->pObjectBars)[n]->nInterfaceId = nIFaceId;
-    (*pImpData->pObjectBars)[n]->bVisible = (BOOL) nVisible;
-
-    SfxIFConfig_Impl *pCfg = pConfig;
-
-    if (nIFaceId != nClassId)           // pConfig von anderem Interface holen
-    {
-        SfxInterface *pIFace =
-            SFX_APP()->GetInterfaceByIdImpl(SfxInterfaceId(nIFaceId));
-        if (pIFace)
-            pCfg = pIFace->pConfig;
-    }
-
-    ResMgr *pResMgr=0;                  // falls selbstdefiniert!
-    if (pCfg->pObjectBars->Count())
-        pResMgr = (*pCfg->pObjectBars)[0]->aResId.GetResMgr();
-
-    (*pImpData->pObjectBars)[n]->aResId.SetResMgr(pResMgr);
-
-    return SfxConfigItem::ERR_OK;
-}
-
-
 void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* pName)
 {
     RegisterChildWindow( nId, bContext, 0UL, pName );
@@ -1051,8 +907,7 @@ void SfxInterface::ReleaseChildWindow( USHORT nId )
     {
         delete (*pImpData->pChildWindows)[n];
         pImpData->pChildWindows->Remove(n);
-        if (pConfig)
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
     }
 }
 
@@ -1209,44 +1064,9 @@ void SfxInterface::SetObjectBarVisible(BOOL bVis, USHORT nId)
     else
     {
         (*pImpData->pObjectBars)[n]->bVisible = bVis;
-        if (pConfig)
-            pConfig->SetDefault(FALSE);
+        DBG_ERROR("Useless configuration!");
     }
 }
-
-/*
-void SfxInterface::ReInitialize(SfxConfigManager *pCfgMgr)
-{
-    DBG_ASSERT( pConfig, "ReInitialize ohne Config!" );
-
-    SfxConfigManager *pOld = pConfig->GetConfigManager_Impl();
-    if (pCfgMgr == pOld)
-        return;
-    pConfig->ReInitialize(pCfgMgr);
-
-    pCfgMgr->RemoveConfigItem(pConfig);
-    pOld->AddConfigItem(pConfig);
-
-    pConfig->SetDefault(FALSE);
-
-    for (USHORT n=0; n<pImpData->pObjectBars->Count(); n++)
-    {
-        USHORT nId = (*pImpData->pObjectBars)[n]->aResId.GetId();
-        if ( SfxToolBoxManager::IsUserDefToolBox_Impl(nId))
-        {
-            if (!pOld->HasConfigItem(nId))
-                pOld->InsertConfigItem(nId);
-        }
-    }
-}
-*/
-
-void SfxInterface::SaveConfig()
-{
-    if ( pConfig )
-        pConfig->StoreConfig();
-}
-
 
 USHORT SfxInterface::GetConfigId() const
 {
@@ -1452,4 +1272,9 @@ const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealS
     return pInterface;
 }
 
+
+
+void SfxInterface::LoadConfig()
+{
+}
 
