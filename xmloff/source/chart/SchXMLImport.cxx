@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 12:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    sXML_width,                 XML_TOK_CHART_WIDTH         },
     { XML_NAMESPACE_SVG,    sXML_height,                XML_TOK_CHART_HEIGHT        },
     { XML_NAMESPACE_CHART,  sXML_style_name,            XML_TOK_CHART_STYLE_NAME    },
+    { XML_NAMESPACE_CHART,  sXML_add_in_name,           XML_TOK_CHART_ADDIN_NAME    },
     XML_TOKEN_MAP_END
 };
 
