@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-25 09:23:25 $
+#   last change: $Author: pl $ $Date: 2002-01-15 17:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,6 @@ TARGET=gdi
 
 .IF "$(COM)"=="ICC"
 CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-.ENDIF
-
-.IF "$(BUILD_SOSL)"==""
-CDEFS+=-DDO_TAB_CHECK
 .ENDIF
 
 # --- Files --------------------------------------------------------
