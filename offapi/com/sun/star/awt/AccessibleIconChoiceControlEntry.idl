@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceControlEntry.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:37:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,18 +76,61 @@ interface XAccessibleComponent;
 
 module com { module sun { module star { module awt {
 
-/** specifies accessibility support for a iconchoicecontrol entry.
+/** specifies accessibility support for an icon choice control entry.
 
     @see com::sun::star::accessibility::AccessibleContext
 
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleText
+    @since #103639#
 */
 service AccessibleIconChoiceControlEntry
 {
+    /** This interface gives access to the structural information of an icon choice control entry:
+
+       <ul>
+       <li>Role: The role of an icon choice control entry is <const
+           scope="com::sun::star::accessibility"
+           >AccessibleRole::LABEL</const>.</li>
+       <li>Name: The name of an icon choice control entry is it's text.</li>
+       <li>Description: The description of an icon choice control entry is empty.</li>
+       <li>Children: There exist no children.
+        </li>
+       <li>Parent: The parent is either the <type scope"com::sun::star::accessibility">AccessibleIconChoiceControl</type>.</li>
+       <li>Relations: There are no relations.</li>
+       <li>States: The states supported by this service are
+           <ul>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::DEFUNC</const>
+               is set if the object has already been disposed
+               and subsequent calls to this object result in
+               <type scope="com::sun::star::lang">DisposedException</type>
+               exceptions.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::ENABLED</const> is set
+               if the object is enabled.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::SHOWING</const> is set
+               if the object is displayed on the screen.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::VISIBLE</const> is always set.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::TRANSIENT</const> is always set.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::SELECTABLE</const> is always set.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::SELECTED</const> is set when it is selected.</li>
+           </ul>
+           </li>
+       </ul>
+    */
     service   com::sun::star::accessibility::AccessibleContext;
 
     interface com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This interface gives read-only access to the text representation
+        of an icon choice control entry.
+     */
     interface com::sun::star::accessibility::XAccessibleText;
 };
 
