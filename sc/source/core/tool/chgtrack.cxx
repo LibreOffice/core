@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:32:51 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,7 +1685,7 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
             const ScChangeActionState eState, const ULONG nRejectingNumber,
             const ScBigRange& aBigRange, const String& aUser,
             const DateTime& aDateTime, const String& sComment,
-            ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sResult )
+            ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sOldValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment),
         pOldCell(pTempOldCell),
@@ -1694,16 +1694,17 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
         pPrevContent(NULL),
         pNextInSlot(NULL),
         ppPrevInSlot(NULL),
-        aOldValue(sResult)
+        aOldValue(sOldValue)
 
 {
     if (pOldCell)
         ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
+    aOldValue = sOldValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
             ScBaseCell* pTempNewCell, const ScBigRange& aBigRange,
-            ScDocument* pDoc )
+            ScDocument* pDoc, const String& sNewValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
         pNewCell(pTempNewCell),
@@ -1711,10 +1712,12 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
         pNextContent(NULL),
         pPrevContent(NULL),
         pNextInSlot(NULL),
-        ppPrevInSlot(NULL)
+        ppPrevInSlot(NULL),
+        aNewValue(sNewValue)
 {
     if (pNewCell)
         ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
+    aNewValue = sNewValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::~ScChangeActionContent()
@@ -5005,9 +5008,9 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
 }
 
 
-ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& aBigRange )
+ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& aBigRange, const String& sNewValue )
 {
-    ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pNewCell, aBigRange, pDoc );
+    ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pNewCell, aBigRange, pDoc, sNewValue );
     if ( pAct )
     {
         if ( pFirstGeneratedDelContent )
