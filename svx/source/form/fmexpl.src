@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:37:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text = "~Löschen" ;
             Text [ ENGLISH ] = "~Delete" ;
             Text [ english_us ] = "~Delete" ;
-            Text [ portuguese_brazilian ] = "Löschen" ;
+            Text [ portuguese_brazilian ] = "L?chen" ;
             Text [ swedish ] = "~Radera" ;
             Text [ danish ] = "~Slet" ;
             Text [ italian ] = "Elimina" ;
@@ -228,7 +228,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ dutch ] = "Volgorde van a~ctivering" ;
             Text[ chinese_simplified ] = "ÂÖ»»Ë³Ðò...";
             Text[ russian ] = "Ïîðÿäîê àêòèâèðîâàíèÿ";
-            Text[ polish ] = "Kolejnoœæ aktywacji";
+            Text[ polish ] = "Kolejno?æ aktywacji";
             Text[ japanese ] = "ÀÌÞµ°ÀÞ°...";
             Text[ chinese_traditional ] = "±Ò°Ê¶¶§Ç...";
             Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ...";
@@ -284,7 +284,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ dutch ] = "~Eigenschappen" ;
             Text[ chinese_simplified ] = "ÊôÐÔ(~I)";
             Text[ russian ] = "Ñâîéñòâà";
-            Text[ polish ] = "W³aœciwoœci";
+            Text[ polish ] = "W³a?ciwo?ci";
             Text[ japanese ] = "ÌßÛÊßÃ¨(~I)";
             Text[ chinese_traditional ] = "ÄÝ©Ê(~I)";
             Text[ arabic ] = "ÎÕÇÆÕ";
@@ -303,7 +303,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ ENGLISH ] = "Open in ~designmode" ;
             Text [ portuguese ] = "Abrir no modo Es~boço" ;
             Text [ english_us ] = "Open in Design Mode" ;
-            Text [ portuguese_brazilian ] = "Im Entwurfsmodus öffnen" ;
+            Text [ portuguese_brazilian ] = "Im Entwurfsmodus ?fnen" ;
             Text [ swedish ] = "Öppna i ~utkastläge" ;
             Text [ danish ] = "Åbn i udkasttilstand" ;
             Text [ italian ] = "Apri nel modo bozza" ;
@@ -894,7 +894,7 @@ ModalDialog RID_SVXDLG_SETFORM
         Text [ dutch ] = "Pad" ;
         Text[ chinese_simplified ] = "Â·¾¶";
         Text[ russian ] = "Ïóòü";
-        Text[ polish ] = "Œcie¿ka";
+        Text[ polish ] = "?cie¿ka";
         Text[ japanese ] = "Êß½";
         Text[ chinese_traditional ] = "¸ô®|";
         Text[ arabic ] = "ÇáãÓÇÑ";
