@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-29 11:08:18 $
+ *  last change: $Author: sj $ $Date: 2001-06-06 15:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,12 @@
 #include "impinccv.h" // etwas Testkram
 #endif
 
-#ifdef DBG_EXTRACTOLEOBJECTS
+#if defined(DBG_EXTRACTOLEOBJECTS) || defined(DBG_EXTRACTFONTMETRICS)
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #endif
 
@@ -254,6 +257,12 @@
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include <escherex.hxx>
+#endif
+#ifndef _SV_PRINT_HXX
+#include <vcl/print.hxx>
+#endif
+#ifndef _SVX_SVXFONT_HXX
+#include <svx/svxfont.hxx>
 #endif
 
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
@@ -596,6 +605,8 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
 
     sal_uInt8   lfCharset, lfPitchAndFamily;
 
+    rAtom.fScaling = 1.0;
+
     rIn >> lfCharset
         >> rAtom.lfClipPrecision
         >> rAtom.lfQuality
@@ -657,7 +668,6 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
             rAtom.ePitch = PITCH_VARIABLE;
         break;
     }
-
     sal_uInt16 i;
     for ( i = 0; i < 32; i++ )
     {
@@ -671,7 +681,6 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
     rAtom.aName = String( cData, i );
     OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
     rAtom.bAvailable = pDev->IsFontAvailable( rAtom.aName );
-
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -1659,28 +1668,6 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
                     }
                 }
             }
-            if ( bOk )
-            {
-                if ( !pFonts )
-                    ReadFontCollection();
-
-                // reading TxSI styles (default language setting ... )
-                PPTTextSpecInfoAtomInterpreter aTxSIStyle;
-                DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
-                if ( pEnvHd )
-                {
-                    pEnvHd->SeekToContent( rStCtrl );
-                    DffRecordHeader aTxSIStyleRecHd;
-                    if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
-                        aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
-                }
-                PPTTextSpecInfo aTxSI( 0 );
-                if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
-                    aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
-
-                // creating stylesheets
-                pPPTStyleSheet = new PPTStyleSheet( rStCtrl, *this, aTxSI );
-            }
         }
     }
     if ( rStCtrl.GetError() != 0 )
@@ -2191,6 +2178,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
         if ( SeekToRec( rStCtrl, PPT_PST_FontCollection, pEnvHd->GetRecEndFilePos(), &aListHd ) )
         {
             sal_uInt16 nCount = 0;
+            VirtualDevice* pVDev = NULL;
             while ( SeekToRec( rStCtrl, PPT_PST_FontEntityAtom, aListHd.GetRecEndFilePos() ) )
             {
                 bRet = TRUE;
@@ -2198,6 +2186,80 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                     pFonts = new PptFontCollection;
                 PptFontEntityAtom* pFont = new PptFontEntityAtom;
                 rStCtrl >> *pFont;
+
+                OutputDevice* pRefDev = pSdrModel->GetRefDevice();
+
+                Font aFont;
+                aFont.SetCharSet( pFont->eCharSet );
+                aFont.SetName( pFont->aName );
+                aFont.SetFamily( pFont->eFamily );
+                aFont.SetPitch( pFont->ePitch );
+                aFont.SetHeight( 100 );
+
+                SvxFont aTmpFont( aFont );
+                if ( !pVDev )
+                    pVDev = new VirtualDevice;
+                aTmpFont.SetPhysFont( pVDev );
+                FontMetric aMetric( pVDev->GetFontMetric() );
+
+                sal_uInt16 nTxtHeight = (sal_uInt16)aMetric.GetAscent() + (sal_uInt16)aMetric.GetDescent();
+
+                if ( nTxtHeight )
+                {
+                    double fScaling = 120.0 / (double)nTxtHeight;
+                    if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
+                        pFont->fScaling = fScaling;
+                }
+
+#ifdef DBG_EXTRACTFONTMETRICS
+
+                String  aFileURLStr;
+                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aFileURLStr ) )
+                {
+                    INetURLObject   aURL( aFileURLStr );
+                    aURL.SetName( String( RTL_CONSTASCII_STRINGPARAM( "dbgfontmetrics.txt" ) ) );
+
+                    SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE );
+                    if( pDbgOut )
+                    {
+                        pDbgOut->Seek( STREAM_SEEK_TO_END );
+
+                        Printer* pPrinter = NULL;
+                        if ( pSdrModel->GetRefDevice() && pSdrModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER )
+                            pPrinter = (Printer*)pSdrModel->GetRefDevice();
+                        if ( pPrinter )
+                        {
+                            Font aOldFont( pPrinter->GetFont() );
+                            aFont.SetKerning( TRUE );
+                            pPrinter->SetFont( aFont );
+                            aMetric = pPrinter->GetFontMetric();
+                            pPrinter->SetFont( aOldFont );
+                        }
+
+                        if ( ( pPrinter == NULL ) || ( aMetric.GetLeading() == 0 ) )
+                        {
+                            VirtualDevice aVirDev( 1 );
+                            aVirDev.SetFont( aFont );
+                            aMetric = aVirDev.GetFontMetric();
+                        }
+                        ByteString aFontName( aFont.GetName(), RTL_TEXTENCODING_UTF8 );
+                        ByteString aHeight( ByteString::CreateFromInt32( aMetric.GetLineHeight() ) );
+                        ByteString aAscent( ByteString::CreateFromInt32( aMetric.GetAscent() ) );
+                        ByteString aDescent( ByteString::CreateFromInt32( aMetric.GetDescent() ) );
+                        ByteString aLeading( ByteString::CreateFromInt32( aMetric.GetLeading() ) );
+                        ByteString aPhysHeight( ByteString::CreateFromInt32( nTxtHeight ) );
+
+                        *pDbgOut                                             << (sal_uInt8)0xa
+                                 << "FontName  : " << aFontName.GetBuffer()  << (sal_uInt8)0xa
+                                 << "    Height: " << aHeight.GetBuffer()    << (sal_uInt8)0xa
+                                 << "    Ascent: " << aAscent.GetBuffer()    << (sal_uInt8)0xa
+                                 << "    Descent:" << aDescent.GetBuffer()   << (sal_uInt8)0xa
+                                 << "    Leading:" << aLeading.GetBuffer()   << (sal_uInt8)0xa
+                                 << "PhysHeight :" << aPhysHeight.GetBuffer()<< (sal_uInt8)0xa;
+                    }
+                    delete pDbgOut;
+                 }
+#endif
 
                 sal_uInt32 nFontId = PPT_UNIQUE_FONT_ID_UNDEFINED;
 
@@ -2238,6 +2300,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 nIStarBats = nCount | 0x80000000;
                 pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount++ );
             }
+            delete pVDev;
         }
         rStCtrl.Seek( nFPosMerk ); // FilePos restaurieren
     }
@@ -5574,18 +5637,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     {
         PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
-        {
-            CharSet eCharSet = rManager.eCharSetSystem;
-            if ( nVal == nAsianFontId ) // when nVal equals nAsianFontId the asian font is used.
-            {                           // that also means that the standard font is undefined, so
-                nVal = 0;               // we set the first font. ( usual times new roman )
-                pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
-            }
-            CharSet eFontCharSet =  pFontEnityAtom->eCharSet;
-            if ( eFontCharSet != gsl_getSystemTextEncoding() )
-                eCharSet = eFontCharSet;
-            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, eCharSet ) );
-        }
+            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet ) );
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nInstanceInSheet ) ) // Schriftgrad in Point
     {
@@ -6055,6 +6107,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         nVal2 = -(INT16)( ( nFontHeight * nVal * 8 ) / 100 );
         bIsHardAttribute = TRUE;
     }
+    sal_uInt32 nFont;
+    if ( pPortion && pPortion->GetAttrib( PPT_CharAttr_Font, nFont, nInstanceInSheet ) )
+        bIsHardAttribute = TRUE;
+
     if ( bIsHardAttribute )
     {
         if ( pPortion && ( nVal2 > 200 ) )
@@ -6068,7 +6124,13 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             aItem.SetLineHeight( (UINT16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
         else
         {
-            aItem.SetPropLineSpace( (BYTE)nVal2 );
+            sal_uInt8 nPropLineSpace = (BYTE)nVal2;
+            if ( pPortion )
+            {
+                PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nFont );
+                nPropLineSpace = (sal_uInt8)((double)nVal2 * pAtom->fScaling + 0.5);
+            }
+            aItem.SetPropLineSpace( nPropLineSpace );
             aItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
         }
         rSet.Put( aItem );
