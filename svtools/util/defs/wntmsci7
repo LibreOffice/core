@@ -9423,3 +9423,8 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?GetName@INetURLObject@@QBE?AVString@@W4DecodeMechanism@1@G@Z
 ?replaceAt@OUString@rtl@@QBE?AV12@JJABV12@@Z
 ?CreateTableDataOptionsValNum@HTMLOutFuncs@@SAAAVByteString@@AAV2@ENKAAVSvNumberFormatter@@GPAVString@@@Z
+??1?$Sequence@UAliasProgrammaticPair@util@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?executedDialog@OAddressBookSourceDialogUno@svt@@MAEXF@Z
+?implInitialize@OAddressBookSourceDialogUno@svt@@MAEXABVAny@uno@star@sun@com@@@Z
+?s_pType@?$Sequence@UAliasProgrammaticPair@util@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_util_AliasProgrammaticPair@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUAliasProgrammaticPair@util@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
