@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:51:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 09:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,10 +142,6 @@
 
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
-#endif
-
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 
 #ifndef SD_VIEW_HXX
@@ -792,7 +788,7 @@ void SdTPAction::OpenFileDialog()
             Application::SetDefDialogParent( this );
 
             // choose macro dialog
-            String aScriptURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
+            String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
 
             // aScriptURL has the following format:
             // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
