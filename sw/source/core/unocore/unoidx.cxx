@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2002-01-07 16:16:16 $
+ *  last change: $Author: os $ $Date: 2002-01-10 13:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+#ifndef _SHELLRES_HXX
+#include <shellres.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -227,6 +233,40 @@ void lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewN
     }
     //has to be non-const-casted
     ((SwTOXType*)pNewType)->Add(&rTOXBase);
+}
+//-----------------------------------------------------------------------------
+static const char cUserDefined[] = "User-Defined";
+static const char cUserSuffix[] = " (user)";
+#define USER_LEN 12
+#define USER_AND_SUFFIXLEN 19
+
+void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
+{
+    ShellResource* pShellRes = ViewShell::GetShellRes();
+
+    if(rTmp.equals(pShellRes->aTOXUserName))
+        rTmp = OUString(C2U(cUserDefined));
+    //if the version is not English but the alternative index's name is "User-Defined"
+    //a " (user)" is appended
+    else if(rTmp.equalsAscii(cUserDefined))
+        rTmp += C2U(cUserSuffix);
+}
+//-----------------------------------------------------------------------------
+void lcl_ConvertTOUNameToUserName(OUString& rTmp)
+{
+    ShellResource* pShellRes = ViewShell::GetShellRes();
+    if(rTmp.equalsAscii(cUserDefined))
+    {
+        rTmp = pShellRes->aTOXUserName;
+    }
+    else if(!pShellRes->aTOXUserName.EqualsAscii(cUserDefined) &&
+        USER_AND_SUFFIXLEN == rTmp.getLength())
+    {
+        String sToChange(rTmp);
+        //make sure that in non-English versions the " (user)" suffix is removed
+        if(!sToChange.SearchAscii(cUserDefined) && USER_LEN == sToChange.SearchAscii(cUserSuffix))
+            rTmp = C2U(cUserDefined);
+    }
 }
 
 /******************************************************************
@@ -484,6 +524,7 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
             {
                 OUString sNewName;
                 aValue >>= sNewName;
+                lcl_ConvertTOUNameToUserName(sNewName);
                 DBG_ASSERT(TOX_USER == eTxBaseType, "tox type name can only be changed for user indexes")
                 if(GetFmt())
                 {
@@ -788,6 +829,8 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                     sTmp = pTOXBase->GetTOXType()->GetTypeName();
                 else
                     sTmp = pProps->GetTypeName();
+                //I18N
+                lcl_ConvertTOUNameToProgrammaticName(sTmp);
                 aRet <<= sTmp;
             }
             break;
@@ -1773,7 +1816,11 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 sSecondaryKey = lcl_AnyToString(aValue);
             break;
             case WID_USER_IDX_NAME :
-                sUserIndexName = lcl_AnyToString(aValue);
+            {
+                OUString sTmp(lcl_AnyToString(aValue));
+                lcl_ConvertTOUNameToUserName(sTmp);
+                sUserIndexName = sTmp;
+            }
             break;
             case WID_MAIN_ENTRY:
                 bMainEntry = lcl_AnyToBool(aValue);
@@ -1819,7 +1866,11 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(pCurMark->GetSecondaryKey());
                 break;
                 case WID_USER_IDX_NAME :
-                    aRet <<= OUString(pType->GetTypeName());
+                {
+                    OUString sTmp(pType->GetTypeName());
+                    lcl_ConvertTOUNameToProgrammaticName(sTmp);
+                    aRet <<= sTmp;
+                }
                 break;
                 case WID_MAIN_ENTRY:
                 {
