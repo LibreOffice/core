@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,7 @@ class ScXMLImport: public SvXMLImport
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
+    sal_Bool                bRemoveLastChar;
 
     ScMyTables              aTables;
 
@@ -874,6 +875,9 @@ public:
     sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
 
     inline ScMyImpDetectiveOpArray& GetDetectiveOpArray()   { return aDetectiveOpArray; }
+
+    void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
+    sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
 };
 
 #endif

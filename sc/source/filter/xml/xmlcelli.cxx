@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-04 14:40:19 $
+ *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
 #include "XMLTableShapeImportHelper.hxx"
 #endif
+#ifndef _SC_XMLTEXTPCONTEXT_HXX
+#include "XMLTextPContext.hxx"
+#endif
 
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
@@ -143,6 +146,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_text_CONTROLCHARACTER_HPP_
+#include <com/sun/star/text/ControlCharacter.hpp>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -182,10 +188,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nRepeatedRows(nTempRepeatedRows),
     bIsEmpty(sal_True),
     bHasTextImport(sal_False),
-    bIsFirstTextImport(sal_True),
+    bIsFirstTextImport(sal_False),
     aDetectiveObjVec(),
     aCellRangeSource()
 {
+    GetScImport().SetRemoveLastChar(sal_False);
     GetScImport().GetTables().AddColumn(bTempIsCovered);
     nMergedCols = 1;
     nMergedRows = 1;
@@ -345,7 +352,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             if (nCellType == util::NumberFormat::TEXT)
             {
                 ScXMLImport& rXMLImport = GetScImport();
-                if (bIsFirstTextImport)
+                if (!bHasTextImport)
                 {
                     com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
                     uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
@@ -366,18 +373,30 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                                 {
                                     uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
                                     rXMLImport.GetTextImport()->SetCursor(xTextCursor);
-                                    bIsFirstTextImport = sal_False;
+                                    bIsFirstTextImport = sal_True;
                                     bHasTextImport = sal_True;
-                                    pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-                                        GetScImport(), nPrefix, rLName, xAttrList);
+                                    pContext = new ScXMLTextPContext(GetScImport(), nPrefix, rLName, xAttrList);
+//                                  pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
+//                                      GetScImport(), nPrefix, rLName, xAttrList);
                                 }
                             }
                         }
                     }
                 }
                 else
+                {
+                    if (bIsFirstTextImport && !GetScImport().GetRemoveLastChar())
+                    {
+                        GetScImport().SetRemoveLastChar(sal_True);
+                        uno::Reference < text::XText > xText (GetScImport().GetTextImport()->GetCursor()->getText());
+                        uno::Reference < text::XTextRange > xTextRange (GetScImport().GetTextImport()->GetCursor(), uno::UNO_QUERY);
+                        if (xText.is() && xTextRange.is())
+                            xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+                    }
                     pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
                         GetScImport(), nPrefix, rLName, xAttrList);
+                    bIsFirstTextImport = sal_False;
+                }
             }
         }
         break;
@@ -947,7 +966,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
 
 void ScXMLTableRowCellContext::EndElement()
 {
-    if (bHasTextImport)
+    if (bHasTextImport && GetScImport().GetRemoveLastChar())
     {
         if (GetImport().GetTextImport()->GetCursor().is())
         {

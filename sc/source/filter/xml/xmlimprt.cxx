@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1314,7 +1314,8 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     sSC_percentage(RTL_CONSTASCII_USTRINGPARAM(sXML_percentage)),
     sSC_currency(RTL_CONSTASCII_USTRINGPARAM(sXML_currency)),
     sSC_string(RTL_CONSTASCII_USTRINGPARAM(sXML_string)),
-    sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean))
+    sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean)),
+    bRemoveLastChar(sal_False)
 
 //  pParaItemMapper( 0 ),
 {
