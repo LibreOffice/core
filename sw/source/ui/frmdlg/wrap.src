@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:57:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_FRM_WRAP
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Asetukset";
         Text[ italian ] = "Predefiniti";
-        Text[ danish ] = "Forudindstillinger";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "F�rinst�llningar";
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Defini��es";
@@ -101,6 +101,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     ImageRadioButton RB_NO_WRAP
     {
@@ -116,7 +118,7 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "~Ninguno" ;
         Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Ingen" ;
-        Text [ danish ] = "Ingen" ;
+        Text [ danish ] = "Ing~en" ;
         Text [ portuguese ] = "~Nenhum" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text[ chinese_simplified ] = "无(~N)";
@@ -136,6 +138,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "Žia~dne";
+        Text[ hungarian ] = "~Nincs";
+        Text[ slovenian ] = "~Brez";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -153,7 +157,7 @@ TabPage TP_FRM_WRAP
         Text[ spanish ] = "Antes";
         Text[ finnish ] = "Vasen";
         Text[ italian ] = "Prima";
-        Text[ danish ] = "Venstre";
+        Text[ danish ] = "F�r";
         Text[ swedish ] = "F�re";
         Text[ polish ] = "Z ~lewej";
         Text[ portuguese_brazilian ] = "~Esquerda";
@@ -169,6 +173,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮לפני‬";
         Text[ hindi ] = "~बायाँ";
         Text[ slovak ] = "Pred";
+        Text[ hungarian ] = "~Előtte";
+        Text[ slovenian ] = "Pred";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -186,7 +192,7 @@ TabPage TP_FRM_WRAP
         Text[ spanish ] = "Despu�s";
         Text[ finnish ] = "Oikea";
         Text[ italian ] = "Dopo";
-        Text[ danish ] = "H�j~re";
+        Text[ danish ] = "Efter";
         Text[ swedish ] = "Efter";
         Text[ polish ] = "Z prawe~j";
         Text[ portuguese_brazilian ] = "~Direita";
@@ -202,6 +208,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮אחרי‬";
         Text[ hindi ] = "दा~हिना";
         Text[ slovak ] = "Za";
+        Text[ hungarian ] = "Utána";
+        Text[ slovenian ] = "Za";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -217,7 +225,7 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "~Paralelo" ;
         Text [ french ] = "~Parall�le" ;
         Text [ swedish ] = "~Parallell" ;
-        Text [ danish ] = "Parallel" ;
+        Text [ danish ] = "~Parallel" ;
         Text [ portuguese ] = "~Paralelo" ;
         Text [ portuguese_brazilian ] = "~Paralelo" ;
         Text[ chinese_simplified ] = "平行(~P)";
@@ -236,6 +244,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "~Parallel";
         Text[ hindi ] = "~समानान्तर";
         Text[ slovak ] = "~Rovnobežne";
+        Text[ hungarian ] = "~Párhuzamos";
+        Text[ slovenian ] = "~Vzporedno";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
@@ -271,6 +281,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "~Durchlauf";
         Text[ hindi ] = "~में";
         Text[ slovak ] = "Ce~z";
+        Text[ hungarian ] = "~Mögötte";
+        Text[ slovenian ] = "S~kozi";
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
@@ -286,7 +298,7 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "Din�~mico" ;
         Text [ french ] = "Dynamique" ;
         Text [ swedish ] = "D~ynamisk" ;
-        Text [ danish ] = "Dynamisk" ;
+        Text [ danish ] = "~Optimal" ;
         Text [ portuguese ] = "D~in�mico" ;
         Text [ portuguese_brazilian ] = "~Otimizado" ;
         Text[ chinese_simplified ] = "最佳(~O)";
@@ -305,6 +317,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "D~ynamisch";
         Text[ hindi ] = "~योग्य";
         Text[ slovak ] = "~Optimálne";
+        Text[ hungarian ] = "~Optimális";
+        Text[ slovenian ] = "~Optimalno";
     };
 
     CheckBox CB_ANCHOR_ONLY
@@ -319,7 +333,7 @@ TabPage TP_FRM_WRAP
         Text [ french ] = "1~er paragraphe" ;
         Text [ dutch ] = "~Eerste alinea" ;
         Text [ swedish ] = "F�r~sta stycket" ;
-        Text [ danish ] = "F�rste afsnit" ;
+        Text [ danish ] = "F�rst~e afsnit" ;
         Text [ portuguese_brazilian ] = "~Primeiro par�grafo" ;
         Text [ portuguese ] = "Primeiro par�~grafo" ;
         Text[ chinese_simplified ] = "第一段落(~F)";
@@ -338,6 +352,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "Er~ster Absatz";
         Text[ hindi ] = "~पहिला परिच्छेद";
         Text[ slovak ] = "P~rvý odstavec";
+        Text[ hungarian ] = "Első be~kezdés";
+        Text[ slovenian ] = "P~rvi odstavek";
     };
     CheckBox CB_TRANSPARENT
     {
@@ -351,7 +367,7 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "En el f~ondo" ;
         Text [ french ] = "� l'arri�re-plan" ;
         Text [ swedish ] = "I ~bakgrunden" ;
-        Text [ danish ] = "I baggrunden" ;
+        Text [ danish ] = "I ~baggrunden" ;
         Text [ portuguese ] = "Em ~segundo plano" ;
         Text [ portuguese_brazilian ] = "No plano de ~fundo" ;
         Text[ chinese_simplified ] = "置于背景(~K)";
@@ -370,6 +386,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "Im Hin~tergrund";
         Text[ hindi ] = "पृष्ठ~भाग में";
         Text[ slovak ] = "Na ~pozadí";
+        Text[ hungarian ] = "~Háttérben";
+        Text[ slovenian ] = "V ~ozadju";
     };
     CheckBox CB_OUTLINE
     {
@@ -384,7 +402,7 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "Conto~rno" ;
         Text [ french ] = "Contour" ;
         Text [ swedish ] = "~Kontur" ;
-        Text [ danish ] = "Kontur" ;
+        Text [ danish ] = "K~ontur" ;
         Text [ portuguese ] = "~Contorno" ;
         Text [ portuguese_brazilian ] = "~Contorno" ;
         Text[ chinese_simplified ] = "轮廓(~C)";
@@ -403,6 +421,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "Kont~ur";
         Text[ hindi ] = "परिवे~श";
         Text[ slovak ] = "~Obrys";
+        Text[ hungarian ] = "~Körvonal";
+        Text[ slovenian ] = "O~bris";
     };
     CheckBox CB_ONLYOUTSIDE
     {
@@ -436,6 +456,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "~Nur außen";
         Text[ hindi ] = "केवल बाहरी ओर";
         Text[ slovak ] = "Iba vonku";
+        Text[ hungarian ] = "Csak külső oldal";
+        Text[ slovenian ] = "Samo zunaj";
     };
     FixedLine FL_OPTION
     {
@@ -468,6 +490,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     FixedLine FL_OPTION_SEP
     {
@@ -486,7 +510,7 @@ TabPage TP_FRM_WRAP
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "Vasen" ;
-        Text [ danish ] = "Venstre" ;
+        Text [ danish ] = "~Venstre" ;
         Text [ french ] = "� gauche" ;
         Text [ swedish ] = "~V�nster" ;
         Text [ dutch ] = "L~inks" ;
@@ -508,6 +532,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "L~inks";
         Text[ hindi ] = "बा~याँ";
         Text[ slovak ] = "~Vľavo";
+        Text[ hungarian ] = "~Bal oldalon";
+        Text[ slovenian ] = "L~evo";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -535,7 +561,7 @@ TabPage TP_FRM_WRAP
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "Oikea" ;
-        Text [ danish ] = "H�jre" ;
+        Text [ danish ] = "~H�jre" ;
         Text [ french ] = "� droite" ;
         Text [ swedish ] = "H~�ger" ;
         Text [ dutch ] = "Rec~hts" ;
@@ -557,6 +583,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "Re~chts";
         Text[ hindi ] = "~दाहिना";
         Text[ slovak ] = "Vp~ravo";
+        Text[ hungarian ] = "~Jobb oldalon";
+        Text[ slovenian ] = "~Desno";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -584,7 +612,7 @@ TabPage TP_FRM_WRAP
         Text [ portuguese_brazilian ] = "Em ~Cima" ;
         Text [ portuguese ] = "~Topo" ;
         Text [ finnish ] = "Yl�reuna" ;
-        Text [ danish ] = "~�verst" ;
+        Text [ danish ] = "~Top" ;
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "~Uppe" ;
         Text [ dutch ] = "~Boven" ;
@@ -606,6 +634,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
         Text[ slovak ] = "~Hore";
+        Text[ hungarian ] = "~Fent";
+        Text[ slovenian ] = "~Zgoraj";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -633,7 +663,7 @@ TabPage TP_FRM_WRAP
         Text [ portuguese_brazilian ] = "Em ~Baixo" ;
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ finnish ] = "Alareuna" ;
-        Text [ danish ] = "Nederst" ;
+        Text [ danish ] = "~Bund" ;
         Text [ french ] = "En bas" ;
         Text [ swedish ] = "N~ere" ;
         Text [ dutch ] = "Be~neden" ;
@@ -655,6 +685,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "Unt~en";
         Text[ hindi ] = "~नीचे";
         Text[ slovak ] = "~Dolu";
+        Text[ hungarian ] = "~Lent";
+        Text[ slovenian ] = "~Spodaj";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -703,6 +735,8 @@ TabPage TP_FRM_WRAP
         Text[ hebrew ] = "‮רוווח‬";
         Text[ hindi ] = "अन्तर देना";
         Text[ slovak ] = "Vzdialenosť";
+        Text[ hungarian ] = "Térköz";
+        Text[ slovenian ] = "Razmik";
     };
 #define WRAP_IDLIST \
         IdList =            \
@@ -734,6 +768,7 @@ TabPage TP_FRM_WRAP
     };
 
 };
+
 
 
 
