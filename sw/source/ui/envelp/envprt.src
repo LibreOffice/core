@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 15:01:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 02:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ TabPage TP_ENV_PRT
         Text[ swedish ] = "Kuvertindrag";
         Text[ polish ] = "Orientacja koperty";
         Text[ portuguese_brazilian ] = "Envelope orientation";
-        Text[ japanese ] = "Envelope orientation";
+        Text[ japanese ] = "••“›‚ÌŒü‚«";
         Text[ korean ] = "Envelope orientation";
         Text[ chinese_simplified ] = "ĞÅ·â·½Ïò";
         Text[ chinese_traditional ] = "«H«Ê¤è¦V";
@@ -160,7 +160,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~P)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â";
+        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
         Text[ turkish ] = "Üstten yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir r~everso";
@@ -190,7 +190,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â";
+        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
         Text[ turkish ] = "Alttan yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir ~anverso";
@@ -308,7 +308,7 @@ TabPage TP_ENV_PRT
         Text[ swedish ] = "Aktuell skrivare";
         Text[ polish ] = "Aktualna drukarka";
         Text[ portuguese_brazilian ] = "Current printer";
-        Text[ japanese ] = "Current printer";
+        Text[ japanese ] = "Œ»İ‚ÌÌßØİÀ";
         Text[ korean ] = "Current printer";
         Text[ chinese_simplified ] = "µ±Ç°µÄ´òÓ¡»ú";
         Text[ chinese_traditional ] = "·í«eªº¦Lªí¾÷";
@@ -425,6 +425,7 @@ Bitmap BMP_VER_RGHT_UPPER
 {
     File = "envvr_u.bmp" ;
 };
+
 
 
 
