@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regkey.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
 
         pReg = ((ORegKey*)phSubKeys[0])->getRegistry();
 
-        for (int i=0; (i < nSubKeys) && (_ret == REG_NO_ERROR); i++)
+        for (sal_uInt32 i=0; (i < nSubKeys) && (_ret == REG_NO_ERROR); i++)
         {
             _ret = pReg->closeKey(phSubKeys[i]);
         }
@@ -802,7 +802,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
         case 6:
             {
                 sal_Char** pVList = (sal_Char**)pValueList;
-                for (int i=0; i < len; i++)
+                for (sal_uInt32 i=0; i < len; i++)
                 {
                     rtl_freeMemory(pVList[i]);
                 }
@@ -813,7 +813,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
         case 7:
             {
                 sal_Unicode** pVList = (sal_Unicode**)pValueList;
-                for (int i=0; i < len; i++)
+                for (sal_uInt32 i=0; i < len; i++)
                 {
                     rtl_freeMemory(pVList[i]);
                 }
@@ -980,7 +980,7 @@ RegError REGISTRY_CALLTYPE getKeyNames(RegKeyHandle hKey,
 RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString** pKeyNames,
                                           sal_uInt32 nKeys)
 {
-    for (int i=0; i <nKeys; i++)
+    for (sal_uInt32 i=0; i < nKeys; i++)
     {
         rtl_uString_release(pKeyNames[i]);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keyimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ RegError ORegKey::closeSubKeys(RegKeyHandle* phSubKeys, sal_uInt32 nSubKeys)
 {
     RegError    _ret = REG_NO_ERROR;
 
-    for (int i=0; i < nSubKeys; i++)
+    for (sal_uInt32 i=0; i < nSubKeys; i++)
     {
         _ret = closeKey(phSubKeys[i]);
     }
@@ -505,7 +505,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
 
     sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
 
-    for (int i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         writeINT32(pBuffer+VALUE_HEADEROFFSET+offset, pValueList[i]);
         offset += 4;
@@ -552,7 +552,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 
     sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
 
-    int i;
+    sal_uInt32 i;
     for (i=0; i < len; i++)
     {
         size +=  4 + strlen(pValueList[i]) + 1;
@@ -619,7 +619,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
     sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
 
-    int i;
+    sal_uInt32 i;
     for (i=0; i < len; i++)
     {
         size +=  4 + ((rtl_ustr_getLength(pValueList[i]) +1) * 2);
@@ -841,7 +841,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
     sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
 
-    for (int i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         readINT32(pBuffer+offset, pVList[i]);
         offset += 4;
@@ -940,7 +940,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     sal_uInt32 sLen = 0;
 
     sal_Char *pValue;
-    for (int i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         readUINT32(pBuffer+offset, sLen);
 
@@ -1046,7 +1046,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     sal_uInt32 sLen = 0;
 
     sal_Unicode *pValue;
-    for (int i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         readUINT32(pBuffer+offset, sLen);
 

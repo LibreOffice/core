@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regmap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class ORegKey;
 
 struct EqualString
 {
-    bool operator()(const OUString& str1, const OUString& str2) const
+    sal_Bool operator()(const OUString& str1, const OUString& str2) const
     {
         return (str1 == str2);
     }
@@ -102,7 +102,7 @@ struct HashString
 
 struct LessString
 {
-    bool operator()(const OUString& str1, const OUString& str2) const
+    sal_Bool operator()(const OUString& str1, const OUString& str2) const
     {
         return (str1 < str2);
     }

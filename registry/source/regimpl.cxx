@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,7 +1378,7 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
                                    StringSet& nameSet)
 {
     sal_uInt32 count=0;
-    sal_uInt32 i;
+    sal_uInt16 i;
     for (i=0 ; i < reader1.getFieldCount(); i++)
     {
         nameSet.insert(reader1.getFieldName(i));
@@ -1419,11 +1419,11 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                   reader.getTypeClass(),
                                   reader.getTypeName(),
                                   reader.getSuperTypeName(),
-                                  count,
+                                  (sal_uInt16)count,
                                   0,
                                   0);
 
-        int i;
+        sal_uInt16 i;
         for (i=0 ; i < reader.getFieldCount(); i++)
         {
             writer.setFieldData(index,
@@ -1782,7 +1782,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Int32 longValue;
-                for (int i=0; i < len; i++)
+                for (sal_uInt32 i=0; i < len; i++)
                 {
                     readINT32(pBuffer+offset, longValue);
 
@@ -1808,7 +1808,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Char *pValue;
-                for (int i=0; i < len; i++)
+                for (sal_uInt32 i=0; i < len; i++)
                 {
                     readUINT32(pBuffer+offset, sLen);
 
@@ -1840,7 +1840,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                 sal_Unicode *pValue;
                 OString uStr;
-                for (int i=0; i < len; i++)
+                for (sal_uInt32 i=0; i < len; i++)
                 {
                     readUINT32(pBuffer+offset, sLen);
 

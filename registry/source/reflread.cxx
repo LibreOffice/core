@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,13 +267,13 @@ public:
     sal_Bool            readBOOLConstant(sal_uInt16 index);
     sal_uInt8           readBYTEConstant(sal_uInt16 index);
     sal_Int16           readINT16Constant(sal_uInt16 index);
-    sal_uInt16      readUINT16Constant(sal_uInt16 index);
+    sal_uInt16          readUINT16Constant(sal_uInt16 index);
     sal_Int32           readINT32Constant(sal_uInt16 index);
     sal_uInt32          readUINT32Constant(sal_uInt16 index);
-    float           readFloatConstant(sal_uInt16 index);
-    double          readDoubleConstant(sal_uInt16 index);
+    float               readFloatConstant(sal_uInt16 index);
+    double              readDoubleConstant(sal_uInt16 index);
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
-    void            readUIK(sal_uInt16 index, RTUik* uik);
+    void                readUIK(sal_uInt16 index, RTUik* uik);
 };
 
 ConstantPool::~ConstantPool()
@@ -863,7 +863,7 @@ public:
     const sal_Char* getMethodDoku(sal_uInt16 index);
 
 private:
-    sal_uInt8 calcMethodParamIndex( const sal_uInt8 index );
+    sal_uInt16 calcMethodParamIndex( const sal_uInt16 index );
 };
 
 MethodList::~MethodList()
@@ -871,7 +871,7 @@ MethodList::~MethodList()
     if (m_pIndex) delete[] m_pIndex;
 }
 
-sal_uInt8 MethodList::calcMethodParamIndex( const sal_uInt8 index )
+sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
 {
     return (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (index * m_PARAM_ENTRY_SIZE));
 }

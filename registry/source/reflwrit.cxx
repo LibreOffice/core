@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
+ *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,11 +848,11 @@ void TypeWriter::createBlop()
         delete[] m_blop;
 
     CPInfo  root(CP_TAG_INVALID, NULL);
-    sal_uInt32  cpIndexThisName = 0;
-    sal_uInt32* cpIndexSuperNames = NULL;
-    sal_uInt32  cpIndexUik = 0;
-    sal_uInt32  cpIndexDoku = 0;
-    sal_uInt32  cpIndexFileName = 0;
+    sal_uInt16  cpIndexThisName = 0;
+    sal_uInt16* cpIndexSuperNames = NULL;
+    sal_uInt16  cpIndexUik = 0;
+    sal_uInt16  cpIndexDoku = 0;
+    sal_uInt16  cpIndexFileName = 0;
     CPInfo* pInfo = NULL;
 
     sal_uInt16  entrySize = sizeof(sal_uInt16);
@@ -877,7 +877,7 @@ void TypeWriter::createBlop()
     {
         m_blopSize += m_nSuperTypes * entrySize;
 
-        cpIndexSuperNames = new sal_uInt32[m_nSuperTypes];
+        cpIndexSuperNames = new sal_uInt16[m_nSuperTypes];
 
         for (sal_uInt32 i=0; i < m_nSuperTypes; i++)
         {
@@ -990,21 +990,21 @@ void TypeWriter::createBlop()
     if (m_methodCount)
     {
         sal_uInt16* pMethodEntrySize = new sal_uInt16[m_methodCount];
-        sal_uInt32  cpIndexName = 0;
-        sal_uInt32  cpIndexReturn = 0;
-        sal_uInt32  cpIndexDoku = 0;
+        sal_uInt16  cpIndexName = 0;
+        sal_uInt16  cpIndexReturn = 0;
+        sal_uInt16  cpIndexDoku = 0;
 
         // nMethodEntries + nParamEntries
         blopMethodsSize = (2 * sizeof(sal_uInt16));
 
         for (i = 0; i < m_methodCount; i++)
         {
-            pMethodEntrySize[i] =
-                blopMethodEntrySize +                                   // header
-                sizeof(sal_uInt16) +                                    // parameterCount
-                (m_methods[i].m_paramCount * blopParamEntrySize) +      // exceptions
-                sizeof(sal_uInt16) +                                    // exceptionCount
-                (m_methods[i].m_excCount * sizeof(sal_uInt16));         // exceptions
+            pMethodEntrySize[i] = (sal_uInt16)
+                ( blopMethodEntrySize +                                 // header
+                  sizeof(sal_uInt16) +                                  // parameterCount
+                  (m_methods[i].m_paramCount * blopParamEntrySize) +    // exceptions
+                  sizeof(sal_uInt16) +                                  // exceptionCount
+                  (m_methods[i].m_excCount * sizeof(sal_uInt16)) );     // exceptions
 
             blopMethodsSize += pMethodEntrySize[i];
         }
@@ -1101,8 +1101,8 @@ void TypeWriter::createBlop()
 
     if (m_referenceCount)
     {
-        sal_uInt32 cpIndexName = 0;
-        sal_uInt32 cpIndexDoku = 0;
+        sal_uInt16 cpIndexName = 0;
+        sal_uInt16 cpIndexDoku = 0;
 
         // nReferenceEntries + n references
         blopReferenceSize = entrySize + (m_referenceCount * blopReferenceEntrySize);
