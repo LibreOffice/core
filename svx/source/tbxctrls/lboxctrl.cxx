@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2001-04-20 14:24:30 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 09:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 
 class SvxPopupWindowListBox;
 
+#define A2S(x)  String::CreateFromAscii(x)
+
 /////////////////////////////////////////////////////////////////
 
 class SvxPopupWindowListBox : public SfxPopupWindow
@@ -127,8 +129,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 
     SvxPopupWindowListBox(const& );
     SvxPopupWindowListBox & operator = (const& );
-
-    DECL_LINK( SelectHdl, void * );
 
     SvxPopupWindowListBox( USHORT nSlotId,
                            ToolBox& rTbx, USHORT nTbxItemId );
@@ -226,10 +226,9 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     pListBox = new PopupListBox( *this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
     FreeResource();
-    //pListBox->EnableMultiSelection( TRUE );
+    pListBox->EnableMultiSelection( TRUE, TRUE );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     pListBox->GrabFocus();
-    pListBox->SetSelectHdl( LINK( this, SvxPopupWindowListBox, SelectHdl ) );
 }
 
 
@@ -251,6 +250,8 @@ void SvxPopupWindowListBox::PopupModeEnd()
     rToolBox.EndSelection();
     SfxPopupWindow::PopupModeEnd();
     //FloatingWindow::PopupModeEnd();
+    rToolBox.SetItemDown( nItemId, FALSE );
+
 }
 
 
@@ -267,11 +268,6 @@ void SvxPopupWindowListBox::StartSelection()
     rToolBox.StartSelection();
 }
 
-
-IMPL_LINK( SvxPopupWindowListBox, SelectHdl, void *, EMPTYARG )
-{
-    return 0;
-}
 
 /////////////////////////////////////////////////////////////////
 
@@ -321,10 +317,23 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
     if (pPopupWin  &&  0 == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
-        USHORT nPos = pPopupWin->GetListBox().GetSelectEntryPos();
-        SfxUInt16Item aItem( GetId(), nPos + 1 );
+        USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
+        SfxUInt16Item aItem( GetId(), nCount );
         GetBindings().GetDispatcher()->Execute( GetId(),
                 SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+    }
+    return 0;
+}
+
+
+IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
+{
+    if (pPopupWin)
+    {
+        USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
+        String aText( aActionStr );
+        aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
+        pPopupWin->GetInfo().SetText( aText );
     }
     return 0;
 }
@@ -337,8 +346,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxUndoControl, SfxStringItem );
 SvxUndoControl::SvxUndoControl(
         USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
 
-    SvxListBoxControl( nId, rTbx, rBind /*, SID_GETUNDOSTRINGS*/ )
+    SvxListBoxControl( nId, rTbx, rBind )
 {
+    aActionStr = String( SVX_RES( RID_SVXSTR_NUM_UNDO_ACTIONS ) );
 }
 
 
@@ -363,6 +373,7 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
         pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, nItemId, rBindings );
         pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoControl, PopupModeEndHdl ) );
         ListBox &rListBox = pPopupWin->GetListBox();
+        rListBox.SetSelectHdl( LINK( this, SvxUndoControl, SelectHdl ) );
 
         SfxStringListItem &rItem = *(SfxStringListItem *) pState;
         String aStrList( rItem.GetString() );
@@ -372,14 +383,12 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
         for (xub_StrLen i = 0;  i < nCount;  ++i)
             rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
         rListBox.SelectEntryPos( 0 );
-        //pPopupWin->GetInfo().SetText( String::CreateFromAscii("Huhu...") );
 
-//      rBox.SetItemDown( nId, TRUE );
         //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
-//      rBox.SetItemDown( nId, FALSE );
 
         ULONG nFlags = FLOATWIN_POPUPMODE_DOWN;
+        rBox.SetItemDown( nItemId, TRUE );
         pPopupWin->StartPopupMode( aItemRect, nFlags );
         pPopupWin->SetPosPixel( aItemRect.BottomLeft() );
         pPopupWin->StartSelection();
@@ -401,6 +410,7 @@ void SvxUndoControl::StateChanged(
     SvxListBoxControl::StateChanged( nSID, eState, pState );
 }
 
+
 /////////////////////////////////////////////////////////////////
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxRedoControl, SfxStringItem );
@@ -409,8 +419,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxRedoControl, SfxStringItem );
 SvxRedoControl::SvxRedoControl(
         USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
 
-    SvxListBoxControl( nId, rTbx, rBind /*, SID_GETREDOSTRINGS*/ )
+    SvxListBoxControl( nId, rTbx, rBind )
 {
+    aActionStr = String( SVX_RES( RID_SVXSTR_NUM_REDO_ACTIONS ) );
 }
 
 
@@ -435,6 +446,7 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
         pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, nItemId, rBindings );
         pPopupWin->SetPopupModeEndHdl( LINK( this, SvxRedoControl, PopupModeEndHdl ) );
         ListBox &rListBox = pPopupWin->GetListBox();
+        rListBox.SetSelectHdl( LINK( this, SvxRedoControl, SelectHdl ) );
 
         SfxStringListItem &rItem = *(SfxStringListItem *) pState;
         String aStrList( rItem.GetString() );
@@ -444,15 +456,13 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
         for (xub_StrLen i = 0;  i < nCount;  ++i)
             rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
         rListBox.SelectEntryPos( 0 );
-        //pPopupWin->GetInfo().SetText( String::CreateFromAscii("Huhu...") );
 
-//      rBox.SetItemDown( nId, TRUE );
         //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
         Point aPt( rBox.OutputToScreenPixel( aItemRect.BottomLeft() ) );
         aItemRect.TopLeft() = rBox.ScreenToOutputPixel( aPt );
-//      rBox.SetItemDown( nId, FALSE );
 
+        rBox.SetItemDown( nItemId, TRUE );
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
         pPopupWin->Show();
