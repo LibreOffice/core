@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MouseEvent.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:12:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,11 @@
 
 /** specifies an event from the mouse.
 
+    <p>This event is also used for popup menu requests on objects.
+    See <member>PopupTrigger</member> for details.</p>
+
+    @see XMouseListener
+    @see XMouseMotionListener
     @see InputEvent
  */
 published struct MouseEvent: com::sun::star::awt::InputEvent
@@ -108,7 +113,17 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
     //-------------------------------------------------------------------------
 
     /** specifies if this event is a popup-menu trigger event.
-     */
+
+        <p>If this member is <TRUE/>, the event describes a request for a popup menu,
+        also known as context menu, on an object.</p>
+
+        <p>In this case, <member>X</member> and <member>Y</member> describe the position
+        where the request was issued. If those members are <code>-1</code>, then the
+        request was issued using the keyboard, by pressing the operating-system dependent
+        key combination for this purpose.</p>
+
+        @see XMouseListener::mousePressed
+    */
     boolean PopupTrigger;
 
 };
