@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-08 16:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,12 @@ const int MAX_TOKEN_LEN = 128;
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
 #define RTF_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
 
+SV_IMPL_VARARR( RtfParserStates_Impl, RtfParserState_Impl )
+
 SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
     : SvParser( rIn, nStackSize ),
-    eUNICodeSet( RTL_TEXTENCODING_MS_1252 )     // default ist ANSI-CodeSet
+    eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
+    nUCharOverread( 1 )
 {
     // default ist ANSI-CodeSet
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
@@ -205,26 +208,59 @@ ISCHAR_SCANTEXT:
                             nRet = RTF_UNKNOWNCONTROL;
 
                         // bug 76812 - unicode token handled as normal text
-                        if( !bRTF_InTextRead && RTF_U == nRet )
+                        bNextCh = FALSE;
+                        switch( nRet )
                         {
-                            nRet = RTF_TEXTTOKEN;
-                            aToken = (sal_Unicode)nTokenValue;
+                        case RTF_UC:
+                            if( 0 <= nTokenValue )
+                            {
+                                nUCharOverread = (BYTE)nTokenValue;
+                                if( !nUCharOverread )
+                                    nUCharOverread = aParserStates[
+                                        aParserStates.Count()-1].nUCharOverread;
+                                else
+                                    aParserStates[ aParserStates.Count()-1].
+                                        nUCharOverread = nUCharOverread;
+                            }
+                            // read next token
+                            nRet = 0;
+                            break;
 
-                            // das naechste Zeichen noch ueberlesen
-                            // JP 10.12.98: das kann auch ein \{, \}, \'88 sein!
-                            sal_Unicode cAnsi = nNextCh;
-                            while( 0xD == cAnsi )
-                                cAnsi = GetNextChar();
-                            while( 0xA == cAnsi )
-                                cAnsi = GetNextChar();
+                        case RTF_UPR:
+                            // UPR - overread the group with the ansi
+                            //       informations
+                            while( '{' != _GetNextToken() )
+                                ;
+                            SkipGroup();
+                            _GetNextToken();  // overread the last bracket
+                            nRet = 0;
+                            break;
 
-                            if( '\\' == cAnsi &&
-                                '\'' == ( cAnsi = GetNextChar() ))
-                                // HexValue ueberlesen
-                                cAnsi = GetHexValue();
+                        case RTF_U:
+                            if( !bRTF_InTextRead )
+                            {
+                                nRet = RTF_TEXTTOKEN;
+                                aToken = (sal_Unicode)nTokenValue;
 
-                            // the next char must be read
-                            bNextCh = TRUE;
+                                // overread the next n "RTF" characters. This
+                                // can be also \{, \}, \'88
+                                for( BYTE m = 0; m < nUCharOverread; ++m )
+                                {
+                                    sal_Unicode cAnsi = nNextCh;
+                                    while( 0xD == cAnsi )
+                                        cAnsi = GetNextChar();
+                                    while( 0xA == cAnsi )
+                                        cAnsi = GetNextChar();
+
+                                    if( '\\' == cAnsi &&
+                                        '\'' == ( cAnsi = GetNextChar() ))
+                                        // HexValue ueberlesen
+                                        cAnsi = GetHexValue();
+                                    nNextCh = GetNextChar();
+                                }
+                                ScanText();
+                                bNextCh = 0 == nNextCh;
+                            }
                             break;
                         }
                     }
@@ -232,9 +268,8 @@ ISCHAR_SCANTEXT:
                     {
                         // Bug 34631 - "\ " ueberlesen - Blank als Zeichen
                         // eState = SVPAR_ERROR;
+                        bNextCh = FALSE;
                     }
-
-                    bNextCh = FALSE;
                     break;
                 }
             }
@@ -246,12 +281,25 @@ ISCHAR_SCANTEXT:
             break;
 
         case '{':
-            ++nOpenBrakets;
-            nRet = nNextCh;
+            {
+                if( 0 <= nOpenBrakets )
+                {
+                    RtfParserState_Impl aState( nUCharOverread );
+                    aParserStates.Insert( aState, nOpenBrakets );
+                }
+                ++nOpenBrakets;
+                DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
+                            "ParserStateStack unequal to bracket count" );
+                nRet = nNextCh;
+            }
             break;
 
         case '}':
             --nOpenBrakets;
+            if( 0 <= nOpenBrakets )
+                aParserStates.Remove( nOpenBrakets );
+            DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
+                        "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
             break;
 
@@ -348,19 +396,23 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             // dont convert symbol chars
                             *(pStr + nStrLen++) = (sal_Unicode)nTokenValue;
 
-                            // das naechste Zeichen noch ueberlesen
-                            // JP 10.12.98: das kann auch ein \{, \}, \'88 sein!
-                            sal_Unicode cAnsi = nNextCh;
-                            while( 0xD == cAnsi )
-                                cAnsi = GetNextChar();
-                            while( 0xA == cAnsi )
-                                cAnsi = GetNextChar();
+                            // overread the next n "RTF" characters. This
+                            // can be also \{, \}, \'88
+                            for( BYTE m = 0; m < nUCharOverread; ++m )
+                            {
+                                sal_Unicode cAnsi = nNextCh;
+                                while( 0xD == cAnsi )
+                                    cAnsi = GetNextChar();
+                                while( 0xA == cAnsi )
+                                    cAnsi = GetNextChar();
 
-                            if( '\\' == cAnsi &&
-                                '\'' == ( cAnsi = GetNextChar() ))
-                                // HexValue ueberlesen
-                                cAnsi = GetHexValue();
-
+                                if( '\\' == cAnsi &&
+                                    '\'' == ( cAnsi = GetNextChar() ))
+                                    // HexValue ueberlesen
+                                    cAnsi = GetHexValue();
+                                nNextCh = GetNextChar();
+                            }
+                            bNextCh = FALSE;
                             aToken = sSave;
                             bRTF_InTextRead = FALSE;
                         }
@@ -553,14 +605,6 @@ void SvRTFParser::Continue( int nToken )
         case RTF_PCTYPE:        SetSrcEncoding( RTL_TEXTENCODING_IBM_437 ); break;
         case RTF_PCATYPE:       SetSrcEncoding( RTL_TEXTENCODING_IBM_850 ); break;
 
-/*
-        case RTF_ANSICPG:
-            switch( nTokenValue )
-            {
-???         case 1252:      SetUNICodeSet( CHARSET_ANSI );      break;
-            }
-            break;
-*/
         default:
 NEXTTOKEN:
             NextToken( nToken );
