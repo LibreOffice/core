@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:32:11 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,8 @@ long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();
         Point aPos = pWindow->OutputToScreenPixel( pMEvent->GetPosPixel() );
         SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
-        pWorkWin->EndAutoShow_Impl( aPos );
+        if ( pWorkWin )
+            pWorkWin->EndAutoShow_Impl( aPos );
     }
 
     return Window::PreNotify( rNEvt );
