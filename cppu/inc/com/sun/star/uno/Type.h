@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:39:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
 
     @return type of the given IDL type
 
-    @since #i31129#
+    @since UDK 3.2.0
 */
 template< typename T > inline const ::com::sun::star::uno::Type & SAL_CALL
 getCppuType() SAL_THROW(());
@@ -444,7 +444,7 @@ getCppuType() SAL_THROW(());
 
     @return type of IDL type char
 
-    @since #i31129#
+    @since UDK 3.2.0
 */
 template<> inline const ::com::sun::star::uno::Type & SAL_CALL
 getCppuType< sal_Unicode >() SAL_THROW(());
