@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 14:28:55 $
+#   last change: $Author: kz $ $Date: 2005-03-18 16:53:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ PRJINC=..$/..
 # --- Files --------------------------------------------------------
 
 SLOFILES =      								\
+    $(SLO)$/SlsFontProvider.obj					\
     $(SLO)$/SlsPageObject.obj					\
     $(SLO)$/SlsPageObjectViewContact.obj		\
     $(SLO)$/SlsPageObjectViewObjectContact.obj	\
