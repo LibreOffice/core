@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.146 $
+#   $Revision: 1.147 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 13:46:43 $
+#   last change: $Author: rt $ $Date: 2004-06-16 10:34:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -781,7 +781,6 @@ INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
 INCCOMX=$(OUT)$/inc
 INCUNOIDL=$(INCCOM)$/$(PRJNAME)
-EXT_INCLUDE:=$(INCLUDE)
 I={$(INCLUDE)}
 INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
 .IF "$(PRJINC)"!=""
