@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:53:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 21:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9979,7 +9979,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ norwegian ] = "ZINS" ;
             Text [ italian ] = "TASSO" ;
             Text [ portuguese_brazilian ] = "ZINS" ;
-            Text [ portuguese ] = "Taxa" ;
+            Text [ portuguese ] = "TAXA" ;
             Text [ finnish ] = "RATE" ;
             Text [ danish ] = "RENTE" ;
             Text [ french ] = "TAUX" ;
@@ -39617,9 +39617,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "desimaalit" ;
             Text [ danish ] = "Decimaler" ;
             Text [ french ] = "D" ;
-            Text [ swedish ] = "decimaler" ;
-            Text [ dutch ] = "D" ;
-            Text [ spanish ] = "decimales" ;
+            Text [ swedish ] = "Decimaler" ;
+            Text [ dutch ] = "Aantal decimalen" ;
+            Text [ spanish ] = "Decimales" ;
             Text [ english_us ] = "decimals" ;
             Text[ chinese_simplified ] = "decimals";
             Text[ russian ] = "Äåñ_öèôðû";
@@ -39628,7 +39628,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ language_user1 ] = " ";
             Text[ chinese_traditional ] = "decimals";
             Text[ arabic ] = "Decimals";
-            Text[ dutch ] = "D";
+            Text[ dutch ] = "Aantal decimalen";
             Text[ chinese_simplified ] = "decimals";
             Text[ greek ] = "ÄåêáäéêÜ";
             Text[ korean ] = "¼Ò¼ö";
@@ -39675,9 +39675,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "T" ;
             Text [ danish ] = "T" ;
             Text [ french ] = "S" ;
-            Text [ swedish ] = "T" ;
-            Text [ dutch ] = "D" ;
-            Text [ spanish ] = "no_separar_millares" ;
+            Text [ swedish ] = "Inga tusentalsavgränsare" ;
+            Text [ dutch ] = "Geen separatoren voor duizendtallen" ;
+            Text [ spanish ] = "No_separar_millares" ;
             Text [ english_us ] = "T" ;
             Text[ chinese_simplified ] = "T";
             Text[ russian ] = "Ïðîáåë";
@@ -39685,7 +39685,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ japanese ] = "T";
             Text[ chinese_traditional ] = "T";
             Text[ arabic ] = "T";
-            Text[ dutch ] = "D";
+            Text[ dutch ] = "Geen separatoren voor duizendtallen";
             Text[ chinese_simplified ] = "T";
             Text[ greek ] = "Ô";
             Text[ korean ] = "T";
@@ -39704,9 +39704,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Tuhaterotin. Määrittää tuhaterotinasetuksen." ;
             Text [ danish ] = "Tusindtalsseparator. Angiver, om en tusindtalsseparator skal sættes." ;
             Text [ french ] = "Séparateur de milliers. Indique si des espaces doivent être insérés ou non." ;
-            Text [ swedish ] = "anger om tusentalsavgränsare skall användas." ;
+            Text [ swedish ] = "Inga tusentalsavgränsare. Sannolikhetsvärde om det finns och är SANT (ej lika med 0) sätts inga tusentalsavgränsare." ;
             Text [ dutch ] = "Duizendtallen. Geeft aan of punten als scheidingsteken voor duizendtallen moeten worden weergegeven." ;
-            Text [ spanish ] = "es un valor lógico que especifica si el signo de separador de millares debe ser mostrado en número o no." ;
+            Text [ spanish ] = "Sin separadores de millares. Si el valor lógico existe y es VERDADERO (no igual a 0) no se mostrarán separadores de millares." ;
             Text [ english_us ] = "Thousand delimiter. Defines if thousand delimitersare to be set." ;
             Text[ chinese_simplified ] = "Ç§Î»µã¡£¸ø¶¨ÊÇ·ñÊ¹ÓÃÇ§Î»µã¡£";
             Text[ russian ] = "Îïðåäåëÿåò, äîëæåí ëè ïîÿâèòüñÿ ïðîáåë â êà÷åñòâå ðàçäåëèòåëÿ ãðóïï ðàçðÿäîâ.";
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
