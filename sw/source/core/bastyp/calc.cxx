@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:29:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ void SwCalc::Pop( const VoidPtr pPtr )
 
 SwCalcOper SwCalc::GetToken()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //JP 25.01.2001: static for switch back to the "old" implementation of the
 //              calculator, which don't use the I18N routines.
 static int nUseOld = 0;
@@ -1006,7 +1006,7 @@ if( !nUseOld )
         nCommandPos = (xub_StrLen)aRes.EndPos;
     };
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #define NextCh( s, n )  (nCommandPos < sCommand.Len() ? sCommand.GetChar( nCommandPos++ ) : 0)
 
