@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:10:19 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 17:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,13 +1695,15 @@ PASTEOLE_SETREADSW3:
         else if( bMsg )
             InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
-    else if( ( rData.GetTransferableObjectDescriptor(
+    else if( (  rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
+                rData.GetTransferableObjectDescriptor(
                         SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
               ( nFmt == nId ? xStore.Is()
                             : ( xStore.Clear(),
                                   rData.GetSotStorageStream( nFmt, xStrm )) ))
-            || ( rData.GetTransferableObjectDescriptor(
-                ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE), aObjDesc ))
+            || ( rData.HasFormat(
+                    ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE )) &&
+                 rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ))
             )
     {
         SvInPlaceObjectRef xIPObj;
@@ -2691,7 +2693,8 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
     }
     else
     {
-        rData.GetTransferableObjectDescriptor(
+        if( rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+            rData.GetTransferableObjectDescriptor(
                                 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
 
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
@@ -2761,7 +2764,8 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
     else
     {
         TransferableObjectDescriptor aDesc;
-        ((TransferableDataHelper&)rData).GetTransferableObjectDescriptor(
+        if( rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+            ((TransferableDataHelper&)rData).GetTransferableObjectDescriptor(
                                 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
 
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
@@ -3172,7 +3176,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     bInWrd  = rSh.IsInWrd();
     bEndWrd = rSh.IsEndWrd();
-    bSttWrd = rSh.IsSttWrd();
+    bSttWrd = !bEndWrd && rSh.IsSttWrd();
     bSttPara= rSh.IsSttPara();
 
     Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );
