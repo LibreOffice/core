@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalendar.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: bustamam $ $Date: 2001-07-01 16:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,13 @@ interface XCalendar : com::sun::star::uno::XInterface
             one of <type>CalendarFieldIndex</type> values
      */
     short   getValue( [in] short nCalendarFieldIndex );
+
+    /**
+        Verify if the date fields set by "setValue()" is valid.
+        Is has a side-effect because it will internally calculates
+        the final value for the date fields
+     */
+    boolean isValid();
 
     /**
         Add an amount to a field.
