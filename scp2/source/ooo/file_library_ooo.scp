@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-02-10 17:20:31 $
+*  last change: $Author: obo $ $Date: 2004-02-20 10:25:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1199,9 +1199,11 @@ STD_SETUPZIP_LIB_FILE( gid_File_Lib_Psp, psp )
 #endif
 
 #ifdef UNX
+STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vclplug_Gen, vclplug_gen )
+#endif
 
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Pure_X, pure_x_ )
-
+#ifdef UNX
+STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vclplug_Gtk, vclplug_gtk )
 #endif
 
 File gid_File_Lib_Rdbtdp
