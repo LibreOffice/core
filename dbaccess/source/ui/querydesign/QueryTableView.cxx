@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // (ich muss ueber das Parent gehen, da nur das die Position der Scrollbars kennt)
         // dann aus der Liste der TabWins raus und verstecken
         OTableWindowMap::iterator aIter = pTabWins->begin();
-        for(;aIter != GetTabWinMap()->end();++aIter)
+        for(;aIter != pTabWins->end();++aIter)
             if(aIter->second == pTabWin)
                 pTabWins->erase(aIter);
 
