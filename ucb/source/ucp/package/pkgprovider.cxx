@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:21:24 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,16 +261,12 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if ( !Identifier.is() )
         return uno::Reference< star::ucb::XContent >();
 
-    // Check URL scheme...
-
-    rtl::OUString aScheme(
-        rtl::OUString::createFromAscii( PACKAGE_URL_SCHEME ) );
-    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase(
-                                                                aScheme ) )
+    PackageUri aUri( Identifier->getContentIdentifier() );
+    if ( !aUri.isValid() )
         throw star::ucb::IllegalIdentifierException();
 
-    // Normalize URL...
-    PackageUri aUri( Identifier->getContentIdentifier() );
+    // Create a new identifier for the mormalized URL returned by
+    // PackageUri::getUri().
     uno::Reference< star::ucb::XContentIdentifier > xId
                 = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
 

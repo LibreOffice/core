@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,44 @@ void PackageUri::init() const
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
         m_aPackage = m_aParentUri = m_aName = OUString();
 
-        if ( m_aUri.getLength() &&
-             ( m_aUri.compareToAscii( PACKAGE_URL_SCHEME,
-                                      PACKAGE_URL_SCHEME_LENGTH ) == 0 ) )
+        // URI must match at least: <sheme>://<non_empty_url_to_file>
+        if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
         {
+            // error, but remember that we did a init().
+            m_aPath = rtl::OUString::createFromAscii( "/" );
+            return;
+        }
+
+        // Scheme is case insensitive.
+        rtl::OUString aScheme
+            = m_aUri.copy( 0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+        if ( aScheme.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) ) )
+        {
+            m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
+
             sal_Int32 nStart = PACKAGE_URL_SCHEME_LENGTH + 3;
             sal_Int32 nEnd   = m_aUri.lastIndexOf( '/' );
-            if ( nEnd == ( m_aUri.getLength() - 1 ) )
+            if ( nEnd == PACKAGE_URL_SCHEME_LENGTH + 3 )
             {
+                // Only <scheme>:/// - Empty authority
+
+                // error, but remember that we did a init().
+                m_aPath = rtl::OUString::createFromAscii( "/" );
+                return;
+            }
+            else if ( nEnd == ( m_aUri.getLength() - 1 ) )
+            {
+                if ( m_aUri.getStr()[ m_aUri.getLength() - 2 ]
+                                                == sal_Unicode( '/' ) )
+                {
+                    // Only <scheme>://// or <scheme>://<something>//
+
+                    // error, but remember that we did a init().
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    return;
+                }
+
                 // Remove trailing slash.
                 m_aUri = m_aUri.copy( 0, nEnd );
             }
@@ -142,14 +172,23 @@ void PackageUri::init() const
             }
             else
             {
+                m_aPath = m_aUri.copy( nEnd + 1 );
+
+                // Empty path segments?
+                if ( m_aPath.indexOf(
+                            rtl::OUString::createFromAscii( "//" ) ) != -1 )
+                {
+                    // error, but remember that we did a init().
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    return;
+                }
+
                 OUString aNormPackage = m_aUri.copy( nStart, nEnd - nStart );
                 normalize( aNormPackage );
 
                 m_aUri = m_aUri.replaceAt(
                             nStart, nEnd - nStart, aNormPackage );
                 m_aPackage = decodeSegment( aNormPackage );
-//              m_aPath = m_aUri.copy( nEnd );
-                m_aPath = m_aUri.copy( nEnd + 1 );
 
                 sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
@@ -160,6 +199,7 @@ void PackageUri::init() const
             }
 
             // success
+            m_bValid = true;
         }
         else
         {

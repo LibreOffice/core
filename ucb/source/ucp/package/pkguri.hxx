@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,21 +82,25 @@ class PackageUri
     mutable ::rtl::OUString m_aPackage;
     mutable ::rtl::OUString m_aPath;
     mutable ::rtl::OUString m_aName;
+    mutable bool            m_bValid;
 
 private:
     void init() const;
     static ::rtl::OUString decodeSegment( const ::rtl::OUString& rSource );
 
 public:
-    PackageUri() {}
+    PackageUri() : m_bValid( false ) {}
     PackageUri( const ::rtl::OUString & rPackageUri )
-    : m_aUri( rPackageUri ) {}
+    : m_aUri( rPackageUri ), m_bValid( false ) {}
+
+    sal_Bool isValid() const
+    { init(); return m_bValid; }
 
     const ::rtl::OUString & getUri() const
     { init(); return m_aUri; }
 
     void setUri( const ::rtl::OUString & rPackageUri )
-    { m_aPath = ::rtl::OUString(); m_aUri = rPackageUri; }
+    { m_aPath = ::rtl::OUString(); m_aUri = rPackageUri; m_bValid = false; }
 
     const ::rtl::OUString & getParentUri() const
     { init(); return m_aParentUri; }
