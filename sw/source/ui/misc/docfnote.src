@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text [ ENGLISH ] = "Footnote Options" ;
     Text [ norwegian ] = "Fotnotevalg" ;
     Text [ italian ] = "Impostazioni note a piè pagina" ;
-    Text [ portuguese_brazilian ] = "Op??s de nota de rodap?" ;
+    Text [ portuguese_brazilian ] = "Configurações das Notas de Rodapé" ;
     Text [ portuguese ] = "Opções de notas de rodapé" ;
     Text [ finnish ] = "Alaviitteen asetukset" ;
     Text [ danish ] = "Fodnoteindstillinger" ;
@@ -94,7 +94,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text = "Fußnoten" ;
                 Text [ ENGLISH ] = "Footnotes" ;
                 Text [ english_us ] = "Footnotes" ;
-                Text [ portuguese_brazilian ] = "Fu?noten" ;
+                Text [ portuguese_brazilian ] = "Notas de Rodapé" ;
                 Text [ swedish ] = "Fotnoter" ;
                 Text [ danish ] = "Fodnoter" ;
                 Text [ italian ] = "Note a piè pagina" ;
@@ -115,6 +115,9 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ catalan ] = "Notes al peu";
                 Text[ finnish ] = "Alaviitteet";
                 Text[ thai ] = "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+                Text[ czech ] = "PoznÃ¡mky pod Äarou";
+                Text[ hebrew ] = "â€®×”×¢×¨×•×ª ×©×•×œ×™×™×â€¬";
+                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
             };
             PageItem
             {
@@ -123,7 +126,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text = "Endnoten" ;
                 Text [ ENGLISH ] = "Endnotes" ;
                 Text [ english_us ] = "Endnotes" ;
-                Text [ portuguese_brazilian ] = "Endnoten" ;
+                Text [ portuguese_brazilian ] = "Notas de Fim" ;
                 Text [ swedish ] = "Slutnoter" ;
                 Text [ danish ] = "Slutnoter" ;
                 Text [ italian ] = "Note di chiusura" ;
@@ -133,7 +136,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text [ portuguese ] = "Notas finais" ;
                 Text[ chinese_simplified ] = "å°¾æ³¨";
                 Text[ russian ] = "Êîíöåâûå ñíîñêè";
-                Text[ polish ] = "Przypisy koñc.";
+                Text[ polish ] = "Przypisy koñcowe";
                 Text[ japanese ] = "æ–‡æœ«è„šæ³¨";
                 Text[ chinese_traditional ] = "å°¾è¨»";
                 Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ";
@@ -144,12 +147,15 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ catalan ] = "Notes finals";
                 Text[ finnish ] = "Loppuviitteet";
                 Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+                Text[ czech ] = "VysvÄ›tlivky";
+                Text[ hebrew ] = "Endnoten";
+                Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾";
             };
         };
     };
     Text[ chinese_simplified ] = "è®¾å®šæ³¨è„š";
     Text[ russian ] = "Íàñòğîéêà ñíîñîê";
-    Text[ polish ] = "Ustawienie przypisów dolnych";
+    Text[ polish ] = "Ustawienia przypisów dolnych";
     Text[ japanese ] = "è„šæ³¨ã®è¨­å®š";
     Text[ chinese_traditional ] = "è¨­å®šè¨»è…³";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáÍÇÔíÉ ÇáÓİáíÉ";
@@ -159,6 +165,9 @@ TabDialog DLG_DOC_FOOTNOTE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions de notes al peu";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+    Text[ czech ] = "NastavenÃ­ poznÃ¡mek pod Äarou";
+    Text[ hebrew ] = "FuÃŸnoteneinstellung";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
 };
 TabPage TP_FOOTNOTEOPTION
 {
@@ -175,7 +184,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
         Text [ italian ] = "Numerazione automatica" ;
-        Text [ portuguese_brazilian ] = "Numera??o autom?tica" ;
+        Text [ portuguese_brazilian ] = "AutoNumeração" ;
         Text [ portuguese ] = "Numeração automática" ;
         Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
@@ -187,16 +196,19 @@ TabPage TP_FOOTNOTEOPTION
         Group = TRUE ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨ç¼–å·";
         Text[ russian ] = "Àâòîíóìåğàöèÿ";
-        Text[ polish ] = "Automatyczna numeracja";
+        Text[ polish ] = "Autonumeracja";
         Text[ japanese ] = "è‡ªå‹•ç•ªå·ä»˜ã‘";
         Text[ chinese_traditional ] = "è‡ªå‹•ç·¨è™Ÿ";
         Text[ arabic ] = "ÊÑŞíã ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôç áñßèìçóç";
         Text[ korean ] = "ìë™ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Otomatik numaralama";
+        Text[ turkish ] = "Otomatik Numaralandırma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeració automàtica";
         Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "AutomatickÃ© ÄÃ­slovÃ¡nÃ­";
+        Text[ hebrew ] = "Automatische Nummerierung";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
     };
     FixedText FT_NUMTYPE
     {
@@ -214,17 +226,20 @@ TabPage TP_FOOTNOTEOPTION
         Text[ italian ] = "Numerazione";
         Text[ danish ] = "Nu~mmerering";
         Text[ swedish ] = "Nu~mrering";
-        Text[ polish ] = "Numeracja";
-        Text[ portuguese_brazilian ] = "Numbering";
+        Text[ polish ] = "~Typ numeracji";
+        Text[ portuguese_brazilian ] = "N~umeração";
         Text[ japanese ] = "ç•ªå·ã®ç¨®é¡(~B)";
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~B)";
         Text[ chinese_simplified ] = "ç¼–å·(~B)";
         Text[ chinese_traditional ] = "ç·¨è™Ÿ(~B)";
-        Text[ turkish ] = "Numbering";
+        Text[ turkish ] = "Numaralama";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ catalan ] = "~Numeració";
         Text[ finnish ] = "Nu~merointi";
         Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€~à¸¥à¸‚";
+        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­";
+        Text[ hebrew ] = "Nu~mmerierung";
+        Text[ hindi ] = "~à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
     };
     ListBox LB_NUMVIEW
     {
@@ -249,21 +264,24 @@ TabPage TP_FOOTNOTEOPTION
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "Bö~rja med" ;
         Text [ danish ] = "Begynd med" ;
-        Text [ portuguese_brazilian ] = "Be~ginn bei" ;
+        Text [ portuguese_brazilian ] = "~Iniciar em" ;
         Text [ portuguese ] = "~Iniciar em" ;
         Text[ chinese_simplified ] = "å¼€å§‹ä»(~S)";
         Text[ russian ] = "Íà÷àòü ñ";
-        Text[ polish ] = "Zacznij od";
+        Text[ polish ] = "~Rozpocznij od";
         Text[ japanese ] = "é–‹å§‹ç•ªå·(~S)";
         Text[ chinese_traditional ] = "é–‹å§‹å¾(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
         Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~S)";
-        Text[ turkish ] = "B~aşlangıç";
+        Text[ turkish ] = "~Başlangıç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~S'inicia a";
         Text[ finnish ] = "~Aloitus";
         Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸—à¸µà¹ˆ";
+        Text[ czech ] = "ZaÄÃ­t od";
+        Text[ hebrew ] = "Be~ginn bei";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤¾à¤°à¤‚~à¤­";
     };
     NumericField FLD_OFFSET
     {
@@ -293,17 +311,20 @@ TabPage TP_FOOTNOTEOPTION
         Text[ italian ] = "Conteggio";
         Text[ danish ] = "~Punkttegn";
         Text[ swedish ] = "Räk~ning";
-        Text[ polish ] = "Ustawienia numeracji";
-        Text[ portuguese_brazilian ] = "Counting";
+        Text[ polish ] = "~Zakres";
+        Text[ portuguese_brazilian ] = "~Contando";
         Text[ japanese ] = "ç•ªå·ä»˜ã‘(~C)";
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~C)";
         Text[ chinese_simplified ] = "è®¡æ•°(~C)";
         Text[ chinese_traditional ] = "è¨ˆæ•¸(~C)";
-        Text[ turkish ] = "Counting";
+        Text[ turkish ] = "~Sayma";
         Text[ arabic ] = "ÊÚÏÇÏ";
         Text[ catalan ] = "~Compta";
         Text[ finnish ] = "~Lasketaan";
         Text[ thai ] = "~à¸™à¸±à¸š";
+        Text[ czech ] = "PoÄÃ­tÃ¡nÃ­";
+        Text[ hebrew ] = "~ZÃ¤hlung";
+        Text[ hindi ] = "~à¤—à¤¿à¤¨à¤¨à¤¾";
     };
     ListBox LB_NUMCOUNT
     {
@@ -340,8 +361,8 @@ TabPage TP_FOOTNOTEOPTION
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Por p?gina" ; > ;
-            < "Por cap?tulo" ; > ;
+            < "Por página" ; > ;
+            < "Por capítulo" ; > ;
             < "Por documento" ; > ;
         };
         StringList [ portuguese ] =
@@ -406,9 +427,9 @@ TabPage TP_FOOTNOTEOPTION
     };
     StringList [ polish ] =
     {
-            < "Na stronê" ; > ;
-        < "Na rozdzia³" ; > ;
-        < "Na dokument" ; > ;
+            < "Strona" ; > ;
+        < "Rozdzia³" ; > ;
+        < "Dokument" ; > ;
     };
     StringList [ japanese ] =
     {
@@ -442,9 +463,9 @@ TabPage TP_FOOTNOTEOPTION
     };
     StringList [ turkish ] =
     {
-            < "Beher sayfa" ; > ;
-        < "Beher bölüm" ; > ;
-        < "Beher belge" ; > ;
+            < "Her sayfa için" ; > ;
+        < "Her bölüm için" ; > ;
+        < "Her belge için" ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -464,6 +485,24 @@ TabPage TP_FOOTNOTEOPTION
         < "à¸•à¹ˆà¸­à¸šà¸—" ; > ;
         < "à¸•à¹ˆà¸­à¹€à¸­à¸à¸ªà¸²à¸£" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Na strÃ¡nku" ; > ;
+        < "Na kapitolu" ; > ;
+        < "Na dokument" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Pro Seite" ; > ;
+        < "Pro Kapitel" ; > ;
+        < "Pro Dokument" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤à¤• à¤ªà¥ƒà¤·à¥à¤  à¤®à¥‡à¤‚" ; > ;
+        < "à¤à¤• à¤…à¤§à¥à¤¯à¤¾à¤¯ à¤®à¥‡à¤‚" ; > ;
+        < "à¤à¤• à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚" ; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -473,7 +512,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Before" ;
         Text [ norwegian ] = "Før" ;
         Text [ italian ] = "Davanti" ;
-        Text [ portuguese_brazilian ] = "Antes" ;
+        Text [ portuguese_brazilian ] = "An~tes" ;
         Text [ portuguese ] = "An~tes" ;
         Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
@@ -485,16 +524,19 @@ TabPage TP_FOOTNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
         Text[ russian ] = "Äî";
-        Text[ polish ] = "Przed";
+        Text[ polish ] = "~Przed";
         Text[ japanese ] = "ç•ªå·å‰(~B)";
         Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
         Text[ korean ] = "ë²ˆí˜¸ ì•(~B)";
-        Text[ turkish ] = "Ön~ünde";
+        Text[ turkish ] = "~Önce";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abans";
         Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
+        Text[ czech ] = "PÅ™ed";
+        Text[ hebrew ] = "×œ×¤× ×™";
+        Text[ hindi ] = "~à¤ª~à¤¹à¤¿à¤²à¥‡";
     };
     Edit ED_PREFIX
     {
@@ -513,7 +555,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "Die~tro" ;
-        Text [ portuguese_brazilian ] = "Atr?s" ;
+        Text [ portuguese_brazilian ] = "A~pós" ;
         Text [ portuguese ] = "At~rás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
@@ -525,16 +567,19 @@ TabPage TP_FOOTNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å(~A)";
         Text[ russian ] = "Ïîñëå";
-        Text[ polish ] = "Za";
+        Text[ polish ] = "P~o";
         Text[ japanese ] = "ç•ªå·å¾Œ(~A)";
         Text[ chinese_traditional ] = "ä¹‹å¾Œ(~A)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "ÌåôÜ áğü";
         Text[ korean ] = "ë²ˆí˜¸ ë’¤(~A)";
-        Text[ turkish ] = "A~rkasında";
+        Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~esprés";
         Text[ thai ] = "~à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸";
+        Text[ czech ] = "Za";
+        Text[ hebrew ] = "××—×¨×™";
+        Text[ hindi ] = "à¤ª~à¤¶à¥à¤šà¤¾à¤¤à¥";
     };
     Edit ED_SUFFIX
     {
@@ -552,7 +597,7 @@ TabPage TP_FOOTNOTEOPTION
         Text = "Position" ;
         Text [ English ] = "Position" ;
         Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Posição" ;
         Text [ swedish ] = "Placering" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
@@ -573,6 +618,9 @@ TabPage TP_FOOTNOTEOPTION
         Text[ catalan ] = "Posició";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
     };
     RadioButton RB_POS_PAGE
     {
@@ -582,29 +630,32 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "End of ~page" ;
         Text [ norwegian ] = "End of ~page" ;
         Text [ italian ] = "Fine pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~p?gina" ;
+        Text [ portuguese_brazilian ] = "~Fim da página" ;
         Text [ portuguese ] = "Fim de ~página" ;
         Text [ finnish ] = "~Sivun loppu" ;
         Text [ danish ] = "Sidens slutning" ;
         Text [ french ] = "Fin de la page" ;
         Text [ swedish ] = "S~idslut" ;
         Text [ dutch ] = "Pag~ina-einde" ;
-        Text [ spanish ] = "Fin de ~página" ;
+        Text [ spanish ] = "Fin de la ~página" ;
         Text [ english_us ] = "~End of page" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "é¡µçš„ç»“æŸä½ç½®(~E)";
         Text[ russian ] = "Êîíåö ñòğàíèöû";
-        Text[ polish ] = "Koniec strony";
+        Text[ polish ] = "~Koniec strony";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸æœ«(~E)";
         Text[ chinese_traditional ] = "é çš„çµæŸä½ç½®(~E)";
         Text[ arabic ] = "äåÇíÉ ÇáÕİÍÉ";
         Text[ greek ] = "Ôİëïò óåëßäáò";
         Text[ korean ] = "í˜ì´ì§€ ë(~E)";
-        Text[ turkish ] = "Sayfa so~nu";
+        Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fi de ~pàgina";
         Text[ thai ] = "~à¸—à¹‰à¸²à¸¢à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Konec strany";
+        Text[ hebrew ] = "Seiten~ende";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤•à¤¾ à¤…à¤‚à¤¤";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -614,7 +665,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "End of ~doc." ;
         Text [ norwegian ] = "Slutt på ~dok." ;
         Text [ italian ] = "Fine documento" ;
-        Text [ portuguese_brazilian ] = "Final de~doc." ;
+        Text [ portuguese_brazilian ] = "Fim do ~documento" ;
         Text [ portuguese ] = "Fim do ~documento" ;
         Text [ finnish ] = "Asiakirjan loppu" ;
         Text [ danish ] = "Dokumentets slutn." ;
@@ -625,16 +676,19 @@ TabPage TP_FOOTNOTEOPTION
         Text [ english_us ] = "En~d of document" ;
         Text[ chinese_simplified ] = "æ–‡æ¡£çš„ç»“æŸä½ç½®(~D)";
         Text[ russian ] = "Êîíåö äîêóìåíòà";
-        Text[ polish ] = "Koniec dokumentu";
+        Text[ polish ] = "Koniec ~dokumentu";
         Text[ japanese ] = "æ–‡æ›¸æœ«(~D)";
         Text[ chinese_traditional ] = "æ–‡ä»¶çš„çµæŸä½ç½®(~D)";
         Text[ arabic ] = "äåÇíÉ ÇáãÓÊäÏ";
         Text[ greek ] = "Ôİëïò êåéìİíïõ";
         Text[ korean ] = "ë¬¸ì„œ ë(~D)";
-        Text[ turkish ] = "~Belge sonu";
+        Text[ turkish ] = "Bel~ge sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fin~al del document";
         Text[ thai ] = "à¸—à¹‰à¸²~à¸¢à¹€à¸­à¸à¸ªà¸²à¸£";
+        Text[ czech ] = "Konec dokumentu";
+        Text[ hebrew ] = "Do~kumentende";
+        Text[ hindi ] = "à¤²à¥‡~à¤–à¤ªà¤¤à¥à¤° à¤•à¤¾ à¤…à¤‚à¤¤";
     };
     FixedLine FL_TEMPL
     {
@@ -661,10 +715,13 @@ TabPage TP_FOOTNOTEOPTION
         Text[ arabic ] = "ÃäãÇØ";
         Text[ greek ] = "Ğñüôõğá";
         Text[ korean ] = "ìŠ¤íƒ€ì¼";
-        Text[ turkish ] = "Biçim";
+        Text[ turkish ] = "Biçimler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils";
         Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°";
+        Text[ czech ] = "Styly";
+        Text[ hebrew ] = "â€®×¡×’× ×•× ×•×ªâ€¬";
+        Text[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -674,7 +731,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Paragraph" ;
         Text [ norwegian ] = "~Paragraf" ;
         Text [ italian ] = "Paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Par?grafo" ;
+        Text [ portuguese_brazilian ] = "~Parágrafo" ;
         Text [ portuguese ] = "~Parágrafo" ;
         Text [ finnish ] = "~Kappale" ;
         Text [ danish ] = "Afsnit" ;
@@ -686,16 +743,19 @@ TabPage TP_FOOTNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ®µè½(~R)";
         Text[ russian ] = "Àáçàö";
-        Text[ polish ] = "Akapit";
+        Text[ polish ] = "~Akapit";
         Text[ japanese ] = "æ®µè½(~R)";
         Text[ chinese_traditional ] = "æ®µè½(~R)";
         Text[ arabic ] = "İŞÑÉ";
         Text[ greek ] = "ĞáñÜãñáöïò";
         Text[ korean ] = "ë‹¨ë½(~R)";
-        Text[ turkish ] = "~Paragraf";
+        Text[ turkish ] = "Pa~ragraf";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Paràgra~f";
         Text[ thai ] = "à¸¢à¹ˆà¸­~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Odstavec";
+        Text[ hebrew ] = "~Absatz";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡~à¤¦";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -715,7 +775,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "Pagina" ;
-        Text [ portuguese_brazilian ] = "~P?gina" ;
+        Text [ portuguese_brazilian ] = "Pá~gina" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -727,7 +787,7 @@ TabPage TP_FOOTNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "é¡µ(~P)";
         Text[ russian ] = "Ñòğàíèöà";
-        Text[ polish ] = "Strona";
+        Text[ polish ] = "~Strona";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸(~P)";
         Text[ chinese_traditional ] = "é (~P)";
         Text[ arabic ] = "ÇáÕİÍÉ";
@@ -737,6 +797,9 @@ TabPage TP_FOOTNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pà~gina";
         Text[ thai ] = "~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "StrÃ¡nka";
+        Text[ hebrew ] = "â€®×“×£â€¬";
+        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ ";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -764,17 +827,20 @@ TabPage TP_FOOTNOTEOPTION
         Text[ danish ] = "Tegntypografier";
         Text[ swedish ] = "Teckenformatmallar";
         Text[ polish ] = "Style znaków";
-        Text[ portuguese_brazilian ] = "Character styles";
+        Text[ portuguese_brazilian ] = "Estilos de Caracter";
         Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
         Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼";
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
         Text[ arabic ] = "ÃäãÇØ ÃÍÑİ";
-        Text[ turkish ] = "Karakter biçimi";
+        Text[ turkish ] = "Karakter Biçemleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils de caràcter";
         Text[ finnish ] = "Merkkityylit";
         Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
+        Text[ czech ] = "ZnakovÃ© styly";
+        Text[ hebrew ] = "Zeichenvorlagen";
+        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -784,7 +850,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Text" ;
         Left = TRUE ;
         Text [ english_us ] = "Te~xt area" ;
-        Text [ portuguese_brazilian ] = "~Fu?notensymbol" ;
+        Text [ portuguese_brazilian ] = "Área do te~xto" ;
         Text [ swedish ] = "Textområde" ;
         Text [ danish ] = "Tekstområde" ;
         Text [ italian ] = "Area del testo" ;
@@ -794,7 +860,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ portuguese ] = "~Área de texto" ;
         Text[ chinese_simplified ] = "æ–‡å­—åŒºåŸŸ(~X)";
         Text[ russian ] = "Îáëàñòü òåêñòà";
-        Text[ polish ] = "Obszar tekstu";
+        Text[ polish ] = "O~bszar tekstu";
         Text[ japanese ] = "æ–‡æ›¸ç¯„å›²(~X)";
         Text[ chinese_traditional ] = "æ–‡å­—å€åŸŸ(~X)";
         Text[ arabic ] = "äØÇŞ ÇáäÕ";
@@ -805,6 +871,9 @@ TabPage TP_FOOTNOTEOPTION
         Text[ catalan ] = "Àrea de ~text";
         Text[ finnish ] = "Teksti~alue";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "Oblast textu";
+        Text[ hebrew ] = "Te~xtbereich";
+        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -823,7 +892,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Footnote text" ;
         Left = TRUE ;
         Text [ english_us ] = "~Footnote area" ;
-        Text [ portuguese_brazilian ] = "~Fu?notensymbol" ;
+        Text [ portuguese_brazilian ] = "Área da nota de ~rodapé" ;
         Text [ swedish ] = "Fotnotsområde" ;
         Text [ danish ] = "Fodnoteområde" ;
         Text [ italian ] = "Area note a piè pagina" ;
@@ -833,17 +902,20 @@ TabPage TP_FOOTNOTEOPTION
         Text [ portuguese ] = "Á~rea de rodapé" ;
         Text[ chinese_simplified ] = "æ³¨è„šåŒºåŸŸ(~F)";
         Text[ russian ] = "Îáëàñòü ñíîñêè";
-        Text[ polish ] = "Obszar przyp. doln.";
+        Text[ polish ] = "Przypis dol~ny";
         Text[ japanese ] = "è„šæ³¨ç¯„å›²(~F)";
         Text[ chinese_traditional ] = "è¨»è…³ç¯„åœ(~F)";
         Text[ arabic ] = "äØÇŞ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Ğåäßï õğïóçìåéşóåùí";
         Text[ korean ] = "ê°ì£¼ ì˜ì—­(~F)";
-        Text[ turkish ] = "D~ipnot alanı";
+        Text[ turkish ] = "~Dipnot alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de ~nota al peu";
         Text[ finnish ] = "Ala~viitealue";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹€~à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+        Text[ czech ] = "Oblast poznÃ¡mek pod Äarou";
+        Text[ hebrew ] = "~FuÃŸnotenbereich";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€~à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -862,7 +934,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
         Text [ italian ] = "Avvertenza che la nota continua" ;
-        Text [ portuguese_brazilian ] = "Aviso de continua??o" ;
+        Text [ portuguese_brazilian ] = "Aviso de continuação" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
         Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Tekst i flersidede fodnoter" ;
@@ -879,10 +951,13 @@ TabPage TP_FOOTNOTEOPTION
         Text[ arabic ] = "ãáÇÍÙÉ Úáì Ôßá ÍæÇÔí ÓİáíÉ İí ÃßËÑ ãä ÕİÍÉ";
         Text[ greek ] = "Êåßìåíï óõìâïõëŞò ãéá ğïëõóİëéäåò õğïóçìåéşóåéò";
         Text[ korean ] = "ê°ì£¼ ê³„ì† ì‹œ ì£¼ì˜ í‘œì‹œ";
-        Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
+        Text[ turkish ] = "Devam uyarısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Indicació per notes al peu en diverses pàgines";
         Text[ thai ] = "à¹à¸ˆà¹‰à¸‡à¹ƒà¸«à¹‰à¸—à¸£à¸²à¸šà¸­à¸¢à¹ˆà¸²à¸‡à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡";
+        Text[ czech ] = "PokraÄujÃ­cÃ­ komentÃ¡Å™";
+        Text[ hebrew ] = "Hinweistext mehrseitige FuÃŸnoten";
+        Text[ hindi ] = "à¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¥‡ à¤•à¤¾ à¤¸à¥‚à¤šà¤¨à¤¾";
     };
     FixedText FT_CONT
     {
@@ -892,28 +967,31 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Continued" ;
         Text [ norwegian ] = "~Fortsetter" ;
         Text [ italian ] = "Alla fine del piè pagina" ;
-        Text [ portuguese_brazilian ] = "~Continuado" ;
+        Text [ portuguese_brazilian ] = "Fim da nota de ~rodapé" ;
         Text [ portuguese ] = "~No final da nota" ;
         Text [ finnish ] = "Alaselitteen loppu" ;
         Text [ danish ] = "Ved fodnotens slutning" ;
         Text [ french ] = "En ~fin de note" ;
         Text [ swedish ] = "Vid slutet av f~otnoten" ;
         Text [ dutch ] = "Eind van ~voetnoot" ;
-        Text [ spanish ] = "Final de n~ota al pie" ;
+        Text [ spanish ] = "Al final de la n~ota al pie" ;
         Text [ english_us ] = "End ~of footnote" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ³¨è„šçš„ç»“æŸä½ç½®(~O)";
         Text[ russian ] = "Â êîíöå ñíîñêè";
-        Text[ polish ] = "Na koncu przypisów dolnych";
+        Text[ polish ] = "Na koñcu przypisów";
         Text[ japanese ] = "è„šæ³¨æœ«(~O)";
         Text[ chinese_traditional ] = "åœ¨è¨»è…³çµå°¾(~O)";
         Text[ arabic ] = "ÚäÏ äåÇíÉ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Óôï ôİëïò ôçò õğ~ïóçìåßùóçò";
         Text[ korean ] = "ê°ì£¼ ëì—(~O)";
-        Text[ turkish ] = "~Dipnot altında";
+        Text[ turkish ] = "Dipnot ~sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Final ~de la nota al peu";
         Text[ thai ] = "à¸—à¹‰à¸²à¸¢~à¸‚à¸­à¸‡à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+        Text[ czech ] = "Konec poznÃ¡mky pod Äarou";
+        Text[ hebrew ] = "Am FuÃŸn~otenende";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ ~à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¤¾ à¤…à¤‚à¤¤";
     };
     Edit ED_CONT
     {
@@ -932,19 +1010,19 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Started" ;
         Text [ norwegian ] = "~Startet" ;
         Text [ italian ] = "Alla pagina successiva" ;
-        Text [ portuguese_brazilian ] = "~Iniciado" ;
+        Text [ portuguese_brazilian ] = "~Início da próxima página" ;
         Text [ portuguese ] = "~Página seguinte" ;
         Text [ finnish ] = "Seuraavan sivun aloitus" ;
         Text [ danish ] = "På næste side" ;
         Text [ french ] = "~Sur la page suivante" ;
         Text [ swedish ] = "~På följande sida" ;
         Text [ dutch ] = "V~olgende pagina" ;
-        Text [ spanish ] = "En pág. sig~uiente" ;
+        Text [ spanish ] = "~En la página siguiente" ;
         Text [ english_us ] = "Star~t of next page" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "å¾ç»­é¡µé–‹å§‹(~T)";
         Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
-        Text[ polish ] = "Na nastepnej stronie";
+        Text[ polish ] = "Na nastêpnej stronie";
         Text[ japanese ] = "æ¬¡ã®ãƒšãƒ¼ã‚¸(~T)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "å¾çºŒé é–‹å§‹(~T)";
@@ -954,6 +1032,9 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "~Sonraki sayfada";
         Text[ catalan ] = "A pàg. seg~üent";
         Text[ thai ] = "à¹€à¸£à¸´à¹ˆ~à¸¡à¸«à¸™à¹‰à¸²à¸–à¸±à¸”à¹„à¸›";
+        Text[ czech ] = "PoÄÃ¡tek nÃ¡sledujÃ­cÃ­ prezentace";
+        Text[ hebrew ] = "A~uf Folgeseite";
+        Text[ hindi ] = "à¤…~à¤—à¤²à¤¾ à¤ªà¥ƒà¤·à¥à¤  à¤•à¤¾ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤®à¥‡à¤‚";
     };
     Edit ED_CONT_FROM
     {
@@ -980,7 +1061,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
         Text [ italian ] = "Numerazione automatica" ;
-        Text [ portuguese_brazilian ] = "Numera??o autom?tica" ;
+        Text [ portuguese_brazilian ] = "AutoNumeração" ;
         Text [ portuguese ] = "Numeração automática" ;
         Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
@@ -992,16 +1073,19 @@ TabPage TP_ENDNOTEOPTION
         Group = TRUE ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨ç¼–å·";
         Text[ russian ] = "Àâòîíóìåğàöèÿ";
-        Text[ polish ] = "Automatyczna numeracja";
+        Text[ polish ] = "Autonumeracja";
         Text[ japanese ] = "è‡ªå‹•ç•ªå·ä»˜ã‘";
         Text[ chinese_traditional ] = "è‡ªå‹•ç·¨è™Ÿ";
         Text[ arabic ] = "ÊÑŞíã ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôç áñßèìçóç";
         Text[ korean ] = "ìë™ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Otomatik numaralama";
+        Text[ turkish ] = "OtomatikNumaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeració automàtica";
         Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "AutomatickÃ© ÄÃ­slovÃ¡nÃ­";
+        Text[ hebrew ] = "Automatische Nummerierung";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
     };
     FixedText FT_NUMTYPE
     {
@@ -1019,17 +1103,20 @@ TabPage TP_ENDNOTEOPTION
         Text[ italian ] = "Numerazione";
         Text[ danish ] = "Nu~mmerering";
         Text[ swedish ] = "Nu~mrering";
-        Text[ polish ] = "Numeracja";
-        Text[ portuguese_brazilian ] = "Numbering";
+        Text[ polish ] = "~Numeracja";
+        Text[ portuguese_brazilian ] = "N~umeração";
         Text[ japanese ] = "ç•ªå·ã®ç¨®é¡(~N)";
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~N)";
         Text[ chinese_simplified ] = "ç¼–å·(~N)";
         Text[ chinese_traditional ] = "ç·¨è™Ÿ(~N)";
-        Text[ turkish ] = "Numbering";
+        Text[ turkish ] = "~Numaralama";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ catalan ] = "Numeració";
         Text[ finnish ] = "~Numerointi";
         Text[ thai ] = "~à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
+        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­";
+        Text[ hebrew ] = "â€®××™×¡×¤×•×¨â€¬";
+        Text[ hindi ] = "~à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
     };
     ListBox LB_NUMVIEW
     {
@@ -1065,21 +1152,24 @@ TabPage TP_ENDNOTEOPTION
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "Begynd med" ;
-        Text [ portuguese_brazilian ] = "Be~ginn bei" ;
+        Text [ portuguese_brazilian ] = "~Iniciar em" ;
         Text [ portuguese ] = "~Iniciar em" ;
         Text[ chinese_simplified ] = "å¼€å§‹ä»(~S)";
         Text[ russian ] = "Íà÷àòü ñ";
-        Text[ polish ] = "Zacznij od";
+        Text[ polish ] = "~Rozpocznij od";
         Text[ japanese ] = "é–‹å§‹ç•ªå·(~S)";
         Text[ chinese_traditional ] = "é–‹å§‹å¾(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
         Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~S)";
-        Text[ turkish ] = "B~aşlangıç";
+        Text[ turkish ] = "Başlangıç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comen~ça a";
         Text[ finnish ] = "~Aloitus";
         Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸—à¸µà¹ˆ";
+        Text[ czech ] = "ZaÄÃ­t od";
+        Text[ hebrew ] = "Be~ginn bei";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤¾à¤°à¤‚~à¤­";
     };
     NumericField FLD_OFFSET
     {
@@ -1115,7 +1205,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Before" ;
         Text [ norwegian ] = "Før" ;
         Text [ italian ] = "Davanti" ;
-        Text [ portuguese_brazilian ] = "Antes" ;
+        Text [ portuguese_brazilian ] = "An~tes" ;
         Text [ portuguese ] = "An~tes" ;
         Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
@@ -1127,16 +1217,19 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
         Text[ russian ] = "Äî";
-        Text[ polish ] = "Przed";
+        Text[ polish ] = "~Przed";
         Text[ japanese ] = "ç•ªå·å‰(~B)";
         Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
         Text[ korean ] = "ë²ˆí˜¸ ì•(~B)";
-        Text[ turkish ] = "Önünde";
+        Text[ turkish ] = "~Önce";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abans";
         Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
+        Text[ czech ] = "PÅ™ed";
+        Text[ hebrew ] = "×œ×¤× ×™";
+        Text[ hindi ] = "à¤ª~à¤¹à¤¿à¤²à¥‡";
     };
     Edit ED_PREFIX
     {
@@ -1155,7 +1248,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "Die~tro" ;
-        Text [ portuguese_brazilian ] = "Atr?s" ;
+        Text [ portuguese_brazilian ] = "A~pós" ;
         Text [ portuguese ] = "A~trás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
@@ -1167,16 +1260,19 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å(~A)";
         Text[ russian ] = "Ïîñëå";
-        Text[ polish ] = "Za";
+        Text[ polish ] = "P~o";
         Text[ japanese ] = "ç•ªå·å¾Œ(~A)";
         Text[ chinese_traditional ] = "ä¹‹å¾Œ(~A)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "Ğßóù áğü";
         Text[ korean ] = "ë²ˆí˜¸ ë’¤(~A)";
-        Text[ turkish ] = "A~rkasında";
+        Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~esprés";
         Text[ thai ] = "~à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸";
+        Text[ czech ] = "Za";
+        Text[ hebrew ] = "××—×¨×™";
+        Text[ hindi ] = "à¤ª~à¤¶à¥à¤šà¤¾à¤¤à¥";
     };
     Edit ED_SUFFIX
     {
@@ -1201,7 +1297,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "End of ~page" ;
         Text [ norwegian ] = "End of ~page" ;
         Text [ italian ] = "Fine pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~p?gina" ;
+        Text [ portuguese_brazilian ] = "Fim da pá~gina" ;
         Text [ portuguese ] = "Fim de ~página" ;
         Text [ finnish ] = "~Sivun loppu" ;
         Text [ danish ] = "Sidens slutning" ;
@@ -1214,7 +1310,7 @@ TabPage TP_ENDNOTEOPTION
         Group = TRUE ;
         Text[ chinese_simplified ] = "é¡µçš„ç»“æŸä½ç½®(~O)";
         Text[ russian ] = "Êîíåö ñòğàíèöû";
-        Text[ polish ] = "Koniec strony";
+        Text[ polish ] = "Koniec ~strony";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸æœ«(~O)";
         Text[ chinese_traditional ] = "é çš„çµæŸä½ç½®(~O)";
         Text[ arabic ] = "äåÇíÉ ÇáÕİÍÉ";
@@ -1224,6 +1320,9 @@ TabPage TP_ENDNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fi de ~pàgina";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢~à¸‚à¸­à¸‡à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Konec strany";
+        Text[ hebrew ] = "Seiten~ende";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤•à¤¾ à¤…à¤‚à¤¤";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -1233,7 +1332,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "End of ~doc." ;
         Text [ norwegian ] = "Slutt på ~dok." ;
         Text [ italian ] = "Fine documento" ;
-        Text [ portuguese_brazilian ] = "Final de~doc." ;
+        Text [ portuguese_brazilian ] = "Fim do ~documento" ;
         Text [ portuguese ] = "Fim do ~documento" ;
         Text [ finnish ] = "~Asiakirjan loppu" ;
         Text [ danish ] = "Dokumentets slutn." ;
@@ -1244,16 +1343,19 @@ TabPage TP_ENDNOTEOPTION
         Text [ english_us ] = "End of ~document" ;
         Text[ chinese_simplified ] = "æ–‡æ¡£çš„ç»“æŸä½ç½®(~D)";
         Text[ russian ] = "Êîíåö äîêóìåíòà";
-        Text[ polish ] = "Koniec dokumentu";
+        Text[ polish ] = "Koniec ~dokumentu";
         Text[ japanese ] = "æ–‡æ›¸æœ«(~D)";
         Text[ chinese_traditional ] = "æ–‡ä»¶çš„çµæŸä½ç½®(~D)";
         Text[ arabic ] = "äåÇíÉ ÇáãÓÊäÏ";
         Text[ greek ] = "Ôİëïò êåéìİíïõ";
         Text[ korean ] = "ë¬¸ì„œ ë(~D)";
-        Text[ turkish ] = "~Belge sonu";
+        Text[ turkish ] = "Belge ~sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Final del ~document";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢à¸‚à¸­à¸‡à¹€~à¸­à¸à¸ªà¸²à¸£";
+        Text[ czech ] = "Konec dokumentu";
+        Text[ hebrew ] = "~Dokumentende";
+        Text[ hindi ] = "à¤²à¥‡~à¤–à¤ªà¤¤à¥à¤° à¤•à¤¾ à¤…à¤‚à¤¤";
     };
     FixedLine FL_TEMPL
     {
@@ -1280,10 +1382,13 @@ TabPage TP_ENDNOTEOPTION
         Text[ arabic ] = "ÃäãÇØ";
         Text[ greek ] = "Ğñüôõğá";
         Text[ korean ] = "ìŠ¤íƒ€ì¼";
-        Text[ turkish ] = "Biçim";
+        Text[ turkish ] = "Biçemler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils";
         Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°";
+        Text[ czech ] = "Styly";
+        Text[ hebrew ] = "â€®×¡×’× ×•× ×•×ªâ€¬";
+        Text[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -1293,7 +1398,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Paragraph" ;
         Text [ norwegian ] = "~Paragraf" ;
         Text [ italian ] = "Paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Par?grafo" ;
+        Text [ portuguese_brazilian ] = "Pa~rágrafo" ;
         Text [ portuguese ] = "~Parágrafo" ;
         Text [ finnish ] = "~Kappale" ;
         Text [ danish ] = "Afsnit" ;
@@ -1305,16 +1410,19 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ®µè½(~R)";
         Text[ russian ] = "Àáçàö";
-        Text[ polish ] = "Akapit";
+        Text[ polish ] = "~Akapit";
         Text[ japanese ] = "æ®µè½(~R)";
         Text[ chinese_traditional ] = "æ®µè½(~R)";
         Text[ arabic ] = "İŞÑÉ";
         Text[ greek ] = "ĞáñÜãñáöïò";
         Text[ korean ] = "ë‹¨ë½(~R)";
-        Text[ turkish ] = "~Paragraf";
+        Text[ turkish ] = "Pa~ragraf";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Paràgra~f";
         Text[ thai ] = "à¸¢à¹ˆà¸­~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Odstavec";
+        Text[ hebrew ] = "~Absatz";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡~à¤¦";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -1334,7 +1442,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "Pagina" ;
-        Text [ portuguese_brazilian ] = "~P?gina" ;
+        Text [ portuguese_brazilian ] = "~Página" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -1346,7 +1454,7 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "é¡µ(~P)";
         Text[ russian ] = "Ñòğàíè~öà";
-        Text[ polish ] = "Strona";
+        Text[ polish ] = "~Strona";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸(~P)";
         Text[ chinese_traditional ] = "é (~P)";
         Text[ arabic ] = "ÇáÕİÍÉ";
@@ -1356,6 +1464,9 @@ TabPage TP_ENDNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pà~gina";
         Text[ thai ] = "~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "StrÃ¡nka";
+        Text[ hebrew ] = "â€®×“×£â€¬";
+        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ ";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -1382,17 +1493,20 @@ TabPage TP_ENDNOTEOPTION
         Text[ danish ] = "Tegntypografier";
         Text[ swedish ] = "Teckenformatmallar";
         Text[ polish ] = "Style znaków";
-        Text[ portuguese_brazilian ] = "Character styles";
+        Text[ portuguese_brazilian ] = "Estilos de Caracter";
         Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
         Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼";
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
         Text[ arabic ] = "ÃäãÇØ ÃÍÑİ";
-        Text[ turkish ] = "Karakter biçimi";
+        Text[ turkish ] = "Karakter Biçemi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils de caràcter";
         Text[ finnish ] = "Merkkityylit";
         Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
+        Text[ czech ] = "ZnakovÃ© styly";
+        Text[ hebrew ] = "Zeichenvorlagen";
+        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -1402,7 +1516,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Text" ;
         Left = TRUE ;
         Text [ english_us ] = "Te~xt area" ;
-        Text [ portuguese_brazilian ] = "~Endnotensymbol" ;
+        Text [ portuguese_brazilian ] = "Área do te~xto" ;
         Text [ swedish ] = "Textområde" ;
         Text [ danish ] = "Tekstområde" ;
         Text [ italian ] = "Area del testo" ;
@@ -1412,7 +1526,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ portuguese ] = "Área de te~xto" ;
         Text[ chinese_simplified ] = "æ–‡å­—åŒºåŸŸ(~X)";
         Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "Obszar tekstu";
+        Text[ polish ] = "O~bszar tekstu";
         Text[ japanese ] = "æ–‡æ›¸ç¯„å›²(~X)";
         Text[ chinese_traditional ] = "æ–‡å­—å€åŸŸ(~X)";
         Text[ arabic ] = "äØÇŞ ÇáäÕ";
@@ -1422,6 +1536,9 @@ TabPage TP_ENDNOTEOPTION
         Text[ catalan ] = "Àrea de ~text";
         Text[ finnish ] = "Tekstialue";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "Oblast textu";
+        Text[ hebrew ] = "Te~xtbereich";
+        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -1440,7 +1557,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Endnote text" ;
         Left = TRUE ;
         Text [ english_us ] = "~Endnote area" ;
-        Text [ portuguese_brazilian ] = "~Endnotensymbol" ;
+        Text [ portuguese_brazilian ] = "Área da nota de ~fim" ;
         Text [ swedish ] = "Slutnotsområde" ;
         Text [ danish ] = "Slutnoteområde" ;
         Text [ italian ] = "Area note di chiusura" ;
@@ -1450,16 +1567,19 @@ TabPage TP_ENDNOTEOPTION
         Text [ portuguese ] = "Área de ~nota final" ;
         Text[ chinese_simplified ] = "å°¾æ³¨åŒºåŸŸ(~E)";
         Text[ russian ] = "Êîíöåâàÿ ñíîñêà";
-        Text[ polish ] = "Obszar przyp. koñc.";
+        Text[ polish ] = "Przypis ~koñcowy";
         Text[ japanese ] = "æ–‡æœ«è„šæ³¨ç¯„å›²(~E)";
         Text[ chinese_traditional ] = "å°¾è¨»å€åŸŸ(~E)";
         Text[ arabic ] = "äØÇŞ ÇáÊÚáíŞ ÇáÎÊÇãí";
         Text[ greek ] = "Ğåñéï÷Ş óçìåßùóçò ôİëïõò";
         Text[ korean ] = "ë¯¸ì£¼ ì˜ì—­(~E)";
-        Text[ turkish ] = "S~onnot alanı";
+        Text[ turkish ] = "~Sonnot alanı";
         Text[ catalan ] = "Àrea de n~ota al final";
         Text[ finnish ] = "~Loppuviitealue";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ~à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+        Text[ czech ] = "Oblast pro vysvÄ›tlivky";
+        Text[ hebrew ] = "E~ndnotenbereich";
+        Text[ hindi ] = "~à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -1479,7 +1599,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
         Text [ italian ] = "Avvertenza che la nota continua" ;
-        Text [ portuguese_brazilian ] = "Aviso de continua??o" ;
+        Text [ portuguese_brazilian ] = "Aviso de continuação" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
         Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
@@ -1496,10 +1616,13 @@ TabPage TP_ENDNOTEOPTION
         Text[ arabic ] = "ãáÇÍÙÉ Úáì Ôßá ÍæÇÔí ÓİáíÉ İí ÃßËÑ ãä ÕİÍÉ";
         Text[ greek ] = "Êåßìåíï óõìâïõëŞò ãéá ğïëõóİëéäåò õğïóçìåéşóåéò";
         Text[ korean ] = "ê°ì£¼ ê³„ì† ì‹œ ì£¼ì˜ í‘œì‹œ";
-        Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
+        Text[ turkish ] = "Devam uyarısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Indicació per notes al peu en diverses pàgines";
         Text[ thai ] = "à¹à¸ˆà¹‰à¸‡à¹ƒà¸«à¹‰à¸—à¸£à¸²à¸šà¸­à¸¢à¹ˆà¸²à¸‡à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡";
+        Text[ czech ] = "PokraÄujÃ­cÃ­ komentÃ¡Å™";
+        Text[ hebrew ] = "Hinweistext mehrseitige FuÃŸnoten";
+        Text[ hindi ] = "à¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¥‡ à¤•à¤¾ à¤¸à¥‚à¤šà¤¨à¤¾";
     };
     FixedText FT_CONT
     {
@@ -1509,7 +1632,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Continued" ;
         Text [ norwegian ] = "~Fortsetter" ;
         Text [ italian ] = "Pagina su~cc." ;
-        Text [ portuguese_brazilian ] = "~Continuado" ;
+        Text [ portuguese_brazilian ] = "Página ~seguinte" ;
         Text [ portuguese ] = "Página ~seguinte" ;
         Text [ finnish ] = "~Seuraava sivu" ;
         Text [ danish ] = "Næste side" ;
@@ -1521,7 +1644,7 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "ç»­é¡µ(~F)";
         Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
-        Text[ polish ] = "Nastêp. str.";
+        Text[ polish ] = "~Nastêpna strona";
         Text[ japanese ] = "æ¬¡ã®ãƒšãƒ¼ã‚¸(~F)";
         Text[ chinese_traditional ] = "çºŒé (~F)";
         Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
@@ -1531,6 +1654,9 @@ TabPage TP_ENDNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pàgina ~següent";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²~à¸™à¸µà¹‰";
+        Text[ czech ] = "NÃ¡sledujÃ­cÃ­ strana";
+        Text[ hebrew ] = "~Folgeseite";
+        Text[ hindi ] = "~à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤ªà¥ƒà¤·à¥à¤ ";
     };
     Edit ED_CONT
     {
@@ -1549,7 +1675,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Started" ;
         Text [ norwegian ] = "~Startet" ;
         Text [ italian ] = "~Inizio" ;
-        Text [ portuguese_brazilian ] = "~Iniciado" ;
+        Text [ portuguese_brazilian ] = "~Início" ;
         Text [ portuguese ] = "~Início" ;
         Text [ finnish ] = "~Aloita" ;
         Text [ danish ] = "Begyndelse" ;
@@ -1561,7 +1687,7 @@ TabPage TP_ENDNOTEOPTION
         Left = TRUE ;
         Text[ chinese_simplified ] = "å¼€å§‹(~S)";
         Text[ russian ] = "Íà÷àëî";
-        Text[ polish ] = "Pocz¹tek";
+        Text[ polish ] = "~Pocz¹tek";
         Text[ japanese ] = "é–‹å§‹(~S)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "é–‹å§‹(~S)";
@@ -1571,6 +1697,9 @@ TabPage TP_ENDNOTEOPTION
         Text[ turkish ] = "~Başlangıç";
         Text[ catalan ] = "~Inicia";
         Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡";
+        Text[ czech ] = "ZaÄÃ¡tek";
+        Text[ hebrew ] = "~Beginn";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤¾~à¤°à¤‚à¤­";
     };
     Edit ED_CONT_FROM
     {
@@ -1582,6 +1711,19 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
