@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-22 08:24:32 $
+ *  last change: $Author: fs $ $Date: 2002-04-25 11:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,14 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
+#endif
+#ifndef COMPHELPER_ACCIMPLACCESS_HXX
+#include <comphelper/accimplaccess.hxx>
+#endif
+#ifndef COMPHELPER_ACCESSIBLE_COMPONENT_HELPER_HXX
+#include <comphelper/accessiblecomponenthelper.hxx>
 #endif
 
 #include <tools/gen.hxx>    // Size
@@ -94,31 +100,31 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-class MutexHelper_Impl
-{
-protected:
-    ::osl::Mutex    maMutex;
-};
+//class MutexHelper_Impl
+//{
+//protected:
+//  ::osl::Mutex    maMutex;
+//};
 
-typedef cppu::WeakComponentImplHelper4<
-    ::drafts::com::sun::star::accessibility::XAccessible,
-    ::drafts::com::sun::star::accessibility::XAccessibleContext,
-    ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent,
-    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
-    > VCLXAccessibleComponentBase;
+//typedef cppu::WeakComponentImplHelper3<
+//    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+//  ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent,
+//    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+//    > VCLXAccessibleComponentBase;
 
+typedef ::comphelper::OAccessibleExtendedComponentHelper    VCLXAccessibleComponentBase;
 
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 
-class VCLXAccessibleComponent : public MutexHelper_Impl, public VCLXAccessibleComponentBase
+class VCLXAccessibleComponent
+        :public VCLXAccessibleComponentBase
+        ,public ::comphelper::OAccessibleImplementationAccess
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
     VCLXWindow*                         mpVCLXindow;
-
-    ::cppu::OInterfaceContainerHelper   maEventListeners;
 
     ULONG                           nDummy1;
     ULONG                           nDummy2;
@@ -126,14 +132,11 @@ private:
     void*                           pDummy2;
 
 protected:
-    ::osl::Mutex&   GetMutex() { return maMutex; }
+//  ::osl::Mutex&   GetMutex() { return maMutex; }
      DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
-
-    void            NotifyAccessibleEvent( sal_Int16 nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-
 
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
@@ -144,12 +147,10 @@ public:
 
     virtual void SAL_CALL disposing();
 
-    // ::drafts::com::sun::star::accessibility::XAccessible
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
-    void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::uno::XInterface
+    DECLARE_XINTERFACE()
+    // ::com::sun::star::lang::XTypeProvider
+    DECLARE_XTYPEPROVIDER()
 
     // ::drafts::com::sun::star::accessibility::XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -164,11 +165,7 @@ public:
     ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
     // ::drafts::com::sun::star::accessibility::XAccessibleComponent
-    sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -186,6 +183,20 @@ public:
     virtual sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    // base class overridables
+    ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    /** we may be reparented (if external components use OAccessibleImplementationAccess base class),
+        so this method here returns the parent in the VCL world, in opposite to the parent
+        an external component gave us
+    @precond
+        the caller must ensure thread safety, i.e. our mutex must be locked
+    */
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+            getVclParent() const;
 };
 
 /* ----------------------------------------------------------
