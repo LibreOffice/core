@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
+ *  last change: $Author: ssa $ $Date: 2002-03-27 15:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,10 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
         SetTitleType( FLOATWIN_TITLE_TEAROFF );
     else
         SetTitleType( FLOATWIN_TITLE_NONE );
+
+    // avoid close on focus change for decorated floating windows
+    if( mbFrame && (GetStyle() & WB_MOVEABLE) )
+        nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // Fenster-Position ermitteln und setzen
     USHORT nArrangeIndex;
