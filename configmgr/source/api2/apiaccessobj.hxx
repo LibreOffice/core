@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace configmgr
             : m_pUnoThis(pUnoThis)
             , m_rTree(rTree)
             , m_aNode(aNode)
-            {}
+            { rTree.setNodeInstance(aNode,pUnoThis); }
 
             virtual NodeRef             doGetNode() const;
             virtual ApiTreeImpl&        getApiTree() const;

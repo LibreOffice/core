@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ namespace configmgr
             explicit ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree);
             explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree = 0);
             ~ApiTreeImpl();
+
+        // initialization
+            void setNodeInstance(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
         // model access
             Tree                        getTree() const { return m_aTree; }

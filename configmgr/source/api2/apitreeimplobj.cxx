@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl
 , m_pParentTree(0)
 , m_aNotifier(new NotifierImpl(aTree))
 {
+    setNodeInstance(aTree.getRootNode(), pInstance);
     init(&rParentTree);
 }
 //-------------------------------------------------------------------------
@@ -117,7 +118,15 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree c
 , m_aNotifier(new NotifierImpl(aTree))
 {
     OSL_ENSURE(!pParentTree || &rProvider == &pParentTree->m_rProvider,"WARNING: Parent tree has a different provider - trouble may be ahead");
+    setNodeInstance(aTree.getRootNode(), pInstance);
     init(pParentTree);
+}
+//-------------------------------------------------------------------------
+
+ApiTreeImpl::~ApiTreeImpl()
+{
+    OSL_ENSURE(m_aNotifier->m_aListeners.isDisposed(),"ApiTree Object was not disposed properly");
+    deinit();
 }
 //-------------------------------------------------------------------------
 ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree)
@@ -128,17 +137,19 @@ ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider
     enableNotification(true);
 }
 //-------------------------------------------------------------------------
-
-ApiTreeImpl::~ApiTreeImpl()
-{
-    OSL_ENSURE(m_aNotifier->m_aListeners.isDisposed(),"ApiTree Object was not disposed properly");
-    deinit();
-}
-//-------------------------------------------------------------------------
 ApiRootTreeImpl::~ApiRootTreeImpl()
 {
     implSetNotificationSource(0);
 }
+//-------------------------------------------------------------------------
+
+void ApiTreeImpl::setNodeInstance(configuration::NodeRef const& aNode, UnoInterface* pInstance)
+{
+    OSL_ENSURE(aNode.isValid(),"ERROR: adding invalid node to ApiTree");
+    OSL_ENSURE(m_aTree.isValidNode(aNode),"ERROR: foreign node being added to ApiTree");
+    m_aNotifier->m_aListeners.setObjectAt( configuration::NodeID(m_aTree, aNode).toIndex(), pInstance );
+}
+
 //-------------------------------------------------------------------------
 
 void ApiTreeImpl::checkAlive() const
