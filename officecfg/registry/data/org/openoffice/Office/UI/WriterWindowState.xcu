@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWindowState.xcu,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:38:29 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -446,6 +449,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/formtools" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
@@ -489,6 +495,9 @@
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/drawbar" oor:op="replace">
