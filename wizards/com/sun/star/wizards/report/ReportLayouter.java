@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportLayouter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:21:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ public class ReportLayouter {
     public String[][] LayoutFiles;
     public String[][] ContentFiles;
     private Desktop.OfficePathRetriever curofficepath;
+    Object imgOrientation;
 
     public ReportLayouter(ReportDocument _CurReportDocument, UnoDialog _CurUnoDialog) {
         try {
@@ -152,13 +153,15 @@ public class ReportLayouter {
                                         new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                         new Object[] { new Integer(10), "HID:34366", sOrientVertical, new Integer(101), new Integer(171), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)});
 
-            CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
-                                        new String[] { "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width" },
-                                        new Object[] { new Short("0"), new Integer(23), curofficepath.BitmapPath + "/landscape.gif", new Integer(164), new Integer(158), new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(30)});
+            imgOrientation = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
+                                        new String[] { "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Step", "Width" },
+                                        new Object[] { new Short("0"), new Integer(23), new Integer(164), new Integer(158), new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(30)});
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblBlindTextNote_2",
                                         new String[] { "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width" },
                                         new Object[] { new Integer(34), ReportWizard.sBlindTextNote, new Boolean(true), new Integer(205), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(99)});
+            CurUnoDialog.getPeerConfiguration().setImageUrl(imgOrientation, 1002, 1003);
+
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -201,14 +204,15 @@ public class ReportLayouter {
                         break;
 
                     case SOOPTLANDSCAPE :
-                        CurReportDocument.changePageOrientation(curofficepath.BitmapPath, true);
-                        CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", curofficepath.BitmapPath + "/landscape.gif");
+                        CurReportDocument.changePageOrientation(true);
+                        Helper.setUnoPropertyValue(imgOrientation, "ImageURL", CurUnoDialog.getWizardImageUrl(1002, 1003));
 
                         break;
 
                     case SOOPTPORTRAIT :
-                        CurReportDocument.changePageOrientation(curofficepath.BitmapPath, false);
+                        CurReportDocument.changePageOrientation( false);
                         CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", curofficepath.BitmapPath + "/portrait.gif");
+                        Helper.setUnoPropertyValue(imgOrientation, "ImageURL", CurUnoDialog.getWizardImageUrl(1000, 1001));
                         break;
 
                     default :
@@ -235,7 +239,8 @@ public class ReportLayouter {
                 Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, "Enabled", new Boolean(false));
                 CurReportDocument.xTextDocument.lockControllers();
                 boolean blandscape = (((Short) CurUnoDialog.getControlProperty("optLandscape", "State")).shortValue() == 1);
-                CurReportDocument.changePageOrientation(curofficepath.BitmapPath, blandscape);
+                CurReportDocument.changePageOrientation(blandscape);
+
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }
@@ -244,19 +249,5 @@ public class ReportLayouter {
         }
     }
 
-/*  class TextListenerImpl implements com.sun.star.awt.XTextListener {
-
-        public void textChanged(com.sun.star.awt.TextEvent EventObject) {
-            try {
-                String TitleName = xTitleTextBox.getText();
-                CurReportDocument.updateReportTitle(xTitleTextBox);
-            } catch (Exception exception) {
-                exception.printStackTrace(System.out);
-            }
-        }
-
-        public void disposing(EventObject EventObject) {
-        }
-    } */
 
 }
