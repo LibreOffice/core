@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
