@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleCalendar.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-08 15:13:09 $
+ *  last change: $Author: er $ $Date: 2002-11-14 16:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,20 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XCalendar.idl>
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
+//============================================================================
 
-/// Access a locale specific calendar
+/// Access a locale specific calendar.
 service LocaleCalendar
 {
     interface com::sun::star::i18n::XCalendar;
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
+//============================================================================
 }; }; }; };
+//============================================================================
 #endif

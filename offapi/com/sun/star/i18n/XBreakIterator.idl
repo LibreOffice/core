@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-01 07:34:17 $
+ *  last change: $Author: er $ $Date: 2002-11-14 16:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,465 +61,318 @@
 #ifndef __com_sun_star_i18n_XBreakIterator_idl__
 #define __com_sun_star_i18n_XBreakIterator_idl__
 
-#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
-#include <com/sun/star/linguistic2/XHyphenator.idl>
-#endif
-#ifndef __com_sun_star_linguistic2_XHyphenatedWord_idl__
-#include <com/sun/star/linguistic2/XHyphenatedWord.idl>
-#endif
-
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
 
+#ifndef __com_sun_star_i18n_LineBreakUserOptions_idl__
+#include <com/sun/star/i18n/LineBreakUserOptions.idl>
+#endif
 
-//=============================================================================
+#ifndef __com_sun_star_i18n_LineBreakHyphenationOptions_idl__
+#include <com/sun/star/i18n/LineBreakHyphenationOptions.idl>
+#endif
 
- module com {  module sun {  module star {  module i18n {
+#ifndef __com_sun_star_i18n_LineBreakResults_idl__
+#include <com/sun/star/i18n/LineBreakResults.idl>
+#endif
 
-//=============================================================================
+#ifndef __com_sun_star_i18n_Boundary_idl__
+#include <com/sun/star/i18n/Boundary.idl>
+#endif
 
-//--------------------------------------------------------------------------
-/** specify the type of character iteration
-*/
-constants CharacterIteratorMode
-{
-    /// skip characters
-    const short SKIPCHARACTER           = 0;
+//============================================================================
 
-    /// skip cells
-    const short SKIPCELL                = 1;
+module com {  module sun {  module star {  module i18n {
 
-    /// skip control characters
-    const short SKIPCONTROLCHARACTER    = 2;
-};
+//============================================================================
 
-//--------------------------------------------------------------------------
-/** specify the type of LineBreak
-*/
-constants BreakType
-{
-    /// linebreak is a word break
-    const short WORDBOUNDARY            = 1;
+/**
+    contains the base routines for iteration in Unicode string. Iterates over
+    characters, words, sentences and line breaks.
 
-    /// linebreak is a result of hyphenation
-    const short HYPHENATION             = 2;
+    <p> Assumption: StartPos is inclusive and EndPos is exclusive. </p>
+ */
 
-    /// linebreak - hanging punctuation recognized
-    const short HANGINGPUNCTUATION      = 3;
-};
-
-//--------------------------------------------------------------------------
-/** specify the type scipts
-*/
-constants ScriptType
-{
-        /// latin characters (english, .. )
-        const short LATIN                                       = 1;
-
-        /// asian characters (japanese, .. )
-        const short ASIAN                                       = 2;
-
-        /// complex characters (arabic, ..)
-        const short COMPLEX                                     = 3;
-
-        /// undefined characters (punctuation, .. )
-        const short WEAK                                        = 4;
-};
-
-//--------------------------------------------------------------------------
-/** specify the type of words
-*/
-constants WordType
-{
-    /** any "words" - words in the meaning of same character types,
-        collection of alphanumeric characters, or collection of non-alphanumeric characters.
-    */
-    const short ANY_WORD                 = 0;
-
-    /** any "words" - words in the meaning of same character types,
-        collection of alphanumeric characters, or collection of
-        non-alphanumeric characters except blanks.
-    */
-    const short ANYWORD_IGNOREWHITESPACES= 1;
-
-    /** "words" - in the meaning of a collection of alphanumeric characters.
-    */
-    const short DICTIONARY_WORD          = 2;
-
-    /** the mode for counting words, it will ignore punctuations and space.
-    */
-    const short WORD_COUNT          = 3;
-};
-
-//--------------------------------------------------------------------------
-/** specify the type character, that starts a charblock
-*/
-constants CharType
-{
-        /// all alpha characters allowed
-        const short ANY_CHAR                = 0;
-
-        const short UPPERCASE_LETTER        = 1;
-        const short LOWERCASE_LETTER        = 2;
-        const short TITLECASE_LETTER        = 3;
-        const short MODIFIER_LETTER         = 4;
-        const short OTHER_LETTER            = 5;
-        const short NON_SPACING_MARK        = 6;
-        const short ENCLOSING_MARK          = 7;
-        const short COMBINING_SPACING_MARK  = 8;
-        const short DECIMAL_DIGIT_NUMBER    = 9;
-        const short LETTER_NUMBER           = 10;
-        const short OTHER_NUMBER            = 11;
-        const short SPACE_SEPARATOR         = 12;
-        const short LINE_SEPARATOR          = 13;
-        const short PARAGRAPH_SEPARATOR     = 14;
-        const short CONTROL                 = 15;
-        const short FORMAT                  = 16;
-        const short PRIVATE_USE             = 17;
-        const short SURROGATE               = 18;
-        const short DASH_PUNCTUATION        = 19;
-        const short START_PUNCTUATION       = 20;
-        const short END_PUNCTUATION         = 21;
-        const short CONNECTOR_PUNCTUATION   = 22;
-        const short OTHER_PUNCTUATION       = 23;
-        const short MATH_SYMBOL             = 24;
-        const short CURRENCY_SYMBOL         = 25;
-        const short MODIFIER_SYMBOL         = 26;
-        const short OTHER_SYMBOL            = 27;
-        const short INITIAL_PUNCTUATION     = 28;
-        const short FINAL_PUNCTUATION       = 29;
-        const short GENERAL_TYPES_COUNT     = 30;
-};
-
-//--------------------------------------------------------------------------
-/** specify the options for the LineBreak
-*/
-struct LineBreakUserOptions
-{
-    /// these characters are not allowed at the begining of a line
-    string forbiddenBeginCharacters;
-
-    /// these characters are not allowed at the end of a line
-    string forbiddenEndCharacters;
-
-    /// act on the forbidden characters or not
-    boolean applyForbiddenRules;
-
-    /// punctuation characters are allowed at the end of the line
-    boolean allowPunctuationOutsideMargin;
-
-    /// allow Hyphenate English
-    boolean allowHyphenateEnglish;
-
-};
-
-//--------------------------------------------------------------------------
-/** specify the hyphenation options for LineBreak
-*/
-struct LineBreakHyphenationOptions
-{
-    /// reference to the specific hyphenator - can be zero.
-    ::com::sun::star::linguistic2::XHyphenator rHyphenator;
-
-    /** sequence of property values to be used by the hyphenator - can be
-        empty if the default values (from the property set) should be used
-    */
-    ::com::sun::star::beans::PropertyValues aHyphenationOptions;
-
-    /** the first character not fitting to the current line,
-        considering an additional "-" for hyphenation
-    */
-    long  hyphenIndex;
-};
-
-//--------------------------------------------------------------------------
-/** specify the result of a LineBreak
-*/
-struct LineBreakResults
-{
-    /// type of linebreak, see <type>BreakType</type>
-    short breakType;
-
-    /// position of the calculated linebreak
-    long  breakIndex;
-
-    /// return value of the hyphenator
-    ::com::sun::star::linguistic2::XHyphenatedWord rHyphenatedWord;
-};
-
-//--------------------------------------------------------------------------
-/** specify the start-/end-position of a word
-*/
-struct Boundary
-{
-    /// start position of a word (do not forget - inclusive)
-    long startPos ;
-
-    /// end position of a word (do not forget - exclusive)
-    long endPos;
-};
-
-
-//--------------------------------------------------------------------------
-/** contains the base routines for iteration in Unicode string. Iterates over
-    Characters, Words, Sentences and Linebreaks.
-    <P>There also exists a specific BreakIterator for asian languages
-    <P>
-    <P>Assumption - StartPos is inclusive and EndPos is exclusive.
-*/
 interface XBreakIterator: com::sun::star::uno::XInterface
 {
-    //--------------------------------------------------------------------------
-       /** Traverses specfied number of characters in Text from the
-        StartPos to the right. <type>CharacterIteratorMode</type> can be cell
-        based or character based. A cell is made of more than one character.
-    */
-    long nextCharacters( [in] string Text, [in] long nStartPos,
-                     [in] ::com::sun::star::lang::Locale rLocale,
+    //------------------------------------------------------------------------
+    /** Traverses specified number of characters in Text from
+        <em>nStartPos</em> to the right.
+        <type>CharacterIteratorMode</type> can be cell based or
+        character based. A cell is made of more than one character.
+
+        @param nCount
+            Number of characters to traverse, it should not be less than 0.
+            If you want to traverse in the opposite direction use
+            <member>XBreakIterator::previousCharacters()</member> instead.
+     */
+    long nextCharacters( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
                      [in] short nCharacterIteratorMode,
                      [in] long nCount, [out] long nDone );
 
-    //--------------------------------------------------------------------------
-       /** Traverses specfied number of characters in Text from the
-        StartPos to the left. <type>CharacterIteratorMode</type> can be cell
-        based or character based. A cell is made of more than one character.
-    */
-    long previousCharacters( [in] string Text, [in] long nStartPos,
-                     [in] ::com::sun::star::lang::Locale nLocale,
+    //------------------------------------------------------------------------
+    /** Traverses specified number of characters in Text from
+        <em>nStartPos</em> to the left.
+        <type>CharacterIteratorMode</type> can be cell based or
+        character based. A cell is made of more than one character.
+
+        @param nCount
+            Number of characters to traverse, it should not be less than 0.
+            If you want to traverse in the opposite direction use
+            <member>XBreakIterator::nextCharacters()</member> instead.
+     */
+    long previousCharacters( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
                      [in] short nCharacterIteratorMode,
                      [in] long nCount, [out] long nDone );
 
-    //--------------------------------------------------------------------------
-       /** Traverses one word in Text from the StartPos to the right.
-        The <type>WordType</type> specify the type of travelling.
-        @returns the <type>Boundary</type> of the found word.
-        Normally used for the CTRL-Right.
-    */
-    Boundary nextWord( [in] string Text, [in] long nStartPos,
-                   [in] ::com::sun::star::lang::Locale nLocale,
-                   [in] short WordType);
+    //------------------------------------------------------------------------
+    /** Traverses one word in Text from <em>nStartPos</em> to the right.
 
-    //--------------------------------------------------------------------------
-       /** Traverses one word in Text from the StartPos to the left.
-        The <type>WordType</type> specify the type of travelling.
-        @returns the <type>Boundary</type> of the found word.
-        Normally used for the CTRL-Right.
+        @param nWordType
+            One of <type>WordType</type>, specifies the type of
+            travelling.
 
-        nLocale refers to previous character from nStartPos.
-        When previous character is a space charcter and WordType indicates spaces
-        should be skiped, and if the first non-space character is a Asian character,
-        since Asian word break needs language specific wordbreak dictionary, the
-        method will return -1 as end boundary pointer and the position after the
-        Asian character as start boundary pinter to caller, for whom to resend
-        correct nLocale refered to the Asian character.
-    */
-    Boundary previousWord( [in] string Text, [in] long nStartPos,
-                       [in] ::com::sun::star::lang::Locale nLocale,
-                       [in] short WordType);
+        @returns
+            The Boundary of the found word. Normally used for
+            CTRL-Right.
+     */
+    Boundary nextWord( [in] string aText, [in] long nStartPos,
+                   [in] ::com::sun::star::lang::Locale aLocale,
+                   [in] short nWordType);
 
-    //--------------------------------------------------------------------------
-    /** identifies StartPos and EndPos of current word. If nPos is the boundary of
-        a word, it is startPos of one word and endPos of previous word. In this
-        situation, the outcome of the algorithm can be indeterminate.
-        In this sitution, bPreferForward flag is used, if bPreferForward == 0,
-        nPos is considered end of word and looks for beginning of word on left
-        otherwise nPos is considered beginning of next word and looks right for
-        end of the word.
+    //------------------------------------------------------------------------
+    /** Traverses one word in Text from <em>nStartPos</em> to the left.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
+            <p> If the previous character is a space character and
+            <em>nWordType</em> indicates spaces should be skipped, and
+            if the first non-space character is an Asian character,
+            then, since Asian word break needs language specific
+            wordbreak dictionaries, the method will return -1 in
+            <member>Boundary::endPos</member> and the position after the
+            Asian character (i.e. the space character) in
+            <member>Boundary::startPos</member>. The caller then has to
+            call this method again with a correct <em>aLocale</em>
+            referring to the Asian character, which is then the previous
+            character of the space character where <em>nStartPos</em>
+            points to. </p>
+
+            <p> <b>Note</b> that the OpenOffice.org 1.0 / StarOffice 6.0
+            / StarSuite 6.0 i18n framework doesn't behave like this and
+            mixed Western/CJK text may lead to wrong word iteration.
+            This is fixed in later versions. </p>
+
+        @param nWordType
+            One of <type>WordType</type>, specifies the type of
+            travelling.
+
+        @returns
+            The Boundary of the found word. Normally used for
+            CTRL-Left.
     */
-    Boundary getWordBoundary( [in] string Text, [in] long nPos,
-                      [in] ::com::sun::star::lang::Locale nLocale,
-                      [in] short WordType,
+    Boundary previousWord( [in] string aText, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale aLocale,
+                       [in] short nWordType);
+
+    //------------------------------------------------------------------------
+    /** Identifies StartPos and EndPos of current word.
+
+        <p> If <em>nPos</em> is the boundary of a word, it is StartPos
+        of one word and EndPos of previous word. In this situation, the
+        outcome of the algorithm can be indeterminate. In this situation
+        the <em>bPreferForward</em> flag is used. If bPreferForward ==
+        <FALSE/>, <em>nPos</em> is considered to be the end of the word
+        and we look for beginning of word on left, otherwise
+        <em>nPos</em> is considered to be the start of the next word and
+        we look right for the end of the word. </p>
+
+        @param nWordType
+            One of <type>WordType</type>.
+
+        @returns
+            The Boundary of the current word.
+    */
+    Boundary getWordBoundary( [in] string aText, [in] long nPos,
+                      [in] ::com::sun::star::lang::Locale aLocale,
+                      [in] short nWordType,
                       [in] boolean bPreferForward );
 
-    //--------------------------------------------------------------------------
-    /** @returns the kind of word that starts at the specified position.
-    */
-    short getWordType( [in] string Text, [in] long nPos,
-                   [in] ::com::sun::star::lang::Locale nLocale);
+    //------------------------------------------------------------------------
+    /** Get the <type>WordType</type> of the word that starts at
+        position <em>nPos</em>.
+     */
+    short getWordType( [in] string aText, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale aLocale);
 
-    //--------------------------------------------------------------------------
-    /** @returns true if at the specified position starts a word
-    */
-    boolean isBeginWord( [in] string Text, [in] long nPos,
-                     [in] ::com::sun::star::lang::Locale nLocale,
-                     [in] short WordType);
+    //------------------------------------------------------------------------
+    /** If a word starts at position <em>nPos</em>.
+     */
+    boolean isBeginWord( [in] string aText, [in] long nPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nWordType);
 
-    //--------------------------------------------------------------------------
-    /** @returns true if at the specified position ends a word
-    */
-    boolean isEndWord( [in] string Text, [in] long nPos,
-                   [in] ::com::sun::star::lang::Locale nLocale,
-                   [in] short WordType);
+    //------------------------------------------------------------------------
+    /** If a word ends at position <em>nPos</em>.
+     */
+    boolean isEndWord( [in] string aText, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale aLocale,
+                   [in] short nWordType);
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the start of a sentence.
-        @returns the position where the sentence starts
-    */
-    long beginOfSentence( [in] string Text, [in] long nStartPos,
-                      [in] ::com::sun::star::lang::Locale nLocale );
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the start of a
+        sentence.
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the end of a sentence.
-        @returns the position where the sentence ends
-    */
-    long endOfSentence( [in] string Text, [in] long nStartPos,
-                    [in] ::com::sun::star::lang::Locale nLocale );
+        @returns
+            The position where the sentence starts.
+     */
+    long beginOfSentence( [in] string aText, [in] long nStartPos,
+                      [in] ::com::sun::star::lang::Locale aLocale );
 
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the end of a
+        sentence.
 
-    //--------------------------------------------------------------------------
-       /** calculate the linebreak position in the Text from the specified StartPos.
-        <type>LineBreakHyphenationOptions</type> defines if the hyphenator is to be used.
-        The <type>LineBreakUserOptions</type> defines, how to handle hanging
-        punctuations, the forbidden character at the start/end of a line.
+        @returns
+            The position where the sentence ends.
+     */
+    long endOfSentence( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale );
 
-        @returns <type>LineBreakResults</type>, which contains the break position
-        of the word and which kind of break it is.
-    */
-    LineBreakResults getLineBreak( [in] string Text, [in] long nStartPos,
-                    [in] ::com::sun::star::lang::Locale nLocale,
+    //------------------------------------------------------------------------
+    /** Calculate the linebreak position in the Text from the specified
+        <em>nStartPos</em>.
+
+        @param nMinBreakPos
+            TODO
+
+        @param aHyphOptions
+            Defines if the hyphenator is to be used.
+
+        @param aUserOptions
+            Defines how to handle hanging punctuations, the forbidden
+            character at the start/end of a line.
+
+        @returns
+            The LineBreakResults contain the break position of the word
+            and which kind of break it is.
+     */
+    LineBreakResults getLineBreak( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale,
                     [in] long nMinBreakPos,
-                                    [in] LineBreakHyphenationOptions hOptions,
-                    [in] LineBreakUserOptions bOptions );
+                    [in] LineBreakHyphenationOptions aHyphOptions,
+                    [in] LineBreakUserOptions aUserOptions );
 
+    //------------------------------------------------------------------------
+    /** Get the position where the specified script starts, starting to
+        look from <em>nStartPos</em> to the left.
 
-    //--------------------------------------------------------------------------
-    /** @returns the position where the specified skipt starts.
-    */
-    long beginOfScript( [in] string Text, [in] long nStartPos,
-                    [in] short ScriptType );
+        @param nScriptType
+            One of <type>ScriptType</type>.
+     */
+    long beginOfScript( [in] string aText, [in] long nStartPos,
+                    [in] short nScriptType );
 
-    //--------------------------------------------------------------------------
-    /** @returns the position where the specified skipt ends.
-    */
-    long endOfScript( [in] string Text, [in] long nStartPos,
-                  [in] short ScriptType );
+    //------------------------------------------------------------------------
+    /** Get the position where the specified script starts, starting to
+        look from <em>nStartPos</em> to the right.
 
-    //--------------------------------------------------------------------------
-    /** @returns the position where the next specified skipt starts.
-    */
-    long nextScript( [in] string Text, [in] long nStartPos,
-                 [in] short ScriptType );
+        @param nScriptType
+            One of <type>ScriptType</type>.
+     */
+    long endOfScript( [in] string aText, [in] long nStartPos,
+                  [in] short nScriptType );
 
-    //--------------------------------------------------------------------------
-    /** @returns the position where the previous specified skipt starts.
-    */
-    long previousScript ( [in] string Text, [in] long nStartPos,
-                      [in] short ScriptType );
+    //------------------------------------------------------------------------
+    /** Get the position where the next specified script starts,
+        starting to look from <em>nStartPos</em> to the right.
 
-    //--------------------------------------------------------------------------
-    /** @returns the scipts type of the current position.
-    */
-    short   getScriptType  ([in] string Text, [in] long nPos);
+        @param nScriptType
+            One of <type>ScriptType</type>.
+     */
+    long nextScript( [in] string aText, [in] long nStartPos,
+                 [in] short nScriptType );
 
+    //------------------------------------------------------------------------
+    /** Get the position where the next specified script starts,
+        starting to look from <em>nStartPos</em> to the left.
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the beginning of the specified character type.
-        @returns the position where the character type starts
-    */
-    long beginOfCharBlock( [in] string Text, [in] long nStartPos,
-                       [in] ::com::sun::star::lang::Locale nLocale,
-                       [in] short CharType );
+        @param nScriptType
+            One of <type>ScriptType</type>.
+     */
+    long previousScript( [in] string aText, [in] long nStartPos,
+                      [in] short nScriptType );
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the end of the specified character type.
-        @returns the position where the character type ends
-    */
-    long endOfCharBlock( [in] string Text, [in] long nStartPos,
-                     [in] ::com::sun::star::lang::Locale nLocale,
-                     [in] short CharType );
+    //------------------------------------------------------------------------
+    /** Get the script type of the character at position <em>nPos</em>.
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the next start of the specified character type.
-        @returns the position where the next character type starts
-    */
-    long nextCharBlock( [in] string Text, [in] long nStartPos,
-                    [in] ::com::sun::star::lang::Locale nLocale,
-                    [in] short CharType );
+        @returns
+            One of <type>ScriptType</type>.
+     */
+    short   getScriptType( [in] string aText, [in] long nPos);
 
-    //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the previous start of the specified character type.
-        @returns the position where the previous character type starts
-    */
-    long previousCharBlock ( [in] string Text, [in] long nStartPos,
-                     [in] ::com::sun::star::lang::Locale nLocale,
-                     [in] short CharType );
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the beginning of
+        the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the character type starts
+     */
+    long beginOfCharBlock( [in] string aText, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale aLocale,
+                       [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the end of the
+        specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the character type ends.
+     */
+    long endOfCharBlock( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the next start of
+        the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the next character type starts.
+     */
+    long nextCharBlock( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale,
+                    [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the previous start
+        of the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the previous character type starts.
+     */
+    long previousCharBlock ( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharType );
 };
 
-
-//=============================================================================
-
+//============================================================================
 }; }; }; };
-
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2002/03/26 02:49:24  bustamam
-    #97583# Change calendar and breakiterator
-
-    Revision 1.8  2001/11/28 16:28:24  jsc
-    remove ' in comment
-
-    Revision 1.7  2001/10/25 10:01:46  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.6  2001/05/10 21:49:59  bustamam
-    modify charType - Joe Xu
-
-    Revision 1.5  2001/03/28 09:17:44  tl
-    #84966 aHyphenationOptions added LineBreakHyphenationOptions
-
-    Revision 1.4  2001/03/16 16:41:27  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2001/02/09 12:11:18  jp
-    rename define
-
-    Revision 1.2  2001/02/06 09:35:43  jp
-    add new descriptions
-
-    Revision 1.1  2000/11/19 00:34:22  bustamam
-    move Collation, breakiterator, transliteration to i18n
-
-    Revision 1.2  2000/10/25 13:26:03  tl
-    linguistic => linguistic2
-
-    Revision 1.1.1.1  2000/09/18 23:36:04  hjs
-    initial import
-
-    Revision 1.11  2000/09/11 11:53:02  mi
-    documentation merged from XML
-
-    Revision 1.9  2000/07/24 13:27:18  st
-    copy right removed
-
-    Revision 1.8  2000/07/04 07:41:18  ama
-    Chg: XHyphenator instead XHyphenator1
-
-    Revision 1.7  2000/07/03 14:04:04  ama
-    More information about hyphenation
-
-    Revision 1.6  2000/06/23 11:40:28  gmu
-    changed previouswords to previousword, nextWords to nextWord
-
-    Revision 1.5  2000/06/14 13:22:59  sse
-    Merged Begin & End word routines
-
-    Revision 1.4  2000/06/14 08:24:19  sse
-    Moved the constants in package context
-
-    Revision 1.3  2000/06/13 08:12:03  sse
-    New breakiterator APIs
-
-    Revision 1.2  2000/06/09 12:58:59  mt
-    XInterface!
-
-    Revision 1.1  2000/06/07 10:56:23  mt
-    XBreakIterator
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
+//============================================================================
 #endif
