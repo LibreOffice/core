@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:39:07 $
+ *  last change: $Author: pb $ $Date: 2002-08-27 08:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,9 +291,9 @@ void ShutdownIcon::FileOpen()
                     aArgs[2].Name = OUString::createFromAscii( "UpdateDocMode" );
                     aArgs[2].Value <<= nUpdateDoc;
 
-                    OUString                    aFilterName;
-                    if ( xFilterManager.is() )
-                        aFilterName = xFilterManager->getCurrentFilter();
+                    // pb: #102643# use the filedlghelper to get the current filter name,
+                    // because it removes the extensions before you get the filter name.
+                    OUString aFilterName( dlg.GetCurrentFilter() );
 
                     if ( xPickerControls.is() )
                     {
