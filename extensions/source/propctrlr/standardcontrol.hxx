@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
 #endif
+#ifndef _CALENDAR_HXX
+#include <svtools/calendar.hxx>
+#endif
 
 class PushButton;
 class MultiLineEdit;
@@ -106,7 +109,7 @@ namespace pcr
     //========================================================================
     //= ODateControl
     //========================================================================
-    class ODateControl : public OCommonBehaviourControl, DateField
+    class ODateControl : public OCommonBehaviourControl, CalendarField
     {
     protected:
             virtual long                    PreNotify( NotifyEvent& rNEvt );
@@ -158,19 +161,32 @@ namespace pcr
     //========================================================================
     //= ONumericControl
     //========================================================================
-    class ONumericControl : public OCommonBehaviourControl, NumericField
+    class ONumericControl : public OCommonBehaviourControl, MetricField
     {
+    private:
+        FieldUnit   m_eValueUnit;
+
     protected:
             virtual long                    PreNotify( NotifyEvent& rNEvt );
 
     public:
-                                            ONumericControl( Window* pParent,sal_uInt16 nDigits, WinBits nWinStyle = WB_TABSTOP);
+            ONumericControl( Window* pParent, sal_uInt16 nDigits, WinBits nWinStyle = WB_TABSTOP );
 
             virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
             virtual ::rtl::OUString         GetProperty()const;
 
-            void                            SetMin(sal_Int32 _nMin) { NumericField::SetMin(_nMin); }
-            void                            SetMax(sal_Int32 _nMax) { NumericField::SetMax(_nMax); }
+            void                            SetMin(sal_Int32 _nMin) { MetricField::SetMin(_nMin); }
+            void                            SetMax(sal_Int32 _nMax) { MetricField::SetMax(_nMax); }
+            void                            SetFieldUnit( FieldUnit _eUnit ) { MetricField::SetUnit( _eUnit ); }
+            void                            SetValueUnit( FieldUnit _eUnit ) { m_eValueUnit = _eUnit; }
+
+    protected:
+        MetricField::SetUnit;
+        MetricField::SetCustomUnitText;
+        MetricField::GetCurUnitText;
+        MetricField::SetValue;
+    protected:
+    inline long  GetLastValue() const { return mnLastValue; }
     };
 
     //========================================================================
@@ -289,6 +305,7 @@ namespace pcr
     protected:
             virtual void modified(Window* _pSource);
     };
+
 //............................................................................
 } // namespace pcr
 //............................................................................
