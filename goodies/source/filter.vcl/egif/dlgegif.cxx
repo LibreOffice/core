@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 #include <tools/ref.hxx>
-#include <vcl/config.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include <vcl/msgbox.hxx>
 #include "dlgegif.hxx"
 #include "dlgegif.hrc"
@@ -82,21 +82,28 @@ DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+
     String aInterlaceStr( ResId( KEY_INTER, pMgr ) );
     String aTranslucentStr( ResId( KEY_TRANS, pMgr ) );
     // Config-Parameter lesen
-    BOOL bInterlaced = ( pConfig->ReadKey( ByteString( aInterlaceStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32() != 0 );
-    BOOL bTranslucent = ( (char) pConfig->ReadKey( ByteString( aTranslucentStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32() != 0 );
+    sal_Bool bInterlaced = pConfigItem->ReadInt32( aInterlaceStr, 1 ) != 0;
+    sal_Bool bTranslucent = pConfigItem->ReadInt32( aTranslucentStr, 1 ) != 0;
 
     aCbxInterlaced.Check( bInterlaced );
     aCbxTranslucent.Check( bTranslucent );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEGIF, OK ) );
+}
+
+DlgExportEGIF::~DlgExportEGIF()
+{
+    delete pConfigItem;
 }
 
 /*************************************************************************
@@ -112,22 +119,15 @@ IMPL_LINK( DlgExportEGIF, OK, void *, EMPTYARG )
     String aInterlaceStr( ResId( KEY_INTER, pMgr ) );
     String aTranslucentStr( ResId( KEY_TRANS, pMgr ) );
 
-    ByteString aStr;
-
+    sal_Int32 nValue = 0;
     if ( aCbxInterlaced.IsChecked() )
-        aStr = '1';
-    else
-        aStr = '0';
+        nValue++;
+    pConfigItem->WriteInt32( aInterlaceStr, nValue );
 
-    pConfig->WriteKey( ByteString( aInterlaceStr, RTL_TEXTENCODING_UTF8 ), aStr );
-
+    nValue = 0;
     if ( aCbxTranslucent.IsChecked() )
-        aStr = '1';
-    else
-        aStr = '0';
-
-    pConfig->WriteKey( ByteString( aTranslucentStr, RTL_TEXTENCODING_UTF8 ), aStr );
-
+        nValue++;
+    pConfigItem->WriteInt32( aTranslucentStr, nValue );
     EndDialog( RET_OK );
 
     return 0;

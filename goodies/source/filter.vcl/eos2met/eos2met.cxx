@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-23 15:06:31 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2605,11 +2605,11 @@ BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                              FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                              FilterConfigItem*, BOOL)
 #endif
 {
     METWriter aMETWriter;
@@ -2636,7 +2636,7 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL    bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString aResMgrName( "eme" );
         ResMgr* pResMgr;

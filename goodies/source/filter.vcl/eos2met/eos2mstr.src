@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2mstr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,10 @@
 
 String KEY_MODE
 {
-    Text = "MET-EXPORT-MODE";
+    Text = "ExportMode";
 };
 
-String KEY_SIZEX
+String KEY_SIZE
 {
-    Text = "MET-EXPORT-SIZEX";
-};
-
-String KEY_SIZEY
-{
-    Text = "MET-EXPORT-SIZEY";
+    Text = "Size";
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: egifstr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 // Key fuer den Dialog
 String KEY_INTER
 {
-    Text = "GIF-EXPORT-INTERLACED";
+    Text = "Interlaced";
 };
 String KEY_TRANS
 {
-    Text = "GIF-EXPORT-TRANSLUCENT";
+    Text = "Translucent";
 };

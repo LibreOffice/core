@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,11 @@
  ************************************************************************/
 
 #pragma hdrstop
-
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 #include <vcl/msgbox.hxx>
-#include <vcl/config.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "dlgeos2.hxx"
 #include "dlgeos2.hrc"
 #include "strings.hrc"
@@ -90,36 +92,29 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 
 {
     FreeResource();
+
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/MET" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEMET, OK ) );
     aRbOriginal.SetClickHdl( LINK( this, DlgExportEMET, ClickRbOriginal ) );
     aRbSize.SetClickHdl( LINK( this, DlgExportEMET, ClickRbSize ) );
 
     // Config-Parameter lesen
-    String aModeStr( ResId( KEY_MODE, pMgr ) );
-    String aSizeXStr( ResId( KEY_SIZEX, pMgr ) );
-    String aSizeYStr( ResId( KEY_SIZEY, pMgr ) );
-    ByteString aStrMode( pConfig->ReadKey( ByteString( aModeStr, RTL_TEXTENCODING_UTF8 ) ) );
-    ByteString aStrSizeX( pConfig->ReadKey( ByteString( aSizeXStr, RTL_TEXTENCODING_UTF8 ) ) );
-    ByteString aStrSizeY( pConfig->ReadKey( ByteString( aSizeYStr, RTL_TEXTENCODING_UTF8 ) ) );
+    sal_Int32 nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
+    ::com::sun::star::awt::Size aDefault( 10000, 10000 );
+    ::com::sun::star::awt::Size aSize;
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
 
-    if ( !aStrSizeX.Len() )
-        aMtfSizeX.SetValue( 10000 );
-    else
-        aMtfSizeX.SetValue( aStrSizeX.ToInt32() );
-
-    if ( !aStrSizeY.Len() )
-        aMtfSizeY.SetValue( 10000 );
-    else
-        aMtfSizeY.SetValue( aStrSizeY.ToInt32() );
+    aMtfSizeX.SetValue( aSize.Width );
+    aMtfSizeY.SetValue( aSize.Height );
 
     switch ( rPara.eFieldUnit )
     {
@@ -143,8 +138,7 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
         }
         break;
     }
-
-    if ( aStrMode.Len() && ( aStrMode.GetChar( 0 ) == '1' ) )
+    if ( nMode == 1 )
     {
         aRbSize.Check( TRUE );
         ClickRbSize( NULL );
@@ -156,6 +150,11 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
     }
 }
 
+DlgExportEMET::~DlgExportEMET()
+{
+    delete pConfigItem;
+}
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -165,17 +164,13 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
 IMPL_LINK( DlgExportEMET, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    sal_Int32 nSizeX = (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM );
-    sal_Int32 nSizeY = (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM );
+    ::com::sun::star::awt::Size aSize(
+        (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
+            (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
     sal_Int32 nStrMode = ( aRbSize.IsChecked() ) ? 1 : 0;
 
-    String aModeStr( ResId( KEY_MODE, pMgr ) );
-    String aSizeXStr( ResId( KEY_SIZEX, pMgr ) );
-    String aSizeYStr( ResId( KEY_SIZEY, pMgr ) );
-    pConfig->WriteKey( ByteString( aModeStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nStrMode ) );
-    pConfig->WriteKey( ByteString( aSizeXStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nSizeX ) );
-    pConfig->WriteKey( ByteString( aSizeYStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nSizeY ) );
-
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nStrMode );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
     EndDialog( RET_OK );
 
     return 0;
@@ -204,7 +199,6 @@ IMPL_LINK( DlgExportEMET, ClickRbOriginal, void*, EMPTYARG )
 |* Enabled/Disabled Controls
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(dlgeos2_09)
 
 IMPL_LINK( DlgExportEMET, ClickRbSize, void*, EMPTYARG )
 {
@@ -223,6 +217,9 @@ IMPL_LINK( DlgExportEMET, ClickRbSize, void*, EMPTYARG )
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:30:12  hr
+      initial import
+
       Revision 1.6  2000/09/15 15:27:06  willem.vandorp
       OpenOffice header added.
 
@@ -256,4 +253,3 @@ IMPL_LINK( DlgExportEMET, ClickRbSize, void*, EMPTYARG )
 
 *************************************************************************/
 
-#pragma SEG_EOFMODULE

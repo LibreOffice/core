@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 |*
 \************************************************************************/
 
-class Config;
+class FilterConfigItem;
 class ResMgr;
 
 class DlgExportEMET : public ModalDialog
@@ -95,7 +95,7 @@ private:
     MetricField         aMtfSizeY;
     GroupBox            aGrpSize;
 
-    Config*             pConfig;
+    FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
 
     DECL_LINK( OK, void* p );
@@ -104,6 +104,7 @@ private:
 
 public:
             DlgExportEMET( FltCallDialogParameter& rPara );
+            ~DlgExportEMET();
 };
 
 

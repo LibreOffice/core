@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+#   last change: $Author: sj $ $Date: 2001-03-07 20:07:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,7 @@ RESLIB1SRSFILES=\
 
 SHL1TARGET=     eme$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     eos2met
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB)
+SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
 SHL1DEPN=       $(LB)$/eos2met.lib
 SHL1LIBS=       $(SLB)$/eos2met.lib # $(LB)$/rtftoken.lib

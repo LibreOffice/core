@@ -2,9 +2,9 @@
  *
  *  $RCSfile: egif.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/config.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
 #include "strings.hrc"
 #include "dlgegif.hrc"
@@ -115,15 +115,15 @@ public:
                         ~GIFWriter() {}
 
     BOOL                WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                                  PFilterCallback pcallback, void* pcallerdata,
-                                  Config* pOptionsConfig );
+                                    PFilterCallback pcallback, void* pcallerdata,
+                                        FilterConfigItem* pConfigItem );
 };
 
 // ------------------------------------------------------------------------
 
 BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                          PFilterCallback pcallback, void* pcallerdata,
-                          Config* pOptionsConfig )
+                            PFilterCallback pcallback, void* pcallerdata,
+                                FilterConfigItem* pConfigItem )
 {
     Size            aSize100;
     const MapMode   aMap( rGraphic.GetPrefMapMode() );
@@ -140,8 +140,8 @@ BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
     pCallback = pcallback;
     pCallerData = pcallerdata;
 
-    if ( pOptionsConfig )
-        nInterlaced = pOptionsConfig->ReadKey( "GIF-EXPORT-INTERLACED", "0" ).ToInt32();
+    if ( pConfigItem )
+        nInterlaced = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
 
     pGIF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -591,9 +591,9 @@ void GIFWriter::WriteTerminator()
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
-    return GIFWriter().WriteGIF( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return GIFWriter().WriteGIF( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 // ------------------------------------------------------------------------
@@ -602,7 +602,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "egi" );
         ResMgr*     pResMgr;
