@@ -2,7 +2,6 @@
 SfxVoidItem NextMark SID_NEXTMARK
 ()
 [
-    UnoName = "NextMark";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -11,18 +10,10 @@ SfxVoidItem NextMark SID_NEXTMARK
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -36,7 +27,6 @@ SfxVoidItem NextMark SID_NEXTMARK
 SfxVoidItem SetPaperSize SID_GETEDITTEXT
 ()
 [
-    UnoName = "SetPaperSize";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -45,18 +35,10 @@ SfxVoidItem SetPaperSize SID_GETEDITTEXT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -70,7 +52,6 @@ SfxVoidItem SetPaperSize SID_GETEDITTEXT
 SfxVoidItem PrevMark SID_PREVMARK
 ()
 [
-    UnoName = "PrevMark";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -79,18 +60,10 @@ SfxVoidItem PrevMark SID_PREVMARK
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -104,7 +77,6 @@ SfxVoidItem PrevMark SID_PREVMARK
 SfxVoidItem View50 SID_VIEW050
 ()
 [
-    UnoName = "View50";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -113,18 +85,10 @@ SfxVoidItem View50 SID_VIEW050
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -138,7 +102,6 @@ SfxVoidItem View50 SID_VIEW050
 SfxVoidItem Config SID_PREFERENCES
 ()
 [
-    UnoName = "Config";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -147,18 +110,10 @@ SfxVoidItem Config SID_PREFERENCES
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -172,7 +127,6 @@ SfxVoidItem Config SID_PREFERENCES
 SfxStringItem ModifyStatus SID_MODIFYSTATUS
 
 [
-    UnoName = "ModifyStatus";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -181,20 +135,12 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -207,7 +153,6 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
 SfxStringItem ConfigName SID_TEXT
 
 [
-    UnoName = "ConfigName";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -216,20 +161,12 @@ SfxStringItem ConfigName SID_TEXT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -242,7 +179,6 @@ SfxStringItem ConfigName SID_TEXT
 SfxBoolItem InsertFormula SID_INSERT_FORMULA
 (SfxStringItem Name SID_INSERT_FORMULA,SfxStringItem Filter FN_PARAM_1)
 [
-    UnoName = "InsertFormula";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -251,18 +187,10 @@ SfxBoolItem InsertFormula SID_INSERT_FORMULA
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Asynchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -276,7 +204,6 @@ SfxBoolItem InsertFormula SID_INSERT_FORMULA
 SfxVoidItem CopyObject SID_COPYOBJECT
 ()
 [
-    UnoName = "CopyObject";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -285,18 +212,10 @@ SfxVoidItem CopyObject SID_COPYOBJECT
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -310,7 +229,6 @@ SfxVoidItem CopyObject SID_COPYOBJECT
 SfxBoolItem ToolBox SID_TOOLBOX
 
 [
-    UnoName = "ToolBox";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -319,20 +237,12 @@ SfxBoolItem ToolBox SID_TOOLBOX
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -345,7 +255,6 @@ SfxBoolItem ToolBox SID_TOOLBOX
 SfxVoidItem NextError SID_NEXTERR
 ()
 [
-    UnoName = "NextError";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -354,18 +263,10 @@ SfxVoidItem NextError SID_NEXTERR
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -379,7 +280,6 @@ SfxVoidItem NextError SID_NEXTERR
 SfxVoidItem CommandWindow SID_CMDBOXWINDOW
 ()
 [
-    UnoName = "CommandWindow";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -388,18 +288,10 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -413,7 +305,6 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
 SfxVoidItem View200 SID_VIEW200
 ()
 [
-    UnoName = "View200";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -422,18 +313,10 @@ SfxVoidItem View200 SID_VIEW200
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -447,7 +330,6 @@ SfxVoidItem View200 SID_VIEW200
 SfxVoidItem ZoomIn SID_ZOOMIN
 ()
 [
-    UnoName = "ZoomIn";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -456,18 +338,10 @@ SfxVoidItem ZoomIn SID_ZOOMIN
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -481,7 +355,6 @@ SfxVoidItem ZoomIn SID_ZOOMIN
 SfxBoolItem Textmode SID_TEXTMODE
 
 [
-    UnoName = "Textmode";
     /* flags: */
     AutoUpdate = TRUE,
     Cachable = Volatile,
@@ -490,20 +363,12 @@ SfxBoolItem Textmode SID_TEXTMODE
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -516,7 +381,6 @@ SfxBoolItem Textmode SID_TEXTMODE
 SfxVoidItem ToolBowWindow SID_TOOLBOXWINDOW
 ()
 [
-    UnoName = "ToolBowWindow";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -525,18 +389,10 @@ SfxVoidItem ToolBowWindow SID_TOOLBOXWINDOW
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -550,7 +406,6 @@ SfxVoidItem ToolBowWindow SID_TOOLBOXWINDOW
 SfxStringItem TextStatus SID_TEXTSTATUS
 
 [
-    UnoName = "TextStatus";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -559,20 +414,12 @@ SfxStringItem TextStatus SID_TEXTSTATUS
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -585,7 +432,6 @@ SfxStringItem TextStatus SID_TEXTSTATUS
 SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
 ()
 [
-    UnoName = "SymbolCatalogue";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -594,18 +440,10 @@ SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -619,7 +457,6 @@ SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
 SfxVoidItem Symbols SID_SYMBOLS
 ()
 [
-    UnoName = "Symbols";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -628,18 +465,10 @@ SfxVoidItem Symbols SID_SYMBOLS
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -653,7 +482,6 @@ SfxVoidItem Symbols SID_SYMBOLS
 SfxVoidItem View100 SID_VIEW100
 ()
 [
-    UnoName = "View100";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -662,18 +490,10 @@ SfxVoidItem View100 SID_VIEW100
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -687,7 +507,6 @@ SfxVoidItem View100 SID_VIEW100
 SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
 
 [
-    UnoName = "RedrawAutomatic";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -696,20 +515,12 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -722,7 +533,6 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
 SfxVoidItem PasteObject SID_PASTEOBJECT
 ()
 [
-    UnoName = "PasteObject";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -731,18 +541,10 @@ SfxVoidItem PasteObject SID_PASTEOBJECT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -756,7 +558,6 @@ SfxVoidItem PasteObject SID_PASTEOBJECT
 SfxVoidItem ChangeFontSize SID_FONTSIZE
 ()
 [
-    UnoName = "ChangeFontSize";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -765,18 +566,10 @@ SfxVoidItem ChangeFontSize SID_FONTSIZE
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -790,7 +583,6 @@ SfxVoidItem ChangeFontSize SID_FONTSIZE
 SfxVoidItem SaveSymbols SID_SAVESYMBOLS
 ()
 [
-    UnoName = "SaveSymbols";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -799,18 +591,10 @@ SfxVoidItem SaveSymbols SID_SAVESYMBOLS
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -824,7 +608,6 @@ SfxVoidItem SaveSymbols SID_SAVESYMBOLS
 SfxInt16Item Graphic SID_GRAPHIC
 
 [
-    UnoName = "Graphic";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -833,20 +616,12 @@ SfxInt16Item Graphic SID_GRAPHIC
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
+    Readonly = FALSE,
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -859,7 +634,6 @@ SfxInt16Item Graphic SID_GRAPHIC
 SfxVoidItem ChangeFont SID_FONT
 ()
 [
-    UnoName = "ChangeFont";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -868,18 +642,10 @@ SfxVoidItem ChangeFont SID_FONT
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -893,7 +659,6 @@ SfxVoidItem ChangeFont SID_FONT
 SfxVoidItem ChangeDistance SID_DISTANCE
 ()
 [
-    UnoName = "ChangeDistance";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -902,18 +667,10 @@ SfxVoidItem ChangeDistance SID_DISTANCE
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -927,7 +684,6 @@ SfxVoidItem ChangeDistance SID_DISTANCE
 SfxVoidItem ZoomOut SID_ZOOMOUT
 ()
 [
-    UnoName = "ZoomOut";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -936,18 +692,10 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -961,7 +709,6 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
 SfxVoidItem Draw SID_DRAW
 ()
 [
-    UnoName = "Draw";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -970,18 +717,10 @@ SfxVoidItem Draw SID_DRAW
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -995,7 +734,6 @@ SfxVoidItem Draw SID_DRAW
 SfxVoidItem InsertCommand SID_INSERTCOMMAND
 ()
 [
-    UnoName = "InsertCommand";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -1004,18 +742,10 @@ SfxVoidItem InsertCommand SID_INSERTCOMMAND
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Asynchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1029,7 +759,6 @@ SfxVoidItem InsertCommand SID_INSERTCOMMAND
 SfxVoidItem InsertConfigName SID_INSERTTEXT
 ()
 [
-    UnoName = "InsertConfigName";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -1038,18 +767,10 @@ SfxVoidItem InsertConfigName SID_INSERTTEXT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Asynchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1063,7 +784,6 @@ SfxVoidItem InsertConfigName SID_INSERTTEXT
 SfxVoidItem ChangeAlignment SID_ALIGN
 ()
 [
-    UnoName = "ChangeAlignment";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -1072,18 +792,10 @@ SfxVoidItem ChangeAlignment SID_ALIGN
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1097,7 +809,6 @@ SfxVoidItem ChangeAlignment SID_ALIGN
 SfxVoidItem LoadSymbols SID_LOADSYMBOLS
 ()
 [
-    UnoName = "LoadSymbols";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -1106,18 +817,10 @@ SfxVoidItem LoadSymbols SID_LOADSYMBOLS
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Asynchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -1131,7 +834,6 @@ SfxVoidItem LoadSymbols SID_LOADSYMBOLS
 SfxVoidItem PrevError SID_PREVERR
 ()
 [
-    UnoName = "PrevError";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -1140,18 +842,10 @@ SfxVoidItem PrevError SID_PREVERR
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1165,7 +859,6 @@ SfxVoidItem PrevError SID_PREVERR
 SfxBoolItem FormelCursor SID_FORMULACURSOR
 ()
 [
-    UnoName = "FormelCursor";
     /* flags: */
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -1174,18 +867,10 @@ SfxBoolItem FormelCursor SID_FORMULACURSOR
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1199,7 +884,6 @@ SfxBoolItem FormelCursor SID_FORMULACURSOR
 SfxVoidItem FitInWindow SID_FITINWINDOW
 ()
 [
-    UnoName = "FitInWindow";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
@@ -1208,18 +892,10 @@ SfxVoidItem FitInWindow SID_FITINWINDOW
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1233,7 +909,6 @@ SfxVoidItem FitInWindow SID_FITINWINDOW
 SfxVoidItem Adjust SID_ADJUST
 ()
 [
-    UnoName = "Adjust";
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -1242,18 +917,10 @@ SfxVoidItem Adjust SID_ADJUST
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fme $ $Date: 2001-08-16 09:17:14 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:25:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 
 
 SDINAME=$(TARGET)
-SDIEXPORT=swnew
+SDIEXPORT=swriter
 SIDHRCNAME=swslots.hrc
 
 # --- Files --------------------------------------------------------
@@ -86,7 +86,6 @@ SIDHRCNAME=swslots.hrc
 SVSDIDEPEND= \
         $(SOLARINCXDIR)$/ofa.ilb \
         switems.sdi\
-        swnew.sdi\
         swriter.sdi\
         _docsh.sdi\
         docsh.sdi\
