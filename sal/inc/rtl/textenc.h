@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:56:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,10 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_KOI8_U                 (RTL_TEXTENC_CAST( 88 ))
 #define RTL_TEXTENCODING_ISCII_DEVANAGARI       (RTL_TEXTENC_CAST( 89 ))
 #define RTL_TEXTENCODING_JAVA_UTF8              (RTL_TEXTENC_CAST( 90 ))
+#define RTL_TEXTENCODING_ADOBE_STANDARD         (RTL_TEXTENC_CAST( 91 ))
+#define RTL_TEXTENCODING_ADOBE_SYMBOL           (RTL_TEXTENC_CAST( 92 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
- * rtl_isOctetEncoding in tencinfo.c.
+ * rtl_isOctetTextEncoding in tencinfo.c.
  */
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
