@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:05:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,6 @@ BOOL Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj );
 const SwFrm *FindKontext( const SwFrm *pFrm, USHORT nAdditionalKontextTyp );
 
 BOOL IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
-
-void MA_ParkCrsr( SwPageDesc *pDesc, SwCrsrShell &rSh );
 
 const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
 
