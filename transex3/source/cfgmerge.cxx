@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-19 16:12:17 $
+ *  last change: $Author: nf $ $Date: 2001-02-02 15:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ void CfgParser::AddText(
 /*****************************************************************************/
 {
     USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
-    if ( nLang ) {
+    if ( nLang != 0xFFFF ) {
         USHORT nLangIndex = Export::GetLangIndex( nLang );
         pStackData->sResTyp = rResTyp;
         WorkOnText( rText, nLangIndex, rResTyp );
