@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-22 11:19:33 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3546,7 +3546,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ã‚¹ã‚¿ã‚¤ãƒ«(~T)";
         Text[ korean ] = "ìœ í˜•(~T):";
         Text[ chinese_simplified ] = "å­—ä½“å½¢çŠ¶(~T)";
-        Text[ chinese_traditional ] = "å­—å‹å½¢ç‹€ï¼š(~T)";
+        Text[ chinese_traditional ] = "å­—å‹å½¢ç‹€(~T)";
         Text[ turkish ] = "Yazıtipi varyantı:";
         Text[ arabic ] = "äãØ ÇáÎØ:";
         Text[ catalan ] = "T~ipografia:";
@@ -6053,7 +6053,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ greek ] = "Óıíïëï ğçëßêïõ ";
                 Text[ korean ] = "ìƒì§‘í•©";
                 Text[ turkish ] = "Bölüm kümesi ";
-                Text[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
+                Text[ language_user1 ] = "Bitt; Bitte das Leerzeichen am Ende entfernen";
                 Text[ catalan ] = "Conjunt de quocients";
                 Text[ finnish ] = "Osamääräjoukko ";
                 Text[ thai ] = "à¹€à¸‹à¸•à¸œà¸¥à¸«à¸²à¸£ ";
@@ -6082,7 +6082,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ greek ] = "aleph ";
                 TEXT[ korean ] = "ì•Œë ˆí”„";
                 TEXT[ turkish ] = "aleph ";
-                TEXT[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
+                TEXT[ language_user1 ] = "Bitt; Bitte das Leerzeichen am Ende entfernen";
                 TEXT[ catalan ] = "aleph ";
                 TEXT[ finnish ] = "Aleph ";
                 TEXT[ thai ] = "Aleph";
