@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-26 14:52:41 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
 #endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
@@ -168,24 +173,6 @@ Matrix4D createTransformationSceneToScreen(
     return aM4;
 }
 
-drawing::HomogenMatrix createTransformationMatrix()
-{
-    Matrix4D aM4;
-    aM4.RotateY( -ZDIRECTION*F_PI/9.0 );
-    aM4.RotateX( ZDIRECTION*F_PI/10.0 );
-
-    //aM4.RotateY( ZDIRECTION*F_PI/2.0 );
-    //aM4.RotateX( -ZDIRECTION*F_PI/2.0 );
-
-    //aM4.RotateX( -ZDIRECTION*F_PI/2.0 );
-
-    aM4.Translate(0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0);
-//  aM4.Scale(1, 1, ZDIRECTION); //invert direction of z coordinate to get a left handed system
-    aM4.Scale(1.0, 1.0, ZDIRECTION);
-    drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
-    return aHM;
-}
-
 uno::Reference< drawing::XShapes > createDiagram(
               const uno::Reference< drawing::XShapes>& xPageShapes
             , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
@@ -196,8 +183,6 @@ uno::Reference< drawing::XShapes > createDiagram(
 {
     VDiagram aVDiagram(xDia, nDimension);
     aVDiagram.init(xPageShapes,xPageShapes,xShapeFactory);
-    if(3==nDimension)
-        aVDiagram.setSceneMatrix( createTransformationMatrix() );
     aVDiagram.createShapes(rPos,rSize);
     uno::Reference< drawing::XShapes > xTarget = aVDiagram.getCoordinateRegion();
     return xTarget;
@@ -353,13 +338,10 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
             , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
             , NumberFormatterWrapper* pNumberFormatterWrapper
             , const awt::Point& rPos, const awt::Size& rSize
-            , const uno::Reference< frame::XModel >& xModel )
+            , const uno::Reference< frame::XModel >& xChartModel )
 {
     //------------ get model series from model
-    uno::Reference< XChartDocument >        xChartDocument( xModel, uno::UNO_QUERY );
-    if( !xChartDocument.is() )
-        return;
-    uno::Reference< XDiagram >              xDiagram = xChartDocument->getDiagram();
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is())
         return;
 
@@ -532,7 +514,9 @@ void ChartViewImpl::getExplicitValuesForMeter(
 
 bool getPosAndSizeForDiagram(
     awt::Point& rOutPos, awt::Size& rOutSize
-    , const awt::Rectangle& rSpaceLeft )
+    , const awt::Rectangle& rSpaceLeft
+    , const awt::Size & rPageSize
+    , const uno::Reference< XDiagram > & xDiagram )
 {
     //@todo: we need a size dependent on the axis labels
 
@@ -552,8 +536,30 @@ bool getPosAndSizeForDiagram(
     if( nHeight <= 0 || nWidth <= 0 )
         return false;
 
-    rOutPos = awt::Point(nOffsetX,nOffsetY);
+    //size:
     rOutSize = awt::Size(nWidth,nHeight);
+
+    //position:
+    ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+    if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
+    {
+        //@todo decide wether x is primary or secondary
+
+        //the anchor point at the page is in the middle of the page
+        double fX = rPageSize.Width/2.0+aRelativePosition.Primary*rPageSize.Width;
+        double fY = rPageSize.Height/2.0+aRelativePosition.Secondary*rPageSize.Height;
+
+        //the anchor point at the diagram object is in the middle
+        fY -= rOutSize.Height/2;
+        fX -= rOutSize.Width/2;
+
+        rOutPos.X = static_cast<sal_Int32>(fX);
+        rOutPos.Y = static_cast<sal_Int32>(fY);
+    }
+    else
+        rOutPos = awt::Point(nOffsetX,nOffsetY);
+
     return true;
 }
 
@@ -572,7 +578,25 @@ void createTitle( const uno::Reference< XTitle >& xTitle
         aVTitle.init(xPageShapes,xShapeFactory);
         aVTitle.createShapes( awt::Point(0,0), rPageSize );
         awt::Size aTitleSize = aVTitle.getFinalSize();
-        aVTitle.changePosition( awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance ) );
+
+        awt::Point aNewPosition;
+        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
+        if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
+        {
+            //@todo decide wether x is primary or secondary
+            aNewPosition.X = static_cast<sal_Int32>(aRelativePosition.Primary*rPageSize.Width);
+            aNewPosition.Y = static_cast<sal_Int32>(aRelativePosition.Secondary*rPageSize.Height);
+
+            //the anchor point at the title object is top/middle
+            aNewPosition.Y += aTitleSize.Height/2;
+        }
+        else
+        {
+            aNewPosition = awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance );
+        }
+
+        aVTitle.changePosition( aNewPosition );
         nrYOffset += aTitleSize.Height + 2*nYDistance;
     }
 }
@@ -691,7 +715,7 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     awt::Size  aSizeDia;
     aSpaceLeft.Y += nYDistance;
     aSpaceLeft.Height -= nYDistance;//@todo substract 2*nYOffset if the diagram size is calculated dependent on axis labels
-    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft ) )
+    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft, rPageSize, ChartModelHelper::findDiagram( m_xChartModel ) ) )
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
                     , aPosDia ,aSizeDia
