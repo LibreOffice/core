@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-12 11:52:32 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,41 +979,30 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter()
     SEQUENCE< PROPERTYVALUE > aPrinter(8);
 
     aPrinter.getArray()[7].Name = DEFINE_CONST_UNICODE( "CanSetPaperSize" );
-//ASDBG aPrinter.getArray()[7].Value.setBOOL( pPrinter->HasSupport( SUPPORT_SET_PAPERSIZE ) );
     aPrinter.getArray()[7].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPERSIZE ) );
 
     aPrinter.getArray()[6].Name = DEFINE_CONST_UNICODE( "CanSetPaperFormat" );
-//ASDBG aPrinter.getArray()[6].Value.setBOOL( pPrinter->HasSupport( SUPPORT_SET_PAPER ) );
     aPrinter.getArray()[6].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPER ) );
 
     aPrinter.getArray()[5].Name = DEFINE_CONST_UNICODE( "CanSetPaperOrientation" );
-//ASDBG aPrinter.getArray()[5].Value.setBOOL( pPrinter->HasSupport( SUPPORT_SET_ORIENTATION ) );
     aPrinter.getArray()[5].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_ORIENTATION ) );
 
     aPrinter.getArray()[4].Name = DEFINE_CONST_UNICODE( "IsBusy" );
-//ASDBG aPrinter.getArray()[4].Value.setBOOL( pPrinter->IsJobActive() );
     aPrinter.getArray()[4].Value <<= ( pPrinter->IsJobActive() );
 
     aPrinter.getArray()[3].Name = DEFINE_CONST_UNICODE( "PaperSize" );
     SIZE aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//  aPrinter.getArray()[3].Value.set( &aSize, Size_getReflection() );
     aPrinter.getArray()[3].Value <<= aSize;
 
     aPrinter.getArray()[2].Name = DEFINE_CONST_UNICODE( "PaperFormat" );
     PAPERFORMAT eFormat = (PAPERFORMAT)pPrinter->GetPaper();
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//  aPrinter.getArray()[2].Value.set( &eFormat, PaperFormat_getReflection() );
     aPrinter.getArray()[2].Value <<= eFormat;
 
     aPrinter.getArray()[1].Name = DEFINE_CONST_UNICODE( "PaperOrientation" );
     PAPERORIENTATION eOrient = (PAPERORIENTATION)pPrinter->GetOrientation();
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//  aPrinter.getArray()[1].Value.set( &eOrient, PaperOrientation_getReflection() );
     aPrinter.getArray()[1].Value <<= eOrient;
 
     aPrinter.getArray()[0].Name = DEFINE_CONST_UNICODE( "Name" );
-//  aPrinter.getArray()[0].Value <<= ( S2U(pPrinter->GetName()) );
     String sStringTemp = pPrinter->GetName() ;
     aPrinter.getArray()[0].Value <<= ::rtl::OUString( sStringTemp );
 
@@ -1050,13 +1039,9 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() != OOUSTRING_getReflection() )
             if ( rProp.Value.getValueType() != ::getCppuType((const OUSTRING*)0) )
-
                 throw ILLEGALARGUMENTEXCEPTION();
 
-//          String aPrinterName( U2S( rProp.Value.getString() ) );
             OUSTRING sTemp;
             rProp.Value >>= sTemp ;
             String aPrinterName( sTemp ) ;
@@ -1069,30 +1054,27 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
     }
 
     Size aSetPaperSize( 0, 0);
-    sal_Int32 nPaperFormat = PAPER_USER;
+    PAPERFORMAT nPaperFormat = (PAPERFORMAT) PAPER_USER;
     // other properties
     for ( int i = 0; i < rPrinter.getLength(); ++i )
     {
         // get Property-Value from printer description
         const PROPERTYVALUE &rProp = rPrinter.getConstArray()[i];
-//      IMPL_SmartAny aValue( rProp.Value );
 
         // PaperOrientation-Property?
         if ( rProp.Name.compareToAscii( "PaperOrientation" ) == 0 )
         {
-            sal_Int32 nOrient;
-//          if ( !aValue.queryEnum( nOrient ) )
-            if ( ( rProp.Value >>= nOrient ) == sal_False )
+            PAPERORIENTATION eOrient;
+            if ( ( rProp.Value >>= eOrient ) == sal_False )
                 throw ILLEGALARGUMENTEXCEPTION();
 
-            pPrinter->SetOrientation( (Orientation) nOrient );
+            pPrinter->SetOrientation( (Orientation) eOrient );
             nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
         }
 
         // PaperFormat-Property?
         if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
         {
-//          if ( !aValue.queryEnum( nPaperFormat ) )
             if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
                 throw ILLEGALARGUMENTEXCEPTION();
 
@@ -1103,12 +1085,6 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
         // PaperSize-Property?
         if ( rProp.Name.compareToAscii( "PaperSize" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() != Size_getReflection() )
-//          if ( rProp.Value.getValueType() != ::getCppuType((const Size*)0) )
-//              throw( ILLEGALARGUMENTEXCEPTION() );
-//
-//          aSetPaperSize = ( *(const Size*) rProp.Value.get() );
             SIZE aTempSize ;
             if ( ( rProp.Value >>= aTempSize ) == sal_False )
             {
@@ -1120,10 +1096,10 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
             }
         }
     }
+
     //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
     //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
-    if(nPaperFormat == PAPER_USER &&
-        aSetPaperSize.Width())
+    if(nPaperFormat == PAPER_USER && aSetPaperSize.Width())
     {
         //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
         //          Device gesetzten umrechnen. Zusaetzlich nur dann
@@ -1167,22 +1143,16 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
     {
         // get Property-Value from options
         const PROPERTYVALUE &rProp = rOptions.getConstArray()[n];
-//      IMPL_SmartAny aValue( rProp.Value );
 
         // FileName-Property?
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == OOUSTRING_getReflection() )
             if ( rProp.Value.getValueType() == ::getCppuType((const OUSTRING*)0) )
             {
-//              aArgs.Put( SfxStringItem( SID_FILE_NAME, U2S( rProp.Value.getString() ) ) );
                 OUSTRING sTemp;
                 rProp.Value >>= sTemp;
                 aArgs.Put( SfxStringItem( SID_FILE_NAME, String( sTemp ) ) );
             }
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          else if ( rProp.Value.getReflection() != Void_getReflection() )
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1191,23 +1161,17 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         else if ( rProp.Name.compareToAscii( "CopyCount" ) == 0 )
         {
             sal_Int32 nCopies = 0;
-//          if ( !aValue.queryINT32( nCopies ) )
             if ( ( rProp.Value >>= nCopies ) == sal_False )
                 throw ILLEGALARGUMENTEXCEPTION();
-            aArgs.Put( SfxInt16Item( SID_PRINT_COPIES, nCopies ) );
+            aArgs.Put( SfxInt16Item( SID_PRINT_COPIES, (USHORT) nCopies ) );
         }
 
         // Collate-Property
         else if ( rProp.Name.compareToAscii( "Collate" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == BOOL_getReflection() )
-            if ( rProp.Value.getValueType() == ::getCppuBooleanType() )
-            {
-                sal_Bool bTemp ;
-                rProp.Value >>= bTemp ;
+            sal_Bool bTemp ;
+            if ( rProp.Value >>= bTemp )
                 aArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bTemp ) );
-            }
             else
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1215,14 +1179,9 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // Sort-Property
         else if ( rProp.Name.compareToAscii( "Sort" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == BOOL_getReflection() )
-            if ( rProp.Value.getValueType() == ::getCppuBooleanType() )
-            {
-                sal_Bool bTemp ;
-                rProp.Value >>= bTemp ;
+            sal_Bool bTemp ;
+            if( rProp.Value >>= bTemp )
                 aArgs.Put( SfxBoolItem( SID_PRINT_SORT, bTemp ) );
-            }
             else
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1230,14 +1189,9 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // Pages-Property
         else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == OOUSTRING_getReflection() )
-            if ( rProp.Value.getValueType() == ::getCppuType((const OUSTRING*)0) )
-            {
-                OUSTRING sTemp;
-                rProp.Value >>= sTemp;
+            OUSTRING sTemp;
+            if( rProp.Value >>= sTemp )
                 aArgs.Put( SfxStringItem( SID_PRINT_PAGES, String( sTemp ) ) );
-            }
             else
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1245,22 +1199,14 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // MonitorVisible
         else if ( rProp.Name.compareToAscii( "MonitorVisible" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == BOOL_getReflection() )
-            if ( rProp.Value.getValueType() == ::getCppuBooleanType() )
-                rProp.Value >>= bMonitor ;
-            else
+            if( !(rProp.Value >>= bMonitor) )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
 
         // MonitorVisible
         else if ( rProp.Name.compareToAscii( "Wait" ) == 0 )
         {
-// automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
-//          if ( rProp.Value.getReflection() == BOOL_getReflection() )
-            if ( rProp.Value.getValueType() == ::getCppuBooleanType() )
-                rProp.Value >>= bWaitUntilEnd ;
-            else
+            if ( !(rProp.Value >>= bWaitUntilEnd) )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
     }
