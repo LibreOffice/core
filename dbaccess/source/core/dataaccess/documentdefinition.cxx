@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 15:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ sal_Int64 SAL_CALL ODocumentDefinition::getSomething( const ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-void ODocumentDefinition::flush_NoBroadcast_NoCommit(  ) throw(RuntimeException)
+void ODocumentDefinition::flush_NoBroadcast_NoCommit(  )
 {
     // only one property to write to the configuration
     m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON, makeAny(m_sDocumentLocation));
