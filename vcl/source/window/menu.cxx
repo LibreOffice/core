@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-17 09:48:58 $
+ *  last change: $Author: tbe $ $Date: 2002-07-22 16:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ namespace vcl
 struct MenuLayoutData : public ControlLayoutData
 {
     std::vector< USHORT >               m_aLineItemIds;
+    std::vector< USHORT >               m_aLineItemPositions;
     std::map< USHORT, Rectangle >       m_aVisibleItemBoundRects;
 };
 
@@ -1670,7 +1671,12 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
 
 BOOL Menu::IsItemVisible( USHORT nItemId ) const
 {
-    return ImplIsVisible( GetItemPos( nItemId ) );
+    return IsMenuVisible() && ImplIsVisible( GetItemPos( nItemId ) );
+}
+
+BOOL Menu::IsItemPosVisible( USHORT nItemPos ) const
+{
+    return IsMenuVisible() && ImplIsVisible( nItemPos );
 }
 
 BOOL Menu::IsMenuVisible() const
@@ -1904,6 +1910,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     {
                         mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
                         mpLayoutData->m_aLineItemIds.push_back( pData->nId );
+                        mpLayoutData->m_aLineItemPositions.push_back( n );
                     }
                     pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
                 }
@@ -1980,9 +1987,9 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
             if( bLayout )
             {
                 if ( !bIsMenuBar )
-                    mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, Size( aOutSz.Width(), pData->aSz.Height() ) );
+                    mpLayoutData->m_aVisibleItemBoundRects[ n ] = Rectangle( aTopLeft, Size( aOutSz.Width(), pData->aSz.Height() ) );
                 else
-                    mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, pData->aSz );
+                    mpLayoutData->m_aVisibleItemBoundRects[ n ] = Rectangle( aTopLeft, pData->aSz );
             }
         }
 
@@ -2167,19 +2174,46 @@ String Menu::GetDisplayText() const
     return mpLayoutData ? mpLayoutData->m_aDisplayText : String();
 }
 
-Rectangle Menu::GetCharacterBounds( long nIndex ) const
+Rectangle Menu::GetCharacterBounds( USHORT nItemID, long nIndex ) const
 {
+    long nItemIndex = -1;
     if( ! mpLayoutData )
         ImplFillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+    if( mpLayoutData )
+    {
+        for( int i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
+        {
+            if( mpLayoutData->m_aLineItemIds[i] == nItemID )
+            {
+                nItemIndex = mpLayoutData->m_aLineIndices[i];
+                break;
+            }
+        }
+    }
+    return (mpLayoutData && nItemIndex != -1) ? mpLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : Rectangle();
 }
 
 
-long Menu::GetIndexForPoint( const Point& rPoint ) const
+long Menu::GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const
 {
+    long nIndex = -1;
+    rItemID = 0;
     if( ! mpLayoutData )
         ImplFillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+    if( mpLayoutData )
+    {
+        nIndex = mpLayoutData->GetIndexForPoint( rPoint );
+        for( int i = 0; i < mpLayoutData->m_aLineIndices.size(); i++ )
+        {
+            if( mpLayoutData->m_aLineIndices[i] <= nIndex &&
+                (i == mpLayoutData->m_aLineIndices.size()-1 || mpLayoutData->m_aLineIndices[i+1] > nIndex) )
+            {
+                rItemID = mpLayoutData->m_aLineItemIds[i];
+                break;
+            }
+        }
+    }
+    return nIndex;
 }
 
 long Menu::GetLineCount() const
@@ -2218,7 +2252,7 @@ BOOL Menu::ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const
     return bRet;
 }
 
-Rectangle Menu::GetBoundingRectangle( USHORT nItemId ) const
+Rectangle Menu::GetBoundingRectangle( USHORT nPos ) const
 {
     Rectangle aRet;
 
@@ -2226,7 +2260,7 @@ Rectangle Menu::GetBoundingRectangle( USHORT nItemId ) const
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        std::map< USHORT, Rectangle >::const_iterator it = mpLayoutData->m_aVisibleItemBoundRects.find( nItemId );
+        std::map< USHORT, Rectangle >::const_iterator it = mpLayoutData->m_aVisibleItemBoundRects.find( nPos );
         if( it != mpLayoutData->m_aVisibleItemBoundRects.end() )
             aRet = it->second;
     }
