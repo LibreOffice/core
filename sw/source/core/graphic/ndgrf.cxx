@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:07:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,7 +1037,10 @@ BOOL SwGrfNode::GetStreamStorageNames( String& rStrmName,
         }
         else
         {
-            rStorName = aUserData.Copy( aProt.Len(), nPos-aProt.Len() );
+            xub_StrLen nPathStart = aProt.Len();
+            if( 0 == aUserData.CompareToAscii( "./", 2 ) )
+                nPathStart += 2;
+            rStorName = aUserData.Copy( nPathStart, nPos-nPathStart );
             rStrmName = aUserData.Copy( nPos+1 );
         }
     }
