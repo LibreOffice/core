@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotattr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ inline BOOL LotAttrWK3::IsCentered( void )
 class LotAttrCache : private List
 {
 private:
-    friend LotAttrTable;
+    friend class LotAttrTable;
 
     struct ENTRY
     {
