@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:39:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 03:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,5 +460,6 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ finnish ] = "Valitse kieli";
 };
  // ********************************************************************** EOF
+
 
 
