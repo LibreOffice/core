@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-28 17:18:30 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 13:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,9 +1179,9 @@ String GraphicFilter::GetImportOSFileType( USHORT nFormat )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportWildcard( USHORT nFormat )
+String GraphicFilter::GetImportWildcard( USHORT nFormat, sal_Int32 nEntry )
 {
-    return pConfig->GetImportWildcard( nFormat );
+    return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
 // ------------------------------------------------------------------------
@@ -1256,9 +1256,9 @@ String GraphicFilter::GetExportOSFileType( USHORT nFormat )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportWildcard( USHORT nFormat )
+String GraphicFilter::GetExportWildcard( USHORT nFormat, sal_Int32 nEntry )
 {
-    return pConfig->GetExportWildcard( nFormat );
+    return pConfig->GetExportWildcard( nFormat, nEntry );
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-28 17:22:36 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 13:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class FilterConfigCache
         struct FilterConfigCacheEntry
         {
             ::rtl::OUString sType;
-            ::rtl::OUString sExtension;
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensionList;
             ::rtl::OUString sUIName;
             ::rtl::OUString sDocumentService;
             ::rtl::OUString sFilterService;
@@ -140,10 +140,10 @@ class FilterConfigCache
         sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
         String      GetImportFilterName( sal_uInt16 nFormat );
         String      GetImportFormatName( sal_uInt16 nFormat );
-        String      GetImportFormatExtension( sal_uInt16 nFormat );
+        String      GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
         String      GetImportFormatMediaType( sal_uInt16 nFormat );
         String      GetImportFormatShortName( sal_uInt16 nFormat );
-        String      GetImportWildcard( sal_uInt16 nFormat );
+        String      GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
         String      GetImportFilterTypeName( sal_uInt16 nFormat );
 
         sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
@@ -156,10 +156,10 @@ class FilterConfigCache
         sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
         String      GetExportFilterName( sal_uInt16 nFormat );
         String      GetExportFormatName( sal_uInt16 nFormat );
-        String      GetExportFormatExtension( sal_uInt16 nFormat );
+        String      GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
         String      GetExportFormatMediaType( sal_uInt16 nFormat );
         String      GetExportFormatShortName( sal_uInt16 nFormat );
-        String      GetExportWildcard( sal_uInt16 nFormat );
+        String      GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
 
         sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
         sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );

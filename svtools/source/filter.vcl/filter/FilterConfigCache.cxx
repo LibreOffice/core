@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-28 17:22:00 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 13:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,29 +236,26 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
                 aTypePropertySet >>= lProperties;
                 sal_Int32 j, nCount = lProperties.getLength();
 
-                Sequence< OUString > lExtensionList;
-
                 for ( j = 0; j < nCount; j++ )
                 {
                     PropertyValue aPropValue( lProperties[ j ] );
                     if ( aPropValue.Name.equals( sExtensions ) )
-                        aPropValue.Value >>= lExtensionList;
+                        aPropValue.Value >>= aEntry.lExtensionList;
                     else if ( aPropValue.Name.equals( sMediaType ) )
                         aPropValue.Value >>= aEntry.sMediaType;
                 }
-                sal_Int32 nExtensionCount = lExtensionList.getLength();
+                sal_Int32 nExtensionCount = aEntry.lExtensionList.getLength();
                 if ( nExtensionCount )
                 {
                     // The first extension will be used
                     // to generate our internal FilterType ( BMP, WMF ... )
 
-                    String aExtension( lExtensionList[ 0 ] );
+                    String aExtension( aEntry.lExtensionList[ 0 ] );
                     if ( aExtension.SearchAscii( "*.", 0 ) == 0 )
                         aExtension.Erase( 0, 2 );
 
                     if ( aExtension.Len() == 3 )
                     {
-                        aEntry.sExtension = aExtension;
                         aEntry.sType = aExtension;
 
                         if ( aEntry.nFlags & 1 )
@@ -363,6 +360,9 @@ void FilterConfigCache::ImplInitSmart()
 
         OUString    sExtension( OUString::createFromAscii( *pPtr++ ) );
 
+        aEntry.lExtensionList.realloc( 1 );
+        aEntry.lExtensionList[ 0 ] = sExtension;
+
         aEntry.sType = sExtension;
         aEntry.sUIName = sExtension;
 
@@ -372,7 +372,6 @@ void FilterConfigCache::ImplInitSmart()
         OUString    sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );
 
-        aEntry.sExtension = sExtension;
         if ( aEntry.nFlags & 1 )
             aImport.push_back( aEntry );
         if ( aEntry.nFlags & 2 )
@@ -466,12 +465,15 @@ String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
     return aType;
 }
 
-String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
+String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     CacheVector::iterator aIter( aImport.begin() + nFormat );
     String aExtension;
     if ( aIter < aImport.end() )
-        aExtension = aIter->sExtension;
+    {
+        if ( nEntry < aIter->lExtensionList.getLength() )
+            aExtension = aIter->lExtensionList[ nEntry ];
+    }
     return aExtension;
 }
 
@@ -484,10 +486,11 @@ String FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
     return aFilterType;
 }
 
-String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat )
+String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    aWildcard.Append( GetImportFormatShortName( nFormat ) );
+    String aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
+    if ( aWildcard.Len() )
+        aWildcard.Insert( UniString::CreateFromAscii( "*.", 2 ), 0 );
     return aWildcard;
 }
 
@@ -581,19 +584,23 @@ String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
     return aType;
 }
 
-String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat )
+String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     CacheVector::iterator aIter( aExport.begin() + nFormat );
     String aExtension;
     if ( aIter < aExport.end() )
-        aExtension = aIter->sExtension;
+    {
+        if ( nEntry < aIter->lExtensionList.getLength() )
+            aExtension = aIter->lExtensionList[ nEntry ];
+    }
     return aExtension;
 }
 
-String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat )
+String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    aWildcard.Append( GetExportFormatShortName( nFormat ) );
+    String aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
+    if ( aWildcard.Len() )
+        aWildcard.Insert( UniString::CreateFromAscii( "*.", 2 ), 0 );
     return aWildcard;
 }
 
