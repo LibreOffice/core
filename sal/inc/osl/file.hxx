@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-19 11:18:13 $
+ *  last change: $Author: obr $ $Date: 2001-10-12 13:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,7 @@ public:
       The path delimiter is '/'. Relative paths are not allowed.
      */
 
-    File( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath ) {};
+    File( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath ) {}
 
     /** D'tor
      */
@@ -758,7 +758,7 @@ public:
         }
 
         return (RC) Error;
-    };
+    }
 
 
     /** Sets the internal position pointer of an open file.
@@ -1082,7 +1082,7 @@ public:
         if( _pData )
             osl_acquireDirectoryItem( _pData );
         return *this;
-    };
+    }
 
     /** @return sal_True if object is valid directory item,
      sal_False otherwise.
@@ -1201,7 +1201,7 @@ public:
 
     Directory( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath )
     {
-    };
+    }
 
     /** D'tor
      */
