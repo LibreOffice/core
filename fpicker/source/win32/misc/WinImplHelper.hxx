@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-14 16:43:47 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,16 @@
 // deklarations
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL IsWin2000( );
+bool SAL_CALL IsWindows2000();
+bool SAL_CALL IsWindowsXP();
+bool SAL_CALL IsWindows98();
+bool SAL_CALL IsWindowsME();
+
+// returns true if the platform is
+// Windows 2000 or above
+bool SAL_CALL IsWindows2000Platform();
+
+#define IsWin2000 IsWindows2000
 
 // set actions
 void SAL_CALL ListboxAddItem(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-14 16:43:47 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,29 +107,82 @@ const rtl::OUString AMPERSAND = OUString::createFromAscii( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------
+// OS NAME          Platform                    Major   Minor
+//
+// Windows NT 3.51  VER_PLATFORM_WIN32_NT       3       51
+// Windows NT 4.0   VER_PLATFORM_WIN32_NT       4       0
+// Windows 2000     VER_PLATFORM_WIN32_NT       5       0
+// Windows XP       VER_PLATFORM_WIN32_NT       5       1
+// Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
+// Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
+// Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersion, int MinorVersion = -1)
+{
+    OSVERSIONINFOEXA osvi;
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+
+    if(!GetVersionExA((OSVERSIONINFOA*)&osvi))
+    {
+        // if OSVERSIONINFOEX doesn't work
+        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+        if(!GetVersionEx((OSVERSIONINFOA*)&osvi))
+            return false;
+    }
+
+    bool bRet = (PlatformId == osvi.dwPlatformId) &&
+                (MajorVersion == osvi.dwMajorVersion);
+
+    if (MinorVersion > -1)
+        bRet = bRet && (MinorVersion == osvi.dwMinorVersion);
+
+    return bRet;
+}
+
+//------------------------------------------------------------
 // determine if we are running under Win2000
 //------------------------------------------------------------
 
-sal_Bool SAL_CALL IsWin2000( )
+bool SAL_CALL IsWindows2000()
 {
-    OSVERSIONINFOEX osvi;
-    BOOL bOsVersionInfoEx;
-    sal_Bool bRet = sal_False;
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);
+}
 
-    osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
-    bOsVersionInfoEx = GetVersionEx( ( OSVERSIONINFO* )&osvi );
-    if( !bOsVersionInfoEx )
-    {
-        // if OSVERSIONINFOEX doesn't work
-        osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
-        if( !GetVersionEx( ( OSVERSIONINFO* )&osvi ) )
-            return sal_False;
-    }
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
 
-    if( ( VER_PLATFORM_WIN32_NT == osvi.dwPlatformId ) && ( osvi.dwMajorVersion >= 5 ) )
-        bRet = sal_True;
+bool SAL_CALL IsWindowsXP()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 1);
+}
 
-    return bRet;
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindows98()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 10);
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindowsME()
+{
+    return  IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 90);
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindows2000Platform()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5);
 }
 
 //------------------------------------------------------------
