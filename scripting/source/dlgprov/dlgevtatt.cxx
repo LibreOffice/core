@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:33 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #endif
 
 
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 
 //.........................................................................
