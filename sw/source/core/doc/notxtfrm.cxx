@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:15:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,8 +455,10 @@ void lcl_ClearArea( const SwFrm &rFrm,
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
-            rOut.Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
+            rOut.SetLineColor();
             for( USHORT i = 0; i < aRegion.Count(); ++i )
                 rOut.DrawRect( aRegion[i].SVRect() );
             rOut.Pop();
