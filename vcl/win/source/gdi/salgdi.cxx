@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-09 14:33:56 $
+ *  last change: $Author: sj $ $Date: 2002-05-23 15:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,9 +1326,6 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
     BOOL    bRetValue = FALSE;
     ULONG   nBytesRead;
 
-    if ( nSize < 256 )      // we assume that the file is greater than 256 bytes
-        return FALSE;
-
     if ( nSize < POSTSCRIPT_BOUNDINGSEARCH )
         nBytesRead = nSize;
     else
@@ -1337,19 +1334,23 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
     BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nBytesRead, 14 );
     if ( pDest )
     {
-        int     nSecurityCount = 100;   // only 100 bytes following the bounding box will be checked
         nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
         pDest += 14;
-        for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
+
+        int nSizeLeft = nSize - ( pDest - pSource );
+        if ( nSizeLeft > 100 )
+            nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
+
+        for ( int i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
             int     nDivision = 1;
             BOOL    bDivision = FALSE;
             BOOL    bNegative = FALSE;
             BOOL    bValid = TRUE;
 
-            while ( ( --nSecurityCount ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
+            while ( ( --nSizeLeft ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
             BYTE nByte = *pDest;
-            while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
+            while ( nSizeLeft && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
             {
                 switch ( nByte )
                 {
@@ -1364,7 +1365,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                            nSecurityCount = 1;     // error parsing the bounding box values
+                            nSizeLeft = 1;  // error parsing the bounding box values
                         else if ( bValid )
                         {
                             if ( bDivision )
@@ -1374,7 +1375,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
                         }
                         break;
                 }
-                nSecurityCount--;
+                nSizeLeft--;
                 nByte = *(++pDest);
             }
             if ( bNegative )
@@ -1382,7 +1383,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
             if ( bDivision && ( nDivision != 1 ) )
                 nNumb[i] /= nDivision;
         }
-        if ( nSecurityCount)
+        if ( nSizeLeft )
             bRetValue = TRUE;
     }
     return bRetValue;
