@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:00:01 $
+ *  last change: $Author: sj $ $Date: 2000-11-13 11:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3161,6 +3161,156 @@ static const mso_AutoShape msoBracePair =
     0x80000000, 0x80000000
 };
 
+static const SvxMSDffCalculationData mso_sptBracketCalc[] =
+{
+    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
+    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
+    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
+    { 0x6000, DFF_Prop_geoTop, 0x400, 0 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
+};
+static const sal_uInt16 mso_sptBracketSegm[] =
+{
+    0x4000, 0x2001, 0x0001, 0x2001, 0x8000
+};
+static const sal_Int32 mso_sptLeftBracketVert[] =       // adj value 0 -> 10800
+{
+    21600,  0,
+    10800,  0,
+    0,      3 MSO_I,
+    0,      1 MSO_I,
+    0,      2 MSO_I,
+    0,      4 MSO_I,
+    10800,  21600,
+    21600,  21600
+};
+static const sal_Int32 mso_sptLeftBracketTextRect[] =
+{
+    1, 6350, 3 MSO_I, 21600, 4 MSO_I
+};
+static const mso_AutoShape msoLeftBracket =
+{
+    (sal_Int32*)mso_sptLeftBracketVert, sizeof( mso_sptLeftBracketVert ) >> 3,
+    (sal_uInt16*)mso_sptBracketSegm, sizeof( mso_sptBracketSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBracketCalc, sizeof( mso_sptBracketCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault1800,
+    (sal_Int32*)mso_sptLeftBracketTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+static const sal_Int32 mso_sptRightBracketVert[] =      // adj value 0 -> 10800
+{
+    0,  0,
+    10800,  0,
+    21600,  3 MSO_I,
+    21600,  1 MSO_I,
+    21600,  2 MSO_I,
+    21600,  4 MSO_I,
+    10800,  21600,
+    0,      21600
+};
+static const sal_Int32 mso_sptRightBracketTextRect[] =
+{
+    1, 0, 3 MSO_I, 15150, 4 MSO_I
+};
+static const mso_AutoShape msoRightBracket =
+{
+    (sal_Int32*)mso_sptRightBracketVert, sizeof( mso_sptRightBracketVert ) >> 3,
+    (sal_uInt16*)mso_sptBracketSegm, sizeof( mso_sptBracketSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBracketCalc, sizeof( mso_sptBracketCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault1800,
+    (sal_Int32*)mso_sptRightBracketTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const SvxMSDffCalculationData mso_sptBraceCalc[] =
+{
+    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0xa000, 0x404, 0, DFF_Prop_adjustValue },
+    { 0xa000, 0x404, 0, 0x400 },
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
+    { 0x6000, 0x404, 0x400, 0 },
+    { 0x6000, 0x404, DFF_Prop_adjustValue, 0 },
+    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
+    { 0x8000, 21600, 0, 0x400 },
+    { 0x2001, DFF_Prop_adjustValue, 10000, 31953 },
+    { 0x8000, 21600, 0, 0x409 }
+};
+static const sal_uInt16 mso_sptBraceSegm[] =
+{
+    0x4000, 0x2001, 0x0001, 0x2002, 0x0001, 0x2001, 0x8000
+};
+static const sal_Int32 mso_sptBraceDefault[] =
+{
+    2, 1800, 10800
+};
+static const sal_Int32 mso_sptLeftBraceVert[] =
+{
+    21600,  0,              // p
+    16200,  0,              // c
+    10800,  0 MSO_I,        // c
+    10800,  1 MSO_I,        // p
+    10800,  2 MSO_I,        // p
+    10800,  3 MSO_I,        // c
+    5400,   4 MSO_I,        // c
+    0,      4 MSO_I,        // p
+    5400,   4 MSO_I,        // c
+    10800,  5 MSO_I,        // c
+    10800,  6 MSO_I,        // p
+    10800,  7 MSO_I,        // p
+    10800,  8 MSO_I,        // c
+    16200,  21600,          // c
+    21600,  21600           // p
+};
+static const sal_Int32 mso_sptLeftBraceTextRect[] =
+{
+    1, 13800, 9 MSO_I, 21600, 10 MSO_I
+};
+static const mso_AutoShape msoLeftBrace =       // adj value0 0 -> 5400
+{                                               // adj value1 0 -> 21600
+    (sal_Int32*)mso_sptLeftBraceVert, sizeof( mso_sptLeftBraceVert ) >> 3,
+    (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBraceCalc, sizeof( mso_sptBraceCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBraceDefault,
+    (sal_Int32*)mso_sptLeftBraceTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+static const sal_Int32 mso_sptRightBraceVert[] =
+{
+    0,      0,              // p
+    5400,   0,              // c
+    10800,  0 MSO_I,        // c
+    10800,  1 MSO_I,        // p
+    10800,  2 MSO_I,        // p
+    10800,  3 MSO_I,        // c
+    16200,  4 MSO_I,        // c
+    21600,  4 MSO_I,        // p
+    16200,  4 MSO_I,        // c
+    10800,  5 MSO_I,        // c
+    10800,  6 MSO_I,        // p
+    10800,  7 MSO_I,        // p
+    10800,  8 MSO_I,        // c
+    5400,   21600,          // c
+    0,      21600           // p
+};
+static const sal_Int32 mso_sptRightBraceTextRect[] =
+{
+    1, 0, 9 MSO_I, 7800, 10 MSO_I
+};
+static const mso_AutoShape msoRightBrace =      // adj value0 0 -> 5400
+{                                               // adj value1 0 -> 21600
+    (sal_Int32*)mso_sptRightBraceVert, sizeof( mso_sptRightBraceVert ) >> 3,
+    (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBraceCalc, sizeof( mso_sptBraceCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBraceDefault,
+    (sal_Int32*)mso_sptRightBraceTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -3346,6 +3496,10 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptBracketPair :           pDefAutoShape = &msoBracketPair; break;
         case mso_sptBracePair :             pDefAutoShape = &msoBracePair; break;
         case mso_sptPlaque :                pDefAutoShape = &msoPlaque; break;
+        case mso_sptLeftBracket :           pDefAutoShape = &msoLeftBracket; break;
+        case mso_sptRightBracket :          pDefAutoShape = &msoRightBracket; break;
+        case mso_sptLeftBrace :             pDefAutoShape = &msoLeftBrace; break;
+        case mso_sptRightBrace :            pDefAutoShape = &msoRightBrace; break;
         case mso_sptArrow :                 pDefAutoShape = &msoArrow; break;
         case mso_sptUpArrow :               pDefAutoShape = &msoUpArrow; break;
         case mso_sptDownArrow :             pDefAutoShape = &msoDownArrow; break;
@@ -3431,7 +3585,6 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
                 sal_uInt32 i = nNumElemSeg;
                 sal_uInt16* pTmp = pSegData;
                 while( i-- )
-
                 {
                     rSt >> *pTmp++;
                 }
@@ -3874,7 +4027,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
         if ( pRet )
         {
             pRet->SetModel( pSdrModel );
-//-/            pRet->NbcSetAttributes( rSet, FALSE );
             pRet->SetItemSet(rSet);
         }
         else
@@ -3973,7 +4125,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 }
                 pRet->NbcSetSnapRect( aSnapRect );
                 pRet->SetModel( pSdrModel );
-//-/                pRet->NbcSetAttributes( rSet, FALSE );
                 pRet->SetItemSet(rSet);
             }
             if ( !pRet )
@@ -3990,7 +4141,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
                     pRet->NbcSetSnapRect( aSnapRect );
                     pRet->SetModel( pSdrModel );
-//-/                    pRet->NbcSetAttributes( rSet, FALSE );
                     pRet->SetItemSet(rSet);
                 }
                 else
@@ -4075,7 +4225,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                             rSet.Put( XFillColorItem( String(), aColor ) );
                                         }
                                     }
-//-/                                    pSdrPathObj->NbcSetAttributes( rSet, FALSE );
                                     pSdrPathObj->SetItemSet(rSet);
                                     if ( pGrp )
                                     {
@@ -4390,7 +4539,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     }
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     aSet.Put( aAdjustItem );
-//-/                    pFirstObject->NbcSetAttributes( aSet, FALSE );
                     pFirstObject->SetItemSet(aSet);
                 }
             }
