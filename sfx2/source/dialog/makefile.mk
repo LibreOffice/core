@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-01 13:13:13 $
+#   last change: $Author: kz $ $Date: 2004-05-20 21:24:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,6 @@ TARGET=dialog
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/dialog.srs
-BMP_IN=$(PRJ)$/win/res
 
 EXCEPTIONSFILES=\
         $(SLO)$/filtergrouping.obj	\
