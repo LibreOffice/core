@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:36:36 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,15 @@
 #define __FRAMEWORK_STDTYPES_H_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+// own includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+// interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+// other includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
@@ -89,16 +89,12 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//  definitions
 //_________________________________________________________________________________________________________________
 
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
-
-/*-************************************************************************************************************//**
-    Used for stl-structures ... e.g. hash tables/maps ...
-*//*-*************************************************************************************************************/
+/**
+    Own hash function used for stl-structures ... e.g. hash tables/maps ...
+*/
 struct OUStringHashCode
 {
     size_t operator()( const ::rtl::OUString& sString ) const
@@ -107,11 +103,59 @@ struct OUStringHashCode
     }
 };
 
-/*-************************************************************************************************************//**
+//_________________________________________________________________________________________________________________
+
+/**
+    Basic string list based on a std::vector()
+    It implements some additional funtionality which can be usefull but
+    is missing at the normal vector implementation.
+*/
+class OUStringList : public ::std::vector< ::rtl::OUString >
+{
+    public:
+
+        // insert given element as the first one into the vector
+        void push_front( const ::rtl::OUString& sElement )
+        {
+            insert( begin(), sElement );
+        }
+
+        // the only way to free used memory realy!
+        void free()
+        {
+            OUStringList().swap( *this );
+        }
+};
+
+//_________________________________________________________________________________________________________________
+
+/**
+    Basic hash based on a std::hash_map() which provides key=[OUString] and value=[template type] pairs
+    It implements some additional funtionality which can be usefull but
+    is missing at the normal hash implementation.
+*/
+template< class TType >
+class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
+                                         TType                              ,
+                                         OUStringHashCode                   ,
+                                         ::std::equal_to< ::rtl::OUString > >
+{
+    public:
+
+        // the only way to free used memory realy!
+        void free()
+        {
+            BaseHash().swap( *this );
+        }
+};
+
+//_________________________________________________________________________________________________________________
+
+/**
     Sometimes we need this template to implement listener container ...
     and we need it at different positions ...
     So it's better to declare it one times only!
-*//*-*************************************************************************************************************/
+*/
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString                    ,
                                                         OUStringHashCode                   ,
                                                         ::std::equal_to< ::rtl::OUString > >    ListenerHash;
