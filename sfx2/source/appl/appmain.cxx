@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:22:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,23 +183,6 @@ SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4);
 
 TYPEINIT1(SfxSysChangeHint, SfxHint);
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
-
-//--------------------------------------------------------------------
-
-BOOL SfxApplication::HasFeature( ULONG nFeature ) const
-
-/** [Description]
-
-    Determines if 'nFeature' is supported by this running application.
-    If more than one feature is given (by arithmetic 'or') and at least
-    one of them is supported, it will return TRUE.
-
-    The supported features are set in the ctor of SfxApplication.
-*/
-
-{
-    return 0 != ( nFeature & _nFeatures );
-}
 
 //--------------------------------------------------------------------
 void SfxApplication::Init
