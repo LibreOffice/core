@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldta.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:03:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
+namespace com { namespace sun { namespace star {
+    namespace linguistic2 {
+        class XDictionaryList;
+    }
+} } }
+
 
 namespace linguistic
 {
@@ -81,10 +87,26 @@ namespace linguistic
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellAlternatives >
         MergeProposals(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt1,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt2 );
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt1,
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt2 );
+
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+        MergeProposalSeqs(
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt1,
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt2,
+                BOOL bAllowDuplicates );
+
+void    SeqRemoveNegEntries(
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XDictionaryList > &rxDicList,
+                INT16 nLanguage );
+
+BOOL    SeqHasEntry(
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
+                const ::rtl::OUString &rTxt);
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -108,6 +130,8 @@ public:
     SpellAlternatives();
     SpellAlternatives(const ::rtl::OUString &rWord, INT16 nLang, INT16 nFailureType,
                       const ::rtl::OUString &rRplcWord );
+    SpellAlternatives(const ::rtl::OUString &rWord, INT16 nLang, INT16 nFailureType,
+                      const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlternatives );
     virtual ~SpellAlternatives();
 
     // XSpellAlternatives
