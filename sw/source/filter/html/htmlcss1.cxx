@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:07:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,37 +1236,6 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     return TRUE;
 }
 
-#ifdef USED
-void SwCSS1Parser::SetFmtAttrs( const SfxItemSet& rItemSet,
-                                SwFmt *pChildFmt1,
-                                SwFmt *pChildFmt2 )
-{
-    SfxItemIter aIter( rItemSet );
-
-    const SfxItemSet& rItemSet1 = pChildFmt1->GetAttrSet();
-    const SfxItemSet* pItemSet2 = pChildFmt2 ? &pChildFmt2->GetAttrSet() : 0;
-    const SfxPoolItem *pPItem = aIter.FirstItem();
-    while( pPItem )
-    {
-        // wenn das Attribut an einer der abhaengigen Vorlagen nicht gesetzt
-        // ist, muss es dort explizit auf den Wrt gesetzt werden, der
-        // dort bereits aus der Parent-Vorlage geerbt wird.
-
-        USHORT nWhich = pPItem->Which();
-        const SfxPoolItem *pCItem;
-        if( SFX_ITEM_SET != rItemSet1.GetItemState( nWhich, FALSE, &pCItem ) )
-            pChildFmt1->SetAttr( pChildFmt1->GetAttr(nWhich) );
-
-        if( pChildFmt2 &&
-            SFX_ITEM_SET != pItemSet2->GetItemState( nWhich, FALSE, &pCItem ) )
-            pChildFmt2->SetAttr( pChildFmt2->GetAttr(nWhich) );
-
-        // auf zum naechsten Item
-        pPItem = aIter.NextItem();
-    }
-}
-#endif
-
 ULONG SwCSS1Parser::GetFontHeight( USHORT nSize ) const
 {
     return aFontHeights[ nSize>6 ? 6 : nSize ];
@@ -2392,22 +2361,6 @@ _HTMLAttrContext *SwHTMLParser::PopContext( USHORT nToken, USHORT nLimit,
     return pCntxt;
 }
 
-#ifdef USED
-USHORT SwHTMLParser::GetTxtFmtCollFromContext() const
-{
-    USHORT nPos = aContexts.Count();
-    USHORT nPoolId = 0;
-
-    while( !nPoolId && nPos>0 ) // nicht nMinStack wg. Tabellen!!!
-        nPoolId = aContexts[--nPos]->GetTxtFmtColl();
-
-    if( !nPoolId )
-        nPoolId = aDfltContext.GetTxtFmtColl();
-
-    return nPoolId;
-}
-#endif
-
 BOOL SwHTMLParser::GetMarginsFromContext( USHORT& nLeft,
                                           USHORT& nRight,
                                           short& nIndent,
@@ -2536,46 +2489,6 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
         }
 
         pItem = aIter.NextItem();
-    }
-}
-
-void SwHTMLParser::AddFormatAttrs( SfxItemSet& rItemSet,
-                                   const SwFmt& rFmt ) const
-{
-    const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
-    const SfxPoolItem *pFmtItem, *pItem;
-    SfxWhichIter aIter( rItemSet );
-
-    USHORT nWhich = aIter.FirstWhich();
-    while( nWhich )
-    {
-        if( SFX_ITEM_SET != rItemSet.GetItemState(nWhich,FALSE,&pItem) &&
-            SFX_ITEM_SET == rFmtItemSet.GetItemState(nWhich,TRUE,&pFmtItem) )
-        {
-                rItemSet.Put( *pFmtItem );
-        }
-
-        nWhich = aIter.NextWhich();
-    }
-}
-
-void SwHTMLParser::RemoveFormatAttrs( SfxItemSet& rItemSet,
-                                      const SwFmt& rFmt ) const
-{
-    const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
-    const SfxPoolItem *pItem;
-    SfxWhichIter aIter( rItemSet );
-
-    USHORT nWhich = aIter.FirstWhich();
-    while( nWhich )
-    {
-        if( SFX_ITEM_SET == rItemSet.GetItemState(nWhich,FALSE,&pItem) &&
-            SFX_ITEM_SET == rFmtItemSet.GetItemState(nWhich,TRUE,&pItem) )
-        {
-                rItemSet.ClearItem( nWhich );
-        }
-
-        nWhich = aIter.NextWhich();
     }
 }
 
