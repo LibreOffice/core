@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-12-11 11:30:42 $
+ *  last change:$Date: 2004-11-02 11:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,11 @@ public class java_complex implements TestBase{
 
         for (int i=0; i<entries.length; i++) {
 
+            if (entries[i] == null) continue;
             String iniName = entries[i].longName;
             iniName = iniName.replace('.', '/');
-            getParamsForComplexTest(iniName+".props", param);
+            CfgParser ini = new CfgParser(iniName+".props");
+            ini.getIniParameters(param);
 
             LogWriter log = (LogWriter)dcl.getInstance(
                                                 (String)param.get("LogWriter"));
@@ -169,32 +171,6 @@ public class java_complex implements TestBase{
     }
 
 
-    private void getParamsForComplexTest(String fileName, TestParameters param) {
-        // get the resource file
-        try {
-            if ( param.DebugIsActive ) {
-                System.out.println("Looking for "+fileName);
-            }
-            java.net.URL url = this.getClass().getResource("/"+fileName);
-            if (url != null) {
-                System.out.println("Parsing properties from "+fileName);
-                java.net.URLConnection connection = url.openConnection();
-                java.io.InputStream in = connection.getInputStream();
-                Properties props = new Properties();
-                props.load(in);
-                Enumeration enum = props.keys();
-                while (enum.hasMoreElements()) {
-                    String key = (String)enum.nextElement();
-                    String value = (String)props.get(key);
-                    param.put(key.trim(), value.trim());
-                }
-            }
-        }
-        catch(java.io.IOException e) {
-            System.out.println("Exception while reading property file '"+fileName+"'");
-            e.printStackTrace();
-        }
-        catch(java.lang.NullPointerException e) {}
-    }
+//    private void getParamsForComplexTest(String fileName, TestParameters param) {
 
 }
