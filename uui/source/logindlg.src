@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_LOGIN
         Text[ polish ] = "Wpisz nazwisko uΏytkownika i has³o dla %1";
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
-        Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα χρήστη και τον κωδικό πρόσβασης για το %1.";
+        Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
         Text[ korean ] = "Ώ©±βΏ΅ »ηΏλΐΪ ΐΜΈ§°ϊ %1ΐΗ ΖΠ½ΊΏφµεΈ¦ ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
         Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ αά %1 εδΗ.";
         Text[ turkish ] = "%1 iηin buraya kullanύcύ adύ ve ώifre girin.";
@@ -353,7 +353,7 @@ ModalDialog DLG_LOGIN
         Text [ swedish ] = "pε   " ;
         Text [ danish ] = "pε " ;
         Text [ italian ] = "su  " ;
-        Text [ spanish ] = "en  " ;
+        Text [ spanish ] = "en   " ;
         Text [ french ] = "sur  " ;
         Text [ dutch ] = "op   " ;
         Text[ chinese_simplified ] = "ΤΪ ";
@@ -380,7 +380,7 @@ ModalDialog DLG_LOGIN
     Text[ polish ] = "Wymagane nazwisko uΏytkownika i has³o";
     Text[ japanese ] = "Υ°»ή°–Ό‚ΖΚί½ά°Δή‚ª•K—v";
     Text[ chinese_traditional ] = "½ΠΏι¤J¨Ο¥Ξ¦W©M±K½X";
-    Text[ greek ] = "Απαιτείται το όνομα χρήστη και ο κωδικός πρόσβασης";
+    Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
     Text[ korean ] = "»ηΏλΐΪ ΐΜΈ§°ϊ ΖΠ½ΊΏφµε°΅ ΗΚΏδΗΥ΄Ο΄Ω.";
     Text[ arabic ] = "γΨαζΘ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ";
     Text[ turkish ] = "Kullanύcύ adύ ve ώifre gerekli";
