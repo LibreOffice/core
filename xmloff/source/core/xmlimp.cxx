@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: bm $ $Date: 2000-09-22 14:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void SvXMLImport::_InitCtor()
                                sXML_n_dc, XML_NAMESPACE_DC );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_META_IDX, sXML_np__meta,
                                sXML_n_meta, XML_NAMESPACE_META );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER_IDX, sXML_np_number,
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER_IDX, sXML_np__number,
                                 sXML_n_number, XML_NAMESPACE_NUMBER );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG_IDX, sXML_np__svg,
                                sXML_n_svg, XML_NAMESPACE_SVG );
