@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:54:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,12 +584,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() )
             {
                 const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                USHORT nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+                SwInsertTableOptions aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
 
                 rSh.StartUndo(UNDO_INSTABLE);
                 bCallEndUndo = TRUE;
 
-                BOOL bInserted = rSh.TextToTable('\t', HORI_FULL, nInsTblFlags);
+                BOOL bInserted = rSh.TextToTable( aInsTblOpts, '\t', HORI_FULL );
                 rSh.EnterStdMode();
                 if (bInserted)
                     rView.AutoCaption(TABLE_CAP);
@@ -599,7 +599,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             {
                 USHORT nCols = 0;
                 USHORT nRows = 0;
-                USHORT nInsTblFlags = ALL_TBL_INS_ATTR;
+                SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
                 String aTableName, aAutoName;
                 SwTableAutoFmt* pTAFmt = 0;
 
@@ -636,11 +636,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     }
 
                     if ( pFlags )
-                        nInsTblFlags = (USHORT) pFlags->GetValue();
+                        aInsTblOpts.mnInsMode = (USHORT) pFlags->GetValue();
                     else
                     {
                         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                        nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+                        aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
                     }
                 }
 
@@ -649,7 +649,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
                     if( RET_OK == pDlg->Execute() )
                     {
-                        pDlg->GetValues( aTableName, nRows, nCols, nInsTblFlags, aAutoName, pTAFmt );
+                        pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
                     }
                     else
                         rReq.Ignore();
@@ -664,7 +664,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
                     rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
                     rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
-                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) nInsTblFlags ) );
+                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTblOpts.mnInsMode ) );
                     rReq.Done();
 
                     rSh.StartUndo(UNDO_INSTABLE);
@@ -674,7 +674,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if( rSh.HasSelection() )
                         rSh.DelRight();
 
-                    rSh.InsertTable( nRows, nCols, HORI_FULL, nInsTblFlags, pTAFmt );
+                    rSh.InsertTable( aInsTblOpts, nRows, nCols, HORI_FULL, pTAFmt );
                     rSh.MoveTable( fnTablePrev, fnTableStart );
 
                     if( aTableName.Len() && !rSh.GetTblStyle( aTableName ) )
