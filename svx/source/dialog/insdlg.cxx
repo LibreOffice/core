@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:56:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
