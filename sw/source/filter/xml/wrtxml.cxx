@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:30:45 $
+ *  last change: $Author: dvo $ $Date: 2001-07-26 15:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 using namespace ::rtl;
@@ -536,6 +539,8 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     ASSERT( xComponent.is(), "Need component!" );
     ASSERT( NULL != pServiceName, "Need component name!" );
 
+    RTL_LOGFILE_CONTEXT( aFilterLog, "SwXMLWriter::WriteThroughComponent" );
+
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
@@ -545,6 +550,8 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
     if(!xSaxWriter.is())
         return sal_False;
+
+    RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "SAX-Writer created" );
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
@@ -564,6 +571,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
             "can't instantiate export filter component" );
     if( !xExporter.is() )
         return sal_False;
+    RTL_LOGFILE_CONTEXT_TRACE1( aFilterLog, "%s instantiated.", pServiceName );
 
     // set block mode (if appropriate)
     if( bBlock )
@@ -583,6 +591,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     xExporter->setSourceDocument( xComponent );
 
     // filter!
+    RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "call filter()" );
     Reference<XFilter> xFilter( xExporter, UNO_QUERY );
     return xFilter->filter( rMediaDesc );
 }
@@ -601,11 +610,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.33 2001-06-19 15:30:45 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.34 2001-07-26 15:11:19 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.33  2001/06/19 15:30:45  mib
+      #87313#: embedded images as base64
+
       Revision 1.32  2001/06/18 17:27:51  dvo
       #86004#
       - changed SvXMLItemMaps to use XMLTokenEnum

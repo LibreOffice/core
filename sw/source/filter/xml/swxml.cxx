@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-26 12:36:51 $
+ *  last change: $Author: dvo $ $Date: 2001-07-26 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -182,6 +185,8 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT(rFactory.is(), "factory missing");
     DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
 
+    RTL_LOGFILE_CONTEXT( aLog, "ReadThroughComponent" );
+
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
@@ -195,6 +200,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return ERR_SWG_READ_ERROR;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
     Reference< xml::sax::XDocumentHandler > xFilter(
@@ -204,6 +210,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
 
     // connect parser and filter
     xParser->setDocumentHandler( xFilter );
@@ -240,6 +247,7 @@ sal_Int32 ReadThroughComponent(
     }
 
     // finally, parser the stream
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parsing stream" );
     try
     {
         xParser->parseStream( aParserInput );
