@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-02 14:52:05 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,7 +1340,9 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
         xRet = pImpl->pManager->AcquireTree(*this);
     else
         xRet = m_xHierarchyAccess;
+#ifdef DEBUG
     OSL_ENSURE(xRet.is(), "AcquireTree failed");
+#endif
     return xRet;
 }
 /* -----------------------------22.06.01 08:42--------------------------------
