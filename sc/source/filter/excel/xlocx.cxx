@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:39:24 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,6 @@ using ::com::sun::star::drawing::XControlShape;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-#define EXC_STREAMNAME_CTLS     String( RTL_CONSTASCII_USTRINGPARAM( "Ctls" ) )
-
 // OCX controls ===============================================================
 
 XclOcxConverter::XclOcxConverter( const XclRoot& rRoot ) :
@@ -205,7 +203,7 @@ XclImpOcxConverter::XclImpOcxConverter( const XclImpRoot& rRoot ) :
     XclOcxConverter( rRoot ),
     XclImpRoot( rRoot )
 {
-    mxStrm = OpenStream( EXC_STREAMNAME_CTLS );
+    mxStrm = OpenStream( EXC_STREAM_CTLS );
 }
 
 bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
@@ -452,7 +450,7 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
         {
             // output stream
             if( !mxStrm.Is() )
-                mxStrm = OpenStream( EXC_STREAMNAME_CTLS );
+                mxStrm = OpenStream( EXC_STREAM_CTLS );
             if( mxStrm.Is() )
             {
                 String aClassName;
@@ -464,7 +462,7 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
                     sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxStrm->Tell() - nStrmStart );
                     // adjust the class name to "Forms.***.1"
                     aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
-                    pOcxCtrl = new XclExpObjOcxCtrl( GetRoot(), rxShape, aClassName, nStrmStart, nStrmSize );
+                    pOcxCtrl = new XclExpObjOcxCtrl( GetRoot(), rxShape, xControlModel, aClassName, nStrmStart, nStrmSize );
                     ConvertSheetLinks( *pOcxCtrl, xControlModel );
                 }
             }
