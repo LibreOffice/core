@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@
 #include "exp_op.hxx"
 
 
-
+const USHORT ExportWK1::WK1MAXCOL = 255;
+const USHORT ExportWK1::WK1MAXROW = 8191;
 
 BYTE ExportWK1::GenFormByte( const ScPatternAttr &aAttr )
 {
@@ -126,10 +127,18 @@ inline void ExportWK1::Sync()
 
 inline void ExportWK1::Dimensions()
 {   // (0x06)
-    USHORT  nEndCol, nEndRow;
+    SCCOL nEndCol;
+    SCROW nEndRow;
     aOut << ( USHORT ) 0x06 << ( USHORT ) 8 << ( USHORT ) 0 << ( USHORT ) 0;        // Starting Col/Row
     pD->GetPrintArea( 0, nEndCol, nEndRow );
-    aOut << nEndCol << nEndRow;                 // Ending Col/Row
+#if SC_ROWLIMIT_MORE_THAN_64K
+#error row limit 64k
+#endif
+    USHORT nCol = static_cast<USHORT>(nEndCol);
+    USHORT nRow = static_cast<USHORT>(nEndRow);
+    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Dimensions(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Dimensions(): Row > WK1MAXROW" );
+    aOut << nCol << nRow;   // Ending Col/Row
 }
 
 
@@ -158,7 +167,7 @@ inline void ExportWK1::Colw()
     BYTE    nWidthSpaces;
     for( USHORT nCol = 0 ; nCol < 256 ; nCol++ )
     {
-        nWidth = pD->GetColWidth( nCol, 0 );
+        nWidth = pD->GetColWidth( static_cast<SCCOL>(nCol), 0 );
         nWidthSpaces = ( BYTE ) ( nWidth / TWIPS_PER_CHAR );
         aOut << ( USHORT ) 0x08 << ( USHORT ) 3 << nCol << nWidthSpaces;
     }
@@ -167,9 +176,9 @@ inline void ExportWK1::Colw()
 
 void ExportWK1::Blank( const USHORT nCol, const USHORT nRow, const ScPatternAttr& aAttr )
 {   // (0x0C)
-    // PREC:    nCol <= MAXCOL, nRow <= MAXROW
-    DBG_ASSERT( nCol <= MAXCOL, "ExportWK1::Blank(): Col > MAXCOL" );
-    DBG_ASSERT( nRow <= MAXROW, "ExportWK1::Blank(): Row > MAXROW" );
+    // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
+    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Blank(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Blank(): Row > WK1MAXROW" );
 
     aOut << ( USHORT ) 0x0C << ( USHORT ) 5 << GenFormByte( aAttr ) << nCol << nRow;
 }
@@ -177,9 +186,9 @@ void ExportWK1::Blank( const USHORT nCol, const USHORT nRow, const ScPatternAttr
 
 void ExportWK1::Number( const USHORT nCol, const USHORT nRow, const double fWert, const ScPatternAttr &aAttr )
 {   // (0x0E)
-    // PREC:    nCol <= MAXCOL, nRow <= MAXROW
-    DBG_ASSERT( nCol <= MAXCOL, "ExportWK1::Number(): Col > MAXCOL" );
-    DBG_ASSERT( nRow <= MAXROW, "ExportWK1::Number(): Row > MAXROW" );
+    // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
+    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Number(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Number(): Row > WK1MAXROW" );
 
     aOut << ( USHORT ) 0x0E << ( USHORT ) 13 << GenFormByte( aAttr ) << nCol << nRow << fWert;
 }
@@ -187,9 +196,9 @@ void ExportWK1::Number( const USHORT nCol, const USHORT nRow, const double fWert
 
 void ExportWK1::Label( const USHORT nCol, const USHORT nRow, const String& rStr, const ScPatternAttr& aAttr )
 {   // (0x0F)
-    // PREC:    nCol <= MAXCOL, nRow <= MAXROW
-    DBG_ASSERT( nCol <= MAXCOL, "ExportWK1::Label(): Col > MAXCOL" );
-    DBG_ASSERT( nRow <= MAXROW, "ExportWK1::Label(): Row > MAXROW" );
+    // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
+    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
     ByteString  aStr( rStr, eZielChar );
 
@@ -214,9 +223,9 @@ void ExportWK1::Label( const USHORT nCol, const USHORT nRow, const String& rStr,
 
 void ExportWK1::Formula( const USHORT nCol, const USHORT nRow, const ScFormulaCell* pFC, const ScPatternAttr& aAttr )
 {   // (0x10)
-    // PREC:    nCol <= MAXCOL, nRow <= MAXROW
-    DBG_ASSERT( nCol <= MAXCOL, "ExportWK1::Formula(): Col > MAXCOL" );
-    DBG_ASSERT( nRow <= MAXROW, "ExportWK1::Formula(): Row > MAXROW" );
+    // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
+    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Formula(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Formula(): Row > WK1MAXROW" );
 
     USHORT  nLaenge = 15;    // Bytes bis Formel
     double  fErgebnis;
@@ -293,9 +302,9 @@ inline void ExportWK1::Cursorw12()
 
 void ExportWK1::WKString( const USHORT nCol, const USHORT nRow, const ScFormulaCell* pFC, const ScPatternAttr& aAttr )
 {   // (0x33)
-    // PREC:    nCol <= MAXCOL, nRow <= MAXROW
-/*  DBG_ASSERT( nCol <= MAXCOL, "ExportWK1::Label(): Col > MAXCOL" );
-    DBG_ASSERT( nRow <= MAXROW, "ExportWK1::Label(): Row > MAXROW" );
+    // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
+/*  DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
+    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
     String aStr;
     ( ( ScFormulaCell * ) pFC )->GetString( aStr );     // Formeltext zunaechst so belassen
@@ -380,7 +389,8 @@ FltError ExportWK1::Write()
     // Zellen-Bemachung
     ScDocumentIterator      aIter( pD, 0, 0 );
     ScBaseCell*             pCell;
-    USHORT                  nCol, nRow, nTab;
+    USHORT                  nCol, nRow;
+    SCTAB                   nTab;
     const ScPatternAttr*    pPatAttr;
 
     if( aIter.GetFirst() )
@@ -388,7 +398,14 @@ FltError ExportWK1::Write()
         {   // ueber alle Zellen der ersten Tabelle iterieren
             pPatAttr = aIter.GetPattern();
             pCell = aIter.GetCell();
-            aIter.GetPos( nCol, nRow, nTab );
+            SCCOL nScCol;
+            SCROW nScRow;
+            aIter.GetPos( nScCol, nScRow, nTab );
+#if SC_ROWLIMIT_MORE_THAN_64K
+#error row limit 64k
+#endif
+            nCol = static_cast<USHORT>(nScCol);
+            nRow = static_cast<USHORT>(nScRow);
 
             switch( pCell->GetCellType() )
             {
