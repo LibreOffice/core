@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:27:03 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,46 +585,38 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
-            case SID_CUT:
-                if (rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) != 0)
-                {
-                    rSet.DisableItem( nWhich );
-                    break;
-                }
-            case SID_COPY:
-                if( !bCopy )
-                    rSet.DisableItem( nWhich );
+        case SID_CUT:
+            if( 0 != rSh.IsSelObjProtected( (FlyProtectType)
+                            (FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) )
+            {
+                rSet.DisableItem( nWhich );
                 break;
-            case SID_PASTE:
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+            }
+        case SID_COPY:
+            if( !bCopy )
+                rSet.DisableItem( nWhich );
+            break;
 
-                    if( !aDataHelper.GetTransferable().is() ||
-                        !SwTransferable::IsPaste( rSh, aDataHelper ))
-                        rSet.DisableItem( SID_PASTE );
-                }
-                break;
-            case SID_CLIPBOARD_FORMAT_ITEMS:
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+        case SID_PASTE:
+            if( !GetView().IsPasteAllowed() )
+                rSet.DisableItem( SID_PASTE );
+            break;
 
-                    SvxClipboardFmtItem aFmtItem( nWhich );
-                    SwTransferable::FillClipFmtItem( rSh, aDataHelper, aFmtItem );
-                    rSet.Put( aFmtItem );
-                }
-                break;
-            case FN_PASTESPECIAL:
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+        case FN_PASTESPECIAL:
+            if( !GetView().IsPasteSpecialAllowed() )
+                rSet.DisableItem( FN_PASTESPECIAL );
+            break;
 
-                    if( !aDataHelper.GetTransferable().is() ||
-                        !SwTransferable::IsPasteSpecial( rSh, aDataHelper ))
-                        rSet.DisableItem( FN_PASTESPECIAL );
-                }
-                break;
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+            {
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard() );
+
+                SvxClipboardFmtItem aFmtItem( nWhich );
+                SwTransferable::FillClipFmtItem( rSh, aDataHelper, aFmtItem );
+                rSet.Put( aFmtItem );
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-24 18:16:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 15:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,10 @@
 #ifndef _OFA_OSPLCFG_HXX
 #include <offmgr/osplcfg.hxx>
 #endif
-
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
+
 #ifndef _UNOTXVW_HXX
 #include <unotxvw.hxx>
 #endif
@@ -230,6 +230,9 @@
 #endif
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 
 #ifndef _VIEW_HRC
@@ -804,11 +807,13 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pLastTableFormat(0),
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
-    nSelectionType( INT_MAX )
+    nSelectionType( INT_MAX ),
+    nLastPasteDestination( 0xFFFF )
 {
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
     bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
-    bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel = sal_False;
+    bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel =
+    bPasteState = bPasteSpecialState = sal_False;
 
     bShowAtResize = bDrawSelMode = bDocSzUpdated = sal_True;
 
@@ -1586,5 +1591,54 @@ sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
         return nRet;
     }
     return SfxViewShell::PrepareClose( bUI, bForBrowsing );
+}
+
+
+
+    // status methods for clipboard.
+    // Status changes now notified from the clipboard.
+BOOL SwView::IsPasteAllowed()
+{
+    USHORT nPasteDestination = SwTransferable::GetSotDestination( *pWrtShell );
+    if( nLastPasteDestination != nPasteDestination )
+    {
+        TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+        if( aDataHelper.GetTransferable().is() )
+        {
+            bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
+            bPasteSpecialState = SwTransferable::IsPasteSpecial(
+                                                    *pWrtShell, aDataHelper );
+        }
+        else
+            bPasteState = bPasteSpecialState = FALSE;
+
+        if( 0xFFFF == nLastPasteDestination )  // the init value
+            pViewImpl->AddClipboardListener();
+        nLastPasteDestination = nPasteDestination;
+    }
+    return bPasteState;
+}
+
+BOOL SwView::IsPasteSpecialAllowed()
+{
+    USHORT nPasteDestination = SwTransferable::GetSotDestination( *pWrtShell );
+    if( nLastPasteDestination != nPasteDestination )
+    {
+        TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+        if( aDataHelper.GetTransferable().is() )
+        {
+            bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
+            bPasteSpecialState = SwTransferable::IsPasteSpecial(
+                                                    *pWrtShell, aDataHelper );
+        }
+        else
+            bPasteState = bPasteSpecialState = FALSE;
+
+        if( 0xFFFF == nLastPasteDestination )  // the init value
+            pViewImpl->AddClipboardListener();
+    }
+    return bPasteSpecialState;
 }
 

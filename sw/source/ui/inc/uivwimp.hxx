@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 14:39:02 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 15:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,56 +68,101 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDLISTENER_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 
 class SwXTextView;
-namespace com{namespace sun{namespace star{namespace frame { class XDispatchProviderInterceptor;}}}}
+
+namespace com{ namespace sun{ namespace star {
+    namespace frame {
+        class XDispatchProviderInterceptor;
+    }
+}}}
+
 /* -----------------------------29.05.00 08:22--------------------------------
 
  ---------------------------------------------------------------------------*/
-class SwScannerEventListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class SwScannerEventListener : public ::cppu::WeakImplHelper1<
+    STAR_NMSPC::lang::XEventListener >
 {
-private:
-
-    SwView*                 m_pParent;
+    SwView* pView;
 
 public:
 
-                            SwScannerEventListener( SwView* pParent ) : m_pParent( pParent )  {};
-    virtual                 ~SwScannerEventListener();
+    SwScannerEventListener( SwView& rView ) : pView( &rView )  {}
+    virtual ~SwScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject );
+    virtual void SAL_CALL disposing(
+                    const ::com::sun::star::lang::EventObject& rEventObject );
 
-    void                    ParentDestroyed() { m_pParent = NULL; }
+    void ViewDestroyed() { pView = 0; }
 };
+
+// --------------------------- Clipboard EventListener ------------------
+
+class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
+    CLIP_NMSPC::XClipboardListener >
+{
+    SwView* pView;
+
+    // XEventListener
+    virtual void SAL_CALL disposing(
+        const STAR_NMSPC::lang::EventObject& rEventObject )
+;//                         throw( UNO_NMSPC::RuntimeException );
+
+    // XClipboardListener
+    virtual void SAL_CALL changedContents(
+            const CLIP_NMSPC::ClipboardEvent& rEventObject )
+;//                                     throw( UNO_NMSPC::RuntimeException );
+
+public:
+    SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
+    virtual ~SwClipboardChangeListener();
+
+    void ViewDestroyed() { pView = 0; }
+
+    void AddRemoveListener( BOOL bAdd );
+};
+
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 class SwView_Impl
 {
-    SwView*                     pView;
-    ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier > *pxXTextView;        // UNO object
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xScanEvtLstnr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
+    STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
+    STAR_REFERENCE( lang::XEventListener )  xClipEvtLstnr;
+    STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
+    STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
+
+    SwView* pView;
     SwScannerEventListener*     pScanEvtLstnr;
+    SwClipboardChangeListener*  pClipEvtLstnr;
     ShellModes                  eShellMode;
 
-    public:
-        SwView_Impl(SwView* pShell);
-        ~SwView_Impl();
+public:
+    SwView_Impl(SwView* pShell);
+    ~SwView_Impl();
 
-        void                            SetShellMode(ShellModes eSet);
+    void                            SetShellMode(ShellModes eSet);
 
-         ::com::sun::star::view::XSelectionSupplier* GetUNOObject();
-        SwXTextView*                    GetUNOObject_Impl();
+    ::com::sun::star::view::XSelectionSupplier* GetUNOObject();
+    SwXTextView*                    GetUNOObject_Impl();
 
-        ShellModes                      GetShellMode() {return eShellMode;}
+    ShellModes                      GetShellMode() {return eShellMode;}
 
-        void                            ExcuteScan(USHORT nSlot);
-        SwScannerEventListener&         GetScannerEventListener();
+    void                            ExcuteScan(USHORT nSlot);
+    SwScannerEventListener&         GetScannerEventListener();
+
+    void                            AddClipboardListener();
 };
 #endif
 

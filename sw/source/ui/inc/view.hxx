@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 15:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,17 @@ class SwView;
 class SwEditWin;
 class SwWrtShell;
 class SwView_Impl;
-namespace com{ namespace sun { namespace star {namespace view{ class XSelectionSupplier;}}}}
 class XSelectionObject;
 struct SwSearchOptions;
 class FmFormShell;
 class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
+
+
+namespace com{ namespace sun { namespace star {
+    namespace view{ class XSelectionSupplier; }
+}}}
 
 const long nLeftOfst = -370;
 const long nScrollX  =   30;
@@ -197,6 +201,7 @@ class SwView: public SfxViewShell
     friend class SwSpellWrapper;
     friend class SwHyphWrapper;
     friend class SwView_Impl;
+    friend class SwClipboardChangeListener;
 
     //suchen & ersetzen
     static SvxSearchDialog *pSrchDlg;
@@ -256,13 +261,14 @@ class SwView: public SfxViewShell
     SwGlossaryHdl       *pGlosHdl;          // Henkel Textbausteine
     SwDrawBase          *pDrawActual;
 
-    const SwFrmFmt*     pLastTableFormat;
+    const SwFrmFmt      *pLastTableFormat;
 
     int                 nSelectionType;
 
     // Aktueller Drawmode
     USHORT          nDrawSfxId;
     USHORT          nFormSfxId;
+    USHORT          nLastPasteDestination;
 
     BOOL            bCenterCrsr : 1,
                     bTopCrsr : 1,
@@ -276,7 +282,10 @@ class SwView: public SfxViewShell
                     bDrawSelMode : 1,
                     bShowAtResize : 1,
                     bInOuterResizePixel : 1,
-                    bIsApi : 1;
+                    bIsApi : 1,
+                    bPasteState : 1,
+                    bPasteSpecialState : 1
+                    ;
 
     // Methoden fuers Suchen
     // Suchkontext setzen
@@ -582,6 +591,12 @@ public:
 
     long InsertDoc( USHORT nSlotId, const String& rFileName,
                     const String& rFilterName, INT16 nVersion = 0 );
+
+    // status methods for clipboard.
+    // Status changes now notified from the clipboard.
+    BOOL IsPasteAllowed();
+    BOOL IsPasteSpecialAllowed();
+
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();

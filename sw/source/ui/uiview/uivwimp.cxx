@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 14:38:25 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 15:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,24 @@
 #include <cmdid.h>
 #include "globals.hrc"
 
-#ifndef _UIVWIMP_HXX
-#include <uivwimp.hxx>
-#endif
-#ifndef _SWWVIEW_HXX //autogen
-#include <wview.hxx>
-#endif
 
-#ifndef _UNOTXVW_HXX
-#include <unotxvw.hxx>
+#ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
+#include <com/sun/star/scanner/XScannerManager.hpp>
 #endif
-#ifndef _UNODISPATCH_HXX
-#include <unodispatch.hxx>
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDNOTIFIER_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -90,25 +96,42 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SWMODULE_HXX
-#include "swmodule.hxx"
-#endif
-#include <view.hrc>
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
-#include <com/sun/star/scanner/XScannerManager.hpp>
 #endif
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
 
+
+#ifndef _UIVWIMP_HXX
+#include <uivwimp.hxx>
+#endif
+#ifndef _SWWVIEW_HXX //autogen
+#include <wview.hxx>
+#endif
+#ifndef _UNOTXVW_HXX
+#include <unotxvw.hxx>
+#endif
+#ifndef _UNODISPATCH_HXX
+#include <unodispatch.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
+#endif
+
+#include <view.hrc>
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::clipboard;
+
 /* -----------------02.06.98 15:31-------------------
  *
  * --------------------------------------------------*/
@@ -119,7 +142,6 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
 {
     *pxXTextView = new SwXTextView(pView);
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
-
 }
 
 /*-----------------13.12.97 09:51-------------------
@@ -130,28 +152,19 @@ SwView_Impl::~SwView_Impl()
     view::XSelectionSupplier* pTextView = pxXTextView->get();
     ((SwXTextView*)pTextView)->Invalidate();
     delete pxXTextView;
-    if(xScanEvtLstnr.is())
-           pScanEvtLstnr->ParentDestroyed();
-}
-/* -----------------------------29.05.00 08:29--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwScannerEventListener::~SwScannerEventListener()
-{
-}
-/* -----------------------------29.05.00 08:29--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SAL_CALL   SwScannerEventListener::disposing( const EventObject& rEventObject )
-{
-    if( m_pParent )
-        m_pParent->ScannerEventHdl( rEventObject );
+    if( xScanEvtLstnr.is() )
+           pScanEvtLstnr->ViewDestroyed();
+    if( xClipEvtLstnr.is() )
+    {
+        pClipEvtLstnr->AddRemoveListener( FALSE );
+        pClipEvtLstnr->ViewDestroyed();
+    }
 }
 
 /*-----------------13.12.97 09:54-------------------
 
 --------------------------------------------------*/
-void    SwView_Impl::SetShellMode(ShellModes eSet)
+void SwView_Impl::SetShellMode(ShellModes eSet)
 {
     eShellMode = eSet;
 }
@@ -258,12 +271,109 @@ void SwView_Impl::ExcuteScan(USHORT nSlot)
 SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 {
     if(!xScanEvtLstnr.is())
-        xScanEvtLstnr = pScanEvtLstnr = new SwScannerEventListener(pView);
+        xScanEvtLstnr = pScanEvtLstnr = new SwScannerEventListener(*pView);
     return *pScanEvtLstnr;
 }
+
+
+void SwView_Impl::AddClipboardListener()
+{
+    if(!xClipEvtLstnr.is())
+    {
+        xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
+        pClipEvtLstnr->AddRemoveListener( TRUE );
+    }
+}
+
+
+
+// ------------------------- SwScannerEventListener ---------------------
+
+SwScannerEventListener::~SwScannerEventListener()
+{
+}
+
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject )
+{
+    if( pView )
+        pView->ScannerEventHdl( rEventObject );
+}
+
+// ------------------------- SwClipboardChangeListener ---------------------
+
+SwClipboardChangeListener::~SwClipboardChangeListener()
+{
+}
+
+void SAL_CALL SwClipboardChangeListener::disposing(
+                                            const EventObject& rEventObject )
+{
+}
+
+void SAL_CALL SwClipboardChangeListener::changedContents(
+                            const CLIP_NMSPC::ClipboardEvent& rEventObject )
+{
+    if( pView )
+    {
+        {
+        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        TransferableDataHelper aDataHelper( rEventObject.Contents );
+        SwWrtShell& rSh = pView->GetWrtShell();
+
+        pView->nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
+        pView->bPasteState = aDataHelper.GetTransferable().is() &&
+                        SwTransferable::IsPaste( rSh, aDataHelper );
+
+        pView->bPasteSpecialState = aDataHelper.GetTransferable().is() &&
+                    SwTransferable::IsPasteSpecial( rSh, aDataHelper );
+        }
+
+        SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
+        rBind.Invalidate( SID_PASTE );
+        rBind.Invalidate( FN_PASTESPECIAL );
+    }
+}
+
+void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
+{
+    try
+    {
+        do {
+            Reference< XMultiServiceFactory > xFact(
+                                ::comphelper::getProcessServiceFactory() );
+            if( !xFact.is() )
+                break;
+            Reference< XClipboard > xClipboard( xFact->createInstance(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.datatransfer.clipboard.SystemClipboard" )),
+                UNO_QUERY );
+            if( !xClipboard.is() )
+                break;
+
+            Reference< XClipboardNotifier > xClpbrdNtfr( xClipboard, UNO_QUERY );
+            if( xClpbrdNtfr.is() )
+            {
+                Reference< XClipboardListener > xClipEvtLstnr( this );
+                if( bAdd )
+                    xClpbrdNtfr->addClipboardListener( xClipEvtLstnr );
+                else
+                    xClpbrdNtfr->removeClipboardListener( xClipEvtLstnr );
+            }
+        }  while ( FALSE );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+}
+
+
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/07 14:38:25  os
+    Dispatch interface for database component
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 
