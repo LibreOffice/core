@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2001-03-09 15:16:25 $
+#   last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,6 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  static.mk
 
 
 # --- Files --------------------------------------------------------
@@ -85,7 +84,9 @@ LIB1FILES= 	\
 APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 
-APP1STDLIBS= $(STATIC_LIBS) msvcirt.lib
+.IF "$(GUI)"=="WNT"
+APP1STDLIBS= MSVCIRT.LIB
+.ENDIF
 # APP1STDLIBS= $(STATIC_LIBS) libci.lib
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 17:16:34 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define __LISTEN_123456__
 
 #include <string.h>
-#include <ostream.h>
+#include <iostream>
 #include <stdlib.h>
 
 template <class XX>
@@ -212,7 +212,7 @@ List<XX>::checkSize(unsigned newLength)
             newSpace <<= 1;
         else
         {
-            cerr << "List becomes too big" << endl;
+            std::cerr << "List becomes too big" << std::endl;
             exit(1);
         }
       }

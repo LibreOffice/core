@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 17:16:34 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <fstream.h>
 #include <string.h>
 #include "sistr.hxx"
 
@@ -73,7 +72,7 @@
 char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
 
 void
-WriteName( ofstream &       o_rFile,
+WriteName( std::ofstream &      o_rFile,
            const Simstr &   i_rIdlDocuBaseDir,
            const Simstr &   i_rName,
            E_LinkType       i_eLinkType )
@@ -177,14 +176,14 @@ WriteName( ofstream &       o_rFile,
 
 
 void
-WriteStr( ofstream &        o_rFile,
+WriteStr( std::ofstream &       o_rFile,
           const char *      i_sStr )
 {
     o_rFile.write( i_sStr, strlen(i_sStr) );
 }
 
 void
-WriteStr( ofstream &          o_rFile,
+WriteStr( std::ofstream &         o_rFile,
           const Simstr &      i_sStr )
 {
     o_rFile.write( i_sStr.str(), i_sStr.l() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 17:16:35 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#include <iostream>
 #include <stdio.h>
+
 
 #include <string.h>
 #include "../support/cmdline.hxx"
@@ -78,11 +80,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#define stricmp strcasecmp
 #else
 #error Must run under unix or windows, please define UNX or WNT.
 #endif
 
 
+using std::cerr;
 
 
 int                     Do_IndexCommandLine(
@@ -113,7 +117,7 @@ main( int       argc,
 
     if (! aCommandLine.IsOk())
     {
-        cerr <<  aCommandLine.ErrorText() << endl;
+        cerr <<  aCommandLine.ErrorText() << std::endl;
         return 1;
     }
 
@@ -136,7 +140,7 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     bool bParseResult = aParser.Parse(i_rCommandLine.XmlSrcFile());
     if (! bParseResult)
     {
-        cerr << "Error: File %s could not be parsed." << i_rCommandLine.XmlSrcFile() << endl;
+        cerr << "Error: File %s could not be parsed." << i_rCommandLine.XmlSrcFile() << std::endl;
         return 1;
     }
 
@@ -172,14 +176,14 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
-    cout << "Gather xml-files ..." << endl;
+    std::cout << "Gather xml-files ..." << std::endl;
     GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
 
-    cout << "Create output ..." << endl;
+    std::cout << "Create output ..." << std::endl;
     aIndex.GatherData(aFiles);
     aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
 
-    cout << "... done." << endl;
+    std::cout << "... done." << std::endl;
 
     return 0;
 };
@@ -223,14 +227,14 @@ GatherFileNames( List<Simstr> &     o_sFiles,
     _findclose(hFile);
     delete [] sFilter;
 #elif defined(UNX)
-    struct DIR * pDir = opendir( i_sSrcDirectory );
-    struct dirent * pEntry = 0;
+    DIR * pDir = opendir( i_sSrcDirectory );
+    dirent * pEntry = 0;
     char * sEnding;
 
-    while ( pEntry = readdir(pDir) != 0 )
+    while ( (pEntry = readdir(pDir)) != 0 )
     {
         sEnding = strrchr(pEntry->d_name,'.');
-        if (sEnding != 0 ? stricmp(sEnding,".xml") == 0 : False )
+        if (sEnding != 0 ? stricmp(sEnding,".xml") == 0 : 0 )
         {
             sNew = i_sSrcDirectory;
             sNew += "/";
@@ -301,12 +305,12 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
     delete [] sFilter;
 
 #elif defined(UNX)
-    struct DIR * pDir = opendir( i_sParentdDirectory );
-    struct dirent * pEntry = 0;
+    DIR * pDir = opendir( i_sParentdDirectory );
+    dirent * pEntry = 0;
     struct stat     aEntryStatus;
     char * sEnding;
 
-    while ( pEntry = readdir(pDir) != 0 )
+    while ( ( pEntry = readdir(pDir) ) != 0 )
     {
         stat(pEntry->d_name, &aEntryStatus);
         if ( ( aEntryStatus.st_mode & S_IFDIR ) == S_IFDIR )
@@ -317,7 +321,7 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
                  && strncmp(pEntry->d_name, "unx", 3) != 0 )
             {
                 sNew = pEntry->d_name;
-                o_sSubDirectories.push_back(pNew);
+                o_sSubDirectories.push_back(sNew);
             }
         }   // endif (aEntry.attrib == _A_SUBDIR)
     }   // end while
@@ -340,7 +344,7 @@ Create_TypeInfoFile( const char *           o_sOutputFile,
     );
     if ( !aOut )
     {
-        cerr << "Error: " << o_sOutputFile << " could not be created." << endl;
+        cerr << "Error: " << o_sOutputFile << " could not be created." << std::endl;
         return;
     }
 

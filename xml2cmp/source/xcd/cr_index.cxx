@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-09 15:23:00 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,14 @@
 #include "cr_index.hxx"
 
 #include <string.h>
-#include <fstream.h>
+#include <fstream>
 #include "../support/syshelp.hxx"
 #include "xmltree.hxx"
 #include "parse.hxx"
 #include "cr_html.hxx"
+
+using std::cerr;
+using std::ofstream;
 
 
 char C_sLineEnd[] = "\n";
@@ -136,7 +139,7 @@ Index::IndexedTags::IndexedTags( const List<Simstr> & i_rTagList )
             cerr << "Warning: It is not possible to create an index for the tag "
                  << i_rTagList[i]
                  << "."
-                 << endl;
+                 << std::endl;
         }
     }   // end for
 }
@@ -176,7 +179,7 @@ Index::WriteOutput( const char * i_sOuputFile )
         cerr << "Error: Indexfile \""
              << i_sOuputFile
              << "\" could not be created."
-             << endl;
+             << std::endl;
         return;
     }
 
@@ -212,7 +215,7 @@ Index::ReadFile(  const char * i_sFilename )
         cerr << "Error: File \""
              << i_sFilename
              << "\" could not be parsed."
-             << endl;
+             << std::endl;
         return;
     }
 

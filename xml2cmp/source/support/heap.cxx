@@ -2,9 +2,9 @@
  *
  *  $RCSfile: heap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-09 15:22:59 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,16 @@
 #include "heap.hxx"
 
 
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
-#define AssertionOf(x)  {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << endl; exit(3); }}
+#define AssertionOf(x)  {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
 
+#ifdef UNX
+#define stricmp strcasecmp
+#endif
+
+
+using std::cerr;
 
 Heap::Heap(unsigned i_nWidth)
     :   dpColumnsArray(new Column[i_nWidth]),

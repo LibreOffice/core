@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdline.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-09 15:22:59 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ostream.h>
+#include <iostream>
 
 
 char C_sUseText[] = "Use: xml2cmp.exe \n"
@@ -109,7 +109,7 @@ CommandLine::CommandLine( int           argc,
 
     if (bDisplayUse)
     {
-        cout << C_sUseText;
+        std::cout << C_sUseText << std::endl;
         bIsOk = false;
         exit(0);
     }

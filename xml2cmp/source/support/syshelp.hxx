@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 17:16:34 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
-class ofstream;
+#include <fstream>
+
 class Simstr;
 
 
@@ -92,17 +93,17 @@ enum E_LinkType
 
 
 void                WriteName(
-                        ofstream &          o_rFile,
+                        std::ofstream &             o_rFile,
                         const Simstr &      i_rIdlDocuBaseDir,
                         const Simstr &      i_rName,
                         E_LinkType          i_eLinkType );
 
 
 void                WriteStr(
-                        ofstream &          o_rFile,
+                        std::ofstream &     o_rFile,
                         const char *        i_sStr );
 void                WriteStr(
-                        ofstream &          o_rFile,
+                        std::ofstream &     o_rFile,
                         const Simstr &      i_sStr );
 
 

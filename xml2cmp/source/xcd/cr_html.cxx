@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-09 15:23:00 $
+ *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,13 @@
  *
  ************************************************************************/
 
-#include <fstream.h>
+#include <fstream>
 #include "cr_html.hxx"
 #include "xmltree.hxx"
 #include "../support/syshelp.hxx"
 
+using std::cerr;
+using std::ofstream;
 
 
 
@@ -97,7 +99,7 @@ HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
 {
     if ( !aFile )
     {
-        cerr << "Error: " << i_pOutputFileName << " could not be created." << endl;
+        cerr << "Error: " << i_pOutputFileName << " could not be created." << std::endl;
         exit(0);
     }
 }

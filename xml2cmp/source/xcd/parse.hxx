@@ -2,7 +2,7 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: np $Date:  $
  *

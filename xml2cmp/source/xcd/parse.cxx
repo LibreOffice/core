@@ -2,7 +2,7 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: np $Date:  $
  *
@@ -63,8 +63,15 @@
 #include <parse.hxx>
 
 #include <string.h>
-#include <ostream.h>
+#include <iostream>
 #include <xmltree.hxx>
+
+#ifdef UNX
+#define strnicmp strncasecmp
+#endif
+
+
+using std::cerr;
 
 
 // NOT FULLY DEFINED SERVICES
@@ -88,9 +95,9 @@ char  C_sType[] = "type";
 
 
 #define AssertionOf(x)  \
-    {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << endl; exit(3); }}
+    {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
 #define SyntaxAssertion(x,file) \
-    {if (!(x)) {cerr << "Syntax error in file: " << #file << endl; exit(3); }}
+    {if (!(x)) {cerr << "Syntax error in file: " << #file << std::endl; exit(3); }}
 
 
 
