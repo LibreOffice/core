@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:47:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <tools/fract.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 class Rectangle;
 class Font;
 class OutputDevice;
@@ -90,7 +94,6 @@ class SdrOle2Obj;
 struct RowInfo;
 struct ScTableInfo;
 class ScTabViewShell;
-class SvInPlaceObjectRef;
 class ScPageBreakData;
 class FmFormView;
 
@@ -207,7 +210,7 @@ private:
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
 
-    void            ConnectObject( const SvInPlaceObjectRef& rRef, SdrOle2Obj* pOleObj );
+    void            ConnectObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rRef, SdrOle2Obj* pOleObj );
 
     double          GetStretch();
 
