@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleFileAccess2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-07 14:28:48 $
+ *  last change: $Author: kso $ $Date: 2001-12-07 14:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,14 @@ interface XSimpleFileAccess2 : com::sun::star::ucb::XSimpleFileAccess
 
         <p>If the file does not exist, it will be created.
 
+        @param FileURL
+        File to write
+
         @param data
         A stream containing the data for the file to be (over-)written
     */
-    void writeFile( [in] com::sun::star::io::XInputStream data )
+    void writeFile( [in] string FileURL,
+                    [in] com::sun::star::io::XInputStream data )
         raises( com::sun::star::uno::Exception );
 
 };
