@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:21:50 $
+ *  last change: $Author: mib $ $Date: 2002-11-26 12:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,7 @@ uno::Reference< XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) throw( Ru
 
   -----------------------------------------------------------------------*/
 
-SdrObject *lcl_GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
+SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
 {
     SdrObject* pObject = pFmt->FindSdrObject();
     if( !pObject )
@@ -1312,7 +1312,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if( nZOrder >= 0)
             {
                 SdrObject* pObject =
-                    lcl_GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
+                    GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
                 SdrModel *pDrawModel = pDoc->GetDrawModel();
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
@@ -2059,7 +2059,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         }
 
         if( pFmt && pDoc->GetDrawModel() )
-            lcl_GetOrCreateSdrObject( pFmt );
+            GetOrCreateSdrObject( pFmt );
         uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
             setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);

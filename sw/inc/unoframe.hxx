@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 15:59:14 $
+ *  last change: $Author: mib $ $Date: 2002-11-26 12:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ public:
 
     sal_Bool            IsDescriptor() const {return bIsDescriptor;}
     void            ResetDescriptor();
+    static SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
 };
 /*-----------------20.02.98 11:28-------------------
 
