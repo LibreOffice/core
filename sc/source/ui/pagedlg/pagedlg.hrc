@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:24:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,26 @@
 #define ED_PAGENO           26
 #define FL_PAGEDIR          29
 
-#define BTN_SCALENONE       30
-#define BTN_SCALEALL        31
+#define FT_SCALEMODE        30
+#define LB_SCALEMODE        31
 #define ED_SCALEALL         32
-#define BTN_SCALEPAGENUM    33
 #define ED_SCALEPAGENUM     34
+#define ED_SCALEPAGEWIDTH   35
+#define ED_SCALEPAGEHEIGHT  36
 #define FL_SCALE            39
+
+#define FT_SCALEFACTOR      51
+#define FT_SCALEPAGEWIDTH   52
+#define FT_SCALEPAGEHEIGHT  53
+#define FT_SCALEPAGENUM     54
 
 #define IMG_LEFTRIGHT_H     41
 #define IMG_TOPDOWN_H       42
+
+// List box entries "Scaling mode"
+#define SC_TPTABLE_SCALE_PERCENT    0
+#define SC_TPTABLE_SCALE_TO         1
+#define SC_TPTABLE_SCALE_TO_PAGES   2
 
 //================================================
 // Dialog: Druckbereiche
