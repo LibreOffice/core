@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_persmap.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:51:57 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,10 @@
 #define INCLUDED_DP_PERSMAP_H
 
 #include "rtl/ustring.hxx"
-#ifdef SYSTEM_DB3
-#include <db3/db_cxx.h>
-#else
-#include "berkeleydb/db_cxx.h"
-#endif
+#include "db.hxx"
 #include <hash_map>
 
+using namespace berkeleydbproxy;
 
 namespace dp_misc
 {
