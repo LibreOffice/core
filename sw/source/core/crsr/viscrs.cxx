@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>   // SwTxtFrm
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -540,15 +543,31 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
-
-             // cursor level has to be shown
-            if ( pSI && pSI->CountDirChg() > 1 )
+            Point aPt( aRect.Pos() );
+            SwFrm* pFrm = rTNd.GetFrm( &aPt );
+            if ( pFrm )
             {
-                aTxtCrsr.SetDirection(
-                    ( pTmpCrsr->GetCrsrBidiLevel() % 2 ) ?
-                      CURSOR_DIRECTION_RTL :
-                      CURSOR_DIRECTION_LTR );
+                const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
+                 // cursor level has to be shown
+                if ( pSI && pSI->CountDirChg() > 1 )
+                {
+                    aTxtCrsr.SetDirection(
+                        ( pTmpCrsr->GetCrsrBidiLevel() % 2 ) ?
+                          CURSOR_DIRECTION_RTL :
+                          CURSOR_DIRECTION_LTR );
+                }
+
+                if ( pFrm->IsRightToLeft() )
+                {
+                    const OutputDevice *pOut = pCrsrShell->GetOut();
+                    if ( pOut )
+                    {
+                        USHORT nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
+                        Size aSize( nSize, nSize );
+                        aSize = pOut->PixelToLogic( aSize );
+                        aRect.Left( aRect.Left() - aSize.Width() );
+                    }
+                }
             }
         }
     }
