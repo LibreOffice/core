@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 12:37:56 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,131 +622,138 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 xColContainer->removeByName(*pBegin);
         }
 
-        // set the formats from the table
-        if(m_pCurrentlyDisplayed)
+        Reference< XChild > xGridAsChild(xGrid, UNO_QUERY);
+        Reference< XLoadable > xFormAsLoadable;
+        if (xGridAsChild.is())
+            xFormAsLoadable = xFormAsLoadable.query(xGridAsChild->getParent());
+        if (xFormAsLoadable.is() && xFormAsLoadable->isLoaded())
         {
-            Sequence< ::rtl::OUString> aProperties(6);
-            Sequence< Any> aValues(6);
-
-            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-            Reference<XPropertySet> xTableProp(pData->xObject,UNO_QUERY);
-            OSL_ENSURE(xTableProp.is(),"SbaTableQueryBrowser::InitializeGridModel: No table available!");
-
-            aProperties.getArray()[0]   = PROPERTY_FONT;
-            aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_FONT);
-            aProperties.getArray()[1]   = PROPERTY_TEXTEMPHASIS;
-            aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_TEXTEMPHASIS);
-            aProperties.getArray()[2]   = PROPERTY_TEXTRELIEF;
-            aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_TEXTRELIEF);
-            aProperties.getArray()[3]   = PROPERTY_ROW_HEIGHT;
-            aValues.getArray()[3]       = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
-            aProperties.getArray()[4]   = PROPERTY_TEXTCOLOR;
-            aValues.getArray()[4]       = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
-            aProperties.getArray()[5]   = PROPERTY_TEXTLINECOLOR;
-            aValues.getArray()[5]       = xTableProp->getPropertyValue(PROPERTY_TEXTLINECOLOR);
-
-            Reference< XMultiPropertySet >  xFormMultiSet(xGrid, UNO_QUERY);
-            xFormMultiSet->setPropertyValues(aProperties, aValues);
-        }
-
-
-        // get the formats supplier of the database we're working with
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getNumberFormatter()->getNumberFormatsSupplier();
-
-        Reference<XConnection> xConnection;
-        Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
-        ::cppu::extractInterface(xConnection,xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION));
-        OSL_ENSURE(xConnection.is(),"A ActiveConnection should normaly exists!");
-
-        Reference<XChild> xChild(xConnection,UNO_QUERY);
-        Reference<XPropertySet> xDataSourceProp(xChild->getParent(),UNO_QUERY);
-        sal_Bool bSupress = ::cppu::any2bool(xDataSourceProp->getPropertyValue(PROPERTY_SUPPRESSVERSIONCL));
-
-        // insert the column into the gridcontrol so that we see something :-)
-        ::rtl::OUString aCurrentModelType;
-        Reference<XColumnsSupplier> xSupCols(getRowSet(),UNO_QUERY);
-        Reference<XNameAccess> xColumns     = xSupCols->getColumns();
-        Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin       = aNames.getConstArray();
-        const ::rtl::OUString* pEnd         = pBegin + aNames.getLength();
-
-        Reference<XPropertySet> xColumn;
-        for (sal_uInt16 i=0; pBegin != pEnd; ++i,++pBegin)
-        {
-            // Typ
-            // first get type to determine wich control we need
-            ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
-
-            // ignore the column when it is a rowversion one
-            if(bSupress && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWVERSION)
-                        && ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISROWVERSION)))
-                continue;
-
-            sal_Bool bIsFormatted           = sal_False;
-            sal_Bool bFormattedIsNumeric    = sal_True;
-            sal_Int32 nType = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
-            switch(nType)
+            // set the formats from the table
+            if(m_pCurrentlyDisplayed)
             {
-                // TODO : die Strings fuer die Column-Typen irgendwo richtig platzieren
-                case DataType::BIT:
-                    aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
-                    break;
+                Sequence< ::rtl::OUString> aProperties(6);
+                Sequence< Any> aValues(6);
 
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::LONGVARBINARY:
-                    aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
-                    break;
+                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
+                Reference<XPropertySet> xTableProp(pData->xObject,UNO_QUERY);
+                OSL_ENSURE(xTableProp.is(),"SbaTableQueryBrowser::InitializeGridModel: No table available!");
 
-                case DataType::VARCHAR:
-                case DataType::LONGVARCHAR:
-                case DataType::CHAR:
-                    bFormattedIsNumeric = sal_False;
-                    // _NO_ break !
-                default:
-                    aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
-                    bIsFormatted = sal_True;
-                    break;
+                aProperties.getArray()[0]   = PROPERTY_FONT;
+                aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_FONT);
+                aProperties.getArray()[1]   = PROPERTY_TEXTEMPHASIS;
+                aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_TEXTEMPHASIS);
+                aProperties.getArray()[2]   = PROPERTY_TEXTRELIEF;
+                aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_TEXTRELIEF);
+                aProperties.getArray()[3]   = PROPERTY_ROW_HEIGHT;
+                aValues.getArray()[3]       = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
+                aProperties.getArray()[4]   = PROPERTY_TEXTCOLOR;
+                aValues.getArray()[4]       = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
+                aProperties.getArray()[5]   = PROPERTY_TEXTLINECOLOR;
+                aValues.getArray()[5]       = xTableProp->getPropertyValue(PROPERTY_TEXTLINECOLOR);
+
+                Reference< XMultiPropertySet >  xFormMultiSet(xGrid, UNO_QUERY);
+                xFormMultiSet->setPropertyValues(aProperties, aValues);
             }
 
-            Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(aCurrentModelType);
-            xCurrentCol->setPropertyValue(PROPERTY_CONTROLSOURCE, makeAny(*pBegin));
-            xCurrentCol->setPropertyValue(PROPERTY_LABEL, makeAny(*pBegin));
-            if (bIsFormatted)
+
+            // get the formats supplier of the database we're working with
+            Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getNumberFormatter()->getNumberFormatsSupplier();
+
+            Reference<XConnection> xConnection;
+            Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
+            ::cppu::extractInterface(xConnection,xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION));
+            OSL_ENSURE(xConnection.is(),"A ActiveConnection should normaly exists!");
+
+            Reference<XChild> xChild(xConnection,UNO_QUERY);
+            Reference<XPropertySet> xDataSourceProp(xChild->getParent(),UNO_QUERY);
+            sal_Bool bSupress = ::cppu::any2bool(xDataSourceProp->getPropertyValue(PROPERTY_SUPPRESSVERSIONCL));
+
+            // insert the column into the gridcontrol so that we see something :-)
+            ::rtl::OUString aCurrentModelType;
+            Reference<XColumnsSupplier> xSupCols(getRowSet(),UNO_QUERY);
+            Reference<XNameAccess> xColumns     = xSupCols->getColumns();
+            Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
+            const ::rtl::OUString* pBegin       = aNames.getConstArray();
+            const ::rtl::OUString* pEnd         = pBegin + aNames.getLength();
+
+            Reference<XPropertySet> xColumn;
+            for (sal_uInt16 i=0; pBegin != pEnd; ++i,++pBegin)
             {
-                if (xSupplier.is())
-                    xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("FormatsSupplier"), makeAny(xSupplier));
-                xCurrentCol->setPropertyValue(PROPERTY_FORMATKEY, xColumn->getPropertyValue(PROPERTY_FORMATKEY));
-                xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("TreatAsNumber"), ::cppu::bool2any(bFormattedIsNumeric));
+                // Typ
+                // first get type to determine wich control we need
+                ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
+
+                // ignore the column when it is a rowversion one
+                if(bSupress && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWVERSION)
+                            && ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISROWVERSION)))
+                    continue;
+
+                sal_Bool bIsFormatted           = sal_False;
+                sal_Bool bFormattedIsNumeric    = sal_True;
+                sal_Int32 nType = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+                switch(nType)
+                {
+                    // TODO : die Strings fuer die Column-Typen irgendwo richtig platzieren
+                    case DataType::BIT:
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
+                        break;
+
+                    case DataType::BINARY:
+                    case DataType::VARBINARY:
+                    case DataType::LONGVARBINARY:
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
+                        break;
+
+                    case DataType::VARCHAR:
+                    case DataType::LONGVARCHAR:
+                    case DataType::CHAR:
+                        bFormattedIsNumeric = sal_False;
+                        // _NO_ break !
+                    default:
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
+                        bIsFormatted = sal_True;
+                        break;
+                }
+
+                Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(aCurrentModelType);
+                xCurrentCol->setPropertyValue(PROPERTY_CONTROLSOURCE, makeAny(*pBegin));
+                xCurrentCol->setPropertyValue(PROPERTY_LABEL, makeAny(*pBegin));
+                if (bIsFormatted)
+                {
+                    if (xSupplier.is())
+                        xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("FormatsSupplier"), makeAny(xSupplier));
+                    xCurrentCol->setPropertyValue(PROPERTY_FORMATKEY, xColumn->getPropertyValue(PROPERTY_FORMATKEY));
+                    xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("TreatAsNumber"), ::cppu::bool2any(bFormattedIsNumeric));
+                }
+
+                // default value
+                if (nType == DataType::BIT)
+                {
+                    Any aDefault; aDefault <<= ((sal_Int16)STATE_DONTKNOW);
+                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+                        aDefault <<= (comphelper::getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                    xCurrentCol->setPropertyValue(PROPERTY_DEFAULTSTATE, aDefault);
+                }
+
+                // transfer properties from the definition to the UNO-model :
+                // ... the hidden flag
+                xCurrentCol->setPropertyValue(PROPERTY_HIDDEN, xColumn->getPropertyValue(PROPERTY_HIDDEN));
+
+                // ... the initial colum width
+                xCurrentCol->setPropertyValue(PROPERTY_WIDTH, xColumn->getPropertyValue(PROPERTY_WIDTH));
+
+                // ... horizontal justify
+                xCurrentCol->setPropertyValue(PROPERTY_ALIGN, makeAny(sal_Int16(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_ALIGN)))));
+
+                // ... the 'comment' property as helptext (will usually be shown as header-tooltip)
+
+                Any aDescription; aDescription <<= ::rtl::OUString();
+                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+                    aDescription <<= comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+                xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
+                xColContainer->insertByName(*pBegin, makeAny(xCurrentCol));
             }
-
-            // default value
-            if (nType == DataType::BIT)
-            {
-                Any aDefault; aDefault <<= ((sal_Int16)STATE_DONTKNOW);
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                    aDefault <<= (comphelper::getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
-                xCurrentCol->setPropertyValue(PROPERTY_DEFAULTSTATE, aDefault);
-            }
-
-            // transfer properties from the definition to the UNO-model :
-            // ... the hidden flag
-            xCurrentCol->setPropertyValue(PROPERTY_HIDDEN, xColumn->getPropertyValue(PROPERTY_HIDDEN));
-
-            // ... the initial colum width
-            xCurrentCol->setPropertyValue(PROPERTY_WIDTH, xColumn->getPropertyValue(PROPERTY_WIDTH));
-
-            // ... horizontal justify
-            xCurrentCol->setPropertyValue(PROPERTY_ALIGN, makeAny(sal_Int16(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_ALIGN)))));
-
-            // ... the 'comment' property as helptext (will usually be shown as header-tooltip)
-
-            Any aDescription; aDescription <<= ::rtl::OUString();
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                aDescription <<= comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-            xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-
-            xColContainer->insertByName(*pBegin, makeAny(xCurrentCol));
         }
     }
     catch(Exception&)
