@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: th $ $Date: 2001-07-06 13:58:07 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 15:23:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-PRJ=..\..\..
+PRJ=..$/..$/..
 
 PRJNAME=TOOLS
 TARGET=dll
