@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #ifndef _CONNECTIVITY_DBASE_DSTATEMENT_HXX_
 #include "dbase/DStatement.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 
@@ -101,14 +105,17 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
+DBG_NAME(ODbaseConnection)
 // --------------------------------------------------------------------------------
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
+    DBG_CTOR(ODbaseConnection,NULL);
     m_aFilenameExtension = String::CreateFromAscii("dbf");
 }
 //-----------------------------------------------------------------------------
 ODbaseConnection::~ODbaseConnection()
 {
+    DBG_DTOR(ODbaseConnection,NULL);
 }
 
 // XServiceInfo
