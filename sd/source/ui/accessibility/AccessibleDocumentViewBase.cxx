@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 14:47:23 $
+ *  last change: $Author: af $ $Date: 2002-06-07 15:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
     }
 
     // Unregister from VCL Window.
-    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
         pWindow->RemoveChildEventListener (LINK(
@@ -252,7 +252,7 @@ void AccessibleDocumentViewBase::Init (void)
 
     // Register at VCL Window to be informed of activated and deactivated
     // OLE objects.
-    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
         pWindow->AddChildEventListener (LINK(
@@ -269,7 +269,6 @@ void AccessibleDocumentViewBase::Init (void)
             }
         }
     }
-
 }
 
 
@@ -781,7 +780,7 @@ void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::s
 void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 {
     // Unregister from VCL Window.
-    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
         pWindow->RemoveChildEventListener (LINK(
