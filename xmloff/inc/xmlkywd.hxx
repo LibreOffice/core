@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:19:57 $
+ *  last change: $Author: dr $ $Date: 2000-10-25 14:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ XML_CONSTASCII_ACTION( sXML_category, "category" );
 XML_CONSTASCII_ACTION( sXML_category_and_value, "category-and-value" );
 XML_CONSTASCII_ACTION( sXML_cell_protect, "cell-protect");
 XML_CONSTASCII_ACTION( sXML_cell_range_address, "cell-range-address");
+XML_CONSTASCII_ACTION( sXML_cell_range_source, "cell-range-source");
 XML_CONSTASCII_ACTION( sXML_center, "center" );
 XML_CONSTASCII_ACTION( sXML_chain_next_name, "chain-next-name" );
 XML_CONSTASCII_ACTION( sXML_chapter, "chapter");
@@ -441,6 +442,7 @@ XML_CONSTASCII_ACTION( sXML_filter, "filter");
 XML_CONSTASCII_ACTION( sXML_filter_and, "filter-and");
 XML_CONSTASCII_ACTION( sXML_filter_condition, "filter-condition");
 XML_CONSTASCII_ACTION( sXML_filter_name, "filter-name" );
+XML_CONSTASCII_ACTION( sXML_filter_options, "filter-options" );
 XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
 XML_CONSTASCII_ACTION( sXML_first_page_number, "first-page-number");
 XML_CONSTASCII_ACTION( sXML_fix, "fix" );
@@ -573,6 +575,8 @@ XML_CONSTASCII_ACTION( sXML_label_range, "label-range" );
 XML_CONSTASCII_ACTION( sXML_label_ranges, "label-ranges" );
 XML_CONSTASCII_ACTION( sXML_landscape, "landscape" );
 XML_CONSTASCII_ACTION( sXML_language, "language" );
+XML_CONSTASCII_ACTION( sXML_last_column_spanned, "last-column-spanned" );
+XML_CONSTASCII_ACTION( sXML_last_row_spanned, "last-row-spanned" );
 XML_CONSTASCII_ACTION( sXML_left, "left" );
 XML_CONSTASCII_ACTION( sXML_legend, "legend" );
 XML_CONSTASCII_ACTION( sXML_legend_position, "legend-position" );
