@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Client.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:30:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 
 #ifndef _SFX_CLIENTSH_HXX //autogen
-#include <sfx2/clientsh.hxx>
+#include <sfx2/ipclient.hxx>
 #endif
 class SdrGrafObj;
 class SdrOle2Obj;
@@ -80,36 +80,27 @@ class ViewShell;
 |*
 \************************************************************************/
 
-class Client
-    : public SfxInPlaceClient
+class Client : public SfxInPlaceClient
 {
-public:
-    Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, ::Window* pWindow);
-    virtual ~Client (void);
-
-    virtual void    RequestObjAreaPixel(const Rectangle& rRect);
-    virtual void    ViewChanged(USHORT nAspect);
-    virtual void    MakeViewData();
-    virtual void    MakeVisible();
-
-    SdrOle2Obj*     GetSdrOle2Obj() const { return pSdrOle2Obj; }
-
-    void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
-    SdrGrafObj*     GetSdrGrafObj() const { return pSdrGrafObj; }
-
-    void            SetOutlinerParaObj (OutlinerParaObject* pObj) { pOutlinerParaObj = pObj; }
-    OutlinerParaObject*     GetOutlinerParaObject () const { return pOutlinerParaObj; }
-
-    BOOL            IsUIActive() const
-                    { return aProt.IsUIActive(); }
-
-protected:
-    ViewShell*  pViewShell;
+    ViewShell*      pViewShell;
     SdrOle2Obj*     pSdrOle2Obj;
     SdrGrafObj*     pSdrGrafObj;
     OutlinerParaObject* pOutlinerParaObj;
 
-    virtual void    UIActivate(BOOL bActivate);
+    virtual void    ObjectAreaChanged();
+    virtual void    RequestNewObjectArea( Rectangle& );
+    virtual void    ViewChanged();
+    virtual void    MakeVisible();
+
+public:
+    Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, ::Window* pWindow);
+    virtual ~Client (void);
+
+    SdrOle2Obj*     GetSdrOle2Obj() const { return pSdrOle2Obj; }
+    void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
+    SdrGrafObj*     GetSdrGrafObj() const { return pSdrGrafObj; }
+    void            SetOutlinerParaObj (OutlinerParaObject* pObj) { pOutlinerParaObj = pObj; }
+    OutlinerParaObject*     GetOutlinerParaObject () const { return pOutlinerParaObj; }
 };
 
 } // end of namespace sd
