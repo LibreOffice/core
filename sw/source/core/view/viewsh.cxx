@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:26:32 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,6 +793,32 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, BYTE nInv )
     rSh.GetDoc()->SetModified();
 }
 
+/** local method to invalidate/re-calculate positions of floating screen
+    objects (Writer fly frame and drawing objects), which are anchored
+    to paragraph or to character.
+
+    OD 2004-03-16 #i11860#
+
+    @author OD
+*/
+void lcl_InvalidateAllObjPos( ViewShell &_rSh )
+{
+    const bool bIsCrsrShell = _rSh.ISA(SwCrsrShell);
+    if ( bIsCrsrShell )
+        static_cast<SwCrsrShell&>(_rSh).StartAction();
+    else
+        _rSh.StartAction();
+
+    _rSh.GetLayout()->InvalidateAllObjPos();
+
+    if ( bIsCrsrShell )
+        static_cast<SwCrsrShell&>(_rSh).EndAction();
+    else
+        _rSh.EndAction();
+
+    _rSh.GetDoc()->SetModified();
+}
+
 // Absatzabstaende koennen wahlweise addiert oder maximiert werden
 
 BOOL ViewShell::IsParaSpaceMax() const
@@ -917,6 +943,23 @@ void ViewShell::SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
         const BYTE nInv = INV_PRTAREA;
         //const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+
+// OD 2004-03-12 #i11860# - former object positioning
+sal_Bool ViewShell::IsFormerObjectPositioning() const
+{
+    return GetDoc()->IsFormerObjectPositioning();
+}
+
+// OD 2004-03-12 #i11860# - control, if former object positioning is used or not.
+void ViewShell::SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos )
+{
+    if ( GetDoc()->IsFormerObjectPositioning() != _bUseFormerObjPos )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetUseFormerObjectPositioning( _bUseFormerObjPos );
+        lcl_InvalidateAllObjPos( *this );
     }
 }
 
