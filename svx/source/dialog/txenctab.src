@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 15:18:31 $
+ *  last change: $Author: er $ $Date: 2002-05-16 18:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,6 +1283,7 @@ ItemList [ language_user1 ] =
         < "한국어 (EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "한국어 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "한국어 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "유니코드"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
