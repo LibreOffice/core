@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 11:04:33 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 11:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2380,21 +2380,83 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
             sal_Int32 nMasterLen = m_aMasterFields.getLength();
             if (xParentCols->hasElements() && (nMasterLen > 0))
             {
-                Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
-                const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-
-                for (sal_Int32 i = 0; i < nMasterLen; ++i)
+#ifdef PARAM_COLUMN_HAS_REALNAME
+                // this is the code as it should be ....
+                // Undfortunately, it requests that the param columns returned by the query composer have a valid
+                // real name (e.g., in a clause WHERE "field" = :param it expects a param column named "param"
+                // with a real name "field".
+                // stumbled upon this while fixing 88392 - 26.06.2001 - frank.schoenheit@sun.com
+                try
                 {
-                    Reference<XPropertySet>  xMasterField, xField;
-                    if (xParentCols->hasByName(pMasterFields[i]) &&
-                        xCols->hasByName(pDetailFields[i]))
+                    // analyze our parameters
+                    if (!m_pParameterInfo)
+                        m_pParameterInfo = createParameterInfo();
+
+                    Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
+
+                    const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
+                    const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+                    const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
+                    for (pDetailFields; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields)
                     {
-                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
-                        ::cppu::extractInterface(xField, xCols->getByName(pDetailFields[i]));
-                        xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                        Reference<XPropertySet>  xMasterField, xField;
+                        if (m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
+                        {   // we really have a parameter column with this name
+                            Reference< XPropertySet > xParamColumn;
+                            m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields) >>= xParamColumn;
+                            if (xParamColumn.is())
+                            {   // we really really have it :)
+                                ::rtl::OUString sParamColumnRealName;
+                                xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
+                                if (xCols->hasByName(sParamColumnRealName))
+                                {   // our own columns have a column which's name equals the real name of the param column
+                                    if (xParentCols->hasByName(*pMasterFields))
+                                    {   // and our parent's cols know the master field which is connected to the current detail field
+
+                                        // -> transfer the value property
+                                        xParentCols->getByName(*pMasterFields) >>= xMasterField;
+                                        xCols->getByName(*pMasterFields) >>= xField;
+                                        if (xField.is() && xMasterField.is())
+                                            xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the mater-detail-driven parameters!");
+                }
+#else
+                // the following below is somewhat strange:
+                // if we have a master-detail connection from, let's say "a" (a master field) to ":param" (our parameter name),
+                // and we ourself have a field called "a", then we set the parent's a-value into our own a-value.
+                // In case our statement is, for example, "SELECT a, c FROM table WHERE c = :param", this may be complete
+                // nonsense!
+
+                try
+                {
+                    Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
+                    const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
+                    const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+                    for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields)
+                    {
+                        Reference<XPropertySet>  xMasterField, xField;
+                        if (xParentCols->hasByName(*pMasterFields) && xCols->hasByName(*pMasterFields))
+                        {
+                            xParentCols->getByName(*pMasterFields) >>= xMasterField;
+                            xCols->getByName(*pMasterFields) >>= xField;
+                            if (xField.is() && xMasterField.is())
+                                xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                        }
+                    }
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the mater-detail-driven parameters!");
+                }
+#endif
             }
         }
     }
@@ -2405,9 +2467,8 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     Reference<XEnumeration>  xIter = createEnumeration();
     while (xIter->hasMoreElements())
     {
-        Any aElement(xIter->nextElement());
         Reference<XReset> xReset;
-        ::cppu::extractInterface(xReset, aElement);
+        xIter->nextElement() >>= xReset;
         if (xReset.is())
         {
             // TODO : all reset-methods have to be thread-safe
@@ -2699,7 +2760,7 @@ void SAL_CALL ODatabaseForm::removeSQLErrorListener(const Reference<XSQLErrorLis
 //------------------------------------------------------------------------------
 void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    if ((0 == evt.PropertyName.compareToAscii(PROPERTY_ACTIVE_CONNECTION.pZeroTerminatedName)) && !m_bForwardingConnection)
+    if ((0 == evt.PropertyName.compareToAscii(PROPERTY_ACTIVE_CONNECTION)) && !m_bForwardingConnection)
     {
         // the rowset changed it's active connection itself (without interaction from our side), so
         // we need to fire this event, too
