@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:56:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,73 +106,59 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <drafts/com/sun/star/ui/ItemType.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XToolbarController.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <drafts/com/sun/star/ui/DockingArea.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
 #include <drafts/com/sun/star/ui/XUIElementSettings.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
 #include <drafts/com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <drafts/com/sun/star/ui/ImageType.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <drafts/com/sun/star/ui/UIElementType.hpp>
 #endif
-
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -182,15 +168,12 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
-
 #ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
 #include <svtools/toolboxcontroller.hxx>
 #endif
-
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-
 #include <svtools/miscopt.hxx>
 #include <svtools/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -198,7 +181,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -325,6 +307,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bUpdateControllers( sal_False ),
     m_bImageOrientationRegistered( sal_False ),
     m_bImageMirrored( sal_False ),
+    m_bCanBeCustomized( sal_True ),
     m_lImageRotation( 0 )
 {
     Window* pWindow = m_pToolBar;
@@ -1457,10 +1440,10 @@ IMPL_LINK( ToolBarManager, MenuDeactivate, Menu*, pMenu )
 {
     ResetableGuard aGuard( m_aLock );
 
-    if( pMenu != m_pToolBar->GetMenu() )
+    if ( m_bDisposed )
         return 1;
 
-    if ( m_bDisposed )
+    if( pMenu != m_pToolBar->GetMenu() )
         return 1;
 
     ImplClearPopupMenu( m_pToolBar );
@@ -1522,6 +1505,13 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
         }
         else
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
+
+        if ( !m_bCanBeCustomized )
+        {
+            // Non-configurable toolbars should disable configuration menu items
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
+        }
 
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
