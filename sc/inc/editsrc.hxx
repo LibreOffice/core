@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:09:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class ScHeaderFooterContentObj;
 class ScCellTextData;
 class ScHeaderFooterTextData;
 class ScAccessibleTextData;
+class SdrObject;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -183,6 +184,7 @@ private:
     SvxEditEngineForwarder* pForwarder;
     BOOL                    bDataValid;
 
+    SdrObject*                  GetCaptionObj();
 public:
                                 ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                     ~ScAnnotationEditSource();
