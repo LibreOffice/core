@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:08:09 $
+ *  last change: $Author: oj $ $Date: 2002-05-03 07:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START + 17
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 18
 #define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 19
-#define ERROR_INVALID_TABLE_NAME_LENGTH RID_ERRORBOX_START + 20
+#define WARN_QRY_NATIVE                 RID_ERRORBOX_START + 20
 
 
 //========================================================================
@@ -171,14 +171,12 @@
 #define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
 #define QUERY_VIEW_DESIGN_SAVEMODIFIED  RID_QUERYBOX_START + 11
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
-#define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
 
 //========================================================================
 // warning boxes
 
 #define WARN_SAVEFORQUERIES             RID_WARN_START +  1
-#define WARN_QRY_NATIVE                 RID_WARN_START +  2
 
 //========================================================================
 // toolboxes
@@ -246,6 +244,13 @@
 #define BMP_EXCEPTION_WARNING_SCH       RID_IMAGE_START + 29
 #define BMP_EXCEPTION_INFO_SCH          RID_IMAGE_START + 30
 #define IMG_PKEYICON_SCH                RID_IMAGE_START + 31
+#define IMG_JOINS_H                     RID_IMAGE_START + 32
+#define IMG_ALL_LEFT_H                  RID_IMAGE_START + 33
+#define IMG_ONE_LEFT_H                  RID_IMAGE_START + 34
+#define IMG_ONE_RIGHT_H                 RID_IMAGE_START + 35
+#define IMG_ALL_RIGHT_H                 RID_IMAGE_START + 36
+#define IMG_SORTUP_H                    RID_IMAGE_START + 37
+#define IMG_SORTDOWN_H                  RID_IMAGE_START + 38
 
 //========================================================================
 // image lists
@@ -500,10 +505,8 @@
 #define STR_NO_COLUMNNAME_MATCHING          RID_STRING_START + 192
 #define STR_ERROR_OCCURED_WHILE_COPYING     RID_STRING_START + 193
 #define STR_QUERY_DROP_ALL                  RID_STRING_START + 194
-#define STR_COLUMN_UNKNOWN                  RID_STRING_START + 195
-#define STR_ERR_LIKE_COLUMN                 RID_STRING_START + 196
-#define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STRING_START + 197
-#define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STRING_START + 198
+#define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STRING_START + 195
+#define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STRING_START + 196
 
 
 //========================================================================
@@ -525,23 +528,17 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.70  2002/04/23 07:51:13  oj
+ *  Revision 1.64.8.4  2002/04/29 14:26:34  oj
+ *  #98772# new images
+ *
+ *  Revision 1.64.8.3  2002/04/29 08:11:20  oj
+ *  #98772# many new ids for bitmaps
+ *
+ *  Revision 1.64.8.2  2002/04/23 07:48:49  oj
  *  #98286# new member methods implemented
  *
- *  Revision 1.69  2002/04/23 07:50:46  oj
- *  #98286# new member methods implemented
- *
- *  Revision 1.68  2002/03/21 12:53:12  oj
- *  #96780# new strings for error messages
- *
- *  Revision 1.67  2002/03/21 07:16:02  oj
- *  #95144# enable create button again when on firstpage
- *
- *  Revision 1.66  2002/02/06 07:23:39  oj
+ *  Revision 1.64.8.1  2002/02/06 07:37:14  oj
  *  #96957# new handling inserted for context menu and accessibility
- *
- *  Revision 1.65  2002/01/24 17:38:31  fs
- *  incorporate the improvements suggested during code review of genericcontroller.*
  *
  *  Revision 1.64  2001/10/05 06:57:19  oj
  *  #84000# impl multiselction for queries and link docs
