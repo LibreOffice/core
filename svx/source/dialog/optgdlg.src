@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 13:49:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,111 +77,51 @@ TabPage OFA_TP_MISC
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_TWOFIGURE
+    FixedLine FL_HELP
     {
         Pos = MAP_APPFONT( COL0, ROW0 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Zweistellige Jahreszahlen" ;
-        Text [ en-US ] = "Year (two digits)" ;
+        Text [ de ] = "Hilfe" ;
+        Text [ en-US ] = "Help";
     };
-    FixedText FT_INTERPRET
+    CheckBox CB_TOOLTIP
     {
-        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW1 ) );
-        Size = MAP_APPFONT( DIFF( COL1, COL3), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "~Interpretieren als Jahre zwischen";
-        Text [ en-US ] = "Interpret as years between";
+        Pos = MAP_APPFONT( COL1, ROW1 );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "~Tipps" ;
+        Text [ en-US ] = "~Tips";
     };
-    NumericField NF_YEARVALUE
+    CheckBox CB_EXTHELP
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT( COL4, ROW1 );
-        Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
-        Minimum = 1583 ;
-        Maximum = 9857 ;
-        Spin = TRUE ;
-        Repeat = TRUE ;
-    };
-    FixedText FT_TO
-    {
-        Pos = MAP_APPFONT( COL6, OFFS_TEXTBOX_FIXEDTEXT( ROW1 ) );
-        Size = MAP_APPFONT( UNIT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "und " ;
-        Text [ en-US ] = "and " ;
-        Text [ x-comment ] = "; nk: im Japanisch muss es an dieser Stelle \"von\" heißen  weil im Japanisch keine Präposition gibt, sondern Postposition. (Extras/Optionen/Allgemein/Sonstiges) 20.08.99 - - - - - - - - - -";
-    };
-    FixedLine FL_HELPAGENT
-    {
-        Pos = MAP_APPFONT( COL0, ROW3 );
-        Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Help Agent" ;
-        Text [ en-US ] = "Help Agent";
+        Pos = MAP_APPFONT( COL2, ROW2 );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL2, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "~Erweiterte Tipps" ;
+        Text [ en-US ] = "~Extended tips";
     };
     CheckBox CB_HELPAGENT
     {
-        Pos = MAP_APPFONT( COL1, ROW4 );
-        Size = MAP_APPFONT( DIFF( COL1, COL3 ), RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "~Aktivieren" ;
-        Text [ en-US ] = "~Activate";
-    };
-    FixedText FT_HELPAGENT_TIME
-    {
-        Pos = MAP_APPFONT( COL2, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
-        Size = MAP_APPFONT( DIFF( COL2, COL3 ), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "A~nzeigedauer" ;
-        Text [ en-US ] = "Displa~y duration";
-    };
-    NumericField ED_HELPAGENT_TIME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT( COL4, ROW5 );
-        Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
-        TabStop = TRUE ;
-        Minimum = 5;
-        Maximum = 60;
-        First = 5;
-        Last = 60;
-        Spin = TRUE ;
-        Repeat = TRUE ;
-    };
-    FixedText FT_HELPAGENT_TIME_UNIT
-    {
-        Pos = MAP_APPFONT( COL6, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
-        Size = MAP_APPFONT( UNIT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Sekunden" ;
-        Text [ x-comment ] = "; pb: this means that the settings of the numeric field in front of this text are in seconds";
-        Text [ en-US ] = "seconds";
-    };
-    FixedText FT_HELPAGENT_RESET
-    {
-        Pos = MAP_APPFONT( COL2, OFFS_PUSHBUTTON_FIXEDTEXT( ROW6 ) );
-        Size = MAP_APPFONT( DIFF( COL2, COL3 ), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Help Agent";
-        Text [ en-US ] = "Help Agent";
+        Pos = MAP_APPFONT( COL1, ROW3 );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "~Office-Assistent" ;
+        Text [ en-US ] = "~Help Agent";
     };
     PushButton PB_HELPAGENT_RESET
     {
-        Pos = MAP_APPFONT( COL4, ROW6 );
+        Pos = MAP_APPFONT( COL2, ROW4 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Z~urücksetzen";
-        Text [ en-US ] = "~Reset";
+        Text [ de ] = "Office-Assistent z~urücksetzen";
+        Text [ en-US ] = "~Reset Help Agent";
     };
-    FixedLine FL_HELPFORMATTING
+    FixedText FT_HELPFORMAT
     {
-        Pos = MAP_APPFONT( COL0, ROW7 );
-        Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Formatierung der %PRODUCTNAME-Hilfe" ;
-        Text [ en-US ] = "%PRODUCTNAME Help formatting" ;
+        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT(ROW5) );
+        Size = MAP_APPFONT( DIFF( COL1, COL3 ), RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ de ] = "~Formatierung der Hilfe" ;
+        Text [ en-US ] = "Help ~formatting";
     };
-    FixedText FT_STYLESHEET
+    ListBox LB_HELPFORMAT
     {
-        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT(ROW8) );
-        Size = MAP_APPFONT( DIFF( COL2, COL3 ), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "~Style Sheet" ;
-        Text [ en-US ] = "~Style sheet";
-    };
-    ListBox LB_STYLESHEET
-    {
-        Pos = MAP_APPFONT( COL4, ROW8 );
+        Pos = MAP_APPFONT( COL4, ROW5 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL4, 50 );
         DropDown = TRUE ;
         Border = TRUE ;
@@ -205,31 +145,64 @@ TabPage OFA_TP_MISC
     };
     FixedLine FL_FILEDLG
     {
-        Pos = MAP_APPFONT( COL0, ROW9 );
+        Pos = MAP_APPFONT( COL0, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Öffnen/Speichern-Dialoge" ;
         Text [ en-US ] = "Open/Save dialogs";
     };
     CheckBox CB_FILEDLG
     {
-        Pos = MAP_APPFONT( COL1, ROW10 );
+        Pos = MAP_APPFONT( COL1, ROW7 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "%PRODUCTNAME-Dialoge ~verwenden" ;
         Text [ en-US ] = "~Use %PRODUCTNAME dialogs";
     };
     FixedLine FL_DOCSTATUS
     {
-        Pos = MAP_APPFONT( COL0, ROW11 );
+        Pos = MAP_APPFONT( COL0, ROW8 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Dokumentstatus" ;
         Text [ en-US ] = "Document status";
     };
     CheckBox CB_DOCSTATUS
     {
-        Pos = MAP_APPFONT( COL1, ROW12 );
+        Pos = MAP_APPFONT( COL1, ROW9 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "~Drucken setzt \"Dokument geändert\" Status" ;
         Text [ en-US ] = "~Printing sets \"document modified\" status";
+    };
+    FixedLine FL_TWOFIGURE
+    {
+        Pos = MAP_APPFONT( COL0, ROW10 );
+        Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ de ] = "Zweistellige Jahreszahlen" ;
+        Text [ en-US ] = "Year (two digits)" ;
+    };
+    FixedText FT_INTERPRET
+    {
+        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT(ROW11) );
+        Size = MAP_APPFONT( DIFF( COL1, COL3), RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ language_user1 ] = "; Interpretieren als";
+        Text [ de ] = "~Interpretieren als Jahre zwischen";
+        Text [ en-US ] = "Interpret as years between";
+    };
+    NumericField NF_YEARVALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( COL4, ROW11 );
+        Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
+        Minimum = 1583 ;
+        Maximum = 9857 ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+    };
+    FixedText FT_TOYEAR
+    {
+        Pos = MAP_APPFONT( COL6, OFFS_TEXTBOX_FIXEDTEXT(ROW11) );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL6, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ de ] = "und " ;
+        Text [ en-US ] = "and " ;
+        Text[ language_user1 ] = "; nk: im Japanisch muss es an dieser Stelle \"von\" heißen  weil im Japanisch keine Präposition gibt, sondern Postposition. (Extras/Optionen/Allgemein/Sonstiges) 20.08.99 - - - - - - - - - -";
     };
 };
 
@@ -391,7 +364,7 @@ TabPage OFA_TP_VIEW
         Text [ en-US ] = "Show font h~istory" ;
     };
 
-    FixedLine GB_WORKINGSET
+    FixedLine FL_WORKINGSET
     {
         Pos = MAP_APPFONT ( 133 , 3 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
@@ -412,7 +385,7 @@ TabPage OFA_TP_VIEW
         Text [ de ] = "Ge~öffnete Fenster" ;
         Text [ en-US ] = "Open ~windows" ;
     };
-    FixedLine GB_3D
+    FixedLine FL_3D
     {
         Pos = MAP_APPFONT (  133, 47 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
@@ -519,7 +492,7 @@ TabPage OFA_TP_LANGUAGES
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_UI_LANG
+    FixedLine FL_UI_LANG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -584,7 +557,7 @@ TabPage OFA_TP_LANGUAGES
         TabStop = TRUE ;
         Sort = TRUE;
     };
-    FixedLine GB_LINGU_LANG
+    FixedLine FL_LINGU_LANG
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
