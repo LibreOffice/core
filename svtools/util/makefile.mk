@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.25 $
+#*  $Revision: 1.26 $
 #*
-#*  last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
+#*  last change: $Author: hjs $ $Date: 2001-08-24 13:54:02 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -295,6 +295,8 @@ SVTTARGETS= $(LB)$/isvl.lib \
             $(BIN)$/$(SHL2TARGET)$(DLLPOST) $(BIN)$/$(SHL1TARGET)$(DLLPOST)
 .ENDIF
 
+# just a quick fix - has to be cleaned up some day...
+.IF "$(L10N-framework)"==""
 ALL: $(SLB)$/svl.lib \
     $(SLB)$/svt.lib \
     $(MISC)$/$(SHL2TARGET).flt \
@@ -304,6 +306,9 @@ ALL: $(SLB)$/svl.lib \
     $(SVTTARGETS) \
     $(SRS)$/hidother.hid \
     ALLTAR
+.ENDIF          # "$(L10N-framework)"==""
+
+.INCLUDE :	target.mk
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
@@ -314,8 +319,6 @@ $(SRS)$/hidother.hid: hidother.src
 .ELSE
     @echo nix
 .ENDIF
-
-.INCLUDE :	target.mk
 
 # --- Svtools-Control-Filter-Datei ---
 
