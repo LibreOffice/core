@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:49:07 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,8 @@ XML_CONSTASCII_ACTION( sXML_auto, "auto" );
 XML_CONSTASCII_ACTION( sXML_auto_grow_height, "auto-grow-height" );
 XML_CONSTASCII_ACTION( sXML_auto_grow_width, "auto-grow-width" );
 XML_CONSTASCII_ACTION( sXML_auto_reload, "auto-reload" );
+XML_CONSTASCII_ACTION( sXML_auto_text, "auto-text" );
+XML_CONSTASCII_ACTION( sXML_auto_text_group, "auto-text-group" );
 XML_CONSTASCII_ACTION( sXML_auto_text_indent, "auto-text-indent" );
 XML_CONSTASCII_ACTION( sXML_up, "up" );
 XML_CONSTASCII_ACTION( sXML_auto_update, "auto-update" );
@@ -754,6 +756,7 @@ XML_CONSTASCII_ACTION( sXML_greyscale, "greyscale" );
 XML_CONSTASCII_ACTION( sXML_grid, "grid" );
 XML_CONSTASCII_ACTION( sXML_groove, "groove" );
 XML_CONSTASCII_ACTION( sXML_group_by_field_number, "group-by-field-number");
+XML_CONSTASCII_ACTION( sXML_group_name, "group-name" );
 XML_CONSTASCII_ACTION( sXML_grouping, "grouping" );
 XML_CONSTASCII_ACTION( sXML_gt, "gt" );
 XML_CONSTASCII_ACTION( sXML_h, "h" );

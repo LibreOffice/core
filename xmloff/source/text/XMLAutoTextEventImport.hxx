@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLStarBasicExportHandler.cxx,v $
+ *  $RCSfile: XMLAutoTextEventImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
  *
@@ -59,75 +59,69 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
-#include "XMLStarBasicExportHandler.hxx"
+#ifndef _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
+#define _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 
-using namespace ::com::sun::star::uno;
+namespace rtl { class OUString; }
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace text { class XAutoTextContainer; }
+    namespace text { class XAutoTextGroup; }
+    namespace text { class XAutoTextEntry; }
+    namespace uno { template<class X> class Reference; }
+    namespace uno { template<class X> class Sequence; }
+    namespace uno { class XInterface; }
+    namespace uno { class Exception; }
+    namespace xml { namespace sax { class XDocumentHandler; } }
+} } }
 
-using ::rtl::OUString;
-using ::com::sun::star::beans::PropertyValue;
 
-
-XMLStarBasicExportHandler::XMLStarBasicExportHandler() :
-    sStarBasic(RTL_CONSTASCII_USTRINGPARAM(sXML_starbasic)),
-    sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-    sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
+class XMLAutoTextEventImport : public SvXMLImport
 {
-}
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XAutoTextContainer> xAutoTextContainer;
 
-XMLStarBasicExportHandler::~XMLStarBasicExportHandler()
-{
-}
+public:
+    XMLAutoTextEventImport() throw();
 
-void XMLStarBasicExportHandler::Export(
-    SvXMLExport& rExport,
-    const OUString& rEventName,
-    Sequence<PropertyValue> & rValues,
-    sal_Bool bUseWhitespace)
-{
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_language, sStarBasic);
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_event_name, rEventName);
+    ~XMLAutoTextEventImport();
 
-    sal_Int32 nCount = rValues.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
-    {
-        if (sLibrary.equals(rValues[i].Name))
-        {
-            OUString sTmp;
-            rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_library, sTmp);
-        }
-        else if (sMacroName.equals(rValues[i].Name))
-        {
-            OUString sTmp;
-            rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_macro_name, sTmp);
-        }
-        // else: disregard
-    }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, sXML_event,
-                                   bUseWhitespace, sal_False);
-}
+protected:
+
+    virtual SvXMLImportContext* CreateContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+};
+
+
+// global functions to support the component
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    XMLAutoTextEventImport_getSupportedServiceNames()
+    throw();
+
+::rtl::OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
+    throw();
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    XMLAutoTextEventImport_createInstance(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & )
+    throw( ::com::sun::star::uno::Exception );
+
+#endif
+

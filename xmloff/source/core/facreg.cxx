@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:16:13 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,17 @@ extern uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames(
 extern OUString SAL_CALL SchXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// writer autotext event export
+extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
+extern OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// writer autotext event import
+extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventImport_getSupportedServiceNames() throw();
+extern OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+
 //
 #ifdef __cplusplus
 extern "C"
@@ -145,6 +156,10 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // chart
             writeInfo( pKey, SchXMLImport_getImplementationName(), SchXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SchXMLExport_getImplementationName(), SchXMLExport_getSupportedServiceNames() );
+
+            // writer auto text events
+            writeInfo( pKey, XMLAutoTextEventExport_getImplementationName(), XMLAutoTextEventExport_getSupportedServiceNames() );
+            writeInfo( pKey, XMLAutoTextEventImport_getImplementationName(), XMLAutoTextEventImport_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -205,6 +220,20 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SchXMLExport_getImplementationName(),
                 SchXMLExport_createInstance,
                 SchXMLExport_getSupportedServiceNames() );
+        }
+        else if( XMLAutoTextEventExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                XMLAutoTextEventExport_getImplementationName(),
+                XMLAutoTextEventExport_createInstance,
+                XMLAutoTextEventExport_getSupportedServiceNames() );
+        }
+        else if( XMLAutoTextEventImport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                XMLAutoTextEventImport_getImplementationName(),
+                XMLAutoTextEventImport_createInstance,
+                XMLAutoTextEventImport_getSupportedServiceNames() );
         }
         if( xFactory.is())
         {
