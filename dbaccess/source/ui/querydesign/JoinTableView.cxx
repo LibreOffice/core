@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:03:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,13 @@
 #ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -137,7 +137,7 @@
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 #define LINE_SIZE           50
 ////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     m_pCornerWindow->Show();
 
     // normally we should be SCROLL_PANE
-    SetAccessibleRole(AccessibleRole::SCROLLPANE);
+    SetAccessibleRole(AccessibleRole::SCROLL_PANE);
 }
 
 // -----------------------------------------------------------------------------
@@ -347,7 +347,7 @@ void OJoinTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJo
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                 makeAny(_pConn->getAccessible()),
                                                 Any());
     if ( _bDelete )
@@ -401,7 +401,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
 
         modified();
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                     Any(),
                                                     makeAny(pNewTabWin->GetAccessible()));
     }
@@ -442,7 +442,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     if ( bRemove )
     {
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                     makeAny(pTabWin->GetAccessible()),Any()
                                                     );
 
@@ -1743,7 +1743,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                 Any(),
                                                 makeAny(_pConnection->getAccessible()));
 }
