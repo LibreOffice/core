@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 11:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _SFX_CONFIG_HRC
 
 #include "sfx.hrc"
+#include "sfxlocal.hrc"
 
 // #defines *****************************************************************
 
@@ -111,7 +112,7 @@
 #define CONFIG_OSPATH_END               STR_OSKEY_BOOKMARK_DIR
 
 #define STR_EVENTCONFIG                 (CONFIG_OSPATH_END+1)
-#define DLG_MACROQUERY                  (CONFIG_OSPATH_END+2)
+// #define DLG_MACROQUERY               (CONFIG_OSPATH_END+2)
 #define RID_STR_NAME_MISCCFG            (CONFIG_OSPATH_END+3)
 
 #define CB_WARNING                      1
