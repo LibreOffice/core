@@ -1,3 +1,5 @@
+"AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
+"AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleComponent";"containsPoint()"
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleComponent";"getAccessibleAtPoint()"
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleComponent";"getBounds()"
@@ -34,5 +36,3 @@
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
-"AccessibleIconChoiceCtrlEntry";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
