@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -150,6 +153,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 
     XMLPropType m_ePropType;
     sal_Bool    m_bControlStyle;
+    ::rtl::OUString m_aStyleFamily;
 
 public:
 
@@ -165,6 +169,7 @@ public:
     XMLPropertiesTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                            XMLPropType eP,
+                           const ::rtl::OUString& rStyleFamily,
                            sal_Bool _bControlStyle = sal_False );
 
     virtual ~XMLPropertiesTContext_Impl();
@@ -185,11 +190,13 @@ public:
 TYPEINIT1( XMLPropertiesTContext_Impl, XMLPersElemContentTContext );
 
 XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
-    XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP, sal_Bool _bControlStyle ) :
+    XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP,
+        const ::rtl::OUString& rStyleFamily, sal_Bool _bControlStyle ) :
     XMLPersElemContentTContext( rImp, rQName, XML_NAMESPACE_STYLE,
                                 XML_PROPERTIES),
     m_ePropType( eP ),
-    m_bControlStyle( _bControlStyle )
+    m_bControlStyle( _bControlStyle ),
+    m_aStyleFamily( rStyleFamily )
 {
 }
 
@@ -487,6 +494,76 @@ void XMLPropertiesTContext_Impl::StartElement(
                     }
                     break;
 
+                case XML_OPTACTION_DRAW_WRITING_MODE:
+                    if( IsXMLToken( m_aStyleFamily, XML_GRAPHICS ) )
+                    {
+                        pAttrList->AddAttribute(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_DRAW,
+                                    GetXMLToken( XML_WRITING_MODE ) ), rAttrValue );
+                    }
+                    pAttrList->AddAttribute( rAttrName, rAttrValue );
+                    break;
+
+                case XML_ATACTION_CAPTION_ESCAPE_OASIS:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                        {
+                            sal_Int32 nValue = 0;
+                            SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                            if( nValue )
+                            {
+                                nValue *= 100;
+                                rtl::OUStringBuffer aOut;
+                                 SvXMLUnitConverter::convertPercent( aOut, nValue );
+                                aAttrValue = aOut.makeStringAndClear();
+                            }
+                        }
+                        else
+                        {
+                            XMLTransformerBase::ReplaceSingleInWithInch( aAttrValue );
+                        }
+
+                        pAttrList->AddAttribute( rAttrName, aAttrValue );
+                    }
+                    break;
+
+                case XML_ATACTION_DECODE_PROTECT:
+                    {
+                        if( rAttrValue.indexOf( GetXMLToken( XML_SIZE ) ) != -1 )
+                            pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_DRAW,
+                                    GetXMLToken( XML_SIZE_PROTECT )), GetXMLToken( XML_TRUE ) );
+
+                        if( rAttrValue.indexOf( GetXMLToken( XML_POSITION ) ) != -1 )
+                            pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_DRAW,
+                                    GetXMLToken( XML_MOVE_PROTECT )), GetXMLToken( XML_TRUE ) );
+                    }
+                    break;
+
+                case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
+                    {
+                        // keep original for writer graphic objects
+                        pAttrList->AddAttribute( rAttrName, rAttrValue );
+
+                        // create old draw:mirror for drawing graphic objects
+                        OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
+                        pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_DRAW,
+                                    GetXMLToken( XML_MIRROR )), aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_GAMMA_OASIS:       // converts percentage value to double
+                    {
+                        sal_Int32 nValue;
+                        SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                        const double fValue = ((double)nValue) / 100.0;
+                        pAttrList->AddAttribute( rAttrName, OUString::valueOf( fValue ) );
+                    }
+                    break;
+
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -713,7 +790,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
             // if no properties context exist start a new one.
             if( !m_xPropContext.is() )
                 m_xPropContext = new XMLPropertiesTContext_Impl(
-                                    GetTransformer(), rQName, ePropType, m_bControlStyle );
+                    GetTransformer(), rQName, ePropType, m_aStyleFamily, m_bControlStyle );
             else
                 m_xPropContext->SetQNameAndPropType( rQName, ePropType );
             pContext = m_xPropContext.get();
@@ -750,6 +827,7 @@ void XMLStyleOASISTContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 nFamilyAttr = -1;
     m_bControlStyle = sal_False;
+
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -774,13 +852,17 @@ void XMLStyleOASISTContext::StartElement(
             case XML_ATACTION_STYLE_FAMILY:
                 if( IsXMLToken( rAttrValue, XML_GRAPHIC ) )
                 {
-                    pMutableAttrList->SetValueByIndex( i,
-                                            GetXMLToken( XML_GRAPHICS ) );
+                    m_aStyleFamily = GetXMLToken( XML_GRAPHICS ) ;
+                    pMutableAttrList->SetValueByIndex( i, m_aStyleFamily );
                 }
-                else if( IsXMLToken( rAttrValue, XML_PARAGRAPH ) )
+                else
                 {
-                    nFamilyAttr = i;
+                    m_aStyleFamily = rAttrValue;
+
+                    if( IsXMLToken( rAttrValue, XML_PARAGRAPH ) )
+                        nFamilyAttr = i;
                 }
+
                 break;
             case XML_ATACTION_STYLE_DISPLAY_NAME:
                 pMutableAttrList->RemoveAttributeByIndex( i );
