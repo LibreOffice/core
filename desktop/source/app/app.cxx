@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 13:04:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-24 11:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,6 +1636,7 @@ void Desktop::Main()
     Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
     // The configuration error handler currently is only for startup
+    ConfigurationErrorHandler aConfigErrHandler;
     aConfigErrHandler.deactivate();
 
    // Acquire solar mutex just before we enter our message loop
