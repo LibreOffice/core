@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:59:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 
 #ifndef _COM_SUN_STAR_PACKAGES_XDATASINKENCRSUPPORT_HPP_
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_NOENCRYPTIONEXCEPTION_HPP_
+#include <com/sun/star/packages/NoEncryptionException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
@@ -175,8 +178,9 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     sal_Bool m_bForceEncrypted;
 
+    sal_Bool m_bUseCommonPass;
     sal_Bool m_bHasCachedPassword;
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aKey;
+    ::rtl::OUString m_aPass;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
 
@@ -189,9 +193,14 @@ private:
 
     void CopyTempFileToOutput( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream );
 
-    ::com::sun::star::uno::Reference<   ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode );
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode );
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > GetCommonRootPass();
+    ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > ReadStreamProperties();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InsertOwnProps(
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                            sal_Bool bUseCommonPass );
 
 public:
     OWriteStream_Impl( OStorage_Impl* pParent,
@@ -209,10 +218,12 @@ public:
     void SetToBeCommited() { m_bFlushed = sal_True; }
 
     sal_Bool HasCachedPassword() { return m_bHasCachedPassword; }
-    ::com::sun::star::uno::Sequence< sal_Int8 > GetCachedPassword() { return m_aKey; }
+    ::rtl::OUString GetCachedPassword() { return m_aPass; }
     sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
 
     sal_Bool IsEncrypted();
+    void SetDecrypted();
+    void SetEncryptedWithPass( const ::rtl::OUString& aPass );
 
     void DisposeWrappers();
 
@@ -228,12 +239,12 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetStreamProperties();
 
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream,
-                                const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
+                                const ::rtl::OUString& aPass );
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
-                        const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
+                        const ::rtl::OUString& aPass );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode );
@@ -244,11 +255,13 @@ public:
     void InputStreamDisposed( OInputCompStream* pStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > CreateReadonlyCopyBasedOnData(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy );
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                    sal_Bool bUseCommonPass );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit(
-                          const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
+                            const ::rtl::OUString& aPass );
 };
 
 class OWriteStream : public cppu::WeakImplHelper8 < ::com::sun::star::io::XInputStream
@@ -316,7 +329,12 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     //XEncryptionProtectedSource
-    virtual void SAL_CALL setEncryptionKey( const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setEncryptionPassword( const ::rtl::OUString& aPass )
+        throw ( ::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::io::IOException );
+    virtual void SAL_CALL removeEncryption()
+        throw ( ::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::io::IOException );
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw ( ::com::sun::star::uno::RuntimeException );
