@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:21:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 21:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/08/07 15:21:40  kz
+ *  Merge SRC638: 07.08.01 - 17:21:20
+ *
  *  Revision 1.20  2001/08/02 06:18:04  fs
  *  changed dialog title from 'StarBase' to ' Base'
  *
@@ -445,6 +448,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
 
 
 
