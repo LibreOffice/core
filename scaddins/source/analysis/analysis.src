@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-26 14:20:36 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,7 +1349,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "X";
             Text[ turkish ] = "Örn";
             Text[ arabic ] = "Number_s";
-            Text[ catalan ] = "X";
+            Text[ catalan ] = "Nombre";
         };
 
         String 3 // description of parameter 1  Seriessum
@@ -1403,7 +1403,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "N";
             Text[ turkish ] = "Deney";
             Text[ arabic ] = "Trials";
-            Text[ catalan ] = "N";
+            Text[ catalan ] = "avaluacions";
         };
 
         String 5 // description of parameter 2  Seriessum
@@ -1457,7 +1457,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "M";
             Text[ turkish ] = "Baþarý";
             Text[ arabic ] = "Population_s";
-            Text[ catalan ] = "M";
+            Text[ catalan ] = "èxits";
         };
 
         String 7 // description of parameter 3  Seriessum
@@ -2255,7 +2255,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "x";
             Text[ turkish ] = "Örn";
             Text[ arabic ] = "Number_s";
-            Text[ catalan ] = "x";
+            Text[ catalan ] = "Nombre";
         };
 
         String 3 // description of parameter 1  BesselI
@@ -2309,7 +2309,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "n";
             Text[ turkish ] = "Deney";
             Text[ arabic ] = "Trials";
-            Text[ catalan ] = "n";
+            Text[ catalan ] = "avaluacions";
         };
 
         String 5 // description of parameter 2  BesselI
@@ -2393,7 +2393,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "x";
             Text[ turkish ] = "Örn";
             Text[ arabic ] = "Number_s";
-            Text[ catalan ] = "x";
+            Text[ catalan ] = "Nombre";
         };
 
         String 3 // description of parameter 1  BesselJ
@@ -2447,7 +2447,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "n";
             Text[ turkish ] = "Deney";
             Text[ arabic ] = "Trials";
-            Text[ catalan ] = "n";
+            Text[ catalan ] = "avaluacions";
         };
 
         String 5 // description of parameter 2  BesselJ
@@ -2531,7 +2531,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "x";
             Text[ turkish ] = "Örn";
             Text[ arabic ] = "Number_s";
-            Text[ catalan ] = "x";
+            Text[ catalan ] = "Nombre";
         };
 
         String 3 // description of parameter 1  BesselK
@@ -2585,7 +2585,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "n";
             Text[ turkish ] = "Deney";
             Text[ arabic ] = "Trials";
-            Text[ catalan ] = "n";
+            Text[ catalan ] = "avaluacions";
         };
 
         String 5 // description of parameter 2  BesselK
@@ -2669,7 +2669,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "x";
             Text[ turkish ] = "Örn";
             Text[ arabic ] = "Number_s";
-            Text[ catalan ] = "x";
+            Text[ catalan ] = "Nombre";
         };
 
         String 3 // description of parameter 1  BesselY
@@ -2723,7 +2723,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "n";
             Text[ turkish ] = "Deney";
             Text[ arabic ] = "Trials";
-            Text[ catalan ] = "n";
+            Text[ catalan ] = "avaluacions";
         };
 
         String 5 // description of parameter 2  BesselY
