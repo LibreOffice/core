@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-07 11:55:14 $
+ *  last change: $Author: mt $ $Date: 2001-11-08 15:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,10 +311,10 @@ void ImplEntryList::RemoveEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-USHORT ImplEntryList::FindEntry( const XubString& rString ) const
+USHORT ImplEntryList::FindEntry( const XubString& rString, BOOL bSearchMRUArea ) const
 {
     USHORT nEntries = GetEntryCount();
-    for ( USHORT n = GetMRUCount(); n < nEntries; n++ )
+    for ( USHORT n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
         ImplEntryType* pImplEntry = GetEntry( n );
         if ( pImplEntry->maStr == rString )
@@ -689,7 +689,7 @@ void ImplListBoxWindow::ImplCallSelect()
         USHORT nSelected = GetEntryList()->GetSelectEntryPos( 0 );
         USHORT nMRUCount = GetEntryList()->GetMRUCount();
         String aSelected = GetEntryList()->GetEntryText( nSelected );
-        USHORT nFirstMatchingEntryPos = GetEntryList()->FindEntry( aSelected );
+        USHORT nFirstMatchingEntryPos = GetEntryList()->FindEntry( aSelected, TRUE );
         if ( nFirstMatchingEntryPos || !nMRUCount )
         {
             BOOL bSelectNewEntry = FALSE;
