@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ English ] = "URL name" ;
         QuickHelpText [ english_us ] = "URL Name" ;
         QuickHelpText [ italian ] = "Nome di URL" ;
-        QuickHelpText [ spanish ] = "Nombre del URL" ;
+        QuickHelpText [ spanish ] = "Nombre de la URL" ;
         QuickHelpText [ french ] = "Nom de l'URL" ;
         QuickHelpText [ dutch ] = "URL-naam" ;
         QuickHelpText [ portuguese_brazilian ] = "Name der URL" ;
