@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addrdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,81 +95,5 @@ Dtor
 __EXPORT SwAddrDlg::~SwAddrDlg()
 {
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/dialog/addrdlg.cxx,v 1.1.1.1 2000-09-18 17:14:34 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2000/09/18 16:05:20  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.9  1997/11/25 09:43:20  MA
-      includes
-
-
-      Rev 1.8   25 Nov 1997 10:43:20   MA
-   includes
-
-      Rev 1.7   03 Nov 1997 13:12:26   MA
-   precomp entfernt
-
-      Rev 1.6   16 Jul 1997 16:26:50   TRI
-   mit __EXPORT gehts viel besser
-
-      Rev 1.5   15 Jul 1997 14:48:12   OS
-   HideExtra entfernt
-
-      Rev 1.4   28 Aug 1996 10:10:00   OS
-   includes
-
-      Rev 1.3   04 Jul 1996 09:03:38   SWG
-   include svfield - Workaround wg. optgenrl.hxx
-
-      Rev 1.2   24 Nov 1995 16:58:16   OM
-   PCH->PRECOMPILED
-
-      Rev 1.1   27 Jul 1995 18:20:56   OS
-   HideExtras jetzt aktiv
-
-      Rev 1.0   26 Jul 1995 19:20:02   OS
-   Initial revision.
-
-*************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:57:42 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,80 +978,4 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
     return 1;
 }
 #endif
-
-/*************************************************************************
-
-          Source Code Control System - Header
-
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.8 2001-09-11 14:57:42 jp Exp $
-
-          Source Code Control System - Update
-
-          $Log: not supported by cvs2svn $
-          Revision 1.7  2001/05/16 18:07:35  jp
-          Bug #85853#: IntelligentCut - only for LATIN scripts
-
-          Revision 1.6  2001/03/12 08:18:49  tl
-          SearcParam => SearchOptions and implied changes
-
-          Revision 1.5  2000/11/28 18:46:55  jp
-          Bug #80312#: OverwriteCursor for CJK
-
-          Revision 1.4  2000/11/21 08:49:57  os
-          #80521# prevent creation of illegal strings
-
-          Revision 1.3  2000/11/20 09:25:03  jp
-          must change: SearchText->TextSearch and use namespace
-
-          Revision 1.2  2000/10/25 15:36:07  jp
-          use CharClass/BreakIt instead of old WordSelection
-
-          Revision 1.1.1.1  2000/09/18 17:14:53  hr
-          initial import
-
-          Revision 1.173  2000/09/18 16:06:26  willem.vandorp
-          OpenOffice header added.
-
-          Revision 1.172  2000/09/07 15:59:36  os
-          change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-          Revision 1.171  2000/07/20 13:17:22  jp
-          change old txtatr-character to the two new characters
-
-          Revision 1.170  2000/07/03 17:45:46  jp
-          ExtSelWrd - use SelWord
-
-          Revision 1.169  2000/06/30 16:31:43  jp
-          new: SelectWord - use the new UNO Api to select one Word
-
-          Revision 1.168  2000/05/19 12:58:31  jp
-          use WordSelection class for check chars
-
-          Revision 1.167  2000/05/19 11:00:20  jp
-          Changes for Unicode
-
-          Revision 1.166  2000/03/14 13:37:25  jp
-          remove unused code
-
-          Revision 1.165  1999/06/11 08:28:04  JP
-          Bug #66823#: ExtSelWord/ExtSelLn - destroy current not expanded cursor
-
-
-      Rev 1.164   11 Jun 1999 10:28:04   JP
-   Bug #66823#: ExtSelWord/ExtSelLn - destroy current not expanded cursor
-
-      Rev 1.163   27 Apr 1999 15:29:18   JP
-   ExtSelWrd/-Ln: im TableMode nur den Cursor setzen
-
-      Rev 1.162   23 Mar 1999 14:13:22   JP
-   Bug #63817#: ExtSelWord/Line - Anfangsselektion beibehalten
-
-      Rev 1.161   25 Nov 1998 16:25:56   OS
-   #59467# EnterStdMode: Funktionspointer zuruecksetzen
-
-      Rev 1.160   24 Feb 1998 15:28:14   JP
-   Search..: SWPOSDOC entfernt, auf enums umgestellt
-*************************************************************************/
-
-
 
