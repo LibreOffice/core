@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 07:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             aError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
         throw aError;
     }
+    if(!m_xDir.is() || !m_xContent.is())
+        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given.")),
+                     *this,
+                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),
+                     0,
+                     Any());
 
     if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
         throw SQLException();
