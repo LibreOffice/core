@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:18:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,17 @@ struct Struct1 { long s1; };
 
 struct Struct2 { Struct1 s1; };
 
+struct Struct3<T, U>: Struct2 { U s2; };
+
+struct Struct4 { Struct3< Struct2, Struct3< boolean, any > > s1; };
+
 interface XBase {};
 
-interface XTest {
+typedef XBase Typedef1;
+
+typedef Typedef1 Typedef2;
+
+interface XTest1 {
     [optional] interface XBase;
 
     void f1([out] any p) raises (com::sun::star::uno::RuntimeException);
@@ -95,7 +103,9 @@ interface XTest {
     };
 };
 
-service Service1: XTest {
+interface XTest2: Typedef2 {};
+
+service Service1: XTest1 {
     c1();
 
     c2([in] any... p) raises (com::sun::star::uno::RuntimeException);
@@ -104,11 +114,15 @@ service Service1: XTest {
 service Service2 {
     [optional] interface XBase;
 
-    interface XTest;
+    interface XTest1;
 };
 
-singleton Singleton1: XTest;
+service Service3: Typedef2 {};
+
+singleton Singleton1: XTest1;
 
 singleton Singleton2 { service Service1; };
+
+singleton Singleton3: Typedef2;
 
 }; };
