@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: os $ $Date: 2000-11-29 09:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,11 +301,11 @@ const SfxItemPropertyMap* GetLineNumberingMap()
         { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DISTANCE       ),         WID_DISTANCE       ,    &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_ON),                     WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_LINE_INTERVAL  ),         WID_LINE_INTERVAL  ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_LINE_SEPARATOR ),         WID_LINE_SEPARATOR,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_ON),                        WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),      WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,        PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_DISTANCE), WID_SEPARATOR_LINE_DISTANCE, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0}
@@ -998,7 +998,7 @@ OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeE
  ---------------------------------------------------------------------------*/
 BOOL SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.LineNumberingSettings") == rServiceName;
+    return C2U("com.sun.star.text.LineNumberingProperties") == rServiceName;
 }
 /* -----------------------------06.04.00 11:47--------------------------------
 
@@ -1007,7 +1007,7 @@ Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames(void) 
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.LineNumberingSettings");
+    pArray[0] = C2U("com.sun.star.text.LineNumberingProperties");
     return aRet;
 }
 /*-- 14.12.98 14:33:36---------------------------------------------------
