@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:49:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,6 +941,21 @@ sal_Bool PPTWriter::ImplCloseDocument()
         mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_CurrentPos, mpStrm->Tell() );
         mpStrm->Seek( nOfs );
 
+        // creating the TxMasterStyleAtom
+        SvMemoryStream aTxMasterStyleAtomStrm( 0x200, 0x200 );
+        {
+            EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
+            aTxMasterStyleAtomStrm << (sal_uInt16)5;        // paragraph count
+            sal_uInt16 nLev;
+            sal_Bool bFirst = sal_True;
+            for ( nLev = 0; nLev < 5; nLev++ )
+            {
+                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, sal_False, mXPagePropSet );
+                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, sal_False, mXPagePropSet );
+                bFirst = sal_False;
+            }
+        }
+
         mpExEmbed->Seek( STREAM_SEEK_TO_END );
         sal_uInt32 nExEmbedSize = mpExEmbed->Tell();
 
@@ -949,7 +964,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                 + 8                                     // 1 FontCollection Container
                                 + 20                                    // SrKinsoku Container
                                 + 18                                    // 1 TxSiStyleAtom
-                                + 118                                   // 1 TxMasterStyleAtom;
+                                + aTxMasterStyleAtomStrm.Tell()         // 1 TxMasterStyleAtom;
                                 + mpStyleSheet->SizeOfTxCFStyleAtom();
 
         sal_uInt32 nBytesToInsert = nEnvironment + 8;
@@ -1057,23 +1072,12 @@ sal_Bool PPTWriter::ImplCloseDocument()
         mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
         *mpStrm << (sal_uInt32)7                        // ?
                 << (sal_Int16)2                         // ?
-                << (sal_uInt8)9                          // ?
-                << (sal_uInt8)8                          // ?
+                << (sal_uInt8)9                         // ?
+                << (sal_uInt8)8                         // ?
                 << (sal_Int16)0;                        // ?
-        mpPptEscherEx->AddAtom( 110, EPP_TxMasterStyleAtom, 0, 4 );
-        static sal_uInt8 aTxSuStyleAtom[ 110 ] =
-        {
-            0x05, 0x00, 0xff, 0xfd, 0x3f, 0x00, 0x00, 0x00, 0x22, 0x20, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x02,
-            0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0xff, 0xff, 0xef, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x18, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05,
-            0x00, 0x00, 0x20, 0x01, 0x20, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x40, 0x02,
-            0x40, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x60, 0x03, 0x60, 0x03, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x80, 0x04, 0x80, 0x04, 0x00, 0x00, 0x00, 0x00
-        };
-        mpStrm->Write( &aTxSuStyleAtom, 110 );
-        maSoundCollection.Write( *mpStrm );
 
+        mpStrm->Write( aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell() );
+        maSoundCollection.Write( *mpStrm );
         mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
         ImplMasterSlideListContainer( mpStrm );
         ImplDocumentListContainer( mpStrm );
@@ -3388,8 +3392,8 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     ::com::sun::star::presentation::AnimationEffect eTe,
     sal_uInt16 nOrder )
 {
-    ppt::ExContainer aAnimationInfo( rSt, EPP_AnimationInfo );
-    ppt::ExAtom aAnimationInfoAtom( rSt, EPP_AnimationInfoAtom, 0, 1 );
+    EscherExContainer aAnimationInfo( rSt, EPP_AnimationInfo );
+    EscherExAtom aAnimationInfoAtom( rSt, EPP_AnimationInfoAtom, 0, 1 );
     sal_uInt32  nDimColor = 0x7000000;  // color to use for dimming
     sal_uInt32  nFlags = 0x4400;        // set of flags that determine type of build
     sal_uInt32  nSoundRef = 0;          // 0 if storage is from clipboard. Otherwise index(ID) in SoundCollection list.
