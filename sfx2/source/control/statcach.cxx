@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 08:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
             // create the dispatch name from the slot data
             ::com::sun::star::util::URL aURL;
-            String aName( pSlot ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
+            String aName( pSlot && pSlot->pUnoName ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
             String aCmd;
             if ( aName.Len() )
             {
