@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:30:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ namespace xmloff
     */
     class OElementImport
                 :public OPropertyImport
-                ,public OAttributeMetaData
                 ,public IEventAttacher
                 ,public OStackedLogging
     {
@@ -611,7 +610,6 @@ namespace xmloff
     */
     class OListOptionImport
                 :public SvXMLImportContext
-                ,public OAttributeMetaData
     {
         OListAndComboImportRef  m_xListBoxImport;
 
@@ -630,7 +628,6 @@ namespace xmloff
     */
     class OComboItemImport
                 :public SvXMLImportContext
-                ,public OAttributeMetaData
     {
         OListAndComboImportRef  m_xListBoxImport;
 
@@ -797,6 +794,19 @@ namespace xmloff
 
 
         void implTranslateStringListProperty(const ::rtl::OUString& _rPropertyName, const ::rtl::OUString& _rValue);
+    };
+
+    //=====================================================================
+    //= OXMLDataSourceImport
+    //=====================================================================
+    class OXMLDataSourceImport : public SvXMLImportContext
+    {
+    public:
+        OXMLDataSourceImport( SvXMLImport& _rImport
+                    ,sal_uInt16 nPrfx
+                    ,const ::rtl::OUString& rLName
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xElement);
     };
 
 #define _INCLUDING_FROM_ELEMENTIMPORT_HXX_
