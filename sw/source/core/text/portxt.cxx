@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 15:25:23 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _PORRST_HXX
 #include <porrst.hxx>   // SwKernPortion
 #endif
+#ifndef _PORFLD_HXX
+#include <porfld.hxx>       // SwFldPortion
+#endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>
 #endif
@@ -106,41 +109,15 @@ const sal_Char *GetLangName( const MSHORT nLang );
  *                      class SwTxtPortion
  *************************************************************************/
 
-
-
 SwTxtPortion::SwTxtPortion( const SwLinePortion &rPortion )
   : SwLinePortion( rPortion )
 {
     SetWhichPor( POR_TXT );
 }
 
-
-
-short SwTxtPortion::GetEscapement() const  { return 0; }
-
 /*************************************************************************
  *                      SwTxtPortion::BreakCut()
  *************************************************************************/
-
-
-
-// 4846: IsPunctUnderFlow() loest UnderFlow aus.
-
-sal_Bool SwTxtPortion::IsPunctUnderFlow( const SwTxtSizeInfo &rInf ) const
-{
-    const xub_Unicode cCh = rInf.GetChar( rInf.GetIdx() );
-    //JP 15.08.00: ispunct can't handle characters greater 255 !!! Bug: 77527
-    //              This Code must be changed to the new
-    //              character classification class!
-    return (cCh < 0xff && ispunct( cCh ))
-            && '-' != cCh;
-}
-
-/*************************************************************************
- *                      SwTxtPortion::BreakCut()
- *************************************************************************/
-
-
 
 void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
 {
@@ -148,36 +125,45 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     // Sonderfall Nr.1: Das Wort ist groesser als die Zeile
     // Wir kappen...
     const KSHORT nLineWidth = rInf.Width() - rInf.X();
-    xub_StrLen nLen = xub_StrLen( Max( 1L, long( rGuess.RightPos() + 1 - rInf.GetIdx() ) ) );
-    Width( KSHRT_MAX );
-
-    // Wer zu breit ist, den straft das Leben: auf aufwendige
-    // Optimierung wird hier verzichtet.
-    while( nLen && Width() > nLineWidth )
+    xub_StrLen nLen = rGuess.CutPos() - rInf.GetIdx();
+    if( nLen )
     {
-        DBG_LOOP;
-        rInf.SetLen( nLen );
-        SetLen( nLen );
-        CalcTxtSize( rInf );
-        --nLen;
-    }
+        // special case: guess does not always provide the correct
+        // width, only in common cases.
+        if ( !rGuess.BreakWidth() )
+        {
+            rInf.SetLen( nLen );
+            SetLen( nLen );
+            CalcTxtSize( rInf );
 
-    if( Width() > nLineWidth )
-    {
-        // Sonderfall Nr.2, Zeichen breiter als Zeile
-        // 5057: Am Zeilenanfang wir abgeschnitten, ansonsten
-        // rutscht die Portion in die naechste Zeile
-        // 6721: !rInf.GetIdx() fuer mehrzeilige Felder.
-        if( !rInf.GetIdx() || rInf.GetIdx() == rInf.GetLineStart() )
-            Width( nLineWidth );
+            // changing these values requires also changing them in
+            // guess.cxx
+            KSHORT nItalic = 0;
+            if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
+            {
+#ifdef MAC
+                nItalic = Height() / 4;
+#else
+                nItalic = Height() / 12;
+#endif
+            }
+            Width( Width() + nItalic );
+        }
         else
         {
-            Height( 0 );
-            Width( 0 );
-            SetLen( 0 );
-            SetAscent( 0 );
-            SetPortion( NULL );  // ????
+            Width( rGuess.BreakWidth() );
+            SetLen( nLen );
         }
+    }
+    else if (  rGuess.CutPos() == rInf.GetLineStart() )
+    {
+        SetLen( 1 );
+        Width( nLineWidth );
+    }
+    else
+    {
+        SetLen( 0 );
+        Width( 0 );
     }
 }
 
@@ -185,269 +171,140 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
  *                      SwTxtPortion::BreakUnderflow()
  *************************************************************************/
 
-
-
-void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf,
-                                   const SwTxtGuess &rGuess,
-                                   const sal_Bool bPunct )
+void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
 {
-    // 4846: FtnPortions nehmen das Wort davor mit
-    sal_Bool bUnderFlow = bPunct || rGuess.LeftPos() < rInf.GetIdx();
-    sal_Bool bFtn = sal_False;
-    sal_Bool bNullWidth = sal_False;
-    if( !bUnderFlow && rGuess.LeftPos() == rInf.GetIdx() && IsFtnPortion() )
-        bUnderFlow = bFtn = sal_True;
-    sal_Bool bSoftHyph = sal_False;
-    if( !bUnderFlow && rInf.GetIdx() && !rInf.GetLast()->IsFlyPortion() )
-    {
-        // SonderFall: Durch recycled Portions ist auch folgender
-        // Fall denkbar: {old}{ new}
-        // Bei SoftHyphens laufen wir ins Underflow, um die deutschen
-        // Sondertrennungen zu pruefen.
-        const xub_Unicode cCh = rInf.GetChar( rInf.GetIdx() );
-        bSoftHyph =  ' ' != cCh && rInf.GetLast()->IsSoftHyphPortion();
-        if( bSoftHyph )
-            bUnderFlow = sal_True;
-        else
-        {
-            xub_StrLen nIdx = rInf.GetIdx() - 1;
-            const xub_Unicode cLastCh = rInf.GetChar( nIdx );
-            bUnderFlow = (' ' != cCh && ' ' != cLastCh && CH_BREAK != cLastCh &&
-                            ( '-' != cLastCh ||
-                            !SwTxtGuess::IsWordEnd( rInf, nIdx ) ) );
-            if( bUnderFlow && ( CH_TXTATR_BREAKWORD == cLastCh ||
-                CH_TXTATR_INWORD == cLastCh ) && rInf.HasHint(nIdx) )
-                bUnderFlow = bNullWidth = !rInf.GetLast()->Width();
-        }
-    }
-
     Truncate();
-
-    // Das ganze Wort passt nicht mehr auf die Zeile
-    if( !bUnderFlow )
-    {
-        // Wir rufen das FormatEOL der letzten Portion.
-        // Damit kommen HardBlanks, SoftHyphs und Tabs zum Zuge.
-        Height( 0 );
-        Width( 0 );
-        SetLen( 0 );
-        SetAscent( 0 );
-        SetPortion( NULL );  // ????
-        rInf.GetLast()->FormatEOL( rInf );
-    }
-    else
-    {
-        // Dieser Teil wird nur betreten, wenn eine Unterlaufsituation
-        // bei Attributen aufgetreten ist: in dem Wort, das nicht mehr
-        // passt, liegt ein Attributwechsel und damit Portionwechsel vor.
-        // Der Umbruch liegt demnach also vor der aktuellen Portion.
-        // Wir muessen uns in die Kette mit aufnehmen, weil
-        // SwTxtFormatter::UnderFlow() wissen muss, wo wieder neu
-        // aufgesetzt werden soll (naemlich vor uns).
-
-        // Wieder mal ein Sonderfall: wenn der Wordbeginn vor unserer Zeile
-        // oder genau am Zeilenbeginn ist, dann schneiden wir ab.
-        const xub_StrLen nWordStart = rGuess.GetPrevEnd(rInf, rGuess.LeftPos());
-        if( !bSoftHyph && (!bFtn || rInf.StopUnderFlow() )
-            && nWordStart <= rInf.GetLineStart() )
-        {
-            if( rInf.GetFly() || rInf.GetLast()->IsFlyPortion()
-                || rInf.IsDropInit() ||
-                ( rInf.StopUnderFlow() && rInf.GetLast()->IsFlyCntPortion() ) )
-            {
-                Height( 0 );
-                Width( 0 );
-                SetLen( 0 );
-                SetAscent( 0 );
-                SetPortion( NULL );  // ????
-                // 3983: {N}ikolaus, Fly rechts drueber haengen
-                if( rInf.GetFly() && nWordStart < rInf.GetIdx() )
-                    Underflow( rInf );
-                else
-                    rInf.GetLast()->FormatEOL( rInf );
-            }
-            else
-                BreakCut( rInf, rGuess );
-        }
-        else
-        {
-            Height( 0 );
-            Width( 0 );
-            SetLen( 0 );
-            SetAscent( 0 );
-            SetPortion( NULL );  // ????
-            if ( bNullWidth )
-            {
-                SwLinePortion *pPor = rInf.GetLast();
-                pPor->Truncate();
-                rInf.SetUnderFlow( pPor );
-            }
-            else
-                Underflow( rInf );
-        }
-    }
+    Height( 0 );
+    Width( 0 );
+    SetLen( 0 );
+    SetAscent( 0 );
+    rInf.SetUnderFlow( this );
 }
 
-/*************************************************************************
- *                      SwTxtPortion::BreakLine()
- *************************************************************************/
-
-
-
-void SwTxtPortion::BreakLine( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
-{
-    // Dieses Wort passt nicht mehr
-    // Hyphenator ...
-    // Wenn das Wort ueber den Rand hinausragt.
-
-    if( rGuess.HyphWord().is() && IsHyphenate( rInf, rGuess ) )
-    {
-        if ( rInf.GetFly() )
-            rInf.GetRoot()->SetMidHyph( sal_True );
-        else
-            rInf.GetRoot()->SetEndHyph( sal_True );
-        return;
-    }
-
-    // Drei Faelle muessen beachtet werden:
-    // "012 456"    Guess: "2 456"  I:0, L:2 -> " 456" in die naechste Zeile
-    // "{01}2 456"  Guess: "2 456", I:2, L:2 -> " 456" in die naechste Zeile
-    // "{012} 456"  Guess: " 456",  I:3, L:3 -> Underflow
-    // Wer weiss, was jetzt alles schief geht:
-    // old: win090: if( rInf.GetIdx() < rGuess.LeftPos() )
-
-    // Und schon ist es passiert:
-    // 4801: "{Drucken}, das" : "{Drucken}" passt "," ist zuviel ...
-    if( rInf.X() + rGuess.LeftWidth() <= rInf.Width() )
-    {
-        if( rInf.GetIdx() <  rGuess.LeftPos() ||
-           ( rInf.GetIdx() == rGuess.LeftPos() &&
-             rInf.GetIdx() > rInf.GetLineStart() &&
-            rGuess.IsWordEnd( rInf, rInf.GetIdx() ) ) )
-        {
-            // Es wurde noch eine Trennstelle gefunden, oder das Wort
-            // soll komplett in die naechste Zeile
-            Width( rGuess.LeftWidth() );
-            SetLen( rGuess.LeftPos() - rInf.GetIdx() );
-// OLD_ITERATOR
-//          SetLen( rGuess.LeftPos() - rInf.GetIdx() + 1 );
-            return;
-        }
-    }
-
-    // nTxtOfst ist der Original-GetIdx (s.Kommentar vom _Format())
-    // Nur wenn die Portion am Anfang der Zeile steht, dann liegt
-    // u.U. ein Sonderfall vor, der im else-Zweig bearbeitet wird.
-    // Wenn ein Zeilenumbruch emuliert wird (derzeit nur durch Flys),
-    // dann wollen wir aus kosmetischen Gruenden das Wort nicht kappen.
-
-    // Es gibt nur zwei Moeglichkeiten:
-    // BreakUnderFlow:  wir formatieren rueckwaerts.
-    // BreakCut: wir schneiden gnadenlos ab.
-
-
-    // 5010: Exp und Tabs
-    sal_Bool bFirstPor = sal_True;
-
-    // Nur bei Feldern muss noch einmal geprueft werden,
-    // ob wir pFirstPor sind.
-    if( InExpGrp() )
-    {
-        const SwLinePortion *pPor = rInf.GetRoot();
-        while( pPor && bFirstPor )
-        {
-            bFirstPor = 0 == pPor->GetLen();
-            pPor = pPor->GetPortion();
-        }
-    }
-    else
-        bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-
-    // 8790: erste Portion hat Vorrang vor bPunct, sonst wird
-    // fuer die ein "(xxx)" am Zeilenanfang ein Dauer-Underflow erzeugt.
-    // 8790: Flys emulieren Zeilenumbrueche, das bricht uns das Genick
-    // Robust:
-    if ( !rInf.GetLast() )
-        rInf.SetLast( rInf.GetRoot() );
-
-    // During multi-portion formatting the bFirstPor-flag is set only
-    // if the multi-portion is the first portion in the line.
-    bFirstPor = bFirstPor && !rInf.IsDropInit() &&
-                ( !rInf.IsMulti() || rInf.IsFirstMulti() );
-
-    if( ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ) &&
-        ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
-          rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, sal_True ) ) )
-    {
-        sal_Bool bPunct = !bFirstPor && IsPunctUnderFlow( rInf ) &&
-                      !rInf.GetLast()->IsFlyPortion();
-        BreakUnderflow( rInf, rGuess, bPunct );
-    }
-    else
-        BreakCut( rInf, rGuess );
-}
-
-/*************************************************************************
+ /*************************************************************************
  *                      SwTxtPortion::_Format()
  *************************************************************************/
-// nTxtOfst ist das Original-GetIdx(). Wenn der Text ersetzt wurde, dann
-// sind nIdx und Len an den Ersatzstring angepasst. In BreakLine() muessen
-// wir jedoch entscheiden, ob ein Wort komplett in die naechste Zeile soll,
-// oder ob ein Sonderfall vorliegt.
 
-
+sal_Bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
+{
+    String aTxt;
+    return rFld.GetExpTxt( rInf, aTxt ) && aTxt.Len();
+}
 
 sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 {
     // 5744: wenn nur der Trennstrich nicht mehr passt,
     // muss trotzdem das Wort umgebrochen werden, ansonsten return sal_True!
     if( rInf.IsUnderFlow() && rInf.GetSoftHyphPos() )
-        if( FormatHyph( rInf ) )
-            return sal_True;
+    {
+        // soft hyphen portion has triggered an underflow event because
+        // of an alternative spelling position
+        sal_Bool bFull = sal_False;
+        const sal_Bool bHyph = rInf.ChgHyph( sal_True );
+        if( rInf.IsHyphenate() )
+        {
+            SwTxtGuess aGuess;
+            // check for alternative spelling left from the soft hyphen
+            // this should usually be true but
+            aGuess.AlternativeSpelling( rInf, rInf.GetSoftHyphPos() - 1 );
+            bFull = CreateHyphen( rInf, aGuess );
+        }
+        rInf.ChgHyph( bHyph );
+        rInf.SetSoftHyphPos( 0 );
+        return bFull;
+    }
 
     SwTxtGuess aGuess;
     const sal_Bool bFull = !aGuess.Guess( rInf, Height() );
-    if( !InExpGrp() || IsFtnPortion() )
-        Height( aGuess.Height() );
-    if( bFull && !aGuess.GetHangingPortion() )
-        BreakLine( rInf, aGuess );
-    else
+
+    // these are the possible cases:
+    // A Portion fits to current line
+    // B Portion does not fit to current line but a possible line break
+    //   within the portion has been found by the break iterator, 2 subcases
+    //   B1 break is hyphen
+    //   B2 break is word end
+    // C Portion does not fit to current line and no possible line break
+    //   has been found by break iterator, 2 subcases:
+    //   C1 break iterator found a possible line break in portion before us
+    //      ==> this break is used (underflow)
+    //   C2 break iterator does not found a possible line break at all:
+    //      ==> line break
+
+      // case A: line not yet full
+    if ( !bFull )
     {
-        Width( aGuess.LeftWidth() );
+        Width( aGuess.BreakWidth() );
         // Vorsicht !
         if( !InExpGrp() || InFldGrp() )
-            SetLen( aGuess.LeftPos() - rInf.GetIdx() + 1 );
-#ifdef DBGTXT
-        const SwPosSize aSize( GetTxtSize( rInf ) );
-        if( aSize.Width() != Width() || aSize.Height() != Height() )
+            SetLen( rInf.GetLen() );
+
+        short nKern = rInf.GetFont()->CheckKerning();
+        if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
         {
-            aDbstream << "Format: diff size: "
-                      << aSize.Width()  << "!=" << Width()  << ' '
-                      << aSize.Height() << "!=" << Height() << endl;
+            nKern = rInf.Width() - rInf.X() - Width();
+            if( nKern < 0 )
+                nKern = 0;
         }
-#endif
-        if( aGuess.GetHangingPortion() )
-        {
-            Insert( aGuess.GetHangingPortion() );
-            SwTwips nTmpW = rInf.Width() - rInf.X() - Width();
-            if( nTmpW > 0 )
-                aGuess.GetHangingPortion()->Width( nTmpW );
-            aGuess.GetHangingPortion()->SetAscent( GetAscent() );
-            aGuess.ClearHangingPortion();
-        }
-        else
-        {
-            short nKern = rInf.GetFont()->CheckKerning();
-            if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
-            {
-                nKern = rInf.Width() - rInf.X() - Width();
-                if( nKern < 0 )
-                    nKern = 0;
-            }
-            if( nKern )
-                new SwKernPortion( *this, nKern );
-        }
+        if( nKern )
+            new SwKernPortion( *this, nKern );
     }
+
+    // breakPos >= index
+    else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != STRING_LEN )
+    {
+        // case B1
+        if( aGuess.HyphWord().is() && ( aGuess.BreakPos() > rInf.GetIdx() ||
+            !rInf.GetLast()->IsFlyPortion() ) )
+        {
+            CreateHyphen( rInf, aGuess );
+            if ( rInf.GetFly() )
+                rInf.GetRoot()->SetMidHyph( sal_True );
+            else
+                rInf.GetRoot()->SetEndHyph( sal_True );
+        }
+        // case C1
+        else if ( IsFtnPortion() )
+            BreakUnderflow( rInf );
+        // case B2
+        else if( rInf.GetIdx() > rInf.GetLineStart() ||
+                 aGuess.BreakPos() > rInf.GetIdx() ||
+                    rInf.GetFly() ||
+                 rInf.GetLast()->IsFlyPortion() ||
+                  (rInf.GetLast()->InFldGrp() && !rInf.GetLast()->InNumberGrp()
+                      && lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf) )
+                 )
+        {
+            ASSERT( rInf.X() + aGuess.BreakWidth() <= rInf.Width(),
+                    "What a guess?!" );
+            Width( aGuess.BreakWidth() );
+            SetLen( aGuess.BreakPos() - rInf.GetIdx() );
+            if( aGuess.BreakPos() < aGuess.BreakStart() && !InFldGrp() )
+            {
+                SwHolePortion *pNew = new SwHolePortion( *this );
+                pNew->SetLen( aGuess.BreakStart() - aGuess.BreakPos() );
+                Insert( pNew );
+            }
+        }
+        else    // case C2, last exit
+            BreakCut( rInf, aGuess );
+    }
+
+    // breakPos < index or no breakpos at all
+    else
+    {
+        sal_Bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
+        if( aGuess.BreakPos() != STRING_LEN &&
+            aGuess.BreakPos() != rInf.GetLineStart() &&
+            ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ) &&
+            ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
+              rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, sal_True )))
+        {       // case C1 (former BreakUnderflow())
+            BreakUnderflow( rInf );
+        }
+        else    // case C2, last exit
+            BreakCut( rInf, aGuess );
+    }
+
     return bFull;
 }
 
@@ -524,23 +381,6 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         ( (SwHolePortion *)pHole )->SetBlankWidth( nBlankSize );
         Insert( pHole );
     }
-}
-
-/*************************************************************************
- *                 virtual SwTxtPortion::Underflow()
- *************************************************************************/
-// Underflow() wird innerhalb des Formatierungsprozesses gerufen,
-// wenn diese Portion nicht mehr passt und die Vorgaengerportion
-// formatiert werden muss (haeufig bei HardBlank, SoftHyph).
-// Wir stellen rInf ein und initialisieren uns.
-
-
-
-sal_Bool SwTxtPortion::Underflow( SwTxtFormatInfo &rInf )
-{
-    Truncate();
-    rInf.SetUnderFlow( this );
-    return sal_True;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 10:00:34 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,8 @@ class SwTxtGuess;
 
 class SwTxtPortion : public SwLinePortion
 {
-    sal_Bool IsPunctUnderFlow( const SwTxtSizeInfo &rInf ) const;
     void BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess );
-    void BreakUnderflow( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess,
-                         const sal_Bool bPunct );
-    void BreakLine( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
-    sal_Bool FormatHyph( SwTxtFormatInfo &rInf );
+    void BreakUnderflow( SwTxtFormatInfo &rInf );
     sal_Bool _Format( SwTxtFormatInfo &rInf );
 
 public:
@@ -94,18 +90,16 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
-    virtual sal_Bool Underflow( SwTxtFormatInfo &rInf );
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
-    virtual short GetEscapement() const;
     virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // zaehlt die Spaces fuer Blocksatz
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf, xub_StrLen& rCnt ) const;
     xub_StrLen GetCrsrOfst( const KSHORT nOfst, SwTxtSizeInfo &rSizeInf ) const;
 
-    sal_Bool IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
+    sal_Bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
 
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)

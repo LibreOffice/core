@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 16:46:28 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   // ASSERTs
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
@@ -95,212 +98,45 @@
 #ifndef _COM_SUN_STAR_I18N_BREAKTYPE_HPP_
 #include <com/sun/star/i18n/BreakType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
 
+using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-inline sal_Bool IsDelim( const xub_Unicode cCh )
-{
-    return ' ' == cCh;
-}
-
 /*************************************************************************
- *                      SwTxtGuess::IsWordEnd
- *************************************************************************/
-
-
-sal_Bool SwTxtGuess::IsWordEnd( const SwTxtSizeInfo &rInf, const xub_StrLen nPos )
-{
-    const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
-
-    ASSERT( nPos <= nEnd, "WordEnd hinter Text?" );
-
-    // Das letzte Zeichen gilt immer als Wortende
-    if ( nPos >= nEnd )
-        return sal_True;
-
-    const XubString& rTxt = rInf.GetTxt();
-    xub_Unicode aChr = rTxt.GetChar( nPos );
-    xub_Unicode aChr1 = rTxt.GetChar( nPos + 1 );
-
-    // Bindestriche sind potentielle Wortenden mit folgenden Ausnahmen:
-    // es folgt ein weiterer Bindestrich
-    // es folgt Textmasse, vor dem Bindestrich sind nur Bindestriche und
-    // davor ein Blank ...
-    if( '-' == aChr )
-    {
-        if ( IsDelim( aChr1 ) )
-            return sal_True;
-        if ( !nPos || '-' == aChr1 )
-            return sal_False;
-        for ( xub_StrLen nCnt = nPos; nCnt && '-' == aChr; )
-            aChr = rTxt.GetChar( --nCnt );
-        return ( !IsDelim( aChr ) && '-' != aChr );
-    }
-
-    // sal_True, wenn nPos kein Blank ist, aber der darauffolgende
-    if( !IsDelim( aChr ) && IsDelim( aChr1 ) )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-
-/*************************************************************************
- *                      _GetFwdWordEnd()
+ *                      SwTxtGuess::GetWordStart
  *
- * Es wird die letzte Position im Wort zurueckgeliefert:
- * Aus "123 456" wird "123" nicht "123 " !!!
- * Sonderfaelle bei "-"
+ * determines the word at nPos and returns its left boundary
  *************************************************************************/
 
-xub_StrLen _GetFwdWordEnd( const XubString& rTxt, xub_StrLen nFound,
-                           const xub_StrLen nMaxPos )
+xub_StrLen SwTxtGuess::GetWordStart( const SwTxtFormatInfo &rInf,
+                                     const xub_StrLen nPos )
 {
-    if( nFound == nMaxPos )
-        return nMaxPos;
-
-    // Suche von links nach rechts
-    // Die Spaces vor einem Wort gehoeren dazu:
-    for( ++nFound; nFound < nMaxPos && IsDelim( rTxt.GetChar( nFound ) ); ++nFound )
-        ;
-
-    if ( nFound == nMaxPos )
-        return nMaxPos;
-
-    // Sonderfall: Bindestrich
-    if ( '-' == rTxt.GetChar( nFound ) )
-    {
-        // Mal gucken, was vor den Bindestrichen los ist
-        for ( ; nFound && '-' == rTxt.GetChar( nFound ); --nFound )
-            ;
-        // Ist vor uns ein Wortteil oder Nichts?
-        const sal_Bool bPartOfWord = nFound && !IsDelim( rTxt.GetChar( nFound ) );
-        // Und wieder hinter die Bindestriche
-        for ( ++nFound; nFound && '-' == rTxt.GetChar( nFound ); ++nFound )
-            ;
-        if ( nFound > nMaxPos )
-            return nMaxPos;
-        if ( bPartOfWord || IsDelim( rTxt.GetChar( nFound ) ) )
-            return nFound - 1;
-    }
-
-    // Beim naechsten Space ist Schluss
-    for( ; nFound < nMaxPos; ++nFound )
-    {
-         if( IsDelim( rTxt.GetChar( nFound ) ) )
-            return nFound - 1;
-         if( '-' == rTxt.GetChar( nFound ) )
-         {
-            while ( '-' == rTxt.GetChar( nFound ) )
-                ++nFound;
-            if ( nFound > nMaxPos )
-                return nMaxPos;
-            else
-                return nFound - 1;
-        }
-    }
-    return nFound;
-}
-
-/*************************************************************************
- *                      _GetBwdWordEnd()
- *
- * Es wird die letzte Position im Wort zurueckgeliefert:
- * Aus "123 456" wird "123" nicht "123 " !!!
- * Sonderfaelle bei "-"
- *************************************************************************/
-
-xub_StrLen _GetBwdWordEnd( const XubString& rTxt, xub_StrLen nFound,
-                           const xub_StrLen nMin )
-{
-    const xub_StrLen nStart = nFound;
-    if( !nFound )
-        return 0;
-
-    // Suche von rechts nach links
-    // Bloede Striche
-    for( ; nFound && '-' == rTxt.GetChar( nFound ); --nFound )
-        ;
-
-    // Bis zum Anfang der Textmasse.
-    for( ; nFound && !IsDelim( rTxt.GetChar( nFound ) ); --nFound )
-    {
-        if( '-' == rTxt.GetChar(nFound) && !ispunct( rTxt.GetChar(nFound+1) ) )
-            break;
-    }
-
-    if ( '-' == rTxt.GetChar( nFound ) )
-    {
-        xub_StrLen nOldFound = nFound;
-        // Mal gucken, was vor den Bindestrichen los ist
-        for ( ; nFound && '-' == rTxt.GetChar( nFound ); --nFound )
-            ;
-        // Ist vor uns ein Wortteil?
-        if( nFound && !IsDelim( rTxt.GetChar( nFound ) ) )
-            return nOldFound;
-    }
-
-    // Die Spaces hinter einem Wort gehoeren nicht dazu:
-    for( ; nFound > nMin; --nFound )
-    {
-        if( !IsDelim( rTxt.GetChar( nFound ) ) )
-            break;
-    }
-    if( nMin == nFound )
-    {
-        if( IsDelim( rTxt.GetChar( nFound ) ) )
-        {
-            while( ++nFound < nStart && IsDelim( rTxt.GetChar( nFound ) ) )
-                ;
-            --nFound;
-        }
-        else if( nMin )
-            --nFound;
-    }
-
-    return nFound;
-}
-
-/*************************************************************************
- *                      SwTxtGuess::GetWordEnd
- *************************************************************************/
-
-// Liefert die Wortgrenze je nach Suchrichtung zurueck.
-// Wortdelimitter sind (nach dem letzten Projekt-Parteitag) nur
-// noch Blanks.
-// Fuehrende Blanks gehoeren zum Wort, aus "XXX   YYY" wird
-// "XXX" und "   YYY".
-
-xub_StrLen SwTxtGuess::GetWordEnd( const SwTxtFormatInfo &rInf,
-                                const xub_StrLen nPos, const sal_Bool bFwd ) const
-{
-    const xub_StrLen nMaxPos = rInf.GetIdx() + rInf.GetLen() - 1;
-    const xub_StrLen nIdx = nPos < nMaxPos ? nPos : nMaxPos;
-    return  bFwd ? _GetFwdWordEnd( rInf.GetTxt(), nIdx, nMaxPos )
-                 : _GetBwdWordEnd( rInf.GetTxt(), nIdx, rInf.GetLineStart() );
+    // get word boundaries
+    Boundary aBound =
+        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), rInf.GetIdx(),
+        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+        WordType::DICTIONARY_WORD, sal_True );
+    return (xub_StrLen)aBound.startPos;
 }
 
 /*************************************************************************
  *                      SwTxtGuess::Guess
  *
- * Nach Guess muessen folgende Verhaeltnisse vorliegen:
- * Bsp: "XXX   YYY", Umbruch beim 2.Space
- * GetLeftPos() liefert das Ende des noch passenden Wortes: "XXX", 3
- * GetRightPos() liefert den Beginn des nicht mehr passenden Wortes: " YYY"
- * Wenn das Wort ganz passte, dann ist GetLeftPos() == GetRightPos().
- * Etwas Verwirrung stiftet der Unterschied zwischen Position und Laenge:
- * GetWord() arbeitet ausschliesslich mit String-Positionen, waehrend
- * die Breiten per GetTxtSize() und damit ueber Laengen ermittelt werden.
- * Die Laenge ist (nach Abzug des Offsets) immer genau um 1 groesser
- * als die Position.
- * Liefert zurueck, ob es noch passte...
+ * provides information for line break calculation
+ * returns true if no line break has to be performed
+ * otherwise possible break or hyphenation position is determined
  *************************************************************************/
 
 sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight )
 {
-    nLeftPos = nRightPos = rInf.GetIdx();
+    nCutPos = rInf.GetIdx();
     // Leere Strings sind immer 0
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
     {
@@ -315,7 +151,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     SwTwips nLineWidth = rInf.Width() - rInf.X();
     const xub_StrLen nMaxLen = Min( xub_StrLen(rInf.GetTxt().Len() - rInf.GetIdx()),
                                 rInf.GetLen() );
-    // Sonderfall: Zeichen breiter als Zeile
+    // special case: char width > line width
     if( !nMaxLen || !nLineWidth )
     {
         nHeight = rInf.GetTxtHeight();
@@ -345,33 +181,28 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 #endif
         if( nItalic >= nLineWidth )
         {
-            nLeftWidth = nRightWidth = nItalic;
-            nLeftPos = nRightPos = rInf.GetIdx();
+            nBreakWidth = nItalic;
+            nCutPos = rInf.GetIdx();
             return sal_False;
         }
         else
             nLineWidth -= nItalic;
     }
 
-    // Kein GetTextBreak, wenn vermutlich alles passt
+    // first check if everything fits to line
     if ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nHeight )
     {
-        nLeftWidth = rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
+        nBreakWidth = rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
 
-        if ( nLeftWidth <= nLineWidth )
+        if ( nBreakWidth <= nLineWidth )
         {
-            // Die Vermutung hat sich bewahrheitet
-            nLeftPos = nRightPos = rInf.GetIdx() + nMaxLen - 1;
+            // portion fits to line
+            nCutPos = rInf.GetIdx() + nMaxLen - 1;
             nHeight = rInf.GetTxtHeight();
-            if( nItalic && ( nLeftPos + 1 ) >= rInf.GetTxt().Len() )
-                nLeftWidth += nItalic;
-            nRightWidth = nLeftWidth;
+            if( nItalic && ( nCutPos + 1 ) >= rInf.GetTxt().Len() )
+                nBreakWidth += nItalic;
             return sal_True;
         }
-#ifdef DEBUG
-        nRightWidth = nLeftWidth; // nur zum Breakpoint setzen,
-                                  // Vermutung schlug fehl, teuer!
-#endif
     }
 
     nHeight = rInf.GetTxtHeight();
@@ -379,112 +210,161 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     sal_Bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
     xub_StrLen nHyphPos = 0;
 
+    // nCutPos is the first character not fitting to the current line
+    // nHyphPos is the first character not fitting to the current line,
+    // considering an additional "-" for hyphenation
     if( bHyph )
-        nRightPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen,
-                                       nHyphPos );
-    else
-        nRightPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen );
-
-    if( nRightPos > rInf.GetIdx() + nMaxLen )
     {
-        // passt noch auf die Zeile
-        nLeftPos = nRightPos = rInf.GetIdx() + nMaxLen - 1;
-        if( bHyph )
-            nHyphPos = nLeftPos;
-        nLeftWidth = nRightWidth =
-            rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
+        nCutPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen,
+                                    nHyphPos );
+        if ( !nHyphPos && rInf.GetIdx() )
+            nHyphPos = rInf.GetIdx() - 1;
+    }
+    else
+        nCutPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen );
+
+    if( nCutPos > rInf.GetIdx() + nMaxLen )
+    {
+        // second check if everything fits to line
+        nCutPos = nBreakPos = rInf.GetIdx() + nMaxLen - 1;
+        nBreakWidth = rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
         // Der folgende Vergleich sollte eigenlich immer sal_True ergeben, sonst
         // hat es wohl bei GetTxtBreak einen Pixel-Rundungsfehler gegeben...
-        if ( nLeftWidth <= nLineWidth )
+        if ( nBreakWidth <= nLineWidth )
         {
-            if( nItalic && ( nLeftPos + 1 ) >= rInf.GetTxt().Len() )
-            {
-                nLeftWidth += nItalic;
-                nRightWidth = nLeftWidth;
-            }
+            if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
+                nBreakWidth += nItalic;
             return sal_True;
         }
     }
 
-    if( IsDelim( rInf.GetChar( nRightPos ) ) )
+    xub_StrLen nPorLen = 0;
+    if( CH_BLANK == rInf.GetTxt().GetChar( nCutPos ) )
     {
-        nLeftPos = nRightPos;
-        while( nRightPos && IsDelim( rInf.GetChar( --nRightPos ) ) )
-            --nLeftPos;
+        nBreakPos = nCutPos;
+        xub_StrLen nX = nBreakPos;
+        while( nX && rInf.GetLineStart() && CH_BLANK == rInf.GetChar( --nX ) )
+            --nBreakPos;
+        if( nBreakPos > rInf.GetIdx() )
+            nPorLen = nBreakPos - rInf.GetIdx();
+        while( ++nCutPos < rInf.GetTxt().Len() &&
+               CH_BLANK == rInf.GetChar( nCutPos ) )
+            ; // nothing
+        nBreakStart = nCutPos;
     }
-    else
+    else if( pBreakIt->xBreak.is() )
     {
-        nLeftPos = nRightPos;
-        if( pBreakIt->xBreak.is() )
+        LineBreakHyphenationOptions aHyphOpt;
+        Reference< XHyphenator >  xHyph;
+        if( bHyph )
         {
-            LineBreakHyphenationOptions aHyphOpt;
-            Reference< XHyphenator >  xHyph;
-            if( bHyph )
-            {
-                xHyph = ::GetHyphenator();
-                aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
-            }
+            xHyph = ::GetHyphenator();
+            aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
+        }
 
-            LanguageType aLang = rInf.GetFont()->GetLanguage();
-            const ForbiddenCharacters aForbidden(
-                    *rInf.GetTxtFrm()->GetNode()->GetDoc()->
-                                GetForbiddenCharacters( aLang, TRUE ));
-            LineBreakUserOptions aUserOpt(
-                    aForbidden.beginLine, aForbidden.endLine,
-                    rInf.HasForbiddenChars(), rInf.IsHanging(), sal_False );
-            LineBreakResults aResult =
-                pBreakIt->xBreak->getLineBreak( rInf.GetTxt(), nRightPos,
-                pBreakIt->GetLocale(aLang), rInf.GetIdx(), aHyphOpt, aUserOpt );
-            nLeftPos = (xub_StrLen)aResult.breakIndex;
-            if( nLeftPos == STRING_LEN )
-                nLeftPos = 0;
+        LanguageType aLang = rInf.GetFont()->GetLanguage();
+        const ForbiddenCharacters aForbidden(
+                *rInf.GetTxtFrm()->GetNode()->GetDoc()->
+                            GetForbiddenCharacters( aLang, TRUE ));
+        LineBreakUserOptions aUserOpt(
+                aForbidden.beginLine, aForbidden.endLine,
+                rInf.HasForbiddenChars(), rInf.IsHanging(), sal_False );
+        // determines first possible line break from nRightPos to
+        // start index of current line
+        LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
+                rInf.GetTxt(), nCutPos, pBreakIt->GetLocale(aLang),
+                rInf.GetLineStart(), aHyphOpt, aUserOpt );
+        nBreakPos = nBreakStart = (xub_StrLen)aResult.breakIndex;
 
-            bHyph = aResult.breakType == BreakType::HYPHENATION;
-            if( bHyph )
-                xHyphWord = aResult.rHyphenatedWord;
-            else
-                xHyphWord = NULL;
+        bHyph = aResult.breakType == BreakType::HYPHENATION;
 
-            if( nLeftPos )
+        if ( bHyph && nBreakPos != STRING_LEN)
+        {
+            // found hyphenation position within line
+            // nBreakPos is set to the hyphenation position
+            xHyphWord = aResult.rHyphenatedWord;
+            nBreakPos += xHyphWord->getHyphenPos() + 1;
+            if( nBreakPos >= rInf.GetIdx() )
             {
-                xub_StrLen nX = nLeftPos;
-                while( nX && IsDelim( rInf.GetChar( --nX ) ) )
-                    nLeftPos = nX;
+                nPorLen = nBreakPos - rInf.GetIdx();
+                if( '-' == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
+                    xHyphWord = NULL;
             }
-            if( nLeftPos > nRightPos )
+        }
+        else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
+        {
+            // found break position within line
+            xHyphWord = NULL;
+            // check, if break position is soft hyphen
+            if( nBreakPos > rInf.GetLineStart() &&
+                rInf.GetTxt().GetChar( nBreakPos - 1 ) == CHAR_SOFTHYPHEN )
             {
-                SwPosSize aTmpSize = rInf.GetTxtSize( --nLeftPos, 1 );
-                ASSERT( !pHanging, "A hanging portion is hanging around" );
-                pHanging = new SwHangingPortion( aTmpSize );
+                // soft hyphen found, we make sure, that an underflow is
+                // triggered by setting nBreakPos to index - 1
+                nBreakPos = rInf.GetIdx() - 1;
             }
+            xub_StrLen nX = nBreakPos;
+            while( nX > rInf.GetLineStart() && CH_BLANK == rInf.GetChar(--nX) )
+                nBreakPos = nX;
+            if( nBreakPos > rInf.GetIdx() )
+                nPorLen = nBreakPos - rInf.GetIdx();
+        }
+        else
+        {
+            // no line break found, setting nBreakPos to STRING_LEN
+            // causes a break cut
+            nBreakPos = STRING_LEN;
+            ASSERT( nCutPos >= rInf.GetIdx(), "Deep cut" );
+            nPorLen = nCutPos - rInf.GetIdx();
+        }
+
+        if( nBreakPos > nCutPos && nBreakPos != STRING_LEN )
+        {
+            SwPosSize aTmpSize = rInf.GetTxtSize( --nBreakPos, 1 );
+            ASSERT( !pHanging, "A hanging portion is hanging around" );
+            pHanging = new SwHangingPortion( aTmpSize );
         }
     }
 
-    if ( nLeftPos < rInf.GetIdx() )
-        nLeftPos = rInf.GetIdx();
+    if( nPorLen )
+        nBreakWidth = nItalic + rInf.GetTxtSize( rInf.GetIdx(), nPorLen ).Width();
+    else
+        nBreakWidth = 0;
 
-    nLeftWidth =
-        rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() ).Width();
-
-    bHyph = bHyph && ( nHyphPos > nLeftPos );
-
-    // Sicher ist sicher, robust gg. Rundungfehler in GetTxtBreak ...
-    if ( nLeftWidth > nLineWidth )
-    {
-        rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() + 1 ).Width();
-        bHyph = sal_False;
-        nLeftPos = GetPrevEnd( rInf, nLeftPos );
-        if ( nLeftPos < rInf.GetIdx() )
-            nLeftPos = rInf.GetIdx();
-        nLeftWidth =
-            rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() + 1 ).Width();
-    }
-
-    nLeftWidth += nItalic;
-    nRightWidth = nLeftWidth;
     if( pHanging )
-        --nLeftPos;
+        --nBreakPos;
     return sal_False;
 }
 
+/*************************************************************************
+ *                      SwTxtGuess::AlternativeSpelling
+ *************************************************************************/
+
+// returns true if word at position nPos has a diffenrent spelling
+// if hyphenated at this position (old german spelling)
+
+sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
+    const xub_StrLen nPos )
+{
+    // get word boundaries
+    xub_StrLen nWordLen;
+
+    Boundary aBound =
+        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nPos,
+        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+        WordType::DICTIONARY_WORD, sal_True );
+    nBreakStart = (xub_StrLen)aBound.startPos;
+    nWordLen = aBound.endPos - nBreakStart;
+
+    XubString aTxt( rInf.GetTxt().Copy( nBreakStart, nWordLen ) );
+
+    // check, if word has alternative spelling
+    Reference< XHyphenator >  xHyph( ::GetHyphenator() );
+    ASSERT( xHyph.is(), "Hyphenator is missing");
+    //! subtract 1 since the UNO-interface is 0 based
+    xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
+                        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+                        nPos - nBreakStart, Sequence< PropertyValue >() );
+    return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
+}
 

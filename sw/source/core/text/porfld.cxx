@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 10:57:37 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,8 +384,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             nFullLen = nOldFullLen;
         else
         {
-            nFullLen = rInf.ScanPortionEnd( rInf.GetIdx() + nOldFullLen,
-                                            IsFollow() ) - rInf.GetIdx();
+            nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(),
+                    rInf.GetIdx() + nOldFullLen, IsFollow() ) - rInf.GetIdx();
             if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
                 --nFullLen;
         }

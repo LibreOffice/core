@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:19:24 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,8 @@ public:
 
     // Sucht ab nIdx bis nEnd nach Tabs, TabDec, TXTATR und BRK.
     // Return: gefundene Position, setzt ggf. cHookChar
-    xub_StrLen ScanPortionEnd( const xub_StrLen nEnd, sal_Bool bSkip = sal_False );
+    xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd,
+                               sal_Bool bSkip = sal_False );
 
 //  friend ostream &operator<<( ostream &rOS, const SwTxtFormatInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-14 11:27:14 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,11 +1014,13 @@ sal_Bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
 /*************************************************************************
  *                 SwTxtFormatInfo::ScanPortionEnd()
  *************************************************************************/
-xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nEnd, sal_Bool bSkip )
+xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
+                                            const xub_StrLen nEnd,
+                                            sal_Bool bSkip )
 {
     cHookChar = 0;
     const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
-    xub_StrLen i = GetIdx();
+    xub_StrLen i = nStart;
     if ( bSkip && i < nEnd )
         ++i;
 

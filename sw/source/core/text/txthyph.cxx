@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:38:54 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 {
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
-    ASSERT( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
+//  ASSERT( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -367,56 +367,10 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 }
 
 /*************************************************************************
- *                      SwTxtPortion::FormatHyph()
+ *                      SwTxtPortion::CreateHyphen()
  *************************************************************************/
 
-sal_Bool SwTxtPortion::FormatHyph( SwTxtFormatInfo &rInf )
-{
-    sal_Bool bFull = sal_False;
-    const sal_Bool bHyph = rInf.ChgHyph( sal_True );
-    if( rInf.IsHyphenate() )
-    {
-        SwTxtGuess aGuess;
-        // const KSHORT nOldWidth = rInf.Width();
-        // Fly-Situationen muessen noch behandelt werden.
-        // rInf.Width( rInf.RealWidth() );
-        bFull = IsHyphenate( rInf, aGuess );
-        // rInf.Width( nOldWidth );
-    }
-    rInf.ChgHyph( bHyph );
-#ifdef DEBUG
-    // alles schon gesehen, z.B: "Schiff{-}fahrt", SoftHyph mit der
-    // Hand eingeben, und auf einmal passt "Schiff-" ...
-//  ASSERT( bFull, "!SwTxtPortion::FormatHyph: not full" );
-#endif
-    return bFull;
-}
-
-/*************************************************************************
- *                      lcl_AdjSoftHyph(...)
- *************************************************************************/
-
-xub_StrLen lcl_AdjSoftHyph( SwTxtSizeInfo& rInf, const XubString aOrgTxt,
-                        const xub_StrLen nPos, const xub_StrLen nWordStart )
-{
-    xub_StrLen nNewPos = 0;
-    const xub_StrLen nEnd = Min( aOrgTxt.Len(), nPos );
-    for( xub_StrLen i = 0; i < nEnd; ++i )
-    {
-        sal_Unicode cCh = aOrgTxt.GetChar(i);
-        if( ( CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-            && rInf.HasHint( nWordStart + i ) )
-            ++nNewPos;
-        ++nNewPos;
-    }
-    return nNewPos;
-}
-
-/*************************************************************************
- *                      SwTxtPortion::IsHyphenate()
- *************************************************************************/
-
-sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
+sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
     ASSERT( !pPortion, "SwTxtPortion::Hyphenate: another portion, another planet..." );
     if( rInf.IsHyphForbud() ||
@@ -425,264 +379,82 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         ( rInf.IsInterHyph() && InFldGrp() ) )
         return sal_False;
 
-    const sal_Bool bDoSoftHyph = rInf.IsUnderFlow() && rInf.GetSoftHyphPos();
-
-    KSHORT nWidth = bDoSoftHyph ? rInf.RealWidth() : rInf.Width();
-
-    if( nWidth <= rInf.X() )
-    {
-        // robust
-        ASSERT( !this, "+SwTxtPortion::Hyphenate: La quenta por favor." );
-        return sal_False;
-    }
-    nWidth -= rInf.X();
-
-    // Ab hier beginnt das 'alte' Hyphenate()
-
-    // Die Breite des Trennstriches muss beruecksichtigt werden, wenn fest-
-    // gestellt werden soll, ob das Wort auf die Zeile passt.
-    SwHyphPortion aHyphPor;
-    aHyphPor.SetLen( 1 );
-
-    static const void* pLastMagicNo = 0;
-//  static SwPosSize aMiniCache;
-    static KSHORT aMiniCacheH = 0, aMiniCacheW = 0;
-    const void* pTmpMagic;
-    MSHORT nFntIdx;
-    rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
-    if( !pLastMagicNo || pLastMagicNo != pTmpMagic )
-    {
-        pLastMagicNo = pTmpMagic;
-//      aMiniCache = aHyphPor.GetTxtSize( rInf );
-        (SwPosSize&)aHyphPor = aHyphPor.GetTxtSize( rInf );
-        aMiniCacheH = aHyphPor.Height(), aMiniCacheW = aHyphPor.Width();
-    }
-//  (SwPosSize&)aHyphPor = aMiniCache;
-    else
-        aHyphPor.Height( aMiniCacheH ), aHyphPor.Width( aMiniCacheW );
-
-    aHyphPor.SetLen( 0 );
-    if( !aHyphPor.Width() )
-    {   // robust
-        ASSERT( aHyphPor.Width(), "+SwTxtPortion::Hyphenate: annorectic HyphPor" );
-        return sal_False;
-    }
-
-    // Wenn der Trennstrich breiter als der zur Verfuegung stehende Platz ist...
-    if( nWidth <= aHyphPor.Width() )
-        return sal_False;
-
+    Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
+    SwHyphPortion *pHyphPor;
+    xub_StrLen nPorEnd;
     SwTxtSizeInfo aInf( rInf );
 
-    xub_StrLen nLastChar;
-    // Wir machen uns breit und tun so, als ob wir noch passen wuerden.
-    const KSHORT nOldWidth = Width();
-    const xub_StrLen nOldLen   = GetLen();
-    if( bDoSoftHyph )
-        nLastChar = rInf.GetSoftHyphPos() + 1;
-    else
-    {
-        Width( rGuess.LeftWidth() );
-        SetLen( rGuess.RightPos() - rInf.GetIdx() + 1 );
-        nLastChar = rGuess.HyphWord()->getHyphenationPos();
-        if( !nLastChar )
-            nLastChar = rInf.GetIdx() +
-                            GetCrsrOfst( nWidth - aHyphPor.Width(), aInf );
-        else
-            nLastChar += rGuess.LeftPos() + 1;
-        Width( nOldWidth);
-        SetLen( nOldLen );
-
-        // "Hunde. XXX", LeftPos auf ".", GetWord: "Hunde"
-        // "spuerbar erweitert", LeftPos auf "r", LastChar auf " "
-        if( rInf.GetIdx() + GetLen() != nLastChar &&
-            rGuess.LeftPos() + 1 >= nLastChar )
-            return sal_False;
-    }
-
-    xub_StrLen nWordStart, nWordLen;
-
-    if( !pBreakIt->xBreak.is() )
-        return sal_False;
-    Boundary aBound =
-        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nLastChar,
-        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-        WordType::DICTIONARY_WORD, sal_True );
-    nWordStart = aBound.startPos;
-    nWordLen = aBound.endPos - nWordStart;
-
-    // Textabschnitte unter 2 Zeichen trennen wir nicht mehr
-    if( 2 > nWordLen )
-        return sal_False;
-
-    // Das gefundene Wort muss natuerlich im scope liegen:
-    // (kann schon mal vorkommen, dass es nicht so ist, kein ASSERT!)
-    if( rInf.GetIdx() + 2 >= nWordStart + nWordLen )
-        return sal_False;
-
-    const XubString aOrgTxt( rInf.GetTxt().Copy( nWordStart, nWordLen ) );
-    XubString aTxt( aOrgTxt );
-    xub_StrLen nDel = 0;
-
-    // Der Hyphenator kriegt nie SoftHyphs zu sehen. Den ganzen Aerger
-    // muss die TxtPortion ausbaden. Es ist ein Spiel mit dem Feuer:
-    // In dem Moment, wo Laengen in Portions eingestellt werden oder
-    // die HyphPos herausgereicht wird, muessen die SoftHyphs miteinbezogen
-    // werden.
-    for( xub_StrLen i = 0; i < nWordLen; ++i )
-    {
-        sal_Unicode cCh = aOrgTxt.GetChar(i);
-        if( ( CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-            && rInf.HasHint( nWordStart + i ) )
-        {
-            aTxt.Erase( i - nDel, 1 );
-            const xub_StrLen nWordPos = nWordStart + i;
-            if( nWordPos - nDel < nLastChar )
-                --nLastChar;
-            ++nDel;
-
-            // Wenn in unserem Wort ein SoftHyphen steht,
-            // dann hat das Vorrang, wir returnen sal_False,
-            // es sei denn wir sind in der interaktiven Trennung!
-            if ( rInf.IsSoftHyph( nWordPos ) && nWordPos < rInf.GetIdx()
-                 && !rInf.IsInterHyph() )
-                    return sal_False;
-        }
-    }
-
-    nWordLen -= nDel;
-    xub_StrLen nHyphPos = 0;
-
-    // MinTrail uebersteuert das Absatzattribut fuer nMinTrail.
-    // (Anzahl der Zeichen die auf die naechste Zeile muessen)
-    MSHORT nMinTrail = 0;
-    if(nWordStart + nWordLen > nLastChar)
-        nMinTrail = nWordStart + nWordLen - nLastChar;
-
-    if( bDoSoftHyph && aTxt.Len() > nMinTrail )
-    {
-        //! make softhyphens work for alternative spellings where the text length
-        //! changes eg "Schiffahrt" (old german spelling)
-        Reference< XHyphenator >  xHyph( ::GetHyphenator() );
-        DBG_ASSERT( xHyph.is(), "Hyphenator is missing");
-        if (xHyph.is())
-        {
-            xub_StrLen nHyphenationPos = aTxt.Len() - nMinTrail - 1;
-                //! subtract 1 since the UNO-interface is 0 based
-            Reference< XHyphenatedWord >
-                    xHW = xHyph->queryAlternativeSpelling( OUString(aTxt),
-                            pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-                            nHyphenationPos,
-                            Sequence< PropertyValue >() );
-            if (xHW.is()  &&  xHW->isAlternativeSpelling())
-            {
-                nMinTrail -= xHW->getHyphenPos() - nHyphenationPos;
-            }
-        }
-    }
-
-    Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
-            // rInf.HyphWord( aTxt, nMinTrail );
-    sal_Bool bRet = xHyphWord.is();
-    if( !bRet )
-        return sal_False;
-
-    // Die Laenge ist nicht der Index !
-    CONST sal_Bool bAlter = xHyphWord.is() &&
-                        xHyphWord->isAlternativeSpelling();
-
-    // Wenn kein Alternativwort gefunden wurde und ein SoftHyph
-    // gerade die zweite Runde dreht, dann wollen wir uns nicht
-    // einmischen.
-    if( IsSoftHyphPortion() )
-    {
-        // check for: bAlter => xHyphWord.is()
-        DBG_ASSERT(!bAlter || xHyphWord.is(), "NULL pointer");
-
-        if ( bAlter &&
-             rInf.GetIdx() - nWordStart - 1 == xHyphWord->getHyphenationPos() )
-            return sal_True;
-        else
-            return sal_False;
-    }
-//  nWordLen = xHyphWord->getHyphenationPos() + 1;
-    nWordLen = xHyphWord->getHyphenPos() + 1;
-
-    if( 2 > nWordLen )
-        return sal_False;
-    nHyphPos = lcl_AdjSoftHyph( rInf, aOrgTxt, nWordLen, nWordStart );
-
-    // Wir muessen mit dem schlimmsten rechnen, z.B., dass die
-    // gefundene Trennstelle vor unserer Portion liegt.
-
-    if( (nWordStart + nHyphPos) < (rInf.GetIdx() + 2) ||
-        nWordLen >= aTxt.Len() )
-        return sal_False;
-
-    SwHyphPortion *pHyphPor;
-    if( bAlter )
-    {
-        // check for: bAlter => xHyphWord.is()
-        DBG_ASSERT(!bAlter || xHyphWord.is(), "NULL pointer");
-
+    // first case: hyphenated word has alternative spelling
+    if ( xHyphWord.is() && xHyphWord->isAlternativeSpelling() ) {
         SvxAlternativeSpelling aAltSpell;
         aAltSpell = SvxGetAltSpelling( xHyphWord );
-        DBG_ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
+        ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
         XubString  aAltTxt   = aAltSpell.aReplacement;
-        xub_StrLen nTxtStart = aAltSpell.nChangedPos;
-        xub_StrLen nTxtEnd   = aAltSpell.nChangedLength + nTxtStart;
+        nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart();
+        xub_StrLen nTmpLen = 0;
 
-        if( bDoSoftHyph )
+        // soft hyphen at alternative spelling position?
+        if( rInf.GetTxt().GetChar( rInf.GetSoftHyphPos() ) == CHAR_SOFTHYPHEN )
+        {
             pHyphPor = new SwSoftHyphStrPortion( aAltTxt );
-        else
+            nTmpLen = 1;
+        }
+        else {
             pHyphPor = new SwHyphStrPortion( aAltTxt );
-        // pHyphPor wird auf die Laenge eingestellt, die im Original-
-        // String ersetzt werden soll.
-        nTxtStart = lcl_AdjSoftHyph( rInf, aOrgTxt, nTxtStart, nWordStart );
-        nTxtEnd   = lcl_AdjSoftHyph( rInf, aOrgTxt, nTxtEnd, nWordStart );
-        ASSERT(nTxtEnd >= nTxtStart, "SwTxtPortion::Hyphenate: time to die.");
-        const xub_StrLen nTmpLen = pHyphPor->GetLen();
+        }
+
+        // length of pHyphPor is adjusted
         pHyphPor->SetLen( aAltTxt.Len() + 1 );
         (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
-        pHyphPor->SetLen( nTxtEnd - nTxtStart + nTmpLen );
-        nWordLen = nTxtStart;
-        if( !aAltTxt.Len() )  // Beim Wrapper Debuggen beobachtet: angebliche
-            ++nWordLen;    // Alternativtrennstelle ohne Unterschied zum
-                           // Originaltext ( Zukkerbackerei )
-    }
-    else
-    {
-        nWordLen = lcl_AdjSoftHyph( rInf, aOrgTxt, nWordLen, nWordStart );
-        // Vorsicht: der benutzte Ctor von SwTxtPortion verstellt nWhichPor!
+        pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
+    } else {
+        // second case: no alternative spelling
+        SwHyphPortion aHyphPor;
+        aHyphPor.SetLen( 1 );
+
+        static const void* pLastMagicNo = 0;
+        static KSHORT aMiniCacheH = 0, aMiniCacheW = 0;
+        const void* pTmpMagic;
+        MSHORT nFntIdx;
+        rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
+        if( !pLastMagicNo || pLastMagicNo != pTmpMagic ) {
+            pLastMagicNo = pTmpMagic;
+            (SwPosSize&)aHyphPor = aHyphPor.GetTxtSize( rInf );
+            aMiniCacheH = aHyphPor.Height(), aMiniCacheW = aHyphPor.Width();
+        } else {
+            aHyphPor.Height( aMiniCacheH ), aHyphPor.Width( aMiniCacheW );
+        }
+        aHyphPor.SetLen( 0 );
         pHyphPor = new SwHyphPortion( aHyphPor );
+
         pHyphPor->SetWhichPor( POR_HYPH );
+
+        // values required for this
+        nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart();
     }
 
-    aInf.SetLen( (nWordStart + nWordLen) - rInf.GetIdx() );
-    pHyphPor->SetAscent( GetAscent() );
-    SetLen( aInf.GetLen()  );
-    CalcTxtSize( aInf );
+    // portion end must be in front of us
+    // we do not put hyphens at start of line
+    if ( nPorEnd > rInf.GetIdx() ||
+         ( nPorEnd == rInf.GetIdx() && rInf.GetLineStart() != rInf.GetIdx() ) )
+    {
+        aInf.SetLen( nPorEnd - rInf.GetIdx() );
+        pHyphPor->SetAscent( GetAscent() );
+        SetLen( aInf.GetLen() );
+        CalcTxtSize( aInf );
 
-    // Die absolute Notbremse:
-    if( nWidth < Width() + pHyphPor->Width() || !GetLen() )
-    {
-        delete pHyphPor;
-        nHyphPos = rInf.GetIdx();
-        Width( nOldWidth);
-        SetLen( nOldLen );
-        return sal_False;
-    }
-    else
-    {
         Insert( pHyphPor );
-        short nKern = rInf.GetFont()->CheckKerning();
-        if( nKern )
-            new SwKernPortion( *this, nKern );
+
+        return sal_True;
     }
 
-    return sal_True;
+    // last exit for the lost
+    delete pHyphPor;
+    BreakCut( rInf, rGuess );
+    return sal_False;
 }
+
 
 /*************************************************************************
  *              virtual SwHyphPortion::GetExpTxt()
@@ -710,8 +482,10 @@ sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
 
     PrtWidth( rInf.GetTxtSize( aTxt ).Width() );
     const sal_Bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
-    if( bFull && !rInf.IsUnderFlow() )
-        Underflow( rInf );
+    if( bFull && !rInf.IsUnderFlow() ) {
+        Truncate();
+        rInf.SetUnderFlow( this );
+    }
 
     return bFull;
 }
@@ -796,7 +570,7 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = sal_True;
 
-    // Aufstand fuer die deutsche Sondertrennung
+    // special case for old german spelling
     if( rInf.IsUnderFlow()  )
     {
         if( rInf.GetSoftHyphPos() )
@@ -805,17 +579,14 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
         const sal_Bool bHyph = rInf.ChgHyph( sal_True );
         if( rInf.IsHyphenate() )
         {
-            SwTxtGuess aGuess;
-
             rInf.SetSoftHyphPos( rInf.GetIdx() );
-
             Width(0);
-
-            // Hyphenate liefert fuer uns zurueck, ob
-            // eine alternative Trennstelle vorliegt.
-            // Wenn nicht alternativ getrennt wird,
-            // akzeptieren wir die Stelle...
-            bFull = rInf.IsInterHyph() || !IsHyphenate( rInf, aGuess );
+            // if the soft hyphend word has an alternative spelling
+            // when hyphenated (old german spelling), the soft hyphen
+            // portion has to trigger an underflow
+            SwTxtGuess aGuess;
+            bFull = rInf.IsInterHyph() ||
+                    !aGuess.AlternativeSpelling( rInf, rInf.GetIdx() - 1 );
         }
         rInf.ChgHyph( bHyph );
 
@@ -831,7 +602,8 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
         else
         {
             rInf.SetSoftHyphPos( rInf.GetIdx() );
-            Underflow( rInf );
+            Truncate();
+            rInf.SetUnderFlow( this );
         }
         return sal_True;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:29:48 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,40 +89,32 @@ class SwTxtGuess
 {
     uno::Reference< XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
-    xub_StrLen nLeftPos;        // untere Kante: Idx
-    xub_StrLen nRightPos;       // obere  Kante: Idx
-    KSHORT nLeftWidth;          // untere Kante: Width
-    KSHORT nRightWidth;         // obere  Kante: Width
-    KSHORT nHeight;             // die GetTxtSize()-Hoehe.
-    xub_StrLen GetWordEnd( const SwTxtFormatInfo &rInf,
-                        const xub_StrLen nPos, const sal_Bool bFwd = sal_True ) const;
+    xub_StrLen nCutPos;         // this character doesn't fit
+    xub_StrLen nBreakStart;     // start index of word containing line break
+    xub_StrLen nBreakPos;       // start index of break position
+    KSHORT nBreakWidth;         // width of the broken portion
+    KSHORT nHeight;             // GetTxtSize()-Height
 public:
-    inline SwTxtGuess(): pHanging( NULL ), nLeftPos(0), nRightPos(0),
-                         nLeftWidth(0), nRightWidth(0), nHeight(0)
+    inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
+                        nBreakPos(0), nBreakWidth(0), nHeight(0)
         { }
     ~SwTxtGuess() { delete pHanging; }
 
-    // liefert zuerueck, ob es noch passte
+    // true, if current portion still fits to current line
     sal_Bool Guess( const SwTxtFormatInfo &rInf, const KSHORT nHeight );
+    sal_Bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const xub_StrLen nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
     inline void ClearHangingPortion() { pHanging = NULL; }
-    inline xub_StrLen LeftPos() const { return nLeftPos; }
-    inline KSHORT LeftWidth() const { return nLeftWidth; }
-    inline xub_StrLen RightPos() const { return nRightPos; }
-    inline KSHORT RightWidth() const { return nRightWidth; }
+    inline KSHORT BreakWidth() const { return nBreakWidth; }
+    inline xub_StrLen CutPos() const { return nCutPos; }
+    inline xub_StrLen BreakStart() const { return nBreakStart; }
+    inline xub_StrLen BreakPos() const {return nBreakPos; }
     inline KSHORT Height() const { return nHeight; }
     inline uno::Reference< XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
-
-    inline xub_StrLen GetPrevEnd( const SwTxtFormatInfo &rInf,
-                                  const xub_StrLen nPos ) const
-        { return GetWordEnd( rInf, nPos, sal_False ); }
-    inline xub_StrLen GetNextEnd( const SwTxtFormatInfo &rInf,
-                                  const xub_StrLen nPos ) const
-        { return GetWordEnd( rInf, nPos, sal_True ); }
-    static sal_Bool IsWordEnd( const SwTxtSizeInfo &rInf, const xub_StrLen nPos );
+    static xub_StrLen GetWordStart( const SwTxtFormatInfo &rInf,
+                    const xub_StrLen nPos );
 };
-
 
 #endif
