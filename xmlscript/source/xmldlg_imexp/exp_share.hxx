@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,25 +58,22 @@
  *
  *
  ************************************************************************/
-#include <hash_map>
 
+#include "common.hxx"
+#include "misc.hxx"
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
-
 #include <osl/diagnose.h>
-
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
+#include <vector>
 
 
-using namespace ::rtl;
-using namespace ::std;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+namespace css = ::com::sun::star;
 
 namespace xmlscript
 {
@@ -87,114 +84,184 @@ struct Style
     sal_uInt32 _textColor;
     sal_uInt32 _textLineColor;
     sal_Int16 _border;
-    awt::FontDescriptor _descr;
+    sal_Int32 _borderColor;
+    css::awt::FontDescriptor _descr;
     sal_uInt16 _fontRelief;
     sal_uInt16 _fontEmphasisMark;
     sal_uInt32 _fillColor;
+    sal_Int16 _visualEffect;
 
+    // current highest mask: 0x40
     short _all;
     short _set;
 
-    OUString _id;
+    ::rtl::OUString _id;
 
     inline Style( short all_ ) SAL_THROW( () )
-        : _fontRelief( awt::FontRelief::NONE )
-        , _fontEmphasisMark( awt::FontEmphasisMark::NONE )
+        : _fontRelief( css::awt::FontRelief::NONE )
+        , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
         , _all( all_ )
         , _set( 0 )
         {}
 
-    Reference< xml::sax::XAttributeList > createElement();
+    css::uno::Reference< css::xml::sax::XAttributeList > createElement();
 };
 class StyleBag
 {
-    vector< Style * > _styles;
+    ::std::vector< Style * > _styles;
 
 public:
     ~StyleBag() SAL_THROW( () );
 
-    OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
+    ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
 
-    void dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut );
+    void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
+               const & xOut );
 };
 
 class ElementDescriptor
     : public ::xmlscript::XMLElement
 {
-    Reference< beans::XPropertySet > _xProps;
-    Reference< beans::XPropertyState > _xPropState;
+    css::uno::Reference< css::beans::XPropertySet > _xProps;
+    css::uno::Reference< css::beans::XPropertyState > _xPropState;
 
 public:
     inline ElementDescriptor(
-        Reference< beans::XPropertySet > const & xProps,
-        Reference< beans::XPropertyState > const & xPropState,
-        OUString const & name )
+        css::uno::Reference< css::beans::XPropertySet > const & xProps,
+        css::uno::Reference< css::beans::XPropertyState > const & xPropState,
+        ::rtl::OUString const & name )
         SAL_THROW( () )
         : XMLElement( name )
         , _xProps( xProps )
         , _xPropState( xPropState )
         {}
     inline ElementDescriptor(
-        OUString const & name )
+        ::rtl::OUString const & name )
         SAL_THROW( () )
         : XMLElement( name )
         {}
 
+    template<typename T>
+    inline void read(
+        ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
+        bool forceAttribute = false );
+
     //
-    Any readProp( OUString const & rPropName );
+    template<typename T>
+    inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
+    css::uno::Any readProp( ::rtl::OUString const & rPropName );
     //
     void readDefaults( bool supportPrintable = true );
     //
-    void readStringAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readDoubleAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readLongAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readHexLongAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readShortAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readBoolAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readAlignAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readImageAlignAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readOrientationAttr( OUString const & rPropName, OUString const & rAttrName );
-    void readButtonTypeAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readStringAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    inline void readDoubleAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        { read<double>( rPropName, rAttrName ); }
+    inline void readLongAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        bool forceAttribute = false )
+        { read<sal_Int32>( rPropName, rAttrName, forceAttribute ); }
+    void readHexLongAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    inline void readShortAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        { read<sal_Int32>( rPropName, rAttrName ); }
+    inline void readBoolAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        { read<sal_Bool>( rPropName, rAttrName ); }
+
+    void readAlignAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readImageAlignAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readDateFormatAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readTimeFormatAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readOrientationAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readButtonTypeAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     //
-    inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
+    inline void addBoolAttr(
+        ::rtl::OUString const & rAttrName, sal_Bool bValue )
+        { addAttribute( rAttrName, ::rtl::OUString::valueOf(bValue) ); }
     void addNumberFormatAttr(
-        Reference< beans::XPropertySet > const & xFormatProperties,
-        OUString const & rAttrName );
+        css::uno::Reference< css::beans::XPropertySet >
+        const & xFormatProperties,
+        ::rtl::OUString const & rAttrName );
 
     //
-    void readEvents() SAL_THROW( (Exception) );
+    void readEvents() SAL_THROW( (css::uno::Exception) );
     //
-    void readDialogModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readButtonModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readEditModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readCheckBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readRadioButtonModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readComboBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readCurrencyFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readDateFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readFileControlModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readFixedTextModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readGroupBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readImageControlModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readListBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readNumericFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readPatternFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readFormattedFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readTimeFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readFixedLineModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readProgressBarModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-    void readScrollBarModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readDialogModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readButtonModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readEditModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readCheckBoxModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readRadioButtonModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readComboBoxModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readCurrencyFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readDateFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFileControlModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFixedTextModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readGroupBoxModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readImageControlModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readListBoxModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readNumericFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readPatternFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFormattedFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readTimeFieldModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFixedLineModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readProgressBarModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readScrollBarModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
 };
-//__________________________________________________________________________________________________
-inline void ElementDescriptor::addBoolAttr( OUString const & rAttrName, sal_Bool bValue )
-    SAL_THROW( () )
+
+template<typename T>
+inline void ElementDescriptor::read(
+    ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
+    bool forceAttribute )
 {
-    addAttribute( rAttrName,
-                  (bValue
-                   ? OUString( RTL_CONSTASCII_USTRINGPARAM("true") )
-                   : OUString( RTL_CONSTASCII_USTRINGPARAM("false") )) );
+    if (forceAttribute ||
+        css::beans::PropertyState_DEFAULT_VALUE !=
+        _xPropState->getPropertyState( propName ))
+    {
+        css::uno::Any a( _xProps->getPropertyValue( propName ) );
+        T v;
+        if (a >>= v)
+            addAttribute( attrName, ::rtl::OUString::valueOf(v) );
+        else
+            OSL_ENSURE( 0, "### unexpected property type!" );
+    }
+}
+
+template<typename T>
+inline bool ElementDescriptor::readProp(
+    T * ret, ::rtl::OUString const & rPropName )
+{
+    _xProps->getPropertyValue( rPropName ) >>= *ret;
+    return css::beans::PropertyState_DEFAULT_VALUE !=
+        _xPropState->getPropertyState( rPropName );
 }
 
 }
