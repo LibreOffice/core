@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:45:53 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,12 +127,17 @@ class Window;
 
 class SvxLinguConfigUpdate
 {
-    static BOOL bUpdated;
+    static INT32    nCurrentDataFilesChangedCheckValue;
+    static INT16    nNeedUpdating;  // n == -1 => needs to be checked
+                                    // n ==  0 => already updated, nothing to be done
+                                    // n ==  1 => needs to be updated
+
+    static INT32 CalcDataFilesChangedCheckValue();
 
 public:
 
-    static BOOL IsUpdated() { return bUpdated; }
     static void UpdateAll();
+    static BOOL IsNeedUpdateAll();
 };
 
 ///////////////////////////////////////////////////////////////////////////
