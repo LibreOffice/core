@@ -186,3 +186,26 @@ SfxVoidItem GrafFilterSolarize SID_GRAFFILTER_SOLARIZE
     ToolBoxConfig = TRUE ,
     GroupId = GID_MODIFY ;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem GrafAttrCrop SID_ATTR_GRAF_CROP
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 08:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,9 +406,10 @@
             SID_GRAFFILTER_POPART;\
             SID_GRAFFILTER_SEPIA;\
             SID_GRAFFILTER_SOLARIZE;\
+            SID_ATTR_GRAF_CROP;\
     };\
     IdCount = {\
-        295;\
+        296;\
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC

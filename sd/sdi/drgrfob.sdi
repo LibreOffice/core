@@ -108,4 +108,9 @@ shell SdDrawGrafObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_GRAF_CROP
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
 }
