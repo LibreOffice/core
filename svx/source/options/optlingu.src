@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-11 07:13:49 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ swedish ] = "Rättstavning";
         Text[ polish ] = "Ortografia";
         Text[ portuguese_brazilian ] = "Spelling";
-        Text[ japanese ] = "³‘–@";
+        Text[ japanese ] = "•¶ÍZ³";
         Text[ korean ] = "¸ÂÃã¹ı";
         Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
         Text[ chinese_traditional ] = "ÀË¬d«÷¼g";
@@ -657,13 +657,13 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "~Nuevo...";
         Text[ italian ] = "Nuovo...";
         Text[ danish ] = "New";
-        Text[ swedish ] = "~Ny";
+        Text[ swedish ] = "~Ny...";
         Text[ polish ] = "Nowy...";
         Text[ portuguese_brazilian ] = "New";
         Text[ japanese ] = "V‹Kì¬(~N)...";
         Text[ korean ] = "»õ(~N)";
         Text[ chinese_simplified ] = "ĞÂ½¨(~N)...";
-        Text[ chinese_traditional ] = "·sªº¦r¨å(~N)...";
+        Text[ chinese_traditional ] = "·s«Ø(~N)...";
         Text[ turkish ] = "New";
         Text[ arabic ] = "ÌÏíÏ...";
         Text[ catalan ] = "~Nuevo...";
@@ -685,7 +685,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "~Editar...";
         Text[ italian ] = "Modifica...";
         Text[ danish ] = "Edit";
-        Text[ swedish ] = "~Redigera";
+        Text[ swedish ] = "~Redigera...";
         Text[ polish ] = "Edytuj...";
         Text[ portuguese_brazilian ] = "Edit";
         Text[ japanese ] = "•ÒW(~E)...";
@@ -713,7 +713,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Elimina";
         Text[ danish ] = "Delete";
-        Text[ swedish ] = "Radera";
+        Text[ swedish ] = "R~adera";
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "Delete";
         Text[ japanese ] = "íœ(~T)";
@@ -880,7 +880,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ swedish ] = "Kontrollera specialområden";
         Text[ polish ] = "SprawdŸ obszary specjalne";
         Text[ portuguese_brazilian ] = "Proof special regions";
-        Text[ japanese ] = "“Á•Ê”ÍˆÍ‚ÌÁª¯¸";
+        Text[ japanese ] = "“Á•Ê”ÍˆÍ‚Ì½ÍßÙÁª¯¸";
         Text[ korean ] = "Æ¯¼ö¿µ¿ª  °Ë»ç";
         Text[ chinese_simplified ] = "¼ì²éÌØÊâÇøÓò";
         Text[ chinese_traditional ] = "ÀË¬d¯S®í°Ï°ì";
@@ -993,7 +993,7 @@ TabPage RID_SFXPAGE_LINGU
     {
         Text = "Minimale Wortlänge für Silbentrennung: " ;
         Text[ ENGLISH ] = "Minimal wordlength for hyphenation: " ;
-        Text[ english_us ] = "Minimal word length for hyphenation: ";
+        Text[ english_us ] = "Minimal number of characters for hyphenation: ";
         Text[ portuguese ] = "Comprimento mínimo de palavras para divisão silábica: ";
         Text[ russian ] = "Ìèíèìàëüíàÿ äëèíà ñëîâà äëÿ ïåğåíîñà: ";
         Text[ greek ] = "ÅëÜ÷éóôï ìŞêïò ëİîçò ãéá ôïí óõëëáâéóìü: ";
@@ -1190,4 +1190,5 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ finnish ] = "Haluatko poistaa ohitettavien luettelon?";
 };
  // ******************************************************************* EOF
+
 
