@@ -1,0 +1,5 @@
+pt	cpputools	:	cppuhelper NULL
+pt	cpputools								usr1	-	all	pt_mkout NULL
+pt	cpputools\prj							get		-	all	pt_prj NULL
+pt	cpputools\source\registercomponent		nmake	-	all	pt_regcomp NULL
+pt	cpputools\source\unoexe					nmake	-	all	pt_unoexe NULL

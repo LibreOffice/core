@@ -1,0 +1,3 @@
+ch	cppuhelper	:	cppu NULL
+ch	cppuhelper								usr1	-	all	ch_mkout NULL
+ch	cppuhelper\source						nmake	-	all	ch_source NULL

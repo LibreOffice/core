@@ -1,0 +1,6 @@
+rm	rdbmaker	:	cppuhelper NULL
+rm	rdbmaker								usr1	-	all	rm_mkout NULL
+rm	rdbmaker\inc							get		-	all	rm_inc NULL
+rm	rdbmaker\prj							get		-	all	rm_prj NULL
+rm	rdbmaker\source\codemaker				nmake	-	all	rm_codemaker NULL
+rm	rdbmaker\source\rdbmaker				nmake	-	all	rm_rdbmaker rm_codemaker NULL

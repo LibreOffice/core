@@ -1,0 +1,4 @@
+s8	store	:	vos NULL
+s8	store									usr1	-	all	s8_mkout NULL
+s8	store\source\							nmake	-	all	s8_source NULL
+s8	store\util\								nmake	-	all	s8_util s8_source NULL

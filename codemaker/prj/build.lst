@@ -1,0 +1,7 @@
+cm	codemaker	:	udkapi NULL
+cm	codemaker								usr1	-	all	cm_mkout NULL
+cm	codemaker\inc							get		-	all	cm_inc NULL
+cm	codemaker\prj							get		-	all	cm_prj NULL
+cm	codemaker\source\codemaker				nmake	-	all	cm_codemaker NULL
+cm	codemaker\source\cppumaker				nmake	-	all	cm_cppumaker cm_codemaker NULL
+cm	codemaker\source\javamaker				nmake	-	all	cm_javamaker cm_codemaker NULL

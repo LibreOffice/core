@@ -1,0 +1,4 @@
+u2	jut	:	javaunohelper NULL
+u2	jut										usr1	-	all	u2_mkout NULL
+u2	jut\com\sun\star\tools\uno				nmake	-	all	u2_csst_uno NULL
+u2	jut\util								nmake	-	all	u2_util u2_csst_uno NULL

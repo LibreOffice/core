@@ -1,0 +1,22 @@
+ua	udkapi	:	unoidl NULL
+ua	udkapi									usr1	-	all	ua_mkout NULL
+ua	udkapi\com\sun\star\beans				nmake	-	all	ua_bean NULL
+ua	udkapi\com\sun\star\bridge				nmake	-	all	ua_brid NULL
+ua	udkapi\com\sun\star\connection			nmake	-	all	ua_connect NULL
+ua	udkapi\com\sun\star\container			nmake	-	all	ua_cont NULL
+ua	udkapi\com\sun\star\io					nmake	-	all	ua_io NULL
+ua	udkapi\com\sun\star\java				nmake	-	all	ua_java NULL
+ua	udkapi\com\sun\star\lang				nmake	-	all	ua_lang NULL
+ua	udkapi\com\sun\star\loader				nmake	-	all	ua_load NULL
+ua	udkapi\com\sun\star\reflection			nmake	-	all	ua_refl NULL
+ua	udkapi\com\sun\star\registry			nmake	-	all	ua_regis NULL
+ua	udkapi\com\sun\star\script				nmake	-	all	ua_scrpt NULL
+ua	udkapi\com\sun\star\test				nmake	-	all	ua_test NULL
+ua	udkapi\com\sun\star\test\performance	nmake	-	all	ua_tstperform NULL
+ua	udkapi\com\sun\star\test\bridge			nmake	-	all	ua_tstbridge NULL
+ua	udkapi\com\sun\star\corba\iop			nmake	-	all	ua_iop NULL
+ua	udkapi\com\sun\star\corba\giop			nmake	-	all	ua_giop NULL
+ua	udkapi\com\sun\star\corba\iiop			nmake	-	all	ua_iiop NULL
+ua	udkapi\com\sun\star\corba				nmake	-	all	ua_corba NULL
+ua	udkapi\com\sun\star\uno					nmake	-	all	ua_uno NULL
+ua	udkapi\util								nmake	-	all	ua_util ua_bean ua_brid ua_connect ua_cont ua_corba ua_giop ua_iiop ua_io ua_iop ua_java ua_lang ua_load ua_refl ua_regis ua_scrpt ua_test ua_tstbridge ua_tstperform ua_uno NULL

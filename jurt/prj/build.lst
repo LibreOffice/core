@@ -1,0 +1,17 @@
+ju	jurt	:	codemaker ridljar sandbox NULL
+ju	jurt									usr1	-	all	ju_mkout NULL
+ju	jurt\com\sun\star\lib\util				nmake	-	all	ju_libutil NULL
+ju	jurt\com\sun\star\uno					nmake	-	all	ju_uno ju_libutil NULL
+ju	jurt\com\sun\star\comp\loader			nmake	-	all	ju_co_loader ju_uno NULL
+ju	jurt\com\sun\star\comp\bridgefactory	nmake	-	all	ju_co_bfactr ju_co_loader NULL
+ju	jurt\com\sun\star\lib\uno\environments\java			nmake	-	all	ju_env_java ju_uno NULL
+ju	jurt\com\sun\star\lib\uno\environments\remote		nmake	-	all	ju_env_remote ju_env_java NULL
+ju	jurt\com\sun\star\lib\uno\protocols\iiop			nmake	-	all	ju_prot_iiop ju_env_remote NULL
+ju	jurt\com\sun\star\lib\uno\protocols\urp	nmake	-	all	ju_prot_urp ju_env_remote NULL
+ju	jurt\com\sun\star\lib\uno\bridges\java_remote		nmake	-	all	ju_brid_jrm ju_co_loader ju_env_remote NULL
+ju	jurt\com\sun\star\lib\connections\socket			nmake	-	all	ju_con_sock ju_co_loader NULL
+ju	jurt\com\sun\star\comp\connections		nmake	-	all	ju_con ju_co_loader NULL
+ju	jurt\com\sun\star\comp\servicemanager	nmake	-	all	ju_servman ju_co_loader NULL
+ju	jurt\com\sun\star\comp\typedescriptionmanager		nmake	-	all	ju_typdesman ju_uno NULL
+ju	jurt\com\sun\star\comp\urlresolver		nmake	-	all	ju_urlres ju_uno NULL
+ju	jurt\util								nmake	-	all	ju_ut ju_brid_jrm ju_co_bfactr ju_con ju_con_sock ju_env_java ju_prot_iiop ju_prot_urp ju_servman ju_typdesman ju_urlres NULL

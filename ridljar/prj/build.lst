@@ -1,0 +1,23 @@
+ri	ridljar	:	udkapi NULL
+ri	ridljar									usr1	-	all	ri_mkout NULL
+ri	ridljar									nmake	-	all	ri_genall NULL
+ri	ridljar\com\sun\star\lib\uno\typedesc	nmake	-	all	ri_typedesc ri_typeinfo ri_uno NULL
+ri	ridljar\com\sun\star\lib\uno\typeinfo	nmake	-	all	ri_typeinfo ri_genall NULL
+ri	ridljar\com\sun\star\uno				nmake	-	all	ri_uno ri_typeinfo NULL
+ri	ridljar\com\sun\star\lang				nmake	-	all	ri_lang ri_uno NULL
+ri	ridljar\com\sun\star\reflection			nmake	-	all	ri_reflection ri_lang NULL
+ri	ridljar\com\sun\star\beans				nmake	-	all	ri_beans ri_container ri_reflection NULL
+ri	ridljar\com\sun\star\bridge				nmake	-	all	ri_bridge ri_connection ri_container NULL
+ri	ridljar\com\sun\star\connection			nmake	-	all	ri_connection ri_io NULL
+ri	ridljar\com\sun\star\container			nmake	-	all	ri_container ri_lang NULL
+ri	ridljar\com\sun\star\corba				nmake	-	all	ri_corba ri_uno NULL
+ri	ridljar\com\sun\star\corba\iop			nmake	-	all	ri_corba_iop ri_corba NULL
+ri	ridljar\com\sun\star\corba\giop			nmake	-	all	ri_corba_giop ri_corba_iop NULL
+ri	ridljar\com\sun\star\corba\iiop			nmake	-	all	ri_corba_iiop ri_corba_iop NULL
+ri	ridljar\com\sun\star\io					nmake	-	all	ri_io ri_lang NULL
+ri	ridljar\com\sun\star\java				nmake	-	all	ri_java ri_lang NULL
+ri	ridljar\com\sun\star\loader				nmake	-	all	ri_loader ri_lang ri_registry NULL
+ri	ridljar\com\sun\star\registry			nmake	-	all	ri_registry ri_lang NULL
+ri	ridljar\com\sun\star\script				nmake	-	all	ri_script ri_beans ri_io NULL
+ri	ridljar\com\sun\star\test				nmake	-	all	ri_test ri_lang NULL
+ri	ridljar\util							nmake	-	all	ri_util ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc NULL

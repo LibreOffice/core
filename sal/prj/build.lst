@@ -1,0 +1,18 @@
+sa	sal	:	xml2cmp NULL
+sa	sal										usr1	-	all	sa_mkout NULL
+sa	sal\systools\win32\advapi32				nmake	-	n	sa_sys_advapi32 NULL
+sa	sal\systools\win32\kernel32				nmake	-	n	sa_sys_kernel32 sa_sys_tools32 NULL
+sa	sal\systools\win32\shell32				nmake	-	n	sa_sys_shell32 sa_sys_tools32 NULL
+sa	sal\systools\win32\tools32				nmake	-	n	sa_sys_tools32 NULL
+sa	sal\systools\win32\user32				nmake	-	n	sa_sys_user32 sa_sys_tools32 NULL
+sa	sal\systools\win32\comdlg32				nmake	-	n	sa_sys_comdlg32 sa_sys_user32 NULL
+sa	sal\systools\win32\ole32				nmake	-	n	sa_sys_ole32 NULL
+sa	sal\rtl\source							nmake	-	all	sa_rtl sa_sys_advapi32.n sa_sys_kernel32.n sa_sys_shell32.n NULL
+sa	sal\textenc								nmake	-	all	sa_textenc NULL
+sa	sal\osl\w16								nmake	-	d	sa_osld NULL
+sa	sal\osl\w32								nmake	-	n	sa_osln sa_sys_advapi32.n sa_sys_kernel32.n NULL
+sa	sal\osl\os2								nmake	-	p	sa_oslp NULL
+sa	sal\osl\unx								nmake	-	u	sa_oslu NULL
+sa	sal\osl\mac								nmake	-	m	sa_oslm NULL
+sa	sal\osl\all								nmake	-	all	sa_oslall NULL
+sa	sal\util								nmake	-	all	sa_util sa_oslall sa_osld.d sa_oslm.m sa_osln.n sa_oslp.p sa_oslu.u sa_rtl sa_textenc NULL

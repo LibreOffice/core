@@ -1,24 +1,5 @@
-# Dies ist ein Kommentar
-#
-# Dies ist immer noch ein Kommentar
-#
-#	Prefix		:	2-Buchstaben Projektprefix fuer Akuefies
-#	Verzeichnis	:	ist ein fuer die Entwicklungsumgebung relevantes
-#					Verzeichnis
-#	Aktion		:	nmake - hier kann get, stamp oder nmake
-#					aufgerufen werden
-#	Pl(attform)	:	all		alle Plattformen
-#					w		WindowsPlattformen
-#					p		Os2Plattformen
-#					u		UnixPlattformen
-#					m		MacPlattformen
-#	LogFile		:	8.3 Protokolldateiname(.log)
-#
-#	Verzeichnis								Aktion	Spec Pl.	LogFile Depends
-#=========================================================================
-xc	xml2cmp	:	NULL
 xc	xml2cmp									usr1	-	all	xc_mkout NULL
-xc	xml2cmp\prj								get	-	all	xc_prj NULL
-xc	xml2cmp\source\support							nmake	-	all	xc_supp NULL
-xc	xml2cmp\source\xcd							nmake	-	all	xc_xcd xc_supp NULL
-#=========================================================================
+xc	xml2cmp\prj								get		-	all	xc_prj NULL
+xc	xml2cmp\source\support					nmake	-	all	xc_supp NULL
+xc	xml2cmp\source\xcd						nmake	-	all	xc_xcd NULL
+xc	xml2cmp\util							nmake	-	all	xc_util xc_supp xc_xcd NULL

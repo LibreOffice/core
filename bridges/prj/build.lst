@@ -1,0 +1,14 @@
+br	bridges	:	cppuhelper jurt NULL
+br	bridges									usr1	-	all	br_mkout NULL
+br	bridges\source\remote\static			nmake	-	all	br_rem_static NULL
+br	bridges\source\remote\urp				nmake	-	all	br_rem_urp br_rem_static NULL
+br	bridges\source\remote\iiop				nmake	-	all	br_iiop br_rem_static NULL
+br	bridges\source\remote\context			nmake	-	all	br_rcon NULL
+br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci NULL
+br	bridges\source\cpp_uno\gcc2_linux_intel	nmake	-	u	br_gccli NULL
+br	bridges\source\cpp_uno\gcc2_macosx_powerpc			nmake	-	u	br_gccmacoxp NULL
+br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols NULL
+br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli NULL
+br	bridges\source\cpp_uno\gcc2_solaris_sparc			nmake	-	u	br_gccsols NULL
+br	bridges\source\prot_uno					nmake	-	all	br_pruno br_cc50soli.u br_cc50sols.u br_gccli.u br_gccsols.u br_msci.w NULL
+br	bridges\source\java_uno					nmake	-	all	br_java_uno br_rcon NULL
