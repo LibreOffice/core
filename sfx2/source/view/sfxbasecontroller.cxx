@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:29:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,13 +499,22 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
     throw (RUNTIMEEXCEPTION, com::sun::star::util::CloseVetoException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if  ( m_pController !=  NULL && m_pController->GetViewShell_Impl() )
+    SfxViewShell* pShell = m_pController->GetViewShell_Impl();
+    if  ( m_pController !=  NULL &&  pShell )
     {
-        BOOL bCanClose = (BOOL) m_pController->GetViewShell_Impl()->PrepareClose( FALSE );
+        BOOL bCanClose = (BOOL) pShell->PrepareClose( FALSE );
         if ( !bCanClose )
         {
-            if ( bDeliverOwnership )
-                m_pController->TakeOwnerShip_Impl();
+            if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
+            {
+                // ignore OwnerShip in case of visible frame (will be closed by user)
+                uno::Reference < frame::XModel > xModel( aEvent.Source, uno::UNO_QUERY );
+                if ( xModel.is() )
+                    pShell->TakeOwnerShip_Impl();
+                else
+                    pShell->TakeFrameOwnerShip_Impl();
+            }
+
             throw com::sun::star::util::CloseVetoException(::rtl::OUString::createFromAscii("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
         }
     }
@@ -1276,13 +1285,6 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             }
         }
     }
-}
-
-void SfxBaseController::TakeOwnerShip_Impl()
-{
-    if ( m_pData->m_pViewShell && ( !m_pData->m_pViewShell->GetWindow() || !m_pData->m_pViewShell->GetWindow()->IsReallyVisible() ) )
-        // ignore OwnerShip for model in case of visible frame
-        m_pData->m_pViewShell->TakeOwnerShip_Impl();
 }
 
 //________________________________________________________________________________________________________
