@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 13:46:44 $
+ *  last change: $Author: thb $ $Date: 2002-08-08 13:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,19 +635,27 @@ namespace accessibility
         EPosition aStartIndex( mpImpl->Index2Internal(nStartIndex) );
         EPosition aEndIndex( mpImpl->Index2Internal(nEndIndex) );
 
-        sal_Int32 i( aStartIndex.nPara );
-        ::rtl::OUString aRes( mpImpl->GetParagraph(i).getTextRange( aStartIndex.nIndex,
-                                                                    mpImpl->GetParagraph(i).getCharacterCount()-1) );
-        ++i;
+        // #102170# Special case: start and end paragraph are identical
+        if( aStartIndex.nPara == aEndIndex.nPara )
+        {
+            return mpImpl->GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
+        }
+        else
+        {
+            sal_Int32 i( aStartIndex.nPara );
+            ::rtl::OUString aRes( mpImpl->GetParagraph(i).getTextRange( aStartIndex.nIndex,
+                                                                        mpImpl->GetParagraph(i).getCharacterCount()-1) );
+            ++i;
 
-        // paragraphs inbetween are fully included
-        for( ; i<aEndIndex.nPara; ++i )
-            aRes += mpImpl->GetParagraph(i).getText();
+            // paragraphs inbetween are fully included
+            for( ; i<aEndIndex.nPara; ++i )
+                aRes += mpImpl->GetParagraph(i).getText();
 
-        if( i<=aEndIndex.nPara )
-            aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
+            if( i<=aEndIndex.nPara )
+                aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
 
-        return aRes;
+            return aRes;
+        }
     }
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
