@@ -2,9 +2,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:45:56 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,13 @@ extern "C" {
 #ifdef LINUX
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
+#           ifndef _LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
+#           endif
 #   elif __BYTE_ORDER == __BIG_ENDIAN
+#           ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
+#           endif
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
