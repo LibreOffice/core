@@ -27,12 +27,12 @@ $(RSC_MULTI1) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -44,12 +44,12 @@ $(RSC_MULTI1) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -80,7 +80,6 @@ $(RESLIB1TARGETN): \
 .ENDIF				# "$(RESLIB1TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB2TARGETN)"!=""
@@ -110,12 +109,12 @@ $(RSC_MULTI2) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -127,12 +126,12 @@ $(RSC_MULTI2) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -163,7 +162,6 @@ $(RESLIB2TARGETN): \
 .ENDIF				# "$(RESLIB2TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB3TARGETN)"!=""
@@ -193,12 +191,12 @@ $(RSC_MULTI3) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -210,12 +208,12 @@ $(RSC_MULTI3) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -246,7 +244,6 @@ $(RESLIB3TARGETN): \
 .ENDIF				# "$(RESLIB3TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB4TARGETN)"!=""
@@ -276,12 +273,12 @@ $(RSC_MULTI4) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -293,12 +290,12 @@ $(RSC_MULTI4) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -329,7 +326,6 @@ $(RESLIB4TARGETN): \
 .ENDIF				# "$(RESLIB4TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB5TARGETN)"!=""
@@ -359,12 +355,12 @@ $(RSC_MULTI5) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -376,12 +372,12 @@ $(RSC_MULTI5) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -412,7 +408,6 @@ $(RESLIB5TARGETN): \
 .ENDIF				# "$(RESLIB5TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB6TARGETN)"!=""
@@ -442,12 +437,12 @@ $(RSC_MULTI6) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -459,12 +454,12 @@ $(RSC_MULTI6) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -495,7 +490,6 @@ $(RESLIB6TARGETN): \
 .ENDIF				# "$(RESLIB6TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB7TARGETN)"!=""
@@ -525,12 +519,12 @@ $(RSC_MULTI7) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -542,12 +536,12 @@ $(RSC_MULTI7) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -578,7 +572,6 @@ $(RESLIB7TARGETN): \
 .ENDIF				# "$(RESLIB7TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB8TARGETN)"!=""
@@ -608,12 +601,12 @@ $(RSC_MULTI8) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -625,12 +618,12 @@ $(RSC_MULTI8) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -661,7 +654,6 @@ $(RESLIB8TARGETN): \
 .ENDIF				# "$(RESLIB8TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB9TARGETN)"!=""
@@ -691,12 +683,12 @@ $(RSC_MULTI9) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -708,12 +700,12 @@ $(RSC_MULTI9) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -744,7 +736,6 @@ $(RESLIB9TARGETN): \
 .ENDIF				# "$(RESLIB9TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB10TARGETN)"!=""
@@ -774,12 +765,12 @@ $(RSC_MULTI10) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -791,12 +782,12 @@ $(RSC_MULTI10) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -827,4 +818,3 @@ $(RESLIB10TARGETN): \
 .ENDIF				# "$(RESLIB10TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
