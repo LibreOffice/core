@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:52:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,36 +75,9 @@ TabPage TP_NUMPARA
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text = "~Nummerierungsvorlage" ;
-        Text [ ENGLISH ] = "~Number style" ;
-        Text [ portuguese ] = "Estilo de ~numeração" ;
-        Text [ english_us ] = "Numbering Style" ;
-        Text [ portuguese_brazilian ] = "Estilo de Numeração" ;
-        Text [ swedish ] = "~Numreringsformatmall" ;
-        Text [ danish ] = "Nummereringstypografi" ;
-        Text [ italian ] = "Modello di numerazione" ;
-        Text [ spanish ] = "Estilo de numeración" ;
-        Text [ french ] = "Style de numérotation" ;
-        Text [ dutch ] = "~Opmaakprofiel voor nummering" ;
-        Text[ chinese_simplified ] = "ç¼–å·æ ·å¼";
-        Text[ russian ] = "Ñòèëü íóìåğàöèè";
-        Text[ polish ] = "S~tyl numeracji";
-        Text[ japanese ] = "ç•ªå·ä»˜ã‘ã‚¹ã‚¿ã‚¤ãƒ«";
-        Text[ chinese_traditional ] = "ç·¨è™Ÿæ¨£å¼";
-        Text[ arabic ] = "äãØ ÇáÊÑŞíã";
-        Text[ greek ] = "Óôõë áñßèìçóçò";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìŠ¤íƒ€ì¼";
-        Text[ turkish ] = "Biçem Numaralandırma";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estil de numeració";
-        Text[ finnish ] = "Numerointityyli";
-        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-        Text[ czech ] = "Styl ÄÃ­slovÃ¡nÃ­";
-        Text[ hebrew ] = "~Nummerierungsvorlage";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¤¾ à¤¶à¥ˆà¤²à¥€";
-        Text[ slovak ] = "Å tÃ½l ÄÃ­slovania";
-        Text[ hungarian ] = "SzÃ¡mozÃ¡s stÃ­lusa";
-        Text[ slovenian ] = "Slog oÅ¡tevilÄevanja";
+        Text [ de ] = "~Nummerierungsvorlage" ;
+        Text [ en-US ] = "Numbering Style" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_NUMBER_STYLE
     {
@@ -112,235 +85,47 @@ TabPage TP_NUMPARA
         Size = MAP_APPFONT ( 118 , 65 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "keine" ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "keine" ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "None" ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Nenhum" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Ingen" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "ingen" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "senza" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Ninguno" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Aucun(e)" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "geen" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Nenhum" ; > ;
-        };
-        StringList [ chinese_simplified ] =
-        {
-             < "æ— " ; > ;
-        };
-        StringList [ russian ] =
-        {
-             < "íåò" ; > ;
-        };
-        StringList [ polish ] =
-        {
-             < "brak" ; > ;
-        };
-        StringList [ japanese ] =
-        {
-             < "ãªã—" ; > ;
-        };
-        StringList [ chinese_traditional ] =
-        {
-             < "ç„¡" ; > ;
-        };
-        StringList [ arabic ] =
-        {
-             < "ÈÏæä" ; > ;
-        };
-        StringList [ greek ] =
-        {
-             < "êáíİíá" ; > ;
-        };
-        StringList [ korean ] =
-        {
-             < "ì—†ìŒ" ; > ;
-        };
-        StringList [ turkish ] =
-        {
-             < "yok" ; > ;
-        };
-        StringList [ language_user1 ] =
+        StringList [ x-comment ] =
         {
              < " " ; > ;
         };
-        StringList [ catalan ] =
-        {
-             < "Cap" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-             < "Ei mitään" ; > ;
-        };
-    StringList [ thai ] =
-    {
-         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Å½Ã¡dnÃ©" ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×œ×œ×â€¬" ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚" ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Å½iadne" ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Nincs" ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Brez" ; > ;
-    };
     };
     FixedLine FL_NEW_START
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Nummerierung" ;
-        Text [ English ] = "Numbering" ;
+        Text [ de ] = "Nummerierung" ;
         Hide = TRUE ;
-        Text [ portuguese ] = "Numeração" ;
-        Text [ english_us ] = "Numbering" ;
-        Text [ portuguese_brazilian ] = "Numeração" ;
-        Text [ swedish ] = "Numrering" ;
-        Text [ danish ] = "Nummerering" ;
-        Text [ italian ] = "Numerazione" ;
-        Text [ spanish ] = "Numeración" ;
-        Text [ french ] = "Numérotation" ;
-        Text [ dutch ] = "Nummering" ;
-        Text[ chinese_simplified ] = "ç¼–å·";
-        Text[ russian ] = "Íóìåğàöèÿ";
-        Text[ polish ] = "Numeracja";
-        Text[ japanese ] = "ç•ªå·ä»˜ã‘";
-        Text[ chinese_traditional ] = "ç·¨è™Ÿ";
-        Text[ arabic ] = "ÇáÊÑŞíã";
-        Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Numaralandırma";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeració";
-        Text[ finnish ] = "Numerointi";
-        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­";
-        Text[ hebrew ] = "â€®××™×¡×¤×•×¨â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slovanie";
-        Text[ hungarian ] = "SzÃ¡mozÃ¡s";
-        Text[ slovenian ] = "OÅ¡tevilÄevanje";
+        Text [ en-US ] = "Numbering" ;
+        Text [ x-comment ] = " ";
     };
     TriStateBox CB_NEW_START
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text = "~An diesem Absatz neu beginnen" ;
-        Text [ English ] = "~Restart at this paragraph" ;
+        Text [ de ] = "~An diesem Absatz neu beginnen" ;
         Hide = TRUE ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Recomeçar neste parágrafo" ;
-        Text [ english_us ] = "R~estart at this paragraph" ;
-        Text [ portuguese_brazilian ] = "R~einiciar neste parágrafo" ;
-        Text [ swedish ] = "Börj~a om vid detta stycke" ;
-        Text [ danish ] = "Begynd forfra ved dette afsnit" ;
-        Text [ italian ] = "Ricomincia con questo paragrafo" ;
-        Text [ spanish ] = "~Volver a empezar en este párrafo" ;
-        Text [ french ] = "~Commencer avec ce paragraphe" ;
-        Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
-        Text[ chinese_simplified ] = "ä»è¿™ä¸ªæ®µè½é‡æ–°å¼€å§‹(~E)";
-        Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
-        Text[ polish ] = "Z~acznij ponownie od tego akapitu";
-        Text[ japanese ] = "ã“ã®æ®µè½ã§æ–°ã—ãé–‹å§‹(~E)";
-        Text[ chinese_traditional ] = "å¾é€™å€‹æ®µè½é‡æ–°é–‹å§‹(~E)";
-        Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
-        Text[ greek ] = "Åğ~áíåêêßíçóç áğü áõôŞ ôçí ğáñÜãñáöï";
-        Text[ korean ] = "ì´ ë‹¨ë½ì—ì„œ ë‹¤ì‹œ ì‹œì‘(~E)";
-        Text[ turkish ] = "Bu paragraf ile yeniden başla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Torna a començar en aquest paràgraf";
-        Text[ finnish ] = "A~loita alusta tämän kappaleen kohdalla";
-        Text[ thai ] = "à¹€à¸£à¸´à¹ˆ~à¸¡à¸—à¸µà¹ˆà¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "Restartovat v tomto odstavci";
-        Text[ hebrew ] = "~An diesem Absatz neu beginnen";
-        Text[ hindi ] = "~à¤‡à¤¸ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¸à¥‡ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¥‹";
-        Text[ slovak ] = "R~eÅ¡tartovaÅ¥ v tomto odstavci";
-        Text[ hungarian ] = "Ãšj~rakezdÃ©s ennÃ©l a bekezdÃ©snÃ©l";
-        Text[ slovenian ] = "P~onovno zaÄni s tem odstavkom";
+        Text [ en-US ] = "R~estart at this paragraph" ;
+        Text [ x-comment ] = " ";
     };
     TriStateBox CB_NUMBER_NEW_START
     {
         Pos = MAP_APPFONT ( 21 , 58 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
-        Text = "~Beginnen mit" ;
+        Text [ de ] = "~Beginnen mit" ;
         Hide = TRUE ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar em" ;
-        Text [ english_us ] = "S~tart with" ;
-        Text [ portuguese_brazilian ] = "Iniciar com:" ;
-        Text [ swedish ] = "~Börja med" ;
-        Text [ danish ] = "~Begynd med" ;
-        Text [ italian ] = "Ini~zia con" ;
-        Text [ spanish ] = "~Empezar con" ;
-        Text [ french ] = "Commencer avec" ;
-        Text [ dutch ] = "~Beginnen met" ;
-        Text[ chinese_simplified ] = "å¼€å§‹ä»(~T)";
-        Text[ russian ] = "Íà÷àòü ñ";
-        Text[ polish ] = "Zacznij od";
-        Text[ japanese ] = "é–‹å§‹ç•ªå·(~T)";
-        Text[ chinese_traditional ] = "é–‹å§‹å¾(~T)";
-        Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
-        Text[ greek ] = "¸íáñîç áğü:";
-        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~T):";
-        Text[ turkish ] = "~Bunla başla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comença ~amb:";
-        Text[ finnish ] = "~Aloitus:";
-        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸”à¹‰à¸§à¸¢";
-        Text[ czech ] = "ZaÄÃ­t ÄÃ­slem";
-        Text[ hebrew ] = "~Beginnen mit";
-        Text[ hindi ] = "~à¤•à¥‡ à¤¸à¤¹à¤¿à¤¤ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "~ZaÄaÅ¥ ÄÃ­slom";
-        Text[ hungarian ] = "~KezdÃ©s";
-        Text[ slovenian ] = "ZaÄ~ni z";
+        Text [ en-US ] = "S~tart with" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_NEW_START
     {
@@ -363,144 +148,36 @@ TabPage TP_NUMPARA
     {
         Pos = MAP_APPFONT ( 6 , 75 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Zeilennummerierung" ;
-        Text [ English ] = "Line numbering" ;
-        Text [ portuguese ] = "Numeração de linhas" ;
-        Text [ english_us ] = "Line numbering" ;
-        Text [ portuguese_brazilian ] = "Numeração de linhas" ;
-        Text [ swedish ] = "Radnumrering" ;
-        Text [ danish ] = "Linjenummerering" ;
-        Text [ italian ] = "Numerazione righe" ;
-        Text [ spanish ] = "Numeración de líneas" ;
-        Text [ french ] = "Numérotation des lignes" ;
-        Text [ dutch ] = "Regelnummering" ;
-        Text[ chinese_simplified ] = "è¡Œç¼–å·";
-        Text[ russian ] = "Íóìåğàöèÿ ñòğîê";
-        Text[ polish ] = "Numeracja wierszy";
-        Text[ japanese ] = "è¡Œç•ªå·ä»˜ã‘";
-        Text[ chinese_traditional ] = "è¡Œç·¨è™Ÿ";
-        Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
-        Text[ greek ] = "Áñßèìçóç ãñáììşí";
-        Text[ korean ] = "ì¤„ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Çizgi numaralandırma";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeració de línies";
-        Text[ finnish ] = "Rivien numerointi";
-        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ Å™Ã¡dkÅ¯";
-        Text[ hebrew ] = "â€®××™×¡×¤×•×¨ ×©×•×¨×•×ªâ€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slovanie riadkov";
-        Text[ hungarian ] = "SorszÃ¡mozÃ¡s";
-        Text[ slovenian ] = "OÅ¡tevilÄevanje vrstic";
+        Text [ de ] = "Zeilennummerierung" ;
+        Text [ en-US ] = "Line numbering" ;
+        Text [ x-comment ] = " ";
     };
     TriStateBox CB_COUNT_PARA
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text = "~Die Zeilen dieses Absatzes mitzählen" ;
-        Text [ English ] = "~Include this paragraph in line numbering" ;
+        Text [ de ] = "~Die Zeilen dieses Absatzes mitzählen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Include this paragraph in line numbering" ;
-        Text [ portuguese_brazilian ] = "~Incluir este parágrafo na numeração de linhas" ;
-        Text [ swedish ] = "~Räkna med raderna i det här stycket" ;
-        Text [ danish ] = "~Inkluder dette afsnit i linjenummerering" ;
-        Text [ italian ] = "~Conta le righe di questo paragrafo" ;
-        Text [ spanish ] = "Con~tar las líneas de este párrafo" ;
-        Text [ french ] = "~Inclure les lignes de ce paragraphe" ;
-        Text [ dutch ] = "~De regels van deze alinea meetellen." ;
-        Text [ portuguese ] = "~Incluir as linhas deste parágrafo" ;
-        Text[ chinese_simplified ] = "åŒ…æ‹¬è¿™ä¸ªæ®µè½çš„è¡Œ(~I)";
-        Text[ russian ] = "Íóìåğîâàòü ñòğîêè";
-        Text[ polish ] = "~Numeruj wiersze tego akapitu";
-        Text[ japanese ] = "ã“ã®æ®µè½ã®è¡Œæ•°ã‚’å«ã‚ã‚‹(~I)";
-        Text[ chinese_traditional ] = "åŒ…æ‹¬é€™å€‹æ®µè½çš„è¡Œ(~I)";
-        Text[ arabic ] = "ÚÏ ÃÓØÑ åĞå ÇáİŞÑÉ ÃíÖÇğ";
-        Text[ greek ] = "Íá óõìğåñéëçöèïıí ïé ãñáììİò áõôŞò ôçò ğáñáãñÜöïõ";
-        Text[ korean ] = "ì´ ë‹¨ë½ì˜ ì¤„ í•¨ê»˜ ì„¸ê¸°(~I)";
-        Text[ turkish ] = "Bu paragrafın da satırlarını numarala";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Con~ta les línies d'aquest paràgraf";
-        Text[ finnish ] = "~Sisällytä tämä kappale rivinumerointiin";
-        Text[ thai ] = "~à¸£à¸§à¸¡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰à¹ƒà¸™à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "Zahrnout tento odstavec do ÄÃ­slovÃ¡nÃ­ Å™Ã¡dkÅ¯";
-        Text[ hebrew ] = "~Die Zeilen dieses Absatzes mitzÃ¤hlen";
-        Text[ hindi ] = "à¤°à¥‡~à¤–à¤¾ à¤•à¥‹ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤‡à¤¸ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~ZahrnÃºÅ¥ tento odstavec do ÄÃ­slovania riadkov";
-        Text[ hungarian ] = "A s~orok szÃ¡mozÃ¡sÃ¡ban ez a bekezdÃ©s is szerepeljen";
-        Text[ slovenian ] = "~VkljuÄi ta odstavek v oÅ¡tevilÄevanje vrstic";
+        Text [ en-US ] = "~Include this paragraph in line numbering" ;
+        Text [ x-comment ] = " ";
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text = "An diese~m Absatz neu beginnen" ;
-        Text [ English ] = "~Restart at this paragraph" ;
+        Text [ de ] = "An diese~m Absatz neu beginnen" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Recomeçar neste parágrafo" ;
-        Text [ english_us ] = "Rest~art at this paragraph" ;
-        Text [ portuguese_brazilian ] = "Reinici~ar neste parágrafo" ;
-        Text [ swedish ] = "Börja o~m vid detta stycke" ;
-        Text [ danish ] = "Begynd forfra ved dette afsnit" ;
-        Text [ italian ] = "Ricomincia con questo paragrafo" ;
-        Text [ spanish ] = "Volver a empe~zar en este párrafo" ;
-        Text [ french ] = "Recommencer avec ce paragraphe" ;
-        Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
-        Text[ chinese_simplified ] = "åœ¨è¿™ä¸ªæ®µè½å¤„é‡æ–°å¼€å§‹(~A)";
-        Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà ñíîâà";
-        Text[ polish ] = "Zacznij p~onownie od tego akapitu";
-        Text[ japanese ] = "ã“ã®æ®µè½ã§æ–°ã—ãé–‹å§‹(~A)";
-        Text[ chinese_traditional ] = "å¾é€™å€‹æ®µè½é‡æ–°é–‹å§‹(~A)";
-        Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
-        Text[ greek ] = "Åğáíåêêßíçóç áğü áõôŞ ôçí ğáñÜãñáöï";
-        Text[ korean ] = "ì´ ë‹¨ë½ì—ì„œ ë‹¤ì‹œ ì‹œì‘(~A)";
-        Text[ turkish ] = "Bu satırda tekrar başla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Torna a començar en ~aquest paràgraf";
-        Text[ finnish ] = "Aloi~ta alusta tämän kappaleen kohdalla";
-        Text[ thai ] = "à¹€à¸£à¸´à¹ˆ~à¸¡à¸—à¸µà¹ˆà¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰";
-        Text[ czech ] = "Restartovat na zaÄÃ¡tku tohoto odstavce";
-        Text[ hebrew ] = "An diese~m Absatz neu beginnen";
-        Text[ hindi ] = "à¤‡~à¤¸ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¸à¥‡ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ReÅ¡t~artovaÅ¥ na zaÄiatku tohto odstavca";
-        Text[ hungarian ] = "Ãšjrak~ezdÃ©s ennÃ©l a bekezdÃ©snÃ©l";
-        Text[ slovenian ] = "Po~novno zaÄni s tem odstavkom";
+        Text [ en-US ] = "Rest~art at this paragraph" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_RESTART_NO
     {
         Pos = MAP_APPFONT ( 21 , 116 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text = "B~eginnen mit" ;
-        Text [ English ] = "~Start at" ;
+        Text [ de ] = "B~eginnen mit" ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar em" ;
-        Text [ english_us ] = "~Start with" ;
-        Text [ portuguese_brazilian ] = "~Iniciar com" ;
-        Text [ swedish ] = "Börja m~ed" ;
-        Text [ danish ] = "B~egynd med" ;
-        Text [ italian ] = "Inizia con..." ;
-        Text [ spanish ] = "Empezar con" ;
-        Text [ french ] = "Commencer avec" ;
-        Text [ dutch ] = "~Beginnen met" ;
-        Text[ chinese_simplified ] = "å¼€å§‹ä»(~S)";
-        Text[ russian ] = "Íà÷àòü ñ";
-        Text[ polish ] = "Ro~zpocznij od";
-        Text[ japanese ] = "é–‹å§‹ç•ªå·(~S)";
-        Text[ chinese_traditional ] = "é–‹å§‹å¾(~S)";
-        Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
-        Text[ greek ] = "¸íáñ~îç áğü";
-        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~S):";
-        Text[ turkish ] = "~Bununla başla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comença ~amb:";
-        Text[ finnish ] = "Alo~itus:";
-        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸”à¹‰à¸§à¸¢";
-        Text[ czech ] = "ZaÄÃ­t ÄÃ­slem";
-        Text[ hebrew ] = "B~eginnen mit";
-        Text[ hindi ] = "~à¤•à¥‡ à¤¸à¤¹à¤¿à¤¤ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "~ZaÄaÅ¥ ÄÃ­slom";
-        Text[ hungarian ] = "Kez~dÅ‘Ã©rtÃ©k:";
-        Text[ slovenian ] = "~ZaÄni z";
+        Text [ en-US ] = "~Start with" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_RESTART_PARA
     {
