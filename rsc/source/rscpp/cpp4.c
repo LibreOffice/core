@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp4.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:59:07 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,6 @@ void dodefine()
         int                     isredefine;     /* TRUE if redefined    */
         char                    *old = 0;       /* Remember redefined   */
 
-#ifndef ZTC  /* BP */
-    extern int      save();     /* Save char in work[]  */
-#endif
-
         if (type[(c = skipws())] != LET)
             goto bad_define;
         isredefine = FALSE;                     /* Set if redefining    */
@@ -179,7 +175,7 @@ void dodefine()
                 c = get();
 #else
             if (c == '#') {                     /* Token concatenation? */
-                while (workp > work && type[workp[-1]] == SPA)
+                while (workp > work && type[(int)workp[-1]] == SPA)
                     --workp;                    /* Erase leading spaces */
                 save(TOK_SEP);                  /* Stuff a delimiter    */
                 c = skipws();                   /* Eat whitespace       */
@@ -275,7 +271,7 @@ bad_define:
         inmacro = FALSE;                        /* Stop <newline> hack  */
 }
 
-int checkparm(c, dp)
+void checkparm(c, dp)
 register int    c;
 DEFBUF          *dp;
 /*
@@ -343,7 +339,7 @@ register DEFBUF *dp;
         save(c);
 }
 #else
-int stparmscan(delim)
+void stparmscan(delim)
 int             delim;
 /*
  * Normal string parameter scan.
@@ -351,9 +347,6 @@ int             delim;
 {
         register char           *wp;
         register int            i;
-#ifndef ZTC  /* BP */
-    extern int      save();
-#endif
 
         wp = workp;                     /* Here's where it starts       */
         if (!scanstring(delim, save))
@@ -381,7 +374,7 @@ int             delim;
 }
 #endif
 
-doundef()
+void doundef()
 /*
  * Remove the symbol from the defined list.
  * Called from the #control processor.
@@ -401,7 +394,7 @@ doundef()
         }
 }
 
-textput(text)
+void textput(text)
 char            *text;
 /*
  * Put the string in the parm[] buffer.
@@ -418,7 +411,7 @@ char            *text;
         }
 }
 
-charput(c)
+void charput(c)
 register int    c;
 /*
  * Put the byte in the parm[] buffer.
@@ -437,7 +430,7 @@ register int    c;
 
 static DEFBUF   *macro;         /* Catches start of infinite macro      */
 
-expand(tokenp)
+void expand(tokenp)
 register DEFBUF *tokenp;
 /*
  * Expand a macro.  Called from the cpp mainline routine (via subroutine
@@ -543,9 +536,6 @@ expcollect()
 {
         register int    c;
         register int    paren;                  /* For embedded ()'s    */
-#ifndef ZTC  /* BP */
-    extern int  charput();
-#endif
         for (;;) {
             paren = 0;                          /* Collect next arg.    */
             while ((c = skipws()) == '\n')      /* Skip over whitespace */
@@ -600,7 +590,7 @@ expcollect()
 }
 
 FILE_LOCAL
-expstuff(tokenp)
+void expstuff(tokenp)
 DEFBUF          *tokenp;                /* Current macro being expanded */
 /*
  * Stuff the macro body, replacing formal parameters by actual parameters.
@@ -669,7 +659,7 @@ nospace:            cfatal("Out of space in macro \"%s\" arg expansion",
 }
 
 #if OSL_DEBUG_LEVEL > 1
-dumpparm(why)
+void dumpparm(why)
 char            *why;
 /*
  * Dump parameter list.
