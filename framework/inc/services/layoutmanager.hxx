@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:00:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ namespace framework
             void    implts_sortActiveElement( const UIElement& aElementData );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
             void    implts_setDockingAreaWindowSizes( const com::sun::star::awt::Rectangle& rBorderSpace );
-            void    implts_doLayout( sal_Bool bForceRequestBorderSpace );
+            sal_Bool implts_doLayout( sal_Bool bForceRequestBorderSpace );
 
             // internal methods to control status/progress bar
             ::Size      implts_getStatusBarSize();
@@ -546,6 +546,8 @@ namespace framework
             void    implts_setVisibleState( sal_Bool bShow );
             void    implts_updateUIElementsVisibleState( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
+
+            void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
 
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );
@@ -619,6 +621,7 @@ namespace framework
             SvtMiscOptions*                                                             m_pMiscOptions;
             sal_Int16                                                                   m_eSymbolSet;
             Timer                                                                       m_aAsyncLayoutTimer;
+            ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
     };
 
 } // namespace framework
