@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageNativeOutputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:52:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,13 +243,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
         catch(Exception& e)
         {
             OSL_ENSURE(0,"Exception catched! : sync();");
-            if (JNI_FALSE != env->ExceptionCheck())
-                env->ExceptionClear();
-            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            ThrowException( env,
-                            "java/io/IOException",
-                            cstr.getStr());
+            StorageContainer::throwJavaException(e,env);
         }
     }
 }
