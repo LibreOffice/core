@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 15:39:18 $
+#   last change: $Author: hr $ $Date: 2003-03-18 13:36:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,8 @@ OBJFILES= \
 
 APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
+
+LIBSALCPPRT=$(0)
 
 .IF "$(GUI)"=="WNT"
 UWINAPILIB=$(0)

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 15:40:05 $
+#   last change: $Author: hr $ $Date: 2003-03-18 13:36:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ APP1STDLIBS= MSVCIRT.LIB
 
 
 UWINAPILIB=$(0)
+LIBSALCPPRT=$(0)
 
 APP1LIBS=	$(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
