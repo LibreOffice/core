@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:01:11 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,8 @@
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
-#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
@@ -349,7 +349,7 @@ namespace pcr
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::table;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
     using namespace ::dbtools;
 
     //========================================================================
