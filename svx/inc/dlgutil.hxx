@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:36:33 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 // macro -----------------------------------------------------------------
 
+#if SUPD<609
 #define GET_MODULE_FIELDUNIT( eFieldUnit )                                  \
 {                                                                           \
     SfxApplication* pSfxApp = SFX_APP();                                    \
@@ -88,6 +89,7 @@
             eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();  \
     }                                                                       \
 }
+#endif
 
 // typedef ---------------------------------------------------------------
 
