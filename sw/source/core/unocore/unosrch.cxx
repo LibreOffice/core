@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,23 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 /******************************************************************************
  *
@@ -763,8 +778,43 @@ Sequence< OUString > SwXTextSearch::getSupportedServiceNames(void) throw( Runtim
     return aRet;
 }
 
+void SwXTextSearch::FillSearchOptions( SearchOptions& rSearchOpt ) const
+{
+    if( bSimilarity )
+    {
+        rSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
+        rSearchOpt.changedChars = nLevExchange;
+        rSearchOpt.deletedChars = nLevRemove;
+        rSearchOpt.insertedChars = nLevAdd;
+        if( bLevRelax )
+            rSearchOpt.searchFlag |= SearchFlags::LEV_RELAXED;
+    }
+    else if( bExpr )
+        rSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
+    else
+        rSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+
+    rSearchOpt.Locale = CreateLocale( GetAppLanguage() );
+    rSearchOpt.searchString = sSearchText;
+    rSearchOpt.replaceString = sReplaceText;
+
+    if( !bCase )
+        rSearchOpt.transliterateFlags |= TransliterationModules_IGNORE_CASE;
+    if( !bWord )
+        rSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
+
+//  bInSel: 1;  // wie geht das?
+//  TODO: pSearch->bStyles!
+//      inSelection??
+//      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
+}
+
+
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:29  hr
+    initial import
+
     Revision 1.38  2000/09/18 16:04:35  willem.vandorp
     OpenOffice header added.
 

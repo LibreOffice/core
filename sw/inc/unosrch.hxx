@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@ struct SfxItemPropertyMap;
 class SwXTextDocument;
 class SwSearchProperties_Impl;
 class SfxItemSet;
+
+namespace com{namespace sun{namespace star{namespace util{
+    struct SearchOptions;
+}}}}
+
+
 /*-----------------19.12.97 12:58-------------------
 
 --------------------------------------------------*/
@@ -165,6 +171,8 @@ public:
     sal_Bool    HasSearchAttributes() const;
     sal_Bool    HasReplaceAttributes() const;
 
+    void    FillSearchOptions( ::com::sun::star::util::SearchOptions&
+                                        rSearchOpt ) const;
 };
 
 #endif
