@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 13:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ class SmGraphicAccessible :
     //vos::ORefCount    aRefCount;  // number of references to object
     cppu::OInterfaceContainerHelper     aAccEventListeners;
     osl::Mutex                          aListenerMutex;
+    String                              aAccName;
 
     SmGraphicWindow     *pWin;
 
@@ -375,6 +376,7 @@ class SmEditAccessible :
 {
     cppu::OInterfaceContainerHelper         aAccEventListeners;
     osl::Mutex                              aListenerMutex;
+    String                                  aAccName;
     accessibility::AccessibleTextHelper    *pTextHelper;
     SmEditWindow                           *pWin;
 
