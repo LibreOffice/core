@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         MutexGuard aGuard(m_rMutex);
 
         OQueryDescriptor* pImpl = NULL;
-        getImplementation(pImpl, Reference< XInterface >(_rxDesc));
+                comphelper::getImplementation(pImpl, Reference< XInterface >(_rxDesc.get()));
         DBG_ASSERT(pImpl != NULL, "OQueryContainer::appendByDescriptor : can't fully handle this descriptor !");
 
         // first clone this object's CommandDefinition part
