@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-09 09:10:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-14 09:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
 
     try
     {
-        DragFinished( rDSDE.DropSuccess ? rDSDE.DropAction : DNDConstants::ACTION_NONE );
+        DragFinished( rDSDE.DropSuccess ? ( rDSDE.DropAction & ~DNDConstants::ACTION_DEFAULT ) : DNDConstants::ACTION_NONE );
         ObjectReleased();
     }
     catch( const ::com::sun::star::uno::Exception& )
