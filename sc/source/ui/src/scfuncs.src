@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:31:32 $
+ *  last change: $Author: rt $ $Date: 2002-09-05 18:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2791,7 +2791,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ì›”";
             Text[ turkish ] = "Ay";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Mes";
+            Text[ catalan ] = "MONTH";
         };
         String 5 // Description of Parameter 2
         {
@@ -3785,7 +3785,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ì‹œê°„";
             Text[ turkish ] = "Saat";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Hora";
+            Text[ catalan ] = "HOUR";
         };
         String 3 // Description of Parameter 1
         {
@@ -4615,7 +4615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese_brazilian ] = "Legt den ersten Tag in der Woche fest." ;
             Text [ portuguese ] = "Determina o primeiro dia da semana." ;
             Text [ finnish ] = "Viikon ensimmäinen päivä." ;
-            Text [ danish ] = "Definerer den første dag i ugen." ;
+            Text [ danish ] = "Definerer den første dag i ugen (1 = søndag, andre værdier = mandag)." ;
             Text [ french ] = "Détermine le premier jour de la semaine (1 = Dimanche, autres valeurs = Lundi)." ;
             Text [ swedish ] = "Definierar den första dagen i veckan (1 = söndag, andra värden = måndag)." ;
             Text [ dutch ] = "Bepaalt de eerste dag van de week (1 = zondag, andere waarde = maandag)." ;
@@ -4853,7 +4853,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "nper";
+            Text[ catalan ] = "NPER";
         };
         String 5 // Description of Parameter 2
         {
@@ -5187,7 +5187,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "nper";
+            Text[ catalan ] = "NPER";
         };
         String 5 // Description of Parameter 2
         {
@@ -5853,7 +5853,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "nper";
+            Text[ catalan ] = "NPER";
         };
         String 5 // Description of Parameter 2
         {
@@ -6128,7 +6128,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "nper";
+            Text[ catalan ] = "NPER";
         };
         String 3 // Description of Parameter 1
         {
@@ -6638,7 +6638,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "nper";
+            Text[ catalan ] = "NPER";
         };
         String 7 // Description of Parameter 3
         {
@@ -6697,7 +6697,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "pv";
             Text[ turkish ] = "Bugünkü deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "va";
+            Text[ catalan ] = "PV";
         };
         String 9 // Description of Parameter 4
         {
@@ -7030,7 +7030,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Nper";
+            Text[ catalan ] = "NPER";
         };
         String 7 // Description of Parameter 3
         {
@@ -7363,7 +7363,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Nper";
+            Text[ catalan ] = "NPER";
         };
         String 5 // Description of Parameter 2
         {
@@ -7755,7 +7755,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "NPER";
             Text[ turkish ] = "NPER";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Nper";
+            Text[ catalan ] = "NPER";
         };
         String 5 // Description of Parameter 2
         {
@@ -10263,7 +10263,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Calcule le taux de rentabilité interne modifié pour une série d'investissements.";
             Text[ spanish ] = "Calcula el tipo de interés de una serie de inversiones.";
             Text[ italian ] = "Restituisce il tasso di rendimento interno variato di una serie di investimenti.";
-            Text[ danish ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
+            Text[ danish ] = "Beregner den modificerede interne rentefod for en række investeringer.";
             Text[ swedish ] = "Beräknar den modifierade internräntan för en investeringsserie.";
             Text[ polish ] = "Oblicza zmodyfikowan¹ wewnêtrzn¹ stopê procentow¹ szeregu inwestycji.";
             Text[ portuguese_brazilian ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
@@ -10294,7 +10294,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Valeurs";
             Text[ spanish ] = "Valores";
             Text[ italian ] = "Valori";
-            Text[ danish ] = "values";
+            Text[ danish ] = "Værdier";
             Text[ swedish ] = "värden";
             Text[ polish ] = "Wartoœci";
             Text[ portuguese_brazilian ] = "values";
@@ -10319,7 +10319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Une matrice ou une référence à des cellules dont le contenu correspond aux paiements.";
             Text[ spanish ] = "Matriz o referencia de celda a celdas cuyo contenido corresponde a los pagos.";
             Text[ italian ] = "Riferimento a una cella o una matrice che contiene i valori degli importi di pagamento.";
-            Text[ danish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
+            Text[ danish ] = "Matrix eller cellehenvisning til celler, hvis indhold svarer til betalingerne.";
             Text[ swedish ] = "Matris eller cellreferens till celler vars innehåll motsvarar betalningarna.";
             Text[ polish ] = "Macierz lub odwo³anie komórek do komórek, których zawartoœci odpowiadaj¹ p³atnoœciom.  ";
             Text[ portuguese_brazilian ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
@@ -10344,7 +10344,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversión";
             Text[ italian ] = "Investimento";
-            Text[ danish ] = "invest_rate";
+            Text[ danish ] = "Investering";
             Text[ swedish ] = "investering";
             Text[ polish ] = "Inwestycja";
             Text[ portuguese_brazilian ] = "invest_rate";
@@ -10369,7 +10369,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Taux de rentabilité des investissements (les valeurs négatives de la matrice).";
             Text[ spanish ] = "Tipo de interés de las inversiones (los valores negativos de la matriz).";
             Text[ italian ] = "Tasso di rendimento degli investimenti (valori negativi della matrice).";
-            Text[ danish ] = "interest rate of investments (the negative values in the array).";
+            Text[ danish ] = "Rentefod for investeringerne (matrixens negative værdier).";
             Text[ swedish ] = "Räntesats för investeringar (de negativa värdena i matrisen).";
             Text[ polish ] = "Stopa procentowa inwestycji (negatywne wartoœci macierzy)";
             Text[ portuguese_brazilian ] = "interest rate of investments (the negative values in the array).";
@@ -10394,7 +10394,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Réinvestissement";
             Text[ spanish ] = "Reinversión";
             Text[ italian ] = "Reinvestimenti";
-            Text[ danish ] = "reinvest_rate";
+            Text[ danish ] = "Reinvestering";
             Text[ swedish ] = "återinvestering";
             Text[ polish ] = "Reinwestycja";
             Text[ portuguese_brazilian ] = "reinvest_rate";
@@ -10419,7 +10419,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Taux de rentabilité des réinvestissements (les valeurs positives de la matrice).";
             Text[ spanish ] = "Tipo de interés de las reinversiones (los valores positivos de la matriz)";
             Text[ italian ] = "Tasso di rendimento dei reinvenstimenti (valori positivi della matrice).";
-            Text[ danish ] = "interest rate of reinvestments (the positive values in the array).";
+            Text[ danish ] = "Rentefod for reinvesteringerne (matrixens positive værdier).";
             Text[ swedish ] = "Räntesats för återinvesteringar (de positiva värdena i matrisen).";
             Text[ polish ] = "Stopa procentowa reinwestycji (pozytywne wartoœci macierzy)";
             Text[ portuguese_brazilian ] = "interest rate of reinvestments (the positive values in the array).";
@@ -10448,7 +10448,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Calcule le montant des intérêts pour un emprunt à remboursement constant.";
             Text[ spanish ] = "Calcula los intereses en una amortización constante.";
             Text[ italian ] = "Calcola gli interessi per ammortamenti costanti";
-            Text[ danish ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ danish ] = "Beregner højden af renterne ved konstante afdragsrater.";
             Text[ swedish ] = "Beräknar hur höga räntorna blir vid konstanta amorteringar.";
             Text[ polish ] = "Oblicza wysokoœæ odsetków w przypadku sta³ych rat amortyzacyjnych.";
             Text[ portuguese_brazilian ] = "Returns the amount of interest for constant redemption rates.";
@@ -10479,7 +10479,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Taux";
             Text[ spanish ] = "Interés";
             Text[ italian ] = "Tasso";
-            Text[ danish ] = "rate";
+            Text[ danish ] = "Rente";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Odsetek";
             Text[ portuguese_brazilian ] = "rate";
@@ -10504,7 +10504,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Taux d'intérêt pour une période d'amortissement.";
             Text[ spanish ] = "Tipo de interés para una tasa de amortización.";
             Text[ italian ] = "Interessi equivalenti a una rata di ammortamento";
-            Text[ danish ] = "Interest rate of a single redemption rate.";
+            Text[ danish ] = "Rentesats for en afdragsrate.";
             Text[ swedish ] = "Räntesats för en amortering.";
             Text[ polish ] = "Stopa procentowa raty amortyzacjynej.";
             Text[ portuguese_brazilian ] = "Interest rate of a single redemption rate.";
@@ -10529,7 +10529,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Périodes";
             Text[ spanish ] = "Período";
             Text[ italian ] = "Periodo";
-            Text[ danish ] = "period";
+            Text[ danish ] = "Tidsrum";
             Text[ swedish ] = "Period";
             Text[ polish ] = "Okres";
             Text[ portuguese_brazilian ] = "period";
@@ -10554,7 +10554,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Nombre de périodes d'amortissement pour le calcul des intérêts.";
             Text[ spanish ] = "Cantidad de periodos de amortización para el cálculo de intereses.";
             Text[ italian ] = "Periodo di ammortamento per il calcolo degli interessi";
-            Text[ danish ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ danish ] = "Antal afdragsperioder for beregningen af renter.";
             Text[ swedish ] = "Antal amorteringar för beräkningen av räntor.";
             Text[ polish ] = "Liczba okresów amortyzacji do obliczenia odsetków.";
             Text[ portuguese_brazilian ] = "Count of amortization periods for the calculation of the interest.";
@@ -10579,7 +10579,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Durée_totale";
             Text[ spanish ] = "Período_total";
             Text[ italian ] = "Periodi";
-            Text[ danish ] = "total_periods";
+            Text[ danish ] = "Samlet_periode";
             Text[ swedish ] = "Perioder_totalt";
             Text[ polish ] = "Suma_okresów";
             Text[ portuguese_brazilian ] = "total_periods";
@@ -10604,7 +10604,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Nombre total de périodes d'amortissement.";
             Text[ spanish ] = "Cantidad total de periodos de amortización.";
             Text[ italian ] = "Calcolo totale del periodo di ammortamento";
-            Text[ danish ] = "Sum total of amortization periods.";
+            Text[ danish ] = "Samlet antal afdragsperioder.";
             Text[ swedish ] = "Totalt antal amorteringsperioder.";
             Text[ polish ] = "Suma okresów amortyzacji.";
             Text[ portuguese_brazilian ] = "Sum total of amortization periods.";
@@ -10629,7 +10629,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversión";
             Text[ italian ] = "Investimento";
-            Text[ danish ] = "invest";
+            Text[ danish ] = "Invest";
             Text[ swedish ] = "investering";
             Text[ polish ] = "Inwestycja";
             Text[ portuguese_brazilian ] = "invest";
@@ -10654,7 +10654,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Montant de l'investissement.";
             Text[ spanish ] = "Cantidad de la inversión.";
             Text[ italian ] = "Cifra d'investimento";
-            Text[ danish ] = "Amount of the investment.";
+            Text[ danish ] = "Investeringsbeløb.";
             Text[ swedish ] = "Investeringsbelopp.";
             Text[ polish ] = "Kwota inwestycji.";
             Text[ portuguese_brazilian ] = "Amount of the investment.";
@@ -11162,7 +11162,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11260,7 +11260,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11358,7 +11358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11456,7 +11456,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11555,7 +11555,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11653,7 +11653,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11751,7 +11751,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11849,7 +11849,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -11947,7 +11947,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -12412,7 +12412,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Renvoie des informations concernant la position, le format ou le contenu d'une cellule.";
             Text[ spanish ] = "Determina la información sobre direcciones, formato o contenido de una celda.";
             Text[ italian ] = "Fornisce informazioni sull'indirizzo, la formattazione oppure il contenuto di una cella.";
-            Text[ danish ] = "Determines information about address, formatting or contents of a cell.";
+            Text[ danish ] = "Finder informationer om en celles adresse, formatering eller inhold.";
             Text[ swedish ] = "Bestämmer information om adress, formatering eller innehåll i en cell.";
             Text[ polish ] = "Ustala adres, format lub zawartoœæ komórki.";
             Text[ portuguese_brazilian ] = "Determines information about address, formatting or contents of a cell.";
@@ -12443,7 +12443,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Type_info";
             Text[ spanish ] = "Tipo de información";
             Text[ italian ] = "Tipo di informazioni";
-            Text[ danish ] = "info_type";
+            Text[ danish ] = "Infotype";
             Text[ swedish ] = "infotyp";
             Text[ polish ] = "Rodzaj_informacji";
             Text[ portuguese_brazilian ] = "info_type";
@@ -12468,7 +12468,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "Chaîne de caractères déterminant le type d'information.";
             Text[ spanish ] = "Cadena de caracteres que determina el tipo de información.";
             Text[ italian ] = "String che specifica il tipo di informazione";
-            Text[ danish ] = "This text specifies the type of information.";
+            Text[ danish ] = "Strenge, som bestemmer informationstypen.";
             Text[ swedish ] = "Sträng som specificerar typen av information.";
             Text[ polish ] = "Ci¹g znaków definiuj¹cy rodzaj informacji.";
             Text[ portuguese_brazilian ] = "This text specifies the type of information.";
@@ -12518,7 +12518,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ french ] = "La position de la cellule à examiner.";
             Text[ spanish ] = "La posición de las celdas a examinar.";
             Text[ italian ] = "Posizione della cella da esaminare.";
-            Text[ danish ] = "The position of the cell you want to examine.";
+            Text[ danish ] = "Placeringen af den celle, der skal undersøges.";
             Text[ swedish ] = "Positionen för cellen som ska undersökas.";
             Text[ polish ] = "Pozycja komórki, który ma byæ sprawdzona.";
             Text[ portuguese_brazilian ] = "The position of the cell you want to examine.";
@@ -14411,7 +14411,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -14509,7 +14509,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -17016,7 +17016,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "ê¸°ë³¸";
             Text[ turkish ] = "Taban";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Base";
+            Text[ catalan ] = "Base anual";
         };
         String 5 // Description of Parameter 2
         {
@@ -26713,7 +26713,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 7 // Description of Parameter 3
         {
@@ -28399,7 +28399,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 5 // Description of Parameter 2
         {
@@ -28670,7 +28670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 5 // Description of Parameter 2
         {
@@ -28981,7 +28981,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 5 // Description of Parameter 2
         {
@@ -29312,7 +29312,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 5 // Description of Parameter 2
         {
@@ -29643,7 +29643,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 5 // Description of Parameter 2
         {
@@ -31760,7 +31760,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ì•ŒíŒŒ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "alfa";
+            Text[ catalan ] = "Alfa";
         };
         String 3 // Description of Parameter 1
         {
@@ -32091,7 +32091,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "STD";
             Text[ turkish ] = "Sigma";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "sigma";
+            Text[ catalan ] = "STDEV";
         };
         String 7 // Description of Parameter 3
         {
@@ -34126,7 +34126,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ë‹¨";
             Text[ turkish ] = "Sütun";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Columna";
+            Text[ catalan ] = "COLUMN";
         };
         String 5 // Description of Parameter 2
         {
@@ -37104,7 +37104,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "DDE-linkin tulos." ;
             Text [ danish ] = "Resultatet af en DDE-kæde." ;
             Text [ french ] = "Résultat d'un lien DDE." ;
-            Text [ swedish ] = "Resultatet av en DDD-länkning." ;
+            Text [ swedish ] = "Resultatet av en DDE-länkning." ;
             Text [ dutch ] = "Resultaat van een DDE-koppeling." ;
             Text [ spanish ] = "Resultado de un vínculo DDE." ;
             Text [ english_us ] = "Result of a DDE link." ;
@@ -39673,7 +39673,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese_brazilian ] = "T" ;
             Text [ portuguese ] = "Sem separador de milhares" ;
             Text [ finnish ] = "T" ;
-            Text [ danish ] = "T" ;
+            Text [ danish ] = "Ingen tusindtalsseparatorer" ;
             Text [ french ] = "Sans séparateur de milliers" ;
             Text [ swedish ] = "Inga tusentalsavgränsare" ;
             Text [ dutch ] = "Geen separatoren voor duizendtallen" ;
@@ -39702,7 +39702,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese_brazilian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
             Text [ portuguese ] = "Sem separador de milhares. Se o valor lógico existir e for VERDADEIRO (diferente de 0), o separador de milhares não é colocado." ;
             Text [ finnish ] = "Tuhaterotin. Määrittää tuhaterotinasetuksen." ;
-            Text [ danish ] = "Tusindtalsseparator. Angiver, om en tusindtalsseparator skal sættes." ;
+            Text [ danish ] = "Ingen tusindtalsseparatorer. Logisk værdi, når til stede og SAND (forskellig fra 0) sættes ingen tusindtalsseparatorer." ;
             Text [ french ] = "Sans séparateur de milliers si valeur logique = VRAI (différente de 0)." ;
             Text [ swedish ] = "Inga tusentalsavgränsare. Sannolikhetsvärde, om det finns och är SANT (ej lika med 0) sätts inga tusentalsavgränsare." ;
             Text [ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet." ;
@@ -41144,7 +41144,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Convertit une valeur à l'aide de la table de conversion provenant de la configuration. (calc.xml)";
             Text[ spanish ] = "Convierte un valor en base a una tabla de conversión de la configuración (calc.xml).";
             Text[ italian ] = "Converte un valore in base a una tabella di conversione della configurazione (calc.xml).";
-            Text[ danish ] = "Konverterer en værdi ved hjælp af et element i convert.ini tabellen.";
+            Text[ danish ] = "Omregner en værdi ved hjælp af en omregningstabel fra konfigurationen (calc.xml).";
             Text[ swedish ] = "Räknar om ett värde med hjälp av en omräkningstabell från konfigurationen (calc.xml).";
             Text[ polish ] = "Konwertuje wartoœæ na podstawie tabeli do konwersji z konfiguracji (calc.xml).";
             Text[ portuguese_brazilian ] = "Converts a value according to an entry of the convert.ini table.";
@@ -41194,7 +41194,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "ê°’";
             Text[ turkish ] = "Deðer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Valor";
+            Text[ catalan ] = "valor";
         };
         String 3 // Description of Parameter 1
         {
@@ -41352,7 +41352,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Convertit un nombre en chiffres romains.";
             Text[ spanish ] = "Convierte un número en un número romano.";
             Text[ italian ] = "Converte una cifra in numeri romani.";
-            Text[ danish ] = "Converts a number to roman.";
+            Text[ danish ] = "Konverterer et tal til et romertal.";
             Text[ swedish ] = "Omvandlar ett tal till romerska siffror.";
             Text[ polish ] = "Zamienia liczbê arabsk¹ na rzymsk¹.";
             Text[ portuguese_brazilian ] = "Converts a number to roman.";
@@ -41383,7 +41383,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ italian ] = "Numero";
-            Text[ danish ] = "number";
+            Text[ danish ] = "Tal";
             Text[ swedish ] = "tal";
             Text[ polish ] = "Liczba";
             Text[ portuguese_brazilian ] = "number";
@@ -41408,7 +41408,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Le nombre (compris entre 0 et 3999) à convertir en chiffres romains.";
             Text[ spanish ] = "El número a convertir en número romano debe ser uno entre 0 y 3999.";
             Text[ italian ] = "La cifra da convertire in numero romano dev'essere compresa tra 0 e 3999.";
-            Text[ danish ] = "The number to be converted to roman must be in the range 0 - 3999.";
+            Text[ danish ] = "Det tal, som skal konverteres til et romertal, skal ligge mellem 0 og 3999.";
             Text[ swedish ] = "Talet som ska omvandlas till romerska siffror måste ligga i området 0 - 3999.";
             Text[ polish ] = "Liczba, która ma byæ zamieniona na rzymsk¹, musi mieœciæ siê w zakresie 0 - 3999.";
             Text[ portuguese_brazilian ] = "The number to be converted to roman must be in the range 0 - 3999.";
@@ -41433,7 +41433,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Mode";
             Text[ spanish ] = "Modo";
             Text[ italian ] = "Modo";
-            Text[ danish ] = "mode";
+            Text[ danish ] = "Modus";
             Text[ swedish ] = "läge";
             Text[ polish ] = "Tryb";
             Text[ portuguese_brazilian ] = "mode";
@@ -41458,7 +41458,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Plus cette valeur (comprise entre 0 et 4) est élévée, plus le nombre en chiffres romains sera simplifié.";
             Text[ spanish ] = "Cuanto mayor sea este valor, más simple será el número romano. El valor debe estar entre 0 y 4.";
             Text[ italian ] = "Più il valore della cifra è alto, più il numero romano risulterà semplice. Il valore dev'essere compreso tra 0 e 4.";
-            Text[ danish ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
+            Text[ danish ] = "Jo højere denne værdi er, jo mere forenkles romertallet. Værdien skal ligge i området 0-4.";
             Text[ swedish ] = "Ju högre värdet är desto mer förenklas de romerska siffrorna. Värdet måste ligga i området 0 -4.";
             Text[ polish ] = "Im wy¿sza wartoœæ, tym bardziej uproszczona zostanie rzymska liczba. Wartoœæ musi siê mieœciæ w zakresie 0 - 4.";
             Text[ portuguese_brazilian ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
@@ -41487,7 +41487,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Calcule la valeur d'un nombre en chiffres romains.";
             Text[ spanish ] = "Calcula el valor de un número romano.";
             Text[ italian ] = "Calcola il valore di un numero romano.";
-            Text[ danish ] = "Calculates the value of a roman number.";
+            Text[ danish ] = "Beregner værdien af et romertal.";
             Text[ swedish ] = "Beräknar värdet av romerska siffror.";
             Text[ polish ] = "Zamienia liczbê rzymsk¹ na arabsk¹.";
             Text[ portuguese_brazilian ] = "Calculates the value of a roman number.";
@@ -41543,7 +41543,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ french ] = "Le nombre en chiffres romains sous forme de texte.";
             Text[ spanish ] = "El texto que representa un número romano.";
             Text[ italian ] = "Il testo che rappresenta un numero romano.";
-            Text[ danish ] = "The text that represents a roman number.";
+            Text[ danish ] = "Den tekst, som et romertal repræsenterer.";
             Text[ swedish ] = "Texten som representerar en romersk siffra.";
             Text[ polish ] = "Tekst przedstawiaj¹cy rzymsk¹ liczbê.";
             Text[ portuguese_brazilian ] = "The text that represents a roman number.";
