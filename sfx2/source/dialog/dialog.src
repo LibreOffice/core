@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:29:22 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ chinese_simplified ] = "ΥβΈφΓϋ³ΖΚΗÒ»Έφ±κΧΌΡωΚ½µΔΓϋ³Ζ΅£\nΗλΚΉΣΓΖδΛϋÒ»ΈφΓϋ³Ζ΅£";
     MESSAGE[ russian ] = "έςξ θμÿ σζε οπθρβξενξ ξδνξμσ ρςθλώ οξ σμξλχΰνθώ.\nΟπθρβξιςε, οξζΰλσιρςΰ, δπσγξε θμÿ.";
     MESSAGE[ polish ] = "Ta nazwa jest juΏ nazwΉ stylu domylnego .\nProszκ wybierz innΉ nazwκ.";
-    MESSAGE[ japanese ] = "‚±‚Μ–Ό‘O‚Ν‚·‚Ε‚Ι•W€½ΐ²Ω‚Μ–Ό‘O‚Ζ‚µ‚Δg‚ν‚κ‚Δ‚Ά‚ά‚·B\n‘Ό‚Μ–Ό‘O‚Ι‚µ‚Δ‰Ί‚³‚ΆB";
+    MESSAGE[ japanese ] = "‚±‚Μ–Ό‘O‚Ν‚·‚Ε‚Ι•W€½ΐ²Ω–Ό‚Εg‚ν‚κ‚Δ‚Ά‚ά‚·B\n•Κ‚Μ–Ό‘O‚π‘I‘π‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     MESSAGE[ chinese_traditional ] = "³o­Σ¦WΊΩ¬O¤@­ΣΌΠ·ΗΌΛ¦΅ªΊ¦WΊΩ΅C\n½Π±z±Δ¥Ξ¨δ¥L¤@­Σ¦WΊΩ΅C";
     MESSAGE[ arabic ] = "εΠΗ ΗαΗΣγ γζΜζΟ γΣΘήΗπ ίΗΣγ δγΨ ΗέΚΡΗΦν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΒΞΡ.";
     MESSAGE[ greek ] = "Το όνομα αυτό υπάρχει ήδη ως όνομα προτύπου προεπιλογής.\nΠαρακαλώ επιλέξτε άλλο όνομα.";
