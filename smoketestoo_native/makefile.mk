@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-05 10:41:21 $
+#   last change: $Author: kz $ $Date: 2004-08-26 17:10:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET=t1
 
 .INCLUDE : settings.mk
 
-.IF "$(OS)$(PROEXT)"=="LINUX.pro"
+.IF "$(OS)$(PROEXT)"=="LINUX.pro_never"
 SHL1TARGET= genstats
 SLOFILES=       $(SLO)$/genstats.obj
 SHL1OBJS=   $(SLOFILES)
