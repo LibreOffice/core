@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:24 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 09:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ class WW8ReaderSave
     BOOL bPgSecBreak : 1;
     BOOL bVerticalEnviron : 1;
     BOOL bWasParaEnd : 1;
+    BOOL bHasBorder : 1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:23 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 09:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,18 +862,21 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bAnl            = pRdr->bAnl;
     bInHyperlink    = pRdr->bInHyperlink;
     bPgSecBreak     = pRdr->bPgSecBreak;
-    bVerticalEnviron = pRdr->bVerticalEnviron;
     bWasParaEnd = pRdr->bWasParaEnd;
+    bHasBorder = pRdr->bHasBorder;
     nAktColl        = pRdr->nAktColl;
 
-                                    // Tracking beginnt neu
+    //Honestly should inherit this from parent environment so don't reset this
+    bVerticalEnviron = pRdr->bVerticalEnviron;
+
     pRdr->bHdFtFtnEdn = TRUE;
-    pRdr->bApo = pRdr->bTxbxFlySection
-               = pRdr->bTableInApo = pRdr->bAnl = FALSE;
+    pRdr->bApo = pRdr->bTxbxFlySection = pRdr->bTableInApo = pRdr->bAnl =
+        pRdr->bPgSecBreak = pRdr->bWasParaEnd = pRdr->bHasBorder = FALSE;
     pRdr->nTable = 0;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
+    pRdr->nAktColl = 0;
 
     pOldStck = pRdr->pCtrlStck;
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
@@ -891,8 +894,8 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
 
     if (nStartCp != -1)
     {
-        pRdr->pPlcxMan = new WW8PLCFMan( pRdr->pSBase,
-            pOldPlcxMan->GetManType(), nStartCp );
+        pRdr->pPlcxMan = new WW8PLCFMan(pRdr->pSBase, pOldPlcxMan->GetManType(),
+            nStartCp );
     }
 }
 
