@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:46:15 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,10 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
             }
         }
     }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        throw; // dont hide it!
+    }
     catch( const ::com::sun::star::uno::Exception& )
     {
         // type detection failed -> no extension
@@ -390,6 +394,10 @@ sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo
                  ( rContent.getPropertyValue( ASCII_STRING("IsFloppy") ) >>= rVolumeInfo.m_bIsFloppy ) &&
                  ( rContent.getPropertyValue( ASCII_STRING("IsCompactDisc") ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        throw; // dont hide it!
+    }
     catch( const ::com::sun::star::uno::Exception& )
     {
         // type detection failed -> no extension
@@ -416,6 +424,10 @@ USHORT GetFolderImageId_Impl( const String& rURL )
             else if ( aVolumeInfo.m_bIsVolume )
                 nRet = IMG_FIXEDDEV;
         }
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        throw; // dont hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -555,6 +567,10 @@ USHORT GetFolderDescriptionId_Impl( const String& rURL )
             else if ( aVolumeInfo.m_bIsRemoveable || aVolumeInfo.m_bIsVolume )
                 nRet = STR_DESCRIPTION_LOCALE_VOLUME;
         }
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        throw; // dont hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
