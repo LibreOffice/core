@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:38:32 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ spanish ] = "para el área de datos" ;
         Text [ french ] = "Pour la plage de ~données" ;
         Text [ dutch ] = "voor gegevensbereik" ;
-        Text [ portuguese ] = "para a área dos dados" ;
+        Text [ portuguese ] = "para a área ~dos dados" ;
         Text[ chinese_simplified ] = "ÓÃÓÚÊı¾İÇøÓò";
         Text[ russian ] = "Äëÿ äèàïàçîíà äàííûõ";
         Text[ polish ] = "dla zakresu danych";
@@ -368,4 +368,5 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ catalan ] = "Definir área de etiqueta";
     Text[ finnish ] = "Määritä nimiöalue";
 };
+
 
