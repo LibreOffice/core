@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2001-02-28 09:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,15 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
 
     aHeaderCB.Check(nInsTblFlags & HEADLINE);
     aRepeatHeaderCB.Check(nInsTblFlags & REPEAT);
-    aDontSplitCB.Check(!(nInsTblFlags & SPLIT_LAYOUT));
+    if(bHTMLMode)
+    {
+        aDontSplitCB.Hide();
+        aBorderCB.SetPosPixel(aDontSplitCB.GetPosPixel());
+    }
+    else
+    {
+        aDontSplitCB.Check(!(nInsTblFlags & SPLIT_LAYOUT));
+    }
     aBorderCB.Check(nInsTblFlags & DEFAULT_BORDER);
 
     aHeaderCB.SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
@@ -217,6 +225,9 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.49  2000/09/18 16:06:08  willem.vandorp
     OpenOffice header added.
 
