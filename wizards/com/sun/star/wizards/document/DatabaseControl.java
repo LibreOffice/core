@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:31:36 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ public class DatabaseControl extends Control {
 
 
     public DatabaseControl(FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, int _fieldtype, Point _aPoint) {
-    super(_oFormHandler, _xFormName, _oFormHandler.getControlType(_fieldtype), _aPoint, null);
+    super(_oFormHandler, _xFormName, _oFormHandler.getControlType(_fieldtype), _curFieldName, _aPoint, null);
     try {
         this.ifieldtype = _fieldtype;
         Helper.setUnoPropertyValue(xControlModel, "DataField", _curFieldName);
@@ -141,20 +141,12 @@ public class DatabaseControl extends Control {
     }}
 
 
-
-
     private String getGridColumnName(){
         for (int i = 0; i < FormHandler.oControlData.length; i++){
             if (FormHandler.oControlData[i].DataType == this.ifieldtype)
                 return FormHandler.oControlData[i].GridColumnName;
         }
         return null;
-    }
-
-
-    // TODO the default name should be set according to the Array ControlData defined in FormHandler
-    public String getDefaultControlName(){
-        return "DBControl";
     }
 
 
@@ -166,6 +158,8 @@ public class DatabaseControl extends Control {
                 Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
                 return (oFormHandler.getDBRefHeight() * 4);
             }
+            else if (this.icontroltype == FormHandler.SOCHECKBOX)
+                return super.getPreferredHeight();
             else
                 return oFormHandler.getDBRefHeight();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Control.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:31:25 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,7 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 
-/**
- * @author Administrator
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
+
 public class Control extends Shape{
     XControlModel xControlModel;
     XControl xControl;
@@ -110,37 +105,35 @@ public class Control extends Shape{
         super(_oFormHandler, _sServiceName, _aPoint, null);
     }
 
-    public Control(FormHandler _oFormHandler, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize){
+    public Control(FormHandler _oFormHandler, XNameContainer _xFormName, int _icontroltype, String _FieldName, Point _aPoint, Size _aSize){
     super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, _aPoint, _aSize, null);
+        createControl(_icontroltype, _aPoint, _aSize, null, _FieldName);
     }
 
 
     public Control(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize){
     super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, _aPoint, _aSize, _xGroupShapes);
+        createControl(_icontroltype, _aPoint, _aSize, _xGroupShapes, null);
     }
-
-
 
 
     public Control(FormHandler _oFormHandler, int _icontroltype, Point _aPoint, Size _aSize){
         super(_oFormHandler, _aPoint, _aSize);
-        createControl(_icontroltype, _aPoint, _aSize, null);
+        createControl(_icontroltype, _aPoint, _aSize, null, null);
     }
 
 
 
-    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes){
+    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes, String _FieldName){
     try {
         this.icontroltype = _icontroltype;
         this.sServiceName = oFormHandler.sModelServices[icontroltype];
         Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
         xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oControlModel);
         xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oControlModel);
-//      insertControlInContainer();
+        insertControlInContainer(_FieldName);
         xControlShape.setControl(xControlModel);
         if  (_xGroupShapes == null)
             oFormHandler.xDrawPage.add(xShape);
@@ -155,11 +148,12 @@ public class Control extends Shape{
     }}
 
 
-    protected void insertControlInContainer(){
+    public void insertControlInContainer(String _fieldname){
     try {
         if (xFormName != null){
             XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
-            String sControlName = Desktop.getUniqueName(xNameAccess, getDefaultControlName());
+            String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
+            xPropertySet.setPropertyValue("Name", sControlName);
             xFormName.insertByName(sControlName, xControlModel);
         }
     } catch (Exception e) {
@@ -167,9 +161,37 @@ public class Control extends Shape{
     }}
 
 
-    // TODO the default name should be set according to the Array ControlData defined in FormHandler
-    public String getDefaultControlName(){
-        return "LabelField";
+    public String getControlName(String _fieldname){
+        String controlname = "";
+        switch (getControlType()){
+            case FormHandler.SOLABEL:
+                controlname = "lbl" + _fieldname;
+                break;
+            case FormHandler.SOTEXTBOX:
+                controlname = "txt" + _fieldname;
+                break;
+            case FormHandler.SOCHECKBOX:
+                controlname = "chk" + _fieldname;
+                break;
+            case FormHandler.SODATECONTROL:
+                controlname = "dat" + _fieldname;
+                break;
+            case FormHandler.SOTIMECONTROL:
+                controlname = "tim" + _fieldname;
+                break;
+            case FormHandler.SONUMERICCONTROL:
+                controlname = "fmt" + _fieldname;
+                break;
+            case FormHandler.SOGRIDCONTROL:
+                controlname = "grd" + _fieldname;
+                break;
+            case FormHandler.SOIMAGECONTROL:
+                controlname = "img" + _fieldname;
+                break;
+            default:
+                controlname = "ctrl" + _fieldname;
+        }
+        return controlname;
     }
 
 
@@ -186,7 +208,10 @@ public class Control extends Shape{
 
     public int getPreferredHeight(String sText){
         Size aPeerSize = getPreferredSize(sText);
-        return ((aPeerSize.Height + 2) * oFormHandler.getXPixelFactor());
+        if (icontroltype == FormHandler.SOCHECKBOX)
+            return (aPeerSize.Height * oFormHandler.getXPixelFactor());
+        else
+            return ((aPeerSize.Height + 2) * oFormHandler.getXPixelFactor());
     }
 
 
@@ -197,7 +222,10 @@ public class Control extends Shape{
             Size aPeerSize = getPeerSize();
             // We increase the preferred Width a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
-            return((aPeerSize.Width + 100) * oFormHandler.getXPixelFactor());   // PixelTo100thmm(nWidth)
+            if (icontroltype == FormHandler.SOCHECKBOX)
+                return((aPeerSize.Width * oFormHandler.getXPixelFactor()) );
+            else
+                return((aPeerSize.Width * oFormHandler.getXPixelFactor()) + 200);
         }
     }
 
@@ -210,7 +238,10 @@ public class Control extends Shape{
             int nHeight = aPeerSize.Height;
             // We increase the preferred Height a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
-            return((nHeight+1) * oFormHandler.getYPixelFactor());   // PixelTo100thmm(nHeight)
+//          if (icontroltype == FormHandler.SOCHECKBOX)
+//              return(nHeight * oFormHandler.getYPixelFactor());
+//          else
+                return((nHeight+1) * oFormHandler.getYPixelFactor());
         }
     }
 
@@ -253,7 +284,7 @@ public class Control extends Shape{
                 xPropertySet.setPropertyValue("EffectiveValue", new Double(99999));
             }
             else
-                xPropertySet.setPropertyValue("EffectiveValue", xPropertySet.getPropertyValue("EffectiveMax"));
+                xPropertySet.setPropertyValue("EffectiveValue", xPropertySet.getPropertyValue("EffectiveMax")); //new Double(100000.2)); //
             aPreferredSize = xLayoutConstrains.getPreferredSize();
             xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);
 
@@ -267,7 +298,7 @@ public class Control extends Shape{
             xPropertySet.setPropertyValue("Date",  com.sun.star.uno.Any.VOID);
         }
         else if (this.icontroltype == FormHandler.SOTIMECONTROL){
-            xPropertySet.setPropertyValue("Time", new Integer(4711));       //TODO find a better time
+            xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
             aPreferredSize = xLayoutConstrains.getPreferredSize();
             xPropertySet.setPropertyValue("Time",  com.sun.star.uno.Any.VOID);
         }
