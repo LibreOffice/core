@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-05 16:16:53 $
+ *  last change: $Author: mt $ $Date: 2001-06-13 10:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,8 @@ void TextView::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpTextEngine->mpIMEInfos;
-        mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd() );
+        TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( GetSelection().GetEnd().GetPara() );
+        mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd(), pNode->GetText().Copy( GetSelection().GetEnd().GetIndex() ) );
         mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
@@ -929,10 +930,38 @@ void TextView::Command( const CommandEvent& rCEvt )
 
             TextSelection aSel( mpTextEngine->mpIMEInfos->aPos );
             aSel.GetEnd().GetIndex() += mpTextEngine->mpIMEInfos->nLen;
-            SetSelection( aSel );
-            DeleteSelected();
-            aSel.GetEnd() = aSel.GetStart();
+            aSel = mpTextEngine->ImpDeleteText( aSel );
             aSel = mpTextEngine->ImpInsertText( aSel, pData->GetText() );
+
+            if ( mpTextEngine->mpIMEInfos->bWasCursorOverwrite )
+            {
+                USHORT nOldIMETextLen = mpTextEngine->mpIMEInfos->nLen;
+                USHORT nNewIMETextLen = pData->GetText().Len();
+
+                if ( ( nOldIMETextLen > nNewIMETextLen ) &&
+                     ( nNewIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                {
+                    // restore old characters
+                    USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
+                    TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
+                    aPaM.GetIndex() += nNewIMETextLen;
+                    mpTextEngine->ImpInsertText( aPaM, mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                }
+                else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
+                          ( nOldIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                {
+                    // overwrite
+                    USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                    if ( ( nOldIMETextLen + nOverwrite ) > mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() )
+                        nOverwrite = mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
+                    DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
+                    TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
+                    aPaM.GetIndex() += nNewIMETextLen;
+                    TextSelection aSel( aPaM );
+                    aSel.GetEnd().GetIndex() += nOverwrite;
+                    mpTextEngine->ImpDeleteText( aSel );
+                }
+            }
 
             if ( pData->GetTextAttr() )
             {
