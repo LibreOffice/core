@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-19 10:08:36 $
+ *  last change: $Author: dbo $ $Date: 2001-03-19 10:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <rtl/memory.h>
 
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
@@ -265,15 +266,11 @@ void exportToFile(
         nRead = xStream->readBytes( readBytes, 1024 );
         if (! nRead)
             break;
+        OSL_ASSERT( readBytes.getLength() >= nRead );
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        sal_Int8 * pBytes = bytes.getArray();
-        sal_Int8 const * pReadBytes = readBytes.getConstArray();
-        while (nRead--)
-        {
-            pBytes[ nPos + nRead ] = pReadBytes[ nRead ];
-        }
+        ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
     }
 
     FILE * f = ::fopen( fname, "w" );
