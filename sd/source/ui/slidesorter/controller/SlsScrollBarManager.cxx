@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:15:32 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ ScrollBarManager::ScrollBarManager (
       maScrollBorder (10,10),
       mnHorizontalScrollFactor (0.1),
       mnVerticalScrollFactor (0.1),
-      mbUseVerticalScrollBar (true),
       mpContentWindow (pContentWindow)
 {
     maAutoScrollTimer.SetTimeout(50);
@@ -134,14 +133,6 @@ void ScrollBarManager::LateInitialization (void)
 
 
 
-void ScrollBarManager::UseVerticalScrollBar (bool bUseVerticalScrollBar)
-{
-    mbUseVerticalScrollBar = bUseVerticalScrollBar;
-}
-
-
-
-
 /** Placing the scroll bars is an iterative process.  The visibility of one
     scroll bar affects the remaining size and thus may lead to the other
     scroll bar becoming visible.
@@ -155,122 +146,72 @@ void ScrollBarManager::UseVerticalScrollBar (bool bUseVerticalScrollBar)
 */
 Rectangle ScrollBarManager::PlaceScrollBars (const Rectangle& rAvailableArea)
 {
-    Rectangle aAvailableArea (rAvailableArea);
+    Rectangle aRemainingSpace (DetermineScrollBarVisibilities(rAvailableArea));
+    PlaceHorizontalScrollBar (rAvailableArea);
+    PlaceVerticalScrollBar (rAvailableArea);
+    PlaceFiller (rAvailableArea);
 
-    PlaceHorizontalScrollBar (aAvailableArea);
-    PlaceVerticalScrollBar (aAvailableArea);
-    PlaceFiller (aAvailableArea);
-
-    UpdateScrollBars (false);
-
-    return aAvailableArea;
+    return aRemainingSpace;
 }
 
 
 
 
-void ScrollBarManager::PlaceHorizontalScrollBar (Rectangle& aAvailableArea)
+void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea)
 {
-    if (mpHorizontalScrollBar != NULL)
+    if (mpHorizontalScrollBar != NULL
+        && mpHorizontalScrollBar->IsVisible())
     {
-        // To be on the safe side we assume that the vertical scroll bar
-        // will be shown.
-        int nVerticalScrollBarWidth = GetVerticalScrollBarWidth();
-        Size aBrowserSize (
-            aAvailableArea.GetWidth() - nVerticalScrollBarWidth,
-            aAvailableArea.GetHeight());
-        bool bShowHorizontalScrollBar = false;
-        if (mrController.GetModel().GetPageCount() > 0)
-        {
-            if (mrController.GetView().GetLayouter().Rearrange (
-                aBrowserSize,
-                mrController.GetModel().GetPageDescriptor(0)
-                ->GetPage()->GetSize(),
-                mpContentWindow))
-            {
-                Size aPageSize
-                    = mrController.GetView().GetLayouter().GetPageBox (
-                        mrController.GetModel().GetPageCount()).GetSize();
-                Size aWindowModelSize = mpContentWindow->PixelToLogic(
-                    aAvailableArea.GetSize());
-                bShowHorizontalScrollBar
-                    = (aWindowModelSize.Width() < aPageSize.Width());
-            }
-        }
+        // Save the current relative position.
+        mnHorizontalPosition = double(mpHorizontalScrollBar->GetThumbPos())
+            / double(mpHorizontalScrollBar->GetRange().Len());
 
+        // Place the scroll bar.
+        Size aScrollBarSize (mpHorizontalScrollBar->GetSizePixel());
+        mpHorizontalScrollBar->SetPosSizePixel (
+            Point(aAvailableArea.Left(),
+                aAvailableArea.Bottom()-aScrollBarSize.Height()+1),
+            Size (aAvailableArea.GetWidth() - GetVerticalScrollBarWidth(),
+                aScrollBarSize.Height()));
 
-        if (bShowHorizontalScrollBar)
-        {
-            // Save the current relative position.
-            mnHorizontalPosition =
-                double(mpHorizontalScrollBar->GetThumbPos())
-                / double(mpHorizontalScrollBar->GetRange().Len());
-
-            // Place the scroll bar.
-            Size aScrollBarSize (mpHorizontalScrollBar->GetSizePixel());
-            aAvailableArea.Bottom() -= aScrollBarSize.Height();
-            mpHorizontalScrollBar->SetPosSizePixel (
-                Point(aAvailableArea.Left(), aAvailableArea.Bottom()+1),
-                Size (aAvailableArea.GetWidth() - nVerticalScrollBarWidth,
-                    aScrollBarSize.Height()));
-
-            // Restore the relative position.
-            mpHorizontalScrollBar->SetThumbPos(
-                (long)(0.5 + mnHorizontalPosition
-                    * mpHorizontalScrollBar->GetRange().Len()));
-
-            mpHorizontalScrollBar->Show();
-        }
-        else
-            mpHorizontalScrollBar->Hide();
+        // Restore the relative position.
+        mpHorizontalScrollBar->SetThumbPos(
+            (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
     }
 }
 
 
 
 
-void ScrollBarManager::PlaceVerticalScrollBar (Rectangle& aArea)
+void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
 {
-    if (mpVerticalScrollBar != NULL)
+    if (mpVerticalScrollBar != NULL
+        && mpVerticalScrollBar->IsVisible())
     {
-        if (mbUseVerticalScrollBar)
-        {
-            view::Layouter::DoublePoint aLayouterPosition
-                = mrController.GetView().GetLayouter()
-                .ConvertModelToLayouterCoordinates (
-                    Point (0, mpVerticalScrollBar->GetThumbPos()));
+        view::Layouter::DoublePoint aLayouterPosition
+            = mrController.GetView().GetLayouter().ConvertModelToLayouterCoordinates (
+                Point (0, mpVerticalScrollBar->GetThumbPos()));
 
-            // Place the scroll bar.
-            Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());
-            aArea.Right() -= aScrollBarSize.Width();
-            mpVerticalScrollBar->SetPosSizePixel (
-                Point (aArea.Right()+1, aArea.Top()),
-                Size (aScrollBarSize.Width(), aArea.GetHeight()));
+        // Place the scroll bar.
+        Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());
+        mpVerticalScrollBar->SetPosSizePixel (
+            Point (aArea.Right()-aScrollBarSize.Width()+1, aArea.Top()),
+            Size (aScrollBarSize.Width(),
+                aArea.GetHeight() - GetHorizontalScrollBarHeight()));
 
-            // Restore the position.
-            mpVerticalScrollBar->SetThumbPos(
-                mrController.GetView().GetLayouter()
-                .ConvertLayouterToModelCoordinates(
-                    aLayouterPosition).Y());
-            mnVerticalPosition =
-                double(mpVerticalScrollBar->GetThumbPos())
-                / double(mpVerticalScrollBar->GetRange().Len());
-
-            mpVerticalScrollBar->Show();
-        }
-        else
-        {
-            mpVerticalScrollBar->Hide();
-            if ( ! mbUseVerticalScrollBar)
-                AdaptWindowSize (aArea);
-        }
+        // Restore the position.
+        mpVerticalScrollBar->SetThumbPos(
+            mrController.GetView().GetLayouter().ConvertLayouterToModelCoordinates(
+                aLayouterPosition).Y());
+        mnVerticalPosition = double(mpVerticalScrollBar->GetThumbPos())
+            / double(mpVerticalScrollBar->GetRange().Len());
     }
 }
 
 
 
 
-void ScrollBarManager::PlaceFiller (Rectangle& aArea)
+void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 {
     // Place the filler when both scroll bars are visible.
     if (mpHorizontalScrollBar != NULL
@@ -280,8 +221,8 @@ void ScrollBarManager::PlaceFiller (Rectangle& aArea)
     {
         mpScrollBarFiller->SetPosSizePixel(
             Point(
-                aArea.Right()+1,
-                aArea.Bottom()+1),
+                aArea.Right()-mpVerticalScrollBar->GetSizePixel().Width()+1,
+                aArea.Bottom()-mpHorizontalScrollBar->GetSizePixel().Height()+1),
             Size (
                 mpVerticalScrollBar->GetSizePixel().Width(),
                 mpHorizontalScrollBar->GetSizePixel().Height()));
@@ -376,8 +317,9 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition)
     mrController.GetView().InvalidatePageObjectVisibilities();
     if (nOldHorizontalPosition != mnHorizontalPosition
         || nOldVerticalPosition != mnVerticalPosition)
-        pWindow->SetVisibleXY (
-            mnHorizontalPosition, mnVerticalPosition);
+    {
+        pWindow->SetVisibleXY (mnHorizontalPosition, mnVerticalPosition);
+    }
 }
 
 
@@ -436,14 +378,91 @@ void ScrollBarManager::SetWindowOrigin (
 
 
 
-bool ScrollBarManager::IsHorizontalScrollBarVisible (void)
+/** Determining the visibility of the scroll bars is quite complicated.  The
+    visibility of one influences that of the other because showing a scroll
+    bar makes the available space smaller and may lead to the need of
+    displaying the other.
+    To solve this we test all four combinations of showing or hiding each
+    scroll bar and use the best one.  The best one is that combination that
+    a) shows the least number of scroll bars with preference of showing the
+    vertical over showing the horizontal and
+    b) when not showing a scroll bar the area used by the page objects fits
+    into the available area in the scroll bars orientation.
+*/
+Rectangle ScrollBarManager::DetermineScrollBarVisibilities (const Rectangle& rAvailableArea)
 {
-    ::sd::Window* pWindow = mrController.GetView().GetWindow();
-    Rectangle aPixelViewArea (pWindow->LogicToPixel(mrController.GetView().GetModelArea()));
-    Size aWindowPixelSize (pWindow->GetSizePixel());
-    // Return whether the window is smaller then the view.  Allow for some
-    // minor rounding error.
-    return (aWindowPixelSize.Width() < aPixelViewArea.GetWidth()-1);
+    // Test which combination of scroll bars is the best.
+    bool bShowHorizontal = false;
+    bool bShowVertical = false;
+    do
+    {
+        if (mrController.GetModel().GetPageCount() == 0)
+            // No pages => no scroll bars.
+            break;
+
+        if (TestScrollBarVisibilities(bShowHorizontal=false, bShowVertical=false, rAvailableArea))
+            break;
+        if (TestScrollBarVisibilities(bShowHorizontal=true, bShowVertical=false, rAvailableArea))
+            break;
+        if (TestScrollBarVisibilities(bShowHorizontal=false, bShowVertical=true, rAvailableArea))
+            break;
+        if (TestScrollBarVisibilities(bShowHorizontal=true, bShowVertical=true, rAvailableArea))
+            break;
+    }
+    while (false);
+
+    // Make the visibility of the scroll bars permanent.
+    mpVerticalScrollBar->Show(bShowVertical);
+    mpHorizontalScrollBar->Show(bShowHorizontal);
+
+    // Adapt the remaining space accordingly.
+    Rectangle aRemainingSpace (rAvailableArea);
+    if (bShowVertical)
+        aRemainingSpace.Right() -= mpVerticalScrollBar->GetSizePixel().Width();
+    if (bShowHorizontal)
+        aRemainingSpace.Bottom() -= mpHorizontalScrollBar->GetSizePixel().Height();
+
+    return aRemainingSpace;
+}
+
+
+
+
+bool ScrollBarManager::TestScrollBarVisibilities (
+    bool bHorizontalScrollBarVisible,
+    bool bVerticalScrollBarVisible,
+    const Rectangle& rAvailableArea)
+{
+    bool bAreVisibilitiesOK = true;
+
+    // Adapt the available size by subtracting the sizes of the scroll bars
+    // visible in this combination.
+    Size aBrowserSize (rAvailableArea.GetSize());
+    if (bHorizontalScrollBarVisible)
+        aBrowserSize.Height() -= mpHorizontalScrollBar->GetSizePixel().Height();
+    if (bVerticalScrollBarVisible)
+        aBrowserSize.Width() -= mpVerticalScrollBar->GetSizePixel().Width();
+
+    // Tell the view to rearrange its page objects and check whether the
+    // page objects can be shown without clipping.
+    if (mrController.GetView().GetLayouter().Rearrange (
+        aBrowserSize,
+        mrController.GetModel().GetPageDescriptor(0)->GetPage()->GetSize(),
+        mpContentWindow))
+    {
+        Size aPageSize = mrController.GetView().GetLayouter().GetPageBox (
+            mrController.GetModel().GetPageCount()).GetSize();
+        Size aWindowModelSize = mpContentWindow->PixelToLogic(aBrowserSize);
+
+        bool bHorizontallyClipped = (aPageSize.Width() > aWindowModelSize.Width());
+        bool bVerticallyClipped = (aPageSize.Height() > aWindowModelSize.Height());
+        bAreVisibilitiesOK = (bHorizontallyClipped == bHorizontalScrollBarVisible)
+            && (bVerticallyClipped == bVerticalScrollBarVisible);
+    }
+    else
+        bAreVisibilitiesOK = false;
+
+    return bAreVisibilitiesOK;
 }
 
 
@@ -468,8 +487,19 @@ void ScrollBarManager::SetTop (long nNewTop)
 
 int ScrollBarManager::GetVerticalScrollBarWidth (void) const
 {
-    if (mpVerticalScrollBar != NULL && mbUseVerticalScrollBar)
+    if (mpVerticalScrollBar != NULL && mpVerticalScrollBar->IsVisible())
         return mpVerticalScrollBar->GetSizePixel().Width();
+    else
+        return 0;
+}
+
+
+
+
+int ScrollBarManager::GetHorizontalScrollBarHeight (void) const
+{
+    if (mpHorizontalScrollBar != NULL && mpHorizontalScrollBar->IsVisible())
+        return mpHorizontalScrollBar->GetSizePixel().Height();
     else
         return 0;
 }
