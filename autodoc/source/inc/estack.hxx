@@ -2,9 +2,9 @@
  *
  *  $RCSfile: estack.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:27:34 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,11 @@ class EStack : private std::slist<ELEM>
     bool                operator==(
                             const EStack<ELEM> &
                                                 i_r2 ) const
-                                                { return std::operator==( Base(), i_rStack.Base() ); }
+                                                { return std::operator==( Base(), this->i_rStack.Base() ); }
     bool                operator<(
                             const EStack<ELEM> &
                                                 i_r2 ) const
-                                                { return std::operator<( Base(), i_rStack.Base() ); }
+                                                { return std::operator<( Base(), this->i_rStack.Base() ); }
     // OPERATIONS
     void                push(
                             const value_type &  i_rElem )
