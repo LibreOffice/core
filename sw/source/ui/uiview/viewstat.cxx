@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 14:59:18 $
+ *  last change: $Author: os $ $Date: 2002-05-03 11:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SFXMSGPOOL_HXX
+#include <sfx2/msgpool.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
@@ -256,14 +259,41 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_INSERT_CTRL:
-                rSet.Put(SfxUInt16Item(nWhich,
-                    bWeb ? SwView::nWebInsertCtrlState : SwView::nInsertCtrlState));
+            {
+                SfxImageItem aImgItem(nWhich, bWeb ? SwView::nWebInsertCtrlState : SwView::nInsertCtrlState);
+                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( GetViewFrame() );
+                const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
+                if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                {
+                    if(pWrtShell->IsInVerticalText())
+                        aImgItem.SetRotation(2700);
+#ifdef BIDI
+                    if(pWrtShell->IsInRightToLeftText())
+                        aImgItem.SetMirrored(TRUE);
+#endif
+                }
+                rSet.Put(aImgItem);
+            }
             break;
             case FN_INSERT_OBJ_CTRL:
             if(bWeb)
                 rSet.DisableItem(nWhich);
             else
-                rSet.Put(SfxUInt16Item(nWhich, SwView::nInsertObjectCtrlState));
+            {
+                SfxImageItem aImgItem(nWhich, SwView::nInsertObjectCtrlState);
+                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( GetViewFrame() );
+                const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
+                if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                {
+                    if(pWrtShell->IsInVerticalText())
+                        aImgItem.SetRotation(2700);
+#ifdef BIDI
+                    if(pWrtShell->IsInRightToLeftText())
+                        aImgItem.SetMirrored(TRUE);
+#endif
+                }
+                rSet.Put(aImgItem);
+            }
             break;
             case FN_UPDATE_TOX:
                 if(!pWrtShell->GetTOXCount())
