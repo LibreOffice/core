@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 13:18:53 $
+#   last change: $Author: hjs $ $Date: 2001-11-05 12:35:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1120,9 +1120,6 @@ RSCEXTINC=.
 .IF "$(DEBUG)" != ""
 RSCDEFS+= -DDEBUG
 .ENDIF
-.IF "$(OLD_CHAOS)"!=""
-RSCDEFS+= -DOLD_CHAOS
-.ENDIF
 
 UNOIDL=unoidl
 
@@ -1184,11 +1181,6 @@ COMID=$(COM)
 
 # --- Neues Environment erweitern ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
-
-.IF "$(OLD_CHAOS)"!=""
-CDEFS+= -DOLD_CHAOS
-.ENDIF
-
 
 .IF "$(SWEEPER)"!=""
 CDEFS+= -DSWEEPER

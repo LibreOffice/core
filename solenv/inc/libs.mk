@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-26 13:14:41 $
+#   last change: $Author: hjs $ $Date: 2001-11-05 12:35:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,9 +180,7 @@ SVXLIB=-lsvx$(UPD)$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(UPD)$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
 SVXLLIB=-lsvxl
-.IF "$(OLD_CHAOS)"==""
 CHAOSLIB=-lcnt$(UPD)$(DLLPOSTFIX)
-.ENDIF
 UUILIB=-luui$(UPD)$(DLLPOSTFIX)
 DGLIB=
 SIMLIB=-lysim
@@ -329,9 +327,7 @@ JPEG3RDLIB=$(LIBPRE) jpeglib.lib
 NEON3RDLIB=$(LIBPRE) neon.lib
 BERKELEYLIB=$(LIBPRE) libdb32.lib
 BERKELEYCPPLIB=
-.IF "$(OLD_CHAOS)"==""
 CHAOSLIB=$(LIBPRE) ichaos.lib
-.ENDIF
 UUILIB=$(LIBPRE) iuui.lib
 DGLIB=
 SIMLIB=$(LIBPRE) ysim.lib
