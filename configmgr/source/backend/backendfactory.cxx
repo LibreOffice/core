@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:43:00 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ rtl::Reference<IMergedDataProvider>
     UnoBackend xBackendService = createUnoBackend(_aSettings, _xCtx);
 
     if (xBackendService.is())
-        xBackend = new BackendAccess();
+        xBackend = new BackendAccess(xBackendService, _xCtx);
 
     return xBackend;
 }
