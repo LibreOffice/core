@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:44:48 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,6 +781,11 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     case OBJ_CCUT:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_GEOMOBJ_POPUP :
                                                                     RID_DRAW_GEOMOBJ_POPUP;
+                                        break;
+
+                                    case OBJ_CUSTOMSHAPE:
+                                        nSdResId = bGraphicShell ? RID_GRAPHIC_CUSTOMSHAPE_POPUP :
+                                                                    RID_DRAW_CUSTOMSHAPE_POPUP;
                                         break;
 
                                     case OBJ_GRUP:
