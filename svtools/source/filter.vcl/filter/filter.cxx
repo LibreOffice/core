@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
+ *  last change: $Author: sj $ $Date: 2002-06-21 14:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #if defined UNX && defined ALPHA
 #include <fstream.hxx>
 #endif
+#include <vos/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -1106,12 +1107,15 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 
 GraphicFilter::~GraphicFilter()
 {
+
     pFilterHdlList->Remove( (void*)this );
     if ( !pFilterHdlList->Count() )
     {
         delete pFilterHdlList, pFilterHdlList = NULL;
         delete pConfig;
     }
+
+
     delete pErrorEx;
 }
 
@@ -1128,6 +1132,7 @@ void GraphicFilter::ImplInit()
         pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
 
     pFilterHdlList->Insert( (void*)this );
+
 
     if( bUseConfig )
     {
@@ -1700,10 +1705,34 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
     return nStatus;
 }
 
+
 // ------------------------------------------------------------------------
 
+static sal_Bool ImplGetInt32( const uno::Sequence< beans::PropertyValue >* pFilterData,
+                                            const String& rName, sal_Int32& nValue )
+{
+    sal_Bool bHasFilterData = sal_False;
+    if ( pFilterData )
+    {
+        sal_Int32 i, nCount;
+        for ( i = 0, nCount = pFilterData->getLength(); i < nCount; i++ )
+        {
+            if ( (*pFilterData)[ i ].Name.equals( rName ) )
+            {
+                if ( (*pFilterData)[ i ].Value >>= nValue )
+                    bHasFilterData = sal_True;
+                break;
+            }
+        }
+    }
+    return bHasFilterData;
+}
+
+//--------------------------------------------------------------------------
+
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-                                            sal_uInt16 nFormat, sal_Bool bIgnoreOptions )
+    sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
+        const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
@@ -1713,7 +1742,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
     if ( pStream )
     {
-        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, bIgnoreOptions );
+        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, bIgnoreOptions, pFilterData );
         delete pStream;
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
@@ -1725,7 +1754,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
-                                     SvStream& rOStm, sal_uInt16 nFormat, sal_Bool bIgnoreOptions )
+    SvStream& rOStm, sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
+        const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
     USHORT nFormatCount = GetExportFormatCount();
 
@@ -1858,6 +1888,9 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( !rOStm.GetError() )
                 {
+                    sal_Int32 nVersion;
+                    if ( ImplGetInt32( pFilterData, String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), nVersion ) )
+                        rOStm.SetVersion( nVersion );
                     GDIMetaFile aMTF;
 
                     if ( eType != GRAPHIC_BITMAP )
