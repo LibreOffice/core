@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:45:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,31 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     EnableHdl_Impl( &m_aJavaEnableCB );
     jfw_lock();
+
+    //check if the text fits into the class path button
+    Size aButtonSize = m_aClassPathBtn.GetOutputSizePixel();
+    sal_Int32 nTextWidth = m_aClassPathBtn.GetTextWidth(m_aClassPathBtn.GetText());
+    //add some additional space
+    sal_Int32 nDiff = nTextWidth + 4 - aButtonSize.Width();
+    if( nDiff > 0)
+    {
+        Point aPos(m_aClassPathBtn.GetPosPixel());
+        aPos.X() -= nDiff;
+        aButtonSize.Width() += nDiff;
+        m_aClassPathBtn.SetPosSizePixel(aPos, aButtonSize);
+        aPos = m_aAddBtn.GetPosPixel();
+        aPos.X() -= nDiff;
+        m_aAddBtn.SetPosSizePixel(aPos, aButtonSize);
+        aPos = m_aParameterBtn.GetPosPixel();
+        aPos.X() -= nDiff;
+        m_aParameterBtn.SetPosSizePixel(aPos, aButtonSize);
+        Size aSize = m_aJavaList.GetSizePixel();
+        aSize.Width() -= nDiff;
+        m_aJavaList.SetSizePixel(aSize);
+
+    }
+
+
 }
 
 // -----------------------------------------------------------------------
