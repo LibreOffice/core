@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,21 @@ using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+    inline OUString str_ac_singleton()
+    {
+        return OUSTR("/singletons/com.sun.star.security.theAccessController");
+    }
+}
+
 namespace cppu
 {
-
-static OUString str_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-static OUString str_ac_singleton = OUSTR("/singletons/com.sun.star.security.theAccessController");
-
 //__________________________________________________________________________________________________
 AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
-    if (! (xContext->getValueByName( str_ac_singleton ) >>= m_xController))
+    if (! (xContext->getValueByName( str_ac_singleton() ) >>= m_xController))
     {
         throw SecurityException(
             OUSTR("no access controller!"), Reference< XInterface >() );
