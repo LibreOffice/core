@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:30:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
@@ -124,12 +127,18 @@ class XMLTransformerBase : public XMLTransformer
     XMLTransformerTokenMap      *m_pTokenMap;
 
 protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     mxModel;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     XMLTransformerContext *CreateContext( sal_uInt16 nPrefix,
                                       const ::rtl::OUString& rLocalName,
                                       const ::rtl::OUString& rQName );
+
+    // this method may return an empty reference when the transformer service
+    // was created outside the xmloff environment.
+    // It is strictly forbiden to use this as a write access to the model!
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& getModel() const { return mxModel; }
 
 public:
     XMLTransformerBase( XMLTransformerActionInit *pInit=0,
@@ -229,6 +238,12 @@ public:
     // C++
     inline void SetClass( const ::rtl::OUString& r ) { m_aClass = r; }
     inline const ::rtl::OUString& GetClass() const { return m_aClass; }
+
+    bool isDraw() const;
+    bool isImpress() const;
+    bool isCalc() const;
+    bool isWriter() const;
+
 };
 
 #endif  //  _XMLOFF_TRANSFORMER_BASE_HXX
