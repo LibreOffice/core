@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 08:03:14 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 11:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 
 // ERRCODE_CLASS_IMPORT - does not display "Read-Error" in MsgBox
 #define SCWARN_IMPORT_RANGE_OVERFLOW (  1 | ERRCODE_CLASS_IMPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
+#define SCWARN_IMPORT_ROW_OVERFLOW (  2 | ERRCODE_CLASS_IMPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
+#define SCWARN_IMPORT_COLUMN_OVERFLOW (  3 | ERRCODE_CLASS_IMPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
+#define SCWARN_IMPORT_SHEET_OVERFLOW (  4 | ERRCODE_CLASS_IMPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
 
 // ERRCODE_CLASS_EXPORT - does not display "Write-Error" in MsgBox
 #define SCWARN_EXPORT_NONCONVERTIBLE_CHARS  (   1 | ERRCODE_CLASS_EXPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
