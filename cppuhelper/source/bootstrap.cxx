@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,37 +62,40 @@
 #include <string.h>
 #include <vector>
 
-#include <rtl/process.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/string.hxx>
-#include <rtl/ustrbuf.hxx>
+#include "rtl/process.h"
+#include "rtl/bootstrap.hxx"
+#include "rtl/string.hxx"
+#include "rtl/ustrbuf.hxx"
 #ifdef _DEBUG
-#include <rtl/strbuf.hxx>
+#include "rtl/strbuf.hxx"
 #endif
+#include "osl/diagnose.h"
+#include "osl/file.hxx"
+#include "osl/module.hxx"
+#include "osl/security.hxx"
 
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
-#include <osl/module.hxx>
-#include <osl/security.hxx>
+#include "cppuhelper/shlib.hxx"
+#include "cppuhelper/bootstrap.hxx"
+#include "cppuhelper/component_context.hxx"
+#include "cppuhelper/access_control.hxx"
 
-#include <cppuhelper/shlib.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/component_context.hxx>
-#include <cppuhelper/access_control.hxx>
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/XCurrentContext.hpp"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
-
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
+#include "com/sun/star/container/XSet.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+#if ! defined SAL_DLLPREFIX
+#define SAL_DLLPREFIX
+#endif
+#define CORE_COMPONENT_LIB(x) SAL_DLLPREFIX x SAL_DLLEXTENSION
 
 
 using namespace ::rtl;
@@ -102,6 +105,50 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
+
+static void MyDummySymbolWithinLibrary(){}
+//--------------------------------------------------------------------------------------------------
+OUString const & get_this_libpath()
+{
+    static OUString s_path;
+    if (0 == s_path.getLength())
+    {
+        OUString path;
+        Module::getUrlFromAddress( (void*) MyDummySymbolWithinLibrary, path );
+        path = path.copy( 0, path.lastIndexOf( '/' ) );
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if (0 == s_path.getLength())
+            s_path = path;
+    }
+    return s_path;
+}
+
+//--------------------------------------------------------------------------------------------------
+Bootstrap const & get_unorc() SAL_THROW( () )
+{
+    static rtlBootstrapHandle s_bstrap = 0;
+    if (! s_bstrap)
+    {
+        OUString iniName( get_this_libpath() + OUSTR("/" SAL_CONFIGFILE("uno")) );
+        rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
+
+        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        if (s_bstrap)
+        {
+            guard.clear();
+            rtl_bootstrap_args_close( bstrap );
+        }
+        else
+        {
+            s_bstrap = bstrap;
+        }
+    }
+    return *(Bootstrap const *)&s_bstrap;
+}
+
+//##################################################################################################
+//##################################################################################################
+//##################################################################################################
 
 //==================================================================================================
 void addFactories(
@@ -199,7 +246,7 @@ static OUString findBoostrapArgument(
 {
     OUString result;
 
-    OUString prefixed_arg_name = OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_"));
+    OUString prefixed_arg_name = OUSTR("UNO_");
     prefixed_arg_name += arg_name.toAsciiUpperCase();
 
     // environment not set -> try relative to executable
@@ -212,10 +259,12 @@ static OUString findBoostrapArgument(
         bootstrap.getIniName(fileName);
 
         // cut the rc extension
-        result = fileName.copy(0, fileName.getLength() - strlen(SAL_CONFIGFILE("")));
-        result += OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
-        result += arg_name.toAsciiLowerCase();
-        result += OUString(RTL_CONSTASCII_USTRINGPARAM(".rdb"));
+        OUStringBuffer result_buf( 64 );
+        result_buf.append( fileName.copy(0, fileName.getLength() - strlen(SAL_CONFIGFILE(""))) );
+        result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_") );
+        result_buf.append( arg_name.toAsciiLowerCase() );
+        result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
+        result = result_buf.makeStringAndClear();
 
 #ifdef DEBUG
         OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
@@ -265,7 +314,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
 
         try
         {
-              lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
+            lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
         }
         catch (registry::InvalidRegistryException & invalidRegistryException)
         {
@@ -353,7 +402,7 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
-    OUString bootstrapPath;
+    OUString bootstrapPath( get_this_libpath() );
     OUString iniDir;
 
     osl_getProcessWorkingDir(&iniDir.pData);
@@ -366,25 +415,22 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
     Reference<registry::XRegistryKey> xEmptyKey;
     Reference<lang::XSingleServiceFactory> xSimRegFac(
         loadSharedLibComponentFactory(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("simreg")),
-            bootstrapPath,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry")),
+            OUSTR(CORE_COMPONENT_LIB("simreg")), bootstrapPath,
+            OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
         UNO_QUERY);
 
     Reference<lang::XSingleServiceFactory> xNesRegFac(
         loadSharedLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("defreg")),
-            bootstrapPath,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.NestedRegistry")),
+            OUSTR(CORE_COMPONENT_LIB("defreg")), bootstrapPath,
+            OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
         UNO_QUERY);
 
     sal_Bool bFallenback_types;
-    OUString cls_uno_types = findBoostrapArgument(
-        bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")), &bFallenback_types );
+    OUString cls_uno_types = findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
 
     Reference<registry::XSimpleRegistry> types_xRegistry = nestRegistries(
         iniDir, xSimRegFac, xNesRegFac, cls_uno_types, OUString(), sal_False, bFallenback_types );
@@ -499,11 +545,11 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
 
         sal_Bool bFallenback_services;
         OUString cls_uno_services = findBoostrapArgument(
-            bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")), &bFallenback_services );
+            bootstrap, OUSTR("SERVICES"), &bFallenback_services );
 
         sal_Bool fallenBackWriteRegistry;
         OUString write_rdb = findBoostrapArgument(
-            bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBackWriteRegistry );
+            bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
         if (fallenBackWriteRegistry)
         {
             // no standard write rdb anymore
@@ -532,33 +578,6 @@ static Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponent
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
-
-static void MyDummySymbolWithinLibrary(){}
-//--------------------------------------------------------------------------------------------------
-Bootstrap const & get_unorc() SAL_THROW( () )
-{
-    static rtlBootstrapHandle s_bstrap = 0;
-    if (! s_bstrap)
-    {
-        OUString libraryFileUrl;
-        Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
-
-        OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
-        iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
-        rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
-        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
-        if (s_bstrap)
-        {
-            guard.clear();
-            rtl_bootstrap_args_close( bstrap );
-        }
-        else
-        {
-            s_bstrap = bstrap;
-        }
-    }
-    return *(Bootstrap const *)&s_bstrap;
-}
 
 //==================================================================================================
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
