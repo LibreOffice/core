@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:42:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,11 +929,11 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ dutch ] = "~Vanaf begin;~Vanaf einde;~Zoeken;~Stoppen";
     Text[ spanish ] = "~Desde el principio;~Desde el final;~Buscar;~Cancelar";
     Text[ english_us ] = "From top;From bottom;Search;Cancel";
-    Text[ chinese_simplified ] = "´Ó¿ª¶Ë;´ÓÎ²¶Ë;ËÑÑ°;È¡Ïû";
+    Text[ chinese_simplified ] = "´Ó¿ª¶ËÎ»ÖÃ;´Ó½áÊøÎ»ÖÃ;ËÑÑ°;È¡Ïû";
     Text[ russian ] = "ñ íà÷àëà;~ñ êîíöà;~Íàéòè;~Îòìåíèòü";
     Text[ polish ] = "od koñca;od pocz¹tku;Szukaj;Anuluj";
     Text[ japanese ] = "Å‰‚©‚ç;ÅŒã‚©‚ç;ŒŸõ;·¬İ¾Ù";
-    Text[ chinese_traditional ] = "±q°_©l;±qµ²§À;·j´M;¨ú®ø";
+    Text[ chinese_traditional ] = "±q°_©l¦ì¸m;±qµ²§ô¦ì¸m;·j´M;¨ú®ø";
     Text[ arabic ] = "ãä ÇáÈÏÇíÉº ãä ÇáäåÇíÉº ÈÍËº ÅáÛÇÁ";
     Text[ greek ] = "Áğü ôçí áñ÷Ş;Áğü ôï ôİëïò;ÁíáæŞôç~óç;~Áêıñùóç";
     Text[ korean ] = "Ã³À½ºÎÅÍ;³¡¿¡¼­ ºÎÅÍ;Ã£±â;Ãë¼Ò";
@@ -1012,12 +1012,12 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ dutch ] = "Overloop, zoeken werd voortgezet aan het begin; Overloop, zoeken werd voortgezet aan het einde";
     Text[ spanish ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa por el final";
     Text[ english_us ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
-    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø;ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
+    Text[ chinese_simplified ] = "ÒçÖµ,ËÑÑ°´ÓÆğÊ¼Î»ÖÃ¼ÌĞø;ÒçÖµ,ËÑÑ°´Ó½áÊøÎ»ÖÃ¼ÌĞø";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â íà÷àëå;Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â êîíöå";
     Text[ polish ] = "Przepe³nienie, Kontynuuj wyszukiwanie na pocz¹tku;Przepe³nienie, Kontynuuj wyszukiwanie na koñcu";
     Text[ japanese ] = "µ°ÊŞ°ÌÛ°AŒŸõ‚ÍÅ‰‚Å‘±s;µ°ÊŞ°ÌÛ°AŒŸõ‚ÍÅŒã‚Å‘±s";
-    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q°_©l¦ì¸mÄ~Äò;·¸­È¡A·j´M±qµ²§À¦ì¸mÄ~Äò";
+    Text[ chinese_traditional ] = "·¸­È,·j´M±q°_©l¦ì¸mÄ~Äò;·¸­È,·j´M±qµ²§À¦ì¸mÄ~Äò";
     Text[ arabic ] = "İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáÈÏÇíÉ; İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáäåÇíÉ";
     Text[ greek ] = "Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôçí áñ÷Ş,Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôï ôİëïò";
     Text[ korean ] = "¿À¹öÇÃ·Î- Ã£±â´Â ½ÃÀÛºÎºĞºÎÅÍ ÁøÇàµÇ¾úÀ½;¿À¹öÇÃ·Î-Ã£±â´Â ³¡¿¡¼­ ºÎÅÍ ÁøÇàµÇ¾úÀ½";
@@ -1039,11 +1039,11 @@ String RID_STR_SEARCH_COUNTING
     Text[ dutch ] = "tel records";
     Text[ spanish ] = "contando registros de datos";
     Text[ english_us ] = "counting records";
-    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø;ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
+    Text[ chinese_simplified ] = "¼ÇÊıÊı¾İÌõÄ¿";
     Text[ russian ] = "Ïîäñ÷åò çàïèñåé";
     Text[ polish ] = "Licz rekordy";
     Text[ japanese ] = "Úº°ÄŞ‚ğ”‚¦‚é";
-    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q­ººİÄ~Äò;·¸­È¡A·j´M±q§ÀºİÄ~Äò";
+    Text[ chinese_traditional ] = "­p¼Æ¸ê®Æ¶µ¥Ø";
     Text[ arabic ] = "ÚÏ ÓÌáÇÊ ÇáÈíÇäÇÊ";
     Text[ greek ] = "áñßèìçóç åããñáöşí";
     Text[ korean ] = "·¹ÄÚµå ¼ö ¼¼±â";
@@ -1052,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
