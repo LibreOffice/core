@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:32:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,6 @@ public:
     BOOL            IsReadonly(){return bReadonly;}
 
     void            DoDelayedSyntaxHighlight( USHORT nPara );
-
-    void            SyntaxColorsChanged();
 
     void            SetStartLine(USHORT nLine){nStartLine = nLine;}
 
