@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:36:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ XclFontData::XclFontData()
 
 XclFontData::XclFontData( const Font& rFont )
 {
+    Clear();
     FillFromFont( rFont );
 }
 
