@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-22 12:07:33 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 15:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,16 +378,11 @@ SfxHelp::SfxHelp() :
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
-    rtl_uString* ustrTmp = NULL;
-    rtl_uString* ustrHelpDebug = NULL;
-    rtl_uString_newFromStr( &ustrTmp, L"HELP_DEBUG" );
-    osl_getEnvironment( ustrTmp, &ustrHelpDebug );
-    rtl_uString_release( ustrTmp );
-
-    if( ustrHelpDebug )
     {
-        bIsDebug = sal_True;
-        rtl_uString_release( ustrHelpDebug );
+        ::rtl::OUString sHelpDebug;
+        ::rtl::OUString sEnvVarName( RTL_CONSTASCII_USTRINGPARAM( "HELP_DEBUG" ) );
+        osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
+        bIsDebug = (0 == sEnvVarName.getLength() );
     }
 
     pImp = new SfxHelp_Impl( bIsDebug );
