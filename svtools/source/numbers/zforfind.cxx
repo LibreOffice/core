@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
+ *  last change: $Author: er $ $Date: 2001-07-06 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,9 +1640,9 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
         USHORT nString )                    // TeilString des TeilFormats
                                             // normalerweise 0 oder 0xFFFF
 {
-    const International* pIntl = pFormatter->GetInternational();
     if ( !pFormat )
         return FALSE;
+    const CollatorWrapper* pCollator = pFormatter->GetCollator();
     const String* pStr;
     String aString( rString );
     BOOL bFound = FALSE;
@@ -1658,7 +1658,7 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
         {   // TeilFormate durchprobieren, erst positiv, dann negativ, dann anderes,
             // letztes (Text) nicht
             pStr = pFormat->GetNumForString( nSub, nString, TRUE );
-            if ( pStr && pIntl->CompareEqual( aString, *pStr, INTN_COMPARE_IGNORECASE ) )
+            if ( pStr && (pCollator->compareString( aString, *pStr ) == 0) )
             {
                 bFound = TRUE;
                 bContinue = FALSE;

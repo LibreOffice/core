@@ -177,6 +177,7 @@ hedabu: ..\inc\wizdlg.hxx %_DEST%\inc%_EXT%\svtools\wizdlg.hxx
 hedabu: ..\inc\zforlist.hxx %_DEST%\inc%_EXT%\svtools\zforlist.hxx
 hedabu: ..\inc\zformat.hxx %_DEST%\inc%_EXT%\svtools\zformat.hxx
 hedabu: ..\inc\numuno.hxx %_DEST%\inc%_EXT%\svtools\numuno.hxx
+hedabu: ..\inc\ondemand.hxx %_DEST%\inc%_EXT%\svtools\ondemand.hxx
 hedabu: ..\source\misc\filearch.hxx %_DEST%\inc%_EXT%\svtools\filearch.hxx
 hedabu: ..\inc\loginerr.hxx %_DEST%\inc%_EXT%\svtools\loginerr.hxx
 hedabu: ..\inc\logindlg.hxx %_DEST%\inc%_EXT%\svtools\logindlg.hxx
