@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:09:12 $
+ *  last change: $Author: jl $ $Date: 2000-10-17 09:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #endif
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/MemberType.hpp>
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <uno/typedescription.h>
@@ -353,14 +355,15 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
     return ret;
 }
 
-// "convertVARIANTARGS" converts VARIANTS to their respecting Any counterparts
-// As parameter it uses some of the parameters passed to IDispatch::Invoke. These
-// ar "id", "wFlags" and "pdispparams". The function handles special JavaScript
-// cases where a VARIANT of type VT_DISPATCH is ambiguous and can represent
-// an object, array ( JavaScript Array object), out ( Array) and in/out ( Array)
+// "convertDispparamsArgs" converts VARIANTS to their respecting Any counterparts
+// The parameters "id", "wFlags" and "pdispparams" equal those as used in
+// IDispatch::Invoke. The function handles special JavaScript
+// cases where a VARIANT of type VT_DISPATCH is ambiguous and could represent
+// an object, array ( JavaScript Array object), out ( JavaScript Array object) and in/out
+// (JavaScript Array object)
 // parameter. Because all those VT_DISPATCH objects need a different conversion
 // we have to find out what the object is supposed to be. The function does this
-// by either using type information or by help of specialized JavaScript object.
+// by either using type information or by help of a specialized JavaScript object.
 
 // A. Type Information
 // -----------------------------------------------------------------------------
@@ -379,7 +382,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // objects used within a JScript script. To obtain an instance one has to call
 // "_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper_Impl).
 // A value object is appropriately initialized within the script and passed as
-// parameter to an UNO object method or property. The convertVARIANTARGS function
+// parameter to an UNO object method or property. The convertDispparamsArgs function
 // can easily find out that a param is such an object by queriing for the
 // IJScriptValue interface. By this interface one the type and kind ( out, in/out)
 // can be determined and the right conversion can be applied.
@@ -393,26 +396,29 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // out Parameter in Visual Basic have the type VT_BYREF | VT_VARIANT and if the bridge
 // is used from C++ than the type is usually VT_BYREF |VT_xxx. Those parameter are converted
 // and we don't go to the trouble of aquiring type information.
-sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
+HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
-    HRESULT hr;
-    if( pdispparams->cArgs == 0)
-        return TRUE;
-    sal_Bool convOk = TRUE;
+    HRESULT hr= S_OK;
+    sal_Int32 countArgs= pdispparams->cArgs;
+    if( countArgs == 0)
+        return S_OK;
+    sal_Bool convOk = sal_True;
 
-    // iterate over all parameter and check for special JScript value objects that originated in this bridge.
-    // Those can be converted straight away. The index in the sequence "seqConvertedParams" matches the index in the
-    // DISPPARAMS.rgvarg array. If the value is true then the corresponding VARIANT has been converted
-    // and the any has been written to the Sequence that holds  the converted values.
-    Sequence< sal_Bool > seqConvertedParams( pdispparams->cArgs);
-    rSeq.realloc( pdispparams->cArgs);
+    // If a parameter is a JScript Value Object then it is being converted
+    // by  convertValueObject function and the result is stored in this Sequence.
+    Sequence< sal_Bool > seqConvertedParams( countArgs);
+    rSeq.realloc( countArgs);
     Any*    pParams = rSeq.getArray();
 
     sal_Bool allDispHandled= sal_True;
     Any anyParam;
     sal_Bool bHandled= sal_False;
 
-    for( int i= 0; i < pdispparams->cArgs; i++)
+    // iterate over all parameter and check for special JScript value objects that originated in this bridge.
+    // Those can be converted straight away. The index in the sequence "seqConvertedParams" matches the index in the
+    // DISPPARAMS.rgvarg array. If the value is true then the corresponding VARIANT has been converted
+    // and the any has been written to the Sequence that holds  the converted values.
+    for( int i= 0; i < countArgs; i++)
     {
         if( sal_False == convertValueObject( &pdispparams->rgvarg[i], anyParam, bHandled) )
         {
@@ -421,7 +427,7 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
         }
         else if( bHandled)
         {// a param is a JScriptValue and could be converted
-            pParams[pdispparams->cArgs - i - 1]= anyParam;
+            pParams[countArgs - i - 1]= anyParam;
             seqConvertedParams[i]= sal_True;
             continue;
         }// also take care of VBasic ( VT_BYREF)
@@ -430,51 +436,37 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
     }
 
     if( ! convOk)
-        return sal_False;
+        return DISP_E_BADVARTYPE;
     // ----------------------
 
-    // If there is a VT_DISPATCH  and it is no JScriptValue object then
+    // If there is a VT_DISPATCH  and if it is no JScriptValue object then
     // we need to know if it represents a Sequence, out or in/out parameter
     // or an actual object. Therefore we obtain type information
     try{
-        Sequence<ParamMode> seqParamMode;
         sal_Bool bTypesAvailable= sal_False;
-        Sequence< Type > seqParamTypes;
-        sal_Bool bIsMethod= sal_False;
+        InvocationInfo info;
 
         //only aquire type information if at least one of the parameter is IDispatch
-        // and has not been convert yet because it is no JScriptValue object
+        // and has not been converted yet because it is no JScriptValue object
         if( ! allDispHandled)
         {
-            if( !m_xInvocation.is() )return FALSE;
-            Reference<XIntrospectionAccess> xIntroAccess= m_xInvocation->getIntrospection();
-            if( !xIntroAccess.is()) return FALSE;
+            if( !m_xInvocation.is() )return DISP_E_EXCEPTION;
+            Reference<XInvocation2> inv2( m_xInvocation, UNO_QUERY);
+            if( inv2.is())
+            {
 
-            // We need the name of the property or method to get its type description
-            // The name can be identified through the param "id"
-            // that is kept als value in the map m_nameToDispIdMap.
-            // Proplem: the Windows JScript engine sometimes changes small letters to capital
-            // letters as happens in xidlclass_obj.createObject( var) // in JScript.
-            // IDispatch::GetIdsOfNames is then called with "CreateObject" !!!
-            // m_nameToDispIdMap can contain several names for one DISPID but only one is
-            // the exact one. If there's no m_xExactName and therfore no exact name then
-            // there's only one entry in the map.
-            typedef NameToIdMap::const_iterator cit;
-            OUString sMemberName;
-            if( m_xExactName.is())
-            {
-                for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ci1++)
-                {
-                    if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
-                    {
-                        sMemberName= (*ci1).first;
-                        sMemberName= m_xExactName->getExactName( sMemberName);
-                        break;
-                    }
-                }
-            }
-            else // the first match is certainly the only
-            {
+                // We need the name of the property or method to get its type information.
+                // The name can be identified through the param "id"
+                // that is kept als value in the map m_nameToDispIdMap.
+                // Proplem: the Windows JScript engine sometimes changes small letters to capital
+                // letters as happens in xidlclass_obj.createObject( var) // in JScript.
+                // IDispatch::GetIdsOfNames is then called with "CreateObject" !!!
+                // m_nameToDispIdMap can contain several names for one DISPID but only one is
+                // the exact one. If there's no m_xExactName and therfore no exact name then
+                // there's only one entry in the map.
+                typedef NameToIdMap::const_iterator cit;
+                OUString sMemberName;
+
                 for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ci1++)
                 {
                     if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
@@ -483,54 +475,38 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
                         break;
                     }
                 }
-            }
 
-            if( sMemberName == L"")
-                return FALSE;
-            // Get the type description of the uno method or property
-            // Problem: In some cases DISPATCH_METHOD AND!!! DISPATCH_PROPERTYPUT or
-            // DISPATCH_PROPERTYGET can be set. That might
-            // be due to VBScript or JScript that can't differ what's what or it doesnt matter
-            // For that reaseon we can't use the wFlags param in Invoke
-            // The automation wrapper (this class (InterfaceOleWrapper_Impl) doesn't provide
-            // any type information currently.
-            try{
-                // throws // NoSuchMethodException
-                Reference< XIdlMethod > spTypeMethod= xIntroAccess->getMethod( sMemberName, MethodConcept::ALL);
-                // ----------------
-                Sequence< ParamInfo > seqInfos= spTypeMethod->getParameterInfos();
-                Sequence< Reference< XIdlClass > > seqParamClasses= spTypeMethod->getParameterTypes();
-                int count= min( seqParamClasses.getLength(), seqConvertedParams.getLength());
-
-                seqParamTypes.realloc( count);
-                seqParamMode.realloc( count);
-                // --------------------
-                for( int i= 0; i < count ; i++)
-                {
-                    seqParamTypes[i]= Type( seqParamClasses[count - 1 - i]->getTypeClass(),
-                        seqParamClasses[count - 1 - i]->getName());
-
-                    seqParamMode[i]= seqInfos[ count - 1 -i].aMode;
-                }
-                bTypesAvailable= sal_True;
-                bIsMethod= sal_True;
-            }catch(...)  {}
-
-            if( ! bTypesAvailable)
-            {
+                // Get information for the current call ( property or method).
+                // There could be similar names which only differ in the cases
+                // of letters. First we assume that the name which was passed into
+                // GetIDsOfNames is correct. If we won't get information with that
+                // name then we have the invocation service use the XExactName interface.
+                sal_Bool validInfo= sal_True;
                 try{
-                    // throws NoSuchElementException
-                    Property aProperty= xIntroAccess->getProperty( sMemberName, PropertyConcept::ATTRIBUTES);
-                    seqParamTypes.realloc(1);
-                    seqParamTypes[0]= aProperty.Type;
-                    bTypesAvailable= sal_True;
-                }catch(...) {}
+                    info= inv2->getInfoForName( sMemberName, sal_False);
+                }
+                catch( IllegalArgumentException )
+                {
+                    validInfo= sal_False;
+                }
+
+                if( ! validInfo)
+                {
+                    info= inv2->getInfoForName( sMemberName, sal_True);
+                }
+
+                // If the current call is being dispatched to a method,
+                // make sure that the number of arguments in DISPPARAMS::cArgs is equal
+                // to the one in InvocationInfo::aParamTypes.getLength();
+                if( info.eMemberType == MemberType_METHOD &&
+                    countArgs != info.aParamTypes.getLength() )
+                    hr= DISP_E_BADPARAMCOUNT;
+
+                bTypesAvailable= sal_True;
             }
-            if( ! bTypesAvailable)
-                return FALSE;
         }
 
-        // used within the for loop. If the param is a IDispatch and the reqired parameter
+        // Used within the following "for" loop. If the param is a IDispatch and the reqired parameter
         // is an in/out parameter, then this uno wrapper is likely used in JScript. Then we
         // extract Array[0] and put the value into varParam. At the end of the loop varParam
         // is converted if it contains a value otherwise the VARIANT from
@@ -541,7 +517,7 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
         // by convertValueObject ( see above ). If a parameter is converted or is can be infered
         // from the Sequence seqConvertedParams. Its values relate to the VARIANT params in DISPPARAMS
         // at the same index.
-        for (int i = 0; convOk && (i < pdispparams->cArgs); i++)
+        for (int i = 0; convOk && (i < countArgs); i++)
         {
             if( seqConvertedParams[i] == sal_True)
                 continue;
@@ -552,7 +528,8 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
             // from JScript like an Array used for Squences and out-params
             if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
             {
-                if( bIsMethod && seqParamMode[i] == ParamMode_INOUT)
+
+                if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
                 {
                     // An INOUT-param in JSCript must be VT_DISPATCH since JScript Array objects are used
                     // for OUT-params. Index ( property) "0" contains the actual IN-param.
@@ -569,14 +546,16 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
                     if( FAILED( hr))
                     {
                         varParam.Clear();
-                        convOk= FALSE; break;
+                        convOk= sal_False; break;
+                        hr= DISP_E_EXCEPTION;
+                        break;
                     }
                 }
-                else if( bIsMethod && seqParamMode[i] == ParamMode_OUT)
+                else if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ] == ParamMode_OUT)
                 {
                     // No conversion necessary. The VT_DISPATCH represents
                     // an Array in which the outparam is written on index 0
-                    bDoConversion= FALSE;
+                    bDoConversion= sal_False;
                 }
             }
             if( bDoConversion)
@@ -585,37 +564,35 @@ sal_Bool InterfaceOleWrapper_Impl::convertVARIANTARGS(  DISPID id, unsigned shor
                     varParam= pdispparams->rgvarg[i];
 
                 Any theParam;
-                if( bTypesAvailable)
+                if( bTypesAvailable && info.eMemberType == MemberType_METHOD)
                     convOk= variantToAny2( & varParam,theParam,
-                            seqParamTypes[i]);
+                            info.aParamTypes[ countArgs - i - 1]);
+                else if( bTypesAvailable && info.eMemberType == MemberType_PROPERTY)
+                    convOk= variantToAny2( & varParam,theParam, info.aType);
+
                 else
                     convOk = variantToAny( & varParam, theParam);
 
                 if( convOk)
-                    pParams[pdispparams->cArgs - (i + 1)]= theParam;
+                    pParams[countArgs - (i + 1)]= theParam;
             }
 
         }// end for / iterating over all parameters
 
 
-    }catch(NoSuchMethodException e)
+    }catch( IllegalArgumentException ) // XInvocation2::getInfoForName
     {
-        e;
-        convOk= FALSE;
-    }catch(RuntimeException e)
-    {
-        e;
-        convOk= FALSE;
-    }catch( NoSuchElementException e)
-    {
-        e;
-        convOk= FALSE;
+        hr= DISP_E_BADVARTYPE;
     }
     catch(...)
     {
-        convOk= FALSE;
+        hr= DISP_E_EXCEPTION;
     }
-    return convOk;
+
+    if( SUCCEEDED( hr) && convOk == sal_False)
+        hr= DISP_E_EXCEPTION;
+
+    return hr;
 }
 
 // XBridgeSupplier2 ---------------------------------------------------
@@ -955,7 +932,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                 else
                 {
                     Sequence<Any> params;
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams , params ))
+
+                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams , params ) ))
                     {
                         ret= doInvoke(  pdispparams, pvarResult,
                           pexcepinfo, puArgErr, d.name, params );
@@ -976,7 +954,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                 else
                 {
                     Sequence<Any> params;
-                    if (convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ) && (params.getLength() > 0))
+                    ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
+                    if( SUCCEEDED( ret) && (params.getLength() > 0))
                     {
                         ret= doSetProperty( pdispparams, pvarResult, pexcepinfo, puArgErr, d.name, params);
                     }
@@ -1047,10 +1026,9 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
 //          ret = NOERROR;
 //      }
     }
-    catch(IllegalArgumentException e)
+    catch(IllegalArgumentException )
     {
-        e;
-        ret = ResultFromScode(DISP_E_TYPEMISMATCH);
+        ret = DISP_E_TYPEMISMATCH;
     }
     catch(CannotConvertException e)
     {
@@ -1349,7 +1327,8 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
             { // DISPID called for the first time
                 if( wFlags == DISPATCH_METHOD )
                 {
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+
+                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )))
                     {
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params))
@@ -1372,14 +1351,14 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_METHOD;
 
-                    } // end if ( convertVARIANTARGS )
-                    else // convertVARIANTARGS failed
+                    } // end if ( convertDispparamsArgs )
+                    else // convertDispparamsArgs failed
                         ret= DISP_E_BADVARTYPE;
                 } //if( wFlags == DISPATCH_METHOD )
 
                 else if( wFlags == DISPATCH_PROPERTYPUT || wFlags == DISPATCH_PROPERTYPUTREF)
                 {
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )))
                     {
                         if( FAILED( ret= doSetProperty( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params))
@@ -1401,7 +1380,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                         }
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYGET;
-                    } // end if ( convertVARIANTARGS )
+                    } // end if ( convertDispparamsArgs )
                     else
                         ret= DISP_E_BADVARTYPE;
 
@@ -1436,7 +1415,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
 
                     OUString exactName;
                     // convert params for DISPATCH_METHOD or DISPATCH_PROPERTYPUT
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
                     {// try first as method
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params))
@@ -1476,14 +1455,14 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                             if( SUCCEEDED( ret ) )
                                 info.flags= DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYGET;
                         }
-                    } // end if ( convertVARIANTARGS )
+                    } // end if ( convertDispparamsArgs )
                     else
                         ret= DISP_E_BADVARTYPE;
                 }
                 else if( wFlags & DISPATCH_METHOD && wFlags & DISPATCH_PROPERTYGET)
                 {
                     OUString exactName;
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
                     {
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params))
@@ -1505,7 +1484,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_METHOD;
 
-                    } // end if ( convertVARIANTARGS )
+                    } // end if ( convertDispparamsArgs )
                     else
                         ret= DISP_E_BADVARTYPE;
 
@@ -1541,7 +1520,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
             {
                 if( wFlags & DISPATCH_METHOD && info.flags == DISPATCH_METHOD)
                 {
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
                     {
                         ret= doInvoke( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params);
@@ -1552,7 +1531,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                 else if( (wFlags & DISPATCH_PROPERTYPUT || wFlags & DISPATCH_PROPERTYPUTREF )  &&
                         info.flags & DISPATCH_PROPERTYPUT)
                 {
-                    if( convertVARIANTARGS(dispidMember, wFlags, pdispparams, params ))
+                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
                     {
                         ret= doSetProperty( pdispparams, pvarResult,
                                   pexcepinfo, puArgErr, info.name, params);
