@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:54:57 $
+ *  last change: $Author: os $ $Date: 2001-06-26 09:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2614,7 +2614,6 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aHighLowEdit.Disable();
             }
             m_aHighLowEdit.SetValue( m_aHighLowEdit.Normalize( nFac * nEsc ) );
-            m_aFontSizeEdit.SetValue( m_aFontSizeEdit.Normalize( nEscProp ) );
         }
         else
         {
@@ -2622,6 +2621,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             m_aHighLowRB.Check( TRUE );
             PositionHdl_Impl( NULL );
         }
+        //the height has to be set after the handler is called to keep the value also if the escapement is zero
+        m_aFontSizeEdit.SetValue( m_aFontSizeEdit.Normalize( nEscProp ) );
     }
     else
     {
