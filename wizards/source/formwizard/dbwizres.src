@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 14:37:08 $
+ *  last change: $Author: bc $ $Date: 2002-12-03 11:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5312,7 +5312,7 @@ String RID_DB_REPORT_WIZARD_START + 65
 
 String RID_DB_REPORT_WIZARD_START + 66
 {
-    Text = "Folgendes versteckte Control im Formular '<FORMNAME>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
+    Text = "Folgendes versteckte Kontrollelement im Formular '<FORMNAME>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
     Text [ english_us ] = "The following hidden control in the form '<REPORTFORM>' could not be read: '<CONTROLNAME>'.";
     Text[ portuguese ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ russian ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
@@ -5355,6 +5355,48 @@ String RID_DB_REPORT_WIZARD_START + 67
     Text[ turkish ] = "All the data is imported...";
     Text[ arabic ] = "All the data is imported...";
 };
+
+
+String RID_DB_REPORT_WIZARD_START + 68
+{
+    Text = "Felder beschriften";
+    Text [ english_us ] = "Labeling Fields";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 69
+{
+    Text = "Wie möchten Sie die Felder beschriften?";
+    Text [ english_us ] = "How do you want to label the fields?";
+};
+
+String RID_DB_REPORT_WIZARD_START + 70
+{
+    Text = "Beschriftung";
+    Text [ english_us ] = "Label";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 71
+{
+    Text = "Feld";
+    Text [ english_us ] = "Field";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 72
+{
+    Text = "Es ist ein Fehler im Autopiloten aufgetreten.<BR>Möglicherweise ist die Vorlage '%PATH' fehlerhaft.<BR>Entweder die benötigten Bereiche bzw. Tabellen sind nicht vorhanden oder sie existiern unter einem falschen Namen.<BR>Bitte schauen Sie in der Hilfe nach genaueren Hinweisen.<BR>Bitte wählen Sie eine andere Dokumentvorlage aus.";
+    Text [ english_us ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 73
+{
+    Text = "Es ist ein ungültiges Benutzerfeld in einer Tabelle vorhanden!";
+    Text [ english_us ] = "There is an invalid user field in a table.";
+};
+
 
 
 
