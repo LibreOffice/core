@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:50:05 $
+*  last change: $Author: hr $ $Date: 2004-08-03 13:18:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -69,7 +69,9 @@ STD_RES_FILE( gid_File_Res_Bib, bib )
 
 STD_RES_FILE( gid_File_Res_Cal, cal )
 
-STD_RES_FILE( gid_File_Res_Chartcontroller, chartcontroller )
+// BM: #117495# remove chart2 from setup.  I just comment this
+// out, because it will later be re-added
+// STD_RES_FILE( gid_File_Res_Chartcontroller, chartcontroller )
 
 STD_RES_FILE( gid_File_Res_Dba, dba)
 
