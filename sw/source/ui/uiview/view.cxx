@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:35 $
+ *  last change: $Author: jp $ $Date: 2001-04-24 18:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,10 +1344,22 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
 
 void SwView::ShowCursor( FASTBOOL bOn )
 {
+#ifdef HIDE_CRSR_AND_SEL
+
+//JP 24.4.2001: this doesnt work correct!
     if ( bOn )
         pWrtShell->ShowCrsrs( sal_True );
     else
         pWrtShell->HideCrsrs();
+
+#else
+
+    if ( bOn )
+        pWrtShell->ShowCrsr();
+    else
+        pWrtShell->HideCrsr();
+
+#endif
 }
 
 
