@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmfwk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:20:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,11 @@
 #include "jvmfwk.hxx"
 #include <stack>
 
+#include "osl/thread.hxx"
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-#define SERVICE_NAME "com.sun.star.desktop.MigrationOO2"
-#define IMPL_NAME "com.sun.star.comp.desktop.MigrationOO2"
+#define SERVICE_NAME "com.sun.star.migration.Java"
+#define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"
 
 #define ENABLE_JAVA     1
 #define USER_CLASS_PATH 2
@@ -362,44 +363,28 @@ void JavaMigration::migrateJavarc()
 
     OUString sValue;
     rtl::Bootstrap javaini(m_sUserDir + OUSTR("/user/config/"SAL_CONFIGFILE("java")));
-    sal_Bool bSuccess = javaini.getFrom(OUSTR("RuntimeLib"), sValue);
+    sal_Bool bSuccess = javaini.getFrom(OUSTR("Home"), sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
-                       "] XJob::execute: Could not get RuntimeLib entry from java.ini/javarc.");
+                       "] XJob::execute: Could not get Home entry from java.ini/javarc.");
     if (bSuccess == sal_True && sValue.getLength() > 0)
     {
         //get the directory
-        sal_Int32 index;
-        while ((index = sValue.lastIndexOf('/')) != -1)
-        {
-            sValue = sValue.copy(0, index);
-            CJavaInfo aInfo;
-            javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.pData);
+        CJavaInfo aInfo;
+        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.pData);
 
-            if (err == JFW_E_NONE)
+        if (err == JFW_E_NONE)
+        {
+            if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
             {
-                if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
-                {
-                    OSL_ENSURE(0, "[Service implementation " IMPL_NAME
-                       "] XJob::execute: jfw_setSelectedJRE failed.");
-                    fprintf(stderr, "\nCannot migrate Java. An error occured.\n");
-                }
-                break;
+                OSL_ENSURE(0, "[Service implementation " IMPL_NAME
+                           "] XJob::execute: jfw_setSelectedJRE failed.");
+                fprintf(stderr, "\nCannot migrate Java. An error occured.\n");
             }
-            else if (err == JFW_E_NOT_RECOGNIZED)
-            {
-                continue;
-            }
-            else if (err == JFW_E_FAILED_VERSION)
-            {
-                fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
-                        "is not supported anymore.\n");
-                break;
-            }
-            else
-            {
-                OSL_ASSERT(0);
-                break;
-            }
+        }
+        else if (err == JFW_E_FAILED_VERSION)
+        {
+            fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
+                    "is not supported anymore.\n");
         }
     }
 }
