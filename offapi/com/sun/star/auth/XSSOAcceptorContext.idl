@@ -74,7 +74,7 @@ module com { module sun { module star { module auth {
     @since #107627#
 */
 
-interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext
+published interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext
 {
     /** accepts/authenticates an SSO token sent from the context initiator side.
         <P>
