@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:53:18 $
+ *  last change: $Author: fs $ $Date: 2001-10-01 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,29 +280,9 @@ String STR_STANDARD
 
 String STR_FILTERNAME_ALL
 {
-    TEXT = "<Alle>" ;
-    TEXT [ ENGLISH ] = "<All>" ;
-    TEXT [ norwegian ] = "<Alle>" ;
-    TEXT [ italian ] = "<tutto>" ;
-    TEXT [ portuguese_brazilian ] = "<Tudo>" ;
-    TEXT [ portuguese ] = "<Todos>" ;
-    TEXT [ finnish ] = "<Kaikki>" ;
-    TEXT [ danish ] = "<Alle>" ;
-    TEXT [ french ] = "<Tout>" ;
-    TEXT [ swedish ] = "<Alla>" ;
-    TEXT [ dutch ] = "<Alle>" ;
-    TEXT [ spanish ] = "<Todos>" ;
-    TEXT [ english_us ] = "<All>" ;
-    TEXT[ chinese_simplified ] = "<å…¨éƒ¨>";
-    TEXT[ russian ] = "<Âñå>";
-    TEXT[ polish ] = "<Wszystkie>";
-    TEXT[ japanese ] = "<ã™ã¹ã¦>";
-    TEXT[ chinese_traditional ] = "<å…¨éƒ¨>";
-    TEXT[ arabic ] = "<Çáßá>";
-    TEXT[ greek ] = "<¼ëá>";
-    TEXT[ korean ] = "<ì „ë¶€>";
-    TEXT[ turkish ] = "<Tümü>";
-    TEXT[ catalan ] = "<Todos>";
+    Text = "Alle Dateien (*.*)" ;
+    Text [ english ] = "All files (*.*)" ;
+    Text [ english_us ] = "All files (*.*)" ;
 };
 
 String STR_HUMAN_APPNAME
