@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:22:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮מילימטר‬";
             Text[ hindi ] = "मिल्लीमीटर";
             Text[ slovak ] = "Milimeter";
+            Text[ hungarian ] = "Milliméter";
+            Text[ slovenian ] = "Milimeter";
         };
         MenuItem
         {
@@ -131,6 +133,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮סנטימטר‬";
             Text[ hindi ] = "सेंटिमीटर";
             Text[ slovak ] = "Centimeter";
+            Text[ hungarian ] = "Centiméter";
+            Text[ slovenian ] = "Centimeter";
         };
         MenuItem
         {
@@ -164,6 +168,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮מטר‬";
             Text[ hindi ] = "मीटर";
             Text[ slovak ] = "Meter";
+            Text[ hungarian ] = "Méter";
+            Text[ slovenian ] = "Meter";
         };
         MenuItem
         {
@@ -197,6 +203,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮קילומטר‬";
             Text[ hindi ] = "किलोमीटर";
             Text[ slovak ] = "Kilometer";
+            Text[ hungarian ] = "Kilométer";
+            Text[ slovenian ] = "Kilometer";
         };
         MenuItem
         {
@@ -230,6 +238,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮אינצ'‬";
             Text[ hindi ] = "इंच";
             Text[ slovak ] = "Palec";
+            Text[ hungarian ] = "Hüvelyk";
+            Text[ slovenian ] = "Palec";
         };
         MenuItem
         {
@@ -265,6 +275,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮רגל‬";
             Text[ hindi ] = "फ़ूट्";
             Text[ slovak ] = "Stopa";
+            Text[ hungarian ] = "Láb";
+            Text[ slovenian ] = "Čevelj";
         };
         MenuItem
         {
@@ -298,6 +310,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮מילים‬";
             Text[ hindi ] = "मइल्स्";
             Text[ slovak ] = "Míle";
+            Text[ hungarian ] = "Mérföld";
+            Text[ slovenian ] = "Milje";
         };
         MenuItem
         {
@@ -332,6 +346,8 @@ Menu RID_SVXMN_RULER
             Text[ hebrew ] = "‮נקודה‬";
             Text[ hindi ] = "बिन्दु";
             Text[ slovak ] = "Bod";
+            Text[ hungarian ] = "Pont";
+            Text[ slovenian ] = "Točka";
         };
         MenuItem
         {
@@ -372,6 +388,8 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT[ hebrew ] = "‮שמאל‬";
     TEXT[ hindi ] = "बायाँ";
     TEXT[ slovak ] = "Vľavo";
+    TEXT[ hungarian ] = "Bal";
+    TEXT[ slovenian ] = "Levo";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
@@ -404,6 +422,8 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT[ hebrew ] = "‮ימין‬";
     TEXT[ hindi ] = "दाहिना";
     TEXT[ slovak ] = "Vpravo";
+    TEXT[ hungarian ] = "Jobb";
+    TEXT[ slovenian ] = "Desno";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
@@ -436,6 +456,8 @@ String RID_SVXSTR_RULER_TAB_DECIMAL
     TEXT[ hebrew ] = "‮עשרוני‬";
     TEXT[ hindi ] = "दशांश";
     TEXT[ slovak ] = "Desatinné";
+    TEXT[ hungarian ] = "Decimális";
+    TEXT[ slovenian ] = "Decimalno";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
@@ -468,7 +490,10 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ hebrew ] = "‮מרכז‬";
     TEXT[ hindi ] = "मध्यभाग";
     TEXT[ slovak ] = "Na stred";
+    TEXT[ hungarian ] = "Középen";
+    TEXT[ slovenian ] = "Sredina";
 };
+
 
 
 
