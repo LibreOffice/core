@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-19 12:50:55 $
+ *  last change: $Author: cl $ $Date: 2002-11-04 12:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // -----------------------------
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
-    const sal_Bool bObjSupportsText =
+    const bool bObjSupportsText =
 //      aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
@@ -258,7 +258,13 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DCubeObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DSphereObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DLatheObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DExtrudeObject;
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DExtrudeObject &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawGroupShape;
+
+    const bool bObjSupportsStyle =
+        aShapeInfo.meShapeType != XmlShapeTypeDrawGroupShape;
 
     sal_Bool bIsEmptyPresObj = sal_False;
 
@@ -290,7 +296,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // ------------------------------
     // compute the shape parent style
     // ------------------------------
-    if(xPropSet.is())
+    if( xPropSet.is() && bObjSupportsStyle )
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
