@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-18 11:12:47 $
+#   last change: $Author: hjs $ $Date: 2002-04-19 16:05:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,6 +115,7 @@ sub WinFormat {
     $variable =~ s/$d1/$d2/ ;
   }
   $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
+  $variable =~ s/^\\$/\//g; # a single "/" needs to be preserved
 
   if ( defined $debug ) { print(STDERR "WinFormat:\nresult:\n$variable\n");};
   return $variable;
