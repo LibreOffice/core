@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchStatement.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:27 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 
 // DocMerge from xml: struct com::sun::star::frame::DispatchStatement
 /** represents a dispatch statement from a recorded macro
+
+    @since #107627#
  */
 struct DispatchStatement
 {
