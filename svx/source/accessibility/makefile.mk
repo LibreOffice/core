@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: af $ $Date: 2002-04-12 08:45:03 $
+#   last change: $Author: af $ $Date: 2002-04-18 16:43:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ CXXFILES =								\
     AccessibleComponentBase.cxx			\
     AccessibleShapeTreeInfo.cxx			\
     ShapeTypeHandler.cxx				\
-    SvxShapeTypes.cxx
+    SvxShapeTypes.cxx					\
+    AccessibleControlShape.cxx			\
 
 SLOFILES =	\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
@@ -104,7 +105,8 @@ SLOFILES =	\
     $(SLO)$/AccessibleOLEShape.obj				\
     $(SLO)$/AccessibleShapeTreeInfo.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
-    $(SLO)$/SvxShapeTypes.obj
+    $(SLO)$/SvxShapeTypes.obj					\
+    $(SLO)$/AccessibleControlShape.obj
 
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src
