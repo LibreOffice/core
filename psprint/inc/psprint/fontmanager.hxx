@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:21:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ class PrintFontManager
         int                                         m_nXMax;
         int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
+        bool                                        m_bUserOverride;
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
 
