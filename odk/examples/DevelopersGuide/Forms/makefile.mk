@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:25:51 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:44:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,15 +90,19 @@ FORMS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/SalesFilter.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/UNO.java
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(FORMS_FILES)
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_forms_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_forms.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
