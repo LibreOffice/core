@@ -1,0 +1,305 @@
+/*************************************************************************
+ *
+ *  $RCSfile: layerimport.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:31:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _XMLOFF_FORMS_LAYERIMPORT_HXX_
+#include "layerimport.hxx"
+#endif
+#ifndef _XMLOFF_FORMENUMS_HXX_
+#include "formenums.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
+#include "elementimport.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_STRINGS_HXX_
+#include "strings.hxx"
+#endif
+#ifndef _XMLOFF_XMLICTXT_HXX
+#include "xmlictxt.hxx"
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
+#include <com/sun/star/form/FormSubmitEncoding.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMSUBMITMETHOD_HPP_
+#include <com/sun/star/form/FormSubmitMethod.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_NAVIGATIONBARMODE_HPP_
+#include <com/sun/star/form/NavigationBarMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_TABULATORCYCLE_HPP_
+#include <com/sun/star/form/TabulatorCycle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
+#include <com/sun/star/form/FormButtonType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
+#include <com/sun/star/form/ListSourceType.hpp>
+#endif
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>     // for check states
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+
+//.........................................................................
+namespace xmloff
+{
+//.........................................................................
+
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::drawing;
+    using namespace ::com::sun::star::xml;
+    using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::sdb;
+
+    //=====================================================================
+    //= OFormLayerXMLImport_Impl
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
+        :m_rImporter(_rImporter)
+        ,m_xAttributeMetaData(new OAttribute2Property)
+    {
+        // build the attribute2property map
+        // string properties which are exported as attributes
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION), PROPERTY_TARGETURL);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_TITLE), PROPERTY_TITLE);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD), PROPERTY_DATAFIELD);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getFormAttributeName(faCommand), PROPERTY_COMMAND);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getFormAttributeName(faDatasource), PROPERTY_DATASOURCENAME);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getFormAttributeName(faFilter), PROPERTY_FILTER);
+        m_xAttributeMetaData->addStringProperty(
+            OAttributeMetaData::getFormAttributeName(faOrder), PROPERTY_ORDER);
+
+        // properties not added because they're already present in another form
+        OSL_ENSURE(
+            0 == ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)).compareToAscii(
+                OAttributeMetaData::getFormAttributeName(faAction)),
+            "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (1)!");
+            // if this fails, we would have to add a translation from faAction->PROPERTY_TARGETURL
+            // We did not because we already have one CCA_TARGET_LOCATION->PROPERTY_TARGETURL,
+            // and CCA_TARGET_LOCATION and faAction should be represented by the same attribute
+
+        OSL_ENSURE(
+            0 == ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME)).compareToAscii(
+                OAttributeMetaData::getFormAttributeName(faName)),
+            "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (2)!");
+            // the same for faName, CCA_NAME and PROPERTY_NAME
+
+        // boolean properties which are exported as attributes
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_DISABLED), PROPERTY_ENABLED, sal_False, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_DROPDOWN), PROPERTY_DROPDOWN, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_PRINTABLE), PROPERTY_PRINTABLE, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_READONLY), PROPERTY_READONLY, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED), PROPERTY_DEFAULT_STATE, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_STOP), PROPERTY_TABSTOP, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_MULTI_LINE), PROPERTY_MULTILINE, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_MULTIPLE), PROPERTY_MULTISELECTION, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_DEFAULT_BUTTON), PROPERTY_DEFAULTBUTTON, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_IS_TRISTATE), PROPERTY_TRISTATE, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faAllowInserts), PROPERTY_ALLOWINSERTS, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faAllowUpdates), PROPERTY_ALLOWUPDATES, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faApplyFilter), PROPERTY_APPLYFILTER, sal_False);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, sal_True);
+        m_xAttributeMetaData->addBooleanProperty(
+            OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, sal_False);
+
+        // the int16 attributes
+        m_xAttributeMetaData->addInt16Property(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_MAX_LENGTH), PROPERTY_MAXTEXTLENGTH, 0);
+        m_xAttributeMetaData->addInt16Property(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_SIZE), PROPERTY_LINECOUNT, 5);
+        m_xAttributeMetaData->addInt16Property(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_INDEX), PROPERTY_TABINDEX, 0);
+        m_xAttributeMetaData->addInt16Property(
+            OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
+
+        // the enum attributes
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE), PROPERTY_BUTTONTYPE,
+            FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
+            &::getCppuType( static_cast<FormButtonType*>(NULL) ));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE), PROPERTY_LISTSOURCETYPE,
+            ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
+            &::getCppuType( static_cast<ListSourceType*>(NULL) ));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, STATE_NOCHECK,
+            OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, STATE_NOCHECK,
+            OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
+            FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
+            &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
+            FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
+            &::getCppuType( static_cast<FormSubmitMethod*>(NULL) ));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
+            CommandType::COMMAND, OEnumMapper::getEnumMap(OEnumMapper::epCommandType));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
+            NavigationBarMode_NONE, OEnumMapper::getEnumMap(OEnumMapper::epNavigationType),
+            &::getCppuType( static_cast<NavigationBarMode*>(NULL) ));
+        m_xAttributeMetaData->addEnumProperty(
+            OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
+            TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
+            &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
+    }
+
+    //---------------------------------------------------------------------
+    OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
+    {
+        // outlined to allow forward declaration of OAttribute2Property in the header
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        m_xForms.clear();
+
+        OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::seekPage: NULL page!");
+        Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
+        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLImport_Impl::seekPage: invalid draw page (no XFormsSupplier)!");
+        if (!xFormsSupp.is())
+            return;
+
+        m_xForms = Reference< XNameContainer >(xFormsSupp->getForms(), UNO_QUERY);
+        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::seekPage: invalid forms collection!");
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttribs)
+    {
+        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::createContext: have no forms collection (did you use seekPage?)!");
+        OSL_ENSURE(0 == _rLocalName.compareToAscii("form"), "OFormLayerXMLImport_Impl::createContext: don't know the element name (must be \"form\")!");
+
+        if (!m_xForms.is() || (0 != _rLocalName.compareToAscii("form")))
+        {
+            return new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
+        }
+
+        return new OFormImport(m_rImporter, _nPrefix, _rLocalName, m_xAttributeMetaData,
+            m_xForms, ::comphelper::getProcessServiceFactory() );
+    }
+
+//.........................................................................
+}   // namespace xmloff
+//.........................................................................
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 04.12.00 15:48:46  fs
+ ************************************************************************/
+
