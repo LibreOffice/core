@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:21:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,21 +68,23 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
 #endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 #ifndef SC_ITEMS_HXX
@@ -114,6 +116,9 @@
 #include "patattr.hxx"
 #endif
 
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
+#endif
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -123,20 +128,17 @@
 
 #include "root.hxx"
 
-
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
 
-
 // Global data ================================================================
 
-XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet ) :
+XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet, bool bExport ) :
     meBiff( eBiff ),
+    mrMedium( rMedium ),
     mrDoc( rDocument ),
-    maDocUrl( rDocUrl ),
-    maBasePath( rDocUrl, 0, rDocUrl.SearchBackward( '/' ) + 1 ),
     meCharSet( eCharSet ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
@@ -148,8 +150,10 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
             static_cast<SCTAB>(EXC_MAXTAB2) ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
+    mbExport( bExport ),
     mbTruncated( false ),
-    mpRDP( new RootData )//!
+    mbHasPassw( false ),
+    mxRD( new RootData )//!
 {
 #ifdef DBG_UTIL
     mnObjCnt = 0;
@@ -185,11 +189,21 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     maMaxPos.SetRow( ::std::min( maScMaxPos.Row(), maXclMaxPos.Row() ) );
     maMaxPos.SetTab( ::std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
 
+    // document URL and path
+    if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
+        if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
+            maDocUrl = pItem->GetValue();
+    maBasePath = maDocUrl.Copy( 0, maDocUrl.SearchBackward( '/' ) + 1 );
+
     // extended document options
     if( mrDoc.GetExtDocOptions() )
         mpExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
     else
         mpExtDocOpt.reset( new ScExtDocOptions );
+
+    // filter tracer
+    mpTracer.reset( new XclTracer( maDocUrl, CREATE_OUSTRING(
+        mbExport ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
 }
 
 XclRootData::~XclRootData()
@@ -199,12 +213,11 @@ XclRootData::~XclRootData()
 #endif
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData ),
-    mpRD( rRootData.mpRDP.get() )//!
+    mpRD( rRootData.mxRD.get() )//!
 {
 #ifdef DBG_UTIL
     ++mrData.mnObjCnt;
@@ -249,6 +262,48 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
 }
 
+const String& XclRoot::QueryPassword() const
+{
+    if( !mrData.mbHasPassw )
+    {
+        mrData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
+        // set to true, even if dialog has been cancelled (never ask twice)
+        mrData.mbHasPassw = true;
+
+        GetExtDocOptions().SetWinEncryption( true );
+    }
+    return mrData.maPassw;
+}
+
+SvStorage* XclRoot::GetRootStorage() const
+{
+    return GetMedium().GetStorage();
+}
+
+SvStorageRef XclRoot::OpenStorage( SvStorage* pStrg, const String& rStrgName ) const
+{
+    return mrData.mbExport ?
+        ScfTools::OpenStorageWrite( pStrg, rStrgName ) :
+        ScfTools::OpenStorageRead( pStrg, rStrgName );
+}
+
+SvStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
+{
+    return OpenStorage( GetRootStorage(), rStrgName );
+}
+
+SvStorageStreamRef XclRoot::OpenStream( SvStorage* pStrg, const String& rStrmName ) const
+{
+    return mrData.mbExport ?
+        ScfTools::OpenStorageStreamWrite( pStrg, rStrmName ) :
+        ScfTools::OpenStorageStreamRead( pStrg, rStrmName );
+}
+
+SvStorageStreamRef XclRoot::OpenStream( const String& rStrmName ) const
+{
+    return OpenStream( GetRootStorage(), rStrmName );
+}
+
 SfxObjectShell* XclRoot::GetDocShell() const
 {
     return GetDoc().GetDocumentShell();
@@ -278,11 +333,6 @@ ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
 ScRangeName& XclRoot::GetNamedRanges() const
 {
     return *GetDoc().GetRangeName();
-}
-
-SvStorage* XclRoot::GetRootStorage() const
-{
-    return mpRD->pRootStorage;
 }
 
 ScEditEngineDefaulter& XclRoot::GetEditEngine() const
@@ -393,7 +443,6 @@ void XclRoot::CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos
             delete rRanges.Remove( nIndex );
     }
 }
-
 
 // ============================================================================
 
