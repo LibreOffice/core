@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 15:53:12 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ public:
     virtual WW8PLCFx& operator ++( int );
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
-    eCutT AktPieceFc2Cp( long& rStartPos, long& rEndPos );
+    eCutT AktPieceFc2Cp(long& rStartPos, long& rEndPos, const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
 
     static INT32 TransformPieceAddress(long nfc, BOOL& bIsUnicodeAddress)
@@ -1544,12 +1544,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.7 2001-03-14 15:53:12 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.8 2001-03-16 14:34:34 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/03/14 15:53:12  jp
+      remove compiler warning
+
       Revision 1.6  2001/01/30 20:11:06  cmc
       #83362# CJK Forbidden Character {Im|Ex}port
 

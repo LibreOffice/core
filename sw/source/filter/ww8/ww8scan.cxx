@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-19 13:01:19 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,6 @@ struct WW8_PCD1
 #ifdef __WW8_NEEDS_PACK
 #    pragma pack()
 #  endif
-
-
 
 
 USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta );
@@ -435,11 +433,27 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 }
 
 
-eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos )
+eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos,
+    const WW8ScannerBase *pSBase )
 {
+    eCutT eRet = CUT_NONE;
+    //No point going anywhere with this
+    if ((rStartPos == LONG_MAX) && (rEndPos == LONG_MAX))
+        return eRet;
+#ifndef CRUEL_CUT
+    rStartPos = pSBase->WW8Fc2Cp( rStartPos );
+    rEndPos = pSBase->WW8Fc2Cp( rEndPos );
+#else
+    /*
+    ##502##,##517##,##516##,##503##
+    I am not convinced that we should do this cutting, if there truly are
+    problems with property runs that span a piece break then I do not think
+    they should be handled by munging the start and end property locations,
+    that just causes all sorts of problems, I suspect that the solution is
+    worse than the problem.
+    */
     WW8_CP nCpStart, nCpEnd;
     void* pData;
-    eCutT eRet = CUT_NONE;
 
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) ){
         ASSERT( !this, "AktPieceFc2Cp() - Fehler" );
@@ -450,11 +464,10 @@ eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos )
     BOOL bIsUnicode = FALSE;
     INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
     if( !bVer67 )
-        nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
+        nFcStart = WW8PLCFx_PCD::TransformPieceAddress(nFcStart, bIsUnicode);
 
     INT32 nUnicodeFactor = bIsUnicode ? 2 : 1;
-
-    if( rStartPos < nFcStart )
+        if( rStartPos < nFcStart )
     {
         rStartPos = nFcStart;
         eRet = (eCutT)( eRet | CUT_START );
@@ -466,7 +479,6 @@ eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos )
     }
     // jetzt CP berechnen
     rStartPos = nCpStart + (rStartPos - nFcStart) / nUnicodeFactor;
-
 
     if( rEndPos < nFcStart )
     {
@@ -486,6 +498,7 @@ eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos )
         BOOL i = 5;
     }
     ASSERT( (0 <= rStartPos), "AktPieceFc2Cp() - rStartPos kleiner Null!" );
+#endif
 #endif
     return eRet;
 }
@@ -561,14 +574,16 @@ wdy     short   :3  E0000000    weekday(Sunday=0
 
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
+    WW8_CP nFallBackCpEnd = LONG_MAX;
     if( nFcPos == LONG_MAX )
-        return LONG_MAX;
+        return nFallBackCpEnd;
 
     if( pPieceIter )
     {                               // Complex File ?
         ULONG nOldPos = pPieceIter->GetIdx();
-        pPieceIter->SetIdx( 0 );
-        while( 1 )
+
+        for (pPieceIter->SetIdx(0);
+            pPieceIter->GetIdx() < pPieceIter->GetIMax();(*pPieceIter)++)
         {
             long nCpStart, nCpEnd;
             void* pData;
@@ -576,27 +591,44 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             {   // ausserhalb PLCFfpcd ?
                 ASSERT( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
                 break;
-//              pPieceIter->SetIdx( nOldPos );
-//              return 0;
             }
             BOOL bIsUnicode = FALSE;
             INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
-
             INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
-            if( nFcPos >= nFcStart && nFcPos < nFcStart + nLen )
-            {   // gefunden
-                pPieceIter->SetIdx( nOldPos );
-
-                return nCpStart + ((nFcPos - nFcStart) / (bIsUnicode ? 2 : 1));
+            /*
+            If this cp is inside this piece, or its the last piece and we are
+            on the very last cp of that piece
+            */
+            if (nFcPos >= nFcStart)
+            {
+                // found
+                WW8_CP nTempCp =
+                    nCpStart + ((nFcPos - nFcStart) / (bIsUnicode ? 2 : 1));
+                if (nFcPos < nFcStart + nLen)
+                {
+                    pPieceIter->SetIdx( nOldPos );
+                    return nTempCp;
+                }
+                else if (nFcPos == nFcStart + nLen)
+                {
+                    //Keep this cp as its on a piece boundary because we might
+                    //need it if tests fail
+                    nFallBackCpEnd = nTempCp;
+                }
             }
-            (*pPieceIter)++;
         }
-        pPieceIter->SetIdx( nOldPos );      // nicht gefunden
-        return LONG_MAX;
+        // not found
+        pPieceIter->SetIdx( nOldPos );      // not found
+        /*
+        If it was not found, then this is because it has fallen between two
+        stools, i.e. either it is the last cp/fc of the last piece, or it is
+        the last cp/fc of a disjoint piece.
+        */
+        return nFallBackCpEnd;
     }
     // No complex file
     return nFcPos - pWw8Fib->fcMin;
@@ -1930,12 +1962,11 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
     {
         pPLCF->SetIdx( nIdx >> 8 );
         DELETEZ( pFkp );
-
     }
     else
-    {                                   // Es gab einen Fkp
-                                        // Lese PLCF um 1 Pos zurueck, um
-        pPLCF->SetIdx( ( nIdx >> 8 ) - 1 );  // die Adresse des Fkp wiederzubekommen
+    {                                   //Es gab einen Fkp
+        //Lese PLCF um 1 Pos zurueck, um die Adresse des Fkp wiederzubekommen
+        pPLCF->SetIdx( ( nIdx >> 8 ) - 1 );
         if ( NewFkp() )                     // und lese Fkp wieder ein
             pFkp->SetIdx( nIdx & 0xff );    // Dann stelle Fkp-Pos wieder ein
     }
@@ -2215,7 +2246,7 @@ void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
         if(    (nAttrStart >  nAttrEnd)
             || (nAttrStart ==       -1) )  // Init ( noch kein ++ gerufen )
         {
-            eCutT eC = pPcd->AktPieceFc2Cp( p->nStartPos, p->nEndPos );
+            eCutT eC = pPcd->AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
             p->bRealLineEnd = !( eC & CUT_END ) && ePLCF == PAP;
         }
         else
@@ -2256,7 +2287,7 @@ void WW8PLCFx_Cp_FKP::SearchParaEnd( long nOldEndCp )
     {
         return;
     }*/
-    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd );
+    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     if( eC == CUT_NONE )            // neuer Eintrag ganz im akt. Piece
     {
         ASSERT( !this, "Nanu?" );
@@ -2299,7 +2330,7 @@ void WW8PLCFx_Cp_FKP::SearchParaEnd( long nOldEndCp )
         return;
     }
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
-    eC = pPcd->AktPieceFc2Cp(  nAttrStart, nAttrEnd );  // wird in CPs gebraucht
+    eC = pPcd->AktPieceFc2Cp(  nAttrStart, nAttrEnd, &rSBase ); // wird in CPs gebraucht
 
     nAttrStart = nOldEndCp;     // Aufziehen ueber ganzen Absatz, unabhaengig
                                 // davon, wieviel Pieces das sind
@@ -2324,7 +2355,7 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
     long nOldEndCp = nAttrEnd;
 
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
-    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd );
+    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = !( eC & CUT_END ) && ePLCF == PAP;
     if( !( eC & CUT_START ) ){                  // neuer Eintrag faengt im
                                                 // akt. Piece an
@@ -2358,7 +2389,7 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
     }
     // Fkp-Eintrag holen
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen );
-    eC  = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd );
+    eC  = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
 Ret:
     return *this;
 }
@@ -2992,7 +3023,9 @@ long WW8PLCFx_Book::GetLen() const
     }
     USHORT nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
 //  USHORT nEndIdx = *(USHORT*)p;
-    return pBook[1]->GetPos( nEndIdx ) - nStartPos;
+    long nNum = pBook[1]->GetPos( nEndIdx );
+    nNum -= nStartPos;
+    return nNum;
 }
 
 // IgnoreBook ist dafuer da, bei Feldern mit implizitem WW-Bookmark
@@ -3100,44 +3133,81 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
              && (rDesc.nEndPos > rDesc.nStartPos) )
             rDesc.nEndPos--;                    // ... dann um 1 Zeichen verkuerzen
     }
-
-    if( rDesc.nStartPos > rDesc.nEndPos ){  // allgemeiner Plausibilitaetstest
-
-        //if( gfhdf
-
-        ASSERT( !this, "+Anfang und Ende des WW86-Attributes stehen ueber Kreuz" );
+#ifdef CRUEL_CUT
+    /*
+    So what, I don't think there's anything wrong with that, its fastsaved so
+    the fc could be anywhere, all we care about is where the next *CP*
+    location of a property change occurs.
+    */
+    if( rDesc.nStartPos > rDesc.nEndPos )   // allgemeiner Plausibilitaetstest
+    {
+        ASSERT( !this,
+            "+Anfang und Ende des WW86-Attributes stehen ueber Kreuz" );
         rDesc.nEndPos = rDesc.nStartPos;
     }
+#endif
 }
 
 void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
 {
     rDesc.pPLCFx->GetSprms( &rDesc );
 
-    //if( rDesc.nStartPos <= rDesc.nEndPos
-
     ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
-    if( rDesc.nStartPos != LONG_MAX ) rDesc.nStartPos -= rDesc.nCpOfs;
-    if( rDesc.nEndPos   != LONG_MAX ) rDesc.nEndPos   -= rDesc.nCpOfs;
+    if( rDesc.nStartPos != LONG_MAX )
+    {
+        /*
+        ##516##,##517##
+        Force the property change to happen at the beginning of this
+        subdocument, same as in GetNewSoSprms, except that the target type is
+        attributes attached to a piece that might span subdocument boundaries
+        */
+        if (rDesc.nCpOfs > rDesc.nStartPos)
+            rDesc.nStartPos = 0;
+        else
+            rDesc.nStartPos -= rDesc.nCpOfs;
+    }
+    if( rDesc.nEndPos   != LONG_MAX )
+    {
+        ASSERT(rDesc.nCpOfs <= rDesc.nEndPos,
+            "oh oh, so much for the subdocument piece theory");
+        rDesc.nEndPos   -= rDesc.nCpOfs;
+    }
 
     rDesc.bFirstSprm = TRUE;
-
     AdjustEnds( rDesc );
 }
 
 void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
 {
-    rDesc.nCp2OrIdx =
-        rDesc.pPLCFx->GetNoSprms(rDesc.nStartPos, rDesc.nEndPos,
-                                                rDesc.nSprmsLen);
+    rDesc.nCp2OrIdx = rDesc.pPLCFx->GetNoSprms(rDesc.nStartPos, rDesc.nEndPos,
+        rDesc.nSprmsLen);
 
     ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
-    if( rDesc.nStartPos != LONG_MAX ) rDesc.nStartPos -= rDesc.nCpOfs;
-    if( rDesc.nEndPos   != LONG_MAX ) rDesc.nEndPos   -= rDesc.nCpOfs;
+    if( rDesc.nStartPos != LONG_MAX )
+    {
+        /*
+        ##516##, ##517##
+        Idea being that there is something that spans the end of a document
+        and the beginning of a subdocument, or the end of a sub and the
+        beginning of the next sub. So we force it to happen at the beginning
+        of this subdocument, basically we're only talking about a piece
+        change.
+        */
+        if (rDesc.nCpOfs > rDesc.nStartPos)
+            rDesc.nStartPos = 0;
+        else
+            rDesc.nStartPos -= rDesc.nCpOfs;
+    }
+    if( rDesc.nEndPos != LONG_MAX )
+    {
+        ASSERT(rDesc.nCpOfs <= rDesc.nEndPos,
+            "oh oh, so much for the subdocument piece theory");
+        rDesc.nEndPos -= rDesc.nCpOfs;
+    }
     rDesc.bFirstSprm = TRUE;
 }
 
@@ -3182,6 +3252,7 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         pEdn->pPLCFx = pBase->pEdnPLCF;
         pBkm->pPLCFx = pBase->pBook;
         pAnd->pPLCFx = pBase->pAndPLCF;
+
     }
     else
     {
@@ -3191,7 +3262,7 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         pBkm = ( pBase->pBook ) ? &aD[1] : 0;
         pChp = &aD[2];
         pPap = &aD[3];
-        pSep = &aD[4];          // Dummy
+        pSep = &aD[4]; // Dummy
         pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
         pPcdA= ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
         pAnd = pFtn = pEdn = 0;     // unbenutzt bei SpezText
@@ -3264,11 +3335,22 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
     // initialisieren der Member-Vars Low-Level
     GetChpPLCF()->ResetAttrStartEnd();
     GetPapPLCF()->ResetAttrStartEnd();
-    for( i=0; i<nPLCF; i++)
+    for( i=0; i < nPLCF; i++)
     {
         register WW8PLCFxDesc* p = &aD[i];
-
+#ifdef CRUEL_CUT
         p->nCpOfs = ( p == pChp || p == pPap || p == pBkm ) ? nCpO : 0;
+#else
+        /*
+        ##516##,##517##
+        For subdocuments we modify the cp of properties to be relative to
+        the beginning of subdocuments, we should also do the same for
+        piecetable changes, and piecetable properties, otherwise a piece
+        change that happens in a subdocument is lost.
+        */
+        p->nCpOfs = ( p == pChp || p == pPap || p == pBkm || p == pPcd ||
+            p == pPcdA ) ? nCpO : 0;
+#endif
         p->nCp2OrIdx = 0;
         p->bFirstSprm = FALSE;
         p->pIdStk = 0;
@@ -5878,8 +5960,15 @@ static SprmInfo aWwSprmTab[] = {
 //0xD62A, 0, L_FIX, // "sprmTDiagLine" ;;;
     0xD62B, 0, L_VAR, // "sprmTVertMerge" tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, 0, L_VAR, // "sprmTVertAlign" tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
-    0xCA78, 0, L_VAR // undocumented "sprmCDoubleLine ?" i.e. variable length thing.
-
+    0xCA78, 0, L_VAR, // undocumented "sprmCDoubleLine ?" i.e. variable length thing.
+    0x6649, 4, L_FIX, // undocumented
+    0xF614, 3, L_FIX, // undocumented
+    0xD61A, 0, L_VAR, // undocumented
+    0xD61B, 0, L_VAR, // undocumented
+    0xD61C, 0, L_VAR, // undocumented
+    0xD61D, 0, L_VAR, // undocumented
+    0xD634, 0, L_VAR, // undocumented
+    0xF661, 3, L_FIX // undocumented
 };
 
 
@@ -6100,11 +6189,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.10 2001-02-19 13:01:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.11 2001-03-16 14:34:34 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/19 13:01:19  cmc
+      #84082# Extra unknown bit in language index in DopTypography
+
       Revision 1.9  2001/02/15 20:08:10  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 
