@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-09-28 14:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,71 +470,68 @@ inline static void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )
 {
     typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription *)pTD;
-    OSL_ASSERT( !pITD->nMapFunctionIndexToMemberIndex );
+
+    sal_Bool * pReadWriteAttributes = (sal_Bool *)alloca( pITD->nAllMembers );
+    for ( sal_Int32 i = pITD->nAllMembers; i--; )
     {
-        sal_Bool * pReadWriteAttributes = (sal_Bool *)alloca( pITD->nAllMembers );
-//          {
-//          MutexGuard aGuard( aInit.getMutex() );
-        for ( sal_Int32 i = pITD->nAllMembers; i--; )
+        pReadWriteAttributes[i] = sal_False;
+        if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pITD->ppAllMembers[i]->eTypeClass )
         {
-            pReadWriteAttributes[i] = sal_False;
-            if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pITD->ppAllMembers[i]->eTypeClass )
+            typelib_TypeDescription * pM = 0;
+            TYPELIB_DANGER_GET( &pM, pITD->ppAllMembers[i] );
+            OSL_ASSERT( pM );
+            if (pM)
             {
-                typelib_TypeDescription * pM = 0;
-                TYPELIB_DANGER_GET( &pM, pITD->ppAllMembers[i] );
-                OSL_ASSERT( pM );
-                if (pM)
-                {
-                    pReadWriteAttributes[i] = !((typelib_InterfaceAttributeTypeDescription *)pM)->bReadOnly;
-                    TYPELIB_DANGER_RELEASE( pM );
-                }
+                pReadWriteAttributes[i] = !((typelib_InterfaceAttributeTypeDescription *)pM)->bReadOnly;
+                TYPELIB_DANGER_RELEASE( pM );
+            }
 #ifdef CPPU_ASSERTIONS
-                else
-                {
-                    OString aStr( OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                    CPPU_TRACE( "\n### cannot get attribute type description: " );
-                    CPPU_TRACE( aStr.getStr() );
-                }
+            else
+            {
+                OString aStr( OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+                CPPU_TRACE( "\n### cannot get attribute type description: " );
+                CPPU_TRACE( aStr.getStr() );
+            }
 #endif
-            }
         }
-//          }
+    }
 
-        if( !pITD->nMapFunctionIndexToMemberIndex )
+    MutexGuard aGuard( aInit.getMutex() );
+    if( !pTD->bComplete )
+    {
+        // create the index table from member to function table
+        pITD->pMapMemberIndexToFunctionIndex = new sal_Int32[ pITD->nAllMembers ];
+        sal_Int32 nAdditionalOffset = 0; // +1 for read/write attributes
+        sal_Int32 i;
+        for( i = 0; i < pITD->nAllMembers; i++ )
         {
-            // create the index table from member to function table
-            pITD->pMapMemberIndexToFunctionIndex = new sal_Int32[ pITD->nAllMembers ];
-            sal_Int32 nAdditionalOffset = 0; // +1 for read/write attributes
-            sal_Int32 i;
-            for( i = 0; i < pITD->nAllMembers; i++ )
+            // index to the get method of the attribute
+            pITD->pMapMemberIndexToFunctionIndex[i] = i + nAdditionalOffset;
+            // extra offset if it is a read/write attribute?
+            if( pReadWriteAttributes[i] )
             {
-                // index to the get method of the attribute
-                pITD->pMapMemberIndexToFunctionIndex[i] = i + nAdditionalOffset;
-                // extra offset if it is a read/write attribute?
-                if( pReadWriteAttributes[i] )
-                {
-                    // a read/write attribute
-                    nAdditionalOffset++;
-                }
+                // a read/write attribute
+                nAdditionalOffset++;
             }
-
-            // create the index table from function to member table
-            pITD->pMapFunctionIndexToMemberIndex = new sal_Int32[ pITD->nAllMembers + nAdditionalOffset ];
-            nAdditionalOffset = 0; // +1 for read/write attributes
-            for( i = 0; i < pITD->nAllMembers; i++ )
-            {
-                // index to the get method of the attribute
-                pITD->pMapFunctionIndexToMemberIndex[i + nAdditionalOffset] = i;
-                // extra offset if it is a read/write attribute?
-                if( pReadWriteAttributes[i] )
-                {
-                    // a read/write attribute
-                    pITD->pMapFunctionIndexToMemberIndex[i + ++nAdditionalOffset] = i;
-                }
-            }
-            // must be the last action after all initialization is done
-            pITD->nMapFunctionIndexToMemberIndex = pITD->nAllMembers + nAdditionalOffset;
         }
+
+        // create the index table from function to member table
+        pITD->pMapFunctionIndexToMemberIndex = new sal_Int32[ pITD->nAllMembers + nAdditionalOffset ];
+        nAdditionalOffset = 0; // +1 for read/write attributes
+        for( i = 0; i < pITD->nAllMembers; i++ )
+        {
+            // index to the get method of the attribute
+            pITD->pMapFunctionIndexToMemberIndex[i + nAdditionalOffset] = i;
+            // extra offset if it is a read/write attribute?
+            if( pReadWriteAttributes[i] )
+            {
+                // a read/write attribute
+                pITD->pMapFunctionIndexToMemberIndex[i + ++nAdditionalOffset] = i;
+            }
+        }
+        // must be the last action after all initialization is done
+        pITD->nMapFunctionIndexToMemberIndex = pITD->nAllMembers + nAdditionalOffset;
+        pTD->bComplete = sal_True;
     }
 }
 
@@ -2018,13 +2015,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
         if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
             ((typelib_InterfaceTypeDescription *)*ppTypeDescr)->ppAllMembers)
         {
-            // complete except of tables init
-            MutexGuard aGuard( aInit.getMutex() ); // type is registered
-            if (! (*ppTypeDescr)->bComplete)
-            {
-                typelib_typedescription_initTables( *ppTypeDescr );
-                (*ppTypeDescr)->bComplete = sal_True;
-            }
+            typelib_typedescription_initTables( *ppTypeDescr );
             return sal_True;
         }
         // obsolete
@@ -2109,4 +2100,5 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
     }
     return sal_True;
 }
+
 
