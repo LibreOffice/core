@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:41:44 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 12:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#define LEAK_STATIC_DATA
-//  #define TRACE(x) OSL_TRACE(x)
-#define TRACE(x)
-
 #pragma warning( disable : 4237 )
 #include <list>
 #include <malloc.h>
@@ -87,6 +83,12 @@
 #endif
 
 #include "msci.hxx"
+
+#ifdef DEBUG
+#define TRACE(x) OSL_TRACE(x)
+#else
+#define TRACE(x)
+#endif
 
 using namespace std;
 using namespace rtl;

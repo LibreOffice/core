@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:41:44 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 12:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define LEAK_STATIC_DATA
-
 #pragma warning( disable : 4237 )
 #include <hash_map>
 #include <sal/config.h>
@@ -84,11 +82,11 @@
 
 #include "msci.hxx"
 
-#ifndef DEBUG
-#undef OSL_TRACE
-#define OSL_TRACE(x)
+#ifdef DEBUG
+#define TRACE(x) OSL_TRACE(x)
+#else
+#define TRACE(x)
 #endif
-
 
 #pragma pack(push, 8)
 
@@ -209,7 +207,7 @@ RTTInfos::RTTInfos() throw ()
 //__________________________________________________________________________________________________
 RTTInfos::~RTTInfos() throw ()
 {
-    OSL_TRACE( "> freeing generated RTTI infos... <\n" );
+    TRACE( "> freeing generated RTTI infos... <\n" );
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
@@ -399,7 +397,7 @@ ExceptionInfos::ExceptionInfos() throw ()
 //__________________________________________________________________________________________________
 ExceptionInfos::~ExceptionInfos() throw ()
 {
-    OSL_TRACE( "> freeing exception infos... <\n" );
+    TRACE( "> freeing exception infos... <\n" );
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
