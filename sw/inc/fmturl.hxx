@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmturl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:07:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,11 @@ public:
 };
 
 
-#if ! (defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtURL &SwAttrSet::GetURL(BOOL bInP) const
     { return (const SwFmtURL&)Get( RES_URL,bInP); }
 
 inline const SwFmtURL &SwFmt::GetURL(BOOL bInP) const
     { return aSet.GetURL(bInP); }
-#endif
 
 #endif
 
