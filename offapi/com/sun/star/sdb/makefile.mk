@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-02-20 14:33:09 $
+#   last change: $Author: fs $ $Date: 2001-04-26 09:14:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ IDLFILES=\
     DatasourceAdministrationDialog.idl \
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
-    DocumentDefinition.idl \
     ErrorMessageDialog.idl \
     InteractionHandler.idl \
     ParametersRequest.idl \
@@ -110,6 +109,7 @@ IDLFILES=\
     Table.idl \
     TableDescriptor.idl \
     XAlterQuery.idl \
+    XBookmarksSupplier.idl \
     XColumn.idl \
     XColumnUpdate.idl \
     XCommandPreparation.idl \
