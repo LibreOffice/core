@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:33:38 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ class PspGraphics : public SalGraphics
     psp::PrinterGfx*            m_pPrinterGfx;
     String*                     m_pPhoneNr;
     bool                        m_bSwallowFaxNo;
+    String                      m_aPhoneCollection;
+    bool                        m_bPhoneCollectionActive;
 
     ServerFont*                 m_pServerFont[ MAX_FALLBACK ];
     bool                        m_bFontVertical;
@@ -95,6 +97,7 @@ public:
               m_pPrinterGfx( pGfx ),
               m_pPhoneNr( pPhone ),
               m_bSwallowFaxNo( bSwallow ),
+              m_bPhoneCollectionActive( false ),
               m_bFontVertical( false )
     { for( int i = 0; i < MAX_FALLBACK; i++ ) m_pServerFont[i] = 0; }
     virtual ~PspGraphics();
@@ -211,7 +214,7 @@ public:
     virtual void            invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
-
+    virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
 };
 
 #endif // _VCL_PSPGRAPHICS_H
