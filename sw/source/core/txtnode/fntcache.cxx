@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:41:56 $
+ *  last change: $Author: fme $ $Date: 2002-01-25 16:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,6 +692,28 @@ void lcl_Pos( USHORT nWhich, long& rPos, long nWidth, long nLeft, long nRight )
 
 #endif
 
+#ifdef VERTICAL_LAYOUT
+BYTE lcl_WhichPunctuation( xub_Unicode cChar )
+{
+    if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
+            ( cChar < 0x3008 || cChar > 0x3011 ) &&
+            ( cChar < 0x3014 || cChar > 0x301F ) )
+        // no punctuation
+        return SwScriptInfo::NONE;
+    else if ( cChar == 0x3001 || cChar == 0x3002 ||
+                cChar == 0x3009 || cChar == 0x300B ||
+                cChar == 0x300D || cChar == 0x300F ||
+                cChar == 0x3011 || cChar == 0x3015 ||
+                cChar == 0x3017 || cChar == 0x3019 ||
+                cChar == 0x301B || cChar == 0x301E ||
+                cChar == 0x301F )
+        // right punctuation
+        return SwScriptInfo::SPECIAL_RIGHT;
+
+    return SwScriptInfo::SPECIAL_LEFT;
+}
+#endif
+
 // ER 09.07.95 20:34
 // mit -Ox Optimierung stuerzt's unter win95 ab
 // JP 12.07.95: unter WNT auch (i386);       Alpha ??
@@ -795,17 +817,47 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // position of first character, we take the printer position
             long nCharWidth = pKernArray[ 0 ];
+            USHORT nHalfWidth = nWidthPerChar / 2;
 
-            aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
-            long nNextFix = nCharWidth / 2;
+            long nNextFix;
+
+            // punctuation characters are not centered
+            xub_Unicode cChar = rInf.GetText().GetChar( rInf.GetIdx() );
+            BYTE nType = lcl_WhichPunctuation( cChar );
+            switch ( nType )
+            {
+            case SwScriptInfo::NONE :
+                aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
+                nNextFix = nCharWidth / 2;
+                break;
+            case SwScriptInfo::SPECIAL_RIGHT :
+                nNextFix = nHalfWidth;
+                break;
+            default:
+                aPos.X() += nWidthPerChar - nCharWidth;
+                nNextFix = nCharWidth - nHalfWidth;
+            }
 
             // calculate offsets
             for ( xub_StrLen j = 1; j < rInf.GetLen(); ++j )
             {
                 long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
-
                 nNextFix += nWidthPerChar;
-                pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
+
+                // punctuation characters are not centered
+                cChar = rInf.GetText().GetChar( rInf.GetIdx() + j );
+                nType = lcl_WhichPunctuation( cChar );
+                switch ( nType )
+                {
+                case SwScriptInfo::NONE :
+                    pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
+                    break;
+                case SwScriptInfo::SPECIAL_RIGHT :
+                    pKernArray[ j - 1 ] = nNextFix - nHalfWidth;
+                    break;
+                default:
+                    pKernArray[ j - 1 ] = nNextFix + nHalfWidth - nScr;
+                }
             }
 
             if ( bSwitchH2V )
@@ -1553,7 +1605,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             nWidthPerChar = i * nGridWidth;
 
-            nCnt = rInf.GetOfst() / nWidthPerChar;
+            nCnt = (USHORT)(rInf.GetOfst() / nWidthPerChar);
             if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
                 ++nCnt;
 
