@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="toolkit_AccessibleStatusBarItem" script:language="StarBasic">
+
+'*************************************************************************
+'*
+'*  $RCSfile: toolkit_AccessibleStatusBarItem.xba,v $ 
+'*
+'*  $Revision: 1.2 $ 
+'*
+'*  last change:$Date: 2003-10-06 13:29:12 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' "com::sun::star::accessibility::XAccessibleText"
+ ' needs the following Global variables:
+   Global accText as String
+   Global readOnly as Boolean
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.toolkit.AccessibleStatusBarItem
+'*************************************************************************
+On Error Goto ErrHndl
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    Dim xController As Object
+    xController = oDoc.getCurrentController()
+
+    Dim xRoot As Object
+    Dim oWin as Object
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    Dim oStatusBar as Object
+    oStatusBar = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.STATUS_BAR)
+    oObj = oStatusBar.getAccessibleChild(0)
+    
+    readOnly = true
+    accText = oObj.getText()
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub fireEvent()
+    Dim oText as Object
+    oText = oDoc.getText()
+    
+    Dim oEnum as Object
+    Dim oParagraph as Object
+    oEnum = oText.createEnumeration() ' get all paragraphs
+    while oEnum.hasMoreElements()
+        oParagraph = oEnum.nextElement() ' get the last paragraph
+    wend
+    oParagraph.BreakType = com.sun.star.style.BreakType.PAGE_AFTER 
+    
+    Dim oCursor as Object
+    oCursor = oText.createTextCursor()
+    oCursor.gotoEnd(false) 'Goto to the end of document
+    oText.insertControlCharacter(oCursor, 0, false) ' insert a new paragraph
+    oCursor.setString("AccessibleStatusBarItem") ' insert text 
+end Sub
+</script:module>
