@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:39 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,4 +1176,28 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
     }
     return xAccessible;
 }
+// -----------------------------------------------------------------------------
+Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 _nIndex)
+{
+    Rectangle aRect;
+    return aRect;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+{
+    String sText = GetCellText(_nRow,_nColumnId);
+    MetricVector aRects;
+    if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
+    {
+        for (MetricVector::iterator aIter = aRects.begin(); aIter != aRects.end(); ++aIter)
+        {
+            if( aIter->IsInside(_rPoint) )
+                return aIter - aRects.begin();
+        }
+    }
+
+    return -1;
+}
+// -----------------------------------------------------------------------------
+
 
