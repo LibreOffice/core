@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:57:24 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _PARATR_HXX
+#include "paratr.hxx"
 #endif
 
 
@@ -527,6 +530,21 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), FALSE, &pItem);
     switch ( nSlot )
     {
+        case FN_DROP_CHAR_STYLE_NAME:
+            if( pItem )
+            {
+                String sCharStyleName = ((const SfxStringItem*)pItem)->GetValue();
+                SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP, 0L);
+                rSh.GetAttr(aSet);
+                SwFmtDrop aDropItem((const SwFmtDrop&)aSet.Get(RES_PARATR_DROP));
+                SwCharFmt* pFmt = 0;
+                if(sCharStyleName.Len())
+                    pFmt = rSh.FindCharFmtByName( sCharStyleName );
+                aDropItem.SetCharFmt( pFmt );
+                aSet.Put(aDropItem);
+                rSh.SetAttr(aSet);
+            }
+        break;
         case FN_FORMAT_DROPCAPS:
         {
             if(pItem)
@@ -784,6 +802,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/06/14 07:57:24  mba
+    #100081#: some new slots for attributes
+
     Revision 1.5  2002/06/07 08:43:31  mba
     #99911#: support for ParagraphAlignment recording
 

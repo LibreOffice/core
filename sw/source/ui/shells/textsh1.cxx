@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:09:41 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,12 @@
 #include <svtools/cjkoptions.hxx>
 #endif
 
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-
+#endif
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
@@ -247,10 +251,12 @@
 #ifndef _WEB_HRC
 #include <web.hrc>
 #endif
+#ifndef _PARATR_HXX
+#include "paratr.hxx"
+#endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -605,118 +611,114 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_HYPERLINK:
         case SID_CHAR_DLG:
         {
-            SwView* pView = GetActiveView();
-            if(pView)
+            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SfxItemSet aCoreSet( GetPool(),
+                                RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
+                                RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
+                                RES_BACKGROUND,        RES_BACKGROUND,
+                                FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
+                                SID_HTML_MODE,         SID_HTML_MODE,
+                                SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                                0 );
+            rWrtSh.GetAttr( aCoreSet );
+            BOOL bSel = rWrtSh.HasSelection();
+            BOOL bSelectionPutted = FALSE;
+            if(bSel || rWrtSh.IsInWord())
             {
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-                SfxItemSet aCoreSet( GetPool(),
-                                 RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
-                                 RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
-                                 RES_BACKGROUND,        RES_BACKGROUND,
-                                 FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
-                                 SID_HTML_MODE,         SID_HTML_MODE,
-                                 SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                                 0 );
-                rWrtSh.GetAttr( aCoreSet );
-                BOOL bSel = rWrtSh.HasSelection();
-                BOOL bSelectionPutted = FALSE;
-                if(bSel || rWrtSh.IsInWord())
+                if(!bSel)
                 {
-                    if(!bSel)
-                    {
-                        rWrtSh.StartAction();
-                        rWrtSh.Push();
-                        if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
-                            rWrtSh.SelWrd();
-                    }
-                    aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
-                    bSelectionPutted = TRUE;
-                    if(!bSel)
-                    {
-                        rWrtSh.Pop(FALSE);
-                        rWrtSh.EndAction();
-                    }
+                    rWrtSh.StartAction();
+                    rWrtSh.Push();
+                    if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
+                        rWrtSh.SelWrd();
                 }
+                aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
+                bSelectionPutted = TRUE;
+                if(!bSel)
+                {
+                    rWrtSh.Pop(FALSE);
+                    rWrtSh.EndAction();
+                }
+            }
 
-                aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                              rWrtSh.GetScalingOfSelectedText() ) );
+            aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                            rWrtSh.GetScalingOfSelectedText() ) );
 
-                // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
-                // ein RES_BACKGROUND verwandelt und wieder zurueck ...
-                const SfxPoolItem *pTmpBrush;
-                if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, TRUE, &pTmpBrush ) )
+            // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
+            // ein RES_BACKGROUND verwandelt und wieder zurueck ...
+            const SfxPoolItem *pTmpBrush;
+            if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, TRUE, &pTmpBrush ) )
+            {
+                SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+                aTmpBrush.SetWhich( RES_BACKGROUND );
+                aCoreSet.Put( aTmpBrush );
+            }
+
+            aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+            SwCharDlg* pDlg = NULL;
+            if ( bUseDialog && GetActiveView() )
+            {
+                pDlg = new SwCharDlg(GetView().GetWindow(), GetView(), aCoreSet);
+                if( FN_INSERT_HYPERLINK == nSlot )
+                    pDlg->SetCurPageId(TP_CHAR_URL);
+            }
+
+            const SfxItemSet* pSet = NULL;
+            if ( !bUseDialog )
+                pSet = pArgs;
+            else if ( pDlg->Execute() == RET_OK )
+            {
+                pSet = pDlg->GetOutputItemSet();
+            }
+
+            if ( pSet)
+            {
+                SfxItemSet aTmpSet( *pSet );
+                if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, FALSE, &pTmpBrush ) )
                 {
                     SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                    aTmpBrush.SetWhich( RES_BACKGROUND );
-                    aCoreSet.Put( aTmpBrush );
+                    aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
+                    aTmpSet.Put( aTmpBrush );
                 }
 
-                aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-                SwCharDlg* pDlg = NULL;
-                if ( bUseDialog )
+                aTmpSet.ClearItem( RES_BACKGROUND );
+
+                const SfxPoolItem* pItem;
+                BOOL bInsert = FALSE;
+
+                // aus ungeklaerter Ursache ist das alte Item wieder im Set
+                if( !bSelectionPutted && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
                 {
-                    pDlg = new SwCharDlg(GetView().GetWindow(), GetView(), aCoreSet);
-                    if( FN_INSERT_HYPERLINK == nSlot )
-                        pDlg->SetCurPageId(TP_CHAR_URL);
-                }
-
-                const SfxItemSet* pSet = NULL;
-                if ( !bUseDialog )
-                    pSet = pArgs;
-                else if ( pDlg->Execute() == RET_OK )
-                {
-                    pSet = pDlg->GetOutputItemSet();
-                }
-
-                if ( pSet)
-                {
-                    SfxItemSet aTmpSet( *pSet );
-                    if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, FALSE, &pTmpBrush ) )
-                    {
-                        SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                        aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                        aTmpSet.Put( aTmpBrush );
-                    }
-
-                    aTmpSet.ClearItem( RES_BACKGROUND );
-
-                    const SfxPoolItem* pItem;
-                    BOOL bInsert = FALSE;
-
-                    // aus ungeklaerter Ursache ist das alte Item wieder im Set
-                    if( !bSelectionPutted && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
-                    {
-                        String sInsert = ((const SfxStringItem*)pItem)->GetValue();
-                        bInsert = sInsert.Len() != 0;
-                        if(bInsert)
-                        {
-                            rWrtSh.StartAction();
-                            rWrtSh.Insert( sInsert );
-                            rWrtSh.SetMark();
-                            rWrtSh.ExtendSelection(FALSE, sInsert.Len());
-                        }
-                    }
-
-                    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-                    if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
-                    {
-                        rWrtSh.AutoUpdatePara(pColl, aTmpSet);
-                    }
-                    else
-                        rWrtSh.SetAttr( aTmpSet );
-                    rReq.Done(aTmpSet);
+                    String sInsert = ((const SfxStringItem*)pItem)->GetValue();
+                    bInsert = sInsert.Len() != 0;
                     if(bInsert)
                     {
-                        rWrtSh.SwapPam();
-                        rWrtSh.ClearMark();
-                        rWrtSh.DontExpandFmt();
-                        rWrtSh.EndAction();
+                        rWrtSh.StartAction();
+                        rWrtSh.Insert( sInsert );
+                        rWrtSh.SetMark();
+                        rWrtSh.ExtendSelection(FALSE, sInsert.Len());
                     }
                 }
 
-                delete pDlg;
+                SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
+                if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
+                {
+                    rWrtSh.AutoUpdatePara(pColl, aTmpSet);
+                }
+                else
+                    rWrtSh.SetAttr( aTmpSet );
+                rReq.Done(aTmpSet);
+                if(bInsert)
+                {
+                    rWrtSh.SwapPam();
+                    rWrtSh.ClearMark();
+                    rWrtSh.DontExpandFmt();
+                    rWrtSh.EndAction();
+                }
             }
+
+            delete pDlg;
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -730,6 +732,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_NUMBER_NEWSTART :
         case FN_NUMBER_NEWSTART_AT :
         case FN_FORMAT_DROPCAPS :
+        case FN_DROP_TEXT:
         {
             USHORT nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
@@ -739,146 +742,158 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_PARA_DLG:
         {
-        //Damit aus dem Basic keine Dialoge fuer Hintergrund-Views aufgerufen werden:
-            SwView* pView = GetActiveView();
-            if(pView)
+            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SfxItemSet aCoreSet( GetPool(),
+                            RES_PARATR_BEGIN,           RES_PARATR_END - 1,
+                            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
+                            SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
+                            SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
+                            SID_ATTR_TABSTOP_OFFSET,    SID_ATTR_TABSTOP_OFFSET,
+                            SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,
+                            SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
+                            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
+                            SID_HTML_MODE,              SID_HTML_MODE,
+                            FN_PARAM_1,                 FN_PARAM_1,
+                            FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
+                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
+                            0);
+            rWrtSh.GetAttr( aCoreSet );
+            aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
+                            ::GetHtmlMode(GetView().GetDocShell())));
+
+            // Tabulatoren, DefaultTabs ins ItemSet Stecken
+            const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
+                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+
+            USHORT nDefDist = ::GetTabDist( rDefTabs );
+            SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
+            aCoreSet.Put( aDefDistItem );
+
+            // Aktueller Tab
+            SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
+            aCoreSet.Put( aTabPos );
+
+            // linker Rand als Offset
+            const long nOff = ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).
+                                                                GetTxtLeft();
+            SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
+            aCoreSet.Put( aOff );
+
+
+            // BoxInfo setzen
+            ::PrepareBoxInfo( aCoreSet, rWrtSh );
+
+            //aktuelles Seitenformat
+            ::SwToSfxPageDescAttr( aCoreSet );
+
+            UINT16 nDefPage = 0;
+            if( pItem )
+                nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
+
+            // Numerierungseigenschaften
+            if(rWrtSh.GetCurNumRule())
             {
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-                SfxItemSet aCoreSet( GetPool(),
-                                RES_PARATR_BEGIN,           RES_PARATR_END - 1,
-                                RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
-                                SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
-                                SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
-                                SID_ATTR_TABSTOP_OFFSET,    SID_ATTR_TABSTOP_OFFSET,
-                                SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,
-                                SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
-                                SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
-                                SID_HTML_MODE,              SID_HTML_MODE,
-                                FN_PARAM_1,                 FN_PARAM_1,
-                                FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
-                                0);
-                rWrtSh.GetAttr( aCoreSet );
-                aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
-                                ::GetHtmlMode(GetView().GetDocShell())));
+                aCoreSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
+                                    USHRT_MAX != rWrtSh.IsNodeNumStart()));
+                aCoreSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
+                                                rWrtSh.IsNodeNumStart()));
+            }
+            SwParaDlg *pDlg = NULL;
+            if ( bUseDialog && GetActiveView() )
+                pDlg = new SwParaDlg( GetView().GetWindow(),
+                                                GetView(), aCoreSet, DLG_STD,
+                                                NULL, FALSE, nDefPage );
 
-                // Tabulatoren, DefaultTabs ins ItemSet Stecken
-                const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
-                                GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+            SfxItemSet* pSet = NULL;
+            if ( !bUseDialog )
+            {
+                pSet = (SfxItemSet*) pArgs;
 
-                USHORT nDefDist = ::GetTabDist( rDefTabs );
-                SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
-                aCoreSet.Put( aDefDistItem );
-
-                // Aktueller Tab
-                SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
-                aCoreSet.Put( aTabPos );
-
-                // linker Rand als Offset
-                const long nOff = ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).
-                                                                    GetTxtLeft();
-                SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
-                aCoreSet.Put( aOff );
-
-
-                // BoxInfo setzen
-                ::PrepareBoxInfo( aCoreSet, rWrtSh );
-
-                //aktuelles Seitenformat
-                ::SwToSfxPageDescAttr( aCoreSet );
-
-                UINT16 nDefPage = 0;
-                if( pItem )
-                    nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
-
-                // Numerierungseigenschaften
-                if(rWrtSh.GetCurNumRule())
+            }
+            else if ( pDlg->Execute() == RET_OK )
+            {
+                // Defaults evtl umsetzen
+                pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
+                USHORT nNewDist;
+                if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, FALSE, &pItem ) &&
+                    nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
-                    aCoreSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
-                                        USHRT_MAX != rWrtSh.IsNodeNumStart()));
-                    aCoreSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
-                                                    rWrtSh.IsNodeNumStart()));
+                    SvxTabStopItem aDefTabs( 0, 0 );
+                    MakeDefTabs( nNewDist, aDefTabs );
+                    rWrtSh.SetDefault( aDefTabs );
+                    pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
                 }
-                SwParaDlg *pDlg = NULL;
-                if ( bUseDialog )
-                    pDlg = new SwParaDlg( GetView().GetWindow(),
-                                                 GetView(), aCoreSet, DLG_STD,
-                                                 NULL, FALSE, nDefPage );
 
-                SfxItemSet* pSet = NULL;
-                if ( !bUseDialog )
-                    pSet = (SfxItemSet*) pArgs;
-                else if ( pDlg->Execute() == RET_OK )
+                if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
-                    // Defaults evtl umsetzen
-                    pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
-                    USHORT nNewDist;
-                    if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, FALSE, &pItem ) &&
-                        nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
-                    {
-                        SvxTabStopItem aDefTabs( 0, 0 );
-                        MakeDefTabs( nNewDist, aDefTabs );
-                        rWrtSh.SetDefault( aDefTabs );
-                        pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
-                    }
+                    // only one item is needed, especially for recording
+                    BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                    if ( !bStart )
+                        pSet->ClearItem( FN_NUMBER_NEWSTART_AT );
+                    else
+                        pSet->ClearItem( FN_NUMBER_NEWSTART );
+                }
+                if ( SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_1,FALSE,&pItem) )
+                {
+                    pSet->Put(SfxStringItem(FN_DROP_TEXT, ((const SfxStringItem*)pItem)->GetValue()));
+                    pSet->ClearItem(FN_PARAM_1);
+                }
 
-                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
+                if( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_DROP, FALSE, &pItem ))
+                {
+                    String sCharStyleName;
+                    if(((const SwFmtDrop*)pItem)->GetCharFmt())
+                        sCharStyleName = ((const SwFmtDrop*)pItem)->GetCharFmt()->GetName();
+                    pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
+                }
+            }
+
+            if ( pSet )
+            {
+                rReq.Done( *pSet );
+                ::SfxToSwPageDescAttr( rWrtSh, *pSet );
+                if( pSet->Count() )
+                {
+                    rWrtSh.StartAction();
+                    rWrtSh.StartUndo( UNDO_START );
+                    if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, FALSE, &pItem) )
                     {
-                        // only one item is needed, especially for recording
-                        BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                        if ( !bStart )
-                            pSet->ClearItem( FN_NUMBER_NEWSTART_AT );
-                        else
-                            pSet->ClearItem( FN_NUMBER_NEWSTART );
+                        if ( ((SfxStringItem*)pItem)->GetValue().Len() )
+                            rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
+                    }
+                    rWrtSh.SetAttr( *pSet );
+                    rWrtSh.EndUndo( UNDO_END );
+                    rWrtSh.EndAction();
+                    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
+                    if(pColl && pColl->IsAutoUpdateFmt())
+                    {
+                        rWrtSh.AutoUpdatePara(pColl, *pSet);
                     }
                 }
 
-                if ( pSet )
+                if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
-                    rReq.Done( *pSet );
-                    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
-                    if( pSet->Count() )
+                    BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
-                        rWrtSh.StartAction();
-                        rWrtSh.StartUndo( UNDO_START );
-                        if ( SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_1,FALSE,&pItem) )
-                        {
-                            if ( ((SfxStringItem*)pItem)->GetValue().Len() )
-                                rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
-                        }
-                        rWrtSh.SetAttr( *pSet );
-                        rWrtSh.EndUndo( UNDO_END );
-                        rWrtSh.EndAction();
-                        SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-                        if(pColl && pColl->IsAutoUpdateFmt())
-                        {
-                            rWrtSh.AutoUpdatePara(pColl, *pSet);
-                        }
-                    }
-
-                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
-                    {
-                        BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                        if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
-                        {
-                            // das zweite Item muss immer drin sein!
-                            USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-                            if(!bStart)
-                                nNumStart = USHRT_MAX;
-                            rWrtSh.SetNodeNumStart(nNumStart);
-                        }
-                        else
-                            rWrtSh.SetNodeNumStart(bStart ? 1 : USHRT_MAX);
-                    }
-                    else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
-                    {
+                        // das zweite Item muss immer drin sein!
                         USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                        if(!bStart)
+                            nNumStart = USHRT_MAX;
                         rWrtSh.SetNodeNumStart(nNumStart);
                     }
+                    else
+                        rWrtSh.SetNodeNumStart(bStart ? 1 : USHRT_MAX);
                 }
-
-                delete pDlg;
+                else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+                {
+                    USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                    rWrtSh.SetNodeNumStart(nNumStart);
+                }
             }
+
+            delete pDlg;
         }
         break;
         case FN_SELECT_PARA:
