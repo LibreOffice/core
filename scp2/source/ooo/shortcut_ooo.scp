@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 12:09:23 $
+*  last change: $Author: obo $ $Date: 2004-11-17 13:00:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -401,13 +401,6 @@ Shortcut gid_Shortcut_Uno
     FileID = gid_File_Script_Unopkg;
     Dir = gid_Dir_Program;
     Name = "uno";
-    Styles = (STANDALONE, NETWORK, RELATIVE);
-End
-
-Shortcut gid_Shortcut_Soffice_Configimport
-    FileID = gid_File_Script_Unopkg;
-    Dir = gid_Dir_Program;
-    Name = "configimport";
     Styles = (STANDALONE, NETWORK, RELATIVE);
 End
 
