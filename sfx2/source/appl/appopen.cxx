@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 16:01:01 $
+ *  last change: $Author: dv $ $Date: 2001-04-27 11:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,14 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -74,24 +80,23 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
+
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
@@ -123,7 +128,6 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -156,18 +160,25 @@
 #include "app.hrc"
 #include "topfrm.hxx"
 #include "appimp.hxx"
-#include "iodlg.hxx"
 #include "sfxuno.hxx"
+
+//#define DONT_USE_FILE_DIALOG_SERVICE
+#ifdef DONT_USE_FILE_DIALOG_SERVICE
+#include "iodlg.hxx"
+#else
+#include "filedlghelper.hxx"
+#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::cppu;
+using namespace ::sfx2;
 
 //=========================================================================
 
@@ -195,6 +206,7 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& Sourc
 {
 }
 
+#ifdef DONT_USE_FILE_DIALOG_SERVICE
 ErrCode FileOpenDialog_Impl
 (
     sal_uInt32              nFlags,
@@ -233,8 +245,7 @@ ErrCode FileOpenDialog_Impl
         return ERRCODE_ABORT;
     }
 }
-
-
+#endif
 
 SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 (
@@ -598,7 +609,11 @@ SfxMedium* SfxApplication::InsertDocumentDialog
         SvStringsDtor* pURLList = NULL;
         String aFilter;
         SfxItemSet* pSet;
+#ifdef DONT_USE_FILE_DIALOG_SERVICE
         ErrCode nErr = FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+#else
+        ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+#endif
         if( !nErr )
         {
             DBG_ASSERT( pURLList, "invalid URLList" );
@@ -792,10 +807,10 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
             INetURLObject aURLObj( pReferer->GetValue() );
             BOOL bBookmark=TRUE;
             SvtPathOptions aPathCFG;
-            USHORT nPathLevel = aURLObj.getSegmentCount();
+            sal_Int32 nPathLevel = aURLObj.getSegmentCount();
             INetURLObject aNewPathObj = INetURLObject( aPathCFG.GetNewMenuPath() );
-            USHORT nNewLevel = aNewPathObj.getSegmentCount();
-            int nOffset = nPathLevel;
+            sal_Int32 nNewLevel = aNewPathObj.getSegmentCount();
+            sal_Int32 nOffset = nPathLevel;
             nOffset -= nNewLevel;
             if ( nOffset >= 0 )
             {
@@ -1010,8 +1025,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aPath = aPath.GetToken(0,';');
         }
 
+#ifdef DONT_USE_FILE_DIALOG_SERVICE
         ULONG nErr = FileOpenDialog_Impl(
                 WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, *(SfxObjectFactory*)pDummy, pURLList, aFilter, pSet, aPath );
+#else
+        ULONG nErr = sfx2::FileOpenDialog_Impl(
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, *(SfxObjectFactory*)pDummy, pURLList, aFilter, pSet, aPath );
+#endif
         if ( nErr == ERRCODE_ABORT )
         {
             delete pURLList;
