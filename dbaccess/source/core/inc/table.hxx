@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2002-10-30 09:34:14 $
+ *  last change: $Author: vg $ $Date: 2002-10-30 14:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@ namespace dbaccess
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
-        using OTable_Linux::rBHelper;
 
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
