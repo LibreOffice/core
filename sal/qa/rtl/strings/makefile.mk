@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-26 13:37:01 $
+#   last change: $Author: hr $ $Date: 2004-04-14 11:48:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ SHL1OBJS := \
     $(SLO)$/test_oustringbuffer_utf32.obj \
     $(SLO)$/test_oustring_compare.obj \
     $(SLO)$/test_oustring_convert.obj \
+    $(SLO)$/test_oustring_endswith.obj \
     $(SLO)$/test_oustring_noadditional.obj
 SHL1IMPLIB := i$(SHL1TARGET)
 SHL1STDLIBS := $(CPPUNITLIB) $(SALLIB)
