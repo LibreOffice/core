@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:14:23 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,9 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
 
 sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
 {
+    USHORT nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
+    USHORT nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
+
     CharAttribArray& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
     sal_uInt16 nAttrs = rAttribs.Count();
     for ( sal_uInt16 n = 0; n < nAttrs; n++ )
@@ -674,9 +677,8 @@ sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
         if ( pAttr->GetStart() >= nEnd )
             return sal_False;
 
-        if ( ( pAttr->Which() == EE_CHAR_FONTINFO ) &&
-                ( ((SvxFontItem*)pAttr->GetItem())->
-                        GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
+        if ( ( pAttr->Which() == nScriptFontInfoItemId ) &&
+                ( ((SvxFontItem*)pAttr->GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
         {
             // Pruefen, ob das Attribt im Bereich liegt...
             if ( pAttr->GetEnd() >= nStt )

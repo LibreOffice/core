@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #include "cscoitem.hxx"
 #include "kernitem.hxx"
 #include "akrnitem.hxx"
+#include "langitem.hxx"
+
 
 #include <editattr.hxx>
 
@@ -234,6 +236,20 @@ EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, USHORT nSta
 void EditCharAttribColor::SetFont( SvxFont& rFont )
 {
     rFont.SetColor( ((const SvxColorItem*)GetItem())->GetValue() );
+}
+
+// -------------------------------------------------------------------------
+// class EditCharAttribLanguage
+// -------------------------------------------------------------------------
+EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, USHORT nStart, USHORT nEnd )
+    : EditCharAttrib( rAttr, nStart, nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_COLOR, "Kein Languageattribut!" );
+}
+
+void EditCharAttribLanguage::SetFont( SvxFont& rFont )
+{
+    rFont.SetLanguage( ((const SvxLanguageItem*)GetItem())->GetLanguage() );
 }
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SvxKerningItem;
 class SvxCharSetColorItem;
 class SvxWordLineModeItem;
 class SvxFieldItem;
+class SvxLanguageItem;
 
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
@@ -317,6 +318,17 @@ class EditCharAttribColor : public EditCharAttrib
 {
 public:
     EditCharAttribColor( const SvxColorItem& rAttr, USHORT nStart, USHORT nEnd );
+
+    virtual void    SetFont( SvxFont& rFont );
+};
+
+// -------------------------------------------------------------------------
+// class EditCharAttribLanguage
+// -------------------------------------------------------------------------
+class EditCharAttribLanguage : public EditCharAttrib
+{
+public:
+    EditCharAttribLanguage( const SvxLanguageItem& rAttr, USHORT nStart, USHORT nEnd );
 
     virtual void    SetFont( SvxFont& rFont );
 };

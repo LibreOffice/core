@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );
+            pNew = new EditCharAttribLanguage( (const SvxLanguageItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_COLOR:
@@ -1187,6 +1187,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
 
     if ( bSearchInParent )
     {
+        rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( EE_CHAR_LANGUAGE )).GetLanguage() );
         rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
         const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO );
         rFont.SetName( rFontItem.GetFamilyName() );
@@ -1208,6 +1209,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
     }
     else
     {
+        if ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_ON )
+            rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( EE_CHAR_LANGUAGE )).GetLanguage() );
         if ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON )
             rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
         if ( rSet.GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )

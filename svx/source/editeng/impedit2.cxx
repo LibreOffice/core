@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 13:40:42 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         pView->DeleteSelected();
         delete mpIMEInfos;
         mpIMEInfos = new ImplIMEInfos( pView->GetImpEditView()->GetEditSelection().Max() );
+        mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
@@ -562,10 +563,14 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
             pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
 
+            BOOL bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
+
             delete mpIMEInfos;
             mpIMEInfos = NULL;
 
             FormatAndUpdate( pView );
+
+            pView->SetInsertMode( !bWasCursorOverwrite );
         }
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
@@ -599,45 +604,43 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
             EditSelection aNewSel = EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
             pView->SetSelection( CreateESel( aNewSel ) );
+            pView->SetInsertMode( !pData->IsCursorOverwrite() );
+
+            if ( pData->IsCursorVisible() )
+                pView->ShowCursor();
+            else
+                pView->HideCursor();
         }
-    }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
-    {
-        if ( mpIMEInfos && mpIMEInfos->nLen )
-        {
-            const CommandExtTextInputPosData* pData = rCEvt.GetExtTextInputPosData();
-
-            USHORT nChars = pData->GetChars();
-            USHORT nStart = mpIMEInfos->aPos.GetIndex() + pData->GetFirstPos();
-
-            EditPaM aPaM( mpIMEInfos->aPos );
-            Rectangle* pRects = new Rectangle[ nChars ];
-            for ( USHORT n = 0; n < nChars; n++ )
-            {
-                aPaM.GetIndex() = nStart+n;
-                Rectangle aR1 = PaMtoEditCursor( aPaM, 0 );
-                aR1 = pView->GetImpEditView()->GetWindowPos( aR1 );
-                aPaM.GetIndex()++;
-                Rectangle aR2 = PaMtoEditCursor( aPaM, GETCRSR_TXTONLY );
-                aR2 = pView->GetImpEditView()->GetWindowPos( aR2 );
-
-                pRects[n] = aR1;
-                pRects[n].Right() = aR2.Left();
-
-            }
-            pView->GetWindow()->SetExtTextInputPos( pData->GetFirstPos(), pData->GetChars(), pRects );
-            delete pRects;
-        }
-        else
-            pView->GetWindow()->SetExtTextInputPos( 0, 0, NULL );
     }
     else if ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE )
     {
     }
     else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
-    }
+        if ( mpIMEInfos && mpIMEInfos->nLen )
+        {
+            EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
+            Rectangle aR1 = PaMtoEditCursor( aPaM, 0 );
 
+            USHORT nInputEnd = mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen;
+
+            if ( !IsFormatted() )
+                FormatDoc();
+
+            ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
+            USHORT nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_True );
+            EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+            if ( pLine && ( nInputEnd > pLine->GetEnd() ) )
+                nInputEnd = pLine->GetEnd();
+            Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GETCRSR_ENDOFLINE );
+            Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
+            pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+        }
+        else
+        {
+            pView->GetWindow()->SetCursorRect();
+        }
+    }
 #endif // !SVX_LIGHT
 
     GetSelEngine().Command( rCEvt );

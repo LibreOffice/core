@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "kernitem.hxx"
 #include "wrlmitem.hxx"
 #include "akrnitem.hxx"
+#include "langitem.hxx"
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -154,7 +155,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_LANGUAGE:
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
-            aDebStr += "Language = ?";
+            aDebStr += "Language=";
+            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxLanguageItem&)rItem).GetLanguage() );
         break;
         case EE_CHAR_COLOR:
         {

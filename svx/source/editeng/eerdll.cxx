@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[22] = new SvxAutoKernItem( FALSE, EE_CHAR_PAIRKERNING );
         ppDefItems[23] = new SvxKerningItem( 0, EE_CHAR_KERNING );
         ppDefItems[24] = new SvxWordLineModeItem( FALSE, EE_CHAR_WLM );
-        ppDefItems[25] = new SvxLanguageItem( LANGUAGE_GERMAN, EE_CHAR_LANGUAGE );
+        ppDefItems[25] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
         ppDefItems[26] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[27] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
 #ifdef DEBUG

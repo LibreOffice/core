@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:18:02 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,11 +751,9 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         if ( !pEditEngine->pImpEditEngine->mpIMEInfos )
         {
             SvxFont aFont;
-            sal_uInt16 nPos = aPaM.GetIndex();
-            if ( nPos < aPaM.GetNode()->Len() )
-                nPos++; // Zeichen danach...
-            pEditEngine->pImpEditEngine->SeekCursor( aPaM.GetNode(), nPos, aFont );
-            GetWindow()->SetInputContext( InputContext( aFont, sal_True ) );
+            pEditEngine->pImpEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
+            ULONG nContextFlags = INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT;
+            GetWindow()->SetInputContext( InputContext( aFont, nContextFlags ) );
         }
     }
     else
@@ -847,8 +845,11 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
 
 void ImpEditView::SetInsertMode( sal_Bool bInsert )
 {
-    SetFlags( nControl, EV_CNTRL_OVERWRITE, !bInsert );
-    ShowCursor( DoAutoScroll(), sal_False );
+    if ( bInsert != IsInsertMode() )
+    {
+        SetFlags( nControl, EV_CNTRL_OVERWRITE, !bInsert );
+        ShowCursor( DoAutoScroll(), sal_False );
+    }
 }
 
 sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ struct ImplIMEInfos
     EditPaM     aPos;
     sal_uInt16  nLen;
     sal_Bool    bCursor;
+    sal_Bool    bWasCursorOverwrite;
 
             ImplIMEInfos( const EditPaM& rPos );
             ~ImplIMEInfos();

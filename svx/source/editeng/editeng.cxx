@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:11:59 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "wrlmitem.hxx"
 #include "brshitem.hxx"
 #include "cscoitem.hxx"
+#include "langitem.hxx"
 
 
 #ifndef _SV_SYSTEM_HXX
@@ -2097,6 +2098,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const Font& rFont )
 
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
 {
+    rSet.Put( SvxLanguageItem( rFont.GetLanguage(), EE_CHAR_LANGUAGE ) );
     rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), XubString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
     rSet.Put( SvxFontHeightItem( rFont.GetSize().Height(), 100, EE_CHAR_FONTHEIGHT )  );
     rSet.Put( SvxFontWidthItem( (sal_uInt16)rFont.GetSize().Width(), 100, EE_CHAR_FONTWIDTH )  );

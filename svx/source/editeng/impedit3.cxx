@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <fontitem.hxx>
 #include <wghtitem.hxx>
 #include <postitem.hxx>
+#include <langitem.hxx>
 
 
 #include <textconv.hxx>
@@ -1986,6 +1987,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         rFont.SetSize( aSz );
         rFont.SetWeight( ((const SvxWeightItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
         rFont.SetItalic( ((const SvxPostureItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
+        rFont.SetLanguage( ((const SvxLanguageItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
     }
 
     const SvxFontWidthItem& rWidthItem =
@@ -2102,6 +2104,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             rFont.SetUnderline( UNDERLINE_DOTTED );
         else if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
             rFont.SetColor( Color( COL_RED ) );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+            rFont.SetColor( Color( COL_LIGHTGRAY ) );
         if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
