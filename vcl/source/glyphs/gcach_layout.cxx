@@ -2,8 +2,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.32 $
- *  last change: $Author: rt $ $Date: 2004-11-03 15:06:36 $
+ *  $Revision: 1.33 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
