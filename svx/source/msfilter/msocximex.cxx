@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:29:59 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2706,11 +2706,15 @@ OCX_map aOCXTab[NO_OCX] =
         form::FormComponentType::GROUPBOX,""}
 };
 
-SvxMSConvertOCXControls::SvxMSConvertOCXControls( SfxObjectShell *pDSh,SwPaM *pP ) :
-    pDocSh( pDSh ), pPaM(pP),nEdit( 0 ), nCheckbox( 0 )
+SvxMSConvertOCXControls::SvxMSConvertOCXControls(SfxObjectShell *pDSh, SwPaM *pP) :
+    pDocSh(pDSh), pPaM(pP), nEdit(0), nCheckbox(0)
 {
     DBG_ASSERT( pDocSh, "No DocShell, Cannot do Controls" );
     OCX_Control::FillSystemColors();
+}
+
+SvxMSConvertOCXControls::~SvxMSConvertOCXControls()
+{
 }
 
 OCX_Control * SvxMSConvertOCXControls::OCX_Factory(const String &sName)
