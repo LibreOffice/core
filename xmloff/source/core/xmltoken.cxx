@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:48:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2132,10 +2132,84 @@ namespace xmloff { namespace token {
         TOKEN( "no" ),                          // XML_NO
         TOKEN( "unsorted" ),                    // XML_UNSORTED
         TOKEN( "sorted-ascending" ),            // XML_SORTED_ASCENDING
+        TOKEN( "font-independent-line-spacing" ),   // XML_FONT_INDEPENDENT_LINE_SPACING
 
+        TOKEN( "database" ),                    // XML_DATABASE
+        TOKEN( "data-source" ),                 // XML_DATASOURCE
+        TOKEN( "queries" ),                     // XML_QUERIES
+        TOKEN( "reports" ),                     // XML_REPORTS
+        TOKEN( "report" ),                      // XML_REPORT
+        TOKEN( "as-template" ),                 // XML_AS_TEMPLATE
+
+        TOKEN( "connection-resource" ),         // XML_CONNECTION_RESOURCE
+        TOKEN( "suppress-version-columns" ),    // XML_SUPPRESS_VERSION_COLUMNS
+        TOKEN( "java-driver-class" ),           // XML_JAVA_DRIVER_CLASS
+        TOKEN( "extension" ),                   // XML_EXTENSION
+        TOKEN( "is-first-row-header-line" ),    // XML_IS_FIRST_ROW_HEADER_LINE
+        TOKEN( "show-deleted" ),                // XML_SHOW_DELETED
+        TOKEN( "is-table-name-length-limited" ),// XML_IS_TABLE_NAME_LENGTH_LIMITED
+        TOKEN( "system-driver-settings" ),      // XML_SYSTEM_DRIVER_SETTINGS
+        TOKEN( "enable-sql92-check" ),          // XML_ENABLE_SQL92_CHECK
+        TOKEN( "append-table-alias-name" ),     // XML_APPEND_TABLE_ALIAS_NAME
+        TOKEN( "parameter-name-substitution" ), // XML_PARAMETER_NAME_SUBSTITUTION
+        TOKEN( "ignore-driver-privileges" ),    // XML_IGNORE_DRIVER_PRIVILEGES
+        TOKEN( "boolean-comparison-mode" ),     // XML_BOOLEAN_COMPARISON_MODE
+        TOKEN( "use-catalog" ),                 // XML_USE_CATALOG
+        TOKEN( "base-dn" ),                     // XML_BASE_DN
+        TOKEN( "max-row-count" ),               // XML_MAX_ROW_COUNT
+        TOKEN( "login" ),                       // XML_LOGIN
+        TOKEN( "user-name" ),                   // XML_USER_NAME
+        TOKEN( "is-password-required" ),        // XML_IS_PASSWORD_REQUIRED
+        TOKEN( "login-timeout" ),               // XML_LOGIN_TIMEOUT
+        TOKEN( "delimiter" ),                   // XML_DELIMITER
+        TOKEN( "field" ),                       // XML_FIELD
+        TOKEN( "decimal" ),                     // XML_DECIMAL
+        TOKEN( "thousand" ),                    // XML_THOUSAND
+        TOKEN( "table-filter" ),                // XML_TABLE_FILTER
+        TOKEN( "table-filter-pattern" ),        // XML_TABLE_FILTER_PATTERN
+        TOKEN( "table-type-filter" ),           // XML_TABLE_TYPE_FILTER
+        TOKEN( "auto-increment" ),              // XML_AUTO_INCREMENT
+        TOKEN( "additional-column-statement" ), // XML_ADDITIONAL_COLUMN_STATEMENT
+        TOKEN( "row-retrieving-statement" ),    // XML_ROW_RETRIEVING_STATEMENT
+        TOKEN( "data-source-settings" ),        // XML_DATA_SOURCE_SETTINGS
+        TOKEN( "data-source-setting" ),         // XML_DATA_SOURCE_SETTING
+        TOKEN( "data-source-setting-value" ),   // XML_DATA_SOURCE_SETTING_VALUE
+        TOKEN( "data-source-setting-is-list" ), // XML_DATA_SOURCE_SETTING_IS_LIST
+        TOKEN( "data-source-setting-type" ),    // XML_DATA_SOURCE_SETTING_TYPE
+        TOKEN( "data-source-setting-name" ),    // XML_DATA_SOURCE_SETTING_NAME
+        TOKEN( "component" ),                   // XML_COMPONENT
+        TOKEN( "component-collection" ),        // XML_COMPONENT_COLLECTION
+        TOKEN( "query-collection" ),            // XML_QUERY_COLLECTION
+        TOKEN( "update-table" ),                // XML_UPDATE_TABLE
+        TOKEN( "filter-statement" ),            // XML_FILTER_STATEMENT
+        TOKEN( "order-statement" ),             // XML_ORDER_STATEMENT
+        TOKEN( "escape-processing" ),           // XML_ESCAPE_PROCESSING
+        TOKEN( "keys" ),                        // XML_KEYS
+        TOKEN( "indices" ),                     // XML_INDICES
+        TOKEN( "type-name" ),                   // XML_TYPE_NAME
+        TOKEN( "precision" ),                   // XML_PRECISION
+        TOKEN( "is-nullable" ),                 // XML_IS_NULLABLE
+        TOKEN( "is-autoincrement" ),            // XML_IS_AUTOINCREMENT
+        TOKEN( "default-value" ),               // XML_DEFAULT_VALUE
+        TOKEN( "referenced-table-name" ),       // XML_REFERENCED_TABLE_NAME
+        TOKEN( "update-rule" ),                 // XML_UPDATE_RULE
+        TOKEN( "delete-rule" ),                 // XML_DELETE_RULE
+        TOKEN( "key-columns" ),                 // XML_KEY_COLUMNS
+        TOKEN( "key-column" ),                  // XML_KEY_COLUMN
+        TOKEN( "related-column-name" ),         // XML_RELATED_COLUMN_NAME
+        TOKEN( "catalog-name" ),                // XML_CATALOG_NAME
+        TOKEN( "is-unique" ),                   // XML_IS_UNIQUE
+        TOKEN( "is-clustered" ),                // XML_IS_CLUSTERED
+        TOKEN( "index-columns" ),               // XML_INDEX_COLUMNS
+        TOKEN( "index-column" ),                // XML_INDEX_COLUMN
+        TOKEN( "is-ascending" ),                // XML_IS_ASCENDING
+        TOKEN( "schema-name" ),                 // XML_SCHEMA_NAME
+        TOKEN( "db" ),                          // XML_NP_DB
+        TOKEN( "http://openoffice.org/2004/database" ), // XML_N_DB
+        TOKEN( "apply-filter" ),                // XML_APPLY_FILTER
+        TOKEN( "apply-order" ),                 // XML_APPLY_ORDER
         TOKEN( "automatic-print-range" ),       // XML_AUTOMATIC_PRINT_RANGE
 
-        TOKEN( "font-independent-line-spacing" ),   // XML_FONT_INDEPENDENT_LINE_SPACING
         TOKEN( "selection" ),                  // XML_SELECTION
         TOKEN( "selection-indexes" ),          // XML_SELECTION_INDEXES
 
@@ -2448,6 +2522,7 @@ namespace xmloff { namespace token {
         TOKEN( "interpolation" ),           // XML_INTERPOLATION
         TOKEN( "cubic-spline" ),            // XML_CUBIC_SPLINE
         TOKEN( "b-spline" ),                // XML_B_SPLINE
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:database:1.0" ),// XML_N_DB_OASIS
 
         TOKEN( "show-filter-button"),               // XML_SHOW_FILTER_BUTTON,
         TOKEN( "drill-down-on-double-click"),       // XML_DRILL_DOWN_ON_DOUBLE_CLICK,
@@ -2462,6 +2537,7 @@ namespace xmloff { namespace token {
     {
         DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
         DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
+        DBG_ASSERT(sal_uInt16(eToken) < sizeof(aTokenList)/sizeof(aTokenList[0]),"Illegal position!");
 
         XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         if (!pToken->pOUString)
