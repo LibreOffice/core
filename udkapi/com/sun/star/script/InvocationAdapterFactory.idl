@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationAdapterFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef __com_sun_star_script_XInvocationAdapterFactory_idl__
 #include <com/sun/star/script/XInvocationAdapterFactory.idl>
 #endif
-
 #ifndef __com_sun_star_script_XInvocationAdapterFactory2_idl__
 #include <com/sun/star/script/XInvocationAdapterFactory2.idl>
 #endif
@@ -92,7 +91,7 @@
         <type scope="com::sun::star::script">XInvocationAdapterFactory2</type>.
     </p>
  */
-service InvocationAdapterFactory
+published service InvocationAdapterFactory
 {
     /** Interface for creating adapter objects.
         This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.

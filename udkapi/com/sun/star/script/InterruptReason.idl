@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterruptReason.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,9 @@
 //=============================================================================
 /** values used to specify the response for a scripting engine
     interrupt.
-
     @deprecated
  */
-enum InterruptReason
+published enum InterruptReason
 {
     //-------------------------------------------------------------------------
     /** script execution was cancelled.
