@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shapes.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: service com::sun::star::drawing::Shapes
 /** This service is for a generic collection of shapes.
  */
-service Shapes
+published service Shapes
 {
     // DocMerge: empty anyway
     interface com::sun::star::drawing::XShapes;
