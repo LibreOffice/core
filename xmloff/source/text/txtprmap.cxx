@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 12:06:21 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 07:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_CHRATR_FONTSIZE
     M_E( "CharHeight",        FO,   font_size,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
     M_E( "CharPropFontHeight",FO,   font_size,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
+    M_E( "CharDiffFontHeight",STYLE,font_size_rel,      XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
     // RES_CHRATR_KERNING
     M_E( "CharKerning",     FO,     letter_spacing,     XML_TYPE_TEXT_KERNING, 0 ),
     // RES_CHRATR_LANGUAGE
@@ -322,6 +323,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_FONTSIZE
     M_E( "CharHeight",        FO,   font_size,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
     M_E( "CharPropFontHeight",FO,   font_size,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
+    M_E( "CharDiffFontHeight",STYLE,font_size_rel,      XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
     // RES_CHRATR_KERNING
     M_E( "CharKerning",     FO,     letter_spacing,     XML_TYPE_TEXT_KERNING, 0 ),
     // RES_CHRATR_LANGUAGE
@@ -511,6 +513,7 @@ void XMLTextPropertySetMapper::ContextFilter(
     // filter char height point/percent
     XMLPropertyState* pCharHeightState = NULL;
     XMLPropertyState* pCharPropHeightState = NULL;
+    XMLPropertyState* pCharDiffHeightState = NULL;
 
     // filter left margin measure/percent
     XMLPropertyState* pParaLeftMarginState = NULL;
@@ -599,6 +602,7 @@ void XMLTextPropertySetMapper::ContextFilter(
         {
         case CTF_CHARHEIGHT:            pCharHeightState = propertie; break;
         case CTF_CHARHEIGHT_REL:        pCharPropHeightState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF:       pCharDiffHeightState = propertie; break;
         case CTF_PARALEFTMARGIN:        pParaLeftMarginState = propertie; break;
         case CTF_PARALEFTMARGIN_REL:    pParaLeftMarginRelState = propertie; break;
         case CTF_PARARIGHTMARGIN:       pParaRightMarginState = propertie; break;
@@ -662,6 +666,21 @@ void XMLTextPropertySetMapper::ContextFilter(
         {
             pCharPropHeightState->mnIndex = -1;
             pCharPropHeightState->maValue.clear();
+        }
+        else
+        {
+            pCharHeightState->mnIndex = -1;
+            pCharHeightState->maValue.clear();
+        }
+    }
+    if( pCharHeightState && pCharDiffHeightState )
+    {
+        float nTemp;
+        pCharDiffHeightState->maValue >>= nTemp;
+        if( nTemp == 0. )
+        {
+            pCharDiffHeightState->mnIndex = -1;
+            pCharDiffHeightState->maValue.clear();
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:51:44 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 07:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ XML_CONSTASCII_ACTION( sXML_font_family, "font-family" );
 XML_CONSTASCII_ACTION( sXML_font_family_generic, "font-family-generic" );
 XML_CONSTASCII_ACTION( sXML_font_pitch, "font-pitch" );
 XML_CONSTASCII_ACTION( sXML_font_size, "font-size" );
+XML_CONSTASCII_ACTION( sXML_font_size_rel, "font-size-rel" );
 XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
 XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );

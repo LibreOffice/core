@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 07:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     {
         if( rUnitConverter.convertPercent( nPrc, rStrImpValue ) )
         {
-            rValue <<= nPrc;
+            rValue <<= (sal_Int16)nPrc;
             return sal_True;
         }
     }
@@ -162,7 +162,7 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 {
     OUStringBuffer aOut( rStrExpValue );
 
-    sal_Int32 nValue;
+    sal_Int16 nValue;
     if( rValue >>= nValue )
     {
         rUnitConverter.convertPercent( aOut, nValue );
@@ -171,3 +171,41 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     rStrExpValue = aOut.makeStringAndClear();
     return rStrExpValue.getLength() != 0;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLEscapementPropHdl
+//
+
+XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nRel = 0;
+
+    if( SvXMLUnitConverter::convertMeasure( nRel, rStrImpValue, MAP_POINT ) )
+    {
+        rValue <<= (float)nRel;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    OUStringBuffer aOut;
+
+    float nRel = 0;
+    if( (rValue >>= nRel) && (nRel != 0) )
+    {
+        SvXMLUnitConverter::convertMeasure( aOut, nRel, MAP_POINT, MAP_POINT );
+        rStrExpValue = aOut.makeStringAndClear();
+    }
+
+    return rStrExpValue.getLength() != 0;
+}
+

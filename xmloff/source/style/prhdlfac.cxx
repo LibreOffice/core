@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 07:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_CHAR_HEIGHT_PROP:
                 pPropHdl = new XMLCharHeightPropHdl;
+                break;
+            case XML_TYPE_CHAR_HEIGHT_DIFF:
+                pPropHdl = new XMLCharHeightDiffHdl;
                 break;
             case XML_TYPE_CHAR_LANGUAGE:
                 pPropHdl = new XMLCharLanguageHdl;
