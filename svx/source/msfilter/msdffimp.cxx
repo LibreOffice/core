@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:23:30 $
+ *  last change: $Author: sj $ $Date: 2001-08-09 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3087,7 +3087,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
                             || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
                         {
-                            pRet = new SdrRectObj( OBJ_TEXT, aBoundRect );
+                            pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
                         }
                     }
                     else if (
@@ -3391,7 +3391,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( bTextFrame && pObj )
                 pTextObj = PTR_CAST(SdrRectObj, pObj);
             if( !pTextObj )
+            {
                 pTextObj = new SdrRectObj( OBJ_TEXT, rTextRect );
+                pTextObj->SetModel( pSdrModel );
+            }
 
             if( pTextObj != pObj )
                 pTextImpRec = new SvxMSDffImportRec( *pImpRec );
@@ -3534,8 +3537,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
             aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
             aSet.Put( SdrTextMinFrameWidthItem( rTextRect.Right() - rTextRect.Left() ) );
-
-            pTextObj->SetModel( pSdrModel );
             pTextObj->SetItemSet(aSet);
 
             // rotate text with shape ?
