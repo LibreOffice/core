@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 10:09:53 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ BOOL XLineEndList::Load()
         }
 
         {
-            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
+            SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
             SvStream* pStream = aMedium.GetInStream();
             if( !pStream )
                 return( FALSE );
@@ -455,7 +455,7 @@ BOOL XLineEndList::Load()
         }
 
         uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
+        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
 #endif
     return( FALSE );
@@ -480,10 +480,10 @@ BOOL XLineEndList::Save()
         aURL.setExtension( String( pszExtLineEnd, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 
 /*
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

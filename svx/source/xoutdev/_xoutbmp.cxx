@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-08 16:11:39 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,9 +400,9 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
             if( aExt.Len() )
             {
                 aURL.setExtension( aExt );
-                rFileName = aURL.GetMainURL();
+                rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                SfxMedium   aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+                SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
                 SvStream*   pOStm = aMedium.GetOutStream();
 
                 if( pOStm && aGfxLink.GetDataSize() )
@@ -505,7 +505,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
                 {
                     aURL.setExtension( aExt );
-                    rFileName = aURL.GetMainURL();
+                    rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
                     nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE );
                 }
             }
@@ -531,7 +531,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
 #ifndef SVX_LIGHT
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
-    SfxMedium   aMedium( rURL.GetMainURL(), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
     SvStream*   pOStm = aMedium.GetOutStream();
     USHORT      nRet = 1;
 
@@ -540,7 +540,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
         pGrfFilter = &rFilter;
 
         if( bIgnoreOptions )
-            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL(), *pOStm, nFormat, bIgnoreOptions );
+            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, bIgnoreOptions );
         else
         {
             Graphic aGraphic;
@@ -576,7 +576,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
             }
             else
                 aGraphic = rGraphic;
-            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL(), *pOStm, nFormat, sal_False );
+            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, sal_False );
         }
 
         pGrfFilter = NULL;

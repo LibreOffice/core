@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 10:09:53 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ BOOL XBitmapList::Load()
         }
 
         {
-            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
+            SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
 
             SvStream* pStream = aMedium.GetInStream();
             if( !pStream )
@@ -383,7 +383,7 @@ BOOL XBitmapList::Load()
         }
 
         uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
+        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
 #endif
     return( FALSE );
@@ -409,10 +409,10 @@ BOOL XBitmapList::Save()
         aURL.setExtension( String( pszExtBitmap, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 
 /*
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();
