@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 15:23:00 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 06:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
@@ -478,11 +482,15 @@ void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        maComponentInfos.nX = X;
-        maComponentInfos.nY = Y;
-        maComponentInfos.nWidth = Width;
-        maComponentInfos.nHeight = Height;
-        maComponentInfos.nFlags = Flags;
+        if ( Flags & awt::PosSize::X )
+            maComponentInfos.nX = X;
+        if ( Flags & awt::PosSize::Y )
+            maComponentInfos.nY = Y;
+        if ( Flags & awt::PosSize::WIDTH )
+            maComponentInfos.nWidth = Width;
+        if ( Flags & awt::PosSize::HEIGHT )
+            maComponentInfos.nHeight = Height;
+        maComponentInfos.nFlags |= Flags;
 
         xWindow = xWindow.query( mxPeer );
     }
