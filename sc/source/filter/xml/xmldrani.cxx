@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:12:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include <xmloff/nmspmap.hxx>
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -390,9 +393,15 @@ void ScXMLDatabaseRangeContext::EndElement()
                             {
                                 if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
                                 {
-                                    uno::Any aDatabaseName;
-                                    aDatabaseName <<= sDatabaseName;
-                                    aImportDescriptor[i].Value = aDatabaseName;
+                                    if (sDatabaseName.getLength())
+                                    {
+                                        aImportDescriptor[i].Value <<= sDatabaseName;
+                                    }
+                                    else
+                                    {
+                                        aImportDescriptor[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONRES));
+                                        aImportDescriptor[i].Value <<= sConnectionRessource;
+                                    }
                                 }
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCOBJ)))
                                 {
@@ -545,7 +554,7 @@ ScXMLSourceSQLContext::ScXMLSourceSQLContext( ScXMLImport& rImport,
         {
             case XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME :
             {
-                pDatabaseRangeContext->SetDatabaseName(sValue);
+                sDBName = sValue;
             }
             break;
             case XML_TOK_SOURCE_SQL_ATTR_SQL_STATEMENT :
@@ -574,6 +583,15 @@ SvXMLImportContext *ScXMLSourceSQLContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
+    if ( nPrefix == XML_NAMESPACE_FORM )
+    {
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        {
+            pContext = new ScXMLConResContext( GetScImport(), nPrefix,
+                                                          rLName, xAttrList, pDatabaseRangeContext);
+        }
+    }
+
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -582,6 +600,8 @@ SvXMLImportContext *ScXMLSourceSQLContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLSourceSQLContext::EndElement()
 {
+    if (sDBName.getLength())
+        pDatabaseRangeContext->SetDatabaseName(sDBName);
 }
 
 ScXMLSourceTableContext::ScXMLSourceTableContext( ScXMLImport& rImport,
@@ -607,7 +627,7 @@ ScXMLSourceTableContext::ScXMLSourceTableContext( ScXMLImport& rImport,
         {
             case XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME :
             {
-                pDatabaseRangeContext->SetDatabaseName(sValue);
+                sDBName = sValue;
             }
             break;
             case XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME :
@@ -631,6 +651,15 @@ SvXMLImportContext *ScXMLSourceTableContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
+    if ( nPrefix == XML_NAMESPACE_FORM )
+    {
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        {
+            pContext = new ScXMLConResContext( GetScImport(), nPrefix,
+                                                          rLName, xAttrList, pDatabaseRangeContext);
+        }
+    }
+
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -639,6 +668,8 @@ SvXMLImportContext *ScXMLSourceTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLSourceTableContext::EndElement()
 {
+    if (sDBName.getLength())
+        pDatabaseRangeContext->SetDatabaseName(sDBName);
 }
 
 ScXMLSourceQueryContext::ScXMLSourceQueryContext( ScXMLImport& rImport,
@@ -664,7 +695,7 @@ ScXMLSourceQueryContext::ScXMLSourceQueryContext( ScXMLImport& rImport,
         {
             case XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME :
             {
-                pDatabaseRangeContext->SetDatabaseName(sValue);
+                sDBName = sValue;
             }
             break;
             case XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME :
@@ -688,6 +719,15 @@ SvXMLImportContext *ScXMLSourceQueryContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
+    if ( nPrefix == XML_NAMESPACE_FORM )
+    {
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        {
+            pContext = new ScXMLConResContext( GetScImport(), nPrefix,
+                                                          rLName, xAttrList, pDatabaseRangeContext);
+        }
+    }
+
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -695,6 +735,59 @@ SvXMLImportContext *ScXMLSourceQueryContext::CreateChildContext( USHORT nPrefix,
 }
 
 void ScXMLSourceQueryContext::EndElement()
+{
+    if (sDBName.getLength())
+        pDatabaseRangeContext->SetDatabaseName(sDBName);
+}
+
+ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
+                                      USHORT nPrfx,
+                                      const ::rtl::OUString& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext( pTempDatabaseRangeContext )
+{
+    rtl::OUString sConRes;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceSQLAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+
+        if (nPrefix == XML_NAMESPACE_XLINK)
+        {
+            if (IsXMLToken(aLocalName, XML_HREF))
+                sConRes = sValue;
+        }
+    }
+    if (sConRes.getLength())
+        pDatabaseRangeContext->SetConnectionRessource(sConRes);
+}
+
+ScXMLConResContext::~ScXMLConResContext()
+{
+}
+
+SvXMLImportContext *ScXMLConResContext::CreateChildContext( USHORT nPrefix,
+                                            const ::rtl::OUString& rLName,
+                                            const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+
+    return pContext;
+}
+
+void ScXMLConResContext::EndElement()
 {
 }
 
