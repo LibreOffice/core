@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.40 2001-08-10 19:03:30 nn Exp $
+	$Id: table.mod,v 1.41 2002-05-03 14:30:34 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -315,8 +315,9 @@
 <!ELEMENT table:highlighted-range EMPTY>
 <!ATTLIST table:highlighted-range
 	table:cell-range-address %cell-range-address; #IMPLIED
-	table:direction (from-another-table | to-another-table | from-same-table | to-same-table) #REQUIRED
-	table:contains-error %boolean; "false"
+	table:direction (from-another-table | to-another-table | from-same-table | to-same-table) #IMPLIED
+	table:contains-error %boolean; #IMPLIED
+	table:marked-invalid %boolean; #IMPLIED
 >
 <!ELEMENT table:operation EMPTY>
 <!ATTLIST table:operation
