@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:14:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 //........................................................................
+// -----------------------------------------------------------------------------
 void OApplicationController::convertToView(const ::rtl::OUString& _sName)
 {
     try
@@ -364,7 +365,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     }
 
     EventObject aEvt;
-    aEvt.Source = m_xDataSource;
+    aEvt.Source = m_xModel;
     modified(aEvt);
 }
 // -----------------------------------------------------------------------------
@@ -455,37 +456,42 @@ void OApplicationController::askToReconnect()
     }
 }
 // -----------------------------------------------------------------------------
+sal_Bool OApplicationController::suspendDocument(const TDocuments::key_type& _xComponent,sal_Bool _bSuspend)
+{
+    sal_Bool bSuspended = sal_True;
+    Reference<XController> xController;
+    Reference<XModel> xModel(_xComponent,UNO_QUERY);
+    if ( xModel.is() )
+        xController = xModel->getCurrentController();
+    else
+    {
+        xController.set(_xComponent,UNO_QUERY);
+        if ( !xController.is() )
+        {
+            Reference<XFrame> xFrame(_xComponent,UNO_QUERY);
+            if ( xFrame.is() )
+                xController = xFrame->getController();
+        }
+    }
+
+
+    if ( xController.is() && xController != *this )
+        bSuspended = xController->suspend(_bSuspend);
+
+    return bSuspended;
+}
+// -----------------------------------------------------------------------------
 sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
 {
     sal_Bool bSubSuspended = sal_True;
     Reference<XModel> xModel;
     TDocuments::iterator aIter = m_aDocuments.begin();
     TDocuments::iterator aEnd = m_aDocuments.end();
+    sal_Int32 nSuspendPos = 1;
     try
     {
-        for (; aIter != aEnd && bSubSuspended; ++aIter)
-        {
-            Reference<XController> xController;
-            xModel.set(aIter->first,UNO_QUERY);
-            if ( xModel.is() )
-                xController = xModel->getCurrentController();
-            else
-            {
-                xController.set(aIter->first,UNO_QUERY);
-                if ( !xController.is() )
-                {
-                    Reference<XFrame> xFrame(aIter->first,UNO_QUERY);
-                    if ( xFrame.is() )
-                        xController = xFrame->getController();
-                }
-            }
-
-
-            if ( xController.is() && xController != *this )
-            {
-                bSubSuspended = xController->suspend(bSuspend);
-            }
-        }
+        for (; aIter != aEnd && bSubSuspended; ++aIter,++nSuspendPos)
+            bSubSuspended = suspendDocument(aIter->first,bSuspend);
     }
     catch(Exception)
     {
@@ -542,6 +548,19 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
         {
         }
         m_aDocuments.clear();
+    }
+    else // resuspend the documents again
+    {
+        aIter = m_aDocuments.begin();
+        aEnd = m_aDocuments.end();
+        try
+        {
+            for (; aIter != aEnd && nSuspendPos ; ++aIter,--nSuspendPos)
+                suspendDocument(aIter->first,!bSuspend);
+        }
+        catch(Exception)
+        {
+        }
     }
 
     return bSubSuspended;
