@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:06:28 $
+#   last change: $Author: tv $ $Date: 2001-04-23 09:18:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET=euro
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE : $(PRJ)$/util$/target.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -80,6 +81,9 @@ SRS2NAME =              euro
 SRC2FILES=              euro.src
 RESLIB2SRSFILES= $(SRS)$/euro.srs
 RESLIB2NAME=    eur
+
+ZIP1TARGET      = $(EURO_ALL_TARGET)
+ZIP1LIST        = *.xdl *.xba
 
 # --- Targets ------------------------------------------------------
 
