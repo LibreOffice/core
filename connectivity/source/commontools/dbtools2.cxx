@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:59:15 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ namespace
         while( xParent.is() && !xModel.is() )
         {
             Reference<XChild> xChild(xParent,UNO_QUERY);
-            xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface > (),UNO_QUERY);
+            xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
             xModel.set(xParent,UNO_QUERY);
         }
         return xModel;
