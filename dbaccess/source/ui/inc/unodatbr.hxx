@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 10:31:50 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 13:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,9 @@ namespace dbaui
         virtual void AddColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
         virtual void RemoveColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
 
-        virtual void FormLoaded(sal_Bool _bWasSynch);
+        virtual void LoadFinished(sal_Bool _bWasSynch);
+
+        virtual void criticalFail();
 
         virtual void            AddSupportedFeatures();
         virtual FeatureState    GetState(sal_uInt16 nId);
