@@ -9032,3 +9032,8 @@ lpfnGetWindowTextW
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUUserRecord@task@345@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexReplace@container@star@sun@com@@@2345@@Z
 ?s_pType_com_sun_star_container_XIndexReplace@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexReplace@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBVSQLException@sdbc@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBVSQLWarning@sdbc@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDropTargetListener@dnd@datatransfer@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUDateTime@util@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUNumberedSortingInfo@ucb@345@@Z
