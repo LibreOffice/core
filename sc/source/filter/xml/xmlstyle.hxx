@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 12:28:50 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 06:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,9 @@ public:
             SvXMLAttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const;
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties = 0,
+            sal_uInt32 nIdx = 0 ) const;
 };
 
 class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP

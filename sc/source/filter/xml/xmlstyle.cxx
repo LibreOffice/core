@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 12:28:50 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 06:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,9 @@ void ScXMLExportPropertyMapper::handleSpecialItem(
             SvXMLAttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties,
+            sal_uInt32 nIdx ) const
 {
     // the SpecialItem NumberFormat must not be handled by this method
     // the SpecialItem ConditionlaFormat must not be handled by this method
