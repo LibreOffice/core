@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:05 $
+ *  last change: $Author: cl $ $Date: 2002-12-06 10:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,14 @@ service DrawingDocument
         <ul>
             <li><type scope="com::sun::star::drawing">Background</type></li>
         </ul>
+
+        <p>The following service can be used to change the settings for this
+            document
+
+        <ul>
+            <li><type scope="com::sun::star::drawing">DocumentSettings</type></li>
+        </ul>
+
      */
     service DrawingDocumentFactory;
 

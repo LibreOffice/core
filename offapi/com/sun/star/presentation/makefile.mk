@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2002-11-19 15:11:48 $
+#   last change: $Author: cl $ $Date: 2002-12-06 10:28:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ IDLFILES=\
     ClickAction.idl\
     CustomPresentation.idl\
     CustomPresentationAccess.idl\
+    DocumentSettings.idl\
     DrawPage.idl\
     FadeEffect.idl\
     GraphicObjectShape.idl\
