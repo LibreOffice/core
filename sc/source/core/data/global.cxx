@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 09:47:22 $
+ *  last change: $Author: er $ $Date: 2002-11-12 18:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,6 +968,94 @@ LanguageType ScGlobal::GetEditDefaultLanguage()
     //  used for EditEngine::SetDefaultLanguage
 
     return Application::GetSettings().GetLanguage();
+}
+
+USHORT ScGlobal::GetScriptedWhichID( BYTE nScriptType, USHORT nWhich )
+{
+    switch ( nScriptType )
+    {
+        case SCRIPTTYPE_LATIN:
+        case SCRIPTTYPE_ASIAN:
+        case SCRIPTTYPE_COMPLEX:
+        break;      // take exact matches
+        default:    // prefer one, first COMPLEX, then ASIAN
+            if ( nScriptType & SCRIPTTYPE_COMPLEX )
+                nScriptType = SCRIPTTYPE_COMPLEX;
+            else if ( nScriptType & SCRIPTTYPE_ASIAN )
+                nScriptType = SCRIPTTYPE_ASIAN;
+    }
+    switch ( nScriptType )
+    {
+        case SCRIPTTYPE_COMPLEX:
+        {
+            switch ( nWhich )
+            {
+                case ATTR_FONT:
+                case ATTR_CJK_FONT:
+                    nWhich = ATTR_CTL_FONT;
+                break;
+                case ATTR_FONT_HEIGHT:
+                case ATTR_CJK_FONT_HEIGHT:
+                    nWhich = ATTR_CTL_FONT_HEIGHT;
+                break;
+                case ATTR_FONT_WEIGHT:
+                case ATTR_CJK_FONT_WEIGHT:
+                    nWhich = ATTR_CTL_FONT_WEIGHT;
+                break;
+                case ATTR_FONT_POSTURE:
+                case ATTR_CJK_FONT_POSTURE:
+                    nWhich = ATTR_CTL_FONT_POSTURE;
+                break;
+            }
+        }
+        break;
+        case SCRIPTTYPE_ASIAN:
+        {
+            switch ( nWhich )
+            {
+                case ATTR_FONT:
+                case ATTR_CTL_FONT:
+                    nWhich = ATTR_CJK_FONT;
+                break;
+                case ATTR_FONT_HEIGHT:
+                case ATTR_CTL_FONT_HEIGHT:
+                    nWhich = ATTR_CJK_FONT_HEIGHT;
+                break;
+                case ATTR_FONT_WEIGHT:
+                case ATTR_CTL_FONT_WEIGHT:
+                    nWhich = ATTR_CJK_FONT_WEIGHT;
+                break;
+                case ATTR_FONT_POSTURE:
+                case ATTR_CTL_FONT_POSTURE:
+                    nWhich = ATTR_CJK_FONT_POSTURE;
+                break;
+            }
+        }
+        break;
+        default:
+        {
+            switch ( nWhich )
+            {
+                case ATTR_CTL_FONT:
+                case ATTR_CJK_FONT:
+                    nWhich = ATTR_FONT;
+                break;
+                case ATTR_CTL_FONT_HEIGHT:
+                case ATTR_CJK_FONT_HEIGHT:
+                    nWhich = ATTR_FONT_HEIGHT;
+                break;
+                case ATTR_CTL_FONT_WEIGHT:
+                case ATTR_CJK_FONT_WEIGHT:
+                    nWhich = ATTR_FONT_WEIGHT;
+                break;
+                case ATTR_CTL_FONT_POSTURE:
+                case ATTR_CJK_FONT_POSTURE:
+                    nWhich = ATTR_FONT_POSTURE;
+                break;
+            }
+        }
+    }
+    return nWhich;
 }
 
 //------------------------------------------------------------------------

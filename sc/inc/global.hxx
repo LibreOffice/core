@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 09:46:56 $
+ *  last change: $Author: er $ $Date: 2002-11-12 18:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,10 @@ public:
 
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
     static BYTE GetDefaultScriptType();             // for all WEAK characters
+    /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
+        If more than one SCRIPTTYPE_... values are or'ed together, prefers
+        first COMPLEX, then ASIAN */
+    static USHORT GetScriptedWhichID( BYTE nScriptType, USHORT nWhich );
 
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */
