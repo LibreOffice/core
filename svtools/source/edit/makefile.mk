@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+#   last change: $Author: pb $ $Date: 2001-05-21 07:50:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ CXXFILES=   \
 
 .IF "$(VCL)" != ""
 CXXFILES+=   \
-            svmedit.cxx
+            svmedit.cxx		\
+            svmedit2.cxx
 .ENDIF
 
 
@@ -104,7 +105,8 @@ SLOFILES=   \
 
 .IF "$(VCL)" != ""
 SLOFILES+=   \
-            $(SLO)$/svmedit.obj
+            $(SLO)$/svmedit.obj		\
+            $(SLO)$/svmedit2.obj
 .ENDIF
 
 OBJFILES=   \
@@ -119,7 +121,8 @@ OBJFILES=   \
 
 .IF "$(VCL)" != ""
 OBJFILES+=   \
-            $(OBJ)$/svmedit.obj
+            $(OBJ)$/svmedit.obj		\
+            $(OBJ)$/svmedit2.obj
 .ENDIF
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
