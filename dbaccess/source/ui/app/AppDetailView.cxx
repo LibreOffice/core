@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:29:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,21 @@
 #ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
 #include "IAppElementNotification.hxx"
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <drafts/com/sun/star/ui/ImageType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
@@ -100,12 +115,18 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
 #endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
+
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::graphic;
+using namespace ::drafts::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
 #define SPACEBETWEENENTRIES     4
@@ -226,20 +247,37 @@ void OTasksWindow::Resize()
     m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
 // -----------------------------------------------------------------------------
-void OTasksWindow::fillCreationNew(const TResourceStruct& _rList ,USHORT _nImageListId)
+void OTasksWindow::fillCreationNew(const TResourceStruct& _rList ,short _nImageType)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     Clear();
-    ModuleRes aRes(_nImageListId);
-    ImageList aImageList(aRes);
 
-    m_aHelpTextIds.reserve(_rList.size());
-    TResourceStruct::const_iterator aEnd = _rList.end();
-    for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
+    try
     {
-        Image aImage = aImageList.GetImage(aIter->second.first);
-        SvLBoxEntry* pEntry = m_aCreation.InsertEntry(aIter->first,aImage,aImage);
-        pEntry->SetUserData(reinterpret_cast<void*>(new TResourcePair(aIter->second)));
+        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin()->getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
+        Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument")));
+        Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
+
+        m_aHelpTextIds.reserve(_rList.size());
+        Sequence< ::rtl::OUString> aSeq(_rList.size());
+        sal_Int32 i = 0;
+        TResourceStruct::const_iterator aEnd = _rList.end();
+        for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
+        {
+            aSeq[i] = aIter->second.first;
+        }
+
+        i = 0;
+        Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(_nImageType,aSeq);
+        for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
+        {
+            Image aImage(aImages[i]);
+            SvLBoxEntry* pEntry = m_aCreation.InsertEntry(aIter->first,aImage,aImage);
+            pEntry->SetUserData(reinterpret_cast<void*>(new TResourcePair(aIter->second)));
+        }
+    }
+    catch(Exception&)
+    {
     }
 
     m_aCreation.Show();
@@ -267,13 +305,11 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSp
     ,m_aHorzSplitter(this)
     ,m_aTasks(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL )
     ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
+    ,m_pBorderWin(_pParent)
 {
     DBG_CTOR(OApplicationDetailView,NULL);
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( sal_True, sal_True, sal_True );
-
-    m_aTasks.SetBorderStyle(WINDOW_BORDER_MONO);
-    m_aContainer.SetBorderStyle(WINDOW_BORDER_MONO);
 
     m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,_pParent);
     m_pControlHelper->Show();
@@ -291,7 +327,6 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSp
 
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
     m_aHorzSplitter.SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
-    m_aHorzSplitter.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     // now set the components at the base class
     init(&m_aContainer,&m_aTasks);
 
@@ -306,54 +341,13 @@ OApplicationDetailView::~OApplicationDetailView()
     m_pControlHelper = NULL;
 }
 //  -----------------------------------------------------------------------------
-//void OApplicationDetailView::Resize()
-//{
-    ////////////////////////////////////////////////////////////////
-//  // Abmessungen parent window
-//  Size aOutputSize( GetOutputSize() );
-//  long nOutputWidth   = aOutputSize.Width();
-//  long nOutputHeight  = aOutputSize.Height();
-//  long n13Height = static_cast<sal_Int32>(nOutputHeight * 0.3);
-
-//  m_aTasks.SetPosSizePixel( Point(0, 0), Size(nOutputWidth, n13Height) );
-
-//  Size aFLSize = LogicToPixel( Size( 0, 5 ), MAP_APPFONT );
-//  n13Height += aFLSize.Height();
-//  m_aContainer.SetPosSizePixel(Point(0, n13Height),
-//                              Size(nOutputWidth, nOutputHeight - n13Height) );
-//}
-//-----------------------------------------------------------------------------
 void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
-    }
-
-    if ( bFont || bForeground )
-    {
-        Color aTextColor = rStyleSettings.GetButtonTextColor();
-        if ( IsControlForeground() )
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
-    }
-
-    if ( bBackground )
-    {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetFaceColor() );
-
-        //  m_aHelpText.SetBackground(rStyleSettings.GetHighlightTextColor());
-    }
+    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
+    m_aHorzSplitter.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
+    m_aHorzSplitter.SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+    m_aHorzSplitter.SetTextFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
 }
 // -----------------------------------------------------------------------
 void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
@@ -364,7 +358,6 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        m_aHorzSplitter.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
@@ -381,12 +374,12 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     TResourceStruct aList;
     aList.reserve(4);
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE),TResourcePair(ID_NEW_TABLE_DESIGN,RID_STR_TABLES_HELP_TEXT_DESIGN)));
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE_AUTO),TResourcePair(ID_NEW_TABLE_DESIGN_AUTO_PILOT,RID_STR_TABLES_HELP_TEXT_WIZARD)));
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(ID_NEW_VIEW_DESIGN,RID_STR_VIEWS_HELP_TEXT_DESIGN)));
+    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),RID_STR_TABLES_HELP_TEXT_DESIGN)));
+    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTableAutoPilot")),RID_STR_TABLES_HELP_TEXT_WIZARD)));
+    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView")),RID_STR_VIEWS_HELP_TEXT_DESIGN)));
     //  aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW_AUTO),TResourcePair(ID_NEW_VIEW_DESIGN_AUTO_PILOT,RID_STR_VIEWS_HELP_TEXT_WIZARD)));
 
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList,GetBackground().GetColor().IsDark() ? IMG_TABLESUBCRIPTION_SCH :IMG_TABLESUBCRIPTION_SC);
+    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList,ImageType::SIZE_DEFAULT | (GetBackground().GetColor().IsDark() ? ImageType::COLOR_HIGHCONTRAST : ImageType::COLOR_NORMAL));
     static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_TABLE_DESIGN));
 
     m_pControlHelper->createTablesPage(_xConnection);
@@ -397,27 +390,25 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
 void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNameAccess >& _xContainer)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    USHORT nImageResId = 0, nTitleId = 0;
+    USHORT nTitleId = 0;
+    short nImageType = ImageType::SIZE_DEFAULT;
+    nImageType |= GetBackground().GetColor().IsDark() ? ImageType::COLOR_HIGHCONTRAST :ImageType::COLOR_NORMAL;
     TResourceStruct aList;
     aList.reserve(4);
     switch(_eType )
     {
         case E_FORM:
             {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM),TResourcePair(ID_APP_NEW_FORM, RID_STR_FORMS_HELP_TEXT)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM_AUTO),TResourcePair(ID_FORM_NEW_PILOT,RID_STR_FORMS_HELP_TEXT_WIZARD)));
-
-                nImageResId = GetBackground().GetColor().IsDark() ? IMG_DOCUMENTLINKS_SCH :IMG_DOCUMENTLINKS_SC;
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm")), RID_STR_FORMS_HELP_TEXT)));
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilot")),RID_STR_FORMS_HELP_TEXT_WIZARD)));
 
                 nTitleId = RID_STR_FORMS_CONTAINER;
-                static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_APP_NEW_FORM));
+                static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(SID_APP_NEW_FORM));
             }
             break;
         case E_REPORT:
             {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_REPORT_AUTO),TResourcePair(ID_DOCUMENT_CREATE_REPWIZ,RID_STR_REPORTS_HELP_TEXT_WIZARD)));
-
-                nImageResId = GetBackground().GetColor().IsDark() ? IMG_DOCUMENTLINKS_SCH :IMG_DOCUMENTLINKS_SC;
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_REPORT_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot")),RID_STR_REPORTS_HELP_TEXT_WIZARD)));
 
                 nTitleId = RID_STR_REPORTS_CONTAINER;
                 static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_DOCUMENT_CREATE_REPWIZ));
@@ -425,11 +416,9 @@ void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNam
             break;
         case E_QUERY:
             {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY),TResourcePair(ID_NEW_QUERY_DESIGN,RID_STR_QUERIES_HELP_TEXT)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_AUTO),TResourcePair(ID_APP_NEW_QUERY_AUTO_PILOT,RID_STR_QUERIES_HELP_TEXT_WIZARD)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_SQL),TResourcePair(ID_NEW_QUERY_SQL,RID_STR_QUERIES_HELP_TEXT_SQL)));
-
-                nImageResId = GetBackground().GetColor().IsDark() ? IMG_QUERYADMINISTRATION_SCH : IMG_QUERYADMINISTRATION_SC;
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery")),RID_STR_QUERIES_HELP_TEXT)));
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQueryAutoPilot")),RID_STR_QUERIES_HELP_TEXT_WIZARD)));
+                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_SQL),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql")),RID_STR_QUERIES_HELP_TEXT_SQL)));
 
                 nTitleId = RID_STR_QUERIES_CONTAINER;
                 static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_QUERY_DESIGN));
@@ -438,8 +427,8 @@ void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNam
         default:
             OSL_ENSURE(0,"Illegal call!");
     }
-    if ( nImageResId != 0 )
-        static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList, nImageResId);
+
+    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList, nImageType);
     m_pControlHelper->createPage(_eType,_xContainer);
     m_aContainer.setTitle(nTitleId);
     Resize();
@@ -544,10 +533,10 @@ void OApplicationDetailView::paste()
     m_pControlHelper->paste();
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::onCreationClick( sal_uInt16 _nId)
+void OApplicationDetailView::onCreationClick( const ::rtl::OUString& _sCommand)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    static_cast<OAppBorderWindow*>(GetParent())->getView()->getElementNotification()->onCreationClick(_nId);
+    static_cast<OAppBorderWindow*>(GetParent())->getView()->getElementNotification()->onCreationClick(_sCommand);
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject, const Reference< XConnection >& _rxConn )

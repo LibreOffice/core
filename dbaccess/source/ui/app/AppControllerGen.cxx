@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
+#include <com/sun/star/sdbcx/XRename.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -545,6 +548,69 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
                            ,_bCollection
                            ,_xContent
                            ,_bMove);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const
+{
+    ElementType eType = getContainer()->getElementType();
+    sal_Bool bEnabled = !isDataSourceReadOnly() && eType == _eType;
+    if ( bEnabled )
+    {
+
+        if ( E_TABLE == eType )
+            bEnabled = !isConnectionReadOnly() && getContainer()->isALeafSelected();
+
+        sal_Bool bCompareRes = sal_False;
+        if ( _bDelete )
+            bCompareRes = getContainer()->getSelectionCount() > 0;
+        else
+        {
+            bCompareRes = getContainer()->getSelectionCount() == 1;
+            if ( bEnabled && bCompareRes && E_TABLE == eType )
+            {
+                ::std::vector< ::rtl::OUString> aList;
+                const_cast<OApplicationController*>(this)->getSelectionElementNames(aList);
+
+                try
+                {
+                    Reference< XNameAccess > xContainer = const_cast<OApplicationController*>(this)->getElements(eType);
+                    if ( bEnabled = (xContainer.is() && xContainer->hasByName(*aList.begin())) )
+                        bEnabled = Reference<XRename>(xContainer->getByName(*aList.begin()),UNO_QUERY).is();
+                }
+                catch(Exception&)
+                {
+                    bEnabled = sal_False;
+                }
+            }
+        }
+
+        bEnabled = bEnabled && bCompareRes;
+    }
+    return bEnabled;
+}
+// -----------------------------------------------------------------------------
+void OApplicationController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+{
+    OGenericUnoController::loadSubToolbar(_xLayoutManager);
+    Execute(SID_DB_APP_VIEW_FORMS,Sequence<PropertyValue>());
+
+    InvalidateAll();
+}
+// -----------------------------------------------------------------------------
+void OApplicationController::doAction(sal_uInt16 _nId ,sal_Bool _bEdit)
+{
+    ::std::vector< ::rtl::OUString> aList;
+    getSelectionElementNames(aList);
+    ElementType eType = getContainer()->getElementType();
+
+    ::std::vector< ::rtl::OUString>::iterator aEnd = aList.end();
+    for (::std::vector< ::rtl::OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
+    {
+        if ( SID_DB_APP_CONVERTTOVIEW == _nId )
+            convertToView(*aIter);
+        else
+            openElement(*aIter,eType, _bEdit );
+    }
 }
 //........................................................................
 }   // namespace dbaui
