@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:02 $
+ *  last change: $Author: oj $ $Date: 2002-10-04 08:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,8 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 //------------------------------------------------------------------------------
 void OFieldDescControl::Init()
 {
-    ::dbaui::setEvalDateFormatForFormatter(GetFormatter());
+    Reference< XNumberFormatter > xFormatter = GetFormatter();
+    ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
 //------------------------------------------------------------------------------
