@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:02:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 09:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ class SwPrtOptions;
 class SwTransferable;
 class SwTxtNode; // #i23726#
 struct SwPrintData;
+class SwFormatClipboard;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -183,11 +184,13 @@ struct SwApplyTemplate
 
     int eType;
     USHORT nColor;
+    SwFormatClipboard* pFormatClipboard;
     BOOL bUndo;
 
     SwApplyTemplate() :
         eType(0),
         nColor(0),
+        pFormatClipboard(0),
         bUndo(FALSE)
     {
         aColl.pTxtColl = 0;
@@ -274,6 +277,8 @@ class SwView: public SfxViewShell
     SwDrawBase          *pDrawActual;
 
     const SwFrmFmt      *pLastTableFormat;
+
+    SwFormatClipboard   *pFormatClipboard; //holds data for format paintbrush
 
     int                 nSelectionType;
 
@@ -654,6 +659,9 @@ public:
     SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
+
+    void ExecFormatPaintbrush(SfxRequest &);
+    void StateFormatPaintbrush(SfxItemSet &);
 };
 
 // ----------------- inline Methoden ----------------------
