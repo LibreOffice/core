@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:58:40 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,15 +646,19 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 
         // Load all forms
         FmFormPage* pPage = static_cast<FmFormPage*>(m_pPageViewForActivation->GetPage());
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(pPage->GetForms(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Any aElement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xForm;
-        for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
+        Reference< XIndexAccess >  xForms(pPage->GetForms(), UNO_QUERY);
+
+        if ( xForms.is() )
         {
-            xForms->getByIndex(i) >>= xForm;
-            // a database form must be loaded for
-            if (::isLoadable(xForm) && !xForm->isLoaded())
-                xForm->load();
+            Any aElement;
+            Reference< XLoadable >  xForm;
+            for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
+            {
+                xForms->getByIndex(i) >>= xForm;
+                // a database form must be loaded for
+                if (::isLoadable(xForm) && !xForm->isLoaded())
+                    xForm->load();
+            }
         }
 
         if (pModel && pModel->GetAutoControlFocus())
