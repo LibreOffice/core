@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 09:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             *pBegin <<= aFrame;
             const PropertyValue* pIter      = m_aArgs.getConstArray();
             const PropertyValue* pIterEnd   = pIter + m_aArgs.getLength();
-            for(++pBegin;pBegin != pEnd;++pBegin)
+            for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
             {
                 *pBegin <<= *pIter;
             }
