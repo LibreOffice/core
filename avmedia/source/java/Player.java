@@ -75,6 +75,7 @@ public class Player implements javax.media.ControllerListener,
 
 
 {
+    private com.sun.star.lang.XMultiServiceFactory maFactory;
     private String maURL;
     private javax.media.Player maPlayer;
     private javax.media.GainControl maGainControl;
@@ -83,8 +84,11 @@ public class Player implements javax.media.ControllerListener,
 
     // -------------------------------------------------------------------------
 
-    public Player( javax.media.Player aPlayer )
+    public Player( com.sun.star.lang.XMultiServiceFactory aFactory,
+                   javax.media.Player aPlayer, String aURL )
     {
+        maFactory = aFactory;
+        maURL = aURL;
         maPlayer = aPlayer;
         maPlayer.addControllerListener( this );
         maGainControl = maPlayer.getGainControl();
@@ -275,7 +279,7 @@ public class Player implements javax.media.ControllerListener,
         try
         {
             com.sun.star.media.XPlayerWindow xPlayerWindow = ( ( ( aArgs.length > 1 ) && ( AnyConverter.toInt( aArgs[ 0 ] ) > 0 ) ) ?
-                                                             new PlayerWindow( aArgs, maPlayer ) :
+                                                             new PlayerWindow( maFactory, aArgs, maPlayer ) :
                                                              null );
 
             // check if it is a real player window (video window)
@@ -288,6 +292,13 @@ public class Player implements javax.media.ControllerListener,
         {
             return null;
         }
+    }
+
+    // -------------------------------------------------------------------------
+
+    public synchronized com.sun.star.media.XFrameGrabber createFrameGrabber()
+    {
+        return( (com.sun.star.media.XFrameGrabber) new FrameGrabber( maFactory, maURL ) );
     }
 
     // --------------
