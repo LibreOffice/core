@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:14:25 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ dutch ] = "Presentatie uit extract";
     SlotName[ chinese_simplified ] = "ζΌ”η¤Ίζ–‡η¨Ώζ¥θ‡ªζ‘θ¦";
     SlotName[ greek ] = "Παρουσίαση από Abstract";
-    SlotName[ korean ] = "μ¶”μƒ ν”„λ¦¬μ  ν…μ΄μ…";
+    SlotName[ korean ] = "μ¶”μƒ ν”„λ μ  ν…μ΄μ…";
     SlotName[ turkish ] = "Sunu φzeti ηύkar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Presentaciσn desde extracto";
@@ -5646,7 +5646,7 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€θ‡³ε‰ªθ΄΄ζΏ";
     SlotName[ greek ] = "Διάρθρωση προς το πρόχειρο";
-    SlotName[ korean ] = "ν΄λ¦½λ³΄λ“μ λ‹¤λ‹¨κ³„";
+    SlotName[ korean ] = "ν΄λ¦½λ³΄λ“μ μ•„μ›ƒνΈλΌμΈ";
     SlotName[ turkish ] = "Anahatlarύ panoya gφnder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema al portapapeles";
@@ -5674,7 +5674,7 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ dutch ] = "Overzicht bij presentatie";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€ε°ζΌ”η¤Ίζ–‡η¨Ώ";
     SlotName[ greek ] = "Διάρθρωση προς παρουσίαση";
-    SlotName[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… λ‹¤λ‹¨κ³„";
+    SlotName[ korean ] = "ν”„λ μ  ν…μ΄μ… μ•„μ›ƒνΈλΌμΈ";
     SlotName[ turkish ] = "Anahatlarύ sunuya aktar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema para presentaciσn";
