@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:29:11 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include "attrib.hxx"
 #include "dbdocutl.hxx"
 #include "editable.hxx"
+#include "hints.hxx"
 
 using namespace com::sun::star;
 
@@ -714,6 +715,9 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         pDoc->SetDirty();
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
         aModificator.SetDocumentModified();
+
+        ScDBRangeRefreshedHint aHint( rParam );
+        pDoc->BroadcastUno( aHint );
 
         if (pWaitWin)
             pWaitWin->LeaveWait();
