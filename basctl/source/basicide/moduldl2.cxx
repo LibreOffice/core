@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:05:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 
 #define GLOBALOVERFLOW
 
-#ifndef _SFX_IPFRM_HXX
-#include <sfx2/ipfrm.hxx>
-#endif
-
 #include <ide_pch.hxx>
 
 #include <svtools/filedlg.hxx>
@@ -91,9 +87,7 @@
 #include <tools/urlobj.hxx>
 #endif
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -663,17 +657,11 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     if ( pButton == &aEditButton )
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-        }
-        else
-        {
-            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-            SFX_APP()->ExecuteSlot( aRequest );
-        }
+
+        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+        SFX_APP()->ExecuteSlot( aRequest );
+
         SfxObjectShellItem aShellItem( SID_BASICIDE_ARG_SHELL, m_pCurShell );
         SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
@@ -681,7 +669,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
