@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mhu $ $Date: 2001-04-17 11:48:35 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.6 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.7 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -509,6 +509,7 @@ inline storeError OFileLockBytes_Impl::create (
     // Path conversion result.
     oslFileError result;
 
+#if 0
     // Convert into normalized path.
     rtl::OUString aNormPath;
     result = osl_getNormalizedPathFromFileURL (
@@ -533,6 +534,30 @@ inline storeError OFileLockBytes_Impl::create (
         // Invalid path.
         return store_E_InvalidParameter;
     }
+#else
+    rtl::OUString aSystemPath;
+
+    result = osl_getSystemPathFromFileURL( pFilename, &(aSystemPath.pData) );
+
+    // Maybe it's alreadey a system path
+
+    if ( osl_File_E_None != result )
+    {
+        rtl::OUString aTempURL;
+
+        result = osl_getFileURLFromSystemPath( pFilename, &(aTempURL.pData) );
+
+        if (!(result == osl_File_E_None))
+        {
+            // Invalid path.
+            return store_E_InvalidParameter;
+        }
+        else
+            aSystemPath = pFilename;
+    }
+
+#endif
+
 
     // Convert into system text encoding.
     rtl::OString aFilename (
