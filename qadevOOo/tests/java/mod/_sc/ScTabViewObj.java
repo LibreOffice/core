@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-12-11 12:13:37 $
+ *  last change:$Date: 2004-01-05 19:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,10 @@ public class ScTabViewObj extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
         XComponent oComp2 = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc2) ;
-        oComp2.dispose();
+        util.DesktopTools.closeDoc(oComp2);
     }
 
     /**
