@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 07:38:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 13:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2226,6 +2226,9 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
     PropertyState eState;
     switch (nHandle)
     {
+        case PROPERTY_ID_NAVIGATION:
+            return (NavigationBarMode_CURRENT == m_eNavigation) ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
+            break;
         case PROPERTY_ID_CYCLE:
             if (!m_aCycle.hasValue())
                 eState = PropertyState_DEFAULT_VALUE;
@@ -2243,6 +2246,9 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_NAVIGATION:
+            setFastPropertyValue(nHandle, makeAny(NavigationBarMode_CURRENT));
+            break;
         case PROPERTY_ID_CYCLE:
             setFastPropertyValue(nHandle, Any());
             break;
@@ -2256,6 +2262,9 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_NAVIGATION:
+            return makeAny(NavigationBarMode_CURRENT);
+            break;
         case PROPERTY_ID_CYCLE:
             return Any();
         default:
