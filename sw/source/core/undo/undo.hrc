@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:07:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #define STR_INSATTR_UNDO        (UNDO_BASE      + 7)
 #define STR_SETFMTCOLL_UNDO     (UNDO_BASE      + 8)
 #define STR_RESET_ATTR_UNDO     (UNDO_BASE      + 9)
-#define STR_APPLY_ATTR_UNDO     (UNDO_BASE      +10)
+#define STR_INSFMT_ATTR_UNDO    (UNDO_BASE      +10)
 #define STR_INSERT_DOC_UNDO     (UNDO_BASE      +11)
 #define STR_COPY_UNDO           (UNDO_BASE      +12)
 #define STR_INSTABLE_UNDO       (UNDO_BASE      +13)
@@ -87,7 +87,7 @@
 #define STR_OUTLINE_LR          (UNDO_BASE      +20)
 #define STR_OUTLINE_UD          (UNDO_BASE      +21)
 #define STR_INSNUM              (UNDO_BASE      +22)
-#define STR_NUMUPDOWN           (UNDO_BASE      +23)
+#define STR_NUMUP               (UNDO_BASE      +23)
 #define STR_MOVENUM             (UNDO_BASE      +24)
 #define STR_INSERTDRAW          (UNDO_BASE      +25)
 #define STR_NUMORNONUM          (UNDO_BASE      +26)
@@ -167,8 +167,28 @@
 #define STR_UNDO_PAGEDESC_DELETE    (CORE_REPEAT_END      +47)
 #define STR_UNDO_HEADER_FOOTER      (CORE_REPEAT_END      +48) // #i7983#
 #define STR_UNDO_FIELD              (CORE_REPEAT_END      +49) // #111840#
+#define STR_UNDO_TXTFMTCOL_CREATE           (CORE_REPEAT_END      +50)
+#define STR_UNDO_TXTFMTCOL_DELETE           (CORE_REPEAT_END      +51)
+#define STR_UNDO_TXTFMTCOL_RENAME           (CORE_REPEAT_END      +52)
+#define STR_UNDO_CHARFMT_CREATE             (CORE_REPEAT_END      +53)
+#define STR_UNDO_CHARFMT_DELETE             (CORE_REPEAT_END      +54)
+#define STR_UNDO_CHARFMT_RENAME             (CORE_REPEAT_END      +55)
+#define STR_UNDO_FRMFMT_CREATE              (CORE_REPEAT_END      +56)
+#define STR_UNDO_FRMFMT_DELETE              (CORE_REPEAT_END      +57)
+#define STR_UNDO_FRMFMT_RENAME              (CORE_REPEAT_END      +58)
+#define STR_UNDO_NUMRULE_CREATE             (CORE_REPEAT_END      +59)
+#define STR_UNDO_NUMRULE_DELETE             (CORE_REPEAT_END      +60)
+#define STR_UNDO_NUMRULE_RENAME             (CORE_REPEAT_END      +61)
+#define STR_UNDO_BOOKMARK_RENAME            (CORE_REPEAT_END      +62)
+#define STR_UNDO_INDEX_ENTRY_INSERT         (CORE_REPEAT_END      +63)
+#define STR_UNDO_INDEX_ENTRY_DELETE         (CORE_REPEAT_END      +64)
+#define STR_UNDO_COL_DELETE                 (CORE_REPEAT_END      +65)
+#define STR_UNDO_ROW_DELETE                 (CORE_REPEAT_END      +66)
+#define STR_UNDO_PAGEDESC_RENAME            (CORE_REPEAT_END      +67)
+#define STR_NUMDOWN                         (CORE_REPEAT_END      +68)
+
 // !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
-#define CORE_UNDO_END           STR_UNDO_FIELD// !!!! umsetzen !!!
+#define CORE_UNDO_END           STR_NUMDOWN// !!!! umsetzen !!!
 
 // UI-Undo Klammerungen
 #define UI_UNDO_BEGIN                   (CORE_UNDO_END + 1)
@@ -185,9 +205,15 @@
 #define STR_INSERT_URLBTN               (UI_UNDO_BEGIN + 10)
 #define STR_INSERT_URLTXT               (UI_UNDO_BEGIN + 11)
 #define STR_DELETE_INVISIBLECNTNT       (UI_UNDO_BEGIN + 12)
-#define UI_UNDO_END                     STR_DELETE_INVISIBLECNTNT
+#define STR_REPLACE_STYLE               (UI_UNDO_BEGIN + 13)
+#define UI_UNDO_END                     STR_REPLACE_STYLE
 
 #define UNDO_MORE_STRINGS_BEGIN         (UI_UNDO_END + 1)
 #define STR_OCCURRENCES_OF              (UNDO_MORE_STRINGS_BEGIN)
+#define STR_UNDO_TABS                   (UNDO_MORE_STRINGS_BEGIN + 1)
+#define STR_UNDO_NLS                    (UNDO_MORE_STRINGS_BEGIN + 2)
+#define STR_UNDO_PAGEBREAKS             (UNDO_MORE_STRINGS_BEGIN + 3)
+#define STR_UNDO_COLBRKS                (UNDO_MORE_STRINGS_BEGIN + 4)
+#define STR_UNDO_SPECIALCHAR            (UNDO_MORE_STRINGS_BEGIN + 5)
 
-#define UNDO_ACT_END                    STR_OCCURRENCES_OF
+#define UNDO_ACT_END                    STR_UNDO_TABLE_NAME
