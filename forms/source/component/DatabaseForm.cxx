@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:52:27 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,7 @@ void ODatabaseForm::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(18, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(18, m_xAggregateSet)
         // we want to "override" the privileges, since we have additional "AllowInsert" etc. properties
         RemoveProperty( _rAggregateProps, PROPERTY_PRIVILEGES );
 
@@ -1458,7 +1458,7 @@ void ODatabaseForm::fillProperties(
         DECL_PROP1      ( TARGET_FRAME,     ::rtl::OUString,                BOUND                          );
         DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,               BOUND                          );
         DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,             BOUND                          );
-    END_AGGREGATION_PROPERTY_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
