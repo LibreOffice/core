@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 15:43:10 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 09:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,6 +1211,10 @@ void DbGridControl::RemoveRows(sal_Bool bNewCursor)
 //------------------------------------------------------------------------------
 void DbGridControl::RemoveRows()
 {
+    // we're going to remove all columns and all row, so deactivate the current cell
+    if (IsEditing())
+        DeactivateCell();
+
     // alle Columns deinitialisieren
     // existieren Spalten, dann alle Controller freigeben
     for (sal_uInt32 i = 0; i < m_aColumns.Count(); i++)
@@ -1433,8 +1437,6 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
     // if there is no cursor or the cursor is not valid we have to clean up an leave
     if (!_xCursor.is() || !::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier > (_xCursor, ::com::sun::star::uno::UNO_QUERY)->getColumns()->hasElements())
     {
-        if (IsEditing())
-            DeactivateCell();
         RemoveRows();
         return;
     }
