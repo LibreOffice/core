@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 12:02:15 $
+#   last change: $Author: hr $ $Date: 2004-07-23 14:19:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ LIB1FILES = \
         $(SLB)$/deployment_registry_configuration.lib \
         $(SLB)$/deployment_registry_component.lib \
         $(SLB)$/deployment_registry_script.lib \
+        $(SLB)$/deployment_registry_sfwk.lib                  \
         $(SLB)$/deployment_registry_package.lib \
         $(SLB)$/deployment_registry.lib \
         $(SLB)$/deployment_manager.lib \
@@ -115,6 +116,7 @@ RESLIB1SRSFILES = \
         $(SRS)$/deployment_registry_configuration.srs \
         $(SRS)$/deployment_registry_component.srs \
         $(SRS)$/deployment_registry_script.srs \
+        $(SRS)$/deployment_registry_sfwk.srs \
         $(SRS)$/deployment_registry_package.srs \
         $(SRS)$/deployment_registry.srs \
         $(SRS)$/deployment_manager.srs \
