@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:13:24 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ korean ] = "±€≤√(~F)";
         Text[ turkish ] = "~Yaz˝tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fuente";
     };
     ListBox LB_FONT
     {
@@ -161,6 +162,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ chinese_traditional ] = "§l∂∞(~S)";
         Text[ turkish ] = "~Subset";
         Text[ arabic ] = "„Ã„Ê⁄… Ã“∆Ì…";
+        Text[ catalan ] = "~¡rea";
     };
     ListBox LB_SUBSET
     {
@@ -195,6 +197,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ korean ] = "πÆ¿⁄:";
         Text[ turkish ] = "Karakter:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Car·cter:";
     };
     Control CT_SHOWTEXT
     {
@@ -259,11 +262,13 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ korean ] = "ªË¡¶(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Text[ greek ] = "≈È‰ÈÍÔﬂ ˜·Ò·ÍÙﬁÒÂÚ";
     Text[ korean ] = "∆Øºˆ±‚»£";
     Text[ turkish ] = "÷zel karakter";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "SÌmbolos";
 };
 
 /*
@@ -295,6 +300,7 @@ String RID_SUBSETSTR_BASIC_LATIN
         Text[ chinese_traditional ] = "∞Ú•ª©‘§B§Â";
         Text[ turkish ] = "Basic Latin";
         Text[ arabic ] = "·« Ì‰Ì √”«”Ì";
+        Text[ catalan ] = "LatÌn b·sico";
     };
 String RID_SUBSETSTR_LATIN_1
 {
@@ -318,6 +324,7 @@ String RID_SUBSETSTR_LATIN_1
         Text[ chinese_traditional ] = "©‘§B§Â-1";
         Text[ turkish ] = "Latin-1";
         Text[ arabic ] = "·« Ì‰Ì-1";
+        Text[ catalan ] = "LatÌn-1";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_A
 {
@@ -341,6 +348,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_A
         Text[ chinese_traditional ] = "©‘§B§Â¬X•R-A";
         Text[ turkish ] = "Latin Extended-A";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄A-";
+        Text[ catalan ] = "LatÌn ampliado A";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_B
 {
@@ -364,6 +372,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_B
         Text[ chinese_traditional ] = "©‘§B§Â¬X•R-B";
         Text[ turkish ] = "Latin Extended-B";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄B-";
+        Text[ catalan ] = "LatÌn ampliado B";
     };
 String RID_SUBSETSTR_IPA_EXTENSIONS
 {
@@ -387,6 +396,7 @@ String RID_SUBSETSTR_IPA_EXTENSIONS
         Text[ chinese_traditional ] = "∞Íª⁄≠µº–";
         Text[ turkish ] = "IPA Extensions";
         Text[ arabic ] = "„·Õﬁ« IPA ";
+        Text[ catalan ] = "Ampliaciones fonÈticas";
     };
 String RID_SUBSETSTR_SPACING_MODIFIERS
 {
@@ -410,6 +420,7 @@ String RID_SUBSETSTR_SPACING_MODIFIERS
         Text[ chinese_traditional ] = "∂°πj≠◊π¢¶r§∏";
         Text[ turkish ] = "Spacing Modifier Letters";
         Text[ arabic ] = "√Õ—› „⁄œ¯· «·„”«›« ";
+        Text[ catalan ] = "Caracteres modificadores de espacios";
     };
 String RID_SUBSETSTR_COMB_DIACRITICAL
 {
@@ -433,6 +444,7 @@ String RID_SUBSETSTR_COMB_DIACRITICAL
         Text[ chinese_traditional ] = "≤’¶X¶°≤≈∏π";
         Text[ turkish ] = "Combining Diacritical Marks";
         Text[ arabic ] = "÷„ ⁄·«„«  «· ‘ﬂÌ·";
+        Text[ catalan ] = "CombinaciÛn de caracteres diacrÌticos";
     };
 String RID_SUBSETSTR_BASIC_GREEK
 {
@@ -456,6 +468,7 @@ String RID_SUBSETSTR_BASIC_GREEK
         Text[ chinese_traditional ] = "∞Ú•ªß∆€Kªy";
         Text[ turkish ] = "Basic Greek";
         Text[ arabic ] = "ÌÊ‰«‰Ì √”«”Ì";
+        Text[ catalan ] = "Griego b·sico";
     };
 String RID_SUBSETSTR_GREEK_SYMS_COPTIC
 {
@@ -479,6 +492,7 @@ String RID_SUBSETSTR_GREEK_SYMS_COPTIC
         Text[ chinese_traditional ] = "ß∆€K≤≈∏π©MÆJ§Œ•jªy";
         Text[ turkish ] = "Greek Symbols And Coptic";
         Text[ arabic ] = "—„Ê“ ÌÊ‰«‰Ì… Êﬁ»ÿÌ";
+        Text[ catalan ] = "SÌmbolos griegos y copto";
     };
 String RID_SUBSETSTR_CYRILLIC
 {
@@ -502,6 +516,7 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ chinese_traditional ] = "•j•N¥µ©‘§“ªy™∫¶r•¿";
         Text[ turkish ] = "Cyrillic";
         Text[ arabic ] = "”Ì—Ì·Ì";
+        Text[ catalan ] = "CirÌlico";
     };
 String RID_SUBSETSTR_ARMENIAN
 {
@@ -525,6 +540,7 @@ String RID_SUBSETSTR_ARMENIAN
         Text[ chinese_traditional ] = "®»¨¸•ß®»ªy";
         Text[ turkish ] = "Armenian";
         Text[ arabic ] = "√—„‰Ì";
+        Text[ catalan ] = "Armenio";
     };
 String RID_SUBSETSTR_HEBREW_EXTENDED
 {
@@ -548,6 +564,7 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ chinese_traditional ] = "∞Ú•ªß∆ßB®”ªy";
         Text[ turkish ] = "Basic Hebrew";
         Text[ arabic ] = "⁄»—Ì √”«”Ì";
+        Text[ catalan ] = "Hebreo b·sico";
     };
 String RID_SUBSETSTR_BASIC_HEBREW
 {
@@ -571,6 +588,7 @@ String RID_SUBSETSTR_BASIC_HEBREW
         Text[ chinese_traditional ] = "ß∆ßB®”ªy¬X•R";
         Text[ turkish ] = "Hebrew Extended";
         Text[ arabic ] = "⁄»—Ì „Ê”¯⁄";
+        Text[ catalan ] = "Hebreo ampliado";
     };
 String RID_SUBSETSTR_BASIC_ARABIC
 {
@@ -594,6 +612,7 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ chinese_traditional ] = "∞Ú•ª™¸©‘ßBªy";
         Text[ turkish ] = "Basic Arabic";
         Text[ arabic ] = "⁄—»Ì √”«”Ì";
+        Text[ catalan ] = "Arabe b·sico";
     };
 String RID_SUBSETSTR_ARABIC_EXTENDED
 {
@@ -617,6 +636,7 @@ String RID_SUBSETSTR_ARABIC_EXTENDED
         Text[ chinese_traditional ] = "™¸©‘ßBªy¬X•R";
         Text[ turkish ] = "Arabic Extended";
         Text[ arabic ] = "⁄—»Ì „Ê”¯⁄";
+        Text[ catalan ] = "Arabe ampliado";
     };
 String RID_SUBSETSTR_DEVANAGARI
 {
@@ -640,6 +660,7 @@ String RID_SUBSETSTR_DEVANAGARI
         Text[ chinese_traditional ] = "±Î§Â¶r•¿";
         Text[ turkish ] = "Devanagari";
         Text[ arabic ] = "œÌ›«‰«€«—Ì";
+        Text[ catalan ] = "Devanagari";
     };
 String RID_SUBSETSTR_BENGALI
 {
@@ -663,6 +684,7 @@ String RID_SUBSETSTR_BENGALI
         Text[ chinese_traditional ] = "©s•[©‘§Hªy";
         Text[ turkish ] = "Bengali";
         Text[ arabic ] = "»‰€«·Ì";
+        Text[ catalan ] = "BengalÌ";
     };
 String RID_SUBSETSTR_GURMUKHI
 {
@@ -686,6 +708,7 @@ String RID_SUBSETSTR_GURMUKHI
         Text[ chinese_traditional ] = "¶L´◊•_≥°™∫ Gurmukhi ªy®•";
         Text[ turkish ] = "Gurmukhi";
         Text[ arabic ] = "€Ê—„ÊﬂÌ";
+        Text[ catalan ] = "Gurmukhi";
     };
 String RID_SUBSETSTR_GUJARATI
 {
@@ -709,6 +732,7 @@ String RID_SUBSETSTR_GUJARATI
         Text[ chinese_traditional ] = "¶L´◊•_≥°™∫ Gujarati ªy®•";
         Text[ turkish ] = "Gujarati";
         Text[ arabic ] = "€ÊÃ«—« Ì";
+        Text[ catalan ] = "Gujarati";
     };
 String RID_SUBSETSTR_ORIYA
 {
@@ -732,6 +756,7 @@ String RID_SUBSETSTR_ORIYA
         Text[ chinese_traditional ] = "¶L´◊•_≥°™∫ Oriya ªy®•";
         Text[ turkish ] = "Oriya";
         Text[ arabic ] = "√Ê—Ì«";
+        Text[ catalan ] = "Oriya";
     };
 String RID_SUBSETSTR_TAMIL
 {
@@ -755,6 +780,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ chinese_traditional ] = "©Z¶Ã∫∏ªy";
         Text[ turkish ] = "Tamil";
         Text[ arabic ] = " «„Ì·";
+        Text[ catalan ] = "Tamil";
     };
 String RID_SUBSETSTR_TELUGU
 {
@@ -778,6 +804,7 @@ String RID_SUBSETSTR_TELUGU
         Text[ chinese_traditional ] = "¶L´◊•_≥°™∫ Telugu ªy®•";
         Text[ turkish ] = "Telugu";
         Text[ arabic ] = " Ì·Ê€Ê";
+        Text[ catalan ] = "Telugu";
     };
 String RID_SUBSETSTR_KANNADA
 {
@@ -801,6 +828,7 @@ String RID_SUBSETSTR_KANNADA
         Text[ chinese_traditional ] = "¶L´◊™∫•dØ«πFªy";
         Text[ turkish ] = "Kannada";
         Text[ arabic ] = "ﬂ«‰«œ«";
+        Text[ catalan ] = "Kannada";
     };
 String RID_SUBSETSTR_MALAYALAM
 {
@@ -824,6 +852,7 @@ String RID_SUBSETSTR_MALAYALAM
         Text[ chinese_traditional ] = "¶L´◊¶Ë´n≥°™∫Dravidian_ªy™∫§@§Ë®•";
         Text[ turkish ] = "Malayalam";
         Text[ arabic ] = "„«·«Ì«·«„";
+        Text[ catalan ] = "Malayalam";
     };
 String RID_SUBSETSTR_THAI
 {
@@ -847,6 +876,7 @@ String RID_SUBSETSTR_THAI
         Text[ chinese_traditional ] = "Æıªy";
         Text[ turkish ] = "Thai";
         Text[ arabic ] = "«· «ÌÌ…";
+        Text[ catalan ] = "TailandÈs";
     };
 String RID_SUBSETSTR_LAO
 {
@@ -870,6 +900,7 @@ String RID_SUBSETSTR_LAO
         Text[ chinese_traditional ] = "¶—æ‚ªy";
         Text[ turkish ] = "Lao";
         Text[ arabic ] = "«··«ÊÌ…";
+        Text[ catalan ] = "Laosiano";
     };
 String RID_SUBSETSTR_BASIC_GEORGIAN
 {
@@ -893,6 +924,7 @@ String RID_SUBSETSTR_BASIC_GEORGIAN
         Text[ chinese_traditional ] = "∞Ú•ªÆÊæ|¶N®»ªy";
         Text[ turkish ] = "Basic Georgian";
         Text[ arabic ] = "«·ÃÊ—ÃÌ… «·√”«”Ì…";
+        Text[ catalan ] = "Georgiano b·sico";
     };
 String RID_SUBSETSTR_GEORGIAN_EXTENDED
 {
@@ -916,6 +948,7 @@ String RID_SUBSETSTR_GEORGIAN_EXTENDED
         Text[ chinese_traditional ] = "ÆÊæ|¶N®»ªy¬X•R";
         Text[ turkish ] = "Georgian Extended";
         Text[ arabic ] = "«·ÃÊ—ÃÌ… «·„Ê”¯⁄…";
+        Text[ catalan ] = "Georgiano extendido";
     };
 String RID_SUBSETSTR_HANGUL_JAMO
 {
@@ -939,6 +972,7 @@ String RID_SUBSETSTR_HANGUL_JAMO
         Text[ chinese_traditional ] = "¡˙§Â Jamo";
         Text[ turkish ] = "Hangul Jamo";
         Text[ arabic ] = "Â«‰€Ê· Ã«„Ê";
+        Text[ catalan ] = "Hangul Jamo";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
 {
@@ -962,6 +996,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
         Text[ chinese_traditional ] = "©‘§B§Â¬X•R™˛•[";
         Text[ turkish ] = "Latin Extended Additional";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄ ≈÷«›Ì";
+        Text[ catalan ] = "LatÌn extendido adicional";
     };
 String RID_SUBSETSTR_GREEK_EXTENDED
 {
@@ -985,6 +1020,7 @@ String RID_SUBSETSTR_GREEK_EXTENDED
         Text[ chinese_traditional ] = "ß∆€Kªy¬X•R";
         Text[ turkish ] = "Greek Extended";
         Text[ arabic ] = "ÌÊ‰«‰Ì „Ê”¯⁄";
+        Text[ catalan ] = "Griego ampliado";
     };
 String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
@@ -1008,6 +1044,7 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ chinese_traditional ] = "¥∂≥qº–¬I";
         Text[ turkish ] = "General Punctuation";
         Text[ arabic ] = "⁄·«„«   ‰ﬁÌÿ ⁄«„…";
+        Text[ catalan ] = "PuntuaciÛn general";
     };
 String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
 {
@@ -1031,6 +1068,7 @@ String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
         Text[ chinese_traditional ] = "§Wº–©M§Uº–";
         Text[ turkish ] = "Superscripts And Subscripts";
         Text[ arabic ] = "„— ›⁄ Ê„‰Œ›÷";
+        Text[ catalan ] = "Super y subÌndices";
     };
 String RID_SUBSETSTR_CURRENCY_SYMBOLS
 {
@@ -1054,6 +1092,7 @@ String RID_SUBSETSTR_CURRENCY_SYMBOLS
         Text[ chinese_traditional ] = "≥fπÙ≤≈∏π";
         Text[ turkish ] = "Currency Symbols";
         Text[ arabic ] = "—„Ê“ «·⁄„·…";
+        Text[ catalan ] = "SÌmbolos de monedas";
     };
 String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
 {
@@ -1077,6 +1116,7 @@ String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
         Text[ chinese_traditional ] = "≤’¶X¶°≤≈∏π";
         Text[ turkish ] = "Combining Diacritical Marks For Symbols";
         Text[ arabic ] = "÷„ ⁄·«„«  «· ‘ﬂÌ· ··—„Ê“";
+        Text[ catalan ] = "CombinaciÛn de sÌmbolos diacrÌticos";
     };
 String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
 {
@@ -1100,6 +1140,7 @@ String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
         Text[ chinese_traditional ] = "¶¸¶r•¿≤≈∏π";
         Text[ turkish ] = "Letterlike Symbols";
         Text[ arabic ] = "—„Ê“ ﬂ«·√Õ—›";
+        Text[ catalan ] = "SÌmbolos tipo carta";
     };
 String RID_SUBSETSTR_NUMBER_FORMS
 {
@@ -1123,6 +1164,7 @@ String RID_SUBSETSTR_NUMBER_FORMS
         Text[ chinese_traditional ] = "º∆¶r≤≈∏π";
         Text[ turkish ] = "Number Forms";
         Text[ arabic ] = "‰„«–Ã √—ﬁ«„";
+        Text[ catalan ] = "SÌmbolos numÈricos";
     };
 String RID_SUBSETSTR_ARROWS
 {
@@ -1146,6 +1188,7 @@ String RID_SUBSETSTR_ARROWS
         Text[ chinese_traditional ] = "Ωb¿Y≤≈∏π";
         Text[ turkish ] = "Arrows";
         Text[ arabic ] = "√”Â„";
+        Text[ catalan ] = "Flechas";
     };
 String RID_SUBSETSTR_MATH_OPERATORS
 {
@@ -1169,6 +1212,7 @@ String RID_SUBSETSTR_MATH_OPERATORS
         Text[ chinese_traditional ] = "º∆æ«πB∫‚≤≈∏π";
         Text[ turkish ] = "Mathematical Operators";
         Text[ arabic ] = "⁄Ê«„·  ‘€Ì· —Ì«÷Ì…";
+        Text[ catalan ] = "Operadores matem·ticos";
     };
 String RID_SUBSETSTR_MISC_TECHNICAL
 {
@@ -1192,6 +1236,7 @@ String RID_SUBSETSTR_MISC_TECHNICAL
         Text[ chinese_traditional ] = "¶U¶°ßﬁ≥N≤≈∏π";
         Text[ turkish ] = "Miscellaneous Technical";
         Text[ arabic ] = "—„Ê“  ﬁ‰Ì… „ ‰Ê⁄…";
+        Text[ catalan ] = "Diversos caracteres tÈcnicos";
     };
 String RID_SUBSETSTR_CONTROL_PICTURES
 {
@@ -1215,6 +1260,7 @@ String RID_SUBSETSTR_CONTROL_PICTURES
         Text[ chinese_traditional ] = "±±®Ó≤≈∏π";
         Text[ turkish ] = "Control Pictures";
         Text[ arabic ] = "«· Õﬂ„ »«·’Ê—";
+        Text[ catalan ] = "SÌmbolos del teclado";
     };
 String RID_SUBSETSTR_OPTICAL_CHAR_REC
 {
@@ -1238,6 +1284,7 @@ String RID_SUBSETSTR_OPTICAL_CHAR_REC
         Text[ chinese_traditional ] = "•i®—•˙æ«®t≤Œ√—ßO™∫¶r§∏";
         Text[ turkish ] = "Optical Character Recognition";
         Text[ arabic ] = " ⁄—› »’—Ì ⁄·Ï «·Õ—›";
+        Text[ catalan ] = "Caracteres legibles por m·quina";
     };
 String RID_SUBSETSTR_ENCLOSED_ALPHANUM
 {
@@ -1261,6 +1308,7 @@ String RID_SUBSETSTR_ENCLOSED_ALPHANUM
         Text[ chinese_traditional ] = "±a¨A∏π™∫¶r≤≈";
         Text[ turkish ] = "Enclosed Alphanumerics";
         Text[ arabic ] = "√»ÃœÌ —ﬁ„Ì ›Ì œ«∆—…";
+        Text[ catalan ] = "Caracteres incluidos";
     };
 String RID_SUBSETSTR_BOX_DRAWING
 {
@@ -1284,6 +1332,7 @@ String RID_SUBSETSTR_BOX_DRAWING
         Text[ chinese_traditional ] = "∞œ∂Ù§∏•Û";
         Text[ turkish ] = "Box Drawing";
         Text[ arabic ] = "—”„ „—»⁄";
+        Text[ catalan ] = "SÌmbolos de marco";
     };
 String RID_SUBSETSTR_BLOCK_ELEMENTS
 {
@@ -1307,6 +1356,7 @@ String RID_SUBSETSTR_BLOCK_ELEMENTS
         Text[ chinese_traditional ] = "∞œ∂Ù§∏•Û";
         Text[ turkish ] = "Block Elements";
         Text[ arabic ] = "⁄‰«’— «·ﬂ ·…";
+        Text[ catalan ] = "SÌmbolos de bloque";
     };
 String RID_SUBSETSTR_GEOMETRIC_SHAPES
 {
@@ -1330,6 +1380,7 @@ String RID_SUBSETSTR_GEOMETRIC_SHAPES
         Text[ chinese_traditional ] = "§L¶ÛßŒ";
         Text[ turkish ] = "Geometric Shapes";
         Text[ arabic ] = "√‘ﬂ«· Â‰œ”Ì…";
+        Text[ catalan ] = "SÌmbolos geomÈtricos";
     };
 String RID_SUBSETSTR_MISC_DINGBATS
 {
@@ -1353,6 +1404,7 @@ String RID_SUBSETSTR_MISC_DINGBATS
         Text[ chinese_traditional ] = "≤V¶X§∞¿A≤≈∏π";
         Text[ turkish ] = "Miscellaneous Symbols";
         Text[ arabic ] = "—„Ê“ „Œ ·›…";
+        Text[ catalan ] = "Diversos sÌmbolos";
     };
 String RID_SUBSETSTR_DINGBATS
 {
@@ -1376,6 +1428,7 @@ String RID_SUBSETSTR_DINGBATS
         Text[ chinese_traditional ] = "∏Àπ¢≤≈∏π";
         Text[ turkish ] = "Dingbats";
         Text[ arabic ] = "Dingbats";
+        Text[ catalan ] = "Dingbats";
     };
 String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
 {
@@ -1399,6 +1452,7 @@ String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
         Text[ chinese_traditional ] = "§§§È¡˙≤≈∏π©Mº–¬I";
         Text[ turkish ] = "CJK Symbols And Punctuation";
         Text[ arabic ] = "—„Ê“ Ê⁄·«„«   ‰ﬁÌÿ ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì…";
+        Text[ catalan ] = "SÌmbolos y puntuaciÛn CJK";
     };
 String RID_SUBSETSTR_HIRAGANA
 {
@@ -1422,6 +1476,7 @@ String RID_SUBSETSTR_HIRAGANA
         Text[ chinese_traditional ] = "•≠∞≤¶W";
         Text[ turkish ] = "Hiragana";
         Text[ arabic ] = "ÂÌ—«Ã«‰«";
+        Text[ catalan ] = "Hiragana";
     };
 String RID_SUBSETSTR_KATAKANA
 {
@@ -1445,6 +1500,7 @@ String RID_SUBSETSTR_KATAKANA
         Text[ chinese_traditional ] = "§˘∞≤¶W";
         Text[ turkish ] = "Katakana";
         Text[ arabic ] = "ﬂ« «ﬂ«‰«";
+        Text[ catalan ] = "Katakana";
     };
 String RID_SUBSETSTR_BOPOMOFO
 {
@@ -1468,6 +1524,7 @@ String RID_SUBSETSTR_BOPOMOFO
         Text[ chinese_traditional ] = "µ˘≠µ≤≈∏π";
         Text[ turkish ] = "Bopomofo";
         Text[ arabic ] = "»Ê»Ê„Ê›Ê";
+        Text[ catalan ] = "Bopomofo";
     };
 String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
 {
@@ -1491,6 +1548,7 @@ String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
         Text[ chinese_traditional ] = "¡˙§Â≠›Æe Jamo";
         Text[ turkish ] = "Hangul Compatibility Jamo";
         Text[ arabic ] = " Ê«›ﬁ Â«‰€Ê· „⁄ Ã«„Ê";
+        Text[ catalan ] = "Jamo compatible con Hangul";
     };
 String RID_SUBSETSTR_CJK_MISC
 {
@@ -1514,6 +1572,7 @@ String RID_SUBSETSTR_CJK_MISC
         Text[ chinese_traditional ] = "§§§È¡˙≤V¶X¶r§∏";
         Text[ turkish ] = "CJK Miscellaneous";
         Text[ arabic ] = "„ ›—ﬁ«  ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì…";
+        Text[ catalan ] = "Diversos caracteres CJK";
     };
 String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
 {
@@ -1537,6 +1596,7 @@ String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
         Text[ chinese_traditional ] = "±a¨A∏π™∫§§§È¡˙¶r§∏©M§Î•˜";
         Text[ turkish ] = "Enclosed CJK Letters And Months";
         Text[ arabic ] = "√Õ—› Ê√‘Â— ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì… ›Ì œ«∆—…";
+        Text[ catalan ] = "Caracteres y meses incluidos en CJK";
     };
 String RID_SUBSETSTR_CJK_COMPATIBILITY
 {
@@ -1560,6 +1620,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
         Text[ chinese_traditional ] = "§§§È¡˙¨€Æe";
         Text[ turkish ] = "CJK Compatibility";
         Text[ arabic ] = " Ê«›ﬁ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
+        Text[ catalan ] = "Compatibilidad CJK";
     };
 String RID_SUBSETSTR_HANGUL
 {
@@ -1583,6 +1644,7 @@ String RID_SUBSETSTR_HANGUL
         Text[ chinese_traditional ] = "¡˙§Â";
         Text[ turkish ] = "Hangul";
         Text[ arabic ] = "Hangul";
+        Text[ catalan ] = "Hangul";
     };
 String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
 {
@@ -1606,6 +1668,7 @@ String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
         Text[ chinese_traditional ] = "§§§È¡˙≤Œ§@∫~¶r";
         Text[ turkish ] = "CJK Unified Ideographs";
         Text[ arabic ] = "√ÌœÌÊ€—«„ „ Õœ ’Ì‰Ì ÊÌ«»«‰Ì ÊﬂÊ—Ì";
+        Text[ catalan ] = "Ideogramas CJK unificados";
     };
 String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
 {
@@ -1629,6 +1692,7 @@ String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
         Text[ chinese_traditional ] = "§§§È¡˙≤Œ§@∫~¶r¬X•R-A";
         Text[ turkish ] = "CJK Unified Ideographs Extension-A";
         Text[ arabic ] = "≈ÌœÌÊ€—«„ „ Õœ ’Ì‰Ì ÊÌ«»«‰Ì ÊﬂÊ—Ì° „·ÕﬁA-";
+        Text[ catalan ] = "Ideogramas CJK unificados extensiÛn A";
     };
 String RID_SUBSETSTR_PRIVATE_USE_AREA
 {
@@ -1652,6 +1716,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ chinese_traditional ] = "±M•Œ∞œ∞Ï";
         Text[ turkish ] = "Private Use Area";
         Text[ arabic ] = "„‰ÿﬁ… «” ⁄„«· Œ«’";
+        Text[ catalan ] = "SÌmbolos especÌficos de fuentes";
     };
 String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
 {
@@ -1675,6 +1740,7 @@ String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
         Text[ chinese_traditional ] = "§§§È¡˙¨€Æe¶r§∏";
         Text[ turkish ] = "CJK Compatibility Ideographs";
         Text[ arabic ] = " Ê«›ﬁ ≈ÌœÌÊ€—«„ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
+        Text[ catalan ] = "Ideogramas de compatibilidad CJK";
     };
 String RID_SUBSETSTR_ALPHA_PRESENTATION
 {
@@ -1698,6 +1764,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ chinese_traditional ] = "¶r•¿∫t•‹πœºÀ";
         Text[ turkish ] = "Alphabetic Presentation Forms";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… √»ÃœÌ…";
+        Text[ catalan ] = "Formas de presentaciÛn alfabÈticas";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_A
 {
@@ -1721,6 +1788,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ chinese_traditional ] = "™¸©‘ßB∫t•‹πœºÀ-A";
         Text[ turkish ] = "Arabic Presentation Forms-A";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… ⁄—»Ì…-A";
+        Text[ catalan ] = "Formas A de presentaciÛn ·rabe";
     };
 String RID_SUBSETSTR_COMBINING_HALF_MARKS
 {
@@ -1744,6 +1812,7 @@ String RID_SUBSETSTR_COMBINING_HALF_MARKS
         Text[ chinese_traditional ] = "πÔ¿≥™∫≤≈∏π";
         Text[ turkish ] = "Combining Half Marks";
         Text[ arabic ] = "÷„ ‰’› «·⁄·«„« ";
+        Text[ catalan ] = "CombinaciÛn de medias marcas";
     };
 String RID_SUBSETSTR_CJK_COMPAT_FORMS
 {
@@ -1767,6 +1836,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ chinese_traditional ] = "§§§È¡˙¨€ÆeπœºÀ";
         Text[ turkish ] = "CJK Compatibility Forms";
         Text[ arabic ] = "‰„«–Ã  Ê«›ﬁ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
+        Text[ catalan ] = "Formas de compatibilidad CJK";
     };
 String RID_SUBSETSTR_SMALL_FORM_VARIANTS
 {
@@ -1790,6 +1860,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
         Text[ chinese_traditional ] = "§pºg≈‹≈È";
         Text[ turkish ] = "Small Form Variants";
         Text[ arabic ] = "„ €Ì—«  ‰„Ê–Ã ’€Ì—";
+        Text[ catalan ] = "Variantes de pequeÒas formas";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_B
 {
@@ -1813,6 +1884,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_B
         Text[ chinese_traditional ] = "™¸©‘ßB∫t•‹πœºÀ-B";
         Text[ turkish ] = "Arabic Presentation Forms-B";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… ⁄—»Ì…-B";
+        Text[ catalan ] = "Formas B de presentaciÛn ·rabe";
     };
 String RID_SUBSETSTR_HALFW_FULLW_FORMS
 {
@@ -1836,6 +1908,7 @@ String RID_SUBSETSTR_HALFW_FULLW_FORMS
         Text[ chinese_traditional ] = "•bßŒ©M•˛ßŒ";
         Text[ turkish ] = "Halfwidth And Fullwidth Forms";
         Text[ arabic ] = "‰„«–Ã »‰’› «·⁄—÷ Ê√Œ—Ï »⁄—÷ ﬂ«„·";
+        Text[ catalan ] = "Formas anchas y medio anchas";
     };
 String RID_SUBSETSTR_SPECIALS
 {
@@ -1859,6 +1932,7 @@ String RID_SUBSETSTR_SPECIALS
         Text[ chinese_traditional ] = "ØSÆÌ¶r§∏";
         Text[ turkish ] = "Specials";
         Text[ arabic ] = "—„Ê“ Œ«’…";
+        Text[ catalan ] = "SÌmbolos especiales";
     };
 String RID_SUBSETSTR_HANGUL_GA
 {
@@ -1882,6 +1956,7 @@ String RID_SUBSETSTR_HANGUL_GA
         Text[ chinese_traditional ] = "¡˙§Â Ga";
         Text[ turkish ] = "Hangul Ga";
         Text[ arabic ] = "Hangul Ga";
+        Text[ catalan ] = "Hangul Ga";
     };
 String RID_SUBSETSTR_HANGUL_NA
 {
@@ -1905,6 +1980,7 @@ String RID_SUBSETSTR_HANGUL_NA
         Text[ chinese_traditional ] = "¡˙§Â Na";
         Text[ turkish ] = "Hangul Na";
         Text[ arabic ] = "Hangul Na";
+        Text[ catalan ] = "Hangul Na";
     };
 String RID_SUBSETSTR_HANGUL_DA
 {
@@ -1928,6 +2004,7 @@ String RID_SUBSETSTR_HANGUL_DA
         Text[ chinese_traditional ] = "¡˙§Â Da";
         Text[ turkish ] = "Hangul Da";
         Text[ arabic ] = "Hangul Da";
+        Text[ catalan ] = "Hangul Da";
     };
 String RID_SUBSETSTR_HANGUL_RA
 {
@@ -1951,6 +2028,7 @@ String RID_SUBSETSTR_HANGUL_RA
         Text[ chinese_traditional ] = "¡˙§Â Ra";
         Text[ turkish ] = "Hangul Ra";
         Text[ arabic ] = "Hangul Ra";
+        Text[ catalan ] = "Hangul Ra";
     };
 String RID_SUBSETSTR_HANGUL_MA
 {
@@ -1974,6 +2052,7 @@ String RID_SUBSETSTR_HANGUL_MA
         Text[ chinese_traditional ] = "¡˙§Â Ma";
         Text[ turkish ] = "Hangul Ma";
         Text[ arabic ] = "Hangul Ma";
+        Text[ catalan ] = "Hangul Ma";
     };
 String RID_SUBSETSTR_HANGUL_BA
 {
@@ -1997,6 +2076,7 @@ String RID_SUBSETSTR_HANGUL_BA
         Text[ chinese_traditional ] = "¡˙§Â Ba";
         Text[ turkish ] = "Hangul Ba";
         Text[ arabic ] = "Hangul Ba";
+        Text[ catalan ] = "Hangul Ba";
     };
 String RID_SUBSETSTR_HANGUL_SA
 {
@@ -2020,6 +2100,7 @@ String RID_SUBSETSTR_HANGUL_SA
         Text[ chinese_traditional ] = "¡˙§Â Sa";
         Text[ turkish ] = "Hangul Sa";
         Text[ arabic ] = "Hangul Sa";
+        Text[ catalan ] = "Hangul Sa";
     };
 String RID_SUBSETSTR_HANGUL_AH
 {
@@ -2043,6 +2124,7 @@ String RID_SUBSETSTR_HANGUL_AH
         Text[ chinese_traditional ] = "¡˙§Â Ah";
         Text[ turkish ] = "Hangul Ah";
         Text[ arabic ] = "Hangul Ah";
+        Text[ catalan ] = "Hangul Ah";
     };
 String RID_SUBSETSTR_HANGUL_JA
 {
@@ -2066,6 +2148,7 @@ String RID_SUBSETSTR_HANGUL_JA
         Text[ chinese_traditional ] = "¡˙§Â Ja";
         Text[ turkish ] = "Hangul Ja";
         Text[ arabic ] = "Hangul Ja";
+        Text[ catalan ] = "Hangul Ja";
     };
 String RID_SUBSETSTR_HANGUL_CHA
 {
@@ -2089,6 +2172,7 @@ String RID_SUBSETSTR_HANGUL_CHA
         Text[ chinese_traditional ] = "¡˙§Â Cha";
         Text[ turkish ] = "Hangul Cha";
         Text[ arabic ] = "Hangul Cha";
+        Text[ catalan ] = "Hangul Cha";
     };
 String RID_SUBSETSTR_HANGUL_KA
 {
@@ -2112,6 +2196,7 @@ String RID_SUBSETSTR_HANGUL_KA
         Text[ chinese_traditional ] = "¡˙§Â Ka";
         Text[ turkish ] = "Hangul Ka";
         Text[ arabic ] = "Hangul Ka";
+        Text[ catalan ] = "Hangul Ka";
     };
 String RID_SUBSETSTR_HANGUL_TA
 {
@@ -2135,6 +2220,7 @@ String RID_SUBSETSTR_HANGUL_TA
         Text[ chinese_traditional ] = "¡˙§Â Ta";
         Text[ turkish ] = "Hangul Ta";
         Text[ arabic ] = "Hangul Ta";
+        Text[ catalan ] = "Hangul Ta";
     };
 String RID_SUBSETSTR_HANGUL_PA
 {
@@ -2158,6 +2244,7 @@ String RID_SUBSETSTR_HANGUL_PA
         Text[ chinese_traditional ] = "¡˙§Â Pa";
         Text[ turkish ] = "Hangul Pa";
         Text[ arabic ] = "Hangul Pa";
+        Text[ catalan ] = "Hangul Pa";
     };
 String RID_SUBSETSTR_HANGUL_HA
 {
@@ -2181,6 +2268,7 @@ String RID_SUBSETSTR_HANGUL_HA
         Text[ chinese_traditional ] = "¡˙§Â Ha";
         Text[ turkish ] = "Hangul Ha";
         Text[ arabic ] = "Hangul Ha";
+        Text[ catalan ] = "Hangul Ha";
     };
 String RID_SUBSETSTR_YI
 {
@@ -2204,6 +2292,7 @@ String RID_SUBSETSTR_YI
         Text[ chinese_traditional ] = "¬U±⁄§Â¶r";
         Text[ turkish ] = "Yi";
         Text[ arabic ] = "Yi";
+        Text[ catalan ] = "Yi";
     };
 String RID_SUBSETSTR_SINHALA
 {
@@ -2227,6 +2316,7 @@ String RID_SUBSETSTR_SINHALA
         Text[ chinese_traditional ] = "ø¸ƒıªy";
         Text[ turkish ] = "Sinhala";
         Text[ arabic ] = "”Ì‰Â«·«";
+        Text[ catalan ] = "Sinhala";
     };
 String RID_SUBSETSTR_TIBETAN
 {
@@ -2250,6 +2340,7 @@ String RID_SUBSETSTR_TIBETAN
         Text[ chinese_traditional ] = "¬√ªy";
         Text[ turkish ] = "Tibetan";
         Text[ arabic ] = "«· Ì» Ì…";
+        Text[ catalan ] = "Tibetano";
     };
 String RID_SUBSETSTR_MYANMAR
 {
@@ -2273,6 +2364,7 @@ String RID_SUBSETSTR_MYANMAR
         Text[ chinese_traditional ] = "Ωq®lªy";
         Text[ turkish ] = "Myanmar";
         Text[ arabic ] = "„Ì«‰„«—";
+        Text[ catalan ] = "Birmano";
     };
 String RID_SUBSETSTR_KHMER
 {
@@ -2296,6 +2388,7 @@ String RID_SUBSETSTR_KHMER
         Text[ chinese_traditional ] = "®¶¨¸∫∏ªy";
         Text[ turkish ] = "Khmer";
         Text[ arabic ] = "«·Œ„Ì—Ì…";
+        Text[ catalan ] = "Khmer";
     };
 String RID_SUBSETSTR_OGHAM
 {
@@ -2319,6 +2412,7 @@ String RID_SUBSETSTR_OGHAM
         Text[ chinese_traditional ] = "º⁄•Ã§Â¶r";
         Text[ turkish ] = "Ogham";
         Text[ arabic ] = "«·√Ê€„Ì…";
+        Text[ catalan ] = "Ogham";
     };
 String RID_SUBSETSTR_RUNIC
 {
@@ -2342,6 +2436,7 @@ String RID_SUBSETSTR_RUNIC
         Text[ chinese_traditional ] = "•j•N•_º⁄§Â¶r";
         Text[ turkish ] = "Runic";
         Text[ arabic ] = "—Ê‰Ì";
+        Text[ catalan ] = "R˙nico";
     };
 String RID_SUBSETSTR_SYRIAC
 {
@@ -2365,6 +2460,7 @@ String RID_SUBSETSTR_SYRIAC
         Text[ chinese_traditional ] = "•j•N±‘ßQ®»ªy";
         Text[ turkish ] = "Syriac";
         Text[ arabic ] = "«·”—Ì«‰Ì…";
+        Text[ catalan ] = "Sirio";
     };
 String RID_SUBSETSTR_THAANA
 {
@@ -2388,6 +2484,7 @@ String RID_SUBSETSTR_THAANA
         Text[ chinese_traditional ] = "∞®∫∏•N§“ªy";
         Text[ turkish ] = "Thaana";
         Text[ arabic ] = " «‰«";
+        Text[ catalan ] = "Thaana";
     };
 String RID_SUBSETSTR_ETHIOPIC
 {
@@ -2411,6 +2508,7 @@ String RID_SUBSETSTR_ETHIOPIC
         Text[ chinese_traditional ] = "¶ÁØ¡§Ò®»ªy";
         Text[ turkish ] = "Ethiopic";
         Text[ arabic ] = "«·Õ»‘Ì…";
+        Text[ catalan ] = "EtÌope";
     };
 String RID_SUBSETSTR_CHEROKEE
 {
@@ -2434,6 +2532,7 @@ String RID_SUBSETSTR_CHEROKEE
         Text[ chinese_traditional ] = "¨d©‘§L±⁄§g§Hªy";
         Text[ turkish ] = "Cherokee";
         Text[ arabic ] = "‘Ì—ÊﬂÌ";
+        Text[ catalan ] = "Cheroque";
     };
 String RID_SUBSETSTR_CANADIAN_ABORIGINAL
 {
@@ -2457,6 +2556,7 @@ String RID_SUBSETSTR_CANADIAN_ABORIGINAL
         Text[ chinese_traditional ] = "•[Æ≥§j§gµ€§H™∫ªy®•¶r•¿";
         Text[ turkish ] = "Canadian Aboriginal Syllables";
         Text[ arabic ] = "„ﬁ«ÿ⁄ «·√—Ê„Ì «·ﬂ«‰«œÌÌ‰";
+        Text[ catalan ] = "SÌlabas aborÌgenes canadienses";
     };
 String RID_SUBSETSTR_MONGOLIAN
 {
@@ -2480,6 +2580,7 @@ String RID_SUBSETSTR_MONGOLIAN
         Text[ chinese_traditional ] = "ªX•jªy";
         Text[ turkish ] = "Mongolian";
         Text[ arabic ] = "«·„€Ê·Ì…";
+        Text[ catalan ] = "Mogol";
     };
 };
 
