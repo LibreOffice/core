@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salshl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 14:47:59 $
+ *  last change: $Author: ssa $ $Date: 2001-11-09 14:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,23 +172,38 @@ BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {
     DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
 
-    // Try at first to load the icons from the application exe file
     SalData* pSalData = GetSalData();
+
+    // check the cache first
+    SalIcon *pSalIcon = pSalData->mpFirstIcon;
+    while( pSalIcon )
+    {
+        if( pSalIcon->nId != nId )
+            pSalIcon = pSalIcon->pNext;
+        else
+        {
+            rIcon       = pSalIcon->hIcon;
+            rSmallIcon  = pSalIcon->hSmallIcon;
+            return (rSmallIcon != 0);
+        }
+    }
+
+    // Try at first to load the icons from the application exe file
     rIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
-                                           LR_DEFAULTCOLOR | LR_SHARED );
+                                           LR_DEFAULTCOLOR );
     if ( !rIcon )
     {
         // If the application don't provide these icons, then we try
         // to load the icon from the VCL resource
         rIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
-                                           LR_DEFAULTCOLOR | LR_SHARED );
+                                           LR_DEFAULTCOLOR );
         if ( rIcon )
         {
             rSmallIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
-                                           LR_DEFAULTCOLOR | LR_SHARED );
+                                           LR_DEFAULTCOLOR );
         }
         else
             rSmallIcon = 0;
@@ -197,7 +212,18 @@ BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
     {
         rSmallIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
                                        IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
-                                       LR_DEFAULTCOLOR | LR_SHARED );
+                                       LR_DEFAULTCOLOR );
+    }
+
+    if( rIcon )
+    {
+        // add to icon cache
+        pSalIcon = new SalIcon();
+        pSalIcon->nId = nId;
+        pSalIcon->hIcon = rIcon;
+        pSalIcon->hSmallIcon = rSmallIcon;
+        pSalIcon->pNext = pSalData->mpFirstIcon;
+        pSalData->mpFirstIcon = pSalIcon;
     }
 
     return (rSmallIcon != 0);

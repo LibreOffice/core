@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:06:28 $
+ *  last change: $Author: ssa $ $Date: 2001-11-09 14:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,18 @@ struct HDCCache;
 #define MAX_STOCKBRUSH          4
 #define SAL_CLIPRECT_COUNT      16
 
+// --------------------
+// - Icon cache       -
+// --------------------
+
+struct SalIcon
+{
+    int     nId;
+    HICON   hIcon;
+    HICON   hSmallIcon;
+    SalIcon *pNext;
+};
+
 // -----------
 // - SalData -
 // -----------
@@ -153,6 +165,7 @@ struct SalData
     int                     mnSageStatus;           // Status der Sage-DLL (DISABLE_AGENT == nicht vorhanden)
     HINSTANCE               mhSageInst;             // Instance-Handle zur Sage-DLL
     SysAgt_Enable_PROC      mpSageEnableProc;       // Funktion zum deaktivieren des Systemagenten
+    SalIcon*                mpFirstIcon;            // Iconcache, points to first icon, NULL if no icons loaded
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: ssa $ $Date: 2001-11-09 14:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,17 @@ void ImplFreeSalGDI()
         pEntry = pTmp;
     }
     pFirstSysColor = NULL;
+
+    // delete icon cache
+    SalIcon* pIcon = pSalData->mpFirstIcon;
+    while( pIcon )
+    {
+        SalIcon* pTmp = pIcon->pNext;
+        DestroyIcon( pIcon->hIcon );
+        DestroyIcon( pIcon->hSmallIcon );
+        delete pIcon;
+        pIcon = pTmp;
+    }
 }
 
 // -----------------------------------------------------------------------
