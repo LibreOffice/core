@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:06:02 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,12 @@ public:
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
+
+    /** Call this method when the text in the outliner (may) has changed.
+        It will invalidate some slots of the view frame and update the
+        preview in the slide sorter.
+    */
+    void UpdateForKeyPress (const KeyEvent& rEvent);
 };
 
 } // end of namespace sd
