@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:14:35 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     if(&_rRH == this)
         return *this;
 
-    if(m_eTypeKind != _rRH.m_eTypeKind || _rRH.m_bNull)
+    if ( m_eTypeKind != _rRH.m_eTypeKind || _rRH.m_bNull || m_bSigned != _rRH.m_bSigned)
         free();
 
     m_bBound    = _rRH.m_bBound;
@@ -531,7 +531,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 if ( _rRH.m_bSigned )
                     m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
                 else
-                    (*this) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
+                    *static_cast<sal_Int64*>(m_aValue.m_pValue) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
                 break;
             default:
                 (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);
