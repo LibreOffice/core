@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 11:11:13 $
+ *  last change: $Author: cmc $ $Date: 2001-05-29 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2862,6 +2862,29 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     return pRet;
 }
 
+INT32 lcl_MapTextRotation(UINT32 nIn)
+{
+    INT32 nTextRotationAngle = 0;
+    MSO_TextFlow eTextFlow = (MSO_TextFlow)(nIn & 0xFFFF);
+    switch( eTextFlow )
+    {
+        case mso_txflBtoT:
+            nTextRotationAngle = 9000;
+        break;
+        case mso_txflTtoBA :
+        case mso_txflTtoBN :
+        case mso_txflVertN :
+            nTextRotationAngle = 27000;
+        break;
+        case mso_txflHorzN :
+        case mso_txflHorzA :
+        default :
+            nTextRotationAngle = 0;
+        break;
+    }
+    return nTextRotationAngle;
+}
+
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                        const Rectangle* pRect,
@@ -3086,7 +3109,29 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     {
                         if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
                             || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
+                        {
+                            /*
+                            ##957##
+                            For word the bound rect has width and height set
+                            as *after* rotation, so if we are to rotate undo
+                            the rotation for the boundrect.
+                            */
+                            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+                            {
+                                if ( lcl_MapTextRotation(GetPropertyValue(
+                                        DFF_Prop_txflTextFlow)) )
+                                {
+                                    long nTemp = aBoundRect.Left();
+                                    aBoundRect.Left() = aBoundRect.Top();
+                                    aBoundRect.Top() = nTemp;
+
+                                    nTemp = aBoundRect.Right();
+                                    aBoundRect.Right() = aBoundRect.Bottom();
+                                    aBoundRect.Bottom() = nTemp;
+                                }
+                            }
                             pRet = new SdrRectObj( OBJ_TEXT, aBoundRect );
+                        }
                     }
                     else if (
                         mso_sptWedgeRectCallout == aObjData.eShapeType ||
@@ -3374,23 +3419,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             INT32 nTextRotationAngle = 0;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
-                MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
-                switch( eTextFlow )
-                {
-                    case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
-                        nTextRotationAngle = 9000;
-                    break;
-                    case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
-                    case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
-                    case mso_txflVertN :                    // Vertical, non-@, oben -> unten
-                        nTextRotationAngle = 27000;
-                    break;
-                    case mso_txflHorzN :                    // Horizontal non-@, normal
-                    case mso_txflHorzA :                    // Horizontal @-font, normal
-                    default :
-                        nTextRotationAngle = 0;
-                    break;
-                }
+                nTextRotationAngle = lcl_MapTextRotation(
+                    GetPropertyValue(DFF_Prop_txflTextFlow));
                 if ( nTextRotationAngle )
                 {
                     if ( rObjData.nSpFlags & SP_FFLIPV )
