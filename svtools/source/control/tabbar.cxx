@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-06 12:30:44 $
+ *  last change: $Author: cd $ $Date: 2002-12-09 08:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2459,7 +2459,7 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
         if ( nOldFirstPos != mnFirstPos )
         {
             Rectangle aRect( mnOffX, 0, mnOutWidth, maWinSize.Height() );
-            SetFillColor();
+            SetFillColor( GetBackground().GetColor() );
             DrawRect( aRect );
             Paint( aRect );
         }
