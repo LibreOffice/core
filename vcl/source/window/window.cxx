@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 17:27:45 $
+ *  last change: $Author: ssa $ $Date: 2001-12-14 13:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5588,7 +5588,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         }
 
 #ifdef DBG_UTIL
-        if ( IsDialog() || (GetType() == WINDOW_TABPAGE) )
+        if ( IsDialog() || (GetType() == WINDOW_TABPAGE) || (GetType() == WINDOW_DOCKINGWINDOW) )
         {
             DBG_DIALOGTEST( this );
         }
