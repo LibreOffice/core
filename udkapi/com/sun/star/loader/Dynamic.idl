@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dynamic.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-10 13:16:33 $
+ *  last change: $Author: kr $ $Date: 2001-04-05 10:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@ module com {  module sun {  module star {  module loader {
 interface XImplementationLoader;
 
 
-/** makes it possible to access services accessible via an <code>UnoUrlResolver</code>
-    E.g.: instantiaten of services in an other process
+/** makes it possible to access services accessible via a <code>UnoUrlResolver</code>
+    E.g.: instantiation of services in an other process
  */
 service Dynamic
 {
@@ -82,9 +82,9 @@ service Dynamic
     /** allows registration and activation of described service.
         The url parameter has to be a komma separated list of attributes.
         The following attribute types are understood:
-        servicename = the service name to register this component with
+        servicename = the service name to register this component under
         link        = a parameter given to a resolver to get a <code>SingleServiceFactory</code>
-        resolver    = an <code>UnoUrlResolver</code> service, which is used to resolve the link
+        resolver    = a <code>UnoUrlResolver</code> service, which is used to resolve the link
     */
     interface XImplementationLoader;
 

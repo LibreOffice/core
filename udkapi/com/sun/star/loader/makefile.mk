@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+#   last change: $Author: kr $ $Date: 2001-04-05 10:22:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PACKAGE=com$/sun$/star$/loader
 IDLFILES=\
     CannotActivateFactoryException.idl\
     Java.idl\
+    Dynamic.idl\
     SharedLibrary.idl\
     XImplementationLoader.idl\
 
