@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-06 16:30:57 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,6 +929,14 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CONVERT_TO_METAFILE:
         case SID_CONVERT_TO_BITMAP:
         {
+            // End text edit mode when it is active because the metafile or
+            // bitmap that will be created does not support it.
+            if ( pDrView->IsTextEdit() )
+            {
+                pDrView->EndTextEdit();
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            }
+
             if ( pDrView->IsPresObjSelected(true,true,true) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
