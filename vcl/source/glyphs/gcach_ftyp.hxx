@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:18:54 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 typedef int FT_Int;
 struct FT_GlyphRec_;
 class FreetypeServerFont;
+struct FT_FaceRec_;
+struct FT_SizeRec_;
 
 // -----------------------------------------------------------------------
 
@@ -83,7 +85,7 @@ public:
     void                    Unmap();
 
     const unsigned char*    GetBuffer() const { return mpFileMap; }
-    int                     GetSize() const { return mnFileSize; }
+    int                     GetFileSize() const { return mnFileSize; }
     const ::rtl::OString*   GetFileName() const { return &maNativeFileName; }
 
 private:
@@ -104,12 +106,10 @@ public:
     FtFontInfo( const ImplFontData&, const ::rtl::OString&,
         int nFaceNum, int nFontId, int nSynthetic );
 
-    bool                  MapFile() { return mpFontFile->Map(); }
-    void                  Unmap() { mpFontFile->Unmap(); }
-
-    int                   GetFileSize() const { return mpFontFile->GetSize(); }
-    const unsigned char*  GetBuffer() const { return mpFontFile->GetBuffer(); }
     const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
+
+    FT_FaceRec_*          GetFaceFT();
+    void                  ReleaseFaceFT();
 
     const ::rtl::OString* GetFontFileName() const { return mpFontFile->GetFileName(); }
     const ImplFontData&   GetFontData() const { return maFontData; }
@@ -129,6 +129,10 @@ private:
     const int       mnSynthetic;
     int             mnFontId;
 
+    FT_FaceRec_*    maFaceFT;
+    int             mnRefCount;
+
+    // cache unicode->glyphid mapping because looking it up is expensive
     typedef ::std::hash_map<sal_Unicode,int> FIGlyphMap;
     mutable FIGlyphMap maGlyphMap;
 };
@@ -177,7 +181,7 @@ private:
 
 class FreetypeServerFont : public ServerFont
 {
-    public:
+public:
                                 FreetypeServerFont( const ImplFontSelectData&, FtFontInfo* );
     virtual                     ~FreetypeServerFont();
 
@@ -215,15 +219,15 @@ friend GlyphCache;
 
 private:
     int                         mnWidth;
-    struct FT_FaceRec_*         maFaceFT;
     FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
     double                      mfStretch;
+    FT_FaceRec_*                maFaceFT;
+    FT_SizeRec_*                maSizeFT;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
     rtl_UnicodeToTextConverter  maRecodeConverter;
-
 
     ServerFontLayoutEngine*     mpLayoutEngine;
 };
