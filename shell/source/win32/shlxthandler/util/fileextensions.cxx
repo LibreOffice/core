@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileextensions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:35:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,13 @@
 //
 //------------------------------------
 
-const std::string WRITER_FILE_EXTENSIONS  = "sxwstwsxgoxtottoxgootoom";
-const std::string CALC_FILE_EXTENSIONS    = "sxcstcoxsotsoos";
-const std::string DRAW_FILE_EXTENSIONS    = "sxdstdoxdotdood";
-const std::string IMPRESS_FILE_EXTENSIONS = "sxistioxpotpoop";
-const std::string MATH_FILE_EXTENSIONS    = "sxmoxfoof";
+const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgootottoom";
+const std::string CALC_FILE_EXTENSIONS     = "sxcstcoosots";
+const std::string DRAW_FILE_EXTENSIONS     = "sxdstdoodotd";
+const std::string IMPRESS_FILE_EXTENSIONS  = "sxistioopotp";
+const std::string MATH_FILE_EXTENSIONS     = "sxmoof";
+const std::string WEB_FILE_EXTENSIONS      = "oth";
+const std::string DATABASE_FILE_EXTENSIONS = "odb";
 
 FileExtensionEntry OOFileExtensionTable[] = {
     { ".sxw", L".sxw", "soffice.StarWriterDocument.6"      },
@@ -133,6 +135,10 @@ File_Type_t get_file_type(const std::string& file_name)
         return IMPRESS;
     else if (std::string::npos != MATH_FILE_EXTENSIONS.find(fext))
         return MATH;
+    else if (std::string::npos != WEB_FILE_EXTENSIONS.find(fext))
+        return WEB;
+    else if (std::string::npos != DATABASE_FILE_EXTENSIONS.find(fext))
+        return DATABASE;
     else
         return UNKNOWN;
 }
