@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const ::rtl::OUString& aNewName )
 {
-    sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+    sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     uno::Reference< io::XStream > xNewOwnStream = xNewParentStorage->openStreamElement( aNewName, nStreamMode );
     OSL_ENSURE( xNewOwnStream.is(), "The method can not return empty reference!" );
@@ -203,21 +203,21 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     sal_Bool bResult = sal_False;
 
     OSL_ENSURE( m_nObjectState != -1, "The object has no persistence!\n" );
-    OSL_ENSURE( m_nObjectState != embed::EmbedStates::EMBED_LOADED, "The object get OnShowWindow in loaded state!\n" );
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    OSL_ENSURE( m_nObjectState != embed::EmbedStates::LOADED, "The object get OnShowWindow in loaded state!\n" );
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         return sal_False;
 
     // the object is either activated or deactivated
-    if ( bShow && m_nObjectState == embed::EmbedStates::EMBED_RUNNING )
-        m_nObjectState = embed::EmbedStates::EMBED_ACTIVE;
-    else if ( !bShow && m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
-        m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+    if ( bShow && m_nObjectState == embed::EmbedStates::RUNNING )
+        m_nObjectState = embed::EmbedStates::ACTIVE;
+    else if ( !bShow && m_nObjectState == embed::EmbedStates::ACTIVE )
+        m_nObjectState = embed::EmbedStates::RUNNING;
 
     if ( m_xClientSite.is() )
     {
         try
         {
-            m_xClientSite->onShowWindow( bShow );
+            m_xClientSite->visibilityChanged( bShow );
             bResult = sal_True;
         }
         catch( uno::Exception& )
@@ -324,9 +324,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
-    // May be EMBED_LOADED should be forbidden here ???
-    if ( ( m_nObjectState != -1 || nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
-      && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::ENTRY_NO_INIT ) )
+    // May be LOADED should be forbidden here ???
+    if ( ( m_nObjectState != -1 || nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
+      && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::NO_INIT ) )
     {
         // if the object is not loaded
         // it can not get persistant representation without initialization
@@ -357,7 +357,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         if ( lArguments[nInd].Name.equalsAscii( "ReadOnly" ) )
             lArguments[nInd].Value >>= m_bReadOnly;
 
-    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     SwitchOwnPersistence( xStorage, sEntName );
 
@@ -366,7 +366,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             lObjArgs[nInd].Value >>= m_bStoreVisRepl;
 
 #ifdef WNT
-    if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
+    if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT )
     {
         if ( bElExists )
         {
@@ -376,7 +376,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             CreateOleComponentAndLoad_Impl( NULL );
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
 
-            m_nObjectState = embed::EmbedStates::EMBED_LOADED;
+            m_nObjectState = embed::EmbedStates::LOADED;
         }
         else
         {
@@ -384,30 +384,30 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             CreateOleComponent_Impl();
             m_pOleComponent->CreateNewEmbeddedObject( m_aClassID );
             m_pOleComponent->RunObject();
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
     }
     else
     {
-        if ( ( nStorageMode & embed::ElementModes::ELEMENT_READWRITE ) != embed::ElementModes::ELEMENT_READWRITE )
+        if ( ( nStorageMode & embed::ElementModes::READWRITE ) != embed::ElementModes::READWRITE )
             throw io::IOException();
 
-        if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
+        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
         {
             // the document just already changed its stream to store to;
             // the links to OLE documents switch their persistence in the same way
             // as normal embedded objects
         }
-        else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRUNCATE_INIT )
+        else if ( nEntryConnectionMode == embed::EntryInitModes::TRUNCATE_INIT )
         {
             // create a new object, that will be stored in specified stream
             CreateOleComponent_Impl();
 
             m_pOleComponent->CreateNewEmbeddedObject( m_aClassID );
             m_pOleComponent->RunObject();
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
-        else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT )
+        else if ( nEntryConnectionMode == embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT )
         {
             // use URL ( may be content or stream later ) from MediaDescriptor to initialize object
             ::rtl::OUString aURL;
@@ -432,9 +432,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             m_pOleComponent->RunObject();
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
 
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
-        //else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRANSFERABLE_INIT )
+        //else if ( nEntryConnectionMode == embed::EntryInitModes::TRANSFERABLE_INIT )
         //{
             //TODO:
         //}
@@ -445,7 +445,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     }
 #else
     // On unix the ole object can not do anything except storing itself somewere
-    if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT && bElExists )
+    if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT && bElExists )
     {
         // TODO: detect classID of the object
         // can be a real problem for the links
@@ -488,7 +488,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( m_bReadOnly )
         throw io::IOException(); // TODO: access denied
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
         return; // nothing to do, the object is in loaded state
 
 #ifdef WNT
@@ -524,7 +524,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     // TODO:
     // notify listeners
-    if ( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+    if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
     {
         // TODO: update visual representation
     }
@@ -562,7 +562,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
     }
@@ -573,7 +573,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
             throw uno::RuntimeException();
 
         uno::Reference< io::XStream > xTargetStream =
-                xStorage->openStreamElement( sEntName, embed::ElementModes::ELEMENT_READWRITE );
+                xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
         if ( !xTargetStream.is() )
             throw io::IOException(); //TODO: access denied
 
@@ -639,7 +639,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
     uno::Reference< io::XStream > xTargetStream =
-            xStorage->openStreamElement( sEntName, embed::ElementModes::ELEMENT_READWRITE );
+            xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
     if ( !xTargetStream.is() )
         throw io::IOException(); //TODO: access denied
 
@@ -653,7 +653,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
         if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
             lObjArgs[nInd].Value >>= bStoreVis;
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         if ( bStoreVis != m_bStoreVisRepl )
             throw lang::IllegalArgumentException(
@@ -742,7 +742,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     {
         // TODO: notify listeners
 
-        if ( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+        if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
         {
             // TODO: update visual representation
         }
@@ -920,16 +920,16 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
 
-    if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
         // TODO: should we activate the new object if the link was activated?
 
         sal_Int32 nTargetState = m_nObjectState;
-        m_nObjectState = embed::EmbedStates::EMBED_LOADED;
+        m_nObjectState = embed::EmbedStates::LOADED;
 
-        if ( m_nObjectState == embed::EmbedStates::EMBED_RUNNING )
+        if ( m_nObjectState == embed::EmbedStates::RUNNING )
             m_pOleComponent->RunObject();
-        else // m_nObjectState == embed::EmbedStates::EMBED_ACTIVE
+        else // m_nObjectState == embed::EmbedStates::ACTIVE
         {
             m_pOleComponent->RunObject();
             m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
