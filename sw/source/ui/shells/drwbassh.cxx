@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,13 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     {
         case FN_DRAW_WRAP_DLG:
         {
-            if(pSdrView->HasMarkedObj())
+            if(pSdrView->AreObjectsMarked())
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
 
                 if(!pArgs)
                 {
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != 0 )
                     {
                         SfxItemSet aSet(GetPool(),  RES_SURROUND, RES_SURROUND,
@@ -322,13 +322,13 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_TRANSFORM:
         {
-            if(pSdrView->HasMarkedObj())
+            if(pSdrView->AreObjectsMarked())
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
 
                 if(!pArgs)
                 {
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != 0 )
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -587,7 +587,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         {
             if ( bAlignPossible )
             {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
                 {   // Objekte nicht aneinander ausrichten
 
@@ -669,7 +669,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case FN_NAME_GROUP:
         {
             bDone = TRUE;
-            const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             DBG_ASSERT(rMarkList.GetMarkCount() == 1, "Exactly one object has to be selected" )
             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
             ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -721,7 +721,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
 {
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection")
     SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
     ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -806,7 +806,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 else
                 {
                     SfxAllEnumItem aEnumItem(nWhich, USHRT_MAX);
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     //if only one object is selected it can only be vertically
                     // aligned because it is character bound
                     if( rMarkList.GetMarkCount() == 1 )
@@ -821,7 +821,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case FN_NAME_GROUP :
             {
                 BOOL bDisable = TRUE;
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 )
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
