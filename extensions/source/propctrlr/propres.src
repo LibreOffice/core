@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:43:29 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/08/13 20:43:29  kz
+ *  Merge SRC638: 08/13/01 - 22:43:41
+ *
  *  Revision 1.12  2001/08/07 15:05:37  rt
  *  Merge SRC638: 07.08.01 - 17:04:40
  *
@@ -210,6 +213,7 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
 
 
 
