@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubTotalDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com {  module sun {  module star {  module sheet {
     <p>The descriptor contains properties and a collection of subtotal fields
     which control the behaviour of operation.</p>
  */
-service SubTotalDescriptor
+published service SubTotalDescriptor
 {
     //-------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ service SubTotalDescriptor
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** procides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
