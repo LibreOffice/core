@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 18:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1725,7 +1725,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
             BOOL bINet = nWhich == RES_TXTATR_INETFMT;
             BOOL bForgetAttr = bParaAttr;
             // Muessen wir uns aufspalten?
-            if ( !bINet || !pHint->IsDontMergeAttr() )
+            if ( !bINet && !pHint->IsDontMergeAttr() )
             {
                 // Ab der zweiten Runde muessen wir zunaechst einen neuen
                 // Hint erzeugen.
