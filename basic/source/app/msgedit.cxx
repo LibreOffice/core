@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 17:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , pBasicFrame(pBF)
 , pCurrentRun(NULL)
 , pCurrentTestCase(NULL)
+, pCurrentAssertion( NULL )
 , pCurrentError(NULL)
 , nVersion(0)
 , bFileLoading(FALSE)
@@ -168,8 +169,11 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
         String aLastPart = LogMsg->aDebugData.aMsg.Copy( nPos+nSysLineEndLen );
         LogMsg->aDebugData.aMsg.Erase( nPos );
         AddAnyMsg( LogMsg );
-        LogMsg->aDebugData.aMsg = aLastPart;
-        AddAnyMsg( LogMsg );
+        if ( aLastPart.Len() )
+        {
+            LogMsg->aDebugData.aMsg = aLastPart;
+            AddAnyMsg( LogMsg );
+        }
     }
     else
     {
@@ -194,6 +198,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             case LOG_MESSAGE:   AddMessage( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_WARNING:   AddWarning( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_ASSERTION: AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_ASSERTION_STACK:   AddAssertionStack( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_QA_ERROR:  AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
             default:DBG_ERROR("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
         }
@@ -236,6 +241,7 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
 
     aEditTree.ShowEntry( pCurrentRun );
     pCurrentTestCase = NULL;
+    pCurrentAssertion = NULL;
     pCurrentError = NULL;
     aDebugData.aLogType = LOG_RUN;      // Da auch von anderswo aufgerufen
     ADD_TTDEBUGDATA( pCurrentRun );
@@ -257,6 +263,7 @@ void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
             ADD_TTDEBUGDATA( pCurrentTestCase );
         }
     }
+    pCurrentAssertion = NULL;
     pCurrentError = NULL;
 }
 
@@ -339,6 +346,12 @@ void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
 
 void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
 {
+    const String aAssertionStackPrefix( CUniString(ASSERTION_STACK_PREFIX) );
+    if ( aMsg.Match( aAssertionStackPrefix ) == aAssertionStackPrefix.Len() )
+    {
+        AddAssertionStack( aMsg, aDebugData );
+        return;
+    }
     SvLBoxEntry *pThisEntry = NULL;
     if ( pCurrentTestCase )
         pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
@@ -354,6 +367,33 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
     aDebugData.aLogType = LOG_ASSERTION;        // Da auch von anderswo aufgerufen
+    ADD_TTDEBUGDATA( pThisEntry );
+
+    pCurrentAssertion = pThisEntry;
+
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+        aEditTree.InvalidateEntry( pThisEntry );
+}
+
+void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
+{
+    SvLBoxEntry *pThisEntry = NULL;
+    if ( pCurrentAssertion )
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentAssertion );
+    else if ( pCurrentTestCase )
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+    else if ( pCurrentRun )
+    {
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        aEditTree.ShowEntry( pThisEntry );
+    }
+    else
+    {
+        AddRun( aMsg, aDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        aEditTree.ShowEntry( pThisEntry );
+    }
+    aDebugData.aLogType = LOG_ASSERTION_STACK;      // Da auch von anderswo aufgerufen
     ADD_TTDEBUGDATA( pThisEntry );
 
     while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
@@ -419,6 +459,7 @@ void MsgEdit::Delete()
     aEditTree.RemoveSelection();
     CHECK( pCurrentRun );
     CHECK( pCurrentTestCase );
+    CHECK( pCurrentAssertion );
     CHECK( pCurrentError );
     bModified = TRUE;
     lModify.Call( NULL );
@@ -444,6 +485,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
         case LOG_MESSAGE:   break;
         case LOG_WARNING:   break;
         case LOG_ASSERTION: break;
+        case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");  break;
         case LOG_QA_ERROR:  break;
         default:DBG_ERROR("Unbekannter Typ im ResultFenster");
     }
@@ -846,6 +888,7 @@ TTFeatures TTTreeListBox::GetFeatures( SvLBoxEntry* pEntry )
                 return aResult;
             }
         case LOG_ASSERTION:
+        case LOG_ASSERTION_STACK:
                 return HasAssertion;
         case LOG_QA_ERROR:
                 return HasQAError;
