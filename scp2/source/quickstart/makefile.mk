@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 17:55:45 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:26:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,8 @@ PARFILES= \
         procedure_quickstart.par
 .ENDIF
 
-LNGFILES= \
-        module_quickstart.lng
+ULFFILES= \
+        module_quickstart.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
