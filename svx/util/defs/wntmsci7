@@ -20277,3 +20277,9 @@ writeInfo
 ?getCurrentText@CheckBoxWrapper@svxform@@UBE?AVOUString@rtl@@XZ
 ?getCurrentText@ListBoxWrapper@svxform@@UBE?AVOUString@rtl@@XZ
 ?getCurrentText@SimpleTextWrapper@svxform@@UBE?AVOUString@rtl@@XZ
+?_M_insert_overflow@?$vector@PAVSfxItemSet@@V?$allocator@PAVSfxItemSet@@@_STL@@@_STL@@IAEXPAPAVSfxItemSet@@ABQAV3@I@Z
+?__uninitialized_copy_aux@_STL@@YAPAPAVSfxItemSet@@PAPAV2@00U__false_type@@@Z
+?__uninitialized_fill_n_aux@_STL@@YAPAPAVSfxItemSet@@PAPAV2@IABQAV2@U__false_type@@@Z
+?_M_insert@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@UUStringLess@comphelper@@V?$allocator@VOUString@rtl@@@4@@_STL@@AAE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Nonconst_traits@VOUString@rtl@@@_STL@@@2@PAU_Rb_tree_node_base@2@0ABVOUString@rtl@@@Z
+?begin@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@UUStringLess@comphelper@@V?$allocator@VOUString@rtl@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Nonconst_traits@VOUString@rtl@@@_STL@@@2@XZ
+?destroy_node@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@UUStringLess@comphelper@@V?$allocator@VOUString@rtl@@@4@@_STL@@IAEXPAU?$_Rb_tree_node@VOUString@rtl@@@2@@Z
