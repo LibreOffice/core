@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,17 @@
 #ifndef _SVDOVIRT_HXX
 #include <svx/svdovirt.hxx>
 #endif
+// OD 2004-01-16 #110582#
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+
+#ifndef _FMTANCHR_HXX //autogen
+#include <fmtanchr.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
 
 // OD 17.06.2003 #108784#
 #include <list>
@@ -87,6 +98,10 @@ class SwFlyDrawObj;
 class SwRect;
 // OD 17.06.2003 #108784# - forward declaration for class <SwDrawVirtObj>
 class SwDrawContact;
+// OD 2004-01-16 #110582#
+struct SwPosition;
+class SwNodeIndex;
+class SwIndex;
 
 //Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
 //Wenn das Object ein SwVirtFlyDrawObj ist so wird das Format von
@@ -125,6 +140,33 @@ class SwContact : public SdrObjUserCall, public SwClient
     //                 in the subclasses using method <SetInDTOR()>.
     bool mbInDTOR;
 
+    /** method to move object to visible/invisible layer
+
+        OD 21.08.2003 #i18447#
+        Implementation for the public method <MoveObjToVisibleLayer(..)>
+        and <MoveObjToInvisibleLayer(..)>
+        If object is in invisble respectively visible layer, its moved to
+        the corresponding visible respectively invisible layers.
+        For group object the members are individually moved to the corresponding
+        layer, because <SdrObjGroup::GetLayer()> does return 0, if members
+        aren't on the same layer as the group object, and
+        <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
+        the members.
+        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact>
+
+        @author OD
+
+        @param _bToVisible
+        input parameter - boolean indicating, if object has to be moved to
+        visible (== true) or invisible (== false) layer.
+
+        @param _pDrawObj
+        input parameter, which will be changed - drawing object, which will
+        change its layer.
+    */
+    void _MoveObjToLayer( const bool _bToVisible,
+                          SdrObject* _pDrawObj );
+
 protected:
     // OD 05.09.2003 #112039# - accessor to set member <mbInDTOR>
     void SetInDTOR();
@@ -153,6 +195,63 @@ public:
 
     // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
     const bool IsInDTOR() const;
+
+    /** method to move drawing object to corresponding visible layer
+
+        OD 21.08.2003 #i18447#
+        uses method <_MoveObjToLayer(..)>
+        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact> and made virtual
+
+        @author OD
+
+        @param _pDrawObj
+        drawing object, which will be moved to the visible layer
+    */
+    virtual void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
+
+    /** method to move drawing object to corresponding invisible layer
+
+        OD 21.08.2003 #i18447#
+        uses method <_MoveObjToLayer(..)>
+        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact> and made virtual.
+
+        @author OD
+
+        @param _pDrawObj
+        drawing object, which will be moved to the visible layer
+    */
+    virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
+
+    // -------------------------------------------------------------------------
+    // OD 2004-01-16 #110582# - some virtual helper methods for information
+    // about the object (Writer fly frame resp. drawing object)
+    const SwFmtAnchor& GetAnchorFmt() const
+    {
+        ASSERT( GetFmt(),
+                "<SwContact::GetAnchorFmt()> - no frame format -> crash" );
+
+        return GetFmt()->GetAnchor();
+    }
+
+    RndStdIds GetAnchorId() const { return GetAnchorFmt().GetAnchorId(); }
+    bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_PAGE; }
+    bool      ObjAnchoredAtFly() const { return GetAnchorId() == FLY_AT_FLY; }
+    bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_CNTNT; }
+    bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AUTO_CNTNT; }
+    bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_IN_CNTNT; }
+
+    const SwPosition&  GetCntntAnchor() const
+    {
+        ASSERT( GetAnchorFmt().GetCntntAnchor(),
+                "<SwContact::GetCntntAnchor()> - no content anchor -> crash" );
+
+        return *(GetAnchorFmt().GetCntntAnchor());
+    }
+
+    const SwNodeIndex& GetCntntAnchorNode() const;
+    const SwIndex&     GetCntntAnchorIndex() const;
+
+    // -------------------------------------------------------------------------
 };
 
 //KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
@@ -173,6 +272,11 @@ public:
     // virtuelle Methoden von SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
+    // OD 2004-01-16 #110582# - override methods to control Writer fly frames,
+    // which are linked, and to assure that all objects anchored at/inside the
+    // Writer fly frame are also made visible/invisible.
+    virtual void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
+    virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 };
 
 
@@ -336,32 +440,6 @@ class SwDrawContact : public SwContact
         void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
         void RemoveAllVirtObjs();
 
-        /** method to move object to visible/invisible layer
-
-            OD 21.08.2003 #i18447#
-            Implementation for the public method <MoveObjToVisibleLayer(..)>
-            and <MoveObjToInvisibleLayer(..)>
-            If object is in invisble respectively visible layer, its moved to
-            the corresponding visible respectively invisible layers.
-            For group object the members are individually moved to the corresponding
-            layer, because <SdrObjGroup::GetLayer()> does return 0, if members
-            aren't on the same layer as the group object, and
-            <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
-            the members.
-
-            @author OD
-
-            @param _bToVisible
-            input parameter - boolean indicating, if object has to be moved to
-            visible (== true) or invisible (== false) layer.
-
-            @param _pDrawObj
-            input parameter, which will be changed - drawing object, which will
-            change its layer.
-        */
-        void _MoveObjToLayer( const bool _bToVisible,
-                              SdrObject* _pDrawObj );
-
     public:
         TYPEINFO();
 
@@ -428,30 +506,6 @@ class SwDrawContact : public SwContact
         void MoveOffsetOfVirtObjs( const Size& _rMoveSize );
         void InvalidateAnchorOfVirtObjs();
         void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
-
-        /** method to move drawing object to corresponding visible layer
-
-            OD 21.08.2003 #i18447#
-            uses method <_MoveObjToLayer(..)>
-
-            @author OD
-
-            @param _pDrawObj
-            drawing object, which will be moved to the visible layer
-        */
-        void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
-
-        /** method to move drawing object to corresponding invisible layer
-
-            OD 21.08.2003 #i18447#
-            uses method <_MoveObjToLayer(..)>
-
-            @author OD
-
-            @param _pDrawObj
-            drawing object, which will be moved to the visible layer
-        */
-        void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 };
 
 #endif
