@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:43:29 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 08:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,16 @@
 // Forward-Deklaration
 class CharClass;
 
-struct ::com::sun::star::util::SearchResult;
-struct ::com::sun::star::util::SearchOptions;
+namespace com {
+    namespace sun {
+        namespace star {
+            namespace util {
+                struct SearchResult;
+                struct SearchOptions;
+            }
+        }
+    }
+}
 
 
 // SS - Klasse fuers Suchen
