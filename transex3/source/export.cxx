@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-29 14:13:57 $
+ *  last change: $Author: nf $ $Date: 2001-08-30 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1834,6 +1834,13 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 
             nEnd --;
             sLastListLine = rText;
+            if (( sLastListLine.Search( ">" ) != STRING_NOTFOUND ) &&
+                ( sLastListLine.Search( "<" ) == STRING_NOTFOUND ))
+            {
+                ByteString sTmp = sLastListLine;
+                sLastListLine = "<";
+                sLastListLine += sTmp;
+            }
             pResData->sId = ByteString::CreateFromInt32( nListIndex );
             if ( pResData->sGId.Len())
                 pResData->sGId += ".";
