@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ namespace dbp
                 xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("DefaultState"), makeAny(sal_Int16(1)));
 
             // the connection to the database field
-            if (0 == _rSettings.sDBField.Len())
+            if (0 != _rSettings.sDBField.Len())
                 xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(_rSettings.sDBField)));
 
             // the name for the model
@@ -278,6 +278,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.2  2001/02/21 12:11:58  fs
  *  +disambiguateName
  *
