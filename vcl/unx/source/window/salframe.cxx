@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
+ *  last change: $Author: pl $ $Date: 2001-09-13 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,24 +1088,47 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             aPosSize.setHeight (nHeight);
         }
 
-        // ignore request if frame would be placed outside the screen
+        // ignore request if frame is larger than screen
         const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
-        if( aPosSize.Left() >= 0
-            && aPosSize.Top() >= 0
-            && aPosSize.Right() < rScreenSize.Width()
-            && aPosSize.Bottom() < rScreenSize.Height() )
+        if( aPosSize.GetWidth() < rScreenSize.Width() &&
+            aPosSize.GetHeight() < rScreenSize.Height() )
         {
+            const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
+            int nGravity = pWM->getPositionWinGravity();
+
+            // adjust position so that frame fits onto screen
+            if( aPosSize.Right()+maFrameData.nRight_ >= rScreenSize.Width() )
+            {
+                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maFrameData.nRight_, 0 );
+                nGravity = EastGravity;
+            }
+            if( aPosSize.Bottom()+maFrameData.nBottom_ >= rScreenSize.Height() )
+            {
+                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maFrameData.nBottom_ );
+                nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
+            }
+            if( aPosSize.Left() < maFrameData.nLeft_ )
+            {
+                aPosSize.Move( (long)maFrameData.nLeft_ - (long)aPosSize.Left(), 0 );
+                nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
+            }
+            if( aPosSize.Top() < maFrameData.nTop_ )
+            {
+                aPosSize.Move( 0, (long)maFrameData.nTop_ - (long)aPosSize.Top() );
+                nGravity =
+                    ( nGravity == SouthEastGravity || nGravity == EastGravity ) ? NorthEastGravity :
+                    ( ( nGravity == SouthWestGravity || nGravity == WestGravity ) ? NorthWestGravity : NorthGravity );
+            }
+
             // demand correct positioning from the WM
             XSizeHints* pHints = XAllocSizeHints();
             long nSuppliedFlag;
-            const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
-
             Display*    pDisplay = _GetXDisplay();
             XLIB_Window hWindow  = maFrameData.GetShellWindow();
             if (XGetWMNormalHints (pDisplay, hWindow, pHints, &nSuppliedFlag))
             {
                 pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
-                pHints->win_gravity = pWM->getPositionWinGravity();
+                pHints->win_gravity = nGravity;
                 pHints->x           = aPosSize.getX();
                 pHints->y           = aPosSize.getY();
 
