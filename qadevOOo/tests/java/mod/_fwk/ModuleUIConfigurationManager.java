@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleUIConfigurationManager.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2004-11-02 12:00:24 $
+ *  last change: $Date: 2005-03-01 20:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,14 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;
 import com.sun.star.lang.EventObject;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.util.XCloseable;
-import drafts.com.sun.star.ui.ConfigurationEvent;
-import drafts.com.sun.star.ui.XUIConfigurationManager;
+import com.sun.star.ui.ConfigurationEvent;
+import com.sun.star.ui.XUIConfigurationManager;
 import ifc.ui._XUIConfigurationManager;
 import lib.StatusException;
 import lib.TestCase;
@@ -126,7 +126,7 @@ public class ModuleUIConfigurationManager extends TestCase {
             log.println("Creating instance...");
             xTextDoc = WriterTools.createTextDoc(xMSF);
 
-            Object o = (XInterface)xMSF.createInstance("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+            Object o = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             XModuleUIConfigurationManagerSupplier xMUICMS = (XModuleUIConfigurationManagerSupplier)
             UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);
 
@@ -169,9 +169,9 @@ public class ModuleUIConfigurationManager extends TestCase {
             tEnv.addObjRelation("XInitialization.args", initProps);
 
             // the short cut manager service name
-            // 2do: correct the service name when it's no longer in drafts
+            // 2do: correct the service name when it's no longer in
             tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
-                "drafts.com.sun.star.ui.ModuleAcceleratorConfiguration");
+                "com.sun.star.ui.ModuleAcceleratorConfiguration");
 
             // the resourceURL
             tEnv.addObjRelation("XModuleUIConfigurationManager.ResourceURL",
