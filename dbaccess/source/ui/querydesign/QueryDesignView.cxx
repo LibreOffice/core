@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 13:03:58 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,6 @@ using namespace ::com::sun::star::container;
 #define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
                                             (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e1) || \
                                             (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e2)))
-
-extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
 
 // here we define our functions used in the anonymous namespace to get our header file smaller
 // please look at the book LargeScale C++ to know why
@@ -383,11 +381,11 @@ namespace
                 {
                     if(aCondition.getLength())
                         aCondition += C_AND;
-                    aCondition += ::dbtools::quoteName(aQuote, ConvertAlias( pData->GetAliasName(JTCS_FROM) ));
+                    aCondition += ::dbtools::quoteName(aQuote, pData->GetAliasName(JTCS_FROM));
                     aCondition += ::rtl::OUString('.');
                     aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) );
                     aCondition += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                    aCondition += ::dbtools::quoteName(aQuote, ConvertAlias( pData->GetAliasName(JTCS_TO) ));
+                    aCondition += ::dbtools::quoteName(aQuote, pData->GetAliasName(JTCS_TO));
                     aCondition += ::rtl::OUString('.');
                     aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) );
                 }
@@ -441,6 +439,7 @@ namespace
             try
             {
                 Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
+
                 ::rtl::OUString aCatalog,aSchema,aTable,sComposedName;
                 ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable);
                 ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,sComposedName,sal_True);
@@ -448,7 +447,7 @@ namespace
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
                 ::rtl::OUString aTableListStr(sComposedName);
                 aTableListStr += ::rtl::OUString(' ');
-                aTableListStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryTab->GetAliasName())).getStr();
+                aTableListStr += ::dbtools::quoteName(aQuote, pEntryTab->GetAliasName());
                 aDBName = aTableListStr;
             }
             catch(SQLException&)
@@ -710,7 +709,7 @@ namespace
                     ::rtl::OUString rFieldAlias = pEntryField->GetFieldAlias();
                     if((bAlias || bAsterix) && rAlias.getLength())
                     {
-                        aTmpStr += ::dbtools::quoteName(aQuote,ConvertAlias(rAlias));
+                        aTmpStr += ::dbtools::quoteName(aQuote,rAlias);
                         aTmpStr += ::rtl::OUString('.');
                     }
                     // we have to look if we have alias.* here
@@ -811,7 +810,7 @@ namespace
                             if(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*'))
                                 aWork += aFieldName;
                             else
-                                aWork += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryField->GetAlias()));
+                                aWork += ::dbtools::quoteName(aQuote, pEntryField->GetAlias());
                             aWork += ::rtl::OUString('.');
                         }
                         if(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*'))
@@ -843,7 +842,7 @@ namespace
                             if (pParseNode)
                             {
                                 if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
-                                    pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
+                                    pParseNode->replaceNodeValue(pEntryField->GetAlias(),aFieldName);
                                 ::rtl::OUString sHavingStr = aHavingStr;
                                 OSL_ENSURE(pParseNode->count() == 3,"Count must be three here!");
                                 for( sal_Int32 i = 1 ; i < 3 ; ++i)
@@ -874,7 +873,7 @@ namespace
                             if (pParseNode)
                             {
                                 if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
-                                    pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
+                                    pParseNode->replaceNodeValue(pEntryField->GetAlias(),aFieldName);
                                 ::rtl::OUString aWhere = aWhereStr;
                                 pParseNode->parseNodeToStr( aWhere,
                                                             xMetaData,
@@ -976,7 +975,7 @@ namespace
                     {
                         if (bMulti && pEntryField->GetAlias().getLength())
                         {
-                            aWorkStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryField->GetAlias())).getStr();
+                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
                             aWorkStr += String('.');
                         }
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
@@ -992,7 +991,7 @@ namespace
                         aWorkStr +=  String('(');
                         if (bMulti && pEntryField->GetAlias().getLength())
                         {
-                            aWorkStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryField->GetAlias())).getStr();
+                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
                             aWorkStr += String('.');
                         }
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
@@ -1002,7 +1001,7 @@ namespace
                     {
                         if (bMulti && pEntryField->GetAlias().getLength())
                         {
-                            aWorkStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryField->GetAlias())).getStr();
+                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
                             aWorkStr += String('.');
                         }
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
@@ -1205,7 +1204,7 @@ namespace
                     DBG_ASSERT(pEntryField->GetField().getLength(),"Kein FieldName vorhanden!;-(");
                     if (bMulti)
                     {
-                        aGroupByStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryField->GetAlias()));
+                        aGroupByStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias());
                         aGroupByStr += ::rtl::OUString('.');
                     }
 
