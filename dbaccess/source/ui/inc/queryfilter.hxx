@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:06:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ namespace com
             namespace sdb
             {
                 class XSingleSelectQueryComposer;
-                class XSingleSelectQueryAnalyzer;
             }
             namespace sdbc
             {
@@ -155,7 +154,6 @@ namespace dbaui
         String          aSTR_COMPARE_OPERATORS;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer>    m_xQueryAnalyzer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
@@ -181,14 +179,12 @@ namespace dbaui
         DlgFilterCrit(  Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer>& _xAnalyzer,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols
                     );
         ~DlgFilterCrit();
 
-        String          BuildWherePart();
-
-        void            GetFilterList( ) const;
+        void            BuildWherePart();
 
     protected:
         DECL_LINK( PredicateLoseFocus, Edit* );
