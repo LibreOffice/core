@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
+ *  last change: $Author: cmc $ $Date: 2001-07-17 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,7 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM,
 // Dieses Vorgehen ist noetig geworden, da die UEbersetzung der verschiedenen
 // Seiten-Attribute zu stark verflochten ist.
 
-void SwWW8ImplReader::CreateSep(const long nTxtPos)
+void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 {/*static BYTE __READONLY_DATA nHdFtType[] =
         { WW8_HEADER_EVEN,  WW8_HEADER_ODD,
             WW8_FOOTER_EVEN,  WW8_FOOTER_ODD,
@@ -1296,7 +1296,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                 switch( nBreakCode )
                 {
                 case 0:
-#if 1
                     InsertSectionWithWithoutCols( *pPaM, 0 );
                     if( pPageDesc )
                     {
@@ -1309,45 +1308,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                         SetCols( pNewSection->GetFmt(), pSep,
                             nWidth - nLeft - nRight );
                     }
-#else   //Old (seemingly) duplicate code
-                    {
-                        if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                            rDoc.AppendTxtNode( *pPaM->GetPoint() );
-                        // Abschnittsweschsel: neuer Bereich
-                        SwSection aSection( CONTENT_SECTION,
-                                            rDoc.GetUniqueSectionName() );
-
-                        SfxItemSet aSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
-                        if( 2 == pWDop->fpc )
-                            aSet.Put( SwFmtFtnAtTxtEnd( FTNEND_ATTXTEND ));
-                        if( 3 == pWDop->epc )
-                            aSet.Put( SwFmtEndAtTxtEnd( FTNEND_ATTXTEND ));
-
-                        pNewSection = rDoc.Insert( *pPaM, aSection, &aSet );
-
-                        // Anzahl der Spalten einstellen
-                        if( pPageDesc )
-                        {
-                            SwFrmFmt& rFmt = pPageDesc->GetMaster();
-                            const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
-                            const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
-                            SwTwips nWidth = rSz.GetWidth();
-                            USHORT  nLeft  = rLR.GetTxtLeft();
-                            USHORT  nRight = rLR.GetRight();
-                            SetCols( pNewSection->GetFmt(), pSep, nWidth - nLeft - nRight );
-                        }
-                        // PaM in Node der Section setzen
-                        const SwSectionNode* pSectionNode =
-                            pNewSection->GetFmt()->GetSectionNode();
-                        ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
-                        pBehindSection = new SwNodeIndex( pPaM->GetPoint()->nNode );
-
-                        pPaM->GetPoint()->nNode =
-                            pSectionNode->GetIndex()+1;
-                        pPaM->GetPoint()->nContent.Assign(
-                            pPaM->GetCntntNode(), 0 );
-                    }
-#endif
                     break;
                 case 1:
                     if( bNew )
@@ -1369,7 +1329,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                     */
                     if( bNew )
                     {
-                        if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                        if( 0 <= pPaM->GetPoint()->nContent.GetIndex() )
                             rDoc.AppendTxtNode( *pPaM->GetPoint() );
 
                         if( pPageDesc )
@@ -1390,6 +1350,14 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
             && (    bSectionWasJustClosed
                  || (pPageDesc != &rDoc._GetPageDesc( 0 )) ) )
         {
+            if ((nBreakCode > 1) && bMustHaveBreak)
+            {
+                if( 0 <= pPaM->GetPoint()->nContent.GetIndex() )
+                    rDoc.AppendTxtNode( *pPaM->GetPoint() );
+
+                if( pPageDesc )
+                    rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
+            }
             // Create and *insert* PageDesc
             SwPaM* pPageDeskPaM = 0;
             pPageDesc = CreatePageDesc( 0, &pPageDeskPaM );
@@ -5156,12 +5124,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.31 2001-07-13 14:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.32 2001-07-17 13:28:26 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.31  2001/07/13 14:08:12  cmc
+      #89125# WW6 Redline authorname table import fix ( + new undocumented sprms)
+
       Revision 1.30  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 

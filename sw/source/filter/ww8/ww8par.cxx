@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 13:00:33 $
+ *  last change: $Author: cmc $ $Date: 2001-07-17 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1811,9 +1811,11 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
     if( aRes.nFlags & MAN_MASK_NEW_SEP ){   // neue Section
+        CreateSep( rTxtPos, bPgSecBreak );  // PageDesc erzeugen und fuellen
+                                            // -> 0xc war ein Sectionbreak, aber
+                                            // kein Pagebreak;
         bPgSecBreak = FALSE;                // PageDesc erzeugen und fuellen
-        CreateSep( rTxtPos );               // -> 0xc war ein Sectionbreak, aber
-    }                                       // kein Pagebreak;
+    }
 
     if(    ( aRes.nFlags & MAN_MASK_NEW_PAP )   // neuer Absatz ueber Plcx.Fkp.papx
             || rbStartLine )
@@ -3081,11 +3083,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.25 2001-07-17 13:00:33 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.26 2001-07-17 13:28:26 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/07/17 13:00:33  cmc
+      #89801# ##1140## Frame attributes in cells past the first cell in a table are to be ignored
+
       Revision 1.24  2001/06/12 09:24:43  cmc
       #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
 
