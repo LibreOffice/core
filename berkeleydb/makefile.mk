@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-07 18:40:42 $
+#   last change: $Author: hjs $ $Date: 2001-06-08 09:24:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,13 +79,13 @@ PATCH_FILE_NAME=none
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=../dist$/configure
+CONFIGURE_ACTION=..$/dist$/configure
 CONFIGURE_FLAGS=--enable-cxx --enable-java --enable-dynamic --enable-shared
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/.libs/libdb*.so
+OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*.so
 
 OUT2BIN=java$/classes$/db.jar
     
@@ -94,15 +94,15 @@ OUT2BIN=java$/classes$/db.jar
 .IF "$(GUI)"=="WNT"
 
 BUILD_DIR=build_win32
-BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE"
+BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" /MAKE "db_java - RELEASE"
 
 OUT2BIN=java$/classes$/db.jar \
-    $(BUILD_DIR)$/Release/libdb_java32.dll \
-    $(BUILD_DIR)$/Release/libdb32.dll
+    $(BUILD_DIR)$/Release$/libdb_java32.dll \
+    $(BUILD_DIR)$/Release$/libdb32.dll
 
 OUT2LIB= \
-    $(BUILD_DIR)$/Release/libdb_java32.lib \
-    $(BUILD_DIR)$/Release/libdb32.lib
+    $(BUILD_DIR)$/Release$/libdb_java32.lib \
+    $(BUILD_DIR)$/Release$/libdb32.lib
     
 .ENDIF			# "$(GUI)"=="WNT"
 
