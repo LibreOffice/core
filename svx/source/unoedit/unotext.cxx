@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 15:43:43 $
+ *  last change: $Author: cl $ $Date: 2002-11-26 17:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,15 +476,20 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
             }
             else
             {
-                sal_Int32 nEndPara = nPara;
+                sal_Int32 nEndPara;
 
                 if( nPara == -1 )
                 {
                     nPara = aSel.nStartPara;
                     nEndPara = aSel.nEndPara;
                 }
+                else
+                {
+                    // only one paragraph
+                    nEndPara = nPara;
+                }
 
-                do
+                while( nPara <= nEndPara )
                 {
                     // we have a paragraph
                     SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
@@ -492,7 +497,6 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
                     pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
                     nPara++;
                 }
-                while( nPara < nEndPara );
             }
 
             GetEditSource()->UpdateData();
@@ -832,14 +836,13 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
 
                 if( pNewParaSet->Count() )
                 {
-                    do
+                    while( nTempPara <= nEndPara )
                     {
                         SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
                         aSet.Put( *pNewParaSet );
                         pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
                         nTempPara++;
                     }
-                    while( nTempPara < nEndPara );
                     bNeedsUpdate = sal_True;
                 }
 
