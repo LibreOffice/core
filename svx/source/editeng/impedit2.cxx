@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 13:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,7 +1051,7 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( (USHORT)xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
     }
     else
     {
@@ -1074,7 +1074,7 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( (USHORT)xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
     }
     else
     {
@@ -1308,7 +1308,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
         i18n::Boundary aBoundary = xBI->getWordBoundary( *aNewPaM.GetNode(), nCurrentPos, GetLocale(), nWordType, sal_True );
         if ( aBoundary.startPos == nCurrentPos )
             aBoundary = xBI->previousWord( *aNewPaM.GetNode(), nCurrentPos, GetLocale(), nWordType );
-        aNewPaM.SetIndex( aBoundary.startPos );
+        aNewPaM.SetIndex( (USHORT)aBoundary.startPos );
     }
 
     return aNewPaM;
@@ -1322,7 +1322,7 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         i18n::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), nWordType );
-        aNewPaM.SetIndex( aBoundary.startPos );
+        aNewPaM.SetIndex( (USHORT)aBoundary.startPos );
     }
     // not 'else', maybe the index reached nMax now...
     if ( aNewPaM.GetIndex() >= nMax )
@@ -1344,7 +1344,7 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     EditPaM aNewPaM( rPaM );
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
-    aNewPaM.SetIndex( aBoundary.startPos );
+    aNewPaM.SetIndex( (USHORT)aBoundary.startPos );
     return aNewPaM;
 }
 
@@ -1353,7 +1353,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     EditPaM aNewPaM( rPaM );
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
-    aNewPaM.SetIndex( aBoundary.endPos );
+    aNewPaM.SetIndex( (USHORT)aBoundary.endPos );
     return aNewPaM;
 }
 
@@ -1366,8 +1366,8 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
     if ( nType == i18n::WordType::ANY_WORD )
     {
         i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale(), nWordType, sal_True );
-        aNewSel.Min().SetIndex( aBoundary.startPos );
-        aNewSel.Max().SetIndex( aBoundary.endPos );
+        aNewSel.Min().SetIndex( (USHORT)aBoundary.startPos );
+        aNewSel.Max().SetIndex( (USHORT)aBoundary.endPos );
     }
 
     return aNewSel;
@@ -1384,22 +1384,22 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         ::rtl::OUString aText( *pNode );
-        USHORT nTextLen = aText.getLength();
+        USHORT nTextLen = (USHORT)aText.getLength();
 
 
         long nPos = 0;
         short nScriptType = xBI->getScriptType( aText, nPos );
-        rTypes.Insert( ScriptTypePosInfo( nScriptType, nPos, nTextLen ), rTypes.Count() );
+        rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
         nPos = xBI->endOfScript( aText, nPos, nScriptType );
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
-            rTypes[rTypes.Count()-1].nEndPos = nPos;
+            rTypes[rTypes.Count()-1].nEndPos = (USHORT)nPos;
 
             nScriptType = xBI->getScriptType( aText, nPos );
             if ( nScriptType == i18n::ScriptType::WEAK )
                 nScriptType = rTypes[rTypes.Count()-1].nScriptType;
 
-            rTypes.Insert( ScriptTypePosInfo( nScriptType, nPos, nTextLen ), rTypes.Count() );
+            rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
             nPos = xBI->endOfScript( aText, nPos, nScriptType );
         }
 
@@ -1459,13 +1459,13 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
                {
                 switch ( rTypes[n].nScriptType )
                 {
-                    case text::ScriptType::LATIN:
+                    case i18n::ScriptType::LATIN:
                         nScriptType |= SCRIPTTYPE_LATIN;
                         break;
-                    case text::ScriptType::ASIAN:
+                    case i18n::ScriptType::ASIAN:
                         nScriptType |= SCRIPTTYPE_ASIAN;
                         break;
-                    case text::ScriptType::COMPLEX:
+                    case i18n::ScriptType::COMPLEX:
                         nScriptType |= SCRIPTTYPE_COMPLEX;
                         break;
                 }
@@ -1568,13 +1568,13 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
     if ( nNewPos == 0 ) // Move to Start
     {
         pRecalc1 = GetParaPortions().GetObject( 0 );
-        pRecalc2 = GetParaPortions().GetObject( aOldPositions.Min() );
+        pRecalc2 = GetParaPortions().GetObject( (USHORT)aOldPositions.Min() );
 
     }
     else if ( nNewPos == nParaCount )
     {
-        pRecalc1 = GetParaPortions().GetObject( nParaCount-1 );
-        pRecalc2 = GetParaPortions().GetObject( aOldPositions.Max() );
+        pRecalc1 = GetParaPortions().GetObject( (USHORT)(nParaCount-1) );
+        pRecalc2 = GetParaPortions().GetObject( (USHORT)aOldPositions.Max() );
     }
 
     if ( aOldPositions.Min() == 0 ) // Move from Start
@@ -1582,10 +1582,10 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
         pRecalc3 = GetParaPortions().GetObject( 0 );
         pRecalc4 = GetParaPortions().GetObject( aOldPositions.Max()+1 );
     }
-    else if ( aOldPositions.Max() == (nParaCount-1) )
+    else if ( (USHORT)aOldPositions.Max() == (nParaCount-1) )
     {
-        pRecalc3 = GetParaPortions().GetObject( aOldPositions.Max() );
-        pRecalc4 = GetParaPortions().GetObject( aOldPositions.Min()-1 );
+        pRecalc3 = GetParaPortions().GetObject( (USHORT)aOldPositions.Max() );
+        pRecalc4 = GetParaPortions().GetObject( (USHORT)(aOldPositions.Min()-1) );
     }
 
     if ( IsUndoEnabled() && !IsInUndo())
