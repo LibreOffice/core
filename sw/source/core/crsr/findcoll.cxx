@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findcoll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:45:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ struct SwFindParaFmtColl : public SwFindParas
     SwCursor& rCursor;
     SwFindParaFmtColl( const SwTxtFmtColl& rFmtColl,
                         const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
-        : rCursor( rCrsr ), pFmtColl( &rFmtColl ), pReplColl( pRpColl )
+        : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
     virtual int IsReplaceMode() const;
