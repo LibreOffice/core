@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-11 12:03:16 $
+ *  last change: $Author: pb $ $Date: 2001-04-18 05:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ private:
     Edit                aExpressionED;
     ListBox             aResultsLB;
     PushButton          aOpenBtn;
+    Timer               aFactoryTimer;
 
     long                nMinWidth;
     String              aFactory;
@@ -109,6 +110,7 @@ private:
     void                ClearIndex();
 
     DECL_LINK(          OpenHdl, PushButton* );
+    DECL_LINK(          FactoryHdl, Timer* );
 
 public:
     IndexTabPage_Impl( Window* pParent );
@@ -172,6 +174,7 @@ private:
     FixedLine           aActiveLine;
 
     TabControl          aTabCtrl;
+    Timer               aInitTimer;
 
     ContentTabPage_Impl*    pCPage;
     IndexTabPage_Impl*      pIPage;
@@ -184,6 +187,7 @@ private:
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(          SelectHdl, ListBox* );
+    DECL_LINK(          InitHdl, Timer* );
 
 public:
     SfxHelpIndexWindow_Impl( Window* pParent );
@@ -198,19 +202,23 @@ public:
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
+class SfxHelpWindow_Impl;
 class SfxHelpTextWindow_Impl : public Window
 {
 private:
     ToolBox                 aToolBox;
+    SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             xFrame;
+    sal_Bool                bIsDebug;
 
 public:
-    SfxHelpTextWindow_Impl( Window* pParent );
+    SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
     ~SfxHelpTextWindow_Impl();
 
     virtual void            Resize();
+    virtual long            PreNotify( NotifyEvent& rNEvt );
 
     void                    SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
 
@@ -261,6 +269,7 @@ public:
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
     void                SetFactory( const String& rFactory, sal_Bool bStart );
+    void                DoAction( USHORT nActionId );
 };
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-16 11:47:25 $
+ *  last change: $Author: pb $ $Date: 2001-04-18 05:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "sfxresid.hxx"
 #include "helpinterceptor.hxx"
 #include "helper.hxx"
+#include "msgpool.hxx"
+#include "app.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -145,6 +147,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_FORWARD         1004
 #define TBI_CONTEXT         1005
 #define TBI_PRINT           1006
+#define TBI_SOURCEVIEW      1007
 
 #define HELPWIN_CONFIGNAME      String(DEFINE_CONST_UNICODE("OfficeHelp"))
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
@@ -155,7 +158,10 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define PARSE_URL( aURL ) \
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
             DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY ); \
-    xTrans->parseStrict( aURL ) \
+    xTrans->parseStrict( aURL )
+
+#define GET_SLOT_NAME( nId ) \
+    SFX_SLOTPOOL().GetSlotName_Impl( nId )
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -197,6 +203,8 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
     FreeResource();
 
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
+    aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
+    aFactoryTimer.SetTimeout( 200 );
 
     nMinWidth = GetSizePixel().Width();
 }
@@ -212,8 +220,6 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 void IndexTabPage_Impl::InitializeIndex()
 {
-    ClearIndex();
-
     try
     {
         ::rtl::OUString aURL = HELP_URL;
@@ -320,6 +326,14 @@ IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( IndexTabPage_Impl, FactoryHdl, Timer*, EMPTYARG )
+{
+    InitializeIndex();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void IndexTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
@@ -367,7 +381,8 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
     if ( rFactory != aFactory )
     {
         aFactory = rFactory;
-        InitializeIndex();
+        ClearIndex();
+        aFactoryTimer.Start();
     }
 }
 
@@ -525,7 +540,10 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
     ActivatePageHdl( &aTabCtrl );
     aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = aActiveLB.GetSizePixel().Width();
-    Initialize();
+
+    aInitTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
+    aInitTimer.SetTimeout( 200 );
+    aInitTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -565,6 +583,10 @@ void SfxHelpIndexWindow_Impl::Initialize()
         USHORT nPos = aActiveLB.InsertEntry( aTitle );
         aActiveLB.SetEntryData( nPos, (void*)(ULONG)pFactory );
     }
+
+    aActiveLB.SetDropDownLineCount( (USHORT)nCount );
+    if ( aActiveLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+        SetActiveFactory();
 }
 
 // -----------------------------------------------------------------------
@@ -641,6 +663,14 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
+{
+    Initialize();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpIndexWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
@@ -697,12 +727,14 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
-SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( Window* pParent ) :
+SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN ),
 
     aToolBox( this, 0 ),
-    pTextWin( new Window( this, 0 ) )
+    pHelpWin( pParent ),
+    pTextWin( new Window( this, 0 ) ),
+    bIsDebug( sal_False )
 
 {
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -729,6 +761,10 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( Window* pParent ) :
     aToolBox.SetSizePixel( aSize );
     aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.Show();
+
+    char* pEnv = getenv( "help_debug" );
+    if ( pEnv )
+        bIsDebug = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -751,6 +787,43 @@ void SfxHelpTextWindow_Impl::Resize()
     aSize = aWinSize;
     aSize.Height() -= nToolBoxHeight;
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
+}
+
+// -----------------------------------------------------------------------
+
+long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+    if ( rNEvt.GetType() == EVENT_COMMAND && rNEvt.GetCommandEvent() )
+    {
+        const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
+
+        if ( pCmdEvt->IsMouseEvent() && pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU )
+        {
+            // link at current mouse position ?
+            const Point&  rPos = pCmdEvt->GetMousePosPixel();
+            PopupMenu aMenu;
+            aMenu.InsertItem( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
+            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
+            if ( bIsDebug )
+            {
+                aMenu.InsertSeparator();
+                aMenu.InsertItem( TBI_SOURCEVIEW, String( SfxResId( STR_HELP_BUTTON_SOURCEVIEW ) ) );
+            }
+
+            USHORT nId = aMenu.Execute( this, rPos );
+            pHelpWin->DoAction( nId );
+            nDone = 1;
+        }
+    }
+
+    return nDone ? nDone : Window::PreNotify( rNEvt );
 }
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -887,76 +960,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
     if ( pToolBox )
-    {
-        USHORT nId = pToolBox->GetCurItemId();
-        switch ( nId )
-        {
-            case TBI_INDEX :
-            {
-                bIndex = !bIndex;
-                MakeLayout();
-                break;
-            }
-
-            case TBI_START :
-            {
-                String aStartURL;
-                aStartURL = HELP_URL;
-                aStartURL += pIndexWin->GetFactory();
-                aStartURL += DEFINE_CONST_UNICODE("/start");
-                AppendConfigToken_Impl( aStartURL, sal_True );
-
-                URL aURL;
-                aURL.Complete = aStartURL;
-                PARSE_URL( aURL );
-
-                String aTarget( DEFINE_CONST_UNICODE("_self") );
-                Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-                Reference < XDispatch > xDisp = xProv.is() ?
-                    xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
-
-                if ( xDisp.is() )
-                {
-                    Sequence < PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
-                    BOOL bReadOnly = TRUE;
-                    aArgs[0].Value <<= bReadOnly;
-                    xDisp->dispatch( aURL, aArgs );
-                }
-                break;
-            }
-
-            case TBI_BACKWARD :
-            case TBI_FORWARD :
-            {
-                URL aURL;
-                aURL.Complete = DEFINE_CONST_UNICODE(".uno:Backward");
-                if ( TBI_FORWARD == nId )
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Forward");
-                PARSE_URL( aURL );
-                pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
-                break;
-            }
-
-            case TBI_CONTEXT :
-                break;
-
-            case TBI_PRINT :
-            {
-                Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-                if ( xProv.is() )
-                {
-                    URL aURL;
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
-                    PARSE_URL( aURL );
-                    Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
-                    if ( xDisp.is() )
-                        xDisp->dispatch( aURL, Sequence < PropertyValue >() );
-                }
-                break;
-            }
-        }
-    }
+        DoAction( pToolBox->GetCurItemId() );
 
     return 1;
 }
@@ -1056,5 +1060,82 @@ void SfxHelpWindow_Impl::SetFactory( const String& rFactory, sal_Bool bStart )
     pIndexWin->SetFactory( rFactory, sal_True );
     if ( bStart )
         pHelpInterceptor->SetFactory( rFactory );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
+{
+    switch ( nActionId )
+    {
+        case TBI_INDEX :
+        {
+            bIndex = !bIndex;
+            MakeLayout();
+            break;
+        }
+
+        case TBI_START :
+        {
+            String aStartURL;
+            aStartURL = HELP_URL;
+            aStartURL += pIndexWin->GetFactory();
+            aStartURL += DEFINE_CONST_UNICODE("/start");
+            AppendConfigToken_Impl( aStartURL, sal_True );
+
+            URL aURL;
+            aURL.Complete = aStartURL;
+            PARSE_URL( aURL );
+
+            String aTarget( DEFINE_CONST_UNICODE("_self") );
+            Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+            Reference < XDispatch > xDisp = xProv.is() ?
+                xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
+
+            if ( xDisp.is() )
+            {
+                Sequence < PropertyValue > aArgs( 1 );
+                aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
+                BOOL bReadOnly = TRUE;
+                aArgs[0].Value <<= bReadOnly;
+                xDisp->dispatch( aURL, aArgs );
+            }
+            break;
+        }
+
+        case TBI_BACKWARD :
+        case TBI_FORWARD :
+        {
+            URL aURL;
+            aURL.Complete = DEFINE_CONST_UNICODE(".uno:Backward");
+            if ( TBI_FORWARD == nActionId )
+                aURL.Complete = DEFINE_CONST_UNICODE(".uno:Forward");
+            PARSE_URL( aURL );
+            pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
+            break;
+        }
+
+        case TBI_CONTEXT :
+            break;
+
+        case TBI_PRINT :
+        case TBI_SOURCEVIEW :
+        {
+            Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+            if ( xProv.is() )
+            {
+                URL aURL;
+                if ( TBI_PRINT == nActionId )
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
+                else
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SourceView");
+                PARSE_URL( aURL );
+                Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
+                if ( xDisp.is() )
+                    xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+            }
+            break;
+        }
+    }
 }
 

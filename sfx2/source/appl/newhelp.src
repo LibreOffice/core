@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:16:47 $
+ *  last change: $Author: pb $ $Date: 2001-04-18 05:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,5 +477,30 @@ String STR_HELP_BUTTON_PRINT
     Text[ chinese_traditional ] = "¦C¦L";
     Text[ turkish ] = "Print";
     Text[ arabic ] = "ØÈÇÚÉ";
+};
+
+String STR_HELP_BUTTON_SOURCEVIEW
+{
+    Text = "HTML-Quelltext";
+    Text[ english_us ] = "HTML Source";
+    Text[ portuguese ] = "Fonte HTML";
+    Text[ russian ] = "Èñòî÷íèê HTML";
+    Text[ dutch ] = "HTLM-brontekst";
+    Text[ french ] = "Texte source HTML";
+    Text[ spanish ] = "Texto fuente HTML";
+    Text[ italian ] = "Testo sorgente HTML";
+    Text[ danish ] = "HTML-kildetekst";
+    Text[ swedish ] = "HTML-källtext";
+    Text[ polish ] = "Tekst Ÿród³owy HTML";
+    Text[ portuguese_brazilian ] = "FramesetSource";
+    Text[ japanese ] = "HTML ¿°½Ã·½Ä";
+    Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
+    Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
+    Text[ arabic ] = "äÕ ãÕÏÑ HTML";
+    Text[ dutch ] = "HTLM-brontekst";
+    Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï ðñïÝëåõóçò HTML";
+    Text[ korean ] = "HTML ¼Ò½ºÅØ½ºÆ®";
+    Text[ turkish ] = "HTML kaynak kodu";
 };
 
