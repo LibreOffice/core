@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:06:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
+    { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_ID },
     XML_TOKEN_MAP_END
 };
 
