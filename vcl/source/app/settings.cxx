@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:11 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,6 +766,19 @@ void StyleSettings::SetStandardUnixStyles()
     return; // no more style changes since NWF
 }
 
+// -----------------------------------------------------------------------
+
+Color StyleSettings::GetFaceGradientColor() const
+{
+    // compute a brighter face color that can be used in gradients
+    // for a convex look (eg toolbars)
+
+    USHORT h, s, b;
+    GetFaceColor().RGBtoHSB( h, s, b );
+    if( s > 1) s=1;
+    if( b < 98) b=98;
+    return Color( Color::HSBtoRGB( h, s, b ) );
+}
 
 // -----------------------------------------------------------------------
 
