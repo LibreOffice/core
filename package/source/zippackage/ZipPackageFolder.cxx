@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-26 21:57:47 $
+ *  last change: $Author: mtg $ $Date: 2001-10-30 13:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ using namespace com::sun::star::io;
 using namespace cppu;
 using namespace rtl;
 using namespace std;
+using vos::ORef;
 
 ::cppu::class_data6 ZipPackageFolder::s_cd =
 {
@@ -490,14 +491,11 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    ContentInfo *pInfo;
-
     if ( pEntry->IsFolder() )
-        pInfo = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
+        maContents[pEntry->aEntry.sName] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
     else
-        pInfo = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
+        maContents[pEntry->aEntry.sName] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
 
-    maContents[pEntry->aEntry.sName] = auto_ptr < ContentInfo > ( pInfo );
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
