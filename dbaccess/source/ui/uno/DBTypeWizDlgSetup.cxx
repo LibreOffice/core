@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:09:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 #ifndef DBAUI_DBWIZSETUP_HXX
 #include "dbwizsetup.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -94,6 +100,8 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::sdbc;
 
 //=========================================================================
 //-------------------------------------------------------------------------
@@ -118,34 +126,7 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    Reference < XInterface > xDBContext = _rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
-       Sequence<Any> aSequence(1);
-    PropertyValue aPropertyValue;
-    Any aTmp;
-    aTmp <<= xDBContext;
-    aPropertyValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection"));
-    aPropertyValue.Value = aTmp;
-    aSequence[0] <<= aPropertyValue;
     Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup(_rxFactory));
-    Reference < XInitialization > xDBWizardInit(xDBWizard, UNO_QUERY);
-
-    xDBWizardInit->initialize(aSequence);
-
-    try
-    {
-        Reference< css::container::XSet > xModelCollection(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
-        xModelCollection->insert(css::uno::makeAny(xDBContext));
-
-        Reference< css::document::XEventListener > xDocEventBroadcaster(xDBContext,UNO_QUERY_THROW);
-        ::com::sun::star::document::EventObject aEvent(xDBContext, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")));
-        xDocEventBroadcaster->notifyEvent(aEvent);
-    }
-    catch(Exception)
-    {
-        OSL_ENSURE(0,"Could not create append model to global model collectiona and broadcaste document events for it!");
-    }
-    Reference <com::sun::star::ui::dialogs::XExecutableDialog> xDBWizardExecute( xDBWizard, UNO_QUERY );
-    xDBWizardExecute->execute();
     return xDBWizard;
 }
 
