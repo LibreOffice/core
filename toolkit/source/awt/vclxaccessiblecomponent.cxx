@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-31 16:38:30 $
+ *  last change: $Author: ssa $ $Date: 2002-06-03 16:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #endif
 
+#ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
+#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018    // pData = XubString* = oldTitle
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 using namespace ::comphelper;
@@ -169,7 +173,8 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+        //if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
 }
@@ -180,9 +185,21 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
+        //if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+            ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
+}
+
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) const
+{
+    // checks if the data in the window event is our direct child
+    // and returns its accessible
+    Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
+    if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
+        return pChildWindow->GetAccessible();
+    else
+        return uno::Reference< accessibility::XAccessible > ();
 }
 
 void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
@@ -190,17 +207,12 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
     uno::Any aOldValue, aNewValue;
     uno::Reference< accessibility::XAccessible > xAcc;
 
-    //Window* pWindow = ((VclWindowEvent*)pEvent)->GetWindow();
-    //DBG_ASSERT( pWindow, "VCLXAccessibleComponent::ProcessWindowEvent - Window?" );
-
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
         {
-            Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
-            if( pChildWindow )
-                xAcc = pChildWindow->GetAccessible();
-            if( xAcc.is() && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
+            xAcc = GetChildAccessible( rVclWindowEvent );
+            if( xAcc.is() )
             {
                 aNewValue <<= xAcc;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
@@ -209,10 +221,8 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
         break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
         {
-            Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
-            if( pChildWindow )
-                xAcc = pChildWindow->GetAccessible();
-            if( xAcc.is() && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
+            xAcc = GetChildAccessible( rVclWindowEvent );
+            if( xAcc.is() )
             {
                 aOldValue <<= xAcc;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
@@ -310,6 +320,15 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_FRAMETITLECHANGED:
+        {
+            ::rtl::OUString aOldName ( *((::rtl::OUString*) rVclWindowEvent.GetData()) );
+            ::rtl::OUString aNewName ( pWindow->GetText() );
+            aOldValue <<= aOldName;
+            aNewValue <<= aNewName;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT, aOldValue, aNewValue );
         }
         break;
 
