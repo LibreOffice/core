@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:48 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
     /** subject of document
+
+        @deprecated
+        use <member>DocumentInfo::Title</member> instead.
      */
     [property] string Subject;
 
@@ -293,7 +296,7 @@ service DocumentInfo
     [property] string ReplyTo;
 
     //-------------------------------------------------------------------------
-    /** @deprecated
+    /** contains the theme of the document.
      */
     [property] string Theme;
 
