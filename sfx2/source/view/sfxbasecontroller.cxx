@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-28 16:54:34 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -122,7 +125,8 @@
 #include <unoctitm.hxx>
 #include <childwin.hxx>
 #include <sfxsids.hrc>
-
+#include <workwin.hxx>
+#include <stbmgr.hxx>
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -136,7 +140,113 @@
 #define MUTEXGUARD                              ::osl::MutexGuard
 #define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
 #define MAPPING                                 ::com::sun::star::uno::Mapping
+#define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
+
+class SfxStatusIndicator : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator >
+{
+friend class SfxBaseController;
+    ::com::sun::star::uno::WeakReference < XCONTROLLER > wOwner;
+    SfxWorkWindow*          pWorkWindow;
+    sal_Int32               _nRange;
+    sal_Int32               _nValue;
+public:
+                            SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
+                                : wOwner( pController )
+                                , pWorkWindow( pWork )
+                            {}
+
+    virtual void SAL_CALL   start(const ::rtl::OUString& aText, sal_Int32 nRange);
+    virtual void SAL_CALL   end(void);
+    virtual void SAL_CALL   setText(const ::rtl::OUString& aText);
+    virtual void SAL_CALL   setValue(sal_Int32 nValue);
+    virtual void SAL_CALL   reset();
+};
+
+void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( wOwner.get().is() )
+    {
+        _nRange = nRange;
+        _nValue = 0;
+        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( !pMgr )
+            pWorkWindow->SetTempStatusBar_Impl( TRUE );
+        pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( pMgr && !pMgr->IsProgressMode() )
+            pMgr->StartProgressMode( aText, nRange );
+    }
+}
+
+void SAL_CALL SfxStatusIndicator::end(void)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( wOwner.get().is() )
+    {
+        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( pMgr && pMgr->IsProgressMode() )
+            pMgr->EndProgressMode();
+    }
+}
+
+void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( wOwner.get().is() )
+    {
+        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( !pMgr )
+            pWorkWindow->SetTempStatusBar_Impl( TRUE );
+        pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( pMgr )
+        {
+            if( pMgr->IsProgressMode() )
+            {
+                // anders kann VCL das leider nicht
+                pMgr->GetStatusBar()->SetUpdateMode( FALSE );
+                pMgr->EndProgressMode();
+                pMgr->StartProgressMode( aText, _nRange );
+                pMgr->SetProgressState( _nValue );
+                pMgr->GetStatusBar()->SetUpdateMode( TRUE );
+            }
+            else
+            {
+                if ( aText.getLength() )
+                    pMgr->ShowHelpText( aText );
+                else
+                {
+                    pMgr->ShowItems();
+                    reset();
+                }
+            }
+        }
+    }
+}
+
+void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( wOwner.get().is() )
+    {
+        _nValue = nValue;
+        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( pMgr && pMgr->IsProgressMode() )
+            pMgr->SetProgressState( nValue );
+    }
+}
+
+void SAL_CALL SfxStatusIndicator::reset()
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( wOwner.get().is() )
+    {
+        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
+        if ( pMgr )
+            pMgr->ShowItems();
+        pWorkWindow->SetTempStatusBar_Impl( FALSE );
+    }
+}
 
 //________________________________________________________________________________________________________
 //________________________________________________________________________________________________________
@@ -168,6 +278,7 @@ struct IMPL_SfxBaseController_DataContainer
     REFERENCE < XFRAME >    m_xFrame;
     REFERENCE < XFRAMEACTIONLISTENER >      m_xListener       ;
     OMULTITYPEINTERFACECONTAINERHELPER      m_aListenerContainer    ;
+    REFERENCE < ::com::sun::star::task::XStatusIndicator > m_xIndicator;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
@@ -269,6 +380,9 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
     ANY aReturn( ::cppu::queryInterface(    rType                                       ,
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
+#if SUPD>626
+                                            static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
+#endif
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
     // If searched interface supported by this class ...
@@ -331,6 +445,9 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
         {
             // Create a static typecollection ...
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
+#if SUPD>626
+                                                    ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
+#endif
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
@@ -641,5 +758,9 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > ();
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
+        m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame()->GetWorkWindow_Impl() );
+    return m_pData->m_xIndicator;
 }
+
