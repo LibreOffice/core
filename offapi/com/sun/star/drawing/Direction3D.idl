@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Direction3D.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: struct com::sun::star::drawing::Direction3D
 /** specifies a 3-dimensional vector.
  */
-struct Direction3D
+published struct Direction3D
 {
     // DocMerge: empty anyway
     double DirectionX;
