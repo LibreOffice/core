@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-namespace com { namespace sun { namespace star { namespace container {
-    class XHierarchicalNameAccess;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XHierarchicalNameAccess;
+    }
+    namespace util {
+        class XOfficeInstallationDirectories;
+    }
+} } }
 
 namespace hierarchy_ucp {
 
@@ -136,7 +141,9 @@ ConfigProviderMap;
 class HierarchyContentProvider : public ::ucb::ContentProviderImplHelper,
                                  public com::sun::star::lang::XInitialization
 {
-    ConfigProviderMap m_aConfigProviderMap;
+    ConfigProviderMap   m_aConfigProviderMap;
+    com::sun::star::uno::Reference<
+        com::sun::star::util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
 public:
     HierarchyContentProvider(
@@ -175,6 +182,11 @@ public:
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     getRootConfigReadNameAccess( const rtl::OUString & rServiceSpecifier );
+
+    // Note: may retrun an empty reference.
+    com::sun::star::uno::Reference<
+        com::sun::star::util::XOfficeInstallationDirectories >
+    getOfficeInstallationDirectories();
 };
 
 } // namespace hierarchy_ucp
