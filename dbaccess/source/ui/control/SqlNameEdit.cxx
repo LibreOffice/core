@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:01:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,26 +74,49 @@ namespace dbaui
 
     }
     //------------------------------------------------------------------
-    void OSQLNameEdit::Modify()
+    sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,
+                                        const ::rtl::OUString& _sToCheck,
+                                        ::rtl::OUString& _rsCorrected)
     {
+        sal_Bool bCorrected = sal_False;
         if(m_bCheck)
         {
-            XubString sSavedValue = GetSavedValue();
-            XubString sText = GetText();
-            xub_StrLen nMatch = 0;//sText.Search(sSavedValue);
+            XubString sSavedValue   = _sOldValue;
+            XubString sText         = _sToCheck;
+            xub_StrLen nMatch       = 0;
             for(xub_StrLen i=nMatch;i < sText.Len();++i)
             {
                 if(!isCharOk(sText.GetBuffer()[i],i == 0,m_bOnlyUpperCase,m_sAllowedChars))
                 {
                     if(i) // only set when not first char
                         sSavedValue = sText.Copy(nMatch,i-nMatch);
-                    SetText(sSavedValue);
+                    _rsCorrected = sSavedValue;
+                    bCorrected = sal_True;
                     break;
                 }
             }
+        }
+        return bCorrected;
+    }
+    //------------------------------------------------------------------
+    void OSQLNameEdit::Modify()
+    {
+        ::rtl::OUString sCorrected;
+        if(checkString(GetSavedValue(),GetText(),sCorrected))
+            SetText(sCorrected);
+        SaveValue();
+        Edit::Modify();
+    }
+    //------------------------------------------------------------------
+    void OSQLNameComboBox::Modify()
+    {
+        ::rtl::OUString sCorrected;
+        if(checkString(GetSavedValue(),GetText(),sCorrected))
+        {
+            SetText(sCorrected);
             SaveValue();
         }
-        Edit::Modify();
+        ComboBox::Modify();
     }
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

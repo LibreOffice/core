@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
 
         virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 13:37:37 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,6 +2118,17 @@ void OFieldDescControl::LoseFocus()
     implFocusLost(NULL);
 
     TabPage::LoseFocus();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OFieldDescControl::isCopyAllowed()
+{
+    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
+                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName) &&
+                        reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFieldDescControl::isCutAllowed()

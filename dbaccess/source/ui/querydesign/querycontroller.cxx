@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:45:28 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
@@ -1074,6 +1077,9 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
     bNew = bNew || _bSaveAs;
     if(bNew)
     {
+        Reference<XDatabaseMetaData> xMetaData;
+        if(m_xConnection.is())
+            xMetaData = m_xConnection->getMetaData();
         String aDefaultName;
         if(_bSaveAs && !bNew)
             aDefaultName = String(m_sName);
@@ -1081,15 +1087,16 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
         {
             String aName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
             aName = aName.GetToken(0,' ');
-            aDefaultName = String(::dbtools::createUniqueName(_xElements,aName));
+            if(m_bCreateView && m_xConnection.is())
+                aDefaultName = ::dbaui::createDefaultName(xMetaData,_xElements,aName);
+            else
+                aDefaultName = String(::dbtools::createUniqueName(_xElements,aName));
         }
 
-        Reference<XDatabaseMetaData> xMeta;
-        if(m_xConnection.is())
-            xMeta = m_xConnection->getMetaData();
+
         OSaveAsDlg aDlg(
             getView(), m_bCreateView ? CommandType::TABLE : CommandType::QUERY, _xElements,
-                xMeta, aDefaultName,
+                xMetaData, aDefaultName,
                 _bSaveAs ? SAD_OVERWRITE : SAD_DEFAULT);
 
         if(aDlg.Execute() == RET_OK)

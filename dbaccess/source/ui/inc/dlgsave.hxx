@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 06:46:52 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,25 +98,25 @@ namespace dbaui
     class OSaveAsDlg : public ModalDialog
     {
     private:
-        FixedText       m_aDescription;
-        FixedText       m_aCatalogLbl;
-        OSQLNameEdit    m_aCatalog;
-        FixedText       m_aSchemaLbl;
-        OSQLNameEdit    m_aSchema;
-        FixedText       m_aLabel;
-        OSQLNameEdit    m_aTitle;
-        OKButton        m_aPB_OK;
-        CancelButton    m_aPB_CANCEL;
-        HelpButton      m_aPB_HELP;
-        String          m_aQryLabel;
-        String          m_sTblLabel;
-        String          m_aName;
-        String          m_aExists;
-        String          m_aExistsOverwrite;
+        FixedText           m_aDescription;
+        FixedText           m_aCatalogLbl;
+        OSQLNameComboBox    m_aCatalog;
+        FixedText           m_aSchemaLbl;
+        OSQLNameComboBox    m_aSchema;
+        FixedText           m_aLabel;
+        OSQLNameEdit        m_aTitle;
+        OKButton            m_aPB_OK;
+        CancelButton        m_aPB_CANCEL;
+        HelpButton          m_aPB_HELP;
+        String              m_aQryLabel;
+        String              m_sTblLabel;
+        String              m_aName;
+        String              m_aExists;
+        String              m_aExistsOverwrite;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xNames;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
-        sal_Int32       m_nType;
-        sal_Int32       m_nFlags;
+        sal_Int32           m_nType;
+        sal_Int32           m_nFlags;
 
 
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:47:44 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ namespace dbaui
         // Resize aufegrufen
         void                CheckScrollBars();
         sal_Bool            isCutAllowed();
+        sal_Bool            isCopyAllowed();
+
         void                cut();
         void                copy();
         void                paste();

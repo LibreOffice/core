@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:16:00 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,13 +136,15 @@ ModalDialog DLG_SAVE_AS
         Text[ catalan ] = "~Catálogo";
         Text[ finnish ] = "~Catalog";
     };
-    Edit ET_CATALOG
+    ComboBox ET_CATALOG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 25 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
-        Text = "" ;
-        TabStop = TRUE ;
+        SVLook      = TRUE ;
+        TabStop     = TRUE ;
+        DropDown    = TRUE ;
+        AutoHScroll = TRUE ;
     };
     FixedText FT_SCHEMA
     {
@@ -171,13 +173,15 @@ ModalDialog DLG_SAVE_AS
         Text[ catalan ] = "~Esquema";
         Text[ finnish ] = "~Schema";
     };
-    Edit ET_SCHEMA
+    ComboBox ET_SCHEMA
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
-        Text = "" ;
-        TabStop = TRUE ;
+        SVLook      = TRUE ;
+        TabStop     = TRUE ;
+        DropDown    = TRUE ;
+        AutoHScroll = TRUE ;
     };
     FixedText FT_TITLE
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:01:35 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
@@ -149,24 +152,6 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             break;
         case CommandType::TABLE:
             {
-                OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
-                if(m_aName.Search('.') != STRING_NOTFOUND)
-                {
-                    ::rtl::OUString sCatalog,sSchema,sTable;
-                    ::dbtools::qualifiedNameComponents(_rxMetaData,
-                                                        m_aName,
-                                                        sCatalog,
-                                                        sSchema,
-                                                        sTable);
-
-                    m_aCatalog.SetText(sCatalog);
-                    m_aSchema.SetText(sSchema);
-                    m_aTitle.SetText(sTable);
-                }
-                else
-                    m_aTitle.SetText(m_aName);
-
-
                 m_aLabel.SetText(m_sTblLabel);
                 Point aPos(m_aPB_OK.GetPosPixel());
                 if(!_rxMetaData->supportsCatalogsInTableDefinitions())
@@ -182,6 +167,25 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aSchemaLbl.SetPosPixel(m_aCatalogLbl.GetPosPixel());
                     m_aSchema.SetPosPixel(m_aCatalog.GetPosPixel());
                 }
+                else
+                {
+                    // now fill the catalogs
+                    try
+                    {
+                        Reference<XResultSet> xRes = m_xMetaData->getCatalogs();
+                        Reference<XRow> xRow(xRes,UNO_QUERY);
+                        ::rtl::OUString sCatalog;
+                        while(xRes.is() && xRes->next())
+                        {
+                            sCatalog = xRow->getString(1);
+                            if(!xRow->wasNull())
+                                m_aCatalog.InsertEntry(sCatalog);
+                        }
+                    }
+                    catch(const SQLException&)
+                    {
+                    }
+                }
 
                 if(!_rxMetaData->supportsSchemasInTableDefinitions())
                 {
@@ -193,6 +197,46 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aLabel.SetPosPixel(m_aSchemaLbl.GetPosPixel());
                     m_aTitle.SetPosPixel(m_aSchema.GetPosPixel());
                 }
+                else
+                {
+                    // now fill the schemata
+                    try
+                    {
+                        Reference<XResultSet> xRes = m_xMetaData->getSchemas();
+                        Reference<XRow> xRow(xRes,UNO_QUERY);
+                        ::rtl::OUString sSchema;
+                        while(xRes.is() && xRes->next())
+                        {
+                            sSchema = xRow->getString(1);
+                            if(!xRow->wasNull() && m_aSchema.GetEntryPos(XubString(sSchema)) == COMBOBOX_ENTRY_NOTFOUND)
+                                m_aSchema.InsertEntry(sSchema);
+                        }
+
+                        m_aSchema.SetText(m_xMetaData->getUserName());
+                    }
+                    catch(const SQLException&)
+                    {
+                    }
+                }
+
+                OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
+                if(m_aName.Search('.') != STRING_NOTFOUND)
+                {
+                    ::rtl::OUString sCatalog,sSchema,sTable;
+                    ::dbtools::qualifiedNameComponents(_rxMetaData,
+                                                        m_aName,
+                                                        sCatalog,
+                                                        sSchema,
+                                                        sTable);
+
+                    m_aCatalog.SetText(sCatalog);
+                    if(sSchema.getLength())
+                        m_aSchema.SetText(sSchema);
+                    m_aTitle.SetText(sTable);
+                }
+                else
+                    m_aTitle.SetText(m_aName);
+
                 m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
                 m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));

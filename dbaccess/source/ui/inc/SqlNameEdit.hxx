@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:01:35 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,28 +64,21 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
+#ifndef _SV_COMBOBOX_HXX
+#include <vcl/combobox.hxx>
+#endif
 
 namespace dbaui
 {
-    //==================================================================
-    class OSQLNameEdit : public Edit
+    class OSQLNameChecker
     {
         ::rtl::OUString m_sAllowedChars;
         sal_Bool        m_bOnlyUpperCase;
         sal_Bool        m_bCheck;           // true when we should check for invalid chars
     public:
-        OSQLNameEdit(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
-            : Edit(_pParent,nStyle)
-            ,m_sAllowedChars(_rAllowedChars)
+        OSQLNameChecker(const ::rtl::OUString& _rAllowedChars)
+            :m_sAllowedChars(_rAllowedChars)
             ,m_bOnlyUpperCase(sal_False)
-            ,m_bCheck(sal_True)
-        {
-        }
-        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
-            : Edit(_pParent,_rRes)
-            ,m_sAllowedChars(_rAllowedChars)
-            ,m_bOnlyUpperCase(sal_False)
-            ,m_bCheck(sal_True)
         {
         }
 
@@ -102,9 +95,46 @@ namespace dbaui
         {
             m_bCheck = _bCheck;
         }
+        sal_Bool checkString(const ::rtl::OUString& _sOldValue,const ::rtl::OUString& _sToCheck,::rtl::OUString& _rsCorrected);
+    };
+    //==================================================================
+    class OSQLNameEdit : public Edit
+                        ,public OSQLNameChecker
+    {
+    public:
+        OSQLNameEdit(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+            : Edit(_pParent,nStyle)
+            ,OSQLNameChecker(_rAllowedChars)
+        {
+        }
+        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
+            : Edit(_pParent,_rRes)
+            ,OSQLNameChecker(_rAllowedChars)
+        {
+        }
 
         // Window overload
         //  virtual long PreNotify( NotifyEvent& rNEvt );
+        // Edit
+        virtual void Modify();
+    };
+
+    class OSQLNameComboBox : public ComboBox
+                            ,public OSQLNameChecker
+    {
+    public:
+        OSQLNameComboBox(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+            : ComboBox(_pParent,nStyle)
+            ,OSQLNameChecker(_rAllowedChars)
+        {
+        }
+        OSQLNameComboBox(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
+            : ComboBox(_pParent,_rRes)
+            ,OSQLNameChecker(_rAllowedChars)
+        {
+        }
+
+        // Window overload
         // Edit
         virtual void Modify();
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 08:41:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,7 @@ void OQueryTextView::clear()
 // -----------------------------------------------------------------------------
 void OQueryTextView::setStatement(const ::rtl::OUString& _rsStatement)
 {
-    m_pEdit->SetText(_rsStatement);
-    m_pEdit->Modify();
+    m_pEdit->OverloadedSetText(_rsStatement);
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::copy()

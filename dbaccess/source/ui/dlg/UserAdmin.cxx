@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                     Reference<XUser> xUser;
                     m_xUsers->getByName(GetUser()) >>= xUser;
                     if(xUser.is())
-                        xUser->changePassword(sOldPwd,aPwdDlg.GetPassword());
+                        xUser->changePassword(sOldPwd.ToUpperAscii(),aPwdDlg.GetPassword().ToUpperAscii());
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:20:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,6 @@ void OSqlEdit::OverloadedSetText(const String& rNewText)
 
     MultiLineEdit::SetText(rNewText);
     m_strOrigText = rNewText;
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OSqlEdit::stopTimer()
