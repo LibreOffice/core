@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:14:22 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 19:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Actualisation";
         Text[ spanish ] = "Actualización";
         Text[ italian ] = "Aggiorna";
-        Text[ danish ] = "Updating";
+        Text[ danish ] = "Opdatering";
         Text[ swedish ] = "Uppdatering";
         Text[ polish ] = "Aktualizacja";
         Text[ portuguese_brazilian ] = "Updating";
@@ -100,7 +100,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ turkish ] = "Updating";
         Text[ arabic ] = "ÊÍÏíË";
         Text[ finnish ] = "Päivitä";
-        Text[ catalan ] = "Updating";
+        Text[ catalan ] = "S'està actualitzant";
     };
     FixedText FT_LINK
     {
@@ -116,7 +116,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Actualiser les liens lors du chargement";
         Text[ spanish ] = "Actualizar vínculos al cargar";
         Text[ italian ] = "Aggiorna collegamenti durante il caricamento";
-        Text[ danish ] = "Update links when loading";
+        Text[ danish ] = "Opdater kæder ved indlæsning";
         Text[ swedish ] = "Uppdatera länkar vid laddning";
         Text[ polish ] = "Aktualizuj ³¹cza podczas ³adowania";
         Text[ portuguese_brazilian ] = "Update links when loading";
@@ -127,7 +127,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ turkish ] = "Update links when loading";
         Text[ arabic ] = "ÊÍÏíË ÇáÇÑÊÈÇØÇÊ ÚäÏ ÇáÊÍãíá";
         Text[ finnish ] = "Päivitä linkit ladattaessa";
-        Text[ catalan ] = "Update links when loading";
+        Text[ catalan ] = "Actualitza els enllaços en carregar";
     };
     RadioButton RB_ALWAYS
     {
@@ -139,7 +139,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Sempre";
         Text[ portuguese_brazilian ] = "~Always";
         Text[ portuguese ] = "~Sempre";
-        Text[ danish ] = "Altid";
+        Text[ danish ] = "Alt~id";
         Text[ french ] = "Toujours";
         Text[ swedish ] = "Allt~id";
         Text[ dutch ] = "~Altijd";
@@ -156,7 +156,7 @@ TabPage TP_OPTLOAD_PAGE
     Text[ turkish ] = "Her zaman";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "~Aina";
-        Text[ catalan ] = "~Siempre";
+        Text[ catalan ] = "~Sempre";
     };
     RadioButton RB_REQUEST
     {
@@ -168,7 +168,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Su richiesta";
         Text[ portuguese_brazilian ] = "On request";
         Text[ portuguese ] = "A ~pedido";
-        Text[ danish ] = "På anmodning";
+        Text[ danish ] = "~På forespørgsel";
         Text[ french ] = "Sur de~mande";
         Text[ swedish ] = "~På begäran";
         Text[ dutch ] = "Op aan~vraag";
@@ -185,7 +185,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ turkish ] = "Ýstek üzerine";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Pyynnöstä";
-        Text[ catalan ] = "A ~petición";
+        Text[ catalan ] = "S~ota petició";
     };
     RadioButton RB_NEVER
     {
@@ -197,7 +197,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Mai";
         Text[ portuguese_brazilian ] = "Never";
         Text[ portuguese ] = "~Nunca";
-        Text[ danish ] = "Aldrig";
+        Text[ danish ] = "Al~drig";
         Text[ french ] = "~Jamais";
         Text[ swedish ] = "A~ldrig";
         Text[ dutch ] = "~Nooit";
@@ -214,7 +214,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ turkish ] = "Hiçbir zaman";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ei koskaan";
-        Text[ catalan ] = "~Nunca";
+        Text[ catalan ] = "~Mai";
     };
     FixedText FT_FIELD
     {
@@ -231,7 +231,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "Automático";
         Text[ finnish ] = "Päivitä automaattisesti";
         Text[ italian ] = "In modo automatico";
-        Text[ danish ] = "Felter og diagrammer";
+        Text[ danish ] = "Automatisk";
         Text[ swedish ] = "Automatiskt";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "Refresh links";
@@ -241,7 +241,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_traditional ] = "è‡ªå‹•";
         Text[ turkish ] = "Alan ve þemalar";
         Text[ arabic ] = "ÍÞæá æÑÓæã ÈíÇäíÉ";
-        Text[ catalan ] = "Campos y diagramas";
+        Text[ catalan ] = "Automàtic";
         Text[ language_user1 ] = " ";
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
@@ -259,7 +259,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "~Campos";
         Text[ finnish ] = "~Kentät";
         Text[ italian ] = "~Comandi di campo";
-        Text[ danish ] = "Opdater felter automatisk";
+        Text[ danish ] = "Fe~lter";
         Text[ swedish ] = "Fält~kommandon";
         Text[ polish ] = "Pola";
         Text[ portuguese_brazilian ] = "Update fields automatically";
@@ -287,7 +287,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "~Diagramas";
         Text[ finnish ] = "~Kaaviot";
         Text[ italian ] = "~Diagrammi";
-        Text[ danish ] = "Opdater diagrammer automatisk";
+        Text[ danish ] = "Dia~grammer";
         Text[ swedish ] = "Dia~gram";
         Text[ polish ] = "Wykresy";
         Text[ portuguese_brazilian ] = "Update charts automatically";
@@ -338,7 +338,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "In modo ~automatico";
         Text[ portuguese_brazilian ] = "Automatic";
         Text[ portuguese ] = "~Automático";
-        Text[ danish ] = "Automatisk";
+        Text[ danish ] = "~Automatisk";
         Text[ french ] = "Automatique";
         Text[ swedish ] = "~Automatiskt";
         Text[ dutch ] = "~Automatisch";
@@ -355,7 +355,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Otomatik";
         Text[ finnish ] = "Automaattinen";
-        Text[ catalan ] = "~Automático";
+        Text[ catalan ] = "~Automàtic";
     };
     FixedText TXT_OPTIONS
     {
@@ -367,7 +367,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Scelta ~oggetto:";
         Text[ portuguese_brazilian ] = "~Object selection";
         Text[ portuguese ] = "~Selecção de objecto:";
-        Text[ danish ] = "Objektudvalg:";
+        Text[ danish ] = "~Objektudvalg:";
         Text[ french ] = "~Sélection d'objet :";
         Text[ swedish ] = "~Objekturval:";
         Text[ dutch ] = "~Objectselectie";
@@ -406,7 +406,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Configuración";
         Text[ italian ] = "Impostazioni";
-        Text[ danish ] = "Settings";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Inställningar";
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
@@ -417,7 +417,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
         Text[ finnish ] = "Asetukset";
-        Text[ catalan ] = "Settings";
+        Text[ catalan ] = "Paràmetres";
     };
     FixedText FT_METRIC
     {
@@ -428,7 +428,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ italian ] = "Unità di misura";
         Text [ portuguese_brazilian ] = "Unidades m?tricas";
         Text [ portuguese ] = "~Unidade de medida";
-        Text [ danish ] = "Måleenhed";
+        Text [ danish ] = "~Måleenhed";
         Text [ french ] = "Unité de mesure";
         Text [ swedish ] = "~Måttenhet";
         Text [ dutch ] = "~Maateenheid";
@@ -446,7 +446,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ korean ] = "ìˆ˜ì¹˜ ë‹¨ìœ„";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Unidad de medida";
+        Text[ catalan ] = "Unitat de mesura";
     };
     ListBox LB_METRIC
     {
@@ -464,7 +464,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ italian ] = "Intervallo di tabulazione";
         Text [ portuguese_brazilian ] = "Default Tab distance";
         Text [ portuguese ] = "Es~paço entre tabulações";
-        Text [ danish ] = "Tabulatorafstand";
+        Text [ danish ] = "Tabulatoraf~stand";
         Text [ french ] = "Espace entre les tabulations";
         Text [ swedish ] = "Tabulatorav~stånd";
         Text [ dutch ] = "~Tabstop";
@@ -527,7 +527,7 @@ TabPage TP_OPTLOAD_PAGE
     Text[ turkish ] = "Uyumluluk";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yhteensopivuus";
-        Text[ catalan ] = "Compatibilidad";
+        Text[ catalan ] = "Compatibilitat";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -542,7 +542,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Additionner les espaces entre paragraphes et tableaux dans le document actif";
         Text[ spanish ] = "Sumar ~espacios de párrafos y tablas en el documento actual";
         Text[ italian ] = "Aggiungi distanze tra i paragrafi e le tabelle nel documento attuale";
-        Text[ danish ] = "Tæl alle afsnits- og tabelafstande i det aktuelle dokument sammen";
+        Text[ danish ] = "Adder alle afsnits- og tabelafstande i det aktuelle do~kument";
         Text[ swedish ] = "Addera alla stycke- och tabellavstånd i det aktuella ~dokumentet";
         Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami i tabelami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
@@ -571,7 +571,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Additionner les ~espaces entre paragraphes et tableaux en début de page";
         Text[ spanish ] = "Su~mar espacios de tablas y párrafos en los comienzos de páginas";
         Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
-        Text[ danish ] = "Læg afsnits- og tabelafstande til ved sidebegyndelser";
+        Text[ danish ] = "Adder a~fsnits- og tabelafstande på nye sider";
         Text[ swedish ] = "Lägg till stycke- och ta~bellavstånd i början av sidor";
         Text[ polish ] = "Dodaj odstêpy od a~kapitów i tabel na pocz¹tku stron";
         Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
@@ -599,7 +599,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Aligner la position de tabulation";
         Text[ spanish ] = "Ajustar posición de tabulador";
         Text[ italian ] = "Allinea posizione tabulazione";
-        Text[ danish ] = "Align tab stop position";
+        Text[ danish ] = "~Juster tabulatorposition";
         Text[ swedish ] = "Justera tab~ulatorposition";
         Text[ polish ] = "Wyrównaj pozycjê tabulatora";
         Text[ portuguese_brazilian ] = "Align tab stop position";
@@ -650,7 +650,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ italian ] = "Tabella %PRODUCTNAME Writer";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME Writer Table";
         Text[ portuguese ] = "Tabela %PRODUCTNAME Writer";
-        Text[ danish ] = "%PRODUCTNAME Writer tabel";
+        Text[ danish ] = "%PRODUCTNAME Writer-tabel";
         Text[ french ] = "Tableau %PRODUCTNAME Writer";
         Text[ swedish ] = "Tabell %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer tabel";
@@ -676,7 +676,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ italian ] = "Cornice %PRODUCTNAME Writer";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME Writer Frame";
         Text[ portuguese ] = "Moldura %PRODUCTNAME Writer";
-        Text[ danish ] = "%PRODUCTNAME Writer ramme";
+        Text[ danish ] = "%PRODUCTNAME Writer-ramme";
         Text[ french ] = "Cadre %PRODUCTNAME Writer";
         Text[ swedish ] = "Ram %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer kader";
@@ -702,7 +702,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ italian ] = "Immagine %PRODUCTNAME Writer";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME Writer Graphic";
         Text[ portuguese ] = "Imagem %PRODUCTNAME Writer";
-        Text[ danish ] = "%PRODUCTNAME Writer grafik";
+        Text[ danish ] = "%PRODUCTNAME Writer-grafik";
         Text[ french ] = "Image %PRODUCTNAME Writer";
         Text[ swedish ] = "Grafik %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer afbeelding";
@@ -759,7 +759,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "Luokka" ;
-        Text [ danish ] = "Kategori" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Categorie" ;
@@ -776,7 +776,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ korean ] = "ë²”ì£¼";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kategori";
-        Text[ catalan ] = "~Categoría";
+        Text[ catalan ] = "~Categoria";
     };
     ComboBox BOX_CATEGORY
     {
@@ -797,7 +797,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese_brazilian ] = "~Numera??o" ;
         Text [ portuguese ] = "~Numeração" ;
         Text [ finnish ] = "~Numerointi" ;
-        Text [ danish ] = "Nummerering" ;
+        Text [ danish ] = "~Nummerering" ;
         Text [ french ] = "Numérotation" ;
         Text [ swedish ] = "~Numrering" ;
         Text [ dutch ] = "~Nummering" ;
@@ -835,7 +835,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese_brazilian ] = "~Legenda" ;
         Text [ portuguese ] = "~Legenda" ;
         Text [ finnish ] = "Kuvaotsikko" ;
-        Text [ danish ] = "Billedtekst" ;
+        Text [ danish ] = "~Billedtekst" ;
         Text [ french ] = "~Légende" ;
         Text [ swedish ] = "~Bildtext" ;
         Text [ dutch ] = "~Bijschrift" ;
@@ -874,7 +874,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~Posição" ;
         Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
@@ -910,7 +910,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ english_us ] = "Level" ;
         Text [ portuguese_brazilian ] = "E~bene" ;
         Text [ swedish ] = "~Nivå" ;
-        Text [ danish ] = "Niveau" ;
+        Text [ danish ] = "N~iveau" ;
         Text [ italian ] = "Livello" ;
         Text [ spanish ] = "~Nivel" ;
         Text [ french ] = "Ni~veau" ;
@@ -1025,7 +1025,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     StringList [ catalan ] =
     {
-             < "Ninguno" ; > ;
+             < "Cap" ; > ;
     };
     };
     FixedText FT_SEPARATOR
@@ -1037,7 +1037,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ english_us ] = "Separator" ;
         Text [ portuguese_brazilian ] = "~Trenner" ;
         Text [ swedish ] = "Skilje~tecken" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "~Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
         Text [ french ] = "~Séparateur" ;
@@ -1098,7 +1098,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ greek ] = "Ñõèìßóåéò";
         Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
-        Text[ catalan ] = "Configuración";
+        Text[ catalan ] = "Paràmetres";
     };
     String STR_BEGINNING
     {
@@ -1109,7 +1109,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese_brazilian ] = "No in?cio" ;
         Text [ portuguese ] = "No início" ;
         Text [ finnish ] = "Alussa" ;
-        Text [ danish ] = "Ved begyndelsen" ;
+        Text [ danish ] = "Ved starten" ;
         Text [ french ] = "Au début" ;
         Text [ swedish ] = "I början" ;
         Text [ dutch ] = "Aan het begin" ;
