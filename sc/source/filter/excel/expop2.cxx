@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:01:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,20 +99,9 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData ):
     XclExpRoot( rExpData )
 {
     // nur Teil der Root-Daten gebraucht
-    pExcRoot = mpRD;
-    pExcRoot->pDoc = GetDocPtr();
+    pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
-    pExcRoot->bCellCut = FALSE;
-    pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
-    pExcRoot->pCharset = &eZielChar;
-
-    // options from configuration
-    ScFilterOptions aFilterOpt;
-    pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
-    if( pExcRoot->fRowScale <= 0.0 )
-        pExcRoot->fRowScale = 1.0;
-
     pExcDoc = new ExcDocument( *this );
 }
 
@@ -126,45 +115,44 @@ ExportBiff5::~ExportBiff5()
 FltError ExportBiff5::Write()
 {
     FltError                eRet = eERR_OK;
-    SvtFilterOptions*       pFiltOpt = NULL;
 
-    if( pExcRoot->eHauptDateiTyp >= Biff8 )
+    SfxObjectShell* pDocShell = GetDocShell();
+    DBG_ASSERT( pDocShell, "ExportBiff5::Write - no document shell" );
+
+    SotStorageRef xRootStrg = GetRootStorage();
+    DBG_ASSERT( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
+
+    bool bWriteBasicCode = false;
+    bool bWriteBasicStrg = false;
+    if( GetBiff() == EXC_BIFF8 )
     {
-        pFiltOpt = SvtFilterOptions::Get();
-
-        pExcRoot->bWriteVBAStorage = pFiltOpt && pFiltOpt->IsLoadExcelBasicStorage();
+        if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
+        {
+            bWriteBasicCode = pFilterOpt->IsLoadExcelBasicCode();
+            bWriteBasicStrg = pFilterOpt->IsLoadExcelBasicStorage();
+        }
     }
 
-    SfxObjectShell&         rDocShell = *pExcRoot->pDoc->GetDocumentShell();
-
-    if( pExcRoot->bWriteVBAStorage )
+    if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
     {
-        SfxObjectShell&     rDocShell = *pExcRoot->pDoc->GetDocumentShell();
-
-        DBG_ASSERT( GetRootStorage(), "ExportBiff5::Write - no storage" );
-
-        SvxImportMSVBasic   aBasicImport(   rDocShell,
-                                            *GetRootStorage(),
-                                            pFiltOpt->IsLoadExcelBasicCode(),
-                                            pFiltOpt->IsLoadExcelBasicStorage() );
-
-        ULONG       nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
-
+        SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
+        ULONG nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
-            rDocShell.SetError( nErr );
+            pDocShell->SetError( nErr );
     }
-
-    // VBA-storage written?
-    pExcRoot->bWriteVBAStorage = GetRootStorage()->IsContained( EXC_STORAGE_VBA_PROJECT );
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
     pExcDoc->Write( aOut );     // wechstreamen
 
-    SfxDocumentInfo&    rInfo = rDocShell.GetDocInfo();
-    rInfo.SavePropertySet( GetRootStorage() );
+    if( pDocShell && xRootStrg.Is() )
+    {
+        SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
+        rInfo.SavePropertySet( xRootStrg );
+    }
 
     //! TODO: separate warnings for columns and sheets
-    if( pExcRoot->bCellCut || IsColTruncated() || IsRowTruncated() || IsTabTruncated() )
+    const XclExpAddressConverter& rAddrConv = GetAddressConverter();
+    if( rAddrConv.IsColTruncated() || rAddrConv.IsRowTruncated() || rAddrConv.IsTabTruncated() )
         return SCWARN_EXPORT_MAXROW;
 
     return eERR_OK;
@@ -175,7 +163,6 @@ FltError ExportBiff5::Write()
 ExportBiff8::ExportBiff8( XclExpRootData& rExpData ) :
     ExportBiff5( rExpData )
 {
-    pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->pEscher = new XclEscher( GetDoc().GetTableCount(), *pExcRoot );
 }
