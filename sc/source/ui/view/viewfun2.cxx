@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:34:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1769,6 +1769,9 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
 
+            if ( pDoc->IsTabProtected( nTab ) )
+                pUndoDoc->SetTabProtection( nTab, TRUE, pDoc->GetTabPassword( nTab ) );
+
             //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
             //      pUndoDoc->TransferDrawPage(pDoc, nTab,nTab);
         }
@@ -2206,6 +2209,10 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
                     pDestDoc->SetVisible(nDestTab1,bVisible );
 
                 }
+
+                if ( nErrVal > 0 && pDoc->IsTabProtected( TheTabs[i] ) )
+                    pDestDoc->SetTabProtection( nDestTab1, TRUE, pDoc->GetTabPassword( TheTabs[i] ) );
+
                 nDestTab1++;
             }
         }
