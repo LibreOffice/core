@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:28:47 $
+ *  last change: $Author: os $ $Date: 2000-11-08 11:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,18 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>        // SwUpdateAttr
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
-#endif
-#ifndef _UNOSTYLE_HXX
-#include <unostyle.hxx>
 #endif
 
 
@@ -378,14 +381,19 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
              aName = sVal;
         break;
         case MID_URL_VISITED_FMT:
+        {
             aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
                                                        SFX_STYLE_FAMILY_CHAR );
-            nVisitedId = USHRT_MAX;
+            nVisitedId = SwDoc::GetPoolId( aVisitedFmt, GET_POOLID_CHRFMT );
+
+        }
         break;
         case MID_URL_UNVISITED_FMT:
+        {
             aINetFmt = SwXStyleFamilies::GetUIName( sVal,
                                                     SFX_STYLE_FAMILY_CHAR );
-            nINetId = USHRT_MAX;
+            nINetId = SwDoc::GetPoolId( aINetFmt,   GET_POOLID_CHRFMT );
+        }
         break;
         default:
             bRet = FALSE;
