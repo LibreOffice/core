@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:05:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,26 +1327,34 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     SCCOL nCol = rButtonPos.Col();
     SCROW nRow = rButtonPos.Row();
 
+    long nCellSizeX;    // width of this cell, including merged
+    long nDummy;
+    pViewData->GetMergeSizePixel( nCol, nRow, nCellSizeX, nDummy );
+
+    // for height, only the cell's row is used, excluding merged cells
+    long nCellSizeY = ScViewData::ToPixel( pDoc->GetRowHeight( nRow, nTab ), pViewData->GetPPTY() );
+    long nAvailable = nCellSizeX;
+
     //  left edge of next cell if there is a non-hidden next column
     SCCOL nNextCol = nCol + 1;
+    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE ));
+    if ( pMerge->GetColMerge() > 1 )
+        nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
     while ( nNextCol <= MAXCOL && (pDoc->GetColFlags( nNextCol, nTab ) & CR_HIDDEN) )
         ++nNextCol;
     BOOL bNextCell = ( nNextCol <= MAXCOL );
     if ( bNextCell )
-        nCol = nNextCol;
+        nAvailable = ScViewData::ToPixel( pDoc->GetColWidth( nNextCol, nTab ), pViewData->GetPPTX() );
 
-    long nCellSizeX;
-    long nCellSizeY;
-    pViewData->GetMergeSizePixel( nCol, nRow, nCellSizeX, nCellSizeY );
-
-    if ( nCellSizeX < aBtnSize.Width() )
-        aBtnSize.Width() = nCellSizeX;
+    if ( nAvailable < aBtnSize.Width() )
+        aBtnSize.Width() = nAvailable;
     if ( nCellSizeY < aBtnSize.Height() )
         aBtnSize.Height() = nCellSizeY;
 
-    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich, TRUE );
+    aPos.X() += nCellSizeX * nLayoutSign;               // start of next cell
     if (!bNextCell)
-        aPos.X() += (nCellSizeX - aBtnSize.Width()) * nLayoutSign;  // right edge of cell if next cell not available
+        aPos.X() -= aBtnSize.Width() * nLayoutSign;     // right edge of cell if next cell not available
     aPos.Y() += nCellSizeY - aBtnSize.Height();
     // X remains at the left edge
 
