@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 10:39:18 $
+ *  last change: $Author: jp $ $Date: 2001-09-13 16:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,9 +323,8 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // Wir hauen das Ding auf SvPersist-Ebene rein
     String aNewName( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) );
     SvPersist* pSrc = GetDoc()->GetPersist();
-    SvInfoObjectRef refObj = pSrc->Find( aOLEObj.aName );
-    if( refObj.Is() )
-        p->Copy( aNewName, aNewName, refObj, pSrc );
+
+    p->CopyObject( aOLEObj.aName, aNewName, pSrc );
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName,
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
