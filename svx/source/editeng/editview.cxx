@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 13:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,6 +976,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             if (xDic.is())
                 xDic->add( aSelected, sal_False, String() );
             aPaM.GetNode()->GetWrongList()->GetInvalidStart() = 0;
+            aPaM.GetNode()->GetWrongList()->GetInvalidEnd() = aPaM.GetNode()->Len();
             PIMPEE->StartOnlineSpellTimer();
         }
         else if ( nId >= MN_AUTOSTART )
