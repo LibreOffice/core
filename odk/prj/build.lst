@@ -1,0 +1,9 @@
+od	odk	:	offapi product NULL
+od	odk										usr1	-	all	od_mkout NULL
+od	odk\examples\cpp\officeclient			nmake	-	all	od_offclient NULL
+od	odk\pack\unzip_udk						nmake	-	all	od_unzip_udk NULL
+od	odk\pack\copying						nmake	-	all	od_copying od_unzip_udk NULL
+od	odk\pack\checkinc						nmake	-	all	od_checkinc od_unzip_udk NULL
+od	odk\pack\checkinc2						nmake	-	all	od_checkinc2 od_unzip_udk NULL
+od	odk\pack\checkbin						nmake	-	all	od_checkbin od_unzip_udk NULL
+od	odk\util								nmake	-	all	od_util od_copying NULL
