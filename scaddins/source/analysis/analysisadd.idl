@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *  last change: $Author: gt $ $Date: 2001-04-24 13:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module addin
     /**
      * Interface with analysis functions.
      */
-    [ uik(20D2C191-648C-11d4-9F8D0050-04D75D79), ident("XAnalysis", 1.0) ]
     interface XAnalysis : com::sun::star::uno::XInterface
     {
         /// _test.
