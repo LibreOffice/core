@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,13 @@ struct Bridge
 
     Mapping                     m_java2uno;
     Mapping                     m_uno2java;
+    bool                        m_registered_java2uno;
 
     JNI_info const *            m_jni_info;
 
     //
     ~Bridge() SAL_THROW( () );
-    Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env );
+    Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool registered_java2uno );
 
     void acquire() const;
     void release() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:05 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,9 @@ struct JNI_type_info
     JNI_type_info( JNI_context const & jni, typelib_InterfaceTypeDescription * td );
     JNI_type_info( JNI_context const & jni, typelib_CompoundTypeDescription * td );
 
-    static void _delete( JNI_context const & jni, JNI_type_info * that ) SAL_THROW( () );
+    void destroy( JNI_context const & jni );
+private:
+    inline ~JNI_type_info() {}
 };
 //==================================================================================================
 struct JNI_type_info_holder
@@ -107,12 +109,9 @@ struct JNI_type_info_holder
 //==================================================================================================
 typedef ::std::hash_map< ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
 
-struct Bridge;
-
 //==================================================================================================
 class JNI_info
 {
-    Bridge const *              m_bridge; // unacquired pointer to owner
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
 
@@ -193,10 +192,6 @@ public:
     jfieldID                    m_field_JNI_proxy_m_oid;
 
     //
-    ~JNI_info() SAL_THROW( () );
-    JNI_info( Bridge const * bridge );
-
-    //
     JNI_type_info const * get_type_info(
         JNI_context const & jni, typelib_TypeDescription * td ) const;
     JNI_type_info const * get_type_info(
@@ -211,6 +206,13 @@ public:
         JNI_context const & jni, jobject javaI, jstring oid, jobject type ) const;
     inline void java_env_revokeInterface(
         JNI_context const & jni, jstring oid, jobject type ) const;
+
+    //
+    static JNI_info const * get_jni_info( JNI_context const & jni );
+    void destroy( JNI_context const & jni );
+private:
+    JNI_info( JNI_context const & jni );
+    inline ~JNI_info() {}
 };
 //__________________________________________________________________________________________________
 inline void JNI_info::append_sig(

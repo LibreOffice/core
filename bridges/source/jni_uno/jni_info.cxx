@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+
+#include "uno/lbnames.h"
 
 
 using namespace ::std;
@@ -300,12 +302,12 @@ JNI_type_info::JNI_type_info(
     m_jo_type = 0;
 }
 //__________________________________________________________________________________________________
-void JNI_type_info::_delete( JNI_context const & jni, JNI_type_info * that ) SAL_THROW( () )
+void JNI_type_info::destroy( JNI_context const & jni )
 {
-    delete [] that->m_fields;
-    delete [] that->m_methods;
-    jni->DeleteGlobalRef( that->m_class );
-    delete that;
+    delete [] m_fields;
+    delete [] m_methods;
+    jni->DeleteGlobalRef( m_class );
+    delete this;
 }
 
 //##################################################################################################
@@ -353,7 +355,7 @@ JNI_type_info const * JNI_info::get_type_info(
         {
             info = holder.m_info;
             guard.clear();
-            JNI_type_info::_delete( jni, new_info );
+            new_info->destroy( jni );
         }
     }
     else
@@ -406,7 +408,7 @@ JNI_type_info const * JNI_info::get_type_info(
         {
             info = holder.m_info;
             guard.clear();
-            JNI_type_info::_delete( jni, new_info );
+            new_info->destroy( jni );
         }
     }
     else
@@ -417,9 +419,8 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 //__________________________________________________________________________________________________
-JNI_info::JNI_info( Bridge const * bridge )
-    : m_bridge( bridge ), // unacquired pointer to owner
-      m_XInterface_td(
+JNI_info::JNI_info( JNI_context const & jni )
+    : m_XInterface_td(
           ::getCppuType(
               (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > const *)0 ) ),
       m_XInterface_queryInterface_td(
@@ -432,8 +433,7 @@ JNI_info::JNI_info( Bridge const * bridge )
               (::com::sun::star::uno::RuntimeException const *)0 ) ),
       m_class_JNI_proxy( 0 )
 {
-    JNI_guarded_context jni(
-        this, reinterpret_cast< ::jvmaccess::VirtualMachine * >( m_bridge->m_java_env->pContext ) );
+    // !!!no JNI_info available at JNI_context!!!
 
     // class lookup
     JLocalAutoRef jo_Object(
@@ -700,7 +700,8 @@ JNI_info::JNI_info( Bridge const * bridge )
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_oid );
 
     // get java env
-    JLocalAutoRef jo_java( jni, ustring_to_jstring( jni, m_bridge->m_java_env->pTypeName ) );
+    OUString java_env_type_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
+    JLocalAutoRef jo_java( jni, ustring_to_jstring( jni, java_env_type_name.pData ) );
     jvalue args[ 2 ];
     args[ 0 ].l = jo_java.get();
     args[ 1 ].l = 0;
@@ -736,55 +737,88 @@ JNI_info::JNI_info( Bridge const * bridge )
     m_object_java_env = jni->NewGlobalRef( jo_java_env.get() );
 }
 //__________________________________________________________________________________________________
-JNI_info::~JNI_info() SAL_THROW( () )
+void JNI_info::destroy( JNI_context const & jni )
 {
-    try
+    t_str2type::const_iterator iPos( m_type_map.begin() );
+    t_str2type::const_iterator const iEnd( m_type_map.begin() );
+    for ( ; iPos != iEnd; ++iPos )
     {
-        JNI_guarded_context jni(
-            this,
-            reinterpret_cast< ::jvmaccess::VirtualMachine * >( m_bridge->m_java_env->pContext ) );
-
-        t_str2type::const_iterator iPos( m_type_map.begin() );
-        t_str2type::const_iterator const iEnd( m_type_map.begin() );
-        for ( ; iPos != iEnd; ++iPos )
-        {
-            JNI_type_info::_delete( jni, iPos->second.m_info );
-        }
-
-        // free global refs
-        jni->DeleteGlobalRef( m_object_java_env );
-
-        jni->DeleteGlobalRef( m_class_Object );
-        jni->DeleteGlobalRef( m_class_String );
-        jni->DeleteGlobalRef( m_class_Double );
-        jni->DeleteGlobalRef( m_class_Float );
-        jni->DeleteGlobalRef( m_class_Long );
-        jni->DeleteGlobalRef( m_class_Integer );
-        jni->DeleteGlobalRef( m_class_Short );
-        jni->DeleteGlobalRef( m_class_Byte );
-        jni->DeleteGlobalRef( m_class_Boolean );
-        jni->DeleteGlobalRef( m_class_Character );
-
-        jni->DeleteGlobalRef( m_class_JNI_proxy );
-        jni->DeleteGlobalRef( m_class_RuntimeException );
-        jni->DeleteGlobalRef( m_class_UnoRuntime );
-        jni->DeleteGlobalRef( m_class_TypeClass );
-        jni->DeleteGlobalRef( m_class_Type );
-        jni->DeleteGlobalRef( m_class_Any );
+        iPos->second.m_info->destroy( jni );
     }
-    catch (BridgeRuntimeError & err)
-    {
-#ifdef _DEBUG
-        OString cstr_msg(
-            OUStringToOString(
-                OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
-#endif
-    }
-    catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-    {
-        OSL_ENSURE( 0, "[jni_uno bridge error] attaching current thread to java failed!" );
-    }
+
+    // free global refs
+    jni->DeleteGlobalRef( m_object_java_env );
+
+    jni->DeleteGlobalRef( m_class_Object );
+    jni->DeleteGlobalRef( m_class_String );
+    jni->DeleteGlobalRef( m_class_Double );
+    jni->DeleteGlobalRef( m_class_Float );
+    jni->DeleteGlobalRef( m_class_Long );
+    jni->DeleteGlobalRef( m_class_Integer );
+    jni->DeleteGlobalRef( m_class_Short );
+    jni->DeleteGlobalRef( m_class_Byte );
+    jni->DeleteGlobalRef( m_class_Boolean );
+    jni->DeleteGlobalRef( m_class_Character );
+
+    jni->DeleteGlobalRef( m_class_JNI_proxy );
+    jni->DeleteGlobalRef( m_class_RuntimeException );
+    jni->DeleteGlobalRef( m_class_UnoRuntime );
+    jni->DeleteGlobalRef( m_class_TypeClass );
+    jni->DeleteGlobalRef( m_class_Type );
+    jni->DeleteGlobalRef( m_class_Any );
+
+    delete this;
 }
 
+//__________________________________________________________________________________________________
+JNI_info const * JNI_info::get_jni_info( JNI_context const & jni )
+{
+    // !!!no JNI_info available at JNI_context!!!
+
+    JLocalAutoRef jo_JNI_info_holder(
+        jni, find_class( jni, "com/sun/star/bridges/jni_uno/JNI_info_holder" ) );
+    // field JNI_info_holder.m_jni_info_handle
+    jfieldID field_s_jni_info_handle =
+        jni->GetStaticFieldID( (jclass)jo_JNI_info_holder.get(), "s_jni_info_handle", "J" );
+    jni.ensure_no_exception();
+    OSL_ASSERT( 0 != field_s_jni_info_handle );
+
+    JNI_info const * jni_info =
+        reinterpret_cast< JNI_info const * >(
+            jni->GetStaticLongField( (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
+    if (0 == jni_info) // UNinitialized?
+    {
+        JNI_info * new_info = new JNI_info( jni );
+
+        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        jni_info =
+            reinterpret_cast< JNI_info const * >(
+                jni->GetStaticLongField(
+                    (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
+        if (0 == jni_info) // still UNinitialized?
+        {
+            jni->SetStaticLongField( (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle,
+                reinterpret_cast< jlong >( new_info ) );
+            jni_info = new_info;
+        }
+        else
+        {
+            guard.clear();
+            new_info->destroy( jni );
+        }
+    }
+
+    return jni_info;
+}
+
+}
+
+//##################################################################################################
+JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
+    JNIEnv * jni_env, jobject jo_proxy, jlong jni_info_handle )
+    SAL_THROW_EXTERN_C()
+{
+    ::jni_uno::JNI_info * jni_info = reinterpret_cast< ::jni_uno::JNI_info * >( jni_info_handle );
+    ::jni_uno::JNI_context jni( jni_info, jni_env );
+    jni_info->destroy( jni );
 }

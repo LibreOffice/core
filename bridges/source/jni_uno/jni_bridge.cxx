@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,12 +210,18 @@ void Bridge::acquire() const SAL_THROW( () )
 {
     if (1 == osl_incrementInterlockedCount( &m_ref ))
     {
-        uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
-        uno_registerMapping( &mapping, Bridge_free, m_java_env, (uno_Environment *)m_uno_env, 0 );
-        OSL_ASSERT( mapping == const_cast< Mapping * >( &m_java2uno ) );
-        mapping = const_cast< Mapping * >( &m_uno2java );
-        uno_registerMapping( &mapping, Bridge_free, (uno_Environment *)m_uno_env, m_java_env, 0 );
-        OSL_ASSERT( mapping == const_cast< Mapping * >( &m_uno2java ) );
+        if (m_registered_java2uno)
+        {
+            uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
+            uno_registerMapping(
+                &mapping, Bridge_free, m_java_env, (uno_Environment *)m_uno_env, 0 );
+        }
+        else
+        {
+            uno_Mapping * mapping = const_cast< Mapping * >( &m_uno2java );
+            uno_registerMapping(
+                &mapping, Bridge_free, (uno_Environment *)m_uno_env, m_java_env, 0 );
+        }
     }
 }
 //__________________________________________________________________________________________________
@@ -223,18 +229,25 @@ void Bridge::release() const SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( &m_ref ))
     {
-        uno_revokeMapping( const_cast< Mapping * >( &m_java2uno ) );
-        uno_revokeMapping( const_cast< Mapping * >( &m_uno2java ) );
+        uno_revokeMapping(
+            m_registered_java2uno
+            ? const_cast< Mapping * >( &m_java2uno )
+            : const_cast< Mapping * >( &m_uno2java ) );
     }
 }
 //__________________________________________________________________________________________________
 Bridge::Bridge(
-    uno_Environment * java_env, uno_ExtEnvironment * uno_env )
-    : m_ref( 0 ),
+    uno_Environment * java_env, uno_ExtEnvironment * uno_env,
+    bool registered_java2uno )
+    : m_ref( 1 ),
       m_uno_env( uno_env ),
-      m_java_env( java_env )
+      m_java_env( java_env ),
+      m_registered_java2uno( registered_java2uno )
 {
-    m_jni_info = new JNI_info( this );
+    JNI_guarded_context jni(
+        0 /* bootstrapping bridge, no jni_info available */,
+        reinterpret_cast< ::jvmaccess::VirtualMachine * >( m_java_env->pContext ) );
+    m_jni_info = JNI_info::get_jni_info( jni );
 
     OSL_ASSERT( 0 != m_java_env && 0 != m_uno_env );
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
@@ -256,8 +269,6 @@ Bridge::Bridge(
 //__________________________________________________________________________________________________
 Bridge::~Bridge() SAL_THROW( () )
 {
-    delete m_jni_info;
-
     (*m_java_env->release)( m_java_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
 
@@ -401,16 +412,18 @@ void SAL_CALL uno_ext_getMapping(
             if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ) &&
                 to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
             {
-                Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv ); // ref count = 0
-                bridge->acquire(); // 0->1 registers both mappings
+                Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
                 mapping = &bridge->m_java2uno;
+                uno_registerMapping(
+                    &mapping, Bridge_free, pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
             }
             else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
                      to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ))
             {
-                Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv ); // ref count = 0
-                bridge->acquire(); // 0->1 registers both mappings
+                Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
                 mapping = &bridge->m_uno2java;
+                uno_registerMapping(
+                    &mapping, Bridge_free, (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
             }
         }
         catch (BridgeRuntimeError & err)
