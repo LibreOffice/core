@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:37:08 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Per ~defecte";\
         Text[ finnish ] = "~Oletusarvo";\
+        Text[ thai ] = "~ค่าเริ่มต้น";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -175,6 +176,7 @@
                     Text[ turkish ] = "~�st simge";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Super�ndex";\
+                    Text[ thai ] = "~ตัวยก";\
                 };\
                 MenuItem\
                 {\
@@ -204,6 +206,7 @@
                     Text[ turkish ] = "~Alt simge";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "S~ub�ndex";\
+                    Text[ thai ] = "ตั~วยก";\
                 };\
             };\
         };\
@@ -218,6 +221,7 @@
         Text[ turkish ] = "Bi~�im";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "E~stil";\
+        Text[ thai ] = "~ลักษณะ";\
     };\
     MenuItem\
     {\
@@ -285,6 +289,7 @@
                     Text[ turkish ] = "~�ki yana yasla";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Justificat";\
+                    Text[ thai ] = "~ชิดขอบ";\
                 };\
             };\
         };\
@@ -299,6 +304,7 @@
         Text[ turkish ] = "~Hizalama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Alineaci�";\
+        Text[ thai ] = "~จัดตำแหน่ง";\
     };\
     MenuItem\
     {\
@@ -350,6 +356,7 @@
         Text[ turkish ] = "~Sat�r aral���";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Inter~lineat";\
+        Text[ thai ] = "ช่องว่าง~บรรทัด";\
     };
 
 #define MN_DRWTXT \
@@ -391,6 +398,7 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Te~xt...";\
         Text[ finnish ] = "Teks~ti";\
+        Text[ thai ] = "ข้อ~ความ...";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -423,6 +431,7 @@
         Text[ turkish ] = "Ger�ek ~boyut";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Mida ~original";\
+        Text[ thai ] = "ขนาดเ~ดิม";\
     };
 
 #define MN_RENAME_OBJECT \
@@ -452,6 +461,7 @@
         Text[ turkish ] = "~Name Object...";\
         Text[ arabic ] = "~Name Object...";\
         Text[ catalan ] = "~Name Object...";\
+        Text[ thai ] = "~Name Object...";\
     };
 
 #define MN_MIRRORSUB \
@@ -504,6 +514,7 @@
                     Text[ turkish ] = "~Dikey";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Verticalment";\
+                    Text[ thai ] = "แ~นวตั้ง";\
                 };\
                 MenuItem\
                 {\
@@ -533,6 +544,7 @@
                     Text[ turkish ] = "~Yatay";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Horitzontal";\
+                    Text[ thai ] = "แน~วนอน";\
                 };\
             };\
         };\
@@ -547,6 +559,7 @@
         Text[ turkish ] = "~Yans�t";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "In~verteix";\
+        Text[ thai ] = "~พลิก";\
     };
 
 #define MN_ARRANGESUB \
@@ -604,6 +617,7 @@
                     Text[ turkish ] = "B~ir �ne getir";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Porta al ~davant";\
+                    Text[ thai ] = "ส่ง~ต่อ";\
                 };\
                 MenuItem\
                 {\
@@ -634,6 +648,7 @@
                     Text[ turkish ] = "Bir  ~geri g�nder";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "En~via cap enrere";\
+                    Text[ thai ] = "ส่ง~กลับ";\
                 };\
                 MenuItem\
                 {\
@@ -661,6 +676,7 @@
         Text[ turkish ] = "~S�ralama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Organitza";\
+        Text[ thai ] = "~จัดเรียง";\
     };
 
 #define MN_ANCHORSUB \
@@ -706,6 +722,7 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la p~�gina";\
                     Text[ finnish ] = "Sivul~le";\
+                    Text[ thai ] = "ไปยังห~น้า";\
                 };\
                 MenuItem\
                 {\
@@ -734,6 +751,7 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~cel�la";\
                     Text[ finnish ] = "So~luun";\
+                    Text[ thai ] = "ไปยังเ~ซลล์";\
                 };\
             };\
         };\
@@ -753,6 +771,7 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "An~cora";\
         Text[ finnish ] = "Ank~kuri";\
+        Text[ thai ] = "ส~มอ";\
     };
 
 #define MN_ALIGNSUB \
@@ -818,6 +837,7 @@
         Text[ turkish ] = "Hiz~alama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "A~lineaci�";\
+        Text[ thai ] = "จั~ดเรียง";\
     };
 
  //
@@ -852,6 +872,7 @@ String RID_DRAW_OBJECTBAR
     Text[ turkish ] = "�izim nesne �ubu�u";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de dibuix";
+    Text[ thai ] = "แถบวัตถุวาดรูป";
 };
 ToolBox RID_DRAW_OBJECTBAR
 {
@@ -1026,6 +1047,7 @@ String RID_TEXT_TOOLBOX
     Text[ turkish ] = "Metin nesne �ubu�u";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de text";
+    Text[ thai ] = "แถบวัตถุข้อความ";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -1215,6 +1237,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ arabic ] = "���� ������ ����";
     Text[ catalan ] = "Barra d'objectes gr�fics";
     Text[ finnish ] = "Grafiikkaobjektipalkki";
+    Text[ thai ] = "แถบวัตถุกราฟิค";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -1476,6 +1499,7 @@ String RID_POPUP_DRAW
     Text[ turkish ] = "�izim nesneleri i�in a��lan m�n�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Men� emergent per a objectes de dibuix";
+    Text[ thai ] = "เมนูแบบผุดขึ้นสำหรับวัตถุวาดรูป";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -1495,6 +1519,7 @@ Menu RID_POPUP_DRAW
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1557,6 +1582,7 @@ Menu RID_POPUP_GRAPHIC
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
+        MN_RENAME_OBJECT
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1633,6 +1659,7 @@ Menu RID_POPUP_CHART
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Modifica l'�rea de dades...";
             Text[ finnish ] = "~Muokkaa tietoaluetta...";
+            Text[ thai ] = "~ดัดแปลงช่วงข้อมูล...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1671,6 +1698,7 @@ String RID_POPUP_DRAWTEXT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Men� emergent per a objectes de text";
     Text[ finnish ] = "Tekstiobjektien ponnahdusvalikko";
+    Text[ thai ] = "เมนูแบบผุดขึ้นสำหรับวัตถุข้อความ";
 };
 
 Menu RID_POPUP_DRAWTEXT

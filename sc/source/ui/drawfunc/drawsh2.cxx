@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:06:48 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,15 +186,15 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
     }
 
-    if ( nMarkCount != 1 ||
-         rMarkList.GetMark( 0 )->GetObj()->GetObjIdentifier() != OBJ_OLE2 )
+    BOOL bCanRename = FALSE;
+    if ( nMarkCount == 1 )
     {
-        //  Only a single object can be renamed.
-        //  Currently only OLE objects (charts and others) are supported,
-        //  Graphics and groups may be added later.
-
-        rSet.DisableItem( SID_RENAME_OBJECT );
+        UINT16 nObjType = rMarkList.GetMark( 0 )->GetObj()->GetObjIdentifier();
+        if ( nObjType == OBJ_OLE2 || nObjType == OBJ_GRAF || nObjType == OBJ_GRUP )
+            bCanRename = TRUE;
     }
+    if ( !bCanRename )
+        rSet.DisableItem( SID_RENAME_OBJECT );
 
     if ( !nMarkCount )                          // nichts selektiert
     {

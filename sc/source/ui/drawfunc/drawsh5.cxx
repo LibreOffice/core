@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:06:48 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
+#include <svx/dlgname.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
@@ -94,6 +95,7 @@
 #include "strindlg.hxx"
 #include "scresid.hxx"
 #include "undotab.hxx"
+#include "drwlayer.hxx"
 
 #include "sc.hrc"
 
@@ -505,31 +507,50 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if ( rMarkList.GetMarkCount() == 1 )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
-                    if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
+                    UINT16 nObjType = pObj->GetObjIdentifier();
+                    if ( nObjType == OBJ_OLE2 || nObjType == OBJ_GRAF || nObjType == OBJ_GRUP )
                     {
                         // PersistName is used to identify object in Undo
-                        String aPersistName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
-
-                        //  Currently only OLE objects (charts and others) are supported,
-                        //  Graphics and groups may be added later (Undo must be changed then)
+                        String aPersistName;
+                        if ( nObjType == OBJ_OLE2 )
+                            aPersistName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
 
                         String aOldName = pObj->GetName();
-                        ScStringInputDlg* pDlg = new ScStringInputDlg( pViewData->GetDialogParent(),
-                                                      String(ScResId(SCSTR_RENAMEOBJECT)),
-                                                      String(ScResId(SCSTR_NAME)),
-                                                      aOldName, nSlotId );
+                        String aTitle(ScResId(SCSTR_RENAMEOBJECT));
+                        String aDesc(ScResId(SCSTR_NAME));
+
+                        SvxNameDialog* pDlg = new SvxNameDialog( NULL, aOldName, aDesc );
+                        pDlg->SetText( aTitle );
+                        pDlg->SetCheckNameHdl( LINK( this, ScDrawShell, NameObjectHdl ) );
+
                         USHORT nRet = pDlg->Execute();
                         if ( nRet == RET_OK )
                         {
                             String aNewName;
-                            pDlg->GetInputString( aNewName );
+                            pDlg->GetName( aNewName );
                             if ( aNewName != aOldName )
                             {
+                                if ( nObjType == OBJ_GRAF && aNewName.Len() == 0 )
+                                {
+                                    //  graphics objects must have names
+                                    //  (all graphics are supposed to be in the navigator)
+                                    ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
+                                    if ( pModel )
+                                        aNewName = pModel->GetNewGraphicName();
+                                }
+
                                 pObj->SetName( aNewName );              // set new name
 
                                 ScDocShell* pDocSh = pViewData->GetDocShell();
-                                pDocSh->GetUndoManager()->AddUndoAction(
-                                            new ScUndoRenameObject( pDocSh, aPersistName, aOldName, aNewName ) );
+
+                                //  An undo action for renaming is missing in svdraw (99363).
+                                //  For OLE objects (which can be identified using the persist name),
+                                //  ScUndoRenameObject can be used until there is a common action for all objects.
+                                if ( aPersistName.Len() )
+                                {
+                                    pDocSh->GetUndoManager()->AddUndoAction(
+                                                new ScUndoRenameObject( pDocSh, aPersistName, aOldName, aNewName ) );
+                                }
 
                                 pDocSh->SetDrawModified();
                             }
@@ -545,6 +566,26 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     }
 }
 
+IMPL_LINK( ScDrawShell, NameObjectHdl, SvxNameDialog*, pDialog )
+{
+    String aName;
+
+    if( pDialog )
+        pDialog->GetName( aName );
+
+    ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
+    if ( aName.Len() && pModel )
+    {
+        USHORT nDummyTab;
+        if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )
+        {
+            // existing object found -> name invalid
+            return 0;
+        }
+    }
+
+    return 1;   // name is valid
+}
 
 //------------------------------------------------------------------
 
