@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-04 14:29:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#include <assert.h>
 #include <stdio.h>
 
 #include <osl/interlck.h>
@@ -212,7 +211,7 @@ struct StaticSingleton
 };
 StaticSingleton singleton;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 static MyCounter thisCounter( "Remote Environment" );
 #endif
 
@@ -358,7 +357,7 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
             pImpl->m_pLogFile = 0;
         }
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         pImpl->dumpErrors( stderr );
 #endif
 
@@ -401,7 +400,7 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
     delete pImpl;
     pContext->aBase.release( (uno_Context * ) pContext );
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
       thisCounter.release();
 #endif
 }
@@ -530,7 +529,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
             new PropertySetterThread( pEnvRemote, pImpl , sProtocolProperties );
         pPropsSetterThread->create();
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
