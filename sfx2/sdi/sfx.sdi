@@ -691,7 +691,7 @@ SfxRectangleItem Area SID_WIN_POSSIZE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ArrangeHorizontal SID_HORIZONTALDOCKWINS
+SfxVoidItem ArrangeWinsHorizontal SID_HORIZONTALDOCKWINS
 ()
 [
     /* flags: */
@@ -766,7 +766,7 @@ SfxVoidItem ArrangeIcons SID_ARRANGEICONS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ArrangeVertical SID_VERTICALDOCKWINS
+SfxVoidItem ArrangeWinsVertical SID_VERTICALDOCKWINS
 ()
 [
     /* flags: */
@@ -1814,7 +1814,7 @@ SfxBoolItem CommonTaskBarVisible SID_TOGGLECOMMONTASKBAR
 
 //--------------------------------------------------------------------------
 SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3093,7 +3093,7 @@ SfxVoidItem GoDown SID_CURSORDOWN
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
+(SfxInt16Item By SID_CURSORPAGEDOWN,SfxBoolItem Sel FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3168,7 +3168,7 @@ SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoLeft SID_CURSORLEFT
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
+(SfxInt16Item By SID_CURSORLEFT,SfxBoolItem Sel FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3268,7 +3268,7 @@ SfxVoidItem GoLeftSel SID_CURSORLEFT_SEL
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoRight SID_CURSORRIGHT
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
+(SfxInt16Item By SID_CURSORRIGHT,SfxBoolItem Sel FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3518,7 +3518,7 @@ SfxVoidItem GoToStartSel SID_CURSORTOPOFFILE_SEL
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoUp SID_CURSORUP
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
+(SfxInt16Item By SID_CURSORUP,SfxBoolItem Sel FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3543,7 +3543,7 @@ SfxVoidItem GoUp SID_CURSORUP
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoUpBlock SID_CURSORPAGEUP
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
+(SfxInt16Item By SID_CURSORPAGEUP,SfxBoolItem Sel FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3771,31 +3771,6 @@ SfxBoolItem HelperDialog SID_HELP_PI
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem HelpIndex SID_HELP_INDEX
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EXPLORER;
 ]
 
 //--------------------------------------------------------------------------
@@ -4054,6 +4029,7 @@ SfxBoolItem InsertDoc SID_INSERTDOC
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertHyperlink SID_HYPERLINK_INSERT
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -4067,6 +4043,8 @@ SfxBoolItem InsertHyperlink SID_HYPERLINK_INSERT
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4316,7 +4294,7 @@ SfxBoolItem IsTopWindow SID_ISTOP
 
 //--------------------------------------------------------------------------
 SfxVoidItem JumpToMark SID_JUMPTOMARK
-(SfxStringItem Bookmark ID_VAL_DUMMY0)
+(SfxStringItem Bookmark SID_JUMPTOMARK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5868,7 +5846,7 @@ SfxStringItem OnStart SID_ON_STARTAPP
 
 //--------------------------------------------------------------------------
 SfxObjectItem Open SID_OPENDOC
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5974,31 +5952,6 @@ SfxStringItem OpenUrl SID_OPENURL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem OpenUrl SID_EXECUTE
-(SfxStringItem Comand SID_EXECUTE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem OptionBarVisible SID_TOGGLEOPTIONBAR
 
 [
@@ -6037,7 +5990,7 @@ SfxVoidItem Options SID_OPTIONS
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
+    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
@@ -6185,7 +6138,7 @@ SfxVoidItem Paste SID_PASTE
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem Path SID_DOCPATH
+SfxStringItem DocPath SID_DOCPATH
 
 [
     /* flags: */
@@ -6317,16 +6270,7 @@ SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
 
 //--------------------------------------------------------------------------
 SfxBoolItem Print SID_PRINTDOC
-(SfxStringItem PrinterName SID_PRINTER_NAME,
- SfxStringItem FileName SID_FILE_NAME,
- SfxInt16Item From SID_PRINT_FIRST_PAGE,
- SfxInt16Item To SID_PRINT_LAST_PAGE,
- SfxInt16Item Copies SID_PRINT_COPIES,
- SfxStringItem RangeText SID_PRINT_PAGES,
- SfxBoolItem Selection SID_SELECTION,
- SfxBoolItem Asynchron SID_ASYNCHRON,
- SfxBoolItem Collate SID_PRINT_COLLATE,
- SfxBoolItem Silent SID_SILENT)
+(SfxStringItem PrinterName SID_PRINTER_NAME,SfxStringItem FileName SID_FILE_NAME,SfxInt16Item From SID_PRINT_FIRST_PAGE,SfxInt16Item To SID_PRINT_LAST_PAGE,SfxInt16Item Copies SID_PRINT_COPIES,SfxStringItem RangeText SID_PRINT_PAGES,SfxBoolItem Selection SID_SELECTION,SfxBoolItem Asynchron SID_ASYNCHRON,SfxBoolItem Collate SID_PRINT_COLLATE,SfxBoolItem Silent SID_SILENT)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6481,7 +6425,8 @@ SfxStringItem PrivateUse SID_OFFICE_PRIVATE_USE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetDocumentProperties SID_DOCINFO( SfxDocumentInfoItem Properties SID_DOCINFO )
+SfxVoidItem SetDocumentProperties SID_DOCINFO
+(SfxDocumentInfoItem Properties SID_DOCINFO)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6561,6 +6506,7 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
 
 //--------------------------------------------------------------------------
 SfxBoolItem MacroRecorder SID_RECORDMACRO
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6575,6 +6521,8 @@ SfxBoolItem MacroRecorder SID_RECORDMACRO
     NoRecord;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6583,8 +6531,9 @@ SfxBoolItem MacroRecorder SID_RECORDMACRO
     GroupId = GID_MACRO;
 ]
 
+//--------------------------------------------------------------------------
 SfxVoidItem StopRecording SID_STOP_RECORDING
-( SfxBoolItem DontRecord FN_PARAM_1 )
+(SfxBoolItem DontRecord FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6607,6 +6556,7 @@ SfxVoidItem StopRecording SID_STOP_RECORDING
     GroupId = GID_MACRO;
 ]
 
+//--------------------------------------------------------------------------
 SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 
 [
@@ -6622,6 +6572,8 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
     RecordAbsolute = FALSE,
     NoRecord;
     Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6972,7 +6924,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7025,7 +6977,7 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAsUrl SID_SAVEASURL
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_DOC_READONLY,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_DOC_READONLY,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7671,31 +7623,6 @@ SfxObjectItem SplitVertical SID_SPLIT_VERTICAL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem StartApplication SID_START_APP
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem StartMenu SID_STARTMENU
 ()
 [
@@ -8170,7 +8097,7 @@ SfxVoidItem Tile SID_TILEWINS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Tile SID_TILEDOCKWINS
+SfxVoidItem TileWins SID_TILEDOCKWINS
 ()
 [
     /* flags: */
@@ -8819,34 +8746,6 @@ SfxBoolItem ExportTo SID_EXPORTDOC
     GroupId = GID_DOCUMENT;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
-(SfxStringItem URL SID_FILE_NAME )
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DOCUMENT;
-]
-
 SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
 (SfxStringItem URL SID_FILE_NAME)
 [
@@ -8927,3 +8826,4 @@ SfxBoolItem SaveVersionOnClose SID_SAVE_VERSION_ON_CLOSE
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
+
