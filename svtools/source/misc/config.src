@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:08:15 $
+ *  last change: $Author: rt $ $Date: 2001-08-21 20:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_WARNING_ITEM
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "¡La entrada contiene una versión incorrecta!";
 };
+
 
 
 
