@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 12:59:42 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 13:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     if ( aTemplateRootURL.Len() > 0 )
     {
         aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
-        nTemp = GetTextWidth( aEntryStr );
+        nTemp = aIconCtrl.GetTextWidth( aEntryStr );
         if ( nTemp > nMaxTextLength )
             nMaxTextLength = nTemp;
         pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
@@ -281,7 +281,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // "My Documents"
     aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
-    nTemp = GetTextWidth( aEntryStr );
+    nTemp = aIconCtrl.GetTextWidth( aEntryStr );
     if ( nTemp > nMaxTextLength )
         nMaxTextLength = nTemp;
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
@@ -290,7 +290,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // "Samples"
     aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
-    nTemp = GetTextWidth( aEntryStr );
+    nTemp = aIconCtrl.GetTextWidth( aEntryStr );
     if ( nTemp > nMaxTextLength )
         nMaxTextLength = nTemp;
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
@@ -813,12 +813,10 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     aFileViewTB     ( this, SvtResId( TB_SVT_FILEVIEW ) ),
     aFrameWinTB     ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin       ( this, WB_DOCKBORDER ),
+    aSplitWin       ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW ),
     pHistoryList    ( NULL )
 
 {
-    SetDialogControlStart( TRUE );
-
     // create windows
     pIconWin = new SvtIconWindow_Impl( this );
     pFileWin = new SvtFileViewWindow_Impl( this );
