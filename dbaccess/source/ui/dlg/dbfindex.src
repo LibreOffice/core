@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,26 @@ ModalDialog DLG_DBASE_INDEXES
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Tabelle" ;
         Text [ english ] = "Table" ;
+        Text[ english_us ] = "~Table";
+        Text[ portuguese ] = "~Tabela:";
+        Text[ russian ] = "“‡·ÎËˆ‡:";
+        Text[ greek ] = "–ﬂÌ·Í·Ú:";
+        Text[ dutch ] = "~Tabel";
+        Text[ french ] = "~Table :";
+        Text[ spanish ] = "~Tabla";
+        Text[ finnish ] = "~Taulukko:";
+        Text[ italian ] = "~Tabella";
+        Text[ danish ] = "Tabel:";
+        Text[ swedish ] = "~Tabell";
+        Text[ polish ] = "Tabela";
+        Text[ portuguese_brazilian ] = "Tabelle:";
+        Text[ japanese ] = "√∞ÃﬁŸ(~T)";
+        Text[ korean ] = "«•(~T):";
+        Text[ chinese_simplified ] = "±Ì∏Ò(~T)";
+        Text[ chinese_traditional ] = "™ÌÆÊ(~T)";
+        Text[ turkish ] = "Tablo:";
+        Text[ arabic ] = "ÃœÊ·:";
+        Text[ catalan ] = "~Tabla:";
     };
     ComboBox CB_TABLES
     {
@@ -151,6 +171,26 @@ ModalDialog DLG_DBASE_INDEXES
         Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "T~abellenindizes" ;
         Text [ english ] = "Table indexes" ;
+        Text[ english_us ] = "T~able indexes";
+        Text[ portuguese ] = "~Õndices de tabelas:";
+        Text[ russian ] = "»Ì‰ÂÍÒ˚ Ú‡·ÎËˆ˚:";
+        Text[ greek ] = "≈ıÒÂÙﬁÒÈ~· ÈÌ‹Í˘Ì:";
+        Text[ dutch ] = "Tabel~indices";
+        Text[ french ] = "~Index de table :";
+        Text[ spanish ] = "Õndices de ta~bla";
+        Text[ finnish ] = "T~aulukkohakemistot:";
+        Text[ italian ] = "Indici t~abella";
+        Text[ danish ] = "Tabelindeks:";
+        Text[ swedish ] = "T~abellindex";
+        Text[ polish ] = "Indeksy tabeli";
+        Text[ portuguese_brazilian ] = "Tabellenindizes:";
+        Text[ japanese ] = "√∞ÃﬁŸÇÃ≤›√ﬁØ∏Ω(~A)";
+        Text[ korean ] = "«• ªˆ¿Œ(~A):";
+        Text[ chinese_simplified ] = "±Ì∏Ò±Í÷æ(~A)";
+        Text[ chinese_traditional ] = "™ÌÆÊº–ªx(~A)";
+        Text[ turkish ] = "Tablo dizinleri:";
+        Text[ arabic ] = "›Â«—” ÃœÊ·:";
+        Text[ catalan ] = "Õndices de ta~bla:";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -166,6 +206,26 @@ ModalDialog DLG_DBASE_INDEXES
         Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "~Freie Indizes" ;
         Text [ english ] = "Free Indexes" ;
+        Text[ english_us ] = "~Free indexes";
+        Text[ portuguese ] = "Õndices ~livres:";
+        Text[ russian ] = "—‚Ó·Ó‰Ì˚Â ËÌ‰ÂÍÒ˚:";
+        Text[ greek ] = "≈ÎÂ˝~ËÂÒ· ÂıÒÂÙﬁÒÈ·";
+        Text[ dutch ] = "~Vrije indices";
+        Text[ french ] = "Index ~libres :";
+        Text[ spanish ] = "Õndices lib~res";
+        Text[ finnish ] = "~Vapaat hakemistot:";
+        Text[ italian ] = "Indici li~beri";
+        Text[ danish ] = "Frie indeks:";
+        Text[ swedish ] = "~Fria index";
+        Text[ polish ] = "Wolne indeksy";
+        Text[ portuguese_brazilian ] = "Freie Indizes";
+        Text[ japanese ] = "Ãÿ∞≤›√ﬁØ∏Ω(~F)";
+        Text[ korean ] = "¿”¿«¿« ªˆ¿Œ(~F)";
+        Text[ chinese_simplified ] = "◊‘”…±Í÷æ(~F)";
+        Text[ chinese_traditional ] = "¶€•—º–ªx(~F)";
+        Text[ turkish ] = "Bo˛ dizinler:";
+        Text[ arabic ] = "›Â«—” Õ—…:";
+        Text[ catalan ] = "Õndices lib~res:";
     };
     ListBox LB_FREEINDEXES
     {
@@ -271,6 +331,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/21 15:07:11  fme
+ *  Fix #86988#: Redesign of dialogs
+ *
  *  Revision 1.8  2001/06/13 22:26:30  kz
  *  Merge SRC633: 14.06.01 - 00:26:49
  *
@@ -298,5 +361,6 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
