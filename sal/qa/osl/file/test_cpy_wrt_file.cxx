@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_cpy_wrt_file.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:09:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ using namespace rtl;
 #ifdef UNX
 #   define COPY_SOURCE_PATH "/home/tr109510/ucbhelper.cxx"
 #   define COPY_DEST_PATH "/mnt/mercury08/ucbhelper.cxx"
-#else if WNT
+#else /* if WNT */
 #   define COPY_SOURCE_PATH "d:\\msvcr70.dll"
 #   define COPY_DEST_PATH "x:\\tra\\msvcr70.dll"
 #endif
@@ -99,7 +99,7 @@ public:
 //########################################
 #ifdef UNX
 #   define WRITE_DEST_PATH "/mnt/mercury08/muell.tmp"
-#else if WNT
+#else /* if WNT */
 #   define WRITE_DEST_PATH "d:\\tmp_data.tmp"
 #endif
 
