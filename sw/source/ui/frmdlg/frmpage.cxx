@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 15:54:56 $
+ *  last change: $Author: os $ $Date: 2002-06-26 10:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ struct RelationMap
     ULONG  nLBRelation;
     USHORT nRelation;
 };
+#define MAX_PERCENT_WIDTH 254L
 
 #define LB_FRAME                0x00000001L // Textbereich des Absatzes
 #define LB_PRTAREA              0x00000002L // Textbereich des Absatzes + Einzuege
@@ -919,7 +920,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         if (aRelWidthCB.IsChecked())
         {
-            aSz.SetWidthPercent((BYTE)Min(100L, aWidthED.Convert(aWidthED.Normalize(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetWidthPercent((BYTE)Min(MAX_PERCENT_WIDTH, aWidthED.Convert(aWidthED.Normalize(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
         }
         else
             aSz.SetWidthPercent(0);
@@ -1438,7 +1439,10 @@ IMPL_LINK( SwFrmPage, MirrorHdl, CheckBox *, pBtn )
 IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
 {
     if (pBtn == &aRelWidthCB)
+    {
         aWidthED.ShowPercent(pBtn->IsChecked());
+        aWidthED.MetricField::SetMax(MAX_PERCENT_WIDTH);
+    }
     else
         aHeightED.ShowPercent(pBtn->IsChecked());
 
