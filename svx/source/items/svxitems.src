@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:04:50 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2571,7 +2571,7 @@ String RID_SVXITEMS_CASEMAP_TITEL
     Text [ french ] = "Caractères du titre" ;
     Text [ swedish ] = "Titel" ;
     Text [ dutch ] = "Titel" ;
-    Text [ spanish ] = "Caracteres del título" ;
+    Text [ spanish ] = "Caracteres de título" ;
     Text [ english_us ] = "Title" ;
     Text[ chinese_simplified ] = "±êÌâ";
     Text[ russian ] = "Òèòóëüíûé øğèôò";
@@ -7327,7 +7327,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ russian ] = "Îòêë. äâóñòğî÷íûé";
     Text[ greek ] = "Äßãñáììá - ¼÷é";
     Text[ dutch ] = "Tweeregelig uit";
-    Text[ french ] = "Two lines off";
+    Text[ french ] = "Désactiver les deux lignes en une";
     Text[ spanish ] = "Desactivar líneas dobles";
     Text[ italian ] = "Disattiva 'A due righe'";
     Text[ danish ] = "Two lines off";
@@ -7350,7 +7350,7 @@ String RID_SVXITEMS_TWOLINES
     Text[ russian ] = "Äâóñòğî÷íûé";
     Text[ greek ] = "Äßãñáììá";
     Text[ dutch ] = "Tweeregelig";
-    Text[ french ] = "Two lines";
+    Text[ french ] = "Deux lignes en une";
     Text[ spanish ] = "Dos líneas";
     Text[ italian ] = "A due righe";
     Text[ danish ] = "Two lines";
@@ -7512,13 +7512,13 @@ String RID_SVXITEMS_CHARROTATE_OFF
     Text = "keine gedrehten Zeichen";
     Text [ English ] = "no rotated character";
     Text[ english_us ] = "No rotated characters";
-    Text[ portuguese ] = "no rotated character";
+    Text[ portuguese ] = "Sem rotação de caracteres";
     Text[ russian ] = "áåç ïåğåâåğíóòûõ çíàêîâ";
     Text[ greek ] = "÷ùñßò ğåñéóôñåöüìåíïõò ÷áñáêôŞñåò";
-    Text[ dutch ] = "no rotated character";
-    Text[ french ] = "no rotated character";
+    Text[ dutch ] = "geen gedraaide tekens";
+    Text[ french ] = "Sans rotation des caractères";
     Text[ spanish ] = "Sin carácteres cambiados";
-    Text[ italian ] = "no rotated character";
+    Text[ italian ] = "Senza rotazione carattere";
     Text[ danish ] = "no rotated character";
     Text[ swedish ] = "inga roterade tecken";
     Text[ polish ] = "bez obróconych znaków";
@@ -7535,13 +7535,13 @@ String RID_SVXITEMS_CHARROTATE
     Text = "Zeichen um $(ARG1)° gedreht";
     Text [ English ] = "character rotated by $(ARG1)°";
     Text[ english_us ] = "Character rotated by $(ARG1)°";
-    Text[ portuguese ] = "character rotated by $(ARG1)°";
+    Text[ portuguese ] = "Rotação de caracteres: $(ARG1)°";
     Text[ russian ] = "Ïîâåğíóòü çíàêè íà $(ARG1)°";
     Text[ greek ] = "ĞåñéóôñïöŞ ÷áñáêôŞñùí êáôÜ $(ARG1)°";
-    Text[ dutch ] = "character rotated by $(ARG1)°";
-    Text[ french ] = "character rotated by $(ARG1)°";
+    Text[ dutch ] = "teken $(ARG1)° gedraaid";
+    Text[ french ] = "Rotation des caractères : $(ARG1)°";
     Text[ spanish ] = "Carácter rodado en $(ARG1)°";
-    Text[ italian ] = "character rotated by $(ARG1)°";
+    Text[ italian ] = "Carattere rotato di $(ARG1)°";
     Text[ danish ] = "character rotated by $(ARG1)°";
     Text[ swedish ] = "tecken roterat med $(ARG1)°";
     Text[ polish ] = "znaki obrócono o $(ARG1)°";
@@ -7558,13 +7558,13 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
     Text = " an Zeile anpassen";
     Text [ English ] = " fit to line";
     Text[ english_us ] = "Fit to line";
-    Text[ portuguese ] = " fit to line";
+    Text[ portuguese ] = "Ajustar à linha";
     Text[ russian ] = "Ñîãëàñîâàòü ñî ñòğîêîé";
     Text[ greek ] = "ğñïóáñìïãŞ óôç óåéñÜ";
-    Text[ dutch ] = " fit to line";
-    Text[ french ] = " fit to line";
+    Text[ dutch ] = "aanpassen aan regel";
+    Text[ french ] = " Ajuster à la ligne";
     Text[ spanish ] = "ajustar a fila";
-    Text[ italian ] = " fit to line";
+    Text[ italian ] = "Adatta alla riga";
     Text[ danish ] = " fit to line";
     Text[ swedish ] = "anpassa till rad";
     Text[ polish ] = "wyrównaj do wiersza";
@@ -7581,13 +7581,13 @@ String RID_SVXITEMS_CHARSCALE
     Text = "Zeichenskalierung $(ARG1)%";
     Text [ English ] = "Scaled characters $(ARG1)%";
     Text[ english_us ] = "Characters scaled $(ARG1)%";
-    Text[ portuguese ] = "Scaled characters $(ARG1)%";
+    Text[ portuguese ] = "Escalar caracteres: $(ARG1)%";
     Text[ russian ] = "Ìàñøòàáèğîâàíèå çíàêîâ $(ARG1)%";
     Text[ greek ] = "ÊëéìÜêùóç ÷áñáêôŞñùí $(ARG1)%";
-    Text[ dutch ] = "Scaled characters $(ARG1)%";
-    Text[ french ] = "Scaled characters $(ARG1)%";
+    Text[ dutch ] = "Schaal van tekens $(ARG1)%";
+    Text[ french ] = "Graduation des caractères : $(ARG1)%";
     Text[ spanish ] = "Aumento del tamaño de carácter $(ARG1)%";
-    Text[ italian ] = "Scaled characters $(ARG1)%";
+    Text[ italian ] = "Scala carattere $(ARG1)%";
     Text[ danish ] = "Scaled characters $(ARG1)%";
     Text[ swedish ] = "Teckenskalning $(ARG1)%";
     Text[ polish ] = "Skalowane znaki $(ARG1)%";
@@ -7607,10 +7607,10 @@ String RID_SVXITEMS_CHARSCALE_OFF
     Text[ portuguese ] = "no scaled characters";
     Text[ russian ] = "Áåç ìàñøòàáèğîâàíèÿ çíàêîâ";
     Text[ greek ] = "÷ùñßò êëéìáêşìåíïõò ÷áñáêôŞñåò";
-    Text[ dutch ] = "no scaled characters";
-    Text[ french ] = "no scaled characters";
+    Text[ dutch ] = "geen schaalverandering van tekens";
+    Text[ french ] = "Sans graduation des caractères";
     Text[ spanish ] = "sin aumento de tamaño del carácter";
-    Text[ italian ] = "no scaled characters";
+    Text[ italian ] = "Senza scala carattere";
     Text[ danish ] = "no scaled characters";
     Text[ swedish ] = "ingen teckenskalning";
     Text[ polish ] = "bez skalowania znaków";
@@ -7628,13 +7628,13 @@ String RID_SVXITEMS_RELIEF_NONE
     Text = "Kein Relief" ;
     Text [ English ] = "No Emboss" ;
     Text[ english_us ] = "No relief";
-    Text[ portuguese ] = "No Emboss";
+    Text[ portuguese ] = "Sem relevo";
     Text[ russian ] = "Áåç ğåëüåôà";
     Text[ greek ] = "×ùñßò áíÜãëõöá";
-    Text[ dutch ] = "No Emboss";
-    Text[ french ] = "No Emboss";
+    Text[ dutch ] = "Geen relief";
+    Text[ french ] = "Sans relief";
     Text[ spanish ] = "Sin relieve";
-    Text[ italian ] = "No Emboss";
+    Text[ italian ] = "Senza rilievo";
     Text[ danish ] = "No Emboss";
     Text[ swedish ] = "Ingen relief";
     Text[ polish ] = "Bez reliefu";
@@ -7651,13 +7651,13 @@ String RID_SVXITEMS_RELIEF_EMBOSSED
     Text = "Relief";
     Text [ English ] = "Emboss";
     Text[ english_us ] = "Relief";
-    Text[ portuguese ] = "Emboss";
+    Text[ portuguese ] = "Relevo";
     Text[ russian ] = "Ğåëüåô";
     Text[ greek ] = "ÁíÜãëõöá";
-    Text[ dutch ] = "Emboss";
-    Text[ french ] = "Emboss";
+    Text[ dutch ] = "Reliëf";
+    Text[ french ] = "Relief";
     Text[ spanish ] = "Relieve";
-    Text[ italian ] = "Emboss";
+    Text[ italian ] = "Rilievo";
     Text[ danish ] = "Emboss";
     Text[ swedish ] = "Relief";
     Text[ polish ] = "Relief";
@@ -7674,13 +7674,13 @@ String RID_SVXITEMS_RELIEF_ENGRAVED
     Text = "Gravur";
     Text [ English ] = "Engrave";
     Text[ english_us ] = "Engraved";
-    Text[ portuguese ] = "Engrave";
+    Text[ portuguese ] = "Gravado";
     Text[ russian ] = "Ãğàâèğîâêà";
     Text[ greek ] = "Ãêñáâïıñá";
-    Text[ dutch ] = "Engrave";
-    Text[ french ] = "Engrave";
+    Text[ dutch ] = "Gravure";
+    Text[ french ] = "Empreinte";
     Text[ spanish ] = "Grabado";
-    Text[ italian ] = "Engrave";
+    Text[ italian ] = "Incisione";
     Text[ danish ] = "Engrave";
     Text[ swedish ] = "Gravyr";
     Text[ polish ] = "Grawura";
@@ -7696,26 +7696,116 @@ String RID_SVXITEMS_PARAVERTALIGN_AUTO
 {
     Text = "Textausrichtung automatisch";
     Text [ English ] = "text alignment automatically";
+    Text[ english_us ] = "text alignment automatically";
+    Text[ portuguese ] = "text alignment automatically";
+    Text[ russian ] = "Àâòîìàòè÷åñêîå âûğàâíèâàíèå òåêñòà";
+    Text[ greek ] = "text alignment automatically";
+    Text[ dutch ] = "text alignment automatically";
+    Text[ french ] = "text alignment automatically";
+    Text[ spanish ] = "Alineación de texto automática";
+    Text[ italian ] = "Allineamento automatico testo";
+    Text[ danish ] = "text alignment automatically";
+    Text[ swedish ] = "Textjustering automatiskt";
+    Text[ polish ] = "Automatyczne wyrównanie tekstu";
+    Text[ portuguese_brazilian ] = "text alignment automatically";
+    Text[ japanese ] = "text alignment automatically";
+    Text[ korean ] = "text alignment automatically";
+    Text[ chinese_simplified ] = "text alignment automatically";
+    Text[ chinese_traditional ] = "text alignment automatically";
+    Text[ turkish ] = "text alignment automatically";
+    Text[ arabic ] = "text alignment automatically";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BASELINE
 {
     Text = "Textausrichtung Grundlinie";
     Text [ English ] = "text alignment baseline";
+    Text[ english_us ] = "text alignment baseline";
+    Text[ portuguese ] = "text alignment baseline";
+    Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ïî îñíîâíîé ëèíèè";
+    Text[ greek ] = "text alignment baseline";
+    Text[ dutch ] = "text alignment baseline";
+    Text[ french ] = "text alignment baseline";
+    Text[ spanish ] = "Alineación de texto a línea base";
+    Text[ italian ] = "Allineamento ai dase del testo";
+    Text[ danish ] = "text alignment baseline";
+    Text[ swedish ] = "Textjustering baslinje";
+    Text[ polish ] = "text alignment baseline";
+    Text[ portuguese_brazilian ] = "text alignment baseline";
+    Text[ japanese ] = "text alignment baseline";
+    Text[ korean ] = "text alignment baseline";
+    Text[ chinese_simplified ] = "text alignment baseline";
+    Text[ chinese_traditional ] = "text alignment baseline";
+    Text[ turkish ] = "text alignment baseline";
+    Text[ arabic ] = "text alignment baseline";
 };
 String RID_SVXITEMS_PARAVERTALIGN_TOP
 {
     Text = "Textausrichtung oben";
     Text [ English ] = "text alignment top";
+    Text[ english_us ] = "text alignment top";
+    Text[ portuguese ] = "text alignment top";
+    Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ñâåğõó";
+    Text[ greek ] = "text alignment top";
+    Text[ dutch ] = "text alignment top";
+    Text[ french ] = "text alignment top";
+    Text[ spanish ] = "Alineación de texto arriba";
+    Text[ italian ] = "Allineamento testo in alto";
+    Text[ danish ] = "text alignment top";
+    Text[ swedish ] = "Textjustering uppe";
+    Text[ polish ] = "Wyrównanie tekstu do góry";
+    Text[ portuguese_brazilian ] = "text alignment top";
+    Text[ japanese ] = "text alignment top";
+    Text[ korean ] = "text alignment top";
+    Text[ chinese_simplified ] = "text alignment top";
+    Text[ chinese_traditional ] = "text alignment top";
+    Text[ turkish ] = "text alignment top";
+    Text[ arabic ] = "text alignment top";
 };
 String RID_SVXITEMS_PARAVERTALIGN_CENTER
 {
     Text = "Textausrichtung zentriert";
     Text [ English ] = "text alignment center";
+    Text[ english_us ] = "text alignment center";
+    Text[ portuguese ] = "text alignment center";
+    Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ïî öåíòğó";
+    Text[ greek ] = "text alignment center";
+    Text[ dutch ] = "text alignment center";
+    Text[ french ] = "text alignment center";
+    Text[ spanish ] = "Alineación de texto centrada";
+    Text[ italian ] = "Allineamento tel testo al centro";
+    Text[ danish ] = "text alignment center";
+    Text[ swedish ] = "Textjustering centrerat";
+    Text[ polish ] = "Wyœrodkowanie tekstu";
+    Text[ portuguese_brazilian ] = "text alignment center";
+    Text[ japanese ] = "text alignment center";
+    Text[ korean ] = "text alignment center";
+    Text[ chinese_simplified ] = "text alignment center";
+    Text[ chinese_traditional ] = "text alignment center";
+    Text[ turkish ] = "text alignment center";
+    Text[ arabic ] = "text alignment center";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 {
     Text = "Textausrichtung unten";
     Text [ English ] = "text alignment bottom";
+    Text[ english_us ] = "text alignment bottom";
+    Text[ portuguese ] = "text alignment bottom";
+    Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ñíèçó";
+    Text[ greek ] = "text alignment bottom";
+    Text[ dutch ] = "text alignment bottom";
+    Text[ french ] = "text alignment bottom";
+    Text[ spanish ] = "Alineación de texto abajo";
+    Text[ italian ] = "Allineamento del testo in basso";
+    Text[ danish ] = "text alignment bottom";
+    Text[ swedish ] = "Textjustering nere";
+    Text[ polish ] = "Wyrównanie tekstu do do³u";
+    Text[ portuguese_brazilian ] = "text alignment bottom";
+    Text[ japanese ] = "text alignment bottom";
+    Text[ korean ] = "text alignment bottom";
+    Text[ chinese_simplified ] = "text alignment bottom";
+    Text[ chinese_traditional ] = "text alignment bottom";
+    Text[ turkish ] = "text alignment bottom";
+    Text[ arabic ] = "text alignment bottom";
 };
 
  // ********************************************************************** EOF
