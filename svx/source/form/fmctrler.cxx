@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 10:01:03 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,7 @@ namespace fmctrlr
 }
 using namespace fmctrlr;
 
+DBG_NAME( FmXFormController )
 //------------------------------------------------------------------
 FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
                                      FmFormView* _pView, Window* _pWindow, const UniString& _sDispatchPrefix)
@@ -394,6 +395,8 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                   ,m_nUpdateDispatcherEvent(0)
                   ,m_nToggleEvent(0)
 {
+    DBG_CTOR( FmXFormController, NULL );
+
     ::comphelper::increment(m_refCount);
     {
         m_xAggregate = Reference< XAggregation > (m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.awt.TabController")), UNO_QUERY);
@@ -430,7 +433,10 @@ FmXFormController::~FmXFormController()
         Reference< XInterface >  xInt;
         m_xAggregate->setDelegator(xInt);
     }
+
+    DBG_DTOR( FmXFormController, NULL );
 }
+
 // -----------------------------------------------------------------------------
 using namespace ::cppu;
 using namespace ::osl;
@@ -1784,7 +1790,6 @@ void FmXFormController::startListening()
 
     // jetzt anmelden bei gebundenen feldern
     const Reference< ::com::sun::star::awt::XControl > * pControls = m_aControls.getConstArray();
-//  Reference< ::com::sun::star::data::XDatabaseCursor >  xCursor(getModel(), UNO_QUERY);
     for (sal_Int32 i = 0; i < m_aControls.getLength(); i++ )
         startControlListening(pControls[i]);
 }
@@ -1952,6 +1957,8 @@ IMPL_LINK(FmXFormController, OnUpdateDispatchers, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
+    OSL_ENSURE( rEvent.Source == m_xModelAsIndex, "FmXFormController::loaded: where did this come from?" );
+
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< ::com::sun::star::sdbc::XRowSet >  xForm(rEvent.Source, UNO_QUERY);
@@ -1970,16 +1977,8 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
             m_bCanInsert    = aStaticTools.canInsert(xSet);
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
             m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
-            if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
-            {
-                xSet->addPropertyChangeListener(FM_PROP_ISNEW, this);
-                xSet->addPropertyChangeListener(FM_PROP_ISMODIFIED, this);
 
-                // set the Listener for UI interaction
-                Reference< ::com::sun::star::sdb::XRowSetApproveBroadcaster >  xApprove(xForm, UNO_QUERY);
-                if (xApprove.is())
-                    xApprove->addRowSetApproveListener(this);
-            }
+            startFormListening( xSet, sal_False );
 
             // set the locks for the current controls
             if (getContainer().is())
@@ -2081,23 +2080,57 @@ void FmXFormController::unload() throw( RuntimeException )
     if (m_bDBConnection && isListeningForChanges())
         stopListening();
 
-    Reference< XPropertySet >  xSet(m_xModelAsIndex, UNO_QUERY);
-    if (m_bDBConnection && xSet.is())
-    {
-        if (m_bCanInsert || m_bCanUpdate)
-        {
-            xSet->removePropertyChangeListener(FM_PROP_ISNEW, this);
-            xSet->removePropertyChangeListener(FM_PROP_ISMODIFIED, this);
+    Reference< XPropertySet >  xSet( m_xModelAsIndex, UNO_QUERY );
+    if ( m_bDBConnection && xSet.is() )
+        stopFormListening( xSet, sal_False );
 
-            // reset the Listener for UI interaction
-            Reference< ::com::sun::star::sdb::XRowSetApproveBroadcaster >  xApprove(xSet, UNO_QUERY);
-            if (xApprove.is())
-                xApprove->removeRowSetApproveListener(this);
-        }
-    }
     m_bDBConnection = sal_False;
     m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
     m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
+{
+    if ( m_bCanInsert || m_bCanUpdate )   // form can be modified
+    {
+        _rxForm->addPropertyChangeListener( FM_PROP_ISNEW, this );
+        _rxForm->addPropertyChangeListener( FM_PROP_ISMODIFIED, this );
+
+        if ( !_bPropertiesOnly )
+        {
+            // set the Listener for UI interaction
+            Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
+            if ( xApprove.is() )
+                xApprove->addRowSetApproveListener( this );
+
+            // listener for row set changes
+            Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
+            if ( xRowSet.is() )
+                xRowSet->addRowSetListener( this );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
+{
+    if ( m_bCanInsert || m_bCanUpdate )
+    {
+        _rxForm->removePropertyChangeListener( FM_PROP_ISNEW, this );
+        _rxForm->removePropertyChangeListener( FM_PROP_ISMODIFIED, this );
+
+        if ( !_bPropertiesOnly )
+        {
+            Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
+            if (xApprove.is())
+                xApprove->removeRowSetApproveListener(this);
+
+            Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
+            if ( xRowSet.is() )
+                xRowSet->removeRowSetListener( this );
+        }
+    }
 }
 
 // com::sun::star::sdbc::XRowSetListener
@@ -2116,6 +2149,9 @@ void FmXFormController::cursorMoved(const ::com::sun::star::lang::EventObject& e
         else
             stopListening();
     }
+
+    // neither the current control nor the current record are modified anymore
+    m_bCurrentRecordModified = m_bModified = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -2618,12 +2654,9 @@ void FmXFormController::startFiltering()
     if (xWindow.is())
         xWindow->setFocus();
 
-    if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
-    {
-        Reference< XPropertySet >  xSet(m_xModelAsIndex, UNO_QUERY);
-        xSet->removePropertyChangeListener(FM_PROP_ISNEW, this);
-        xSet->removePropertyChangeListener(FM_PROP_ISMODIFIED, this);
-    }
+    Reference< XPropertySet > xSet( m_xModelAsIndex, UNO_QUERY );
+    if ( xSet.is() )
+        stopFormListening( xSet, sal_True );
 
     // set the text for all filters
     FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
@@ -2741,12 +2774,9 @@ void FmXFormController::stopFiltering()
     if (xWindow.is())
         xWindow->setFocus();
 
-    if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
-    {
-        Reference< XPropertySet >  xSet(m_xModelAsIndex, UNO_QUERY);
-        xSet->addPropertyChangeListener(FM_PROP_ISNEW, this);
-        xSet->addPropertyChangeListener(FM_PROP_ISMODIFIED, this);
-    }
+    Reference< XPropertySet >  xSet( m_xModelAsIndex, UNO_QUERY );
+    if ( xSet.is() )
+        startFormListening( xSet, sal_True );
 
     m_bDetachEvents = sal_True;
 

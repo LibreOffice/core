@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 17:14:22 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,9 @@ protected:
     void removeFromEventAttacher(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
     void toggleAutoFields(sal_Bool bAutoFields);
     void unload() throw( ::com::sun::star::uno::RuntimeException );
+
+    void startFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly  );
+    void stopFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel ) const;
 
