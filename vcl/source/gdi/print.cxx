@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 14:16:23 $
+ *  last change: $Author: cd $ $Date: 2000-11-17 13:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,31 +347,42 @@ static void ImplInitPrnQueueList()
 #else
     if ( pSVData->mpRemotePrinterList && pSVData->mpRemotePrinterList->GetPrinterCount() )
     {
+        BOOL        bPrinterInfoOk = FALSE;
         const ULONG nCount = pSVData->mpRemotePrinterList->GetPrinterCount();
+
         for( ULONG i = 0; i < nCount; i++ )
         {
-            NMSP_CLIENT::RmQueueInfo    aRmQInfo;
             QueueInfo                   aQInfo;
             SalPrinterQueueInfo*        pNewInfo = new SalPrinterQueueInfo;
 
             RemotePrinterInfo* pPrinterInfo = pSVData->mpRemotePrinterList->GetPrinter( i );
-            REF( NMSP_CLIENT::XRmPrinterEnvironment ) xPrinterEnv( pSVData->mpRemotePrinterList->GetPrinterEnv( pPrinterInfo->aServerName ) );
-
-            if ( xPrinterEnv.is() )
+            if ( pPrinterInfo->aServerName.CompareToAscii( RVP_CLIENT_SERVER_NAME ) != COMPARE_EQUAL )
             {
-                CHECK_FOR_RVPSYNC_NORMAL()
-                if ( xPrinterEnv->GetPrinterInfo( pPrinterInfo->aPrinterName.GetBuffer(), aRmQInfo ) )
+                REF( NMSP_CLIENT::XRmPrinterEnvironment ) xPrinterEnv( pSVData->mpRemotePrinterList->GetPrinterEnv( pPrinterInfo->aServerName ) );
+                if ( xPrinterEnv.is() )
                 {
-                    PRINTERSEQ_GET( aRmQInfo, aQInfo );
-                    pNewInfo->maPrinterName = pPrinterInfo->GetFullName();
-                    pNewInfo->maDriver      = aQInfo.GetDriver();
-                    pNewInfo->maLocation    = aQInfo.GetLocation();
-                    pNewInfo->maComment     = aQInfo.GetComment();
-                    pNewInfo->mnStatus      = aQInfo.GetStatus();
-                    pNewInfo->mnJobs        = aQInfo.GetJobs();
-                    pNewInfo->mpSysData     = NULL;
-                    pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
+                    CHECK_FOR_RVPSYNC_NORMAL()
+                    if ( xPrinterEnv->GetPrinterInfo( pPrinterInfo->aPrinterName.GetBuffer(), pPrinterInfo->aRmQueueInfo ) )
+                        bPrinterInfoOk = TRUE;
                 }
+            }
+            else
+            {
+                // short cut for client printers, info was sent before by the rvp Start command
+                bPrinterInfoOk = TRUE;
+            }
+
+            if ( bPrinterInfoOk )
+            {
+                PRINTERSEQ_GET( pPrinterInfo->aRmQueueInfo, aQInfo );
+                pNewInfo->maPrinterName = pPrinterInfo->GetFullName();
+                pNewInfo->maDriver      = aQInfo.GetDriver();
+                pNewInfo->maLocation    = aQInfo.GetLocation();
+                pNewInfo->maComment     = aQInfo.GetComment();
+                pNewInfo->mnStatus      = aQInfo.GetStatus();
+                pNewInfo->mnJobs        = aQInfo.GetJobs();
+                pNewInfo->mpSysData     = NULL;
+                pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
             }
         }
     }
