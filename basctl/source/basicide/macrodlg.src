@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:09:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,14 +117,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ dutch ] = "~Macronaam" ;
         Text [ spanish ] = "Nombre de la ~macro" ;
         Text [ english_us ] = "~Macro name" ;
-        Text[ chinese_simplified ] = "∫Í√˚≥∆(~N)";
+        Text[ chinese_simplified ] = "∫Í√˚≥∆(~M)";
         Text[ russian ] = "»Ïˇ Ï‡ÍÓÒ‡";
         Text[ polish ] = "Nazwa makra";
-        Text[ japanese ] = "œ∏€ñº(~N)";
-        Text[ chinese_traditional ] = "•®∂∞¶W∫Ÿ(~N)";
+        Text[ japanese ] = "œ∏€ñº(~M)";
+        Text[ chinese_traditional ] = "•®∂∞¶W∫Ÿ(~M)";
         Text[ arabic ] = "«”„ «·„«ﬂ—Ê";
         Text[ greek ] = "ºÌÔÏ· ~Ï·ÍÒÔÂÌÙÔÎﬁÚ";
-        Text[ korean ] = "∏≈≈©∑Œ ¿Ã∏ß(~N)";
+        Text[ korean ] = "∏≈≈©∑Œ ¿Ã∏ß(~M)";
         Text[ turkish ] = "Makro ad˝";
     };
     FixedText RID_TXT_MACROFROM
