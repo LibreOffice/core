@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 15:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,22 +1714,29 @@ void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
 
-    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, m_xComposer);
+    // build the sequence of numbers of selected rows
+    Sequence< Any > aSelectedRows;
 
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
-        pTransfer->addRow(nRowPos + 1);
+        aSelectedRows.realloc(1);
+        aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
     }
     else if (!IsAllSelected())
     {
+        aSelectedRows.realloc(GetSelectRowCount());
+        Any* pSelectedRows = aSelectedRows.getArray();
+
         for (long nIdx = FirstSelectedRow();
              nIdx >= 0;
-             nIdx = NextSelectedRow())
+             nIdx = NextSelectedRow(), ++pSelectedRows)
         {
-            pTransfer->addRow(nIdx + 1);
+            (*pSelectedRows) <<= (sal_Int32)(nIdx + 1);
         }
     }
+
+    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows);
 
     Reference< XTransferable > xEnsureDelete = pTransfer;
     pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
