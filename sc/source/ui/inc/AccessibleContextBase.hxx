@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 07:59:07 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 11:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,10 @@ public:
     /// Calls all Listener to tell they the change.
     void
         CommitChange(const drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent) const;
+
+    /// change the name and call the listener to tell they the change
+    void
+        ChangeName();
 
 protected:
     /// Calls all Listener to tell they that the object is now DEFUNC

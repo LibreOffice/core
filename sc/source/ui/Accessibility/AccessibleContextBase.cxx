@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:41:22 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 11:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ sal_Int16 SAL_CALL
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
-        DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
+//      DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
@@ -629,6 +629,21 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) 
             }
         }
     }
+}
+
+void ScAccessibleContextBase::ChangeName()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.OldValue <<= msName;
+
+    msName = rtl::OUString(); // reset the name so it will be hold again
+    getAccessibleName(); // create the new name
+
+    aEvent.NewValue <<= msName;
+
+    CommitChange(aEvent);
 }
 
 void ScAccessibleContextBase::CommitDefunc() const
