@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:15:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _DBFLD_HXX
 #include <dbfld.hxx>            // class SwDBField
+#endif
+#ifndef _USRFLD_HXX
+#include <usrfld.hxx>
 #endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
@@ -740,6 +743,25 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
                 }
                 bForceJapanese = true;
             }
+            else if (nChar == '/')
+            {
+                // MM We have to escape '/' in case it's used as a char
+                rParams.Replace(nI, 1, CREATE_CONST_ASC("\\/"));
+                // rParams.Insert( nI, '\\' );
+                nI++;
+                nLen++;
+            }
+
+            if(rLang == LANGUAGE_GERMAN)
+            {
+                // MM German word documents understand yy and dd.
+                // We do not, we use jj and tt instead.
+                if(nChar == 'y' || nChar == 'Y')
+                    rParams.SetChar(nI, 'J');
+                else if(nChar == 'd' || nChar == 'D')
+                    rParams.SetChar(nI, 'T');
+            }
+
             ++nI;
         }
     }
@@ -1710,6 +1732,35 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                 if( !bFldFound )
                     return FLD_TEXT; // Error: give up
             }
+        }
+        else
+        {
+            // MM Create a user field
+            String aDocProperty;
+            _ReadFieldParams aReadParam( aStr );
+            long nRet;
+            while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+            {
+                switch( nRet )
+                {
+                    case -2:
+                        if( !aDocProperty.Len() )
+                            aDocProperty = aReadParam.GetResult();
+                        break;
+                    case '*':
+                        //Skip over MERGEFORMAT
+                        aReadParam.SkipToNextToken();
+                        break;
+                }
+            }
+
+            SwUserFieldType aTmp( &rDoc, aDocProperty );
+            aTmp.SetContent(GetFieldResult( pF ));
+            SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
+            aUFld.ChangeFormat( UF_STRING );
+            rDoc.Insert( *pPaM, SwFmtFld( aUFld ));
+
+            return FLD_OK;
         }
     }
 
