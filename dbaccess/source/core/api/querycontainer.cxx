@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,11 @@ DBG_NAME(OQueryContainer)
 //------------------------------------------------------------------------------
 OQueryContainer::OQueryContainer(
                 OWeakObject& _rConnection, Mutex& _rMutex, const Reference< XNameContainer >& _rxCommandDefinitions,
-                const OConfigurationTreeRoot& _rRootConfigNode, const Reference< XMultiServiceFactory >& _rxORB)
+                const OConfigurationTreeRoot& _rRootConfigNode, const Reference< XMultiServiceFactory >& _rxORB,
+                IWarningsContainer* _pWarnings)
     :OConfigurationFlushable(_rMutex)
     ,m_rParent(_rConnection)
+    ,m_pWarnings( _pWarnings )
     ,m_rMutex(_rMutex)
     ,m_aContainerListeners(_rMutex)
     ,m_xCommandDefinitions(_rxCommandDefinitions)
@@ -173,6 +175,18 @@ OQueryContainer::~OQueryContainer()
     DBG_DTOR(OQueryContainer, NULL);
     //  dispose();
         //  maybe we're already disposed, but this should be uncritical
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OQueryContainer::acquire() throw(RuntimeException)
+{
+    m_rParent.acquire();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OQueryContainer::release() throw(RuntimeException)
+{
+    m_rParent.release();
 }
 
 //------------------------------------------------------------------------------
@@ -495,8 +509,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
         xRemovedElement = pRemoved;
 
         // remove all my refs
-        m_aQueriesIndexed.erase(m_aQueriesIndexed.begin() + nMyIndex);
-        m_aQueries.erase(aMapPos);
+        implRemove( nMyIndex );
     }
 
     // notify our own listeners
@@ -546,8 +559,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
         }
 
         // remove all my refs to the replaced element's wrapper
-        m_aQueriesIndexed.erase(m_aQueriesIndexed.begin() + nMyIndex);
-        m_aQueries.erase(aMapPos);
+        implRemove( nMyIndex );
 
         // insert an own new element
         m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sAccessor, implCreateWrapper(xNewElementProps))).first);
@@ -633,6 +645,19 @@ void OQueryContainer::flush_NoBroadcast_NoCommit()
 }
 
 //--------------------------------------------------------------------------
+void OQueryContainer::implRemove( sal_Int32 _nIndex )
+{
+    OSL_ENSURE( _nIndex >= 0 && _nIndex < (sal_Int32)m_aQueriesIndexed.size(), "OQueryContainer::implRemove: invalid index!" );
+
+    QueriesIterator aMapPos = m_aQueriesIndexed[ _nIndex ];
+    if ( aMapPos->second )
+        aMapPos->second->setWarningsContainer( NULL );
+
+    m_aQueriesIndexed.erase( m_aQueriesIndexed.begin() + _nIndex );
+    m_aQueries.erase( aMapPos );
+}
+
+//--------------------------------------------------------------------------
 OQuery* OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
 {
     Reference< XPropertySet > xObject;
@@ -643,8 +668,11 @@ OQuery* OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
 //--------------------------------------------------------------------------
 OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxCommandDesc)
 {
-    OQuery* pNewObject = new OQuery(_rxCommandDesc, Reference< XConnection >((Reference< XInterface >)m_rParent, UNO_QUERY));
+    Reference< XConnection > xConn( &m_rParent, UNO_QUERY );
+    OQuery* pNewObject = new OQuery(_rxCommandDesc, xConn);
+
     pNewObject->acquire();
+    pNewObject->setWarningsContainer( m_pWarnings );
 
     ::rtl::OUString sName;
     pNewObject->getPropertyValue(PROPERTY_NAME) >>= sName;
