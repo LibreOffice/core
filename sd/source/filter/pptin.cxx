@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:45:12 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,8 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
         }
 
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags );
-        SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | 2 );              // SVXMSDFF_SETTINGS_IMPORT_PPT
+        SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS
+            | SVXMSDFF_SETTINGS_IMPORT_IAS | SVXMSDFF_SETTINGS_IMPORT_PPT );
         SetModel( pDoc, 576 );
     }
 }
@@ -2607,7 +2608,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             pPresObj->SetUserCall( pPage );
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
-                            ApplyAttributes( rStCtrl, aSet, pPresObj );
+                            ApplyAttributes( rStCtrl, aSet );
                             pPresObj->SetMergedItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != -1 ) )
