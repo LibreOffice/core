@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:11:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,28 +1186,41 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         else
             nY = rNew.Y() - pCnt->Frm().Top();
     }
+
+    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+    const SwFmtSurround& rSurround = pFmt->GetSurround();
+    const FASTBOOL bWrapThrough =
+        rSurround.GetSurround() == SURROUND_THROUGHT;
+    SwTwips nBaseOfstForFly = 0;
+    const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
+    if ( pTmpFrm->IsTxtFrm() )
+        nBaseOfstForFly =
+            ((SwTxtFrm*)pTmpFrm)->GetBaseOfstForFly( !bWrapThrough );
+
     if( bVert )
     {
         if( !pFrm )
-            nX += rNew.Y() - pCnt->Frm().Top();
+            nX += rNew.Y() - pCnt->Frm().Top() - nBaseOfstForFly;
         else
-            nX = rNew.Y() - pFrm->Frm().Top();
+            nX = rNew.Y() - pFrm->Frm().Top() - nBaseOfstForFly;
     }
     else
     {
         if( !pFrm )
         {
             if ( pCnt->IsRightToLeft() )
-                nX += pCnt->Frm().Right() - rNew.X() - Frm().Width();
+                nX += pCnt->Frm().Right() - rNew.X() - Frm().Width() +
+                      nBaseOfstForFly;
             else
-                nX += rNew.X() - pCnt->Frm().Left();
+                nX += rNew.X() - pCnt->Frm().Left() - nBaseOfstForFly;
         }
         else
         {
             if ( pFrm->IsRightToLeft() )
-                nX += pFrm->Frm().Right() - rNew.X() - Frm().Width();
+                nX += pFrm->Frm().Right() - rNew.X() - Frm().Width() +
+                      nBaseOfstForFly;
             else
-                nX = rNew.X() - pFrm->Frm().Left();
+                nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
         }
     }
     GetFmt()->GetDoc()->StartUndo( UNDO_START );
@@ -1216,7 +1229,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                                   GetFmt()->GetDoc()->IsHTMLMode() ) )
     {
         //Das Ankerattribut auf den neuen Cnt setzen.
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
         SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
         if( IsAutoPos() && pCnt->IsTxtFrm() )
@@ -1599,8 +1611,12 @@ void SwFlyAtCntFrm::MakeFlyPos()
 
     /// OD 02.10.2002 #102646# - NOTE
     /// determine, if fly frame has no surrounding.
-    const FASTBOOL bNoSurround
-        = pFmt->GetSurround().GetSurround() == SURROUND_NONE;
+    const SwFmtSurround& rSurround = pFmt->GetSurround();
+    const FASTBOOL bNoSurround =
+        rSurround.GetSurround() == SURROUND_NONE;
+    const FASTBOOL bWrapThrough =
+        rSurround.GetSurround() == SURROUND_THROUGHT;
+
     BOOL bGrow =
         !GetAnchor()->IsInTab() || !pFmt->GetFrmSize().GetHeightPercent();
 
@@ -2037,6 +2053,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
             {
                 nWidth = (pOrient->Prt().*fnRect->fnGetWidth)();
                 nAdd = (pOrient->*fnRect->fnGetLeftMargin)();
+                if ( pOrient->IsTxtFrm() )
+                    nAdd += ((SwTxtFrm*)pOrient)->GetBaseOfstForFly( !bWrapThrough );
                 break;
             }
             case REL_PG_LEFT:
@@ -2106,7 +2124,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
             default:
             {
                 nWidth = (pOrient->Frm().*fnRect->fnGetWidth)();
-                nAdd = 0;
+                nAdd = pOrient->IsTxtFrm() ?
+                       ((SwTxtFrm*)pOrient)->GetBaseOfstForFly( !bWrapThrough ) :
+                       0;
                 break;
             }
         }
