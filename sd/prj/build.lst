@@ -14,8 +14,9 @@ sd	sd\source\core							nmake	-	all	sd_core sd_sdi NULL
 sd	sd\source\ui\docshell					nmake	-	all	sd_docsh sd_sdi NULL
 sd	sd\source\ui\unoidl						nmake	-	all	sd_unid sd_sdi NULL
 sd	sd\source\ui\accessibility				nmake	-	all	sd_accessibility NULL
-sd	sd\source\ui\toolpanel  				nmake	-	all	sd_toolpanel NULL
-sd	sd\source\ui\toolpanel\controls			nmake	-	all	sd_toolpanel_controls NULL
+sd	sd\source\ui\toolpanel  				nmake	-	all	sd_toolpanel sd_sdi NULL
+sd	sd\source\ui\toolpanel\controls			nmake	-	all	sd_toolpanel_controls sd_sdi NULL
+sd	sd\source\ui\tools      				nmake	-	all	sd_tools NULL
 sd	sd\source\ui\slidesorter\shell			nmake	-	all	sd_slsshell sd_sdi NULL
 sd	sd\source\ui\slidesorter\model			nmake	-	all	sd_slsmodel NULL
 sd	sd\source\ui\slidesorter\view			nmake	-	all	sd_slsview NULL
@@ -29,4 +30,4 @@ sd	sd\source\filter\eppt					nmake	-	all	sd_eppt NULL
 sd	sd\source\filter\grf					nmake	-	all	sd_grf NULL
 sd	sd\source\filter\xml					nmake	-	all	sd_xml NULL
 sd	sd\source\filter\html					nmake	-	all	sd_html NULL
-sd	sd\util									nmake	-	all	sd_util sd_app sd_bin sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_accessibility sd_toolpanel sd_toolpanel_controls sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes NULL
+sd	sd\util									nmake	-	all	sd_util sd_app sd_bin sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_accessibility sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes NULL
