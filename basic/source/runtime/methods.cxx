@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-29 15:15:18 $
+ *  last change: $Author: ab $ $Date: 2001-04-06 15:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,23 @@ static long GetDayDiff( const Date& rDate )
         nDiffDays = (long)(rDate - aRefDate);
     nDiffDays += 2; // Anpassung VisualBasic: 1.Jan.1900 == 2
     return nDiffDays;
+}
+
+static CharClass& GetCharClass( void )
+{
+    static sal_Bool bInit = sal_False;
+    static ::com::sun::star::lang::Locale aLocale;
+    if( !bInit )
+    {
+        const International& rInt = GetpApp()->GetAppInternational();
+        LanguageType eLang = rInt.GetLanguage();
+        String aLanguage, aCountry;
+        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
+            aLanguage, aCountry );
+        aLocale = ::com::sun::star::lang::Locale( aLanguage, aCountry, OUString() );
+    }
+    static CharClass aCharClass( aLocale );
+    return aCharClass;
 }
 
 
@@ -1114,15 +1131,9 @@ RTLFUNC(LCase)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        const International& rInt = GetpApp()->GetAppInternational();
-        LanguageType eLang = rInt.GetLanguage();
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
-            aLanguage, aCountry );
-        ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, OUString() );
-        CharClass aCharClass( aLocale );
+        CharClass& rCharClass = GetCharClass();
         String aStr( rPar.Get(1)->GetString() );
-        aCharClass.toLower( aStr );
+        rCharClass.toLower( aStr );
         rPar.Get(0)->PutString( aStr );
     }
 }
@@ -1400,15 +1411,9 @@ RTLFUNC(UCase)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        const International& rInt = GetpApp()->GetAppInternational();
-        LanguageType eLang = rInt.GetLanguage();
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
-            aLanguage, aCountry );
-        ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, OUString() );
-        CharClass aCharClass( aLocale );
+        CharClass& rCharClass = GetCharClass();
         String aStr( rPar.Get(1)->GetString() );
-        aCharClass.toUpper( aStr );
+        rCharClass.toUpper( aStr );
         rPar.Get(0)->PutString( aStr );
     }
 }
@@ -2083,7 +2088,7 @@ sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
                     sal_Int32 nPreWildcardLen = pRTLData->sPreWildcard.Len();
                     if( nPreWildcardLen )
                     {
-                        String sTmp = sMainName.Copy( 0, nPreWildcardLen );
+                        String sTmp = sMainName.Copy( 0, (sal_Int32)nPreWildcardLen );
 #ifdef UNX
                         bMatch = sTmp.Equals( pRTLData->sPreWildcard );
 #else
