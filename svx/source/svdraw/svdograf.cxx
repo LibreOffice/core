@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-16 12:57:26 $
+ *  last change: $Author: thb $ $Date: 2001-10-16 16:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,6 @@ void SdrGrafObj::ImpLinkAbmeldung()
 
 void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterName )
 {
-#ifndef SVX_LIGHT
     ImpLinkAbmeldung();
     aFileName = rFileName;
     aFilterName = rFilterName;
@@ -534,25 +533,6 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
 
     // #92205# A linked graphic is per definition swapped out (has to be loaded)
     pGraphic->SetSwapState();
-#else
-    // #92205# Preload linked graphics for player
-    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
-
-    if( pIStm )
-    {
-        Graphic         aGraphic;
-        GraphicFilter*  pFilter = GetGrfFilter();
-        USHORT          nFilter = pFilter->GetImportFormatNumber( rFilterName );
-        USHORT          nError = pFilter->ImportGraphic( aGraphic, rFileName, *pIStm, nFilter );
-
-        pGraphic->SetGraphic( aGraphic );
-
-        // enforce resolved link state
-        aFileName = aFilterName = String();
-
-        delete pIStm;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -598,6 +578,46 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 UINT16 SdrGrafObj::GetObjIdentifier() const
 {
     return UINT16( OBJ_GRAF );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
+{
+    sal_Bool    bRet = sal_False;
+
+#ifndef SVX_LIGHT
+    if( pGraphicLink )
+    {
+        BOOL bIsChanged = pModel->IsChanged();
+        pGraphicLink->UpdateSynchron();
+        pModel->SetChanged( bIsChanged );
+
+        bRet = sal_True;
+    }
+#else
+    if( aFileName.Len() && aFilterName.Len() )
+    {
+        // #92205# Load linked graphics for player
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
+
+        if( pIStm )
+        {
+            Graphic         aGraphic;
+            GraphicFilter*  pFilter = GetGrfFilter();
+            USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
+            USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter );
+
+            pGraphic->SetGraphic( aGraphic );
+
+            delete pIStm;
+        }
+
+        bRet = sal_True;
+    }
+#endif
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -867,15 +887,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
     if( bSwappedOut && !bDraft )
     {
-#ifndef SVX_LIGHT
-        if( pGraphicLink )
-        {
-            BOOL bIsChanged = pModel->IsChanged();
-            pGraphicLink->UpdateSynchron();
-            pModel->SetChanged( bIsChanged );
-        }
-        else
-#endif
+        if( !ImpUpdateGraphicLink() )
         {
             if( ( OUTDEV_WINDOW == pOutDev->GetOutDevType() ) && !bMtfRecording && pView && pView->IsSwapAsynchron() )
             {
@@ -1105,7 +1117,11 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
     aName = rGraf.aName;
     bMirrored = rGraf.bMirrored;
 
+#ifndef SVX_LIGHT
     if( rGraf.pGraphicLink != NULL)
+#else
+    if( rGraf.aFileName.Len() && rGraf.aFilterName.Len() )
+#endif
         SetGraphicLink( aFileName, aFilterName );
 
     ImpSetAttrToGrafInfo();
@@ -1588,14 +1604,8 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
         {
             SetGraphicLink( aFileName, aFilterName );
 
-#ifndef SVX_LIGHT
-            if( pGraphicLink && !bDelayedLoad )
-            {
-                BOOL bIsChanged = pModel->IsChanged();
-                pGraphicLink->UpdateSynchron();
-                pModel->SetChanged( bIsChanged );
-            }
-#endif
+            if( !bDelayedLoad )
+                ImpUpdateGraphicLink();
         }
     }
 }
@@ -1919,8 +1929,14 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             {
                 const ULONG nSwapMode = pModel->GetSwapGraphicsMode();
 
+#ifndef SVX_LIGHT
                 if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() || pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
+#else
+                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) ||
+                      pGraphic->HasUserData() || (aFileName.Len() && aFilterName.Len()) ) &&
+                    ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
+#endif
                 {
                     pRet = NULL;
                 }
@@ -1976,16 +1992,10 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                 }
             }
-#ifndef SVX_LIGHT
-            else if( pGraphicLink )
+            else if( !ImpUpdateGraphicLink() )
             {
-                BOOL bIsChanged = pModel->IsChanged();
-                pGraphicLink->UpdateSynchron();
-                pModel->SetChanged( bIsChanged );
-            }
-#endif
-            else
                 pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
+            }
         }
         else
             pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
