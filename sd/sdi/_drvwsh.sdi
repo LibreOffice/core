@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-26 15:29:10 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2203,6 +2203,11 @@ interface DrawView : View
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
+    ]
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
 }
 
