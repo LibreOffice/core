@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:14:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,20 +379,21 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             OUString sPrinterName;
             if( rValue >>= sPrinterName  )
             {
-                if( sPrinterName.getLength() > 0 )
+                if( !mpPrinter && sPrinterName.getLength() > 0 )
                 {
                     SfxPrinter* pPrinter = mpDoc->GetPrt( sal_True );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                        if (pNewPrinter->IsKnown())
+                        if( pNewPrinter->IsKnown() )
                         {
                             // set printer only once; in _postSetValues
-                            delete mpPrinter;
                             mpPrinter = pNewPrinter;
                         }
                         else
+                        {
                             delete pNewPrinter;
+                        }
                     }
                 }
             }
@@ -525,8 +526,9 @@ void SwXDocumentSettings::_postSetValues ()
 {
     // set printer only once, namely here!
     if( mpPrinter != NULL )
-        mpDoc->SetPrt( mpPrinter, true );
+        mpDoc->SetPrt( mpPrinter, sal_True );
 
+    mpPrinter = 0;
     mpDocSh = 0;
     mpDoc = 0;
 }
