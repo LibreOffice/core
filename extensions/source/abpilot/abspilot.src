@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:37:39 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,8 @@
 //........................................................................
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
-    Text                = "Autopilot Adressdatenquelle" ;
-    Text [ english ]    = "Autopilot Address Book Data Source" ;
-    Text [ english_us ] = "Address Data Source AutoPilot" ;
+    Text [ de ] = "Autopilot Adressdatenquelle" ;
+    Text [ en-US ]  = "Address Data Source AutoPilot" ;
 
     HelpId = HID_ABSPILOT;
 
@@ -77,74 +76,42 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Moveable        = TRUE ;
     Closeable       = TRUE ;
     Hide            = TRUE;
-    Text[ portuguese ] = "Autopiloto da fonte de dados dos endereços";
-    Text[ russian ] = "Ìàñòåğ èñòî÷íèêîâ äàííûõ àäğåñîâ";
-    Text[ greek ] = "Áõôüìáôïò ğéëüôïò ãéá ğñïİëåõóç äåäïìİíùí äéåõèıíóåùí";
-    Text[ dutch ] = "Autopiloot Adresgegevensbron";
-    Text[ french ] = "AutoPilote de source de données des adresses";
-    Text[ spanish ] = "Piloto automático de fuente de datos de la libreta de direcciones";
-    Text[ finnish ] = "Ohjattu yhteystietojen tuominen";
-    Text[ italian ] = "Pilota automatico della sorgente dati della Rubrica";
-    Text[ danish ] = "AutoPilot adressedatakilde";
-    Text[ swedish ] = "AutoPilot för adressdatakällor";
-    Text[ polish ] = "AutoPilot Ÿród³a danych adresowych";
-    Text[ portuguese_brazilian ] = "Assistente da Fonte de Dados de Endereços";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆ ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-    Text[ korean ] = "ì£¼ì†Œ ë°ì´í„° ì›ë³¸ ìë™ íŒŒì¼ëŸ¿";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡æ¡£åŠ©ç† é€šè®¯ç°¿æ•°æ®æº";
-    Text[ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† é€šè¨ŠéŒ„è³‡æ–™æº";
-    Text[ turkish ] = "Adres veri kaynağı otopilotu";
-    Text[ arabic ] = "Autopilot Address Book Data Source";
-    Text[ catalan ] = "Font de dades d'adreces de l'Autopilot";
-    Text[ thai ] = "à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "PrÅ¯vodce importem databÃ¡ze kontaktÅ¯";
-    Text[ hebrew ] = "â€®\"×˜×™×™×¡ ××•×˜×•××˜×™\" ×¡×¤×¨ ×›×ª×•×‘×•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥";
-    Text[ slovak ] = "Sprievodca zdrojom dÃ¡t adries";
-    Text[ hungarian ] = "CÃ­mtÃ¡rtÃ¼ndÃ©r";
-    Text[ slovenian ] = "Avtopilot vira podatkov adresarja";
 
 #if defined( ABP_USE_ROADMAP )
     String STR_SELECT_ABTYPE
     {
-        Text = "Adreßbuchtyp";
-        Text [ english ] = "Address book type";
-        Text [ english_us ] = "Address book type";
+        Text[ de ] = "Adreßbuchtyp";
+        Text [ en-US ] = "Address book type";
     };
 
     String STR_INVOKE_ADMIN_DIALOG
     {
-        Text = "Verbindungs-Einstellungen";
-        Text [ english ] = "Connection Settings";
-        Text [ english_us ] = "Connection Settings";
+        Text[ de ] = "Verbindungs-Einstellungen";
+        Text [ en-US ] = "Connection Settings";
     };
 
     String STR_TABLE_SELECTION
     {
-        Text = "Tabellenauswahl";
-        Text [ english ] = "Table selection";
-        Text [ english_us ] = "Table selection";
+        Text[ de ] = "Tabellenauswahl";
+        Text [ en-US ] = "Table selection";
     };
 
     String STR_MANUAL_FIELD_MAPPING
     {
-        Text = "Feldzuordnung";
-        Text [ english ] = "Field Assignment";
-        Text [ english_us ] = "Field Assignment";
+        Text[ de ] = "Feldzuordnung";
+        Text [ en-US ] = "Field Assignment";
     };
 
     String STR_FINAL_CONFIRM
     {
-        Text = "Datenquellen Titel";
-        Text [ english ] = "Data Source Title";
-        Text [ english_us ] = "Data Source Title";
+        Text[ de ] = "Datenquellen Titel";
+        Text [ en-US ] = "Data Source Title";
     };
 
     String STR_ROADMAP_TITLE
     {
-        Text = "Adreßbuch Datenquelle";
-        Text [ english ] = "Address Book Data Source";
-        Text [ english_us ] = "Address Book Data Source";
+        Text [ de ]= "Adreßbuch Datenquelle";
+        Text [ en-US ] = "Address Book Data Source";
     };
 #endif
 };
@@ -156,9 +123,8 @@ TabPage RID_PAGE_SELECTABTYPE
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text = "Willkommen zum AutoPiloten zur Einrichtung von Adressdatenquellen.";
-    Text [ english ] = "Welcome to the Address Data Source AutoPilot";
-    Text [ english_us ] = "Welcome to the Address Data Source AutoPilot";
+    Text [ de ] = "Willkommen zum AutoPiloten zur Einrichtung von Adressdatenquellen.";
+    Text [ en-US ] = "Welcome to the Address Data Source AutoPilot";
 #endif
 
     FixedText FT_TYPE_HINTS
@@ -167,39 +133,10 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen. "
+        Text [ de ] = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen. "
             "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\n"
             "Dieser AutoPilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
-        Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system. "
-            "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
-            "This auto pilot will assist you in the creation of this data source.";
-        Text [ english_us ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
-        Text[ portuguese ] = "O %PRODUCTNAME permite-lhe o acesso a dados de endereços já disponíveis no seu sistema.\nPara isso é criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endereço na forma de tabelas.\n\nEste AutoPiloto ajuda-o a configurar essa fonte de dados.";
-        Text[ russian ] = "%PRODUCTNAME ïğåäîñòàâëÿåò âîçìîæíîñòü äîñòóïà ê ñóùåñòâóşùèì â ñèñòåìå àäğåñíûì äàííûì.\nÄëÿ ıòîãî áóäóò ñîçäàíû èñòî÷íèêè äàííûõ %PRODUCTNAME, â êîòîğûõ âàøè àäğåñíûå êíèãè áóäóò äîñòóïíû â âèäå òàáëèö.\n\nÌàñòåğ ïîìîæåò ïğè ñîçäàíèè òàêèõ èñòî÷íèêîâ äàííûõ.";
-        Text[ greek ] = "Ôï %PRODUCTNAME óÜò åğéôñİğåé íá ğñïóğåëÜóåôå äåäïìİíá äéåõèıíóåùí ğïõ âñßóêïíôáé Şäç óôï óıóôçìÜ óáò. Ãéá íá ãßíåé áõôü, èá äçìéïõñãçèåß ìéá ğñïİëåõóç äåäïìİíùí ãéá ôï %PRODUCTNAME ìİóá óôçí ïğïßá èá åßíáé äéáèİóéìá ôá äåäïìİíá äéåõèıíóåùí óå ìïñöŞ ğßíáêá.\n\nÁõôüò ï áõôüìáôïò ğéëüôïò óÜò âïçèÜ íá äçìéïõñãŞóåôå ôçí ğñïİëåõóç äåäïìİíùí.";
-        Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds op uw systeem beschikbaar zijn. Daartoe wordt er een %PRODUCTNAME-gegevensbron aangemaakt via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze AutoPiloot ondersteunt u bij het inrichten van deze gegevensbron.";
-        Text[ french ] = "%PRODUCTNAME permet l'accès aux données des adresses présentes dans votre système. Cette fonction nécessite la création d'une source de données %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du paramétrage de cette source de données.";
-        Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se creará una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarán disponibles en tablas.\n\nEl Piloto automático le apoya durante la creación de esta fuente de datos.";
-        Text[ finnish ] = "%PRODUCTNAME antaa sinun käyttää osoitetietoja, jotka ovat jo järjestelmässä. Tätä varten luodaan %PRODUCTNAMEn tietolähde, jossa osoitetietosi ovat taulukkomuodossa.\n\nTällä ohjatulla toiminnolla voit luoda tietolähteen.";
-        Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica già presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi aiuterà ad impostare la sorgente dati.";
-        Text[ danish ] = "%PRODUCTNAME giver dig adgang til adressedata, som allerede findes på computeren. Dette gør du ved at oprette en %PRODUCTNAME-datakilde, hvor du har adgang til dine adressekartoteker som tabeller.\n\nDenne AutoPilot hjælper dig med at oprette datakilden.";
-        Text[ swedish ] = "%PRODUCTNAME ger dig möjlighet att ha tillgång till adressdata som redan finns i ditt system. För att du ska kunna göra detta skapas en %PRODUCTNAME-datakälla där dina adressböcker är tillgängliga som tabeller.\n\nDenna AutoPilot hjälper dig att skapa datakällan.";
-        Text[ polish ] = "%PRODUCTNAME umo¿liwia dostêp do danych adresowych zapisanych ju¿ w systemie. Utworzone zostanie w tym celu Ÿród³o danych programu %PRODUCTNAME, udostêpniaj¹ce ksi¹¿ki adresowe u¿ytkownika, wyœwietlane w postaci tabel.\n\nW tworzeniu Ÿród³a danych pomocny bêdzie niniejszy AutoPilot.";
-        Text[ portuguese_brazilian ] = "O %PRODUCTNAME permite acessar dados de endereços já disponíveis no seu sistema.\nPara isso, é criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endereço na forma de tabelas.\n\nEste Assistente permite configurar essa fonte de dados.";
-        Text[ japanese ] = "%PRODUCTNAME ã¯ã‚·ã‚¹ãƒ†ãƒ ä¸Šã®æ—¢å­˜ã®ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã™ã€‚\nã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã«ã¯ã€ãƒ†ãƒ¼ãƒ–ãƒ«å½¢å¼ã§ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ %PRODUCTNAME ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã‚’ä½œæˆã—ã¾ã™ã€‚\n\nã“ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®è¨­å®šã‚’ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆãŒãŠæ‰‹ä¼ã„ã—ã¾ã™ã€‚";
-        Text[ korean ] = "%PRODUCTNAMEë¥¼ í†µí•´ ì‚¬ìš©ìì˜ ì‹œìŠ¤í…œì— ì´ë¯¸ ìˆëŠ” ì£¼ì†Œ ë°ì´í„°ì— ì•¡ì„¸ìŠ¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤. ì•¡ì„¸ìŠ¤í•˜ê¸° ìœ„í•´ì„œëŠ” ì‚¬ìš©ìì˜ ì£¼ì†Œ ë°ì´í„°ë¥¼ \ní…Œì´ë¸” í˜•ì‹ìœ¼ë¡œ ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” %PRODUCTNAME ë°ì´í„° ì›ë³¸ì´ ë§Œë“¤ì–´ì§‘ë‹ˆë‹¤.\n\nìë™ íŒŒì¼ëŸ¿ ê¸°ëŠ¥ì„ ì‚¬ìš©í•˜ì—¬ ë°ì´í„° ì›ë³¸ì„ ë§Œë“¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "%PRODUCTNAME å…è®¸æ‚¨è¯»å–ç³»ç»Ÿä¸Šç°æœ‰çš„é€šè®¯ç°¿æ•°æ®ã€‚å¯¹æ­¤ç¨‹åºä¼šå»ºç«‹ä¸€ä¸ª %PRODUCTNAME æ•°æ®æºï¼Œè¿™æ ·æ‚¨çš„é€šè®¯ç°¿ä¾¿ä¼šå˜æˆæ­¤æ•°æ®æºä¸­çš„ä¸€ä¸ªå·¥ä½œè¡¨ä»¥ä¾›è¯»å–ã€‚\n\nè‡ªåŠ¨æ–‡æ¡£åŠ©ç†ä¼šå¸®åŠ©æ‚¨å»ºç«‹è¿™ä¸ªæ•°æ®æºã€‚";
-        Text[ chinese_traditional ] = "%PRODUCTNAME å‘æ‚¨æä¾›ä¸€å€‹å­˜å–ç³»çµ±çš„é€šè¨ŠéŒ„è³‡æ–™çš„åŠŸèƒ½ã€‚åœ¨åŸ·è¡Œé€™å€‹åŠŸèƒ½æ™‚æœƒå»ºç«‹ä¸€å€‹æ–°çš„ %PRODUCTNAME è³‡æ–™æºï¼Œé€šè¨ŠéŒ„å°±æœƒè®Šæˆé€™å€‹è³‡æ–™åº«çš„ä¸€å€‹è³‡æ–™è¡¨ã€‚\n\næ‚¨é€éé€™å€‹è‡ªå‹•æª”æ¡ˆåŠ©ç†å°±å¯ä»¥å»ºç«‹é€™æ¨£çš„ä¸€å€‹è³‡æ–™æºã€‚";
-        Text[ turkish ] = "%PRODUCTNAME, size sisteminizde şu anda kullandığınız   adreslere ulaşmanıza imkan tanır.\nAdreslerin bir tablo şekline getirilmesi için  %PRODUCTNAME% adında yeni bir veri kaynağı yaratılmalıdır.\n\nBu otopilot bu verikaynağının yaratılması konusunda size yardımcı olacaktır.";
-        Text[ arabic ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ catalan ] = "%PRODUCTNAME us permet accedir a les dades d'adreces que ja existeixen en el sistema.\nPer tal de fer això, es crearà una nova base de dades de l'%PRODUCTNAME, on les adreces estaran disponibles com a taules.\n\nAquest assistent us ajudarà en la creació d'aquesta base de dades.";
-        Text[ thai ] = "%PRODUCTNAME à¹ƒà¸«à¹‰à¸„à¸¸à¸“à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¹ƒà¸™à¸£à¸°à¸šà¸šà¸‚à¸­à¸‡à¸„à¸¸à¸“à¹à¸¥à¹‰à¸§\nà¸—à¸³à¸ªà¸´à¹ˆà¸‡à¸™à¸µà¹‰, à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ %PRODUCTNAME à¹ƒà¸«à¸¡à¹ˆà¸ˆà¸°à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¸‚à¸¶à¹‰à¸™à¹ƒà¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¹„à¸”à¹‰à¹ƒà¸™à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¸²à¸£à¸²à¸‡\n\nà¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸™à¸µà¹‰à¸Šà¹ˆà¸§à¸¢à¹ƒà¸«à¹‰à¸„à¸¸à¸“à¸ªà¸£à¹‰à¸²à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸”à¹‰";
-        Text[ czech ] = "%PRODUCTNAME vÃ¡m umoÅ¾Åˆuje importovat data z databÃ¡zÃ­ kontaktÅ¯, kterÃ© jsou jiÅ¾ ve vaÅ¡em systÃ©mu dostupnÃ©. %PRODUCTNAME vytvoÅ™Ã­ zdroj dat, kterÃ½ zpÅ™Ã­stupnÃ­ tato data jako tabulku.\n\nTento prÅ¯vodce vÃ¡m pomÅ¯Å¾e ve vytvoÅ™enÃ­ tohoto zdroje dat.";
-        Text[ hebrew ] = "â€®×××¤×©×¨ ×’×™×©×” ×œ×¡×¤×¨×™ ×›×ª×•×‘×•×ª ×§×™×™××™× ×‘××¢×¨×›×ª. ×›×“×™ ×œ×¢×©×•×ª ×–××ª ×™××™×¨ ×”\"×˜×™×™×¡ ×”××•×˜×•××˜×™\" ××ª ×”× ×ª×•× ×™× ×œ××‘× ×” ×˜×‘×œ××™ × ×’×™×©â€¬ %PRODUCTNAME";
-        Text[ hindi ] = "%PRODUCTNAME à¤¦à¥à¤µà¤¾à¤°à¤¾ à¤†à¤ª à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤¸à¤¿à¤¸à¥à¤Ÿà¤® à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ à¤ªà¥à¤°à¤µà¥‡à¤¶ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤¯à¤¹ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤, %PRODUCTNAME à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾ à¤œà¤¹à¤¾à¤ à¤ªà¤° à¤†à¤ªà¤•à¤¾ à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¸à¤¾à¤°à¤£à¥€à¤¬à¤¦à¥à¤§ à¤ªà¥à¤°à¤•à¤¾à¤° à¤®à¥‡à¤‚ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤¹à¥ˆ à¥¤\n\nà¤‡à¤¸ à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿ à¤†à¤ªà¤•à¥‹ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾ à¤•à¤°à¥‡à¤—à¤¾ à¥¤";
-        Text[ slovak ] = "%PRODUCTNAME VÃ¡m umoÅ¾Åˆuje pristupovaÅ¥ k adresÃ¡m nachÃ¡dzajÃºcim sa vo vaÅ¡om systÃ©me. Aby ste toto mohli vyuÅ¾Ã­vaÅ¥ bude vytvorenÃ½ zdroj dÃ¡t v ktorom budÃº vaÅ¡e adresy k dispozÃ­cii v tabuÄ¾kovej forme.\n\nTento sprievodca vÃ¡m pomÃ´Å¾e vytvoriÅ¥ spomÃ­nanÃ½ zdroj dÃ¡t.";
-        Text[ hungarian ] = "Az %PRODUCTNAME rÃ©vÃ©n a mÃ¡r meglÃ©vÅ‘ adataihoz is hozzÃ¡fÃ©rhet. Ehhez egy %PRODUCTNAME adatforrÃ¡s lÃ©trehozÃ¡sa szÃ¼ksÃ©ges. \n\nA TÃ¼ndÃ©r segÃ­t az adatforrÃ¡s lÃ©trehozÃ¡sÃ¡ban.";
-        Text[ slovenian ] = "%PRODUCTNAME vam omogoÄa dostop do podatkov adresarja, ki Å¾e obstajajo v sistemu. Za to bo ustvarjen vir podatkov %PRODUCTNAME, v katerem bodo podatki na voljo v obliki tabele.\n\nAvtopilot vam pomaga pri izdelavi vira podatkov.";
+        Text [ en-US ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
     };
 
     FixedLine FL_TYPE
@@ -207,35 +144,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 7, 56 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
 
-        Text = "Bitte wählen Sie den Typ Ihres externen Adressbuches:";
-        Text [ english ] = "Please choose the type of your external address book:";
-        Text [ english_us ] = "Please select the type of your external address book:";
-        Text[ portuguese ] = "Seleccione o tipo do seu livro de endereços externo:";
-        Text[ russian ] = "Âûáåğèòå òèï âíåøíåé àäğåñíîé êíèãè:";
-        Text[ greek ] = "Åğéëİîôå ôïí ôığï ôïõ åîùôåñéêïı óáò âéâëßïõ äéåõèıíóåùí:";
-        Text[ dutch ] = "Kies het type van uw externe adresboek:";
-        Text[ french ] = "Sélectionnez le type du carnet d'adresses externe :";
-        Text[ spanish ] = "Seleccione el tipo de libreta de direcciones externa:";
-        Text[ finnish ] = "Valitse ulkoisen osoitekirjan tyyppi:";
-        Text[ italian ] = "Selezionate il tipo di Rubrica esterna:";
-        Text[ danish ] = "Vælg typen af dit eksterne adressekartotek:";
-        Text[ swedish ] = "Välj typen för din externa adressbok:";
-        Text[ polish ] = "Wybierz typ swojej zewnêtrznej ksi¹¿ki adresowej:";
-        Text[ portuguese_brazilian ] = "Selecione o tipo do seu livro de endereços externo:";
-        Text[ japanese ] = "ãŠä½¿ã„ã®å¤–éƒ¨ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã®ç¨®é¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ì™¸ë¶€ ì£¼ì†Œë¡ ìœ í˜•ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "è¯·é€‰æ‹©å¤–æ¥é€šè®¯ç°¿çš„ç±»å‹ï¼š";
-        Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹å¤–ä¾†é€šè¨ŠéŒ„çš„é¡å‹ï¼š";
-        Text[ turkish ] = "Harici adres defteri türünü seçiniz.:";
-        Text[ arabic ] = "Please choose the type of your external address book:";
-        Text[ catalan ] = "Escolliu la llibreta d'adreces externa:";
-        Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸ à¸²à¸¢à¸™à¸­à¸à¸‚à¸­à¸‡à¸„à¸¸à¸“:";
-        Text[ czech ] = "ProsÃ­m zvolte si typ svÃ© externÃ­ databÃ¡ze kontaktÅ¯:";
-        Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×¡×•×’ ×¡×¤×¨ ×”×›×ª×•×‘×•×ª ×”×¨×¦×•×™â€¬";
-        Text[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤†à¤ªà¤•à¤¾ à¤¬à¤¾à¤¹à¤°à¥€ à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤•à¤¾ à¤µà¤°à¥à¤— à¤•à¥‹ à¤šà¥à¤¨à¤¿à¤ :";
-        Text[ slovak ] = "ProsÃ­m vyberte typ vÃ¡Å¡ho externÃ©ho adresÃ¡ra:";
-        Text[ hungarian ] = "VÃ¡lassza ki a kÃ¼lsÅ‘ cÃ­mjegyzÃ©k tÃ­pusÃ¡t:";
-        Text[ slovenian ] = "Izberite vrsto zunanjega adresarja:";
+        Text [ de ] = "Bitte wählen Sie den Typ Ihres externen Adressbuches:";
+        Text [ en-US ] = "Please select the type of your external address book:";
     };
 
     RadioButton RB_MORK
@@ -244,237 +154,49 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Group = TRUE;
 
-        Text = "Mozilla / Netscape";
-        Text [ english ] = "Mozilla / Netscape";
-        Text [ english_us ] = "Mozilla / Netscape";
-        Text[ portuguese ] = "Mozilla / Netscape 6.x";
-        Text[ russian ] = "Àäğåñíàÿ êíèãà Mozilla / Netscape 6.x";
-        Text[ greek ] = "Mozilla / Netscape 6.x";
-        Text[ dutch ] = "Mozilla / Netscape 6.x";
-        Text[ french ] = "Mozilla / Netscape";
-        Text[ spanish ] = "Mozilla / Netscape";
-        Text[ finnish ] = "Mozilla / Netscape 6.x";
-        Text[ italian ] = "Mozilla / Netscape";
-        Text[ danish ] = "Mozilla / Netscape 6.x";
-        Text[ swedish ] = "Mozilla/Netscape";
-        Text[ polish ] = "Mozilla/Netscape 6.x";
-        Text[ portuguese_brazilian ] = "Mozilla / Netscape 6.x";
-        Text[ japanese ] = "Mozilla / Netscape";
-        Text[ korean ] = "Mozilla / Netscape";
-        Text[ chinese_simplified ] = "Mozilla / Netscape";
-        Text[ chinese_traditional ] = "Mozilla / Netscape";
-        Text[ turkish ] = "Mozilla / Netscape";
-        Text[ arabic ] = "Mozilla / Netscape";
-        Text[ catalan ] = "Mozilla / Netscape 6.x";
-        Text[ czech ] = "Mozilla / Netscape 6.x";
-        Text[ hebrew ] = "Mozilla / Netscape";
-        Text[ thai ] = "Mozilla / Netscape";
-        Text[ hindi ] = "Mozilla / Netscape 6.x";
-        Text[ slovak ] = "Mozilla / Netscape 6.x";
-        Text[ hungarian ] = "Mozilla / Netscape";
-        Text[ slovenian ] = "Mozilla / Netscape";
+        Text [ de ] = "Mozilla / Netscape";
+        Text [ en-US ] = "Mozilla / Netscape";
     };
     RadioButton RB_EVOLUTION
      {
          Pos        = MAP_APPFONT ( 15, 79 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "Evolution";
-        Text [ english ] = "Evolution";
-        Text [ english_us ] = "Evolution";
-        Text[ portuguese ] = "Evolution";
-        Text[ russian ] = "Evolution";
-        Text[ greek ] = "Evolution";
-        Text[ dutch ] = "Evolution";
-        Text[ french ] = "Evolution";
-        Text[ spanish ] = "Evolution";
-        Text[ finnish ] = "Evolution";
-        Text[ italian ] = "Evolution";
-        Text[ danish ] = "Evolution";
-        Text[ swedish ] = "Evolution";
-        Text[ polish ] = "Evolution";
-        Text[ portuguese_brazilian ] = "Evolution";
-        Text[ japanese ] = "Evolution";
-        Text[ korean ] = "Evolution";
-        Text[ chinese_simplified ] = "Evolution";
-        Text[ chinese_traditional ] = "Evolution";
-        Text[ turkish ] = "Evolution";
-        Text[ arabic ] = "Evolution";
-        Text[ catalan ] = "Evolution";
-        Text[ czech ] = "Evolution";
-        Text[ slovak ] = "Evolution";
-        Text[ hebrew ] = "Evolution";
-        Text[ thai ] = "Evolution";
-        Text[ hindi ] = "Evolution";
-        Text[ hungarian ] = "Evolution";
-        Text[ slovenian ] = "Evolution";
+        Text [ de ] = "Evolution";
+        Text [ en-US ] = "Evolution";
     };
     RadioButton RB_LDAP
     {
         Pos     = MAP_APPFONT ( 15, 90 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "LDAP Adress-Bestand";
-        Text [ english ] = "LDAP address data";
-        Text [ english_us ] = "LDAP address data";
-        Text[ portuguese ] = "Endereços LDAP";
-        Text[ russian ] = "Àäğåñà LDAP";
-        Text[ greek ] = "Äåäïìİíá äéåõèıíóåùí LDAP";
-        Text[ dutch ] = "LDAP-adresbestand";
-        Text[ french ] = "Stock des adresses LDAP";
-        Text[ spanish ] = "Datos de las direcciones LDAP ";
-        Text[ finnish ] = "LDAP-osoitetiedot";
-        Text[ italian ] = "Dati Rubrica LDAP";
-        Text[ danish ] = "LDAP-adressesæt";
-        Text[ swedish ] = "LDAP-adressdata";
-        Text[ polish ] = "Dane adresowe LDAP";
-        Text[ portuguese_brazilian ] = "Endereços LDAP";
-        Text[ japanese ] = "LDAP ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿";
-        Text[ korean ] = "LDAP ì£¼ì†Œ ë°ì´í„°";
-        Text[ chinese_simplified ] = "LDAP åœ°å€èµ„æ–™";
-        Text[ chinese_traditional ] = "LDAP åœ°å€è³‡æ–™";
-        Text[ turkish ] = "LDAP tipi adres verisi";
-        Text[ arabic ] = "LDAP address data";
-        Text[ catalan ] = "Dades LDAP";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ LDAP ";
-        Text[ czech ] = "LDAP";
-        Text[ hebrew ] = "LDAPâ€®×¡×¤×¨ ×›×ª×•×‘×•×ª â€¬";
-        Text[ hindi ] = "LDAP à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾";
-        Text[ slovak ] = "LDAP adresÃ¡r";
-        Text[ hungarian ] = "LDAP-cÃ­mtÃ¡r";
-        Text[ slovenian ] = "LDAP-adresar";
+        Text [ de ] = "LDAP Adress-Bestand";
+        Text [ en-US ] = "LDAP address data";
     };
     RadioButton RB_OUTLOOK
     {
         Pos     = MAP_APPFONT ( 15, 101 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "Outlook Adressbuch";
-        Text [ english ] = "Outlook address book";
-        Text [ english_us ] = "Outlook address book";
-        Text[ portuguese ] = "Livro de endereços Outlook";
-        Text[ russian ] = "Àäğåñíàÿ êíèãà â Outlook";
-        Text[ greek ] = "Âéâëßï äéåõèıíóåùí ôïõ Outlook";
-        Text[ dutch ] = "Outlook-adresboek";
-        Text[ french ] = "Carnet d'adresses Outlook";
-        Text[ spanish ] = "Libreta de direcciones de Outlook";
-        Text[ finnish ] = "Outlookin osoitekirja";
-        Text[ italian ] = "Rubrica Outlook";
-        Text[ danish ] = "Outlook-adressekartotek";
-        Text[ swedish ] = "Outlook-adressbok";
-        Text[ polish ] = "Ksi¹¿ka adresowa programu Outlook";
-        Text[ portuguese_brazilian ] = "Livro de endereços do Outlook";
-        Text[ japanese ] = "Outlook ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³";
-        Text[ korean ] = "Outlook ì£¼ì†Œë¡";
-        Text[ chinese_simplified ] = "Outlook é€šè®¯ç°¿";
-        Text[ chinese_traditional ] = "Outlook é€šè¨ŠéŒ„";
-        Text[ turkish ] = "Outlook adres defteri";
-        Text[ arabic ] = "Outlook address book";
-        Text[ catalan ] = "Llibreta d'adreces de l'Outlook";
-        Text[ thai ] = "à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸‚à¸­à¸‡ Outlook ";
-        Text[ czech ] = "DatabÃ¡ze kontaktÅ¯ programu Outlook";
-        Text[ hebrew ] = "Outlookâ€®×¡×¤×¨ ×›×ª×•×‘×•×ª â€¬";
-        Text[ hindi ] = "à¤”à¤Ÿà¤²à¥à¤• à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤•";
-        Text[ slovak ] = "Outlook adresÃ¡r";
-        Text[ hungarian ] = "Outlook-cÃ­mjegyzÃ©k";
-        Text[ slovenian ] = "Adresar programa Outlook";
+        Text [ de ] = "Outlook Adressbuch";
+        Text [ en-US ] = "Outlook address book";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
         Pos     = MAP_APPFONT ( 15,112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "Windows System-Adressbuch";
-        Text [ english ] = "Windows system address book";
-        Text [ english_us ] = "Windows system address book";
-        Text[ portuguese ] = "Livro de endereços do sistema Windows";
-        Text[ russian ] = "Àäğåñíàÿ êíèãà Windows";
-        Text[ greek ] = "Âéâëßï äéåõèıíóåùí ôïõ óõóôŞìáôïò ôùí Windows";
-        Text[ dutch ] = "Windows-systeemadresboek";
-        Text[ french ] = "Carnet d'adresses du système Windows";
-        Text[ spanish ] = "Libreta de direcciones del sistema de Windows";
-        Text[ finnish ] = "Windows-järjestelmän osoitekirja";
-        Text[ italian ] = "Rubrica di sistema Windows";
-        Text[ danish ] = "Windows systemadressekartotek";
-        Text[ swedish ] = "Windowssystemets adressbok";
-        Text[ polish ] = "Ksi¹¿ka adresowa systemu Windows";
-        Text[ portuguese_brazilian ] = "Livro de endereços do sistema Windows";
-        Text[ japanese ] = "Windows ã‚·ã‚¹ãƒ†ãƒ ã®ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³";
-        Text[ korean ] = "Windows ì‹œìŠ¤í…œ ì£¼ì†Œë¡";
-        Text[ chinese_simplified ] = "Windows ç³»ç»Ÿé€šè®¯ç°¿";
-        Text[ chinese_traditional ] = "Windows ç³»çµ±é€šè¨ŠéŒ„";
-        Text[ turkish ] = "Windows sistem adres defteri";
-        Text[ arabic ] = "Windows system address book";
-        Text[ catalan ] = "Llibreta d'adreces del Windows";
-        Text[ thai ] = "à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸‚à¸­à¸‡à¸£à¸°à¸šà¸šà¸§à¸´à¸™à¹‚à¸”à¸§à¸ªà¹Œ";
-        Text[ czech ] = "SystÃ©movÃ¡ databÃ¡ze kontaktÅ¯ op.systÃ©mu Windows";
-        Text[ hebrew ] = "Windows Systemâ€®×¡×¤×¨ ×›×ª×•×‘×•×ª â€¬";
-        Text[ hindi ] = "Windows à¤¸à¤¿à¤¸à¥à¤Ÿà¤® à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤•";
-        Text[ slovak ] = "Windows system adresÃ¡r";
-        Text[ hungarian ] = "Windows-rendszercÃ­mjegyzÃ©k";
-        Text[ slovenian ] = "Adresar sistema Windows";
+        Text [ de ] = "Windows System-Adressbuch";
+        Text [ en-US ] = "Windows system address book";
     };
     RadioButton RB_OTHER
     {
         Pos     = MAP_APPFONT ( 15, 123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "andere externe Datenquelle";
-        Text [ english ] = "other external data source";
-        Text [ english_us ] = "Other external data source";
-        Text[ portuguese ] = "Outra fonte de dados externa";
-        Text[ russian ] = "Äğóãîé âíåøíèé èñòî÷íèê äàííûõ";
-        Text[ greek ] = "¢ëëç åîùôåñéêŞ ğñïİëåõóç äåäïìİíùí";
-        Text[ dutch ] = "andere externe gegevensbron";
-        Text[ french ] = "Autre source de données externe";
-        Text[ spanish ] = "Otras fuentes de datos externas";
-        Text[ finnish ] = "Muu ulkoinen tietolähde";
-        Text[ italian ] = "Altre sorgenti dati esterne";
-        Text[ danish ] = "andre eksterne datakilder";
-        Text[ swedish ] = "Annan extern datakälla";
-        Text[ polish ] = "inne zewnêtrzne Ÿród³o danych";
-        Text[ portuguese_brazilian ] = "Outra fonte de dados externa";
-        Text[ japanese ] = "ãã®ä»–ã®å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-        Text[ korean ] = "ê¸°íƒ€ ì™¸ë¶€ ë°ì´í„° ì›ë³¸";
-        Text[ chinese_simplified ] = "å…¶å®ƒçš„å¤–éƒ¨æ•°æ®æº";
-        Text[ chinese_traditional ] = "å…¶å®ƒçš„è³‡æ–™æº";
-        Text[ turkish ] = "Diğer harici veri kaynağı ";
-        Text[ arabic ] = "Other external data source";
-        Text[ catalan ] = "Un altre tipus de dades externes";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ à¸²à¸¢à¸™à¸­à¸à¸­à¸·à¹ˆà¸™ à¹†";
-        Text[ czech ] = "JinÃ½ externÃ­ zdroj dat";
-        Text[ hebrew ] = "â€®×¡×•×’×™× ××—×¨×™× ×©×œ ××§×•×¨×•×ª ×—×™×¦×•× ×™×™× ×œ×¡×¤×¨ ×”×›×ª×•×‘×•×ªâ€¬";
-        Text[ hindi ] = "à¤…à¤¨à¥à¤¯ à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤²";
-        Text[ slovak ] = "OstatnÃ© externÃ© zdroje dÃ¡t";
-        Text[ hungarian ] = "EgyÃ©b kÃ¼lsÅ‘ adatforrÃ¡s";
-        Text[ slovenian ] = "Drug zunanji vir podatkov";
+        Text [ de ] = "andere externe Datenquelle";
+        Text [ en-US ] = "Other external data source";
     };
-    Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endereços!";
-    Text[ russian ] = "Äîáğî ïîæàëîâàòü â Ìàñòåğ èñòî÷íèêîâ äàííûõ àäğåñîâ!";
-    Text[ greek ] = "Êáëşò ïñßóáôå óôïí áõôüìáôï ğéëüôï ãéá ğñïİëåõóç äåäïìİíùí äéåõèıíóåùí";
-    Text[ dutch ] = "Welkom bij de AutoPiloot voor het inrichten van adresgegevensbronnen";
-    Text[ french ] = "Bienvenue dans l'AutoPilote pour le paramétrage des sources de données des adresses !";
-    Text[ spanish ] = "Bienvenido al Piloto automático de fuentes de datos de direcciones";
-    Text[ finnish ] = "Tämä on ohjattu yhteystietojen tuominen";
-    Text[ italian ] = "Benvenuti nel Pilota automatico per impostare la sorgente dati della Rubrica";
-    Text[ danish ] = "Velkommen til AutoPilot for adressedatakilder.";
-    Text[ swedish ] = "Välkommen till AutoPiloten för att skapa adressdatakällor";
-    Text[ polish ] = "Witamy w AutoPilocie Ÿróde³ danych adresowych.";
-    Text[ portuguese_brazilian ] = "Bem-vindo ao Assistente da Fonte de Dados de Endereços";
-    Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã¸ã‚ˆã†ã“ã";
-    Text[ korean ] = "ì£¼ì†Œ ë°ì´í„° ì›ë³¸ì˜ ìë™ íŒŒì¼ëŸ¿ì— ì˜¤ì‹  ê²ƒì„ í™˜ì˜í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ¬¢è¿ä½¿ç”¨ç”¨äºå»ºç«‹é€šè®¯ç°¿æ•°æ®æºçš„è‡ªåŠ¨æ–‡æ¡£åŠ©ç†ã€‚";
-    Text[ chinese_traditional ] = "æ­¡è¿ä½¿ç”¨ç”¨æ–¼å»ºç«‹é€šè¨ŠéŒ„è³‡æ–™æºçš„è‡ªå‹•æª”æ¡ˆåŠ©ç†";
-    Text[ turkish ] = "Adres veri kaynağına otomatik pilotuna hoşgeldiniz ";
-    Text[ arabic ] = "Welcome to the Address Data Source AutoPilot";
-    Text[ catalan ] = "Benvinguts a l'assistent de dades d'adreces";
-    Text[ thai ] = "à¸‚à¸­à¸•à¹‰à¸­à¸™à¸£à¸±à¸šà¸ªà¸¹à¹ˆà¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "VÃ­tejte v prÅ¯vodci vytvoÅ™enÃ­m databÃ¡ze kontaktÅ¯";
-    Text[ hebrew ] = "â€®×‘×¨×™×›×™× ×”×‘××™× ×œ\"×˜×™×™×¡ ×”××•×˜×•××˜×™\" ×œ×¡×¤×¨×™ ×›×ª×•×‘×•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥ à¤®à¥‡à¤‚ à¤¸à¥à¤µà¤¾à¤—à¤¤ à¤¹à¥ˆ";
-    Text[ slovak ] = "Vitajte v sprievodcovi zdrojom dÃ¡t adries";
-    Text[ hungarian ] = "ÃœdvÃ¶zli a CÃ­mtÃ¡rtÃ¼ndÃ©r";
-    Text[ slovenian ] = "DobrodoÅ¡li v Avtopilotu vira podatkov adresarja";
 };
 
 //........................................................................
@@ -484,9 +206,8 @@ TabPage RID_PAGE_ADMININVOKATION
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text = "Zusätzliche Einstellungen";
-    Text [ english ] = "Additional Settings";
-    Text [ english_us ] = "Additional Settings";
+    Text [ de ] = "Zusätzliche Einstellungen";
+    Text [ en-US ] = "Additional Settings";
 #endif
 
     FixedText FT_ADMINEXPLANATION
@@ -495,38 +216,9 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\n"
+        Text [ de ] = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\n"
             "Die folgende Schaltfläche öffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen können.";
-        Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
-            "For this, another dialog will be opened, as soon as you press the button below. "
-            "There, please specify all missing settings.";
-        Text [ english_us ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
-        Text[ portuguese ] = "Para configurar a nova fonte de dados são ainda necessárias algumas informações.\n\nClique no botão abaixo para abrir a respectiva caixa de diálogo. Indique aí os parâmetros necessários.";
-        Text[ russian ] = "Äëÿ ñîçäàíèÿ íîâûõ èñòî÷íèêîâ äàííûõ íåîáõîäèìû äîïîëíèòåëüíûå íàñòğîéêè.\n\nÍàæìèòå êíîïêó, ğàñïîëîæåííóş âíèçó, ÷òîáû îòêğûòü äèàëîãîâîå îêíî, â êîòîğîì ìîæíî ââåñòè íåäîñòàşùóş èíôîğìàöèş.";
-        Text[ greek ] = "Ãéá íá ñõèìßóïõìå ôç íİá ğçãŞ äåäïìİíùí, áğáéôïıíôáé ğñüóèåôåò ğëçñïöïñßåò.n\nÊÜíôå êëéê óôï ğáñáêÜôù êïõìğß ãéá íá áíïßîåôå İíá Üëëï ğëáßóéï äéáëüãïõ óôï ïğïßï åéóÜãåôå óôç óõíİ÷åéá ôéò áğáñáßôçôåò ğëçñïöïñßåò.";
-        Text[ dutch ] = "Om de nieuwe gegevensbron in te richten, zijn nog meer gegevens vereist.\n\nZodra u op de knop hieronder klikt, wordt er nog een dialoogvenster geopend. Geef daarin de ontbrekende instellingen op.";
-        Text[ french ] = "Des informations supplémentaires sont requises pour le paramétrage de la nouvelle source de données.\n\nUtilisez le bouton ci-dessous pour ouvrir une autre boîte de dialogue permettant de définir les paramètres manquants.";
-        Text[ spanish ] = "Para configurar la nueva fuente de datos se necesita otra información.\n\nPara ello, en cuanto pulse sobre el botón que se encuentra abajo se abrirá otro diálogo. Introduzca en él la información requerida.";
-        Text[ finnish ] = "Lisätietoja vaaditaan uuden tietolähteen asentamiseksi.\n\nAvaa seuraavaa painiketta napsauttamalla toinen valintaikkuna, johon voit syöttää tarvittavat tiedot.";
-        Text[ italian ] = "Per impostare la nuova sorgente dati sono necessarie ancora alcune informazioni.\n\nCliccando il pulsante sotto si aprirà un altro dialogo in cui potete inserire le informazioni mancanti.";
-        Text[ danish ] = "Der skal bruges flere oplysninger for at kunne konfigurere den nye datakilde.\n\nDen følgende knap åbner en ny dialog, hvor du kan foretage de manglende indstillinger.";
-        Text[ swedish ] = "Du måste göra fler inställningar för den nya datakällan.\n\nOm du klickar på kommandoknappen nedan öppnas en annan dialogruta där du gör inställningarna som saknas.";
-        Text[ polish ] = "Konfiguracja nowego Ÿród³a danych wymaga dodatkowych ustawieñ.\n\nKliknij poni¿szy przycisk, a zostanie otwarte okno dialogowe, w którym mo¿na podaæ potrzebne informacje.";
-        Text[ portuguese_brazilian ] = "Para configurar a nova fonte de dados, são necessárias mais algumas informações.\n\nClique no botão abaixo para abrir a respectiva caixa de diálogo. Indique aí os parâmetros necessários.";
-        Text[ japanese ] = "æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®è¨­å®šã«ã¯ã€ã¾ã ã„ãã¤ã‹ã®é …ç›®ã‚’æŒ‡å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\n\nä¸‹ã«ã‚ã‚‹ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦æ¬¡ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ãã€ãã“ã§ã¾ã æŒ‡å®šã•ã‚Œã¦ãªã„é …ç›®ã®è¨­å®šã‚’è¡Œã„ã¾ã™ã€‚";
-        Text[ korean ] = "ìƒˆ ë°ì´í„° ì›ë³¸ì„ ì„¤ì •í•˜ë ¤ë©´ ì¶”ê°€ ì •ë³´ê°€ í•„ìš”í•©ë‹ˆë‹¤.\n\nì•„ë˜ ìˆëŠ” ë²„íŠ¼ì„ ëˆ„ë¥´ë©´ ì´ ì‘ì—…ì„ ìˆ˜í–‰í•  ë˜ í•˜ë‚˜ì˜ ëŒ€í™” ìƒìê°€ í‘œì‹œë©ë‹ˆë‹¤. ì´ ëŒ€í™” ìƒìì—ì„œ ì•„ì§ ì„¤ì •í•˜ì§€ ì•Šì€ ë‚´ìš©ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "æ–°å»ºæ•°æ®æºæ—¶è¿˜å¿…é¡»åšå…¶å®ƒè®¾å®šã€‚\n\næŒ‰å‡»ä¸‹æ–¹çš„æŒ‰é’®åä¾¿ä¼šå‡ºç°ä¸€ä¸ªå¯¹è¯æ¡†ã€‚åœ¨æ­¤å¯¹è¯æ¡†å†…æ‚¨å¯ä»¥åšè¿˜æœªå®Œæˆçš„è®¾å®šã€‚";
-        Text[ chinese_traditional ] = "æ–°å»ºä¸€å€‹è³‡æ–™æºé‚„å¿…é ˆåšå…¶å®ƒçš„è¨­å®šã€‚\n\næŒ‰ä¸€ä¸‹ä¸‹æ–¹çš„æŒ‰éˆ•ï¼Œå°±æœƒé–‹å•“ä¸€å€‹å°è©±æ–¹å¡Šã€‚åœ¨é€™å€‹å°è©±æ–¹å¡Šä¹‹ä¸­å°±å¯ä»¥åšæ‰€æœ‰æœªå®Œæˆçš„è¨­å®šã€‚";
-        Text[ turkish ] = "Yeni bir veri kaynağı oluşturmak için ek bilgilere gerek vardır..\n\nTakip eden tuşa bastığınzda açılan pencereye gerekli bilgileri girebilirsiniz.";
-        Text[ arabic ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
-        Text[ catalan ] = "Per a configurar una nova font de dades, es necessita informació addicional.\n\nS'obrirà un nou diàleg quan feu clic al botó de més avall. Allà podeu especificar les dades que falten.";
-        Text[ thai ] = "à¸à¸²à¸£à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸«à¸¡à¹ˆ, à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸à¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡\n\nà¸„à¸¥à¸´à¹Šà¸à¸›à¸¸à¹ˆà¸¡à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¸´à¸”à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸­à¸·à¹ˆà¸™à¸—à¸µà¹ˆà¸—à¸µà¹ˆà¸„à¸¸à¸“à¹ƒà¸ªà¹ˆà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸ˆà¸³à¹€à¸›à¹‡à¸™";
-        Text[ czech ] = "K vytvoÅ™enÃ­ novÃ©ho zdroje dat je potÅ™eba dalÅ¡Ã­ch informacÃ­.\n\nKliknÄ›te na nÃ¡sledujÃ­cÃ­ tlaÄÃ­tko k otevÅ™enÃ­ dalÅ¡Ã­ho dialogu, kde zadÃ¡te potÅ™ebnÃ© informace.";
-        Text[ hebrew ] = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\nDie folgende SchaltflÃ¤che Ã¶ffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen kÃ¶nnen.";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤¸à¥‡à¤Ÿà¤ª à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤, à¤…à¤¤à¤¿à¤°à¤¿à¤•à¥à¤¤ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤•à¥€ à¤†à¤µà¤¶à¥à¤¯à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤\n\nà¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¬à¤Ÿà¤¨ à¤•à¥‹ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¤¨à¥‡ à¤¸à¥‡ à¤¦à¥‚à¤¸à¤°à¤¾ à¤¡à¤¯à¤²à¥‰à¤— à¤–à¥à¤² à¤œà¤¾à¤¯à¥‡à¤—à¤¾ à¤œà¤¹à¤¾à¤ à¤ªà¤° à¤†à¤µà¤¶à¥à¤¯à¤• à¤œà¤¾à¤¨à¤•à¤¾à¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤†à¤ª à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "Aby bolo moÅ¾nÃ© nastaviÅ¥ zdroj dÃ¡t, sÃº potrebnÃ© ÄalÅ¡ie informÃ¡cie.\n\nKliknutÃ­m na nasledujÃºce tlaÄÃ­tko otvorÃ­te ÄalÅ¡ie okno, v ktorom zadÃ¡te potrebnÃ© informÃ¡cie.";
-        Text[ hungarian ] = "Ãšj adatforrÃ¡s beÃ¡llÃ­tÃ¡sÃ¡hoz tovÃ¡bbi rÃ©szletek szÃ¼ksÃ©gesek.\n\nA szÃ¼ksÃ©ges adatok bevitelÃ©hez kattintson a BeÃ¡llÃ­tÃ¡sok gombra.";
-        Text[ slovenian ] = "Za nov vir podatkov so potrebne dodatne informacije.\n\nKliknite na gumb, da se odpre pogovorno okno, in vnesite potrebne podatke.";
+        Text [ en-US ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
     };
 
     PushButton PB_INVOKE_ADMIN_DIALOG
@@ -534,35 +226,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
-        Text = "Einstellungen";
-        Text [ english ] = "Settings";
-        Text [ english_us ] = "Settings";
-        Text[ portuguese ] = "Definições";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ greek ] = "Ñõèìßóåéò";
-        Text[ dutch ] = "Instellingen";
-        Text[ french ] = "Paramètres";
-        Text[ spanish ] = "Configuración";
-        Text[ finnish ] = "Asetukset";
-        Text[ italian ] = "Impostazioni";
-        Text[ danish ] = "Indstillinger";
-        Text[ swedish ] = "Inställningar";
-        Text[ polish ] = "Ustawienia";
-        Text[ portuguese_brazilian ] = "Definições";
-        Text[ japanese ] = "è¨­å®š";
-        Text[ korean ] = "ì„¤ì •";
-        Text[ chinese_simplified ] = "è®¾å®š";
-        Text[ chinese_traditional ] = "è¨­å®š";
-        Text[ turkish ] = "Ayarlar";
-        Text[ arabic ] = "ÅÚÏÇÏÇÊ";
-        Text[ catalan ] = "Configuració";
-        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
-        Text[ czech ] = "NastavenÃ­";
-        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "Nastavitve";
+        Text [ de ] = "Einstellungen";
+        Text [ en-US ] = "Settings";
     };
 
     FixedText FT_ERROR
@@ -572,65 +237,11 @@ TabPage RID_PAGE_ADMININVOKATION
         WordBreak = TRUE;
         Hide = TRUE;
 
-        Text = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\n"
+        Text [ de ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\n"
             "Bitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorigen "
             "Seite) einen anderen Typ für Ihre  Adress-Datenquelle.";
-        Text [ english ] = "The connection to the data source could not be established.\n"
-            "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
-        Text [ english_us ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
-        Text[ portuguese ] = "Foi impossível estabelecer a ligação à fonte de dados.\nAntes de continuar, verifique as definições ou seleccione outro tipo (página anterior) para a fonte de dados dos endereços.";
-        Text[ russian ] = "Íåâîçìîæíî óñòàíîâèòü ñîåäèíåíèå ñ èñòî÷íèêîì äàííûõ.\nÏğåæäå, ÷åì ïğîäîëæèòü ïğîöåññ, ïğîâåğüòå íàñòğîéêè èëè âûáåğèòå (íà ïğåäûäóùåé ñòğàíèöå) äğóãîé òèï èñòî÷íèêà.";
-        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá óıíäåóçò ìå ôçí ğñïİëåõóç äåäïìİíùí.\nĞñéí óõíå÷ßóåôå, åëİãîôå ôéò ñõèìßóåéò ğïõ İãéíáí Ş (óôçí ğñïçãïıìåíç óåëßäá) åğéëİîôå İíáí Üëëï ôığï ğñïİëåõóçò äåäïìİíùí äéåõèıíóåùí.";
-        Text[ dutch ] = "De verbinding met de gegevensbron kan niet tot stand worden gebracht.\nControleer eerst de gedefinieerde instellingen of kies (op de vorige pagina) een ander type adresgegevensbron.";
-        Text[ french ] = "La connexion à la source de données n'a pas pu être établie.\nAvant de poursuivre, vérifiez le paramétrage effectué ou choisissez (sur la page précédente) un autre type pour la source de données des adresses.";
-        Text[ spanish ] = "No se pudo efectuar la conexión a la fuente de datos.\nAntes de continuar, compruebe la configuración realizada o elija (en la ficha anterior) otro tipo para la fuente de datos de direcciones.";
-        Text[ finnish ] = "Yhteyttä tietolähteeseen ei saatu.\nTarkista tehdyt asetukset ennen jatkamista tai valitse edelliseltä sivulta toinen osoitetietolähteen tyyppi.";
-        Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.\nPrima di proseguire vi consigliamo di verificare le impostazioni appena fatte oppure selezionate un altro tipo di sorgente dati per la Rubrica nella pagina precedente.";
-        Text[ danish ] = "Der kunne ikke oprettes forbindelse til datakilden.\nKontroller venligst de foretagne indstillinger, før du fortsætter, eller vælg (på forrige side) en anden type til dit adressekartotek.";
-        Text[ swedish ] = "Det gick inte att koppla till datakällan.\nKontrollera de gjorda inställningarna innan du fortsätter eller välj en annan typ för din adressdatakälla (på föregående sida).";
-        Text[ polish ] = "Nie uda³o siê nawi¹zaæ po³¹czenia ze Ÿród³em danych.\nZanim przejdziesz dalej, sprawdŸ przyjête ustawienia lub wybierz (na poprzedniej stronie) inny typ Ÿród³a danych adresowych.";
-        Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão com a fonte de dados.\nAntes de continuar, verifique as definições ou selecione outro tipo para a fonte de dados dos endereços (na página anterior).";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¸ã¯æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nç¶šè¡Œã™ã‚‹å‰ã«ã€ã‚‚ã†ä¸€åº¦é¸æŠã—ãŸè¨­å®šã‚’ç¢ºèªã™ã‚‹ã‹ã€ã‚ã‚‹ã„ã¯å‰ãƒšãƒ¼ã‚¸ã«æˆ»ã£ã¦ã€ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«åˆ¥ã®ç¨®é¡ã‚’é¸æŠã—ã¾ã™ã€‚";
-        Text[ korean ] = "ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì—°ê²°í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\nê³„ì† ì§„í–‰í•˜ê¸° ì „ì— ì„¤ì • ëª¨ë“œë¥¼ í™•ì¸í•˜ê±°ë‚˜ ì´ì „ í˜ì´ì§€ì—ì„œ ë‹¤ë¥¸ ì£¼ì†Œ ë°ì´í„° ì›ë³¸ ìœ í˜•ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "æ— æ³•ä¸æ•°æ®æºå»ºç«‹è¿æ¥ã€‚\nåœ¨ç»§ç»­æ‰§è¡Œå‘½ä»¤ä¹‹å‰ï¼Œè¯·æ£€æŸ¥ä¸€ä¸‹æ‰€æœ‰å·²ç»å®Œæˆçš„è®¾å®šï¼Œæˆ–è€…è¿”å›åˆ°ä¸Šä¸€é¡µï¼Œé€‰æ‹©å…¶å®ƒçš„é€šè®¯ç°¿æ•°æ®æºç±»å‹ã€‚";
-        Text[ chinese_traditional ] = "ç„¡æ³•å’Œè³‡æ–™æºé€£ç·šã€‚\nåœ¨ç¹¼çºŒåŸ·è¡ŒæŒ‡ä»¤ä¹‹å‰ï¼Œè«‹æª¢æŸ¥æ‰€æœ‰å®Œæˆçš„è¨­å®šï¼Œæˆ–è€…è¿”å›åˆ°ä¸Šä¸€é ï¼Œé¸æ“‡å¦å¤–ä¸€å€‹åœ°å€è³‡æ–™æºã€‚";
-        Text[ turkish ] = "Veri kaynağına bağlantı kurulamadı.\nDevam etmeden önce bir önceki sayfadaki ayarlarınızı kontrol edin veya başka bir adrse veri kaynağı tipi seçin.";
-        Text[ arabic ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
-        Text[ catalan ] = "No es pot establir la connexió amb la base de dades\nAbans de continuar, comproveu les dades o (a la pàgina anterior) escolliu un altre tipus de font.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸”à¹‰\nà¸à¹ˆà¸­à¸™à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸ˆà¸°à¸—à¸³à¸•à¹ˆà¸­, à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸—à¸µà¹ˆà¸—à¸³à¹„à¸§à¹‰, à¸«à¸£à¸·à¸­ (à¹ƒà¸™à¸«à¸™à¹‰à¸²à¸à¹ˆà¸­à¸™) à¹€à¸¥à¸·à¸­à¸à¸Šà¸™à¸´à¸”à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸­à¸·à¹ˆà¸™";
-        Text[ czech ] = "Nelze navÃ¡zat spojenÃ­ se zdrojem dat.\n\nDÅ™Ã­ve neÅ¾ budete pokraÄovat, zkontrolujte prosÃ­m nastavenÃ­ nebo na pÅ™edchozÃ­ strÃ¡nce zvolte jinÃ½ typ zdroje dat.";
-        Text[ hebrew ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\nBitte Ã¼berprÃ¼fen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wÃ¤hlen Sie (auf der vorigen Seite) einen anderen Typ fÃ¼r Ihre  Adress-Datenquelle.";
-        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤\nà¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¥‡ à¤¸à¥‡ à¤ªà¤¹à¤¿à¤²à¥‡, à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£à¥‹à¤‚ à¤•à¤¾ à¤œà¤¾à¤à¤š à¤•à¥€à¤œà¤¿à¤, à¤…à¤¥à¤µà¤¾ (à¤ªà¤¿à¤›à¤²à¤¾ à¤ªà¥ƒà¤·à¥à¤  à¤®à¥‡à¤‚) à¤¦à¥‚à¤¸à¤°à¤¾ à¤ªà¤¤à¥‡ à¤•à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤µà¤°à¥à¤— à¤•à¥‹ à¤šà¥à¤¨à¤¿à¤ à¥¤ ";
-        Text[ slovak ] = "Nepodarilo sa nadviazaÅ¥ spojenie so zdrojom dÃ¡t.\nPredtÃ½m ako budete pokraÄovaÅ¥, skontrolujte prosÃ­m nastavenia, alebo (na predchÃ¡dzajÃºcej strÃ¡nke) vyberte inÃ½ typ zdroja dÃ¡t adresy.";
-        Text[ hungarian ] = "Nem lehet az adatforrÃ¡shoz kapcsolÃ³dni.\nEllenÅ‘rizze a beÃ¡llÃ­tÃ¡sokat, vagy vÃ¡lasszon mÃ¡sik adatforrÃ¡st az elÅ‘zÅ‘ lapon.";
-        Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave z virom podatkov.\nPreden nadaljujete, preverite nastavitve ali pa na prejÅ¡nji strani izberite drug vir podatkov.";
+        Text [ en-US ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
     };
-    Text[ portuguese ] = "Definições adicionais";
-    Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
-    Text[ greek ] = "Ğñüóèåôåò ñõèìßóåéò";
-    Text[ dutch ] = "Extra instellingen";
-    Text[ french ] = "Paramètres supplémentaires";
-    Text[ spanish ] = "Configuración adicional";
-    Text[ finnish ] = "Lisäasetukset";
-    Text[ italian ] = "Ulteriori impostazioni";
-    Text[ danish ] = "Yderligere indstillinger";
-    Text[ swedish ] = "Ytterligare inställningar";
-    Text[ polish ] = "Dodatkowe ustawienia";
-    Text[ portuguese_brazilian ] = "Definições adicionais";
-    Text[ japanese ] = "è©³ç´°è¨­å®š";
-    Text[ korean ] = "ì¶”ê°€ ì„¤ì •";
-    Text[ chinese_simplified ] = "é™„åŠ è®¾å®š";
-    Text[ chinese_traditional ] = "å…¶å®ƒçš„è¨­å®š";
-    Text[ turkish ] = "Ek ayarlar";
-    Text[ arabic ] = "Additional Settings";
-    Text[ catalan ] = "Configuració addicional";
-    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¹€à¸à¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡";
-    Text[ czech ] = "DalÅ¡Ã­ nastavenÃ­";
-    Text[ hebrew ] = "ZusÃ¤tzliche Einstellungen";
-    Text[ hindi ] = "à¤…à¤¤à¤¿à¤°à¤¿à¤•à¥à¤¤ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-    Text[ slovak ] = "ÄalÅ¡ie nastavenia";
-    Text[ hungarian ] = "TovÃ¡bbi beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "Dodatne nastavitve";
 };
 
 //........................................................................
@@ -640,9 +251,8 @@ TabPage RID_PAGE_TABLESELECTION
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text = "Tabelle auswählen";
-    Text [ english ] = "Select Table";
-    Text [ english_us ] = "Select Table";
+    Text [ de ] = "Tabelle auswählen";
+    Text [ en-US ] = "Select Table";
 #endif
 
     FixedText FL_TOOMUCHTABLES
@@ -651,37 +261,9 @@ TabPage RID_PAGE_TABLESELECTION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
         WordBreak = TRUE;
 
-        Text = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\n"
+        Text [ de ] = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\n"
             "Bitte wählen Sie denjenigen aus, mit dem Sie hauptsächlich arbeiten wollen:";
-        Text [ english ] = "The external data source chosen by you contains more than one address stock.\n"
-            "Please choose the one you primarily want to work with:";
-        Text [ english_us ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
-        Text[ portuguese ] = "A fonte de dados externa seleccionada contém vários stocks de endereços.\nSeleccione o que irá ser mais usado.";
-        Text[ russian ] = "Âûáğàííûå âíåøíèå èñòî÷íèêè äàííûõ ñîäåğæàò íåñêîëüêî àäğåñíûõ êíèã.\nÂûáåğèòå âğó÷íóş òå, ñ êîòîğûì âû áóäåòå ğàáîòàòü äàëüøå.";
-        Text[ greek ] = "Ç åîùôåñéêŞ ğñïİëåõóç äåäïìİíùí ğïõ İ÷åôå åğéëİîåé ğåñéİ÷åé ğåñéóóüôåñá áğü İíá âéâëßá äéåõèıíóåùí.\nÅğéëİîôå áõôü ìå ôï ïğïßï èİëåôå íá åñãáóôåßôå êõñßùò:";
-        Text[ dutch ] = "De door u geselecteerde externe gegevensbron bevat meerdere adresbestanden.\nKies daaruit diegene waarmee u hoofdzakelijk wilt werken:";
-        Text[ french ] = "La source de données externe que vous avez choisie contient plusieurs stocks d'adresses.\nSélectionnez celui avec lequel vous voulez principalement travailler :";
-        Text[ spanish ] = "La fuente de datos externa que ha seleccionado contiene varias existencias de direcciones.\nSeleccione la que vaya a utilizar principalmente:";
-        Text[ finnish ] = "Valitsemasi ulkoinen tietolähde sisältää monta osoitekirjaa.\nValitse osoitekirja, jota pääasiassa käytät:";
-        Text[ italian ] = "La sorgente dati esterna selezionata contiene diversi indirizzi.\nSelezionate quelli con cui volete lavorare:";
-        Text[ danish ] = "Den valgte eksterne datakilde indeholder flere adressesæt.\nVælg det sæt, som du hovedsageligt vil arbejde med:";
-        Text[ swedish ] = "Den externa datakällan som du har valt innehåller flera adressuppsättningar.\nVälj den som du huvudsakligen vill arbeta med:";
-        Text[ polish ] = "Wybrane zewnêtrzne Ÿród³o danych zawiera kilka zbiorów adresów.\nWybierz ten zbiór, z którym chcesz g³ównie pracowaæ:";
-        Text[ portuguese_brazilian ] = "A fonte de dados externa selecionada contém mais de um livro de endereços.\nSelecione o que será mais usado:";
-        Text[ japanese ] = "é¸æŠã—ãŸå¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«ã¯è¤‡æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚\nä¸»ã«ä½œæ¥­ã«å¿…è¦ãªã‚‚ã®ã‚’ãã®ä¸­ã‹ã‚‰é¸æŠã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ì„ íƒí•œ ì™¸ë¶€ ë°ì´í„° ì›ë³¸ì— ë‘ ê°œ ì´ìƒì˜ ì£¼ì†Œë¡ì´ ë“¤ì–´ ìˆìŠµë‹ˆë‹¤.\nê¸°ë³¸ìœ¼ë¡œ ì‚¬ìš©í•  ì£¼ì†Œë¡ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
-        Text[ chinese_simplified ] = "æ‚¨é€‰å®šçš„å¤–éƒ¨æ•°æ®æºå†…å«æœ‰å¤šä¸ªåœ°å€èµ„æ–™è¡¨æ ¼ã€‚\nè¯·é€‰æ‹©ä¸€ä¸ªæ‚¨ç»å¸¸è¦ä½¿ç”¨çš„è¡¨æ ¼ï¼š";
-        Text[ chinese_traditional ] = "å·²ç¶“é¸å–çš„å¤–ä¾†è³‡æ–™æºå…§å«å¤šå€‹åœ°å€è³‡æ–™(ä¹Ÿå°±æ˜¯å¤šå€‹è³‡æ–™è¡¨æ ¼)ã€‚\nè«‹é¸æ“‡å…¶ä¸­ä¸€å€‹å¤§éƒ½æœƒè¦ä½¿ç”¨çš„è¡¨æ ¼ï¼š";
-        Text[ turkish ] = "Seçtiğniz harici veri kaynağı ,birden fazla adres bloğu veya tablosu barındırıyor.\nLütfen birinicil olarak kullanmak istediğiniz tablo veya bloğu seçiniz:";
-        Text[ arabic ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ catalan ] = "La font de dades externa conté més d'un tipus d'adreces (o taules, respectivament).\nEscolliu les dades primàries amb les que voleu treballar:";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ à¸²à¸¢à¸™à¸­à¸à¸—à¸µà¹ˆà¸„à¸¸à¸“à¹€à¸¥à¸·à¸­à¸à¸¡à¸µà¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸«à¸™à¸¶à¹ˆà¸‡\nà¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¹€à¸à¸µà¸¢à¸‡à¸«à¸™à¸¶à¹ˆà¸‡à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸—à¸µà¹ˆà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸Šà¹‰à¸‡à¸²à¸™:";
-        Text[ czech ] = "ExternÃ­ zdroj dat, kterÃ½ jste zvolili, obsahuje vÃ­ce neÅ¾ jednu databÃ¡zi kontaktÅ¯.\nProsÃ­m zvolte tu, se kterou chcete dÃ¡le pracovat:";
-        Text[ hebrew ] = "Die von Ihnen gewÃ¤hlte externe Datenquelle enthÃ¤lt mehrere Adress-BestÃ¤nde.\nBitte wÃ¤hlen Sie denjenigen aus, mit dem Sie hauptsÃ¤chlich arbeiten wollen:";
-        Text[ hindi ] = "à¤†à¤ªà¤•à¥‡ à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤®à¥‡à¤‚ à¤à¤• à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¹à¥ˆ à¥¤\nà¤•à¥ƒà¤ªà¤¯à¤¾ à¤•à¤¾ à¤à¤• à¤®à¥à¤–à¥à¤¯ à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤•à¥‹ à¤šà¥à¤¨à¥‹ à¤œà¤¿à¤¸à¤•à¥‡ à¤¸à¤¾à¤¥ à¤†à¤ª à¤•à¤¾à¤® à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ :";
-        Text[ slovak ] = "ExternÃ½ zdroj dÃ¡t, ktorÃ½ ste vybrali obsahuje viac ako jednu knihu adries.\nVyberte si prosÃ­m jednu, s ktorou chcete pracovaÅ¥.";
-        Text[ hungarian ] = "A vÃ¡lasztott kÃ¼lsÅ‘ adatforrÃ¡s tÃ¶bb cÃ­mjegyzÃ©ket tartalmaz.\nVÃ¡lassza ki kÃ¶zÃ¼lÃ¼k azt, amellyel dolgozni kÃ­vÃ¡n.";
-        Text[ slovenian ] = "Izbrani zunanji vir podatkov vsebuje veÄ adresarjev.\nIzberite tistega, ki ga boste najpogosteje rabili:";
+        Text [ en-US ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
     };
 
     ListBox LB_TABLELIST
@@ -694,32 +276,6 @@ TabPage RID_PAGE_TABLESELECTION
         AutoHScroll = TRUE;
         Border = TRUE;
     };
-    Text[ portuguese ] = "Seleccionar tabela";
-    Text[ russian ] = "Âûáîğ òàáëèöû";
-    Text[ greek ] = "ÅğéëïãŞ ğßíáêá";
-    Text[ dutch ] = "Tabel selecteren";
-    Text[ french ] = "Sélection de table";
-    Text[ spanish ] = "Seleccionar tabla";
-    Text[ finnish ] = "Valitse taulukko";
-    Text[ italian ] = "Seleziona tabella";
-    Text[ danish ] = "Vælg tabel";
-    Text[ swedish ] = "Välj tabell";
-    Text[ polish ] = "Zaznacz tabelê";
-    Text[ portuguese_brazilian ] = "Selecione a tabela";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®é¸æŠ";
-    Text[ korean ] = "í…Œì´ë¸” ì„ íƒ";
-    Text[ chinese_simplified ] = "é€‰æ‹©è¡¨æ ¼";
-    Text[ chinese_traditional ] = "é¸æ“‡è¡¨æ ¼";
-    Text[ turkish ] = "Tablo seç";
-    Text[ arabic ] = "Select Table";
-    Text[ catalan ] = "Selecció de taula";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "Vybrat tabulku";
-    Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×˜×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤šà¥à¤¨à¥‹";
-    Text[ slovak ] = "VybraÅ¥ tabuÄ¾ku";
-    Text[ hungarian ] = "TÃ¡bla kivÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izberi tabelo";
 };
 
 //........................................................................
@@ -729,9 +285,8 @@ TabPage RID_PAGE_FIELDMAPPING
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text = "Feldzuordnung";
-    Text [ english ] = "Field Assignment";
-    Text [ english_us ] = "Field Assignment";
+    Text [ de ] = "Feldzuordnung";
+    Text [ en-US ] = "Field Assignment";
 #endif
 
     FixedText FT_FIELDASSIGMENTEXPL
@@ -740,43 +295,12 @@ TabPage RID_PAGE_FIELDMAPPING
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 72 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche "
+        Text [ de ] = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche "
             "konkreten Daten enthalten.\n\n"
             "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
             "Sobald Sie die unten befindliche Schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
             "für Ihre Datenquelle vornehmen können.";
-        Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
-            "do contain which concrete data.\n\n"
-            "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
-            "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
-            "data source.";
-        Text [ english_us ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
-        Text[ portuguese ] = "Para poder utilizar os dados dos endereços nos seus modelos de documentos, o %PRODUCTNAME tem de reconhecer os campos que contêm os dados concretos.\n\nExemplo: os endereços electrónicos podem estar guardados num determinado campo com o nome que lhe parecer mais conveniente (e-mail, email ou EM, etc.)\n\nUtilize o botão abaixo para abrir outra caixa de diálogo que lhe permite definir estes parâmetros para a fonte de dados.";
-        Text[ russian ] = "Äëÿ èñïîëüçîâàíèÿ àäğåñîâ â øàáëîíàõ, %PRODUCTNAME äîëæåí çíàòü ïîëÿ è êîíêğåòíûå äàííûå, êîòîğûå ñîäåğæàòñÿ â ıòèõ ïîëÿõ.\n\nÍàïğèìåğ, àäğåñà ıëåêòğîííîé ïî÷òû ìîãóò áûòü ñîõğàíåíû â ïîëå ñ èìåíåì \"E-Mail\" èëè \"İëåêòğîííàÿ ïî÷òà\" èëè ñ êàêèì-ëèáî äğóãèì èìåíåì.\n\nÍàæàâ íà êíîïêó, íàõîäÿùóşñÿ âíèçó, ìîæíî âûïîëíèòü ıòè íàñòğîéêè.";
-        Text[ greek ] = "Ãéá íá óõìğåñéëÜâåôå ôá äåäïìİíá äéåõèıíóåùí ìİóá óôá ğñüôõğÜ óáò, ôï %PRODUCTNAME ğñİğåé íá ãíùñßæåé ğïéá ğåäßá ğåñéİ÷ïõí ğïéá äåäïìİíá.\n\nÃéá ğáñÜäåéãìá, èá ìğïñïıóáôå íá İ÷åôå áğïèçêåıóåé ôéò äéåõèıíóåéò çëåêôñïíéêïı ôá÷õäñïìåßïõ óå İíá ğåäßï ìå üíïìá \"email\" Ş \"E-mail\" Ş \"EM\" - Ş êÜôé ôåëåßùò äéáöïñåôéêü.\n\nÊÜíôå êëéê óôï ğáñáêÜôù êïõìğß ãéá íá áíïßîåé İíá Üëëï ğáñÜèõñï äéáëüãïõ, üğïõ ìğïñåßôå íá åéóÜãåôå ôéò ñõèìßóåéò ãéá ôçí ğñïİëåõóç äåäïìİíùí.";
-        Text[ dutch ] = "Om de adresgegevens in uw sjabloondocumenten te kunnen gebruiken, moet %PRODUCTNAME weten welke velden welke concrete gegevens bevatten.\n\nU kunt bijvoorbeeld de e-mailadressen hebben opgeslagen in een veld met de naam \"E-mail\", \"EMail\", of \"EM\", of onder een andere naam.\n\nAls u op de knop hieronder klikt, wordt er een dialoogvenster geopend waarin u de instellingen voor uw gegevensbron kunt opgeven.";
-        Text[ french ] = "Afin de pouvoir utiliser les données des adresses dans les modèles, %PRODUCTNAME doit reconnaître les champs contenant les données concrètes.\n\nExemple : les adresses e-mail pourront avoir été stockées dans un champ précis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre boîte de dialogue permettant de définir ces paramètres pour la source de données.";
-        Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber qué campos contienen qué datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electrónicas en un campo con el nombre \"correo-e\", Correo e\", \"email\" o con un nombre completamente distinto.\n\nSi pulsa el botón que se encuentra más abajo, se abrirá otro diálogo en el que podrá configurar la fuente de datos.";
-        Text[ finnish ] = "Jotta osoitetietojen yhdistäminen malleihin onnistuisi, %PRODUCTNAMEn on tiedettävä, missä kentissä on mitäkin tietoa.\n\nSähköpostiosoitteet voivat olla esimerkiksi kentässä \"sähköposti\", \"s-posti\" tai \"email\" tms.\n\nAvaa alla olevaa painiketta napsauttamalla toinen valintaikkuna, johon voit syöttää tietolähteen asetukset.";
-        Text[ italian ] = "Per poter utilizzare i dati della Rubrica nei vostri modelli è necessario che %PRODUCTNAME riconosca i campi contenenti dati concreti.\n\nSupponiamo che abbiate salvato i vostri indirizzi eMail in un campo chiamato \"E-Mail\", \"eMail\", \"EM\" o un qualsiasi altro nome.\n\nPremendo il pulsante in basso si aprirà un altro dialogo in cui potrete impostare la sorgente dati.";
-        Text[ danish ] = "For at kunne bruge adressedataene i dine skabelondokumenter skal %PRODUCTNAME vide, hvilke felter der indeholder hvilke konkrete data.\n\nFor eksempel kunne du have gemt e-mail-adresserne i et felt ved navn \"E-post\", \"Email\" eller \"EM\" – eller under et helt andet navn.\n\nSå snart du trykker på knappen nedenfor, åbnes en yderligere dialog, hvor du kan foretage indstillingerne for din datakilde.";
-        Text[ swedish ] = "För att adressdata i dina malldokument ska kunna användas måste %PRODUCTNAME veta vilka fält som innehåller vilka konkreta data.\n\nDu kan till exempel ha sparat e-postadresser i ett fält som kallas \"E-Mail\" eller \"Email\" eller \"EM\" - eller något helt annat.\n\nOm du klickar på kommandoknappen nedan öppnas en ytterligare dialogruta där du kan göra de här inställningarna för din datakälla.";
-        Text[ polish ] = "Aby mo¿na by³o zastosowaæ dane adresowe w szablonach, program %PRODUCTNAME musi wiedzieæ, w których polach znajduj¹ siê okreœlone dane.\n\nMo¿na np. zapisaæ adresy poczty elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nGdy klikniesz przycisk poni¿ej, pojawi siê nowe okno dialogowe, w którym mo¿esz podaæ ustawienia dla Ÿród³a danych.";
-        Text[ portuguese_brazilian ] = "Para poder utilizar os dados dos endereços nos seus modelos de documentos, o %PRODUCTNAME tem que saber quais dados cada campo contém.\n\nExemplo: os endereços de e-mail podem estar guardados num campo com o nome \"e-mail\", \"email\" ou \"EM\" - ou algo completamente diferente.\n\nUtilize o botão abaixo para abrir outra caixa de diálogo que lhe permite definir estes parâmetros para a fonte de dados.";
-        Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ãŒãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã‚‚ä½¿ç”¨ã§ãã‚‹ã‚ˆã†ã«ã€ã©ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã©ã®ãƒ‡ãƒ¼ã‚¿ã‚’å…¥åŠ›ã™ã‚‹ã‹ %PRODUCTNAME ãŒèª­ã¿å–ã‚Œã‚‹ã‚ˆã†ã«ã—ã¦ãŠãå¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\n\nãŸã¨ãˆã°ã€E-mail ã‚¢ãƒ‰ãƒ¬ã‚¹ã®åå‰ãŒã€ŒE-Mailã€ã€ã€ŒEMailã€ã€ã€ŒEMã€ã€ã‚ã‚‹ã„ã¯å…¨ãç•°ãªã£ãŸåå‰ã§ä¿å­˜ã•ã‚Œã¦ã„ã‚‹å¯èƒ½æ€§ã‚‚ã‚ã‚Šã¾ã™ã€‚\n\nä¸‹ã®ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹è¨­å®šç”¨ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒé–‹ãã¾ã™ã€‚";
-        Text[ korean ] = "ì„œì‹ íŒŒì¼ ë¬¸ì„œë¡œ ì£¼ì†Œ ë°ì´í„°ë¥¼ í†µí•©í•˜ë ¤ë©´ ì–´ë–¤ í•„ë“œê°€ ì–´ë–¤ êµ¬ì²´ì ì¸ ë°ì´í„°ë¥¼ í¬í•¨í•˜ëŠ”ì§€ë¥¼ %PRODUCTNAMEì— ì•Œë ¤ì•¼ í•©ë‹ˆë‹¤.\n\nì˜ˆë¥¼ ë“¤ë©´, ì „ì ë©”ì¼ ì£¼ì†Œë¥¼ \"E-Mail\", \"EMail\", \"EM\" ë˜ëŠ” ì „í˜€ ë‹¤ë¥¸ ì´ë¦„ì˜ í•„ë“œì— ì €ì¥í–ˆì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n\nì•„ë˜ì— ìˆëŠ” ë²„íŠ¼ì„ ëˆ„ë¥´ë©´ ë˜ í•˜ë‚˜ì˜ ëŒ€í™” ìƒìê°€ ì—´ë¦½ë‹ˆë‹¤. ì´ ëŒ€í™” ìƒìì—ì„œ ë°ì´í„° ì›ë³¸ì˜ ì„¤ì •ì„ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "è¦åœ¨æ–‡æ¡£æ ·å¼å†…æ­£ç¡®ä½¿ç”¨é€šè®¯ç°¿æ•°æ®ï¼Œå°±å¿…é¡»è®© %PRODUCTNAME çŸ¥é“å“ªäº›å­—æ®µå«æœ‰ä½•ç§æ•°æ®ã€‚\n\nä¾‹å¦‚ï¼Œæ‚¨å¯ä»¥åœ¨ä¸€ä¸ªè‡ªå·±è®¾å®šåç§°çš„å­—æ®µå†…ï¼Œæˆ–è€…åœ¨ä¸€ä¸ªé‡‡ç”¨å­—æ®µåç§°\"EMail\"ï¼Œæˆ–\"E-Mail\" æˆ–\"EM\"çš„å­—æ®µä¹‹å†…ä¿å­˜ç”µå­é‚®ä»¶åœ°å€ã€‚\n\nç‚¹å‡»ä¸‹æ–¹çš„æŒ‰é’®åï¼Œå°±ä¼šæ‰“å¼€ä¸€ä¸ªæä¾›è¿›è¡Œæ•°æ®æºè®¾å®šçš„å¯¹è¯æ¡†ã€‚";
-        Text[ chinese_traditional ] = "è¦åœ¨æ–‡ä»¶æ¨£å¼ä¹‹ä¸­æ­£ç¢ºä½¿ç”¨é€šè¨ŠéŒ„è³‡æ–™å°±å¿…é ˆè®“ %PRODUCTNAME çŸ¥é“å“ªäº›æ¬„ä½å«æœ‰ä½•ç¨®è³‡æ–™ã€‚\n\nä¾‹å¦‚ï¼Œå¯ä»¥åœ¨ä¸€å€‹è‡ªè¨‚åç¨±çš„æ¬„ä½ä¹‹å…§æˆ–åœ¨ä¸€å€‹æ¡ç”¨æ¬„ä½åç¨±<EMail>ï¼Œæˆ–<E-Mail>æˆ–<EM>æ¬„ä½ä¹‹å…§å„²å­˜é›»å­éƒµä»¶åœ°å€ã€‚\n\næŒ‰ä¸‹æ–¹çš„æŒ‰éˆ•ï¼Œå°±æœƒé–‹å•“ä¸€å€‹æä¾›è¨­å®šè³‡æ–™æºçš„å°è©±æ–¹å¡Šã€‚";
-        Text[ turkish ] = "Adres verilerinin şablonlarınızda   yer alabilmesi için , %PRODUCTNAME hangi alanda  doğru bilginin bulunduğunu bilmek  ister.\n\nÖrneğin e-posta adreslerini \"EMail\", \"E-Mail\" veya \"EM\" gibi birbirinden çok farklı alan ismimleri kullanarak saklamış olabilirsiniz.\n\nAlttaki düğmeye bastığınızda ,veri kaynağının alan atamasını yapabileceğiniz bir başka pencere açılacaktır.";
-        Text[ arabic ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
-        Text[ catalan ] = "Per incorporar les adreces als documents de plantilles, %PRODUCTNAME ha de saber quins camps contenen les dades concretes.\n\nPer exemple, podeu tenir les adreces de correu en un camp anomenat \"EMail\", o \"Correu\" or \"Adreça\" - o alguna cosa similar.\n\nQuan feu clic al botó de més avall, s'obrirà un altre diàleg i allà podreu fer l'assignació.";
-        Text[ thai ] = "à¸à¸²à¸£à¸œà¸™à¸¶à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸¥à¸‡à¹ƒà¸™à¹à¸¡à¹ˆà¹à¸šà¸šà¸‚à¸­à¸‡à¸„à¸¸à¸“, %PRODUCTNAME à¸•à¹‰à¸­à¸‡à¸£à¸¹à¹‰à¸§à¹ˆà¸²à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸¢à¸¹à¹ˆ\n\nà¹€à¸Šà¹ˆà¸™, à¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸à¹‡à¸šà¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸­à¸µà¹€à¸¡à¸¥à¹Œà¹ƒà¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸¡à¸µà¸Šà¸·à¹ˆà¸­ \"à¸­à¸µà¹€à¸¡à¸¥à¹Œ\", à¸«à¸£à¸·à¸­ \"à¸­à¸µ-à¹€à¸¡à¸¥à¹Œ\" à¸«à¸£à¸·à¸­ \"EM\" - à¸«à¸£à¸·à¸­à¸­à¸°à¹„à¸£à¸à¹‡à¹„à¸”à¹‰à¸—à¸µà¹ˆà¸•à¹ˆà¸²à¸‡à¸ˆà¸²à¸à¸™à¸µà¹‰\n\nà¸„à¸¥à¸´à¹Šà¸à¸›à¸¸à¹ˆà¸¡à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡à¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¸´à¸”à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸­à¸·à¹ˆà¸™à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸ªà¹ˆà¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸ªà¸³à¸«à¸£à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¸„à¸¸à¸“";
-        Text[ czech ] = "Abyste mohli zaÅ™adit svÃ¡ data do Å¡ablon, %PRODUCTNAME potÅ™ebuje vÄ›dÄ›t, kterÃ¡ pole obsahujÃ­ jakÃ¡ data.\n\nNapÅ™Ã­klad jste mohli uloÅ¾it emailovÃ© adresy do pole \"email\", \"E-mail\" , nebo ÃºplnÄ› jinÃ©ho.\n\nKliknutÃ­m na tlaÄÃ­tko nÃ­Å¾e otevÅ™ete dialog, kde mÅ¯Å¾ete zadat nastavenÃ­ svÃ©ho zdroje dat.";
-        Text[ hebrew ] = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu kÃ¶nnen, muss %PRODUCTNAME wissen, welche Felder welche konkreten Daten enthalten.\n\nZum Beispiel kÃ¶nnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter vÃ¶llig anderem Namen - gespeichert haben.\n\nSobald Sie die unten befindliche SchaltflÃ¤che betÃ¤tigen, wird ein weiterer Dialog geÃ¶ffnet, in dem sie diese Einstellungen fÃ¼r Ihre Datenquelle vornehmen kÃ¶nnen.";
-        Text[ hindi ] = "à¤†à¤ªà¤•à¥‡ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤®à¥‡à¤‚ à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ à¤¸à¤‚à¤¯à¥à¤•à¥à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤, %PRODUCTNAME à¤•à¥‹ à¤¯à¤¹ à¤ªà¤¤à¤¾ à¤¹à¥‹à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤ à¤•à¤¿ à¤¹à¤°à¥‡à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¥à¤¯à¤¾ à¤®à¥‚à¤²à¥à¤¯ à¤¹à¥ˆ à¥¤\n\nà¤…à¤­à¥€ à¤•à¥‡à¤²à¤¿à¤, à¤†à¤ªà¤¨à¥‡ à¤‡-à¤®à¥‡à¤‡à¤² à¤ªà¤¤à¤¾ à¤•à¥‹ \"à¤ˆà¤®à¥‡à¤‡à¤²\", à¤…à¤¥à¤µà¤¾ \"à¤‡-à¤®à¥‡à¤‡à¤²\" à¤…à¤¥à¤µà¤¾ \"EM\" - à¤…à¤¥à¤µà¤¾ à¤•à¥à¤› à¤¸à¤‚à¤ªà¥‚à¤°à¥à¤£ à¤­à¤¿à¤¨à¥à¤¨ à¤¨à¤¾à¤® à¤•à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤®à¥‡à¤‚ à¤¸à¤‚à¤—à¥à¤°à¤¹ à¤•à¤¿à¤¯à¤¾ à¤¹à¥‹à¤—à¤¾ à¥¤\n\nà¤¨à¥€à¤šà¥‡ à¤•à¤¾ à¤¬à¤Ÿà¤¨ à¤•à¥‹ à¤¦à¤¬à¤¾à¤¨à¥‡ à¤ªà¤° à¤à¤• à¤¡à¤¯à¤²à¥‰à¤— à¤¬à¥‰à¤•à¥à¤¸ à¤–à¥à¤² à¤œà¤¾à¤¯à¥‡à¤—à¤¾ à¤œà¤¹à¤¾à¤ à¤ªà¤° à¤†à¤ª à¤…à¤ªà¤¨à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‡à¤²à¤¿à¤ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£à¥‹à¤‚ à¤•à¥‹ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "Aby ste mohli pripojiÅ¥ adresy k VaÅ¡im Å¡ablÃ³nam, %PRODUCTNAME musÃ­ vedieÅ¥, akÃ© dÃ¡ta obsahujÃº jednotlivÃ© polia.\n\nNaprÃ­klad, mÃ´Å¾ete maÅ¥ uloÅ¾enÃ© e-mailovÃ© adresy v poli nazvanom \"email\", alebo \"E-mail\", alebo \"EM\" - alebo hociako inak.\n\nKliknite na tlaÄidlo dole a otvorte ÄalÅ¡ie okno, kde mÃ´Å¾ete zadaÅ¥ nastavenie pre VÃ¡Å¡ zdroj dÃ¡t.";
-        Text[ hungarian ] = "A cÃ­m sablonban tÃ¶rtÃ©nÅ‘ hasznÃ¡latÃ¡hoz meg kell adnia, hogy az egyes mezÅ‘k milyen adatokat tartalmaznak.\n\nPÃ©ldÃ¡ul az e-mail cÃ­met tartalmazhatja akÃ¡r egy 'email', egy 'E-mail' vagy egy 'EM' nevÅ± mezÅ‘.\n\nKattintson az alÃ¡bbi gombra a mezÅ‘k megadÃ¡sÃ¡hoz.";
-        Text[ slovenian ] = "Za vnaÅ¡anje podatkov iz adresarja v predloge mora %PRODUCTNAME vedeti, katere podatke vsebujejo posamezna polja.\n\nPoÅ¡tne naslove ste morda shranili v polje z imenom \"e-mail\" ali \"e-poÅ¡ta\" ali v polje s kakÅ¡nim drugim imenom.\n\nKliknite na spodnji gumb, da se odpre novo pogovorno okno, v katero lahko vnesete nastavitve vira podatkov.";
+        Text [ en-US ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
     };
 
     PushButton PB_INVOKE_FIELDS_DIALOG
@@ -784,35 +308,8 @@ TabPage RID_PAGE_FIELDMAPPING
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
-        Text = "Feldzuordnung";
-        Text [ english ] = "Field assignment";
-        Text [ english_us ] = "Field Assignment";
-        Text[ portuguese ] = "Atribuir campos";
-        Text[ russian ] = "Íàçíà÷åíèå ïîëåé";
-        Text[ greek ] = "ÁíÜèåóç ğåäßïõ";
-        Text[ dutch ] = "Veldindeling";
-        Text[ french ] = "Assignation des champs";
-        Text[ spanish ] = "Asignación de campo";
-        Text[ finnish ] = "Kenttämääritys";
-        Text[ italian ] = "Assegnazione campo";
-        Text[ danish ] = "Felttildeling";
-        Text[ swedish ] = "Fälttilldelning";
-        Text[ polish ] = "Przypisanie pól";
-        Text[ portuguese_brazilian ] = "Atribuição de Campo";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‰²ã‚Šå½“ã¦";
-        Text[ korean ] = "í•„ë“œ í• ë‹¹";
-        Text[ chinese_simplified ] = "æŒ‡å®šå­—æ®µ";
-        Text[ chinese_traditional ] = "æŒ‡å®šæ¬„ä½";
-        Text[ turkish ] = "Alan ataması";
-        Text[ arabic ] = "ÊÚííä ÇáÍŞá";
-        Text[ catalan ] = "Assignació de camp";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "PÅ™iÅ™azenÃ­ polÃ­";
-        Text[ hebrew ] = "â€®×”×©××ª ×¢×¨×›×™× ×œ×©×“×•×ªâ€¬";
-        Text[ hindi ] = "Field Assignment";
-        Text[ slovak ] = "Priradenie poÄ¾a";
-        Text[ hungarian ] = "MezÅ‘ hozzÃ¡rendelÃ©se";
-        Text[ slovenian ] = "Dodelitev polja";
+        Text [ de ] = "Feldzuordnung";
+        Text [ en-US ] = "Field Assignment";
     };
 
     FixedText FT_ASSIGNEDFIELDS
@@ -821,32 +318,6 @@ TabPage RID_PAGE_FIELDMAPPING
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
         WordBreak = TRUE;
     };
-    Text[ portuguese ] = "Atribuição de campos";
-    Text[ russian ] = "Íàçíà÷åíèå ïîëÿ";
-    Text[ greek ] = "ÁíÜèåóç ğåäßïõ";
-    Text[ dutch ] = "Veldindeling";
-    Text[ french ] = "Assignation des champs";
-    Text[ spanish ] = "Asignación de campo";
-    Text[ finnish ] = "Kenttämääritys";
-    Text[ italian ] = "Assegnazione campo";
-    Text[ danish ] = "Felttildeling";
-    Text[ swedish ] = "Fälttilldelning";
-    Text[ polish ] = "Przypisanie pól";
-    Text[ portuguese_brazilian ] = "Atribuição de campos";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‰²ã‚Šå½“ã¦";
-    Text[ korean ] = "í•„ë“œ í• ë‹¹";
-    Text[ chinese_simplified ] = "æŒ‡å®šå­—æ®µ";
-    Text[ chinese_traditional ] = "æŒ‡å®šæ¬„ä½";
-    Text[ turkish ] = "Alan atayıcısı";
-    Text[ arabic ] = "ÊÚííä ÇáÍŞá";
-    Text[ catalan ] = "Assignació de camp";
-    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "PÅ™iÅ™azenÃ­ polÃ­";
-    Text[ hebrew ] = "â€®×”×©×¦×ª ×¢×¨×›×™× ×œ×©×“×•×ªâ€¬";
-    Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¤¨à¤¾";
-    Text[ slovak ] = "Priradenie poÄ¾a";
-    Text[ hungarian ] = "MezÅ‘ hozzÃ¡rendelÃ©se";
-    Text[ slovenian ] = "Dodelitev polja";
 };
 
 //........................................................................
@@ -856,9 +327,8 @@ TabPage RID_PAGE_FINAL
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text = "Datenquellen Titel";
-    Text [ english ] = "Data Source Title";
-    Text [ english_us ] = "Data Source Name";
+    Text [ de ] = "Datenquellen Titel";
+    Text [ en-US ] = "Data Source Name";
 #endif
 
     FixedText FT_FINISH_EXPL
@@ -867,37 +337,9 @@ TabPage RID_PAGE_FINAL
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\n"
+        Text [ de ] = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\n"
             "Geben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
-        Text [ english ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
-            "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
-        Text [ english_us ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
-        Text[ portuguese ] = "Estas são todas as informações necessárias para a integração dos seus dados relacionados com endereços no %PRODUCTNAME.\n\nAgora só falta indicar o nome para o registo da fonte de dados no %PRODUCTNAME.";
-        Text[ russian ] = "Èíôîğìàöèÿ, íåîáõîäèìàÿ äëÿ èíòåãğàöèè äàííûõ â %PRODUCTNAME ñîáğàíà.\n\nÎñòàëîñü ââåñòè èìÿ, ïîä êîòîğûì èñòî÷íèê äàííûõ áóäåò çàğåãèñòğèğîâàí â %PRODUCTNAME.";
-        Text[ greek ] = "Áõôİò Şôáí üëåò ïé áğáñáßôçôåò ğëçñïöïñßåò ãéá íá åíóùìáôşóåôå ôá äåäïìİíá äéåõèıíóåùí ìİóá óôï %PRODUCTNAME.\n\nÔşñá, åéóáãÜãåôå áğëÜ ôï üíïìá ìå ôï ïğïßï èİëåôå íá äçëşóåôå ôçí ğñïİëåõóç äåäïìİíùí óôï %PRODUCTNAME.";
-        Text[ dutch ] = "Dat waren alle vereiste gegevens voor de integratie van uw adresgegevens in %PRODUCTNAME.\n\nVoer nu nog de naam in waaronder de gegevensbron in %PRODUCTNAME moet worden geregistreerd.";
-        Text[ french ] = "Toutes les informations requises pour l'intégration des données des adresses dans %PRODUCTNAME sont à présent réunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de données dans %PRODUCTNAME.";
-        Text[ spanish ] = "Ahora dispone de la información necesaria para integrar los datos de las direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que desee registrar la fuente de datos en %PRODUCTNAME.";
-        Text[ finnish ] = "Siinä olivat kaikki tarvittavat tiedot osoitetietojen yhdistämiseksi %PRODUCTNAMEen.\n\nAnna nyt nimi, jolla haluat rekisteröidä tietolähteen %PRODUCTNAMEssa.";
-        Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della Rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
-        Text[ danish ] = "Du har nu angivet alle de oplysninger, som er nødvendige for at integrere dine adressedata i %PRODUCTNAME.\n\nIndtast nu det navn, som datakilden skal registreres under i %PRODUCTNAME.";
-        Text[ swedish ] = "Detta var alla uppgifter som behövs för att dina adressdata ska kunna integreras i %PRODUCTNAME.\n\nAnge nu namnet som datakällan i %PRODUCTNAME ska registreras med.";
-        Text[ polish ] = "To ju¿ wszystkie informacje, które s¹ potrzebne do integracji danych adresowych z programem %PRODUCTNAME.\n\nTeraz nale¿y jeszcze tylko podaæ nazwê, pod któr¹ Ÿród³o danych zostanie zarejestrowane w programie %PRODUCTNAME.";
-        Text[ portuguese_brazilian ] = "Estas eram as informações necessárias para a integração dos seus dados relacionados com endereços no %PRODUCTNAME.\n\nAgora só falta indicar um nome para a sua fonte de dados no %PRODUCTNAME.";
-        Text[ japanese ] = "ã“ã‚Œã§ãŠä½¿ã„ã®ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚’ %PRODUCTNAME ã«çµ±åˆã™ã‚‹æº–å‚™ãŒæ•´ã„ã¾ã—ãŸã€‚\n\næœ€å¾Œã« %PRODUCTNAME ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«ç™»éŒ²ã™ã‚‹åå‰ã‚’å…¥åŠ›ã—ã¾ã™ã€‚";
-        Text[ korean ] = "ì´ ëª¨ë“  ì‚¬í•­ì€ %PRODUCTNAME(ìœ¼)ë¡œ ì£¼ì†Œ ë°ì´í„°ë¥¼ í†µí•©í•˜ëŠ”ë° í•„ìš”í•œ ì •ë³´ì…ë‹ˆë‹¤.\n\nì´ì œ %PRODUCTNAMEì— ë°ì´í„° ì›ë³¸ì„ ë“±ë¡í•˜ëŠ”ë° ì‚¬ìš©í•  ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "æ‚¨å·²ç»å®Œæˆæ‰€æœ‰çš„ %PRODUCTNAME æ•´åˆé€šè®¯ç°¿æ•°æ®çš„è®¾å®šã€‚\n\nç°åœ¨æ‚¨åªéœ€è¦è¾“å…¥ %PRODUCTNAME ç”¨æ¥ç™»è®°è¿™ä¸ªæ•°æ®æºçš„åç§°ã€‚";
-        Text[ chinese_traditional ] = "æ‚¨å·²ç¶“å®Œæˆæ‰€æœ‰å¿…é ˆçš„ %PRODUCTNAME æ•´åˆé€šè¨ŠéŒ„è³‡æ–™çš„è¨­å®šã€‚\n\nç¾åœ¨æ‚¨åªéœ€è¦è¼¸å…¥ %PRODUCTNAME ç”¨ä¾†ç™»è¨˜å’Œä½¿ç”¨é€™å€‹è³‡æ–™æºçš„åç¨±ã€‚";
-        Text[ turkish ] = "Adres verilerini %PRODUCTNAME% içine  entegre etmek için gerekli tüm bilgiler toplandı.\n\nSon olarak ,%PRODUCTNAME% içindeki veri kaynağını hangi isimde saklamak istiyorsanız bu ismi girin.";
-        Text[ arabic ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
-        Text[ catalan ] = "Aquesta era tota la informació necessaria per poder integrar les vostres adreces a %PRODUCTNAME.\n\nAra, introduïu el nom que s'ha d'utilitzar per registrar les dades a %PRODUCTNAME.";
-        Text[ thai ] = "à¸™à¸±à¹‰à¸™à¸„à¸·à¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸ˆà¸³à¹€à¸›à¹‡à¸™à¹ƒà¸™à¸à¸²à¸£à¸£à¸§à¸¡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸¥à¸‡à¹ƒà¸™ %PRODUCTNAME\n\nà¸‚à¸“à¸°à¸™à¸µà¹‰, à¹€à¸à¸µà¸¢à¸‡à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸‡à¸—à¸°à¹€à¸šà¸µà¸¢à¸™à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸™ %PRODUCTNAME";
-        Text[ czech ] = "Toto jsou vÅ¡echny informace potÅ™ebnÃ© k integraci vaÅ¡Ã­ databÃ¡ze kontaktÅ¯ do %PRODUCTNAME.\n\nNynÃ­ pouze zadejte nÃ¡zev, pod kterÃ½m chcete tuto databÃ¡zi zaregistrovat v %PRODUCTNAME.";
-        Text[ hebrew ] = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benÃ¶tigt werden.\n\nGeben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
-        Text[ hindi ] = "à¤†à¤ªà¤•à¤¾ à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ %PRODUCTNAME à¤®à¥‡à¤‚ à¤¸à¤‚à¤¯à¥à¤•à¥à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤‡à¤¨ à¤¸à¤­à¥€ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤•à¤¾ à¤†à¤µà¤¶à¥à¤¯à¤•à¤¤à¤¾ à¤¥à¤¾ à¥¤";
-        Text[ slovak ] = "To boli vÅ¡etky informÃ¡cie potrebnÃ© na integrÃ¡ciu vaÅ¡ich adries do %PRODUCTNAME.\n\nTeraz iba zadajte meno, pod ktorÃ½m chcete zaregistrovaÅ¥ zdroj dÃ¡t v %PRODUCTNAME.";
-        Text[ hungarian ] = "Az Ã¶sszes informÃ¡ciÃ³ rendelkezÃ©sre Ã¡ll, hogy cÃ­mjegyzÃ©kÃ©t az %PRODUCTNAME-ban hasznÃ¡lhassa.\n\nAz %PRODUCTNAME egy adatforrÃ¡st fog rendelni a cÃ­mjegyzÃ©khez. KÃ©rem, adja meg az adatforrÃ¡s nevÃ©t.";
-        Text[ slovenian ] = "To so bile vse potrebne informacije za integriranje vaÅ¡ega adresarja v %PRODUCTNAME.\n\nVnesite ime, s katerim bi radi registrirali ta vir podatkov v programu %PRODUCTNAME.";
+        Text [ en-US ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
     };
 
     FixedText FT_NAME_EXPL
@@ -905,36 +347,9 @@ TabPage RID_PAGE_FINAL
         Pos     = MAP_APPFONT ( BORDER_X, 53 ) ;
         Size    = MAP_APPFONT ( 50, 8 ) ;
 
-        Text = "Titel";
-        Text [ english ] = "Title";
-        Text [ english_us ] = "Name";
+        Text [ de ] = "Titel";
+        Text [ en-US ] = "Name";
         Group = TRUE;
-        Text[ portuguese ] = "Título";
-        Text[ russian ] = "Èìÿ";
-        Text[ greek ] = "¼íïìá";
-        Text[ dutch ] = "Titel";
-        Text[ french ] = "Titre";
-        Text[ spanish ] = "Título";
-        Text[ finnish ] = "Nimi";
-        Text[ italian ] = "Titolo";
-        Text[ danish ] = "Navn";
-        Text[ swedish ] = "Rubrik";
-        Text[ polish ] = "Nazwa";
-        Text[ portuguese_brazilian ] = "Nome";
-Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
-        Text[ korean ] = "ì´ë¦„";
-        Text[ chinese_simplified ] = "æ ‡é¢˜";
-        Text[ chinese_traditional ] = "æ¨™é¡Œ";
-        Text[ turkish ] = "İsim";
-        Text[ arabic ] = "Title";
-        Text[ catalan ] = "Títol";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Titel";
-        Text[ hindi ] = "à¤¨à¤¾à¤®à¥";
-        Text[ slovak ] = "NÃ¡zov";
-        Text[ hungarian ] = "NÃ©v";
-        Text[ slovenian ] = "Ime";
     };
 
     Edit ET_DATASOURCENAME
@@ -952,63 +367,10 @@ Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24) ;
         WordBreak = TRUE;
 
-        Text =  "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, "
+        Text [ de ] =   "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, "
             "müssen sie einen anderen wählen.";
-        Text [ english ] = "Another data source already has this name. As data sources have globally unique names, you have to choose another one.";
-        Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.";
-        Text [ portuguese ] = "Já existe uma fonte de dados com este nome. Os nomes das fontes de dados são únicos, por esta razão terá de seleccionar outro nome.";
-        Text [ russian ] = "Èñòî÷íèêè äàííûõ ñ òàêèì èìåíåì óæå ñóùåñòâóşò. Èìåíà èñõîäíûõ äàííûõ äîëæíû áûòü óíèêàëüíûìè. Íåîáõîäèìî ïğèñâîèòü äğóãîå èìÿ.";
-        Text [ greek ] = "Ìéá Üëëç ğñïİëåõóç äåäïìİíùí İ÷åé Şäç áõôü ôï üíïìá. Ğñİğåé íá äéáëİîåôå İíá Üëëï üíïìá, åğåéäŞ ïé ğñïåëåıóåéò äåäïìİíùí ğñİğåé íá İ÷ïõí ìïíáäéêÜ ïíüìáôá.";
-        Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
-        Text [ french ] = "Ce nom a déjà été attribué à une autre source de données. Étant donné que les sources de données doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
-        Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente único.";
-        Text [ italian ] = "Esiste già una sorgente dati con questo nome. Poiché il nome delle sorgenti di dati dev'essere univoco, è necesario scegliere un altro nome.";
-        Text [ danish ] = "Der findes allerede en datakilde med dette navn. Da datakildenavne er entydige, skal du vælge et andet navn.";
-        Text [ swedish ] = "Det finns redan en datakälla med det här namnet. Eftersom namn på datakällor måste vara globalt unika måste du välja ett annat namn.";
-        Text [ polish ] = "Istnieje inne Ÿród³o danych o tej samej nazwie. Poniewa¿ nazwy Ÿróde³ danych musz¹ byæ globalnie jednoznaczne, nale¿y wybraæ inn¹ nazwê.";
-        Text [ portuguese_brazilian ] = "Já existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser únicos. Por isso, você deve selecionar outro nome.";
-        Text [ japanese ] = "ã“ã®åå‰ã®ä»˜ã„ãŸåˆ¥ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ãŒã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹åã‚’ã¯ã£ãã‚Šã¨åŒºåˆ¥ã™ã‚‹ãŸã‚ã«ã¯ã€ã»ã‹ã®åå‰ã‚’é¸æŠã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-        Text [ korean ] = "ì´ë¯¸ ê°™ì€ ì´ë¦„ì˜ ë°ì´í„° ì›ë³¸ì´ ìˆìŠµë‹ˆë‹¤. ë°ì´í„° ì›ë³¸ì˜ ì´ë¦„ì€ í•­ìƒ ê³ ìœ í•´ì•¼ í•©ë‹ˆë‹¤. ë‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•´ì£¼ì‹­ì‹œì˜¤.";
-        Text [ chinese_simplified ] = "å·²ç»å­˜åœ¨ä¸€ä¸ªåŒåçš„æ•°æ®æºã€‚å› ä¸ºæ•°æ®æºåç§°å¿…é¡»æ˜¯åœ¨æ•°æ®åº“èŒƒå›´å†…å•ä¸€æ˜ç¡®çš„ã€‚è¯·ä½¿ç”¨å¦ä¸€ä¸ªåç§°ã€‚";
-        Text [ chinese_traditional ] = "å·²ç¶“å­˜åœ¨ä¸€å€‹åŒåçš„è³‡æ–™æºã€‚å› ç‚ºä¸€å€‹è³‡æ–™æºåç¨±å¿…é ˆæ˜¯åœ¨è³‡æ–™åº«ç¯„åœå…§å–®ä¸€æ˜ç¢ºçš„ã€‚è«‹æ¡ç”¨å¦å¤–ä¸€å€‹æœ‰æ•ˆçš„åç¨±ã€‚";
-        Text [ turkish ] = "Başka bir veri kaynağı bu isme sahip.Bir bütün içinde veri kaynağı isimleri benzersiz olmak zorundadır, bu sebeple başka bir isim seçin.";
-        Text [ arabic ] = "íæÌÏ ÈÇáİÚá ãÕÏÑ ÈíÇäÇÊ ÂÎÑ áå åĞÇ ÇáÇÓã. äÙÑÇğ áÃä ÃÓãÇÁ ãÕÇÏÑ ÇáÈíÇäÇÊ íÌÈ ÚãæãÇğ Ãä Êßæä İÑíÏÉ¡ ÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
-        Text[ finnish ] = "Toisella tietolähteellä on jo sama nimi. Tietolähteillä on oltava yksilölliset nimet. Valitse toinen nimi.";
-        Text[ catalan ] = "Ja existeix una altra font de dades amb aquest nom. Has d'escollir-ne un altre perquè el nom de la font de dades ha de ser globalment únic.";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸·à¹ˆà¸™à¸¡à¸µà¸Šà¸·à¹ˆà¸­à¸™à¸µà¹‰à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§ à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸•à¹‰à¸­à¸‡à¸¡à¸µà¸Šà¸·à¹ˆà¸­à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™à¹ƒà¸„à¸£à¹‚à¸”à¸¢à¸£à¸§à¸¡, à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¹€à¸¥à¸·à¸­à¸à¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
-        Text[ czech ] = "JinÃ½ zdroj dat jiÅ¾ pouÅ¾Ã­vÃ¡ tento nÃ¡zev. JelikoÅ¾ zdroje dat musÃ­ mÃ­t unikÃ¡tnÃ­ nÃ¡zvy, musÃ­te zvolit jinÃ½.";
-        Text[ hebrew ] = "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, mÃ¼ssen sie einen anderen wÃ¤hlen.";
-        Text[ hindi ] = "à¤‡à¤¸ à¤¨à¤¾à¤® à¤•à¤¾ à¤…à¤¨à¥à¤¯ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥ˆ à¥¤ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤—à¥à¤²à¥‹à¤¬à¤²à¥€ à¤…à¤¨à¥‹à¤–à¤¾ à¤¨à¤¾à¤® à¤°à¤¹à¤¨à¥‡ à¤•à¥‡ à¤•à¤¾à¤°à¤£, à¤•à¥ƒà¤ªà¤¯à¤¾ à¤…à¤¨à¥à¤¯ à¤¨à¤¾à¤® à¤•à¥‹ à¤šà¥à¤¨à¤¿à¤ à¥¤";
-        Text[ slovak ] = "Toto meno uÅ¾ bolo pridelenÃ© inÃ©mu zdroju dÃ¡t. VzhÄ¾adom na to, Å¾e zdroje dÃ¡t musia maÅ¥ unikÃ¡tne menÃ¡, vyberte inÃ©.";
-        Text[ hungarian ] = "Egy mÃ¡sik adatforrÃ¡s mÃ¡r hasznÃ¡lja ezt a nevet. Az adatforrÃ¡sok nevÃ©nek egyedinek kell lennie. VÃ¡laszon egy mÃ¡sik - nem hasznÃ¡lt - nevet.";
-        Text[ slovenian ] = "Drug vir podatkov Å¾e uporablja to ime. Izberite drugo ime, ker morajo imeti viri podatkov edinstvena imena.";
+        Text [ en-US ] = "Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.";
     };
-    Text[ portuguese ] = "Título da fonte de dados";
-    Text[ russian ] = "Èìÿ èñòî÷íèêà äàííûõ";
-    Text[ greek ] = "¼íïìá ğñïİëåõóçò äåäïìİíùí";
-    Text[ dutch ] = "Gegevensbronnen-titel";
-    Text[ french ] = "Titre de la source de données";
-    Text[ spanish ] = "Título de la fuente de datos";
-    Text[ finnish ] = "Tietolähteen nimi";
-    Text[ italian ] = "Sorgenti dati Titel";
-    Text[ danish ] = "Datakildenavn";
-    Text[ swedish ] = "Datakällrubrik";
-    Text[ polish ] = "Nazwa Ÿród³a danych";
-    Text[ portuguese_brazilian ] = "Nome da fonte de dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®ã‚¿ã‚¤ãƒˆãƒ«";
-    Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì´ë¦„";
-    Text[ chinese_simplified ] = "æ•°æ®æºåç§°";
-    Text[ chinese_traditional ] = "è³‡æ–™æºçš„åç¨±";
-    Text[ turkish ] = "Veri kaynağı ismi";
-    Text[ arabic ] = "Data Source Title";
-    Text[ catalan ] = "Títol de la font de dades";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "NÃ¡zev datovÃ©ho zdroje";
-    Text[ hebrew ] = "Datenquellen Titel";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤¨à¤¾à¤®";
-    Text[ slovak ] = "NÃ¡zov zdroja dÃ¡t";
-    Text[ hungarian ] = "AdatforrÃ¡s neve";
-    Text[ slovenian ] = "Ime vira podatkov";
 };
 
 //........................................................................
@@ -1016,35 +378,8 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
 {
     Buttons = WB_OK;
 
-    Message = "Bitte wählen sie einen Adressbuch-Typ aus!";
-    Message [ english ] = "Bitte wählen sie einen Adressbuch-Typ aus!";
-    Message [ english_us ] = "Please select a type of address book.";
-    Message[ portuguese ] = "Seleccione um tipo de livro de endereços";
-    Message[ russian ] = "Âûáåğèòå òèï àäğåñíîé êíèãè";
-    Message[ greek ] = "Åğéëİîôå İíáí ôığï âéâëßïõ äéåõèıíóåùí.";
-    Message[ dutch ] = "Kies een adresboektype.";
-    Message[ french ] = "Sélectionnez un type de carnet d'adresses !";
-    Message[ spanish ] = "Seleccione un tipo de libreta de direcciones";
-    Message[ finnish ] = "Valitse osoitekirjan tyyppi.";
-    Message[ italian ] = "Selezionate un tipo di Rubrica adatto";
-    Message[ danish ] = "Vælg en adressekartotekstype!";
-    Message[ swedish ] = "Välj en typ av adressbok";
-    Message[ polish ] = "Wybierz typ ksi¹¿ki adresowej.";
-    Message[ portuguese_brazilian ] = "Selecione um tipo de livro de endereços";
-    Message[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã®ç¨®é¡ã‚’ã²ã¨ã¤é¸æŠã—ã¦ãã ã•ã„";
-    Message[ korean ] = "ì£¼ì†Œë¡ ìœ í˜•ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-    Message[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªé€šè®¯ç°¿ç±»å‹";
-    Message[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹åˆé©çš„é€šè¨ŠéŒ„é¡å‹ã€‚";
-    Message[ turkish ] = "Adres defteri türü seçin";
-    Message[ arabic ] = "Bitte wählen sie einen Adressbuch-Typ aus";
-    Message[ catalan ] = "Seleccioneu el tipus de llibreta d'adreces!";
-    Message[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Message[ czech ] = "ProsÃ­m zvolte typ databÃ¡ze kontaktÅ¯.";
-    Message[ hebrew ] = "Bitte wÃ¤hlen sie einen Adressbuch-Typ aus";
-    Message[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤à¤• à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤µà¤°à¥à¤— à¤•à¥‹ à¤šà¥à¤¨à¥‹ à¥¤";
-    Message[ slovak ] = "Vyberte typ knihy adries prosÃ­m.";
-    Message[ hungarian ] = "VÃ¡lassza ki a cÃ­mjegyzÃ©k tÃ­pusÃ¡t.";
-    Message[ slovenian ] = "Izberite vrsto adresarja.";
+    Message [ de ] = "Bitte wählen sie einen Adressbuch-Typ aus!";
+    Message [ en-US ] = "Please select a type of address book.";
 };
 
 //........................................................................
@@ -1053,274 +388,55 @@ QueryBox RID_QRY_NOTABLES
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_NO;
 
-    Message = "Die Datenquelle enthält keine Tabelle.\n"
+    Message [ de ] = "Die Datenquelle enthält keine Tabelle.\n"
         "Wollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
-    Message [ english ] = "The data source does not contain any tables.\n"
-        "Do you want to install it as address data source, anyway?";
-    Message [ english_us ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
-    Message[ portuguese ] = "A fonte de dados não contém nenhuma tabela.\nMesmo assim, configurá-la como fonte de dados dos endereços?";
-    Message[ russian ] = "İòè èñõîäíûå äàííûå íå ñîäåğæàò íè îäíîé òàáëèöû.\nÓñòàíîâèòü èõ â êà÷åñòâå èñòî÷íèêîâ äàííûõ àäğåñîâ?";
-    Message[ greek ] = "Ç ğñïİëåõóç äåäïìİíùí äåí ğåñéİ÷åé ğßíáêåò.\nÅßóôå âİâáéïé üôé èİëåôå íá ôçí ïñßóåôå ùò ğñïİëåõóç äåäïìİíùí äéåõèıíóåùí;";
-    Message[ dutch ] = "De gegevensbron bevat geen tabel.\nWilt u deze toch als adresgegevensbron inrichten?";
-    Message[ french ] = "La source de données ne contient aucune table.\nVoulez-vous tout de même la paramétrer comme source de données des adresses ?";
-    Message[ spanish ] = "La fuente de datos no contiene tablas.\n¿Desea no obstante configurarla como fuente de datos de direcciones?";
-    Message[ finnish ] = "Tietolähteessä ei ole taulukoita.\nHaluatko asettaa sen osoitetietolähteeksi joka tapauksessa?";
-    Message[ italian ] = "La sorgente dati non contiene tabelle.\nVolete comunque impostarla come sorgente dati della Rubrica?";
-    Message[ danish ] = "Datakilden indeholder ingen tabel.\nVil du alligevel konfigurere den som adressedatakilde?";
-    Message[ swedish ] = "Datakällan innehåller ingen tabell.\nVill du ändå installera den som adress-datakälla?";
-    Message[ polish ] = "ród³o danych nie zawiera ¿adnych tabel.\nCzy pomimo to przyj¹æ je jako Ÿród³o danych adresowych?";
-    Message[ portuguese_brazilian ] = "A fonte de dados não contém nenhuma tabela.\nDeseja configurá-la como fonte de dados de endereços assim mesmo?";
-    Message[ japanese ] = "ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«ãƒ†ãƒ¼ãƒ–ãƒ«ã¯ã²ã¨ã¤ã‚‚ã‚ã‚Šã¾ã›ã‚“ã€‚\nãã‚Œã§ã‚‚ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¨ã—ã¦è¨­å®šã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "ë°ì´í„° ì›ë³¸ì— í…Œì´ë¸”ì´ ì—†ìŠµë‹ˆë‹¤.\nê·¸ë˜ë„ ë°ì´í„° ì›ë³¸ì„ ì£¼ì†Œ ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì„¤ì¹˜í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ chinese_simplified ] = "è¿™ä¸ªæ•°æ®æºæ²¡æœ‰åŒ…å«ä»»ä½•è¡¨æ ¼ã€‚\næ‚¨è¿˜æ˜¯è¦è®¾å®šè¯¥æ•°æ®æºä¸ºé€šè®¯ç°¿æ•°æ®æºï¼Ÿ";
-    Message[ chinese_traditional ] = "é€™å€‹è³‡æ–™æºæ²’æœ‰ä»»ä½•çš„è³‡æ–™è¡¨æ ¼ã€‚\né‚„æ˜¯è¦å»ºç«‹é€™å€‹é€šè¨ŠéŒ„è³‡æ–™æºï¼Ÿ";
-    Message[ turkish ] = "Veri kaynağı herhangi bir tablo içermemektedir.\nYine de bunu adres veri kaynağı olarak kurmak ister misiniz?";
-    Message[ arabic ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
-    Message[ catalan ] = "La font de dades no conté cap taula.\nVoleu instal.lar-la com a font d'adreces de totes maneres?";
-    Message[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸²à¸£à¸²à¸‡à¹ƒà¸” à¹† à¹€à¸¥à¸¢\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸¡à¸±à¸™à¹€à¸›à¹‡à¸™à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "Zdroj dat neobsahuje Å¾Ã¡dnÃ© tabulky.\nChcete jej pÅ™esto nastavit jako zdroj dat?";
-    Message[ hebrew ] = "Die Datenquelle enthÃ¤lt keine Tabelle.\nWollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
-    Message[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤®à¥‡à¤‚ à¤•à¥‹à¤ˆ à¤¸à¤¾à¤°à¤£à¤¿à¤¯à¤¾à¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤\nà¤†à¤ª à¤•à¤¿à¤¸à¥€ à¤¤à¤°à¤¹ à¤‰à¤¸à¤•à¥‹ à¤à¤• à¤ªà¤¤à¥‡ à¤•à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤œà¥ˆà¤¸à¥‡ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
-    Message[ slovak ] = "Zdroj dÃ¡t neobsahuje Å¾iadne tabuÄ¾ky.\nChcete to nastaviÅ¥ ako zdroj dÃ¡t adries aj napriek tomu?";
-    Message[ hungarian ] = "Az adatforrÃ¡s egyetlen tÃ¡blÃ¡t sem tartalmaz.\nKÃ­vÃ¡nja ezt az adatforrÃ¡st alkalmazni?";
-    Message[ slovenian ] = "Vir podatkov ne vsebuje tabel.\nAli ga vseeno Å¾elite uporabiti kot vir podatkov za adresar?";
+    Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
 };
 
 //........................................................................
 String RID_STR_DEFAULT_NAME
 {
-    Text = "Adressen";
-    Text [ english ] = "Addresses";
-    Text [ english_us ] = "Addresses";
-    Text[ portuguese ] = "Endereços";
-    Text[ russian ] = "Àäğåñà";
-    Text[ greek ] = "Äéåõèıíóåéò";
-    Text[ dutch ] = "Adressen";
-    Text[ french ] = "Adresses";
-    Text[ spanish ] = "Direcciones";
-    Text[ finnish ] = "Osoitteet";
-    Text[ italian ] = "Indirizzi";
-    Text[ danish ] = "Adresser";
-    Text[ swedish ] = "Adresser";
-    Text[ polish ] = "Adresy";
-    Text[ portuguese_brazilian ] = "Endereços";
-    Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹";
-    Text[ korean ] = "ì£¼ì†Œ";
-    Text[ chinese_simplified ] = "åœ°å€";
-    Text[ chinese_traditional ] = "åœ°å€";
-    Text[ turkish ] = "Adresler";
-    Text[ arabic ] = "ÇáÚäÇæíä";
-    Text[ catalan ] = "Adreces";
-    Text[ thai ] = "à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "Adresy";
-    Text[ hebrew ] = "Adressen";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾";
-    Text[ slovak ] = "Adresy";
-    Text[ hungarian ] = "CÃ­mek";
-    Text[ slovenian ] = "Naslovi";
+    Text [ de ] = "Adressen";
+    Text [ en-US ] = "Addresses";
 };
 
 String RID_STR_ADMINDIALOGTITLE
 {
-    Text = "Adress Datenquelle anlegen";
-    Text [ english ] = "Create Address Data Source";
-    Text [ english_us ] = "Create Address Data Source";
-    Text[ portuguese ] = "Criar fonte de dados dos endereços";
-    Text[ russian ] = "Ñîçäàòü èñòî÷íèê äàííûõ àäğåñîâ";
-    Text[ greek ] = "Äçìéïõñãßá ğñïİëåõóçò äåäïìİíùí äéåõèıíóåùí";
-    Text[ dutch ] = "Adresgegevensbron maken";
-    Text[ french ] = "Création de la source de données des adresses";
-    Text[ spanish ] = "Crear fuente de datos de direcciones";
-    Text[ finnish ] = "Luo osoitetietolähde";
-    Text[ italian ] = "Crea sorgente dati Rubrica";
-    Text[ danish ] = "Opret adressedatakilde";
-    Text[ swedish ] = "Skapa adressdatakälla";
-    Text[ polish ] = "Utwórz Ÿród³o danych adresowych";
-    Text[ portuguese_brazilian ] = "Criar Fonte de Dados de Endereços";
-    Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®æ ¼ç´";
-    Text[ korean ] = "ì£¼ì†Œ ë°ì´í„° ì›ë³¸ ë§Œë“¤ê¸°";
-    Text[ chinese_simplified ] = "å»ºç«‹åœ°å€æ•°æ®æº";
-    Text[ chinese_traditional ] = "å»ºç«‹åœ°å€è³‡æ–™æº";
-    Text[ turkish ] = "Adres veri kaynağı yarat";
-    Text[ arabic ] = "Create Address Data Source";
-    Text[ catalan ] = "Crea una font de dades d'adreces";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "VytvoÅ™it databÃ¡zi kontaktÅ¯";
-    Text[ hebrew ] = "Adress Datenquelle anlegen";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ zdroj dÃ¡t pre adresy";
-    Text[ hungarian ] = "CÃ­mjegyzÃ©k-adatforrÃ¡s lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari vir podatkov adresarja";
+    Text [ de ] = "Adress Datenquelle anlegen";
+    Text [ en-US ] = "Create Address Data Source";
 };
 
 String RID_STR_NOCONNECTION
 {
-    Text = "Die Verbindung konnte nicht hergestellt werden.";
-    Text [ english ] = "The connection could not be established.";
-    Text [ english_us ] = "The connection could not be established.";
-    Text[ portuguese ] = "Foi impossível estabelecer a ligação.";
-    Text[ russian ] = "Íåâîçìîæíî óñòàíîâèòü ñîåäèíåíèå.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá óıíäåóçò.";
-    Text[ dutch ] = "De verbinding kan niet tot stand worden gebracht.";
-    Text[ french ] = "Impossible d'établir la connexion !";
-    Text[ spanish ] = "No se pudo realizar la conexión.";
-    Text[ finnish ] = "Yhteyden muodostaminen ei onnistunut.";
-    Text[ italian ] = "Impossibile realizzare il collegamento.";
-    Text[ danish ] = "Forbindelsen kunne ikke oprettes.";
-    Text[ swedish ] = "Det gick inte att koppla.";
-    Text[ polish ] = "Nie mo¿na nawi¹zaæ po³¹czenia.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão.";
-    Text[ japanese ] = "æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ì—°ê²°ì´ ì„¤ì •ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•å»ºç«‹è¿æ¥ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ°è³‡æ–™æºã€‚";
-    Text[ turkish ] = "Bağlantı sağlanamadı.";
-    Text[ arabic ] = "The connection could not be established.";
-    Text[ catalan ] = "No es pot establir la connexió";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¹„à¸”à¹‰";
-    Text[ czech ] = "SpojenÃ­ nelze navÃ¡zat.";
-    Text[ hebrew ] = "Die Verbindung konnte nicht hergestellt werden.";
-    Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤•à¥‹ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Spojenie sa nepodarilo nadviazaÅ¥.";
-    Text[ hungarian ] = "A kapcsolatot nem sikerÃ¼lt lÃ©trehozni.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave.";
+    Text [ de ] = "Die Verbindung konnte nicht hergestellt werden.";
+    Text [ en-US ] = "The connection could not be established.";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
 {
-    Text = "Bitte überprüfen Sie die Einstellungen für die Datenquelle.";
-    Text [ english ] = "Please check the settings made for the data source.";
-    Text [ english_us ] = "Please check the settings made for the data source.";
-    Text[ portuguese ] = "Verifique as definições da fonte de dados.";
-    Text[ russian ] = "Ïğîâåğüòå íàñòğîéêè èñòî÷íèêà äàííûõ.";
-    Text[ greek ] = "Åëİãîôå ôéò ñõèìßóåéò ğïõ İ÷ïõí ãßíåé ãéá ôçí ğñïİëåõóç äåäïìİíùí.";
-    Text[ dutch ] = "Controleer de instellingen voor de gegevensbron.";
-    Text[ french ] = "Vérifiez les paramètres pour la source de données.";
-    Text[ spanish ] = "Compruebe la configuración para la fuente de datos.";
-    Text[ finnish ] = "Tarkista tietolähteen asetukset.";
-    Text[ italian ] = "Verificate le impostazioni della sorgente dati.";
-    Text[ danish ] = "Kontroller venligst indstillingerne for datakilden.";
-    Text[ swedish ] = "Kontrollera inställningarna för datakällan.";
-    Text[ polish ] = "SprawdŸ ustawienia Ÿród³a danych.";
-    Text[ portuguese_brazilian ] = "Verifique as definições da fonte de dados.";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®è¨­å®šé …ç›®ã‚’ã‚‚ã†ä¸€åº¦ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì„¤ì •ì„ ê²€ì‚¬í•˜ì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "è¯·æ£€æŸ¥ä¸€ä¸‹æ•°æ®æºè®¾å®šã€‚";
-    Text[ chinese_traditional ] = "è«‹æª¢æŸ¥è³‡æ–™æºçš„è¨­å®šã€‚";
-    Text[ turkish ] = "Data kaynağı için yapılandırılmış olan ayarları kontrol ediniz.";
-    Text[ arabic ] = "Please check the settings made for the data source.";
-    Text[ catalan ] = "Comprova les dades per aquesta font de dades.";
-    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸—à¸µà¹ˆà¸—à¸³à¹„à¸§à¹‰à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "ProsÃ­m zkontrolujte nastavenÃ­ provedenÃ¡ pro zdroj dat.";
-    Text[ hebrew ] = "Bitte Ã¼berprÃ¼fen Sie die Einstellungen fÃ¼r die Datenquelle.";
-    Text[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‡à¤²à¤¿à¤ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£à¥‹à¤‚ à¤•à¤¾ à¤œà¤¾à¤à¤š à¤•à¥€à¤œà¤¿à¤ à¥¤";
-    Text[ slovak ] = "Skontrolujte nastavenia zdroja dÃ¡t prosÃ­m.";
-    Text[ hungarian ] = "EllenÅ‘rizze az adatforrÃ¡s beÃ¡llÃ­tÃ¡sait.";
-    Text[ slovenian ] = "Preverite nastavitve vira podatkov.";
+    Text [ de ] = "Bitte überprüfen Sie die Einstellungen für die Datenquelle.";
+    Text [ en-US ] = "Please check the settings made for the data source.";
 };
 
 String RID_STR_FIELDDIALOGTITLE
 {
-    Text = "Adress Daten - Feldzuordnung";
-    Text [ english ] = "Address data - field assignment";
-    Text [ english_us ] = "Address Data - Field Assignment";
-    Text[ portuguese ] = "Dados de endereços - Atribuição de campos";
-    Text[ russian ] = "Àäğåñíûå äàííûå: íàçíà÷åíèå ïîëåé";
-    Text[ greek ] = "Äåäïìİíá äéåõèıíóåùí - ÁíÜèåóç ğåäßïõ";
-    Text[ dutch ] = "Adresgegevens - veldtoewijzing";
-    Text[ french ] = "Données des adresses - Assignation des champs";
-    Text[ spanish ] = "Datos de direcciones - asignación de campo";
-    Text[ finnish ] = "Osoitetidot - kenttien määritys";
-    Text[ italian ] = "Dati della Rubrica - Assegnazione campi";
-    Text[ danish ] = "Adressedata - Felttildeling";
-    Text[ swedish ] = "Adressdata - fälttilldelning";
-    Text[ polish ] = "Dane adresowe - przypisywanie pól";
-    Text[ portuguese_brazilian ] = "Dados de endereços - Atribuição de campos";
-    Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‰²ã‚Šå½“ã¦";
-    Text[ korean ] = "ì£¼ì†Œ ë°ì´í„° í•„ë“œ í• ë‹¹";
-    Text[ chinese_simplified ] = "åœ°å€æ•°æ® - æŒ‡å®šå­—æ®µ";
-    Text[ chinese_traditional ] = "é€šè¨ŠéŒ„è³‡æ–™ - æŒ‡å®šæ¬„ä½";
-    Text[ turkish ] = "Adres verisi - Alan ataması";
-    Text[ arabic ] = "Address Data - Field Assignment";
-    Text[ catalan ] = "Dades d'adreces - assignació de camps";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ - à¸à¸³à¸«à¸™à¸”à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "PoloÅ¾ky adresy - pÅ™iÅ™azenÃ­ polÃ­";
-    Text[ hebrew ] = "Adress Daten - Feldzuordnung";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ - à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¤¨à¤¾";
-    Text[ slovak ] = "Ãšdaje adries - priradenie polÃ­";
-    Text[ hungarian ] = "CÃ­madatok - mezÅ‘-hozzÃ¡rendelÃ©s";
-    Text[ slovenian ] = "Podatki adresarja - dodelitev polj";
+    Text [ de ] = "Adress Daten - Feldzuordnung";
+    Text [ en-US ] = "Address Data - Field Assignment";
 };
 
 String RID_STR_NOFIELDSASSIGNED
 {
-    Text = "Im Augenblick sind keine Felder zugeordnet.\n"
+    Text [ de ] = "Im Augenblick sind keine Felder zugeordnet.\n"
         "Wenn Sie im Augenblick keine Zuordnung treffen wollen, können Sie dies später jederzeit nachholen:\n"
         "Menü \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
-    Text [ english ] = "Currently, there are no fields assigned.\n"
-        "If you don't want to do this assignment at the moment, you can make this up at any time later on:\n"
-        "Menu \"File - Template - Address Book Source ...\"";
-    Text [ english_us ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
-    Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
-    Text[ portuguese ] = "Não há campos atribuídos.\nSe não pretender atribuir os campos agora, poderá fazê-lo mais tarde em:\nmenu \"Ficheiro - Modelos - Fonte do livro de endereços...\"";
-    Text[ russian ] = "Â íàñòîÿùèé ìîìåíò ïîëÿ íå ïğèñâîåíû.\n Èõ ìîæíî ïğèñâîèòü ëèáî ñåé÷àñ, ëèáî ïîçæå,\nâ ìåíş \"Ôàéë - Øàáëîíû - Èñòî÷íèê àäğåñíîé êíèãè...\"";
-    Text[ greek ] = "Äåí İ÷ïõí áíáôåèåß ğåäßá áõôŞí ôç óôéãìŞ.\nÌğïñåßôå íá áíáèİóåôå ğåäßá ôşñá Ş íá ôï êÜíåôå áñãüôåñá åğéëİãïíôáò:\n\"Áñ÷åßï - Ğñüôõğï - Ğñïİëåõóç äåäïìİíùí ôïõ âéâëßïõ äéåõèıíóåùí...\"";
-    Text[ dutch ] = "Momenteel zijn er geen velden toegewezen.\nAls u op dit moment geen velden wilt toewijzen, kunt u dit op een later tijdstip doen:\nMenu \"Bestand - Sjabloon - Adresboekbron...\"";
-    Text[ french ] = "Aucun champ n'est assigné.\nSi vous ne souhaitez pas procéder à l'assignation pour le moment, vous pourrez le faire plus tard sous :\n\"Fichier - Modèle de document - Source du carnet d'adresses ...\"";
-    Text[ spanish ] = "Actualmente no existen campos asignados.\nSi no puede llevar a cabo de momento ninguna asignación, lo puede hacer posteriormente en cualquier momento:\nMenú \"Archivo - Plantillas - Fuente de libreta de direcciones...\"";
-    Text[ finnish ] = "Tällä hetkellä ei ole määritettyjä kenttiä.\nVoit määrittää ne nyt tai myöhemmin valitsemalla ensin\n\"Tiedosto - Malli - Osoitekirjan lähde\"";
-    Text[ italian ] = "Al momento non è assegnato alcun campo.\nSe preferite non fare assegnazioni al momento, potete farlo in un secondo momento:\nMenu \"File - Modelli di documenti - Sorgente Rubrica...\"";
-    Text[ danish ] = "I øjeblikket er der ikke tildelt nogen felter.\nHvis du i øjeblikket ikke ønsker at foretage en tildeling, kan du gøre dette senere under \"Filer - Skabelon - Adressekartotekskilde...\"";
-    Text[ swedish ] = "För närvarande är inga fält tilldelade.\nDu kan göra tilldelningen nu eller senare om du väljer:\n\"Arkiv - Dokumentmall - Adressbokskälla ...\"";
-    Text[ polish ] = "Brak przypisanych pól.\nPola mo¿na przypisaæ teraz lub póŸniej,\nwybieraj¹c sekwencjê \"Plik - Szablon - ród³o danych adresowych...\"";
-    Text[ portuguese_brazilian ] = "Não há campos atribuídos.\nSe você não pretender atribuir os campos agora, poderá fazê-lo mais tarde em:\nmenu \"Arquivo - Modelos - Origem do livro de endereços...\"";
-    Text[ japanese ] = "ç¾åœ¨ã€ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‰²ã‚Šå½“ã¦ã¯ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\nä»Šã™ãã«å‰²ã‚Šå½“ã¦ãŒæ±ºã‚ã‚‰ã‚Œãªã‘ã‚Œã°ã€ã‚ã¨ã‹ã‚‰ã§ã‚‚å‰²ã‚Šå½“ã¦ã§ãã¾ã™ã€‚\nãã®ã¨ãã¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã® ãƒ•ã‚¡ã‚¤ãƒ« â†’ ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ â†’ ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã‚½ãƒ¼ã‚¹... ã‚³ãƒãƒ³ãƒ‰ã§å®Ÿè¡Œã—ã¾ã™ã€‚";
-    Text[ korean ] = "í˜„ì¬ëŠ” í• ë‹¹ëœ í•„ë“œê°€ ì—†ìŠµë‹ˆë‹¤.\nì§€ê¸ˆ í• ë‹¹í•˜ì§€ ì•Šì„ ê²½ìš° ë‚˜ì¤‘ì— ì–¸ì œë¼ë„\në©”ë‰´ [íŒŒì¼] - [ì„œì‹ íŒŒì¼] - [ì£¼ì†Œë¡]... ë©”ë‰´ë¥¼ ì‚¬ìš©í•˜ì—¬ í• ë‹¹í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è‡³ä»Šè¿˜æœªæŒ‡å®šä»»ä½•çš„å­—æ®µã€‚\nå¦‚æœç°åœ¨ä¸æŒ‡å®šå­—æ®µï¼Œä¹Ÿå¯ä»¥ä»¥åå†åšè¿™ä¸ªè®¾å®šï¼š\nç‚¹å‡»èœå•\"æ–‡ä»¶ - æ–‡æ¡£æ ·å¼ - é€šè®¯ç°¿æ•°æ®æº...\"";
-    Text[ chinese_traditional ] = "è‡³ä»Šé‚„æœªæŒ‡å®šä»»ä½•æ¬„ä½ã€‚\nå¦‚æœç¾åœ¨ä¸æŒ‡å®šæ¬„ä½ï¼Œä¹Ÿå¯ä»¥ä»¥å¾Œå†åšé€™å€‹è¨­å®šï¼š\næŒ‰åŠŸèƒ½è¡¨<æª”æ¡ˆ>-<æ–‡ä»¶æ¨£å¼>-<é€šè¨ŠéŒ„è³‡æ–™æº...>ã€‚";
-    Text[ turkish ] = "Şu anda herhangi  atanmış alana yok..\nBu atamayı şu anda yapmak zorunda değilsiniz, daha sonra istediğiniz bir anda da bunu yapabilirsiniz.:\nMenü \"Dosya - Şablon - Adres defteri Kaynağı ...\"";
-    Text[ arabic ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
-    Text[ catalan ] = "Actualment, no hi ha camps assignats.\nSi no voleu fer aquesta assignació aquest moment, ho podeu fer més endavant a:\nMenú \"Fitxer - Plantilles - Font de la llibreta d'adreces ...\"";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸”à¹ƒà¸™à¸•à¸­à¸™à¸™à¸µà¹‰\nà¸‚à¸“à¸°à¸™à¸µà¹‰à¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¸à¸³à¸«à¸™à¸”à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆà¸à¹‡à¸—à¸³à¸—à¸µà¸«à¸¥à¸±à¸‡à¹‚à¸”à¸¢à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¹€à¸›à¹‡à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹à¸£à¸:\n\"à¹à¸Ÿà¹‰à¸¡ - à¹à¸¡à¹ˆà¹à¸šà¸š - à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ...\"";
-    Text[ czech ] = "V souÄasnosti nejsou pÅ™iÅ™azena Å¾Ã¡dnÃ¡ pole.\nMÅ¯Å¾ete buÄto pÅ™iÅ™adit pole nynÃ­, anebo pozdÄ›ji pomocÃ­ menu:\n\"Soubor - Å ablona - Zdroj databÃ¡ze kontaktÅ¯...\"";
-    Text[ hebrew ] = "Im Augenblick sind keine Felder zugeordnet.\nWenn Sie im Augenblick keine Zuordnung treffen wollen, kÃ¶nnen Sie dies spÃ¤ter jederzeit nachholen:\nMenÃ¼ \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
-    Text[ hindi ] = "à¤‡à¤¸ à¤¸à¤®à¤¯ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤•à¥‹à¤ˆ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤\n\"à¤«à¤¾à¤‡à¤² - à¤¨à¤®à¥‚à¤¨à¤¾ - à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤®à¥‚à¤²...\"\n à¤•à¥‹ à¤šà¥à¤¨à¤•à¥‡ à¤†à¤ª à¤…à¤­à¥€ à¤…à¤¥à¤µà¤¾ à¤¬à¤¾à¤¦ à¤®à¥‡à¤‚ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
-    Text[ slovak ] = "MomentÃ¡lne nie sÃº priradenÃ© Å¾iadne polia.\nMÃ´Å¾ete ich priradiÅ¥ teraz, ale tak urobiÅ¥ neskÃ´r v::\n\"SÃºbor - Å ablÃ³ny - Zdroj knihy adries...\"";
-    Text[ hungarian ] = "Jelenleg nincsenek mezÅ‘-hozzÃ¡rendelÃ©sek.\nMegadhatja most a mezÅ‘ket, de kÃ©sÅ‘bbre is halaszthatja.\nKÃ©sÅ‘bb a 'FÃ¡jl - Sablonok - CÃ­mjegyzÃ©k-adatforrÃ¡s...' menÃ¼pont segÃ­tsÃ©gÃ©vel vÃ©gezheti el a mezÅ‘k hozzÃ¡rendelÃ©sÃ©t. ";
-    Text[ slovenian ] = "Trenutno ni dodeljenih polj.\nLahko jih dodelite zdaj ali pozneje, tako da izberete:\n\"Datoteka - Predloga - Vir podatkov adresarja...\"";
+    Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
+    Text [ x-comment ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
 };
 
 String RID_STR_ABP_SUCCESS
 {
-    Text = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
-    Text [ english ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
-    Text [ english_us ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
-    Text[ portuguese ] = "O seu livro de endereços externo foi registado no %PRODUCTNAME.\nOs dados dos endereços podem ser agora utilizados como qualquer outra fonte de dados.";
-    Text[ russian ] = "Ğåãèñòğàöèÿ âíåøíåé àäğåñíîé êíèãè â %PRODUCTNAME ïğîøëà óñïåøíî.\nÒåïåğü àäğåñà äîñòóïíû íàğÿäó ñ äğóãèìè èñòî÷íèêàìè äàííûõ.";
-    Text[ greek ] = "Ôï åîùôåñéêü óáò âéâëßï äéåõèıíóåùí äçëşèçêå ìå åğéôõ÷ßá óôï %PRODUCTNAME.\nÔşñá ìğïñåßôå íá ÷ñçóéìïğïéåßôå ôá äåäïìİíá äéåõèıíóåùí üğùò êÜèå Üëëç ğñïİëåõóç äåäïìİíùí.";
-    Text[ dutch ] = "Uw externe adresboek is in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
-    Text[ french ] = "Vous pouvez désormais accéder aux données des adresses depuis %PRODUCTNAME. La touche F4 permet par ex. d'ouvrir la vue de la source de données correspondante.";
-    Text[ spanish ] = "La libreta de direcciones externa se ha registrado en %PRODUCTNAME.\nAhora puede utilizar los datos de las direcciones como cualquier otra fuente de datos.";
-    Text[ finnish ] = "Ulkoisen osoitekirjan rekisteröiminen onnistui %PRODUCTNAMEssa.\nVoit nyt käyttää osoitetietojasi muiden tietolähteiden tapaan.";
-    Text[ italian ] = "Potete accedere alla Rubrica direttamente da %PRODUCTNAME. Premendo il tasto F4 si aprirà la sorgente dati in cui potete eleborare i dati relativi alla Rubrica.";
-    Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemført.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
-    Text[ swedish ] = "Nu kan du använda dina adressdata i %PRODUCTNAME.\nDu kan till exempel öppna datakällvyn genom att trycka på F4 och arbeta med dina adressdata där.";
-    Text[ polish ] = "Zewnêtrzna ksi¹¿ka adresowa zosta³a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo¿na teraz u¿ywaæ tak jak innego Ÿród³a danych.";
-    Text[ portuguese_brazilian ] = "O seu livro de endereços externo foi registrado no %PRODUCTNAME.\nOs dados dos endereços podem ser agora utilizados como qualquer outra fonte de dados.";
-    Text[ japanese ] = "ã“ã‚Œã§ %PRODUCTNAME ã‹ã‚‰ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã¸ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‚ˆã†ã«ãªã‚Šã¾ã—ãŸã€‚ä¾‹ãˆã°ã€F4ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã‚’é–‹ãã¨ã€ãã“ã‹ã‚‰ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì´ì œ %PRODUCTNAMEì—ì„œ ì‚¬ìš©ìì˜ ì£¼ì†Œ ë°ì´í„°ë¡œ ì•¡ì„¸ìŠ¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\nì˜ˆë¥¼ ë“¤ì–´ F4ë¥¼ ëˆŒëŸ¬ ë°ì´í„° ì›ë³¸ ë³´ê¸°ë¥¼ ì—¬ì‹­ì‹œì˜¤. ì´ì œ ì£¼ì†Œ ë°ì´í„°ë¡œ ì›í•˜ì‹œëŠ” ì‘ì—…ì„ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤. ";
-    Text[ chinese_simplified ] = "æ‚¨å¯ä»¥è®¿é—® %PRODUCTNAME ä¸­çš„åœ°å€æ•°æ®ã€‚ä¾‹å¦‚ï¼ŒæŒ‰ F4 æ—¶å°†æ‰“å¼€æ•°æ®æºè§†å›¾ï¼Œåœ¨è¯¥è§†å›¾ä¸­å¯ä»¥ä½¿ç”¨åœ°å€æ•°æ®ã€‚";
-    Text[ chinese_traditional ] = "ç¾åœ¨æ‚¨å°‡å¯ä»¥å¾ %PRODUCTNAME ä¸­å­˜å–æ‚¨çš„åœ°å€è³‡æ–™ã€‚ä¾‹å¦‚ï¼ŒæŒ‰ä¸€ä¸‹ F4 æœƒé–‹å•Ÿè³‡æ–™æºæª¢è¦–ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨å…¶ä¸­çš„åœ°å€è³‡æ–™ã€‚";
-    Text[ turkish ] = "Şimdi adres verilerinize %PRODUCTNAME içinden erişebilirsiniz.";
-    Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ catalan ] = "La font d'adreces extern s'ha registrat correctament a %PRODUCTNAME.\nPodeu accedir a aquestes dades de la mateixa manera que qualsevol altra base de dades.";
-    Text[ thai ] = "à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸ à¸²à¸¢à¸™à¸­à¸à¸‚à¸­à¸‡à¸„à¸¸à¸“à¹„à¸”à¹‰à¸¥à¸‡à¸—à¸°à¹€à¸šà¸µà¸¢à¸™à¸ªà¸³à¹€à¸£à¹‡à¸ˆà¹à¸¥à¹‰à¸§à¹ƒà¸™ %PRODUCTNAME\nà¸‚à¸“à¸°à¸™à¸µà¹‰à¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸‚à¸­à¸‡à¸„à¸¸à¸“à¹€à¸›à¹‡à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸·à¹ˆà¸™ à¹† à¹„à¸”à¹‰";
-    Text[ czech ] = "VaÅ¡e externÃ­ databÃ¡ze kontaktÅ¯ byla ÃºspÄ›Å¡nÄ› registrovÃ¡na v %PRODUCTNAME.\nNynÃ­ mÅ¯Å¾ete pouÅ¾Ã­vat svÃ© kontakty jako kaÅ¾dÃ½ jinÃ½ zdroj dat.";
-    Text[ hebrew ] = "Ab jetzt kÃ¶nnen Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So Ã¶ffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
-    Text[ hindi ] = "%PRODUCTNAME à¤®à¥‡à¤‚ à¤†à¤ªà¤•à¤¾ à¤¬à¤¾à¤¹à¤°à¥€ à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤•à¥‹ à¤¸à¤«à¤²à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤‚à¤œà¥€à¤¯à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤\nà¤…à¤­à¥€ à¤†à¤ª à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤•à¥‹ à¤…à¤¨à¥à¤¯ à¤•à¤¿à¤¸à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤œà¥ˆà¤¸à¥‡ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "VaÅ¡a externÃ¡ kniha adries bola ÃºspeÅ¡ne zaregistrovanÃ¡ v %PRODUCTNAME.\nTeraz mÃ´Å¾ete pouÅ¾Ã­vaÅ¥ vaÅ¡e adresy ako inÃ© zdroje dÃ¡t.";
-    Text[ hungarian ] = "A cÃ­meket mostantÃ³l elÃ©rheti az %PRODUCTNAME alkalmazÃ¡sbÃ³l. Az F4 billentyÅ± lenyomÃ¡sÃ¡val pÃ©ldÃ¡ul megnyithatja az adatforrÃ¡s nÃ©zetet, ahol a cÃ­mekkel dolgozhat.";
-    Text[ slovenian ] = "Sedaj boste imeli dostop do naslovov iz programa %PRODUCTNAME.\nS pritiskom na F4 boste odprli pogled vira podatkov, v katerem boste lahko urejali podatke adresarja.";
+    Text[ de ] = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
+    Text [ en-US ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
 };
 
 //........................................................................
