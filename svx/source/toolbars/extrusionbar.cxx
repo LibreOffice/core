@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:19:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1302,6 +1302,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
 }
 
+namespace svx {
 bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 {
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -1331,6 +1332,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 
     return bFound;
 }
+}
 
 void ExtrusionBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
 {
@@ -1342,54 +1344,56 @@ void ExtrusionBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
     {
         getExtrusionProjectionState( pSdrView, rSet );
     }
+    const bool bOnlyExtrudedCustomShapes =
+        checkForSelectedCustomShapes( pSdrView, true );
     if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
     }
     if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
     }
     if (rSet.GetItemState(SID_EXTRUSION_TILT_UP) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_UP );
     }
     if (rSet.GetItemState(SID_EXTRUSION_TILT_LEFT) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_LEFT );
     }
     if (rSet.GetItemState(SID_EXTRUSION_TILT_RIGHT) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_RIGHT );
     }
     if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
     }
     if (rSet.GetItemState(SID_EXTRUSION_DEPTH_FLOATER) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_DEPTH_FLOATER );
     }
     if (rSet.GetItemState(SID_EXTRUSION_DIRECTION_FLOATER) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_DIRECTION_FLOATER );
     }
     if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_FLOATER) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_LIGHTING_FLOATER );
     }
     if (rSet.GetItemState(SID_EXTRUSION_SURFACE_FLOATER) != SFX_ITEM_UNKNOWN)
     {
-        if( !checkForSelectedCustomShapes( pSdrView, true ) )
+        if(! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_SURFACE_FLOATER );
     }
     if (rSet.GetItemState(SID_EXTRUSION_TOOGLE) != SFX_ITEM_UNKNOWN)
