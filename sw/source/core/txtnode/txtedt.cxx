@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 15:54:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,7 +1369,7 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )
-        pFrm = pFrm->GetFrmAtOfst( rHyphInf.nStart );
+        pFrm = &(pFrm->GetFrmAtOfst( rHyphInf.nStart ));
     else
     {
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
