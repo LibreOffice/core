@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:16:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ TabDialog DLG_ATTR
         Text[ hebrew ] = "‮הקודם‬";
         Text[ hindi ] = "~पीछे";
         Text[ slovak ] = "S~päť";
+        Text[ hungarian ] = "~Vissza";
+        Text[ slovenian ] = "Na~zaj";
     };
     String TP_ATTR_CHAR
     {
@@ -175,6 +177,8 @@ TabDialog DLG_ATTR
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "फ़ॉन्ट";
         Text[ slovak ] = "Písmo";
+        Text[ hungarian ] = "Betűkészlet";
+        Text[ slovenian ] = "Pisava";
     };
     String TP_ATTR_NUMBER
     {
@@ -185,7 +189,7 @@ TabDialog DLG_ATTR
         Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Formato" ;
         Text [ finnish ] = "Muoto" ;
-        Text [ danish ] = "Form" ;
+        Text [ danish ] = "Format" ;
         Text [ french ] = "Format" ;
         Text [ swedish ] = "Format" ;
         Text [ dutch ] = "Formaat" ;
@@ -206,6 +210,8 @@ TabDialog DLG_ATTR
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     String TP_ATTR_ALIGN
     {
@@ -237,6 +243,8 @@ TabDialog DLG_ATTR
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie";
+        Text[ hungarian ] = "Igazítás";
+        Text[ slovenian ] = "Poravnava";
     };
     String ST_ROW
     {
@@ -248,7 +256,7 @@ TabDialog DLG_ATTR
         Text [ french ] = "Formatage de table" ;
         Text [ dutch ] = "Tabelopmaak" ;
         Text [ swedish ] = "Tabellformatering" ;
-        Text [ danish ] = "Tabelformatering" ;
+        Text [ danish ] = "Tabelformat" ;
         Text [ portuguese_brazilian ] = "Formato da tabela" ;
         Text [ portuguese ] = "Formatar tabela" ;
         Text[ chinese_simplified ] = "表格格式";
@@ -267,6 +275,8 @@ TabDialog DLG_ATTR
         Text[ hebrew ] = "Tabellenformatierung";
         Text[ hindi ] = "सारणी रचना";
         Text[ slovak ] = "Formát tabuľky";
+        Text[ hungarian ] = "Tábla formátuma";
+        Text[ slovenian ] = "Oblika tabele";
     };
     Text[ chinese_simplified ] = "字段格式";
     Text[ russian ] = "������ ����";
@@ -283,7 +293,10 @@ TabDialog DLG_ATTR
     Text[ hebrew ] = "Feldformatierung";
     Text[ hindi ] = "क्षेत्र रचना";
     Text[ slovak ] = "Formát poľa";
+    Text[ hungarian ] = "Mező formátuma";
+    Text[ slovenian ] = "Oblika polja";
 };
+
 
 
 
