@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.42 $
+*  $Revision: 1.43 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-11-02 14:57:48 $
+*  last change: $Author: hr $ $Date: 2004-11-09 11:55:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -542,6 +542,8 @@ File gid_File_Fonts_Truetype_All_Delete_Only
     Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
 End
 
+#ifdef SOLAR_JAVA
+
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
@@ -565,6 +567,8 @@ File gid_File_Help_Schart_Zip
     ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(schart);
 End
+
+#endif
 
 File gid_File_Html_Thirdpartylicensereadme
     Name = "THIRDPARTYLICENSEREADME.html";
