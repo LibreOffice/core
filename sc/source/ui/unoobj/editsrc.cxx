@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:57:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,13 @@
 #include "hints.hxx"
 #include "patattr.hxx"
 #include "unoguard.hxx"
+#include "drwlayer.hxx"
+#include "userdat.hxx"
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
 #endif
+#include <svx/svditer.hxx>
+#include <svx/outlobj.hxx>
 
 //------------------------------------------------------------------------
 
@@ -249,14 +253,46 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
     return new ScAnnotationEditSource( pDocShell, aCellPos );
 }
 
+SdrObject* ScAnnotationEditSource::GetCaptionObj()
+{
+    SdrObject* pRet = NULL;
+
+    ScDrawLayer* pModel = pDocShell->GetDocument()->GetDrawLayer();
+    if (!pModel)
+        return FALSE;
+    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(aCellPos.Tab()));
+    DBG_ASSERT(pPage,"Page ?");
+
+    pPage->RecalcObjOrdNums();
+
+    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObject* pObject = aIter.Next();
+    while (pObject && !pRet)
+    {
+        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
+        {
+            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+            if ( pData && aCellPos.Col() == pData->aStt.Col() && aCellPos.Row() == pData->aStt.Row() )
+            {
+                pRet = pObject;
+            }
+        }
+
+        pObject = aIter.Next();
+    }
+
+    return pRet;
+}
+
 SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
 {
     if (!pEditEngine)
     {
         // Notizen haben keine Felder
         if ( pDocShell )
-            pEditEngine = new ScEditEngineDefaulter(
-                pDocShell->GetDocument()->GetEnginePool(), FALSE );
+        {
+            pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument()->GetNoteEngine() );
+        }
         else
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
@@ -275,7 +311,10 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
 
-        pEditEngine->SetText( aNote.GetText() );        // incl. Umbrueche
+        if (aNote.GetEditTextObject())
+            pEditEngine->SetText( *aNote.GetEditTextObject() );     // incl. Umbrueche
+        else
+            pEditEngine->SetText( aNote.GetText() );
     }
 
     bDataValid = TRUE;
@@ -286,9 +325,33 @@ void ScAnnotationEditSource::UpdateData()
 {
     if ( pDocShell && pEditEngine )
     {
-        String aNewText = pEditEngine->GetText( LINEEND_LF );   // im SetNoteText passiert ConvertLineEnd
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNoteText( aCellPos, aNewText, TRUE );
+        ScDocShellModificator aModificator( *pDocShell );
+
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ScPostIt aNote(pDoc);
+        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
+
+        aNote.SetEditTextObject(pEditEngine->CreateTextObject());
+
+        pDoc->SetNote(aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote);
+
+        if (aNote.IsShown())
+        {
+            SdrObject* pObj = GetCaptionObj();
+            if (pObj)
+            {
+                OutlinerParaObject* pOPO = new OutlinerParaObject( *aNote.GetEditTextObject() );
+                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+                pObj->NbcSetOutlinerParaObject( pOPO );
+                pOPO->SetVertical( FALSE );  // notes are always horizontal
+
+                pObj->ActionChanged();
+            }
+        }
+
+        //! Undo !!!
+
+        aModificator.SetDocumentModified();
 
         // bDataValid wird bei SetDocumentModified zurueckgesetzt
     }
