@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_PREVIEW_HXX
 #define SC_PREVIEW_HXX
 
@@ -82,11 +81,11 @@ private:
 
                                         // berechnet:
     BOOL            bValid;             // folgende Werte gueltig
-    USHORT          nTabCount;
-    USHORT          nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
-    long            nPages[MAXTAB+1];
-    long            nFirstAttr[MAXTAB+1];
-    USHORT          nTab;               // Tabelle
+    SCTAB           nTabCount;
+    SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
+    long            nPages[MAXTABCOUNT];
+    long            nFirstAttr[MAXTABCOUNT];
+    SCTAB           nTab;               // Tabelle
     long            nTabPage;           // Seite von Tabelle
     long            nTabStart;          // erste Seite der Tabelle (wirklich)
     long            nDisplayStart;      // dito, relativ zum Anfang der Zaehlung
@@ -108,7 +107,7 @@ private:
 
 
     void    TestLastPage();
-    void    CalcPages( USHORT nToWhichTab );
+    void    CalcPages( SCTAB nToWhichTab );
     void    RecalcPages();
     void    UpdateDrawView();
     void    DoPrint( ScPreviewLocationData* pFillLocation );
@@ -147,13 +146,13 @@ public:
     USHORT  GetZoom() const     { return nZoom; }
     Point   GetOffset() const   { return aOffset; }
 
-    USHORT  GetTab()            { if (!bValid) { CalcPages(0); RecalcPages(); } return nTab; }
+    SCTAB   GetTab()            { if (!bValid) { CalcPages(0); RecalcPages(); } return nTab; }
     long    GetTotalPages()     { if (!bValid) { CalcPages(0); RecalcPages(); } return nTotalPages; }
 
     BOOL    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
     USHORT  GetOptimalZoom(BOOL bWidthOnly);
-    long    GetFirstPage(USHORT nTab);
+    long    GetFirstPage(SCTAB nTab);
 
     void    CalcAll()           { CalcPages(MAXTAB); }
     void    SetInGetState(BOOL bSet) { bInGetState = bSet; }
