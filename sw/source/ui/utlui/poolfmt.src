@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,10 @@ String STR_POOLCHR_FOOTNOTE
     Text [ swedish ] = "Fotnotstecken" ;
     Text [ danish ] = "Fodnotetegn" ;
     Text [ portuguese ] = "Símbolo de nota de rodapé" ;
-    Text [ portuguese_brazilian ] = "Fu?notenzeichen" ;
+    Text [ portuguese_brazilian ] = "Caracteres da Nota de Rodapé" ;
     Text[ chinese_simplified ] = "æ³¨è„šç¬¦";
     Text[ russian ] = "Ñèìâîë ñíîñêè";
-    Text[ polish ] = "Symbol przypisów doln.";
+    Text[ polish ] = "Znaki przypisów dolnych";
     Text[ japanese ] = "è„šæ³¨ç•ªå·";
     Text[ chinese_traditional ] = "è¨»è…³ç¬¦";
     Text[ arabic ] = "ÑãÒ ÇáÍÇÔíÉ ÇáÓİáíÉ";
@@ -90,6 +90,9 @@ String STR_POOLCHR_FOOTNOTE
     Text[ catalan ] = "Caràcters de nota al peu";
     Text[ finnish ] = "Alaviitemerkit";
     Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸‚à¸­à¸‡à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+    Text[ czech ] = "Znaky pro poznÃ¡mku pod Äarou";
+    Text[ hebrew ] = "FuÃŸnotenzeichen";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¥€ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
 };
 String STR_POOLCHR_PAGENO
 {
@@ -103,10 +106,10 @@ String STR_POOLCHR_PAGENO
     Text [ swedish ] = "Sidnummer" ;
     Text [ danish ] = "Sidetal" ;
     Text [ portuguese ] = "Número de páginas" ;
-    Text [ portuguese_brazilian ] = "Seitenzahl" ;
+    Text [ portuguese_brazilian ] = "Número da Página" ;
     Text[ chinese_simplified ] = "é¡µç ";
     Text[ russian ] = "Íîìåğ ñòğàíèöû";
-    Text[ polish ] = "Iloœæ stron";
+    Text[ polish ] = "Numer stron";
     Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
     Text[ chinese_traditional ] = "é ç¢¼";
     Text[ arabic ] = "ÑŞã ÇáÕİÍÉ";
@@ -117,6 +120,9 @@ String STR_POOLCHR_PAGENO
     Text[ catalan ] = "Número de pàgina";
     Text[ finnish ] = "Sivunumero";
     Text[ thai ] = "à¹€à¸¥à¸‚à¸«à¸™à¹‰à¸²";
+    Text[ czech ] = "ÄŒÃ­slo strÃ¡nky";
+    Text[ hebrew ] = "Seitenzahl";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤¸à¤‚à¤–à¥à¤¯à¤¾";
 };
 String STR_POOLCHR_LABEL
 {
@@ -130,20 +136,23 @@ String STR_POOLCHR_LABEL
     Text [ swedish ] = "Bildtexttecken" ;
     Text [ danish ] = "Billedteksttegn" ;
     Text [ portuguese ] = "Caracteres para etiqueta" ;
-    Text [ portuguese_brazilian ] = "Beschriftungszeichen" ;
+    Text [ portuguese_brazilian ] = "Caracteres da Legenda" ;
     Text[ chinese_simplified ] = "æ ‡ç­¾æ–‡";
     Text[ russian ] = "Ñèìâîëû íàçâàíèÿ";
-    Text[ polish ] = "Tekst etykiety";
+    Text[ polish ] = "Znaki podpisu";
     Text[ japanese ] = "å›³è¡¨ç•ªå·æ–‡å­—";
     Text[ chinese_traditional ] = "æ¨™ç±¤æ–‡";
     Text[ arabic ] = "ÃÍÑİ ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
     Text[ greek ] = "×áñáêôŞñåò åğéãñáöŞò";
     Text[ korean ] = "ìº¡ì…˜ ë¬¸ì";
-    Text[ turkish ] = "Etiket karakterleri";
+    Text[ turkish ] = "Resim yazısı karakterleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caràcters de la llegenda";
     Text[ finnish ] = "Kuvaotsikon merkit";
     Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸‚à¸­à¸‡à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
+    Text[ czech ] = "Znaky pro popisek";
+    Text[ hebrew ] = "Beschriftungszeichen";
+    Text[ hindi ] = "à¤•à¥‰à¤ªà¥à¤¶à¤¨ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
 };
 String STR_POOLCHR_DROPCAPS
 {
@@ -157,7 +166,7 @@ String STR_POOLCHR_DROPCAPS
     Text [ swedish ] = "Anfangstecken" ;
     Text [ danish ] = "Initialtegn" ;
     Text [ portuguese ] = "Caracteres capitulares" ;
-    Text [ portuguese_brazilian ] = "Initialenzeichen" ;
+    Text [ portuguese_brazilian ] = "Capitular" ;
     Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
     Text[ russian ] = "Áóêâèöà";
     Text[ polish ] = "Inicja³y";
@@ -166,11 +175,14 @@ String STR_POOLCHR_DROPCAPS
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
     Text[ greek ] = "Êåöáëáßá ãñÜììáôá";
     Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
-    Text[ turkish ] = "Başharfler";
+    Text[ turkish ] = "Paragrafın başındaki iri başlangıç karakteri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caplletres";
     Text[ finnish ] = "Anfangit";
     Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
+    Text[ czech ] = "IniciÃ¡ly";
+    Text[ hebrew ] = "â€®×”×©××˜×ª ××•×ª×™×•×ª ×’×“×•×œ×•×ªâ€¬";
+    Text[ hindi ] = "à¤¬à¤¡à¥‡ à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤•à¥‹ à¤¹à¤Ÿà¤¾à¤“";
 };
 String STR_POOLCHR_NUM_LEVEL
 {
@@ -184,7 +196,7 @@ String STR_POOLCHR_NUM_LEVEL
     Text [ swedish ] = "Numreringstecken" ;
     Text [ danish ] = "Nummereringstegn" ;
     Text [ portuguese ] = "Caracteres de numeração" ;
-    Text [ portuguese_brazilian ] = "Numerierungszeichen" ;
+    Text [ portuguese_brazilian ] = "Símbolos de Numeração" ;
     Text[ chinese_simplified ] = "ç¼–å·å­—ç¬¦";
     Text[ russian ] = "Ñèìâîë íóìåğàöèè";
     Text[ polish ] = "Znaki numeracji";
@@ -198,6 +210,9 @@ String STR_POOLCHR_NUM_LEVEL
     Text[ catalan ] = "Símbols de numeració";
     Text[ finnish ] = "Numerointisymbolit";
     Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
+    Text[ czech ] = "Symboly pro ÄÃ­slovÃ¡nÃ­";
+    Text[ hebrew ] = "Nummerierungszeichen";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¤¾ à¤¸à¤‚à¤•à¥‡à¤¤ ";
 };
 String STR_POOLCHR_BUL_LEVEL
 {
@@ -211,11 +226,11 @@ String STR_POOLCHR_BUL_LEVEL
     Text [ dutch ] = "Opsommingstekens" ;
     Text [ swedish ] = "Punktuppställningstecken" ;
     Text [ danish ] = "Punkttegn" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlungszeichen" ;
+    Text [ portuguese_brazilian ] = "Símbolos de Marca" ;
     Text [ portuguese ] = "Marcas e números" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·";
     Text[ russian ] = "Ìàğêåğû ñïèñêà";
-    Text[ polish ] = "Symbol wypunktowania";
+    Text[ polish ] = "Symbole wypunktowania";
     Text[ japanese ] = "ç®‡æ¡æ›¸ãè£…é£¾è¨˜å·";
     Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
     Text[ arabic ] = "ÚáÇãÇÊ ÇáÊÚÏÇÏ";
@@ -226,6 +241,9 @@ String STR_POOLCHR_BUL_LEVEL
     Text[ catalan ] = "Símbols de pic";
     Text[ finnish ] = "Luettelomerkkisymbolit";
     Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
+    Text[ czech ] = "Symboly pro odrÃ¡Å¾ky";
+    Text[ hebrew ] = "AufzÃ¤hlungszeichen";
+    Text[ hindi ] = "à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥ à¤¸à¤‚à¤•à¥‡à¤¤";
 };
 String STR_POOLCHR_INET_NORMAL
 {
@@ -239,7 +257,7 @@ String STR_POOLCHR_INET_NORMAL
     Text [ swedish ] = "Internetlänk" ;
     Text [ danish ] = "Hyperlink" ;
     Text [ portuguese ] = "Link Internet" ;
-    Text [ portuguese_brazilian ] = "Internet Link" ;
+    Text [ portuguese_brazilian ] = "Link Internet" ;
     Text[ chinese_simplified ] = "å›½é™…äº’è”ç½‘é“¾æ¥";
     Text[ russian ] = "Èíòåğíåò-ññûëêà";
     Text[ polish ] = "£¹cze internetowe";
@@ -253,6 +271,9 @@ String STR_POOLCHR_INET_NORMAL
     Text[ catalan ] = "Enllaç d'Internet";
     Text[ finnish ] = "Internet-linkki";
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•";
+    Text[ czech ] = "InternetovÃ½ odkaz";
+    Text[ hebrew ] = "Internet Link";
+    Text[ hindi ] = "à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥ à¤²à¤¿à¤‚à¤•";
 };
 String STR_POOLCHR_INET_VISIT
 {
@@ -268,7 +289,7 @@ String STR_POOLCHR_INET_VISIT
     Text [ swedish ] = "Använd Internetlänk" ;
     Text [ danish ] = "Besøgt hyperlink" ;
     Text [ portuguese ] = "Link Internet visitado" ;
-    Text [ portuguese_brazilian ] = "Besuchter Internet Link" ;
+    Text [ portuguese_brazilian ] = "Link Internet Visitado" ;
     Text[ chinese_simplified ] = "è®¿é—®è¿‡çš„å›½é™…äº’è”ç½‘é“¾æ¥";
     Text[ russian ] = "Ïğîñìîòğåííàÿ ãèïåğññûëêà";
     Text[ polish ] = "Odwiedzone ³¹cze internetowe";
@@ -277,11 +298,14 @@ String STR_POOLCHR_INET_VISIT
     Text[ arabic ] = "ÇÑÊÈÇØ ÇáÅäÊÑäÊ ÇáĞí Êã ÒíÇÑÊå";
     Text[ greek ] = "Óıíäåóç Internet ğïõ åğéóêåöèŞêáôå";
     Text[ korean ] = "ë°©ë¬¸í•œ ì¸í„°ë„· ë§í¬";
-    Text[ turkish ] = "Kullanılmış Internet bağlantısı";
+    Text[ turkish ] = "Ziyaret edilmiş internet bağlantısı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enllaç d'Internet visitat";
     Text[ finnish ] = "Avattu Internet-linkki";
     Text[ thai ] = "à¸”à¸¹à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•";
+    Text[ czech ] = "NavÅ¡tÃ­venÃ½ internetovÃ½ odkaz";
+    Text[ hebrew ] = "Besuchter Internet Link";
+    Text[ hindi ] = "à¤­à¥‡à¤‚à¤Ÿ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥ à¤²à¤¿à¤‚à¤•";
 };
 String STR_POOLCHR_JUMPEDIT
 {
@@ -295,7 +319,7 @@ String STR_POOLCHR_JUMPEDIT
     Text [ swedish ] = "Platshållare" ;
     Text [ danish ] = "Pladsholdere" ;
     Text [ portuguese ] = "Marcador de posição" ;
-    Text [ portuguese_brazilian ] = "Platzhalter" ;
+    Text [ portuguese_brazilian ] = "Marcador de posição" ;
     Text[ chinese_simplified ] = "é€šé…ç¬¦";
     Text[ russian ] = "Ïîëå ïîäñòàíîâêè";
     Text[ polish ] = "Znak-wype³niacz";
@@ -309,6 +333,9 @@ String STR_POOLCHR_JUMPEDIT
     Text[ catalan ] = "Marcador";
     Text[ finnish ] = "Paikkamerkki";
     Text[ thai ] = "à¸•à¸±à¸§à¸¢à¸¶à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+    Text[ czech ] = "ZÃ¡stupka";
+    Text[ hebrew ] = "Platzhalter";
+    Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤§à¤¾à¤°à¤•";
 };
 String STR_POOLCHR_TOXJUMP
 {
@@ -322,10 +349,10 @@ String STR_POOLCHR_TOXJUMP
     Text [ spanish ] = "Salto de índice" ;
     Text [ french ] = "Saut d'index" ;
     Text [ portuguese ] = "Salto ao índice" ;
-    Text [ portuguese_brazilian ] = "Verzeichnissprung" ;
+    Text [ portuguese_brazilian ] = "Vínculo de Índice" ;
     Text[ chinese_simplified ] = "ç›®å½•é“¾æ¥";
     Text[ russian ] = "Ññûëêà óêàçàòåëÿ";
-    Text[ polish ] = "Skok w indeksie";
+    Text[ polish ] = "£¹cze indeksu";
     Text[ japanese ] = "ç´¢å¼•ã‚¸ãƒ£ãƒ³ãƒ—";
     Text[ chinese_traditional ] = "ç›®éŒ„æ·å¾‘";
     Text[ arabic ] = "ÇÑÊÈÇØ İåÑÓ";
@@ -336,6 +363,9 @@ String STR_POOLCHR_TOXJUMP
     Text[ catalan ] = "Salt d'índex";
     Text[ finnish ] = "Hakemistolinkki";
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸”à¸±à¸Šà¸™à¸µ";
+    Text[ czech ] = "Odkaz na rejstÅ™Ã­k";
+    Text[ hebrew ] = "Verzeichnissprung";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤²à¤¿à¤‚à¤•";
 };
 String STR_POOLCHR_ENDNOTE
 {
@@ -343,7 +373,7 @@ String STR_POOLCHR_ENDNOTE
     Text [ English ] = "Endnote Symbol" ;
     Text [ english_us ] = "Endnote Characters" ;
     Text [ portuguese ] = "Símbolo de nota final" ;
-    Text [ portuguese_brazilian ] = "Endnotenzeichen" ;
+    Text [ portuguese_brazilian ] = "Caracteres de Nota de Fim" ;
     Text [ swedish ] = "Slutnotstecken" ;
     Text [ danish ] = "Slutnotetegn" ;
     Text [ italian ] = "Carattere nota di chiusura" ;
@@ -352,7 +382,7 @@ String STR_POOLCHR_ENDNOTE
     Text [ dutch ] = "Eindnootteken" ;
     Text[ chinese_simplified ] = "å°¾æ ‡ç¬¦";
     Text[ russian ] = "Ñèìâîëû êîíöåâîé ñíîñêè";
-    Text[ polish ] = "Symbol przypisów koñc.";
+    Text[ polish ] = "Znaki przypisów koñcowych";
     Text[ japanese ] = "æ–‡æœ«è„šæ³¨ç•ªå·";
     Text[ chinese_traditional ] = "å°¾è¨»ç¬¦è™Ÿ";
     Text[ arabic ] = "ÑãÒ ÇáÊÚáíŞ ÇáÎÊÇãí";
@@ -363,6 +393,9 @@ String STR_POOLCHR_ENDNOTE
     Text[ catalan ] = "Caràcters de nota final";
     Text[ finnish ] = "Loppuviitemerkit";
     Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Znaky pro vysvÄ›tlivky";
+    Text[ hebrew ] = "Endnotenzeichen";
+    Text[ hindi ] = "à¤…à¤‚à¤¤ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¥€ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
 };
 String STR_POOLCHR_LINENUM
 {
@@ -370,7 +403,7 @@ String STR_POOLCHR_LINENUM
     Text [ English ] = "Line numbering" ;
     Text [ portuguese ] = "Numeração de linhas" ;
     Text [ english_us ] = "Line numbering" ;
-    Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
+    Text [ portuguese_brazilian ] = "Numeração de linhas" ;
     Text [ swedish ] = "Radnumrering" ;
     Text [ danish ] = "Linjenummerering" ;
     Text [ italian ] = "Numerazione righe" ;
@@ -390,6 +423,9 @@ String STR_POOLCHR_LINENUM
     Text[ catalan ] = "Numeració de línies";
     Text[ finnish ] = "Rivien numerointi";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ Å™Ã¡dkÅ¯";
+    Text[ hebrew ] = "â€®××™×¡×¤×•×¨ ×©×•×¨×•×ªâ€¬";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
 };
 String STR_POOLCHR_IDX_MAIN_ENTRY
 {
@@ -405,10 +441,10 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ italian ] = "Voce principale per indice analitico";
     Text[ danish ] = "Stikordsregister hovedelement";
     Text[ swedish ] = "Sakregister huvudpost";
-    Text[ polish ] = "Skorowidz: wpis g³ówny";
-    Text[ portuguese_brazilian ] = "Main index entry";
+    Text[ polish ] = "G³ówny wpis indeksu";
+    Text[ portuguese_brazilian ] = "Entrada principal de índice";
     Text[ japanese ] = "ç´¢å¼•ã®ä¸»é …ç›®";
-    Text[ korean ] = "ì£¼í•­ëª© ìƒ‰ì¸";
+    Text[ korean ] = "ìƒ‰ì¸ ì£¼ í•­ëª©";
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• ä¸»æ¡ç›®";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ä¸»æ¢ç›®";
     Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí İí ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -417,6 +453,9 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ catalan ] = "Entrada principal de l'índex";
     Text[ finnish ] = "Päähakemistomerkintä";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸”à¸±à¸Šà¸™à¸µà¸«à¸¥à¸±à¸";
+    Text[ czech ] = "PoloÅ¾ka hlavnÃ­ho rejstÅ™Ã­ku";
+    Text[ hebrew ] = "Stichwortverzeichnis Haupteintrag";
+    Text[ hindi ] = "à¤®à¥à¤–à¥à¤¯ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤­à¤°à¤¤à¥€";
 };
 String STR_POOLCHR_FOOTNOTE_ANCHOR
 {
@@ -432,8 +471,8 @@ String STR_POOLCHR_FOOTNOTE_ANCHOR
     Text[ italian ] = "Richiamo di nota";
     Text[ danish ] = "Fodnoteanker";
     Text[ swedish ] = "Fotnotsankare";
-    Text[ polish ] = "Zakotwiczenie przypisów doln.";
-    Text[ portuguese_brazilian ] = "Footnote anchor";
+    Text[ polish ] = "Zakotwiczenie przypisu dolnego";
+    Text[ portuguese_brazilian ] = "Âncora da nota de rodapé";
     Text[ japanese ] = "è„šæ³¨å‚ç…§ç•ªå·";
     Text[ korean ] = "ê°ì£¼ ê¸°ì¤€ ìœ„ì¹˜";
     Text[ chinese_simplified ] = "æ³¨è„šæ ‡è®°";
@@ -443,6 +482,9 @@ String STR_POOLCHR_FOOTNOTE_ANCHOR
     Text[ catalan ] = "Àncora de nota al peu";
     Text[ finnish ] = "Alaviitteen ankkuri";
     Text[ thai ] = "à¸ªà¸¡à¸­à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+    Text[ czech ] = "UkotvenÃ­ poznÃ¡mky pod Äarou";
+    Text[ hebrew ] = "FuÃŸnotenanker";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥€ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤à¤¨à¥à¤•à¤° ";
 };
 String STR_POOLCHR_ENDNOTE_ANCHOR
 {
@@ -458,8 +500,8 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ italian ] = "Richiamo di nota di chiusura";
     Text[ danish ] = "Slutnoteanker";
     Text[ swedish ] = "Slutnotsankare";
-    Text[ polish ] = "Zakotwiczenie przypisów koñc.";
-    Text[ portuguese_brazilian ] = "Endnote anchor";
+    Text[ polish ] = "Zakotwiczenie przypisu koñcowego";
+    Text[ portuguese_brazilian ] = "Âncora de nota de fim";
     Text[ japanese ] = "æ–‡æœ«è„šæ³¨å‚ç…§è¨˜å·";
     Text[ korean ] = "ë¯¸ì£¼ ê¸°ì¤€ ìœ„ì¹˜";
     Text[ chinese_simplified ] = "å°¾æ³¨æ ‡è®°";
@@ -469,6 +511,9 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ catalan ] = "Àncora de nota final";
     Text[ finnish ] = "Loppuviitteen ankkuri";
     Text[ thai ] = "à¸ªà¸¡à¸­à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "UkotvenÃ­ vysvÄ›tlivky";
+    Text[ hebrew ] = "Endnotenanker";
+    Text[ hindi ] = "à¤…à¤‚à¤¤ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤à¤¨à¥à¤•à¤°";
 };
 
  // Zeichenvorlagen fuer HTML
@@ -484,10 +529,10 @@ String STR_POOLCHR_HTML_EMPHASIS
     Text [ spanish ] = "Destacado" ;
     Text [ french ] = "Accentuation" ;
     Text [ portuguese ] = "Destaque" ;
-    Text [ portuguese_brazilian ] = "Betont" ;
+    Text [ portuguese_brazilian ] = "Ênfase" ;
     Text[ chinese_simplified ] = "å¼ºè°ƒ";
     Text[ russian ] = "Âûäåëåíèå";
-    Text[ polish ] = "Wyró¿niony";
+    Text[ polish ] = "Wyró¿nienie";
     Text[ japanese ] = "å¼·èª¿";
     Text[ chinese_traditional ] = "å¼·èª¿";
     Text[ arabic ] = "ÅÈÑÇÒ";
@@ -498,6 +543,9 @@ String STR_POOLCHR_HTML_EMPHASIS
     Text[ catalan ] = "Èmfasi";
     Text[ finnish ] = "Painotus";
     Text[ thai ] = "à¹€à¸™à¹‰à¸™";
+    Text[ czech ] = "ZdÅ¯raznÄ›nÃ­";
+    Text[ hebrew ] = "Betont";
+    Text[ hindi ] = "à¤…à¤¸à¤°";
 };
 String STR_POOLCHR_HTML_CITIATION
 {
@@ -511,7 +559,7 @@ String STR_POOLCHR_HTML_CITIATION
     Text [ spanish ] = "Cita" ;
     Text [ french ] = "Citation" ;
     Text [ portuguese ] = "Citação" ;
-    Text [ portuguese_brazilian ] = "Zitat" ;
+    Text [ portuguese_brazilian ] = "Citação" ;
     Text[ chinese_simplified ] = "å¼•ç”¨æ–‡";
     Text[ russian ] = "Öèòàòà";
     Text[ polish ] = "Cytat";
@@ -525,6 +573,9 @@ String STR_POOLCHR_HTML_CITIATION
     Text[ catalan ] = "Citació";
     Text[ finnish ] = "Lainaus";
     Text[ thai ] = "à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
+    Text[ czech ] = "Citace";
+    Text[ hebrew ] = "Zitat";
+    Text[ hindi ] = "à¤•à¤¹à¤¨à¤¾";
 };
 String STR_POOLCHR_HTML_STRONG
 {
@@ -538,7 +589,7 @@ String STR_POOLCHR_HTML_STRONG
     Text [ spanish ] = "Muy destacado" ;
     Text [ french ] = "Accentuation forte" ;
     Text [ portuguese ] = "Destaque acentuado" ;
-    Text [ portuguese_brazilian ] = "Stark betont" ;
+    Text [ portuguese_brazilian ] = "Destaque enfatizado" ;
     Text[ chinese_simplified ] = "å¼ºè°ƒ";
     Text[ russian ] = "Âûäåëåíèå æèğíûì";
     Text[ polish ] = "Mocno wyró¿niony";
@@ -552,6 +603,9 @@ String STR_POOLCHR_HTML_STRONG
     Text[ catalan ] = "Èmfasi fort";
     Text[ finnish ] = "Vahva painotus";
     Text[ thai ] = "à¹€à¸™à¹‰à¸™à¸«à¸™à¸±à¸";
+    Text[ czech ] = "SilnÃ© zdÅ¯raznÄ›nÃ­";
+    Text[ hebrew ] = "Stark betont";
+    Text[ hindi ] = "à¤…à¤§à¤¿à¤• à¤…à¤¸à¤°";
 };
 String STR_POOLCHR_HTML_CODE
 {
@@ -565,7 +619,7 @@ String STR_POOLCHR_HTML_CODE
     Text [ spanish ] = "Texto fuente" ;
     Text [ french ] = "Texte source" ;
     Text [ portuguese ] = "Texto-fonte" ;
-    Text [ portuguese_brazilian ] = "Quelltext" ;
+    Text [ portuguese_brazilian ] = "Texto de Origem" ;
     Text[ chinese_simplified ] = "æºæ–‡æœ¬";
     Text[ russian ] = "Èñõîäíûé òåêñò";
     Text[ polish ] = "Tekst Ÿród³owy";
@@ -574,11 +628,14 @@ String STR_POOLCHR_HTML_CODE
     Text[ arabic ] = "äÕ ÇáãÕÏÑ";
     Text[ greek ] = "Êåßìåíï ğñïİëåõóçò";
     Text[ korean ] = "ì›ë³¸ í…ìŠ¤íŠ¸";
-    Text[ turkish ] = "Kaynak kodu";
+    Text[ turkish ] = "Kaynak metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Text font";
     Text[ finnish ] = "Lähdeteksti";
     Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "ZdrojovÃ½ text";
+    Text[ hebrew ] = "Quelltext";
+    Text[ hindi ] = "à¤®à¥‚à¤² à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
 };
 String STR_POOLCHR_HTML_SAMPLE
 {
@@ -592,7 +649,7 @@ String STR_POOLCHR_HTML_SAMPLE
     Text [ spanish ] = "Ejemplo" ;
     Text [ french ] = "Exemple" ;
     Text [ portuguese ] = "Exemplo" ;
-    Text [ portuguese_brazilian ] = "Beispiel" ;
+    Text [ portuguese_brazilian ] = "Exemplo" ;
     Text[ chinese_simplified ] = "ç¤ºä¾‹";
     Text[ russian ] = "Ïğèìåğ";
     Text[ polish ] = "Przyk³ad";
@@ -606,6 +663,9 @@ String STR_POOLCHR_HTML_SAMPLE
     Text[ catalan ] = "Exemple";
     Text[ finnish ] = "Esimerkki";
     Text[ thai ] = "à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
+    Text[ czech ] = "PÅ™Ã­klad";
+    Text[ hebrew ] = "Beispiel";
+    Text[ hindi ] = "à¤‰à¤¦à¤¾à¤¹à¤°à¤£";
 };
 String STR_POOLCHR_HTML_KEYBOARD
 {
@@ -619,7 +679,7 @@ String STR_POOLCHR_HTML_KEYBOARD
     Text [ spanish ] = "Entrada del usuario" ;
     Text [ french ] = "Saisie de l'utilisateur" ;
     Text [ portuguese ] = "Entrada do utilizador" ;
-    Text [ portuguese_brazilian ] = "Benutzereingabe" ;
+    Text [ portuguese_brazilian ] = "Entrada do usuário" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…è¾“å…¥";
     Text[ russian ] = "Ââîä ïîëüçîâàòåëÿ";
     Text[ polish ] = "Wpis u¿ytkownika";
@@ -633,6 +693,9 @@ String STR_POOLCHR_HTML_KEYBOARD
     Text[ catalan ] = "Entrada de l'usuari";
     Text[ finnish ] = "Käyttäjämerkintä";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
+    Text[ czech ] = "UÅ¾ivatelskÃ¡ poloÅ¾ka";
+    Text[ hebrew ] = "Benutzereingabe";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";
 };
 String STR_POOLCHR_HTML_VARIABLE
 {
@@ -646,7 +709,7 @@ String STR_POOLCHR_HTML_VARIABLE
     Text [ spanish ] = "Variable" ;
     Text [ french ] = "Variable" ;
     Text [ portuguese ] = "Variável" ;
-    Text [ portuguese_brazilian ] = "Variable" ;
+    Text [ portuguese_brazilian ] = "Variável" ;
     Text[ chinese_simplified ] = "å¯å˜";
     Text[ russian ] = "Ïåğåìåííàÿ";
     Text[ polish ] = "Zmienna";
@@ -660,6 +723,9 @@ String STR_POOLCHR_HTML_VARIABLE
     Text[ catalan ] = "Variable";
     Text[ finnish ] = "Muuttuja";
     Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸£";
+    Text[ czech ] = "PromÄ›nnÃ¡";
+    Text[ hebrew ] = "Variable";
+    Text[ hindi ] = "à¤µà¥‡à¤°à¤¿à¤à¤¬à¤²";
 };
 String STR_POOLCHR_HTML_DEFINSTANCE
 {
@@ -673,7 +739,7 @@ String STR_POOLCHR_HTML_DEFINSTANCE
     Text [ spanish ] = "Definición" ;
     Text [ french ] = "Définition" ;
     Text [ portuguese ] = "Definição" ;
-    Text [ portuguese_brazilian ] = "Definition" ;
+    Text [ portuguese_brazilian ] = "Definição" ;
     Text[ chinese_simplified ] = "å®šä¹‰";
     Text[ russian ] = "Îïğåäåëåíèå";
     Text[ polish ] = "Definicja";
@@ -687,6 +753,9 @@ String STR_POOLCHR_HTML_DEFINSTANCE
     Text[ catalan ] = "Definició";
     Text[ finnish ] = "Määritys";
     Text[ thai ] = "à¸„à¸³à¸ˆà¸³à¸à¸±à¸”à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "Definice";
+    Text[ hebrew ] = "Definition";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾";
 };
 String STR_POOLCHR_HTML_TELETYPE
 {
@@ -700,7 +769,7 @@ String STR_POOLCHR_HTML_TELETYPE
     Text [ spanish ] = "Texto no proporcional" ;
     Text [ french ] = "Texte non proportionnel" ;
     Text [ portuguese ] = "Texto não-proporcional" ;
-    Text [ portuguese_brazilian ] = "Nicht-proportionaler Text" ;
+    Text [ portuguese_brazilian ] = "Telex" ;
     Text[ chinese_simplified ] = "éæˆæ¯”ä¾‹æ–‡å­—";
     Text[ russian ] = "Íåïğîïîğöèîíàëüíûé òåêñò";
     Text[ polish ] = "Tekst nieproporcjonalny";
@@ -709,11 +778,14 @@ String STR_POOLCHR_HTML_TELETYPE
     Text[ arabic ] = "äÕ ÛíÑ ÊäÇÓÈí";
     Text[ greek ] = "Ìç áñìïíéêü êåßìåíï";
     Text[ korean ] = "í…”ë ˆíƒ€ì´í”„";
-    Text[ turkish ] = "Orantısız yazıtipi";
+    Text[ turkish ] = "Daktilo yazıtipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Teletip";
     Text[ finnish ] = "Konekirjoitusteksti";
     Text[ thai ] = "à¹‚à¸—à¸£à¹€à¸¥à¸‚";
+    Text[ czech ] = "NeproporcionÃ¡lnÃ­ text";
+    Text[ hebrew ] = "Nicht-proportionaler Text";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤²à¤¿à¤Ÿà¤‡à¤ª";
 };
 
 // Rahmenvorlagen
@@ -729,7 +801,7 @@ String STR_POOLFRM_FRAME
     Text [ swedish ] = "Ram" ;
     Text [ danish ] = "Ramme" ;
     Text [ portuguese ] = "Moldura" ;
-    Text [ portuguese_brazilian ] = "Rahmen" ;
+    Text [ portuguese_brazilian ] = "Moldura" ;
     Text[ chinese_simplified ] = "æ¡†";
     Text[ russian ] = "Âğåçêà";
     Text[ polish ] = "Ramka";
@@ -743,6 +815,9 @@ String STR_POOLFRM_FRAME
     Text[ catalan ] = "Marc";
     Text[ finnish ] = "Kehys";
     Text[ thai ] = "à¸à¸£à¸­à¸š";
+    Text[ czech ] = "RÃ¡mec";
+    Text[ hebrew ] = "â€®××¡×’×¨×ªâ€¬";
+    Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤®";
 };
 String STR_POOLFRM_GRAPHIC
 {
@@ -756,7 +831,7 @@ String STR_POOLFRM_GRAPHIC
     Text [ swedish ] = "Grafik" ;
     Text [ danish ] = "Grafik" ;
     Text [ portuguese ] = "Imagem" ;
-    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text [ portuguese_brazilian ] = "Figura" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
     Text[ russian ] = "Ãğàôèêà";
     Text[ polish ] = "Grafika";
@@ -770,6 +845,9 @@ String STR_POOLFRM_GRAPHIC
     Text[ catalan ] = "Gràfic";
     Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
+    Text[ czech ] = "ObrÃ¡zky";
+    Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
+    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
 };
 String STR_POOLFRM_OLE
 {
@@ -797,6 +875,9 @@ String STR_POOLFRM_OLE
     Text[ catalan ] = "OLE";
     Text[ finnish ] = "OLE";
     Text[ thai ] = "OLE";
+    Text[ czech ] = "OLE";
+    Text[ hebrew ] = "OLE";
+    Text[ hindi ] = "OLE";
 };
 String STR_POOLFRM_FORMEL
 {
@@ -810,7 +891,7 @@ String STR_POOLFRM_FORMEL
     Text [ swedish ] = "Formel" ;
     Text [ danish ] = "Formel" ;
     Text [ portuguese ] = "Fórmula" ;
-    Text [ portuguese_brazilian ] = "Formel" ;
+    Text [ portuguese_brazilian ] = "Fórmula" ;
     Text[ chinese_simplified ] = "å…¬å¼";
     Text[ russian ] = "Ôîğìóëà";
     Text[ polish ] = "Formu³a";
@@ -824,6 +905,9 @@ String STR_POOLFRM_FORMEL
     Text[ catalan ] = "Fórmula";
     Text[ finnish ] = "Kaava";
     Text[ thai ] = "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
+    Text[ czech ] = "Vzorec";
+    Text[ hebrew ] = "â€®× ×•×¡×—×”â€¬";
+    Text[ hindi ] = "à¤¸à¥‚à¤¤à¥à¤°";
 };
 String STR_POOLFRM_MARGINAL
 {
@@ -837,10 +921,10 @@ String STR_POOLFRM_MARGINAL
     Text [ swedish ] = "Marginalanteckning" ;
     Text [ danish ] = "Randbemærkning" ;
     Text [ portuguese ] = "Notas à margem" ;
-    Text [ portuguese_brazilian ] = "Marginalie" ;
+    Text [ portuguese_brazilian ] = "Notas à margem" ;
     Text[ chinese_simplified ] = "æ—æ³¨";
     Text[ russian ] = "Çàìåòêè";
-    Text[ polish ] = "Marginesy";
+    Text[ polish ] = "Marginalia";
     Text[ japanese ] = "å‚æ³¨";
     Text[ chinese_traditional ] = "æ—è¨»";
     Text[ arabic ] = "ãáÇÍÙÇÊ åÇãÔíÉ";
@@ -851,6 +935,9 @@ String STR_POOLFRM_MARGINAL
     Text[ catalan ] = "Comentaris al marge";
     Text[ finnish ] = "Reunahuomautukset";
     Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸‚à¹‰à¸²à¸‡ à¹†";
+    Text[ czech ] = "PoznÃ¡mka na okraj";
+    Text[ hebrew ] = "Marginalie";
+    Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤œà¤¿à¤¨à¤¾à¤²à¤¿à¤¯à¤¾";
 };
 String STR_POOLFRM_WATERSIGN
 {
@@ -864,10 +951,10 @@ String STR_POOLFRM_WATERSIGN
     Text [ swedish ] = "Vattenmärke" ;
     Text [ danish ] = "Vandmærke" ;
     Text [ portuguese ] = "Marca de água" ;
-    Text [ portuguese_brazilian ] = "Wasserzeichen" ;
+    Text [ portuguese_brazilian ] = "Marca d'água" ;
     Text[ chinese_simplified ] = "æ°´å°";
     Text[ russian ] = "Âîäÿíûå çíàêè";
-    Text[ polish ] = "Znaki wodne";
+    Text[ polish ] = "Znak wodny";
     Text[ japanese ] = "é€ã‹ã—";
     Text[ chinese_traditional ] = "æ°´å°";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
@@ -878,6 +965,9 @@ String STR_POOLFRM_WATERSIGN
     Text[ catalan ] = "Marca a l'aigua";
     Text[ finnish ] = "Vesileima";
     Text[ thai ] = "à¸¥à¸²à¸¢à¸™à¹‰à¸³";
+    Text[ czech ] = "Vodoznak";
+    Text[ hebrew ] = "Wasserzeichen";
+    Text[ hindi ] = "à¤œà¤²à¤¸à¤‚à¤•à¥‡à¤¤";
 };
 String STR_POOLFRM_LABEL
 {
@@ -906,6 +996,9 @@ String STR_POOLFRM_LABEL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Etiquetes";
     Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "Popisky";
+    Text[ hebrew ] = "â€®××“×‘×§×•×ªâ€¬";
+    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
 };
  // -----------------
  // Vorlagen-Namen
@@ -922,7 +1015,7 @@ String STR_POOLCOLL_STANDARD
     Text [ swedish ] = "Standard" ;
     Text [ danish ] = "Standard" ;
     Text [ portuguese ] = "Padrão" ;
-    Text [ portuguese_brazilian ] = "Standard" ;
+    Text [ portuguese_brazilian ] = "Padrão" ;
     Text[ chinese_simplified ] = "æ ‡å‡†";
     Text[ russian ] = "Îáû÷íûé";
     Text[ polish ] = "Domyœlnie";
@@ -931,11 +1024,14 @@ String STR_POOLCOLL_STANDARD
     Text[ arabic ] = "ŞíÇÓí";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "ê¸°ë³¸ê°’";
-    Text[ turkish ] = "Standart";
+    Text[ turkish ] = "Öndeğer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
     Text[ finnish ] = "Oletus";
     Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­";
+    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
 };
 String STR_POOLCOLL_TEXT
 {
@@ -950,10 +1046,10 @@ String STR_POOLCOLL_TEXT
     Text [ swedish ] = "Brödtext" ;
     Text [ danish ] = "Brødtekst" ;
     Text [ portuguese ] = "Corpo do texto" ;
-    Text [ portuguese_brazilian ] = "Textk?per" ;
+    Text [ portuguese_brazilian ] = "Corpo do texto" ;
     Text[ chinese_simplified ] = "æ­£æ–‡";
     Text[ russian ] = "Îñíîâíîé òåêñò";
-    Text[ polish ] = "Obszar tekstu";
+    Text[ polish ] = "Treœæ tekstu";
     Text[ japanese ] = "æœ¬æ–‡";
     Text[ chinese_traditional ] = "å…§æ–‡";
     Text[ arabic ] = "ÌÓã ÇáäÕ";
@@ -964,6 +1060,9 @@ String STR_POOLCOLL_TEXT
     Text[ catalan ] = "Cos del text";
     Text[ finnish ] = "Leipäteksti";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "TÄ›lo textu";
+    Text[ hebrew ] = "TextkÃ¶rper";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤®à¥à¤–à¥à¤¯ à¤­à¤¾à¤—";
 };
 String STR_POOLCOLL_TEXT_IDENT
 {
@@ -978,7 +1077,7 @@ String STR_POOLCOLL_TEXT_IDENT
     Text [ swedish ] = "Dra in första raden" ;
     Text [ danish ] = "Første linjes indrykning" ;
     Text [ portuguese ] = "Abrir parágrafo" ;
-    Text [ portuguese_brazilian ] = "Textk?per Einzug" ;
+    Text [ portuguese_brazilian ] = "Recuo da primeira linha" ;
     Text[ chinese_simplified ] = "æ­£æ–‡ç¼©è¿›";
     Text[ russian ] = "Ïåğâàÿ ñòğîêà ñ îòñòóïîì";
     Text[ polish ] = "Wciêcie pierwszego wiersza";
@@ -992,6 +1091,9 @@ String STR_POOLCOLL_TEXT_IDENT
     Text[ catalan ] = "Sagnat de primera línia";
     Text[ finnish ] = "Ensimmäisen rivin sisennys";
     Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¸šà¸£à¸£à¸—à¸±à¸”à¹à¸£à¸";
+    Text[ czech ] = "OdsazenÃ­ prvnÃ­ho Å™Ã¡dku";
+    Text[ hebrew ] = "TextkÃ¶rper Einzug";
+    Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤°à¥‡à¤–à¤¾ à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
 };
 String STR_POOLCOLL_TEXT_NEGIDENT
 {
@@ -1006,7 +1108,7 @@ String STR_POOLCOLL_TEXT_NEGIDENT
     Text [ swedish ] = "Negativt indrag av första raden" ;
     Text [ danish ] = "Hængende indrykning" ;
     Text [ portuguese ] = "Abrir parágrafo negativo" ;
-    Text [ portuguese_brazilian ] = "Textk?per Einzug negativ" ;
+    Text [ portuguese_brazilian ] = "Recuo do parágrafo" ;
     Text[ chinese_simplified ] = "æ­£æ–‡åå‘ç¼©è¿›";
     Text[ russian ] = "Îáğàòíûé îòñòóï";
     Text[ polish ] = "Wysuniêcie tekstu";
@@ -1020,6 +1122,9 @@ String STR_POOLCOLL_TEXT_NEGIDENT
     Text[ catalan ] = "Sagnat negatiu";
     Text[ finnish ] = "Riippuva sisennys";
     Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¸¥à¸­à¸¢";
+    Text[ czech ] = "PÅ™edsazenÃ­ prvnÃ­ho Å™Ã¡dku";
+    Text[ hebrew ] = "TextkÃ¶rper Einzug negativ";
+    Text[ hindi ] = "à¤¹à¤¾à¤‚à¤—à¤¿à¤‚à¤— à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
 };
 String STR_POOLCOLL_TEXT_MOVE
 {
@@ -1034,7 +1139,7 @@ String STR_POOLCOLL_TEXT_MOVE
     Text [ swedish ] = "Dra in hela stycket" ;
     Text [ danish ] = "Brødtekst indrykning" ;
     Text [ portuguese ] = "Avanço corpo do texto" ;
-    Text [ portuguese_brazilian ] = "Textk?per Einr?kung" ;
+    Text [ portuguese_brazilian ] = "Recuo do corpo de texto" ;
     Text[ chinese_simplified ] = "æ­£æ–‡ç¼©è¿›";
     Text[ russian ] = "Îñíîâíîé òåêñò ñ îòñòóïîì";
     Text[ polish ] = "Wciêcie tekstu";
@@ -1048,6 +1153,9 @@ String STR_POOLCOLL_TEXT_MOVE
     Text[ catalan ] = "Sagnat del cos del text";
     Text[ finnish ] = "Sisennetty leipäteksti";
     Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹€à¸™à¸·à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "OdsazenÃ­ tÄ›la textu";
+    Text[ hebrew ] = "TextkÃ¶rper EinrÃ¼ckung";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤®à¥à¤–à¥à¤¯ à¤­à¤¾à¤— à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ ";
 };
 String STR_POOLCOLL_GREETING
 {
@@ -1062,7 +1170,7 @@ String STR_POOLCOLL_GREETING
     Text [ swedish ] = "Hälsningsfras" ;
     Text [ danish ] = "Sluthilsen" ;
     Text [ portuguese ] = "Saudação" ;
-    Text [ portuguese_brazilian ] = "Gru?formel" ;
+    Text [ portuguese_brazilian ] = "Encerramento" ;
     Text[ chinese_simplified ] = "é—®å€™è¯­";
     Text[ russian ] = "Ïğèâåòñòâèå";
     Text[ polish ] = "Pozdrowienie";
@@ -1071,11 +1179,14 @@ String STR_POOLCOLL_GREETING
     Text[ arabic ] = "ÇáÊÍíÉ";
     Text[ greek ] = "Ğñïóöşíçóç";
     Text[ korean ] = "ì¸ì‚¬ë§";
-    Text[ turkish ] = "Selamlama";
+    Text[ turkish ] = "Tamamlayıcı bitiş";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tancament complementari";
     Text[ finnish ] = "Loppusanat";
     Text[ thai ] = "à¸¥à¸‡à¸—à¹‰à¸²à¸¢à¹à¸ªà¸”à¸‡à¸„à¸§à¸²à¸¡à¹€à¸„à¸²à¸£à¸";
+    Text[ czech ] = "ZdvoÅ™ilostnÃ­ zakonÄenÃ­";
+    Text[ hebrew ] = "GruÃŸformel";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤ªà¥‚à¤°à¤• à¤¬à¤‚à¤¦";
 };
 String STR_POOLCOLL_SIGNATURE
 {
@@ -1089,7 +1200,7 @@ String STR_POOLCOLL_SIGNATURE
     Text [ swedish ] = "Underskrift" ;
     Text [ danish ] = "Underskrift" ;
     Text [ portuguese ] = "Assinatura" ;
-    Text [ portuguese_brazilian ] = "Unterschrift" ;
+    Text [ portuguese_brazilian ] = "Assinatura" ;
     Text[ chinese_simplified ] = "ç­¾å";
     Text[ russian ] = "Ïîäïèñü";
     Text[ polish ] = "Podpis";
@@ -1103,6 +1214,9 @@ String STR_POOLCOLL_SIGNATURE
     Text[ catalan ] = "Signatura";
     Text[ finnish ] = "Allekirjoitus";
     Text[ thai ] = "à¸¥à¸²à¸¢à¹€à¸‹à¹‡à¸™";
+    Text[ czech ] = "Podpis";
+    Text[ hebrew ] = "Unterschrift";
+    Text[ hindi ] = "à¤¹à¤¸à¥à¤¤à¤¾à¤•à¥à¤·à¤°";
 };
 String STR_POOLCOLL_HEADLINE_BASE
 {
@@ -1117,10 +1231,10 @@ String STR_POOLCOLL_HEADLINE_BASE
     Text [ swedish ] = "Överskrift" ;
     Text [ danish ] = "Overskrift" ;
     Text [ portuguese ] = "Título" ;
-    Text [ portuguese_brazilian ] = "?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê";
-    Text[ polish ] = "Tytu³";
+    Text[ polish ] = "Nag³ówek";
     Text[ japanese ] = "è¦‹å‡ºã—";
     Text[ chinese_traditional ] = "æ¨™é¡Œ";
     Text[ arabic ] = "ÇáÚäæÇä";
@@ -1131,6 +1245,9 @@ String STR_POOLCOLL_HEADLINE_BASE
     Text[ catalan ] = "Encapçalament";
     Text[ finnish ] = "Otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­";
+    Text[ czech ] = "Nadpis";
+    Text[ hebrew ] = "Ãœberschrift";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_NUMBUL_BASE
 {
@@ -1144,7 +1261,7 @@ String STR_POOLCOLL_NUMBUL_BASE
     Text [ swedish ] = "Lista" ;
     Text [ danish ] = "Liste" ;
     Text [ portuguese ] = "Lista" ;
-    Text [ portuguese_brazilian ] = "Liste" ;
+    Text [ portuguese_brazilian ] = "Lista" ;
     Text[ chinese_simplified ] = "åˆ—å•";
     Text[ russian ] = "Ñïèñîê";
     Text[ polish ] = "Lista";
@@ -1158,6 +1275,9 @@ String STR_POOLCOLL_NUMBUL_BASE
     Text[ catalan ] = "Llista";
     Text[ finnish ] = "Luettelo";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
+    Text[ czech ] = "Seznam";
+    Text[ hebrew ] = "Liste";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€";
 };
 String STR_POOLCOLL_REGISTER_BASE
 {
@@ -1171,7 +1291,7 @@ String STR_POOLCOLL_REGISTER_BASE
     Text [ swedish ] = "Förteckning" ;
     Text [ danish ] = "Indeks" ;
     Text [ portuguese ] = "Índice" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Índice" ;
     Text[ chinese_simplified ] = "ç›®å½•";
     Text[ russian ] = "Óêàçàòåëü";
     Text[ polish ] = "Indeks";
@@ -1185,6 +1305,9 @@ String STR_POOLCOLL_REGISTER_BASE
     Text[ catalan ] = "Índex";
     Text[ finnish ] = "Hakemisto";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
+    Text[ czech ] = "RejstÅ™Ã­k";
+    Text[ hebrew ] = "Verzeichnis";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾";
 };
 String STR_POOLCOLL_CONFRONTATION
 {
@@ -1199,10 +1322,10 @@ String STR_POOLCOLL_CONFRONTATION
     Text [ swedish ] = "Indrag lista" ;
     Text [ danish ] = "Opstillingsindrykning" ;
     Text [ portuguese ] = "Confrontar" ;
-    Text [ portuguese_brazilian ] = "Gegen?erstellung" ;
+    Text [ portuguese_brazilian ] = "Recuo da Lista" ;
     Text[ chinese_simplified ] = "ç¼©è¿›";
     Text[ russian ] = "Îòñòóïû";
-    Text[ polish ] = "Wciêcie i wysuniêcie";
+    Text[ polish ] = "Wciêcie listy";
     Text[ japanese ] = "ãƒªã‚¹ãƒˆã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ";
     Text[ chinese_traditional ] = "ç¸®æ’";
     Text[ arabic ] = "ãæÇÌåÉ";
@@ -1213,6 +1336,9 @@ String STR_POOLCOLL_CONFRONTATION
     Text[ catalan ] = "Sagnat de la llista";
     Text[ finnish ] = "Luettelon sisennys";
     Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¸£à¸²à¸¢à¸à¸²à¸£";
+    Text[ czech ] = "OdsazenÃ­ seznamu";
+    Text[ hebrew ] = "GegenÃ¼berstellung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
 };
 String STR_POOLCOLL_MARGINAL
 {
@@ -1226,10 +1352,10 @@ String STR_POOLCOLL_MARGINAL
     Text [ swedish ] = "Marginalanteckning" ;
     Text [ danish ] = "Randbemærkning" ;
     Text [ portuguese ] = "Notas à margem" ;
-    Text [ portuguese_brazilian ] = "Marginalie" ;
+    Text [ portuguese_brazilian ] = "Notas à margem" ;
     Text[ chinese_simplified ] = "æ—æ³¨";
     Text[ russian ] = "Çàìåòêè";
-    Text[ polish ] = "Marginesy";
+    Text[ polish ] = "Marginalia";
     Text[ japanese ] = "å‚æ³¨";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "æ—è¨»";
@@ -1240,6 +1366,9 @@ String STR_POOLCOLL_MARGINAL
     Text[ catalan ] = "Comentaris al marge";
     Text[ finnish ] = "Reunahuomautukset";
     Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸‚à¹‰à¸²à¸‡ à¹†";
+    Text[ czech ] = "PoznÃ¡mka na okraj";
+    Text[ hebrew ] = "Marginalie";
+    Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤œà¤¿à¤¨à¤¾à¤²à¤¿à¤¯à¤¾";
 };
 String STR_POOLCOLL_HEADLINE1
 {
@@ -1254,10 +1383,10 @@ String STR_POOLCOLL_HEADLINE1
     Text [ swedish ] = "Överskrift 1" ;
     Text [ danish ] = "Overskrift 1" ;
     Text [ portuguese ] = "Título 1" ;
-    Text [ portuguese_brazilian ] = "?berschrift 1" ;
+    Text [ portuguese_brazilian ] = "Título 1" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 1";
     Text[ russian ] = "Çàãîëîâîê 1";
-    Text[ polish ] = "Tytu³ 1";
+    Text[ polish ] = "Nag³ówek 1";
     Text[ japanese ] = "è¦‹å‡ºã— 1";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 1";
     Text[ arabic ] = "ÇáÚäæÇä 1";
@@ -1268,6 +1397,9 @@ String STR_POOLCOLL_HEADLINE1
     Text[ catalan ] = "Encapçalament 1";
     Text[ finnish ] = "Otsikko 1";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 1";
+    Text[ czech ] = "Nadpis 1";
+    Text[ hebrew ] = "Ãœberschrift 1";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•  1";
 };
 String STR_POOLCOLL_HEADLINE2
 {
@@ -1281,11 +1413,11 @@ String STR_POOLCOLL_HEADLINE2
     Text [ dutch ] = "Kop 2" ;
     Text [ swedish ] = "Överskrift 2" ;
     Text [ danish ] = "Overskrift 2" ;
-    Text [ portuguese_brazilian ] = "?berschrift 2" ;
+    Text [ portuguese_brazilian ] = "Título 2" ;
     Text [ portuguese ] = "Título 2" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 2";
     Text[ russian ] = "Çàãîëîâîê 2";
-    Text[ polish ] = "Tytu³ 2";
+    Text[ polish ] = "Nag³ówek 2";
     Text[ japanese ] = "è¦‹å‡ºã— 2";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 2";
     Text[ arabic ] = "ÇáÚäæÇä 2";
@@ -1296,6 +1428,9 @@ String STR_POOLCOLL_HEADLINE2
     Text[ catalan ] = "Encapçalament 2";
     Text[ finnish ] = "Otsikko 2";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 2";
+    Text[ czech ] = "Nadpis 2";
+    Text[ hebrew ] = "Ãœberschrift 2";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 2";
 };
 String STR_POOLCOLL_HEADLINE3
 {
@@ -1309,11 +1444,11 @@ String STR_POOLCOLL_HEADLINE3
     Text [ dutch ] = "Kop 3" ;
     Text [ swedish ] = "Överskrift 3" ;
     Text [ danish ] = "Overskrift 3" ;
-    Text [ portuguese_brazilian ] = "?berschrift 3" ;
+    Text [ portuguese_brazilian ] = "Título 3" ;
     Text [ portuguese ] = "Título 3" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 3";
     Text[ russian ] = "Çàãîëîâîê 3";
-    Text[ polish ] = "Tytu³ 3";
+    Text[ polish ] = "Nag³ówek 3";
     Text[ japanese ] = "è¦‹å‡ºã— 3";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 3";
     Text[ arabic ] = "ÇáÚäæÇä 3";
@@ -1324,6 +1459,9 @@ String STR_POOLCOLL_HEADLINE3
     Text[ catalan ] = "Encapçalament 3";
     Text[ finnish ] = "Otsikko 3";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 3";
+    Text[ czech ] = "Nadpis 3";
+    Text[ hebrew ] = "Ãœberschrift 3";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 3";
 };
 String STR_POOLCOLL_HEADLINE4
 {
@@ -1337,11 +1475,11 @@ String STR_POOLCOLL_HEADLINE4
     Text [ dutch ] = "Kop 4" ;
     Text [ swedish ] = "Överskrift 4" ;
     Text [ danish ] = "Overskrift 4" ;
-    Text [ portuguese_brazilian ] = "?berschrift 4" ;
+    Text [ portuguese_brazilian ] = "Título 4" ;
     Text [ portuguese ] = "Título 4" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 4";
     Text[ russian ] = "Çàãîëîâîê 4";
-    Text[ polish ] = "Tytu³ 4";
+    Text[ polish ] = "Nag³ówek 4";
     Text[ japanese ] = "è¦‹å‡ºã— 4";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 4";
     Text[ arabic ] = "ÇáÚäæÇä 4";
@@ -1352,6 +1490,9 @@ String STR_POOLCOLL_HEADLINE4
     Text[ catalan ] = "Encapçalament 4";
     Text[ finnish ] = "Otsikko 4";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 4";
+    Text[ czech ] = "Nadpis 4";
+    Text[ hebrew ] = "Ãœberschrift 4";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 4";
 };
 String STR_POOLCOLL_HEADLINE5
 {
@@ -1365,11 +1506,11 @@ String STR_POOLCOLL_HEADLINE5
     Text [ dutch ] = "Kop 5" ;
     Text [ swedish ] = "Överskrift 5" ;
     Text [ danish ] = "Overskrift 5" ;
-    Text [ portuguese_brazilian ] = "?berschrift 5" ;
+    Text [ portuguese_brazilian ] = "Título 5" ;
     Text [ portuguese ] = "Título 5" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 5";
     Text[ russian ] = "Çàãîëîâîê 5";
-    Text[ polish ] = "Tytu³ 5";
+    Text[ polish ] = "Nag³ówek 5";
     Text[ japanese ] = "è¦‹å‡ºã— 5";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 5";
     Text[ arabic ] = "ÇáÚäæÇä 5";
@@ -1380,6 +1521,9 @@ String STR_POOLCOLL_HEADLINE5
     Text[ catalan ] = "Encapçalament 5";
     Text[ finnish ] = "Otsikko 5";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 5";
+    Text[ czech ] = "Nadpis 5";
+    Text[ hebrew ] = "Ãœberschrift 5";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 5";
 };
 String STR_POOLCOLL_HEADLINE6
 {
@@ -1393,11 +1537,11 @@ String STR_POOLCOLL_HEADLINE6
     Text [ dutch ] = "Kop 6" ;
     Text [ swedish ] = "Överskrift 6" ;
     Text [ danish ] = "Overskrift 6" ;
-    Text [ portuguese_brazilian ] = "?berschrift 6" ;
+    Text [ portuguese_brazilian ] = "Título 6" ;
     Text [ portuguese ] = "Título 6" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 6";
     Text[ russian ] = "Çàãîëîâîê 6";
-    Text[ polish ] = "Tytu³ 6";
+    Text[ polish ] = "Nag³ówek 6";
     Text[ japanese ] = "è¦‹å‡ºã— 6";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 6";
     Text[ arabic ] = "ÇáÚäæÇä 6";
@@ -1408,6 +1552,9 @@ String STR_POOLCOLL_HEADLINE6
     Text[ catalan ] = "Encapçalament 6";
     Text[ finnish ] = "Otsikko 6";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 6";
+    Text[ czech ] = "Nadpis 6";
+    Text[ hebrew ] = "Ãœberschrift 6";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 6";
 };
 String STR_POOLCOLL_HEADLINE7
 {
@@ -1421,11 +1568,11 @@ String STR_POOLCOLL_HEADLINE7
     Text [ dutch ] = "Kop 7" ;
     Text [ swedish ] = "Överskrift 7" ;
     Text [ danish ] = "Overskrift 7" ;
-    Text [ portuguese_brazilian ] = "?berschrift 7" ;
+    Text [ portuguese_brazilian ] = "Título 7" ;
     Text [ portuguese ] = "Título 7" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 7";
     Text[ russian ] = "Çàãîëîâîê 7";
-    Text[ polish ] = "Tytu³ 7";
+    Text[ polish ] = "Nag³ówek 7";
     Text[ japanese ] = "è¦‹å‡ºã— 7";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 7";
     Text[ arabic ] = "ÇáÚäæÇä 7";
@@ -1436,6 +1583,9 @@ String STR_POOLCOLL_HEADLINE7
     Text[ catalan ] = "Encapçalament 7";
     Text[ finnish ] = "Otsikko 7";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 7";
+    Text[ czech ] = "Nadpis 7";
+    Text[ hebrew ] = "Ãœberschrift 7";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 7";
 };
 String STR_POOLCOLL_HEADLINE8
 {
@@ -1449,11 +1599,11 @@ String STR_POOLCOLL_HEADLINE8
     Text [ dutch ] = "Kop 8" ;
     Text [ swedish ] = "Överskrift 8" ;
     Text [ danish ] = "Overskrift 8" ;
-    Text [ portuguese_brazilian ] = "?berschrift 8" ;
+    Text [ portuguese_brazilian ] = "Título 8" ;
     Text [ portuguese ] = "Título 8" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 8";
     Text[ russian ] = "Çàãîëîâîê 8";
-    Text[ polish ] = "Tytu³ 8";
+    Text[ polish ] = "Nag³ówek 8";
     Text[ japanese ] = "è¦‹å‡ºã— 8";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 8";
     Text[ arabic ] = "ÇáÚäæÇä 8";
@@ -1464,6 +1614,9 @@ String STR_POOLCOLL_HEADLINE8
     Text[ catalan ] = "Encapçalament 8";
     Text[ finnish ] = "Otsikko 8";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 8";
+    Text[ czech ] = "Nadpis 8";
+    Text[ hebrew ] = "Ãœberschrift 8";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 8";
 };
 String STR_POOLCOLL_HEADLINE9
 {
@@ -1477,11 +1630,11 @@ String STR_POOLCOLL_HEADLINE9
     Text [ dutch ] = "Kop 9" ;
     Text [ swedish ] = "Överskrift 9" ;
     Text [ danish ] = "Overskrift 9" ;
-    Text [ portuguese_brazilian ] = "?berschrift 9" ;
+    Text [ portuguese_brazilian ] = "Título 9" ;
     Text [ portuguese ] = "Título 9" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 9";
     Text[ russian ] = "Çàãîëîâîê 9";
-    Text[ polish ] = "Tytu³ 9";
+    Text[ polish ] = "Nag³ówek 9";
     Text[ japanese ] = "è¦‹å‡ºã— 9";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 9";
     Text[ arabic ] = "ÇáÚäæÇä 9";
@@ -1492,6 +1645,9 @@ String STR_POOLCOLL_HEADLINE9
     Text[ catalan ] = "Encapçalament 9";
     Text[ finnish ] = "Otsikko 9";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 9";
+    Text[ czech ] = "Nadpis 9";
+    Text[ hebrew ] = "Ãœberschrift 9";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 9";
 };
 String STR_POOLCOLL_HEADLINE10
 {
@@ -1505,11 +1661,11 @@ String STR_POOLCOLL_HEADLINE10
     Text [ dutch ] = "Kop 10" ;
     Text [ swedish ] = "Överskrift 10" ;
     Text [ danish ] = "Overskrift 10" ;
-    Text [ portuguese_brazilian ] = "?berschrift 10" ;
+    Text [ portuguese_brazilian ] = "Título 10" ;
     Text [ portuguese ] = "Título 10" ;
     Text[ chinese_simplified ] = "æ ‡é¢˜ 10";
     Text[ russian ] = "Çàãîëîâîê 10";
-    Text[ polish ] = "Tytu³ 10";
+    Text[ polish ] = "Nag³ówek 10";
     Text[ japanese ] = "è¦‹å‡ºã— 10";
     Text[ chinese_traditional ] = "æ¨™é¡Œ 10";
     Text[ arabic ] = "ÇáÚäæÇä 10";
@@ -1520,6 +1676,9 @@ String STR_POOLCOLL_HEADLINE10
     Text[ catalan ] = "Encapçalament 10";
     Text[ finnish ] = "Otsikko 10";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­ 10";
+    Text[ czech ] = "Nadpis 10";
+    Text[ hebrew ] = "Ãœberschrift 10";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• 10";
 };
 String STR_POOLCOLL_NUM_LEVEL1S
 {
@@ -1533,7 +1692,7 @@ String STR_POOLCOLL_NUM_LEVEL1S
     Text [ swedish ] = "Numrering 1 start" ;
     Text [ danish ] = "Nummerering 1 start" ;
     Text [ portuguese ] = "Numeração 1 Início" ;
-    Text [ portuguese_brazilian ] = "Numerierung 1 Anfang" ;
+    Text [ portuguese_brazilian ] = "Numeração 1 Início" ;
     Text[ chinese_simplified ] = "ç¼–å· 1 å¼€ç«¯";
     Text[ russian ] = "Íà÷àëî íóìåğàöèè 1";
     Text[ polish ] = "Pocz¹tek numeracji 1";
@@ -1547,6 +1706,9 @@ String STR_POOLCOLL_NUM_LEVEL1S
     Text[ catalan ] = "Numeració 1 inici";
     Text[ finnish ] = "Numeroinnin 1 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 1";
+    Text[ czech ] = "ZaÄÃ¡tek ÄÃ­slovÃ¡nÃ­ 1";
+    Text[ hebrew ] = "Nummerierung 1 Anfang";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 1 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_NUM_LEVEL1
 {
@@ -1560,7 +1722,7 @@ String STR_POOLCOLL_NUM_LEVEL1
     Text [ swedish ] = "Numrering 1" ;
     Text [ danish ] = "Nummerering 1" ;
     Text [ portuguese ] = "Numeração 1" ;
-    Text [ portuguese_brazilian ] = "Numerierung 1" ;
+    Text [ portuguese_brazilian ] = "Numeração 1" ;
     Text[ chinese_simplified ] = "ç¼–å· 1";
     Text[ russian ] = "Íóìåğàöèÿ 1";
     Text[ polish ] = "Numeracja 1";
@@ -1574,6 +1736,9 @@ String STR_POOLCOLL_NUM_LEVEL1
     Text[ catalan ] = "Numeració 1";
     Text[ finnish ] = "Numerointi 1";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 1";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 1";
+    Text[ hebrew ] = "Nummerierung 1";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 1";
 };
 String STR_POOLCOLL_NUM_LEVEL1E
 {
@@ -1587,7 +1752,7 @@ String STR_POOLCOLL_NUM_LEVEL1E
     Text [ swedish ] = "Numrering 1 slut" ;
     Text [ danish ] = "Nummerering 1 slut" ;
     Text [ portuguese ] = "Numeração 1 Fim" ;
-    Text [ portuguese_brazilian ] = "Numerierung 1 Ende" ;
+    Text [ portuguese_brazilian ] = "Numeração 1 Fim" ;
     Text[ chinese_simplified ] = "ç¼–å· 1 ç»“å°¾";
     Text[ russian ] = "Êîíåö íóìåğàöèè 1";
     Text[ polish ] = "Koniec numeracji 1";
@@ -1601,6 +1766,9 @@ String STR_POOLCOLL_NUM_LEVEL1E
     Text[ catalan ] = "Numeració 1 final";
     Text[ finnish ] = "Numeroinnin 1 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 1 ";
+    Text[ czech ] = "Konec ÄÃ­slovÃ¡nÃ­ 1";
+    Text[ hebrew ] = "Nummerierung 1 Ende";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 1 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_NUM_NONUM1
 {
@@ -1614,7 +1782,7 @@ String STR_POOLCOLL_NUM_NONUM1
     Text [ swedish ] = "Numrering 1 fortsättning" ;
     Text [ danish ] = "Nummerering 1 fortsættelse" ;
     Text [ portuguese ] = "Numeração 1 Continuação" ;
-    Text [ portuguese_brazilian ] = "Numerierung 1 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Numeração 1 Cont." ;
     Text[ chinese_simplified ] = "ç¼–å· 1 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå íóìåğàöèè 1";
     Text[ polish ] = "Kontynuacja numeracji 1";
@@ -1628,6 +1796,9 @@ String STR_POOLCOLL_NUM_NONUM1
     Text[ catalan ] = "Numeració 1 continuació";
     Text[ finnish ] = "Numeroinnin 1 jatko";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 1 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­ 1";
+    Text[ hebrew ] = "Nummerierung 1 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 1 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_NUM_LEVEL2S
 {
@@ -1641,7 +1812,7 @@ String STR_POOLCOLL_NUM_LEVEL2S
     Text [ swedish ] = "Numrering 2 start" ;
     Text [ danish ] = "Nummerering 2 start" ;
     Text [ portuguese ] = "Numeração 2 Início" ;
-    Text [ portuguese_brazilian ] = "Numerierung 2 Anfang" ;
+    Text [ portuguese_brazilian ] = "Numeração 2 Início" ;
     Text[ chinese_simplified ] = "ç¼–å· 2 å¼€ç«¯";
     Text[ russian ] = "Íà÷àëî íóìåğàöèè 2";
     Text[ polish ] = "Pocz¹tek numeracji 2 ";
@@ -1655,6 +1826,9 @@ String STR_POOLCOLL_NUM_LEVEL2S
     Text[ catalan ] = "Numeració 2 inici";
     Text[ finnish ] = "Numeroinnin 2 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 2 ";
+    Text[ czech ] = "ZaÄÃ¡tek ÄÃ­slovÃ¡nÃ­ 2";
+    Text[ hebrew ] = "Nummerierung 2 Anfang";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 2 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_NUM_LEVEL2
 {
@@ -1668,7 +1842,7 @@ String STR_POOLCOLL_NUM_LEVEL2
     Text [ swedish ] = "Numrering 2" ;
     Text [ danish ] = "Nummerering 2" ;
     Text [ portuguese ] = "Numeração 2" ;
-    Text [ portuguese_brazilian ] = "Numerierung 2" ;
+    Text [ portuguese_brazilian ] = "Numeração 2" ;
     Text[ chinese_simplified ] = "ç¼–å· 2";
     Text[ russian ] = "Íóìåğàöèÿ 2";
     Text[ polish ] = "Numeracja 2";
@@ -1682,6 +1856,9 @@ String STR_POOLCOLL_NUM_LEVEL2
     Text[ catalan ] = "Numeració 2";
     Text[ finnish ] = "Numerointi 2";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 2";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 2";
+    Text[ hebrew ] = "Nummerierung 2";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 2";
 };
 String STR_POOLCOLL_NUM_LEVEL2E
 {
@@ -1695,7 +1872,7 @@ String STR_POOLCOLL_NUM_LEVEL2E
     Text [ swedish ] = "Numrering 2 slut" ;
     Text [ danish ] = "Nummerering 2 slut" ;
     Text [ portuguese ] = "Numeração 2 Fim" ;
-    Text [ portuguese_brazilian ] = "Numerierung 2 Ende" ;
+    Text [ portuguese_brazilian ] = "Numeração 2 Fim" ;
     Text[ chinese_simplified ] = "ç¼–å· 2 ç»“å°¾";
     Text[ russian ] = "Êîíåö íóìåğàöèè 2";
     Text[ polish ] = "Koniec numeracji 2 ";
@@ -1709,6 +1886,9 @@ String STR_POOLCOLL_NUM_LEVEL2E
     Text[ catalan ] = "Numeració 2 final";
     Text[ finnish ] = "Numeroinnin 2 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 2 ";
+    Text[ czech ] = "Konec ÄÃ­slovÃ¡nÃ­ 2";
+    Text[ hebrew ] = "Nummerierung 2 Ende";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 2 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_NUM_NONUM2
 {
@@ -1722,7 +1902,7 @@ String STR_POOLCOLL_NUM_NONUM2
     Text [ swedish ] = "Numrering 2 fortsättning" ;
     Text [ danish ] = "Nummerering 2 fortsættelse" ;
     Text [ portuguese ] = "Numeração 2 Continuação" ;
-    Text [ portuguese_brazilian ] = "Numerierung 2 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Numeração 2 Cont." ;
     Text[ chinese_simplified ] = "ç¼–å· 2 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå íóìåğàöèè 2";
     Text[ polish ] = "Kontynuacja numeracji 2";
@@ -1736,6 +1916,9 @@ String STR_POOLCOLL_NUM_NONUM2
     Text[ catalan ] = "Numeració 2 continuació";
     Text[ finnish ] = "Numeroinnin 2 jatko";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 2 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­ 2";
+    Text[ hebrew ] = "Nummerierung 2 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 2 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_NUM_LEVEL3S
 {
@@ -1749,7 +1932,7 @@ String STR_POOLCOLL_NUM_LEVEL3S
     Text [ swedish ] = "Numrering 3 start" ;
     Text [ danish ] = "Nummerering 3 start" ;
     Text [ portuguese ] = "Numeração 3 Início" ;
-    Text [ portuguese_brazilian ] = "Numerierung 3 Anfang" ;
+    Text [ portuguese_brazilian ] = "Numeração 3 Início" ;
     Text[ chinese_simplified ] = "ç¼–å· 3 å¼€ç«¯";
     Text[ russian ] = "Íà÷àëî íóìåğàöèè 3";
     Text[ polish ] = "Pocz¹tek numeracji 3 ";
@@ -1763,6 +1946,9 @@ String STR_POOLCOLL_NUM_LEVEL3S
     Text[ catalan ] = "Numeració 3 inici";
     Text[ finnish ] = "Numeroinnin 3 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 3 ";
+    Text[ czech ] = "ZaÄÃ¡tek ÄÃ­slovÃ¡nÃ­ 3";
+    Text[ hebrew ] = "Nummerierung 3 Anfang";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 3 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_NUM_LEVEL3
 {
@@ -1776,7 +1962,7 @@ String STR_POOLCOLL_NUM_LEVEL3
     Text [ swedish ] = "Numrering 3" ;
     Text [ danish ] = "Nummerering 3" ;
     Text [ portuguese ] = "Numeração 3" ;
-    Text [ portuguese_brazilian ] = "Numerierung 3" ;
+    Text [ portuguese_brazilian ] = "Numeração 3" ;
     Text[ chinese_simplified ] = "ç¼–å· 3";
     Text[ russian ] = "Íóìåğàöèÿ 3";
     Text[ polish ] = "Numeracja 3";
@@ -1790,6 +1976,9 @@ String STR_POOLCOLL_NUM_LEVEL3
     Text[ catalan ] = "Numeració 3";
     Text[ finnish ] = "Numerointi 3";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 3";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 3";
+    Text[ hebrew ] = "Nummerierung 3";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 3";
 };
 String STR_POOLCOLL_NUM_LEVEL3E
 {
@@ -1803,7 +1992,7 @@ String STR_POOLCOLL_NUM_LEVEL3E
     Text [ swedish ] = "Numrering 3 slut" ;
     Text [ danish ] = "Nummerering 3 slut" ;
     Text [ portuguese ] = "Numeração 3 Fim" ;
-    Text [ portuguese_brazilian ] = "Numerierung 3 Ende" ;
+    Text [ portuguese_brazilian ] = "Numeração 3 Fim" ;
     Text[ chinese_simplified ] = "ç¼–å· 3 ç»“å°¾";
     Text[ russian ] = "Êîíåö íóìåğàöèè 3";
     Text[ polish ] = "Koniec numeracji 3 ";
@@ -1817,6 +2006,9 @@ String STR_POOLCOLL_NUM_LEVEL3E
     Text[ catalan ] = "Numeració 3 final";
     Text[ finnish ] = "Numeroinnin 3 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 3 ";
+    Text[ czech ] = "Konec ÄÃ­slovÃ¡nÃ­ 3";
+    Text[ hebrew ] = "Nummerierung 3 Ende";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 3 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_NUM_NONUM3
 {
@@ -1830,7 +2022,7 @@ String STR_POOLCOLL_NUM_NONUM3
     Text [ swedish ] = "Numrering 3 fortsättning" ;
     Text [ danish ] = "Nummerering 3 fortsættelse" ;
     Text [ portuguese ] = "Numeração 3 Continuação" ;
-    Text [ portuguese_brazilian ] = "Numerierung 3 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Numeração 3 Cont." ;
     Text[ chinese_simplified ] = "ç¼–å· 3 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå íóìåğàöèè 3";
     Text[ polish ] = "Kontynuacja numeracji 3";
@@ -1844,6 +2036,9 @@ String STR_POOLCOLL_NUM_NONUM3
     Text[ catalan ] = "Numeració 3 continuació";
     Text[ finnish ] = "Numeroinnin 3 jatko";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 3 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­ 3";
+    Text[ hebrew ] = "Nummerierung 3 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 3 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_NUM_LEVEL4S
 {
@@ -1857,7 +2052,7 @@ String STR_POOLCOLL_NUM_LEVEL4S
     Text [ swedish ] = "Numrering 4 start" ;
     Text [ danish ] = "Nummerering 4 start" ;
     Text [ portuguese ] = "Numeração 4 Início" ;
-    Text [ portuguese_brazilian ] = "Numerierung 4 Anfang" ;
+    Text [ portuguese_brazilian ] = "Numeração 4 Início" ;
     Text[ chinese_simplified ] = "ç¼–å· 4 å¼€ç«¯";
     Text[ russian ] = "Íà÷àëî íóìåğàöèè 4";
     Text[ polish ] = "Pocz¹tek numeracji 4";
@@ -1871,6 +2066,9 @@ String STR_POOLCOLL_NUM_LEVEL4S
     Text[ catalan ] = "Numeració 4 inici";
     Text[ finnish ] = "Numeroinnin 4 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 4 ";
+    Text[ czech ] = "ZaÄÃ¡tek ÄÃ­slovÃ¡nÃ­ 4";
+    Text[ hebrew ] = "Nummerierung 4 Anfang";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 4 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_NUM_LEVEL4
 {
@@ -1884,7 +2082,7 @@ String STR_POOLCOLL_NUM_LEVEL4
     Text [ swedish ] = "Numrering 4" ;
     Text [ danish ] = "Nummerering 4" ;
     Text [ portuguese ] = "Numeração 4" ;
-    Text [ portuguese_brazilian ] = "Numerierung 4" ;
+    Text [ portuguese_brazilian ] = "Numeração 4" ;
     Text[ chinese_simplified ] = "ç¼–å· 4";
     Text[ russian ] = "Íóìåğàöèÿ 4";
     Text[ polish ] = "Numeracja 4";
@@ -1898,6 +2096,9 @@ String STR_POOLCOLL_NUM_LEVEL4
     Text[ catalan ] = "Numeració 4";
     Text[ finnish ] = "Numerointi 4";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 4";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 4";
+    Text[ hebrew ] = "Nummerierung 4";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 4";
 };
 String STR_POOLCOLL_NUM_LEVEL4E
 {
@@ -1911,7 +2112,7 @@ String STR_POOLCOLL_NUM_LEVEL4E
     Text [ swedish ] = "Numrering 4 slut" ;
     Text [ danish ] = "Nummerering 4 slut" ;
     Text [ portuguese ] = "Numeração 4 Fim" ;
-    Text [ portuguese_brazilian ] = "Numerierung 4 Ende" ;
+    Text [ portuguese_brazilian ] = "Numeração 4 Fim" ;
     Text[ chinese_simplified ] = "ç¼–å· 4 ç»“å°¾";
     Text[ russian ] = "Êîíåö íóìåğàöèè 4";
     Text[ polish ] = "Koniec numeracji 4";
@@ -1925,6 +2126,9 @@ String STR_POOLCOLL_NUM_LEVEL4E
     Text[ catalan ] = "Numeració 4 final";
     Text[ finnish ] = "Numeroinnin 4 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 4 ";
+    Text[ czech ] = "Konec ÄÃ­slovÃ¡nÃ­ 4";
+    Text[ hebrew ] = "Nummerierung 4 Ende";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 4 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_NUM_NONUM4
 {
@@ -1938,7 +2142,7 @@ String STR_POOLCOLL_NUM_NONUM4
     Text [ swedish ] = "Numrering 4 fortsättning" ;
     Text [ danish ] = "Nummerering 4 fortsættelse" ;
     Text [ portuguese ] = "Numeração 4 Continuação" ;
-    Text [ portuguese_brazilian ] = "Numerierung 4 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Numeração 4 Cont." ;
     Text[ chinese_simplified ] = "ç¼–å· 4 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå íóìåğàöèè 4";
     Text[ polish ] = "Kontynuacja numeracji 4";
@@ -1952,6 +2156,9 @@ String STR_POOLCOLL_NUM_NONUM4
     Text[ catalan ] = "Numeració 4 continuació";
     Text[ finnish ] = "Numeroinnin 4 jatko";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 4 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­ 4";
+    Text[ hebrew ] = "Nummerierung 4 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 4 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_NUM_LEVEL5S
 {
@@ -1965,7 +2172,7 @@ String STR_POOLCOLL_NUM_LEVEL5S
     Text [ swedish ] = "Numrering 5 start" ;
     Text [ danish ] = "Nummerering 5 start" ;
     Text [ portuguese ] = "Numeração 5 Início" ;
-    Text [ portuguese_brazilian ] = "Numerierung 5 Anfang" ;
+    Text [ portuguese_brazilian ] = "Numeração 5 Início" ;
     Text[ chinese_simplified ] = "ç¼–å· 5 å¼€ç«¯";
     Text[ russian ] = "Íà÷àëî íóìåğàöèè 5";
     Text[ polish ] = "Pocz¹tek numeracji 5";
@@ -1979,6 +2186,9 @@ String STR_POOLCOLL_NUM_LEVEL5S
     Text[ catalan ] = "Numeració 5 inici";
     Text[ finnish ] = "Numeroinnin 5 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 5 ";
+    Text[ czech ] = "ZaÄÃ¡tek ÄÃ­slovÃ¡nÃ­ 5";
+    Text[ hebrew ] = "Nummerierung 5 Anfang";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 5 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_NUM_LEVEL5
 {
@@ -1992,7 +2202,7 @@ String STR_POOLCOLL_NUM_LEVEL5
     Text [ swedish ] = "Numrering 5" ;
     Text [ danish ] = "Nummerering 5" ;
     Text [ portuguese ] = "Numeração 5" ;
-    Text [ portuguese_brazilian ] = "Numerierung 5" ;
+    Text [ portuguese_brazilian ] = "Numeração 5" ;
     Text[ chinese_simplified ] = "ç¼–å· 5";
     Text[ russian ] = "Íóìåğàöèÿ 5";
     Text[ polish ] = "Numeracja 5";
@@ -2006,6 +2216,9 @@ String STR_POOLCOLL_NUM_LEVEL5
     Text[ catalan ] = "Numeració 5";
     Text[ finnish ] = "Numerointi 5";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 5";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 5";
+    Text[ hebrew ] = "Nummerierung 5";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 5";
 };
 String STR_POOLCOLL_NUM_LEVEL5E
 {
@@ -2019,7 +2232,7 @@ String STR_POOLCOLL_NUM_LEVEL5E
     Text [ swedish ] = "Numrering 5 slut" ;
     Text [ danish ] = "Nummerering 5 slut" ;
     Text [ portuguese ] = "Numeração 5 Fim" ;
-    Text [ portuguese_brazilian ] = "Numerierung 5 Ende" ;
+    Text [ portuguese_brazilian ] = "Numeração 5 Fim" ;
     Text[ chinese_simplified ] = "ç¼–å· 5 ç»“å°¾";
     Text[ russian ] = "Êîíåö íóìåğàöèè 5";
     Text[ polish ] = "Koniec numeracji 5";
@@ -2033,6 +2246,9 @@ String STR_POOLCOLL_NUM_LEVEL5E
     Text[ catalan ] = "Numeració 5 final";
     Text[ finnish ] = "Numeroinnin 5 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 5 ";
+    Text[ czech ] = "Konec ÄÃ­slovÃ¡nÃ­ 5";
+    Text[ hebrew ] = "Nummerierung 5 Ende";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 5 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_NUM_NONUM5
 {
@@ -2046,7 +2262,7 @@ String STR_POOLCOLL_NUM_NONUM5
     Text [ swedish ] = "Numrering 5 fortsättning" ;
     Text [ danish ] = "Nummerering 5 fortsættelse" ;
     Text [ portuguese ] = "Numeração 5 Continuação" ;
-    Text [ portuguese_brazilian ] = "Numerierung 5 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Numeração 5 Cont." ;
     Text[ chinese_simplified ] = "ç¼–å· 5 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå íóìåğàöèè 5";
     Text[ polish ] = "Kontynuacja numeracji 5";
@@ -2060,6 +2276,9 @@ String STR_POOLCOLL_NUM_NONUM5
     Text[ catalan ] = "Numeració 5 continuació";
     Text[ finnish ] = "Numeroinnin 5 jatko";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ 5 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­ 5";
+    Text[ hebrew ] = "Nummerierung 5 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 5 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_BUL_LEVEL1S
 {
@@ -2074,7 +2293,7 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text [ swedish ] = "Punktuppställning 1 start" ;
     Text [ danish ] = "Punktopstilling 1 start" ;
     Text [ portuguese ] = "Marca 1 Início" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 1 Anfang" ;
+    Text [ portuguese_brazilian ] = "Lista 1 Início" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 1 å¼€å§‹";
     Text[ russian ] = "Íà÷àëî ñïèñêà 1";
     Text[ polish ] = "Pocz¹tek listy 1";
@@ -2088,6 +2307,9 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text[ catalan ] = "Inici de la llista 1";
     Text[ finnish ] = "Luettelon 1 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸£à¸²à¸¢à¸à¸²à¸£ 1 ";
+    Text[ czech ] = "ZaÄÃ¡tek seznamu 1";
+    Text[ hebrew ] = "AufzÃ¤hlung 1 Anfang";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 1 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_BUL_LEVEL1
 {
@@ -2102,7 +2324,7 @@ String STR_POOLCOLL_BUL_LEVEL1
     Text [ swedish ] = "Punktuppställning 1" ;
     Text [ danish ] = "Punktopstilling 1" ;
     Text [ portuguese ] = "Marca 1" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 1" ;
+    Text [ portuguese_brazilian ] = "Lista 1" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 1";
     Text[ russian ] = "Ñïèñîê 1";
     Text[ polish ] = "Lista 1";
@@ -2116,6 +2338,9 @@ String STR_POOLCOLL_BUL_LEVEL1
     Text[ catalan ] = "Llista 1";
     Text[ finnish ] = "Luettelo 1";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 1";
+    Text[ czech ] = "Seznam 1";
+    Text[ hebrew ] = "AufzÃ¤hlung 1";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 1";
 };
 String STR_POOLCOLL_BUL_LEVEL1E
 {
@@ -2130,7 +2355,7 @@ String STR_POOLCOLL_BUL_LEVEL1E
     Text [ swedish ] = "Punktuppställning 1 slut" ;
     Text [ danish ] = "Punktopstilling 1 slut" ;
     Text [ portuguese ] = "Marca 1 Fim" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 1 Ende" ;
+    Text [ portuguese_brazilian ] = "Lista 1 Fim" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 1 ç»“æŸ";
     Text[ russian ] = "Êîíåö ñïèñêà 1";
     Text[ polish ] = "Koniec listy 1";
@@ -2144,6 +2369,9 @@ String STR_POOLCOLL_BUL_LEVEL1E
     Text[ catalan ] = "Fi de la llista 1";
     Text[ finnish ] = "Luettelon 1 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸£à¸²à¸¢à¸à¸²à¸£ 1 ";
+    Text[ czech ] = "Konec seznamu 1";
+    Text[ hebrew ] = "AufzÃ¤hlung 1 Ende";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 1 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_BUL_NONUM1
 {
@@ -2158,10 +2386,10 @@ String STR_POOLCOLL_BUL_NONUM1
     Text [ swedish ] = "Punktuppställning 1 fortsättning" ;
     Text [ danish ] = "Punktopstilling 1 fortsættelse" ;
     Text [ portuguese ] = "Marca 1 Continuação" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 1 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Lista 1 Cont." ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 1 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 1";
-    Text[ polish ] = "Kontynuacja listy1";
+    Text[ polish ] = "Kontynuacja listy 1";
     Text[ japanese ] = "ç®‡æ¡æ›¸ã 1 ç¶šã";
     Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ 1 ç¹¼çºŒ";
     Text[ arabic ] = "ÊÚÏÇÏ 1 ãæÇÕáÉ";
@@ -2172,6 +2400,9 @@ String STR_POOLCOLL_BUL_NONUM1
     Text[ catalan ] = "Enumeració 1 continuació";
     Text[ finnish ] = "Luettelo 1 jatkuu";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 1 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ seznamu 1";
+    Text[ hebrew ] = "AufzÃ¤hlung 1 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 1 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_BUL_LEVEL2S
 {
@@ -2186,7 +2417,7 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text [ swedish ] = "Punktuppställning 2 start" ;
     Text [ danish ] = "Punktopstilling 2 start" ;
     Text [ portuguese ] = "Marca 2 Início" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 2 Anfang" ;
+    Text [ portuguese_brazilian ] = "Lista 2 Início" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 2 å¼€å§‹";
     Text[ russian ] = "Íà÷àëî ñïèñêà 2";
     Text[ polish ] = "Pocz¹tek listy 2 ";
@@ -2200,6 +2431,9 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text[ catalan ] = "Inici de la llista 2";
     Text[ finnish ] = "Luettelon 2 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸£à¸²à¸¢à¸à¸²à¸£ 2 ";
+    Text[ czech ] = "ZaÄÃ¡tek seznamu 2";
+    Text[ hebrew ] = "AufzÃ¤hlung 2 Anfang";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 2 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_BUL_LEVEL2
 {
@@ -2214,7 +2448,7 @@ String STR_POOLCOLL_BUL_LEVEL2
     Text [ swedish ] = "Punktuppställning 2" ;
     Text [ danish ] = "Punktopstilling 2" ;
     Text [ portuguese ] = "Marca 2" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 2" ;
+    Text [ portuguese_brazilian ] = "Lista 2" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 2";
     Text[ russian ] = "Ñïèñîê 2";
     Text[ polish ] = "Lista 2";
@@ -2228,6 +2462,9 @@ String STR_POOLCOLL_BUL_LEVEL2
     Text[ catalan ] = "Llista 2";
     Text[ finnish ] = "Luettelo 2";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 2";
+    Text[ czech ] = "Seznam 2";
+    Text[ hebrew ] = "AufzÃ¤hlung 2";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 2";
 };
 String STR_POOLCOLL_BUL_LEVEL2E
 {
@@ -2242,7 +2479,7 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text [ swedish ] = "Punktuppställning 2 slut" ;
     Text [ danish ] = "Punktopstilling 2 slut" ;
     Text [ portuguese ] = "Marca 2 Fim" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 2 Ende" ;
+    Text [ portuguese_brazilian ] = "Lista 2 Fim" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 2 ç»“æŸ";
     Text[ russian ] = "Êîíåö ñïèñêà 2";
     Text[ polish ] = "Koniec listy 2 ";
@@ -2256,6 +2493,9 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text[ catalan ] = "Fi de la llista 2";
     Text[ finnish ] = "Luettelon 2 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸£à¸²à¸¢à¸à¸²à¸£ 2 ";
+    Text[ czech ] = "Konec seznamu 2";
+    Text[ hebrew ] = "AufzÃ¤hlung 2 Ende";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 2 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_BUL_NONUM2
 {
@@ -2270,7 +2510,7 @@ String STR_POOLCOLL_BUL_NONUM2
     Text [ swedish ] = "Punktuppställning 2 fortsättning" ;
     Text [ danish ] = "Punktopstilling 2 fortsættelse" ;
     Text [ portuguese ] = "Marca 2 Continuação" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 2 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Lista 2 Cont." ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 2 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 2";
     Text[ polish ] = "Kontynuacja listy 2";
@@ -2284,6 +2524,9 @@ String STR_POOLCOLL_BUL_NONUM2
     Text[ catalan ] = "Enumeració 2 continuació";
     Text[ finnish ] = "Luettelo 2 jatkuu";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 2 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ seznamu 2";
+    Text[ hebrew ] = "AufzÃ¤hlung 2 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 2 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_BUL_LEVEL3S
 {
@@ -2298,7 +2541,7 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text [ swedish ] = "Punktuppställning 3 start" ;
     Text [ danish ] = "Punktopstilling 3 start" ;
     Text [ portuguese ] = "Marca 3 Início" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 3 Anfang" ;
+    Text [ portuguese_brazilian ] = "Lista 3 Início" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 3 å¼€å§‹";
     Text[ russian ] = "Íà÷àëî ñïèñêà 3";
     Text[ polish ] = "Pocz¹tek listy 3";
@@ -2312,6 +2555,9 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text[ catalan ] = "Inici de la llista 3";
     Text[ finnish ] = "Luettelon 3 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸£à¸²à¸¢à¸à¸²à¸£ 3 ";
+    Text[ czech ] = "ZaÄÃ¡tek seznamu 3";
+    Text[ hebrew ] = "AufzÃ¤hlung 3 Anfang";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 3 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_BUL_LEVEL3
 {
@@ -2326,7 +2572,7 @@ String STR_POOLCOLL_BUL_LEVEL3
     Text [ swedish ] = "Punktuppställning 3" ;
     Text [ danish ] = "Punktopstilling 3" ;
     Text [ portuguese ] = "Marca 3" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 3" ;
+    Text [ portuguese_brazilian ] = "Lista 3" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 3";
     Text[ russian ] = "Ñïèñîê 3";
     Text[ polish ] = "Lista 3";
@@ -2340,6 +2586,9 @@ String STR_POOLCOLL_BUL_LEVEL3
     Text[ catalan ] = "Llista 3";
     Text[ finnish ] = "Luettelo 3";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 3";
+    Text[ czech ] = "Seznam 3";
+    Text[ hebrew ] = "AufzÃ¤hlung 3";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 3";
 };
 String STR_POOLCOLL_BUL_LEVEL3E
 {
@@ -2354,7 +2603,7 @@ String STR_POOLCOLL_BUL_LEVEL3E
     Text [ swedish ] = "Punktuppställning 3 slut" ;
     Text [ danish ] = "Punktopstilling 3 slut" ;
     Text [ portuguese ] = "Marca 3 Fim" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 3 Ende" ;
+    Text [ portuguese_brazilian ] = "Lista 3 Fim" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 3 ç»“æŸ";
     Text[ russian ] = "Êîíåö ñïèñêà 3";
     Text[ polish ] = "Koniec listy 3";
@@ -2368,6 +2617,9 @@ String STR_POOLCOLL_BUL_LEVEL3E
     Text[ catalan ] = "Fi de la llista 3";
     Text[ finnish ] = "Luettelon 3 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸£à¸²à¸¢à¸à¸²à¸£ 3 ";
+    Text[ czech ] = "Konec seznamu 3";
+    Text[ hebrew ] = "AufzÃ¤hlung 3 Ende";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 3 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_BUL_NONUM3
 {
@@ -2382,7 +2634,7 @@ String STR_POOLCOLL_BUL_NONUM3
     Text [ swedish ] = "Punktuppställning 3 fortsättning" ;
     Text [ danish ] = "Punktopstilling 3 fortsættelse" ;
     Text [ portuguese ] = "Marca 3 Continuação" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 3 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Lista 3 Cont." ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 3 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 3";
     Text[ polish ] = "Kontynuacja listy 3";
@@ -2396,6 +2648,9 @@ String STR_POOLCOLL_BUL_NONUM3
     Text[ catalan ] = "Enumeració 3 continuació";
     Text[ finnish ] = "Luettelo 3 jatkuu";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 3 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ seznamu 3";
+    Text[ hebrew ] = "AufzÃ¤hlung 3 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 3 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_BUL_LEVEL4S
 {
@@ -2410,7 +2665,7 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text [ swedish ] = "Punktuppställning 4 start" ;
     Text [ danish ] = "Punktopstilling 4 start" ;
     Text [ portuguese ] = "Marca 4 Início" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 4 Anfang" ;
+    Text [ portuguese_brazilian ] = "Lista 4 Início" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 4 å¼€å§‹";
     Text[ russian ] = "Íà÷àëî ñïèñêà 4";
     Text[ polish ] = "Pocz¹tek listy 4";
@@ -2424,6 +2679,9 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text[ catalan ] = "Inici de la llista 4";
     Text[ finnish ] = "Luettelon 4 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸£à¸²à¸¢à¸à¸²à¸£ 4 ";
+    Text[ czech ] = "ZaÄÃ¡tek seznamu 4";
+    Text[ hebrew ] = "AufzÃ¤hlung 4 Anfang";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 4 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_BUL_LEVEL4
 {
@@ -2438,7 +2696,7 @@ String STR_POOLCOLL_BUL_LEVEL4
     Text [ swedish ] = "Punktuppställning 4" ;
     Text [ danish ] = "Punktopstilling 4" ;
     Text [ portuguese ] = "Marca 4" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 4" ;
+    Text [ portuguese_brazilian ] = "Lista 4" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 4";
     Text[ russian ] = "Ñïèñîê 4";
     Text[ polish ] = "Lista 4";
@@ -2452,6 +2710,9 @@ String STR_POOLCOLL_BUL_LEVEL4
     Text[ catalan ] = "Llista 4";
     Text[ finnish ] = "Luettelo 4";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 4";
+    Text[ czech ] = "Seznam 4";
+    Text[ hebrew ] = "AufzÃ¤hlung 4";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 4";
 };
 String STR_POOLCOLL_BUL_LEVEL4E
 {
@@ -2466,7 +2727,7 @@ String STR_POOLCOLL_BUL_LEVEL4E
     Text [ swedish ] = "Punktuppställning 4 slut" ;
     Text [ danish ] = "Punktopstilling 4 slut" ;
     Text [ portuguese ] = "Marca 4 Fim" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 4 Ende" ;
+    Text [ portuguese_brazilian ] = "Lista 4 Fim" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 4 ç»“æŸ";
     Text[ russian ] = "Êîíåö ñïèñêà 4";
     Text[ polish ] = "Koniec listy 4";
@@ -2480,6 +2741,9 @@ String STR_POOLCOLL_BUL_LEVEL4E
     Text[ catalan ] = "Fi de la llista 4";
     Text[ finnish ] = "Luettelon 4 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸£à¸²à¸¢à¸à¸²à¸£ 4 ";
+    Text[ czech ] = "Konec seznamu 4";
+    Text[ hebrew ] = "AufzÃ¤hlung 4 Ende";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 4 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_BUL_NONUM4
 {
@@ -2494,7 +2758,7 @@ String STR_POOLCOLL_BUL_NONUM4
     Text [ swedish ] = "Punktuppställning 4 fortsättning" ;
     Text [ danish ] = "Punktopstilling 4 fortsættelse" ;
     Text [ portuguese ] = "Marca 4 Continuação" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 4 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Lista 4 Cont." ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 4 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 4";
     Text[ polish ] = "Kontynuacja listy 4";
@@ -2508,6 +2772,9 @@ String STR_POOLCOLL_BUL_NONUM4
     Text[ catalan ] = "Enumeració 4 continuació";
     Text[ finnish ] = "Luettelo 4 jatkuu";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 4 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ seznamu 4";
+    Text[ hebrew ] = "AufzÃ¤hlung 4 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 4 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_BUL_LEVEL5S
 {
@@ -2522,7 +2789,7 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text [ swedish ] = "Punktuppställning 5 start" ;
     Text [ danish ] = "Punktopstilling 5 start" ;
     Text [ portuguese ] = "Marca 5 Início" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 5 Anfang" ;
+    Text [ portuguese_brazilian ] = "Lista 5 Início" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 5 å¼€å§‹";
     Text[ russian ] = "Íà÷àëî ñïèñêà 5";
     Text[ polish ] = "Pocz¹tek listy 5";
@@ -2536,6 +2803,9 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text[ catalan ] = "Inici de la llista 5";
     Text[ finnish ] = "Luettelon 5 alku";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸£à¸²à¸¢à¸à¸²à¸£ 5 ";
+    Text[ czech ] = "ZaÄÃ¡tek seznamu 5";
+    Text[ hebrew ] = "AufzÃ¤hlung 5 Anfang";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 5 à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
 };
 String STR_POOLCOLL_BUL_LEVEL5
 {
@@ -2550,7 +2820,7 @@ String STR_POOLCOLL_BUL_LEVEL5
     Text [ swedish ] = "Punktuppställning 5" ;
     Text [ danish ] = "Punktopstilling 5" ;
     Text [ portuguese ] = "Marca 5" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 5" ;
+    Text [ portuguese_brazilian ] = "Lista 5" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 5";
     Text[ russian ] = "Ñïèñîê 5";
     Text[ polish ] = "Lista 5";
@@ -2564,6 +2834,9 @@ String STR_POOLCOLL_BUL_LEVEL5
     Text[ catalan ] = "Llista 5";
     Text[ finnish ] = "Luettelo 5";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 5";
+    Text[ czech ] = "Seznam 5";
+    Text[ hebrew ] = "AufzÃ¤hlung 5";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 5";
 };
 String STR_POOLCOLL_BUL_LEVEL5E
 {
@@ -2578,7 +2851,7 @@ String STR_POOLCOLL_BUL_LEVEL5E
     Text [ swedish ] = "Punktuppställning 5 slut" ;
     Text [ danish ] = "Punktopstilling 5 slut" ;
     Text [ portuguese ] = "Marca 5 Fim" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 5 Ende" ;
+    Text [ portuguese_brazilian ] = "Lista 5 Fim" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 5 ç»“æŸ";
     Text[ russian ] = "Êîíåö ñïèñêà 5";
     Text[ polish ] = "Koniec listy 5";
@@ -2592,6 +2865,9 @@ String STR_POOLCOLL_BUL_LEVEL5E
     Text[ catalan ] = "Fi de la llista 5";
     Text[ finnish ] = "Luettelon 5 loppu";
     Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸£à¸²à¸¢à¸à¸²à¸£ 5 ";
+    Text[ czech ] = "Konec seznamu 5";
+    Text[ hebrew ] = "AufzÃ¤hlung 5 Ende";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 5 à¤¸à¤®à¤¾à¤ªà¥à¤¤";
 };
 String STR_POOLCOLL_BUL_NONUM5
 {
@@ -2606,7 +2882,7 @@ String STR_POOLCOLL_BUL_NONUM5
     Text [ swedish ] = "Punktuppställning 5 fortsättning" ;
     Text [ danish ] = "Punktopstilling 5 fortsættelse" ;
     Text [ portuguese ] = "Marca 5 Continuação" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 5 Fortsetzung" ;
+    Text [ portuguese_brazilian ] = "Lista 5 Cont." ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 5 ç»§ç»­";
     Text[ russian ] = "Ïğîäîëæåíèå ñïèñêà 5";
     Text[ polish ] = "Kontynuacja listy 5";
@@ -2620,6 +2896,9 @@ String STR_POOLCOLL_BUL_NONUM5
     Text[ catalan ] = "Enumeració 5 continuació";
     Text[ finnish ] = "Luettelo 5 jatkuu";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 5 Cont.";
+    Text[ czech ] = "PokraÄovÃ¡nÃ­ seznamu 5";
+    Text[ hebrew ] = "AufzÃ¤hlung 5 Fortsetzung";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ 5 à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‹";
 };
 String STR_POOLCOLL_HEADER
 {
@@ -2633,7 +2912,7 @@ String STR_POOLCOLL_HEADER
     Text [ swedish ] = "Sidhuvud" ;
     Text [ danish ] = "Sidehoved" ;
     Text [ portuguese ] = "Cabeçalho" ;
-    Text [ portuguese_brazilian ] = "Kopfzeile" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho" ;
     Text[ chinese_simplified ] = "é¡µçœ‰";
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
     Text[ polish ] = "Nag³ówek";
@@ -2642,11 +2921,14 @@ String STR_POOLCOLL_HEADER
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
     Text[ greek ] = "Êåöáëßäá";
     Text[ korean ] = "ë¨¸ë¦¬ê¸€";
-    Text[ turkish ] = "Üstbilgi";
+    Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Capçalera";
     Text[ finnish ] = "Ylätunniste";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
+    Text[ czech ] = "ZÃ¡hlavÃ­";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
 String STR_POOLCOLL_HEADERL
 {
@@ -2660,20 +2942,23 @@ String STR_POOLCOLL_HEADERL
     Text [ swedish ] = "Sidhuvud till vänster" ;
     Text [ danish ] = "Sidehoved til venstre" ;
     Text [ portuguese ] = "Cabeçalho à esquerda" ;
-    Text [ portuguese_brazilian ] = "Kopfzeile links" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho à esquerda" ;
     Text[ chinese_simplified ] = "å·¦é¡µçœ‰";
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë ñëåâà";
-    Text[ polish ] = "Nag³ówek z lewej strony";
+    Text[ polish ] = "Nag³ówek z lewej";
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€å·¦";
     Text[ chinese_traditional ] = "å·¦é é¦–";
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ Åáì ÇáíÓÇÑ";
     Text[ greek ] = "Êåöáëßäåò áñéóôåñÜ";
     Text[ korean ] = "ë¨¸ë¦¬ê¸€ ì™¼ìª½";
-    Text[ turkish ] = "Sol üstbilgi";
+    Text[ turkish ] = "Sol başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Capçalera esquerra";
     Text[ finnish ] = "Ylätunniste vasemmalla";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸”à¹‰à¸²à¸™à¸‹à¹‰à¸²à¸¢";
+    Text[ czech ] = "ZÃ¡hlavÃ­ vlevo";
+    Text[ hebrew ] = "Kopfzeile links";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¬à¤¾à¤¯à¤¾à¤";
 };
 String STR_POOLCOLL_HEADERR
 {
@@ -2687,20 +2972,23 @@ String STR_POOLCOLL_HEADERR
     Text [ swedish ] = "Sidhuvud till höger" ;
     Text [ danish ] = "Sidehoved til højre" ;
     Text [ portuguese ] = "Cabeçalho à direita" ;
-    Text [ portuguese_brazilian ] = "Kopfzeile rechts" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho à direita" ;
     Text[ chinese_simplified ] = "å³é¡µçœ‰";
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë ñïğàâà";
-    Text[ polish ] = "Nag³ówek z prawej strony";
+    Text[ polish ] = "Nag³ówek z prawej";
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€å³";
     Text[ chinese_traditional ] = "å³é é¦–";
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ Åáì Çáíãíä";
     Text[ greek ] = "Êåöáëßäåò äåîéÜ";
     Text[ korean ] = "ë¨¸ë¦¬ê¸€ ì˜¤ë¥¸ìª½";
-    Text[ turkish ] = "Sağ üstbilgi";
+    Text[ turkish ] = "Sağ başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Capçalera dreta";
     Text[ finnish ] = "Ylätunniste oikealla";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸”à¹‰à¸²à¸™à¸‚à¸§à¸²";
+    Text[ czech ] = "ZÃ¡hlavÃ­ vpravo";
+    Text[ hebrew ] = "Kopfzeile rechts";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
 };
 String STR_POOLCOLL_FOOTER
 {
@@ -2715,7 +3003,7 @@ String STR_POOLCOLL_FOOTER
     Text [ swedish ] = "Sidfot" ;
     Text [ danish ] = "Sidefod" ;
     Text [ portuguese ] = "Rodapé" ;
-    Text [ portuguese_brazilian ] = "Fu?zeile" ;
+    Text [ portuguese_brazilian ] = "Rodapé" ;
     Text[ chinese_simplified ] = "é¡µè„š";
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";
     Text[ polish ] = "Stopka";
@@ -2724,11 +3012,14 @@ String STR_POOLCOLL_FOOTER
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
     Text[ greek ] = "Õğïóİëéäï";
     Text[ korean ] = "ë°”ë‹¥ê¸€";
-    Text[ turkish ] = "Altbilgi";
+    Text[ turkish ] = "Dipnot";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Peu de pàgina";
     Text[ finnish ] = "Alatunniste";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
+    Text[ czech ] = "ZÃ¡patÃ­";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
 String STR_POOLCOLL_FOOTERL
 {
@@ -2743,20 +3034,23 @@ String STR_POOLCOLL_FOOTERL
     Text [ swedish ] = "Sidfot till vänster" ;
     Text [ danish ] = "Sidefod til venstre" ;
     Text [ portuguese ] = "Rodapé à esquerda" ;
-    Text [ portuguese_brazilian ] = "Fu?zeile links" ;
+    Text [ portuguese_brazilian ] = "Rodapé à esquerda" ;
     Text[ chinese_simplified ] = "å·¦é¡µè„š";
     Text[ russian ] = "Íèæíèé êîëîíòèòóë ñëåâà";
-    Text[ polish ] = "Stopka z lewej strony";
+    Text[ polish ] = "Stopka z lewej";
     Text[ japanese ] = "ãƒ•ãƒƒã‚¿ å·¦";
     Text[ chinese_traditional ] = "å·¦é å°¾";
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ Åáì ÇáíÓÇÑ";
     Text[ greek ] = "Õğïóİëéäï áñéóôåñÜ";
     Text[ korean ] = "ë°”ë‹¥ê¸€ ì™¼ìª½";
-    Text[ turkish ] = "Sol altbilgi";
+    Text[ turkish ] = "Sol dipnot";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Peu de pàgina esquerre";
     Text[ finnish ] = "Alatunniste vasemmalla";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢à¸”à¹‰à¸²à¸™à¸‹à¹‰à¸²à¸¢";
+    Text[ czech ] = "ZÃ¡patÃ­ vlevo";
+    Text[ hebrew ] = "FuÃŸzeile links";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¬à¤¾à¤¯à¤¾à¤";
 };
 String STR_POOLCOLL_FOOTERR
 {
@@ -2771,20 +3065,23 @@ String STR_POOLCOLL_FOOTERR
     Text [ swedish ] = "Sidfot till höger" ;
     Text [ danish ] = "Sidefod til højre" ;
     Text [ portuguese ] = "Rodapé à direita" ;
-    Text [ portuguese_brazilian ] = "Fu?zeile rechts" ;
+    Text [ portuguese_brazilian ] = "Rodapé à direita" ;
     Text[ chinese_simplified ] = "å³é¡µè„š";
     Text[ russian ] = "Íèæíèé êîëîíòèòóë ñïğàâà";
-    Text[ polish ] = "Stopka z prawej strony";
+    Text[ polish ] = "Stopka z prawej";
     Text[ japanese ] = "ãƒ•ãƒƒã‚¿ å³";
     Text[ chinese_traditional ] = "å³é å°¾";
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ Åáì Çáíãíä";
     Text[ greek ] = "Õğïóİëéäï äåîéÜ";
     Text[ korean ] = "ë°”ë‹¥ê¸€ ì˜¤ë¥¸ìª½";
-    Text[ turkish ] = "Sağ altbilgi";
+    Text[ turkish ] = "Sağ dipnot";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Peu de pàgina dret";
     Text[ finnish ] = "Alatunniste oikealla";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢à¸”à¹‰à¸²à¸™à¸‚à¸§à¸²";
+    Text[ czech ] = "ZÃ¡patÃ­ vpravo";
+    Text[ hebrew ] = "FuÃŸzeile rechts";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
 };
 String STR_POOLCOLL_TABLE
 {
@@ -2798,7 +3095,7 @@ String STR_POOLCOLL_TABLE
     Text [ swedish ] = "Tabellinnehåll" ;
     Text [ danish ] = "Tabelindhold" ;
     Text [ portuguese ] = "Conteúdo de tabela" ;
-    Text [ portuguese_brazilian ] = "Tabellen Inhalt" ;
+    Text [ portuguese_brazilian ] = "Conteúdo da Tabela" ;
     Text[ chinese_simplified ] = "è¡¨æ ¼å†…å®¹";
     Text[ russian ] = "Ñîäåğæèìîå òàáëèöû";
     Text[ polish ] = "Zawartoœæ tabeli";
@@ -2812,6 +3109,9 @@ String STR_POOLCOLL_TABLE
     Text[ catalan ] = "Contingut de la taula";
     Text[ finnish ] = "Taulukon sisältö";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "Obsah tabulky";
+    Text[ hebrew ] = "Tabellen Inhalt";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤µà¤¿à¤·à¤¯";
 };
 String STR_POOLCOLL_TABLE_HDLN
 {
@@ -2826,12 +3126,12 @@ String STR_POOLCOLL_TABLE_HDLN
     Text [ swedish ] = "Tabellöverskrift" ;
     Text [ danish ] = "Tabeloverskrift" ;
     Text [ portuguese ] = "Título de tabela" ;
-    Text [ portuguese_brazilian ] = "Tabellen ?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título da Tabela" ;
     Text[ chinese_simplified ] = "è¡¨æ ¼æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê òàáëèöû";
-    Text[ polish ] = "Tytu³ tabeli";
+    Text[ polish ] = "Nag³ówek tabeli";
     Text[ japanese ] = "è¡¨ã®è¦‹å‡ºã—";
-    Text[ chinese_traditional ] = "è¡¨æ ¼æ¨™é¡Œ";
+    Text[ chinese_traditional ] = "è¡¨æ ¼æ¨™é ­";
     Text[ arabic ] = "ÚäæÇä ÇáÌÏæá";
     Text[ greek ] = "Åğéêåöáëßäá ğßíáêá";
     Text[ korean ] = "í‘œ ì œëª©";
@@ -2840,6 +3140,9 @@ String STR_POOLCOLL_TABLE_HDLN
     Text[ catalan ] = "Encapçalament de la taula";
     Text[ finnish ] = "Taulukon otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "Nadpis tabulky";
+    Text[ hebrew ] = "Tabellen Ãœberschrift";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_FRAME
 {
@@ -2853,7 +3156,7 @@ String STR_POOLCOLL_FRAME
     Text [ swedish ] = "Raminnehåll" ;
     Text [ danish ] = "Rammeindhold" ;
     Text [ portuguese ] = "Conteúdo da moldura" ;
-    Text [ portuguese_brazilian ] = "Rahmeninhalt" ;
+    Text [ portuguese_brazilian ] = "Conteúdo da moldura" ;
     Text[ chinese_simplified ] = "æ¡†å†…å®¹";
     Text[ russian ] = "Ñîäåğæèìîå âğåçêè";
     Text[ polish ] = "Zawartoœæ ramki";
@@ -2867,6 +3170,9 @@ String STR_POOLCOLL_FRAME
     Text[ catalan ] = "Contingut del marc";
     Text[ finnish ] = "Kehyksen sisältö";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¸à¸£à¸­à¸š";
+    Text[ czech ] = "Obsah rÃ¡mce";
+    Text[ hebrew ] = "Rahmeninhalt";
+    Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤® à¤µà¤¿à¤·à¤¯";
 };
 String STR_POOLCOLL_FOOTNOTE
 {
@@ -2881,7 +3187,7 @@ String STR_POOLCOLL_FOOTNOTE
     Text [ swedish ] = "Fotnot" ;
     Text [ danish ] = "Fodnote" ;
     Text [ portuguese ] = "Nota de rodapé" ;
-    Text [ portuguese_brazilian ] = "Fu?note" ;
+    Text [ portuguese_brazilian ] = "Nota de rodapé" ;
     Text[ chinese_simplified ] = "æ³¨è„š";
     Text[ russian ] = "Ñíîñêà";
     Text[ polish ] = "Przypis dolny";
@@ -2895,6 +3201,9 @@ String STR_POOLCOLL_FOOTNOTE
     Text[ catalan ] = "Nota al peu";
     Text[ finnish ] = "Alaviite";
     Text[ thai ] = "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+    Text[ czech ] = "PoznÃ¡mka pod Äarou";
+    Text[ hebrew ] = "â€®×”×¢×¨×ª ×©×•×œ×™×™×â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
 String STR_POOLCOLL_ENDNOTE
 {
@@ -2902,7 +3211,7 @@ String STR_POOLCOLL_ENDNOTE
     Text [ English ] = "Endnote" ;
     Text [ portuguese ] = "Nota final" ;
     Text [ english_us ] = "Endnote" ;
-    Text [ portuguese_brazilian ] = "Endnote" ;
+    Text [ portuguese_brazilian ] = "Nota de Fim" ;
     Text [ swedish ] = "Slutnot" ;
     Text [ danish ] = "Slutnote" ;
     Text [ italian ] = "Nota di chiusura" ;
@@ -2922,6 +3231,9 @@ String STR_POOLCOLL_ENDNOTE
     Text[ catalan ] = "Nota final";
     Text[ finnish ] = "Loppuviite";
     Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "VysvÄ›tlivka";
+    Text[ hebrew ] = "Endnote";
+    Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾ ";
 };
 String STR_POOLCOLL_LABEL
 {
@@ -2935,20 +3247,23 @@ String STR_POOLCOLL_LABEL
     Text [ swedish ] = "Bildtext" ;
     Text [ danish ] = "Billedtekst" ;
     Text [ portuguese ] = "Legenda" ;
-    Text [ portuguese_brazilian ] = "Beschriftung" ;
+    Text [ portuguese_brazilian ] = "Legenda" ;
     Text[ chinese_simplified ] = "æ ‡ç­¾";
     Text[ russian ] = "Íàçâàíèå";
-    Text[ polish ] = "Etykieta";
+    Text[ polish ] = "Podpis";
     Text[ japanese ] = "å›³è¡¨ç•ªå·";
     Text[ chinese_traditional ] = "æ¨™ç±¤";
     Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
     Text[ greek ] = "ÅğéãñáöŞ";
     Text[ korean ] = "ìº¡ì…˜";
-    Text[ turkish ] = "Yazı";
+    Text[ turkish ] = "Resim Yazısı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Llegenda";
     Text[ finnish ] = "Kuvaotsikko";
     Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¹€à¸‰à¸à¸²à¸°";
+    Text[ czech ] = "Popisek";
+    Text[ hebrew ] = "Beschriftung";
+    Text[ hindi ] = "à¤•à¥‰à¤ªà¥à¤¶à¤¨à¥ ";
 };
 String STR_POOLCOLL_LABEL_ABB
 {
@@ -2962,7 +3277,7 @@ String STR_POOLCOLL_LABEL_ABB
     Text [ swedish ] = "Illustration" ;
     Text [ danish ] = "Illustration" ;
     Text [ portuguese ] = "Ilustração" ;
-    Text [ portuguese_brazilian ] = "Abbildung" ;
+    Text [ portuguese_brazilian ] = "Ilustração" ;
     Text[ chinese_simplified ] = "æ’å›¾";
     Text[ russian ] = "Èëëşñòğàöèÿ";
     Text[ polish ] = "Ilustracja";
@@ -2976,6 +3291,9 @@ String STR_POOLCOLL_LABEL_ABB
     Text[ catalan ] = "Il.lustració";
     Text[ finnish ] = "Kuvitus";
     Text[ thai ] = "à¸ à¸²à¸à¸›à¸£à¸°à¸à¸­à¸š";
+    Text[ czech ] = "Ilustrace";
+    Text[ hebrew ] = "Abbildung";
+    Text[ hindi ] = "à¤¦à¥ƒà¤·à¥à¤Ÿà¤¾à¤¨à¥à¤¤";
 };
 String STR_POOLCOLL_LABEL_TABLE
 {
@@ -2989,7 +3307,7 @@ String STR_POOLCOLL_LABEL_TABLE
     Text [ swedish ] = "Tabell" ;
     Text [ danish ] = "Tabel" ;
     Text [ portuguese ] = "Tabela" ;
-    Text [ portuguese_brazilian ] = "Tabelle" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
     Text[ chinese_simplified ] = "è¡¨æ ¼";
     Text[ russian ] = "Òàáëèöà";
     Text[ polish ] = "Tabela";
@@ -3003,6 +3321,9 @@ String STR_POOLCOLL_LABEL_TABLE
     Text[ catalan ] = "Taula";
     Text[ finnish ] = "Taulukko";
     Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "Tabulka";
+    Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€";
 };
 String STR_POOLCOLL_LABEL_FRAME
 {
@@ -3016,12 +3337,12 @@ String STR_POOLCOLL_LABEL_FRAME
     Text [ swedish ] = "Text" ;
     Text [ danish ] = "Tekst" ;
     Text [ portuguese ] = "Texto" ;
-    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese_brazilian ] = "Texto" ;
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "å…§æ–‡";
+    Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ arabic ] = "äÕ";
     Text[ greek ] = "Êåßìåíï";
     Text[ korean ] = "í…ìŠ¤íŠ¸";
@@ -3030,13 +3351,16 @@ String STR_POOLCOLL_LABEL_FRAME
     Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "Text";
+    Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
 };
 String STR_POOLCOLL_LABEL_DRAWING
 {
     Text = "Zeichnung" ;
     Text [ English ] = "Drawing" ;
     Text[ italian ] = "Disegno";
-    Text[ portuguese_brazilian ] = "Drawing";
+    Text[ portuguese_brazilian ] = "Desenho";
     Text[ portuguese ] = "Desenho";
     Text[ danish ] = "Tegning";
     Text[ french ] = "Dessin";
@@ -3057,6 +3381,9 @@ String STR_POOLCOLL_LABEL_DRAWING
     Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirros";
     Text[ thai ] = "à¸§à¸²à¸”à¸£à¸¹à¸›";
+    Text[ czech ] = "Kresba";
+    Text[ hebrew ] = "â€®×¦×™×•×¨â€¬";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°";
 };
 String STR_POOLCOLL_JAKETADRESS
 {
@@ -3071,7 +3398,7 @@ String STR_POOLCOLL_JAKETADRESS
     Text [ swedish ] = "Mottagare" ;
     Text [ danish ] = "Modtager" ;
     Text [ portuguese ] = "Destinatário" ;
-    Text [ portuguese_brazilian ] = "Empf?nger" ;
+    Text [ portuguese_brazilian ] = "Destinatário" ;
     Text[ chinese_simplified ] = "æ”¶ä»¶äºº";
     Text[ russian ] = "Ïîëó÷àòåëü";
     Text[ polish ] = "Odbiorca";
@@ -3085,6 +3412,9 @@ String STR_POOLCOLL_JAKETADRESS
     Text[ catalan ] = "Destinatari";
     Text[ finnish ] = "Saaja";
     Text[ thai ] = "à¸œà¸¹à¹‰à¸£à¸±à¸š";
+    Text[ czech ] = "PÅ™Ã­jemce";
+    Text[ hebrew ] = "EmpfÃ¤nger";
+    Text[ hindi ] = "à¤²à¥‡à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
 };
 String STR_POOLCOLL_SENDADRESS
 {
@@ -3098,7 +3428,7 @@ String STR_POOLCOLL_SENDADRESS
     Text [ swedish ] = "Avsändare" ;
     Text [ danish ] = "Afsender" ;
     Text [ portuguese ] = "Remetente" ;
-    Text [ portuguese_brazilian ] = "Absender" ;
+    Text [ portuguese_brazilian ] = "Remetente" ;
     Text[ chinese_simplified ] = "å‘ä»¶äºº";
     Text[ russian ] = "Îòïğàâèòåëü";
     Text[ polish ] = "Nadawca";
@@ -3112,6 +3442,9 @@ String STR_POOLCOLL_SENDADRESS
     Text[ catalan ] = "Remitent";
     Text[ finnish ] = "Lähettäjä";
     Text[ thai ] = "à¸œà¸¹à¹‰à¸ªà¹ˆà¸‡";
+    Text[ czech ] = "Odesilatel";
+    Text[ hebrew ] = "Absender";
+    Text[ hindi ] = "à¤­à¥‡à¤œà¤¨à¥‡à¤µà¤¾à¤²à¤¾ ";
 };
 String STR_POOLCOLL_TOX_IDXH
 {
@@ -3126,10 +3459,10 @@ String STR_POOLCOLL_TOX_IDXH
     Text [ swedish ] = "Sakregisteröverskrift" ;
     Text [ danish ] = "Stikordsregisteroverskrift" ;
     Text [ portuguese ] = "Título do índice remissivo" ;
-    Text [ portuguese_brazilian ] = "Stichwortverzeichnis ?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título do Índice" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëÿ";
-    Text[ polish ] = "Tytu³ skorowidza";
+    Text[ polish ] = "Nag³ówek indeksu";
     Text[ japanese ] = "ç´¢å¼• è¦‹å‡ºã—";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -3140,6 +3473,9 @@ String STR_POOLCOLL_TOX_IDXH
     Text[ catalan ] = "Encapçalament de l'índex";
     Text[ finnish ] = "Hakemiston otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸±à¸Šà¸™à¸µ";
+    Text[ czech ] = "Nadpis rejstÅ™Ã­ku";
+    Text[ hebrew ] = "Stichwortverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_IDX1
 {
@@ -3153,10 +3489,10 @@ String STR_POOLCOLL_TOX_IDX1
     Text [ swedish ] = "Sakregister 1" ;
     Text [ danish ] = "Stikordsregister 1" ;
     Text [ portuguese ] = "Índice remissivo 1" ;
-    Text [ portuguese_brazilian ] = "Stichwortverzeichnis 1" ;
+    Text [ portuguese_brazilian ] = "Índice 1" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• 1";
     Text[ russian ] = "Óêàçàòåëü 1";
-    Text[ polish ] = "Skorowidz 1";
+    Text[ polish ] = "Indeks 1";
     Text[ japanese ] = "ç´¢å¼• 1";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ 1";
     Text[ arabic ] = "İåÑÓ ÃÈÍÏí 1";
@@ -3167,6 +3503,9 @@ String STR_POOLCOLL_TOX_IDX1
     Text[ catalan ] = "Índex 1";
     Text[ finnish ] = "Hakemisto 1";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ 1";
+    Text[ czech ] = "RejstÅ™Ã­k 1";
+    Text[ hebrew ] = "Stichwortverzeichnis 1";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾  1";
 };
 String STR_POOLCOLL_TOX_IDX2
 {
@@ -3180,10 +3519,10 @@ String STR_POOLCOLL_TOX_IDX2
     Text [ swedish ] = "Sakregister 2" ;
     Text [ danish ] = "Stikordsregister 2" ;
     Text [ portuguese ] = "Índice remissivo 2" ;
-    Text [ portuguese_brazilian ] = "Stichwortverzeichnis 2" ;
+    Text [ portuguese_brazilian ] = "Índice 2" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• 2";
     Text[ russian ] = "Óêàçàòåëü 2";
-    Text[ polish ] = "Skorowidz 2";
+    Text[ polish ] = "Indeks 2";
     Text[ japanese ] = "ç´¢å¼• 2";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ 2";
     Text[ arabic ] = "İåÑÓ ÃÈÌÏí 2";
@@ -3194,6 +3533,9 @@ String STR_POOLCOLL_TOX_IDX2
     Text[ catalan ] = "Índex 2";
     Text[ finnish ] = "Hakemisto 2";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ 2";
+    Text[ czech ] = "RejstÅ™Ã­k 2";
+    Text[ hebrew ] = "Stichwortverzeichnis 2";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾  2";
 };
 String STR_POOLCOLL_TOX_IDX3
 {
@@ -3207,10 +3549,10 @@ String STR_POOLCOLL_TOX_IDX3
     Text [ swedish ] = "Sakregister 3" ;
     Text [ danish ] = "Stikordsregister 3" ;
     Text [ portuguese ] = "Índice remissivo 3" ;
-    Text [ portuguese_brazilian ] = "Stichwortverzeichnis 3" ;
+    Text [ portuguese_brazilian ] = "Índice 3" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• 3";
     Text[ russian ] = "Óêàçàòåëü 3";
-    Text[ polish ] = "Skorowidz 3";
+    Text[ polish ] = "Indeks 3";
     Text[ japanese ] = "ç´¢å¼• 3";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ 3";
     Text[ arabic ] = "İåÑÓ ÃÈÌÏí 3";
@@ -3221,6 +3563,9 @@ String STR_POOLCOLL_TOX_IDX3
     Text[ catalan ] = "Índex 3";
     Text[ finnish ] = "Hakemisto 3";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ 3";
+    Text[ czech ] = "RejstÅ™Ã­k 3";
+    Text[ hebrew ] = "Stichwortverzeichnis 3";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾  3";
 };
 String STR_POOLCOLL_TOX_IDXBREAK
 {
@@ -3234,10 +3579,10 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text [ swedish ] = "Sakregisteravskiljare" ;
     Text [ danish ] = "Stikordsregister separator" ;
     Text [ portuguese ] = "Separador de índice remissivo" ;
-    Text [ portuguese_brazilian ] = "Stichwortverzeichnis Trenner" ;
+    Text [ portuguese_brazilian ] = "Separador de Índice" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• åˆ†éš”ç¬¦";
     Text[ russian ] = "Ğàçäåëèòåëü ïğåäìåòíîãî óêàçàòåëÿ";
-    Text[ polish ] = "Separator skorowidza";
+    Text[ polish ] = "Separator indeksu";
     Text[ japanese ] = "ç´¢å¼• ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿";
     Text[ chinese_traditional ] = "ç´¢å¼•ç›®éŒ„ åˆ†éš”ç¬¦";
     Text[ arabic ] = "İÇÕá ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -3248,6 +3593,9 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text[ catalan ] = "Separador de l'índex";
     Text[ finnish ] = "Hakemistoerotin";
     Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸à¸”à¸±à¸Šà¸™à¸µ";
+    Text[ czech ] = "OddÄ›lovaÄ rejstÅ™Ã­ku";
+    Text[ hebrew ] = "Stichwortverzeichnis Trenner";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤…à¤²à¤—à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
 };
 String STR_POOLCOLL_TOX_CNTNTH
 {
@@ -3262,10 +3610,10 @@ String STR_POOLCOLL_TOX_CNTNTH
     Text [ swedish ] = "Innehållsförteckning överskrift" ;
     Text [ danish ] = "Indholdsfortegnelse overskrift" ;
     Text [ portuguese ] = "Título do índice" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis ?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título do Índice" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½•æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê îãëàâëåíèÿ";
-    Text[ polish ] = "Tytu³ spisu treœci";
+    Text[ polish ] = "Nag³ówek spisu treœci";
     Text[ japanese ] = "ç›®æ¬¡ è¦‹å‡ºã—";
     Text[ chinese_traditional ] = "å…§å®¹ç›®éŒ„æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä İåÑÓ ÇáãÍÊæíÇÊ";
@@ -3276,6 +3624,9 @@ String STR_POOLCOLL_TOX_CNTNTH
     Text[ catalan ] = "Encapçalament de l'índex";
     Text[ finnish ] = "Sisältöotsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+    Text[ czech ] = "Nadpis obsahu";
+    Text[ hebrew ] = "Inhaltsverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_CNTNT1
 {
@@ -3289,7 +3640,7 @@ String STR_POOLCOLL_TOX_CNTNT1
     Text [ swedish ] = "Innehållsförteckning 1" ;
     Text [ danish ] = "Indholdsfortegnelse 1" ;
     Text [ portuguese ] = "Índice 1" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 1" ;
+    Text [ portuguese_brazilian ] = "Índice 1" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 1";
     Text[ russian ] = "Îãëàâëåíèå 1";
     Text[ polish ] = "Spis treœci 1";
@@ -3303,6 +3654,9 @@ String STR_POOLCOLL_TOX_CNTNT1
     Text[ catalan ] = "Contingut 1";
     Text[ finnish ] = "Sisältö 1";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 1";
+    Text[ czech ] = "Obsah 1";
+    Text[ hebrew ] = "Inhaltsverzeichnis 1";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 1";
 };
 String STR_POOLCOLL_TOX_CNTNT2
 {
@@ -3316,7 +3670,7 @@ String STR_POOLCOLL_TOX_CNTNT2
     Text [ swedish ] = "Innehållsförteckning 2" ;
     Text [ danish ] = "Indholdsfortegnelse 2" ;
     Text [ portuguese ] = "Índice 2" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 2" ;
+    Text [ portuguese_brazilian ] = "Índice 2" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 2";
     Text[ russian ] = "Îãëàâëåíèå 2";
     Text[ polish ] = "Spis treœci 2";
@@ -3330,6 +3684,9 @@ String STR_POOLCOLL_TOX_CNTNT2
     Text[ catalan ] = "Contingut 2";
     Text[ finnish ] = "Sisältö 2";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 2";
+    Text[ czech ] = "Obsah 2";
+    Text[ hebrew ] = "Inhaltsverzeichnis 2";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 2";
 };
 String STR_POOLCOLL_TOX_CNTNT3
 {
@@ -3343,7 +3700,7 @@ String STR_POOLCOLL_TOX_CNTNT3
     Text [ swedish ] = "Innehållsförteckning 3" ;
     Text [ danish ] = "Indholdsfortegnelse 3" ;
     Text [ portuguese ] = "Índice 3" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 3" ;
+    Text [ portuguese_brazilian ] = "Índice 3" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 3";
     Text[ russian ] = "Îãëàâëåíèå 3";
     Text[ polish ] = "Spis treœci 3";
@@ -3357,6 +3714,9 @@ String STR_POOLCOLL_TOX_CNTNT3
     Text[ catalan ] = "Contingut 3";
     Text[ finnish ] = "Sisältö 3";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 3";
+    Text[ czech ] = "Obsah 3";
+    Text[ hebrew ] = "Inhaltsverzeichnis 3";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 3";
 };
 String STR_POOLCOLL_TOX_CNTNT4
 {
@@ -3370,7 +3730,7 @@ String STR_POOLCOLL_TOX_CNTNT4
     Text [ swedish ] = "Innehållsförteckning 4" ;
     Text [ danish ] = "Indholdsfortegnelse 4" ;
     Text [ portuguese ] = "Índice 4" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 4" ;
+    Text [ portuguese_brazilian ] = "Índice 4" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 4";
     Text[ russian ] = "Îãëàâëåíèå 4";
     Text[ polish ] = "Spis treœci 4";
@@ -3384,6 +3744,9 @@ String STR_POOLCOLL_TOX_CNTNT4
     Text[ catalan ] = "Contingut 4";
     Text[ finnish ] = "Sisältö 4";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 4";
+    Text[ czech ] = "Obsah 4";
+    Text[ hebrew ] = "Inhaltsverzeichnis 4";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 4";
 };
 String STR_POOLCOLL_TOX_CNTNT5
 {
@@ -3397,7 +3760,7 @@ String STR_POOLCOLL_TOX_CNTNT5
     Text [ swedish ] = "Innehållsförteckning 5" ;
     Text [ danish ] = "Indholdsfortegnelse 5" ;
     Text [ portuguese ] = "Índice 5" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 5" ;
+    Text [ portuguese_brazilian ] = "Índice 5" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 5";
     Text[ russian ] = "Îãëàâëåíèå 5";
     Text[ polish ] = "Spis treœci 5";
@@ -3411,6 +3774,9 @@ String STR_POOLCOLL_TOX_CNTNT5
     Text[ catalan ] = "Contingut 5";
     Text[ finnish ] = "Sisältö 5";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 5";
+    Text[ czech ] = "Obsah 5";
+    Text[ hebrew ] = "Inhaltsverzeichnis 5";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 5";
 };
 String STR_POOLCOLL_TOX_CNTNT6
 {
@@ -3424,7 +3790,7 @@ String STR_POOLCOLL_TOX_CNTNT6
     Text [ swedish ] = "Innehållsförteckning 6" ;
     Text [ danish ] = "Indholdsfortegnelse 6" ;
     Text [ portuguese ] = "Índice geral 6" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 6" ;
+    Text [ portuguese_brazilian ] = "Índice 6" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 6";
     Text[ russian ] = "Îãëàâëåíèå 6";
     Text[ polish ] = "Spis treœci 6";
@@ -3438,6 +3804,9 @@ String STR_POOLCOLL_TOX_CNTNT6
     Text[ catalan ] = "Contingut 6";
     Text[ finnish ] = "Sisältö 6";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 6";
+    Text[ czech ] = "Obsah 6";
+    Text[ hebrew ] = "Inhaltsverzeichnis 6";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 6";
 };
 String STR_POOLCOLL_TOX_CNTNT7
 {
@@ -3451,7 +3820,7 @@ String STR_POOLCOLL_TOX_CNTNT7
     Text [ swedish ] = "Innehållsförteckning 7" ;
     Text [ danish ] = "Indholdsfortegnelse 7" ;
     Text [ portuguese ] = "Índice geral 7" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 7" ;
+    Text [ portuguese_brazilian ] = "Índice 7" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 7";
     Text[ russian ] = "Îãëàâëåíèå 7";
     Text[ polish ] = "Spis treœci 7";
@@ -3465,6 +3834,9 @@ String STR_POOLCOLL_TOX_CNTNT7
     Text[ catalan ] = "Contingut 7";
     Text[ finnish ] = "Sisältö 7";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 7";
+    Text[ czech ] = "Obsah 7";
+    Text[ hebrew ] = "Inhaltsverzeichnis 7";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 7";
 };
 String STR_POOLCOLL_TOX_CNTNT8
 {
@@ -3478,7 +3850,7 @@ String STR_POOLCOLL_TOX_CNTNT8
     Text [ swedish ] = "Innehållsförteckning 8" ;
     Text [ danish ] = "Indholdsfortegnelse 8" ;
     Text [ portuguese ] = "Índice geral 8" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 8" ;
+    Text [ portuguese_brazilian ] = "Índice 8" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 8";
     Text[ russian ] = "Îãëàâëåíèå 8";
     Text[ polish ] = "Spis treœci 8";
@@ -3492,6 +3864,9 @@ String STR_POOLCOLL_TOX_CNTNT8
     Text[ catalan ] = "Contingut 8";
     Text[ finnish ] = "Sisältö 8";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 8";
+    Text[ czech ] = "Obsah 8";
+    Text[ hebrew ] = "Inhaltsverzeichnis 8";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 8";
 };
 String STR_POOLCOLL_TOX_CNTNT9
 {
@@ -3505,7 +3880,7 @@ String STR_POOLCOLL_TOX_CNTNT9
     Text [ swedish ] = "Innehållsförteckning 9" ;
     Text [ danish ] = "Indholdsfortegnelse 9" ;
     Text [ portuguese ] = "Índice geral 9" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 9" ;
+    Text [ portuguese_brazilian ] = "Índice 9" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 9";
     Text[ russian ] = "Îãëàâëåíèå 9";
     Text[ polish ] = "Spis treœci 9";
@@ -3519,6 +3894,9 @@ String STR_POOLCOLL_TOX_CNTNT9
     Text[ catalan ] = "Contingut 9";
     Text[ finnish ] = "Sisältö 9";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 9";
+    Text[ czech ] = "Obsah 9";
+    Text[ hebrew ] = "Inhaltsverzeichnis 9";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 9";
 };
 String STR_POOLCOLL_TOX_CNTNT10
 {
@@ -3532,7 +3910,7 @@ String STR_POOLCOLL_TOX_CNTNT10
     Text [ swedish ] = "Innehållsförteckning 10" ;
     Text [ danish ] = "Indholdsfortegnelse 10" ;
     Text [ portuguese ] = "Índice geral 10" ;
-    Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 10" ;
+    Text [ portuguese_brazilian ] = "Índice 10" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½• 10";
     Text[ russian ] = "Îãëàâëåíèå 10";
     Text[ polish ] = "Spis treœci 10";
@@ -3546,6 +3924,9 @@ String STR_POOLCOLL_TOX_CNTNT10
     Text[ catalan ] = "Contingut 10";
     Text[ finnish ] = "Sisältö 10";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸² 10";
+    Text[ czech ] = "Obsah 10";
+    Text[ hebrew ] = "Inhaltsverzeichnis 10";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚ 10";
 };
 String STR_POOLCOLL_TOX_USERH
 {
@@ -3560,10 +3941,10 @@ String STR_POOLCOLL_TOX_USERH
     Text [ swedish ] = "Användarförteckning överskrift" ;
     Text [ danish ] = "Brugerindeks overskrift" ;
     Text [ portuguese ] = "Título do índice do utilizador" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis ?berschrift" ;
+    Text [ portuguese_brazilian ] = "Título do Índice do Usuário" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëåé ïîëüçîâàòåëÿ";
-    Text[ polish ] = "Tytu³ indeksu u¿ytkownika";
+    Text[ polish ] = "Nag³ówek indeksu u¿ytkownika";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• è¦‹å‡ºã—";
     Text[ chinese_traditional ] = "è‡ªè¨‚ç›®éŒ„æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä İåÑÓ ÇáãÓÊÎÏã";
@@ -3574,6 +3955,9 @@ String STR_POOLCOLL_TOX_USERH
     Text[ catalan ] = "Encapçalament de l'índex d'usuari";
     Text[ finnish ] = "Käyttäjähakemiston otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
+    Text[ czech ] = "Nadpis rejstÅ™Ã­ku uÅ¾ivatele";
+    Text[ hebrew ] = "Benutzerverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_USER1
 {
@@ -3587,7 +3971,7 @@ String STR_POOLCOLL_TOX_USER1
     Text [ swedish ] = "Användarförteckning 1" ;
     Text [ danish ] = "Brugerindeks 1" ;
     Text [ portuguese ] = "Índice do utilizador 1" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 1" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 1" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• 1";
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 1";
     Text[ polish ] = "Indeks u¿ytkownika 1";
@@ -3601,6 +3985,9 @@ String STR_POOLCOLL_TOX_USER1
     Text[ catalan ] = "Índex d'usuari 1";
     Text[ finnish ] = "Käyttäjähakemisto 1";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 1";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 1";
+    Text[ hebrew ] = "Benutzerverzeichnis 1";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 1";
 };
 String STR_POOLCOLL_TOX_USER2
 {
@@ -3614,7 +4001,7 @@ String STR_POOLCOLL_TOX_USER2
     Text [ swedish ] = "Användarförteckning 2" ;
     Text [ danish ] = "Brugerindeks 2" ;
     Text [ portuguese ] = "Índice do utilizador 2" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 2" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 2" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• 2";
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 2";
     Text[ polish ] = "Indeks u¿ytkownika 2";
@@ -3628,6 +4015,9 @@ String STR_POOLCOLL_TOX_USER2
     Text[ catalan ] = "Índex d'usuari 2";
     Text[ finnish ] = "Käyttäjähakemisto 2";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 2";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 2";
+    Text[ hebrew ] = "Benutzerverzeichnis 2";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 2";
 };
 String STR_POOLCOLL_TOX_USER3
 {
@@ -3641,7 +4031,7 @@ String STR_POOLCOLL_TOX_USER3
     Text [ swedish ] = "Användarförteckning 3" ;
     Text [ danish ] = "Brugerindeks 3" ;
     Text [ portuguese ] = "Índice do utilizador 3" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 3" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 3" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• 3";
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 3";
     Text[ polish ] = "Indeks u¿ytkownika 3";
@@ -3655,6 +4045,9 @@ String STR_POOLCOLL_TOX_USER3
     Text[ catalan ] = "Índex d'usuari 3";
     Text[ finnish ] = "Käyttäjähakemisto 3";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 3";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 3";
+    Text[ hebrew ] = "Benutzerverzeichnis 3";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 3";
 };
 String STR_POOLCOLL_TOX_USER4
 {
@@ -3668,7 +4061,7 @@ String STR_POOLCOLL_TOX_USER4
     Text [ swedish ] = "Användarförteckning 4" ;
     Text [ danish ] = "Brugerindeks 4" ;
     Text [ portuguese ] = "Índice do utilizador 4" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 4" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 4" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• 4";
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 4";
     Text[ polish ] = "Indeks u¿ytkownika 4";
@@ -3682,6 +4075,9 @@ String STR_POOLCOLL_TOX_USER4
     Text[ catalan ] = "Índex d'usuari 4";
     Text[ finnish ] = "Käyttäjähakemisto 4";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 4";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 4";
+    Text[ hebrew ] = "Benutzerverzeichnis 4";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 4";
 };
 String STR_POOLCOLL_TOX_USER5
 {
@@ -3695,7 +4091,7 @@ String STR_POOLCOLL_TOX_USER5
     Text [ swedish ] = "Användarförteckning 5" ;
     Text [ danish ] = "Brugerindeks 5" ;
     Text [ portuguese ] = "Índice do utilizador 5" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 5" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 5" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• 5";
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 5";
     Text[ polish ] = "Indeks u¿ytkownika 5";
@@ -3709,6 +4105,9 @@ String STR_POOLCOLL_TOX_USER5
     Text[ catalan ] = "Índex d'usuari 5";
     Text[ finnish ] = "Käyttäjähakemisto 5";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 5";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 5";
+    Text[ hebrew ] = "Benutzerverzeichnis 5";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 5";
 };
 String STR_POOLCOLL_TOX_USER6
 {
@@ -3722,7 +4121,7 @@ String STR_POOLCOLL_TOX_USER6
     Text [ swedish ] = "Användarförteckning 6" ;
     Text [ danish ] = "Brugerindeks 6" ;
     Text [ portuguese ] = "Índice personalizado 6" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 6" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 6" ;
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 6";
     Text[ polish ] = "Indeks u¿ytkownika 6";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• 6";
@@ -3736,6 +4135,9 @@ String STR_POOLCOLL_TOX_USER6
     Text[ catalan ] = "Índex d'usuari 6";
     Text[ finnish ] = "Käyttäjähakemisto 6";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 6";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 6";
+    Text[ hebrew ] = "Benutzerverzeichnis 6";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 6";
 };
 String STR_POOLCOLL_TOX_USER7
 {
@@ -3749,7 +4151,7 @@ String STR_POOLCOLL_TOX_USER7
     Text [ swedish ] = "Användarförteckning 7" ;
     Text [ danish ] = "Brugerindeks 7" ;
     Text [ portuguese ] = "Índice personalizado 7" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 7" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 7" ;
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 7";
     Text[ polish ] = "Indeks u¿ytkownika 7";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• 7";
@@ -3763,6 +4165,9 @@ String STR_POOLCOLL_TOX_USER7
     Text[ catalan ] = "Índex d'usuari 7";
     Text[ finnish ] = "Käyttäjähakemisto 7";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 7";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 7";
+    Text[ hebrew ] = "Benutzerverzeichnis 7";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 7";
 };
 String STR_POOLCOLL_TOX_USER8
 {
@@ -3776,7 +4181,7 @@ String STR_POOLCOLL_TOX_USER8
     Text [ swedish ] = "Användarförteckning 8" ;
     Text [ danish ] = "Brugerindeks 8" ;
     Text [ portuguese ] = "Índice personalizado 8" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 8" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 8" ;
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 8";
     Text[ polish ] = "Indeks u¿ytkownika 8";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• 8";
@@ -3790,6 +4195,9 @@ String STR_POOLCOLL_TOX_USER8
     Text[ catalan ] = "Índex d'usuari 8";
     Text[ finnish ] = "Käyttäjähakemisto 8";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 8";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 8";
+    Text[ hebrew ] = "Benutzerverzeichnis 8";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 8";
 };
 String STR_POOLCOLL_TOX_USER9
 {
@@ -3803,7 +4211,7 @@ String STR_POOLCOLL_TOX_USER9
     Text [ swedish ] = "Användarförteckning 9" ;
     Text [ danish ] = "Brugerindeks 9" ;
     Text [ portuguese ] = "Índice personalizado 9" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 9" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 9" ;
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 9";
     Text[ polish ] = "Indeks u¿ytkownika 9";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• 9";
@@ -3817,6 +4225,9 @@ String STR_POOLCOLL_TOX_USER9
     Text[ catalan ] = "Índex d'usuari 9";
     Text[ finnish ] = "Käyttäjähakemisto 9";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 9";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 9";
+    Text[ hebrew ] = "Benutzerverzeichnis 9";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 9";
 };
 String STR_POOLCOLL_TOX_USER10
 {
@@ -3830,7 +4241,7 @@ String STR_POOLCOLL_TOX_USER10
     Text [ swedish ] = "Användarförteckning 10" ;
     Text [ danish ] = "Brugerindeks 10" ;
     Text [ portuguese ] = "Índice personalizado 10" ;
-    Text [ portuguese_brazilian ] = "Benutzerverzeichnis 10" ;
+    Text [ portuguese_brazilian ] = "Índice do usuário 10" ;
     Text[ russian ] = "Óêàçàòåëü ïîëüçîâàòåëÿ 10";
     Text[ polish ] = "Indeks u¿ytkownika 10";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼• 10";
@@ -3844,6 +4255,9 @@ String STR_POOLCOLL_TOX_USER10
     Text[ catalan ] = "Índex d'usuari 10";
     Text[ finnish ] = "Käyttäjähakemisto 10";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ 10";
+    Text[ czech ] = "VlastnÃ­ rejstÅ™Ã­k 10";
+    Text[ hebrew ] = "Benutzerverzeichnis 10";
+    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 10";
 };
 String STR_POOLCOLL_TOX_ILLUSH
 {
@@ -3859,8 +4273,8 @@ String STR_POOLCOLL_TOX_ILLUSH
     Text[ italian ] = "Intestazione indice illustrazioni";
     Text[ danish ] = "Figuroversigt overskrift";
     Text[ swedish ] = "Illustrationsförteckning överskrift";
-    Text[ polish ] = "Indeks ilustracji Tytu³";
-    Text[ portuguese_brazilian ] = "Illustration index heading";
+    Text[ polish ] = "Nag³ówek indeksu ilustracji";
+    Text[ portuguese_brazilian ] = "Título do Índice de Ilustrações";
     Text[ japanese ] = "å›³ã®ç´¢å¼• è¦‹å‡ºã—";
     Text[ korean ] = "ì‚½í™” ìƒ‰ì¸ ì œëª©";
     Text[ chinese_simplified ] = "æ’å›¾ç›®å½•æ ‡é¢˜";
@@ -3871,6 +4285,9 @@ String STR_POOLCOLL_TOX_ILLUSH
     Text[ catalan ] = "Encapçalament de l'índex d'il.lustracions";
     Text[ finnish ] = "Kuvitusluettelon otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸±à¸Šà¸™à¸µà¸ à¸²à¸à¸›à¸£à¸°à¸à¸­à¸š";
+    Text[ czech ] = "Nadpis rejstÅ™Ã­ku ilustracÃ­";
+    Text[ hebrew ] = "Abbildungsverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤¦à¥ƒà¤·à¥à¤Ÿà¤¾à¤¨à¥à¤¤ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_ILLUS1
 {
@@ -3887,7 +4304,7 @@ String STR_POOLCOLL_TOX_ILLUS1
     Text[ danish ] = "Figuroversigt 1";
     Text[ swedish ] = "Illustrationsförteckning 1";
     Text[ polish ] = "Indeks ilustracji 1";
-    Text[ portuguese_brazilian ] = "Illustration index 1";
+    Text[ portuguese_brazilian ] = "Índice de ilustrações 1";
     Text[ japanese ] = "å›³ã®ç´¢å¼• 1";
     Text[ korean ] = "ì‚½í™” ìƒ‰ì¸ 1";
     Text[ chinese_simplified ] = "æ’å›¾ç›®å½• 1";
@@ -3898,6 +4315,9 @@ String STR_POOLCOLL_TOX_ILLUS1
     Text[ catalan ] = "Índex d'il.lustracions 1";
     Text[ finnish ] = "Kuvitusluettelo 1";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸ à¸²à¸à¸›à¸£à¸°à¸à¸­à¸š 1";
+    Text[ czech ] = "RejstÅ™Ã­k ilustracÃ­ 1";
+    Text[ hebrew ] = "Abbildungsverzeichnis 1";
+    Text[ hindi ] = "à¤¦à¥ƒà¤·à¥à¤Ÿà¤¾à¤¨à¥à¤¤ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾  1";
 };
 String STR_POOLCOLL_TOX_OBJECTH
 {
@@ -3913,8 +4333,8 @@ String STR_POOLCOLL_TOX_OBJECTH
     Text[ italian ] = "Intestazione indice degli oggetti";
     Text[ danish ] = "Objektindeks overskrift";
     Text[ swedish ] = "Objektförteckning överskrift";
-    Text[ polish ] = "Indeks obiektów Tytu³";
-    Text[ portuguese_brazilian ] = "Object index heading";
+    Text[ polish ] = "Nag³ówek indeksu obiektów";
+    Text[ portuguese_brazilian ] = "Título do índice de objetos";
     Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç´¢å¼•è¦‹å‡ºã—";
     Text[ korean ] = "ê°œì²´ ìƒ‰ì¸ ì œëª©";
     Text[ chinese_simplified ] = "å¯¹è±¡ç›®å½•æ ‡é¢˜";
@@ -3925,6 +4345,9 @@ String STR_POOLCOLL_TOX_OBJECTH
     Text[ catalan ] = "Encapçalament de l'índex d'objectes";
     Text[ finnish ] = "Objektihakemiston otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸±à¸Šà¸™à¸µà¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "Nadpis rejstÅ™Ã­ku objektÅ¯";
+    Text[ hebrew ] = "Objektverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_OBJECT1
 {
@@ -3941,7 +4364,7 @@ String STR_POOLCOLL_TOX_OBJECT1
     Text[ danish ] = "Objektindeks 1";
     Text[ swedish ] = "Objektförteckning 1";
     Text[ polish ] = "Indeks obiektów 1";
-    Text[ portuguese_brazilian ] = "Object index 1";
+    Text[ portuguese_brazilian ] = "Índice de objetos 1";
     Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç´¢å¼• 1";
     Text[ korean ] = "ê°œì²´ ìƒ‰ì¸ 1";
     Text[ chinese_simplified ] = "å¯¹è±¡ç›®å½• 1";
@@ -3952,6 +4375,9 @@ String STR_POOLCOLL_TOX_OBJECT1
     Text[ catalan ] = "Índex d'objectes 1";
     Text[ finnish ] = "Objektihakemisto 1";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸§à¸±à¸•à¸–à¸¸ 1";
+    Text[ czech ] = "RejstÅ™Ã­k objektÅ¯ 1";
+    Text[ hebrew ] = "Objektverzeichnis 1";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 1";
 };
 String STR_POOLCOLL_TOX_TABLESH
 {
@@ -3967,8 +4393,8 @@ String STR_POOLCOLL_TOX_TABLESH
     Text[ italian ] = "Intestazione indice tabella";
     Text[ danish ] = "Tabeloversigt overskrift";
     Text[ swedish ] = "Tabellförteckning överskrift";
-    Text[ polish ] = "Indeks tabeli Tytu³";
-    Text[ portuguese_brazilian ] = "Table index heading";
+    Text[ polish ] = "Nag³ówek indeksu tabeli";
+    Text[ portuguese_brazilian ] = "Título do Índice de tabelas";
     Text[ japanese ] = "è¡¨ç´¢å¼•è¦‹å‡ºã—";
     Text[ korean ] = "í‘œ ìƒ‰ì¸ ì œëª©";
     Text[ chinese_simplified ] = "è¡¨æ ¼ç›®å½•æ ‡é¢˜";
@@ -3979,6 +4405,9 @@ String STR_POOLCOLL_TOX_TABLESH
     Text[ catalan ] = "Encapçalament de l'índex de taules";
     Text[ finnish ] = "Taulukkohakemiston otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸±à¸Šà¸™à¸µà¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "Nadpis rejstÅ™Ã­ku tabulky";
+    Text[ hebrew ] = "Tabellenverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_TABLES1
 {
@@ -3995,7 +4424,7 @@ String STR_POOLCOLL_TOX_TABLES1
     Text[ danish ] = "Tabeloversigt 1";
     Text[ swedish ] = "Tabellförteckning 1";
     Text[ polish ] = "Indeks tabeli 1";
-    Text[ portuguese_brazilian ] = "Table index 1";
+    Text[ portuguese_brazilian ] = "Índice de tabelas 1";
     Text[ japanese ] = "è¡¨ç´¢å¼• 1";
     Text[ korean ] = "í‘œ ìƒ‰ì¸ 1";
     Text[ chinese_simplified ] = "è¡¨æ ¼ç›®å½• 1";
@@ -4006,6 +4435,9 @@ String STR_POOLCOLL_TOX_TABLES1
     Text[ catalan ] = "Índex de taules 1";
     Text[ finnish ] = "Taulukkohakemisto 1";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸•à¸²à¸£à¸²à¸‡ 1";
+    Text[ czech ] = "RejstÅ™Ã­k tabulky 1";
+    Text[ hebrew ] = "Tabellenverzeichnis 1";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ 1";
 };
 String STR_POOLCOLL_TOX_AUTHORITIESH
 {
@@ -4021,8 +4453,8 @@ String STR_POOLCOLL_TOX_AUTHORITIESH
     Text[ italian ] = "Intestazione bibliografia";
     Text[ danish ] = "Litteraturliste overskrift";
     Text[ swedish ] = "Litteraturförteckning överskrift";
-    Text[ polish ] = "Bibliografia - Tytu³";
-    Text[ portuguese_brazilian ] = "Index of authorities heading";
+    Text[ polish ] = "Nag³ówek bibliografii";
+    Text[ portuguese_brazilian ] = "Título da Bibliografia";
     Text[ japanese ] = "å‚è€ƒæ–‡çŒ®è¡¨è¦‹å‡ºã—";
     Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ ì œëª©";
     Text[ chinese_simplified ] = "æ–‡çŒ®ç›®å½•æ ‡é¢˜";
@@ -4033,6 +4465,9 @@ String STR_POOLCOLL_TOX_AUTHORITIESH
     Text[ catalan ] = "Encapçalament de la bibliografia";
     Text[ finnish ] = "Lähdeluettelon otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
+    Text[ czech ] = "Nadpis seznamu pouÅ¾itÃ© literatury";
+    Text[ hebrew ] = "Literaturverzeichnis Ãœberschrift";
+    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_TOX_AUTHORITIES1
 {
@@ -4049,7 +4484,7 @@ String STR_POOLCOLL_TOX_AUTHORITIES1
     Text[ danish ] = "Litteraturliste 1";
     Text[ swedish ] = "Litteraturförteckning 1";
     Text[ polish ] = "Bibliografia 1";
-    Text[ portuguese_brazilian ] = "Index of authorities 1";
+    Text[ portuguese_brazilian ] = "Bibliografia 1";
     Text[ japanese ] = "å‚è€ƒæ–‡çŒ®è¡¨ 1";
     Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ 1";
     Text[ chinese_simplified ] = "æ–‡çŒ®ç›®å½• 1";
@@ -4060,6 +4495,9 @@ String STR_POOLCOLL_TOX_AUTHORITIES1
     Text[ catalan ] = "Bibliografia 1";
     Text[ finnish ] = "Lähdeluettelo 1";
     Text[ thai ] = "à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡ 1";
+    Text[ czech ] = "Seznam pouÅ¾itÃ© literatury 1";
+    Text[ hebrew ] = "Literaturverzeichnis 1";
+    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ 1";
 };
 
 String STR_POOLCOLL_DOC_TITEL
@@ -4074,7 +4512,7 @@ String STR_POOLCOLL_DOC_TITEL
     Text [ swedish ] = "Rubrik" ;
     Text [ danish ] = "Titel" ;
     Text [ portuguese ] = "Título principal" ;
-    Text [ portuguese_brazilian ] = "Titel" ;
+    Text [ portuguese_brazilian ] = "Título" ;
     Text[ chinese_simplified ] = "å¤§æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ polish ] = "Tytu³";
@@ -4083,11 +4521,14 @@ String STR_POOLCOLL_DOC_TITEL
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ greek ] = "Ôßôëïò";
     Text[ korean ] = "ì£¼ì œ";
-    Text[ turkish ] = "Bölüm başlığı";
+    Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Títol";
     Text[ finnish ] = "Otsikko";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Titul";
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_DOC_SUBTITEL
 {
@@ -4101,7 +4542,7 @@ String STR_POOLCOLL_DOC_SUBTITEL
     Text [ swedish ] = "Underrubrik" ;
     Text [ danish ] = "Undertitel" ;
     Text [ portuguese ] = "Subtítulo" ;
-    Text [ portuguese_brazilian ] = "Untertitel" ;
+    Text [ portuguese_brazilian ] = "Subtítulo" ;
     Text[ chinese_simplified ] = "åˆ†æ ‡é¢˜";
     Text[ russian ] = "Ïîäçàãîëîâîê";
     Text[ polish ] = "Podtytu³";
@@ -4115,6 +4556,9 @@ String STR_POOLCOLL_DOC_SUBTITEL
     Text[ catalan ] = "Subtítol";
     Text[ finnish ] = "Alaotsikko";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸£à¸­à¸‡";
+    Text[ czech ] = "Podtitul";
+    Text[ hebrew ] = "Untertitel";
+    Text[ hindi ] = "à¤…à¤§à¥€à¤¨ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 String STR_POOLCOLL_HTML_BLOCKQUOTE
 {
@@ -4128,7 +4572,7 @@ String STR_POOLCOLL_HTML_BLOCKQUOTE
     Text [ spanish ] = "Cita" ;
     Text [ french ] = "Citation" ;
     Text [ portuguese ] = "Citação" ;
-    Text [ portuguese_brazilian ] = "Zitat" ;
+    Text [ portuguese_brazilian ] = "Citações" ;
     Text[ chinese_simplified ] = "å¼•ç”¨æ–‡";
     Text[ russian ] = "Öèòàòà";
     Text[ polish ] = "Cytat";
@@ -4142,6 +4586,9 @@ String STR_POOLCOLL_HTML_BLOCKQUOTE
     Text[ catalan ] = "Citacions";
     Text[ finnish ] = "Lainaukset";
     Text[ thai ] = "à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
+    Text[ czech ] = "Citace";
+    Text[ hebrew ] = "Zitat";
+    Text[ hindi ] = "à¤•à¤¹à¤¨à¤¾";
 };
 String STR_POOLCOLL_HTML_PRE
 {
@@ -4155,10 +4602,10 @@ String STR_POOLCOLL_HTML_PRE
     Text [ spanish ] = "Texto preformateado" ;
     Text [ french ] = "Texte préformaté" ;
     Text [ portuguese ] = "Texto preformatado" ;
-    Text [ portuguese_brazilian ] = "Vorformatierter Text" ;
+    Text [ portuguese_brazilian ] = "Texto Pré-formatado" ;
     Text[ chinese_simplified ] = "é¢„æ ¼å¼åŒ–çš„æ­£æ–‡";
     Text[ russian ] = "Òåêñò â çàäàííîì ôîğìàòå";
-    Text[ polish ] = "Tekst niesformatowany";
+    Text[ polish ] = "Tekst wstêpnie sformatowany";
     Text[ japanese ] = "æ›¸å¼è¨­å®šå‰ã®ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "é æ ¼å¼åŒ–çš„å…§æ–‡";
     Text[ arabic ] = "äÕ ãäÓŞ ãÓÈŞÇğ";
@@ -4169,6 +4616,9 @@ String STR_POOLCOLL_HTML_PRE
     Text[ catalan ] = "Text preformatat";
     Text[ finnish ] = "Esimuotoiltu teksti";
     Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¹„à¸§à¹‰à¹à¸¥à¹‰à¸§";
+    Text[ czech ] = "PÅ™edformÃ¡tovanÃ½ text";
+    Text[ hebrew ] = "Vorformatierter Text";
+    Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤°à¤šà¤¨à¤¾ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
 };
 String STR_POOLCOLL_HTML_HR
 {
@@ -4182,7 +4632,7 @@ String STR_POOLCOLL_HTML_HR
     Text [ spanish ] = "Línea horizontal" ;
     Text [ french ] = "Ligne horizontale" ;
     Text [ portuguese ] = "Linha horizontal" ;
-    Text [ portuguese_brazilian ] = "Horizontale Linie" ;
+    Text [ portuguese_brazilian ] = "Linha Horizontal" ;
     Text[ chinese_simplified ] = "æ°´å¹³çº¿æ¡";
     Text[ russian ] = "Ãîğèçîíòàëüíàÿ ëèíèÿ";
     Text[ polish ] = "Linia pozioma";
@@ -4196,6 +4646,9 @@ String STR_POOLCOLL_HTML_HR
     Text[ catalan ] = "Línia horitzontal";
     Text[ finnish ] = "Vaakaviiva";
     Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸•à¸²à¸¡à¹à¸™à¸§à¸™à¸­à¸™";
+    Text[ czech ] = "VodorovnÃ¡ ÄÃ¡ra";
+    Text[ hebrew ] = "â€®×§×• ××•×¤×§×™â€¬";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤°à¥‡à¤–à¤¾à¤à¤";
 };
 String STR_POOLCOLL_HTML_DD
 {
@@ -4209,7 +4662,7 @@ String STR_POOLCOLL_HTML_DD
     Text [ spanish ] = "Contenido de la lista" ;
     Text [ french ] = "Contenu de liste" ;
     Text [ portuguese ] = "Conteúdo da lista" ;
-    Text [ portuguese_brazilian ] = "Listeninhalt" ;
+    Text [ portuguese_brazilian ] = "Conteúdo da Lista" ;
     Text[ chinese_simplified ] = "åˆ—è¡¨å†…å®¹";
     Text[ russian ] = "Ñîäåğæèìîå ñïèñêà";
     Text[ polish ] = "Zawartoœæ listy";
@@ -4223,6 +4676,9 @@ String STR_POOLCOLL_HTML_DD
     Text[ catalan ] = "Contingut de la llista";
     Text[ finnish ] = "Luetteloiden sisällöt";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+    Text[ czech ] = "Obsah seznamu";
+    Text[ hebrew ] = "Listeninhalt";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
 };
 String STR_POOLCOLL_HTML_DT
 {
@@ -4236,13 +4692,13 @@ String STR_POOLCOLL_HTML_DT
     Text [ spanish ] = "Encabezamiento de lista" ;
     Text [ french ] = "En-tête de liste" ;
     Text [ portuguese ] = "Cabeçalho da lista" ;
-    Text [ portuguese_brazilian ] = "Listenkopf" ;
+    Text [ portuguese_brazilian ] = "Título da Lista" ;
     Text[ chinese_simplified ] = "åˆ—è¡¨æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê ñïèñêà";
     Text[ polish ] = "Nag³ówek listy";
     Text[ japanese ] = "ãƒªã‚¹ãƒˆã®è¦‹å‡ºã—";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "æ¸…å–®æ¨™é¡Œ";
+    Text[ chinese_traditional ] = "æ¸…å–®æ¨™é ­";
     Text[ arabic ] = "ÚäæÇä ÇáŞÇÆãÉ";
     Text[ greek ] = "Êåöáëßäá êáôáëüãïõ";
     Text[ korean ] = "ëª©ë¡ ì œëª©";
@@ -4250,6 +4706,9 @@ String STR_POOLCOLL_HTML_DT
     Text[ catalan ] = "Encapçalament de llista";
     Text[ finnish ] = "Luettelon otsikko";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "Seznam nadpisÅ¯";
+    Text[ hebrew ] = "Listenkopf";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ à¤¶à¥€à¤°à¥à¤·à¤•";
 };
 //page style names
 String STR_POOLPAGE_STANDARD
@@ -4264,7 +4723,7 @@ String STR_POOLPAGE_STANDARD
     Text [ swedish ] = "Standard" ;
     Text [ danish ] = "Standard" ;
     Text [ portuguese ] = "Padrão" ;
-    Text [ portuguese_brazilian ] = "Standard" ;
+    Text [ portuguese_brazilian ] = "Padrão" ;
     Text[ chinese_simplified ] = "æ ‡å‡†";
     Text[ russian ] = "Îáû÷íûé";
     Text[ polish ] = "Domyœlnie";
@@ -4273,11 +4732,14 @@ String STR_POOLPAGE_STANDARD
     Text[ arabic ] = "ŞíÇÓí";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "ê¸°ë³¸ê°’";
-    Text[ turkish ] = "Standart";
+    Text[ turkish ] = "Öndeğer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
     Text[ finnish ] = "Oletus";
     Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­";
+    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ ";
 };
 String STR_POOLPAGE_FIRST
 {
@@ -4291,7 +4753,7 @@ String STR_POOLPAGE_FIRST
     Text [ swedish ] = "Första sidan" ;
     Text [ danish ] = "Første side" ;
     Text [ portuguese ] = "Primeira página" ;
-    Text [ portuguese_brazilian ] = "Erste Seite" ;
+    Text [ portuguese_brazilian ] = "Primeira Página" ;
     Text[ chinese_simplified ] = "é¦–é¡µ";
     Text[ russian ] = "Ïåğâàÿ ñòğàíèöà";
     Text[ polish ] = "Pierwsza strona";
@@ -4305,6 +4767,9 @@ String STR_POOLPAGE_FIRST
     Text[ catalan ] = "Primera pàgina";
     Text[ finnish ] = "Ensimmäinen sivu";
     Text[ thai ] = "à¸«à¸™à¹‰à¸²à¹à¸£à¸";
+    Text[ czech ] = "PrvnÃ­ strÃ¡nka";
+    Text[ hebrew ] = "Erste Seite";
+    Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤ªà¥ƒà¤·à¥à¤ ";
 };
 String STR_POOLPAGE_LEFT
 {
@@ -4318,7 +4783,7 @@ String STR_POOLPAGE_LEFT
     Text [ swedish ] = "Vänstersida" ;
     Text [ danish ] = "Venstre side" ;
     Text [ portuguese ] = "Página esquerda" ;
-    Text [ portuguese_brazilian ] = "Linke Seite" ;
+    Text [ portuguese_brazilian ] = "Página Esquerda" ;
     Text[ chinese_simplified ] = "å·¦é¡µ";
     Text[ russian ] = "Ëåâàÿ ñòğàíèöà";
     Text[ polish ] = "Strona nieparzysta";
@@ -4332,6 +4797,9 @@ String STR_POOLPAGE_LEFT
     Text[ catalan ] = "Pàgina esquerra";
     Text[ finnish ] = "Vasen sivu";
     Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸‹à¹‰à¸²à¸¢";
+    Text[ czech ] = "LevÃ¡ strÃ¡nka";
+    Text[ hebrew ] = "Linke Seite";
+    Text[ hindi ] = "à¤¬à¤¾à¤¯à¤¾à¤ à¤ªà¥ƒà¤·à¥à¤  ";
 };
 String STR_POOLPAGE_RIGHT
 {
@@ -4345,7 +4813,7 @@ String STR_POOLPAGE_RIGHT
     Text [ swedish ] = "Högersida" ;
     Text [ danish ] = "Højre side" ;
     Text [ portuguese ] = "Página direita" ;
-    Text [ portuguese_brazilian ] = "Rechte Seite" ;
+    Text [ portuguese_brazilian ] = "Página Direita" ;
     Text[ chinese_simplified ] = "å³é¡µ";
     Text[ russian ] = "Ïğàâàÿ ñòğàíèöà";
     Text[ polish ] = "Strona parzysta";
@@ -4359,6 +4827,9 @@ String STR_POOLPAGE_RIGHT
     Text[ catalan ] = "Pàgina dreta";
     Text[ finnish ] = "Oikea sivu";
     Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸‚à¸§à¸²";
+    Text[ czech ] = "PravÃ¡ strÃ¡nka";
+    Text[ hebrew ] = "Rechte Seite";
+    Text[ hindi ] = "à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾ à¤ªà¥ƒà¤·à¥à¤ ";
 };
 String STR_POOLPAGE_JAKET
 {
@@ -4372,7 +4843,7 @@ String STR_POOLPAGE_JAKET
     Text [ swedish ] = "Kuvert" ;
     Text [ danish ] = "Konvolut" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ portuguese_brazilian ] = "Umschlag" ;
+    Text [ portuguese_brazilian ] = "Envelope" ;
     Text[ chinese_simplified ] = "ä¿¡å°";
     Text[ russian ] = "Êîíâåğò";
     Text[ polish ] = "Koperta";
@@ -4386,6 +4857,9 @@ String STR_POOLPAGE_JAKET
     Text[ catalan ] = "Sobre";
     Text[ finnish ] = "Kirjekuori";
     Text[ thai ] = "à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
+    Text[ czech ] = "ObÃ¡lka";
+    Text[ hebrew ] = "â€®××¢×˜×¤×”â€¬";
+    Text[ hindi ] = "à¤²à¤¿à¤«à¤¾à¤«à¤¾ ";
 };
 String STR_POOLPAGE_REGISTER
 {
@@ -4399,7 +4873,7 @@ String STR_POOLPAGE_REGISTER
     Text [ swedish ] = "Förteckning" ;
     Text [ danish ] = "Indeks" ;
     Text [ portuguese ] = "Índice" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Índice" ;
     Text[ chinese_simplified ] = "ç›®å½•";
     Text[ russian ] = "Óêàçàòåëü";
     Text[ polish ] = "Indeks";
@@ -4413,6 +4887,9 @@ String STR_POOLPAGE_REGISTER
     Text[ catalan ] = "Índex";
     Text[ finnish ] = "Hakemisto";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
+    Text[ czech ] = "RejstÅ™Ã­k";
+    Text[ hebrew ] = "Verzeichnis";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾";
 };
 String STR_POOLPAGE_HTML
 {
@@ -4440,6 +4917,9 @@ String STR_POOLPAGE_HTML
     Text[ catalan ] = "HTML";
     Text[ finnish ] = "HTML";
     Text[ thai ] = "HTML";
+    Text[ czech ] = "HTML";
+    Text[ hebrew ] = "HTML";
+    Text[ hindi ] = "HTML";
 };
 String STR_POOLPAGE_FOOTNOTE
 {
@@ -4447,7 +4927,7 @@ String STR_POOLPAGE_FOOTNOTE
     Text [ English ] = "Footnote" ;
     Text [ portuguese ] = "Nota de rodapé" ;
     Text [ english_us ] = "Footnote" ;
-    Text [ portuguese_brazilian ] = "Fu?note" ;
+    Text [ portuguese_brazilian ] = "Nota de Rodapé" ;
     Text [ swedish ] = "Fotnot" ;
     Text [ danish ] = "Fodnote" ;
     Text [ italian ] = "Nota a piè pagina" ;
@@ -4467,6 +4947,9 @@ String STR_POOLPAGE_FOOTNOTE
     Text[ catalan ] = "Nota al peu";
     Text[ finnish ] = "Alaviite";
     Text[ thai ] = "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+    Text[ czech ] = "PoznÃ¡mka pod Äarou";
+    Text[ hebrew ] = "â€®×”×¢×¨×ª ×©×•×œ×™×™×â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
 String STR_POOLPAGE_ENDNOTE
 {
@@ -4474,7 +4957,7 @@ String STR_POOLPAGE_ENDNOTE
     Text [ English ] = "Endnote" ;
     Text [ portuguese ] = "Nota final" ;
     Text [ english_us ] = "Endnote" ;
-    Text [ portuguese_brazilian ] = "Endnote" ;
+    Text [ portuguese_brazilian ] = "Nota de Fim" ;
     Text [ swedish ] = "Slutnot" ;
     Text [ danish ] = "Slutnote" ;
     Text [ italian ] = "Nota di chiusura" ;
@@ -4494,6 +4977,9 @@ String STR_POOLPAGE_ENDNOTE
     Text[ catalan ] = "Nota final";
     Text[ finnish ] = "Loppuviite";
     Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "VysvÄ›tlivka";
+    Text[ hebrew ] = "Endnote";
+    Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾ ";
 };
 /*
  Numerierungs Regeln
@@ -4510,7 +4996,7 @@ String STR_POOLNUMRULE_NUM1
     Text [ swedish ] = "Numrering 1" ;
     Text [ danish ] = "Nummerering 1" ;
     Text [ portuguese ] = "Numeração 1" ;
-    Text [ portuguese_brazilian ] = "Numerierung 1" ;
+    Text [ portuguese_brazilian ] = "Numeração 1" ;
     Text[ chinese_simplified ] = "ç¼–å· 1";
     Text[ russian ] = "Íóìåğàöèÿ 1";
     Text[ polish ] = "Numeracja 1";
@@ -4524,6 +5010,9 @@ String STR_POOLNUMRULE_NUM1
     Text[ catalan ] = "Numeració 1";
     Text[ finnish ] = "Numerointi 1";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚ 1";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 1";
+    Text[ hebrew ] = "Nummerierung 1";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 1";
 };
 String STR_POOLNUMRULE_NUM2
 {
@@ -4537,7 +5026,7 @@ String STR_POOLNUMRULE_NUM2
     Text [ swedish ] = "Numrering 2" ;
     Text [ danish ] = "Nummerering 2" ;
     Text [ portuguese ] = "Numeração 2" ;
-    Text [ portuguese_brazilian ] = "Numerierung 2" ;
+    Text [ portuguese_brazilian ] = "Numeração 2" ;
     Text[ chinese_simplified ] = "ç¼–å· 2";
     Text[ russian ] = "Íóìåğàöèÿ 2";
     Text[ polish ] = "Numeracja 2";
@@ -4551,6 +5040,9 @@ String STR_POOLNUMRULE_NUM2
     Text[ catalan ] = "Numeració 2";
     Text[ finnish ] = "Numerointi 2";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚ 2";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 2";
+    Text[ hebrew ] = "Nummerierung 2";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 2";
 };
 String STR_POOLNUMRULE_NUM3
 {
@@ -4564,7 +5056,7 @@ String STR_POOLNUMRULE_NUM3
     Text [ swedish ] = "Numrering 3" ;
     Text [ danish ] = "Nummerering 3" ;
     Text [ portuguese ] = "Numeração 3" ;
-    Text [ portuguese_brazilian ] = "Numerierung 3" ;
+    Text [ portuguese_brazilian ] = "Numeração 3" ;
     Text[ chinese_simplified ] = "ç¼–å· 3";
     Text[ russian ] = "Íóìåğàöèÿ 3";
     Text[ polish ] = "Numeracja 3";
@@ -4578,6 +5070,9 @@ String STR_POOLNUMRULE_NUM3
     Text[ catalan ] = "Numeració 3";
     Text[ finnish ] = "Numerointi 3";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚ 3";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 3";
+    Text[ hebrew ] = "Nummerierung 3";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 3";
 };
 String STR_POOLNUMRULE_NUM4
 {
@@ -4591,7 +5086,7 @@ String STR_POOLNUMRULE_NUM4
     Text [ swedish ] = "Numrering 4" ;
     Text [ danish ] = "Nummerering 4" ;
     Text [ portuguese ] = "Numeração 4" ;
-    Text [ portuguese_brazilian ] = "Numerierung 4" ;
+    Text [ portuguese_brazilian ] = "Numeração 4" ;
     Text[ chinese_simplified ] = "ç¼–å· 4";
     Text[ russian ] = "Íóìåğàöèÿ 4";
     Text[ polish ] = "Numeracja 4";
@@ -4605,6 +5100,9 @@ String STR_POOLNUMRULE_NUM4
     Text[ catalan ] = "Numeració 4";
     Text[ finnish ] = "Numerointi 4";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚ 4";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 4";
+    Text[ hebrew ] = "Nummerierung 4";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 4";
 };
 String STR_POOLNUMRULE_NUM5
 {
@@ -4618,7 +5116,7 @@ String STR_POOLNUMRULE_NUM5
     Text [ swedish ] = "Numrering 5" ;
     Text [ danish ] = "Nummerering 5" ;
     Text [ portuguese ] = "Numeração 5" ;
-    Text [ portuguese_brazilian ] = "Numerierung 5" ;
+    Text [ portuguese_brazilian ] = "Numeração 5" ;
     Text[ chinese_simplified ] = "ç¼–å· 5";
     Text[ russian ] = "Íóìåğàöèÿ 5";
     Text[ polish ] = "Numeracja 5";
@@ -4632,6 +5130,9 @@ String STR_POOLNUMRULE_NUM5
     Text[ catalan ] = "Numeració 5";
     Text[ finnish ] = "Numerointi 5";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚ 5";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ 5";
+    Text[ hebrew ] = "Nummerierung 5";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ 5";
 };
 String STR_POOLNUMRULE_BUL1
 {
@@ -4646,7 +5147,7 @@ String STR_POOLNUMRULE_BUL1
     Text [ swedish ] = "Punktuppställning 1" ;
     Text [ danish ] = "Punktopstilling 1" ;
     Text [ portuguese ] = "Lista 1" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 1" ;
+    Text [ portuguese_brazilian ] = "Lista 1" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 1";
     Text[ russian ] = "Ñïèñîê 1";
     Text[ polish ] = "Lista 1";
@@ -4660,6 +5161,9 @@ String STR_POOLNUMRULE_BUL1
     Text[ catalan ] = "Llista 1";
     Text[ finnish ] = "Luettelo 1";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 1";
+    Text[ czech ] = "Seznam 1";
+    Text[ hebrew ] = "AufzÃ¤hlung 1";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€  1";
 };
 String STR_POOLNUMRULE_BUL2
 {
@@ -4674,7 +5178,7 @@ String STR_POOLNUMRULE_BUL2
     Text [ swedish ] = "Punktuppställning 2" ;
     Text [ danish ] = "Punktopstilling 2" ;
     Text [ portuguese ] = "Lista 2" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 2" ;
+    Text [ portuguese_brazilian ] = "Lista 2" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 2";
     Text[ russian ] = "Ñïèñîê 2";
     Text[ polish ] = "Lista 2";
@@ -4688,6 +5192,9 @@ String STR_POOLNUMRULE_BUL2
     Text[ catalan ] = "Llista 2";
     Text[ finnish ] = "Luettelo 2";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 2";
+    Text[ czech ] = "Seznam 2";
+    Text[ hebrew ] = "AufzÃ¤hlung 2";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€  2";
 };
 String STR_POOLNUMRULE_BUL3
 {
@@ -4702,7 +5209,7 @@ String STR_POOLNUMRULE_BUL3
     Text [ swedish ] = "Punktuppställning 3" ;
     Text [ danish ] = "Punktopstilling 3" ;
     Text [ portuguese ] = "Lista 3" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 3" ;
+    Text [ portuguese_brazilian ] = "Lista 3" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 3";
     Text[ russian ] = "Ñïèñîê 3";
     Text[ polish ] = "Lista 3";
@@ -4716,6 +5223,9 @@ String STR_POOLNUMRULE_BUL3
     Text[ catalan ] = "Llista 3";
     Text[ finnish ] = "Luettelo 3";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 3";
+    Text[ czech ] = "Seznam 3";
+    Text[ hebrew ] = "AufzÃ¤hlung 3";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€  3";
 };
 String STR_POOLNUMRULE_BUL4
 {
@@ -4730,7 +5240,7 @@ String STR_POOLNUMRULE_BUL4
     Text [ swedish ] = "Punktuppställning 4" ;
     Text [ danish ] = "Punktopstilling 4" ;
     Text [ portuguese ] = "Lista 4" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 4" ;
+    Text [ portuguese_brazilian ] = "Lista 4" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 4";
     Text[ russian ] = "Ñïèñîê 4";
     Text[ polish ] = "Lista 4";
@@ -4744,6 +5254,9 @@ String STR_POOLNUMRULE_BUL4
     Text[ catalan ] = "Llista 4";
     Text[ finnish ] = "Luettelo 4";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 4";
+    Text[ czech ] = "Seznam 4";
+    Text[ hebrew ] = "AufzÃ¤hlung 4";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€  4";
 };
 String STR_POOLNUMRULE_BUL5
 {
@@ -4758,7 +5271,7 @@ String STR_POOLNUMRULE_BUL5
     Text [ swedish ] = "Punktuppställning 5" ;
     Text [ danish ] = "Punktopstilling 5" ;
     Text [ portuguese ] = "Lista 5" ;
-    Text [ portuguese_brazilian ] = "Aufz?hlung 51" ;
+    Text [ portuguese_brazilian ] = "Lista 5" ;
     Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å· 5";
     Text[ russian ] = "Ñïèñîê 5";
     Text[ polish ] = "Lista 5";
@@ -4772,6 +5285,9 @@ String STR_POOLNUMRULE_BUL5
     Text[ catalan ] = "Llista 5";
     Text[ finnish ] = "Luettelo 5";
     Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£ 5";
+    Text[ czech ] = "Seznam 5";
+    Text[ hebrew ] = "AufzÃ¤hlung 5";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€  5";
 };
 
 String STR_POOLCHR_RUBYTEXT
@@ -4789,16 +5305,19 @@ String STR_POOLCHR_RUBYTEXT
     Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Fonetisk tekst";
     Text[ swedish ] = "Rubytext";
-    Text[ polish ] = "Znaki Ruby";
-    Text[ portuguese_brazilian ] = "Phonetic Symbols";
+    Text[ polish ] = "Dopiski fonetyczne";
+    Text[ portuguese_brazilian ] = "Rubis";
     Text[ japanese ] = "ãµã‚ŠãŒãª";
     Text[ korean ] = "ë§ë§";
     Text[ chinese_simplified ] = "æ‹¼éŸ³å’Œæ³¨éŸ³ç¬¦å·";
     Text[ chinese_traditional ] = "æ³¨éŸ³ç¬¦è™Ÿ";
-    Text[ turkish ] = "Phonetic Symbols";
+    Text[ turkish ] = "Telaffuz için özel not (fonetik semboller)";
     Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Símbols fonètics";
     Text[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹€à¸¥à¹‡à¸";
+    Text[ czech ] = "Ruby";
+    Text[ hebrew ] = "Rubys";
+    Text[ hindi ] = "à¤°à¥‚à¤¬à¥€à¤¸";
 };
 
 String STR_POOLCHR_VERT_NUM
@@ -4821,9 +5340,52 @@ String STR_POOLCHR_VERT_NUM
     Text[ korean ] = "ì„¸ë¡œ ë²ˆí˜¸ ë§¤ê¸°ê¸° ê¸°í˜¸";
     Text[ chinese_simplified ] = "ç«–å†™å¼ç¼–å·å­—ç¬¦";
     Text[ chinese_traditional ] = "ç›´æ›¸å¼ç·¨è™Ÿå­—å…ƒ";
-    Text[ turkish ] = "Vertical Numbering Symbols";
+    Text[ turkish ] = "Dikey Numara Sembolü";
     Text[ arabic ] = "Vertical Numbering Symbols";
+    Text[ czech ] = "Symboly pro svislÃ© ÄÃ­slovÃ¡nÃ­";
+    Text[ hebrew ] = "Vertikale Nummerierungszeichen";
+    Text[ catalan ] = "Vertical Numbering Symbols";
+    Text[ portuguese_brazilian ] = "Vertical Numbering Symbols";
+    Text[ thai ] = "Vertical Numbering Symbols";
+    Text[ hindi ] = "Vertical Numbering Symbols";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
