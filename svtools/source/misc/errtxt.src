@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:32:42 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij kopiλren of verplaatsen van documentinhoud";
         Text[ chinese_simplified ] = "Έ΄ΦΖ»ςÒΖ¶―ΞΔµµΔΪΘέΚ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την αντιγραφή ή μετακίνηση των περιεχομένων του εγγράφου";
-        Text[ korean ] = "Ή®Ό­ ³»Ώλΐ» ΊΉ»η ¶Η΄Β ΐΜµΏΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­ ³»Ώλΐ» ΊΉ»η ¶Η΄Β ΐΜµΏ½ΓΏ΅ $(ERR)";
         Text[ turkish ] = "Belge iηeriπi kopyalanύrken ya da taώύnύrken $(ERR)";
     };
     String ERRCTX_SFX_DOCMANAGER
@@ -438,7 +438,7 @@ Resource RID_ERRCTX
         Text[ polish ] = "$(ERR) w trakcie wyszukiwania adresu";
         Text[ portuguese_brazilian ] = "$(ERR) searching for an address";
         Text[ japanese ] = "$(ERR) ±ΔήΪ½υ’†‚Ι”­¶‚µ‚ά‚µ‚½";
-        Text[ korean ] = "$(ERR) searching for an address";
+        Text[ korean ] = "ΑΦΌÒ °Λ»φ½ΓΏ΅ $(ERR)";
         Text[ chinese_simplified ] = "ΤΪΛΡΡ°µΨΦ·Κ±³φΟΦ$(ERR)";
         Text[ chinese_traditional ] = "¦b·j΄M¦a§}®Ι¥X²{ $(ERR)";
         Text[ turkish ] = "$(ERR) searching for an address";
@@ -2010,7 +2010,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
         Text[ chinese_simplified ] = "ÒªΈόΜζΡωΚ½ $(ARG1) £Ώ";
         Text[ greek ] = "Να αντικατασταθεί το στυλ $(ARG1);";
-        Text[ korean ] = "ΐ―Ηό$(ARG1)ΐ» ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+        Text[ korean ] = "ΐ―Ηό$(ARG1)ΐ»(Έ¦)  ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "$(ARG1) biηimi deπiώtirilsin mi?";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
     };
