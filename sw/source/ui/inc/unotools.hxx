@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:04:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,44 +103,6 @@
 #include "swdllapi.h"
 #endif
 
-/* -----------------09.06.99 14:36-------------------
- *
- * --------------------------------------------------*/
-//CHINA001 class SwRenameXNamedDlg : public ModalDialog
-//CHINA001 {
-//CHINA001 FixedText        aNewNameFT;
-//CHINA001 NoSpaceEdit  aNewNameED;
-//CHINA001 FixedLine       aNameFL;
-//CHINA001 OKButton         aOk;
-//CHINA001 CancelButton     aCancel;
-//CHINA001 HelpButton       aHelp;
-//CHINA001
-//CHINA001 String           sRemoveWarning;
-//CHINA001
-//CHINA001 STAR_REFERENCE( container::XNamed ) &    xNamed;
-//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
-//CHINA001 STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
-//CHINA001 STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
-//CHINA001
-//CHINA001 DECL_LINK(OkHdl, OKButton*);
-//CHINA001 DECL_LINK(ModifyHdl, NoSpaceEdit*);
-//CHINA001
-//CHINA001 public:
-//CHINA001 SwRenameXNamedDlg( Window* pParent,
-//CHINA001 STAR_REFERENCE( container::XNamed ) & xNamed,
-//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
-//CHINA001
-//CHINA001 void SetForbiddenChars( const String& rSet )
-//CHINA001      { aNewNameED.SetForbiddenChars( rSet ); }
-//CHINA001
-//CHINA001 void SetAlternativeAccess(
-//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xSecond,
-//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xThird )
-//CHINA001  {
-//CHINA001 xSecondAccess = xSecond;
-//CHINA001 xThirdAccess = xThird;
-//CHINA001  }
-//CHINA001 };
 /* -----------------------------15.12.99 09:55--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -172,6 +134,8 @@ public:
 
 // hard zoom value
 #define EX_SHOW_BUSINESS_CARDS  0x02
+//don't modify page size
+#define EX_SHOW_DEFAULT_PAGE    0x04
 
 class SwView;
 class SW_DLLPUBLIC SwOneExampleFrame
