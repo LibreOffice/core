@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
+ *  last change: $Author: pl $ $Date: 2002-10-21 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,14 @@ PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
      if (pPreeditData->eState == ePreeditStatusActive )
     {
+        if( pPreeditData->pFrame )
+        {
 #ifdef __synchronous_extinput__
-        pPreeditData->pFrame->maFrameData.Call(
-                SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #else
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent(
-                SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #endif
+        }
     }
     pPreeditData->eState = ePreeditStatusStartPending;
 }
@@ -465,7 +466,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
                 (void*)&aTextEvent);
       if (aTextEvent.mpTextAttr)
         free((void*)aTextEvent.mpTextAttr);
-    if (pPreeditData->aText.nLength == 0)
+    if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
         pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 
 #else
@@ -482,11 +483,14 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pTextEvent->mnDeltaStart  = 0; // call_data->chg_first;
       pTextEvent->mbOnlyCursor  = False;
 
-       pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
-        (void*)pTextEvent);
-    if (pPreeditData->aText.nLength == 0)
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
+    if( pPreeditData->pFrame )
+    {
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
+                                                            (void*)pTextEvent);
+        if (pPreeditData->aText.nLength == 0)
+            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+                                                                (void*)NULL );
+    }
 #endif
 
     if (pPreeditData->aText.nLength == 0)
