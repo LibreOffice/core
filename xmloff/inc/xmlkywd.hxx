@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:32:12 $
+ *  last change: $Author: dvo $ $Date: 2001-05-16 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,13 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+
+/*
+ * THIS FILE IS DEPRECATED. IT IS SUPERSEDED BY XMLTOKEN.HXX.
+ *
+ * Please use xmltoken.hxx / xmltoken.cxx from now on.
+ */
+
 
 /* if XML_DEFINE_KEYWORDS is defined the variables are
    defined rather than declared. So this file MUST be included

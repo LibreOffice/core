@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:16:22 $
+ *  last change: $Author: dvo $ $Date: 2001-05-16 15:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
 
@@ -609,6 +610,24 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
 {
     pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
                              sCDATA, rValue );
+}
+
+void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
+                                enum XMLTokenEnum eName,
+                                const OUString& rValue )
+{
+    pAttrList->AddAttribute(
+        pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        sCDATA, rValue );
+}
+
+void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
+                                enum XMLTokenEnum eName,
+                                enum XMLTokenEnum eValue)
+{
+    pAttrList->AddAttribute(
+        pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        sCDATA, GetXMLToken(eValue) );
 }
 
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -1398,6 +1417,18 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
+                                        sal_uInt16 nPrefixKey,
+                                        enum XMLTokenEnum eLName,
+                                        sal_Bool bIWSOutside,
+                                        sal_Bool bIWSInside ) :
+    rExport( rExp ),
+    bIgnWS( bIWSInside ),
+    bDoSomething( sal_True )
+{
+    StartElement( rExp, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
+}
+
+SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
                                         sal_Bool bDoSth,
                                         sal_uInt16 nPrefixKey,
                                         const sal_Char *pLName,
@@ -1426,6 +1457,20 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
 {
     if( bDoSomething )
         StartElement( rExp, nPrefixKey, rLName, bIWSOutside );
+}
+
+SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
+                                        sal_Bool bDoSth,
+                                        sal_uInt16 nPrefixKey,
+                                        enum XMLTokenEnum eLName,
+                                        sal_Bool bIWSOutside,
+                                        sal_Bool bIWSInside ) :
+    rExport( rExp ),
+    bIgnWS( bIWSInside ),
+    bDoSomething( bDoSth )
+{
+    if( bDoSomething )
+        StartElement( rExp, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
 }
 
 SvXMLElementExport::~SvXMLElementExport()
