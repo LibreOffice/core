@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:11:36 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,7 @@ String RID_SVXSTR_A11Y_AND
     Text[ thai ] = "and";
 };
 
+/*
 String RID_SVXSTR_A11Y_ST_RECTANGLE
 {
     Text = "Rechteck" ;
@@ -635,6 +636,7 @@ String RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE
     Text[ thai ] = "Open bezier curve";
 };
 
+*/
 
 // SvxRectCtl
 
