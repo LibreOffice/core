@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\bridge
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\chart
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\container
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\configuration
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\connection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\data
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer
@@ -71,6 +72,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\bridge\*.hpp %_DEST%\inc%_EXT%\com\sun\star\bridge\*.hpp
 ..\%__SRC%\inc\com\sun\star\chart\*.hdl %_DEST%\inc%_EXT%\com\sun\star\chart\*.hdl
 ..\%__SRC%\inc\com\sun\star\chart\*.hpp %_DEST%\inc%_EXT%\com\sun\star\chart\*.hpp
+..\%__SRC%\inc\com\sun\star\configuration\*.hdl %_DEST%\inc%_EXT%\com\sun\star\configuration\*.hdl
+..\%__SRC%\inc\com\sun\star\configuration\*.hpp %_DEST%\inc%_EXT%\com\sun\star\configuration\*.hpp
 ..\%__SRC%\inc\com\sun\star\container\*.hdl %_DEST%\inc%_EXT%\com\sun\star\container\*.hdl
 ..\%__SRC%\inc\com\sun\star\container\*.hpp %_DEST%\inc%_EXT%\com\sun\star\container\*.hpp
 ..\%__SRC%\inc\com\sun\star\connection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\connection\*.hdl
