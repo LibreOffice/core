@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 15:18:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,7 +1115,7 @@ namespace
 
                 // check which service we know ....
                 static const sal_Char* pTransTable[] = {
-                    "com.sun.star.sdb.DatabaseDocument","sdatabase",
+                    "com.sun.star.sdb.OfficeDatabaseDocument","sdatabase",
                     "com.sun.star.text.TextDocument",   "swriter",
                     "com.sun.star.sheet.SpreadsheetDocument", "scalc",
                     "com.sun.star.presentation.PresentationDocument", "simpress",
