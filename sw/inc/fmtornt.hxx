@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:58:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _FMTORNT_HXX
 #define _FMTORNT_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -70,18 +73,18 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
-#ifndef _SFXPOOLITEM_HXX //autogen
-#include <svtools/poolitem.hxx>
-#endif
 #ifndef _ORNTENUM_HXX
 #include <orntenum.hxx>
+#endif
+#ifndef _SFXPOOLITEM_HXX //autogen
+#include <svtools/poolitem.hxx>
 #endif
 
 class IntlWrapper;
 
 #define IVER_VERTORIENT_REL ((USHORT)0x0001)
 
-class SwFmtVertOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
     SwTwips          nYPos; //Enthaelt _immer_ die aktuelle RelPos.
     SwVertOrient     eOrient;
@@ -124,7 +127,7 @@ public:
 #define IVER_HORIORIENT_TOGGLE ((USHORT)0x0001)
 #define IVER_HORIORIENT_REL ((USHORT)0x0002)
 
-class SwFmtHoriOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
     SwTwips          nXPos; //Enthaelt _immer_ die aktuelle RelPos.
     SwHoriOrient     eOrient;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:56:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
-
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 enum SwFtnEndPosEnum
 {
@@ -85,7 +87,7 @@ enum SwFtnEndPosEnum
 };
 
 
-class SwFmtFtnEndAtTxtEnd : public SfxEnumItem
+class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
 {
     String      sPrefix;
     String      sSuffix;
@@ -145,7 +147,7 @@ public:
     void SetSuffix(const String& rSet)      { sSuffix = rSet; }
 };
 
-class SwFmtFtnAtTxtEnd : public SwFmtFtnEndAtTxtEnd
+class SW_DLLPUBLIC SwFmtFtnAtTxtEnd : public SwFmtFtnEndAtTxtEnd
 {
 public:
     SwFmtFtnAtTxtEnd( SwFtnEndPosEnum ePos = FTNEND_ATPGORDOCEND )
@@ -155,7 +157,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 };
 
-class SwFmtEndAtTxtEnd : public SwFmtFtnEndAtTxtEnd
+class SW_DLLPUBLIC SwFmtEndAtTxtEnd : public SwFmtFtnEndAtTxtEnd
 {
 public:
     SwFmtEndAtTxtEnd( SwFtnEndPosEnum ePos = FTNEND_ATPGORDOCEND )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtlsplt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:58:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,13 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class IntlWrapper;
 
-class SwFmtLayoutSplit : public SfxBoolItem
+class SW_DLLPUBLIC SwFmtLayoutSplit : public SfxBoolItem
 {
 public:
     SwFmtLayoutSplit( BOOL bSplit = TRUE ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
