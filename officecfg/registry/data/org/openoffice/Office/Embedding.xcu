@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:00:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@
             <prop oor:name="ObjectMiscStatus">
                 <value>1</value>
             </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
+            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
         </node>
         <node oor:name="4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3" oor:op="replace" install:module="draw">
             <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
