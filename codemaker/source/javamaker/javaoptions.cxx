@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:43 $
+ *  last change: $Author: jsc $ $Date: 2002-11-20 16:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #include    <stdio.h>
 #include <string.h>
 
-#include    "javaoptions.hxx"
+#include "javaoptions.hxx"
+#include "osl/process.h"
+#include "osl/thread.h"
 
 using namespace rtl;
 
@@ -249,7 +251,10 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 }
             } else
             {
-                m_inputFiles.push_back(av[i]);
+                OUString system_filepath;
+                OSL_VERIFY( osl_Process_E_None == osl_getCommandArg( i-1, &system_filepath.pData ) );
+                m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
+//                m_inputFiles.push_back(av[i]);
             }
         }
     }
