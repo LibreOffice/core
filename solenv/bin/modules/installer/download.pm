@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-02-01 15:35:05 $
+#   last change: $Author: is $ $Date: 2005-02-01 16:19:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -490,9 +490,11 @@ sub nsis_language_converter
     elsif ( $language eq "de" ) { $nsislanguage = "German"; }
     elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
     elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
+    elsif ( $language eq "nl" ) { $nsislanguage = "Dutch"; }
     elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
     elsif ( $language eq "sv" ) { $nsislanguage = "Swedish"; }
     elsif ( $language eq "pt-BR" ) { $nsislanguage = "PortugueseBR"; }
+    elsif ( $language eq "ru" ) { $nsislanguage = "Russian"; }
     elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
     elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
