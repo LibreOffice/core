@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 10:52:20 $
+ *  last change: $Author: fme $ $Date: 2002-08-20 11:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,10 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
+#ifndef _CHECKIT_HXX
+#include <checkit.hxx>
+#endif
+
 #ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
 #endif
@@ -642,6 +646,7 @@ SvPtrarr *pGlobalOLEExcludeList = 0;
 SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwBreakIt* pBreakIt = 0;
+SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 SwCalendarWrapper* pCalendarWrapper = 0;
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
@@ -935,6 +940,7 @@ void _InitCore()
     pBreakIt = new SwBreakIt;
     const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
                                             (LanguageType)GetAppLanguage() );
+    pCheckIt = NULL;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
@@ -968,6 +974,7 @@ void _FinitCore()
     _TextFinit();
 
     delete pBreakIt;
+    delete pCheckIt;
     delete pAppCharClass;
     delete pCalendarWrapper;
     delete pCollator;

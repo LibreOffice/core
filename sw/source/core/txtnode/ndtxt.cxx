@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-23 14:54:03 $
+ *  last change: $Author: fme $ $Date: 2002-08-20 11:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 
 #include <hintids.hxx>
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
+#include <drafts/com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
 #endif
@@ -81,6 +87,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 #ifndef _TXTFLD_HXX //autogen
@@ -206,7 +215,12 @@
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
-
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _CHECKIT_HXX
+#include <checkit.hxx>
+#endif
 
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
@@ -1596,9 +1610,51 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
     ASSERT( rIdx <= aText.Len(), "Array ueberindiziert." );
     ASSERT( (ULONG)aText.Len() + (ULONG)rStr.Len() <= STRING_LEN,
             "STRING_LEN ueberschritten." );
+
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = aText.Len() - aPos;
-    aText.Insert( rStr, aPos );
+
+    // sequence input checking
+    sal_Bool bInputChecked = sal_False;
+
+    // We check only buffers which contain less than MAX_SEQUENCE_CHECK_LEN
+    // characters. This is for performance reasons, because a "copy and paste"
+    // can give us a really big input string.
+    SvtLanguageOptions aLangOptions;
+    if ( aLangOptions.IsCTLFontEnabled() &&
+         aLangOptions.IsCTLSequenceChecking() && aPos &&
+         rStr.Len() < MAX_SEQUENCE_CHECK_LEN && pBreakIt->xBreak.is() &&
+         ::com::sun::star::i18n::ScriptType::COMPLEX ==
+         pBreakIt->xBreak->getScriptType( rStr, 0 ) )
+    {
+        // generate new sequence input checker if not already done
+        if ( ! pCheckIt )
+            pCheckIt = new SwCheckIt;
+
+        if ( pCheckIt->xCheck.is() )
+        {
+            xub_StrLen nI = 0;
+            xub_StrLen nTmpPos = aPos;
+            xub_Unicode cChar;
+
+            while ( nI < rStr.Len() )
+            {
+                cChar = rStr.GetChar( nI++ );
+                if ( pCheckIt->xCheck->checkInputSequence(
+                        aText, nTmpPos - 1, cChar,
+                        ::drafts::com::sun::star::i18n::InputSequenceCheckMode::BASIC ) )
+                {
+                    // character can be inserted
+                    aText.Insert( cChar, nTmpPos++ );
+                }
+            }
+            bInputChecked = sal_True;
+        }
+    }
+
+    if ( ! bInputChecked )
+        aText.Insert( rStr, aPos );
+
     nLen = aText.Len() - aPos - nLen;
     if( !nLen )                         // String nicht gewachsen ??
         return *this;
@@ -1612,7 +1668,7 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
 
     if( pSwpHints )
     {
-        for( i = 0; i < pSwpHints->Count() &&
+       for( i = 0; i < pSwpHints->Count() &&
                 rIdx >= *(*pSwpHints)[i]->GetStart(); ++i )
         {
             SwTxtAttr *pHt = pSwpHints->GetHt( i );
