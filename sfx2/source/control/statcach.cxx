@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:57:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
         DBG_ASSERT( !pDispatch, "Old Dispatch not removed!" );
 
+        // we don't need to check the dispatch provider if we only have an internal controller
         if ( xProv.is() )
         {
             const SfxSlot* pSlot = aSlotServ.GetSlot();
