@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:00 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ namespace configmgr
             bool isEmptyChange()    const { return eNoChange == type; }
             bool isValueChange()    const { return eSetValue <= type && type <= eSetDefault; }
             bool isSetChange()      const { return eInsertElement <= type && type <= eRemoveElement; }
-
+            bool isRemoveSetChange() const { return eRemoveElement == type;}
+            bool isReplaceSetChange() const { return eReplaceElement == type;}
         //-------------------------------------------------
             bool isDataChange() const;
 
