@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
+ *  last change: $Author: os $ $Date: 2001-06-08 09:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 using namespace com::sun::star::form;
-using namespace com::sun::star::awt;
+using namespace com::sun::star;
 using namespace com::sun::star::view;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -348,7 +348,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
         for( Window** ppW = aCntrlArr; *ppW; ++ppW )
         {
-            Point aPnt( (*ppW)->GetPosPixel() );
+            ::Point aPnt( (*ppW)->GetPosPixel() );
             aPnt.Y() -= nDiff;
             (*ppW)->SetPosPixel( aPnt );
         }
@@ -395,7 +395,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             pImpl->xFController = Reference<XFormController>(xController, UNO_QUERY);
             if(pImpl->xFController.is())
             {
-                Reference< XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
+                Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
                 pImpl->xSelSupp = Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
                 if(pImpl->xSelSupp.is())
                 {
@@ -774,7 +774,7 @@ Reference<XResultSet> SwMailMergeDlg::GetResultSet()
     Reference< XResultSet >  xResSet;
     if(pImpl->xFController.is())
     {
-        Reference< XTabControllerModel > xTModel = pImpl->xFController->getModel();
+        Reference< awt::XTabControllerModel > xTModel = pImpl->xFController->getModel();
         xResSet = Reference< XResultSet >(xTModel, UNO_QUERY);
     }
     return xResSet;
