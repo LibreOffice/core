@@ -2151,6 +2151,9 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
         pElement->m_xStorage = pRet;
     }
 
+    if ( pRet )
+        pRet->Init();
+
     return pRet;
 }
 
