@@ -1,0 +1,332 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dpgroupdlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:36:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dpgroupdlg.hrc"
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPNUMGROUP
+{
+    Size = MAP_APPFONT ( 220 , 110 ) ;
+    HelpId = HID_SC_DPNUMGROUP ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    FixedLine FL_START
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 152, 8 ) ;
+        Text [ de ] = "Anfang" ;
+        Text [ en-US ] = "Start" ;
+    };
+    RadioButton RB_AUTOSTART
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Automatisch" ;
+        Text [ en-US ] = "~Automatically" ;
+    };
+    RadioButton RB_MANSTART
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Manuell bei" ;
+        Text [ en-US ] = "~Manually at" ;
+    };
+    Edit ED_START
+    {
+        Pos = MAP_APPFONT ( 94 , 26 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_END
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ de ] = "Ende" ;
+        Text [ en-US ] = "End" ;
+    };
+    RadioButton RB_AUTOEND
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "A~utomatisch" ;
+        Text [ en-US ] = "A~utomatically" ;
+    };
+    RadioButton RB_MANEND
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Ma~nuell bei" ;
+        Text [ en-US ] = "Ma~nually at" ;
+    };
+    Edit ED_END
+    {
+        Pos = MAP_APPFONT ( 94 , 65 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_BY
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ de ] = "~Gruppieren nach" ;
+        Text [ en-US ] = "~Group by" ;
+    };
+    Edit ED_BY
+    {
+        Pos = MAP_APPFONT ( 94 , 92 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ de ] = "Gruppierung" ;
+    Text [ en-US ] = "Grouping" ;
+} ;
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPDATEGROUP
+{
+    Size = MAP_APPFONT ( 220 , 180 ) ;
+    HelpId = HID_SC_DPDATEGROUP ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    FixedLine FL_START
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 152, 8 ) ;
+        Text [ de ] = "Anfang" ;
+        Text [ en-US ] = "Start" ;
+    };
+    RadioButton RB_AUTOSTART
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Automatisch" ;
+        Text [ en-US ] = "~Automatically" ;
+    };
+    RadioButton RB_MANSTART
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Manuell bei" ;
+        Text [ en-US ] = "~Manually at" ;
+    };
+    DateField ED_START
+    {
+        Pos = MAP_APPFONT ( 94 , 26 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_END
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ de ] = "Ende" ;
+        Text [ en-US ] = "End" ;
+    };
+    RadioButton RB_AUTOEND
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "A~utomatisch" ;
+        Text [ en-US ] = "A~utomatically" ;
+    };
+    RadioButton RB_MANEND
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Ma~nuell bei" ;
+        Text [ en-US ] = "Ma~nually at" ;
+    };
+    DateField ED_END
+    {
+        Pos = MAP_APPFONT ( 94 , 65 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_BY
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ de ] = "Gruppieren nach" ;
+        Text [ en-US ] = "Group by" ;
+    };
+    RadioButton RB_NUMDAYS
+    {
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Anzahl von ~Tagen" ;
+        Text [ en-US ] = "Number of ~days" ;
+    };
+    RadioButton RB_UNITS
+    {
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Intervallen" ;
+        Text [ en-US ] = "~Intervals" ;
+    };
+    NumericField ED_NUMDAYS
+    {
+        Pos = MAP_APPFONT ( 94, 92 ) ;
+        Size = MAP_APPFONT ( 35, 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 32767 ;
+        SpinSize = 1 ;
+    };
+    Control LB_UNITS
+    {
+        Pos = MAP_APPFONT( 94, 110 );
+        Size = MAP_APPFONT( 58, 64 );
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    StringArray STR_UNITS
+    {
+        ItemList [ de ] =
+        {
+            < "Sekunden" ; Default ; > ;
+            < "Minuten" ; Default ; > ;
+            < "Stunden" ; Default ; > ;
+            < "Tage" ; Default ; > ;
+            < "Monate" ; Default ; > ;
+            < "Quartale" ; Default ; > ;
+            < "Jahre" ; Default ; > ;
+        };
+        ItemList [ en-US ] =
+        {
+            < "Seconds" ; Default ; > ;
+            < "Minutes" ; Default ; > ;
+            < "Hours" ; Default ; > ;
+            < "Days" ; Default ; > ;
+            < "Months" ; Default ; > ;
+            < "Quarters" ; Default ; > ;
+            < "Years" ; Default ; > ;
+        } ;
+    } ;
+    Text [ de ] = "Gruppierung" ;
+    Text [ en-US ] = "Grouping" ;
+} ;
+
+// ----------------------------------------------------------------------------
+
