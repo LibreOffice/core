@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.15 2002-01-18 16:41:13 fs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.16 2002-03-06 13:07:48 hjs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: fs $ $Date: 2002-01-18 16:41:13 $ $Revision: 1.15 $
+//	$Author: hjs $ $Date: 2002-03-06 13:07:48 $ $Revision: 1.16 $
 //
 // Description:
 //
@@ -38,7 +38,7 @@
 #define SQLYYDEBUG 1
 #endif
 
-#include "connectivity/sqlbison.hxx"
+#include "sqlbison.hxx"
 #endif
 #ifndef _CONNECTIVITY_SQLSCAN_HXX
 #include "sqlscan.hxx"
