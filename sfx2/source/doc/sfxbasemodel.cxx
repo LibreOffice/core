@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-13 12:50:43 $
+ *  last change: $Author: ab $ $Date: 2000-11-27 15:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,10 @@
 #include <printer.hxx>
 #endif
 
+#ifndef _SFX_BASMGR_HXX
+#include <basmgr.hxx>
+#endif
+
 #include <vos/mutex.hxx>
 
 #include "sfxsids.hrc"
@@ -224,6 +228,7 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XINTERFACE >                         m_xParent               ;
     REFERENCE< XCONTROLLER >                        m_xCurrent              ;
     REFERENCE< XDOCUMENTINFO >                      m_xDocumentInfo         ;
+    REFERENCE< XSTARBASICACCESS >                   m_xStarBasicAccess      ;
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
 
@@ -487,9 +492,26 @@ SEQUENCE< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( RUNTIME
 //  XStarBasicAccess
 //________________________________________________________________________________________________________
 
+REFERENCE< XSTARBASICACCESS > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
+{
+    REFERENCE< XSTARBASICACCESS > xRet;
+    if( pObjectShell )
+    {
+        BasicManager* pMgr = pObjectShell->GetBasicManager();
+        xRet = getStarBasicAccess( pMgr );
+    }
+    return xRet;
+}
+
 REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( RUNTIMEEXCEPTION )
 {
+    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    if( !rxAccess.is() )
+        rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
+
     REFERENCE< XNAMECONTAINER > xRet;
+    if( rxAccess.is() )
+        xRet = rxAccess->getLibraryContainer();
     return xRet;
 }
 
@@ -500,6 +522,12 @@ void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRI
     const OUSTRING& ExternalSourceURL, const OUSTRING& LinkTargetURL )
         throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    if( !rxAccess.is() )
+        rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
+
+    if( rxAccess.is() )
+        rxAccess->createLibrary( LibName, Password, ExternalSourceURL, LinkTargetURL );
 }
 
 /**___________________________________________________________________________________________________
@@ -509,6 +537,12 @@ void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRI
     const OUSTRING& Language, const OUSTRING& Source )
         throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    if( !rxAccess.is() )
+        rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
+
+    if( rxAccess.is() )
+        rxAccess->addModule( LibraryName, ModuleName, Language, Source );
 }
 
 /**___________________________________________________________________________________________________
@@ -518,6 +552,12 @@ void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRI
     const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
         throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    if( !rxAccess.is() )
+        rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
+
+    if( rxAccess.is() )
+        rxAccess->addDialog( LibraryName, DialogName, Data );
 }
 
 
