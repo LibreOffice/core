@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-07 20:06:47 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1737,7 +1737,7 @@ TabPage PAGE_ODBC
         Text[ polish ] = "W przypadku baz danych bazuj�cych na plikach u�yj katalogu";
         Text[ portuguese_brazilian ] = "Use catalog on filebased databases";
         Text[ japanese ] = "ファイルがベースのデータベースでは Catalog を使用";
-        Text[ korean ] = "파일 기반 데이터베이스에서 카탈로그 사용";
+        Text[ korean ] = "파일 기반 데이터베이스에서 목록 사용";
         Text[ chinese_simplified ] = "如果是文件式数据库就采用分类";
         Text[ chinese_traditional ] = "若是檔案式資料庫就採用分類";
         Text[ turkish ] = "Use catalog on filebased databases";
@@ -2992,7 +2992,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "~Arkusz kalkulacyjny";
             Text[ portuguese_brazilian ] = "~Spreadsheet";
             Text[ japanese ] = "表計算ドキュメント(~S)";
-            Text[ korean ] = "스프레드시트 문서(~S)";
+            Text[ korean ] = "스프레드시트(~S)";
             Text[ chinese_simplified ] = "工作表文档(~S)";
             Text[ chinese_traditional ] = "工作表文件(~S)";
             Text[ turkish ] = "~Spreadsheet";
@@ -3019,7 +3019,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "~Prezentacja";
             Text[ portuguese_brazilian ] = "~Presentation";
             Text[ japanese ] = "プレゼンテーション(~P)";
-            Text[ korean ] = "프리젠테이션(~P)";
+            Text[ korean ] = "프레젠테이션(~P)";
             Text[ chinese_simplified ] = "演示文稿(~P)";
             Text[ chinese_traditional ] = "簡報(~P)";
             Text[ turkish ] = "~Presentation";
@@ -3576,6 +3576,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.97  2002/05/07 20:06:47  kz
+ *  Merge SRX642: 07.05.02 - 22:06:14
+ *
  *  Revision 1.96  2002/04/30 15:38:27  fs
  *  #97118# remove user/password - not used at the moment
  *
