@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:08:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ russian ] = "Òî÷êè îñòàíîâà";
         Text[ polish ] = "Punkty przerwania";
         Text[ japanese ] = "ÌŞÚ°¸Îß²İÄ";
-        Text[ chinese_traditional ] = "¤¤¤îÂI";
+        Text[ chinese_traditional ] = "¤¤Â_ÂI";
         Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
         Text[ greek ] = "Óçìåßá óôÜóçò";
         Text[ korean ] = "Áß´ÜÁ¡";
@@ -243,7 +243,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text[ russian ] = "Òî÷êè îñòàíîâà";
     Text[ polish ] = "Punkty przerwania";
     Text[ japanese ] = "ÌŞÚ°¸Îß²İÄ";
-    Text[ chinese_traditional ] = "¤¤¤îÂI";
+    Text[ chinese_traditional ] = "¤¤Â_ÂI";
     Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
     Text[ greek ] = "Óçìåßá óôÜóçò";
     Text[ korean ] = "Áß´ÜÁ¡";
