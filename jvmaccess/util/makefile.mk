@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:41:30 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:50:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,8 @@ SHL1VERSIONMAP = msvc_win32_intel.map
 .ELIF "$(COMNAME)" == "sunpro5"
 SHL1VERSIONMAP = cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
+SHL1VERSIONMAP = gcc3_linux_intel.map
+.ELIF "$(OS)$(CPU)$(COMNAME)" == "FREEBSDIgcc3"
 SHL1VERSIONMAP = gcc3_linux_intel.map
 .ENDIF
 
