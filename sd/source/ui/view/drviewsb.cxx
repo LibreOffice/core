@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:41:45 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
