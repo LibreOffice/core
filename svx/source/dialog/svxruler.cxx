@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 08:49:32 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3214,7 +3214,7 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
     aTabStop.GetAdjustment() = ToAttrTab_Impl(pMenu->GetCurItemId()-1);
     pTabStopItem->Remove(pRuler_Imp->nIdx);
     pTabStopItem->Insert(aTabStop);
-    pBindings->GetDispatcher()->Execute( SID_ATTR_TABSTOP, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
+    pBindings->GetDispatcher()->Execute( pTabStopItem->Which(), SFX_CALLMODE_RECORD, pTabStopItem, 0L );
     UpdateTabs();
     pRuler_Imp->nIdx = 0;
     return 0;
