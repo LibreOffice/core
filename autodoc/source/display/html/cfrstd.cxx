@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:23:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,35 +133,72 @@ classes:
 namespace
 {
 const char * const C_sStdStyle =
-    "h3 { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:1pt; }"CRLF
-    "p, dt, dd, pre  { font-size:11pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
-
-    "table.lightbg { background-color:#eeeeff; }"CRLF
+    "/*See bottom of file for explanations.*/"CRLF
+    CRLF
+    "body { background-color:#ffffff; }"CRLF
+    CRLF
+    "h3             { font-size:13pt; font-weight:bold;"CRLF
+    "                 margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "p, dt, dd, pre { font-size:11pt;"CRLF
+    "                 margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "pre            { font-family:monospace; }"CRLF
+    CRLF
+    "table.lightbg  { background-color:#eeeeff; }"CRLF
     "table.subtitle { margin-top:6pt; margin-bottom:6pt; }"CRLF
-
-    "td { font-size:11pt; }"CRLF
-    "td.title { font-family: Arial; font-size:19pt; font-weight:bold; text-align:center; background-color:#ccccff; line-height:30pt; }"CRLF
-    "td.subtitle { font-family: Arial; font-size:13pt; background-color:#ccccff; line-height:20pt; }"CRLF
-    "td.crosstitle { font-size:12pt; font-weight:bold; background-color:#eeeeff; line-height:15pt; }"CRLF
-    "td.imdetail { width:100%; background-color:#eeeeff; }"CRLF
-    "a.membertitle { font-size:12pt; font-weight:bold; line-height:18pt; }"CRLF
-
-    "td.imsum_left { width:30%;  }"CRLF
+    CRLF
+    "td             {                     font-size:11pt; }"CRLF
+    "td.title       { font-family: Arial; font-size:19pt; font-weight:bold;"CRLF
+    "                 line-height:30pt;   background-color:#ccccff; text-align:center; }"CRLF
+    "td.subtitle    { font-family: Arial; font-size:13pt;"CRLF
+    "                 line-height:20pt;   background-color:#ccccff; }"CRLF
+    "td.crosstitle  {                     font-size:12pt; font-weight:bold;"CRLF
+    "                 line-height:15pt;   background-color:#eeeeff; }"CRLF
+    "td.imdetail    { width:100%;         background-color:#eeeeff; }"CRLF
+    CRLF
+    "td.imsum_left  { width:30%;  }"CRLF
     "td.imsum_right { width:70%;  }"CRLF
-
-    "td.navimain, a.navimain { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; }"CRLF
-    "td.navimainself { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; color:#ffffff; background-color:#2222ad; }"CRLF
-    "td.navimainnone { text-align:center; font-family: Arial; font-size:12pt; }"CRLF
-    "td.attrtitle { font-weight:bold; background-color:#eeeeff; }"CRLF
-    "td.navisub, a.navisub, td.attrtitle, td.attrvalue { text-align:center; font-family: Arial; font-size:9pt; font-variant:small-caps; }"CRLF
-    "td.navimain, td.navisub { padding-left:7pt; padding-right:7pt; }"CRLF
-
-    "p.raise  { font-size:11pt; margin-top:0pt; text-align:right; padding-right:5pt; }"CRLF
-
+    CRLF
+    "td.navimain, a.navimain"CRLF
+    "                   { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "td.navimainself    { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold;"CRLF
+    "                     color:#ffffff; background-color:#2222ad; }"CRLF
+    "td.navimainnone    { text-align:center; font-family: Arial; font-size:12pt; }"CRLF
+    "td.navisub, a.navisub"CRLF
+    "                   { text-align:center; font-family: Arial; font-size:9pt; font-variant:small-caps; }"CRLF
+    "td.navimain, td.navisub"CRLF
+    "                   { padding-left:7pt; padding-right:7pt; }"CRLF
+    CRLF
+    "a.membertitle  { font-size:12pt; font-weight:bold; line-height:18pt; }"CRLF
     "a.navimain, a.navisub  { color:#000000; }"CRLF
-    ".dt     { font-weight:bold; }"CRLF
-    ".namechain  { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:6pt; }"CRLF
-    ".tpl        { font-size:13pt; margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ".dt            { font-weight:bold; }"CRLF
+    ".namechain     { font-size:13pt; font-weight:bold;"CRLF
+    "                 margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ;
+
+
+const char * const C_sCssExplanations =
+    "/* Explanation of CSS classes:"CRLF
+    CRLF
+    "table.lightbg      Background of navigation bar."CRLF
+    ".navimain          Text in main navigation bar."CRLF
+    ".navisub           Text in lower navigation bar."CRLF
+    "td.navimainself    Cell in main navigation bar with \"selected\" shadow: You are here."CRLF
+    "td.navimainnone    Cell in main navigation bar with no link."CRLF
+    CRLF
+    ".namechain         Line with current module path."CRLF
+    CRLF
+    "td.crosstitle      Comment box for bases (base interfaces etc.)"CRLF
+    "td.imsum_left      Left part of such boxes."CRLF
+    "td.imsum_right     Right part of such boxes."CRLF
+    CRLF
+    "td.title           Main title of the page like \"interface XYz\""CRLF
+    ".subtitle          Tables, and head cells of those, which list members"CRLF
+    "                   like \"method summary\" and \"method details\"."CRLF
+    CRLF
+    "td.imdetail        Background table of method's detail description."CRLF
+    "a.membertitle      Method name (as jump label) in method's detail"CRLF
+    "                   description."CRLF
+    "*/"CRLF
     ;
 }   // anonymous namespace
 
@@ -197,16 +234,22 @@ StdFrame::LogoLink() const
 const char *
 StdFrame::CopyrightText() const
 {
-//  return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
     return "Copyright &copy; 2003 Sun Microsystems, Inc.";
-//  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 
+//  return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
+//  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 }
 
 const char *
 StdFrame::CssStyle() const
 {
     return C_sStdStyle;
+}
+
+const char *
+StdFrame::CssStylesExplanation() const
+{
+    return C_sCssExplanations;
 }
 
 const char *
