@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:30:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,22 +280,6 @@ Any convertAny( const Any& rVal, const Type& aDestType )
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any
-class SbUnoAnyObject: public SbxObject
-{
-    Any     mVal;
-
-public:
-    SbUnoAnyObject( const Any& rVal )
-        : SbxObject( String() )
-        , mVal( rVal )
-    {}
-
-    const Any& getValue( void )
-        { return mVal; }
-
-    TYPEINFO();
-};
-
 TYPEINIT1(SbUnoAnyObject,SbxObject)
 
 
