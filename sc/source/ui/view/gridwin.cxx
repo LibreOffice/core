@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-14 14:44:18 $
+ *  last change: $Author: sab $ $Date: 2002-10-17 13:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2359,6 +2359,23 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
             pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
             aMenuPos.X() += nSizeXPix;
             aMenuPos.Y() += nSizeYPix;
+
+            if (pViewData)
+            {
+                ScTabViewShell* pViewSh = pViewData->GetViewShell();
+                if (pViewSh)
+                {
+                    //  Is a draw object selected?
+
+                    SdrView* pDrawView = pViewSh->GetSdrView();
+                    if (pDrawView && pDrawView->HasMarked())
+                    {
+                        // #100442#; the conext menu should open in the middle of the selected objects
+                        Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
+                        aMenuPos = aSelectRect.Center();
+                    }
+                }
+            }
         }
 
         if (!bDone)
