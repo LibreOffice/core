@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:09:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ enum ScXMLTableRowAttrTokens
 enum ScXMLTableRowCellTokens
 {
     XML_TOK_TABLE_ROW_CELL_P,
-    XML_TOK_TABLE_ROW_CELL_SUBTABLE,
+    XML_TOK_TABLE_ROW_CELL_TABLE,
     XML_TOK_TABLE_ROW_CELL_ANNOTATION,
     XML_TOK_TABLE_ROW_CELL_DETECTIVE,
     XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE
