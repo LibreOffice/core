@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-15 10:13:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,23 +598,22 @@ static bool performTest(XBridgeTest xLBT)
             bRet &= check(false, "transportPolySequence");
         }
 
-
         try {
             //When the test object is a cli object then them member is null
             //otherwise the bridge has provided a default value.
-            TestPolyStruct s = (TestPolyStruct) xLBT.getNullPolyLong();
+            TestPolyStruct s =  xLBT.getNullPolyLong();
             if (s.member != null)
                 bRet &= check(((int) s.member) == 0, "getNullPolyLong");
 
-            s = (TestPolyStruct) xLBT.getNullPolyString();
+            s = xLBT.getNullPolyString();
             if (s.member != null)
                 bRet &= check(((string) s.member).Length == 0,
                               "getNullPolyString");
-            s = (TestPolyStruct) xLBT.getNullPolyType();
+            s = xLBT.getNullPolyType();
             if (s.member != null)
                 bRet &= check(((Type) s.member) == typeof(void),
                               "getNullPolyType");
-            s = (TestPolyStruct) xLBT.getNullPolyAny();
+            s = xLBT.getNullPolyAny();
             if (s.member != null)
             {
                 Any nullAny = (Any) s.member;
@@ -622,20 +621,23 @@ static bool performTest(XBridgeTest xLBT)
                 bRet &= check(nullAny.Type == typeof(void),
                     "getNullPolyAny");
             }
-            s = (TestPolyStruct) xLBT.getNullPolySequence();
+            s = xLBT.getNullPolySequence();
             if (s.member != null)
                 bRet &= check(((bool[]) s.member).Length == 0,
                               "getNullPolySequence");
-            s = (TestPolyStruct) xLBT.getNullPolyEnum();
+            s = xLBT.getNullPolyEnum();
             if (s.member != null)
                 bRet &= check(((TestEnum) s.member) == TestEnum.TEST,
                               "getNullPolyEnum");
-            s = (TestPolyStruct) xLBT.getNullPolyStruct();
+            s = xLBT.getNullPolyStruct();
             if (s.member != null)
                 bRet &= check(((TestStruct) s.member).member == 0,
                               "getNullPolyStruct");
-            s = (TestPolyStruct) xLBT.getNullPolyInterface();
+            s = xLBT.getNullPolyInterface();
                 bRet &= check(s.member == null, "getNullPolyInterface");
+
+            s = xLBT.getNullPolyBadEnum();
+            bRet &= check(((TestBadEnum)s.member) == TestBadEnum.M, "getNullPolyBadEnum");
 
         } catch(InvalidCastException)
         {
@@ -1020,6 +1022,8 @@ static bool raiseException(XBridgeTest xLBT )
 
     public int run( String [] args )
     {
+        Debug.AutoFlush = true;
+
         try
         {
             if (args.Length < 1)
@@ -1031,8 +1035,9 @@ static bool raiseException(XBridgeTest xLBT )
                 m_xContext.getServiceManager().createInstanceWithContext(
                     args[ 0 ], m_xContext );
 
-            Console.WriteLine(
-                "cli target bridgetest obj: {0}", test_obj.ToString() );
+            Debug.WriteLine(
+                "Calling object: {0}", test_obj.ToString() );
+
             XBridgeTest xTest = (XBridgeTest) test_obj ;
             perform_test( xTest );
             Console.WriteLine( "\n### cli_uno C# bridgetest succeeded." );
