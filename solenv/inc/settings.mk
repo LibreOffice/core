@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-15 17:23:14 $
+#   last change: $Author: kz $ $Date: 2001-01-29 12:23:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1014,6 +1014,11 @@ CDEFS+=-DTF_SDBAPI
 #to be removed soon!!!
 .IF "$(TF_CFG)" != ""
 CDEFS+=-DTF_CFG
+.ENDIF
+
+#to be removed soon!!!
+.IF "$(TF_FILTER)" != ""
+CDEFS+=-DTF_FILTER
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
