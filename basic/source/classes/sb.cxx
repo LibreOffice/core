@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-17 12:38:56 $
+ *  last change: $Author: ab $ $Date: 2001-12-03 09:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,6 +992,25 @@ BOOL StarBASIC::LoadData( SvStream& r, USHORT nVer )
 {
     if( !SbxObject::LoadData( r, nVer ) )
         return FALSE;
+
+    // #95459 Delete dialogs, otherwise endless recursion
+    // in SbxVarable::GetType() if dialogs are accessed
+    USHORT nObjCount = pObjs->Count();
+    SbxVariable** ppDeleteTab = new SbxVariable*[ nObjCount ];
+    for( USHORT nObj = 0 ; nObj < nObjCount ; nObj++ )
+    {
+        SbxVariable* pVar = pObjs->Get( nObj );
+        StarBASIC* pBasic = PTR_CAST( StarBASIC, pVar );
+        ppDeleteTab[nObj] = pBasic ? NULL : pVar;
+    }
+    for( nObj = 0 ; nObj < nObjCount ; nObj++ )
+    {
+        SbxVariable* pVar = ppDeleteTab[nObj];
+        if( pVar )
+            pObjs->Remove( pVar );
+    }
+    delete ppDeleteTab;
+
     UINT16 nMod;
     pModules->Clear();
     r >> nMod;
