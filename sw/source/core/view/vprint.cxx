@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:07:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,7 +1178,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     // Some field types, can require a valid layout
     // (expression fields in tables). For these we do an UpdateFlds
     // here after calculation of the pages.
-    pShell->UpdateFlds(TRUE);
+    // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
+    //                            the fields during pdf export.
+    if ( !pPDFOut )
+    // <--
+        pShell->UpdateFlds(TRUE);
 
     if( !  pShell->Imp()->IsStopPrt() &&
         (pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
