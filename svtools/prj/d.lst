@@ -1,6 +1,10 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\inc%_EXT%\svtools
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\srs\ehdl.srs %_DEST%\res%_EXT%\svtools.srs
+..\%COMMON_OUTDIR%\srs\ehdl_srs.hid %COMMON_DEST%\res%_EXT%\svtools_srs.hid
 ..\%__SRC%\lib\_notify.lib %_DEST%\lib%_EXT%\_notify.lib
 ..\%__SRC%\lib\_ctrl.lib %_DEST%\lib%_EXT%\_ctrl.lib
 ..\%__SRC%\lib\ctrl.lib %_DEST%\lib%_EXT%\ctrl.lib
