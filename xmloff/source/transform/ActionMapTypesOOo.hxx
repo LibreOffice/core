@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOOo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:43:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ enum ActionMapTypesOOo
     OOO_CHART_ACTIONS,
     OOO_ERROR_MACRO_ACTIONS,
     OOO_DDE_CONV_MODE_ACTIONS,
+    OOO_SCRIPT_ACTIONS,
     MAX_OOO_ACTIONS
 };
 
