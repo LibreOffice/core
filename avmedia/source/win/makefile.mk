@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2004-08-27 13:34:23 $
+#   last change: $Author: vg $ $Date: 2005-03-23 12:30:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,13 +82,16 @@ SLOFILES= \
         $(SLO)$/winuno.obj      \
         $(SLO)$/manager.obj     \
         $(SLO)$/window.obj      \
-        $(SLO)$/player.obj
+        $(SLO)$/player.obj      \
+        $(SLO)$/framegrabber.obj    
+        
 
 EXCEPTIONSFILES= \
-        $(SLO)$/winuno.obj
+        $(SLO)$/winuno.obj      \
+        $(SLO)$/framegrabber.obj    
 
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS= $(CPPULIB) $(SALLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB)
+SHL1STDLIBS= $(CPPULIB) $(SALLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(UNOTOOLSLIB) $(TOOLSLIB) $(VCLLIB) 
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -98,6 +101,7 @@ DEF1EXPORTFILE=exports.dxp
 
 SHL1STDLIBS += strmiids.lib
 SHL1STDLIBS += ole32.lib
+SHL1STDLIBS += oleaut32.lib
 SHL1STDLIBS += gdi32.lib
 SHL1STDLIBS += ddraw.lib
 SHL1STDLIBS += dxguid.lib
