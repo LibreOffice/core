@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:24:03 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifndef _SV_SALPRN_H
 #define _SV_SALPRN_H
 
-#ifndef _USE_PRINT_EXTENSION_
-
 #ifndef _PSPRINT_JOBDATA_HXX_
 #include <psprint/jobdata.hxx>
 #endif
@@ -73,29 +71,68 @@
 #ifndef _PSPRINT_PRINTERJOB_HXX_
 #include <psprint/printerjob.hxx>
 #endif
+#ifndef _SV_SALPRN_HXX
+#include <salprn.hxx>
+#endif
 
-class SalGraphics;
+class X11SalGraphics;
 
-struct SalInfoPrinterData
+class PspSalInfoPrinter : public SalInfoPrinter
 {
-    SalGraphics*            m_pGraphics;
-    ::psp::JobData          m_aJobData;
-    ::psp::PrinterGfx       m_aPrinterGfx;
+public:
+    X11SalGraphics*         m_pGraphics;
+    psp::JobData            m_aJobData;
+    psp::PrinterGfx         m_aPrinterGfx;
+
+    PspSalInfoPrinter();
+    virtual ~PspSalInfoPrinter();
+
+    // overload all pure virtual methods
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual BOOL                    SetPrinterData( ImplJobSetup* pSetupData );
+    virtual BOOL                    SetData( ULONG nFlags, ImplJobSetup* pSetupData );
+    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
+                                                 long& rOutWidth, long& rOutHeight,
+                                                 long& rPageOffX, long& rPageOffY,
+                                                 long& rPageWidth, long& rPageHeight );
+    virtual ULONG                   GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType );
+    virtual ULONG                   GetPaperBinCount( const ImplJobSetup* pSetupData );
+    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
+    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-struct SalPrinterData
+class PspSalPrinter : public SalPrinter
 {
+public:
     String                  m_aFileName;
     String                  m_aTmpFile;
     String                  m_aFaxNr;
     bool                    m_bFax:1;
     bool                    m_bPdf:1;
     bool                    m_bSwallowFaxNo:1;
-    SalGraphics*            m_pGraphics;
+    X11SalGraphics*         m_pGraphics;
     ::psp::PrinterJob       m_aPrintJob;
     ::psp::JobData          m_aJobData;
     ::psp::PrinterGfx       m_aPrinterGfx;
     ULONG                   m_nCopies;
+
+    PspSalPrinter();
+    virtual ~PspSalPrinter();
+
+    // overload all pure virtual methods
+    virtual BOOL                    StartJob( const XubString* pFileName,
+                                              const XubString& rJobName,
+                                              const XubString& rAppName,
+                                              ULONG nCopies, BOOL bCollate,
+                                              ImplJobSetup* pSetupData );
+    virtual BOOL                    EndJob();
+    virtual BOOL                    AbortJob();
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );
+    virtual BOOL                    EndPage();
+    virtual ULONG                   GetErrorCode();
 };
 
 class Timer;
@@ -114,74 +151,6 @@ public:
     static void jobEnded();
 };
 }
-
-#else
-
-#ifndef _SALSTD_HXX
-#include <salstd.hxx>
-#endif
-
-#ifndef _SV_PRNTYPES_HXX
-#include <prntypes.hxx>
-#endif
-
-// forward declarations
-class SalInfoPrinter;
-
-class SalPrinterQueueInfo;
-class ImplJobSetup;
-
-class ImplSalPrinterData;
-
-
-// class declarations
-
-
-class SalInfoPrinterData
-{
-  friend class SalInfoPrinter;
-  friend class SalPrinterData;
-
-  ImplSalPrinterData*   mpImplData;
-
-  inline        SalInfoPrinterData();
-  inline        ~SalInfoPrinterData();
-
-public:
-
-  inline void   Init( SalPrinterQueueInfo*  pQueueInfo,
-                      ImplJobSetup*         pJobSetup);
-};
-
-
-// -=-= SalPrinterData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-class SalPrinterData
-{
-    friend class SalPrinter;
-
-    ImplSalPrinterData* mpImplData;
-
-    BOOL                    mbJobStarted;       // is job started
-    BOOL                    mbPageStarted;      // is page started
-    String                  maFileName;         // print to file
-    int                     mnError;            // error code
-    ImplJobSetup*           mpJobSetup;         // job setup
-    BOOL                    mbAbort:1;          // is job aborted
-    BOOL                    mbFirstPage:1;      // false after first startpage
-
-    inline      SalPrinterData();
-    inline      ~SalPrinterData();
-
-public:
-    inline void Init( SalInfoPrinter*   pInfoPrinter );
-};
-
-
-// necessary to get changes in Xpdefaults
-void StartPrinterListening();
-void StopPrinterListening();
-
-#endif
 
 #endif // _SV_SALPRN_H
 
