@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: fs $ $Date: 2000-11-03 17:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,9 @@ OImageControlModel::~OImageControlModel()
 StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 1);
 
     ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.starform");
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_IMAGECONTROL;
     return aSupported;
 }
