@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 09:01:50 $
+ *  last change: $Author: oj $ $Date: 2002-02-27 10:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,20 @@
 
 #define HID_QUERY_EDIT_JOINCONNECTION               (HID_DBACCESS_START + 211)
 
+#define HID_DLG_QRY_WINDOW_CONTROL                  (HID_DBACCESS_START + 212)
+#define HID_DLG_QRY_LEFT_TABLE                      (HID_DBACCESS_START + 213)
+#define HID_DLG_QRY_RIGHT_TABLE                     (HID_DBACCESS_START + 214)
+
+#define HID_DLG_REL_CASC_DEL                        (HID_DBACCESS_START + 215)
+#define HID_DLG_REL_NO_CASC_DEL                     (HID_DBACCESS_START + 216)
+#define HID_DLG_REL_CASC_DEL_NULL                   (HID_DBACCESS_START + 217)
+#define HID_DLG_REL_CASC_DEL_DEFAULT                (HID_DBACCESS_START + 218)
+
+#define HID_DLG_REL_CASC_UPD                        (HID_DBACCESS_START + 219)
+#define HID_DLG_REL_NO_CASC_UPD                     (HID_DBACCESS_START + 220)
+#define HID_DLG_REL_CASC_UPD_NULL                   (HID_DBACCESS_START + 221)
+#define HID_DLG_REL_CASC_UPD_DEFAULT                (HID_DBACCESS_START + 222)
+
 // don't forget to update the file util/hidother.src
 
 
@@ -312,6 +326,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2002/02/06 09:01:50  oj
+ *  #90580# introduce new file for relation control
+ *
  *  Revision 1.44  2001/09/25 13:28:23  oj
  *  #91719# implementing the XRename handling
  *

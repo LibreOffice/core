@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:45:42 $
+ *  last change: $Author: oj $ $Date: 2002-02-27 10:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SVEDIT_HXX //autogen
-#include <svtools/svmedit.hxx>
-#endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
@@ -101,7 +98,7 @@ namespace dbaui
         FixedLine               aFL_Join;
         FixedText               aFT_Title;
         ListBox                 aLB_JoinType;
-        MultiLineEdit           aML_HelpText;
+        FixedText               aML_HelpText;
         OKButton                aPB_OK;
         CancelButton            aPB_CANCEL;
         HelpButton              aPB_HELP;

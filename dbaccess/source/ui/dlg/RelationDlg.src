@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.22 2002-02-06 08:43:11 oj Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.23 2002-02-27 10:16:25 oj Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: oj $ $Date: 2002-02-06 08:43:11 $ $Revision: 1.22 $
+ //  $Author: oj $ $Date: 2002-02-27 10:16:25 $ $Revision: 1.23 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -17,6 +17,7 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#include "dbaccess_helpid.hrc"
 
 
 ModalDialog DLG_REL_PROPERTIES
@@ -36,6 +37,7 @@ ModalDialog DLG_REL_PROPERTIES
         Pos = MAP_APPFONT( 0, 0 );
         Size = MAP_APPFONT( 186, 113 );
         DialogControl = TRUE;
+        HelpId        = HID_DLG_QRY_WINDOW_CONTROL ;
 
         FixedLine FL_INVOLVED_TABLES
         {
@@ -70,6 +72,7 @@ ModalDialog DLG_REL_PROPERTIES
             Border = TRUE;
             Pos = MAP_APPFONT( 12, 14 );
             Size = MAP_APPFONT( 78, 60 );
+            HelpId   = HID_DLG_QRY_LEFT_TABLE ;
             DropDown = TRUE;
             TabStop = TRUE;
         };
@@ -79,6 +82,7 @@ ModalDialog DLG_REL_PROPERTIES
             Border = TRUE;
             Pos = MAP_APPFONT( 96, 14 );
             Size = MAP_APPFONT( 78, 60 );
+            HelpId   = HID_DLG_QRY_RIGHT_TABLE ;
             DropDown = TRUE;
             TabStop = TRUE;
         };
@@ -148,6 +152,7 @@ ModalDialog DLG_REL_PROPERTIES
         Pos = MAP_APPFONT ( 12 , 125 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
+        HelpId  = HID_DLG_REL_NO_CASC_UPD;
         Text = "~Keine Aktion" ;
         Text [ English ] = "No action" ;
         Text [ portuguese ] = "~Nenhuma acção" ;
@@ -176,6 +181,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_UPD ;
         Text = "K~ask. Update" ;
         Text [ English ] = "Cascading update" ;
         Text [ portuguese ] = "Actualizar ~cascata" ;
@@ -204,6 +210,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_UPD_NULL ;
         Text = "~Null setzen" ;
         Text [ English ] = "Set null" ;
         Text [ portuguese ] = "Definir ~Null" ;
@@ -232,6 +239,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_UPD_DEFAULT ;
         Text = "~Default setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
@@ -290,6 +298,7 @@ ModalDialog DLG_REL_PROPERTIES
         Pos = MAP_APPFONT ( 102 , 125 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
+        HelpId  = HID_DLG_REL_NO_CASC_DEL ;
         Text = "K~eine Aktion" ;
         Text [ English ] = "No action" ;
         Text [ portuguese ] = "N~enhuma acção" ;
@@ -318,6 +327,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 102 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_DEL ;
         Text = "Ka~sk. Löschen" ;
         Text [ English ] = "Cascading delete" ;
         Text [ portuguese ] = "Eli~minar cascata" ;
@@ -346,6 +356,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 102 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_DEL_NULL ;
         Text = "Nu~ll setzen" ;
         Text [ English ] = "Set null" ;
         Text [ portuguese ] = "Definir ~Null" ;
@@ -374,6 +385,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 102 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
+        HelpId  = HID_DLG_REL_CASC_DEL_DEFAULT ;
         Text = "De~fault setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
