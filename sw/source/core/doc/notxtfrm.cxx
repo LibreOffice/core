@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:13:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,11 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         }
         return;
     }
-    if( pSh->GetAccessibilityOptions()->IsStopAnimatedGraphics() )
+
+    if( pSh->GetAccessibilityOptions()->IsStopAnimatedGraphics() ||
+    // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
+       !pSh->GetWin() )
+    // <--
         StopAnimation();
 
     if ( pSh->Imp()->IsPaintInScroll() && pSh->GetWin() && rRect != Frm() &&
@@ -1075,8 +1079,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
                 const FASTBOOL bAnimate = rGrfObj.IsAnimated() &&
-                                            !pShell->IsPreView() &&
-                            !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics();
+                                         !pShell->IsPreView() &&
+                                         !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
+                // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
+                                          pShell->GetWin();
+                // <--
+
                 if( bAnimate &&
                     FindFlyFrm() != ::GetFlyFromMarked( 0, pShell ))
                 {
@@ -1092,6 +1100,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport(),
                             "pOut sollte kein virtuelles Device sein" );
+
                     rGrfObj.StartAnimation( pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), long(this),
                                         0, GRFMGR_DRAW_STANDARD, pVout );
