@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,14 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
+#include <com/sun/star/drawing/LineDash.hpp>
+#endif
+
 //==================================================================
 //  SvxColorTableItem
 //==================================================================
@@ -92,6 +100,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XColorTable*            GetColorTable() const { return pColorTable; }
     void                    SetColorTable( XColorTable* pTable ) {
@@ -125,6 +135,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XGradientList*          GetGradientList() const { return pGradientList; }
     void                    SetGradientList( XGradientList* pList ) {
@@ -158,6 +170,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XHatchList*             GetHatchList() const { return pHatchList; }
     void                    SetHatchList( XHatchList* pList ) {
@@ -191,6 +205,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XBitmapList*            GetBitmapList() const { return pBitmapList; }
     void                    SetBitmapList( XBitmapList* pList ) {
@@ -224,10 +240,11 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XDashList*              GetDashList() const { return pDashList; }
-    void                    SetDashList( XDashList* pList ) {
-                                    pDashList = pList; }
+    void                    SetDashList( XDashList* pList );
 };
 
 #endif
@@ -257,6 +274,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XLineEndList*           GetLineEndList() const { return pLineEndList; }
     void                    SetLineEndList( XLineEndList* pList ) {
