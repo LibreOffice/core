@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:15:28 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     void                    UpdateFromHDC( HDC );
 
-    bool                    HasChar( sal_Unicode c ) const { return mpUnicodeMap->HasChar(c); }
+    bool                    HasChar( sal_uInt32 cChar ) const;
+
     WIN_BYTE                GetCharSet() const          { return meWinCharSet; }
     WIN_BYTE                GetPitchAndFamily() const   { return mnPitchAndFamily; }
     bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
@@ -387,6 +388,19 @@ inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
     if( a.wFirst > b.wFirst )
         return false;
     return (a.wSecond < b.wSecond);
+}
+
+// called extremely often from just one spot => inline
+inline bool ImplWinFontData::HasChar( sal_uInt32 cChar ) const
+{
+    if( mpUnicodeMap->HasChar( cChar ) )
+        return true;
+    // second chance to allow symbol aliasing
+    if( mbAliasSymbolsLow && ((cChar-0xF000) <= 0xFF) )
+        cChar -= 0xF000;
+    else if( mbAliasSymbolsHigh && (cChar <= 0xFF) )
+        cChar += 0xF000;
+    return mpUnicodeMap->HasChar( cChar );
 }
 
 #endif // _SV_SALGDI_H
