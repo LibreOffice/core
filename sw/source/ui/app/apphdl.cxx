@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:23:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,6 +1082,8 @@ void SwModule::ExecOther(SfxRequest& rReq)
                         {
                             pTargetView->GetViewFrame()->DoClose();
                             pSourceView->GetViewFrame()->GetFrame()->Appear();
+                            // the current view has be be set when the target is destroyed
+                            pView = pSourceView;
                             pMMConfig->SetTargetView(0);
                             bDeleteConfigItem = false;
                             pWizard = pFact->CreateMailMergeWizard(*pSourceView, *pMMConfig);
