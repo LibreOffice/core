@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:21:10 $
+ *  last change: $Author: os $ $Date: 2001-05-16 06:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ TabPage TP_PRINT_OPTIONS
     FixedLine GRP_PAGE
     {
         Pos = MAP_APPFONT ( 130 , 72  ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Seitenoptionen" ;
         Text [ ENGLISH ] = "Page options" ;
         Text [ norwegian ] = "Side valg" ;

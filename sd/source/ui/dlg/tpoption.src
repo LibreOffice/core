@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:27:53 $
+ *  last change: $Author: os $ $Date: 2001-05-16 06:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_QUICKEDIT
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Schnellbearbeitung zulassen" ;
         Text [ ENGLISH ] = "Quick edit" ;
@@ -486,7 +486,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_PICKTHROUGH
     {
         Pos = MAP_APPFONT ( 12 , 27  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Nur Textbereich selektierbar" ;
         Text [ ENGLISH ] = "Only textarea selectable" ;
@@ -543,7 +543,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_START_WITH_TEMPLATE
     {
         Pos = MAP_APPFONT ( 12 , 53  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "Mit ~Autopiloten starten" ;
         Text [ ENGLISH ] = "~Start with autopilot" ;
@@ -599,7 +599,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_MASTERPAGE_CACHE
     {
         Pos = MAP_APPFONT ( 12 , 80  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Cache für Hintergrund benutzen" ;
         Text [ ENGLISH ] = "Use Master page cache" ;
@@ -628,7 +628,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_COPY
     {
         Pos = MAP_APPFONT ( 12 , 93  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Kopie beim Verschieben" ;
         Text [ ENGLISH ] = "Drag with copy" ;
@@ -657,7 +657,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
         Pos = MAP_APPFONT ( 12 , 106  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Objekte immer verschiebbar" ;
         Text [ ENGLISH ] = "Objekte immer verschiebbar" ;
@@ -687,7 +687,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_CROOK_NO_CONTORTION
     {
         Pos = MAP_APPFONT ( 12 , 119  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE;
         Text = "S~etzen auf Kreis: nicht verzerren" ;
@@ -718,7 +718,7 @@ TabPage TP_OPTIONS_MISC
     FixedText FT_METRIC
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Maßeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
         Text [ norwegian ] = "Metriske Enheter" ;
@@ -747,14 +747,14 @@ TabPage TP_OPTIONS_MISC
     ListBox LB_METRIC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 117  ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 75 , 117  ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_TABSTOP
     {
-        Pos = MAP_APPFONT ( 136 , 119  ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 130 , 119  ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
         Text [ english_us ] = "Tab stops" ;
@@ -782,8 +782,8 @@ TabPage TP_OPTIONS_MISC
     MetricField MTR_FLD_TABSTOP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 117 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 206 , 117 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -827,7 +827,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 145  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Immer mit aktueller Seite" ;
         Text [ ENGLISH ] = "Always with actual page" ;
