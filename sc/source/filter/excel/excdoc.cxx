@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include "unonames.hxx"
 #include "convuno.hxx"
 #include "patattr.hxx"
+#include "docoptio.hxx"
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"
@@ -284,7 +285,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         }
 
         // Natural Language Formulas Flag
-        Add( new ExcDummy8_UsesElfs );
+        aRecList.AppendNewRecord( new XclExpBoolRecord( EXC_ID_USESELFS, GetDoc().GetDocOptions().IsLookUpColRowNames() ) );
 
         // Bundlesheet
         for( nC = 0 ; nC < nScTabCount ; nC++ )
