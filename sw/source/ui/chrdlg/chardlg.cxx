@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:25:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
     String sURL = aURLED.GetText();
     if(sURL.Len())
-        sURL = URIHelper::SmartRelToAbs(sURL);
+        sURL = INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE );
     SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
     aINetFmt.SetName(aNameED.GetText());
     SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
@@ -467,7 +467,7 @@ IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-        aURLED.SetText(URIHelper::SmartRelToAbs(xFP->getFiles().getConstArray()[0]));
+        aURLED.SetText(xFP->getFiles().getConstArray()[0]);
     }
     return 0;
 }
