@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:42:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -127,12 +127,12 @@ void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     m_aCollection.Delete(_sElementName);
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     OAdoIndex* pIndex = NULL;
     if(getImplementation(pIndex,_xDescriptor) && pIndex != NULL)
         return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());
-    return Reference< XNamed >();
+    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
