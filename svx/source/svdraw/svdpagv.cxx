@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-14 12:40:09 $
+ *  last change: $Author: aw $ $Date: 2002-02-28 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,56 +125,10 @@
 
 #pragma hdrstop
 
-#ifdef JOEDEBUG
-#include "joedebug.hxx"
-#endif
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
 TYPEINIT1(SdrPageView, SfxListener);
-
-#ifdef JOEDEBUG
-class UnoControl
-{
-public:
-    Window* pWin;
-public:
-    UnoControl(OutputDevice* pParent);
-    ~UnoControl() { delete pWin; }
-    void SetRect(const SdrObject* pObj, const Point& rPvOfs); // nur fuer intern zum testen!
-};
-
-UnoControl::UnoControl(OutputDevice* pParent)
-{
-    if (pParent->GetOutDevType()==OUTDEV_WINDOW)
-    {
-        pWin=new Window((Window*)pParent);
-        pWin->Show();
-    } else {
-        pWin=NULL;
-    }
-}
-
-// nur fuer intern zum testen!
-void UnoControl::SetRect(const SdrObject* pObj, const Point& rPvOfs)
-{
-    if (pWin!=NULL)
-    {
-        Rectangle aRect(pObj->GetBoundRect());
-        aRect.Move(rPvOfs.X(),rPvOfs.Y());
-        Window* pParent=pWin->GetParent();
-        aRect=pParent->LogicToPixel(aRect);
-        pWin->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
-    }
-}
-
-class UnoControlModel
-{
-public:
-    UnoControl* CreateUnoControl(OutputDevice* pOutDev1) const { return new UnoControl(pOutDev1); }
-};
-#endif
 
 // Klasse muß als listener fungieren, um den Zustand, ob ein Object sichtbar ist oder nicht
 // festzuhalten
@@ -1076,14 +1030,6 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
     else
         nImplPrepareMode = IMP_PAGEPAINT_PREPARE_BG_CACHE, nImplPaintMode = IMP_PAGEPAINT_PAINT_BG_CACHE;
 
-#ifdef nixJOEDEBUG
-    DebWrite("SdrPageView("); DebWrite(GetStr((void*)this)); DebWrite(")::DoCachedMasterPaint(");
-    DebWrite(GetStr((void*)pPg)); DebWrite(",pWin="); DebWrite(GetStr(rXOut.GetOutDev()));
-    DebWrite("("); DebWrite(GetStr(rXOut.GetOutDev()->GetOutDevType())); DebWriteln("),...)");
-    DebIncIndent();
-    DebWrite("pWin->GetMapMode()="); DebWriteln(GetStr(rXOut.GetMapMode()));
-#endif
-
     FASTBOOL bRet=TRUE;
 
     OutputDevice* pWin=rXOut.GetOutDev();
@@ -1128,21 +1074,9 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
     if (!bCreate)
         bCreate=!pBmp->aLogBound.IsInside(aNeedLogRect);
 
-#ifdef nixJOEDEBUG
-    Rectangle aVisibleArea(aTopLeftTmp,aWinSize);
-    aVisibleArea.Right()++; aVisibleArea.Bottom()++; // Weil Rect(Pnt,Siz) unten rechts immer eins weniger ist
-    DEBOUT(aVisibleArea);
-    DEBOUT(aPageBound);
-    DEBOUT(aNeedLogRect);
-    DEBOUT(pBmp->aLogBound);
-#endif
-
     // 2. Wenn keine passende Bmp da ist, dann versuchen eine zu erzeugen
     if (bCreate)
     {
-#ifdef nixJOEDEBUG
-        DebWriteln("*** Bitmap wird neu erzeugt ***");
-#endif
         pPg->SwapInAll();          // Gelinkte Graphiken auf MasterPages machen sonst Probleme
 
         if (pBmp==NULL)
@@ -1156,10 +1090,6 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
         Size a1Pix(pWin->PixelToLogic(Size(1,1)));
         aNeedLogSize.Width() +=a1Pix.Width();  // 1 Pixel fuer Toleranz drauf
         aNeedLogSize.Height()+=a1Pix.Height();
-
-#ifdef nixJOEDEBUG
-        DEBOUT(aNeedLogSize);
-#endif
 
      // Die Wiese im Hintergrund fuer StarDraw
 #ifdef MAC
@@ -1194,15 +1124,12 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             aNewMap.SetOrigin(aMapOrgTmp);
             pBmp->aVD.SetMapMode(aNewMap);
 
-#ifdef nixJOEDEBUG
-            DebWrite("pBmp->aVD.SetMapMode("); DebWrite(GetStr(aNewMap)); DebWriteln(");");
-#endif
             Point aTopLeftVDPixelLog(-aMapOrgTmp.X(),-aMapOrgTmp.Y());
             pBmp->aVD.IntersectClipRegion(Rectangle(aTopLeftVDPixelLog,aNeedLogSize));
             SdrPaintInfoRec aInfoRec(rInfoRec);
             aInfoRec.aCheckRect=aNeedLogRect;
             aInfoRec.aDirtyRect=aNeedLogRect;
-            pPg->Paint(rXOut,aInfoRec,FALSE,nImplPrepareMode);
+            pPg->Paint(rXOut,aInfoRec,FALSE,(sal_uInt16)nImplPrepareMode);
             pBmp->aLogBound=aNeedLogRect;
             pBmp->nMasterPageNum=pPg->GetPageNum();
             pBmp->aMapX=rMap.GetScaleX();
@@ -1219,9 +1146,6 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
         }
         else
         {
-#ifdef nixJOEDEBUG
-            DebWriteln("pBmp->aVD.SetOutputSize() ging daneben");
-#endif
             // Speicher reicht nicht
             delete pBmp;
             pBmp=NULL;
@@ -1233,12 +1157,7 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
     {
         Size aSiz(pBmp->aVD.GetOutputSize());
         pWin->DrawOutDev(pBmp->aLogBound.TopLeft(),aSiz,Point(),aSiz,pBmp->aVD);
-        pPg->Paint(rXOut,rInfoRec,FALSE,nImplPaintMode);
-#ifdef nixJOEDEBUG
-        DebWrite("Bitmap gepaintet: Size="); DebWrite(GetStr(aSiz));
-        DebWrite(", Position="); DebWrite(GetStr(pBmp->aLogBound.TopLeft()));
-        DebWriteln("");
-#endif
+        pPg->Paint(rXOut,rInfoRec,FALSE,(sal_uInt16)nImplPaintMode);
 
         // #74982# activate plugins on master page
         if(rInfoRec.pPV)
@@ -1261,11 +1180,6 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
         bRet=FALSE; // ansonsten hat der Speicher nicht ausgereicht
 
 //#endif
-
-#ifdef nixJOEDEBUG
-    DebWrite("Returniert mit "); DebOut(bRet);
-    DebDecIndent();
-#endif
 
     return bRet;
 }
@@ -1312,205 +1226,194 @@ void SdrPageView::InitRedraw(USHORT nWinNum, const Region& rReg, USHORT nPaintMo
 
 void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPaintMode, const Link* pPaintProc)
 {
-    if (pPage==NULL) return;
-    USHORT nWinAnz=pOut_!=NULL ? 1 : rView.GetWinCount();
-    rView.GetModel()->SetPaintingPageView(this);
-    //SdrPageWin*   pRed=GetWin(nWinNum);
-    for (USHORT nWinNum=0; nWinNum<nWinAnz; nWinNum++) {
-        OutputDevice* pOut=pOut_!=NULL ? pOut_ : rView.GetWin(nWinNum);
-        DBG_ASSERT(pOut!=NULL,"SdrPageView::InitRedraw(): pOut==NULL");
-        if (pOut==NULL) break;
-//    if (pOut!=NULL /*&& pRed!=NULL*/) {
+    if(!pPage)
+        return;
 
-        FASTBOOL bPrinter=(pOut->GetOutDevType()==OUTDEV_PRINTER);
-        const ULONG nOldDrawMode = pOut->GetDrawMode();
+    sal_uInt16 nWinAnz(pOut_!=NULL ? 1 : rView.GetWinCount());
+    rView.GetModel()->SetPaintingPageView(this);
+
+    for(sal_uInt16 nWinNum(0); nWinNum < nWinAnz; nWinNum++)
+    {
+        OutputDevice* pOut = pOut_!=NULL ? pOut_ : rView.GetWin(nWinNum);
+        DBG_ASSERT(pOut!=NULL,"SdrPageView::InitRedraw(): pOut==NULL");
+
+        if(!pOut)
+            break;
+
+        sal_Bool bPrinter(OUTDEV_PRINTER == pOut->GetOutDevType());
+        const sal_uInt16 nOldDrawMode((sal_uInt16)pOut->GetDrawMode());
 
         // DrawMode temp. zuruecksetzen
-        pOut->SetDrawMode( DRAWMODE_DEFAULT );
+        pOut->SetDrawMode(DRAWMODE_DEFAULT);
 
-        //pRed->bPrinter=bPrinter;
-        ExtOutputDevice* pXOut=rView.pXOut;
+        ExtOutputDevice* pXOut = rView.pXOut;
         pXOut->SetOutDev(pOut);
-        //pRed->eDrwStat=SDRREDRAW_BEGIN;
-        //pRed->aDrwReg=rReg;
-        //pRed->aCheckRect=rReg.GetBoundRect();
-        FASTBOOL bDrawAll=rReg.IsEmpty();
+
+        sal_Bool bDrawAll(rReg.IsEmpty());
         Rectangle aDirtyRect(rReg.GetBoundRect());
-        Size a1PixSiz(pOut->PixelToLogic(Size(1,1)));
+        Size a1PixSiz(pOut->PixelToLogic(Size(1, 1)));
         Rectangle aCheckRect(aDirtyRect);
-        aCheckRect.Left()  -=a1PixSiz.Width();
-        aCheckRect.Top()   -=a1PixSiz.Height();
-        aCheckRect.Right() +=a1PixSiz.Width();
-        aCheckRect.Bottom()+=a1PixSiz.Height();
-        aCheckRect-=aOfs; // Rect relativ zur PageView zum checken der Objekte
 
-        FASTBOOL bTextEdit=rView.IsTextEdit() && rView.pTextEditPV==this;
-        FASTBOOL bOnlyTextEdit=FALSE;
-        if (bTextEdit && !bDrawAll && !bPrinter && rView.IsTextEditFrame() &&
-            rView.pTextEditOutlinerView)
+        aCheckRect.Left() -= a1PixSiz.Width();
+        aCheckRect.Top() -= a1PixSiz.Height();
+        aCheckRect.Right() += a1PixSiz.Width();
+        aCheckRect.Bottom() += a1PixSiz.Height();
+
+        // Rect relativ zur PageView zum checken der Objekte
+        aCheckRect -= aOfs;
+
+        sal_Bool bTextEdit(rView.IsTextEdit() && rView.pTextEditPV == this);
+        ImpSdrHdcMerk aHDCMerk(*pOut, SDRHDC_SAVEPENANDBRUSHANDFONT, rView.bRestoreColors);
+        // Dirty, wg. DrawPager, ...
+        sal_Bool bColorsDirty(sal_True);
+
+        if(!bPrinter)
         {
-            Rectangle aTmpRect(rView.pTextEditOutlinerView->GetOutputArea());
+            // Papier, Seitenraender, Raster und Hilfslinien
+            if(rView.bPageVisible)
+                DrawPaper(*pOut);
 
-            // Da nicht mehr der gesamte Hintergrund der EditArea mit einem DrawRect()
-            // vollflaechig gepainted wird, entfaellt das folgende Union()
-//          aTmpRect.Union(rView.aMinTextEditArea);
+            if(rView.bBordVisible)
+                DrawBorder(*pOut);
 
-            aTmpRect.Left()  -=2*a1PixSiz.Width();
-            aTmpRect.Top()   -=2*a1PixSiz.Height();
-            aTmpRect.Right() +=2*a1PixSiz.Width();
-            aTmpRect.Bottom()+=2*a1PixSiz.Height();
-            // wenn der Invalidierte Bereich vollstaendig von der OutlinerView
-            // verdeckt wird, male ich nur die OutlinerView und sonst nix.
-            bOnlyTextEdit=aTmpRect.IsInside(aDirtyRect);
+            if(rView.bGridVisible && !rView.bGridFront)
+                DrawGrid(*pOut,aCheckRect);
 
-            // Da nicht mehr der gesamte Hintergrund der EditArea mit einem DrawRect()
-            // vollflaechig gepainted wird, muss bOnlyTextEdit ggf. auf FALSE gesetzt werden
-            if( bOnlyTextEdit && rView.pTextEditOutliner )
-            {
-                Paragraph* p1stPara = rView.pTextEditOutliner->GetParagraph( 0 );
-                if ( !p1stPara )
-                {
-                    // Kein Text vorhanden
-                    bOnlyTextEdit = FALSE;
-                }
-                else
-                {
-                    if ( rView.pTextEditOutliner->GetParagraphCount() == 1 )
-                    {
-                        // bei nur einem Para nachsehen ob da ueberhaupt was drin steht
-                        XubString aStr( rView.pTextEditOutliner->GetText( p1stPara ) );
-                        if ( !aStr.Len() )
-                            bOnlyTextEdit = FALSE; // Kein Text vorhanden
-                    }
-                }
-            }
-
-            // Funkt noch nicht:
-            //if (!bOnlyTextEdit) { // aTmpRect ggf. von aCheckRect abziehen
-              //  if (aTmpRect2.Left()<=pRed->aCheckRect.Left() && aTmpRect2.Right()>=pRed->aCheckRect.Right()) {
-              //      if (aTmpRect2.Top()<=pRed->aCheckRect.Top() && aTmpRect2.Bottom()>pRed->aCheckRect.Top()) {
-              //          pRed->aCheckRect.Top()=aTmpRect2.Bottom();
-              //      }
-              //  }
-                //if (aTmpRect2.Top()<=pRed->aCheckRect.Top() && aTmpRect2.Bottom()>=pRed->aCheckRect.Bottom()) {
-                //    ...
-                //}
-            //}
-        }
-#ifdef neeJOEDEBUG
-        if (bTextEdit && !bOnlyTextEdit) {
-            String aMsg("PageView::InitRedraw: bOnlyTextEdit=");
-            if (bOnlyTextEdit) aMsg+="TRUE"; else aMsg+="FALSE";
-            DebWriteln(aMsg);
-        }
-#endif
-        ImpSdrHdcMerk aHDCMerk(*pOut,SDRHDC_SAVEPENANDBRUSHANDFONT,rView.bRestoreColors);
-        FASTBOOL bColorsDirty=TRUE; // Dirty, wg. DrawPager, ...
-        if (!bOnlyTextEdit) {
-            if (!bPrinter) { // Papier, Seitenraender, Raster und Hilfslinien
-                if (rView.bPageVisible) DrawPaper(*pOut);
-                if (rView.bBordVisible) DrawBorder(*pOut);
-                if (rView.bGridVisible && !rView.bGridFront) DrawGrid(*pOut,aCheckRect);
-                if (rView.bHlplVisible && !rView.bHlplFront) DrawHelplines(*pOut);
-            }
+            if(rView.bHlplVisible && !rView.bHlplFront)
+                DrawHelplines(*pOut);
         }
 
         pXOut->SetOffset(aOfs);
 
         // eingestellten DrawMode wiederherstellen
-        pOut->SetDrawMode( nOldDrawMode );
+        pOut->SetDrawMode(nOldDrawMode);
 
-        if (!bOnlyTextEdit) {
-            SdrPaintInfoRec aInfoRec;
-            aInfoRec.pPV=this;
-            aInfoRec.bPrinter=bPrinter;
-            aInfoRec.aDirtyRect=aDirtyRect;
-            aInfoRec.aCheckRect=aCheckRect;
-            aInfoRec.pPaintProc=pPaintProc;
-    #ifdef nixJOEDEBUG
-            String aMsg("SdrPageView::InitRedraw(): "); if (pPage->IsMasterPage()) aMsg+="MasterPage "; else aMsg+="Seite ";
-            aMsg+=(pPage->GetPageNum()+1); aMsg+=" auf OutDev "; aMsg+=...nWinNum...; aMsg+=" ("; aMsg+=GetStr(pOut->GetOutDevType()); aMsg+=").";
-            DebWriteln(aMsg);
-            DebOut(*pPage);
-    #endif
-            if (bPrinter) {
-                if (rView.IsLineDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
-                if (rView.IsFillDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
-                if (rView.IsTextDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
-                if (rView.IsGrafDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
-            } else {
-                if (rView.IsLineDraft()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
-                if (rView.IsFillDraft()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
-                if (rView.IsTextDraft()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
-                if (rView.IsGrafDraft()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
-                if (rView.IsHideGrafDraft()) nPaintMode|=SDRPAINTMODE_HIDEDRAFTGRAF;
-            }
-            const SetOfByte& rPaintLayer=bPrinter ? aLayerPrn : aLayerVisi;
+        SdrPaintInfoRec aInfoRec;
+        aInfoRec.pPV = this;
+        aInfoRec.bPrinter = bPrinter;
+        aInfoRec.aDirtyRect = aDirtyRect;
+        aInfoRec.aCheckRect = aCheckRect;
+        aInfoRec.pPaintProc = pPaintProc;
 
-            // erstmal alle MasterPages Painten
-            USHORT nMaPgAnz=pPage->GetMasterPageCount();
-            FASTBOOL bNeedMPagPaint=TRUE;
-            if (!bPrinter && nMaPgAnz==1 && rView.IsMasterPagePaintCaching()) { // Die MasterPage ggf. mit 'ner Bitmap malen
-                SdrPage* pMasterPage=pPage->GetMasterPage(0);
-                if (pMasterPage!=NULL && pMasterPage->GetObjCount()!=0 && MasterShouldBeCached(pMasterPage)) {
-                    // Gucken, ob passende Bmp da ist. Wenn nicht, dann versuchen eine zu erzeugen. Bmp painten.
-                    aInfoRec.aPaintLayer=rPaintLayer;
-                    aInfoRec.aPaintLayer&=pPage->GetMasterPageVisibleLayers(0);
-                    aInfoRec.nPaintMode=nPaintMode|SDRPAINTMODE_MASTERPAGE;
-                    bNeedMPagPaint=!DoCachedMasterPaint(pMasterPage,*pXOut,aInfoRec,rView.GetMasterPagePaintCacheMode());
-                }
-            }
-            if (bNeedMPagPaint) {
-                USHORT nMaPgNum=0;
-                while (nMaPgNum<nMaPgAnz) {
-                    SdrPage* pMasterPage=pPage->GetMasterPage(nMaPgNum);
-                    if (pMasterPage!=NULL && pMasterPage->GetObjCount()!=0) {
-                        aInfoRec.aPaintLayer=rPaintLayer;
-                        aInfoRec.aPaintLayer&=pPage->GetMasterPageVisibleLayers(nMaPgNum);
-                        aInfoRec.nPaintMode=nPaintMode|SDRPAINTMODE_MASTERPAGE;
-                        pMasterPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
-                    }
-                    nMaPgNum++;
-                }
-            }
-            // Und nun die eigentliche Zeichenseite Painten
-            aInfoRec.aPaintLayer=rPaintLayer;
-            aInfoRec.nPaintMode=nPaintMode;
-            if (GetObjList()!=pPage) aInfoRec.pAktList=GetObjList();
-            if (!bPrinter && rView.ImpIsGlueVisible()) {
-                aInfoRec.nPaintMode|=SDRPAINTMODE_GLUEPOINTS;
-            }
+        if(bPrinter)
+        {
+            if(rView.IsLineDraftPrn())
+                nPaintMode |= SDRPAINTMODE_DRAFTLINE;
 
-            // Zeichnen
-            pPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
-            pXOut->SetOffset(Point(0,0));
+            if(rView.IsFillDraftPrn())
+                nPaintMode |= SDRPAINTMODE_DRAFTFILL;
 
-            if (!bPrinter) { // Raster und Hilfslinien malen
-                if (rView.bGridVisible && rView.bGridFront) DrawGrid(*pOut,aCheckRect);
-                if (rView.bHlplVisible && rView.bHlplFront) DrawHelplines(*pOut);
+            if(rView.IsTextDraftPrn())
+                nPaintMode |= SDRPAINTMODE_DRAFTTEXT;
+
+            if(rView.IsGrafDraftPrn())
+                nPaintMode |= SDRPAINTMODE_DRAFTGRAF;
+        }
+        else
+        {
+            if(rView.IsLineDraft())
+                nPaintMode |= SDRPAINTMODE_DRAFTLINE;
+
+            if(rView.IsFillDraft())
+                nPaintMode |= SDRPAINTMODE_DRAFTFILL;
+
+            if(rView.IsTextDraft())
+                nPaintMode |= SDRPAINTMODE_DRAFTTEXT;
+
+            if(rView.IsGrafDraft())
+                nPaintMode |= SDRPAINTMODE_DRAFTGRAF;
+
+            if(rView.IsHideGrafDraft())
+                nPaintMode |= SDRPAINTMODE_HIDEDRAFTGRAF;
+        }
+
+        const SetOfByte& rPaintLayer = bPrinter ? aLayerPrn : aLayerVisi;
+
+        // erstmal alle MasterPages Painten
+        sal_uInt16 nMaPgAnz(pPage->GetMasterPageCount());
+        sal_Bool bNeedMPagPaint(sal_True);
+
+        if(!bPrinter && 1 == nMaPgAnz && rView.IsMasterPagePaintCaching())
+        {
+            // Die MasterPage ggf. mit 'ner Bitmap malen
+            SdrPage* pMasterPage = pPage->GetMasterPage(0);
+
+            if(pMasterPage && pMasterPage->GetObjCount() && MasterShouldBeCached(pMasterPage))
+            {
+                // Gucken, ob passende Bmp da ist. Wenn nicht, dann versuchen eine zu erzeugen. Bmp painten.
+                aInfoRec.aPaintLayer = rPaintLayer;
+                aInfoRec.aPaintLayer &= pPage->GetMasterPageVisibleLayers(0);
+                aInfoRec.nPaintMode = nPaintMode | SDRPAINTMODE_MASTERPAGE;
+                bNeedMPagPaint = !DoCachedMasterPaint(pMasterPage, *pXOut, aInfoRec, rView.GetMasterPagePaintCacheMode());
             }
         }
-        if (bTextEdit) {
-            ImpPaintOutlinerView(pOut,aCheckRect);
-            bColorsDirty=TRUE;
+
+        if(bNeedMPagPaint)
+        {
+            sal_uInt16 nMaPgNum(0);
+
+            while(nMaPgNum < nMaPgAnz)
+            {
+                SdrPage* pMasterPage = pPage->GetMasterPage(nMaPgNum);
+
+                if(pMasterPage && pMasterPage->GetObjCount())
+                {
+                    aInfoRec.aPaintLayer = rPaintLayer;
+                    aInfoRec.aPaintLayer &= pPage->GetMasterPageVisibleLayers(nMaPgNum);
+                    aInfoRec.nPaintMode = nPaintMode | SDRPAINTMODE_MASTERPAGE;
+                    pMasterPage->Paint(*pXOut, aInfoRec, rView.bRestoreColors);
+                }
+                nMaPgNum++;
+            }
         }
-        //pRed->eDrwStat=SDRREDRAW_READY;
-        if (rView.bRestoreColors /*&& bColorsDirty*/) {
+
+        // Und nun die eigentliche Zeichenseite Painten
+        aInfoRec.aPaintLayer = rPaintLayer;
+        aInfoRec.nPaintMode = nPaintMode;
+
+        if(GetObjList() != pPage)
+            aInfoRec.pAktList = GetObjList();
+
+        if(!bPrinter && rView.ImpIsGlueVisible())
+        {
+            aInfoRec.nPaintMode |= SDRPAINTMODE_GLUEPOINTS;
+        }
+
+        // Zeichnen
+        pPage->Paint(*pXOut, aInfoRec, rView.bRestoreColors);
+        pXOut->SetOffset(Point(0, 0));
+
+        if(!bPrinter)
+        {
+            // Raster und Hilfslinien malen
+            if(rView.bGridVisible && rView.bGridFront)
+                DrawGrid(*pOut, aCheckRect);
+
+            if(rView.bHlplVisible && rView.bHlplFront)
+                DrawHelplines(*pOut);
+        }
+
+        if(bTextEdit)
+        {
+            ImpPaintOutlinerView(pOut, aCheckRect);
+            bColorsDirty = sal_True;
+        }
+
+        if(rView.bRestoreColors)
+        {
             aHDCMerk.Restore(*pOut);
         }
     }
 
     rView.PostPaint();
-    rView.RestartAfterPaintTimer(); // #37074#: fuer SolidHandles im LiveModus der praesentation
+    // #37074#: fuer SolidHandles im LiveModus der praesentation
+    rView.RestartAfterPaintTimer();
 }
 
 
 FASTBOOL SdrPageView::IsReady() const
 {
     FASTBOOL bRet=TRUE;
-/*    for (USHORT i=0; i<GetWinCount() && bRet; i++) {
-        if (GetWin(i)->eDrwStat!=SDRREDRAW_READY) bRet=FALSE;
-    }*/
     return bRet;
 }
 
@@ -1519,14 +1422,6 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 {
     if (pPage==NULL)
         return;
-
-#ifdef nixJOEDEBUG
-    DebWriteln("SdrPageView::DrawPaper()");
-    DebIncIndent();
-    DebWrite("MapMode des OutDev: ");
-    DebWriteln(GetStr(rOut.GetMapMode()));
-    DebDecIndent();
-#endif
 
     rOut.SetLineColor( Color( COL_GRAY ) );
     rOut.SetFillColor( Color( COL_WHITE ) );
@@ -1550,22 +1445,6 @@ void SdrPageView::DrawBorder(OutputDevice& rOut)
     aRect.Right ()-=pPage->GetRgtBorder();
     aRect.Bottom()-=pPage->GetLwrBorder();
     rOut.DrawRect(aRect);
-
-#ifdef neinJOEDEBUG // BoundRect und SnapRect der Page sichtbar machen
-    rOut.SetFillColor();
-    Rectangle aBnd(pPage->GetAllObjBoundRect());
-    Rectangle aSnp(pPage->GetAllObjSnapRect());
-    if (!aBnd.IsEmpty()) {
-        aBnd.Move(aOfs.X(),aOfs.Y());
-        rOut.SetLineColor( Color(COL_BLUE) );
-        rOut.DrawRect(aBnd);
-    }
-    if (!aSnp.IsEmpty()) {
-        aSnp.Move(aOfs.X(),aOfs.Y());
-        rOut.SetLineCOlor( Color(COL_RED) );
-        rOut.DrawRect(aSnp);
-    }
-#endif
 }
 
 #ifdef OS2
@@ -1685,11 +1564,6 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
         long nOS2MaxYPix=rOut.GetOutputSizePixel().Height()-1;
 #endif
 
-//#ifdef JOEDEBUG
-//        aPgOrg.X()=0;
-//        aPgOrg.Y()=0;
-//#endif
-
         //Point aWriterPageOffset(pPage->GetOffset());
         long nWrX=0;//aWriterPageOffset.X();
         long nWrY=0;//aWriterPageOffset.Y();
@@ -1747,7 +1621,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
                 if( bHoriLines )
                 {
                     ULONG nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
-                    UINT16 nSteps = nx1 / nx2;
+                    UINT16 nSteps = sal_uInt16(nx1 / nx2);
                     UINT32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
                     UINT32 nStepOffset = 0;
                     UINT16 nPointOffset = 0;
@@ -1774,7 +1648,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
                 if( bVertLines )
                 {
                     ULONG nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
-                    UINT16 nSteps = ny1 / ny2;
+                    UINT16 nSteps = sal_uInt16(ny1 / ny2);
                     UINT32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
                     UINT32 nStepOffset = 0;
                     UINT16 nPointOffset = 0;
@@ -1858,56 +1732,42 @@ void SdrPageView::RedrawOneLayer(SdrLayerID nId, const Rectangle& rRect, OutputD
         aCheckRect-=aOfs; // Rect relativ zur PageView zum checken der Objekte
 
         FASTBOOL bTextEdit=rView.IsTextEdit() && rView.pTextEditPV==this;
-        FASTBOOL bOnlyTextEdit=FALSE;
-        if (bTextEdit && !bDrawAll && !bPrinter && rView.IsTextEditFrame()) {
-            Rectangle aTmpRect(rView.pTextEditOutlinerView->GetOutputArea());
-            aTmpRect.Union(rView.aMinTextEditArea);
-            //Rectangle aTmpRect(rView.aTextEditArea);
-            aTmpRect.Left()  -=2*a1PixSiz.Width();
-            aTmpRect.Top()   -=2*a1PixSiz.Height();
-            aTmpRect.Right() +=2*a1PixSiz.Width();
-            aTmpRect.Bottom()+=2*a1PixSiz.Height();
-            // wenn der Invalidierte Bereich vollstaendig von der OutlinerView
-            // verdeckt wird, male ich nur die OutlinerView und sonst nix.
-            bOnlyTextEdit=aTmpRect.IsInside(rRect);
-        }
 
         ImpSdrHdcMerk aHDCMerk(*pOut,SDRHDC_SAVEPENANDBRUSHANDFONT,rView.bRestoreColors);
         FASTBOOL bColorsDirty=FALSE;
 
         pXOut->SetOffset(aOfs);
-        if (!bOnlyTextEdit) {
-            SdrPaintInfoRec aInfoRec;
-            aInfoRec.pPV=this;
-            aInfoRec.bPrinter=bPrinter;
-            aInfoRec.aDirtyRect=rRect;
-            aInfoRec.aCheckRect=aCheckRect;
-            aInfoRec.pPaintProc=pPaintProc;
+        SdrPaintInfoRec aInfoRec;
+        aInfoRec.pPV=this;
+        aInfoRec.bPrinter=bPrinter;
+        aInfoRec.aDirtyRect=rRect;
+        aInfoRec.aCheckRect=aCheckRect;
+        aInfoRec.pPaintProc=pPaintProc;
 
-            if (bPrinter) {
-                if (rView.IsLineDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
-                if (rView.IsFillDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
-                if (rView.IsTextDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
-                if (rView.IsGrafDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
-            } else {
-                if (rView.IsLineDraft()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
-                if (rView.IsFillDraft()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
-                if (rView.IsTextDraft()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
-                if (rView.IsGrafDraft()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
-                if (rView.IsHideGrafDraft()) nPaintMode|=SDRPAINTMODE_HIDEDRAFTGRAF;
-            }
-
-            aInfoRec.aPaintLayer.ClearAll();
-            aInfoRec.aPaintLayer.Set((BYTE)nId);
-            aInfoRec.nPaintMode=nPaintMode;
-            if (GetObjList()!=pPage) aInfoRec.pAktList=GetObjList();
-            if (!bPrinter && rView.ImpIsGlueVisible()) {
-                aInfoRec.nPaintMode|=SDRPAINTMODE_GLUEPOINTS;
-            }
-
-            pPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
-            pXOut->SetOffset(Point(0,0));
+        if (bPrinter) {
+            if (rView.IsLineDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+            if (rView.IsFillDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
+            if (rView.IsTextDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
+            if (rView.IsGrafDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
+        } else {
+            if (rView.IsLineDraft()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+            if (rView.IsFillDraft()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
+            if (rView.IsTextDraft()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
+            if (rView.IsGrafDraft()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
+            if (rView.IsHideGrafDraft()) nPaintMode|=SDRPAINTMODE_HIDEDRAFTGRAF;
         }
+
+        aInfoRec.aPaintLayer.ClearAll();
+        aInfoRec.aPaintLayer.Set((BYTE)nId);
+        aInfoRec.nPaintMode=nPaintMode;
+        if (GetObjList()!=pPage) aInfoRec.pAktList=GetObjList();
+        if (!bPrinter && rView.ImpIsGlueVisible()) {
+            aInfoRec.nPaintMode|=SDRPAINTMODE_GLUEPOINTS;
+        }
+
+        pPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
+        pXOut->SetOffset(Point(0,0));
+
         if (bTextEdit)
         {
             SdrObject* pObj = rView.GetTextEditObject();
@@ -2388,36 +2248,17 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
                     if (!bMaster) rPageView.pPage=pMod->GetPage(nPgNum);
                     else rPageView.pPage=pMod->GetMasterPage(nPgNum);
                     rPageView.pAktList=rPageView.pPage;
-#ifdef JOEDEBUG
-                    String aStr("Lesen der PageView fuer ");
-                    if (bMaster) aStr+="Master";
-                    aStr+="Page ";
-                    aStr+=String::CreateFromInt32( nPgNum+1 );
-                    DebWriteln(aStr);
-#endif
                 } break;
                 case SDRIORECNAME_PAGVLAYER: {
                     rIn>>rPageView.aLayerVisi;
                     rIn>>rPageView.aLayerLock;
                     rIn>>rPageView.aLayerPrn;
-#ifdef JOEDEBUG
-                    DebWriteln("Lesen der Layerstati");
-#endif
                 } break;
                 case SDRIORECNAME_PAGVHELPLINES: {
                     rIn>>rPageView.aHelpLines;
-#ifdef JOEDEBUG
-                    String aStr("Lesen der Hilfsliniendefinitionen (");
-                    aStr+=String::CreateFromInt32( rPageView.aHelpLines.GetCount() );
-                    aStr+=" Stueck)";
-                    DebWriteln(aStr);
-#endif
                 } break;
                 case SDRIORECNAME_PAGVAKTGROUP: {
                     //rIn>>aAktGroup; fehlende Implementation!
-#ifdef JOEDEBUG
-                    DebWriteln("Lesen der EnteredGroup - nicht implementiert");
-#endif
                 } break;
             }
         }
