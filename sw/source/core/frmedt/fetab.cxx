@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 09:38:14 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ USHORT SwFEShell::MergeTab()
     return nRet;
 }
 
-BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt )
+BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt, BOOL bSameHeight )
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwFrm *pFrm = GetCurrFrm();
@@ -526,7 +526,7 @@ BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt )
         TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
         // dann loesche doch die Spalten
-        bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt );
+        bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
 
         DELETEZ( pLastCols );
     }

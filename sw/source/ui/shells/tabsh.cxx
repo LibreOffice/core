@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 09:27:03 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,7 +1018,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if ( nCount>1 )
             {
-                rSh.SplitTab(!bHorizontal, nCount-1 );
+                rSh.SplitTab(!bHorizontal, nCount-1, sal_True );
                 rReq.Done();
             }
             else

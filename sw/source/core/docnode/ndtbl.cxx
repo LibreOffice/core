@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 14:24:27 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,7 +1794,8 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
 
 // ---------- teilen / zusammenfassen von Boxen in der Tabelle --------
 
-BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, BOOL bVert, USHORT nCnt )
+BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
+                      sal_Bool bSameHeight )
 {
     // uebers SwDoc fuer Undo !!
     ASSERT( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
@@ -1814,7 +1815,8 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, BOOL bVert, USHORT nCnt )
     if( DoesUndo() )
     {
         DoUndo( FALSE );
-        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, nCnt, bVert );
+        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, nCnt,
+                                     bVert, bSameHeight );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
         if( !bVert )
         {
@@ -1835,7 +1837,7 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, BOOL bVert, USHORT nCnt )
     if( bVert )
         bRet = rTbl.SplitCol( this, rBoxes, nCnt );
     else
-        bRet = rTbl.SplitRow( this, rBoxes, nCnt );
+        bRet = rTbl.SplitRow( this, rBoxes, nCnt, bSameHeight );
 
     if( bRet )
     {

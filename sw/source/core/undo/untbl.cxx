@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-10-15 14:22:13 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,13 +1509,14 @@ void SwUndoTblAutoFmt::Redo( SwUndoIter& rUndoIter )
 SwUndoTblNdsChg::SwUndoTblNdsChg( USHORT nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTblNd,
-                                    USHORT nCnt, BOOL bFlg )
+                                    USHORT nCnt, BOOL bFlg, BOOL bSmHght )
     : SwUndo( nAction ),
     nSttNode( rTblNd.GetIndex() ),
     aBoxes( rBoxes.Count() < 255 ? (BYTE)rBoxes.Count() : 255, 10 ),
     nCount( nCnt ), nRelDiff( 0 ), nAbsDiff( 0 ),
     nSetColType( USHRT_MAX ), nCurrBox( 0 ),
-    bFlag( bFlg )
+    bFlag( bFlg ),
+    bSameHeight( bSmHght )
 {
     Ptrs.pNewSttNds = 0;
 
@@ -1820,7 +1821,7 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
         break;
 
     case UNDO_TABLE_SPLIT:
-        rDoc.SplitTbl( aSelBoxes, bFlag, nCount );
+        rDoc.SplitTbl( aSelBoxes, bFlag, nCount, bSameHeight );
         break;
     case UNDO_TABLE_DELBOX:
         if( USHRT_MAX == nSetColType )
