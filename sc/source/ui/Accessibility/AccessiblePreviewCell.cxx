@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:56:23 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,27 @@ ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::R
 
 ScAccessiblePreviewCell::~ScAccessiblePreviewCell()
 {
+    if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
+    {
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        // call dispose to inform object wich have a weak reference to this object
+        dispose();
+    }
+}
+
+void SAL_CALL ScAccessiblePreviewCell::disposing()
+{
     if (mpViewShell)
+    {
         mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
+    }
+
+    if (mpTextHelper)
+        DELETEZ(mpTextHelper);
+
+    ScAccessibleCellBase::disposing();
 }
 
 //=====  XAccessibleComponent  ============================================
