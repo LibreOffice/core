@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
+ *  last change: $Author: abi $ $Date: 2001-04-25 08:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,6 +1958,23 @@ shell::setv( sal_Int32 CommandId,
         else
         {
             // Setting of physical file properties
+            if( values[i].Name == IsReadOnly )
+            {
+                sal_Bool readonly ;
+                if( values[i].Value >>= readonly )
+                {
+                    // err value not used here, since method is not allowed to
+                    // throw an exception
+                    if( readonly )
+                        osl::File::setAttributes( aUnqPath,Attribute_ReadOnly );
+                    else
+                        osl::File::setAttributes( aUnqPath,
+                                                  Attribute_GrpWrite    |
+                                                  Attribute_GrpRead     |
+                                                  Attribute_OwnWrite    |
+                                                  Attribute_OwnRead );
+                }
+            }
         }
     }
 
