@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 09:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,7 +1471,7 @@ CheckIntegrity();
 |*
 |*    Beschreibung
 |*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  24.06.97
+|*    Letzte Aenderung  05.04.01
 |*
 *************************************************************************/
 BOOL SvTreeList::Remove( SvListEntry* pEntry )
@@ -1508,7 +1508,9 @@ BOOL SvTreeList::Remove( SvListEntry* pEntry )
         pList->Remove( (void*) pEntry );
     }
 
-    delete pEntry; // loescht auch alle Childs
+
+    // moved to end of method because it is used later with Broadcast
+    // delete pEntry; // loescht auch alle Childs
 
     if ( pList->Count() == 0 )
     {
@@ -1526,6 +1528,8 @@ BOOL SvTreeList::Remove( SvListEntry* pEntry )
 CheckIntegrity();
 #endif
     Broadcast( LISTACTION_REMOVED, pEntry );
+
+    delete pEntry; // loescht auch alle Childs
     return TRUE;
 }
 
