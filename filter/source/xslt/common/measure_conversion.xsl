@@ -3,9 +3,9 @@
 
    $RCSfile: measure_conversion.xsl,v $
 
-   $Revision: 1.4 $
+   $Revision: 1.5 $
 
-   last change: $Author: obo $ $Date: 2004-09-08 15:34:27 $
+   last change: $Author: obo $ $Date: 2004-11-18 10:09:03 $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -158,10 +158,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-            <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'dpt')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') * $didot-point-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -203,10 +199,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $centimeter-in-mm * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-             <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') div $centimeter-in-mm * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $centimeter-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -242,10 +234,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $inch-in-mm * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-             <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') div $inch-in-mm * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $inch-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -281,10 +269,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $didot-point-in-mm * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-             <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') div $didot-point-in-mm * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $didot-point-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -320,10 +304,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $pica-in-mm * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-             <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') div $pica-in-mm * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $pica-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -359,10 +339,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $point-in-mm * $twip-in-mm)) div $rounding-factor"/>
             </xsl:when>
-             <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dxa') div $point-in-mm * $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $point-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -398,10 +374,6 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="substring-before($value, 'twip')"/>
             </xsl:when>
-            <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="substring-before($value, 'dxa')"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $twip-in-mm * $pixel-in-mm)) div $rounding-factor"/>
             </xsl:when>
@@ -436,54 +408,11 @@
             <xsl:when test="contains($value, 'twip')">
                 <xsl:value-of select="round(number(substring-before($value, 'twip')) div $pixel-in-mm * $twip-in-mm)"/>
             </xsl:when>
-            <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="round(number(substring-before($value, 'dxa')) div $pixel-in-mm * $twip-in-mm)"/>
-            </xsl:when>
-
             <xsl:when test="contains($value, 'px')">
                 <xsl:value-of select="$value"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'px'!</xsl:message>
-                <xsl:value-of select="$value"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-        <xsl:template name="convert2dxa">
-        <!-- this template is the same as the template of convert2twip because M$ word uses the dxa to represent twip-->
-        <xsl:param name="value"/>
-        <xsl:param name="rounding-factor" select="10000"/>
-        <xsl:choose>
-            <xsl:when test="contains($value, 'mm')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $twip-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'cm')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $twip-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'in')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $twip-in-mm * $inch-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'pt')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $twip-in-mm * $point-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'dpt')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $twip-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'pica')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $twip-in-mm * $pica-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'twip')">
-                <xsl:value-of select="substring-before($value, 'twip')"/>
-            </xsl:when>
-            <xsl:when test="contains($value, 'dxa')">
-                <xsl:value-of select="substring-before($value, 'dxa')"/>
-            </xsl:when>
-
-            <xsl:when test="contains($value, 'px')">
-                <xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $twip-in-mm * $pixel-in-mm)) div $rounding-factor"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'twip'!</xsl:message>
                 <xsl:value-of select="$value"/>
             </xsl:otherwise>
         </xsl:choose>
