@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     visual feedback to the user throughout the Drag and Drop operation.</p>
 */
 
-interface XDropTargetListener: com::sun::star::lang::XEventListener
+published interface XDropTargetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** The drag operation has terminated with a drop on this drop target.
