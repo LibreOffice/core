@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:59:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ private:
     BOOL                    mbEPS           : 1;
     BOOL                    mbIsInSwapIn    : 1;
     BOOL                    mbIsInSwapOut   : 1;
-    BOOL                    mbDummyFlag7    : 1;
+    BOOL                    mbAlpha         : 1;
     BOOL                    mbDummyFlag8    : 1;
 
 #if _SOLAR__PRIVATE
@@ -436,6 +436,7 @@ public:
     ULONG                   GetSizeBytes() const { return mnSizeBytes; }
     ULONG                   GetChecksum() const;
     BOOL                    IsTransparent() const { return mbTransparent; }
+    BOOL                    IsAlpha() const { return mbAlpha; }
     BOOL                    IsAnimated() const { return mbAnimated; }
     BOOL                    IsEPS() const { return mbEPS; }
 
