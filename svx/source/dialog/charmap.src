@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:53:28 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     SvLook = TRUE ;
     Text= "Sonderzeichen";
     Text[ italian ] = "Carattere speciale";
-    Text[ portuguese_brazilian ] = "Símbolo";
+    Text[ portuguese_brazilian ] = "S?mbolo";
     Text[ portuguese ] = "Caracteres especiais";
     Text[ danish ] = "Specialtegn";
     Text[ french ] = "Caractères spéciaux";
@@ -1671,7 +1671,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
         Text[ italian ] = "Compatibilità CJK";
         Text[ danish ] = "CJK Compatibility";
         Text[ swedish ] = "CJK kompatibilitet";
-        Text[ polish ] = "Kompatybilnoœæ z CJK";
+        Text[ polish ] = "Kompatybilno?æ z CJK";
         Text[ portuguese_brazilian ] = "CJK Compatibility";
         Text[ japanese ] = "CJKŒÝŠ·Œ`";
         Text[ korean ] = "CJK È£È¯";
@@ -1896,7 +1896,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ italian ] = "Forme compatibili CJK";
         Text[ danish ] = "CJK Compatibility Forms";
         Text[ swedish ] = "CJK - kompatibilitetsformat";
-        Text[ polish ] = "Formy zgodnoœci CJK";
+        Text[ polish ] = "Formy zgodno?ci CJK";
         Text[ portuguese_brazilian ] = "CJK Compatibility Forms";
         Text[ japanese ] = "CJKŒÝŠ·•¶Žš";
         Text[ korean ] = "CJK È£È¯ Çü½Ä";
