@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:29:09 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,11 @@ const sal_uInt16 EXC_WSBOOL_COLBELOW        = 0x0080;
 const sal_uInt16 EXC_WSBOOL_FITTOPAGE       = 0x0100;
 
 const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
+
+
+// (0x008C) COUNTRY -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
 
 
 // (0x0092) PALETTE -----------------------------------------------------------
