@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 14:43:38 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 15:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,6 +1329,7 @@ BOOL SwFEShell::Paste( const Graphic &rGrf )
     return bRet;
 }
 
+#ifdef USED
 BOOL SwFEShell::Paste( SotDataObject& rObj, const Point& rPt )
 {
     SET_CURR_SHELL( this );
@@ -1425,5 +1426,5 @@ BOOL SwFEShell::Paste( SotDataObject& rObj, const Point& rPt )
 
     return bRet;
 }
-
+#endif
 
