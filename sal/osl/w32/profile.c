@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-20 14:01:57 $
+ *  last change: $Author: hro $ $Date: 2001-08-21 12:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,8 +2178,6 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
         return 0;
     }
 
-
-    osl_getSystemPathFromFileURL(ustrTmpName, &ustrTmpName);
 
     if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) )
     {
