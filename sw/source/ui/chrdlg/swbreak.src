@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:53:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,8 @@ ModalDialog DLG_BREAK
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Umbruch einfügen : Umbruch einf³gen */
-    Text = "Umbruch einfügen" ;
-    Text [ ENGLISH ] = "Insert Break" ;
-    Text [ norwegian ] = "Sett inn Skift" ;
-    Text [ italian ] = "Inserisci interruzione" ;
-    Text [ portuguese_brazilian ] = "Inserir Quebra" ;
-    Text [ portuguese ] = "Inserir quebra" ;
-    Text [ finnish ] = "Lisää vaihto" ;
-    Text [ danish ] = "Indsæt skift" ;
-    Text [ french ] = "Insérer un saut" ;
-    Text [ swedish ] = "Infoga brytning" ;
-    Text [ dutch ] = "Einde invoegen" ;
-    Text [ spanish ] = "Insertar salto" ;
-    Text [ english_us ] = "Insert Break" ;
+    Text [ de ] = "Umbruch einfügen" ;
+    Text [ en-US ] = "Insert Break" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -111,188 +100,48 @@ ModalDialog DLG_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~Zeilenumbruch" ;
-        Text [ ENGLISH ] = "~Line break" ;
-        Text [ norwegian ] = "~Linjeskift" ;
-        Text [ italian ] = "I~nterruzione riga" ;
-        Text [ portuguese_brazilian ] = "Quebra de ~linha" ;
-        Text [ portuguese ] = "~Quebra de linha" ;
-        Text [ finnish ] = "~Rivinvaihto" ;
-        Text [ danish ] = "~Linjeskift" ;
-        Text [ french ] = "Retour à la ligne" ;
-        Text [ swedish ] = "~Radbrytning" ;
-        Text [ dutch ] = "~Regeleinde" ;
-        Text [ spanish ] = "Salto de ~línea" ;
-        Text [ english_us ] = "~Line break" ;
+        Text [ de ] = "~Zeilenumbruch" ;
+        Text [ en-US ] = "~Line break" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "æ¢è¡Œ(~L)";
-        Text[ russian ] = "Ïåğåíîñ ñòğîêè";
-        Text[ polish ] = "Podzia³ ~wiersza";
-        Text[ japanese ] = "æ”¹è¡Œ(~L)";
-        Text[ chinese_traditional ] = "æ›è¡Œ(~L)";
-        Text[ arabic ] = "İÇÕá ÃÓØÑ";
-        Text[ greek ] = "ÁëëáãŞ ãñáììŞò";
-        Text[ korean ] = "ì¤„ ë°”ê¿ˆ(~L)";
-        Text[ turkish ] = "Satır sonu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Salt de ~línia";
-        Text[ thai ] = "à¹à¸šà¹ˆà¸‡~à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "ZalomenÃ­ Å™Ã¡dku";
-        Text[ hebrew ] = "~Zeilenumbruch";
-        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾ à¤–à¤£à¥à¤¡à¤¨";
-        Text[ slovak ] = "Zalomenie ~riadku";
-        Text[ hungarian ] = "Sor~tÃ¶rÃ©s";
-        Text[ slovenian ] = "Prelom ~vrstice";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 39 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~Seitenumbruch" ;
-        Text [ ENGLISH ] = "~Page break" ;
-        Text [ norwegian ] = "~Sideskift" ;
-        Text [ italian ] = "Interruzione pagina" ;
-        Text [ portuguese_brazilian ] = "Quebra de ~página" ;
-        Text [ portuguese ] = "~Quebra de página" ;
-        Text [ finnish ] = "~Sivunvaihto" ;
-        Text [ danish ] = "~Sideskift" ;
-        Text [ french ] = "Saut de p~age" ;
-        Text [ swedish ] = "~Sidbrytning" ;
-        Text [ dutch ] = "~Pagina-einde" ;
-        Text [ spanish ] = "Salto de ~página" ;
-        Text [ english_us ] = "~Page break" ;
+        Text [ de ] = "~Seitenumbruch" ;
+        Text [ en-US ] = "~Page break" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "æ¢é¡µ(~P)";
-        Text[ russian ] = "Ğàçğûâ ñòğàíèöû";
-        Text[ polish ] = "Podzia³ ~strony";
-        Text[ japanese ] = "æ”¹ãƒšãƒ¼ã‚¸(~P)";
-        Text[ chinese_traditional ] = "æ›é (~P)";
-        Text[ arabic ] = "İÇÕá ÕİÍÇÊ";
-        Text[ greek ] = "ÁëëáãŞ óåëßäáò";
-        Text[ korean ] = "í˜ì´ì§€ ë‚˜ëˆ„ê¸°(~P)";
-        Text[ turkish ] = "~Sayfa sonu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Salt de ~pàgina";
-        Text[ thai ] = "à¹à¸šà¹ˆà¸‡~à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "ZalomenÃ­ strÃ¡nky";
-        Text[ hebrew ] = "~Seitenumbruch";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤–à¤£à¥à¤¡à¤¨";
-        Text[ slovak ] = "Zalomenie ~strÃ¡nky";
-        Text[ hungarian ] = "~OldaltÃ¶rÃ©s";
-        Text[ slovenian ] = "Prelom s~trani";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_COL
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        Text = "S~paltenumbruch" ;
-        Text [ ENGLISH ] = "~Column break" ;
-        Text [ norwegian ] = "~Kolonneskift" ;
-        Text [ italian ] = "Interr~uzione colonna" ;
-        Text [ portuguese_brazilian ] = "Quebra de ~Coluna" ;
-        Text [ portuguese ] = "~Quebra de coluna" ;
-        Text [ finnish ] = "Palstan ~vaihto" ;
-        Text [ danish ] = "~Kolonneskift" ;
-        Text [ french ] = "Saut de ~colonne" ;
-        Text [ swedish ] = "Kolumnbrytning" ;
-        Text [ dutch ] = "~Kolomeinde" ;
-        Text [ spanish ] = "Salto de colu~mna" ;
-        Text [ english_us ] = "~Column break" ;
+        Text [ de ] = "S~paltenumbruch" ;
+        Text [ en-US ] = "~Column break" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ¢æ (~C)";
-        Text[ russian ] = "Ğàçğûâ ñòîëáöà";
-        Text[ polish ] = "~Podzia³ kolumny";
-        Text[ japanese ] = "æ”¹æ®µ(~C)";
-        Text[ chinese_traditional ] = "æ›æ¬„(~C)";
-        Text[ arabic ] = "İÇÕá ÃÚãÏÉ";
-        Text[ greek ] = "ÁëëáãŞ óôŞëçò";
-        Text[ korean ] = "ì—´ ë‚˜ëˆ„ê¸°(~C)";
-        Text[ turkish ] = "Sütun sonu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Salt de columna";
-        Text[ thai ] = "à¹à¸šà¹ˆà¸‡~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-        Text[ czech ] = "ZalomenÃ­ sloupce";
-        Text[ hebrew ] = "S~paltenumbruch";
-        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚~à¤­ à¤–à¤£à¥à¤¡à¤¨ ";
-        Text[ slovak ] = "Zalomenie ~stÄºpca";
-        Text[ hungarian ] = "~HasÃ¡btÃ¶rÃ©s";
-        Text[ slovenian ] = "Prelom ~stolpca";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_BREAK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
-        Text = "Art" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Tyyppi" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "Type" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ dutch ] = "Type" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ç±»å‹";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "ç¨®é¡";
-        Text[ chinese_traditional ] = "é¡å‹";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "í˜•ì‹";
-        Text[ turkish ] = "Tür";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "TÃ­pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Art" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_COLL
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "~Vorlage" ;
-        Text [ ENGLISH ] = "~Style" ;
-        Text [ norwegian ] = "~Style" ;
-        Text [ italian ] = "Modello di formato" ;
-        Text [ portuguese_brazilian ] = "~Estilo" ;
-        Text [ portuguese ] = "~Estilo" ;
-        Text [ finnish ] = "T~yyli" ;
-        Text [ danish ] = "~Typografi" ;
-        Text [ french ] = "Style" ;
-        Text [ swedish ] = "~Formatmall" ;
-        Text [ dutch ] = "~Profiel" ;
-        Text [ spanish ] = "~Estilo" ;
-        Text [ english_us ] = "~Style" ;
+        Text [ de ] = "~Vorlage" ;
+        Text [ en-US ] = "~Style" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ ·å¼(~S)";
-        Text[ russian ] = "Ñòèëü";
-        Text[ polish ] = "S~tyl";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~S)";
-        Text[ chinese_traditional ] = "æ¨£å¼(~S)";
-        Text[ arabic ] = "äãØ";
-        Text[ greek ] = "Ğñüôõğï";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼(~S)";
-        Text[ turkish ] = "~Biçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Estil";
-        Text[ thai ] = "~à¸¥à¸±à¸à¸©à¸“à¸°";
-        Text[ czech ] = "Styl";
-        Text[ hebrew ] = "~Vorlage";
-        Text[ hindi ] = "~à¤¶à¥ˆà¤²à¥€";
-        Text[ slovak ] = "Å ~tÃ½l";
-        Text[ hungarian ] = "StÃ­l~us";
-        Text[ slovenian ] = "~Slog";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_COLL
     {
@@ -301,129 +150,17 @@ ModalDialog DLG_BREAK
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "[Ohne]" ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "[Ohne]" ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "[Ohne]" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "[Nessuno]" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "[Nenhum]" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "[sem]" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "[Ei mitään]" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "[Ingen]" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "[Aucun]" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "[Utan]" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "[Geen]" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "[Sin]" ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "[None]" ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-             < "[æ— ]" ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "[Íåò]" ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "[Brak]" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "[ãªã—]" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "[ç„¡]" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "[ÈÏæä]" ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "[×ùñßò]" ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "[ì—†ìŒ]" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "[Yok]" ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
              < " " ; > ;
-    };
-    StringList [ catalan ] =
-    {
-             < "[Cap]" ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "[à¹„à¸¡à¹ˆà¸¡à¸µ]" ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "[Å¾Ã¡dnÃ½]" ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®[×œ×œ×]â€¬" ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "[à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚]" ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "[Å¾iaden]" ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "[Nincs]" ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "[brez]" ; > ;
     };
     };
     CheckBox CB_PAGENUM
@@ -431,38 +168,10 @@ ModalDialog DLG_BREAK
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Seitennummer ~ändern : Seitennummer ~õndern */
-        Text = "Seitennummer ~ändern" ;
-        Text [ English ] = "Change page number" ;
-        Text [ norwegian ] = "Endre sidenummer" ;
-        Text [ italian ] = "Cambia numero pagina" ;
-        Text [ portuguese_brazilian ] = "Alterar o ~número da página" ;
-        Text [ portuguese ] = "Alterar número de página" ;
-        Text [ finnish ] = "~Muuta sivunumero" ;
-        Text [ danish ] = "Modificer sidetal" ;
-        Text [ french ] = "Modifier le numéro de page" ;
-        Text [ swedish ] = "~Ändra sidnummer" ;
-        Text [ dutch ] = "~Paginanummer wijzigen" ;
-        Text [ spanish ] = "Cam~biar número de página" ;
-        Text [ english_us ] = "Change page ~number" ;
+        Text [ de ] = "Seitennummer ~ändern" ;
+        Text [ en-US ] = "Change page ~number" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ›´æ”¹é¡µç (~N)";
-        Text[ russian ] = "Èçìåíèòü íîìåğ ñòğàíèöû";
-        Text[ polish ] = "Zmieñ ~numer strony";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·ã®å¤‰æ›´(~N)";
-        Text[ chinese_traditional ] = "è®Šæ›´é ç¢¼(~N)";
-        Text[ arabic ] = "ÊÛííÑ ÑŞã ÇáÕİÍÉ";
-        Text[ greek ] = "ÁëëáãŞ áñéèìïı óåëßäáò";
-        Text[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸ ë³€ê²½(~N)";
-        Text[ turkish ] = "Sayfa numarasını değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Can~via número de pàgina";
-        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹€~à¸¥à¸‚à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "ZmÄ›nit ÄÃ­slo strÃ¡nky";
-        Text[ hebrew ] = "Seitennummer ~Ã¤ndern";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¬à¤¦à¤²à¥‹";
-        Text[ slovak ] = "ZmeniÅ¥ ÄÃ­slo ~strÃ¡nky";
-        Text[ hungarian ] = "Ol~dalszÃ¡m megvÃ¡ltoztatÃ¡sa";
-        Text[ slovenian ] = "Spremeni Å¡~tevilko strani";
+        Text [ x-comment ] = " ";
     };
     NumericField ED_PAGENUM
     {
@@ -479,24 +188,7 @@ ModalDialog DLG_BREAK
         First = 1 ;
         Last = 9999 ;
     };
-    Text[ chinese_simplified ] = "æ’å…¥æ¢è¡Œ";
-    Text[ russian ] = "Âñòàâèòü ğàçğûâ";
-    Text[ polish ] = "Wstaw podzia³";
-    Text[ japanese ] = "åŒºåˆ‡ã‚Šã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥æ›è¡Œ";
-    Text[ arabic ] = "ÅÏÑÇÌ İÇÕá";
-    Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò";
-    Text[ korean ] = "ë‚˜ëˆ„ê¸° ì‚½ì…";
-    Text[ turkish ] = "Kesme ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix un salt";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸•à¸±à¸§à¹à¸šà¹ˆà¸‡";
-    Text[ czech ] = "VloÅ¾it zalomenÃ­";
-    Text[ hebrew ] = "Umbruch einfÃ¼gen";
-    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ zalomenie";
-    Text[ hungarian ] = "TÃ¶rÃ©spont beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi prelom";
+    Text [ x-comment ] = " ";
 };
 
 
