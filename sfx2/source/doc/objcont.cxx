@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 17:07:35 $
+ *  last change: $Author: mba $ $Date: 2001-05-21 12:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1578,16 +1578,15 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         aTempl.Construct();
         if ( aTemplFileName.Len() )
         {
-            INetURLObject aURL( aTemplFileName );
-            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
-
-            aTemplStor = new SvStorage( aURL.GetMainURL(),
-                                    STREAM_READ | STREAM_NOCREATE |
-                                    STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
-            if ( aTemplStor->GetError() )
-                aTemplStor.Clear();
-            else
-                aFoundName = aTemplFileName;
+            String aURL;
+            if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplFileName, GetMedium()->GetName(), aURL ) )
+            {
+                aTemplStor = new SvStorage( aURL, STREAM_READ|STREAM_NOCREATE|STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
+                if ( aTemplStor->GetError() )
+                    aTemplStor.Clear();
+                else
+                    aFoundName = aURL;
+            }
         }
 
         if( !aFoundName.Len() && aTemplName.Len() )
@@ -1648,19 +1647,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     {
         aTemplFileName = aFoundName;
         BOOL bLoad = FALSE;
-        INetURLObject aTestObj( aTemplFileName );
-        if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
-        {
-            // temp. fix until Templates are managed by UCB compatible service
-            // does NOT work with locally cached components !
-            String aTemp;
-            utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemplFileName, aTemp );
-            aTemplFileName = aTemp;
-        }
-
-        INetURLObject aURL( aTemplFileName );
         if ( !aTemplStor.Is() )
-            aTemplStor = new SvStorage( aURL.GetMainURL(),
+            aTemplStor = new SvStorage( aTemplFileName,
                                     STREAM_READ | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
 
