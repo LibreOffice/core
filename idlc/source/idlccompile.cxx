@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bei $ $Date: 2001-06-03 10:06:50 $
+ *  last change: $Author: jsc $ $Date: 2001-06-11 11:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     oslProcessError procError = osl_Process_E_None;
 
     procError = osl_executeProcess(cpp.pData, &cmdArg.pData, 1, osl_Process_WAIT,
-                                   0, startDir.pData, 0, 0, 0, &hProcess);
+                                   0, startDir.pData, 0, 0, &hProcess);
 
     oslProcessInfo hInfo;
     hInfo.Size = sizeof(oslProcessInfo);
