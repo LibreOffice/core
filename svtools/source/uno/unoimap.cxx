@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:07:12 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 16:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ public:
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
     virtual ~SvUnoImageMapObject();
 
-    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject );
+    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
 
     IMapObject* createIMapObject() const;
 
@@ -613,9 +613,9 @@ public:
     virtual ~SvUnoImageMap();
 
     sal_Bool fillImageMap( ImageMap& rMap ) const;
-    SvUnoImageMapObject* getObject( const Any& aElement ) const;
+    SvUnoImageMapObject* getObject( const Any& aElement ) const throw( IllegalArgumentException );
 
-    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap );
+    UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
