@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOutputStream.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:50:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@ published interface XOutputStream: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::XOutputStream::flush
     /** flushes out of the stream any data that may exist in buffers.
+
+        <p>The semantics of this method are rather vague.  See
+        <member scope="com::sun::star::io">
+        XAsyncOutputMonitor::waitForCompletion</member> for a similar method
+        with very specific semantics, that is useful in certain scenarios.</p>
      */
     void flush()
             raises( com::sun::star::io::NotConnectedException,
