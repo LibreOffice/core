@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-14 10:32:48 $
+ *  last change: $Author: dr $ $Date: 2002-04-09 14:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3045,23 +3045,26 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     FormulaDump( nLen, FT_RangeName );
 
                     LINESTART();
-                    ADDTEXT( "unknown3: " );
+                    ADDTEXT( "range count: " );
                     ADDHEX( 2 );
                     PRINT();
                 }
 
-                // Row-Row / Col-Col
-                UINT16  nR1, nR2, nC1, nC2;
-                rIn >> nR1 >> nR2 >> nC1 >> nC2;
-                LINESTART();
-                ADDTEXT( "Cells: " );
-                __AddRef( t, nC1, nR1 );
-                if( nC1 != nC2 || nR1 != nR2 )
+                while( rIn.GetRecLeft() >= 8 )
                 {
-                    ADDTEXT( " : " );
-                    __AddRef( t, nC2, nR2 );
+                    // Row-Row / Col-Col
+                    UINT16  nR1, nR2, nC1, nC2;
+                    rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                    LINESTART();
+                    ADDTEXT( "Cells: " );
+                    __AddRef( t, nC1, nR1 );
+                    if( nC1 != nC2 || nR1 != nR2 )
+                    {
+                        ADDTEXT( ":" );
+                        __AddRef( t, nC2, nR2 );
+                    }
+                    PRINT();
                 }
-                PRINT();
             }
             break;
             case 0x01B8:        // HLINK
