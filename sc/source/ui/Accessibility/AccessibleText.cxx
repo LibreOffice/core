@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,8 +404,7 @@ void ScPreviewViewForwarder::FillTableInfo() const
 Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) const
 {
     Rectangle aVisArea(rVisArea);
-    Point aPos;
-    aVisArea.getLocation(aPos); // get first the position to remember negative positions after clipping
+    Point aPos = aVisArea.TopLeft(); // get first the position to remember negative positions after clipping
 
     Window* pWin = mpViewShell->GetWindow();
     if (pWin)
