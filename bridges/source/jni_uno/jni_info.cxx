@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:40:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 JNI_type_info::JNI_type_info(
     JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td )
     : m_base( 0 ),
@@ -87,16 +87,17 @@ JNI_type_info::JNI_type_info(
     if (! m_td.get()->bComplete)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot make type incomplete: ") );
-        buf.append( *reinterpret_cast< OUString const * >( &m_td.get()->pTypeName ) );
+        buf.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM("cannot make type incomplete: ") );
+        buf.append(
+            *reinterpret_cast< OUString const * >( &m_td.get()->pTypeName ) );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
 }
 
-//##################################################################################################
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 void JNI_interface_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
@@ -105,34 +106,41 @@ void JNI_interface_type_info::destroy( JNIEnv * jni_env )
     delete [] m_methods;
     delete this;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 JNI_interface_type_info::JNI_interface_type_info(
     JNI_context const & jni, css::uno::TypeDescription const & td_ )
     : JNI_type_info( jni, td_ )
 {
     OSL_ASSERT( typelib_TypeClass_INTERFACE == m_td.get()->eTypeClass );
-    typelib_InterfaceTypeDescription * td = (typelib_InterfaceTypeDescription *)m_td.get();
+    typelib_InterfaceTypeDescription * td =
+        reinterpret_cast< typelib_InterfaceTypeDescription * >( m_td.get() );
 
     OUString const & uno_name = *reinterpret_cast< OUString const * >(
-        &((typelib_TypeDescription *)td)->pTypeName );
+        &m_td.get()->pTypeName );
 
     JNI_info const * jni_info = jni.get_info();
 
     // retrieve info for base type
-    typelib_TypeDescription * base_td = (typelib_TypeDescription *)td->pBaseTypeDescription;
+    typelib_TypeDescription * base_td =
+        reinterpret_cast< typelib_TypeDescription * >(
+            td->pBaseTypeDescription );
     m_base = (0 == base_td ? 0 : jni_info->get_type_info( jni, base_td ));
 
     OString java_name(
-        OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+        OUStringToOString(
+            uno_name.replace( '.', '/' ),
+            RTL_TEXTENCODING_ASCII_US ) );
     JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
-    JLocalAutoRef jo_type( jni, create_type( jni, (jclass)jo_class.get() ) );
+    JLocalAutoRef jo_type( jni, create_type( jni, (jclass) jo_class.get() ) );
 
     // get proxy ctor
     jvalue arg;
     arg.l = jo_class.get();
     JLocalAutoRef jo_proxy_ctor(
         jni, jni->CallStaticObjectMethodA(
-            jni_info->m_class_JNI_proxy, jni_info->m_method_JNI_proxy_get_proxy_ctor, &arg ) );
+            jni_info->m_class_JNI_proxy,
+            jni_info->m_method_JNI_proxy_get_proxy_ctor, &arg ) );
 
     if (is_XInterface( m_td.get()->pWeakRef ))
     {
@@ -154,15 +162,20 @@ JNI_interface_type_info::JNI_interface_type_info(
 
                 OStringBuffer sig_buf( 64 );
 
-                if (typelib_TypeClass_INTERFACE_METHOD == member_td.get()->eTypeClass) // method
+                if (typelib_TypeClass_INTERFACE_METHOD ==
+                      member_td.get()->eTypeClass) // method
                 {
                     typelib_InterfaceMethodTypeDescription * method_td =
-                        (typelib_InterfaceMethodTypeDescription *)member_td.get();
+                        reinterpret_cast<
+                          typelib_InterfaceMethodTypeDescription * >(
+                              member_td.get() );
 
                     sig_buf.append( '(' );
-                    for ( sal_Int32 nPos = 0; nPos < method_td->nParams; ++nPos )
+                    for ( sal_Int32 nPos = 0;
+                          nPos < method_td->nParams; ++nPos )
                     {
-                        typelib_MethodParameter const & param = method_td->pParams[ nPos ];
+                        typelib_MethodParameter const & param =
+                            method_td->pParams[ nPos ];
                         if (param.bOut)
                             sig_buf.append( '[' );
                         JNI_info::append_sig( &sig_buf, param.pTypeRef );
@@ -173,11 +186,13 @@ JNI_interface_type_info::JNI_interface_type_info(
                     OString method_signature( sig_buf.makeStringAndClear() );
                     OString method_name(
                         OUStringToOString(
-                            *reinterpret_cast< OUString const * >( &method_td->aBase.pMemberName ),
+                            *reinterpret_cast< OUString const * >(
+                                &method_td->aBase.pMemberName ),
                             RTL_TEXTENCODING_ASCII_US ) );
 
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
-                        (jclass)jo_class.get(), method_name.getStr(), method_signature.getStr() );
+                        (jclass) jo_class.get(), method_name.getStr(),
+                        method_signature.getStr() );
                     jni.ensure_no_exception();
                     OSL_ASSERT( 0 != m_methods[ nMethodIndex ] );
                     ++nMethodIndex;
@@ -185,17 +200,22 @@ JNI_interface_type_info::JNI_interface_type_info(
                 else // attribute
                 {
                     OSL_ASSERT(
-                        typelib_TypeClass_INTERFACE_ATTRIBUTE == member_td.get()->eTypeClass );
+                        typelib_TypeClass_INTERFACE_ATTRIBUTE ==
+                          member_td.get()->eTypeClass );
                     typelib_InterfaceAttributeTypeDescription * attribute_td =
-                        (typelib_InterfaceAttributeTypeDescription *)member_td.get();
+                        reinterpret_cast<
+                          typelib_InterfaceAttributeTypeDescription * >(
+                              member_td.get() );
 
                     // type sig
-                    JNI_info::append_sig( &sig_buf, attribute_td->pAttributeTypeRef );
+                    JNI_info::append_sig(
+                        &sig_buf, attribute_td->pAttributeTypeRef );
                     OString type_sig( sig_buf.makeStringAndClear() );
                     sig_buf.ensureCapacity( 64 );
                     // member name
-                    OUString const & member_name = *reinterpret_cast< OUString const * >(
-                        &attribute_td->aBase.pMemberName );
+                    OUString const & member_name =
+                        *reinterpret_cast< OUString const * >(
+                            &attribute_td->aBase.pMemberName );
 
                     // getter
                     sig_buf.append( RTL_CONSTASCII_STRINGPARAM("()") );
@@ -206,9 +226,11 @@ JNI_interface_type_info::JNI_interface_type_info(
                     name_buf.append( member_name );
                     OString method_name(
                         OUStringToOString(
-                            name_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+                            name_buf.makeStringAndClear(),
+                            RTL_TEXTENCODING_ASCII_US ) );
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
-                        (jclass)jo_class.get(), method_name.getStr(), method_signature.getStr() );
+                        (jclass) jo_class.get(), method_name.getStr(),
+                        method_signature.getStr() );
                     jni.ensure_no_exception();
                     OSL_ASSERT( 0 != m_methods[ nMethodIndex ] );
                     ++nMethodIndex;
@@ -221,12 +243,14 @@ JNI_interface_type_info::JNI_interface_type_info(
                         sig_buf.append( RTL_CONSTASCII_STRINGPARAM(")V") );
                         method_signature = sig_buf.makeStringAndClear();
                         name_buf.ensureCapacity( 3 + member_name.getLength() );
-                        name_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("set") );
+                        name_buf.appendAscii(
+                            RTL_CONSTASCII_STRINGPARAM("set") );
                         name_buf.append( member_name );
                         method_name = OUStringToOString(
-                        name_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US );
+                            name_buf.makeStringAndClear(),
+                            RTL_TEXTENCODING_ASCII_US );
                         m_methods[ nMethodIndex ] = jni->GetMethodID(
-                            (jclass)jo_class.get(), method_name.getStr(),
+                            (jclass) jo_class.get(), method_name.getStr(),
                             method_signature.getStr() );
                         jni.ensure_no_exception();
                         OSL_ASSERT( 0 != m_methods[ nMethodIndex ] );
@@ -241,21 +265,21 @@ JNI_interface_type_info::JNI_interface_type_info(
             throw;
         }
     }
-    m_class = (jclass)jni->NewGlobalRef( jo_class.get() );
+    m_class = (jclass) jni->NewGlobalRef( jo_class.get() );
     m_type = jni->NewGlobalRef( jo_type.get() );
     m_proxy_ctor = jni->NewGlobalRef( jo_proxy_ctor.get() );
 }
 
-//##################################################################################################
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
     delete [] m_fields;
     delete this;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 JNI_compound_type_info::JNI_compound_type_info(
     JNI_context const & jni, css::uno::TypeDescription const & td_ )
     : JNI_type_info( jni, td_ ),
@@ -264,13 +288,17 @@ JNI_compound_type_info::JNI_compound_type_info(
 {
     OSL_ASSERT( typelib_TypeClass_STRUCT == m_td.get()->eTypeClass ||
                 typelib_TypeClass_EXCEPTION == m_td.get()->eTypeClass );
-    typelib_CompoundTypeDescription * td = (typelib_CompoundTypeDescription *)m_td.get();
+    typelib_CompoundTypeDescription * td =
+        reinterpret_cast< typelib_CompoundTypeDescription * >( m_td.get() );
 
-    OUString const & uno_name = *reinterpret_cast< OUString const * >(
-        &((typelib_TypeDescription *)td)->pTypeName );
+    OUString const & uno_name =
+        *reinterpret_cast< OUString const * >(
+            &((typelib_TypeDescription *)td)->pTypeName );
 
     OString java_name(
-        OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+        OUStringToOString(
+            uno_name.replace( '.', '/' ),
+            RTL_TEXTENCODING_ASCII_US ) );
     JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
 
     JNI_info const * jni_info = jni.get_info();
@@ -278,13 +306,16 @@ JNI_compound_type_info::JNI_compound_type_info(
     if (typelib_TypeClass_EXCEPTION == m_td.get()->eTypeClass)
     {
         // retrieve exc ctor( msg )
-        m_exc_ctor = jni->GetMethodID( (jclass)jo_class.get(), "<init>", "(Ljava/lang/String;)V" );
+        m_exc_ctor = jni->GetMethodID(
+            (jclass) jo_class.get(), "<init>", "(Ljava/lang/String;)V" );
         jni.ensure_no_exception();
         OSL_ASSERT( 0 != m_exc_ctor );
     }
 
     // retrieve info for base type
-    typelib_TypeDescription * base_td = (typelib_TypeDescription *)td->pBaseTypeDescription;
+    typelib_TypeDescription * base_td =
+        reinterpret_cast< typelib_TypeDescription * >(
+            td->pBaseTypeDescription );
     m_base = (0 == base_td ? 0 : jni_info->get_type_info( jni, base_td ));
 
     try
@@ -300,7 +331,7 @@ JNI_compound_type_info::JNI_compound_type_info(
             m_fields[ 0 ] = 0; // special Throwable.getMessage()
             // field Context
             m_fields[ 1 ] = jni->GetFieldID(
-                (jclass)jo_class.get(), "Context", "Ljava/lang/Object;" );
+                (jclass) jo_class.get(), "Context", "Ljava/lang/Object;" );
             jni.ensure_no_exception();
             OSL_ASSERT( 0 != m_fields[ 1 ] );
         }
@@ -318,11 +349,13 @@ JNI_compound_type_info::JNI_compound_type_info(
 
                 OString member_name(
                     OUStringToOString(
-                        *reinterpret_cast< OUString const * >( &td->ppMemberNames[ nPos ] ),
+                        *reinterpret_cast< OUString const * >(
+                            &td->ppMemberNames[ nPos ] ),
                         RTL_TEXTENCODING_ASCII_US ) );
 
                 m_fields[ nPos ] = jni->GetFieldID(
-                    (jclass)jo_class.get(), member_name.getStr(), sig.getStr() );
+                    (jclass) jo_class.get(), member_name.getStr(),
+                    sig.getStr() );
                 jni.ensure_no_exception();
                 OSL_ASSERT( 0 != m_fields[ nPos ] );
             }
@@ -334,16 +367,16 @@ JNI_compound_type_info::JNI_compound_type_info(
         throw;
     }
 
-    m_class = (jclass)jni->NewGlobalRef( jo_class.get() );
+    m_class = (jclass) jni->NewGlobalRef( jo_class.get() );
 }
 
-//##################################################################################################
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 JNI_type_info const * JNI_info::create_type_info(
     JNI_context const & jni, typelib_TypeDescription * td ) const
 {
-    OUString const & uno_name = *reinterpret_cast< OUString const * >( &td->pTypeName );
+    OUString const & uno_name =
+        *reinterpret_cast< OUString const * >( &td->pTypeName );
 
     JNI_type_info * new_info;
     switch (td->eTypeClass)
@@ -351,16 +384,19 @@ JNI_type_info const * JNI_info::create_type_info(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         new_info = new JNI_compound_type_info(
-            jni, *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
+                jni,
+                *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
         break;
     case typelib_TypeClass_INTERFACE:
         new_info = new JNI_interface_type_info(
-            jni, *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
+                jni,
+                *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
         break;
     default:
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("type info not supported for ") );
+        buf.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM("type info not supported for ") );
         buf.append( uno_name );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -385,7 +421,8 @@ JNI_type_info const * JNI_info::create_type_info(
     }
     return info;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, typelib_TypeDescription * td ) const
 {
@@ -394,7 +431,8 @@ JNI_type_info const * JNI_info::get_type_info(
         return m_XInterface_type_info;
     }
 
-    OUString const & uno_name = *reinterpret_cast< OUString const * >( &td->pTypeName );
+    OUString const & uno_name =
+        *reinterpret_cast< OUString const * >( &td->pTypeName );
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
@@ -410,7 +448,8 @@ JNI_type_info const * JNI_info::get_type_info(
 
     return info;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, typelib_TypeDescriptionReference * type ) const
 {
@@ -419,7 +458,8 @@ JNI_type_info const * JNI_info::get_type_info(
         return m_XInterface_type_info;
     }
 
-    OUString const & uno_name = *reinterpret_cast< OUString const * >( &type->pTypeName );
+    OUString const & uno_name =
+        *reinterpret_cast< OUString const * >( &type->pTypeName );
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
@@ -436,11 +476,13 @@ JNI_type_info const * JNI_info::get_type_info(
 
     return info;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, OUString const & uno_name ) const
 {
-    if (uno_name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
+    if (uno_name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
     {
         return m_XInterface_type_info;
     }
@@ -455,7 +497,8 @@ JNI_type_info const * JNI_info::get_type_info(
         if (! td.is())
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("UNO type not found: ") );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("UNO type not found: ") );
             buf.append( uno_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -470,14 +513,17 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 JNI_info::JNI_info( JNIEnv * jni_env )
     : m_XInterface_queryInterface_td(
-        ((typelib_InterfaceTypeDescription *)css::uno::TypeDescription(
-            ::getCppuType(
-                (css::uno::Reference< css::uno::XInterface > const *)0 ) ).get())->ppMembers[ 0 ] ),
+        (reinterpret_cast< typelib_InterfaceTypeDescription * >(
+            css::uno::TypeDescription(
+                ::getCppuType(
+                    (css::uno::Reference< css::uno::XInterface > const *)0 ) )
+            .get())->ppMembers[ 0 ] ) ),
       m_Exception_type( ::getCppuType( (css::uno::Exception const *)0 ) ),
-      m_RuntimeException_type( ::getCppuType( (css::uno::RuntimeException const *)0 ) ),
+      m_RuntimeException_type(
+          ::getCppuType( (css::uno::RuntimeException const *)0 ) ),
       m_void_type( ::getCppuVoidType() ),
       m_class_JNI_proxy( 0 ),
       m_XInterface_type_info( 0 )
@@ -528,280 +574,316 @@ JNI_info::JNI_info( JNIEnv * jni_env )
 
     // method Object.toString()
     m_method_Object_toString = jni->GetMethodID(
-        (jclass)jo_Object.get(), "toString", "()Ljava/lang/String;" );
+        (jclass) jo_Object.get(), "toString", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Object_toString );
     // method Class.getName()
     m_method_Class_getName = jni->GetMethodID(
-        (jclass)jo_Class.get(), "getName", "()Ljava/lang/String;" );
+        (jclass) jo_Class.get(), "getName", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Class_getName );
 
     // method Throwable.getMessage()
     m_method_Throwable_getMessage = jni->GetMethodID(
-        (jclass)jo_Throwable.get(), "getMessage", "()Ljava/lang/String;" );
+        (jclass) jo_Throwable.get(), "getMessage", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Throwable_getMessage );
 
     // method Character.charValue()
     m_method_Character_charValue = jni->GetMethodID(
-        (jclass)jo_Character.get(), "charValue", "()C" );
+        (jclass) jo_Character.get(), "charValue", "()C" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Character_charValue );
     // method Boolean.booleanValue()
     m_method_Boolean_booleanValue = jni->GetMethodID(
-        (jclass)jo_Boolean.get(), "booleanValue", "()Z" );
+        (jclass) jo_Boolean.get(), "booleanValue", "()Z" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Boolean_booleanValue );
     // method Byte.byteValue()
     m_method_Byte_byteValue = jni->GetMethodID(
-        (jclass)jo_Byte.get(), "byteValue", "()B" );
+        (jclass) jo_Byte.get(), "byteValue", "()B" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Byte_byteValue );
     // method Short.shortValue()
     m_method_Short_shortValue = jni->GetMethodID(
-        (jclass)jo_Short.get(), "shortValue", "()S" );
+        (jclass) jo_Short.get(), "shortValue", "()S" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Short_shortValue );
     // method Integer.intValue()
     m_method_Integer_intValue = jni->GetMethodID(
-        (jclass)jo_Integer.get(), "intValue", "()I" );
+        (jclass) jo_Integer.get(), "intValue", "()I" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Integer_intValue );
     // method Long.longValue()
     m_method_Long_longValue = jni->GetMethodID(
-        (jclass)jo_Long.get(), "longValue", "()J" );
+        (jclass) jo_Long.get(), "longValue", "()J" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Long_longValue );
     // method Float.floatValue()
     m_method_Float_floatValue = jni->GetMethodID(
-        (jclass)jo_Float.get(), "floatValue", "()F" );
+        (jclass) jo_Float.get(), "floatValue", "()F" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Float_floatValue );
     // method Double.doubleValue()
     m_method_Double_doubleValue = jni->GetMethodID(
-        (jclass)jo_Double.get(), "doubleValue", "()D" );
+        (jclass) jo_Double.get(), "doubleValue", "()D" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_Double_doubleValue );
 
     // ctor Character( char )
     m_ctor_Character_with_char = jni->GetMethodID(
-        (jclass)jo_Character.get(), "<init>", "(C)V" );
+        (jclass) jo_Character.get(), "<init>", "(C)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Character_with_char );
     // ctor Boolean( boolean )
     m_ctor_Boolean_with_boolean = jni->GetMethodID(
-        (jclass)jo_Boolean.get(), "<init>", "(Z)V" );
+        (jclass) jo_Boolean.get(), "<init>", "(Z)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Boolean_with_boolean );
     // ctor Byte( byte )
     m_ctor_Byte_with_byte = jni->GetMethodID(
-        (jclass)jo_Byte.get(), "<init>", "(B)V" );
+        (jclass) jo_Byte.get(), "<init>", "(B)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Byte_with_byte );
     // ctor Short( short )
     m_ctor_Short_with_short = jni->GetMethodID(
-        (jclass)jo_Short.get(), "<init>", "(S)V" );
+        (jclass) jo_Short.get(), "<init>", "(S)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Short_with_short );
     // ctor Integer( int )
     m_ctor_Integer_with_int = jni->GetMethodID(
-        (jclass)jo_Integer.get(), "<init>", "(I)V" );
+        (jclass) jo_Integer.get(), "<init>", "(I)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Integer_with_int );
     // ctor Long( long )
     m_ctor_Long_with_long = jni->GetMethodID(
-        (jclass)jo_Long.get(), "<init>", "(J)V" );
+        (jclass) jo_Long.get(), "<init>", "(J)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Long_with_long );
     // ctor Float( float )
     m_ctor_Float_with_float = jni->GetMethodID(
-        (jclass)jo_Float.get(), "<init>", "(F)V" );
+        (jclass) jo_Float.get(), "<init>", "(F)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Float_with_float );
     // ctor Double( double )
     m_ctor_Double_with_double = jni->GetMethodID(
-        (jclass)jo_Double.get(), "<init>", "(D)V" );
+        (jclass) jo_Double.get(), "<init>", "(D)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Double_with_double );
 
     // static method UnoRuntime.generateOid()
     m_method_UnoRuntime_generateOid = jni->GetStaticMethodID(
-        (jclass)jo_UnoRuntime.get(), "generateOid", "(Ljava/lang/Object;)Ljava/lang/String;" );
+        (jclass) jo_UnoRuntime.get(),
+        "generateOid", "(Ljava/lang/Object;)Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_UnoRuntime_generateOid );
     // static method UnoRuntime.queryInterface()
     m_method_UnoRuntime_queryInterface = jni->GetStaticMethodID(
-        (jclass)jo_UnoRuntime.get(),
-        "queryInterface", "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;" );
+        (jclass) jo_UnoRuntime.get(),
+        "queryInterface",
+        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_UnoRuntime_queryInterface );
 
     // field Enum.m_value
     m_field_Enum_m_value = jni->GetFieldID(
-        (jclass)jo_Enum.get(), "m_value", "I" );
+        (jclass) jo_Enum.get(), "m_value", "I" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_Enum_m_value );
 
     // static method TypeClass.fromInt()
     m_method_TypeClass_fromInt = jni->GetStaticMethodID(
-        (jclass)jo_TypeClass.get(), "fromInt", "(I)Lcom/sun/star/uno/TypeClass;" );
+        (jclass) jo_TypeClass.get(),
+        "fromInt", "(I)Lcom/sun/star/uno/TypeClass;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_TypeClass_fromInt );
 
     // ctor Type( Class )
     m_ctor_Type_with_Class = jni->GetMethodID(
-        (jclass)jo_Type.get(), "<init>", "(Ljava/lang/Class;)V" );
+        (jclass) jo_Type.get(), "<init>", "(Ljava/lang/Class;)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Type_with_Class );
     // ctor Type( String, TypeClass )
     m_ctor_Type_with_Name_TypeClass = jni->GetMethodID(
-        (jclass)jo_Type.get(), "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V" );
+        (jclass) jo_Type.get(),
+        "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Type_with_Name_TypeClass );
     // field Type._typeName
     m_field_Type__typeName = jni->GetFieldID(
-        (jclass)jo_Type.get(), "_typeName", "Ljava/lang/String;" );
+        (jclass) jo_Type.get(), "_typeName", "Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_Type__typeName );
 
     // ctor Any( Type, Object )
     m_ctor_Any_with_Type_Object = jni->GetMethodID(
-        (jclass)jo_Any.get(), "<init>", "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V" );
+        (jclass) jo_Any.get(),
+        "<init>", "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_ctor_Any_with_Type_Object );
 
     // field Any._type
     m_field_Any__type = jni->GetFieldID(
-        (jclass)jo_Any.get(), "_type", "Lcom/sun/star/uno/Type;" );
+        (jclass) jo_Any.get(), "_type", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_Any__type );
     // field Any._object
     m_field_Any__object = jni->GetFieldID(
-        (jclass)jo_Any.get(), "_object", "Ljava/lang/Object;" );
+        (jclass) jo_Any.get(), "_object", "Ljava/lang/Object;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_Any__object );
 
     // method IEnvironment.getRegisteredInterface()
     m_method_IEnvironment_getRegisteredInterface = jni->GetMethodID(
-        (jclass)jo_IEnvironment.get(), "getRegisteredInterface",
+        (jclass) jo_IEnvironment.get(),
+        "getRegisteredInterface",
         "(Ljava/lang/String;Lcom/sun/star/uno/Type;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_IEnvironment_getRegisteredInterface );
     // method IEnvironment.registerInterface()
     m_method_IEnvironment_registerInterface = jni->GetMethodID(
-        (jclass)jo_IEnvironment.get(), "registerInterface",
-        "(Ljava/lang/Object;[Ljava/lang/String;Lcom/sun/star/uno/Type;)Ljava/lang/Object;" );
+        (jclass) jo_IEnvironment.get(), "registerInterface",
+        "(Ljava/lang/Object;[Ljava/lang/String;Lcom/sun/star/uno/Type;)"
+        "Ljava/lang/Object;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_IEnvironment_registerInterface );
 
     // static method JNI_proxy.get_proxy_ctor()
     m_method_JNI_proxy_get_proxy_ctor = jni->GetStaticMethodID(
-        (jclass)jo_JNI_proxy.get(), "get_proxy_ctor",
+        (jclass) jo_JNI_proxy.get(), "get_proxy_ctor",
         "(Ljava/lang/Class;)Ljava/lang/reflect/Constructor;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_JNI_proxy_get_proxy_ctor );
     // static method JNI_proxy.create()
     m_method_JNI_proxy_create = jni->GetStaticMethodID(
-        (jclass)jo_JNI_proxy.get(), "create",
-        "(JLcom/sun/star/uno/IEnvironment;JJLcom/sun/star/uno/Type;Ljava/lang/String;Ljava/lang/reflect/Constructor;)Ljava/lang/Object;" );
+        (jclass) jo_JNI_proxy.get(), "create",
+        "(JLcom/sun/star/uno/IEnvironment;JJLcom/sun/star/uno/Type;Ljava/lang"
+        "/String;Ljava/lang/reflect/Constructor;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_JNI_proxy_create );
     // field JNI_proxy.m_receiver_handle
     m_field_JNI_proxy_m_receiver_handle = jni->GetFieldID(
-        (jclass)jo_JNI_proxy.get(), "m_receiver_handle", "J" );
+        (jclass) jo_JNI_proxy.get(), "m_receiver_handle", "J" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_receiver_handle );
     // field JNI_proxy.m_td_handle
     m_field_JNI_proxy_m_td_handle = jni->GetFieldID(
-        (jclass)jo_JNI_proxy.get(), "m_td_handle", "J" );
+        (jclass) jo_JNI_proxy.get(), "m_td_handle", "J" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_td_handle );
     // field JNI_proxy.m_type
     m_field_JNI_proxy_m_type = jni->GetFieldID(
-        (jclass)jo_JNI_proxy.get(), "m_type", "Lcom/sun/star/uno/Type;" );
+        (jclass) jo_JNI_proxy.get(), "m_type", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_type );
     // field JNI_proxy.m_oid
     m_field_JNI_proxy_m_oid = jni->GetFieldID(
-        (jclass)jo_JNI_proxy.get(), "m_oid", "Ljava/lang/String;" );
+        (jclass) jo_JNI_proxy.get(), "m_oid", "Ljava/lang/String;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_oid );
 
     // get java env
     OUString java_env_type_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
-    JLocalAutoRef jo_java( jni, ustring_to_jstring( jni, java_env_type_name.pData ) );
+    JLocalAutoRef jo_java(
+        jni, ustring_to_jstring( jni, java_env_type_name.pData ) );
     jvalue args[ 2 ];
     args[ 0 ].l = jo_java.get();
     args[ 1 ].l = 0;
     jmethodID method_getEnvironment = jni->GetStaticMethodID(
-        (jclass)jo_UnoRuntime.get(), "getEnvironment",
-        "(Ljava/lang/String;Ljava/lang/Object;)Lcom/sun/star/uno/IEnvironment;" );
+        (jclass) jo_UnoRuntime.get(), "getEnvironment",
+        "(Ljava/lang/String;Ljava/lang/Object;)"
+        "Lcom/sun/star/uno/IEnvironment;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != method_getEnvironment );
     JLocalAutoRef jo_java_env(
         jni, jni->CallStaticObjectMethodA(
-            (jclass)jo_UnoRuntime.get(), method_getEnvironment, args ) );
+            (jclass) jo_UnoRuntime.get(), method_getEnvironment, args ) );
 
     // get com.sun.star.uno.Any.VOID
     jfieldID field_Any_VOID = jni->GetStaticFieldID(
-        (jclass)jo_Any.get(), "VOID", "Lcom/sun/star/uno/Any;" );
+        (jclass) jo_Any.get(), "VOID", "Lcom/sun/star/uno/Any;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != field_Any_VOID );
     JLocalAutoRef jo_Any_VOID(
-        jni, jni->GetStaticObjectField( (jclass)jo_Any.get(), field_Any_VOID ) );
+        jni, jni->GetStaticObjectField(
+            (jclass) jo_Any.get(), field_Any_VOID ) );
     // get com.sun.star.uno.Type.UNSIGNED_SHORT
     jfieldID field_Type_UNSIGNED_SHORT = jni->GetStaticFieldID(
-        (jclass)jo_Type.get(), "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;" );
+        (jclass) jo_Type.get(), "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != field_Type_UNSIGNED_SHORT );
     JLocalAutoRef jo_Type_UNSIGNED_SHORT(
-        jni, jni->GetStaticObjectField( (jclass)jo_Type.get(), field_Type_UNSIGNED_SHORT ) );
+        jni, jni->GetStaticObjectField(
+            (jclass) jo_Type.get(), field_Type_UNSIGNED_SHORT ) );
     // get com.sun.star.uno.Type.UNSIGNED_LONG
     jfieldID field_Type_UNSIGNED_LONG = jni->GetStaticFieldID(
-        (jclass)jo_Type.get(), "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;" );
+        (jclass) jo_Type.get(), "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != field_Type_UNSIGNED_LONG );
     JLocalAutoRef jo_Type_UNSIGNED_LONG(
-        jni, jni->GetStaticObjectField( (jclass)jo_Type.get(), field_Type_UNSIGNED_LONG ) );
+        jni, jni->GetStaticObjectField(
+            (jclass) jo_Type.get(), field_Type_UNSIGNED_LONG ) );
     // get com.sun.star.uno.Type.UNSIGNED_HYPER
     jfieldID field_Type_UNSIGNED_HYPER = jni->GetStaticFieldID(
-        (jclass)jo_Type.get(), "UNSIGNED_HYPER", "Lcom/sun/star/uno/Type;" );
+        (jclass) jo_Type.get(), "UNSIGNED_HYPER", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != field_Type_UNSIGNED_HYPER );
     JLocalAutoRef jo_Type_UNSIGNED_HYPER(
-        jni, jni->GetStaticObjectField( (jclass)jo_Type.get(), field_Type_UNSIGNED_HYPER ) );
+        jni, jni->GetStaticObjectField(
+            (jclass) jo_Type.get(), field_Type_UNSIGNED_HYPER ) );
 
     // make global refs
-    m_class_UnoRuntime = (jclass)jni->NewGlobalRef( jo_UnoRuntime.get() );
-    m_class_RuntimeException = (jclass)jni->NewGlobalRef( jo_RuntimeException.get() );
-    m_class_Any = (jclass)jni->NewGlobalRef( jo_Any.get() );
-    m_class_Type = (jclass)jni->NewGlobalRef( jo_Type.get() );
-    m_class_TypeClass = (jclass)jni->NewGlobalRef( jo_TypeClass.get() );
-    m_class_JNI_proxy = (jclass)jni->NewGlobalRef( jo_JNI_proxy.get() );
+    m_class_UnoRuntime =
+        (jclass) jni->NewGlobalRef( jo_UnoRuntime.get() );
+    m_class_RuntimeException =
+        (jclass) jni->NewGlobalRef( jo_RuntimeException.get() );
+    m_class_Any =
+        (jclass) jni->NewGlobalRef( jo_Any.get() );
+    m_class_Type =
+        (jclass) jni->NewGlobalRef( jo_Type.get() );
+    m_class_TypeClass =
+        (jclass) jni->NewGlobalRef( jo_TypeClass.get() );
+    m_class_JNI_proxy =
+        (jclass) jni->NewGlobalRef( jo_JNI_proxy.get() );
 
-    m_class_Character = (jclass)jni->NewGlobalRef( jo_Character.get() );
-    m_class_Boolean = (jclass)jni->NewGlobalRef( jo_Boolean.get() );
-    m_class_Byte = (jclass)jni->NewGlobalRef( jo_Byte.get() );
-    m_class_Short = (jclass)jni->NewGlobalRef( jo_Short.get() );
-    m_class_Integer = (jclass)jni->NewGlobalRef( jo_Integer.get() );
-    m_class_Long = (jclass)jni->NewGlobalRef( jo_Long.get() );
-    m_class_Float = (jclass)jni->NewGlobalRef( jo_Float.get() );
-    m_class_Double = (jclass)jni->NewGlobalRef( jo_Double.get() );
-    m_class_String = (jclass)jni->NewGlobalRef( jo_String.get() );
-    m_class_Object = (jclass)jni->NewGlobalRef( jo_Object.get() );
+    m_class_Character =
+        (jclass) jni->NewGlobalRef( jo_Character.get() );
+    m_class_Boolean =
+        (jclass) jni->NewGlobalRef( jo_Boolean.get() );
+    m_class_Byte =
+        (jclass) jni->NewGlobalRef( jo_Byte.get() );
+    m_class_Short =
+        (jclass) jni->NewGlobalRef( jo_Short.get() );
+    m_class_Integer =
+        (jclass) jni->NewGlobalRef( jo_Integer.get() );
+    m_class_Long =
+        (jclass) jni->NewGlobalRef( jo_Long.get() );
+    m_class_Float =
+        (jclass) jni->NewGlobalRef( jo_Float.get() );
+    m_class_Double =
+        (jclass) jni->NewGlobalRef( jo_Double.get() );
+    m_class_String =
+        (jclass) jni->NewGlobalRef( jo_String.get() );
+    m_class_Object =
+        (jclass) jni->NewGlobalRef( jo_Object.get() );
 
-    m_object_Any_VOID = jni->NewGlobalRef( jo_Any_VOID.get() );
-    m_object_Type_UNSIGNED_SHORT = jni->NewGlobalRef( jo_Type_UNSIGNED_SHORT.get() );
-    m_object_Type_UNSIGNED_LONG = jni->NewGlobalRef( jo_Type_UNSIGNED_LONG.get() );
-    m_object_Type_UNSIGNED_HYPER = jni->NewGlobalRef( jo_Type_UNSIGNED_HYPER.get() );
+    m_object_Any_VOID =
+        jni->NewGlobalRef( jo_Any_VOID.get() );
+    m_object_Type_UNSIGNED_SHORT =
+        jni->NewGlobalRef( jo_Type_UNSIGNED_SHORT.get() );
+    m_object_Type_UNSIGNED_LONG =
+        jni->NewGlobalRef( jo_Type_UNSIGNED_LONG.get() );
+    m_object_Type_UNSIGNED_HYPER =
+        jni->NewGlobalRef( jo_Type_UNSIGNED_HYPER.get() );
     m_object_java_env = jni->NewGlobalRef( jo_java_env.get() );
 
     try
     {
         css::uno::TypeDescription XInterface_td(
-            ::getCppuType( (css::uno::Reference< css::uno::XInterface > const *)0 ) );
-        m_XInterface_type_info = new JNI_interface_type_info( jni, XInterface_td );
+            ::getCppuType(
+                (css::uno::Reference< css::uno::XInterface > const *)0 ) );
+        m_XInterface_type_info =
+            new JNI_interface_type_info( jni, XInterface_td );
     }
     catch (...)
     {
@@ -809,7 +891,8 @@ JNI_info::JNI_info( JNIEnv * jni_env )
         throw;
     }
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 void JNI_info::destruct( JNIEnv * jni_env )
 {
     t_str2type::const_iterator iPos( m_type_map.begin() );
@@ -820,7 +903,8 @@ void JNI_info::destruct( JNIEnv * jni_env )
     }
     if (0 != m_XInterface_type_info)
     {
-        const_cast< JNI_interface_type_info * >( m_XInterface_type_info )->destroy( jni_env );
+        const_cast< JNI_interface_type_info * >(
+            m_XInterface_type_info )->destroy( jni_env );
     }
 
     // free global refs
@@ -849,23 +933,26 @@ void JNI_info::destruct( JNIEnv * jni_env )
     jni_env->DeleteGlobalRef( m_class_Any );
 }
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
 {
     // !!!no JNI_info available at JNI_context!!!
     JNI_context jni( 0, jni_env );
 
     JLocalAutoRef jo_JNI_info_holder(
-        jni, find_class( jni, "com/sun/star/bridges/jni_uno/JNI_info_holder" ) );
+        jni,
+        find_class( jni, "com/sun/star/bridges/jni_uno/JNI_info_holder" ) );
     // field JNI_info_holder.m_jni_info_handle
     jfieldID field_s_jni_info_handle =
-        jni->GetStaticFieldID( (jclass)jo_JNI_info_holder.get(), "s_jni_info_handle", "J" );
+        jni->GetStaticFieldID(
+            (jclass) jo_JNI_info_holder.get(), "s_jni_info_handle", "J" );
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != field_s_jni_info_handle );
 
     JNI_info const * jni_info =
         reinterpret_cast< JNI_info const * >(
-            jni->GetStaticLongField( (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
+            jni->GetStaticLongField(
+                (jclass) jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
     if (0 == jni_info) // un-initialized?
     {
         JNI_info * new_info = new JNI_info( jni_env );
@@ -874,11 +961,12 @@ JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
         jni_info =
             reinterpret_cast< JNI_info const * >(
                 jni->GetStaticLongField(
-                    (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
+                    (jclass) jo_JNI_info_holder.get(),
+                    field_s_jni_info_handle ) );
         if (0 == jni_info) // still un-initialized?
         {
             jni->SetStaticLongField(
-                (jclass)jo_JNI_info_holder.get(), field_s_jni_info_handle,
+                (jclass) jo_JNI_info_holder.get(), field_s_jni_info_handle,
                 reinterpret_cast< jlong >( new_info ) );
             jni_info = new_info;
         }
@@ -894,15 +982,17 @@ JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
 
 }
 
-//##################################################################################################
 extern "C"
 {
 
-JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
+//------------------------------------------------------------------------------
+JNIEXPORT void
+JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
     JNIEnv * jni_env, jobject jo_holder, jlong jni_info_handle )
     SAL_THROW_EXTERN_C()
 {
-    ::jni_uno::JNI_info * jni_info = reinterpret_cast< ::jni_uno::JNI_info * >( jni_info_handle );
+    ::jni_uno::JNI_info * jni_info =
+          reinterpret_cast< ::jni_uno::JNI_info * >( jni_info_handle );
     jni_info->destroy( jni_env );
 }
 
