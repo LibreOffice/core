@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 14:04:43 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 15:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "docfile.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -80,6 +80,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/urihelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -122,6 +123,11 @@
 #include "mnumgr.hxx"
 #include "imgmgr.hxx"
 #include "tbxconf.hxx"
+#include "docfile.hxx"
+#include "objuno.hxx"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 //====================================================================
 
@@ -1667,57 +1673,75 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     if ( aFoundName.Len() )
     {
+        // check existence of template storage
         aTemplFileName = aFoundName;
         BOOL bLoad = FALSE;
         if ( !aTemplStor.Is() )
             aTemplStor = new SvStorage( aTemplFileName,
-                                    STREAM_READ | STREAM_NOCREATE |
-                                    STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
+                            STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
 
-        if ( !aTemplStor->GetError() )
+        // should the document checked against changes in the template ?
+        if ( !aTemplStor->GetError() && pInfo->IsQueryLoadTemplate() )
         {
-            // Template-DocInfo laden
-            SfxDocumentInfo *pTemplInfo = new SfxDocumentInfo;
+            // load document info of template
+            BOOL bOK = FALSE;
             DateTime aTemplDate;
-            if ( pTemplInfo->Load(aTemplStor) )
-                aTemplDate = pTemplInfo->GetChanged().GetTime();
-
-            // soll der Benutzer gefragt werden?
-            if ( pInfo->IsQueryLoadTemplate() )
+            Reference < document::XStandaloneDocumentInfo > xDocInfo (
+                    ::comphelper::getProcessServiceFactory()->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo") ) ), UNO_QUERY );
+            Reference < beans::XFastPropertySet > xSet( xDocInfo, UNO_QUERY );
+            if ( xDocInfo.is() && xSet.is() )
             {
-                // ist das Template neuer?
-                const DateTime aInfoDate( pInfo->GetTemplateDate(),
-                                          pInfo->GetTemplateDate() );
+                try
+                {
+                    xDocInfo->loadFromURL( aTemplFileName );
+                    Any aAny = xSet->getFastPropertyValue( WID_DATE_MODIFIED );
+                    ::com::sun::star::util::DateTime aTmp;
+                    if ( aAny >>= aTmp )
+                    {
+                        // get modify date from document info
+                        aTemplDate = SfxDocumentInfoObject::impl_DateTime_Struct2Object( aTmp );
+                        bOK = TRUE;
+                    }
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            // if modify date was read successfully
+            if ( bOK )
+            {
+                // compare modify data of template with the last check date of the document
+                const DateTime aInfoDate( pInfo->GetTemplateDate(), pInfo->GetTemplateDate() );
                 if ( aTemplDate > aInfoDate )
                 {
-                    // Benutzer fragen, ob update
+                    // ask user
                     QueryBox aBox( 0, SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
                     if ( RET_YES == aBox.Execute() )
                         bLoad = TRUE;
                     else
                     {
-                        // nein => am Doc merken, da\s nie wieder gefragt wird
+                        // user refuses, so don't ask again for this document
                         pInfo->SetQueryLoadTemplate(FALSE);
                         pInfo->Save(xDocStor);
                     }
                 }
             }
 
-            // StyleSheets aus Template updaten?
             if ( bLoad )
             {
-                // Document-Instanz f"ur das Template erzeugen und laden
-                SfxObjectShellLock xTemplDoc =
-                            GetFactory().CreateObject(SFX_CREATE_MODE_ORGANIZER);
+                // styles should be updated, create document in organizer mode to read in the styles
+                SfxObjectShellLock xTemplDoc = GetFactory().CreateObject( SFX_CREATE_MODE_ORGANIZER );
                 xTemplDoc->DoInitNew(0);
                 String aOldBaseURL = INetURLObject::GetBaseURL();
                 INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL() );
                 if ( xTemplDoc->LoadFrom(aTemplStor) )
                 {
-                    // StyleSheets ins eigene Doc laden
+                    // transfer styles from xTemplDoc to this document
                     LoadStyles(*xTemplDoc);
 
-                    // Update im Doc merken
+                    // remember date/time of check
                     pInfo->SetTemplateDate(aTemplDate);
                     pInfo->Save(xDocStor);
                 }
@@ -1725,11 +1749,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 INetURLObject::SetBaseURL( aOldBaseURL );
             }
 /*
-            // Config aus Template laden?
             SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
             BOOL bConfig = pInfo->HasTemplateConfig();
             {
-                // Config-Manager aus Template-Storage erzeugen
                 SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
                 SetConfigManager(pTemplCfg);
                 SetTemplateConfig(TRUE);
@@ -1744,7 +1766,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
 */
             // Template und Template-DocInfo werden nicht mehr gebraucht
-            delete pTemplInfo;
+//            delete pTemplInfo;
         }
     }
 }
