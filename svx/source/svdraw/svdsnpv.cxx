@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2002-03-07 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,11 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     if (bOFrmSnap || bOPntSnap /*|| (bConnVisible && bOConSnap)*/) {
         ULONG nMaxPointSnapCount=200;
         ULONG nMaxFrameSnapCount=200;
-        SdrObjListIter aIter(*pPV->GetPage(),IM_FLAT/*IM_DEEPNOGROUPS*/,TRUE);
+
+        // #97981# go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
+        // SdrObjListIter aIter(*pPV->GetPage(),IM_FLAT/*IM_DEEPNOGROUPS*/,TRUE);
+        SdrObjListIter aIter(*pPV->GetPage(),/*IM_FLAT*/IM_DEEPNOGROUPS,TRUE);
+
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
             Rectangle aRect(pO->GetBoundRect());
