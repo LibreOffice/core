@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:31:01 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ void SimpleParser::Parse( ByteString PaSource )
     aTokenList.Clear();
 };
 
-TokenInfo SimpleParser::GetNextToken()
+TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 {
     TokenInfo aResult;
     if ( aNextTag.nId != TAG_NOMORETAGS )
@@ -181,7 +181,7 @@ TokenInfo SimpleParser::GetNextToken()
     }
     else
     {
-        aLastToken = GetNextTokenString();
+        aLastToken = GetNextTokenString( rErrorList );
         if ( aLastToken == "" )
             return TokenInfo( TAG_NOMORETAGS );
 
@@ -191,9 +191,34 @@ TokenInfo SimpleParser::GetNextToken()
             i++;
         aResult = TokenInfo( aKnownTags[i].nTag );
 
-        // try to detect common open/close tags
+        // do we have a \< ... \> style tag?
         if ( aResult.nId == TAG_UNKNOWN_TAG && aLastToken.Copy(0,2).Equals( "\\<" ) )
         {
+            // check for paired \" \"
+            bool bEven = true;
+            USHORT nPos = 0;
+            USHORT nQuotedQuotesPos = aLastToken.Search( "\\\"" );
+            USHORT nQuotedBackPos = aLastToken.Search( "\\\\" );    // this is only to kick out quoted backslashes
+            while ( nQuotedQuotesPos != STRING_NOTFOUND )
+            {
+                if ( nQuotedBackPos <= nQuotedQuotesPos )
+                    nPos = nQuotedBackPos+2;
+                else
+                {
+                    nPos = nQuotedQuotesPos+2;
+                    bEven = !bEven;
+                }
+                nQuotedQuotesPos = aLastToken.Search( "\\\"", nPos );
+                nQuotedBackPos = aLastToken.Search( "\\\\", nPos );    // this is only to kick out quoted backslashes
+            }
+            if ( !bEven )
+            {
+                ByteString sTmp( "Missing quotes ( \\\" ) in Tag: " );
+                sTmp += aLastToken;
+                rErrorList.Insert( new ParserMessage( 24, sTmp ) );
+            }
+
+            // check if we have an end-tag or a start-tag
             if ( aLastToken.GetChar(2) == '/' )
                 aResult = TokenInfo( TAG_COMMONEND, aLastToken );
             else
@@ -216,11 +241,12 @@ ByteString SimpleParser::GetTokenText()
     return aLastToken;
 }
 
-ByteString SimpleParser::GetNextTokenString()
+ByteString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList )
 {
     USHORT nStyle1StartPos = aSource.Search( "<#", nPos );
     USHORT nStyle2StartPos = aSource.Search( "$[", nPos );
     USHORT nStyle3StartPos = aSource.Search( "\\<", nPos );
+    USHORT nStyle4StartPos = aSource.Search( "\\\\", nPos );    // this is only to kick out quoted backslashes
 
     // check if the tag starts with a letter to avoid things like <> <= ... >
     while ( STRING_NOTFOUND != nStyle3StartPos && !( aSource.Copy( nStyle3StartPos+2, 1 ).IsAlphaAscii() || aSource.GetChar( nStyle3StartPos+2 ) == '/' ) )
@@ -229,21 +255,53 @@ ByteString SimpleParser::GetNextTokenString()
     if ( STRING_NOTFOUND == nStyle1StartPos && STRING_NOTFOUND == nStyle2StartPos && STRING_NOTFOUND == nStyle3StartPos )
         return "";  // no more tokens
 
-    if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure aor spechial tags are recognized before all others
+    if ( nStyle4StartPos < nStyle1StartPos && nStyle4StartPos < nStyle2StartPos && nStyle4StartPos <= nStyle3StartPos )  // <= to make sure \\ is always handled first
+    {   // Skip quoted Backslash
+        nPos = nStyle4StartPos +2;
+        return GetNextTokenString( rErrorList );
+    }
+
+    if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure our spechial tags are recognized before all others
     {   // test for <# ... > style tokens
         USHORT nEndPos = aSource.Search( ">", nStyle1StartPos );
+        if ( nEndPos == STRING_NOTFOUND )
+        {   // Token is incomplete. Skip start and search for better ones
+            nPos = nStyle1StartPos +2;
+            return GetNextTokenString( rErrorList );
+        }
         nPos = nEndPos;
         return aSource.Copy( nStyle1StartPos, nEndPos-nStyle1StartPos +1 ).ToUpperAscii();
     }
     else if ( nStyle2StartPos < nStyle1StartPos && nStyle2StartPos < nStyle3StartPos )
     {   // test for $[ ... ] style tokens
         USHORT nEndPos = aSource.Search( "]", nStyle2StartPos);
+        if ( nEndPos == STRING_NOTFOUND )
+        {   // Token is incomplete. Skip start and search for better ones
+            nPos = nStyle2StartPos +2;
+            return GetNextTokenString( rErrorList );
+        }
         nPos = nEndPos;
         return aSource.Copy( nStyle2StartPos, nEndPos-nStyle2StartPos +1 );
     }
     else
-    {   // test for < ... > style tokens
+    {   // test for \< ... \> style tokens
         USHORT nEndPos = aSource.Search( "\\>", nStyle3StartPos);
+        USHORT nQuotedBackPos = aSource.Search( "\\\\", nStyle3StartPos );    // this is only to kick out quoted backslashes
+        while ( nQuotedBackPos <= nEndPos && nQuotedBackPos != STRING_NOTFOUND )
+        {
+            nEndPos = aSource.Search( "\\>", nQuotedBackPos +2);
+            nQuotedBackPos = aSource.Search( "\\\\", nQuotedBackPos +2 );    // this is only to kick out quoted backslashes
+        }
+        if ( nEndPos == STRING_NOTFOUND )
+        {   // Token is incomplete. Skip start and search for better ones
+            nPos = nStyle3StartPos +2;
+            ByteString sTmp( "Tag Start '\\<' without Tag End '\\>': " );
+            sTmp += aSource.Copy( nStyle3StartPos-10, 20 );
+            rErrorList.Insert( new ParserMessage( 24, sTmp ) );
+            return GetNextTokenString( rErrorList );
+        }
+        // check for paired quoted "    -->   \"sometext\"
+
         nPos = nEndPos;
         return aSource.Copy( nStyle3StartPos, nEndPos-nStyle3StartPos +2 );
     }
@@ -280,7 +338,7 @@ void TokenParser::Parse( const ByteString &aCode )
     aParser.Parse( aCode );
 
     //erstes Symbol holen
-    aTag = aParser.GetNextToken();
+    aTag = aParser.GetNextToken( aErrorList );
 
     nPfCaseOptions = 0;
     nAppCaseOptions = 0;
@@ -769,7 +827,7 @@ BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &aExpec
 {
     if ( aCurrentToken.nId == aExpectedToken.nId )
     {
-        aTag = aParser.GetNextToken();
+        aTag = aParser.GetNextToken( aErrorList );
         return TRUE;
     }
     else
@@ -789,7 +847,7 @@ void TokenParser::ParseError( USHORT nErrNr, const ByteString &aErrMsg )
     aErrorList.Insert( new ParserMessage( nErrNr, aErrMsg, aParser.GetScanningPosition()-nTokenLength, nTokenLength), LIST_APPEND );
 
     // Das Fehlerhafte Tag überspringen
-    aTag = aParser.GetNextToken();
+    aTag = aParser.GetNextToken( aErrorList );
 }
 
 void LingTest::CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, TokenInfo aToken )
@@ -958,11 +1016,12 @@ BOOL LingTest::ReferenceOK( const ByteString &aReference )
     return !aReferenceParser.HasErrors();
 }
 
-BOOL LingTest::TesteeOK( const ByteString &aTestee )
+BOOL LingTest::TesteeOK( const ByteString &aTestee, BOOL bHasSourceLine )
 {
     aTesteeParser.Parse( aTestee );
 
-    CheckTags( aReferenceParser.GetTokenList(), aTesteeParser.GetTokenList(), aTesteeParser.GetErrors() );
+    if ( bHasSourceLine )
+        CheckTags( aReferenceParser.GetTokenList(), aTesteeParser.GetTokenList(), aTesteeParser.GetErrors() );
 
     return !aTesteeParser.HasErrors() && !HasCompareWarnings();
 }
