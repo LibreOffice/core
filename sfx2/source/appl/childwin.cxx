@@ -2,9 +2,17 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.17 $
+<<<<<<< childwin.cxx
+ *  $Revision: 1.18 $
+=======
+ *  $Revision: 1.18 $
+>>>>>>> 1.13.142.2
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:33:50 $
+<<<<<<< childwin.cxx
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:07:32 $
+=======
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:07:32 $
+>>>>>>> 1.13.142.2
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,13 +442,19 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
 {
     // load configuration
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nId ) );
+
+    if ( aWinOpt.Exists() )
+        rInfo.bVisible  = aWinOpt.IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
+
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
+
     ::rtl::OUString aTmp;
     if ( aSeq.getLength() )
         aSeq[0].Value >>= aTmp;
 
     String aWinData( aTmp );
     rInfo.aWinState = ByteString( String(aWinOpt.GetWindowState()), RTL_TEXTENCODING_UTF8 );
+
     //ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if ( aWinData.Len() )
