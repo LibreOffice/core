@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 12:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,12 +235,32 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getNumColAttrib(column,SQL_DESC_PRECISION);
+    sal_Int32 nType = 0;
+    try
+    {
+        nType = getNumColAttrib(column,SQL_DESC_PRECISION);
+    }
+    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
+    {
+        m_bUseODBC2Types = sal_True;
+        nType = getNumColAttrib(column,SQL_COLUMN_PRECISION );
+    }
+    return nType;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return getNumColAttrib(column,SQL_DESC_SCALE);
+    sal_Int32 nType = 0;
+    try
+    {
+        nType = getNumColAttrib(column,SQL_DESC_SCALE);
+    }
+    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
+    {
+        m_bUseODBC2Types = sal_True;
+        nType = getNumColAttrib(column,SQL_COLUMN_SCALE );
+    }
+    return nType;
 }
 // -------------------------------------------------------------------------
 
