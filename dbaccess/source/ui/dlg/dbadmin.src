@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:41:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1396,35 +1396,9 @@ TabPage PAGE_GENERAL
     };
     String STR_NO_ADABASE_DATASOURCES
     {
-        Text = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
-        Text [ english ] = "No Adabas data sources have been found on your system.";
-        Text [ english_us ] = "There are no Adabas data sources on your system.";
-        Text [ portuguese ] = "No seu sistema não existe nenhuma fonte de dados Adabas.";
-        Text [ russian ] = "Èñòî÷íèêè äàííûõ Adabas íå îáíàğóæåíû â ñèñòåìå.";
-        Text [ greek ] = "Äåí âñİèçêå êáìßá ğñïİëåõóç äåäïìİíùí ôïõ Adabas óôï óıóôçìá óáò.";
-        Text [ dutch ] = "Op uw systeem zijn geen Adabas-gegevensbronnen gevonden.";
-        Text [ french ] = "Aucune source de données Adabas n'a été détectée dans votre système.";
-        Text [ spanish ] = "No se han encontrado fuentes de datos Adabas en su sistema.";
-        Text [ italian ] = "Impossibile trovare una sorgente dati Adabas nel sistema";
-        Text [ danish ] = "Der blev ikke fundet nogen Adabas-datakilder på systemet.";
-        Text [ swedish ] = "Inga Adabasdatakällor har hittats i ditt system.";
-        Text [ polish ] = "W systemie nie znaleziono Ÿróde³ danych Adabas.";
-        Text [ portuguese_brazilian ] = "Não existe nenhuma fonte de dados Adabas no seu sistema.";
-        Text [ japanese ] = "ãŠä½¿ã„ã®ã‚·ã‚¹ãƒ†ãƒ ä¸Šã« Adabas ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
-        Text [ korean ] = "ì‚¬ìš©ìì˜ ì‹œìŠ¤í…œì—ì„œ Adabas ë°ì´í„° ì›ë³¸ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-        Text [ chinese_simplified ] = "åœ¨æ‚¨çš„ç³»ç»Ÿä¸Šæ²¡æœ‰å®‰è£… Adabas æ•°æ®åº“ã€‚";
-        Text [ chinese_traditional ] = "åœ¨æ‚¨çš„ç³»çµ±ä¸Šæ²’æœ‰å®‰è£ Adabas è³‡æ–™æºã€‚";
-        Text [ turkish ] = "Sisteminizde herhangi bir Adabas veri kaynağı bulunmuyor.";
-        Text [ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ãÕÇÏÑ ÈíÇäÇÊ Adabas Úáì äÙÇãß.";
-        Text[ finnish ] = "Järjestelmässä ei ole Adabas-tietolähteitä.";
-        Text[ catalan ] = "No hi ha cap font de dades Adabas en el sistema.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ Adabas à¹ƒà¸™à¸£à¸°à¸šà¸šà¸‚à¸­à¸‡à¸„à¸¸à¸“";
-        Text[ czech ] = "Ve vaÅ¡em systÃ©mu nenÃ­ Å¾Ã¡dnÃ½ zdroj dat Adabas.";
-        Text[ hebrew ] = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
-        Text[ hindi ] = "à¤†à¤ªà¤•à¥‡ à¤¸à¤¿à¤¸à¥à¤Ÿà¤® à¤®à¥‡à¤‚ à¤•à¥‹à¤ˆ Adabas à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "Vo vaÅ¡om systÃ©me nie sÃº Å¾iadne zdroje dÃ¡t Adabas.";
-        Text[ hungarian ] = "Nincs Adabas adatforrÃ¡s a rendszerben.";
-        Text[ slovenian ] = "V vaÅ¡em sistemu ni virov podatkov za Adabas.";
+        Text = "Auf Ihrem System wurden keine Adabas-D-Datenquellen gefunden.";
+        Text [ english ] = "No Adabas D data sources have been found on your system.";
+        Text [ english_us ] = "There are no Adabas D data sources on your system.";
     };
     String STR_UNSUPPORTED_DATASOURCE_TYPE
     {
