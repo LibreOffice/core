@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ namespace dbaui
         void commitTo(IndexFields& _rFields);
 
         sal_Bool SaveModified();
+        sal_Bool IsModified() const;
 
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
@@ -142,6 +143,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/30 14:10:22  oj
+ *  #85298##85297# correct index impl
+ *
  *  Revision 1.1  2001/03/16 16:22:00  fs
  *  initial checkin - index design related classes
  *
