@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:35:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SVX_HLNKITEM_HXX
-#include <hlnkitem.hxx>
-#endif
+//CHINA001 #ifndef _SVX_HLNKITEM_HXX
+//CHINA001 #include <hlnkitem.hxx>
+//CHINA001 #endif
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
 #endif
@@ -81,29 +81,10 @@
 #include <vcl/image.hxx>
 #endif
 
-#include "iconcdlg.hxx"
+//CHINA001 #include "iconcdlg.hxx"
 
-/*************************************************************************
-|*
-|* Hyperlink-Dialog
-|*
-\************************************************************************/
 
-class SvxHpLinkDlg;
-class SvxHlinkCtrl : public SfxControllerItem
-{
-private :
-    SvxHpLinkDlg *pParent;
 
-    SfxStatusForwarder aOnlineForwarder;
-    SfxStatusForwarder aRdOnlyForwarder;
-
-public :
-    SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
-
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
-                                const SfxPoolItem* pState );
-};
 
 /*************************************************************************
 |*
@@ -120,51 +101,6 @@ public:
     SFX_DECL_CHILDWINDOW(SvxHlinkDlgWrapper);
 };
 
-/*************************************************************************
-|*
-|* Hyperlink-Dialog
-|*
-\************************************************************************/
-
-class SvxHpLinkDlg : public IconChoiceDialog
-{
-private:
-    SvxHlinkCtrl        maCtrl;         // Controler
-    SfxBindings*        mpBindings;
-    SfxItemSet*         mpItemSet;
-
-    sal_Bool            mbDummy1    : 1;
-    sal_Bool            mbDummy2    : 1;
-    sal_Bool            mbDummy3    : 1;
-    sal_Bool            mbDummy4    : 1;
-    sal_Bool            mbDummy5    : 1;
-    sal_Bool            mbGrabFocus : 1;
-    sal_Bool            mbReadOnly  : 1;
-    sal_Bool            mbIsHTMLDoc : 1;
-
-    void*               mpDummy1;
-    void*               mpDummy2;
-
-    DECL_LINK (ClickApplyHdl_Impl, void * );
-    DECL_LINK (ClickCloseHdl_Impl, void * );
-
-protected:
-    virtual BOOL            Close();
-    virtual void            Move();
-
-//    virtual long          PreNotify( NotifyEvent& rNEvt );
-public:
-    SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
-    ~SvxHpLinkDlg ();
-
-    USHORT                  SetPage( SvxHyperlinkItem* pItem );
-    void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
-    void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
-    inline const BOOL       IsHTMLDoc() const { return mbIsHTMLDoc; }
-
-    inline SfxBindings*     GetBindings() const { return mpBindings; };
-    inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
-};
 
 
 #endif // _SVX_TAB_HYPERLINK_HXX
