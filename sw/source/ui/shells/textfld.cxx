@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:15:54 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bRes = aFldMgr.InsertFld( aData );
                 }
                 else
+                        //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
+                        if(!GetView().GetViewFrame()->IsInModalMode())
                 {
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
                     pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
@@ -761,7 +763,9 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             case FN_INSERT_FIELD:
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                if(pVFrame->KnowsChildWindow(FN_INSERT_FIELD) && !pVFrame->HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
+                //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
+                if(!pVFrame->IsInModalMode() &&
+                        pVFrame->KnowsChildWindow(FN_INSERT_FIELD) && !pVFrame->HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
                     rSet.Put(SfxBoolItem( FN_INSERT_FIELD, pVFrame->HasChildWindow(nWhich)));
                 else
                     rSet.DisableItem(FN_INSERT_FIELD);
