@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_chain_next_name, XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME },
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXT_FRAME_HREF },
     { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_TEXT_FRAME_FILTER_NAME },
+    { XML_NAMESPACE_DRAW, sXML_zindex, XML_TOK_TEXT_FRAME_Z_INDEX },
     XML_TOKEN_MAP_END
 };
 

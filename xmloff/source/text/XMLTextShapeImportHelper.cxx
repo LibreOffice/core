@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HDL_
+#include <com/sun/star/drawing/XShapes.hdl>
+#endif
 
 #ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
 #include "XMLTextShapeImportHelper.hxx"
@@ -92,6 +98,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
 XMLTextShapeImportHelper::XMLTextShapeImportHelper(
@@ -102,10 +109,18 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
     sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
 {
+    Reference < XDrawPageSupplier > xDPS( rImp.GetModel(), UNO_QUERY );
+    if( xDPS.is() )
+    {
+         Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
+        pushGroupForSorting( xShapes );
+    }
+
 }
 
 XMLTextShapeImportHelper::~XMLTextShapeImportHelper()
 {
+    popGroupAndSort();
 }
 
 void XMLTextShapeImportHelper::addShape(

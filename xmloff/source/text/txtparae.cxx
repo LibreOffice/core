@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1539,6 +1539,21 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
             else
                 GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
                                           sValue.makeStringAndClear() );
+        }
+    }
+
+    OUString sZOrder( RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ) );
+    if( xPropSetInfo->hasPropertyByName( sZOrder ) )
+    {
+        sal_Int32 nZIndex;
+        aAny = rPropSet->getPropertyValue( sZOrder );
+        aAny >>= nZIndex;
+        if( -1 != nZIndex )
+        {
+            GetExport().GetMM100UnitConverter().convertNumber( sValue,
+                                                                nZIndex );
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_zindex,
+                                      sValue.makeStringAndClear() );
         }
     }
 

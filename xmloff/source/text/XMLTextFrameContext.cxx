@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:26:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -125,6 +128,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::drawing;
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
 {
@@ -328,6 +332,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int32   nMinWidth = 0;
     sal_Int32   nHeight = 0;
     sal_Int32   nMinHeight;
+    sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
 
     TextContentAnchorType   eAnchorType = eATyp;
@@ -414,6 +419,9 @@ XMLTextFrameContext::XMLTextFrameContext(
                 GetImport().GetMM100UnitConverter().convertPercent( nMinHeight, rValue );
             else
                 GetImport().GetMM100UnitConverter().convertMeasure( nMinHeight, rValue, 0 );
+            break;
+        case XML_TOK_TEXT_FRAME_Z_INDEX:
+            GetImport().GetMM100UnitConverter().convertNumber( nZIndex, rValue, -1 );
             break;
         case XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME:
             sChainNextName = rValue;
@@ -592,6 +600,9 @@ XMLTextFrameContext::XMLTextFrameContext(
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
         xTxtImport->InsertTextContent( xTxtCntnt );
+
+        Reference < XShape > xShape( xPropSet, UNO_QUERY );
+        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
     }
 
     // page number (must be set after the frame is inserted, because it
