@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
         while( aCmdLine.SearchAndReplace( "(TMP)", aFilename ) != STRING_NOTFOUND )
             ;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",
              bPipe ? "piping to" : "executing",
              aCmdLine.GetBuffer() );
