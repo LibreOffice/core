@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 11:38:56 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,12 +1488,11 @@ SfxItemPresentation XLineStartItem::GetPresentation
 
 sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else
@@ -1503,11 +1502,13 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
         rVal <<= aBezier;
     }
 
+#endif
     return sal_True;
 }
 
 sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -1526,6 +1527,7 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
                 SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
+#endif
 
     return sal_True;
 }
@@ -2184,12 +2186,11 @@ SfxItemPresentation XLineEndItem::GetPresentation
 
 sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else
@@ -2198,12 +2199,13 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
         SvxConvertXPolygonToPolyPolygonBezier( aXPolygon, aBezier );
         rVal <<= aBezier;
     }
-
+#endif
     return sal_True;
 }
 
 sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -2222,7 +2224,7 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
                 SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
-
+#endif
     return sal_True;
 }
 
