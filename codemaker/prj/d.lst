@@ -2,9 +2,12 @@
 ..\%__SRC%\bin\cppumaker.pdb %_DEST%\bin%_EXT%\cppumaker.pdb
 ..\%__SRC%\bin\javamaker.exe %_DEST%\bin%_EXT%\javamaker.exe
 ..\%__SRC%\bin\javamaker.pdb %_DEST%\bin%_EXT%\javamaker.pdb
+..\%__SRC%\bin\uno-skeletonmaker.exe %_DEST%\bin%_EXT%\uno-skeletonmaker.exe
+..\%__SRC%\bin\uno-skeletonmaker.pdb %_DEST%\bin%_EXT%\uno-skeletonmaker.pdb
 
 ..\%__SRC%\bin\cppumaker %_DEST%\bin%_EXT%\cppumaker
 ..\%__SRC%\bin\javamaker %_DEST%\bin%_EXT%\javamaker
+..\%__SRC%\bin\uno-skeletonmaker %_DEST%\bin%_EXT%\uno-skeletonmaker
 
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
