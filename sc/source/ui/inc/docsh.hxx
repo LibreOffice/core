@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ class ScDocShellModificator;
                                     // Extra-Flags fuer Repaint
 #define SC_PF_LINES         1
 #define SC_PF_TESTMERGE     2
+#define SC_PF_WHOLEROWS     4
 
 class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxListener
 {
@@ -343,6 +344,10 @@ public:
     void            PostPaintExtras();
 
     void            PostDataChanged();
+
+    void            UpdatePaintExt( USHORT& rExtFlags, USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
+                                                       USHORT nEndCol, USHORT nEndRow, USHORT nEndTab );
+    void            UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange );
 
     void            SetDocumentModified( BOOL bIsModified = TRUE );
     void            SetDrawModified( BOOL bIsModified = TRUE );
