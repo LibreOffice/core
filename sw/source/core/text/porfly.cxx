@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-19 09:54:29 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,19 +466,19 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     else
     {
         aBoundRect = GetFlyFrm()->Frm();
-#ifdef VERTICAL_LAYOUT
-        nOldWidth = (aBoundRect.*fnRect->fnGetWidth)();
-#else
+#ifndef VERTICAL_LAYOUT
         nOldWidth = aBoundRect.Width();
 #endif
     }
 
 #ifdef VERTICAL_LAYOUT
+    nOldWidth = (aBoundRect.*fnRect->fnGetWidth)();
+
     long nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
     if ( rFrm.IsVertical() )
     {
         // Seems to be easier to do it all the horizontal way
-        // So, from now on thinks horizontal.
+        // So, from now on think horizontal.
         rFrm.SwitchVerticalToHorizontal( aBoundRect );
         rFrm.SwitchVerticalToHorizontal( aBase );
 
@@ -488,6 +488,24 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nULSpaceUpper = rLRSpace.GetRight();
         nULSpaceLower = rLRSpace.GetLeft();
     }
+#ifdef BIDI
+    else
+    {
+        if ( rFrm.IsRightToLeft() )
+        {
+            nLRSpaceLeft = rLRSpace.GetRight();
+            nLRSpaceRight = rLRSpace.GetLeft();
+        }
+        else
+        {
+            nLRSpaceLeft = rLRSpace.GetLeft();
+            nLRSpaceRight = rLRSpace.GetRight();
+        }
+
+        nULSpaceUpper = rULSpace.GetUpper();
+        nULSpaceLower = rULSpace.GetLower();
+    }
+#else
     else
     {
         nLRSpaceLeft = rLRSpace.GetLeft();
@@ -495,6 +513,7 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nULSpaceUpper = rULSpace.GetUpper();
         nULSpaceLower = rULSpace.GetLower();
     }
+#endif
 
     if( nFlags & SETBASE_ULSPACE )
         aBase.X() += nLRSpaceLeft;
@@ -596,6 +615,11 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             aBase.Y() -= nFlyAsc + nRelPos;
     }
 
+#ifdef BIDI
+    if( nFlags & SETBASE_BIDI )
+        aBase.X() -= aBoundRect.Width();
+#endif
+
     Point aRelPos;
     if( nFlags & SETBASE_ROTATE )
     {
@@ -630,6 +654,15 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
 
             Point aDiff = aRelPos + aBase - aSnapRect.TopLeft();
             Point aAnchorBase( aBase );
+
+#ifdef BIDI
+            if ( rFrm.IsRightToLeft() )
+            {
+                rFrm.SwitchLTRtoRTL( aAnchorBase );
+                aAnchorBase.X() -= nOldWidth;
+                aDiff = aRelPos + aAnchorBase - aSnapRect.TopLeft();
+            }
+#endif
             if ( rFrm.IsVertical() )
             {
                 rFrm.SwitchHorizontalToVertical( aAnchorBase );
@@ -648,6 +681,13 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     else
     {
         Point aRelAttr;
+#ifdef BIDI
+        if ( rFrm.IsRightToLeft() )
+        {
+            rFrm.SwitchLTRtoRTL( aBase );
+            aBase.X() -= nOldWidth;
+        }
+#endif
         if ( rFrm.IsVertical() )
         {
             rFrm.SwitchHorizontalToVertical( aBase );

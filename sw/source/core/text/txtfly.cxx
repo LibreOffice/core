@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-19 09:54:04 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,17 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             else
                 aTmpInf.X( aTmpInf.X() + nAscent );
         }
+#ifdef BIDI
+        else
+        {
+            if ( GetMulti()->IsBidi() )
+                nFlags |= SETBASE_BIDI;
+            aTmpInf.Y( aTmpInf.Y() + nAscent );
+        }
+#else
         else
             aTmpInf.Y( aTmpInf.Y() + nAscent );
+#endif
     }
     else
         aTmpInf.Y( aTmpInf.Y() + nAscent );
@@ -378,6 +387,11 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
                 else
                     aSt.Y() += GetMulti()->Height();
                }
+#ifdef BIDI
+            else if ( GetMulti()->IsBidi() )
+                // jump to end of the bidi portion
+                aSt.X() += pLay->Width();
+#endif
 
             xub_StrLen nStIdx = aTmpInf.GetIdx();
             do
@@ -844,13 +858,15 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
             nMode |= SETBASE_REVERSE;
     }
 
+#ifdef VERTICAL_LAYOUT
+    Point aTmpBase( aBase );
+    if ( GetInfo().GetTxtFrm()->IsVertical() )
+        GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+#endif
+
     if( pFly )
     {
 #ifdef VERTICAL_LAYOUT
-        Point aTmpBase( aBase );
-        if ( GetInfo().GetTxtFrm()->IsVertical() )
-            GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
-
         pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aTmpBase,
                                     nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
 #else
@@ -884,10 +900,6 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     else
     {
 #ifdef VERTICAL_LAYOUT
-        Point aTmpBase( aBase );
-        if ( GetInfo().GetTxtFrm()->IsVertical() )
-            GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
-
         pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
            aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
 #else

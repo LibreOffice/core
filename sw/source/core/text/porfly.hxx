@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-31 13:08:33 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ public:
 #define SETBASE_INIT    4
 #define SETBASE_ROTATE  8
 #define SETBASE_REVERSE 16
+#ifdef BIDI
+#define SETBASE_BIDI    32
+#endif
 
 class SwFlyCntPortion : public SwLinePortion
 {
