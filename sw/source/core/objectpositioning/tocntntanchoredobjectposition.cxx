@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:02:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,9 +417,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // the frame, the object is oriented at.
             if ( pOrientFrm != &rAnchorTxtFrm )
             {
-                const SwTwips nTopOfOrient = (pOrientFrm->Frm().*fnRect->fnGetTop)();
+                // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
+                // to get top of frame for object positioning.
+                const SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
                 nRelPosY += (*fnRect->fnYDiff)( nTopOfOrient,
-                                      (rAnchorTxtFrm.Frm().*fnRect->fnGetTop)());
+                                      _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert ) );
             }
 
             // ??? Why saving calculated relative position
@@ -467,24 +469,29 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                  ( aVert.GetRelationOrient() == REL_CHAR ||
                    aVert.GetRelationOrient() == REL_VERT_LINE ) )
             {
+                // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
+                // to get top of frame for object positioning.
+                SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
                 if ( aVert.GetRelationOrient() == REL_CHAR )
                 {
                     nRelPosY = (*fnRect->fnYDiff)(
                                     (ToCharRect()->*fnRect->fnGetBottom)(),
-                                    (pOrientFrm->Frm().*fnRect->fnGetTop)() );
+                                    nTopOfOrient );
                 }
                 else
                 {
-                    nRelPosY = (*fnRect->fnYDiff)(
-                                    ToCharTopOfLine(),
-                                    (pOrientFrm->Frm().*fnRect->fnGetTop)() );
+                    nRelPosY = (*fnRect->fnYDiff)( ToCharTopOfLine(),
+                                                   nTopOfOrient );
                 }
                 nRelPosY -= aVert.GetPos();
                 if( pOrientFrm != &rAnchorTxtFrm )
                 {
                     const SwTxtFrm* pTmp = &rAnchorTxtFrm;
                     SWREFRESHFN( pTmp )
-                    nRelPosY -=(*fnRect->fnYDiff)((pTmp->Frm().*fnRect->fnGetTop)(),
+                    // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
+                    // to get top of frame for object positioning.
+                    SwTwips nTop = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
+                    nRelPosY -= (*fnRect->fnYDiff)( nTop,
                                     (pTmp->GetUpper()->*fnRect->fnGetPrtTop)());
                     while( pTmp != pOrientFrm )
                     {
@@ -498,11 +505,22 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             else
             {
                 nRelPosY = aVert.GetPos();
+                // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
+                // to get top of frame for object positioning.
+                const SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
                 // OD 02.10.2002 #102646# - increase <nRelPosY> by margin height,
                 // if position is vertical aligned to "paragraph text area"
                 if ( aVert.GetRelationOrient() == PRTAREA )
                 {
-                    nRelPosY += (pOrientFrm->*fnRect->fnGetTopMargin)();
+                    // OD 2004-03-11 #i11860# - consider upper space amount
+                    // of previous frame
+                    SwTwips nTopMargin = (pOrientFrm->*fnRect->fnGetTopMargin)();
+                    if ( pOrientFrm->IsTxtFrm() )
+                    {
+                        nTopMargin -= static_cast<const SwTxtFrm*>(pOrientFrm)->
+                            GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+                    }
+                    nRelPosY += nTopMargin;
                 }
                 // OD 22.09.2003 #i18732# - adjust <nRelPosY> by difference
                 // between 'page area' and 'anchor' frame, if position is
@@ -511,7 +529,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 {
                     nRelPosY += (*fnRect->fnYDiff)(
                                     (rPageAlignLayFrm.Frm().*fnRect->fnGetTop)(),
-                                    (pOrientFrm->Frm().*fnRect->fnGetTop)() );
+                                    nTopOfOrient );
                 }
                 else if ( aVert.GetRelationOrient() == REL_PG_PRTAREA )
                 {
@@ -523,14 +541,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     nRelPosY += (*fnRect->fnYDiff)(
                                     (aPgPrtRect.*fnRect->fnGetTop)(),
-                                    (pOrientFrm->Frm().*fnRect->fnGetTop)() );
+                                    nTopOfOrient );
                 }
 
                 if ( pOrientFrm != &rAnchorTxtFrm )
                 {
-                    const SwTwips nTopOfOrient = (pOrientFrm->Frm().*fnRect->fnGetTop)();
-                    nRelPosY += (*fnRect->fnYDiff)( nTopOfOrient,
-                                          (rAnchorTxtFrm.Frm().*fnRect->fnGetTop)());
+                    const SwTwips nTopOfAnch = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
+                    nRelPosY += (*fnRect->fnYDiff)( nTopOfOrient, nTopOfAnch );
                 }
             }
 
@@ -556,9 +573,12 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             else
             {
                 SWREFRESHFN( (&rAnchorTxtFrm) )
+                // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
+                // to get top of frame for object positioning.
+                const SwTwips nTopOfAnch = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
                 SwTwips nAvail =
                     (*fnRect->fnYDiff)( (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)(),
-                                        (rAnchorTxtFrm.Frm().*fnRect->fnGetTop)() );
+                                        nTopOfAnch );
                 const bool bInFtn = rAnchorTxtFrm.IsInFtn();
                 while ( nRelPosY )
                 {
@@ -568,18 +588,26 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                          ( pUpperOfOrientFrm->IsInTab() && bGrow &&
                            ( const_cast<SwLayoutFrm*>(pUpperOfOrientFrm)->Grow( nRelPosY-nAvail, TRUE) ) ) )
                     {
-                        if( bVert )
-                            aRelPos.X() = rAnchorTxtFrm.Frm().Left() +
-                                          rAnchorTxtFrm.Frm().Width() -
-                                          pUpperOfOrientFrm->Frm().Left() -
-                                          pUpperOfOrientFrm->Prt().Left() -
-                                          nAvail + nRelPosY;
+                        SwTwips nTmpRelPosY =
+                            (*fnRect->fnYDiff)( (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)(),
+                                                nTopOfAnch ) -
+                            nAvail + nRelPosY;
+                        if ( bVert )
+                            aRelPos.X() = nTmpRelPosY;
                         else
-                            aRelPos.Y() = pUpperOfOrientFrm->Frm().Top() +
-                                          pUpperOfOrientFrm->Prt().Top() +
-                                          pUpperOfOrientFrm->Prt().Height() -
-                                          nAvail + nRelPosY -
-                                          rAnchorTxtFrm.Frm().Top();
+                            aRelPos.Y() = nTmpRelPosY;
+//                        if( bVert )
+//                            aRelPos.X() = rAnchorTxtFrm.Frm().Left() +
+//                                          rAnchorTxtFrm.Frm().Width() -
+//                                          ( pUpperOfOrientFrm->Frm().Left() +
+//                                            pUpperOfOrientFrm->Prt().Left() ) -
+//                                          nAvail + nRelPosY;
+//                        else
+//                            aRelPos.Y() = pUpperOfOrientFrm->Frm().Top() +
+//                                          pUpperOfOrientFrm->Prt().Top() +
+//                                          pUpperOfOrientFrm->Prt().Height() -
+//                                          nAvail + nRelPosY -
+//                                          rAnchorTxtFrm.Frm().Top();
 
                         if ( ( bBrowse ||
                                ( pUpperOfOrientFrm->IsInTab() && bGrow ) ) &&
@@ -639,6 +667,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     }
                                     else
                                     {
+#if OSL_DEBUG_LEVEL > 1
+                                        ASSERT( false, "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
+#endif
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;
                                     }
@@ -666,18 +697,19 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 } // end of <while ( nRelPosY )>
             } // end of else <nRelPosY <= 0>
         } // end of <aVert.GetVertOrient() == VERT_NONE>
+
         //Damit das Teil ggf. auf die richtige Seite gestellt und in die
         //PrtArea des LayLeaf gezogen werden kann, muss hier seine
         //absolute Position berechnet werden.
+        const SwTwips nTopOfAnch = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
         if( bVert )
         {
-            pFlyAtCntFrm->Frm().Pos().X() = rAnchorTxtFrm.Frm().Left() -
-                                            aObjBoundRect.Width() +
-                                            rAnchorTxtFrm.Frm().Width() -
-                                            aRelPos.X() + nRelDiff;
+            pFlyAtCntFrm->Frm().Pos().X() = nTopOfAnch -
+                                            ( aRelPos.X() - nRelDiff ) -
+                                            aObjBoundRect.Width();
         }
         else
-            pFlyAtCntFrm->Frm().Pos().Y() = rAnchorTxtFrm.Frm().Top() +
+            pFlyAtCntFrm->Frm().Pos().Y() = nTopOfAnch +
                                             ( aRelPos.Y() - nRelDiff );
 
         // grow environment under certain conditions
@@ -747,29 +779,33 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                          ( pUpperOfOrientFrm->FindSctFrm()->IsAnFollow( pNextLay->FindSctFrm() ) &&
                            (pNextLay->Prt().*fnRectX->fnGetHeight)() ) )
                     {
-                        if( bVertX )
-                            aRelPos.X() = rAnchorTxtFrm.Frm().Left() +
-                                          rAnchorTxtFrm.Frm().Width() -
-                                          pNextLay->Frm().Left() -
-                                          pNextLay->Prt().Left() -
-                                          pNextLay->Prt().Width();
+                        SwTwips nTmpRelPosY =
+                            (*fnRect->fnYDiff)( (pNextLay->*fnRect->fnGetPrtTop)(),
+                                                nTopOfAnch );
+                        if ( bVert )
+                            aRelPos.X() = nTmpRelPosY;
                         else
-                            aRelPos.Y() = pNextLay->Frm().Top() +
-                                          pNextLay->Prt().Top() -
-                                          rAnchorTxtFrm.Frm().Top();
+                            aRelPos.Y() = nTmpRelPosY;
+//                        if( bVertX )
+//                            aRelPos.X() = rAnchorTxtFrm.Frm().Left() +
+//                                          rAnchorTxtFrm.Frm().Width() -
+//                                          ( pNextLay->Frm().Left() +
+//                                            pNextLay->Prt().Left() +
+//                                            pNextLay->Prt().Width() );
+//                        else
+//                            aRelPos.Y() = pNextLay->Frm().Top() +
+//                                          pNextLay->Prt().Top() -
+//                                          rAnchorTxtFrm.Frm().Top();
                         pUpperOfOrientFrm = pNextLay;
                         SWREFRESHFN( pUpperOfOrientFrm )
                         bMoveable = rAnchorTxtFrm.IsMoveable( (SwLayoutFrm*)pUpperOfOrientFrm );
                         if( bVertX )
-                            pFlyAtCntFrm->Frm().Pos().X() =
-                                            rAnchorTxtFrm.Frm().Left() +
-                                            rAnchorTxtFrm.Frm().Width() -
-                                            aRelPos.X() -
-                                            aObjBoundRect.Width();
+                            pFlyAtCntFrm->Frm().Pos().X() = nTopOfAnch -
+                                                            aRelPos.X() -
+                                                            aObjBoundRect.Width();
                         else
-                            pFlyAtCntFrm->Frm().Pos().Y() =
-                                            rAnchorTxtFrm.Frm().Top() +
-                                            aRelPos.Y();
+                            pFlyAtCntFrm->Frm().Pos().Y() = nTopOfAnch +
+                                                            aRelPos.Y();
                         nDist = (pFlyAtCntFrm->Frm().*fnRect->fnBottomDist)(
                                   (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)() );
                     }
@@ -811,14 +847,14 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
         // set calculated vertical position in order to determine correct
         // frame, the horizontal position is oriented at.
+        const SwTwips nTopOfAnch = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
         if( bVert )
-            pFlyAtCntFrm->Frm().Pos().X() = rAnchorTxtFrm.Frm().Left() -
-                                            aObjBoundRect.Width() +
-                                            rAnchorTxtFrm.Frm().Width() -
-                                            aRelPos.X();
+        {
+            pFlyAtCntFrm->Frm().Pos().X() = nTopOfAnch -
+                                            aRelPos.X() - aObjBoundRect.Width();
+        }
         else
-            pFlyAtCntFrm->Frm().Pos().Y() = aRelPos.Y() +
-                                            rAnchorTxtFrm.Frm().Top();
+            pFlyAtCntFrm->Frm().Pos().Y() = nTopOfAnch + aRelPos.Y();
 
         // determine frame, horizontal position is oriented at.
         const SwFrm* pHoriOrientFrm = &_GetHoriVirtualAnchor( *mpVertPosOrientFrm );
@@ -850,19 +886,21 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     pFlyAtCntFrm->AssertPage();
 
     // set absolute position at object
+    const SwTwips nTopOfAnch = _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert );
     if( bVert )
     {
-        pFlyAtCntFrm->Frm().Pos().X() = rAnchorTxtFrm.Frm().Left() +
-                                        rAnchorTxtFrm.Frm().Width() -
-                                        aObjBoundRect.Width() -
-                                        aRelPos.X();
+        pFlyAtCntFrm->Frm().Pos().X() = nTopOfAnch -
+                                        aRelPos.X() - aObjBoundRect.Width();
         pFlyAtCntFrm->Frm().Pos().Y() = rAnchorTxtFrm.Frm().Top() +
                                         aRelPos.Y();
         pFlyAtCntFrm->AssertPage();
     }
     else
     {
-        pFlyAtCntFrm->Frm().Pos( aRelPos + rAnchorTxtFrm.Frm().Pos() );
+        pFlyAtCntFrm->Frm().Pos().X() = rAnchorTxtFrm.Frm().Left() +
+                                        aRelPos.X();
+        pFlyAtCntFrm->Frm().Pos().Y() = nTopOfAnch +
+                                        aRelPos.Y();
     }
 
     // set relative position at object
@@ -907,217 +945,3 @@ const SwLayoutFrm& SwToCntntAnchoredObjectPosition::GetVertPosOrientFrm() const
     return *mpVertPosOrientFrm;
 }
 
-// **************************************************************************
-// method incl. helper methods for adjusting proposed horizontal position,
-// if object has to draw aside another object.
-// **************************************************************************
-/** adjust calculated horizontal position in order to draw object
-    aside other objects with same positioning
-
-    @author OD
-*/
-SwTwips SwToCntntAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
-                                            const SwFrm&  _rHoriOrientFrm,
-                                            const SwTwips _nProposedRelPosX,
-                                            const SwTwips _nRelPosY,
-                                            const SwHoriOrient _eHoriOrient,
-                                            const SwRelationOrient _eRelOrient,
-                                            const SvxLRSpaceItem& _rLRSpacing,
-                                            const SvxULSpaceItem& _rULSpacing,
-                                            const bool _bEvenPage
-                                          ) const
-{
-    const SwTxtFrm&      rAnchorTxtFrm = GetAnchorTxtFrm();
-    const SwFlyAtCntFrm* pFlyAtCntFrm = GetFlyAtCntFrmOfObj();
-    const SwRect         aObjBoundRect( GetObject().GetCurrentBoundRect() );
-    SWRECTFN( (&_rHoriOrientFrm) )
-
-    SwTwips nAdjustedRelPosX = _nProposedRelPosX;
-
-    // determine proposed object bound rectangle
-    Point aTmpPos = (rAnchorTxtFrm.Frm().*fnRect->fnGetPos)();
-    if( bVert )
-    {
-        aTmpPos.X() -= _nRelPosY + aObjBoundRect.Width();
-        aTmpPos.Y() += nAdjustedRelPosX;
-    }
-    else
-    {
-        aTmpPos.X() += nAdjustedRelPosX;
-        aTmpPos.Y() += _nRelPosY;
-    }
-    SwRect aTmpObjRect( aTmpPos, aObjBoundRect.SSize() );
-
-    const UINT32 nObjOrdNum = GetObject().GetOrdNum();
-    const SwPageFrm* pObjPage = pFlyAtCntFrm->FindPageFrm();
-    const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
-    ULONG nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
-    SwOrderIter aIter( pObjPage, TRUE );
-    const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
-    while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
-    {
-        if ( _DrawAsideFly( pFly, aTmpObjRect, pObjContext, nObjIndex,
-                           _bEvenPage, _eHoriOrient, _eRelOrient ) )
-        {
-            if( bVert )
-            {
-                const SvxULSpaceItem& rOtherUL = pFly->GetFmt()->GetULSpace();
-                const SwTwips nOtherTop = pFly->Frm().Top() - rOtherUL.GetUpper();
-                const SwTwips nOtherBot = pFly->Frm().Bottom() + rOtherUL.GetLower();
-                if ( nOtherTop <= aTmpObjRect.Bottom() + _rULSpacing.GetLower() &&
-                     nOtherBot >= aTmpObjRect.Top() - _rULSpacing.GetUpper() )
-                {
-                    if ( _eHoriOrient == HORI_LEFT )
-                    {
-                        SwTwips nTmp = nOtherBot + 1 + _rULSpacing.GetUpper() -
-                                       rAnchorTxtFrm.Frm().Top();
-                        if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Top() + nTmp +
-                             aObjBoundRect.Height() + _rULSpacing.GetLower()
-                             <= pObjPage->Frm().Height() + pObjPage->Frm().Top() )
-                        {
-                            nAdjustedRelPosX = nTmp;
-                        }
-                    }
-                    else if ( _eHoriOrient == HORI_RIGHT )
-                    {
-                        SwTwips nTmp = nOtherTop - 1 - _rULSpacing.GetLower() -
-                                       aObjBoundRect.Height() -
-                                       rAnchorTxtFrm.Frm().Top();
-                        if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Top() + nTmp - _rULSpacing.GetUpper()
-                              >= pObjPage->Frm().Top() )
-                        {
-                            nAdjustedRelPosX = nTmp;
-                        }
-                    }
-                    aTmpObjRect.Pos().Y() = rAnchorTxtFrm.Frm().Top() +
-                                            nAdjustedRelPosX;
-                }
-            }
-            else
-            {
-                const SvxLRSpaceItem& rOtherLR = pFly->GetFmt()->GetLRSpace();
-                const SwTwips nOtherLeft = pFly->Frm().Left() - rOtherLR.GetLeft();
-                const SwTwips nOtherRight = pFly->Frm().Right() + rOtherLR.GetRight();
-                if( nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.GetRight() &&
-                    nOtherRight >= aTmpObjRect.Left() - _rLRSpacing.GetLeft() )
-                {
-                    if ( _eHoriOrient == HORI_LEFT )
-                    {
-                        SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.GetLeft() -
-                                       rAnchorTxtFrm.Frm().Left();
-                        if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Left() + nTmp +
-                             aObjBoundRect.Width() + _rLRSpacing.GetRight()
-                             <= pObjPage->Frm().Width() + pObjPage->Frm().Left() )
-                        {
-                            nAdjustedRelPosX = nTmp;
-                        }
-                    }
-                    else if ( _eHoriOrient == HORI_RIGHT )
-                    {
-                        SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.GetRight() -
-                                       aObjBoundRect.Width() -
-                                       rAnchorTxtFrm.Frm().Left();
-                        if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Left() + nTmp - _rLRSpacing.GetLeft()
-                             >= pObjPage->Frm().Left() )
-                        {
-                            nAdjustedRelPosX = nTmp;
-                        }
-                    }
-                    aTmpObjRect.Pos().X() = rAnchorTxtFrm.Frm().Left() +
-                                            nAdjustedRelPosX;
-                }
-            } // end of <if (bVert)>
-        } // end of <if _DrawAsideFly(..)>
-
-        pFly = ((SwVirtFlyDrawObj*)aIter.Next())->GetFlyFrm();
-    } // end of <loop on fly frames
-
-    return nAdjustedRelPosX;
-}
-
-/** detemine, if object has to draw aside given fly frame
-
-    OD 11.08.2003 #110978#
-    method used by <_AdjustHoriRelPosForDrawAside(..)>
-
-    @author OD
-*/
-bool SwToCntntAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
-                                              const SwRect&   _rObjRect,
-                                              const SwFrm*    _pObjContext,
-                                              const ULONG     _nObjIndex,
-                                              const bool      _bEvenPage,
-                                              const SwHoriOrient _eHoriOrient,
-                                              const SwRelationOrient _eRelOrient
-                                            ) const
-{
-    bool bRetVal = false;
-
-    SWRECTFN( (&GetAnchorTxtFrm()) )
-
-    if ( _pFly->IsFlyAtCntFrm() &&
-         (_pFly->Frm().*fnRect->fnBottomDist)( (_rObjRect.*fnRect->fnGetTop)() ) < 0 &&
-         (_rObjRect.*fnRect->fnBottomDist)( (_pFly->Frm().*fnRect->fnGetTop)() ) < 0 &&
-         ::FindKontext( _pFly->GetAnchor(), FRM_COLUMN ) == _pObjContext )
-    {
-        ULONG nOtherIndex =
-            static_cast<const SwTxtFrm*>(_pFly->GetAnchor())->GetTxtNode()->GetIndex();
-        if( _nObjIndex >= nOtherIndex )
-        {
-            const SwFmtHoriOrient& rHori = _pFly->GetFmt()->GetHoriOrient();
-            SwRelationOrient eOtherRelOrient = rHori.GetRelationOrient();
-            if( REL_CHAR != eOtherRelOrient )
-            {
-                SwHoriOrient eOtherHoriOrient = rHori.GetHoriOrient();
-                _ToggleHoriOrientAndAlign( _bEvenPage && rHori.IsPosToggle(),
-                                           eOtherHoriOrient,
-                                           eOtherRelOrient );
-                if ( eOtherHoriOrient == _eHoriOrient &&
-                    _Minor( _eRelOrient, eOtherRelOrient, HORI_LEFT == _eHoriOrient ) )
-                {
-                    bRetVal = true;
-                }
-            }
-        }
-    }
-
-    return bRetVal;
-}
-
-/** determine, if object has to draw aside another object
-
-    OD 04.08.2003
-    the different alignments of the objects determines, if one has
-    to draw aside another one. Thus, the given alignment are checked
-    against each other, which one has to be drawn aside the other one.
-    depending on parameter _bLeft check is done for left or right
-    positioning.
-    method used by <_DrawAsideFly(..)>
-
-    @author OD
-*/
-bool SwToCntntAnchoredObjectPosition::_Minor( SwRelationOrient _eRelOrient1,
-                                              SwRelationOrient _eRelOrient2,
-                                              bool             _bLeft ) const
-{
-    bool bRetVal;
-
-    // draw aside order for left horizontal position
-    static USHORT __READONLY_DATA aLeft[ LAST_ENUM_DUMMY ] =
-        { 5, 6, 0, 1, 8, 4, 7, 2, 3 };
-    // draw aside order for right horizontal position
-    static USHORT __READONLY_DATA aRight[ LAST_ENUM_DUMMY ] =
-        { 5, 6, 0, 8, 1, 7, 4, 2, 3 };
-
-    // decide depending on given order, which frame has to draw aside another frame
-    if( _bLeft )
-        bRetVal = aLeft[ _eRelOrient1 ] >= aLeft[ _eRelOrient2 ];
-    else
-        bRetVal = aRight[ _eRelOrient1 ] >= aRight[ _eRelOrient2 ];
-
-    return bRetVal;
-}
