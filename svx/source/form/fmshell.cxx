@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:58 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 11:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,6 +595,11 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 //------------------------------------------------------------------------
 sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 {
+    if ( GetImpl()->m_bPreparedClose )
+        // we already did a PrepareClose for the current modifications of the current form
+        // 2002-11-12 #104702# - fs@openoffice.org
+        return sal_True;
+
     sal_Bool nResult = sal_True;
     // Save the data records, not in DesignMode and FilterMode
     if (!m_bDesignMode && !GetImpl()->isInFilterMode() &&
@@ -615,7 +620,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
             {
                 sal_Bool bModified = FmXFormShell::IsModified(xController);
 
-                if (bModified)
+                if ( bModified && bUI )
                 {
                     QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
                     if (bForBrowsing)
@@ -626,9 +631,12 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     {
                         case RET_NO:
                             bModified = sal_False;
+                            GetImpl()->m_bPreparedClose = sal_True;
                             break;
+
                         case RET_CANCEL:
                             return sal_False;
+
                         case RET_NEWTASK:
                             return RET_NEWTASK;
                     }

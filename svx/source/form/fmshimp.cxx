@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:28:47 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 11:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_pExternalViewInterceptor(NULL)
         ,m_bChangingDesignMode(sal_False)
         ,m_bUseWizards(sal_True)
+        ,m_bPreparedClose( sal_False )
 {
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
@@ -730,6 +731,10 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (evt.PropertyName == FM_PROP_ISMODIFIED)
     {
+        m_bPreparedClose = sal_False;
+            // the "modification state" of the current for changed -> the next PrepareClose call
+            // must do the full check
+
         if (!::comphelper::getBOOL(evt.NewValue))
             m_bActiveModified = sal_False;
     }
@@ -800,9 +805,12 @@ void SAL_CALL FmXFormShell::modified(const EventObject& rEvent) throw(::com::sun
     {
         m_bActiveModified = sal_True;
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(ModifySlotMap);
+
+        m_bPreparedClose = sal_False;
+            // the "modification state" of the current for changed -> the next PrepareClose call
+            // must do the full check
     }
 }
-// #endif
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch> FmXFormShell::interceptedQueryDispatch(sal_uInt16 _nId, const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
@@ -961,7 +969,13 @@ void FmXFormShell::disposing()
     FmXFormShell_BASE::disposing();
 
     if ( m_pShell && !m_pShell->IsDesignMode() )
-        setActiveController( NULL );
+        setActiveController( NULL, sal_True );
+        // do NOT save the content of the old form (the second parameter tells this)
+        // if we're here, then we expect that PrepareClose has been called, and thus the user
+        // got a chance to commit or reject any changes. So in case we're here and the there
+        // are still uncommitted changes, the user explicitly wanted this.
+        // 2002-11-11 - 104702 - fs@openoffice.org
+
     // dispose our interceptor helpers
     if (m_pMainFrameInterceptor)
     {
@@ -2368,7 +2382,7 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::setActiveController(const Reference< XFormController>& xController)
+void FmXFormShell::setActiveController( const Reference< XFormController>& xController, sal_Bool _bNoSaveOldContent )
 {
     DBG_ASSERT(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_bChangingDesignMode)
@@ -2409,9 +2423,12 @@ void FmXFormShell::setActiveController(const Reference< XFormController>& xContr
             xNewForm = Reference< XResultSet>(xController->getModel(), UNO_QUERY);
         xOldForm = getInternalForm(xOldForm);
         xNewForm = getInternalForm(xNewForm);
-        sal_Bool bNeedSave = (xOldForm != xNewForm);
 
-        if (m_xActiveController.is() && bNeedSave)
+        sal_Bool bDifferentForm = ( xOldForm.get() != xNewForm.get() );
+        sal_Bool bNeedSave = bDifferentForm && !_bNoSaveOldContent;
+            // we save the content of the old form if we move to a new form, and saving old content is allowed
+
+        if ( m_xActiveController.is() && bNeedSave )
         {
             // beim Wechsel des Controllers den Inhalt speichern, ein Commit
             // wurde bereits ausgefuehrt

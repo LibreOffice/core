@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:23:01 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 11:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,6 +430,8 @@ class FmXFormShell  :public FmXFormShell_BASE
     sal_Bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
     sal_Bool        m_bFilterMode       : 1;    // Wird gerade ein Filter auf die Controls angesetzt
     sal_Bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
+    sal_Bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
+                                                //  PrepareClose had been called and the user denied to save changes
 
 public:
     FmXFormShell(FmFormShell* _pShell, SfxViewFrame* _pViewFrame);
@@ -530,7 +532,7 @@ public:
     static sal_Bool SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController, sal_Bool bCommit = sal_True);
 
     // methode fuer nicht designmode (alive mode)
-    void setActiveController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController = ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>());
+    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, sal_Bool _bNoSaveOldContent = sal_False );
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveController() const {return m_xActiveController;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
