@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 22:50:00 $
+ *  last change: $Author: vg $ $Date: 2002-05-21 09:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "Points" ;
         Text [ NORWEGIAN ] = "Punkter" ;
         Text [ DANISH ] = "punkter" ;
-        Text [ ENGLISH_US ] = "points" ;
+        Text [ ENGLISH_US ] = "point(s)" ;
         Text [ SPANISH ] = "Puntos" ;
         Text [ FINNISH ] = "pisteet" ;
         Text [ FRENCH ] = "Points" ;
