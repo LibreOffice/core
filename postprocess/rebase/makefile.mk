@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-29 10:09:20 $
+#   last change: $Author: rt $ $Date: 2004-12-03 14:21:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ $(TARGET) .PHONY :
 .IF "$(GUI)"=="WNT"
 .IF "$(product)"=="full"
     @+echo ------ rebase dlls ------
-    +rebase -b 0x68000000 -C $(MISC)$/coffbase.txt -d -l $(MISC)$/rebase_log.txt -R $(SOLARBINDIR) -N no_rebase.txt $(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll 
+    +$(WRAPCMD) rebase -v -b 0x68000000 -C $(MISC)$/coffbase.txt -d -l $(MISC)$/rebase_log.txt -R $(SOLARBINDIR) -N no_rebase.txt $(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
 .ENDIF
 .ELSE
     @+echo Nothing to do, 'rebase' is windows only.
@@ -80,6 +80,6 @@ $(TARGET) .PHONY :
 
 .ERROR:
     @+echo ERROR COMMENT: If after rebase dmake dies with error code 227,
-    @+echo ERROR COMMENT: it may be we've got another dll which must not 
+    @+echo ERROR COMMENT: it may be we have got another dll which must not 
     @+echo ERROR COMMENT: get rebased. Contact JL whether something needs
     @+echo ERROR COMMENT: to be added to no_rebase.txt
