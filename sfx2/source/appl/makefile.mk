@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
+#   last change: $Author: ab $ $Date: 2001-06-25 11:13:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,6 @@ SLOFILES =  \
         $(SLO)$/picklist.obj \
         $(SLO)$/appsys.obj \
         $(SLO)$/loadenv.obj \
-        $(SLO)$/basmgr.obj \
         $(SLO)$/dlgcont.obj \
         $(SLO)$/namecont.obj \
         $(SLO)$/scriptcont.obj \
