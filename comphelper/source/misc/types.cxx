@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:19:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 08:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,32 +111,49 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 sal_Int32 getINT32(const Any& _rAny)
 {
-    sal_Int32 nReturn;
+    sal_Int32 nReturn = 0;
+#ifdef DEBUG
+    OSL_ENSHURE(_rAny >>= nReturn,"stream any failed!");
+#else
     _rAny >>= nReturn;
+#endif
+
     return nReturn;
 }
 
 //------------------------------------------------------------------------------
 sal_Int16 getINT16(const Any& _rAny)
 {
-    sal_Int16 nReturn;
+    sal_Int16 nReturn = 0;
+#ifdef DEBUG
+    OSL_ENSHURE(_rAny >>= nReturn,"stream any failed!");
+#else
     _rAny >>= nReturn;
+#endif
     return nReturn;
 }
 
 //------------------------------------------------------------------------------
 double getDouble(const Any& _rAny)
 {
-    double nReturn;
+    double nReturn = 0.0;
+#ifdef DEBUG
+    OSL_ENSHURE(_rAny >>= nReturn,"stream any failed!");
+#else
     _rAny >>= nReturn;
+#endif
     return nReturn;
 }
 
 //------------------------------------------------------------------------------
 float getFloat(const Any& _rAny)
 {
-    float nReturn;
+    float nReturn = 0.0;
+#ifdef DEBUG
+    OSL_ENSHURE(_rAny >>= nReturn,"stream any failed!");
+#else
     _rAny >>= nReturn;
+#endif
     return nReturn;
 }
 
@@ -144,7 +161,11 @@ float getFloat(const Any& _rAny)
 ::rtl::OUString getString(const Any& _rAny)
 {
     ::rtl::OUString nReturn;
+#ifdef DEBUG
+    OSL_ENSHURE(_rAny >>= nReturn,"stream any failed!");
+#else
     _rAny >>= nReturn;
+#endif
     return nReturn;
 }
 
