@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:56:03 $
+ *  last change: $Author: os $ $Date: 2001-03-30 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,7 +2455,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 else
                 {
                     pArr[1].Name = C2U("TabStopPosition");
-                    pArr[1].Value <<= (sal_Int32)(TWIP_TO_MM100(aToken.nTabStopPosition));
+                    sal_Int32 nPos = (TWIP_TO_MM100(aToken.nTabStopPosition));
+                    if(nPos < 0)
+                        nPos = 0;
+                    pArr[1].Value <<= (sal_Int32)nPos;
                 }
                 pArr[2].Name = C2U("TabStopFillCharacter");
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
