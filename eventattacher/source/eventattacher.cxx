@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattacher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 15:43:17 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,10 +925,10 @@ sal_Bool SAL_CALL component_writeInfo(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME "/UNO/SERVICES") )));
 
-            Sequence< OUString > & rSNL =
-                ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+            Sequence< OUString > aSNL
+                ( ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() );
+            const OUString * pArray = aSNL.getConstArray();
+            for ( sal_Int32 nPos = aSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
 
             return sal_True;
