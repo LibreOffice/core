@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:54:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2395,13 +2395,13 @@ RegionHandle Region::BeginEnumRects()
 
     // no internal data? -> region is empty!
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
-        return NULL;
+        return 0;
 
     // no band in the list? -> region is empty!
     if ( mpImplRegion->mpFirstBand == NULL )
     {
         DBG_ASSERT( mpImplRegion->mpFirstBand, "Region::BeginEnumRects() First Band is Empty!" );
-        return NULL;
+        return 0;
     }
 
     ImplRegionHandle* pData = new ImplRegionHandle;
