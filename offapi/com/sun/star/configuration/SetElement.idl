@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetElement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ module com { module sun { module star { module configuration {
     A complementary service for the root element of a hierarchy.
 
 */
-service SetElement
+published service SetElement
 {
 /** is the basic service for accessing information about an element in the
  hierarchy.
