@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:46:03 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace utl;
 using namespace rtl;
@@ -182,7 +185,12 @@ public:
 
 SvtAccessibilityOptions_Impl* volatile  SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
 sal_Int32                     volatile  SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
-::osl::Mutex                            SvtAccessibilityOptions::m_aSingletonMutex;
+
+namespace
+{
+    struct SingletonMutex
+        : public rtl::Static< ::osl::Mutex, SingletonMutex > {};
+}
 
 // functions -------------------------------------------------------------
 
@@ -355,7 +363,7 @@ void SvtAccessibilityOptions_Impl::SetToken( BoolPtr pPtr, sal_Bool bSet )
 SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
     {
-        ::osl::MutexGuard aGuard( m_aSingletonMutex );
+        ::osl::MutexGuard aGuard( SingletonMutex::get() );
         if(!sm_pSingleImplConfig)
             sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
          ++sm_nAccessibilityRefCount;
@@ -368,7 +376,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
     EndListening( *sm_pSingleImplConfig, TRUE );
-    ::osl::MutexGuard aGuard( m_aSingletonMutex );
+    ::osl::MutexGuard aGuard( SingletonMutex::get() );
     if( !--sm_nAccessibilityRefCount )
     {
         if( sm_pSingleImplConfig->IsModified() )
