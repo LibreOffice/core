@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 11:05:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_IMAGEMANAGER_HXX_
+#include <uiconfiguration/imagemanager.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -285,6 +289,7 @@ namespace framework
             rtl::OUString                                                                   m_aModuleIdentifier;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
+            com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xImageManager;
    };
 }
 
