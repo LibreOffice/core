@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-09 13:54:58 $
+#   last change: $Author: rt $ $Date: 2004-07-12 12:59:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -370,6 +370,26 @@ sub write_idt_header
         $oneline = "s72\tI2\n";
         push(@{$idtref}, $oneline);
         $oneline = "SelfReg\tFile_\n";
+        push(@{$idtref}, $oneline);
+    }
+
+    if ( $definestring eq "msiassembly" )
+    {
+        $oneline = "Component_\tFeature_\tFile_Manifest\tFile_Application\tAttributes\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ts38\tS72\tS72\tI2\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "MsiAssembly\tComponent_\n";
+        push(@{$idtref}, $oneline);
+    }
+
+    if ( $definestring eq "msiassemblyname" )
+    {
+        $oneline = "Component_\tName\tValue\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ts255\ts255\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "MsiAssemblyName\tComponent_\tName\n";
         push(@{$idtref}, $oneline);
     }
 
