@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-27 16:28:22 $
+ *  last change: $Author: aw $ $Date: 2002-03-07 15:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,33 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     bStartEdit=TRUE;
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
+
+                // #90129# make sure drag start point is inside WorkArea
+                const Rectangle& rWorkArea = ((SdrDragView*)this)->GetWorkArea();
+
+                if(!rWorkArea.IsEmpty())
+                {
+                    if(aPnt.X() < rWorkArea.Left())
+                    {
+                        aPnt.X() = rWorkArea.Left();
+                    }
+
+                    if(aPnt.X() > rWorkArea.Right())
+                    {
+                        aPnt.X() = rWorkArea.Right();
+                    }
+
+                    if(aPnt.Y() < rWorkArea.Top())
+                    {
+                        aPnt.Y() = rWorkArea.Top();
+                    }
+
+                    if(aPnt.Y() > rWorkArea.Bottom())
+                    {
+                        aPnt.Y() = rWorkArea.Bottom();
+                    }
+                }
+
                 aDragStat.Reset(aPnt);
                 aDragStat.SetView((SdrView*)this);
                 aDragStat.SetPageView(pCreatePV);
@@ -553,6 +580,33 @@ BOOL SdrCreateView::BegCreateLibObj(const Point& rPnt, SdrObject* pObj, BOOL bMo
             pAktCreate=pObj;
             Point aPnt(rPnt-pCreatePV->GetOffset());
             aPnt=GetSnapPos(aPnt,pCreatePV);
+
+            // #90129# make sure drag start point is inside WorkArea
+            const Rectangle& rWorkArea = ((SdrDragView*)this)->GetWorkArea();
+
+            if(!rWorkArea.IsEmpty())
+            {
+                if(aPnt.X() < rWorkArea.Left())
+                {
+                    aPnt.X() = rWorkArea.Left();
+                }
+
+                if(aPnt.X() > rWorkArea.Right())
+                {
+                    aPnt.X() = rWorkArea.Right();
+                }
+
+                if(aPnt.Y() < rWorkArea.Top())
+                {
+                    aPnt.Y() = rWorkArea.Top();
+                }
+
+                if(aPnt.Y() > rWorkArea.Bottom())
+                {
+                    aPnt.Y() = rWorkArea.Bottom();
+                }
+            }
+
             aDragStat.Reset(aPnt);
             aDragStat.SetView((SdrView*)this);
             aDragStat.SetPageView(pCreatePV);
