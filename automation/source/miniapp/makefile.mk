@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-18 11:17:42 $
+#   last change: $Author: gh $ $Date: 2002-11-20 13:56:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,13 +76,18 @@ TARGET=miniapp
 CXXFILES = \
         testapp.cxx                 \
         editwin.cxx                 \
-        servres.cxx                 \
+        servres.cxx
 
 
 OBJFILES = \
         $(OBJ)$/testapp.obj          \
         $(OBJ)$/editwin.obj          \
-        $(OBJ)$/servres.obj          \
+        $(OBJ)$/servres.obj
+
+
+EXCEPTIONSFILES= \
+        $(OBJ)$/testapp.obj
+
 
 SRCFILES = \
         servres.src

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-20 11:28:44 $
+ *  last change: $Author: gh $ $Date: 2002-11-20 13:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _SVT_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
 #endif
-
+#include <stdio.h>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
