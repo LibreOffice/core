@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:45:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,9 @@ namespace basprov
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
             sal_Int32 childsFound = 0;
-            for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+            sal_Int32 i;
+
+            for ( i = 0 ; i < nLibCount ; ++i )
             {
                 if ( m_bIsAppScriptCtx  )
                 {
