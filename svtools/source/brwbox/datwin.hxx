@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-11 06:20:59 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 14:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,11 +209,6 @@ public:
 
     virtual void    MouseButtonUp( const MouseEvent& rEvt );
     virtual void    KeyInput( const KeyEvent& rEvt );
-
-#ifndef TF_SVDATA
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
-#endif //TF_SVDATA
 
     // DropTargetHelper overridables
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );

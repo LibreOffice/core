@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 09:20:19 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 14:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,24 +1804,6 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
     }
 }
 
-//-------------------------------------------------------------------
-#ifndef TF_SVDATA
-BOOL BrowseBox::Drop( const BrowserDropEvent& )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    return FALSE;
-}
-
-//-------------------------------------------------------------------
-
-BOOL BrowseBox::QueryDrop( const BrowserDropEvent& )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    return FALSE;
-}
-#endif //FT_SVDATA
 //-------------------------------------------------------------------
 
 void BrowseBox::KeyInput( const KeyEvent& rEvt )
