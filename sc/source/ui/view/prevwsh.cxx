@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:32:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,17 @@ void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
 USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
+
+    // get the list of affected sheets (using the "only selected sheets" option) before SfxViewShell::Print
+    USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+    uno::Sequence<sal_Int32> aSheets(nTabCount);
+    for ( USHORT nTab=0; nTab<nTabCount; nTab++ )
+        aSheets[nTab] = nTab;
+
+    uno::Sequence < beans::PropertyValue > aProps(1);
+    aProps[0].Name=::rtl::OUString::createFromAscii("PrintSheets");
+    aProps[0].Value <<= aSheets;
+    SetAdditionalPrintOptions( aProps );
 
     SfxViewShell::Print( rProgress, pPrintDialog );
     pDocShell->Print( rProgress, pPrintDialog, NULL, pPreview, FALSE );
