@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-26 09:53:05 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 14:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,7 +1495,7 @@ void XMLPageExportPropertyMapper::handleElementItem(
                 OUString aSoundURL;
                 if( (rProperty.maValue >>= aSoundURL) && aSoundURL.getLength() != 0 )
                 {
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aSoundURL );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, mrExport.GetRelativeReference(aSoundURL) );
                     mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
                     mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
                     mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
