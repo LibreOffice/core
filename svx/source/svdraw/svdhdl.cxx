@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 09:46:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,9 +616,10 @@ void SdrHdl::CreateB2dIAObject()
                     {
                         B2dIAObject* pNew = CreateMarkerObject(
                             rPageViewWindow.GetIAOManager(),
-                            aPos + aMoveOutsideOffset,
+                            aPos, // + aMoveOutsideOffset,
                             eColIndex,
-                            eKindOfMarker);
+                            eKindOfMarker,
+                            aMoveOutsideOffset);
 
                         if(pNew)
                         {
@@ -690,7 +691,8 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
     }
 }
 
-B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker)
+B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapColorIndex eColIndex,
+    BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
     B2dIAObject* pRetval = 0L;
     sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
@@ -795,10 +797,29 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         }
         else
         {
+            sal_uInt16 nCenX((sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1L) >> 1);
+            sal_uInt16 nCenY((sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1L) >> 1);
+
+            if(aMoveOutsideOffset.X() > 0)
+            {
+                nCenX = 0;
+            }
+            else if(aMoveOutsideOffset.X() < 0)
+            {
+                nCenX = (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1);
+            }
+
+            if(aMoveOutsideOffset.Y() > 0)
+            {
+                nCenY = 0;
+            }
+            else if(aMoveOutsideOffset.Y() < 0)
+            {
+                nCenY = (sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1);
+            }
+
             // create centered handle as default
-            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx,
-                (UINT16)(aBmpEx.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(aBmpEx.GetSizePixel().Height() - 1) >> 1);
+            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx, nCenX, nCenY);
         }
     }
 
