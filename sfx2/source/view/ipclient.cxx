@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:20:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,13 +194,11 @@ void SAL_CALL SfxInPlaceClient_Impl::changingState( const ::com::sun::star::lang
 
 void SAL_CALL SfxInPlaceClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
-    /*
-    if ( nOldState != embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
+    if ( m_pClient && nOldState != embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
-        m_pClient->SetObject(0);
-        delete m_pClient;
+        // deactivation of object
+        SfxObjectShell::SetWorkingDocument( m_pClient->GetViewShell()->GetObjectShell() );
     }
-     */
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
