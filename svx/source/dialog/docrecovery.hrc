@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:20:01 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,8 @@
 
 // Error Report Preview Dialog
 
-#define ERRPREVIEW_WIDTH    220
-#define ERRPREVIEW_HEIGHT   180
+#define ERRPREVIEW_WIDTH    300
+#define ERRPREVIEW_HEIGHT   200
 
 #define ML_ERRPREVIEW_CONTENT   1
 #define BTN_ERRPREVIEW_OK       2
