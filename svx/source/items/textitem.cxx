@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-15 13:30:30 $
+ *  last change: $Author: mt $ $Date: 2002-11-01 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
 #include <com/sun/star/text/FontEmphasis.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #ifndef _SVX_UNOMID_HXX
@@ -3813,3 +3816,29 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
     return nScript;
 }
 
+USHORT GetI18NScriptTypeOfLanguage( USHORT nLang )
+{
+    return GetI18NScriptType( GetScriptTypeOfLanguage( nLang ) );
+}
+
+USHORT GetItemScriptType( short nI18NType )
+{
+    switch ( nI18NType )
+    {
+        case i18n::ScriptType::LATIN:   return SCRIPTTYPE_LATIN;
+        case i18n::ScriptType::ASIAN:   return SCRIPTTYPE_ASIAN;
+        case i18n::ScriptType::COMPLEX: return SCRIPTTYPE_COMPLEX;
+    }
+    return 0;
+}
+
+short GetI18NScriptType( USHORT nItemType )
+{
+    switch ( nItemType )
+    {
+        case SCRIPTTYPE_LATIN:      return i18n::ScriptType::LATIN;
+        case SCRIPTTYPE_ASIAN:      return i18n::ScriptType::ASIAN;
+        case SCRIPTTYPE_COMPLEX:    return i18n::ScriptType::COMPLEX;
+    }
+    return 0;
+}
