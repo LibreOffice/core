@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:38:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
 #endif
@@ -112,9 +109,7 @@
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <svx/backgrnd.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX
-#include <offmgr/htmlcfg.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
@@ -1652,7 +1647,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
-    OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = pHtmlOpt->GetExportMode();
 
     BOOL bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
@@ -2395,7 +2390,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
-    OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = pHtmlOpt->GetExportMode();
     BOOL bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
     if(bWeb)
