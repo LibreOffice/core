@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:51 $
+ *  last change:$Date: 2003-05-27 14:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ public class ContentProvider extends TestCase {
             (TestParameters Param, PrintWriter log ) {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XContentIdentifierFactory cntIDFac = null ;
 
         try {

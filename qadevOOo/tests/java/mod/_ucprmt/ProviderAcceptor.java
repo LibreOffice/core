@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderAcceptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:51 $
+ *  last change:$Date: 2003-05-27 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._ucprmt;
 
 import com.sun.star.ucb.XRemoteContentProviderAcceptor;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -79,7 +80,7 @@ public class ProviderAcceptor extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = Param.getMSF().createInstance
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.ucb.RemoteContentProviderAcceptor");
         } catch( com.sun.star.uno.Exception e ) {
             log.println("Can't create an object." );
