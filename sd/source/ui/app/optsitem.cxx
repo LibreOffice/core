@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:35:13 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,9 +807,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
         SetCrookNoContortion( pView->IsCrookNoContortion() );
         SetQuickEdit( pView->IsQuickEdit() );
 
-        // #110094#-8
-        //SetMasterPagePaintCaching(pView->IsMasterPagePaintCaching() );
-        SetMasterPagePaintCaching( sal_False );
+        // #i26631#
+        SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
         SetDragWithCopy( pView->IsDragWithCopy() );
         SetPickThrough( pView->GetModel()->IsPickThroughTransparentTextFrames() );
