@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:51:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                                                                                                         m_bFrameActionRegistered : 1,
                                                                                                         m_bUpdateControllers : 1;
         sal_Bool                                                                                        m_bImageOrientationRegistered : 1,
-                                                                                                        m_bImageMirrored : 1;
+                                                                                                        m_bImageMirrored : 1,
+                                                                                                        m_bCanBeCustomized : 1;
         long                                                                                            m_lImageRotation;
         ToolBar*                                                                                        m_pToolBar;
         rtl::OUString                                                                                   m_aModuleIdentifier;
