@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _MSOLEEXP_HXX
 #define _MSOLEEXP_HXX
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in
 #define OLE_STARMATH_2_MATHTYPE             0x0001
@@ -68,8 +72,9 @@
 #define OLE_STARCALC_2_EXCEL                0x0004
 #define OLE_STARIMPRESS_2_POWERPOINT        0x0008
 
-class SvInPlaceObject;
-class SvStorage;
+class SotStorage;
+
+#include <svtools/embedhlp.hxx>
 
 class SvxMSExportOLEObjects
 {
@@ -80,7 +85,8 @@ public:
     void SetFlags( UINT32 n )       { nConvertFlags = n; }
     UINT32 GetFlags() const         { return nConvertFlags; }
 
-    void ExportOLEObject( SvInPlaceObject& rObj, SvStorage& rDestStg );
+    void ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg );
+    void ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
 };
 
 
