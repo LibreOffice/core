@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:27:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,9 +528,15 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
         }
-        if( bUnderSz )
+        if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() )
         {
-            if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() )
+            const sal_Bool bNextUndersized =
+                ( GetTxtFrm()->GetNext() &&
+                  0 == GetTxtFrm()->GetNext()->Prt().Height() &&
+                  GetTxtFrm()->GetNext()->IsTxtFrm() &&
+                  ((SwTxtFrm*)GetTxtFrm()->GetNext())->IsUndersized() ) ;
+
+            if( bUnderSz || bNextUndersized )
             {
                 if ( bAdjustBaseLine )
                     GetInfo().Y( GetInfo().GetPos().Y() + pCurr->GetAscent() );
@@ -538,16 +544,16 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 if( pArrow )
                     GetInfo().DrawRedArrow( *pArrow );
 
-                if( !GetTxtFrm()->GetFollow() && ! GetTxtFrm()->GetNext() )
+                // GetInfo().Y() must be current baseline.
+                SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTxtFrm()->Frm().Bottom();
+                if( ( nDiff > 0 &&
+                      ( GetEnd() < GetInfo().GetTxt().Len() ||
+                        ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
+                    nDiff >= 0 && bNextUndersized )
+
                 {
-                    // GetInfo().Y() must be current baseline.
-                    SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTxtFrm()->Frm().Bottom();
-                    if( nDiff > 0 && ( GetEnd() < GetInfo().GetTxt().Len() ||
-                        ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) )
-                    {
-                        SwArrowPortion aArrow( GetInfo() );
-                        GetInfo().DrawRedArrow( aArrow );
-                    }
+                    SwArrowPortion aArrow( GetInfo() );
+                    GetInfo().DrawRedArrow( aArrow );
                 }
 
                 GetInfo().Y( nOldY );
