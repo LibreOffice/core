@@ -820,11 +820,37 @@ void UCBStorage::SetDirty()
     pImp->m_bDirty = TRUE;
 }
 
+//#include "stgole.hxx"
+
 void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
 {
     pImp->m_aGlobalName = rClass;
     pImp->m_nFormat = nOriginalClipFormat;
     pImp->m_aUserTypeName = rUserTypeName;
+/*
+    if( Validate( TRUE ) )
+    {
+        // set the class name in the root entry
+        SetClassId( (const ClsId&) rClass.GetCLSID() );
+        SetDirty();
+
+        // then create the streams
+        StgCompObjStream aCompObj( *this, TRUE );
+        aCompObj.GetClsId() = (const ClsId&) rClass.GetCLSID();
+        aCompObj.GetCbFormat() = nOriginalClipFormat;
+        aCompObj.GetUserName() = rUserTypeName;
+        if( !aCompObj.Store() )
+            SetError( aCompObj.GetError() );
+        else
+        {
+            StgOleStream aOle( *this, STREAM_WRITE );
+            if( !aOle.Store() )
+                SetError( aOle.GetError() );
+        }
+    }
+    else
+        SetError( SVSTREAM_ACCESS_DENIED );
+*/
 }
 
 void UCBStorage::SetConvertClass( const SvGlobalName & rConvertClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
@@ -840,16 +866,34 @@ BOOL UCBStorage::ShouldConvert()
 
 SvGlobalName UCBStorage::GetClassName()
 {
+/*
+    StgCompObjStream aCompObj( *this, FALSE );
+    if( aCompObj.Load() )
+        return SvGlobalName( (const CLSID&) aCompObj.GetClsId() );
+    return SvGlobalName();
+*/
     return pImp->m_aGlobalName;
 }
 
 ULONG UCBStorage::GetFormat()
 {
+/*
+    StgCompObjStream aCompObj( *this, FALSE );
+    if( aCompObj.Load() )
+        return aCompObj.GetCbFormat();
+    return 0;
+*/
     return pImp->m_nFormat;
 }
 
 String UCBStorage::GetUserName()
 {
+/*
+    StgCompObjStream aCompObj( *this, FALSE );
+    if( aCompObj.Load() )
+        return aCompObj.GetUserName();
+    return String();
+*/
     return pImp->m_aUserTypeName;
 }
 
@@ -1053,8 +1097,21 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             }
             else
             {
-                DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
-                return new UCBStorageStream( pElement->m_xStream );
+                BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
+                if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
+                {
+                    String aName( pImp->m_aURL );
+                    aName += '/';
+                    aName += pElement->m_aOriginalName;
+                    UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect );
+                    pElement->m_xStream = pStream->pImp;
+                    return pStream;
+                }
+                else
+                {
+//                    DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
+                    return new UCBStorageStream( pElement->m_xStream );
+                }
             }
         }
         else
@@ -1138,8 +1195,21 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         }
         else
         {
-            DBG_ASSERT( bDirect == pElement->m_xStorage->m_bDirect, "Wrong DirectMode!" );
-            return new UCBStorage( pElement->m_xStorage );
+            BOOL bIsWritable = ( pElement->m_xStorage->m_nMode & STREAM_WRITE );
+            if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
+            {
+                String aName( pImp->m_aURL );
+                aName += '/';
+                aName += pElement->m_aOriginalName;
+                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect );
+                pElement->m_xStorage = pStorage->pImp;
+                return pStorage;
+            }
+            else
+            {
+//                    DBG_ASSERT( bDirect == pElement->m_xStorage->m_bDirect, "Wrong DirectMode!" );
+                return new UCBStorage( pElement->m_xStorage );
+            }
         }
     }
     else
