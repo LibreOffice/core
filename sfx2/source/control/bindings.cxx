@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 08:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,8 @@ SfxBindings::~SfxBindings()
     sal_uInt16 nCount = pImp->pCaches->Count();
     for ( sal_uInt16 nCache = 0; nCache < nCount; ++nCache )
         delete pImp->pCaches->GetObject(nCache);
+
+    DELETEZ( pImp->pWorkWin );
 
     delete pImp->pCaches;
     delete pImp;

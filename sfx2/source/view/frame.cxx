@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:37:58 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 08:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,10 +353,7 @@ sal_Bool SfxFrame::DoClose()
             bRet = pImp->pCurrentViewFrame->Close();
 
         if ( pImp->bOwnsBindings )
-        {
-            DELETEZ( pImp->pWorkWin );
             DELETEZ( pBindings );
-        }
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
         Reference < XFrame > xFrame( pImp-> xFrame );
