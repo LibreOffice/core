@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-20 07:10:12 $
+ *  last change: $Author: obo $ $Date: 2001-08-20 12:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,7 @@ UUIInteractionHandler::getSupportedServiceNames()
 void SAL_CALL
 UUIInteractionHandler::initialize(
     star::uno::Sequence< star::uno::Any > const & rArguments)
+    throw (star::uno::Exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_aArguments = rArguments;
