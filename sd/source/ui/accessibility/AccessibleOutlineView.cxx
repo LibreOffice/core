@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:03:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,25 +108,24 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "sdwindow.hxx"
 #include <vcl/svapp.hxx>
 
-#ifndef _SD_SDWINDOW_HXX
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
 #endif
-#ifndef _SD_VIEWSHEL_HXX
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
 #endif
-#ifndef _SD_OUTLNVSH_HXX
-#include "outlnvsh.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
 #endif
-#ifndef _SD_SDVIEW_HXX
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
 #endif
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 #include "AccessibleOutlineView.hxx"
 #endif
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
 #include "AccessibleOutlineEditSource.hxx"
 #endif
 
@@ -144,8 +143,8 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 AccessibleOutlineView::AccessibleOutlineView (
-    SdWindow* pSdWindow,
-    SdOutlineViewShell* pViewShell,
+    ::sd::Window* pSdWindow,
+    ::sd::OutlineViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
@@ -157,12 +156,14 @@ AccessibleOutlineView::AccessibleOutlineView (
     // depths of the core.  Necessary for making the edit engine accessible.
     if( pViewShell && pSdWindow )
     {
-        SdView* pView = pViewShell->GetView();
+        ::sd::View* pView = pViewShell->GetView();
 
-        if( pView && pView->ISA(SdOutlineView) )
+        if (pView && pView->ISA(::sd::OutlineView))
         {
-            OutlinerView* pOutlineView = static_cast< SdOutlineView* >(pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner* pOutliner = static_cast< SdOutlineView* >(pView)->GetOutliner();
+            OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
+                pView)->GetViewByWindow( pSdWindow );
+            SdrOutliner* pOutliner =
+                static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
 
             if( pOutlineView && pOutliner )
             {
