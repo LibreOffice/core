@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-20 15:44:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 
 
 // -------------------------------------------------------------------------
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -96,7 +97,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
                 ,m_aConnectionHdl(_aConnectionHdl)
@@ -107,10 +108,23 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
 {
     ::rtl::OUString sName;
     sName = _xRow->getString(2);
-    sName += OAdabasCatalog::getDot();
+    if ( sName.getLength() )
+        sName += OAdabasCatalog::getDot();
     sName += _xRow->getString(3);
 
+
     return sName;
+}
+// -----------------------------------------------------------------------------
+void OAdabasCatalog::fillVector(const ::rtl::OUString& _sQuery,TStringVector& _rVector)
+{
+    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
+    OSL_ENSURE(xStmt.is(),"OAdabasCatalog::fillVector: Could not create a statement!");
+    Reference< XResultSet > xResult = xStmt->executeQuery(_sQuery);
+
+    fillNames(xResult,_rVector);
+    ::comphelper::disposeComponent(xStmt);
+
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshTables()
@@ -135,13 +149,8 @@ void OAdabasCatalog::refreshTables()
 void OAdabasCatalog::refreshViews()
 {
     TStringVector aVector;
-
-    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    Reference< XResultSet > xResult = xStmt->executeQuery(
-        ::rtl::OUString::createFromAscii("SELECT DISTINCT NULL,DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
-
-    fillNames(xResult,aVector);
-    ::comphelper::disposeComponent(xStmt);
+    static const ::rtl::OUString s_sView(RTL_CONSTASCII_USTRINGPARAM("SELECT DISTINCT NULL,DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
+    fillVector(s_sView,aVector);
 
     if(m_pViews)
         m_pViews->reFill(aVector);
@@ -152,18 +161,8 @@ void OAdabasCatalog::refreshViews()
 void OAdabasCatalog::refreshGroups()
 {
     TStringVector aVector;
-    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    Reference< XResultSet > xResult = xStmt->executeQuery(
-        ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' '"));
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            aVector.push_back(xRow->getString(1));
-        ::comphelper::disposeComponent(xResult);
-    }
-    ::comphelper::disposeComponent(xStmt);
-
+    static const ::rtl::OUString s_sGroup(RTL_CONSTASCII_USTRINGPARAM("SELECT DISTINCT NULL,NULL,GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' '"));
+    fillVector(s_sGroup,aVector);
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
@@ -173,17 +172,8 @@ void OAdabasCatalog::refreshGroups()
 void OAdabasCatalog::refreshUsers()
 {
     TStringVector aVector;
-    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(
-        ::rtl::OUString::createFromAscii("SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL'"));
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            aVector.push_back(xRow->getString(1));
-        ::comphelper::disposeComponent(xResult);
-    }
-    ::comphelper::disposeComponent(xStmt);
+    static const ::rtl::OUString s_sUsers(RTL_CONSTASCII_USTRINGPARAM("SELECT DISTINCT NULL,NULL,USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL'"));
+    fillVector(s_sUsers,aVector);
 
     if(m_pUsers)
         m_pUsers->reFill(aVector);
@@ -193,7 +183,7 @@ void OAdabasCatalog::refreshUsers()
 // -------------------------------------------------------------------------
 const ::rtl::OUString& OAdabasCatalog::getDot()
 {
-    static const ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+    static const ::rtl::OUString sDot(RTL_CONSTASCII_USTRINGPARAM("."));
     return sDot;
 }
 // -----------------------------------------------------------------------------
@@ -203,7 +193,7 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 _nPrec, sal_Int32& _rnTyp
     {
     case DataType::DECIMAL:
         {
-            static const ::rtl::OUString sDecimal = ::rtl::OUString::createFromAscii("DECIMAL");
+            static const ::rtl::OUString sDecimal(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
             if(_rnType == DataType::DECIMAL && _rsTypeName == sDecimal)
                 _rnType = DataType::NUMERIC;
         }
@@ -211,7 +201,7 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 _nPrec, sal_Int32& _rnTyp
     case DataType::FLOAT:
         //  if(_nPrec >= 16)
         {
-            static const ::rtl::OUString sDouble = ::rtl::OUString::createFromAscii("DOUBLE PRECISION");
+            static const ::rtl::OUString sDouble(RTL_CONSTASCII_USTRINGPARAM("DOUBLE PRECISION"));
             _rsTypeName = sDouble;
             _rnType = DataType::DOUBLE;
         }
