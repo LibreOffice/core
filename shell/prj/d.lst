@@ -10,6 +10,12 @@ mkdir: %_DEST%\inc%_EXT%\shell
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 
+..\%__SRC%\bin\open-url %_DEST%\bin%_EXT%\open-url
+..\%__SRC%\bin\cde-open-url %_DEST%\bin%_EXT%\cde-open-url
+..\%__SRC%\bin\kde-open-url %_DEST%\bin%_EXT%\kde-open-url
+..\%__SRC%\bin\gnome-open-url %_DEST%\bin%_EXT%\gnome-open-url
+..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin%_EXT%\gnome-open-url.bin
+
 ..\source\win32\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\unix\exec\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\win32\simplemail\smplmail.xml %_DEST%\xml%_EXT%\smplmail.xml
