@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
-#include <vos/xception.hxx>
 
 #include "miscuno.hxx"
 #include "unoguard.hxx"
@@ -103,7 +102,7 @@ BOOL ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
     BOOL bRet = bDefault;
     if ( xProp.is() )
     {
-        TRY
+        try
         {
             uno::Any aAny = xProp->getPropertyValue( rName );
             //! type conversion???
@@ -114,11 +113,10 @@ BOOL ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
                 bRet = *(sal_Bool*)aAny.getValue();
             }
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
             // keep default
         }
-        END_CATCH
     }
     return bRet;
 }
@@ -130,17 +128,16 @@ long ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertyS
     sal_Int32 nRet = nDefault;
     if ( xProp.is() )
     {
-        TRY
+        try
         {
             uno::Any aAny = xProp->getPropertyValue( rName );
             //! type conversion???
             aAny >>= nRet;
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
             // keep default
         }
-        END_CATCH
     }
     return nRet;
 }
@@ -152,7 +149,7 @@ long ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertyS
     sal_Int32 nRet = nDefault;
     if ( xProp.is() )
     {
-        TRY
+        try
         {
             uno::Any aAny = xProp->getPropertyValue( rName );
 
@@ -167,11 +164,10 @@ long ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertyS
                 aAny >>= nRet;
             }
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
             // keep default
         }
-        END_CATCH
     }
     return nRet;
 }
