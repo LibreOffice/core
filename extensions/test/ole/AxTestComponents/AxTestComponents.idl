@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxTestComponents.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,32 @@ import "ocidl.idl";
                                               [out] IDispatch** outDisp,
                                               [in,out] IDispatch** inoutDisp);
         [id(44), helpstring("method inSequenceLong")] HRESULT inSequenceLong([in] SAFEARRAY(long)  ar);
+        [id(45), helpstring("method inSequenceByte")] HRESULT inSequenceByte([in] SAFEARRAY(byte) ar);
+        [id(46), helpstring("method inSequenceShort")] HRESULT inSequenceShort([in] SAFEARRAY(short) ar);
+        [id(47), helpstring("method inSequenceString")] HRESULT inSequenceString([in] SAFEARRAY( BSTR) ar);
+        [id(48), helpstring("method inSequenceFloat")] HRESULT inSequenceFloat([in] SAFEARRAY(float) ar);
+        [id(49), helpstring("method inSequenceDouble")] HRESULT inSequenceDouble([in] SAFEARRAY(double) ar);
+        [id(50), helpstring("method inSequenceObject")] HRESULT inSequenceObject([in] SAFEARRAY(IDispatch*) ar);
+        [id(51), helpstring("method outSequenceByte")] HRESULT outSequenceByte([out] SAFEARRAY(unsigned char)* val);
+        [id(52), helpstring("method outSequenceShort")] HRESULT outSequenceShort([out] SAFEARRAY(short)* val);
+        [id(53), helpstring("method outSequenceLong")] HRESULT outSequenceLong([out] SAFEARRAY(long )*val);
+        [id(54), helpstring("method outSequenceString")] HRESULT outSequenceString([out] SAFEARRAY(BSTR)* val);
+        [id(55), helpstring("method outSequenceFloat")] HRESULT outSequenceFloat([out] SAFEARRAY(float)* val);
+        [id(56), helpstring("method outSequenceDouble")] HRESULT outSequenceDouble([out] SAFEARRAY(double)* val);
+        [id(57), helpstring("method outSequenceObject")] HRESULT outSequenceObject([out] SAFEARRAY(IDispatch*)* val);
+        [id(58), helpstring("method inoutSequenceByte")] HRESULT inoutSequenceByte([in,out] SAFEARRAY(unsigned char)* val);
+        [id(59), helpstring("method inoutSequenceShort")] HRESULT inoutSequenceShort([in,out] SAFEARRAY(short)* val);
+        [id(60), helpstring("method inoutSequenceLong")] HRESULT inoutSequenceLong([in,out] SAFEARRAY( long)*val);
+        [id(61), helpstring("method inoutSequenceString")] HRESULT inoutSequenceString([in,out] SAFEARRAY(BSTR)* val);
+        [id(62), helpstring("method inoutSequenceFloat")] HRESULT inoutSequenceFloat([in,out] SAFEARRAY(float)* val);
+        [id(63), helpstring("method inoutSequenceDouble")] HRESULT inoutSequenceDouble([in,out] SAFEARRAY(double)* val);
+        [id(64), helpstring("method inoutSequenceObject")] HRESULT inoutSequenceObject([in,out] SAFEARRAY(IDispatch*)* val);
+        [id(65), helpstring("method inMulDimArrayLong")] HRESULT inMulDimArrayLong([in] SAFEARRAY(long) val );
+        [id(66), helpstring("method inMulDimArrayVariant")] HRESULT inMulDimArrayVariant([in] SAFEARRAY(VARIANT) val);
+        [id(67), helpstring("method inMulDimArrayLong2")] HRESULT inMulDimArrayLong2([in] SAFEARRAY(long) val);
+        [id(68), helpstring("method inMulDimArrayVariant2")] HRESULT inMulDimArrayVariant2([in] SAFEARRAY(VARIANT) val);
+        [id(69), helpstring("method inMulDimArrayByte")] HRESULT inMulDimArrayByte([in] SAFEARRAY(unsigned char) val);
+        [id(70), helpstring("method inMulDimArrayByte2")] HRESULT inMulDimArrayByte2([in] SAFEARRAY(unsigned char) val);
 
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ STDMETHODIMP CBasic::outString(BSTR *val)
 
 STDMETHODIMP CBasic::outFloat(float *val)
 {
-    *val= 3.14;
+    *val= 3.14f;
     return S_OK;
 }
 
@@ -337,48 +337,50 @@ STDMETHODIMP CBasic::outObject(IDispatch* *val)
 
 STDMETHODIMP CBasic::get_prpByte(unsigned char *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_cPrpByte;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpByte(unsigned char newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_cPrpByte= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpShort(short *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_nPrpShort;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpShort(short newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_nPrpShort= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpLong(long *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_lPrpLong;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpLong(long newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_lPrpLong= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpString(BSTR *pVal)
 {
+    if( !pVal)
+        return E_POINTER;
     m_bstrPrpString.CopyTo( pVal );
     return S_OK;
 }
@@ -391,71 +393,74 @@ STDMETHODIMP CBasic::put_prpString(BSTR newVal)
 
 STDMETHODIMP CBasic::get_prpFloat(float *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_fPrpFloat;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpFloat(float newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_fPrpFloat= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpDouble(double *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_dPrpDouble;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpDouble(double newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_dPrpDouble= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpVariant(VARIANT *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    VariantCopy( pVal, &m_PropVariant);
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpVariant(VARIANT newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_PropVariant= newVal;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpArray(LPSAFEARRAY *pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    SafeArrayCopy( m_PrpArray, pVal);
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpArray(LPSAFEARRAY newVal)
 {
-    // TODO: Add your implementation code here
+    SafeArrayDestroy( m_PrpArray);
+    SafeArrayCopy( newVal, &m_PrpArray);
 
     return S_OK;
 }
 
 STDMETHODIMP CBasic::get_prpObject(IDispatch **pVal)
 {
-    // TODO: Add your implementation code here
-
+    if( !pVal)
+        return E_POINTER;
+    *pVal= m_PrpObject;
+    (*pVal)->AddRef();
     return S_OK;
 }
 
 STDMETHODIMP CBasic::put_prpObject(IDispatch *newVal)
 {
-    // TODO: Add your implementation code here
-
+    m_PrpObject= newVal;
     return S_OK;
 }
 
@@ -496,7 +501,52 @@ STDMETHODIMP CBasic::mixed1(
 
 STDMETHODIMP CBasic::inSequenceLong(LPSAFEARRAY val)
 {
+    printArray( val, CComBSTR(L"inSequenceLong\n"), VT_I4);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSequenceByte( LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceByte\n"), VT_UI1);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSequenceShort(LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceShort\n"), VT_I2);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSequenceString(LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceString\n"), VT_BSTR);
+    return S_OK;
+
+}
+
+STDMETHODIMP CBasic::inSequenceFloat(LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceFloat\n"), VT_R4);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSequenceDouble(LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceDouble\n"), VT_R8);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSequenceObject(LPSAFEARRAY val)
+{
+    printArray( val, CComBSTR(L"inSequenceObject\n"), VT_DISPATCH);
+    return S_OK;
+}
+
+void CBasic::printArray( LPSAFEARRAY val, BSTR message, VARTYPE type)
+{
+
     HRESULT hr= S_OK;
+    USES_CONVERSION;
     long lbound=0;
     long ubound= 0;
     hr= SafeArrayGetLBound( val, 1, &lbound);
@@ -504,20 +554,405 @@ STDMETHODIMP CBasic::inSequenceLong(LPSAFEARRAY val)
     long length= ubound - lbound +1;
 
     CComVariant varElement;
-    char buf[4096];
-    ZeroMemory( buf, 10);
+    char buf[1024];
+    sprintf( buf,"%s", W2A(message));
+
     for( long i= 0; i < length ; i++)
     {
-        varElement.Clear();
-        hr= SafeArrayGetElement( val, &i, &varElement);
-
-        if( varElement.vt == VT_BSTR)
-        {   char bufTmp[256];
-            sprintf( bufTmp, " %d  string: = %d \n", i, varElement.lVal);
-            strcat( buf, bufTmp);
+        char tmp[1024];
+        long data=0;
+        CComVariant var;
+        switch( type)
+        {
+        case VT_UI1:
+        case VT_I2:
+        case VT_I4:
+        case VT_ERROR:
+            hr= SafeArrayGetElement( val, &i, (void*)&data);
+            sprintf( tmp, "%d \n", *(long*)&data);
+            break;
+        case VT_BSTR:
+            hr= SafeArrayGetElement( val, &i, (void*)&data);
+            sprintf( tmp, "%S \n", (BSTR)data);
+            break;
+        case VT_VARIANT:
+            hr= SafeArrayGetElement( val, &i, &var);
+            sprintf( tmp, "%x \n", var.byref);
+            break;
+        case VT_R4:
+            hr= SafeArrayGetElement( val, &i, (void*)&data);
+            sprintf( tmp, "%f \n", *(float*) &data);
+            break;
+        case VT_R8: ;
+            hr= SafeArrayGetElement( val, &i, (void*)&data);
+            sprintf( tmp, "%f \n", *(double*) &data);
+            break;
+        case VT_DISPATCH:
+            // we assume the objects are instances of this component and have the
+            // property prpString set.
+            hr= SafeArrayGetElement( val, &i, (void*)&data);
+            IDispatch* pdisp= ( IDispatch*) data;
+            CComDispatchDriver driver( pdisp);
+            CComVariant var;
+            if( pdisp)
+            {
+                driver.GetPropertyByName(L"prpString", &var);
+                sprintf( tmp, "%x : %S \n", *(long*)&data, var.bstrVal);
+            }
+            else
+                sprintf( tmp, "%x\n", *(long*)&data);
         }
+
+        strcat( buf, tmp);
     }
     MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
 
+}
+// V_ERROR OLECHAR VARIANT VT_UI1
+
+STDMETHODIMP CBasic::outSequenceByte(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_UI1, 0, 3);
+    for( long i=0; i< 3; i++)
+    {
+        unsigned char charVal= i +1;
+        hr= SafeArrayPutElement( ar, &i, &charVal);
+    }
+
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceShort(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_I2, 0, 3);
+    for( long i=0; i< 3; i++)
+    {
+        short shortVal= i +1;
+        hr= SafeArrayPutElement( ar, &i, &shortVal);
+    }
+
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceLong(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_I4, 0, 3);
+    for( long i=0; i< 3; i++)
+    {
+        long longVal= i +1;
+        hr= SafeArrayPutElement( ar, &i, &longVal);
+    }
+
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceString(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_BSTR, 0, 3);
+    BSTR strings[3];
+    strings[0]= SysAllocString(L"string 1");
+    strings[1]= SysAllocString(L"string 2");
+    strings[2]= SysAllocString(L"string 3");
+    for( long i=0; i< 3; i++)
+    {
+        hr= SafeArrayPutElement( ar, &i, strings[i]);
+    }
+
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceFloat(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_R4, 0, 3);
+    float arfloats[]= { 3.14f, 31.4f, 314.f};
+    for( long i=0; i< 3; i++)
+    {
+        hr= SafeArrayPutElement( ar, &i, &arfloats[i]);
+    }
+
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceDouble(LPSAFEARRAY* val)
+{
+    HRESULT hr= S_OK;
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_R8, 0, 3);
+    double arDouble[]= { 3.14f, 31.4f, 314.f};
+    for( long i=0; i< 3; i++)
+    {
+        hr= SafeArrayPutElement( ar, &i, &arDouble[i]);
+    }
+    *val= ar;
+    return hr;
+}
+
+STDMETHODIMP CBasic::outSequenceObject(LPSAFEARRAY* val)
+{
+    CComPtr<IDispatch> ob1;
+    CComPtr<IDispatch> ob2;
+    CComPtr<IDispatch> ob3;
+
+    ob1.CoCreateInstance(L"AxTestComponents.Basic");
+    ob2.CoCreateInstance(L"AxTestComponents.Basic");
+    ob3.CoCreateInstance(L"AxTestComponents.Basic");
+
+    CComDispatchDriver disp( ob1);
+    CComVariant param;
+    param= L"this property prpString (1)";
+    disp.PutPropertyByName(L"prpString", &param);
+
+    disp= ob2;
+    param= L"this property prpString (2)";
+    disp.PutPropertyByName(L"prpString", &param);
+
+    disp= ob3;
+    param= L"this property prpString (3)";
+    disp.PutPropertyByName(L"prpString", &param);
+
+    SAFEARRAY* ar=  SafeArrayCreateVector( VT_DISPATCH, 0, 3);
+    long i= 0;
+    SafeArrayPutElement( ar, &i, ob1.p);
+    i++;
+    SafeArrayPutElement( ar, &i, ob2.p);
+    i++;
+    SafeArrayPutElement( ar, &i, ob3.p);
+
+    *val= ar;
     return S_OK;
 }
+
+STDMETHODIMP CBasic::inoutSequenceByte(LPSAFEARRAY* val)
+{
+    inSequenceByte( *val);
+    SafeArrayDestroy( *val);
+    outSequenceByte( val);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceShort(LPSAFEARRAY* val)
+{
+    inSequenceShort( *val);
+    SafeArrayDestroy( *val);
+    outSequenceShort( val);
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceLong(LPSAFEARRAY* val)
+{
+    inSequenceLong( *val);
+    SafeArrayDestroy( *val);
+    outSequenceLong( val);
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceString(LPSAFEARRAY* val)
+{
+    inSequenceString( *val);
+    SafeArrayDestroy( *val);
+    outSequenceString( val);
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceFloat(LPSAFEARRAY* val)
+{
+    inSequenceFloat( *val);
+    SafeArrayDestroy( *val);
+    outSequenceFloat( val);
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceDouble(LPSAFEARRAY* val)
+{
+    inSequenceDouble( *val);
+    SafeArrayDestroy( *val);
+    outSequenceDouble( val);
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSequenceObject(LPSAFEARRAY* val)
+{
+    inSequenceObject( *val);
+    SafeArrayDestroy( *val);
+    outSequenceObject( val);
+
+    return S_OK;
+}
+
+// 2-dimensional Array
+STDMETHODIMP CBasic::inMulDimArrayLong(LPSAFEARRAY val)
+{
+    printMulArray( val, VT_I4);
+    return S_OK;
+}
+// 2-dimensional Array
+STDMETHODIMP CBasic::inMulDimArrayVariant(LPSAFEARRAY val)
+{
+    printMulArray( val, VT_VARIANT);
+    return S_OK;
+}
+// 3-dimensional Array
+STDMETHODIMP CBasic::inMulDimArrayLong2(LPSAFEARRAY val)
+{
+    printMulArray( val, VT_I4);
+    return S_OK;
+}
+// 3-dimensional Array
+STDMETHODIMP CBasic::inMulDimArrayVariant2(LPSAFEARRAY val)
+{
+    return S_OK;
+}
+
+
+STDMETHODIMP CBasic::inMulDimArrayByte(LPSAFEARRAY val)
+{
+    // TODO: Add your implementation code here
+
+    return S_OK;
+}
+// 3-dimensionales array
+STDMETHODIMP CBasic::inMulDimArrayByte2(LPSAFEARRAY val)
+{
+    // TODO: Add your implementation code here
+    printMulArray( val, VT_UI1);
+    return S_OK;
+}
+
+// supports 2 and 3 dimensionals SAFEARRAY with elements of long or VARIANT
+void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
+{
+    HRESULT hr= S_OK;
+    UINT dims= SafeArrayGetDim( val);
+    long lbound1;
+    long ubound1;
+    long lbound2;
+    long ubound2;
+    long lbound3;
+    long ubound3;
+    long length1;
+    long length2;
+    long length3;
+
+    char buff[4096];
+    buff[0]=0;
+
+    if( dims == 2)
+    {
+        hr= SafeArrayGetLBound( val, 1, &lbound1);
+        hr= SafeArrayGetUBound( val, 1, &ubound1);
+        length1= ubound1 - lbound1 +1;
+
+        hr= SafeArrayGetLBound( val, 2, &lbound2);
+        hr= SafeArrayGetUBound( val, 2, &ubound2);
+        length2= ubound2 - lbound2 + 1;
+        char tmpBuf[1024];
+        tmpBuf[0]=0;
+        long index[2];
+        for( long i= 0; i< length2; i++)
+        {
+            for( long j= 0; j<length1; j++)
+            {
+                index[0]= j;
+                index[1]= i;
+                long longVal;
+                CComVariant var;
+                switch( type)
+                {
+                case VT_I4:
+                    hr= SafeArrayGetElement( val, index, &longVal);
+                    sprintf( tmpBuf, "(%d,%d): %d\n", index[1], index[0], longVal);
+                    break;
+                case VT_UI1:
+                    hr= SafeArrayGetElement( val, index, &longVal);
+                    sprintf( tmpBuf, "(%d,%d): %d\n", index[1], index[0], (unsigned char)longVal);
+                    break;
+                case VT_VARIANT:
+                    hr= SafeArrayGetElement( val, index, &var );
+                    sprintf( tmpBuf, "(%d,%d):  %d (vartype %d)\n",  index[1], index[0], var.byref, var.vt);
+                    break;
+                }
+                strcat( buff,tmpBuf);
+            }
+
+        }
+
+
+    }
+    else if( dims == 3 )
+    {
+        hr= SafeArrayGetLBound( val, 1, &lbound1);
+        hr= SafeArrayGetUBound( val, 1, &ubound1);
+        length1= ubound1 - lbound1 +1;
+
+        hr= SafeArrayGetLBound( val, 2, &lbound2);
+        hr= SafeArrayGetUBound( val, 2, &ubound2);
+        length2= ubound2 - lbound2 + 1;
+
+        hr= SafeArrayGetLBound( val, 3, &lbound3);
+        hr= SafeArrayGetUBound( val, 3, &ubound3);
+        length3= ubound3 - lbound3 +1;
+        char tmpBuf[1024];
+        tmpBuf[0]=0;
+        long index[3];
+        for( long i= 0; i< length3; i++)
+        {
+            for( long j= 0; j<length2; j++)
+            {
+                for( long k= 0; k<length1; k++)
+                {
+                    index[0]= k;
+                    index[1]= j;
+                    index[2]= i;
+                    long longVal;
+                    CComVariant var;
+                    switch( type)
+                    {
+                    case VT_I4:
+                        hr= SafeArrayGetElement( val, index, &longVal);
+                        sprintf( tmpBuf, "(%d,%d,%d): %d\n", index[2], index[1], index[0], longVal);
+                        break;
+                    case VT_UI1:
+                        hr= SafeArrayGetElement( val, index, &longVal);
+                        sprintf( tmpBuf, "(%d,%d,%d): %d\n", index[2], index[1], index[0], (unsigned char)longVal);
+                        break;
+
+                    case VT_VARIANT:
+                        hr= SafeArrayGetElement( val, index, &var );
+                        sprintf( tmpBuf, "(%d,%d,%d):  %d (vartype %d)\n", index[2],  index[1], index[0], var.byref, var.vt);
+                        break;
+                    }
+                    strcat( buff,tmpBuf);
+                }
+            }
+
+        }
+
+    }
+
+    MessageBox( NULL, A2T( buff), _T("AxTestControl.Basic"), MB_OK);
+
+
+}
+
+
+

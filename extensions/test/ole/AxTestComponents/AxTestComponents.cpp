@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxTestComponents.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,3 +129,4 @@ STDAPI DllUnregisterServer(void)
 }
 
 
+//VT_I4 size_t V_ERROR VARIANT VARIANT_FALSE CComVariant FADF_EMBEDDED    

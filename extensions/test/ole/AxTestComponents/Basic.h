@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ class ATL_NO_VTABLE CBasic :
     public IDispatchImpl<IBasic, &IID_IBasic, &LIBID_AXTESTCOMPONENTSLib>
 {
 public:
-    CBasic()
+    CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0)
     {
     }
 
@@ -88,6 +88,32 @@ END_COM_MAP()
 
 // IBasic
 public:
+    STDMETHOD(inMulDimArrayByte2)(LPSAFEARRAY val);
+    STDMETHOD(inMulDimArrayByte)(LPSAFEARRAY val);
+    STDMETHOD(inMulDimArrayVariant2)(LPSAFEARRAY val);
+    STDMETHOD(inMulDimArrayLong2)(LPSAFEARRAY val);
+    STDMETHOD(inMulDimArrayVariant)(LPSAFEARRAY val);
+    STDMETHOD(inMulDimArrayLong)( LPSAFEARRAY val);
+    STDMETHOD(inoutSequenceObject)(LPSAFEARRAY* val);
+    STDMETHOD(inoutSequenceDouble)(LPSAFEARRAY * val);
+    STDMETHOD(inoutSequenceFloat)(LPSAFEARRAY * val);
+    STDMETHOD(inoutSequenceString)(LPSAFEARRAY* val);
+    STDMETHOD(inoutSequenceLong)(LPSAFEARRAY * val);
+    STDMETHOD(inoutSequenceShort)(LPSAFEARRAY * val);
+    STDMETHOD(inoutSequenceByte)(LPSAFEARRAY * val);
+    STDMETHOD(outSequenceObject)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceDouble)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceFloat)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceString)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceLong)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceShort)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(outSequenceByte)(/*[out]*/ LPSAFEARRAY* val);
+    STDMETHOD(inSequenceObject)(LPSAFEARRAY ar);
+    STDMETHOD(inSequenceDouble)(LPSAFEARRAY ar);
+    STDMETHOD(inSequenceFloat)(LPSAFEARRAY ar);
+    STDMETHOD(inSequenceString)(LPSAFEARRAY ar);
+    STDMETHOD(inSequenceShort)(LPSAFEARRAY ar);
+    STDMETHOD(inSequenceByte)(LPSAFEARRAY ar);
     STDMETHOD(inSequenceLong)(LPSAFEARRAY  ar);
     STDMETHOD(mixed1)(
             /* [in] */ unsigned char aChar,
@@ -153,7 +179,19 @@ public:
     STDMETHOD(inByte)(/*[in]*/ unsigned char val);
 
 
+// members for property implementations
+    unsigned char m_cPrpByte;
+    short m_nPrpShort;
+    long m_lPrpLong;
+    float m_fPrpFloat;
+    double m_dPrpDouble;
+    CComPtr<IDispatch> m_PrpObject;
     CComBSTR m_bstrPrpString;
+    CComVariant m_PropVariant;
+    LPSAFEARRAY m_PrpArray;
+protected:
+    static void printArray(LPSAFEARRAY val, BSTR message, VARTYPE type);
+    static void printMulArray(LPSAFEARRAY val, VARTYPE type);
 };
 
 #endif //__BASIC_H_
