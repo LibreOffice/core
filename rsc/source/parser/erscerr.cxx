@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:54:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             if( 1 == nErrors )
                 StdLstErr( ByteString::CreateFromInt32( nErrors ).GetBuffer() );
             else
-                StdLstErr( ByteString::CreateFromInt32( (USHORT)(nErrors -1) ).GetBuffer() );
+                StdLstErr( ByteString::CreateFromInt32( (nErrors -1) ).GetBuffer() );
             StdLstErr( " Error" );
             StdLstErr( " found!!" );
         }
@@ -458,7 +458,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                             const RscId & aId ){
     char buf[ 10 ];
-    USHORT i;
+    sal_uInt32 i;
 
     if( pFI )
     {
@@ -467,21 +467,21 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdErr( pFI->GetLine() );
         StdErr( "\n" );
         // Fehlerposition anzeigen
-        for( i = 0; (USHORT)(i +1) < pFI->GetScanPos(); i++ )
+        for( i = 0; (i +1) < pFI->GetScanPos(); i++ )
             StdLstErr( " " );
         LstOut( "     ^" ); //Zeilennummern beachten
         StdErr( "^" );
         StdLstErr( "\n" );
     }
     StdLstErr( "f" );
-    sprintf( buf, "%u", (USHORT)rError );
+    sprintf( buf, "%u", (unsigned int)rError );
     StdLstErr( buf );
 
     if( pFI && pTC ){
         StdLstErr( ": \"" );
         StdLstErr( pTC->aFileTab.Get( pFI->GetFileIndex() )->aFileName.GetBuffer() );
         StdLstErr( "\", line " );
-        sprintf( buf, "%d", pFI->GetLineNo() );
+        sprintf( buf, "%u", (unsigned int)pFI->GetLineNo() );
         StdLstErr( buf );
     }
 
@@ -496,7 +496,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         if( pClass )
         {
             StdLstErr( "Type: " );
-            StdLstErr( pHS->Get( pClass->GetId() ) );
+            StdLstErr( pHS->getString( pClass->GetId() ).getStr() );
             if( aId.IsId() )
                 StdLstErr( ", " );
         }
@@ -520,7 +520,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
 {
-    if( WRN_LOCALID == (USHORT)rError ) // Keine Warning erzeugen
+    if( WRN_LOCALID == rError ) // Keine Warning erzeugen
         return;
     if( rError.IsError() )
         nErrors++;
@@ -543,7 +543,7 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,
                            const char * pMessage )
 {
-    if( ERR_USAGE != (USHORT)rError ){
+    if( ERR_USAGE != rError ){
         nErrors++;
         ErrorFormat( rError, NULL, aId );
         WriteError( rError, pMessage );
