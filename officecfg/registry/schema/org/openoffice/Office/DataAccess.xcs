@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:25:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@
 					<desc>Specifies the prefix of the URL of the database driver.</desc>
 				</info>
 			</prop>
+			<prop oor:name="Extension" oor:type="xs:string">
+                <info><desc>The file extension, which match to this type. Only set when it is file based driver</desc></info>
+				<value/>
+            </prop>
 		</group>
 	</templates>
 	<component>
@@ -233,7 +237,7 @@
 				<info>
 					<desc>Specifies if the global connection pool is enabled.</desc>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<set oor:name="DriverSettings" oor:node-type="DriverPooling">
 				<info>
