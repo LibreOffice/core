@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-16 12:56:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
     //  dialog parent has been set in execute
 
     SfxApplication* pApp = SFX_APP();
-    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, ScDocShell::Factory() );
+    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
 
     if ( pMed )
     {
