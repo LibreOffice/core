@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:43:04 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ struct WW8_SepInfo
         : pPageDesc(pPD), pSectionFmt(pFmt), pPDNd(0), pNumNd(0),
         nLnNumRestartNo(nLnRestart), nPgRestartNo(0)
     {}
+    bool IsProtected() const;
 };
 SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 )
 
@@ -236,6 +237,7 @@ SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 )
 class WW8_WrPlcSepx     // Plc fuer PageDescs -> Sepx ( Section Extensions )
 {
 private:
+    bool mbDocumentIsProtected;
     WW8_WrSepInfoPtrs aSects;   // PTRARR von SwPageDesc und SwSectionFmt
     SvULongs aCps;              // PTRARR von CPs
     WW8_PdAttrDesc* pAttrs;
@@ -253,6 +255,8 @@ private:
     static void SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
                                    BYTE nFlag );
     static int HasBorderItem( const SwFmt& rFmt );
+
+    void NeedsDocumentProtected(const WW8_SepInfo &rInfo);
 
     //No copy, no assign
     WW8_WrPlcSepx(const WW8_WrPlcSepx&);
@@ -275,6 +279,7 @@ public:
     void WritePlcSed( SwWW8Writer& rWrt ) const;
     void WritePlcHdd( SwWW8Writer& rWrt ) const;
     sal_uInt16 CurrentNoColumns(const SwDoc &rDoc) const;
+    bool DocumentIsProtected() const { return mbDocumentIsProtected; }
 };
 
 //--------------------------------------------------------------------------
