@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:22:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "SQL příkaz";
         Text[ hebrew ] = "SQL Kommando";
         Text[ hindi ] = "SQL आज्ञा";
+        Text[ slovak ] = "SQL príkaz";
     };
     FixedText FT_SQL
     {
@@ -141,6 +142,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "Příkaz k provedení";
         Text[ hebrew ] = "auszuführendes Kommando";
         Text[ hindi ] = "चलाने केलिए आज्ञा";
+        Text[ slovak ] = "Príkaz na spustenie";
     };
     MultiLineEdit ME_SQL
     {
@@ -182,6 +184,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "Provést";
         Text[ hebrew ] = "Ausführen";
         Text[ hindi ] = "चलाओ";
+        Text[ slovak ] = "Spustiť";
     };
     FixedText FT_HISTORY
     {
@@ -213,6 +216,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "Předchozí příkazy";
         Text[ hebrew ] = "Vorherige Kommandos";
         Text[ hindi ] = "पिछला आज्ञा";
+        Text[ slovak ] = "Predchádzajúce príkazy";
     };
     ListBox LB_HISTORY
     {
@@ -252,6 +256,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "Stav";
         Text[ hebrew ] = "‮צתב‬";
         Text[ hindi ] = "वस्तुस्थिति";
+        Text[ slovak ] = "Stav";
     };
     MultiLineEdit ME_STATUS
     {
@@ -301,6 +306,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zavrieť";
     };
 
     Text                = "SQL Statement ausf�hren" ;
@@ -330,6 +336,7 @@ ModalDialog DLG_DIRECTSQL
     Text[ czech ] = "Provést SQL příkaz";
     Text[ hebrew ] = "SQL Statement ausführen";
     Text[ hindi ] = "SQL वाक्य चलाओ";
+    Text[ slovak ] = "Spustiť príkaz SQL";
 };
 
 String STR_COMMAND_EXECUTED_SUCCESSFULLY
@@ -360,6 +367,7 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text[ czech ] = "Příkaz byl úspěšně vykonán.";
     Text[ hebrew ] = "Befehl erfolgreich ausgeführt.";
     Text[ hindi ] = "आज्ञा सफलता से पूरा हुआ ।";
+    Text[ slovak ] = "Príkaz úspešne vykonaný.";
 };
 
 String STR_DIRECTSQL_CONNECTIONLOST
@@ -390,11 +398,20 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ czech ] = "Připojení k databázi bylo ztraceno. Tento dialog bude uzavřen.";
     Text[ hebrew ] = "Die Verbindung zur Datenbank wurde gelöscht. Dieser Dialog wird geschlossen.";
     Text[ hindi ] = "लेखासंचय से कनेक्शन नष्ट हो गया । यह डयलॉग को बंद किया जाएगा ।";
+    Text[ slovak ] = "Spojenie s databázou bolo stratené. Tento dialóg bude zatvorený.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17.24.1  2003/06/12 10:57:51  gh
+ *  final Merge RC
+ *
+ *  Revision 1.17  2003/04/29 17:22:32  hr
+ *  INTEGRATION: CWS mergem8 (1.16.8); FILE MERGED
+ *  2003/04/29 08:33:57 gh 1.16.8.2: final merge for Beta2
+ *  2003/04/14 15:03:56 gh 1.16.8.1: merging all languages
+ *
  *  Revision 1.16.8.2  2003/04/29 08:33:57  gh
  *  final merge for Beta2
  *
@@ -469,6 +486,8 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
+
 
 
 
