@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardEx.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
     @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
-interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClipboard
+published interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClipboard
 {
     //-------------------------------------------------------------------------
     /** To determine the supported rendering capabilities of the clipboard instance.
