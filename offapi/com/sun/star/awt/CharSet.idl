@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharSet.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,89 +68,77 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::CharSet
 /** These values are used to specify the characters which are available in
-        a font and their codes.
+    a font and their codes.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
 
-        @deprecated
+    @deprecated
  */
 constants CharSet
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::DONTKNOW
     /** specifies an unknown character set.
      */
     const short DONTKNOW = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::ANSI
     /** specifies the ANSI character set.
      */
     const short ANSI = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::MAC
     /** specifies the <regtm>Apple Macintosh</regtm> character set.
      */
     const short MAC = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_437
     /** specifies the IBM PC character set number 437.
      */
     const short IBMPC_437 = 3;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_850
     /** specifies the IBM PC character set number 850.
      */
     const short IBMPC_850 = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_860
     /** specifies the IBM PC character set number 860.
      */
     const short IBMPC_860 = 5;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_861
     /** specifies the IBM PC character set number 861.
      */
     const short IBMPC_861 = 6;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_863
     /** specifies the IBM PC character set number 863.
      */
     const short IBMPC_863 = 7;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::IBMPC_865
     /** specifies the IBM PC character set number 865.
      */
     const short IBMPC_865 = 8;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::SYSTEM
     /** specifies the system character set.
      */
     const short SYSTEM = 9;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::CharSet::SYMBOL
     /** specifies a set of symbols.
      */
     const short SYMBOL = 10;
