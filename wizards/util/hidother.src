@@ -1,0 +1,378 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:06:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+Web_1   34200
+Web_1_ListTemplate      34201
+Web_1_ListStyle 34202
+Web_1_BtnTemplate       34203
+Web_1_BtnStyle  34204
+Web_1_BtnOK     34205
+Web_1_BtnCancel 34206
+Web_1_SaveAsTemplate    34207
+SQL_0_cmdSQLStatement   34220
+SQL_0_cmdCancel 34221
+SQL_0_cmdPrev   34222
+SQL_0_cmdNextOrReady    34223
+SQL_Dialog      34224
+SQL_1_Preview1  34230
+SQL_1_cmbAvailDatabase  34231
+SQL_1_lbTables  34232
+SQL_1_lbFields  34233
+SQL_2_cmdMoveSelected   34234
+SQL_2_cmdMoveAll        34235
+SQL_2_cmdRemoveSelected 34236
+SQL_2_cmdRemoveAll      34237
+SQL_2_Selected  34238
+SQL_2_Available 34239
+SQL_3_cmbLogic1 34240
+SQL_3_cmbFieldName1     34241
+SQL_3_cmbCondition1     34242
+SQL_3_txtValue1         34243
+SQL_3_cmbLogic2 34244
+SQL_3_cmbFieldName2     34245
+SQL_3_cmbCondition2     34246
+SQL_3_txtValue2         34247
+SQL_3_cmbLogic3 34248
+SQL_3_cmbFieldName3     34249
+SQL_3_cmbCondition3     34460
+SQL_3_txtValue3         34461
+SQL_3_cmbLogic4 34462
+SQL_3_cmbFieldName4     34463
+SQL_3_cmbCondition4     34464
+SQL_3_txtValue4         34465
+SQL_3_cmbLogic5 34466
+SQL_3_cmbFieldName5     34467
+SQL_3_cmbCondition5     34468
+SQL_3_txtValue5         34469
+SQL_4_Preview3  34250
+SQL_4_cmbSort1  34251
+SQL_4_cmdSort1  34252
+SQL_4_cmbSort2  34253
+SQL_4_cmdSort2  34254
+SQL_4_cmbSort3  34255
+SQL_4_cmdSort3  34256
+SQL_4_cmbSort4  34257
+SQL_4_cmdSort4  34258
+SQL_5_Preview2  34260
+SQL_5_txtQueryTitle     34261
+SQL_5_optRunNow 34262
+SQL_5_optRunClosed      34263
+SQL_5_cmdReady  34264
+Table_0_cmdCancel       34270
+Table_0_cmdPrev 34271
+Table_0_cmdNextOrReady  34272
+Table_Dialog    34273
+Table_1_Preview1        34280
+Table_1_cmbAvailDatabase        34281
+Table_1_cmbSelectDataBase       34282
+Table_1_lbTables        34283
+Table_2_lbFields        34290
+Table_2_cmdMoveSelected 34291
+Table_2_cmdMoveAll      34292
+Table_2_cmdRemoveSelected       34293
+Table_2_cmdRemoveAll    34294
+Table_2_lbSelected      34295
+Table_3_txtTableName    34300
+Table_3_txtFieldName    34301
+Table_3_cmdAcceptNewFieldName   34302
+Table_3_Preview2        34310
+Table_3_optOpenTablleReadWrite  34311
+Table_3_optOpenTablleReadOnly   34312
+Table_3_optEdit 34313
+Table_3_cmdReady        34314
+DlgReport_Dialog        34320
+DlgReport_0_cmdCancel   34321
+DlgReport_0_cmdPrev     34322
+DlgReport_0_cmdNextOrReady      34323
+DlgReport_1_cmbAvailDatabase    34330
+DlgReport_1_lbTables    34331
+DlgReport_2_Available   34340
+DlgReport_2_Selected    34341
+DlgReport_2_cmdMoveSelected     34342
+DlgReport_2_cmdMoveAll  34343
+DlgReport_2_cmdRemoveSelected   34344
+DlgReport_2_cmdRemoveAll        34345
+DlgReport_3_Grouping    34350
+DlgReport_3_cmdGroup    34351
+DlgReport_3_cmdUnGroup  34352
+DlgReport_3_PreGroupingDest     34353
+DlgReport_4_Preview3    34360
+DlgReport_4_Sort1       34361
+DlgReport_4_cmdSort1    34362
+DlgReport_4_Sort2       34363
+DlgReport_4_cmdSort2    34364
+DlgReport_4_Sort3       34365
+DlgReport_4_cmdSort3    34366
+DlgReport_4_Sort4       34367
+DlgReport_4_cmdSort4    34368
+DlgReport_5_Preview4    34370
+DlgReport_5_Portrait    34371
+DlgReport_5_Landscape   34372
+DlgReport_5_Style1      34373
+DlgReport_5_Style2      34374
+DlgReport_5_Style3      34375
+DlgReport_5_Style4      34376
+DlgReport_5_Style5      34377
+DlgReport_5_Style6      34378
+DlgReport_6_DocumentStyles      34380
+DlgReport_7_txtReportTitle      34390
+DlgReport_7_optCreateAndViewOrStore     34391
+DlgReport_7_cmdReady            34392
+DlgReport_7_optCreateAndStore           34393
+DlgForm_Dialog                  34400
+DlgForm_0_cmdCancel             34401
+DlgForm_0_cmdPrev               34402
+DlgForm_0_cmdNext               34403
+DlgForm_1_cmbAvailDatabase      34410
+DlgForm_1_lbTables              34411
+DlgForm_2_FieldsAvailable       34420
+DlgForm_2_FieldsSelected        34421
+DlgForm_2_cmdMoveSelected       34422
+DlgForm_2_cmdMoveAll            34423
+DlgForm_2_cmdRemoveSelected     34424
+DlgForm_2_cmdRemoveAll          34425
+DlgForm_3_optStyleCol           34430
+DlgForm_3_optStyleJustified     34431
+DlgForm_3_optStyleTabled        34432
+DlgForm_3_optHorizontal         34433
+DlgForm_3_optVertical           34434
+DlgForm_4_PageStyle             34440
+DlgForm_5_txtDocTitle           34450
+DlgForm_5_optRunNow             34451
+DlgForm_5_cmdReady              34452
+DlgForm_5_optRunEdit            34453
+DlgGrid_Dialog                  34470
+DlgGrid_0_cmdCancel             34471
+DlgGrid_0_cmdPrev               34472
+DlgGrid_0_cmdNext               34473
+DlgGrid_1_cmbAvailDatabase      34480
+DlgGrid_1_lbTables              34481
+DlgGrid_2_lbFields              34490
+DlgGrid_2_lbSelected            34491
+DlgGrid_2_cmdMoveSelected       34492
+DlgGrid_2_cmdMoveAll            34493
+DlgGrid_2_cmdRemoveSelected     34494
+DlgGrid_2_cmdRemoveAll          34495
+DlgGrid_2_cmdReady              34496
+DlgCombo_Dialog                 34500
+DlgCombo_0_cmdCancel            34501
+DlgCombo_0_cmdPrev              34502
+DlgCombo_0_cmdNext              34503
+DlgCombo_1_cmbAvailDatabase     34505
+DlgCombo_1_cmbAvailTable1       34506
+DlgCombo_1_cmbAvailTable2       34507
+DlgCombo_1_lbTables             34508
+DlgCombo_2_lbFields             34510
+DlgCombo_2_lbSelected           34511
+DlgCombo_2_cmdMoveSelected      34512
+DlgCombo_2_cmdRemoveSelected    34513
+DlgCombo_3_fdConnection1        34515
+DlgCombo_3_lbConnection1        34516
+DlgCombo_3_fdConnection2        34517
+DlgCombo_3_lbConnection2        34518
+DlgCombo_4_opDBField            34520
+DlgCombo_4_cbDBField            34521
+DlgCombo_4_opNoDBField          34522
+DlgCombo_4_cmdReady             34523
+DlgGroup_Dialog                 34530
+DlgGroup_0_cmdCancel            34531
+DlgGroup_0_cmdPrev              34532
+DlgGroup_0_cmdNext              34533
+DlgGroup_2_edEdit               34535
+DlgGroup_2_lbSelected           34536
+DlgGroup_2_cmdMoveSelected      34537
+DlgGroup_2_cmdRemoveSelected    34538
+DlgGroup_3_opField              34540
+DlgGroup_3_cbField              34541
+DlgGroup_3_opNoField            34542
+DlgGroup_4_edValue              34545
+DlgGroup_4_lbRadioCaptions      34546
+DlgGroup_4_lbRadioValues        34547
+DlgGroup_5_opDBField            34550
+DlgGroup_5_cbDBField            34551
+DlgGroup_5_opNoDBField          34552
+DlgGroup_6_edGroupTitle         34555
+DlgGroup_6_cmdReady             34556
+DlgImport_Dialog                34570
+DlgImport_0_cmdHelp             34571
+DlgImport_0_cmdCancel           34572
+DlgImport_0_cmdPrev             34573
+DlgImport_0_cmdNext             34574
+DlgImport_1_Preview1            34575
+DlgImport_1_lbGreeting          34576
+DlgImport_2_Preview2            34577
+DlgImport_2_cmdWord             34578
+DlgImport_2_cmdExcel            34579
+DlgImport_2_cmdPowerPoint       34580
+DlgImport_2_cbTemplate          34581
+DlgImport_2_cbTemplateRecurse   34582
+DlgImport_2_lbTemplatePath      34583
+DlgImport_2_edTemplatePath      34584
+DlgImport_2_cmdTemplatePathSelect   34585
+DlgImport_2_cbDocument          34586
+DlgImport_2_cbDocumentRecurse   34587
+DlgImport_2_lbDocumentPath      34588
+DlgImport_2_edDocumentPath      34589
+DlgImport_2_cmdDocumentPathSelect   34590
+DlgImport_2_lbExportDocumentPath    34591
+DlgImport_2_edExportDocumentPath    34592
+DlgImport_2_cmdExportPathSelect     34593
+DlgImport_3_Preview3            34594
+DlgImport_3_lbSummary           34595
+DlgImport_3_edSummary           34596
+DlgImport_3_lbTextGroup         34597
+DlgImport_3_edTextGroup         34598
+DlgImport_3_lbCalcGroup         34599
+DlgImport_3_edCalcGroup         34600
+DlgImport_3_lbPresGroup         34601
+DlgImport_3_edPresGroup         34602
+DlgImport_4_Preview4            34603
+DlgImport_4_lbProgress          34604
+DlgImport_4_lbActualDoc         34605
+DlgTheme_0_Dialog               34610
+DlgTheme_0_lbThemes             34611
+DlgTheme_0_cmdCancel            34612
+DlgTheme_0_cmdOkay              34613
+DlgInternet_Dialog              34620
+DlgInternet_0_cmdHelp           34621
+DlgInternet_0_cmdCancel         34622
+DlgInternet_0_cmdPrev           34623
+DlgInternet_0_cmdNext           34624
+DlgInternet_1_cbStandardApp     34625
+DlgInternet_1_cbStandardBrowser 34626
+DlgInternet_1_cbStandardNews    34627
+DlgInternet_1_cbStandardFTP     34628
+DlgInternet_1_cbStandardSHTTP   34629
+DlgInternet_1_cbStandardMail    34630
+DlgInternet_1_cmdNoInternet     34631
+DlgInternet_2_opImportfromApp   34632
+DlgInternet_2_lbImportfromApp   34633
+DlgInternet_2_opSingleImport    34634
+DlgInternet_4_lbUser        34635
+DlgInternet_5_cmdThanks     34636
+DlgInternet_6_cbNoSetup     34637
+DlgInternet_6_lbAppList     34638
+DlgInternet_7_cbNoProxy     34639
+DlgInternet_7_edHTTPProxy   34640
+DlgInternet_7_edPort        34641
+DlgInternet_9_cbNoEmail     34642
+DlgInternet_9_edAccount     34643
+DlgInternet_9_edMailIn      34644
+DlgInternet_9_edMailOut     34645
+DlgInternet_9_edUserID      34646
+DlgInternet_9_edPassword    34647
+DlgInternet_11_cbNoNews     34648
+DlgInternet_11_edAccount    34649
+DlgInternet_11_edNewsServer 34650
+DlgInternet_12_cmdDontImport    34651
+DlgInternet_12_cmdImport    34652
+DlgInternet_s3OptManual    34653
+DlgInternet_s3OptImport     34654
+DlgInternet_s5OptImport     34655
+DlgInternet_s5OptManual     34656
+DlgInternet_s6OptPop3       34657
+DlgInternet_s6OptImap       34658
+DlgInternet_s8OptImport     34659
+DlgConvert_Dialog       34660
+DlgConvert_Checkbox1        34661
+DlgConvert_OptionButton1    34662
+DlgConvert_OptionButton2    34663
+DlgConvert_OptionButton3    34664
+DlgConvert_OptionButton4    34665
+DlgConvert_Listbox1     34666
+DlgConvert_OBFile       34667
+DlgConvert_OBDir        34668
+DlgConvert_ComboBox1        34669
+DlgConvert_TBSource     34670
+DlgConvert_CheckRecursive   34671
+DlgConvert_TBTarget     34672
+DlgConvert_CBCancel     34673
+DlgConvert_CBHelp       34674
+DlgConvert_CBBack       34675
+DlgConvert_CBGoOn       34676
+DlgConvert_CBSourceOpen     34677
+DlgConvert_CBTargetOpen     34678
+DlgHolidayCal_Dialog    34700
+DlgHolidayCal_1_Preview     34701
+DlgHolidayCal_1_opYear      34702
+DlgHolidayCal_1_opMonth     34703
+DlgHolidayCal_1_edYear      34704
+DlgHolidayCal_1_edMonth     34705
+DlgHolidayCal_1_spinYear    34706
+DlgHolidayCal_1_spinMonth   34707
+DlgHolidayCal_1_cmbState    34708
+DlgHolidayCal_2_lbOwnData   34709
+DlgHolidayCal_2_cmdInsert   34710
+DlgHolidayCal_2_cmdDelete   34711
+DlgHolidayCal_2_edEvent     34712
+DlgHolidayCal_2_chkEvent    34713
+DlgHolidayCal_2_edEventDay  34714
+DlgHolidayCal_2_spinEventDay    34715
+DlgHolidayCal_2_edEventMonth    34716
+DlgHolidayCal_2_spinEventMonth  34717
+DlgHolidayCal_2_edEventYear     34718
+DlgHolidayCal_2_spinEventYear   34719
+DlgHolidayCal_0_cmdOwnData  34720
+DlgHolidayCal_0_cmdCancel   34721
+DlgHolidayCal_0_cmdOK   34722
+DlgHolidaySched_Dialog  34725
+DlgInternet_s8OptManual 34726
+DlgInternet_s2outlookimport     34727
+#Ende bei 34767

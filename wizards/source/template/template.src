@@ -1,0 +1,475 @@
+/*************************************************************************
+ *
+ *  $RCSfile: template.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:06:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define SAMPLES     1000
+#define STYLES      1100
+#define AgendaDlgName       1200
+#define AgendaDlgNoCancel   1201
+#define AgendaDlgFrame      1202
+#define AgendaDlgButton1    1203
+#define AgendaDlgButton2    1204
+#define CorrespondenceNoTextmark    1300
+#define CorrespondenceMsgError  1302
+#define CorrespondenceDialog    1303
+
+// --------------------------------------------------------------------
+String SAMPLES
+{
+    Text = "Damit die volle Funktionalität dieses Beispiels zur Verfügung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
+    Text[English] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
+    Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
+    Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, terá que criar um novo documento com base neste modelo.";
+    Text[ greek ] = "Ãéá íá İ÷åôå ôç äõíáôüôçôá ÷ñŞóçò üëùí ôùí ëåéôïõñãéşí áõôïı ôïõ ğáñáäåßãìáôïò Èá ğñİğåé íá äçìéïõñãŞóåôå İíá íİï İããñáöï ìå âÜóç áõôü ôï ğñüôõğï.";
+    Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken maakt u een nieuw document op basis van deze sjabloon.";
+    Text[ french ] = "Afin de pouvoir profiter de l'entière fonctionnalité de cet exemple, il vous faut créer un nouveau document basé sur ce modèle.";
+    Text[ spanish ] = "Para que esté disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
+    Text[ swedish ] = "Ett nytt dokument måste skapas med den här mallen som grund för att alla funktioner i detta exempel skall vara tillgängliga.";
+    Text[ russian ] = "Äëÿ÷ òîãî, ÷òîáû ôóíêöèè ıòîãî ïğèìåğà ñòàëè äîñòóïíûìè, íåîáõîäèìî ñîçäàòü äîêóìåíò íà îñíîâå ıòîãî øàáëîíà.";
+    Text[ italian ] = "Per poter sfruttare al meglio la funzionalità di questo esempio è necessario creare un documento in base a questo modello.";
+    Text[ danish ] = "For at kunne udnytte dette eksempels fulde funktionsmuligheder skal der oprettes et nyt dokument på grundlag af denne skabelon.";
+    Text[ polish ] = "Aby dany przyk³ad mo¿na by³o w pe³ni wykorzystaæ, trzeba na podstawie danego szablonu utworzyæ nowy dokument.";
+    Text[ portuguese_brazilian ] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
+    Text[ japanese ] = "‚±‚Ì»İÌßÙ‚ª‚¤‚Ü‚­‹@”\\‚³‚¹‚é‚É‚ÍA‚±‚ÌÃİÌßÚ°Ä‚ğè–{‚ÉV‚µ‚¢ÄŞ·­ÒİÄ‚ğì¬‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "ÀÌ »ùÇÃÀÇ ¿ÏÀü ±â´ÉÀ» ÀÌ¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ·Á¸é ÀÌ ¼­½ÄÆÄÀÏÀ» ±âÃÊ·Î »õ ¹®¼­¸¦ ÀÛ¼ºÇØ¾ß ÇÕ´Ï´Ù.";
+    Text[ chinese_simplified ] = "Ö»ÓĞÊ×ÏÈ½èÖúÕâ¸öÑùÊ½ĞÂ½¨Ò»¸öÎÄµµ£¬²ÅÄÜ³ä·ÖÊ¹ÓÃÊ¾Àı¹¦ÄÜ¡£";
+    Text[ chinese_traditional ] = "­n·Q¥R¤À§Q¥Î³o­Ó¼Ë¦¡ªº¦UÏúÉ¬¨q¥\\¯à¡A±z¥²¶·±Ä¥Î³o­Ó¼Ë¦¡¨Ó·s«Ø¤@­Ó¤å¥ó¡C";
+    Text[ arabic ] = "áßí ÊÓÊØíÚ ÇÓÊÎÏÇã åĞÇ ÇáãËÇá Úáì ÇáäÍæ ÇáÃãËá¡ Úáíß ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ ÈÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ.";
+    Text[ turkish ] = "Bu örneğin tüm işlevlerini kullanabilmek için, bu şablon ile yeni bir belge oluşturun.";
+};
+
+String SAMPLES + 1
+{
+    Text = "Hinweis";
+    Text[English] = "Hint";
+    Text[ english_us ] = "Remarks";
+    Text[ portuguese ] = "Observação";
+    Text[ greek ] = "Õğüäåéîç";
+    Text[ dutch ] = "Aanwijzing";
+    Text[ french ] = "Avertissement";
+    Text[ spanish ] = "Indicación";
+    Text[ swedish ] = "Hänvisning";
+    Text[ russian ] = "Óêàçàíèå";
+    Text[ italian ] = "Nota";
+    Text[ danish ] = "Henvisning";
+    Text[ polish ] = "Wskazówka";
+    Text[ portuguese_brazilian ] = "Hint";
+    Text[ japanese ] = "w¦";
+    Text[ korean ] = "Âü°í";
+    Text[ chinese_simplified ] = "ÌáÊ¾";
+    Text[ chinese_traditional ] = "´£¥Ü";
+    Text[ arabic ] = "ãáÇÍÙÉ";
+    Text[ turkish ] = "Bilgi";
+};
+
+// --------------------------------------------------------------------
+String STYLES
+{
+    Text = "Themen-Auswahl";
+    Text[English] = "Design Selection";
+    Text[ english_us ] = "Theme Selection";
+    Text[ portuguese ] = "Seleccionar temas";
+    Text[ russian ] = "Âûáîğ òåì";
+    Text[ greek ] = "ÅğéëïãŞ èåìÜôùí";
+    Text[ dutch ] = "Onderwerpen kiezen";
+    Text[ french ] = "Sélection de thème";
+    Text[ spanish ] = "Selección de temas";
+    Text[ italian ] = "Scelta argomento";
+    Text[ danish ] = "Emneudvalg";
+    Text[ swedish ] = "Temaurval";
+    Text[ polish ] = "Wybór tematów";
+    Text[ portuguese_brazilian ] = "Design Selection";
+    Text[ japanese ] = "Ã°Ï‚Ì‘I‘ğ";
+    Text[ korean ] = "ÁÖÁ¦ ¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¿ï¾Ü³]­p­·®æ";
+    Text[ arabic ] = "ÇÎÊíÇÑ ÇáãæÇÖíÚ";
+    Text[ turkish ] = "Konu seçimi";
+    Text[ language_user1 ] = " ";
+};
+
+String STYLES + 1
+{
+    Text = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rückgängig gemacht werden.";
+    Text[English] = "Error while temporarily saving the document! The following action cannot be undone.";
+    Text[ english_us ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
+    Text[ portuguese ] = "Erro ao guardar o documento activo no porta-documentos! É impossível restaurar a seguinte acção.";
+    Text[ russian ] = "Îøèáêà ïğè ïğîìåæóòî÷íîì ñîõğàíåíèè òåêóùåãî äîêóìåíòà. Îòìåíèòü ñëåäóşùåå äåéñòâèå íåâîçìîæíî.";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñïóùñéíŞ áğïèŞêåõóç ôïõ ôñİ÷ïíôïò åããñÜöïõ! Åßíáé áäıíáôïí íá ãßíåé áíáßñåóç ôçò áêüëïõèçò åíİñãåéáò.";
+    Text[ dutch ] = "Fout bij opslaan van actueel document in cachegeheugen. De volgende activiteit kan niet ongedaan worden gemaakt.";
+    Text[ french ] = "Une erreur est survenue lors de l'enregistrement du document actif dans le presse-papiers ! Impossible d'annuler l'action suivante.";
+    Text[ spanish ] = "¡Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acción.";
+    Text[ italian ] = "Errore mentre si cercava di salvare il documento negli appunti. L'azione seguente non può essere annullata.";
+    Text[ danish ] = "Fejl under forsøg på at gemme dokumentet i udklipsholderen! Den følgende handling kan ikke fortrydes.";
+    Text[ swedish ] = "Fel uppstod när det aktuella dokumentet skulle sparas i urklippet! Följande åtgärd går inte att ångra.";
+    Text[ polish ] = "B³¹d podczas tymczasowego zapisywania aktualnych dokumentów! Nastêpuj¹cej akcji nie mo¿na cofn¹æ.";
+    Text[ portuguese_brazilian ] = "Error while temporarily saving the document! The following action cannot be undone.";
+    Text[ japanese ] = "•\\¦’†‚ÌÄŞ·­ÒİÄ‚ğ¸Ø¯ÌßÎŞ°ÄŞ‚É•Û‘¶‚·‚éÛ‚É´×°”­¶! Ÿ‚Ì±¸¼®İ‚ÍŒ³‚É–ß‚¹‚Ü‚¹‚ñB";
+    Text[ korean ] = "ÇöÀç ¹®¼­¸¦ Áß°£ ÀúÀåÇÏ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! ´ÙÀ½ ÀÛ¾÷À» ½ÇÇà Ãë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚ´æÅÌµ±Ç°ÎÄµµÊ±·¢Éú´íÎó£¡ÎŞ·¨È¡ÏûÏÂÁĞ²Ù×÷¡£";
+    Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº¾Ş§@¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
+    Text[ turkish ] = "Belgeyi panoya kaydederken hata oluştu! Bir sonraki işlem geri alınamaz.";
+};
+
+String STYLES + 2
+{
+    Text = "Abbrechen";
+    Text[English] = "Cancel";
+    Text[ english_us ] = "Cancel";
+    Text[ portuguese ] = "Cancelar";
+    Text[ russian ] = "Îòìåíà";
+    Text[ greek ] = "Áêıñùóç";
+    Text[ dutch ] = "Stoppen";
+    Text[ french ] = "Annuler";
+    Text[ spanish ] = "Cancelar";
+    Text[ italian ] = "Annulla";
+    Text[ danish ] = "Annuller";
+    Text[ swedish ] = "Avbryt";
+    Text[ polish ] = "Anuluj";
+    Text[ portuguese_brazilian ] = "Cancel";
+    Text[ japanese ] = "·¬İ¾Ù";
+    Text[ korean ] = "Ãë¼Ò";
+    Text[ chinese_simplified ] = "È¡Ïû";
+    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+    Text[ turkish ] = "İptal";
+    Text[ language_user1 ] = " ";
+};
+
+String STYLES + 3
+{
+    Text = "OK";
+    Text[English] = "OK";
+    Text[ english_us ] = "OK";
+    Text[ portuguese ] = "OK";
+    Text[ russian ] = "OK";
+    Text[ greek ] = "OK";
+    Text[ dutch ] = "OK";
+    Text[ french ] = "OK";
+    Text[ spanish ] = "Aceptar";
+    Text[ italian ] = "OK";
+    Text[ danish ] = "OK";
+    Text[ swedish ] = "OK";
+    Text[ polish ] = "OK";
+    Text[ portuguese_brazilian ] = "OK";
+    Text[ japanese ] = "OK";
+    Text[ korean ] = "È®ÀÎ";
+    Text[ chinese_simplified ] = "È·¶¨";
+    Text[ chinese_traditional ] = "½T©w";
+    Text[ arabic ] = "ÍÓäÇğ";
+    Text[ turkish ] = "Tamam";
+    Text[ language_user1 ] = " ";
+};
+
+// --------------------------------------------------------------------
+String AgendaDlgName
+{
+    Text = "Protokollvorlage";
+    Text[English] = "Minutes Template";
+    Text[ english_us ] = "Minutes Template";
+    Text[ portuguese ] = "Modelo de acta";
+    Text[ dutch ] = "Sjabloon Verslag";
+    Text[ french ] = "Modèle de compte rendu";
+    Text[ spanish ] = "Plantilla de protocolo";
+    Text[ italian ] = "Modello di protocollo";
+    Text[ swedish ] = "Protokollmall";
+    Text[ russian ] = "Øàáëîí ïğîòîêîëà";
+    Text[ greek ] = "Ğñüôõğï ğñùôüêïëëïõ";
+    Text[ danish ] = "Referatskabelon";
+    Text[ polish ] = "Szablon protoko³u";
+    Text[ portuguese_brazilian ] = "Minutes Template";
+    Text[ japanese ] = "‹c–˜^‚ÌÃİÌßÚ°Ä";
+    Text[ korean ] = "ÇÁ·ÎÅäÄİ ¼­½ÄÆÄÀÏ";
+    Text[ chinese_simplified ] = "¼ÇÂ¼ÑùÊ½";
+    Text[ chinese_traditional ] = "¨óÄ³¼Ë¦¡";
+    Text[ arabic ] = "ŞÇáÈ ÈÑæÊæßæá";
+    Text[ turkish ] = "Tutanak şablonu";
+};
+
+String AgendaDlgNoCancel
+{
+    Text = "Es muß eine Option bestätigt werden.";
+    Text[English] = "An option must be selected.";
+    Text[ english_us ] = "An option must be selected.";
+    Text[ portuguese ] = "É necessário confirmar uma opção.";
+    Text[ dutch ] = "Er moet een optie worden geselecteer.";
+    Text[ french ] = "Une des options doit être acceptée.";
+    Text[ spanish ] = "Debe confirmar una opción.";
+    Text[ italian ] = "Si deve confermare una opzione.";
+    Text[ swedish ] = "Ett alternativ måste bekräftas.";
+};
+
+String AgendaDlgFrame
+{
+    Text = "Protokolltyp";
+    Text[English] = "Minutes Type";
+    Text[ english_us ] = "Minutes Type";
+    Text[ portuguese ] = "Tipo de acta";
+    Text[ dutch ] = "Type verslag";
+    Text[ french ] = "Type de compte rendu";
+    Text[ spanish ] = "Tipo de protocolo";
+    Text[ italian ] = "Tipo di protocollo";
+    Text[ swedish ] = "Protokolltyp";
+    Text[ russian ] = "Òèï ïğîòîêîëà";
+    Text[ greek ] = "Ôığïò ğñùôüêïëëïõ";
+    Text[ danish ] = "Referattype";
+    Text[ polish ] = "Typ protoko³u";
+    Text[ portuguese_brazilian ] = "Minutes Type";
+    Text[ japanese ] = "‹c–˜^‚ÌÀ²Ìß";
+    Text[ korean ] = "ÇÁ·ÎÅäÄİ Çü½Ä";
+    Text[ chinese_simplified ] = "¼ÇÂ¼ÀàĞÍ";
+    Text[ chinese_traditional ] = "°O¿ıÃş«¬";
+    Text[ arabic ] = "äæÚ ÇáÈÑæÊæßæá";
+    Text[ turkish ] = "Tutanak tipi";
+};
+
+String AgendaDlgButton1
+{
+    Text = "Ergebnisprotokoll";
+    Text[English] = "Agenda Results Minutes";
+    Text[ english_us ] = "Results Minutes";
+    Text[ portuguese ] = "Acta sobre resultados";
+    Text[ dutch ] = "Verslag van de resultaten";
+    Text[ french ] = "Compte rendu des résultats";
+    Text[ spanish ] = "Protocolo de resultado";
+    Text[ italian ] = "Protocollo dei risultati";
+    Text[ swedish ] = "Beslutsprotokoll";
+    Text[ russian ] = "Ïğîòîêîë èòîãà";
+    Text[ greek ] = "Ğñùôüêïëëï áğïôåëåóìÜôùí";
+    Text[ danish ] = "Beslutningsreferat";
+    Text[ polish ] = "Protokól podsumowujacy";
+    Text[ portuguese_brazilian ] = "Agenda Results Minutes";
+    Text[ japanese ] = "Œ‹‰Ê‹c–˜^";
+    Text[ korean ] = "°á°ú ÇÁ·ÎÅäÄİ";
+    Text[ chinese_simplified ] = "Òé³Ì½á¹û¼ÇÂ¼";
+    Text[ chinese_traditional ] = "·|½Íµ²ªG°O¿ı";
+    Text[ arabic ] = "ÈÑæÊæßæá ÇáäÊíÌÉ";
+    Text[ turkish ] = "Sonuç tutanağı";
+};
+
+String AgendaDlgButton2
+{
+    Text = "Verlaufsprotokoll";
+    Text[English] = "Agenda Evaluation Minutes";
+    Text[ english_us ] = "Evaluation Minutes";
+    Text[ portuguese ] = "Acta sobre decurso";
+    Text[ dutch ] = "Verslag van het verloop";
+    Text[ french ] = "Procès verbal";
+    Text[ spanish ] = "Protocolo del transcurso";
+    Text[ italian ] = "Protocollo dello svolgimento";
+    Text[ swedish ] = "Redogörande protokoll";
+    Text[ russian ] = "Ïğîòîêîë õîäà";
+    Text[ greek ] = "Ğñùôüêïëëï äéáäéêáóßáò";
+    Text[ danish ] = "Forhandlingsreferat";
+    Text[ polish ] = "Protokól procesu";
+    Text[ portuguese_brazilian ] = "Agenda Evaluation Minutes";
+    Text[ japanese ] = "’†ŠÔ•ñ‚Ì‹c–˜^";
+    Text[ korean ] = "°æ°ú ÇÁ·ÎÅäÄİ";
+    Text[ chinese_simplified ] = "Òé³Ì¹ı³Ì¼ÇÂ¼";
+    Text[ chinese_traditional ] = "·|½Í¹Lµ{°O¿ı";
+    Text[ arabic ] = "ÈÑæÊæßæá ÎØ ÇáÓíÑ";
+    Text[ turkish ] = "Değerlendirme tutanağı";
+};
+
+// --------------------------------------------------------------------
+String CorrespondenceNoTextmark
+{
+    Text = "Die Textmarke 'Recipient' fehlt.";
+    Text[English] = "The Bookmark 'Recipient' is lacking.";
+    Text[ english_us ] = "The bookmark 'Recipient' is missing.";
+    Text[ portuguese ] = "Falta o marcador de texto 'Recipient'.";
+    Text[ dutch ] = "De tekstmarkering 'Recipient' ontbreekt.";
+    Text[ french ] = "Le repère de texte 'Recipient' n'existe pas.";
+    Text[ spanish ] = "Falta la marca de texto 'Recipient'.";
+    Text[ italian ] = "Manca il segnalibro 'Recipient'.";
+    Text[ swedish ] = "Bokmärket 'Recipient' saknas.";
+    Text[ russian ] = "Íåò çàêëàäêè 'Recipient'.";
+    Text[ greek ] = "Ëåßğåé ç óŞìáíóç êåéìİíïõ 'Recipient'.";
+    Text[ danish ] = "Tekstmarkeringen 'Recipient' mangler.";
+    Text[ polish ] = "Brak zak³adki 'Recipient'.";
+    Text[ portuguese_brazilian ] = "The Bookmark 'Recipient' is lacking.";
+    Text[ japanese ] = "Ã·½ÄÏ°¸ 'Recipient' ‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "Ã¥°¥ÇÇ'Recipient'°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÊéÇ© 'Recipient' ²»´æÔÚ¡£";
+    Text[ chinese_traditional ] = "¼Ğ°O 'Recipient' ¤£¦s¦b¡C";
+    Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ 'Recipient' äÇŞÕÉ.";
+    Text[ turkish ] = "'Alıcı' Belirteci mevcut değil.";
+};
+
+String CorrespondenceNoTextmark+1
+{
+    Text = "Serienbrieffelder können nicht eingefügt werden.";
+    Text[English] = "Mail Merge fields can not be included.";
+    Text[ english_us ] = "Form letter fields can not be included.";
+    Text[ portuguese ] = "Impossível inserir campos para cartas em série.";
+    Text[ dutch ] = "Er kunnen geen standaardbriefvelden worden ingevoegd.";
+    Text[ french ] = "Impossible d'insérer des champs de lettre pour mailing.";
+    Text[ spanish ] = "No se pueden insertar campos de cartas en serie.";
+    Text[ italian ] = "Impossibile inserire i campi della stampa in serie.";
+    Text[ swedish ] = "Omöjligt att infoga fält för standardbrev.";
+    Text[ russian ] = "Âñòàâèòü ïîëÿ ñëèÿíèÿ íåâîçìîæíî.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åéóáãùãŞ ôùí ğåäßùí ôùí ïìáäéêşí åğéóôïëşí..";
+    Text[ danish ] = "Det er ikke muligt at indsætte brevfeltningsfelter.";
+    Text[ polish ] = "Nie mo¿na by³o wstawiæ pól listu seryjnego.";
+    Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
+    Text[ japanese ] = "·‚µ‚İˆóü‚ÌÌ¨°ÙÄŞ‚ğ‘}“ü‚Å‚«‚Ü‚¹‚ñB";
+    Text[ korean ] = "Æû ·¹ÅÍ ÇÊµå¸¦ Æ÷ÇÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÎŞ·¨²åÈëÓÊ¼şºÏ²¢×Ö¶Î¡£";
+    Text[ chinese_traditional ] = "µLªk´¡¤J¶l¥ó¦X¦}ªºÄæ¦ì¡C";
+    Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
+    Text[ turkish ] = "Standart mektup alanları eklenemiyor.";
+};
+
+String CorrespondenceMsgError
+{
+    Text = "Fehler";
+    Text[English] = "Error";
+    Text[ english_us ] = "Error";
+    Text[ portuguese ] = "Erro";
+    Text[ dutch ] = "Fout";
+    Text[ french ] = "Erreur";
+    Text[ spanish ] = "Error";
+    Text[ italian ] = "Errore";
+    Text[ swedish ] = "Fel";
+    Text[ russian ] = "Îøèáêà";
+    Text[ greek ] = "ÓöÜëìá";
+    Text[ danish ] = "Fejl";
+    Text[ polish ] = "B³¹d";
+    Text[ portuguese_brazilian ] = "Error";
+    Text[ japanese ] = "´×°";
+    Text[ korean ] = "¿À·ù";
+    Text[ chinese_simplified ] = "´íÎó";
+    Text[ chinese_traditional ] = "¿ù»~";
+    Text[ arabic ] = "ÎØÃ";
+    Text[ turkish ] = "Hata";
+};
+
+String CorrespondenceDialog
+{
+    Text = "Was wollen Sie schreiben?";
+    Text[English] = "What do you want to write?";
+    Text[ english_us ] = "What do you want to write?";
+    Text[ portuguese ] = "Que deseja escrever?";
+    Text[ dutch ] = "Wat wilt u schrijven?";
+    Text[ french ] = "Que souhaitez-vous écrire ?";
+    Text[ spanish ] = "¿Qué desea escribir?";
+    Text[ italian ] = "Che cosa volete scrivere?";
+    Text[ swedish ] = "Vad vill Du skriva?";
+    Text[ russian ] = "×òî Âû õîòèòå íàïèñàòü?";
+    Text[ greek ] = "Ôé åğéèõìåßôå íá ãñÜøåôå;";
+    Text[ danish ] = "Hvad vil du skrive?";
+    Text[ polish ] = "Co chcesz napisaæ?";
+    Text[ portuguese_brazilian ] = "What do you want to write?";
+    Text[ japanese ] = "‰½‚ğ‘‚«‚Ü‚·‚©?";
+    Text[ korean ] = "¹«¾ùÀ» ¾²½Ã°Ú½À´Ï±î?";
+    Text[ chinese_simplified ] = "ÄúÏëÊéĞ´Ê²Ã´ÎÄµµ£¿";
+    Text[ chinese_traditional ] = "­n¶ñ¼gªº¤º®e¡H";
+    Text[ arabic ] = "ãÇĞÇ ÊÑíÏ Ãä ÊßÊÈ¿";
+    Text[ turkish ] = "Ne yazmak istiyorsunuz?";
+};
+
+String CorrespondenceDialog+1
+{
+    Text = "Einzelnen Brief";
+    Text[English] = "Single letter";
+    Text[ english_us ] = "Single letter";
+    Text[ portuguese ] = "Carta individual";
+    Text[ dutch ] = "Een enkele brief";
+    Text[ french ] = "Lettre individuelle";
+    Text[ spanish ] = "Carta individual";
+    Text[ italian ] = "Lettera singola";
+    Text[ swedish ] = "Enskilt brev";
+    Text[ russian ] = "Îäíî ïèñüìî";
+    Text[ greek ] = "Ìåìïíùìİíç åğéóôïëŞ";
+    Text[ danish ] = "Enkelt brev";
+    Text[ polish ] = "Pojedynczy list";
+    Text[ portuguese_brazilian ] = "Single letter";
+    Text[ japanese ] = "1’Ê‚¸‚Â";
+    Text[ korean ] = "´ÜÀÏ ÆíÁö";
+    Text[ chinese_simplified ] = "µ¥¼şĞÅº¯";
+    Text[ chinese_traditional ] = "³æ«Ê«H¥ó";
+    Text[ arabic ] = "ÎØÇÈ ãİÑÏ";
+    Text[ turkish ] = "Tek mektup";
+};
+
+String CorrespondenceDialog+2
+{
+    Text = "Serienbrief";
+    Text[English] = "Multiple letter";
+    Text[ english_us ] = "Form letter";
+    Text[ portuguese ] = "Carta em série";
+    Text[ dutch ] = "Standaardbrief";
+    Text[ french ] = "Mailing";
+    Text[ spanish ] = "Carta en serie";
+    Text[ italian ] = "Stampa in serie";
+    Text[ swedish ] = "Standardbrev";
+    Text[ russian ] = "Íåñêîëüêî ïèñåì";
+    Text[ greek ] = "ÏìáäéêŞ åğéóôïëŞ";
+    Text[ danish ] = "Brevfletningsbrev";
+    Text[ polish ] = "List seryjny";
+    Text[ portuguese_brazilian ] = "Multiple letter";
+    Text[ japanese ] = "·‚µ‚İˆóü";
+    Text[ korean ] = "Æû ·¹ÅÍ";
+    Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢";
+    Text[ chinese_traditional ] = "¶l¥ó(«H¥ó)¦X¦}";
+    Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
+    Text[ turkish ] = "Standart mektup";
+};
+

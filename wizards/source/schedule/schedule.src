@@ -1,0 +1,1270 @@
+/*************************************************************************
+ *
+ *  $RCSfile: schedule.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:06:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+// Dialog labels start at 1000
+#define dlgCalTitle 1000
+#define dlgCalTitleBack 1001
+#define dlgCalTitleOwnData  1002
+#define dlgSchdlTitle   1003
+#define dlgOK   1004
+#define dlgCancel   1005
+#define dlgCalFrameOption   1006
+#define dlgCalOptionYear    1007
+#define dlgCalOptionMonth   1008
+#define dlgSchdlDescription 1009
+#define dlgSchdlCountry 1010
+#define dlgTime 1011
+#define dlgYear 1012
+#define dlgCalMonth 1013
+#define dlgSpecificBankholidays 1014
+#define dlgCalOwnData   1015
+#define dlgCalInsert    1016
+#define dlgCalDelete    1017
+#define dlgCalNewEvent  1018
+#define dlgCalEvent 1019
+#define dlgCalEventOnce 1020
+#define dlgCalEventDay  1021
+#define dlgCalEventMonth    1022
+#define dlgCalEventYear 1023
+
+// Bitmap file is 1099
+#define dlgBitmapFile   1099
+
+// Names of states start at 1100
+#define dlgState    1100
+
+// Months start at 1200
+#define dlgMonth    1200
+
+// Messages start at 1300
+#define msgCalErrorTitle    1300
+#define msgCalError 1301
+#define msgCalRemoveTitle   1302
+#define msgCalRemove    1303
+
+// Styles start at 1400
+#define stlWorkday  1400
+#define stlWeekend  1401
+
+// Sheet names start at 1410
+#define nameCalYear 1410
+#define nameCalMonth    1411
+
+#define sProgress   1500
+
+// --------------------------------------------------------------------
+
+String dlgCalTitle
+{
+Text = "StarOffice Kalender";
+Text[ English ] = "StarOffice Calendar";
+Text[ English_us ] = "StarOffice Calendar";
+Text[ french ] = "Calendrier StarOffice";
+Text[ italian ] = "Calendario StarOffice";
+Text[ spanish ] = "Calendario de StarOffice";
+Text[ portuguese ] = "Calendário StarOffice";
+Text[ dutch ] = "StarOffice Kalender";
+Text[ swedish ] = "StarOffice kalender";
+    Text[ russian ] = "Êàëåíäàğü StarOffice";
+    Text[ greek ] = "Çìåñïëüãéï StarOffice";
+    Text[ danish ] = "StarOffice kalender";
+    Text[ polish ] = "Kalendarz StarOffice";
+    Text[ portuguese_brazilian ] = "StarOffice Calendar";
+    Text[ japanese ] = "StarOffice ¶ÚİÀŞ°";
+    Text[ korean ] = "StarOffice ÀÏÁ¤";
+    Text[ chinese_simplified ] = "StarOffice ÈÕÀú";
+    Text[ chinese_traditional ] = "StarOffice ¦æ¨Æ¾ä";
+    Text[ arabic ] = "ÊŞæíãStarOffice ";
+    Text[ turkish ] = "StarOffice Takvimi";
+};
+
+String  dlgCalTitleBack
+{
+Text = "Zurück";
+Text[ English ] = "Back";
+Text[ English_us ] = "Back";
+Text[ french ] = "Précédent";
+Text[ italian ] = "Indietro";
+Text[ spanish ] = "Atrás";
+Text[ portuguese ] = "Anterior";
+Text[ dutch ] = "Vorige";
+Text[ swedish ] = "Tillbaka";
+    Text[ russian ] = "Íàçàä";
+    Text[ greek ] = "Ğßóù";
+    Text[ danish ] = "Tilbage";
+    Text[ polish ] = "Wstecz";
+    Text[ portuguese_brazilian ] = "Back";
+    Text[ japanese ] = "–ß‚é";
+    Text[ korean ] = "µÚ·Î";
+    Text[ chinese_simplified ] = "·µ»Ø";
+    Text[ chinese_traditional ] = "ªğ¦^";
+    Text[ arabic ] = "ÇáÓÇÈŞ";
+    Text[ turkish ] = "Geri";
+};
+
+String  dlgCalTitleOwnData
+{
+Text = "Eigene Daten";
+Text[ English ] = "Personal Data";
+Text[ English_us ] = "Personal Data";
+Text[ french ] = "Mes données";
+Text[ italian ] = "Dati dell'utente";
+Text[ spanish ] = "Mis datos";
+Text[ portuguese ] = "Dados pessoais";
+Text[ dutch ] = "Eigen gegevens";
+Text[ swedish ] = "Egna data";
+    Text[ russian ] = "Ëè÷íûå äàííûå";
+    Text[ greek ] = "ĞñïóùğéêÜ äåäïìİíá";
+    Text[ danish ] = "Egne data";
+    Text[ polish ] = "Dane osobiste";
+    Text[ portuguese_brazilian ] = "Personal Data";
+    Text[ japanese ] = "“Æ©‚ÌÃŞ°À";
+    Text[ korean ] = "°³ÀÎÀûÀÎ µ¥ÀÌÅÍ";
+    Text[ chinese_simplified ] = "¸öÈËÊı¾İ";
+    Text[ chinese_traditional ] = "­Ó¤H¼ÆÕu";
+    Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
+    Text[ turkish ] = "Kişisel veriler";
+};
+
+String dlgSchdlTitle
+{
+Text = "Feiertagsberechnung";
+Text[ English ] = "Add Holidays to Calendar";
+Text[ English_us ] = "Add Holidays to Calendar";
+Text[ french ] = "Calcul des jours fériés";
+Text[ italian ] = "Calcolo dei giorni festivi";
+Text[ spanish ] = "Cálculo de los días festivos";
+Text[ portuguese ] = "Cálculo dos feriados";
+Text[ dutch ] = "Feestdagen berekenen";
+Text[ swedish ] = "Beräkna helgdagar";
+    Text[ russian ] = "Âêëş÷èòü ïğàçäíèêè â êàëåíäàğü";
+    Text[ greek ] = "Õğïëïãéóìüò çìåñşí áñãßáò";
+    Text[ danish ] = "Beregn helligdage";
+    Text[ polish ] = "Oblicz dni œwi¹teczne";
+    Text[ portuguese_brazilian ] = "Add Holidays to Calendar";
+    Text[ japanese ] = "j“ú‚ğ”‚¦‚é";
+    Text[ korean ] = "ÀÏÁ¤¿¡ ÈŞÀÏÃß°¡";
+    Text[ chinese_simplified ] = "½Ú¼ÙÈÕ¼ÆËã";
+    Text[ chinese_traditional ] = "­pºâ¸`°²¤é";
+    Text[ arabic ] = "ÍÓÇÈ ÇáÚØáÇÊ";
+    Text[ turkish ] = "Tatil günlerinin hesaplanması";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgOK
+{
+Text = "Fertig stellen";
+Text[ English ] = "Create";
+Text[ English_us ] = "Create";
+Text[ french ] = "Créer";
+Text[ italian ] = "Crea";
+Text[ spanish ] = "Crear";
+Text[ portuguese ] = "Criar";
+Text[ dutch ] = "Voltooien";
+Text[ swedish ] = "Färdigställ";
+    Text[ russian ] = "Ãîòîâî";
+    Text[ greek ] = "Äçìéïõñãßá";
+    Text[ danish ] = "Udfør";
+    Text[ polish ] = "Utwórz";
+    Text[ portuguese_brazilian ] = "Create";
+    Text[ japanese ] = "Š®—¹";
+    Text[ korean ] = "¸¸µé±â";
+    Text[ chinese_simplified ] = "Íê³É";
+    Text[ chinese_traditional ] = "§¹¦¨";
+    Text[ arabic ] = "ÅäÔÇÁ";
+    Text[ turkish ] = "Oluştur";
+};
+
+String dlgCancel
+{
+Text = "Abbrechen";
+Text[ English ] = "Cancel";
+Text[ English_us ] = "Cancel";
+Text[ french ] = "Annuler";
+Text[ italian ] = "Annulla";
+Text[ spanish ] = "Cancelar";
+Text[ portuguese ] = "Cancelar";
+Text[ dutch ] = "Annuleren";
+Text[ swedish ] = "Avbryt";
+    Text[ russian ] = "Îòìåíà";
+    Text[ greek ] = "Áêıñùóç";
+    Text[ danish ] = "Annuller";
+    Text[ polish ] = "Anuluj";
+    Text[ portuguese_brazilian ] = "Cancel";
+    Text[ japanese ] = "·¬İ¾Ù";
+    Text[ korean ] = "Ãë¼Ò";
+    Text[ chinese_simplified ] = "È¡Ïû";
+    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ arabic ] = "ÅáÛÇÁ";
+    Text[ turkish ] = "İptal";
+};
+
+String  dlgCalFrameOption
+{
+Text = "Kalender";
+Text[ English ] = "Calendar";
+Text[ English_us ] = "Calendar";
+Text[ french ] = "Calendrier";
+Text[ italian ] = "Calendario";
+Text[ spanish ] = "Calendario";
+Text[ portuguese ] = "Calendário";
+Text[ dutch ] = "Kalender";
+Text[ swedish ] = "Kalender";
+    Text[ russian ] = "Êàëåíäàğü";
+    Text[ greek ] = "Çìåñïëüãéï";
+    Text[ danish ] = "Kalendar";
+    Text[ polish ] = "Kalendarz";
+    Text[ portuguese_brazilian ] = "Calendar";
+    Text[ japanese ] = "¶ÚİÀŞ°";
+    Text[ korean ] = "Ä«·»´õ";
+    Text[ chinese_simplified ] = "ÈÕÀú";
+    Text[ chinese_traditional ] = "¦æ¨Æ¾ä";
+    Text[ arabic ] = "ÊŞæíã";
+    Text[ turkish ] = "Takvim";
+};
+
+String  dlgCalOptionYear
+{
+Text = "&Jahresübersicht";
+Text[ English ] = "&Year Overview";
+Text[ English_us ] = "&Year Overview";
+Text[ french ] = "&Année";
+Text[ italian ] = "&Panoramica annuale";
+Text[ spanish ] = "&Resumen del año";
+Text[ portuguese ] = "&Plano anual";
+Text[ dutch ] = "&Jaaroverzicht";
+Text[ swedish ] = "&Årsöversikt";
+    Text[ russian ] = "&Ãîäîâîé îáçîğ";
+    Text[ greek ] = "&Óıíïøç İôïõò";
+    Text[ danish ] = "&Årsoversigt";
+    Text[ polish ] = "&Przegl¹d roku";
+    Text[ portuguese_brazilian ] = "&Year Overview";
+    Text[ japanese ] = "”NŠÔ•\\(&Y)";
+    Text[ korean ] = "³â°£ ÀÏÁ¤ °³¿ä";
+    Text[ chinese_simplified ] = "ÄêÊÓÍ¼(&Y)";
+    Text[ chinese_traditional ] = "¦~ÀËµø¹Ï";
+    Text[ arabic ] = "ãáÎÕ ÓäÉ&";
+    Text[ turkish ] = "&Yıla genel bakış";
+};
+
+String  dlgCalOptionMonth
+{
+Text = "&Monat";
+Text[ English ] = "&Month";
+Text[ English_us ] = "&Month";
+Text[ french ] = "&Mois";
+Text[ italian ] = "&Mese";
+Text[ spanish ] = "&Mes";
+Text[ portuguese ] = "&Mês";
+Text[ dutch ] = "&Maand";
+Text[ swedish ] = "&Månad";
+    Text[ russian ] = "&Ìåñÿö";
+    Text[ greek ] = "&ÌŞíáò";
+    Text[ danish ] = "&Måned";
+    Text[ polish ] = "&Miesi¹c";
+    Text[ portuguese_brazilian ] = "&Month";
+    Text[ japanese ] = "Œ(&M)";
+    Text[ korean ] = "¿ù";
+    Text[ chinese_simplified ] = "ÔÂ(&M)";
+    Text[ chinese_traditional ] = "¤ë";
+    Text[ arabic ] = "ÔåÑ&";
+    Text[ turkish ] = "&Ay";
+};
+
+String dlgSchdlDescription
+{
+Text = "Feiertagsberechnung für";
+Text[ English ] = "Add holidays for";
+Text[ English_us ] = "Add holidays for";
+Text[ french ] = "Calcul des jours fériés pour";
+Text[ italian ] = "Calcolo dei giorni festivi per";
+Text[ spanish ] = "Cálculo de los días festivos para";
+Text[ portuguese ] = "Cálculo dos feriados para";
+Text[ dutch ] = "Feestdagen berekenen voor";
+Text[ swedish ] = "Beräkna helgdagar för";
+    Text[ russian ] = "Äîáàâèòü ïğàçäíèêè äëÿ";
+    Text[ greek ] = "Õğïëïãéóìüò çìåñşí áñãßáò ãéá";
+    Text[ danish ] = "Beregn helligdage for";
+    Text[ polish ] = "Obliczenie dni œwi¹tecznych dla";
+    Text[ portuguese_brazilian ] = "Add holidays for";
+    Text[ japanese ] = "j“ú‚ğ”‚¦‚é‘ÎÛ";
+    Text[ korean ] = "ÈŞÀÏ¸¸ Ãß°¡";
+    Text[ chinese_simplified ] = "¼ÆËã½Ú¼ÙÈÕÎª";
+    Text[ chinese_traditional ] = "­pºâ¸`°²¤éªº©Ò¦b¦a";
+    Text[ arabic ] = "ÍÓÇÈ ÇáÚØáÇÊ ÇáÑÓãíÉ áÜ";
+    Text[ turkish ] = "Tatil günleri hesaplaması";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgSchdlCountry
+{
+Text = "Deutschland";
+Text[ English ] = "Great Britain";
+Text[ English_us ] = "USA";
+Text[ french ] = "la France";
+Text[ italian ] = "Italia";
+Text[ spanish ] = "España";
+Text[ portuguese ] = "Portugal";
+Text[ dutch ] = "Nederland";
+Text[ swedish ] = "Sverige";
+    Text[ russian ] = "Ğîññèÿ";
+    Text[ greek ] = "ÅëëÜäá";
+    Text[ danish ] = "Danmark";
+    Text[ polish ] = "Polska";
+    Text[ portuguese_brazilian ] = "USA";
+    Text[ japanese ] = "“ú–{";
+    Text[ korean ] = "¹Ì±¹";
+    Text[ chinese_simplified ] = "ÖĞ¹ú";
+    Text[ chinese_traditional ] = "¥xÆW";
+    Text[ arabic ] = "ãÕÑ";
+    Text[ turkish ] = "Türkiye";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgTime
+{
+Text = "Zeitraum";
+Text[ English ] = "Time Frame";
+Text[ English_us ] = "Time Frame";
+Text[ french ] = "Période";
+Text[ italian ] = "Intervallo di tempo";
+Text[ spanish ] = "Período";
+Text[ portuguese ] = "Período";
+Text[ dutch ] = "Tijdsbestek";
+Text[ swedish ] = "Tidsrymd";
+    Text[ russian ] = "Ïåğèîä";
+    Text[ greek ] = "×ñïíéêü äéÜóôçìá";
+    Text[ danish ] = "Tidsperiode";
+    Text[ polish ] = "Okres czasu";
+    Text[ portuguese_brazilian ] = "Time Frame";
+    Text[ japanese ] = "ŠúŠÔ";
+    Text[ korean ] = "½Ã°£ ÇÁ·¹ÀÓ";
+    Text[ chinese_simplified ] = "Ê±¼ä";
+    Text[ chinese_traditional ] = "®É¶¡­S³ò";
+    Text[ arabic ] = "ÇáİÊÑÉ ÇáÒãäíÉ";
+    Text[ turkish ] = "Zaman aralığı";
+};
+
+String dlgYear
+{
+Text = "Jahr";
+Text[ English ] = "Year";
+Text[ English_us ] = "Year";
+Text[ french ] = "Année";
+Text[ italian ] = "Anno";
+Text[ spanish ] = "Año";
+Text[ portuguese ] = "Ano";
+Text[ dutch ] = "Jaar";
+Text[ swedish ] = "År";
+    Text[ russian ] = "Ãîä";
+    Text[ greek ] = "¸ôïò";
+    Text[ danish ] = "År";
+    Text[ polish ] = "Rok";
+    Text[ portuguese_brazilian ] = "Year";
+    Text[ japanese ] = "¼—ï";
+    Text[ korean ] = "³â";
+    Text[ chinese_simplified ] = "Äê";
+    Text[ chinese_traditional ] = "¦~";
+    Text[ arabic ] = "ÓäÉ";
+    Text[ turkish ] = "Yıl";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgCalMonth
+{
+Text = "Monat";
+Text[ English ] = "Month";
+Text[ English_us ] = "Month";
+Text[ french ] = "Mois";
+Text[ italian ] = "Mese";
+Text[ spanish ] = "Mes";
+Text[ portuguese ] = "Mês";
+Text[ dutch ] = "Maand";
+Text[ swedish ] = "Månad";
+    Text[ russian ] = "Ìåñÿö";
+    Text[ greek ] = "ÌŞíáò";
+    Text[ danish ] = "Måned";
+    Text[ polish ] = "Miesi¹c";
+    Text[ portuguese_brazilian ] = "Month";
+    Text[ japanese ] = "Œ";
+    Text[ korean ] = "¿ù";
+    Text[ chinese_simplified ] = "ÔÂ";
+    Text[ chinese_traditional ] = "¤ë";
+    Text[ arabic ] = "ÔåÑ";
+    Text[ turkish ] = "Ay";
+    Text[ language_user1 ] = " ";
+};
+
+String  dlgSpecificBankholidays
+{
+Text = "Bundeslandspezifische Feiertage";
+Text[ English ] = "-";
+Text[ English_us ] = "-";
+Text[ french ] = "Jours fériés propres à une région particulière";
+Text[ italian ] = "-";
+Text[ spanish ] = "Días festivos locales";
+Text[ portuguese ] = "Feriados locais";
+Text[ dutch ] = "Regionale feestdagen";
+Text[ swedish ] = "-";
+    Text[ chinese_traditional ] = "¯S©w¸`°²¤é";
+    Text[ arabic ] = "ÇáÚØáÇÊ ÇáÑÓãíÉ ÇáãÍáíÉ";
+    Text[ greek ] = "Ôïğéêİò áñãßåò";
+    Text[ turkish ] = "-";
+};
+
+String  dlgCalOwnData
+{
+Text = "Eigene Daten";
+Text[ English ] = "Personal Data";
+Text[ English_us ] = "Personal Data";
+Text[ french ] = "Mes données";
+Text[ italian ] = "Dati dell'utente";
+Text[ spanish ] = "Mis datos";
+Text[ portuguese ] = "Dados pessoais";
+Text[ dutch ] = "Eigen gegevens";
+Text[ swedish ] = "Egna data";
+    Text[ russian ] = "Ëè÷íûå äàííûå";
+    Text[ greek ] = "ĞñïóùğéêÜ äåäïìİíá";
+    Text[ danish ] = "Egne data";
+    Text[ polish ] = "Dane osobiste";
+    Text[ portuguese_brazilian ] = "Personal Data";
+    Text[ japanese ] = "“Æ©‚ÌÃŞ°À";
+    Text[ korean ] = "°³ÀÎ µ¥ÀÌÅÍ";
+    Text[ chinese_simplified ] = "¸öÈËÊı¾İ";
+    Text[ chinese_traditional ] = "­Ó¤H¼ÆÕu";
+    Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
+    Text[ turkish ] = "Kişisel veriler";
+};
+
+String dlgCalInsert
+{
+Text = "&Einfügen";
+Text[ English ] = "&Insert";
+Text[ English_us ] = "&Insert";
+Text[ french ] = "&Insérer";
+Text[ italian ] = "&Aggiungi";
+Text[ spanish ] = "&Insertar";
+Text[ portuguese ] = "&Inserir";
+Text[ dutch ] = "&Invoegen";
+Text[ swedish ] = "&Infoga";
+    Text[ russian ] = "&Âñòàâèòü";
+    Text[ greek ] = "&ÅéóáãùãŞ";
+    Text[ danish ] = "&Indsæt";
+    Text[ polish ] = "&Wstaw";
+    Text[ portuguese_brazilian ] = "&Insert";
+    Text[ japanese ] = "‘}“ü(&I)";
+    Text[ korean ] = "»ğÀÔ";
+    Text[ chinese_simplified ] = "²åÈë(&I)";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "ÅÏÑÇÌ&";
+    Text[ turkish ] = "&Ekle";
+};
+
+String dlgCalDelete
+{
+Text = "Ent&fernen";
+Text[ English ] = "&Delete";
+Text[ English_us ] = "&Delete";
+Text[ french ] = "Supp&rimer";
+Text[ italian ] = "&Elimina";
+Text[ spanish ] = "&Eliminar";
+Text[ portuguese ] = "Rem&over";
+Text[ dutch ] = "Ver&wijderen";
+Text[ swedish ] = "Ta &bort";
+    Text[ russian ] = "&Óáğàòü";
+    Text[ greek ] = "Äéáãñá&öŞ";
+    Text[ danish ] = "&Fjern";
+    Text[ polish ] = "&Usuñ";
+    Text[ portuguese_brazilian ] = "&Delete";
+    Text[ japanese ] = "íœ(&D)";
+    Text[ korean ] = "»èÁ¦";
+    Text[ chinese_simplified ] = "É¾³ı(&D)";
+    Text[ chinese_traditional ] = "§R°£";
+    Text[ arabic ] = "ÍĞİ&";
+    Text[ turkish ] = "&Sil";
+};
+
+String dlgCalNewEvent
+{
+Text = "Neues Ereignis";
+Text[ English ] = "New Event";
+Text[ English_us ] = "New Event";
+Text[ french ] = "Nouvel événement";
+Text[ italian ] = "Nuovo evento";
+Text[ spanish ] = "Nuevo acontecimiento";
+Text[ portuguese ] = "Novo evento";
+Text[ dutch ] = "Nieuwe gebeurtenis";
+Text[ swedish ] = "Ny händelse";
+    Text[ russian ] = "Íîâîå ñîáûòèå";
+    Text[ greek ] = "Íİï ãåãïíüò";
+    Text[ danish ] = "Ny begivenhed";
+    Text[ polish ] = "Nowe wydarzenie";
+    Text[ portuguese_brazilian ] = "New Event";
+    Text[ japanese ] = "V‚µ‚¢—\\’è";
+    Text[ korean ] = "»õ ÀÌº¥Æ®";
+    Text[ chinese_simplified ] = "ÖØ´óÊÂ¼ş";
+    Text[ chinese_traditional ] = "·s¼W¬ù·|";
+    Text[ arabic ] = "ÍÏË ÌÏíÏ";
+    Text[ turkish ] = "Yeni olay";
+};
+
+String dlgCalEvent
+{
+Text = "Ereignis";
+Text[ English ] = "Event";
+Text[ English_us ] = "Event";
+Text[ french ] = "Événement";
+Text[ italian ] = "Evento";
+Text[ spanish ] = "Acontecimiento";
+Text[ portuguese ] = "Evento";
+Text[ dutch ] = "Gebeurtenis";
+Text[ swedish ] = "Händelse";
+    Text[ russian ] = "Ñîáûòèå";
+    Text[ greek ] = "Ãåãïíüò";
+    Text[ danish ] = "Begivenhed";
+    Text[ polish ] = "Wydarzenie";
+    Text[ portuguese_brazilian ] = "Event";
+    Text[ japanese ] = "²ÍŞİÄ";
+    Text[ korean ] = "ÀÌº¥Æ®";
+    Text[ chinese_simplified ] = "ÊÂ¼ş";
+    Text[ chinese_traditional ] = "¬ù·|";
+    Text[ arabic ] = "ÍÏË";
+    Text[ turkish ] = "Olay";
+};
+
+String dlgCalEventOnce
+{
+Text = "Einmalig";
+Text[ English ] = "One-Time";
+Text[ English_us ] = "One-Time";
+Text[ french ] = "Unique";
+Text[ italian ] = "Una sola volta";
+Text[ spanish ] = "Único";
+Text[ portuguese ] = "Único";
+Text[ dutch ] = "Eenmalig";
+Text[ swedish ] = "Engångsföreteelse";
+    Text[ russian ] = "Îäíîêğàòíî";
+    Text[ greek ] = "ÌïíáäéêŞ öïñÜ";
+    Text[ danish ] = "Engangsforteelse";
+    Text[ polish ] = "Jednorazowo";
+    Text[ portuguese_brazilian ] = "One-Time";
+    Text[ japanese ] = "1‰ñ‚Ì‚İ";
+    Text[ korean ] = "ÇÑ¹ø";
+    Text[ chinese_simplified ] = "Ò»´ÎĞÔ";
+    Text[ chinese_traditional ] = "¤@¦¸";
+    Text[ arabic ] = "ãÑÉ æÇÍÏÉ";
+    Text[ turkish ] = "Bir kerelik";
+};
+
+String dlgCalEventDay
+{
+Text = "Tag";
+Text[ English ] = "Day";
+Text[ English_us ] = "Day";
+Text[ french ] = "Jour";
+Text[ italian ] = "Giorno";
+Text[ spanish ] = "Día";
+Text[ portuguese ] = "Dia";
+Text[ dutch ] = "Dag";
+Text[ swedish ] = "Dag";
+    Text[ russian ] = "Äåíü";
+    Text[ greek ] = "Çìİñá";
+    Text[ danish ] = "Dag";
+    Text[ polish ] = "Dzieñ";
+    Text[ portuguese_brazilian ] = "Day";
+    Text[ japanese ] = "“ú";
+    Text[ korean ] = "ÀÏ";
+    Text[ chinese_simplified ] = "Ìì";
+    Text[ chinese_traditional ] = "¤Ñ";
+    Text[ arabic ] = "íæã";
+    Text[ turkish ] = "Gün";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgCalEventMonth
+{
+Text = "Monat";
+Text[ English ] = "Month";
+Text[ English_us ] = "Month";
+Text[ french ] = "Mois";
+Text[ italian ] = "Mese";
+Text[ spanish ] = "Mes";
+Text[ portuguese ] = "Mês";
+Text[ dutch ] = "Maand";
+Text[ swedish ] = "Månad";
+    Text[ russian ] = "Ìåñÿö";
+    Text[ greek ] = "ÌŞíáò";
+    Text[ danish ] = "Måned";
+    Text[ polish ] = "Miesi¹c";
+    Text[ portuguese_brazilian ] = "Month";
+    Text[ japanese ] = "Œ";
+    Text[ korean ] = "¿ù";
+    Text[ chinese_simplified ] = "ÔÂ";
+    Text[ chinese_traditional ] = "¤ë";
+    Text[ arabic ] = "ÔåÑ";
+    Text[ turkish ] = "Ay";
+    Text[ language_user1 ] = " ";
+};
+
+String dlgCalEventYear
+{
+Text = "Jahr";
+Text[ English ] = "Year";
+Text[ English_us ] = "Year";
+Text[ french ] = "Année";
+Text[ italian ] = "Anno";
+Text[ spanish ] = "Año";
+Text[ portuguese ] = "Ano";
+Text[ dutch ] = "Jaar";
+Text[ swedish ] = "År";
+    Text[ russian ] = "Ãîä";
+    Text[ greek ] = "¸ôïò";
+    Text[ danish ] = "År";
+    Text[ polish ] = "Rok";
+    Text[ portuguese_brazilian ] = "Year";
+    Text[ japanese ] = "”N";
+    Text[ korean ] = "³â";
+    Text[ chinese_simplified ] = "Äê";
+    Text[ chinese_traditional ] = "¦~";
+    Text[ arabic ] = "ÓäÉ";
+    Text[ turkish ] = "Yıl";
+    Text[ language_user1 ] = " ";
+};
+
+// --------------------------------------------------------------------
+
+String dlgBitmapFile
+{
+Text = "brd.bmp";
+Text[ language_user1 ] = " ";
+Text[ English ] = "britain.bmp";
+Text[ English_us ] = "usa.bmp";
+Text[ french ] = "france.bmp";
+Text[ italian ] = "ital.bmp";
+Text[ spanish ] = "spain.bmp";
+Text[ portuguese ] = "portugal.bmp";
+Text[ dutch ] = "nedland.bmp";
+Text[ swedish ] = "sweden.bmp";
+    Text[ russian ] = "russia.bmp";
+    Text[ greek ] = "greece.bmp";
+    Text[ danish ] = "denmark.bmp";
+    Text[ polish ] = "polska.bmp";
+    Text[ portuguese_brazilian ] = "usa.bmp";
+    Text[ japanese ] = "japan.bmp";
+    Text[ korean ] = "korea.bmp";
+    Text[ chinese_simplified ] = "china.bmp";
+    Text[ chinese_traditional ] = "usa.bmp";
+    Text[ arabic ] = "egypt.bmp";
+    Text[ turkish ] = "turkiye.bmp";
+};
+
+// --------------------------------------------------------------------
+
+String dlgState
+{
+Text = "Allgemeine Feiertage";
+Text[ English ] = "-";
+Text[ English_us ] = "Public holidays";
+Text[ french ] = "Jours fériés généraux";
+Text[ italian ] = "Festività generali";
+Text[ spanish ] = "Días festivos generales";
+Text[ portuguese ] = "Feriados gerais";
+Text[ dutch ] = "Algemene feestdagen";
+Text[ swedish ] = "Allmänna helgdagar";
+    Text[ russian ] = "Îáùåñòâåííûå ïğàçäíèêè";
+    Text[ danish ] = "Almindelige helligdage";
+    Text[ polish ] = "Ogólne dni œwi¹teczne";
+    Text[ chinese_traditional ] = "´¶³q¸`°²¤é";
+    Text[ arabic ] = "ÚØáÇÊ ÚÇãÉ";
+    Text[ greek ] = "Ãåíéêİò áñãßåò";
+    Text[ korean ] = "°øÈŞÀÏ";
+    Text[ turkish ] = "Genel tatil günleri";
+};
+
+
+// --------------------------------------------------------------------
+
+String dlgMonth
+{
+Text = "Januar";
+Text[ English ] = "January";
+Text[ English_us ] = "January";
+Text[ french ] = "Janvier";
+Text[ italian ] = "Gennaio";
+Text[ spanish ] = "Enero";
+Text[ portuguese ] = "Janeiro";
+Text[ dutch ] = "Januari";
+Text[ swedish ] = "Januari";
+    Text[ russian ] = "ßíâàğü";
+    Text[ greek ] = "Éáíïõáñßïõ";
+    Text[ danish ] = "Januar";
+    Text[ polish ] = "Styczeñ";
+    Text[ portuguese_brazilian ] = "January";
+    Text[ japanese ] = "1Œ";
+    Text[ korean ] = "1¿ù";
+    Text[ chinese_simplified ] = "Ò»ÔÂ";
+    Text[ chinese_traditional ] = "¤@¤ë";
+    Text[ arabic ] = "íäÇíÑ";
+    Text[ turkish ] = "Ocak";
+};
+
+String dlgMonth+1
+{
+Text = "Februar";
+Text[ English ] = "February";
+Text[ English_us ] = "February";
+Text[ french ] = "Février";
+Text[ italian ] = "Febbraio";
+Text[ spanish ] = "Febrero";
+Text[ portuguese ] = "Fevereiro";
+Text[ dutch ] = "Februari";
+Text[ swedish ] = "Februari";
+    Text[ russian ] = "Ôåâğàëü";
+    Text[ greek ] = "Öåâñïõáñßïõ";
+    Text[ danish ] = "Februar";
+    Text[ polish ] = "Luty";
+    Text[ portuguese_brazilian ] = "February";
+    Text[ japanese ] = "2Œ";
+    Text[ korean ] = "2¿ù";
+    Text[ chinese_simplified ] = "¶şÔÂ";
+    Text[ chinese_traditional ] = "¤G¤ë";
+    Text[ arabic ] = "İÈÑÇíÑ";
+    Text[ turkish ] = "Şubat";
+};
+
+String dlgMonth+2
+{
+Text = "März";
+Text[ English ] = "March";
+Text[ English_us ] = "March";
+Text[ french ] = "Mars";
+Text[ italian ] = "Marzo";
+Text[ spanish ] = "Marzo";
+Text[ portuguese ] = "Março";
+Text[ dutch ] = "Maart";
+Text[ swedish ] = "Mars";
+    Text[ russian ] = "Ìàğò";
+    Text[ greek ] = "Ìáñôßïõ";
+    Text[ danish ] = "Marts";
+    Text[ polish ] = "Marzec";
+    Text[ portuguese_brazilian ] = "March";
+    Text[ japanese ] = "3Œ";
+    Text[ korean ] = "3¿ù";
+    Text[ chinese_simplified ] = "ÈıÔÂ";
+    Text[ chinese_traditional ] = "¤T¤ë";
+    Text[ arabic ] = "ãÇÑÓ";
+    Text[ turkish ] = "Mart";
+};
+
+String dlgMonth+3
+{
+Text = "April";
+Text[ English ] = "April";
+Text[ English_us ] = "April";
+Text[ french ] = "Avril";
+Text[ italian ] = "Aprile";
+Text[ spanish ] = "Abril";
+Text[ portuguese ] = "Abril";
+Text[ dutch ] = "April";
+Text[ swedish ] = "April";
+    Text[ russian ] = "Àïğåëü";
+    Text[ greek ] = "Áğñéëßïõ";
+    Text[ danish ] = "April";
+    Text[ polish ] = "Kwiecieñ";
+    Text[ portuguese_brazilian ] = "April";
+    Text[ japanese ] = "4Œ";
+    Text[ korean ] = "4¿ù";
+    Text[ chinese_simplified ] = "ËÄÔÂ";
+    Text[ chinese_traditional ] = "¥|¤ë";
+    Text[ arabic ] = "ÃÈÑíá";
+    Text[ turkish ] = "Nisan";
+};
+
+String dlgMonth+4
+{
+Text = "Mai";
+Text[ English ] = "May";
+Text[ English_us ] = "May";
+Text[ french ] = "Mai";
+Text[ italian ] = "Maggio";
+Text[ spanish ] = "Mayo";
+Text[ portuguese ] = "Maio";
+Text[ dutch ] = "Mei";
+Text[ swedish ] = "Maj";
+    Text[ russian ] = "Ìàé";
+    Text[ greek ] = "Ìáßïõ";
+    Text[ danish ] = "Maj";
+    Text[ polish ] = "Maj";
+    Text[ portuguese_brazilian ] = "May";
+    Text[ japanese ] = "5Œ";
+    Text[ korean ] = "5¿ù";
+    Text[ chinese_simplified ] = "ÎåÔÂ";
+    Text[ chinese_traditional ] = "¤­¤ë";
+    Text[ arabic ] = "ãÇíæ";
+    Text[ turkish ] = "Mayıs";
+};
+
+String dlgMonth+5
+{
+Text = "Juni";
+Text[ English ] = "June";
+Text[ English_us ] = "June";
+Text[ french ] = "Juin";
+Text[ italian ] = "Giugno";
+Text[ spanish ] = "Junio";
+Text[ portuguese ] = "Junho";
+Text[ dutch ] = "Juni";
+Text[ swedish ] = "Juni";
+    Text[ russian ] = "Èşíü";
+    Text[ greek ] = "Éïõíßïõ";
+    Text[ danish ] = "Juni";
+    Text[ polish ] = "Czerwiec";
+    Text[ portuguese_brazilian ] = "June";
+    Text[ japanese ] = "6Œ";
+    Text[ korean ] = "6¿ù";
+    Text[ chinese_simplified ] = "ÁùÔÂ";
+    Text[ chinese_traditional ] = "¤»¤ë";
+    Text[ arabic ] = "íæäíæ";
+    Text[ turkish ] = "Haziran";
+};
+
+String dlgMonth+6
+{
+Text = "Juli";
+Text[ English ] = "July";
+Text[ English_us ] = "July";
+Text[ french ] = "Juillet";
+Text[ italian ] = "Luglio";
+Text[ spanish ] = "Julio";
+Text[ portuguese ] = "Julho";
+Text[ dutch ] = "Juli";
+Text[ swedish ] = "Juli";
+    Text[ russian ] = "Èşëü";
+    Text[ greek ] = "Éïõëßïõ";
+    Text[ danish ] = "Juli";
+    Text[ polish ] = "Lipiec";
+    Text[ portuguese_brazilian ] = "July";
+    Text[ japanese ] = "7Œ";
+    Text[ korean ] = "7¿ù";
+    Text[ chinese_simplified ] = "ÆßÔÂ";
+    Text[ chinese_traditional ] = "¤C¤ë";
+    Text[ arabic ] = "íæáíæ";
+    Text[ turkish ] = "Temmuz";
+};
+
+String dlgMonth+7
+{
+Text = "August";
+Text[ English ] = "August";
+Text[ English_us ] = "August";
+Text[ french ] = "Août";
+Text[ italian ] = "Agusto";
+Text[ spanish ] = "Agosto";
+Text[ portuguese ] = "Agosto";
+Text[ dutch ] = "Augustus";
+Text[ swedish ] = "Augusti";
+    Text[ russian ] = "Àâãóñò";
+    Text[ greek ] = "Áõãïıóôïõ";
+    Text[ danish ] = "August";
+    Text[ polish ] = "Sierpieñ";
+    Text[ portuguese_brazilian ] = "August";
+    Text[ japanese ] = "8Œ";
+    Text[ korean ] = "8¿ù";
+    Text[ chinese_simplified ] = "°ËÔÂ";
+    Text[ chinese_traditional ] = "¤K¤ë";
+    Text[ arabic ] = "ÃÛÓØÓ";
+    Text[ turkish ] = "Ağustos";
+};
+
+String dlgMonth+8
+{
+Text = "September";
+Text[ English ] = "September";
+Text[ English_us ] = "September";
+Text[ french ] = "Septembre";
+Text[ italian ] = "Settembre";
+Text[ spanish ] = "Septiembre";
+Text[ portuguese ] = "Setembro";
+Text[ dutch ] = "September";
+Text[ swedish ] = "September";
+    Text[ russian ] = "Ñåíòÿáğü";
+    Text[ greek ] = "Óåğôåìâñßïõ";
+    Text[ danish ] = "September";
+    Text[ polish ] = "Wrzesieñ";
+    Text[ portuguese_brazilian ] = "September";
+    Text[ japanese ] = "9Œ";
+    Text[ korean ] = "9¿ù";
+    Text[ chinese_simplified ] = "¾ÅÔÂ";
+    Text[ chinese_traditional ] = "¤E¤ë";
+    Text[ arabic ] = "ÓÈÊãÈÑ";
+    Text[ turkish ] = "Eylül";
+};
+
+String dlgMonth+9
+{
+Text = "Oktober";
+Text[ English ] = "October";
+Text[ English_us ] = "October";
+Text[ french ] = "Octobre";
+Text[ italian ] = "Ottobre";
+Text[ spanish ] = "Octubre";
+Text[ portuguese ] = "Outubro";
+Text[ dutch ] = "Oktober";
+Text[ swedish ] = "Oktober";
+    Text[ russian ] = "Îêòÿáğü";
+    Text[ greek ] = "Ïêôùâñßïõ";
+    Text[ danish ] = "Oktober";
+    Text[ polish ] = "PaŸdziernik";
+    Text[ portuguese_brazilian ] = "October";
+    Text[ japanese ] = "10Œ";
+    Text[ korean ] = "10¿ù";
+    Text[ chinese_simplified ] = "Ê®ÔÂ";
+    Text[ chinese_traditional ] = "¤Q¤ë";
+    Text[ arabic ] = "ÃßÊæÈÑ";
+    Text[ turkish ] = "Ekim";
+};
+
+String dlgMonth+10
+{
+Text = "November";
+Text[ English ] = "November";
+Text[ English_us ] = "November";
+Text[ french ] = "Novembre";
+Text[ italian ] = "Novembre";
+Text[ spanish ] = "Noviembre";
+Text[ portuguese ] = "Novembro";
+Text[ dutch ] = "November";
+Text[ swedish ] = "November";
+    Text[ russian ] = "Íîÿáğü";
+    Text[ greek ] = "Íïåìâñßïõ";
+    Text[ danish ] = "November";
+    Text[ polish ] = "Listopad";
+    Text[ portuguese_brazilian ] = "November";
+    Text[ japanese ] = "11Œ";
+    Text[ korean ] = "11¿ù";
+    Text[ chinese_simplified ] = "Ê®Ò»ÔÂ";
+    Text[ chinese_traditional ] = "¤Q¤@¤ë";
+    Text[ arabic ] = "äæİãÈÑ";
+    Text[ turkish ] = "Kasım";
+};
+
+String dlgMonth+11
+{
+Text = "Dezember";
+Text[ English ] = "December";
+Text[ English_us ] = "December";
+Text[ french ] = "Décembre";
+Text[ italian ] = "Dicembre";
+Text[ spanish ] = "Diciembre";
+Text[ portuguese ] = "Dezembro";
+Text[ dutch ] = "December";
+Text[ swedish ] = "December";
+    Text[ russian ] = "Äåêàáğü";
+    Text[ greek ] = "Äåêåìâñßïõ";
+    Text[ danish ] = "December";
+    Text[ polish ] = "Grudzieñ";
+    Text[ portuguese_brazilian ] = "December";
+    Text[ japanese ] = "12Œ";
+    Text[ korean ] = "12¿ù";
+    Text[ chinese_simplified ] = "Ê®¶şÔÂ";
+    Text[ chinese_traditional ] = "¤Q¤G¤ë";
+    Text[ arabic ] = "ÏíÓãÈÑ";
+    Text[ turkish ] = "Aralık";
+};
+
+// --------------------------------------------------------------------
+
+String msgCalErrorTitle
+{
+Text = "Jahres- / Monatskalender";
+Text[ English ] = "Yearly- / Monthly Calendar";
+Text[ English_us ] = "Yearly / Monthly Calendar";
+Text[ french ] = "Calendrier annuel/mensuel";
+Text[ italian ] = "Calendario mensile /annuale";
+Text[ spanish ] = "Calendario anual/mensual";
+Text[ portuguese ] = "Calendário anual/mensal";
+Text[ dutch ] = "Jaar- / maandkalender";
+Text[ swedish ] = "Års- / månadskalender";
+    Text[ russian ] = "Êàëåíäàğü íà ãîä / íà ìåñÿö";
+    Text[ greek ] = "Çìåñïëüãéï ÅôŞóéï / Mçíéáßï";
+    Text[ danish ] = "Års- / månedskalender";
+    Text[ polish ] = "Kalendarz roczny / miesiêczny";
+    Text[ portuguese_brazilian ] = "Yearly- / Monthly Calendar";
+    Text[ japanese ] = "”NŠÔ/ŒŠÔ ¶ÚİÀŞ°";
+    Text[ korean ] = "¿¬Áß Ä«·»´õ / ¿ùº° Ä«·»´õ";
+    Text[ chinese_simplified ] = "ÄêÀúºÍÔÂÀú";
+    Text[ chinese_traditional ] = "¦~¤ë¦æ¨Æ¾ä";
+    Text[ arabic ] = "ÊŞæíã Óäæí / ÊŞæíã ÔåÑí";
+    Text[ turkish ] = "Yıllık / Aylık takvim";
+};
+
+String msgCalError
+{
+Text = "Bei der Erstellung des Kalenders ist ein Fehler aufgetreten.";
+Text[ English ] = "An error occurred during the creation of the calendar.";
+Text[ English_us ] = "An error occurred while creating the calendar.";
+Text[ french ] = "Erreur lors de la création du calendrier.";
+Text[ italian ] = "Durante la creazione del calendario si è verificato un errore.";
+Text[ spanish ] = "Ha ocurrido un error al crear el calendario.";
+Text[ portuguese ] = "Surgiu um erro ao criar o calendário.";
+Text[ dutch ] = "Bij het maken van de kalender is een fout opgetreden.";
+Text[ swedish ] = "Ett fel uppstod när kalendern skapades.";
+    Text[ russian ] = "Âî âğåìÿ ñîçäàíèÿ êàëåíäàğÿ ïğîèçîøëà îøèáêà";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí äçìéïõñãßá ôïõ çìåñïëïãßïõ.";
+    Text[ danish ] = "Der opstod en fejl under oprettelsen af kalenderen.";
+    Text[ polish ] = "Podczas tworzenia kalendarza zaszed³ b³¹d.";
+    Text[ portuguese_brazilian ] = "An error occurred during the creation of the calendar.";
+    Text[ japanese ] = "¶ÚİÀŞ°‚Ìì¬‚ÌÛ‚É´×°”­¶B";
+    Text[ korean ] = "Ä«·»´õ ÀÛ¼º½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚÖÆ×÷ÈÕÀúÊ±³öÏÖÁËÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b«Ø¥ß¤@­Ó¦æ¨Æ¾ä®Éµo¥Í¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÇáÊŞæíã.";
+    Text[ turkish ] = "Takvim hazırlanırken bir hata oluştu.";
+};
+
+String msgCalRemoveTitle
+{
+Text = "Ereigniseinträge entfernen";
+Text[ English ] = "Delete Event Entries";
+Text[ English_us ] = "Delete event entries";
+Text[ french ] = "Supprimer les événements ?";
+Text[ italian ] = "Elimina gli eventi";
+Text[ spanish ] = "Eliminar acontecimientos";
+Text[ portuguese ] = "Eliminar eventos";
+Text[ dutch ] = "Ingevulde gegevens wissen";
+Text[ swedish ] = "Ta bort händelseposter";
+    Text[ russian ] = "Óäàëèòü çàïèñè ñîáûòèé";
+    Text[ greek ] = "ÄéáãñáöŞ åããñáöşí ãåãïíüôùí";
+    Text[ danish ] = "Fjern begivenhedselementer";
+    Text[ polish ] = "Usuñ wpisy wydarzeñ";
+    Text[ portuguese_brazilian ] = "Delete Event Entries";
+    Text[ japanese ] = "²ÍŞİÄ€–Ú‚Ìíœ";
+    Text[ korean ] = "ÀÌº¥Æ® Ç×¸ñ Á¦°Å";
+    Text[ chinese_simplified ] = "É¾³ıÊÂ¼şÌõÄ¿";
+    Text[ chinese_traditional ] = "§R°£¬ù·|°O¿ı";
+    Text[ arabic ] = "ÍĞİ ÅÏÎÇáÇÊ ÇáÍÏË";
+    Text[ turkish ] = "Olay girişlerini sil";
+};
+
+String msgCalRemove
+{
+Text = "Sollen die selektierten Einträge entfernt werden?";
+Text[ English ] = "Delete the selected entries?";
+Text[ English_us ] = "Delete the selected entries?";
+Text[ french ] = "Supprimer les entrées sélectionnées ?";
+Text[ italian ] = "Volete eliminare le voci selezionate?";
+Text[ spanish ] = "¿Desea eliminar los registros seleccionados?";
+Text[ portuguese ] = "Eliminar as entradas seleccionadas?";
+Text[ dutch ] = "Wilt u de geselecteerde gegevens wissen?";
+Text[ swedish ] = "Skall de markerade posterna tas bort?";
+    Text[ russian ] = "Óäàëèòü âûäåëåííûå çàïèñè?";
+    Text[ greek ] = "ÄéáãñáöŞ ôùí åğéëåãìİíùí åããñáöşí;";
+    Text[ danish ] = "Er du sikker på, at du vil fjerne de markerede elementer?";
+    Text[ polish ] = "Czy usun¹æ zaznaczone wpisy?";
+    Text[ portuguese_brazilian ] = "Delete the selected entries?";
+    Text[ japanese ] = "‘I‚ñ‚¾€–Ú‚ğíœ‚µ‚Ü‚·‚©?";
+    Text[ korean ] = "¼±ÅÃµÈ Ç×¸ñÀ» Á¦°ÅÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÑ¡ÖĞµÄÌõÄ¿Âğ£¿";
+    Text[ chinese_traditional ] = "­n§R°£¿ï¤¤ªº°O¿ı¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÅÏÎÇáÇÊ ÇáãÍÏÏÉı¿";
+    Text[ turkish ] = "Seçilen girişler silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+
+// --------------------------------------------------------------------
+
+String stlWorkday
+{
+Text = "Arbeitswoche";
+Text[ English ] = "Workday";
+Text[ English_us ] = "Workweek";
+Text[ french ] = "";
+Text[ italian ] = "";
+Text[ spanish ] = "";
+Text[ portuguese ] = "";
+Text[ dutch ] = "";
+Text[ swedish ] = "";
+    Text[ portuguese ] = "Dias úteis";
+    Text[ russian ] = "Ğàáî÷àÿ";
+    Text[ greek ] = "ÅñãÜóéìç åâäïìÜäá";
+    Text[ dutch ] = "Werkweek";
+    Text[ french ] = "Semaine ouvrée";
+    Text[ spanish ] = "Semana laboral";
+    Text[ italian ] = "Settimana lavorativa";
+    Text[ danish ] = "Arbejdsuge";
+    Text[ swedish ] = "Arbetsvecka";
+    Text[ polish ] = "Tydzieñ roboczy";
+    Text[ portuguese_brazilian ] = "Workday";
+    Text[ japanese ] = "˜J“­T“ú";
+    Text[ korean ] = "ÁÖ ±Ù¹« ½Ã°£";
+    Text[ chinese_simplified ] = "¹¤×÷ÖÜ";
+    Text[ chinese_traditional ] = "¤u§@©P";
+    Text[ arabic ] = "ÃÓÈæÚ Úãá";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "Çalışma haftası";
+};
+
+String stlWeekend
+{
+Text = "Wochenende";
+Text[ English ] = "Weekend";
+Text[ English_us ] = "Weekend";
+Text[ french ] = "";
+Text[ italian ] = "";
+Text[ spanish ] = "";
+Text[ portuguese ] = "";
+Text[ dutch ] = "";
+Text[ swedish ] = "";
+    Text[ portuguese ] = "Fim de semana";
+    Text[ russian ] = "Âûõîäíûå";
+    Text[ greek ] = "Óáââáôïêıñéáêï";
+    Text[ dutch ] = "Weekeinde";
+    Text[ french ] = "Week-end";
+    Text[ spanish ] = "Fin de semana";
+    Text[ italian ] = "Fine settimana";
+    Text[ danish ] = "Weekend";
+    Text[ swedish ] = "Veckoslut";
+    Text[ polish ] = "Weekend";
+    Text[ portuguese_brazilian ] = "Weekend";
+    Text[ japanese ] = "T––";
+    Text[ korean ] = "ÁÖ¸»";
+    Text[ chinese_simplified ] = "ÖÜÄ©";
+    Text[ chinese_traditional ] = "©P¥½";
+    Text[ arabic ] = "ÚØáÉ äåÇíÉ ÇáÃÓÈæÚ";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "Haftasonu";
+};
+
+// --------------------------------------------------------------------
+
+String  nameCalYear
+{
+Text = "Kalender";
+Text[ English ] = "Calendar";
+Text[ English_us ] = "Calendar";
+Text[ french ] = "Calendrier";
+Text[ italian ] = "Calendario";
+Text[ spanish ] = "Calendario";
+Text[ portuguese ] = "Calendário";
+Text[ dutch ] = "Kalender";
+Text[ swedish ] = "Kalender";
+    Text[ russian ] = "Êàëåíäàğü";
+    Text[ greek ] = "Çìåñïëüãéï";
+    Text[ danish ] = "Kalendar";
+    Text[ polish ] = "Kalendarz";
+    Text[ portuguese_brazilian ] = "Calendar";
+    Text[ japanese ] = "¶ÚİÀŞ°";
+    Text[ korean ] = "ÀÏÁ¤";
+    Text[ chinese_simplified ] = "ÈÕÀú";
+    Text[ chinese_traditional ] = "¦æ¨Æ¾ä";
+    Text[ arabic ] = "ÇáÊŞæíã";
+    Text[ turkish ] = "Takvim";
+};
+
+String  nameCalMonth
+{
+Text = "Monat";
+Text[ English ] = "Month";
+Text[ English_us ] = "Month";
+Text[ french ] = "Mois";
+Text[ italian ] = "Mese";
+Text[ spanish ] = "Mes";
+Text[ portuguese ] = "Mês";
+Text[ dutch ] = "Maand";
+Text[ swedish ] = "Månad";
+    Text[ russian ] = "Ìåñÿö";
+    Text[ greek ] = "ÌŞíáò";
+    Text[ danish ] = "Måned";
+    Text[ polish ] = "Miesi¹c";
+    Text[ portuguese_brazilian ] = "Month";
+    Text[ japanese ] = "Œ";
+    Text[ korean ] = "¿ù";
+    Text[ chinese_simplified ] = "ÔÂ";
+    Text[ chinese_traditional ] = "¤ë";
+    Text[ arabic ] = "ÔåÑ";
+    Text[ turkish ] = "Ay";
+    Text[ language_user1 ] = " ";
+};
+
+
+
+String  sProgress
+{
+Text = "Fortschritt:";
+Text[ English ] = "Progress:";
+Text[ English_us ] = "Progress:";
+    Text[ portuguese ] = "Progress";
+    Text[ russian ] = "Progress";
+    Text[ greek ] = "Progress";
+    Text[ dutch ] = "Progress";
+    Text[ french ] = "Progression :";
+    Text[ spanish ] = "Progress";
+    Text[ italian ] = "Progress";
+    Text[ danish ] = "Fremgang:";
+    Text[ swedish ] = "Progress";
+    Text[ polish ] = "Progress";
+    Text[ portuguese_brazilian ] = "Progress";
+    Text[ japanese ] = "i’»ó‹µ:";
+    Text[ korean ] = "Progress";
+    Text[ chinese_simplified ] = "½ø³Ì£º";
+    Text[ chinese_traditional ] = "¶iµ{¡G";
+    Text[ turkish ] = "Progress";
+    Text[ arabic ] = "Progress";
+};

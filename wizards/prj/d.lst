@@ -1,0 +1,37 @@
+..\%__SRC%\sbl\createre.sbl %_DEST%\bin%_EXT%\createre.sbl
+..\%__SRC%\sbl\combowiz.sbl %_DEST%\bin%_EXT%\combowiz.sbl
+..\%__SRC%\sbl\dbhandle.sbl %_DEST%\bin%_EXT%\dbhandle.sbl
+..\%__SRC%\sbl\formedit.sbl %_DEST%\bin%_EXT%\formedit.sbl
+..\%__SRC%\sbl\formwiza.sbl %_DEST%\bin%_EXT%\formwiza.sbl
+..\%__SRC%\sbl\gridwiza.sbl %_DEST%\bin%_EXT%\gridwiza.sbl
+..\%__SRC%\sbl\groupwiz.sbl %_DEST%\bin%_EXT%\groupwiz.sbl
+..\%__SRC%\sbl\internet.sbl %_DEST%\bin%_EXT%\internet.sbl
+..\%__SRC%\sbl\letterwi.sbl %_DEST%\bin%_EXT%\letterwi.sbl
+..\%__SRC%\sbl\querywiz.sbl %_DEST%\bin%_EXT%\querywiz.sbl
+..\%__SRC%\sbl\reportwi.sbl %_DEST%\bin%_EXT%\reportwi.sbl
+..\%__SRC%\sbl\soffice.sbl %_DEST%\bin%_EXT%\soffice.new
+..\%__SRC%\sbl\soffice.sbl %_DEST%\bin%_EXT%\soffice.sbl
+..\%__SRC%\sbl\tablewiz.sbl %_DEST%\bin%_EXT%\tablewiz.sbl
+..\%__SRC%\sbl\template.sbl %_DEST%\bin%_EXT%\template.sbl
+..\%__SRC%\sbl\tools.sbl %_DEST%\bin%_EXT%\tools.sbl
+..\%__SRC%\sbl\webwizar.sbl %_DEST%\bin%_EXT%\webwizar.sbl
+..\%__SRC%\sbl\gimmicks.sbl %_DEST%\bin%_EXT%\gimmicks.sbl
+..\%__SRC%\sbl\ssprint.sbl %_DEST%\bin%_EXT%\ssprint.sbl
+..\%__SRC%\sbl\schedule.sbl %_DEST%\bin%_EXT%\schedule.sbl
+..\%__SRC%\sbl\ssfuncs.sbl %_DEST%\bin%_EXT%\ssfuncs.sbl
+..\%__SRC%\sbl\init.sbl %_DEST%\bin%_EXT%\init.sbl
+..\%__SRC%\sbl\importwi.sbl %_DEST%\bin%_EXT%\importwi.sbl
+..\%__SRC%\sbl\euro.sbl %_DEST%\bin%_EXT%\euro.sbl
+..\%__SRC%\sbl\spelling.sbl %_DEST%\bin%_EXT%\spelling.sbl
+..\%__SRC%\bin\iwz*.res %_DEST%\bin%_EXT%\iwz*.res
+..\%__SRC%\bin\dbw*.res %_DEST%\bin%_EXT%\dbw*.res
+..\%__SRC%\bin\tpl*.res %_DEST%\bin%_EXT%\tpl*.res
+..\%__SRC%\bin\imp*.res %_DEST%\bin%_EXT%\imp*.res
+..\%__SRC%\bin\wwz*.res %_DEST%\bin%_EXT%\wwz*.res
+..\%__SRC%\bin\eur*.res %_DEST%\bin%_EXT%\eur*.res
+..\%__SRC%\bin\cal*.res %_DEST%\bin%_EXT%\cal*.res
+
+
+
+touch: ..\%__SRC%\misc\wizards.hid %_DEST%\bin%_EXT%\wizards.hid
+

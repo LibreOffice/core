@@ -1,0 +1,1754 @@
+/*************************************************************************
+ *
+ *  $RCSfile: euro.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:06:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define STEP_ZERO 1000
+#define STEP_CONVERTER 1100
+#define STEP_AUTOPILOT 1200
+#define STATUSLINE 1300
+#define MESSAGES 1400
+#define CURRENCIES 1500
+#define STEP_LASTPAGE 1600
+// --------------------------------------------------------------------
+String STEP_ZERO
+{
+Text = "Be&enden";
+Text[English] = "&Cancel";
+Text[ english_us ] = "&Cancel";
+    Text[ portuguese ] = "Ca&ncelar";
+    Text[ russian ] = "&Âûõîä";
+    Text[ greek ] = "&¸îïäïò";
+    Text[ dutch ] = "&Annuleren";
+    Text[ french ] = "&Annuler";
+    Text[ spanish ] = "&Cancelar";
+    Text[ italian ] = "Esci";
+    Text[ danish ] = "&Afslut";
+    Text[ swedish ] = "&Avbryt";
+    Text[ polish ] = "&Zakoñcz";
+    Text[ portuguese_brazilian ] = "&Cancel";
+    Text[ japanese ] = "I—¹";
+    Text[ korean ] = "Ãë¼Ò";
+    Text[ chinese_simplified ] = "½áÊø(~C)";
+    Text[ chinese_traditional ] = "µ²§ô(&C)";
+    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+    Text[ turkish ] = "&İptal";
+};
+
+String STEP_ZERO + 1
+{
+Text = "&Hilfe";
+Text[English] = "&Help";
+Text[ english_us ] = "&Help";
+    Text[ portuguese ] = "&Ajuda";
+    Text[ russian ] = "Ñï&ğàâêà";
+    Text[ greek ] = "&ÂïŞèåéá";
+    Text[ dutch ] = "&Help";
+    Text[ french ] = "&Aide";
+    Text[ spanish ] = "&Ayuda";
+    Text[ italian ] = "&Guida";
+    Text[ danish ] = "&Hjælp";
+    Text[ swedish ] = "&Hjälp";
+    Text[ polish ] = "&Pomoc";
+    Text[ portuguese_brazilian ] = "&Help";
+    Text[ japanese ] = "ÍÙÌß";
+    Text[ korean ] = "µµ¿ò¸»";
+    Text[ chinese_simplified ] = "ÇóÖú(~H)";
+    Text[ chinese_traditional ] = "»¡©ú(&H)";
+    Text[ arabic ] = "ãÓÇÚÏÉ&";
+    Text[ turkish ] = "&Yardım";
+};
+
+String STEP_ZERO + 2
+{
+Text = "<<&Zurück";
+Text[English] = "<<&Back";
+Text[ english_us ] = "<<&Back";
+    Text[ portuguese ] = "<<&Anterior";
+    Text[ russian ] = "<<&Íàçàä";
+    Text[ greek ] = "<<&Ğßóù";
+    Text[ dutch ] = "<<&Vorige";
+    Text[ french ] = "<<&Précédent";
+    Text[ spanish ] = "<<&Regresar";
+    Text[ italian ] = "<<~Indietro";
+    Text[ danish ] = "<<&Tilbage";
+    Text[ swedish ] = "<<&Tillbaka";
+    Text[ polish ] = "<<&Wstecz";
+    Text[ portuguese_brazilian ] = "&Back";
+    Text[ japanese ] = "<< –ß‚é";
+    Text[ korean ] = "<< µÚ·Î";
+    Text[ chinese_simplified ] = "<<·µ»Ø(~B)";
+    Text[ chinese_traditional ] = "ªğ¦^(&B)";
+    Text[ arabic ] = "&>> ÇáÓÇÈŞ";
+    Text[ turkish ] = "<<Ge&ri";
+};
+
+String STEP_ZERO + 3
+{
+Text = "&Konvertieren";
+Text[English] = "&Ready";
+Text[ english_us ] = "&Convert";
+    Text[ portuguese ] = "&Converter";
+    Text[ russian ] = "&Ïğåîáğàçîâàòü";
+    Text[ greek ] = "&ÌåôáôñïğŞ";
+    Text[ dutch ] = "&Converteren";
+    Text[ french ] = "&Convertir";
+    Text[ spanish ] = "&Convertir";
+    Text[ italian ] = "Converti";
+    Text[ danish ] = "&Konverter";
+    Text[ swedish ] = "&Konvertera";
+    Text[ polish ] = "&Konwertuj";
+    Text[ portuguese_brazilian ] = "&Ready";
+    Text[ japanese ] = "•ÏŠ·";
+    Text[ korean ] = "º¯È¯";
+    Text[ chinese_simplified ] = "×ª»»";
+    Text[ chinese_traditional ] = "Âà´«(&R)";
+    Text[ arabic ] = "ÊÍæíá";
+    Text[ turkish ] = "&Dönüştür";
+};
+
+String STEP_ZERO + 4
+{
+Text = "Hinweis: Währungsbeträge, die mit externen Bezügen verbunden sind, sowie Währungsumrechnungsfaktoren in Zellformeln können nicht konvertiert werden.";
+Text[English] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
+Text[ english_us ] = "Remarks: currency amounts connected to external references and currency conversion factors in cell formulas can not be converted.";
+    Text[ portuguese ] = "Observação: é impossível converter montantes em moeda ligados a referências externas bem como factores de conversão monetária em fórmulas de células.";
+    Text[ russian ] = "Ê Âàøåìó ñâåäåíèş: ñóììû âàëşò, êîòîğûå ñâÿçàíû ñ âíåøíèìè ññûëêàìè, à òàêæå ôàêòîğû ïğåîáğàçîâàíèÿ âàëşòû â ôîğìóëàõ ÿ÷ååê ïğåîáğàçîâàòü íåâîçìîæíî.";
+    Text[ greek ] = "Õğüäåéîç: Äåí åßíáé äõíáôüí íá ãßíåé ìåôáôñïğŞ ğïóşí íïìßóìáôïò, ôá ïğïßá åßíáé óõíäåäåìİíá ìå åîùôåñéêİò áíáöïñİò êáé ğáñáãüíôùí ìåôáôñïğŞò íïìßóìáôïò óå ìáèçìáôéêïıò ôığïõò êåëéşí.";
+    Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
+    Text[ french ] = "Avertissement : Il est impossible de convertir les montants liés à des références externes, de même que les facteurs de conversion inclus dans des cellules contenant des formules.";
+    Text[ spanish ] = "Advertencia: No se pueden convertir los importes unidos a referencias externas ni los factores de conversión de moneda en fórmulas de celdas.";
+    Text[ italian ] = "Nota: non è possibile convertire gli importi monetari connessi a riferimenti esterni, nonché a fattori di conversione monetaria in celle contenenti formule.";
+    Text[ danish ] = "Henvisning: Det er ikke muligt at konvertere valutabeløb, som relaterer til eksterne referencer, og valutaomregningsfaktorer i celleformler.";
+    Text[ swedish ] = "OBS: Valutabelopp som har externa referenser, liksom valutaomräkningsfaktorer i cellformler kan inte konverteras.";
+    Text[ polish ] = "Wskazówka: Kwoty (waluty) po³¹czone z zewnêtrznymi odwo³aniami oraz przeliczniki waluty w formu³ach komórek nie podlegaj¹ konwersji.";
+    Text[ portuguese_brazilian ] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
+    Text[ japanese ] = "w¦: ŠO•”‚ÌQÆ‚ÆŠÖ˜A‚µ‚Ä‚¢‚é’Ê‰İ‹àŠzA‚ ‚é‚¢‚Í¾Ù‚Ì‘®‚Ì’Ê‰İŠ·ZÌ§¸À‚Í•ÏŠ·‚Å‚«‚Ü‚¹‚ñB";
+    Text[ korean ] = "¾Ë¸²: ¼¿ ¼ö½Ä³»ÀÇ ÅëÈ­º¯È¯ ¿ä¼Ò¿Í  ¿ÜºÎÂüÁ¶¿¡ ¿¬°áµÈ ÅëÈ­·®Àº º¯È¯µÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÌáÊ¾£ºÎŞ·¨×ª»»ÒıÓÃÍâ²¿Êı¾İµÄ»õ±Ò½ğ¶îÒÔ¼°µ¥Ôª¸ñ¹«Ê½ÖĞµÄ»õ±Ò»»ËãÏµÊı¡£";
+    Text[ chinese_traditional ] = "´£¥Ü¡G§t¦³¥~³¡¤Ş¥Îªº³f¹ô¼ÆÃB¤Î³æ¤¸®æ¤º³f¹ô´«ºâ­È¬OµLªk³QÂà´«ªº¡C";
+    Text[ arabic ] = "ãáÇÍÙÉ: ãÈÇáÛ ÇáÚãáÉ ÇáãÑÊÈØÉ ÈãÑÇÌÚ ÎÇÑÌíÉ¡ æÚæÇãá ÊÍæíá Şíã ÇáÚãáÉ İí ÕíÛ ÇáÎáÇíÇ ÛíÑ ŞÇÈáÉ ááÊÍæíá.";
+    Text[ turkish ] = "Bilgi: Dış referanslara bağlı para birimi meblağları ve hücre formülleri içindeki para birimi dönüştürme etkenleri dönüştürülemez.";
+};
+
+String STEP_ZERO + 5
+{
+Text = "Entschützen Sie vorab alle Tabellen!";
+Text[English] = "Unprotect all sheets beforehand!";
+Text[ english_us ] = "Unprotect all sheets beforehand!";
+    Text[ portuguese ] = "Desproteger primeiro todas as tabelas!";
+    Text[ russian ] = "Ñíà÷àëà ñíèìèòå çàùèòó ñî âñåõ òàáëèö!";
+    Text[ greek ] = "ÊáôáñãŞóåôå ğñéí ôçí ğñïóôáóßá üëùí ôùí ğéíÜêùí!";
+    Text[ dutch ] = "Hef eerst de bescherming van alle werkbladen op!";
+    Text[ french ] = "Déprotéger toutes les feuilles au préalable !";
+    Text[ spanish ] = "¡Desprotega primero todas las tablas!";
+    Text[ italian ] = "Eliminate la protezione dalle tabelle!";
+    Text[ danish ] = "Ophæv forinden beskyttelsen for alle ark!";
+    Text[ swedish ] = "Upphäv först skyddet för alla tabeller!";
+    Text[ polish ] = "Odbezpiecz najpierw wszystkie tabele!";
+    Text[ portuguese_brazilian ] = "Unprotect all sheets beforehand!";
+    Text[ japanese ] = "‚ ‚ç‚©‚¶‚ß‚·‚×‚Ä‚Ì•\\‚Ì•ÛŒì‚ğ‰ğœ‚µ‚Ä‰º‚³‚¢!";
+    Text[ korean ] = "¹Ì¸® Àü ½ÃÆ® º¸È£ÇØÁ¦!";
+    Text[ chinese_simplified ] = "ÊÂÏÈÈ¡ÏûËùÓĞµÄ¹¤×÷±í±£»¤";
+    Text[ chinese_traditional ] = "¨ú®ø©Ò¦³¤u§@ªíªº«OÅ@";
+    Text[ arabic ] = "Şã ÃæáÇğ ÈÅáÛÇÁ ÍãÇíÉ ÌãíÚ ÇáÌÏÇæá!";
+    Text[ turkish ] = "Önce bütün tabloların korumasını kaldırın!";
+};
+
+String STEP_ZERO + 6
+{
+Text = "Währungen:";
+Text[English] = "Currencies:";
+Text[ english_us ] = "Currencies:";
+    Text[ portuguese ] = "Moedas:";
+    Text[ russian ] = "Âàëşòà:";
+    Text[ greek ] = "Íïìßóìáôá:";
+    Text[ dutch ] = "Valuta:";
+    Text[ french ] = "Monnaies :";
+    Text[ spanish ] = "Monedas:";
+    Text[ italian ] = "Valute:";
+    Text[ danish ] = "Valutaer:";
+    Text[ swedish ] = "Valutor:";
+    Text[ polish ] = "Waluty:";
+    Text[ portuguese_brazilian ] = "Currencies:";
+    Text[ japanese ] = "’Ê‰İ:";
+    Text[ korean ] = "È­Æó:";
+    Text[ chinese_simplified ] = "»õ±Ò£º";
+    Text[ chinese_traditional ] = "³f¹ô¡G";
+    Text[ arabic ] = "ÇáÚãáÇÊ:";
+    Text[ turkish ] = "Para Birimleri:";
+};
+
+
+String STEP_ZERO + 7
+{
+Text = "&Weiter>>";
+Text[English] = "C&ontinue>>";
+Text[ english_us ] = "C&ontinue>>";
+    Text[ portuguese ] = "&Continue>>";
+    Text[ russian ] = "Äàëåå>>";
+    Text[ greek ] = "Ó&õíİ÷åéá>>";
+    Text[ dutch ] = "Volgende>>";
+    Text[ french ] = "&Suivant>>";
+    Text[ spanish ] = "&Siguiente>>";
+    Text[ italian ] = "Avanti>>";
+    Text[ danish ] = "&Næste>>";
+    Text[ swedish ] = "&Nästa>>";
+    Text[ polish ] = "&Dalej>>";
+    Text[ portuguese_brazilian ] = "C&ontinue>>";
+    Text[ japanese ] = "‘±s(&O)>>";
+    Text[ korean ] = "C&ontinue>>";
+    Text[ chinese_simplified ] = "¼ÌĞø(~O)>>";
+    Text[ chinese_traditional ] = "Ä~Äò(&O) >>";
+    Text[ turkish ] = "&İleri>>";
+    Text[ arabic ] = "&ÇáÊÇáí>>";
+};
+
+String STEP_CONVERTER
+{
+Text = "Kom&plettes Dokument";
+Text[English] = "&Entire Document";
+Text[ english_us ] = "&Entire document";
+    Text[ portuguese ] = "&Documento inteiro";
+    Text[ russian ] = "&Âåñü äîêóìåíò";
+    Text[ greek ] = "&Ïëüêëçñï İããñáöï";
+    Text[ dutch ] = "&Compleet document";
+    Text[ french ] = "Document &entier";
+    Text[ spanish ] = "&Documento completo";
+    Text[ italian ] = "Documento intero";
+    Text[ danish ] = "Hele &dokumentet";
+    Text[ swedish ] = "Kom&plett dokument";
+    Text[ polish ] = "&Ca³y dokument";
+    Text[ portuguese_brazilian ] = "&Entire Document";
+    Text[ japanese ] = "‘SÄŞ·­ÒİÄ";
+    Text[ korean ] = "ÀüÃ¼ ¹®¼­";
+    Text[ chinese_simplified ] = "Õû¸öÎÄµµ(~E)";
+    Text[ chinese_traditional ] = "§¹¾ãªº¤å¥ó";
+    Text[ arabic ] = "ãÓÊäÏ ßÇãá";
+    Text[ turkish ] = "&Belgenin tümü";
+};
+
+String STEP_CONVERTER + 1
+{
+Text = "Selektion";
+Text[English] = "Selection";
+Text[ english_us ] = "Selection";
+    Text[ portuguese ] = "Selecção";
+    Text[ russian ] = "Âûäåëåíèå";
+    Text[ greek ] = "ÅğéëïãŞ";
+    Text[ dutch ] = "Selectie";
+    Text[ french ] = "Sélection";
+    Text[ spanish ] = "Selección";
+    Text[ italian ] = "Selezione";
+    Text[ danish ] = "Markering";
+    Text[ swedish ] = "Markering";
+    Text[ polish ] = "Selekcja";
+    Text[ portuguese_brazilian ] = "Selection";
+    Text[ japanese ] = "‘I‘ğ”ÍˆÍ";
+    Text[ korean ] = "¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ";
+    Text[ chinese_traditional ] = "¿ï¾Ü";
+    Text[ arabic ] = "ÇáÊÍÏíÏ";
+    Text[ turkish ] = "Seçim";
+    Text[ language_user1 ] = " ";
+};
+
+String STEP_CONVERTER + 2
+{
+Text = "&Zellvorlagen";
+Text[English] = "Cell&templates";
+Text[ english_us ] = "Cell S&tyles";
+    Text[ portuguese ] = "Estilos de &células";
+    Text[ russian ] = "Ñòèëè ÿ÷åéêè";
+    Text[ greek ] = "Ğñüôõğá &êåëéşí";
+    Text[ dutch ] = "&Celprofielen";
+    Text[ french ] = "Styles de &cellule";
+    Text[ spanish ] = "&Estilos de celda";
+    Text[ italian ] = "Modelli di cella";
+    Text[ danish ] = "&Celletypografier";
+    Text[ swedish ] = "Cell&mallar";
+    Text[ polish ] = "&Style komórki";
+    Text[ portuguese_brazilian ] = "Cell&templates";
+    Text[ japanese ] = "¾Ù ÃİÌßÚ°Ä";
+    Text[ korean ] = "¼¿°ú ÅÛÇÃ¸®Æ®";
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~T)";
+    Text[ chinese_traditional ] = "³æ¤¸®æ¼Ë¦¡";
+    Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ&";
+    Text[ turkish ] = "&Hücre şablonları";
+};
+
+String STEP_CONVERTER + 3
+{
+Text = "Währungszellen im aktuellen &Tabellenblatt";
+Text[English] = "Currency Cells in the current &Sheet";
+Text[ english_us ] = "Currency cells in the current &sheet";
+    Text[ portuguese ] = "Células de moeda na &folha activa";
+    Text[ russian ] = "ß÷åéêè âàëşòû â òåêóùåì ëèñòå";
+    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óôï ôñİ÷ïí öıëëï &ğßíáêá";
+    Text[ dutch ] = "Valutacellen in het actuele &werkblad";
+    Text[ french ] = "Cellules monétaires dans la &feuille de calcul active";
+    Text[ spanish ] = "Celdas monetarias en hoja a&ctiva";
+    Text[ italian ] = "Celle della valuta nella tabella corrente";
+    Text[ danish ] = "Valutaceller i det aktuelle &ark";
+    Text[ swedish ] = "Valutaceller i det aktuella &tabellarket";
+    Text[ polish ] = "Komórki waluty w aktualnym &arkuszu";
+    Text[ portuguese_brazilian ] = "Currency Cells in the current &Sheet";
+    Text[ japanese ] = "Œ»İ‚Ì•\\‚Ì’Ê‰İ¾Ù";
+    Text[ korean ] = "ÇöÀç ½ÃÆ®¿¡¼­ È­Æó ¼¿";
+    Text[ chinese_simplified ] = "µ±Ç°¹¤×÷±íÖĞµÄ»õ±Òµ¥Ôª¸ñ(~S)";
+    Text[ chinese_traditional ] = "·í«e¤u§@ªí­¶¤ºªº³f¹ô³æ¤¸®æ";
+    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí &æÑŞÉ ÇáÌÏæá ÇáÍÇáíÉ";
+    Text[ turkish ] = "Açık &sayfada bulunan para birimi hücreleri";
+};
+
+String STEP_CONVERTER + 4
+{
+Text = "Währungszellen im ganzen &Dokument";
+Text[English] = "Currency Cells in the entire &Document";
+Text[ english_us ] = "Currency cells in the entire &document";
+    Text[ portuguese ] = "Células de moeda no &documento inteiro";
+    Text[ russian ] = "ß÷åéêè âàëşòû âî âñåì äîêóìåíòå";
+    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óå ïëüêëçñï ôï &áñ÷åßï";
+    Text[ dutch ] = "Valutacellen in het gehele &document";
+    Text[ french ] = "Cellules monétaires dans le &document entier";
+    Text[ spanish ] = "Celdas monetarias en todo el &documento";
+    Text[ italian ] = "Celle della valuta nell'intero documento";
+    Text[ danish ] = "Valutaceller i hele &dokumentet";
+    Text[ swedish ] = "Valutaceller i hela &dokumentet";
+    Text[ polish ] = "Komórki waluty w ca³ym &dokumencie";
+    Text[ portuguese_brazilian ] = "Currency Cells in the entire &Document";
+    Text[ japanese ] = "‘SÄŞ·­ÒİÄ‚Ì’Ê‰İ¾Ù";
+    Text[ korean ] = "ÀüÃ¼¹®¼­ÀÇ È­Æó ¼¿";
+    Text[ chinese_simplified ] = "Õû¸öÎÄµµÖĞµÄ»õ±Òµ¥Ôª¸ñ(~D)";
+    Text[ chinese_traditional ] = "¾ã­Ó¤å¥ó¤ºªº³f¹ô³æ¤¸®æ";
+    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí ÇáãÓÊäÏ &ÈÃßãáå";
+    Text[ turkish ] = "&Belgenin tümündeki para birimi hücreleri";
+};
+
+String STEP_CONVERTER + 5
+{
+Text = "Ausgewählter &Bereich";
+Text[English] = "&Selected Range";
+Text[ english_us ] = "&Selected range";
+    Text[ portuguese ] = "&Intervalo seleccionado";
+    Text[ russian ] = "Âûäåëåííàÿ îáëàñòü";
+    Text[ greek ] = "&Åğéëåãìİíç ğåñéï÷Ş";
+    Text[ dutch ] = "Geselecteerd &bereik";
+    Text[ french ] = "Plage &sélectionnée";
+    Text[ spanish ] = "Área &seleccionada";
+    Text[ italian ] = "Area selezionata";
+    Text[ danish ] = "&Markeret område";
+    Text[ swedish ] = "&Utvalt område";
+    Text[ polish ] = "&Zaznaczony obszar";
+    Text[ portuguese_brazilian ] = "&Selected Range";
+    Text[ japanese ] = "‘I‘ğ‚µ‚½”ÍˆÍ";
+    Text[ korean ] = "¿µ¿ªÀÌ ¼±ÅÃµÇ¾ú½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Ñ¡ÖĞµÄÇøÓò(~S)";
+    Text[ chinese_traditional ] = "¿ï¤¤ªº°Ï°ì";
+    Text[ arabic ] = "&ÇáäØÇŞ ÇáãÍÏÏ";
+    Text[ turkish ] = "Seçilen aralık";
+};
+
+String STEP_CONVERTER + 6
+{
+Text = "Zellvorlagen auswählen:";
+Text[English] = "Select Celltemplates";
+Text[ english_us ] = "Select Cell Styles";
+    Text[ portuguese ] = "Seleccionar estilos de células:";
+    Text[ russian ] = "Âûáîğ ñòèëåé ÿ÷ååê:";
+    Text[ greek ] = "ÅğéëïãŞ ğñïôığùí êåëéşí:";
+    Text[ dutch ] = "Celprofielen selecteren:";
+    Text[ french ] = "Sélection des styles de cellule :";
+    Text[ spanish ] = "Seleccione los estilos de celda:";
+    Text[ italian ] = "Seleziona modelli di cella:";
+    Text[ danish ] = "Vælg celletypografier:";
+    Text[ swedish ] = "Välj ut cellmallar";
+    Text[ polish ] = "Wybierz style komórki:";
+    Text[ portuguese_brazilian ] = "Select Celltemplates";
+    Text[ japanese ] = "¾Ù ÃİÌßÚ°Ä‚Ì‘I‘ğ";
+    Text[ korean ] = "¼¿ ÅÛÇÃ¸®Æ® ¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡Ôñµ¥Ôª¸ñÑùÊ½£º";
+    Text[ chinese_traditional ] = "¿ï¾Ü³æ¤¸®æ¼Ë¦¡¡G";
+    Text[ arabic ] = "ÊÍÏíÏ ÃäãÇØ ÇáÎáÇíÇ:";
+    Text[ turkish ] = "Hücre şablonlarını seç:";
+};
+
+String STEP_CONVERTER + 7
+{
+Text = "Währungszellen auswählen:";
+Text[English] = "Select Currency Cells";
+Text[ english_us ] = "Select currency cells";
+    Text[ portuguese ] = "Seleccionar células de moeda:";
+    Text[ russian ] = "Âûäåëèòü ÿ÷åéêè âàëşòû";
+    Text[ greek ] = "ÅğéëïãŞ êåëéşí íïìéóìÜôùí:";
+    Text[ dutch ] = "Valutacellen selecteren:";
+    Text[ french ] = "Sélectionnez les cellules monétaires :";
+    Text[ spanish ] = "Seleccione las celdas monetarias:";
+    Text[ italian ] = "Seleziona celle della valuta";
+    Text[ danish ] = "Vælg valutaceller:";
+    Text[ swedish ] = "Välj ut valutaceller:";
+    Text[ polish ] = "Wybierz komórki waluty:";
+    Text[ portuguese_brazilian ] = "Select Currency Cells";
+    Text[ japanese ] = "’Ê‰İ¾Ù‚Ì‘I‘ğ";
+    Text[ korean ] = "È­Æó ¼¿ ¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ»õ±Òµ¥Ôª¸ñ£º";
+    Text[ chinese_traditional ] = "¿ï¾Ü³f¹ô³æ¤¸®æ¡G";
+    Text[ arabic ] = "ÊÍÏíÏ ÎáÇíÇ ÇáÚãáÉ:";
+    Text[ turkish ] = "Para birimi hücrelerini seç:";
+};
+
+String STEP_CONVERTER + 8
+{
+Text = "Währungsbereiche:";
+Text[English] = "Currency Ranges";
+Text[ english_us ] = "Currency ranges:";
+    Text[ portuguese ] = "Intervalos monetários:";
+    Text[ russian ] = "Îáëàñòè âàëşòû";
+    Text[ greek ] = "ÄéáêõìÜíóåéò íïìßóìáôïò:";
+    Text[ dutch ] = "Valutabereiken:";
+    Text[ french ] = "Plages monétaires :";
+    Text[ spanish ] = "Áreas monetarias:";
+    Text[ italian ] = "Aree valuta";
+    Text[ danish ] = "Valutaområder:";
+    Text[ swedish ] = "Valutaområden:";
+    Text[ polish ] = "Obszary waluty:";
+    Text[ portuguese_brazilian ] = "Currency Ranges";
+    Text[ japanese ] = "’Ê‰İ”ÍˆÍ:";
+    Text[ korean ] = "È­Æó ¿µ¿ª:";
+    Text[ chinese_simplified ] = "»õ±ÒÇøÓò£º";
+    Text[ chinese_traditional ] = "³f¹ô°Ï°ì¡G";
+    Text[ arabic ] = "äØÇŞÇÊ ÇáÚãáÉ:";
+    Text[ turkish ] = "Para birimi aralıkları:";
+};
+
+String STEP_CONVERTER + 9
+{
+Text = "Vorlagen:";
+Text[English] = "Templates:";
+Text[ english_us ] = "Templates:";
+    Text[ portuguese ] = "Estilos:";
+    Text[ russian ] = "Øàáëîíû:";
+    Text[ greek ] = "Ğñüôõğá:";
+    Text[ dutch ] = "Sjablonen:";
+    Text[ french ] = "Styles :";
+    Text[ spanish ] = "Estilos:";
+    Text[ italian ] = "Modelli:";
+    Text[ danish ] = "Typografier:";
+    Text[ swedish ] = "Mallar:";
+    Text[ polish ] = "Szablony:";
+    Text[ portuguese_brazilian ] = "Templates:";
+    Text[ japanese ] = "ÃİÌßÚ°Ä:";
+    Text[ korean ] = "ÅÛÇÃ¸®Æ®:";
+    Text[ chinese_simplified ] = "ÑùÊ½£º";
+    Text[ chinese_traditional ] = "¼Ë¦¡¡G";
+    Text[ arabic ] = "ŞæÇáÈ:";
+    Text[ turkish ] = "Şablonlar:";
+};
+
+
+String STEP_AUTOPILOT
+{
+Text = "Umfang";
+Text[English] = "&Extent";
+Text[ english_us ] = "Extent";
+    Text[ portuguese ] = "Volume";
+    Text[ russian ] = "&Îáúåì";
+    Text[ greek ] = "Åıñïò";
+    Text[ dutch ] = "Omvang";
+    Text[ french ] = "Étendue";
+    Text[ spanish ] = "Volumen";
+    Text[ italian ] = "Volume";
+    Text[ danish ] = "Omfang";
+    Text[ swedish ] = "Omfattning";
+    Text[ polish ] = "Zakres";
+    Text[ portuguese_brazilian ] = "&Extent";
+    Text[ japanese ] = "”ÍˆÍ";
+    Text[ korean ] = "È®´ë";
+    Text[ chinese_simplified ] = "·¶Î§(~E)";
+    Text[ chinese_traditional ] = "­S³ò";
+    Text[ arabic ] = "ÇáÍÌã";
+    Text[ turkish ] = "Kapsam";
+};
+
+String STEP_AUTOPILOT + 1
+{
+Text = "&Einzelnes StarOffice Calc-Dokument";
+Text[English] = "&Single File";
+Text[ english_us ] = "&Single StarOffice Calc Document";
+    Text[ portuguese ] = "&Documento único do StarOffice Calc";
+    Text[ russian ] = "&Îäèí äîêóìåíò StarOffice Calc";
+    Text[ greek ] = "Ì&åìïíùìİíï İããñáöï ôïõ StarOffice Calc";
+    Text[ dutch ] = "&Een StarOffice Calc-document";
+    Text[ french ] = "&Document unique StarOffice Calc";
+    Text[ spanish ] = "&Un archivo de StarOffice Calc";
+    Text[ italian ] = "&Documento singolo StarOffice Calc";
+    Text[ danish ] = "&Enkelt StarOffice Calc-dokument";
+    Text[ swedish ] = "&Enskilt StarOffice Calc-dokument";
+    Text[ polish ] = "&Pojedynczy dokument StarOffice Calc";
+    Text[ portuguese_brazilian ] = "&Single File";
+    Text[ japanese ] = "ŒÂX‚Ì StarOffice Calc ÄŞ·­ÒİÄ(&S)";
+    Text[ korean ] = "´ÜÀÏ ÆÄÀÏ";
+    Text[ chinese_simplified ] = "µ¥¸öStarOffice CalcÎÄµµ(~S)";
+    Text[ chinese_traditional ] = "³æ­Ó StarOffice Calc ¤å¥ó(&S)";
+    Text[ arabic ] = "&ãáİ StarOffice Calc İÑÏí";
+    Text[ turkish ] = "&Tek StarOffice Calc belgesi";
+};
+
+String STEP_AUTOPILOT + 2
+{
+Text = "&Gesamtes Verzeichnis";
+Text[English] = "Complete &Directory";
+Text[ english_us ] = "Complete &Directory";
+    Text[ portuguese ] = "Directório &inteiro";
+    Text[ russian ] = "Âåñü êàòàëîã";
+    Text[ greek ] = "&Ïëüêëçñï êáôÜëïãï";
+    Text[ dutch ] = "&Complete directory";
+    Text[ french ] = "Répertoire &entier";
+    Text[ spanish ] = "&Directorio completo";
+    Text[ italian ] = "Tutte le cartelle";
+    Text[ danish ] = "Hele &biblioteket";
+    Text[ swedish ] = "&Hela mappen";
+    Text[ polish ] = "&Ca³y katalog";
+    Text[ portuguese_brazilian ] = "Complete &Directory";
+    Text[ japanese ] = "‘SÃŞ¨Ú¸ÄØ";
+    Text[ korean ] = "¿Ï·á µğ·ºÅä¸®";
+    Text[ chinese_simplified ] = "È«²¿µÄÄ¿Â¼(~D)";
+    Text[ chinese_traditional ] = "¥ş³¡ªº¥Ø¿ı";
+    Text[ arabic ] = "ÇáÏáíá &ßáå";
+    Text[ turkish ] = "&Dizinin tümü";
+};
+
+String STEP_AUTOPILOT + 3
+{
+Text = "Quelldokument:";
+Text[English] = "Source Document:";
+Text[ english_us ] = "Source Document:";
+    Text[ portuguese ] = "Ficheiro fonte:";
+    Text[ russian ] = "Èñõîäíûé äîêóìåíò:";
+    Text[ greek ] = "¸ããñáöï ğñïİëåõóçò:";
+    Text[ dutch ] = "Bronbestand:";
+    Text[ french ] = "Document source :";
+    Text[ spanish ] = "Archivo fuente:";
+    Text[ italian ] = "Documento sorgente:";
+    Text[ danish ] = "Kildedokument:";
+    Text[ swedish ] = "Källdokument:";
+    Text[ polish ] = "Dokument Ÿród³owy:";
+    Text[ portuguese_brazilian ] = "Source File:";
+    Text[ japanese ] = "¿°½ ÄŞ·­ÒİÄ:";
+    Text[ korean ] = "¼Ò½º ÆÄÀÏ:";
+    Text[ chinese_simplified ] = "Ô´ÎÄµµ£º";
+    Text[ chinese_traditional ] = "·½ÀÉ®×¡G";
+    Text[ arabic ] = "ãáİ ÇáãÕÏÑ:";
+    Text[ turkish ] = "Kaynak belge:";
+};
+
+String STEP_AUTOPILOT + 4
+{
+Text = "Quellverzeichnis:";
+Text[English] = "Source Directory:";
+Text[ english_us ] = "Source Directory:";
+    Text[ portuguese ] = "Directório fonte:";
+    Text[ russian ] = "Èñõîäíûé êàòàëîã:";
+    Text[ greek ] = "ÊáôÜëïãïò ğñïİëåõóçò:";
+    Text[ dutch ] = "Brondirectory:";
+    Text[ french ] = "Répertoire source :";
+    Text[ spanish ] = "Directorio fuente:";
+    Text[ italian ] = "Cartella di origine (root):";
+    Text[ danish ] = "Kildebibliotek:";
+    Text[ swedish ] = "Källmapp:";
+    Text[ polish ] = "Katalog Ÿród³owy:";
+    Text[ portuguese_brazilian ] = "Source Directory:";
+    Text[ japanese ] = "¿°½ ÃŞ¨Ú¸ÄØ:";
+    Text[ korean ] = "¼Ò½º µğ·ºÅä¸®:";
+    Text[ chinese_simplified ] = "Ô´Ä¿Â¼£º";
+    Text[ chinese_traditional ] = "·½¥Ø¿ı¡G";
+    Text[ arabic ] = "Ïáíá ÇáãÕÏÑ:";
+    Text[ turkish ] = "Kaynak dizin:";
+};
+
+String STEP_AUTOPILOT + 5
+{
+Text = "&Inklusive Unterverzeichnisse";
+Text[English] = "&Including Subfolders";
+Text[ english_us ] = "&Including Subfolders";
+    Text[ portuguese ] = "Incluindo &subdirectórios";
+    Text[ russian ] = "&Âêëş÷àÿ ïîäêàòàëîãè";
+    Text[ greek ] = "&Óõìğåñéëáìâáíïìİíùí ôùí õğïêáôáëüãùí";
+    Text[ dutch ] = "&Inclusief subdirectory's";
+    Text[ french ] = "Sous-répertoires &compris";
+    Text[ spanish ] = "Incluidos &subdirectorios";
+    Text[ italian ] = "Comprese le sottocartelle";
+    Text[ danish ] = "&Inklusive underbiblioteker";
+    Text[ swedish ] = "&Inklusive undermappar";
+    Text[ polish ] = "&³¹cznie z katalogami podrzêdn.";
+    Text[ portuguese_brazilian ] = "&Including Subfolders";
+    Text[ japanese ] = "»ÌŞÌ«ÙÀŞ‚àŠÜ‚Ş";
+    Text[ korean ] = "ÇÏÀ§ Æú´õ Æ÷ÇÔ";
+    Text[ chinese_simplified ] = "°üÀ¨×ÓÄ¿Â¼(~I)";
+    Text[ chinese_traditional ] = "¥]¬A¤l¥Ø¿ı";
+    Text[ arabic ] = "&ãÚ ÇáãÌáÏÇÊ ÇáİÑÚíÉ";
+    Text[ turkish ] = "&Alt dizinler dahil";
+};
+
+String STEP_AUTOPILOT + 6
+{
+Text = "Zielverzeichnis:";
+Text[English] = "Target Directory";
+Text[ english_us ] = "Target Directory";
+    Text[ portuguese ] = "Directório de destino:";
+    Text[ russian ] = "Êîíå÷íûé êàòàëîã";
+    Text[ greek ] = "ÊáôÜëïãïò ğñïïñéóìïı:";
+    Text[ dutch ] = "Doeldirectory";
+    Text[ french ] = "Répertoire cible :";
+    Text[ spanish ] = "Directorio destino:";
+    Text[ italian ] = "Cartella di destinazione:";
+    Text[ danish ] = "Målbibliotek:";
+    Text[ swedish ] = "Målmapp";
+    Text[ polish ] = "Katalog docelowy:";
+    Text[ portuguese_brazilian ] = "Target Directory";
+    Text[ japanese ] = "À°¹Ş¯Ä ÃŞ¨Ú¸ÄØ:";
+    Text[ korean ] = "¸ñÇ¥ µğ·ºÅä¸®";
+    Text[ chinese_simplified ] = "Ä¿±êÄ¿Â¼£º";
+    Text[ chinese_traditional ] = "¥Ø¼Ğ¥Ø¿ı¡G";
+    Text[ arabic ] = "ÇáÏáíá ÇáæÌåÉ:";
+    Text[ turkish ] = "Hedef dizin:";
+};
+
+
+String STEP_AUTOPILOT + 7
+{
+Text = "Tabellenschutz vorübergehend ohne Rückfrage aufheben";
+Text[English] = "Always raise Sheet Protection";
+Text[ english_us ] = "Temporarily unprotect sheet without query";
+    Text[ portuguese ] = "Anular provisoriamente a protecção da folha sem pedido de confirmação";
+    Text[ russian ] = "Âğåìåííî ñíÿòü çàùèòó ëèñòà";
+    Text[ greek ] = "ĞñïóùñéíŞ êáôÜñãçóç ğñïóôáóßáò ğßíáêá (÷ùñßò äéåõêñßíçóç)";
+    Text[ dutch ] = "Werkbladbeveiliging tijdelijk zonder bevestigingsdialoog opheffen.";
+    Text[ french ] = "Annulation provisoire de la protection de la feuille sans demande de confirmation";
+    Text[ spanish ] = "Desproteger hoja provisionalmente sin preguntar";
+    Text[ italian ] = "Disattiva temporaneamente la protezione tabella senza conferma";
+    Text[ danish ] = "Ophæv arkbeskyttelse midlertidig uden forspørgsel";
+    Text[ swedish ] = "Upphäv tabellskydd temporärt utan säkerhetsfråga";
+    Text[ polish ] = "Znieœ tymczasowo ochronê arkusza bez uprzedniego zapytania siê";
+    Text[ portuguese_brazilian ] = "Always raise Sheet Protection";
+    Text[ japanese ] = "ˆê“I‚ÉŠm”F‚È‚µ‚Å•\\‚Ì•ÛŒì‚ğ‰ğœ";
+    Text[ korean ] = "Always raise Sheet Protection";
+    Text[ chinese_simplified ] = "²»ĞèÈ·ÈÏÖ±½ÓÔİÊ±È¡Ïû±í¸ñ±£»¤";
+    Text[ chinese_traditional ] = "¼È®É¨ú®ø¤u§@ªí«OÅ@";
+    Text[ turkish ] = "Tablo korumasını, sormadan geçici olarak kaldır";
+    Text[ arabic ] = "ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá ÈÕİÉ ãÄŞÊÉ ÈÏæä ÇÓÊİÓÇÑ";
+};
+
+
+String STATUSLINE
+{
+Text = "Konvertierungsfortschritt: ";
+Text[English] = "Progress of the Conversion";
+Text[ english_us ] = "Conversion status: ";
+    Text[ portuguese ] = "Estado da conversão: ";
+    Text[ russian ] = "Ñîñòîÿíèå ïğåîáğàçîâàíèÿ: ";
+    Text[ greek ] = "Ğñüïäïò ôçò ìåôáôñïğŞò: ";
+    Text[ dutch ] = "Voortschrijden van de convertering:   ";
+    Text[ french ] = "Progression de la conversion :";
+    Text[ spanish ] = "Progreso de conversión: ";
+    Text[ italian ] = "Stato conversione: ";
+    Text[ danish ] = "Konverteringsstatus: ";
+    Text[ swedish ] = "Konverteringsframsteg:  ";
+    Text[ polish ] = "Progres w konwersji:";
+    Text[ portuguese_brazilian ] = "Progress of the Conversion";
+    Text[ japanese ] = "•ÏŠ·½Ã°À½: ";
+    Text[ korean ] = "º¯È¯ »óÅÂ: ";
+    Text[ chinese_simplified ] = "×ª»»×´Ì¬£º ";
+    Text[ chinese_traditional ] = "Âà´«¶i®i¡G ";
+    Text[ arabic ] = "ÇáÊŞÏã İí ÚãáíÉ ÇáÊÍæíá: ";
+    Text[ turkish ] = "Dönüştürme gelişimi:";
+};
+
+String STATUSLINE + 1
+{
+Text = "Konvertierungsfortschritt für die Zellvorlagen:";
+Text[English] = "Progress Of The Conversion of The Celltemplates";
+Text[ english_us ] = "Conversion status of the cell templates:";
+    Text[ portuguese ] = "Estado da conversão dos estilos de células:";
+    Text[ russian ] = "Ñîñòîÿíèå ïğåîáğàçîâàíèÿ ñòèëåé ÿ÷ååê:";
+    Text[ greek ] = "Ğñüïäïò ôçò ìåôáôñïğŞò ãéá ôá ğñüôõğá êåëéşí:";
+    Text[ dutch ] = "Voortschrijden van de convertering van de celprofielen:";
+    Text[ french ] = "Progression de la conversion des styles de cellule :";
+    Text[ spanish ] = "Progreso de conversión para estilos de celdas:";
+    Text[ italian ] = "Stato conversione per i modelli di cella:";
+    Text[ danish ] = "Celletypografiernes konverteringsstatus:";
+    Text[ swedish ] = "Konverteringsframsteg för cellformatmallarna";
+    Text[ polish ] = "Progres w konwersji dot. stylów komórki";
+    Text[ portuguese_brazilian ] = "Progress Of The Conversion of The Celltemplates";
+    Text[ japanese ] = "¾Ù ÃİÌßÚ°Ä‚Ì•ÏŠ·½Ã°À½:";
+    Text[ korean ] = "¼¿ ¼­½ÄÆÄÀÏÀÇ º¯È¯ »óÅÂ:";
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½µÄ×ª»»×´Ì¬";
+    Text[ chinese_traditional ] = "³æ¤¸®æ¼Ë¦¡ªºÂà´«¶i®i";
+    Text[ arabic ] = "ÇáÊŞÏã ÇáÍÇÏË İí ÚãáíÉ ÊÍæíá ÃäãÇØ ÇáÎáÇíÇ:";
+    Text[ turkish ] = "Hücre şablonlarının dönüştürme gelişimi:";
+};
+
+String STATUSLINE + 2
+{
+Text = "Erfassung der umzurechnenden Bereiche: Blatt %1Number%1 von %2TotPageCount%2";
+Text[English] = "Surveying the relevant Ranges...";
+Text[ english_us ] = "Registration of the relevant ranges: Sheet %1Number%1 of %2TotPageCount%2";
+    Text[ portuguese ] = "Registo das áreas a calcular: Página %1 Número %1 de %2 TotPageCount%2";
+    Text[ russian ] = "Ğåãèñòğàöèÿ ïğåîáğàçóåìûõ îáëàñòåé: ëèñò %1Number%1 èç %2TotPageCount%2";
+    Text[ greek ] = "ÊáôáãñáöŞ ôùí ğåñéï÷şí ğñïò ìåôáôñïğŞ: Öıëëï %1Number%1 von %2TotPageCount%2";
+    Text[ dutch ] = "Registratie van de relevante bereiken: Blad %1 nummer %1 van %2TotPageCount%2";
+    Text[ french ] = "Recensement des plages concernées en cours : page %1Number%1de %2TotPageCount%2.";
+    Text[ spanish ] = "Registro de las áreas a calcular: Hoja %1Number%1 de %2TotPageCount%2 .";
+    Text[ italian ] = "Rilevamento delle aree da considerare. pagina %1Number%1 di %2TotPageCount%2";
+    Text[ danish ] = "Registrerer de relevante områder: Ark %1Number%1 af %2TotPageCount%2";
+    Text[ swedish ] = "Bestämning av områdena som skall räknas om: Ark %1Number%1 av %2TotPageCount%2";
+    Text[ polish ] = "Ujêcie obszarów do przeliczenia: Strona %1Number%1 z %2TotPageCount%2 ";
+    Text[ portuguese_brazilian ] = "Surveying the relevant Ranges...";
+    Text[ japanese ] = "•ÏŠ·‚·‚é”ÍˆÍ‚Ì“o˜^:•\\ %1Number%1 ‚©‚ç %2TotPageCount%2 ‚Ü‚Å";
+    Text[ korean ] = "°ü·Ã ¿µ¿ªÀÇ µî·Ï:   %2TotPageCount%2 ÀÇ ½ÃÆ® %1Number%1";
+    Text[ chinese_simplified ] = "ÄÉÈë»»ËãµÄÇøÓò£ºSheet %1Number%1 of %2TotPageCount%2";
+    Text[ chinese_traditional ] = "µn°OÂà´«ªº°Ï°ì¡G¤u§@ªí­¶ %2TotPageCount%2 ¤ºªº %1Number%1";
+    Text[ arabic ] = "ÊÓÌíá ÇáäØÇŞÇÊ ÇáãÑÇÏ ÊÍæíáåÇ: Sheet %1Number%1 of %2TotPageCount%2 ";
+    Text[ turkish ] = "Dönüştürülecek aralıkların kaydı:  %2TotPageCount%2 Sayfa %1Numara%1";
+};
+
+
+String STATUSLINE + 3
+{
+Text = "Erfassung der umzurechnenden Bereiche...";
+Text[English] = "Surveying the relevant Ranges...";
+Text[ english_us ] = "Entry of the ranges to be converted...";
+    Text[ portuguese ] = "Registo das áreas a calcular...";
+    Text[ russian ] = "Ğåãèñòğàöèÿ ïğåîáğàçóåìûõ îáëàñòåé...";
+    Text[ greek ] = "ÊáôáãñáöŞ ôùí ğåñéï÷şí ğïõ ğñüêåéôáé íá ìåôáôñáğïıí...";
+    Text[ dutch ] = "Vastleggen van de te converteren bereiken...";
+    Text[ french ] = "Recensement des plages concernées en cours...";
+    Text[ spanish ] = "Registro de las áreas a calcular...";
+    Text[ italian ] = "Rilevamento delle aree da calcolare...";
+    Text[ danish ] = "Registrerer de relevante områder...";
+    Text[ swedish ] = "Bestämning av områdena som skall räknas om...";
+    Text[ polish ] = "Ujêcie obszarów do przeliczenia...";
+    Text[ portuguese_brazilian ] = "Converting the Currencyunits in the Celltemplates...";
+    Text[ japanese ] = "•ÏŠ·‚·‚é”ÍˆÍ‚Ì“o˜^...";
+    Text[ korean ] = "º¯È¯ÇÒ ¿µ¿ªÀÇ Ç×¸ñ...";
+    Text[ chinese_simplified ] = "ÄÉÈë»»ËãµÄÇøÓò...";
+    Text[ chinese_traditional ] = "µn°OÂà´«°Ï°ì...";
+    Text[ arabic ] = "ÊÓÌíá ÇáäØÇŞÇÊ ÇáãÑÇÏ ÊÍæíáåÇ...";
+    Text[ turkish ] = "Dönüştürülecek aralıkların kaydı...";
+};
+
+
+
+String STATUSLINE + 4
+{
+Text = "Tabellenschütze werden wieder hergestellt...";
+Text[English] = "Sheets are reprotected...";
+Text[ english_us ] = "Sheet protection will be restored...";
+    Text[ portuguese ] = "A restaurar protecção das folhas...";
+    Text[ russian ] = "Çàùèòà ëèñòîâ áóäåò îïÿòü âîññòàíîâëåíà...";
+    Text[ greek ] = "ÅğáíáöïñÜ ôçò ğñïóôáóßáò ôïõ ğßíáêá...";
+    Text[ dutch ] = "Beveiliging van werkbladen wordt hersteld...";
+    Text[ french ] = "Restauration des protections des feuilles en cours...";
+    Text[ spanish ] = "Se volverán a crear las protecciones de tablas";
+    Text[ italian ] = "Protezione tabella in corso di ripristinamento...";
+    Text[ danish ] = "Arkbeskyttelsen genoprettes...";
+    Text[ swedish ] = "Tabellskydd återställs...";
+    Text[ polish ] = "Ochrony arkuszy zostan¹ odnowione...";
+    Text[ portuguese_brazilian ] = "Sheets are reprotected...";
+    Text[ japanese ] = "•\\‚ÍÄ‚Ñ•ÛŒì‚³‚ê‚Ü‚·...";
+    Text[ korean ] = "½ÃÆ® º¸È£°¡ º¹±¸µÉ°Í ÀÔ´Ï´Ù....";
+    Text[ chinese_simplified ] = "±í¸ñ±£»¤¹¦ÄÜ½«ÖØĞÂ»Ö¸´...";
+    Text[ chinese_traditional ] = "­«·s«ìÎ`¤u§@ªí«OÅ@°Ï°ì¡C";
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÍãÇíÉ ÇáÌÏÇæá...";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "Tablo korumaları yeniden oluşturulacak...";
+};
+
+
+String STATUSLINE + 5
+{
+Text = "Konvertierung der Währungseinheiten in den Zellvorlagen...";
+Text[English] = "Converting the Currencyunits in the Celltemplates...";
+Text[ english_us ] = "Conversion of the currency units in the cell templates...";
+    Text[ portuguese ] = "Conversão das unidades monetárias nos estilos de células...";
+    Text[ russian ] = "Ïğåîáğàçîâàíèå äåíåæíûõ åäèíèö â ñòèëÿõ ÿ÷ååê...";
+    Text[ greek ] = "ÌåôáôñïğŞ ôùí íïìéóìáôéêşí ìïíÜäùí óôá ğñüôõğá êåëéşí...";
+    Text[ dutch ] = "Convertering van de valuta in de celprofielen...";
+    Text[ french ] = "Conversion des unités monétaires dans les styles de cellule en cours...";
+    Text[ spanish ] = "Conversión de unidades monetarias en estilos de celdas...";
+    Text[ italian ] = "Conversione delle unità di misura nei modelli di cella.";
+    Text[ danish ] = "Konverterer valutaenhederne i celletypografierne...";
+    Text[ swedish ] = "Konvertering av valutaenheterna i cellformatmallarna...";
+    Text[ polish ] = "Konwersja jednostek waluty w stylach komórki...";
+    Text[ portuguese_brazilian ] = "Converting the Currencyunits in the Celltemplates...";
+    Text[ japanese ] = "’Ê‰İ’PˆÊ‚ğŸ‚Ì¾Ù½À²Ù‚É•ÏŠ·...";
+    Text[ korean ] = "¼¿ ÅÛÇÃ¸®Æ®³»¿¡¼­ ÅëÈ­ ´ÜÀ§ º¯È¯...";
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½ÖĞ»õ±Òµ¥Î»µÄ×ª»»...";
+    Text[ chinese_traditional ] = "Âà´«³æ¤¸®æªº³f¹ô³æ¦ì...";
+    Text[ arabic ] = "ÊÍæíá æÍÏÇÊ ÇáÚãáÉ İí ÃäãÇØ ÇáÎáÇíÇ...";
+    Text[ turkish ] = "Hücre şablonlarındaki para birimlerinin dönüştürülmesi...";
+};
+
+
+
+String MESSAGES
+{
+Text = "    Fertig!";
+Text[English] = "    Ready!";
+Text[ english_us ] = "finished!";
+    Text[ portuguese ] = "....Pronto!";
+    Text[ russian ] = "Ãîòîâî!";
+    Text[ greek ] = "Ïëïêëçñşèçêå!";
+    Text[ dutch ] = "...Klaar!";
+    Text[ french ] = "....Terminé !";
+    Text[ spanish ] = "Terminado!";
+    Text[ italian ] = "...fine!";
+    Text[ danish ] = "Færdig!";
+    Text[ swedish ] = "Färdig!";
+    Text[ polish ] = "...Gotowy!";
+    Text[ portuguese_brazilian ] = "Ready";
+    Text[ japanese ] = "Š®—¹!";
+    Text[ korean ] = "¿Ï·áµÇ¾ú½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Íê³É£¡";
+    Text[ chinese_traditional ] = "¤w¸g§¹¦¨¡I";
+    Text[ arabic ] = "...Êã!";
+    Text[ turkish ] = "Bitti!";
+};
+
+String MESSAGES + 1
+{
+Text = "Wählen Sie ein Verzeichnis";
+Text[English] = "Select a Directory";
+Text[ english_us ] = "Select directory";
+    Text[ portuguese ] = "Seleccionar directório";
+    Text[ russian ] = "Âûáåğèòå êàòàëîã";
+    Text[ greek ] = "Åğéëİîôå êáôÜëïãï";
+    Text[ dutch ] = "Kies een directory";
+    Text[ french ] = "Sélectionnez un répertoire";
+    Text[ spanish ] = "Seleccione un directorio";
+    Text[ italian ] = "Selezionate una cartella";
+    Text[ danish ] = "Vælg et bibliotek";
+    Text[ swedish ] = "Välj en mapp";
+    Text[ polish ] = "Wybierz katalog";
+    Text[ portuguese_brazilian ] = "Select a Directory";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢";
+    Text[ korean ] = "µğ·ºÅÍ¸® ¼±ÅÃ";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÄ¿Â¼";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó¥Ø¿ı";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ Ïáíá";
+    Text[ turkish ] = "Dizin seçin";
+    Text[ language_user1 ] = " ";
+};
+
+String MESSAGES + 2
+{
+Text = "Wählen Sie eine Datei";
+Text[English] = "Select a File";
+Text[ english_us ] = "Select file";
+    Text[ portuguese ] = "Seleccionar ficheiro";
+    Text[ russian ] = "Âûáåğèòå ôàéë";
+    Text[ greek ] = "Åğéëİîôå áñ÷åßï";
+    Text[ dutch ] = "Kies een bestand";
+    Text[ french ] = "Sélectionnez un fichier";
+    Text[ spanish ] = "Seleccione un archivo";
+    Text[ italian ] = "Selezionate un file";
+    Text[ danish ] = "Vælg en fil";
+    Text[ swedish ] = "Välj en fil";
+    Text[ polish ] = "Wybierz plik";
+    Text[ portuguese_brazilian ] = "Select a File";
+    Text[ japanese ] = "Ì§²Ù‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢";
+    Text[ korean ] = "ÆÄÀÏ ¼±ÅÃ";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÎÄ¼ş";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­ÓÀÉ®×";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ãáİ";
+    Text[ turkish ] = "Dosya seçin";
+    Text[ language_user1 ] = " ";
+};
+
+String MESSAGES + 3
+{
+Text = "Wählen Sie das Zielverzeichnis";
+Text[English] = "Select the Targetdirectory";
+Text[ english_us ] = "Select target directory";
+    Text[ portuguese ] = "Seleccionar directório de destino";
+    Text[ russian ] = "Âûáåğèòå êîíå÷íûé êàòàëîã";
+    Text[ greek ] = "Åğéëİîôå ôïí êáôÜëïãï ğñïïñéóìïı";
+    Text[ dutch ] = "Kies de doeldirectory";
+    Text[ french ] = "Sélectionnez le répertoire cible";
+    Text[ spanish ] = "Seleccione el directorio destino";
+    Text[ italian ] = "Selezionate una cartella di destinazione";
+    Text[ danish ] = "Vælg målbiblioteket";
+    Text[ swedish ] = "Välj målmappen";
+    Text[ polish ] = "Wybierz katalog docelowy";
+    Text[ portuguese_brazilian ] = "Select the Targetdirectory";
+    Text[ japanese ] = "À°¹Ş¯Ä ÃŞ¨Ú¸ÄØ‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢";
+    Text[ korean ] = "¸ñÇ¥ µğ·ºÅä¸® ¼±ÅÃ";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÄ¿±êÄ¿Â¼";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó¥Ø¼Ğ¥Ø¿ı";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÏáíá ÇáæÌåÉ";
+    Text[ turkish ] = "Hedef dizin seçin";
+};
+
+String MESSAGES + 4
+{
+Text = "nicht vorhanden";
+Text[English] = "not there";
+Text[ english_us ] = "non-existant";
+    Text[ portuguese ] = "não existe";
+    Text[ russian ] = "íå èìååòñÿ";
+    Text[ greek ] = "äåí õğÜñ÷åé";
+    Text[ dutch ] = "niet voorhanden";
+    Text[ french ] = "inexistant";
+    Text[ spanish ] = "inexistente";
+    Text[ italian ] = "non esiste";
+    Text[ danish ] = "eksisterer ikke";
+    Text[ swedish ] = "finns ej";
+    Text[ polish ] = "nie istnieje";
+    Text[ portuguese_brazilian ] = "not there";
+    Text[ japanese ] = "‚ ‚è‚Ü‚¹‚ñ";
+    Text[ korean ] = "Á¸ÀçÇÏÁö ¾ÊÀ½";
+    Text[ chinese_simplified ] = "²»´æÔÚ";
+    Text[ chinese_traditional ] = "¤£¦s¦b";
+    Text[ arabic ] = "ÛíÑ ãæÌæÏ";
+    Text[ turkish ] = "mevcut değil";
+};
+
+
+String MESSAGES + 5
+{
+Text = "Euro-Konverter";
+Text[English] = "Euro-Converter";
+Text[ english_us ] = "Euro Converter";
+    Text[ portuguese ] = "Conversor Euro";
+    Text[ russian ] = "Ïğåîáğàçîâàòåëü Åâğî";
+    Text[ greek ] = "Ìåôáôñïğİáò Åõñş";
+    Text[ dutch ] = "Euro-Converter";
+    Text[ french ] = "Euro-Convertisseur";
+    Text[ spanish ] = "Convertidor Euro";
+    Text[ italian ] = "Convertitore Euro";
+    Text[ danish ] = "Euro-konverter";
+    Text[ swedish ] = "Eurokonverterare";
+    Text[ polish ] = "Konwerter Euro";
+    Text[ portuguese_brazilian ] = "Euro-Converter";
+    Text[ japanese ] = "Õ°Û’Ê‰İŠ·Z‹@";
+    Text[ korean ] = "À¯·Î º¯È¯±â";
+    Text[ chinese_simplified ] = "Å·Ôª»»ËãÆ÷";
+    Text[ chinese_traditional ] = "¼Ú¤¸Âà´«¾¹";
+    Text[ arabic ] = "ãõÍæøöá ÇáíæÑæ";
+    Text[ turkish ] = "Euro dönüştürücü";
+};
+
+
+
+String MESSAGES + 6
+{
+Text = "Soll der Schutz aller Tabellen vorübergehend aufgehoben werden?";
+Text[English] = "Shall protected Sheets be temporarily unprotected?";
+Text[ english_us ] = "Should protected spreadsheets be temporarily unprotected?";
+    Text[ portuguese ] = "Desproteger temporariamente todas as tabelas?";
+    Text[ russian ] = "Ñíÿòü çàùèòó ñî âñåõ ëèñòîâ íà íåêîòîğîå âğåìÿ?";
+    Text[ greek ] = "Èİëåôå íá êáôáñãçèåß ğñïóùñéíÜ ç ğñïóôáóßá üëùí ôùí ğéíÜêùí;";
+    Text[ dutch ] = "Wilt u de beveiliging van alle werkbladen tijdelijk ongedaan maken?";
+    Text[ french ] = "Souhaitez-vous éliminer temporairement la protection des feuilles ?";
+    Text[ spanish ] = "¿Desea desproteger temporalmante todas las hojas?";
+    Text[ italian ] = "Volete disattivare temporaneamente la protezione da tutte le celle?";
+    Text[ danish ] = "Skal beskyttelsen ophæves midlertidigt for alle ark?";
+    Text[ swedish ] = "Skall skyddet för alla tabeller upphävas temporärt?";
+    Text[ polish ] = "Czy ochrona chronionych arkuszy ma byæ tymczasowo zniesiona?";
+    Text[ portuguese_brazilian ] = "Shall protected Sheets be temporarily unprotected?";
+    Text[ japanese ] = "‚·‚×‚Ä‚Ì•\\‚Ì•ÛŒì‚ğˆê“I‚É‰ğœ‚µ‚Ü‚·‚©?";
+    Text[ korean ] = "¸ğµç ½ºÇÁ·¹µå½ÃÆ®ÀÇ º¸È£¸¦ ÀÏ½ÃÀûÀ¸·Î ÇØÁ¦ÇÒ±î¿ä?";
+    Text[ chinese_simplified ] = "Òª¶ÔÊÜ±£»¤µÄ±í¸ñÔİÊ±È¡Ïû±£»¤Âğ£¿";
+    Text[ chinese_traditional ] = "­n¼È®É¨ú®ø¤u§@ªí°Ï°ì«OÅ@¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÅáÛÇÁ ÍãÇíÉ ÇáÌÏÇæá ÈÔßá ãÄŞÊ¿";
+    Text[ turkish ] = "Tüm tabloların koruması geçici olarak kaldırılsın mı?";
+};
+
+
+String MESSAGES + 7
+{
+Text = "Kennwort zum Aufheben des Schutzes der Tabelle %1TableName%1";
+Text[English] = "Surveying the relevant Ranges of the Table %1TableName%1:";
+Text[ english_us ] = "Enter the password to unprotect the table %1TableName%1";
+    Text[ portuguese ] = "Senha para desproteger a tabela %1TableName%1:";
+    Text[ russian ] = "Ïàğîëü äëÿ ñíÿòèÿ çàùèòû ëèñòà %1TableName%1:";
+    Text[ greek ] = "Êùäéêüò ãéá ôçí êáôÜñãçóç ôçò ğñïóôáóßáò ôïõ ğßíáêá %1TableName%1";
+    Text[ dutch ] = "Wachtwoord voor het verwijderen van de beveiliging van werkblad %1TableName%1:";
+    Text[ french ] = "Mot de passe pour l'annulation de la protection de la feuille %1NomTable%1";
+    Text[ spanish ] = "Contraseña para desproteger la hoja %1TableName%1:";
+    Text[ italian ] = "Password per togliere la protezione alla tabella %1TableName%1:";
+    Text[ danish ] = "Adgangskode til ophævelse af beskyttelsen for arket %1TableName%1:";
+    Text[ swedish ] = "Lösenord för upphävning av skyddet för tabell %1TableName%1:";
+    Text[ polish ] = "Has³o w celu zniesienia ochrony arkusza %1NazwaArkusza%1";
+    Text[ portuguese_brazilian ] = "Surveying the relevant Ranges of the Table %1TableName%1:";
+    Text[ japanese ] = "•\\ %1TableName%1 ‚Ì•ÛŒì‚ğ‰ğœ‚·‚é‚½‚ß‚ÌÊß½Ü°ÄŞ:";
+    Text[ korean ] = "Å×ÀÌºí%1TableName%1ÀÇ º¸È£ ÇØÁ¦¸¦ À§ÇØ¼­ ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ chinese_simplified ] = "ÇëÊäÈëÃÜÂë£¬È¡Ïû±í¸ñ%1TableName%1±£»¤Ëø¶¨";
+    Text[ chinese_traditional ] = "¨ú®ø%1TableName%1°Ï°ì«OÅ@»İ­nÁä¤J±K½X¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ßáãÉ ÇáÓÑ ÇáÎÇÕÉ ÈÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá %1TableName%1";
+    Text[ turkish ] = "Tablo %1TableName%1 korumasını kaldırmak için gerekli şifreyi girin:";
+};
+
+
+String MESSAGES + 8
+{
+Text = "Falsches Kennwort!";
+Text[English] = "Wrong Password!";
+Text[ english_us ] = "Wrong Password!";
+    Text[ portuguese ] = "Senha incorrecta!";
+    Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü!";
+    Text[ greek ] = "ËÜèïò êùäéêüò!";
+    Text[ dutch ] = "Verkeerd wachtwoord!";
+    Text[ french ] = "Mot de passe incorrect !";
+    Text[ spanish ] = "¡Falsa contraseña!";
+    Text[ italian ] = "Password errata!";
+    Text[ danish ] = "Forkert adgangskode!";
+    Text[ swedish ] = "Fel lösenord!";
+    Text[ polish ] = "Nieprawid³owe has³o!";
+    Text[ portuguese_brazilian ] = "Wrong Password!";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ!";
+    Text[ korean ] = "Àß¸øµÈ ÆĞ½º¿öµå!";
+    Text[ chinese_simplified ] = "ÃÜÂëÎŞĞ§£¡";
+    Text[ chinese_traditional ] = "±K½XµL®Ä¡I";
+    Text[ arabic ] = "ßáãÉ ÇáÓÑ ÛíÑ ÕÍíÍÉ!";
+    Text[ turkish ] = "Şifre yanlış!";
+};
+
+
+String MESSAGES + 9
+{
+Text = "Geschützte Tabelle";
+Text[English] = "Protected Sheet";
+Text[ english_us ] = "Protected Sheet";
+    Text[ portuguese ] = "Tabela protegida";
+    Text[ russian ] = "Çàùèùåííûé ëèñò";
+    Text[ greek ] = "Ğñïóôáôåõüìåíïò ğßíáêáò";
+    Text[ dutch ] = "Beveiligd werkblad";
+    Text[ french ] = "Feuille protégée";
+    Text[ spanish ] = "Hoja protegida";
+    Text[ italian ] = "Tabella protetta";
+    Text[ danish ] = "Bekyttede ark";
+    Text[ swedish ] = "Skyddad tabell";
+    Text[ polish ] = "Chronione arkusze";
+    Text[ portuguese_brazilian ] = "Protected Sheet";
+    Text[ japanese ] = "•ÛŒì‚³‚ê‚½•\\";
+    Text[ korean ] = "º¸È£µÈ ½ÃÆ®";
+    Text[ chinese_simplified ] = "ÊÜ±£»¤µÄ±í¸ñ";
+    Text[ chinese_traditional ] = "¨ü«OÅ@ªº¤u§@ªí";
+    Text[ arabic ] = "ÌÏæá ãÍãí";
+    Text[ turkish ] = "Korumalı tablo";
+};
+
+
+String MESSAGES + 10
+{
+Text = "Warnung!";
+Text[English] = "Warning";
+Text[ english_us ] = "Warning!";
+    Text[ portuguese ] = "Aviso!";
+    Text[ russian ] = "Ïğåäóïğåæäåíèå!";
+    Text[ greek ] = "Ğñïåéäïğïßçóç!";
+    Text[ dutch ] = "Waarschuwing!";
+    Text[ french ] = "Attention !";
+    Text[ spanish ] = "¡Atención!";
+    Text[ italian ] = "Attenzione!";
+    Text[ danish ] = "Advarsel!";
+    Text[ swedish ] = "Varning!";
+    Text[ polish ] = "Ostrze¿enie!";
+    Text[ portuguese_brazilian ] = "Warning!";
+    Text[ japanese ] = "Œx!";
+    Text[ korean ] = "°æ°í!";
+    Text[ chinese_simplified ] = "¾¯¸æ£¡";
+    Text[ chinese_traditional ] = "Äµ§i¡I";
+    Text[ arabic ] = "ÊÍĞíÑ!";
+    Text[ turkish ] = "Uyarı!";
+};
+
+
+String MESSAGES + 11
+{
+Text = "Tabellenschutz wird nicht aufgehoben!";
+Text[English] = "Sheets are not protected!";
+Text[ english_us ] = "Sheet cannot be unprotected";
+    Text[ portuguese ] = "A protecção das folhas não será anulada!";
+    Text[ russian ] = "Çàùèòà ëèñòîâ ñíÿòà íå áóäåò!";
+    Text[ greek ] = "Äåí èá ãßíåé êáôÜñãçóç ôçò ğñïóôáóßáò ôïõ ğßíáêá!";
+    Text[ dutch ] = "Werkbladbeveiliging wordt niet opgeheven!";
+    Text[ french ] = "La protection des feuilles ne sera pas annulée !";
+    Text[ spanish ] = "¡Las hojas no se desprotegerán!";
+    Text[ italian ] = "Le protezioni delle tabelle non verranno disattivate!";
+    Text[ danish ] = "Arkbeskyttelsen ophæves ikke!";
+    Text[ swedish ] = "Tabellskydd upphävs inte!";
+    Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
+    Text[ portuguese_brazilian ] = "Sheets are not protected!";
+    Text[ japanese ] = "•\\‚Ì•ÛŒì‚Í‰ğœ‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "½ÃÆ® º¸È£ÇØÁ¦°¡ ¾ÈµË´Ï´Ù!";
+    Text[ chinese_simplified ] = "ÎŞ·¨È¡Ïû±í¸ñ±£»¤£¡";
+    Text[ chinese_traditional ] = "¤u§@ªíªº«OÅ@¨S¦³³Q¨ú®ø¡I";
+    Text[ arabic ] = "áä íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏÇæá!";
+    Text[ turkish ] = "Tablolardaki koruma kaldırılmıyor!";
+};
+
+
+String MESSAGES + 12
+{
+Text = "Tabellenschutz wird nicht aufgehoben!";
+Text[English] = "Sheet is not protected!";
+Text[ english_us ] = "Sheet cannot be unprotected";
+    Text[ portuguese ] = "A protecção da folha não será anulada!";
+    Text[ russian ] = "Çàùèòà ëèñòà ñíÿòà íå áóäåò!";
+    Text[ greek ] = "Äåí èá ãßíåé êáôÜñãçóç ôçò ğñïóôáóßáò ôïõ ğßíáêá!";
+    Text[ dutch ] = "Werkbladbeveiliging wordt niet opgeheven!";
+    Text[ french ] = "La protection de la feuille ne sera pas annulée !";
+    Text[ spanish ] = "¡No se desprotegerá la hoja!";
+    Text[ italian ] = "La protezione della tabella non verrà disattivata!";
+    Text[ danish ] = "Arkbeskyttelsen ophæves ikke!";
+    Text[ swedish ] = "Tabellskydd upphävs inte!";
+    Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
+    Text[ portuguese_brazilian ] = "Sheet is not protected!";
+    Text[ japanese ] = "•\\‚Ì•ÛŒì‚Í‰ğœ‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "½ÃÆ® º¸È£ÇØÁ¦°¡ ¾ÈµË´Ï´Ù!";
+    Text[ chinese_simplified ] = "ÎŞ·¨È¡Ïû±í¸ñ±£»¤£¡";
+    Text[ chinese_traditional ] = "¤u§@ªíªº«OÅ@¨S¦³³Q¨ú®ø¡I";
+    Text[ arabic ] = "áä íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá!";
+    Text[ turkish ] = "Tablo koruması kaldırılmıyor!";
+};
+
+
+String MESSAGES + 13
+{
+Text = "Der AutoPilot kann dieses Dokument nicht bearbeiten, da in Dokumenten mit geschützten Tabellen keine Zellvorlagen modifiziert werden können.";
+Text[English] = "The AutoPilot cannot convert this document, because in documents with protected sheets celltemplates cannot be modified!";
+Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
+    Text[ portuguese ] = "O AutoPiloto não pode editar este documento, já que é impossível modificar estilos de células em documentos com tabelas protegidas.";
+    Text[ russian ] = "Àâòîïèëîò íå ìîæåò èçìåíèòü ıòîò äîêóìåíò, ïîñêîëüêó èçìåíÿòü ñòèëè ÿ÷ååê â äîêóìåíòàõ ñ çàùèùåííûìè ëèñòàìè íåâîçìîæíî.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åğåîåñãáóßá áõôïı ôïõ İããñáöïõ ìå ôï ğñüãñáììá AutoPilot åğåéäŞ äåí ìğïñåß íá ğñáãìáôïğïéçèåß ôñïğïğïßçóç ğñïôığùí êåëéşí óå İããñáöá ìå ğñïóôáôåõüìåíïõò ğßíáêåò.";
+    Text[ dutch ] = "Celopmaakprofielen in documenten met beveiligde werkbladen kunnen niet worden gewijzigd. De AutoPiloot kan dit document daarom niet bewerken.";
+    Text[ french ] = "L'AutoPilote ne peut pas éditer ce document : la modification des styles de cellule est impossible dans un document contenant des feuilles de calcul protégées.";
+    Text[ spanish ] = "El AutoPiloto no puede editar este documento porque no se pueden modificar estilos de celda en documentos con hojas protegidas.";
+    Text[ italian ] = "Il Pilota automatico non può modificare questo documento in quanto non è possibile modificare i modelli di cella nei documenti con tabelle protette.";
+    Text[ danish ] = "AutoPiloten kan ikke redigere dette dokument, da det ikke er muligt at modificere celletypografier i dokumenter med beskyttede regneark.";
+    Text[ swedish ] = "AutoPilot kan inte redigera det här dokumentet eftersom ingen cellmall kan modifieras i dokument med skyddade tabeller.";
+    Text[ polish ] = "AutoPilot nie jest w stanie edytowaæ tego dokumentu, poniewa¿ w dokumentach zawieraj¹cych chronione arkusze nie mo¿na modyfikowaæ stylów komórki.";
+    Text[ portuguese_brazilian ] = "But by modified celltempltates even cells in protected sheets may be modified!";
+    Text[ japanese ] = "•ÛŒì‚³‚ê‚½•\\‚ğŠÜ‚ŞÄŞ·­ÒİÄ‚Å‚Í¾Ù ÃİÌßÚ°Ä‚ª•ÏX‚Å‚«‚È‚¢‚½‚ßAµ°ÄÊß²Û¯Ä‚Í‚±‚ÌÄŞ·­ÒİÄ‚ğ•ÒW‚Å‚«‚Ü‚¹‚ñB!";
+    Text[ korean ] = "º¸È£µÈ ½ºÇÁ·¹µå½ÃÆ®°¡ ÀÖ´Â ¹®¼­¿¡¼­´Â ¼¿ ¼­½ÄÆÄÀÏÀ» º¯°æÇÒ ¼ö ¾ø±â ¶§¹®¿¡ ÀÚµ¿ ÆÄÀÏ·µÀÌ ÀÌ ¹®¼­¸¦ ÆíÁıÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀíÎŞ·¨±à¼­Õâ¸öÎÄµµ£¬ÒòÎªÔÚÎÄµµÄÚº¬ÓĞÊÜ±£»¤µÄ¹¤×÷±íÊ±ÎŞ·¨¸ü¸ÄÆäµ¥Ôª¸ñÑùÊ½¡£";
+    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²zµ{¦¡µLªk­×§ï³o­Ó¤å¥ó¡A¦]¬°¤@­Ó¨ü«OÅ@¤u§@ªí¤£¤¹³\\ÅÜ§óÀx¦s®æ¼Ë¦¡¡C";
+    Text[ arabic ] = "íÊÚĞÑ Úáì ÇáãÑÔÏ ÇáÂáí ÊÍÑíÑ åĞÇ ÇáãÓÊäÏ¡ ÍíË Ãäå ãä ÛíÑ Çáããßä ÊÚÏíá ÃäãÇØ ÇáÎáÇíÇ İí ãÓÊäÏÇÊ ĞÇÊ ÌÏÇæá ãÍãíÉ.";
+    Text[ turkish ] = "Korumalı tablo içeren belgelerde hücre şablonları üzerinde değişiklik yapılamadığı için OtoPilot bu belgeyi düzenleyemiyor.";
+};
+
+
+
+String MESSAGES + 14
+{
+Text = "Bitte bedenken Sie, dass der Eurokonverter sonst das Dokument nicht bearbeiten kann!";
+Text[English] = "Please note that the Euroconverter can otherwise not edit this document!";
+Text[ english_us ] = "Please note that the Euro Converter will, otherwise, not be able to edit this document!";
+    Text[ portuguese ] = "Não esqueça que, de outra forma, o conversor de euros não poderá editar o documento!";
+    Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî èíà÷å ïğåîáğàçîâàòåëü Åâğî èçìåíèòü ıòîò äîêóìåíò íå ìîæåò.";
+    Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé äéáöïñåôéêÜ äåí èá åßíáé äõíáôüí íá ãßíåé åğåîåñãáóßá ôïõ åããñÜöïõ áğü ôïí 'Ìåôáôñïğİá ôïõ Åõñş'!";
+    Text[ dutch ] = "Let op: u kunt het document anders niet bewerken met de euroconverter!";
+    Text[ french ] = "Veuillez noter que, si tel n'est pas le cas, le convertisseur Euro n'est pas en mesure d'éditer le document !";
+    Text[ spanish ] = "¡Tenga en cuenta que de lo contrario el Convertidor Euro no podrá editar el documento!";
+    Text[ italian ] = "Vi preghiamo di notare che altrimenti il convertitore Euro non può modificare il documento!";
+    Text[ danish ] = "Bemærk venligst, at Eurokonverteren ellers ikke kan redigere dokumentet!";
+    Text[ swedish ] = "Tänk på att Eurokonverteraren inte kan redigera dokumentet annars!";
+    Text[ polish ] = "Uwzglêdnij proszê, ¿e w innym wypadku konwerter Euro nie bêdzie w stanie edytowaæ dokumentu!";
+    Text[ portuguese_brazilian ] = "Please note that the Euroconverter can otherwise not edit this document!";
+    Text[ japanese ] = "‚»‚¤‚Å‚È‚¯‚ê‚ÎÕ°Û’Ê‰İŠ·Z‹@‚ÍÄŞ·­ÒİÄ‚Ì•ÒW‚ª‚Å‚«‚È‚¢‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢!";
+    Text[ korean ] = "±×·¸Áö ¾ÊÀ¸¸é À¯·Î º¯È¯±â°¡ ¹®¼­¸¦ ÆíÁıÇÒ ¼ö ¾øÀ½¿¡ À¯ÀÇÇÏ½Ê½Ã¿À!";
+    Text[ chinese_simplified ] = "Çë×¢Òâ£º·ñÔòÅ·±Ò»»ËãÆ÷ÎŞ·¨±à¼­Õâ¸öÎÄµµ£¡";
+    Text[ chinese_traditional ] = "½Ğ±zª`·N¼Ú¶êÂà´«¾¹§_«h´NµLªk³B²z³o­Ó¤å¥ó¡I";
+    Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãäå ÈÎáÇİ Ğáß áä íÊãßä ãÍæá ÇáíæÑæ ãä ÊÍÑíÑ ÇáãÓÊäÏ!";
+    Text[ turkish ] = "Euro Dönüştürücüsü, aksi halde belgeyi düzenleyemez!";
+};
+
+
+
+String MESSAGES + 15
+{
+Text = "Bitte wählen Sie zunächst eine zu konvertierende Währung aus!";
+Text[English] = "Please choose a currency first!";
+Text[ english_us ] = "Please choose a currency to be converted first!";
+    Text[ portuguese ] = "Comece por escolher a moeda a ser convertida!";
+    Text[ russian ] = "Ñíà÷àëà âûáåğèòå âàëşòó, êîòîğóş íåîáõîäèìî ïğåîáğàçîâàòü";
+    Text[ greek ] = "Ğáñáêáëş åğéëİîôå ğñşôá İíá íüìéóìá!";
+    Text[ dutch ] = "Kies eerst de valuta die u wilt converteren";
+    Text[ french ] = "Veuillez commencer par sélectionner la monnaie à convertir !";
+    Text[ spanish ] = "¡Elija primero la moneda que desee convertir!";
+    Text[ italian ] = "Selezionate una valuta da convertire!";
+    Text[ danish ] = "Vælg venligst først en valuta, som skal konverteres!";
+    Text[ swedish ] = "Välj först ut en valuta som skall konverteras!";
+    Text[ polish ] = "Wybierz najpierw walutê, któr¹ chcesz skonwertowaæ!";
+    Text[ portuguese_brazilian ] = "Please choose a currency first!";
+    Text[ japanese ] = "Å‰‚ÉŠ·Z‚·‚é’Ê‰İ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢¡";
+    Text[ korean ] = "¿ì¼± º¯È¯ÇÒ ÅëÈ­¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À!";
+    Text[ chinese_simplified ] = "ÇëÊ×ÏÈÑ¡ÔñÒ»¸öÒª×ª»»µÄ»õ±Ò£¡";
+    Text[ chinese_traditional ] = "½Ğ±z¥ı¿ï¾Ü­nÂà´«ªº¤@­Ó³f¹ô¡I";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÚãáÉ ÇáãÑÇÏ ÊÍæíáåÇ ÃæáÇğ!";
+    Text[ turkish ] = "Önce konvertibl olan bir para birimi seçin!";
+};
+
+String MESSAGES + 16
+{
+Text = "Kennwort:";
+Text[English] = "Password:";
+Text[ english_us ] = "Password:";
+    Text[ portuguese ] = "Senha:";
+    Text[ russian ] = "Ïàğîëü:";
+    Text[ greek ] = "Êùäéêüò ğñüóâáóçò:";
+    Text[ dutch ] = "Wachtwoord:";
+    Text[ french ] = "Mot de passe :";
+    Text[ spanish ] = "Contraseña:";
+    Text[ italian ] = "Password:";
+    Text[ danish ] = "Adgangskode:";
+    Text[ swedish ] = "Lösenord:";
+    Text[ polish ] = "Has³o:";
+    Text[ portuguese_brazilian ] = "Password:";
+    Text[ japanese ] = "Êß½Ü°ÄŞ:";
+    Text[ korean ] = "Password:";
+    Text[ chinese_simplified ] = "¿ÚÁî£º";
+    Text[ chinese_traditional ] = "±K½X¡G";
+    Text[ turkish ] = "Şifre:";
+    Text[ arabic ] = "ßáãÉ ÇáÓÑ:";
+};
+
+String MESSAGES + 17
+{
+Text = "OK";
+Text[English] = "OK";
+Text[ english_us ] = "OK";
+    Text[ portuguese ] = "OK";
+    Text[ russian ] = "OK";
+    Text[ greek ] = "OK";
+    Text[ dutch ] = "OK";
+    Text[ french ] = "OK";
+    Text[ spanish ] = "Aceptar";
+    Text[ italian ] = "OK";
+    Text[ danish ] = "OK";
+    Text[ swedish ] = "OK";
+    Text[ polish ] = "OK";
+    Text[ portuguese_brazilian ] = "OK";
+    Text[ japanese ] = "OK";
+    Text[ korean ] = "OK";
+    Text[ chinese_simplified ] = "È·¶¨";
+    Text[ chinese_traditional ] = "½T©w";
+    Text[ turkish ] = "Tamam";
+    Text[ arabic ] = "ÍÓäÇğ";
+};
+
+String MESSAGES + 18
+{
+Text = "Abbrechen";
+Text[English] = "Cancel";
+Text[ english_us ] = "Cancel";
+    Text[ portuguese ] = "Cancelar";
+    Text[ russian ] = "Îòìåíà";
+    Text[ greek ] = "Áêıñùóç";
+    Text[ dutch ] = "Annuleren";
+    Text[ french ] = "Annuler";
+    Text[ spanish ] = "Cancelar";
+    Text[ italian ] = "Annulla";
+    Text[ danish ] = "Annuller";
+    Text[ swedish ] = "Avbryt";
+    Text[ polish ] = "Anuluj";
+    Text[ portuguese_brazilian ] = "Cancel";
+    Text[ japanese ] = "·¬İ¾Ù";
+    Text[ korean ] = "Cancel";
+    Text[ chinese_simplified ] = "È¡Ïû";
+    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ turkish ] = "İptal";
+    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+};
+
+ String CURRENCIES
+{
+Text = "Portugiesischer Escudo";
+Text[English] = "Portuguese Escudo";
+Text[ english_us ] = "Portuguese Escudo";
+    Text[ portuguese ] = "Escudo português";
+    Text[ russian ] = "Ïîğòóãàëüñêèé ıñêóäî";
+    Text[ greek ] = "Åóêïıäï Ğïñôïãáëßáò";
+    Text[ dutch ] = "Portugese escudo";
+    Text[ french ] = "Escudo Portuguais";
+    Text[ spanish ] = "Escudo portugués";
+    Text[ italian ] = "Scudo portoghese";
+    Text[ danish ] = "Portugisisk escudo";
+    Text[ swedish ] = "Portugisisk escudo";
+    Text[ polish ] = "Escudo portugalski";
+    Text[ portuguese_brazilian ] = "Portuguese Escudo";
+    Text[ japanese ] = "ÎßÙÄ¶ŞÙ ´½¸°ÄŞ";
+    Text[ korean ] = "Æ÷¸£Åõ°¥ ¿¡½ºÄíµµ";
+    Text[ chinese_simplified ] = "ÆÏÌÑÑÀ°£Ë¹¿â¶à";
+    Text[ chinese_traditional ] = "¸²µå¤ú®J´µ®w¦h";
+    Text[ arabic ] = "ÃÓßæÏ ÈÑÊÛÇáí";
+    Text[ turkish ] = "Portekiz Esküdosu";
+};
+
+String CURRENCIES + 1
+{
+Text = "Niederländischer Gulden";
+Text[English] = "Dutch Guilder";
+Text[ english_us ] = "Dutch Guilder";
+    Text[ portuguese ] = "Florim holandês";
+    Text[ russian ] = "Íèäåğëàíäñêèé ãóëüäåí";
+    Text[ greek ] = "Öéïñßíé Ïëëáíäßáò";
+    Text[ dutch ] = "Nederlandse gulden";
+    Text[ french ] = "Florin Hollandais";
+    Text[ spanish ] = "Florín holandés";
+    Text[ italian ] = "Fiorino olandese";
+    Text[ danish ] = "Nederlandsk gylden";
+    Text[ swedish ] = "Holländsk gulden";
+    Text[ polish ] = "Gulden holenderski";
+    Text[ portuguese_brazilian ] = "Dutch Guilder";
+    Text[ japanese ] = "µ×İÀŞ ·ŞÙÀŞ°";
+    Text[ korean ] = "³×µ¨¶õµå ±æ´õ";
+    Text[ chinese_simplified ] = "ºÉÀ¼¶Ü";
+    Text[ chinese_traditional ] = "²üÄõ¬Ş";
+    Text[ arabic ] = "ÌíáÏÑ åæáäÏí";
+    Text[ turkish ] = "Hollanda Florini";
+};
+
+String CURRENCIES + 2
+{
+Text = "Französischer Francs";
+Text[English] = "French Franc";
+Text[ english_us ] = "French Franc";
+    Text[ portuguese ] = "Franco francês";
+    Text[ russian ] = "Ôğàíöóçñêèé ôğàíê";
+    Text[ greek ] = "ÖñÜãêï Ãáëëßáò";
+    Text[ dutch ] = "Franse franc";
+    Text[ french ] = "Franc Français";
+    Text[ spanish ] = "Franco francés";
+    Text[ italian ] = "Franco francese";
+    Text[ danish ] = "Fransk franc";
+    Text[ swedish ] = "Fransk franc";
+    Text[ polish ] = "Frank francuski";
+    Text[ portuguese_brazilian ] = "French Franc";
+    Text[ japanese ] = "Ì×İ½ Ì×İ";
+    Text[ korean ] = "ÇÁ¶û½º ÇÁ¶û";
+    Text[ chinese_simplified ] = "·¨¹ú·¨ÀÉ";
+    Text[ chinese_traditional ] = "ªk°êªk­¦";
+    Text[ arabic ] = "İÑÇäß İÑäÓí";
+    Text[ turkish ] = "Fransız Frangı";
+};
+
+String CURRENCIES + 3
+{
+Text = "Spanische Pesete";
+Text[English] = "Spanish Peseta";
+Text[ english_us ] = "Spanish Peseta";
+    Text[ portuguese ] = "Peseta espanhola";
+    Text[ russian ] = "Èñïàíñêàÿ ïåñåòà";
+    Text[ greek ] = "Ğåóİôá Éóğáíßáò";
+    Text[ dutch ] = "Spaanse peseta";
+    Text[ french ] = "Peseta Espagnole";
+    Text[ spanish ] = "Peseta española";
+    Text[ italian ] = "Peseta spagnola";
+    Text[ danish ] = "Spansk peseta";
+    Text[ swedish ] = "Spansk peseta";
+    Text[ polish ] = "Hiszpañska peseta";
+    Text[ portuguese_brazilian ] = "Spanish Peseta";
+    Text[ japanese ] = "½Íß²İ Íß¾À";
+    Text[ korean ] = "½ºÆäÀÎ Æä¼¼Å¸";
+    Text[ chinese_simplified ] = "Î÷°àÑÀ±ÈÈûËş";
+    Text[ chinese_traditional ] = "¦è¯Z¤ú¤ñ¶ë¶ğ";
+    Text[ arabic ] = "ÈíÒíÊÇ ÅÓÈÇäíÉ";
+    Text[ turkish ] = "İspanyol Pezetası";
+};
+
+String CURRENCIES + 4
+{
+Text = "Italienische Lira";
+Text[English] = "Italian Lira";
+Text[ english_us ] = "Italian Lira";
+    Text[ portuguese ] = "Lira italiana";
+    Text[ russian ] = "Èòàëüÿíñêàÿ ëèğà";
+    Text[ greek ] = "Ëéñİôôá Éôáëßáò";
+    Text[ dutch ] = "Italiaanse lire";
+    Text[ french ] = "Lire Italienne";
+    Text[ spanish ] = "Lira italiana";
+    Text[ italian ] = "Lira italiana";
+    Text[ danish ] = "Italiensk lira";
+    Text[ swedish ] = "Italiensk lire";
+    Text[ polish ] = "Lir w³oski";
+    Text[ portuguese_brazilian ] = "Italian Lira";
+    Text[ japanese ] = "²ÀØ± Ø×";
+    Text[ korean ] = "ÀÌÅÂ¸® ¸®¶ó";
+    Text[ chinese_simplified ] = "Òâ´óÀûÀïÀ­";
+    Text[ chinese_traditional ] = "·N¤j§Q¨½©Ô";
+    Text[ arabic ] = "áíÑÉ ÅíØÇáíÉ";
+    Text[ turkish ] = "İtalyan Lireti";
+};
+
+String CURRENCIES + 5
+{
+Text = "Deutsche Mark";
+Text[English] = "German Mark";
+Text[ english_us ] = "German Mark";
+    Text[ portuguese ] = "Marco alemão";
+    Text[ russian ] = "Íåìåöêàÿ ìàğêà";
+    Text[ greek ] = "ÌÜñêï Ãåñìáíßáò";
+    Text[ dutch ] = "Duitse mark";
+    Text[ french ] = "Deutsche Mark";
+    Text[ spanish ] = "Marco alemán";
+    Text[ italian ] = "Marco tedesco";
+    Text[ danish ] = "Tysk mark";
+    Text[ swedish ] = "Tysk mark";
+    Text[ polish ] = "Marka niemiecka";
+    Text[ portuguese_brazilian ] = "German Mark";
+    Text[ japanese ] = "ÄŞ²Â ÏÙ¸";
+    Text[ korean ] = "Á·ÀÏ ¸¶¸£Å©";
+    Text[ chinese_simplified ] = "µÂ¹úÂí¿Ë";
+    Text[ chinese_traditional ] = "¼w°ê°¨§J";
+    Text[ arabic ] = "ãÇÑß ÃáãÇäí";
+    Text[ turkish ] = "Alman Markı";
+};
+
+String CURRENCIES + 6
+{
+Text = "Belgischer Franc";
+Text[English] = "Belgian Franc";
+Text[ english_us ] = "Belgian Franc";
+    Text[ portuguese ] = "Franco belga";
+    Text[ russian ] = "Áåëüãèéñêèé ôğàíê";
+    Text[ greek ] = "ÖñÜãêï Âåëãßïõ";
+    Text[ dutch ] = "Belgische franc";
+    Text[ french ] = "Franc Belge";
+    Text[ spanish ] = "Franco belga";
+    Text[ italian ] = "Franco belga";
+    Text[ danish ] = "Belgisk franc";
+    Text[ swedish ] = "Belgisk franc";
+    Text[ polish ] = "Frank belgijski";
+    Text[ portuguese_brazilian ] = "Belgian Franc";
+    Text[ japanese ] = "ÍŞÙ·Ş° Ì×İ";
+    Text[ korean ] = "º§±â¿¡ ÇÁ¶û";
+    Text[ chinese_simplified ] = "±ÈÀûÊ±·¨ÀÉ";
+    Text[ chinese_traditional ] = "¤ñ§Q®Éªk­¦";
+    Text[ arabic ] = "İÑÇäß ÈáÌíßí";
+    Text[ turkish ] = "Belçika Frangı";
+};
+
+String CURRENCIES + 7
+{
+Text = "Irisches Pfund";
+Text[English] = "Irish Pound";
+Text[ english_us ] = "Irish Punt";
+    Text[ portuguese ] = "Libra irlandesa";
+    Text[ russian ] = "Èğëàíäñêèé ôóíò";
+    Text[ greek ] = "Ëßñá Éñëáíäßáò";
+    Text[ dutch ] = "Ierse pond";
+    Text[ french ] = "Livre Irlandaise";
+    Text[ spanish ] = "Libra irlandesa";
+    Text[ italian ] = "Sterlina irlandese";
+    Text[ danish ] = "Irsk pund";
+    Text[ swedish ] = "Irländskt pund";
+    Text[ polish ] = "Funt irlandski";
+    Text[ portuguese_brazilian ] = "Irish Pound";
+    Text[ japanese ] = "±²Ù×İÄŞ ÎßİÄŞ";
+    Text[ korean ] = "¾ÆÀÏ·£µå ÆİÆ®";
+    Text[ chinese_simplified ] = "°®¶ûÀ¼°÷";
+    Text[ chinese_traditional ] = "·Rº¸ÄõÂé";
+    Text[ arabic ] = "Ìäíå ÅíÑáäÏí";
+    Text[ turkish ] = "İrlanda Lirası";
+};
+
+String CURRENCIES + 8
+{
+Text = "Luxemburgischer Franc";
+Text[English] = "Luxembourg Franc";
+Text[ english_us ] = "Luxembourg Franc";
+    Text[ portuguese ] = "Franco luxemburguês";
+    Text[ russian ] = "Ëşêñåìáóğãñêèé ôğàíê";
+    Text[ greek ] = "ÖñÜãêï Ëïõîåìâïıñãïõ";
+    Text[ dutch ] = "Luxemburgse franc";
+    Text[ french ] = "Franc Luxembourgeois";
+    Text[ spanish ] = "Franco luxemburgués";
+    Text[ italian ] = "Franco lussemburghese";
+    Text[ danish ] = "Luxembourgsk franc";
+    Text[ swedish ] = "Luxemburgisk franc";
+    Text[ polish ] = "Frank luksemburski";
+    Text[ portuguese_brazilian ] = "Luxembourg Franc";
+    Text[ japanese ] = "Ù¸¾İÌŞÙ¸Ş Ì×İ";
+    Text[ korean ] = "·è¼Àºê¸£Å© ÇÁ¶û";
+    Text[ chinese_simplified ] = "Â¬É­±¤·¨ÀÉ";
+    Text[ chinese_traditional ] = "¿c´Ë³ùªk­¦";
+    Text[ arabic ] = "İÑÇäß áæßÓãÈæÑÌí";
+    Text[ turkish ] = "Luxembourg Frangı";
+};
+
+String CURRENCIES + 9
+{
+Text = "Österreichischer Schilling";
+Text[English] = "Austrian Schilling";
+Text[ english_us ] = "Austrian Schilling";
+    Text[ portuguese ] = "Xelim austríaco";
+    Text[ russian ] = "Àâñòğèéñêèé øèëëèíã";
+    Text[ greek ] = "Óåëëßíé Áõóôñßáò";
+    Text[ dutch ] = "Oostenrijkse schilling";
+    Text[ french ] = "Schilling Autrichien";
+    Text[ spanish ] = "Chelín austriaco";
+    Text[ italian ] = "Scellino austriaco";
+    Text[ danish ] = "Østrigsk schilling";
+    Text[ swedish ] = "Österrikisk schilling";
+    Text[ polish ] = "Szyling austriacki";
+    Text[ portuguese_brazilian ] = "Austrian Schilling";
+    Text[ japanese ] = "µ°½ÄØ± ¼Øİ¸Ş";
+    Text[ korean ] = "¿À½ºÆ®¸®¾Æ ½¯¸µ";
+    Text[ chinese_simplified ] = "°ÂµØÀûÏÈÁî";
+    Text[ chinese_traditional ] = "¶ø¦a§Q¥ı¥O";
+    Text[ arabic ] = "ÔáäÛ  äãÓÇæí";
+    Text[ turkish ] = "Avusturya Şilini";
+};
+
+String CURRENCIES + 10
+{
+Text = "Finnische Mark";
+Text[English] = "Finnish Mark";
+Text[ english_us ] = "Finnish Mark";
+    Text[ portuguese ] = "Marco finlandês";
+    Text[ russian ] = "Ôèíëÿíäñêàÿ ìàğêà";
+    Text[ greek ] = "ÌÜñêï Öéíëáíäßáò";
+    Text[ dutch ] = "Finse mark";
+    Text[ french ] = "Mark Finlandais";
+    Text[ spanish ] = "Marco finlandés";
+    Text[ italian ] = "Marco finlandese";
+    Text[ danish ] = "Finsk markka";
+    Text[ swedish ] = "Finsk mark";
+    Text[ polish ] = "Marka fiñska";
+    Text[ portuguese_brazilian ] = "Finnish Mark";
+    Text[ japanese ] = "Ì¨İ×İÄŞ ÏÙ¯¶";
+    Text[ korean ] = "ÇÉ¶õµå ¸¶¸£Å©";
+    Text[ chinese_simplified ] = "·ÒÀ¼Âí¿Ë";
+    Text[ chinese_traditional ] = "ªâÄõ°¨§J";
+    Text[ arabic ] = "ãÇÑß İäáäÏí";
+    Text[ turkish ] = "Fin Markkası";
+};
+
+String CURRENCIES + 11
+{
+Text = "Die für das Dokument eingestellte Währung ist keine Euro-Währung!";
+Text[English] = "The currency of the document is not of the European Currency Union!";
+Text[ english_us ] = "The currency set for the document is not a currency in Euroland!";
+    Text[ portuguese ] = "A moeda definida para o documento não é uma moeda pertencente à zona do Euro!";
+    Text[ russian ] = "Óñòàíîâëåííûé äëÿ ıòîãî äîêóìåíòà âèä âàëşòû íå ÿâëÿåòñÿ Åâğî!";
+    Text[ greek ] = "Ôï íüìéóìá ğïõ ïñßóôçêå ãéá ôï İããñáöï äåí åßíáé íüìéóìá ôçò åõñùğáúêŞò æşíçò!";
+    Text[ dutch ] = "De voor het document ingestelde valuta is geen Euro!";
+    Text[ french ] = "La monnaie paramétrée pour le document n'est pas une monnaie de l'Euroland !";
+    Text[ spanish ] = "¡La moneda determinada para el documento no pertenece a la zona del Euro!";
+    Text[ italian ] = "La valuta impostata per il documento non fa parte dell'Euro.";
+    Text[ danish ] = "Den valuta, der er indstillet for dette dokument, er ingen Euro-valuta!";
+    Text[ swedish ] = "Valutan som är inställd för dokumentet är ingen Euro-valuta!";
+    Text[ polish ] = "Waluta ustawiona dla dokumentu nie jest walut¹ Euro!";
+    Text[ portuguese_brazilian ] = "The Language of the Document is not known to the Autopilot";
+    Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ—p‚Éİ’è‚³‚ê‚Ä‚¢‚é’Ê‰İ‚ÍÕ°Û’Ê‰İ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ!";
+    Text[ korean ] = "¹®¼­¿¡ ¼³Á¤µÈ ÅëÈ­´Â À¯·´ ÅëÈ­°¡ ¾Æ´Õ´Ï´Ù!";
+    Text[ chinese_simplified ] = "ÎªÎÄµµÉè¶¨µÄ»õ±Ò²»ÊÇÅ·ÖŞ¹²Í¬Ìå»õ±Ò£¡";
+    Text[ chinese_traditional ] = "³o­Ó¤å¥ó³]©wªº³f¹ô¤£¬O¼Ú¶ê¡C";
+    Text[ arabic ] = "ÇáÚãáÉ ÇáÊí Êã ÊÚííäåÇ ááãÓÊäÏ áÇ ÊäÊãí Åáì ÚãáÇÊ ÈáÇÏ ÇáíæÑæ!";
+    Text[ turkish ] = "Belge için ayarlanan para birimi, Euro-para birimi değil!";
+};
+
+String CURRENCIES + 12
+{
+Text = "Die für Ihr Betriebssystem eingestellte Sprache ist keine Sprache der Europäischen Währungsunion!";
+Text[English] = "The language set for the operation system is not a language of the European Currency Union!";
+Text[ english_us ] = "The operating system language is not a language of the Euro area!";
+    Text[ portuguese ] = "A língua que definiu para o seu sistema operativo não faz parte das línguas da união monetária europeia!";
+    Text[ russian ] = "ßçûê, óñòàíîâëåííûé äëÿ Âàøåé îïåğàöèîííîé ñèñòåìû ÿâëÿåòñÿ ÿçûêîì ñòğàíû, íå âõîäÿùåé â Åâğîïåéñêèé ıêîíîìè÷åñêèé è âàëşòíûé ñîşç (ÅİÂÑ).";
+    Text[ greek ] = "Ç ãëşóóá ôçí ïğïßá åğéëİîáôå ãéá ôï ëåéôïõñãéêü óáò óıóôçìá äåí åßíáé ãëşóóá ôçò åõñùğáúêŞò íïìéóìáôéêŞò İíùóçò!";
+    Text[ dutch ] = "De voor uw besturingssysteem ingestelde taal is geen taal van de Europese Monetaire Unie!";
+    Text[ french ] = "La langue paramétrée pour le système d'exploitation ne correspond à aucun pays de l'Union Monétaire Européenne !";
+    Text[ spanish ] = "¡El idioma definido para su sistema operativo no pertenece a la unión monetaria europea!";
+    Text[ italian ] = "La lingua impostata nel vostro sistema operativo non fa parte dell'Unione Monetaria Europea!";
+    Text[ danish ] = "Det sprog, som er indstillet for dit operativsystem, er ikke et sprog som tilhører EU's monetære union!";
+    Text[ swedish ] = "Språket som är inställt för Ditt operativsystem finns inte i den europeiska valutaunionen!";
+    Text[ polish ] = "Jêzyk twojego systemu operacyjnego nie jest jêzykiem ¿adnego z krajów europejskiej unii gospodarczej i walutowej!";
+    Text[ portuguese_brazilian ] = "The language set for the operation system is not a language of the European Currency Union!";
+    Text[ japanese ] = "Õ°»Ş°‚ÌµÍßÚ°Ã¨İ¸Ş¼½ÃÑ‚Éİ’è‚³‚ê‚Ä‚¢‚éŒ¾Œê‚ÍÕ°Û“±“ü‘‚ÌŒ¾Œê‚Å‚Í‚ ‚è‚Ü‚¹‚ñ!";
+    Text[ korean ] = "´ç½ÅÀÇ ¿î¿µÃ¼Á¦¿¡ ¼³Á¤µÈ ¾ğ¾î´Â À¯·´ ÅëÈ­¿¬ÇÕÀÇ ¾ğ¾î°¡ ¾Æ´Õ´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÄúµÄ²Ù×÷ÏµÍ³Ê¹ÓÃµÄÓïÑÔ²»ÊÇÅ·ÖŞ»õ±ÒÁªÃËµÄÊ¹ÓÃÓïÑÔ£¡";
+    Text[ chinese_traditional ] = "¬°±z¾Ş§@¨t²Î³]©wªº»y¨¥¤£¬O¼Ú¬w³f¹ôªº»y¨¥¡C";
+    Text[ arabic ] = "ÇááÛÉ ÇáÊí Êã ÊÚííäåÇ áäÙÇã ÇáÊÔÛíá ÇáÎÇÕ Èß áíÓÊ ãä Öãä áÛÇÊ ÇáÏæá ÇáÃÚÖÇÁ İí ÇáíæÑæáÇäÏ!";
+    Text[ turkish ] = "İşletim sisteminiz için seçtiğiniz dil, Avrupa Para Birliği dillerinden biri değil!";
+};
+
+
+String STEP_LASTPAGE
+{
+Text = "Arbeitsfortschritt";
+Text[English] = "Progress";
+Text[ english_us ] = "Progress";
+    Text[ portuguese ] = "Progressão";
+    Text[ russian ] = "Ïğîãğåññ";
+    Text[ greek ] = "Ğñüïäïò åñãáóßáò";
+    Text[ dutch ] = "Vooruitgang";
+    Text[ french ] = "Progression";
+    Text[ spanish ] = "Progreso";
+    Text[ italian ] = "Progressione";
+    Text[ danish ] = "Arbejdsfremgang";
+    Text[ swedish ] = "Arbetsframsteg";
+    Text[ polish ] = "Postêp w pracy";
+    Text[ portuguese_brazilian ] = "Progress";
+    Text[ japanese ] = "i’»ó‹µ";
+    Text[ korean ] = "Progress";
+    Text[ chinese_simplified ] = "½øÕ¹";
+    Text[ chinese_traditional ] = "¶i®i";
+    Text[ turkish ] = "Gelişim";
+    Text[ arabic ] = "ÇáÊŞÏã";
+};
+
+
+String STEP_LASTPAGE + 1
+{
+Text = "Erfassen der relevanten Dokumente...";
+Text[English] = "Retrieving the relevant Documents...";
+Text[ english_us ] = "Retrieving the relevant documents...";
+    Text[ portuguese ] = "A reunir documentos relevantes...";
+    Text[ russian ] = "Îõâàò âàæíûõ äîêóìåíòîâ...";
+    Text[ greek ] = "ÁíÜêôçóç ôùí ó÷åôéêşí åããñÜöùí...";
+    Text[ dutch ] = "Opnemen van de relevantw documenten...";
+    Text[ french ] = "Récupération des documents importants...";
+    Text[ spanish ] = "Recuperando los documentos relevantes...";
+    Text[ italian ] = "Rilevamento dei documenti importanti...";
+    Text[ danish ] = "Bestemmer de relevante dokumenter...";
+    Text[ swedish ] = "Bestämning av de relevanta dokumenten...";
+    Text[ polish ] = "Ujêcie relewantnych dokumentów...";
+    Text[ portuguese_brazilian ] = "Retrieving the relevant Documents...";
+    Text[ japanese ] = "ŠÖ˜A‚·‚éÄŞ·­ÒİÄ‚ğ‚Ü‚Æ‚ß‚é...";
+    Text[ korean ] = "Retrieving the relevant Documents...";
+    Text[ chinese_simplified ] = "¼ìË÷Ïà¹ØÎÄµµ...";
+    Text[ chinese_traditional ] = "ÀË¯Á½s¿è¬ÛÃö¤å¥ó...";
+    Text[ turkish ] = "İlgili belgeleri alıyor...";
+    Text[ arabic ] = "ÊÖãíä ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ...";
+};
+
+String STEP_LASTPAGE + 2
+{
+Text = "Konvertieren der Dokumente...";
+Text[English] = "Converting the Documents...";
+Text[ english_us ] = "Converting the documents...";
+    Text[ portuguese ] = "A converter documentos...";
+    Text[ russian ] = "Ïğåîáğàçîâàíèå äîêóìåíòîâ...";
+    Text[ greek ] = "ÌåôáôñïğŞ ôùí åããñÜöùí...";
+    Text[ dutch ] = "Converteren van de documenten...";
+    Text[ french ] = "Conversion des documents...";
+    Text[ spanish ] = "Convirtiendo los documentos...";
+    Text[ italian ] = "Conversione dei documenti...";
+    Text[ danish ] = "Konverterer dokumenterne...";
+    Text[ swedish ] = "Konvertering av dokumenten...";
+    Text[ polish ] = "Konwertuj dokumenty...";
+    Text[ portuguese_brazilian ] = "Converting the Documents...";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•ÏŠ·...";
+    Text[ korean ] = "Converting the Documents...";
+    Text[ chinese_simplified ] = "ÎÄµµ×ª»»...";
+    Text[ chinese_traditional ] = "Âà´«¤å¥ó...";
+    Text[ turkish ] = "Belgeleri dönüştürüyor...";
+    Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ...";
+};
+
+String STEP_LASTPAGE + 3
+{
+Text = "Einstellungen:";
+Text[English] = "Configurations:";
+Text[ english_us ] = "Settings:";
+    Text[ portuguese ] = "Configuração:";
+    Text[ russian ] = "Íàñòğîéêè:";
+    Text[ greek ] = "Ñõèìßóåéò:";
+    Text[ dutch ] = "Configuraties:";
+    Text[ french ] = "Paramètres :";
+    Text[ spanish ] = "Configuración:";
+    Text[ italian ] = "Impostazioni:";
+    Text[ danish ] = "Indstillinger:";
+    Text[ swedish ] = "Inställningar:";
+    Text[ polish ] = "Ustawienia:";
+    Text[ portuguese_brazilian ] = "Configurations:";
+    Text[ japanese ] = "İ’è:";
+    Text[ korean ] = "Configurations:";
+    Text[ chinese_simplified ] = "Éè¶¨£º";
+    Text[ chinese_traditional ] = "³]©w¡G";
+    Text[ turkish ] = "Ayarlar:";
+    Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ:";
+};
+
+String STEP_LASTPAGE + 4
+{
+Text = "Tabellenschutz wird immer aufgehoben";
+Text[English] = "Sheet Protection is always raised";
+Text[ english_us ] = "Sheet is always unprotected";
+    Text[ portuguese ] = "Anular sempre protecção da folha";
+    Text[ russian ] = "Çàùèòà ëèñòà ñíèìàåòñÿ âñåãäà";
+    Text[ greek ] = "ĞÜíôá êáôÜñãçóç ôçò ğñïóôáóßáò ôïõ ğßíáêá";
+    Text[ dutch ] = "Werkbladbeveiliging wordt altijd opgeheven";
+    Text[ french ] = "La protection de la feuille sera toujours annulée";
+    Text[ spanish ] = "Anular siempre la protección de hoja";
+    Text[ italian ] = "Disattiva sempre la protezione tabella";
+    Text[ danish ] = "Arkbeskyttelsen ophæves altid";
+    Text[ swedish ] = "Tabellskydd upphävs alltid";
+    Text[ polish ] = "Zniesienie ochrony arkusza za ka¿dym razem";
+    Text[ portuguese_brazilian ] = "Sheet Protection is always raised";
+    Text[ japanese ] = "í‚É•\\‚Ì•ÛŒì‚ğ‰ğœ";
+    Text[ korean ] = "Sheet Protection is always raised";
+    Text[ chinese_simplified ] = "×ÜÊÇÈ¡Ïû±í¸ñ±£»¤";
+    Text[ chinese_traditional ] = "Á`¬O¨ú®ø¤u§@ªí«OÅ@";
+    Text[ turkish ] = "Tablo koruması her zaman kaldırılıyor";
+    Text[ arabic ] = "Óæİ íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá ÏÇÆãÇğ";
+};
+
