@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:11:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,10 +1502,6 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
 
         if( pBest )
         {
-            // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
-            bool bSavedFlagValue = IsMacroExecAllowed();
-            SetMacroExecAllowed( false );
-
             BOOL bFlyFrm = pBest->IsWriterFlyFrame();
             if( bFlyFrm )
             {
@@ -1521,10 +1517,6 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 if( !ActionPend() )
                     MakeVisible( pBest->GetBoundRect() );
             }
-
-            // OD 11.02.2003 #100556# - reset flag value
-            SetMacroExecAllowed( bSavedFlagValue );
-
             CallChgLnk();
             bRet = TRUE;
         }
