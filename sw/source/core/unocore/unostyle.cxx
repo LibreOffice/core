@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:28:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,6 +1404,11 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, BOOL bConditional) :
         case SFX_STYLE_FAMILY_CHAR:
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
+            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterStyles" ) ) );
+            // Get the Frame family (and keep it for later)
+            aAny >>= mxStyleFamily;
+            //aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Standard" ) ) );
+            //aAny >>= mxStyleData;
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
