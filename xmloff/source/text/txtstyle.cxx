@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 04:58:07 $
+ *  last change: $Author: mib $ $Date: 2001-04-10 12:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,11 +177,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
         }
     }
 
-#if SUPD < 628
-    if( nProgress )
-#else
     if( bProgress )
-#endif
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
             pProgress->SetValue( pProgress->GetValue()+2 );
@@ -194,8 +190,11 @@ void XMLTextParagraphExport::exportNumStyles( sal_Bool bUsed )
     aNumRuleExport.exportStyles( bUsed, pListAutoPool, !IsBlockMode() );
 }
 
-void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
+void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
 {
+    sal_Bool bOldProg = bProgress;
+    bProgress = bProg;
+
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
@@ -224,4 +223,6 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
         XMLLineNumberingExport aLineNumberingExport(GetExport());
         aLineNumberingExport.Export();
     }
+
+    bProgress = bOldProg;
 }
