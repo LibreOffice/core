@@ -3,6 +3,7 @@
  * document.
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,56 +33,31 @@
 
 #include "Style.hxx"
 
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
-
 class TagOpenElement;
 class DocumentElement;
+class DocumentHandler;
+
+class ParagraphStyle
+{
+public:
+    ParagraphStyle(WPXPropertyList *propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
+    virtual ~ParagraphStyle();
+    virtual void write(DocumentHandler &xHandler) const;
+    WPXString getName() const { return msName; }
+private:
+    WPXPropertyList *mpPropList;
+    WPXPropertyListVector mxTabStops;
+    WPXString msName;
+};
+
 
 class SpanStyle : public Style
 {
 public:
-    SpanStyle(const uint32_t iTextAttributeBits, const char *pFontName, const float fFontSize, const RGBSColor *pFontColor,
-          const RGBSColor *pHighlightColor, const char *psName);
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
-    const int getTextAttributeBits() const { return miTextAttributeBits; }
-    const UTF8String & getFontName() const { return msFontName; }
-    const float getFontSize() const { return mfFontSize; }
-
-    void _addTextProperties(TagOpenElement *pStylePropertiesOpenElement) const;
+    SpanStyle(const char *psName, const WPXPropertyList &xPropList);
+    virtual void write(DocumentHandler &xHandler) const;
 
 private:
-    int miTextAttributeBits;
-    UTF8String msFontName;
-    float mfFontSize;
-    RGBSColor m_fontColor;
-    RGBSColor m_highlightColor;
-};
-
-class ParagraphStyle : public Style, public TopLevelElementStyle
-{
-public:
-    ParagraphStyle(const uint8_t iParagraphJustification,
-               const float fMarginLeft, const float fMarginRight, const float fTextIndent,
-               const float fLineSpacing, const float fSpacingAfterParagraph,
-               const bool bColumnBreak, const bool bPageBreak, const char *psName, const char *psParentName);
-
-    virtual ~ParagraphStyle();
-
-    void setListStyleName(UTF8String &sListStyleName) { delete mpsListStyleName ; mpsListStyleName = new UTF8String(sListStyleName); }
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
-    const virtual bool isParagraphStyle() const { return true; }
-
-private:
-    UTF8String msParentName;
-    UTF8String *mpsListStyleName;
-    float mfMarginLeft;
-    float mfMarginRight;
-    float mfTextIndent;
-    float mfLineSpacing;
-    float mfSpacingAfterParagraph;
-    uint8_t miParagraphJustification;
-    bool mbColumnBreak;
-    bool mbPageBreak;
+        WPXPropertyList mPropList;
 };
 #endif
