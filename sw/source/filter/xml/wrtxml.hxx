@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-24 12:24:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
