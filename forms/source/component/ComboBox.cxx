@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:55:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,13 +612,14 @@ void OComboBoxModel::loadData()
                     }
 
                     // search the field
-                                        Reference<XColumnsSupplier> xSupplyFields(xComposer, UNO_QUERY);
+                    Reference< XColumnsSupplier > xSupplyFields(xComposer, UNO_QUERY);
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");
 
-                                        Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
+                    Reference< XNameAccess > xFieldNames = xSupplyFields->getColumns();
                     if (xFieldNames->hasByName(m_aControlSource))
                     {
-                                                Reference<XPropertySet> xComposerFieldAsSet(*(Reference<XPropertySet>*)xFieldNames->getByName(m_aControlSource).getValue());
+                        Reference< XPropertySet > xComposerFieldAsSet;
+                        xFieldNames->getByName(m_aControlSource) >>= xComposerFieldAsSet;
                         if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                             xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                     }
@@ -643,7 +644,8 @@ void OComboBoxModel::loadData()
             case ListSourceType_QUERY:
             {
                 Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
-                Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(m_aListSource).getValue(), UNO_QUERY);
+                Reference< XPropertySet > xQuery;
+                xSupplyQueries->getQueries()->getByName( m_aListSource ) >>= xQuery;
                 xStmt = xConnection->createStatement();
                 Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
@@ -704,7 +706,7 @@ void OComboBoxModel::loadData()
                 }
                 Reference<XColumn> xDataField;
                 if (xColumns.is())
-                    xDataField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), UNO_QUERY);
+                    xColumns->getByIndex(0) >>= xDataField;
                 if (!xDataField.is())
                 {
                     disposeComponent(xListCursor);
