@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,22 @@
 #include <com/sun/star/awt/UnoControl.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XUnoControlContainer_idl__
+#include <com/sun/star/awt/XUnoControlContainer.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XControlContainer_idl__
+#include <com/sun/star/awt/XControlContainer.idl>
+#endif
+
 #ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
 #endif
 
+
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
-
-interface XUnoControlContainer;
-interface XControlContainer;
 
 //=============================================================================
 
@@ -84,11 +90,12 @@ service UnoControlContainer
 {
     service com::sun::star::awt::UnoControl;
 
-    interface XUnoControlContainer;
+    interface com::sun::star::awt::XUnoControlContainer;
 
-    interface XControlContainer;
+    interface com::sun::star::awt::XControlContainer;
 
     interface com::sun::star::container::XContainer;
+
 };
 
 //=============================================================================
