@@ -227,12 +227,21 @@ fi
 PATH="$sd_prog":$PATH
 export PATH
 
+# disable crash reporter if accessibility is enabled
+accessible=`gconftool-2 -g /desktop/gnome/interface/accessibility 2>/dev/null`
+
+if [ $? -eq 0 ] && [ $accessible = "true" ]; then
+    crashrepswitch=-nocrashreport
+else
+    crashrepswitch=
+fi
+
 # execute soffice binary
 if [ "X${plugin_mode}" = "Xtrue" ]; then
     SAL_IGNOREXERRORS=true
     export SAL_IGNOREXERRORS
     exec "$sd_prog/$sd_binary" -plugin "$@"
 else
-    exec "$sd_prog/$sd_binary" "$@"
+    exec "$sd_prog/$sd_binary" $crashrepswitch "$@"
 fi
 
