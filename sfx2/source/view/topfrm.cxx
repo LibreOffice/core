@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:46:02 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,8 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
         pFrame->InsertDocument( pDoc );
+        if ( pWindow && !bHidden )
+            pWindow->Show();
     }
 
     return pFrame;
@@ -1000,12 +1002,9 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );
         pDoc->OwnerLock( sal_False );
-        // Dont show container window! Its done by framework ...
-        /*
-        GetFrameInterface()->getContainerWindow()->setVisible( sal_True );
-        if( GetTopWindow_Impl()->HasFocus() ) // ??? influenced by disabling setVisible() before ???
-            pFrame->MakeActive_Impl( TRUE );
-        */
+
+        // Dont show container window! Its done by framework or directly
+        // by SfxTopFrame::Create() or SfxViewFrame::ExecView_Impl() ...
 
         if ( IsInPlace() )
             pFrame->UnlockAdjustPosSizePixel();
