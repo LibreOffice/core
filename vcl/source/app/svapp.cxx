@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:38:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,6 +1881,8 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
 {
     BOOL bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
 
+// There is no GUI to re-enable accessibility on Unix ..
+#ifndef UNX
     if( !bRet && bShowCancel && !rCancelled )
     {
         // disable accessibility if the user chooses to continue
@@ -1890,6 +1892,7 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
         aSettings.SetMiscSettings( aMisc );
         Application::SetSettings( aSettings );
     }
+#endif
 
     return bRet;
 }
