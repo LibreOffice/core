@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConvWatch.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:08:09 $
+ *  last change: $Date: 2004-12-10 16:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,16 @@ import java.io.File;
 public class ConvWatch
 {
 
+    String getBuildID_FromFile(String _sInfoFile)
+    {
+        String sBuildID = "";
+        IniFile aIniFile = new IniFile(_sInfoFile);
+        if (aIniFile.is())
+        {
+            sBuildID = aIniFile.getKey("", "buildid");
+        }
+        return sBuildID;
+    }
     /**
      * Check if given document (_sAbsoluteInputFile) and it's postscript representation (_sAbsoluteReferenceFile) produce
      * the same output like the StarOffice / OpenOffice.org which is accessable with XMultiServiceFactory.
@@ -117,7 +127,17 @@ public class ConvWatch
             {
                 String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
                 String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
+                String sAbsoluteReferenceFileInfo = _sAbsoluteReferenceFile + fs + sNameNoSuffix + ".info";
                 _sAbsoluteReferenceFile = _sAbsoluteReferenceFile + fs + sNameNoSuffix + ".prn";
+
+                // Read the reference from the info file
+                String sRefBuildID = "";
+                if (FileHelper.exists(sAbsoluteReferenceFileInfo))
+                {
+                    sRefBuildID = getBuildID_FromFile(sAbsoluteReferenceFileInfo);
+                }
+                _aGTA.setRefBuildID(sRefBuildID);
+
             }
             else
             {
@@ -215,23 +235,36 @@ public class ConvWatch
         }
 
     // -----------------------------------------------------------------------------
-    static boolean createHTMLStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile)
+    // This creates a status for exact on document
+    static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
         {
             // Status
             String fs = System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
-
-            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, "", "");
-            HTMLoutput.header(sNameNoSuffix);
+//            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
+//            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, "", "");
+//            HTMLoutput.header(sNameNoSuffix);
 //  TODO: version info was fine
-            HTMLoutput.checkSection(sBasename);
+//            HTMLoutput.checkSection(sBasename);
             // Status end
+
+            String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
+            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, "", "");
+            INIoutput.createHeader();
+//  TODO: version info was fine
+
+            INIoutput.writeSection("global");
+            INIoutput.writeValue("pages", String.valueOf(aList.length));
+            INIoutput.writeValue("buildid", _sBuildID);
+            INIoutput.writeValue("refbuildid", _sRefBuildID);
+            INIoutput.writeValue("diffdiff", "no");
+            INIoutput.writeValue("basename", sBasename);
 
             boolean bResultIsOk = true;          // result over all pages
             for (int i=0;i<aList.length; i++)
             {
+                INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
                 aList[i].printStatus();
 
                 boolean bCurrentResult = true;   // result over exact one page
@@ -262,37 +295,50 @@ public class ConvWatch
                 }
 
                 // Status
-                HTMLoutput.checkLine(aList[i], bCurrentResult);
+//                HTMLoutput.checkLine(aList[i], bCurrentResult);
+                INIoutput.checkLine(aList[i], bCurrentResult);
                 bResultIsOk &= bCurrentResult;
             }
             // Status
-            HTMLoutput.close();
+//            HTMLoutput.close();
+            INIoutput.close();
             return bResultIsOk;
         }
 
     // -----------------------------------------------------------------------------
 
-    static void createHTMLStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile)
+    static void createINIStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID)
         {
             // Status
             String fs = System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
+            String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
 
-            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, _sFilenamePrefix, "");
-            HTMLoutput.header(sNameNoSuffix);
-            HTMLoutput.checkDiffDiffSection(sBasename);
+//            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, _sFilenamePrefix, "");
+//            HTMLoutput.header(sNameNoSuffix);
+//            HTMLoutput.checkDiffDiffSection(sBasename);
 
+            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, _sFilenamePrefix, "");
+            INIoutput.createHeader();
             // LLA? what if the are no values in the list? true or false;
+            INIoutput.writeSection("global");
+            INIoutput.writeValue("pages", String.valueOf(aDiffDiffList.length));
+            INIoutput.writeValue("buildid", _sBuildID);
+            INIoutput.writeValue("diffdiff", "yes");
+            INIoutput.writeValue("basename", sBasename);
+
             for (int i=0;i<aDiffDiffList.length; i++)
             {
+                INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
                 boolean bCurrentResult = (aDiffDiffList[i].nDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES); // logic: nDiff==0 = true if there is no difference
 
-                HTMLoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
+//                HTMLoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
+                INIoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
             }
             // Status
-            HTMLoutput.close();
+//            HTMLoutput.close();
+            INIoutput.close();
         }
 
 
@@ -303,9 +349,9 @@ public class ConvWatch
         throws ConvWatchCancelException, ConvWatchException
         {
             ConvWatch a = new ConvWatch();
-            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, true);
+            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, _aGTA.isBorderMove());
 
-            boolean bResultIsOk = createHTMLStatus(aList, "", _sOutputPath, _sAbsoluteInputFile);
+            boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
 
             if (! bResultIsOk)
             {
@@ -324,7 +370,7 @@ public class ConvWatch
             StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, false);
 
             // Status
-            boolean bResultIsOk = createHTMLStatus(aList, "", _sOutputPath, _sAbsoluteInputFile);
+            boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
 
             StatusHelper[] aDiffDiffList = new StatusHelper[aList.length];
 
@@ -362,7 +408,7 @@ public class ConvWatch
                 aDiffDiffList[i] = aCurrentStatus;
             }
 
-            createHTMLStatus_DiffDiff(aDiffDiffList, "DiffDiff_", _sOutputPath, _sAbsoluteInputFile);
+            createINIStatus_DiffDiff(aDiffDiffList, "DiffDiff_", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID());
 
             if (bFoundAOldDiff == false)
             {
