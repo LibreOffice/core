@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:47:11 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, SdrObject* pObj /* = NULL */ ) throw()
 : maPropSet( ImplGetPageBackgroundPropertyMap() ), mpSet( NULL ), mpDoc( pDoc )
 {
-    if( pObj && pDoc )
+    if( pDoc )
     {
         StartListening( *pDoc );
         mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
 
-//-/        pObj->TakeAttributes( *mpSet, sal_False, sal_False );
-        mpSet->Put(pObj->GetItemSet());
+        if( pObj )
+            mpSet->Put(pObj->GetItemSet());
     }
 }
 
