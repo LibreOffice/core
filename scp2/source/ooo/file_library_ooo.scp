@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-11 09:47:35 $
+*  last change: $Author: kz $ $Date: 2004-06-11 11:57:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1192,6 +1192,15 @@ File gid_File_Lib_Deployment
     Name = STRING(CONCAT5(deployment,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
 #else
     Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLSUFFIX,.uno.dll));
+#endif
+    PACKED_UNO_LIB_FILE_BODY;
+End
+
+File gid_File_Lib_DeploymentGui
+#if defined UNX
+    Name = STRING(CONCAT5(deploymentgui,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+#else
+    Name = STRING(CONCAT4(deploymentgui,OFFICEUPD,DLLSUFFIX,.uno.dll));
 #endif
     PACKED_UNO_LIB_FILE_BODY;
 End
