@@ -282,7 +282,7 @@ void BarChart::createShapes()
 
     //update/create information for current group
     m_pPosHelper->updateSeriesCount( m_aXSlots.size() );
-    double fLogicZ        = 0.0;//as defined
+    double fLogicZ        = -0.5;//as defined
     double fLogicBaseWidth = m_pPosHelper->getSlotWidth();
 
     //(@todo maybe different iteration for breaks in axis ?)
