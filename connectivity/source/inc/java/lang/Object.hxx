@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:16:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+#include <jvmaccess/virtualmachine.hxx>
+#endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+
 //=====================================================================
 
 #ifdef HAVE_64BIT_POINTERS
@@ -95,27 +99,20 @@ inline jlong Make_Os2_Int64( sal_Int32 hi, sal_Int32 lo ) {jlong x = CONST64( hi
 #endif //Os2
 #endif //HAVE_64BIT_POINTERS
 
+
 namespace connectivity
 {
-
     class SDBThreadAttach
     {
-        sal_Bool bDetach;
-    protected:
-                void attachThread(JNIEnv * &pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
-        void detachThread();
-                void xInit(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
-                int StartJava(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
-
-        void setError();
+        jvmaccess::VirtualMachine::AttachGuard m_aGuard;
+        SDBThreadAttach(SDBThreadAttach&);
     public:
-        JNIEnv * pEnv;
-
         SDBThreadAttach();
-                SDBThreadAttach(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
         ~SDBThreadAttach();
 
-        static sal_Bool IsJavaErrorOccured();
+        JNIEnv* pEnv;
+        void addRef();
+        void releaseRef();
     };
     //=====================================================================
     class java_lang_Class;
@@ -158,6 +155,8 @@ namespace connectivity
         ::rtl::OUString     toString();
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
         static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
     };
 }
 #endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_
