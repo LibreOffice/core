@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-09-23 14:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@
 #include "reffind.hxx"
 #include "tabvwsh.hxx"
 #include "textdlgs.hxx"
+#include "editutil.hxx"
+#include "globstr.hrc"
 
 #define ScEditShell
 #include "scslots.hxx"
@@ -163,6 +165,24 @@ void ScEditShell::SetEditView(EditView* pView)
     pEditView->SetInsertMode( bIsInsertMode );
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
+}
+
+void lcl_RemoveAttribs( EditView& rEditView )
+{
+    ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
+
+    BOOL bOld = pEngine->GetUpdateMode();
+    pEngine->SetUpdateMode(FALSE);
+
+    String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+    pEngine->GetUndoManager().EnterListAction( aName, aName );
+
+    rEditView.RemoveAttribs(TRUE);
+    pEngine->RepeatDefaults();      // #97226# paragraph attributes from cell formats must be preserved
+
+    pEngine->GetUndoManager().LeaveListAction();
+
+    pEngine->SetUpdateMode(bOld);
 }
 
 void ScEditShell::Execute( SfxRequest& rReq )
@@ -228,9 +248,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_CELL_FORMAT_RESET:                 // "Standard"
-            pTableView->RemoveAttribs(TRUE);        // TRUE: auch Absatz-Attribute
-            if (pTopView)
-                pTopView->RemoveAttribs(TRUE);
+            lcl_RemoveAttribs( *pTableView );
+            if ( pTopView )
+                lcl_RemoveAttribs( *pTopView );
             break;
 
         case SID_CLIPBOARD_FORMAT_ITEMS:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 09:25:55 $
+ *  last change: $Author: nn $ $Date: 2002-09-23 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,10 @@ public:
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset
     void            RemoveParaAttribs();
+
+                    /// Re-apply existing defaults if set, same as in SetText,
+                    /// but without EnableUndo/SetUpdateMode.
+    void            RepeatDefaults();
 };
 
 

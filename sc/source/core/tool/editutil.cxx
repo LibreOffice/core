@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-09-23 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,16 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
     SetDefaults( pSet, bTakeOwnership );
     if ( bUpdateMode )
         SetUpdateMode( TRUE );
+}
+
+void ScEditEngineDefaulter::RepeatDefaults()
+{
+    if ( pDefaults )
+    {
+        USHORT nPara = GetParagraphCount();
+        for ( USHORT j=0; j<nPara; j++ )
+            SetParaAttribs( j, *pDefaults );
+    }
 }
 
 void ScEditEngineDefaulter::RemoveParaAttribs()
