@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:02:31 $
+ *  last change: $Author: os $ $Date: 2001-07-17 08:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,6 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _TEXTSH_HXX
-#include <textsh.hxx>
-#endif
 #ifndef _GRFSH_HXX
 #include <grfsh.hxx>
 #endif
@@ -185,14 +182,8 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
-#ifndef _CAPTION_HXX
-#include <caption.hxx>
-#endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SVX_IMPGRF_HXX
-#include <svx/impgrf.hxx>
 #endif
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
@@ -200,19 +191,6 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
-#ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#endif
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::sfx2;
 
 #define SwGrfShell
 #include "itemdef.hxx"
@@ -738,94 +716,6 @@ SwGrfShell::SwGrfShell(SwView &rView) :
     SetHelpId(SW_GRFSHELL);
 }
 
-
-BOOL SwTextShell::InsertGraphicDlg()
-{
-#ifndef ENABLE_PROP_WITHOUTLINK
-#define ENABLE_PROP_WITHOUTLINK 0x08
-#endif
-
-    BOOL bReturn = FALSE;
-    SwView &rVw = GetView();
-    USHORT nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
-    // im HTML-Mode nur verknuepft einfuegen
-    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC );
-    pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
-    Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
-    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
-    if(nHtmlMode & HTMLMODE_ON)
-    {
-        sal_Bool bTrue = sal_True;
-        Any aVal(&bTrue, ::getBooleanCppuType());
-        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
-        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
-    }
-
-    if( ERRCODE_NONE == pFileDlg->Execute() )
-    {
-        GetShell().StartAction();
-        GetShell().StartUndo(UNDO_INSERT);
-        sal_Bool bAsLink;
-        if(nHtmlMode & HTMLMODE_ON)
-            bAsLink = sal_True;
-        else
-        {
-            Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-            DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
-            bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
-        }
-        USHORT nError = InsertGraphic( pFileDlg->GetPath(), pFileDlg->GetCurrentFilter(),
-                                bAsLink, ::GetGrfFilter() );
-
-        // Format ist ungleich Current Filter, jetzt mit auto. detection
-        if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( pFileDlg->GetPath(), aEmptyStr, bAsLink,
-                                    ::GetGrfFilter() );
-
-        RESOURCE_TYPE nResId = 0;
-        switch( nError )
-        {
-            case GRFILTER_OPENERROR:
-                nResId = STR_GRFILTER_OPENERROR;
-                break;
-            case GRFILTER_IOERROR:
-                nResId = STR_GRFILTER_IOERROR;
-                break;
-            case GRFILTER_FORMATERROR:
-                nResId = STR_GRFILTER_FORMATERROR;
-                break;
-            case GRFILTER_VERSIONERROR:
-                nResId = STR_GRFILTER_VERSIONERROR;
-                break;
-            case GRFILTER_FILTERERROR:
-                nResId = STR_GRFILTER_FILTERERROR;
-                break;
-            case GRFILTER_TOOBIG:
-                nResId = STR_GRFILTER_TOOBIG;
-                break;
-        }
-
-        if( nResId )
-        {
-            GetShell().EndAction();
-            InfoBox aInfoBox( rVw.GetWindow(), SW_RESSTR( nResId ));
-            aInfoBox.Execute();
-        }
-        else
-        {
-            // set the specific graphic attrbutes to the graphic
-            GetShell().EndAction();
-            bReturn = TRUE;
-            rVw.AutoCaption( GRAPHIC_CAP );
-        }
-        rVw.GetWrtShell().EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
-    }
-
-    DELETEZ( pFrmMgr );
-    delete pFileDlg;
-
-    return bReturn;
-}
 
 
 
