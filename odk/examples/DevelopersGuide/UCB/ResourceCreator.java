@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceCreator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:48:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -265,7 +265,7 @@ public class ResourceCreator {
         }
 
         if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=8100";
+            m_connectString = "socket,host=localhost,port=2083";
         }
 
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
@@ -288,7 +288,7 @@ public class ResourceCreator {
         System.out.println(
             "Usage   : ResourceCreator -connect=socket,host=...,port=... -url=...-srcURL=... -name=...n" );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=8100 -url=<workdir> -name=newfile.txt -srcURL=<workdir>/data/data.txt>" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir> -name=newfile.txt -srcURL=<workdir>/data/data.txt>" );
         System.out.println(
             "\nExample : -url=file:///home/kai/ -name=newfile-<uniquepostfix> -srcURL=file:///home/kai/sourcefile.txt" );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:49:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -213,7 +213,7 @@ public class ResourceManager {
         }
 
         if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=8100";
+            m_connectString = "socket,host=localhost,port=2083";
         }
 
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
@@ -236,7 +236,7 @@ public class ResourceManager {
         System.out.println(
             "Usage: ResourceManager -connect=socket,host=...,port=... -transOper=... -url=... -targetFolderURL=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=8100 -url=<workdir>/data/data.txt> -targetFolderURL=<workdir> -transOper=copy");
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt> -targetFolderURL=<workdir> -transOper=copy");
         System.out.println(
             "\nExample : -transOper=copy -url=file:///temp/MyFile.txt -targetFolderURL=file:///test/" );
     }
