@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:43:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Tabulka";
             Text[ hebrew ] = "‮טבלה‬";
             Text[ hindi ] = "सारणी";
+            Text[ slovak ] = "Tabuľka";
         };
         ToolBoxItem
         {
@@ -151,6 +152,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Hledat klíčové slovo";
             Text[ hebrew ] = "Suchbegriff";
             Text[ hindi ] = "खोज करने की चाभी";
+            Text[ slovak ] = "Hľadať kľúčové slovo";
         };
         ToolBoxItem
         {
@@ -197,6 +199,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Automatický filtr";
             Text[ hebrew ] = "‮סינון אוטומטי‬";
             Text[ hindi ] = "स्वचालित ढंग से छानना";
+            Text[ slovak ] = "Automatický filter";
         };
 
         ToolBoxItem
@@ -232,6 +235,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Standardní filtr";
             Text[ hebrew ] = "Standard Filter";
             Text[ hindi ] = "स्टान्डर्ड फिल्टर";
+            Text[ slovak ] = "Bežný filter";
         };
 
         ToolBoxItem
@@ -267,6 +271,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Odstranit filtr";
             Text[ hebrew ] = "Filter entfernen";
             Text[ hindi ] = "फिल्टर हटाओ";
+            Text[ slovak ] = "Odstrániť filter";
         };
         ToolBoxItem
         {
@@ -301,6 +306,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Uspořádání sloupců";
             Text[ hebrew ] = "Spaltenzuordnung";
             Text[ hindi ] = "स्तंभ को क्रम में रखना";
+            Text[ slovak ] = "Usporiadanie stĺpcov";
         };
         ToolBoxItem
         {
@@ -336,6 +342,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ czech ] = "Zdroj dat";
             Text[ hebrew ] = "‮מקור הנתונים‬";
             Text[ hindi ] = "ड़ॉटा मूल";
+            Text[ slovak ] = "Zdroj dát";
         };
 /*
         ToolBoxItem
@@ -554,5 +561,7 @@ ImageList RID_TOOLBAR_BIGIMGLIST_HC
     MASKCOLOR
     BIB_IMAGES
 };
+
+
 
 
