@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-27 23:13:07 $
+ *  last change: $Author: vg $ $Date: 2001-12-04 18:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16913,7 +16913,7 @@ String SIP_EE_PARA_TABS
     Text[ portuguese_brazilian ] = "Tabulators";
     Text[ japanese ] = "ï¾€ï¾Œï¾";
     Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
-    Text[ chinese_traditional ] = "è£½è¡¨ç¬¦";
+    Text[ chinese_traditional ] = "å®šä½éµ";
     Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
     Text[ dutch ] = "Tabulatoren";
     Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
@@ -17342,7 +17342,7 @@ String SIP_EE_FEATURE_TAB
     Text[ portuguese_brazilian ] = "Tabulator";
     Text[ japanese ] = "ï¾€ï¾Œï¾";
     Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
-    Text[ chinese_traditional ] = "è£½è¡¨ç¬¦";
+    Text[ chinese_traditional ] = "å®šä½éµ";
     Text[ arabic ] = "ÚáÇãÉ ÇáÌÏæáÉ";
     Text[ dutch ] = "Tabulator";
     Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
