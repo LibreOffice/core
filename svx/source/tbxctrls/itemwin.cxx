@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 09:17:05 $
+ *  last change: $Author: os $ $Date: 2002-03-12 13:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,13 @@
 SvxLineBox::SvxLineBox( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
 
     LineLB( pParent, nBits ),
-
+    aLogicalSize(40,140),
     nCurPos     ( 0 ),
     rBindings   ( rBind ),
     bRelease    ( TRUE )
 
 {
-    SetSizePixel( Size( 90, 260 ) );
+    SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
     Show();
 
     aDelayTimer.SetTimeout( DELAY_TIMEOUT );
@@ -271,6 +271,19 @@ void SvxLineBox::ReleaseFocus_Impl()
     if ( pShellWnd )
         pShellWnd->GrabFocus();
 }
+/* -----------------------------08.03.2002 15:39------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    LineLB::DataChanged( rDCEvt );
+}
 
 //========================================================================
 // SvxColorBox
@@ -279,23 +292,16 @@ void SvxLineBox::ReleaseFocus_Impl()
 SvxColorBox::SvxColorBox( Window* pParent, USHORT nSID, SfxBindings& rBind, WinBits nBits ) :
 
     ColorLB( pParent, nBits ),
-
+    aLogicalSize(45,80),
     nCurPos     ( 0 ),
     nId         ( nSID ),
     rBindings   ( rBind ),
     bRelease    ( TRUE )
 
 {
-    SetSizePixel( Size( 100, 180 ) );
+    SetSizePixel( LogicToPixel( aLogicalSize , MAP_APPFONT));
     Show();
 
-/*
-    aDelayTimer.SetTimeout( DELAY_TIMEOUT );
-    aDelayTimer.SetTimeoutHdl( LINK( this, SvxColorBox, DelayHdl_Impl ) );
-    aDelayTimer.Start();
-    Jetzt im DelayHdl()
-
-*/
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     if ( pSh )
@@ -408,7 +414,19 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
+/* -----------------------------08.03.2002 15:35------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    ColorLB::DataChanged( rDCEvt );
+}
 // -----------------------------------------------------------------------
 
 void SvxColorBox::ReleaseFocus_Impl()
@@ -431,7 +449,6 @@ void SvxColorBox::ReleaseFocus_Impl()
 SvxMetricField::SvxMetricField( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
 
     MetricField( pParent, nBits ),
-
     aCurTxt     ( String() ),
     rBindings   ( rBind )
 
@@ -444,6 +461,7 @@ SvxMetricField::SvxMetricField( Window* pParent, SfxBindings& rBind, WinBits nBi
     aSize.Height() += 5;
 #endif
     SetSizePixel( aSize );
+    aLogicalSize = PixelToLogic(aSize, MAP_APPFONT);
     SetUnit( FUNIT_MM );
     SetDecimalDigits( 2 );
     SetMax( 5000 );
@@ -586,6 +604,19 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
+/* -----------------------------08.03.2002 15:32------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    MetricField::DataChanged( rDCEvt );
+}
 
 //========================================================================
 // SvxFillTypeBox
@@ -600,7 +631,7 @@ SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     bRelease(TRUE)
 
 {
-    SetSizePixel( Size( 90, 100 ) );
+    SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
     SelectEntryPos( XFILL_SOLID );
     Show();
@@ -687,7 +718,7 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
 
 {
     SetPosPixel( Point( 90, 0 ) );
-    SetSizePixel( Size( 110, 180 ) );
+    SetSizePixel( LogicToPixel( Size(50, 80 ), MAP_APPFONT ));
     Show();
 }
 

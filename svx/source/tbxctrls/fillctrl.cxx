@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 09:15:12 $
+ *  last change: $Author: os $ $Date: 2002-03-12 13:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBind
 
     bUpdate         ( FALSE ),
     eLastXFS        ( XFILL_NONE )
-
 {
     StartListening( rBind );
 }
@@ -550,18 +549,19 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 FillControl::FillControl( Window* pParent, WinBits nStyle ) :
-    Window( pParent, nStyle | WB_DIALOGCONTROL )
+    Window( pParent, nStyle | WB_DIALOGCONTROL ),
+    pLbFillType(new SvxFillTypeBox( this )),
+    aLogicalFillSize(40,80),
+    aLogicalAttrSize(50,80)
 {
-#ifdef OS2
-    WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL;
-    pLbFillType = new SvxFillTypeBox( this, nBits );
-#else
-    pLbFillType = new SvxFillTypeBox( this );
-#endif
     pLbFillAttr = new SvxFillAttrBox( this );
-
-    Size aTypeSize = pLbFillType->GetSizePixel();
-    Size aAttrSize = pLbFillAttr->GetSizePixel();
+    Size aTypeSize(LogicToPixel(aLogicalFillSize, MAP_APPFONT));
+    Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
+    pLbFillType->SetSizePixel(aTypeSize);
+    pLbFillAttr->SetSizePixel(aAttrSize);
+    //to get the base height
+    aTypeSize = pLbFillType->GetSizePixel();
+    aAttrSize = pLbFillAttr->GetSizePixel();
     Point aAttrPnt = pLbFillAttr->GetPosPixel();
     SetSizePixel(
         Size( aAttrPnt.X() + aAttrSize.Width(),
@@ -809,5 +809,29 @@ void FillControl::Resize()
 
     pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
     pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
+}
+/* -----------------------------08.03.2002 15:04------------------------------
+
+ ---------------------------------------------------------------------------*/
+
+void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        Size aTypeSize(LogicToPixel(aLogicalFillSize, MAP_APPFONT));
+        Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
+        pLbFillType->SetSizePixel(aTypeSize);
+        pLbFillAttr->SetSizePixel(aAttrSize);
+        //to get the base height
+        aTypeSize = pLbFillType->GetSizePixel();
+        aAttrSize = pLbFillAttr->GetSizePixel();
+        Point aAttrPnt = pLbFillAttr->GetPosPixel();
+
+        SetSizePixel(
+            Size( aAttrPnt.X() + aAttrSize.Width(),
+                Max( aAttrSize.Height(), aTypeSize.Height() ) ) );
+    }
+    Window::DataChanged( rDCEvt );
 }
 
