@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-14 14:35:04 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 08:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,31 +65,21 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-
 #include <sfx2/sfxsids.hrc>
-
 #define ITEMID_MACRO SID_ATTR_MACROITEM
 #ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
 #endif
-
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-
 #include "hyperdlg.hrc"
-
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #include "hyperdlg.hxx"
 #endif
-
 #include "hltpbase.hxx"
 
 using namespace ucb;
@@ -166,58 +156,31 @@ BOOL SvxFramesComboBox::GetCurrentFrameNames ()
 |*
 |************************************************************************/
 
-SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses )
-: SfxURLBox         ( pParent, eSmart ),
+SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses ) :
+  SfxURLBox         ( pParent, eSmart ),
+  DropTargetHelper  ( this ),
   mbAccessAddress   (bAddresses)
-{}
-
-BOOL SvxHyperURLBox::QueryDrop( DropEvent& rEvt )
 {
-    for( int i=0; i<DragServer::GetItemCount(); i++)
-    {
-        if ( DragServer::HasFormat( i, FORMAT_STRING ) )
-            /*|| ( DragServer::HasFormat( i, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) && mbAccessAddress ) )*/
-        {
-            return TRUE;
-        }
-    }
-    return FALSE;
 }
 
-BOOL SvxHyperURLBox::Drop( const DropEvent &rEvt )
+sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if( rEvt.IsDefaultAction() )
-        ( (DropEvent&)rEvt).SetAction( DROP_COPY );
+    return( IsDropFormatSupported( FORMAT_STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE );
+}
 
-    BOOL bDone = FALSE;
-    USHORT nCount = DragServer::GetItemCount();
+sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+    String                  aString;
+    sal_Int8                nRet = DND_ACTION_NONE;
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    if( aDataHelper.GetString( FORMAT_STRING, aString ) )
     {
-        if( !bDone && DragServer::HasFormat( i, FORMAT_STRING ) )
-        {
-            SetText( DragServer::PasteString(i) );
-            bDone = TRUE;
-            break;
-        }
-        /*
-        Falls Adresse aus Datenbank gedragged werden soll....
-        if( !bDone && mbAccessAddress &&
-            DragServer::HasFormat( i, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
-        {
-            String aAddress = GetAllEmailNamesFromDragItem(i);
-
-            if ( aAddress.Len() )
-            {
-                SetText( aAddress );
-                bDone = TRUE;
-                break;
-            }
-        }
-        */
+        SetText( aString );
+        nRet = DND_ACTION_COPY;
     }
 
-    return TRUE;
+    return nRet;
 }
 
 /*
@@ -358,16 +321,6 @@ long SvxHyperURLBox::Notify( NotifyEvent& rNEvt )
 }
 long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 {
-    // Drag & Drop
-    if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_QUERYDROP )
-    {
-        rNEvt.SetReturnValue ( (long) QueryDrop ( *(rNEvt.GetDropEvent() ) ) );
-        return  1;
-    } else if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_DROP )
-    {
-        return (long) Drop( *(rNEvt.GetDropEvent() ) );
-    }
-
     return SfxURLBox::PreNotify( rNEvt );
 }
 
