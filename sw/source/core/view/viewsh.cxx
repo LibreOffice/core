@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:59:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,14 +1060,16 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                 {
                     // OD 12.02.2003 #i9719#, #105645# - consider new border
                     // and shadow width
-                    const nBorderWidth =
+                    const SwTwips nBorderWidth =
                             GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
-                    const nShadowWidth =
+                    const SwTwips nShadowWidth =
                             GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
-                    sal_Int16 nPageLeft = pPage->Frm().Left() - nBorderWidth;
+                    // OD 03.03.2003 #107927# - use correct datatype
+                    const SwTwips nPageLeft = pPage->Frm().Left() - nBorderWidth;
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
-                    sal_Int16 nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
+                    // OD 03.03.2003 #107927# - use correct datatype
+                    const SwTwips nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
                     if( nPageRight > nMaxRight )
                         nMaxRight = nPageRight;
                     //Zus. auf die Zeichenobjekte abgleichen.
@@ -1085,7 +1087,8 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 //                          if ( pObj->IsWriterFlyFrame() )
 //                              continue;
                             const Rectangle &rBound = pObj->GetBoundRect();
-                            USHORT nL = Max( 0L, rBound.Left() - nOfst );
+                            // OD 03.03.2003 #107927# - use correct datatype
+                            const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
                             if ( nL < nMinLeft )
                                 nMinLeft = nL;
                             if( rBound.Right() + nOfst > nMaxRight )
