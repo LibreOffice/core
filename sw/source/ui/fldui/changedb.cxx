@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
+ *  last change: $Author: os $ $Date: 2001-03-14 10:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
+    int nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 
@@ -266,11 +267,15 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                 if (sTableName == aUsedDBTLB.GetEntryText(pChild))
                     return pChild;
             }
-            return aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+            pRet->SetUserData((void*)nCommandType);
+            return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBBMP, aDBBMP);
-    return aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+    pRet->SetUserData((void*)nCommandType);
+    return pRet;
 }
 
 /*--------------------------------------------------------------------
@@ -304,6 +309,9 @@ void SwChangeDBDlg::UpdateFlds()
                                             aUsedDBTLB.GetParent( pEntry )));
             *pTmp += DB_DELIM;
             *pTmp += aUsedDBTLB.GetEntryText( pEntry );
+            *pTmp += DB_DELIM;
+            int nCommandType = (int)(ULONG)pEntry->GetUserData();
+            *pTmp += String::CreateFromInt32(nCommandType);
             aDBNames.Insert(pTmp, aDBNames.Count() );
         }
         pEntry = aUsedDBTLB.NextSelected(pEntry);
@@ -311,9 +319,12 @@ void SwChangeDBDlg::UpdateFlds()
 
     pSh->StartAllAction();
     String sTableName, sColumnName;
-    String sTemp(aAvailDBTLB.GetDBName(sTableName, sColumnName));
+    sal_Bool bIsTable = sal_False;
+    String sTemp(aAvailDBTLB.GetDBName(sTableName, sColumnName, &bIsTable));
     sTemp += DB_DELIM;
     sTemp += sTableName;
+    sTemp += DB_DELIM;
+    sTemp += bIsTable ? '0' : '1';
     pSh->ChangeDBFields( aDBNames, sTemp);
     pSh->EndAllAction();
 }
@@ -327,8 +338,10 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, pBtn )
 {
     String sTableName, sColumnName;
     SwDBData aData;
-    aData.sDataSource = aAvailDBTLB.GetDBName(sTableName, sColumnName);
+    sal_Bool bIsTable = sal_False;
+    aData.sDataSource = aAvailDBTLB.GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
+    aData.nCommandType = bIsTable ? 0 : 1;;
     pSh->ChgDBData(aData);
     ShowDBName(pSh->GetDBData());
     EndDialog(RET_OK);
