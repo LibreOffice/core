@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-14 15:25:50 $
+ *  last change: $Author: aw $ $Date: 2001-10-24 10:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,8 +1235,8 @@ void SdrMarkView::CheckMarked()
 // actual IAO-Handles to throw away saved contents
 void SdrMarkView::ForceInvalidateMarkHandles()
 {
-    // at the moment, do this using SetMarkHandles()
-    SetMarkHandles();
+    // #86973#
+    aHdl.Clear();
 }
 
 void SdrMarkView::SetMarkRects()
