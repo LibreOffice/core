@@ -52,7 +52,6 @@ hedabu: ..\inc\txtstyle.hxx %_DEST%\inc%_EXT%\xmloff\txtstyle.hxx
 hedabu: ..\inc\prstylei.hxx %_DEST%\inc%_EXT%\xmloff\prstylei.hxx
 hedabu: ..\inc\txtstyli.hxx %_DEST%\inc%_EXT%\xmloff\txtstyli.hxx
 hedabu: ..\inc\txtprmap.hxx %_DEST%\inc%_EXT%\xmloff\txtprmap.hxx
-hedabu: ..\inc\pkgurl.hxx %_DEST%\inc%_EXT%\xmloff\pkgurl.hxx
 hedabu: ..\inc\txtflde.hxx %_DEST%\inc%_EXT%\xmloff\txtflde.hxx
 hedabu: ..\inc\txtfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtfldi.hxx
 hedabu: ..\inc\txtvfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtvfldi.hxx
