@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: af $ $Date: 2002-04-12 14:54:22 $
+#   last change: $Author: af $ $Date: 2002-04-12 15:08:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ AUTOSEG=true
 
 SLOFILES =      									\
     $(SLO)$/AccessibleDocumentView.obj				\
-    $(SLO)$/AccessiblePageShape.obj					\
     $(SLO)$/AccessiblePresentationShape.obj			\
     $(SLO)$/AccessiblePresentationGraphicShape.obj	\
     $(SLO)$/AccessiblePresentationOLEShape.obj		\
