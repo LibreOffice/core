@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:48:57 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-03 15:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ catalan ] = "Endnote $(ARG1)";
     Text[ thai ] = "Endnote $(ARG1)";
 };
+<<<<<<< access.src
 String STR_ACCESS_REPLACEMENT_POSTIT
 {
     Text = "[Notiz: $(ARG1)]" ;
@@ -529,6 +530,8 @@ String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
     Text[ catalan ] = "[Aufzählungszeichen]";
     Text[ thai ] = "[AufzÃ¤hlungszeichen]";
 };
+=======
+>>>>>>> 1.10.2.2
 String STR_ACCESS_TABLE_DESC
 {
     Text = "$(ARG1) auf Seite $(ARG2)" ;
