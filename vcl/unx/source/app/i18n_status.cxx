@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:38:18 $
+ *  last change: $Author: cp $ $Date: 2001-12-04 14:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <menubtn.hxx>
 #include <menu.hxx>
 #include <svdata.hxx>
+#include <svapp.hxx>
 #include <saldisp.hxx>
 #include <salframe.hxx>
 #include <saldata.hxx>
@@ -131,8 +132,15 @@ class XIMStatusWindow : public StatusWindow
     SalFrame*               m_pLastParent;
     Size                    m_aWindowSize;
 
+    // for delayed showing
+    bool                    m_bDelayedShow;
+    I18NStatus::ShowReason  m_eDelayedReason;
+    ULONG                   m_nDelayedEvent;
+
     Point updatePosition();
     void layout();
+
+    DECL_LINK( DelayedShowHdl, void* );
 public:
     XIMStatusWindow();
     virtual ~XIMStatusWindow();
@@ -151,13 +159,18 @@ public:
 XIMStatusWindow::XIMStatusWindow() :
         StatusWindow( WB_BORDER ),
         m_aStatusText( this, 0 ),
-        m_pLastParent( NULL )
+        m_pLastParent( NULL ),
+        m_bDelayedShow( false ),
+        m_eDelayedReason( I18NStatus::contextmap ),
+        m_nDelayedEvent( 0 )
 {
     layout();
 }
 
 XIMStatusWindow::~XIMStatusWindow()
 {
+    if( m_nDelayedEvent )
+        Application::RemoveUserEvent( m_nDelayedEvent );
 }
 
 void XIMStatusWindow::layout()
@@ -217,7 +230,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             setText( String() );
             m_pLastParent = pParent;
-            Show( FALSE );
+            Show( FALSE, SHOW_NOACTIVATE );
         }
         if( IsVisible() )
         {
@@ -229,25 +242,35 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     }
 }
 
-void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
+IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, pDummy )
 {
-    if( bShow && ! m_aStatusText.GetText().Len() )
-        bShow = false;
-
+    m_nDelayedEvent = 0;
     const SystemEnvData* pData = GetSystemData();
     SalFrame* pStatusFrame = (SalFrame*)pData->pSalFrame;
-    if( bShow )
+    if( m_bDelayedShow )
     {
         Size aControlSize( m_aWindowSize.Width()-4, m_aWindowSize.Height()-4 );
         m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
         pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
     }
-    Show( bShow );
-    if( bShow )
+    Show( m_bDelayedShow, SHOW_NOACTIVATE );
+    if( m_bDelayedShow )
     {
         XRaiseWindow( (Display*)pData->pDisplay,
                       (XLIB_Window)pData->aShellWindow );
     }
+    return 0;
+}
+
+void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
+{
+    if( bShow && ! m_aStatusText.GetText().Len() )
+        bShow = false;
+
+    m_bDelayedShow = bShow;
+    m_eDelayedReason = eReason;
+    if( ! m_nDelayedEvent )
+        m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ) );
 }
 
 void XIMStatusWindow::setText( const String& rText )

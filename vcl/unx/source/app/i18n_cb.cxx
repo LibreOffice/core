@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: cp $ $Date: 2001-12-04 14:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#define __synchronous_extinput__ 1
 
 #include <stdio.h>
 #ifdef SOLARIS
@@ -451,7 +453,8 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       aTextEvent.mpTextAttr = Preedit_FeedbackToSAL(
             pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength);
       aTextEvent.mnCursorPos = call_data->caret;
-      aTextEvent.maText = pPreeditData->aText.pUnicodeBuffer;
+      aTextEvent.maText = String (pPreeditData->aText.pUnicodeBuffer,
+                                pPreeditData->aText.nLength);
     aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
       aTextEvent.mnDeltaStart = 0; // call_data->chg_first;
       aTextEvent.mbOnlyCursor = False;
@@ -461,6 +464,8 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
                 (void*)&aTextEvent);
       if (aTextEvent.mpTextAttr)
         free((void*)aTextEvent.mpTextAttr);
+    if (pPreeditData->aText.nLength == 0)
+        pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 
 #else
 
@@ -478,14 +483,13 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 
        pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
         (void*)pTextEvent);
+    if (pPreeditData->aText.nLength == 0)
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
 #endif
 
     if (pPreeditData->aText.nLength == 0)
-    {
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
         pPreeditData->eState = ePreeditStatusStartPending;
-    }
 
     GetPreeditSpotLocation(ic, (XPointer)pPreeditData);
 }
@@ -613,7 +617,7 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
             aTextEvent.mnTime           = 0;
             aTextEvent.mpTextAttr       = 0;
             aTextEvent.mnCursorPos      = cbtext->length;
-            aTextEvent.maText           = p_unicode_data;
+            aTextEvent.maText           = UniString(p_unicode_data, cbtext->length);
             aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
             aTextEvent.mnDeltaStart     = 0;
             aTextEvent.mbOnlyCursor     = False;
