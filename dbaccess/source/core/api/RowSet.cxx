@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:41:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2163,10 +2163,17 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
         {
             m_xComposer->setQuery(rQuery);
 
-            if(m_bIgnoreResult)
-                m_xComposer->setFilter(::rtl::OUString::createFromAscii("0=1"));
-            else if (m_aFilter.getLength() && m_bApplyFilter)
+            if (m_aFilter.getLength() && m_bApplyFilter)
                 m_xComposer->setFilter(m_aFilter);
+
+            if ( m_bIgnoreResult )
+            {   // append a "0=1" filter
+                // don't simply overwrite an existent filter, this would lead to problems if this existent
+                // filter contains paramters (since a keyset may add parameters itself)
+                // 2003-12-12 - #23418# - fs@openoffice.org
+                m_xComposer->setQuery( m_xComposer->getComposedQuery( ) );
+                m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
+            }
 
             if (m_aOrder.getLength())
                 m_xComposer->setOrder(m_aOrder);
