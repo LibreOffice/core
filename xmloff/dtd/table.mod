@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.6 2000-10-18 17:29:22 sab Exp $
+	$Id: table.mod,v 1.7 2000-10-24 08:36:39 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -203,6 +203,13 @@
 	table:name CDATA #IMPLIED
 	table:execute %boolean; #IMPLIED
 >
+<!ELEMENT table:label-ranges (table:label-range)* >
+<!ELEMENT table:label-range EMPTY>
+<!ATTLIST table:label-range
+	table:label-cell-range-address %cell-range-address; #REQUIRED
+	table:data-cell-range-address %cell-range-address; #REQUIRED
+	table:orientation (column|row) #REQUIRED
+>
 <!ELEMENT office:annotation (%cString;)>
 <!ATTLIST office:annotation
 	office:author %string; #REQUIRED
@@ -211,6 +218,7 @@
 	office:display %boolean; "true"
 >
 <!ELEMENT table:sub-table (%table-column-groups; | %table-row-groups;)>
+<!ELEMENT
 <!ELEMENT table:named-expressions (table:named-range | table:named-expression)*>
 <!ELEMENT table:named-range EMPTY>
 <!ATTLIST table:named-range

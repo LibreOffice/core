@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.4 2000-10-19 10:16:12 dr Exp $
+	$Id: office.mod,v 1.5 2000-10-24 08:36:39 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -123,7 +123,8 @@
 <!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
 					   text:user-field-decls?, text:dde-connection-decls?" >
 
-<!ENTITY % body "(%text-decls;,table:content-validations?,(text:h|text:p|text:ordered-list|
+<!ENTITY % body "(%text-decls;,table:content-validations?,table:label-ranges?,
+		(text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|draw:page|
 		draw:a|draw:text-box|draw:image|text:section)*,
 		table:named-expressions?,
