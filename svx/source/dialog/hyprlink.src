@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:35:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,6 +467,8 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ hindi ] = "इस URL अस्तित्व में नहीं है । किसी तरह जोड़ना है?";
     Message[ slovak ] = "Toto URL neexistuje. Napriek tomu vložiť?";
 };
+
+
 
 
 
