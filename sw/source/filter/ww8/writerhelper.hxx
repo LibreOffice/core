@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:41:41 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <typeinfo>
 #include <vector>
 
-#ifndef WW_TYPESSW
-#include "typessw.hxx"
+#ifndef WW_TYPES
+#include "types.hxx"
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
@@ -90,12 +90,18 @@
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>            //SvInPlaceObjectRef
 #endif
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>           //Polygon, PolyPolygon
+#endif
 
 class SwDoc;
 class SwTxtFmtColl;
 class SdrObject;
 class SdrOle2Obj;
 class SvPersist;
+class SwNumFmt;
+class SwTxtNode;
+class SwNoTxtNode;
 
 namespace sw
 {
@@ -388,6 +394,46 @@ namespace sw
         */
         void SortByOutline(ParaStyles &rStyles);
 
+        /** Get the Numbering Format used on a paragraph
+
+            There are two differing types of numbering formats that may be on a
+            paragraph, normal and outline. The outline is that numbering you
+            see in tools->outline numbering. Theres no difference in the
+            numbering itself, just how you get it from the SwTxtNode. Needless
+            to say the filter generally couldn't care less what type of
+            numbering is in use.
+
+            @param rTxtNode
+            The SwTxtNode that is the paragraph
+
+            @return A SwNumFmt pointer that describes the numbering level
+            on this paragraph, or 0 if there is none.
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode);
+
+        /** Get the SwNoTxtNode associated with a SwFrmFmt if here is one
+
+            There are two differing types of numbering formats that may be on a
+            paragraph, normal and outline. The outline is that numbering you
+            see in tools->outline numbering. Theres no difference in the
+            numbering itself, just how you get it from the SwTxtNode. Needless
+            to say the filter generally couldn't care less what type of
+            numbering is in use.
+
+            @param rFmt
+            The SwFrmFmt that may describe a graphic
+
+            @return A SwNoTxtNode pointer that describes the graphic of this
+            frame if there is one, or 0 if there is none.
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt);
+
         /** Does a node have a "page break before" applied
 
             Both text nodes and tables in writer can have "page break before"
@@ -402,6 +448,52 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         bool HasPageBreak(const SwNode &rNode);
+
+        /** Shift tabstops from a given start position to a new start position
+
+            For no good reason except to complicate my life writer tabs are
+            relative to the left of the paragraph text body indent. More
+            reasonably word's are absolute.
+
+            AdjustTabs converts the tabs in rTabs originally relative from
+            nScrLeft to be relative to nDestLeft. For example nSrcLeft would be
+            0 when converting from word to writer, and vice versa when
+            converting to word, and both values are set when moving writer tabs
+            after an indent change
+
+            @param rTabs
+            The SvxTabStopItem whose tabs we want to change
+
+            @param nSrcLeft
+            The original offset that rTabs are relative to
+
+            @param nDestLeft
+            The new offset to change rTabs to be relative to
+
+            @return true if there was any tabs changed, false otherwise
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+
+       */
+        bool AdjustTabs(SvxTabStopItem &rTabs, long nSrcLeft, long nDestLeft);
+
+
+        /** Make a best fit Polygon from a PolyPolygon
+
+            For custom contours in writer we use a PolyPolygon, while word uses
+            a simple polygon, so we need to try and make the best polygon from
+            a PolyPolygon
+
+            @param rPolyPoly
+            The PolyPolygon to try and turn into a Polygon
+
+            @return best fit Polygon from rPolyPoly
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
     }
 
     namespace hack
