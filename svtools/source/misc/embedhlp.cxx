@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:47:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ void EmbeddedObjectRef::Clear()
             {
                 try
                 {
+                    mxObj->changeState( embed::EmbedStates::LOADED );
                     xClose->close( sal_True );
                 }
                 catch ( util::CloseVetoException& )
@@ -399,8 +400,25 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
     DBG_ASSERT( bUpdate || mpImp->pContainer, "Can't retrieve current graphic!" );
     uno::Reference < io::XInputStream > xStream;
     if ( mpImp->pContainer && !bUpdate )
+    {
         // try to get graphic stream from container storage
         xStream = mpImp->pContainer->GetGraphicStream( mxObj, &mpImp->aMediaType );
+        if ( xStream.is() )
+        {
+            const sal_Int32 nConstBufferSize = 32000;
+            SvStream *pStream = new SvMemoryStream( 32000, 32000 );
+            sal_Int32 nRead=0;
+            uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+            do
+            {
+                nRead = xStream->readBytes ( aSequence, nConstBufferSize );
+                pStream->Write( aSequence.getConstArray(), nRead );
+            }
+            while ( nRead == nConstBufferSize );
+            pStream->Seek(0);
+            return pStream;
+        }
+    }
 
     if ( !xStream.is() )
     {
@@ -416,14 +434,15 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
             xStream = new ::comphelper::SequenceInputStream( aSeq );
             if ( mpImp->pContainer )
                 mpImp->pContainer->InsertGraphicStream( xStream, mpImp->aPersistName, mpImp->aMediaType );
+            SvStream *pStream = new SvMemoryStream( aSeq.getLength() );
+            pStream->Write( aSeq.getConstArray(), aSeq.getLength() );
+            pStream->Seek(0);
+            return pStream;
         }
         catch ( uno::Exception& )
         {
         }
     }
-
-    if ( xStream.is() )
-        return ::utl::UcbStreamHelper::CreateStream( xStream );
 
     return NULL;
 }
@@ -534,7 +553,12 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
 
 }
 
-void EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
+BOOL EmbeddedObjectRef::TryRunningState()
+{
+    return TryRunningState( mxObj );
+}
+
+BOOL EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
     try
     {
@@ -543,7 +567,10 @@ void EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbedded
     }
     catch ( uno::Exception& )
     {
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
