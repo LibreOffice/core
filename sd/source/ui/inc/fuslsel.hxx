@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,24 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUSLSEL_HXX
-#define _SD_FUSLSEL_HXX
+#ifndef SD_FU_SLIDE_SELECTION_HXX
+#define SD_FU_SLIDE_SELECTION_HXX
 
-#ifndef _SD_FUSLID_HXX
+#ifndef SD_FU_SLIDE_HXX
 #include "fuslid.hxx"
 #endif
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 
-class SdSlideViewShell;
-class SdWindow;
-class SdSlideView;
 class SdDrawDocument;
 class Sound;
+
+namespace sd {
+
+class SlideView;
+class SlideViewShell;
+class Window;
 
 struct FSS_IsShowingEffectInfo
 {
@@ -78,10 +84,45 @@ struct FSS_IsShowingEffectInfo
     BOOL bDisposed;                 // TRUE if the FuSlideSelection was deleted during fade effect
 };
 
-class FuSlideSelection : public FuSlide
-{
-private:
 
+class FuSlideSelection
+    : public FuSlide
+{
+public:
+    TYPEINFO();
+
+    FuSlideSelection (
+        SlideViewShell* pViewSh,
+        ::sd::Window* pWin,
+        SlideView* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSlideSelection (void);
+
+    // Mouse- & Key-Events
+    virtual BOOL                KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL                MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL                MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL                MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void                Paint(const Rectangle& rRect, ::sd::Window* pWin);
+
+    virtual void                Activate();        // Function aktivieren
+    virtual void                Deactivate();          // Function deaktivieren
+
+    virtual void                ScrollStart();
+    virtual void                ScrollEnd();
+
+    BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
+
+private:
     BOOL                        bSubstShown;
     BOOL                        bPageHit;
     List                        aSubstList;       // Liste mit Ertsatzdarstellungen
@@ -106,41 +147,9 @@ private:
     void                        ShowEffect(USHORT nPageNo);
 
                                 DECL_LINK( DragSlideHdl, Timer* );
-
-public:
-
-                                TYPEINFO();
-
-                                FuSlideSelection( SdSlideViewShell* pViewSh, SdWindow* pWin,
-                                                  SdSlideView* pView, SdDrawDocument* pDoc,
-                                                  SfxRequest& rReq );
-
-    virtual                     ~FuSlideSelection();
-                                                   // Mouse- & Key-Events
-    virtual BOOL                KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL                MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL                MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL                MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void                Paint(const Rectangle& rRect, SdWindow* pWin);
-
-    virtual void                Activate();        // Function aktivieren
-    virtual void                Deactivate();          // Function deaktivieren
-
-    virtual void                ScrollStart();
-    virtual void                ScrollEnd();
-
-    BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
-
-    /** is called when the currenct function should be aborted. <p>
-        This is used when a function gets a KEY_ESCAPE but can also
-        be called directly.
-
-        @returns true if a active function was aborted
-    */
-    virtual bool cancel();
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUSLSEL_HXX
+#endif
 
