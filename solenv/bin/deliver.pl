@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-08 11:02:38 $
+#   last change: $Author: rt $ $Date: 2002-11-08 17:34:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.34 $ ';
+$id_str = ' $Revision: 1.35 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -627,34 +627,40 @@ sub copy_if_newer
             return 0;
         }
         else {
-            # copy to temporary file first and rename later
-            # to minimize the possibility for race conditions
-            local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
-            my $rc = copy($from, $temp_file);
-            if ( $rc) {
-                utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
-                fix_file_permissions($$from_stat_ref[2], $temp_file);
-                $rc = rename($temp_file, $to);
-                if ( $rc ) {
-                    # handle special packaging of *.dylib files for Mac OS X
-                    if ( $^O eq 'darwin' )
-                    {
-                        system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                        system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
-                        system("ranlib", "$to" ) if ( $to =~ /\.a/ );
-                    }
-                    push_on_ziplist($to) if $opt_zip;
-                    return 1;
-                }
-                else {
-                    print_error("can't rename temporary file to $to: $!",0);
-                }
+            if ( -l $from ) {
+                print "$from is a link, don't copy.\n";
+                return 0;
             }
             else {
-                print_error("can't copy $from: $!",0);
+                # copy to temporary file first and rename later
+                # to minimize the possibility for race conditions
+                local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
+                my $rc = copy($from, $temp_file);
+                if ( $rc) {
+                    utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+                    fix_file_permissions($$from_stat_ref[2], $temp_file);
+                    $rc = rename($temp_file, $to);
+                    if ( $rc ) {
+                        # handle special packaging of *.dylib files for Mac OS X
+                        if ( $^O eq 'darwin' )
+                        {
+                            system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                            system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                            system("ranlib", "$to" ) if ( $to =~ /\.a/ );
+                        }
+                        push_on_ziplist($to) if $opt_zip;
+                        return 1;
+                    }
+                    else {
+                        print_error("can't rename temporary file to $to: $!",0);
+                    }
+                }
+                else {
+                    print_error("can't copy $from: $!",0);
+                }
+                unlink($temp_file);
+                return 0;
             }
-            unlink($temp_file);
-            return 0;
         }
     }
 }
