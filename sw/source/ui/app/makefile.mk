@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+#   last change: $Author: cmc $ $Date: 2001-02-08 13:10:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,7 @@ SLOFILES = \
 EXCEPTIONSFILES= \
         $(SLO)$/swmodule.obj \
         $(SLO)$/swmodul1.obj \
-        $(SLO)$/docsh2.obj   \
+        $(SLO)$/docsh2.obj
 
 LIB1TARGET= $(SLB)$/app.lib
 
