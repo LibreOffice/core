@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:38:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,8 @@
           <value >service:com.sun.star.sdb.DatabaseWizardDialog</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Datenbank...</value>
-          <value xml:lang="en-US">Database...</value>
+          <value xml:lang="de">Datenbank</value>
+          <value xml:lang="en-US">Database</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_self</value>
@@ -556,6 +556,26 @@
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
           <value >private:image/3216</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+  <node oor:name="Forms">
+    <node oor:name="ControlLayout">
+      <node oor:name="XMLFormDocument">
+        <prop oor:name="VisualEffect" oor:type="xs:string">
+          <value>flat</value>
+        </prop>
+        <prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="DatabaseFormDocument">
+        <prop oor:name="VisualEffect" oor:type="xs:string">
+          <value>flat</value>
+        </prop>
+        <prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
     </node>
