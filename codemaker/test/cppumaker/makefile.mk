@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:53:51 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:14:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,20 +61,30 @@
 
 PRJ := ..$/..
 PRJNAME := codemaker
-
 TARGET := test_codemaker_cppumaker
 
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
+DLLPRE = # no leading "lib" on .so files
+
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
-SLOFILES = $(SLO)$/test_codemaker_cppumaker.obj
+SHL1TARGET = $(TARGET)
+SHL1OBJS = $(SLO)$/test_codemaker_cppumaker.obj
+SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL1VERSIONMAP = version.map
+SHL1IMPLIB = i$(SHL1TARGET)
+DEF1NAME = $(SHL1TARGET)
+
+SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
 
-$(SLOFILES): $(MISC)$/$(TARGET).cppumaker.flag
+ALLTAR: test
+
+$(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(BIN)$/cppumaker$(EXECPOST)
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
@@ -90,3 +100,6 @@ $(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
 $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
+
+test .PHONY: $(SHL1TARGETN)
+    testshl2 $<
