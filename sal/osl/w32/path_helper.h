@@ -2,9 +2,9 @@
  *
  *  $RCSfile: path_helper.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:50:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,6 @@
 extern "C"
 {
 #endif
-
-/*******************************************************************
- _osl_getSystemPathFromFileURL
- ******************************************************************/
-
-oslFileError SAL_CALL _osl_getSystemPathFromFileURL(
-    rtl_uString *strURL,
-    rtl_uString **pustrPath,
-    sal_Bool bAllowRelative );
 
 /*******************************************************************
  osl_systemPathEnsureSeparator
