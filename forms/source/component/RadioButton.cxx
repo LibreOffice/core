@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: hr $ $Date: 2001-10-25 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 
         case PROPERTY_ID_DEFAULTCHECKED :
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_SHORT, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
-            rValue >>= (sal_Int16)m_nDefaultChecked;
+            rValue >>= m_nDefaultChecked;
             _reset();
             break;
 
@@ -405,15 +405,15 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
 
     switch (nVersion)
     {
-        case 0x0001 : _rxInStream >> m_sReferenceValue; _rxInStream >> (sal_Int16)m_nDefaultChecked; break;
+        case 0x0001 : _rxInStream >> m_sReferenceValue; _rxInStream >> m_nDefaultChecked; break;
         case 0x0002 :
             _rxInStream >> m_sReferenceValue;
-            _rxInStream >> (sal_Int16)m_nDefaultChecked;
+            _rxInStream >> m_nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             break;
         case 0x0003 :
             _rxInStream >> m_sReferenceValue;
-            _rxInStream >> (sal_Int16)m_nDefaultChecked;
+            _rxInStream >> m_nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             readCommonProperties(_rxInStream);
             break;
