@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:40:06 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Window RID_MAIL_WINDOW
         Text[ turkish ] = "Send";
         Text[ arabic ] = "≈—”«·";
         Text[ catalan ] = "Enviar";
+        Text[ finnish ] = "L‰het‰";
     };
     PushButton PB_MAILWIN_CLOSE
     {
@@ -124,6 +125,7 @@ Window RID_MAIL_WINDOW
         Text[ turkish ] = "Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "Sulje";
     };
     ListBox LB_MAILWIN_ROLE
     {
@@ -248,9 +250,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ turkish ] =
         {
-            < "An" ; 1 ; > ;
-            < "Kopie" ; 2 ; > ;
-            < "Blindkopie" ; 3 ; > ;
+            < "Al˝c˝" ; 1 ; > ;
+            < "Kopya" ; 2 ; > ;
+            < "Gizli kopya" ; 3 ; > ;
         };
         StringList [ arabic ] =
         {
@@ -260,9 +262,15 @@ Window RID_MAIL_WINDOW
         };
     StringList [ catalan ] =
     {
-            < "A" ; 3 ; > ;
-        < "Copia" ; 3 ; > ;
+            < "A" ; 1 ; > ;
+        < "Copia" ; 2 ; > ;
         < "CCC" ; 3 ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Kohde" ; 3 ; > ;
+        < "Kopioi" ; 3 ; > ;
+        < "Piilokopio" ; 3 ; > ;
     };
     };
     Edit ED_MAILWIN_ROLE
@@ -305,6 +313,7 @@ Window RID_MAIL_WINDOW
         Text[ turkish ] = "Subject:";
         Text[ arabic ] = "«·„Ê÷Ê⁄:";
         Text[ catalan ] = "Asunto:";
+        Text[ finnish ] = "Aihe:";
     };
     Edit ED_MAILWIN_SUBJECT
     {
@@ -338,6 +347,7 @@ Window RID_MAIL_WINDOW
         Text[ turkish ] = "From:";
         Text[ arabic ] = "„‰:";
         Text[ catalan ] = "De:";
+        Text[ finnish ] = "L‰hett‰j‰:";
     };
     Edit ED_MAILWIN_FROM
     {
@@ -372,6 +382,7 @@ Window RID_MAIL_WINDOW
         Text[ turkish ] = "Priority:";
         Text[ arabic ] = "«·√Ê·ÊÌ…:";
         Text[ catalan ] = "Prioridad:";
+        Text[ finnish ] = "Prioriteetti:";
     };
     ListBox LB_MAILWIN_PRIO
     {
@@ -534,11 +545,11 @@ Window RID_MAIL_WINDOW
         };
         StringList [ turkish ] =
         {
-            < "Sehr hoch" ; 1 ; > ;
-            < "Hoch" ; 2 ; > ;
+            < "«ok y¸ksek" ; 1 ; > ;
+            < "Y¸ksek" ; 2 ; > ;
             < "Normal" ; 3 ; > ;
-            < "Niedrig" ; 4 ; > ;
-            < "Sehr niedrig" ; 5 ; > ;
+            < "D¸˛¸k" ; 4 ; > ;
+            < "«ok d¸˛¸k" ; 5 ; > ;
         };
         StringList [ arabic ] =
         {
@@ -550,11 +561,19 @@ Window RID_MAIL_WINDOW
         };
     StringList [ catalan ] =
     {
-            < "Muy alta" ; 5 ; > ;
-        < "Alta" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Baja" ; 5 ; > ;
+            < "Muy alta" ; 1 ; > ;
+        < "Alta" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Baja" ; 4 ; > ;
         < "Muy baja" ; 5 ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Kiireellinen" ; 5 ; > ;
+        < "T‰rke‰" ; 5 ; > ;
+        < "Normaali" ; 5 ; > ;
+        < "Matala" ; 5 ; > ;
+        < "Matalin" ; 5 ; > ;
     };
     };
     Image IMG_MAILWIN_SEND
