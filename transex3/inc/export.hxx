@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:02:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,10 @@ typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString
 typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
-#define GERMAN_LIST_LINE_INDEX "GERMAN_LIST_LINE_INDEX"
+//#define GERMAN_LIST_LINE_INDEX "GERMAN_LIST_LINE_INDEX"
+// Test ----------------------------
+#define GERMAN_LIST_LINE_INDEX ByteString("de")
+// Test ----------------------------
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
@@ -169,6 +172,7 @@ public:
             pStringList( NULL ),
             pFilterList( NULL ),
             pItemList( NULL ),
+            pPairedList( NULL ),
             pUIEntries( NULL ),
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
@@ -227,11 +231,21 @@ public:
     USHORT nTitleRefId;
 
     ByteString sTextTyp;
+    ByteStringHashMap aFallbackData;
+    ByteStringHashMap aMergedLanguages;
 
     ExportList  *pStringList;
     ExportList  *pUIEntries;
     ExportList  *pFilterList;
     ExportList  *pItemList;
+    ExportList  *pPairedList;
+
+    void Dump();
+    void addFallbackData( ByteString& sId , const ByteString& sText );
+    bool getFallbackData( ByteString& sId , ByteString& sText);
+
+    void addMergedLanguage( ByteString& sLang );
+    bool isMerged( ByteString& sLang );
 };
 
 
@@ -247,6 +261,7 @@ public:
 #define LIST_STRING                 0x0001
 #define LIST_FILTER                 0x0002
 #define LIST_ITEM                   0x0004
+#define LIST_PAIRED                 0x0005
 #define LIST_UIENTRIES              0x0008
 #define STRING_TYP_TEXT             0x0010
 #define STRING_TYP_HELPTEXT         0x0020
@@ -339,6 +354,10 @@ public:
     static BOOL ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
+
+    static void DumpExportList( ByteString& sListName , ExportList& aList );
+    static ByteString DumpMap( ByteString& sMapName , ByteStringHashMap& aMap );
+
 private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
@@ -350,7 +369,14 @@ private:
     BOOL WriteExportList( ResData *pResData, ExportList *pExportList,
                         const ByteString &rTyp, BOOL bCreateNew = FALSE );
 
+    ByteString Export::MergePairedList( ByteString& sLine , ByteString& sText );
+
     ByteString FullId();                    // creates cur. GID
+
+    bool PairedListFallback( ByteString& sText , ResData& aResData );
+
+        ByteString GetPairedListID( const ByteString& sText );
+    ByteString GetPairedListString( const ByteString& sText );
 
     void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
@@ -416,12 +442,16 @@ private:
 
 public:
     PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
+    ByteString Dump();
     void InsertEntry(
                     const ByteString &nId ,
                     const ByteString &rText,
                     const ByteString &rQuickHelpText,
                     const ByteString &rTitle )
         {
+
+            //printf("DBG: PFormEntrys::Insert [nId=%s]=rText=%s)\n",nId.GetBuffer(),rText.GetBuffer());
+
             sText[ nId ] = rText;
             bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
@@ -460,6 +490,7 @@ public:
     void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );
     PFormEntrys* GetPFObject( const ByteString& rPFO );
 
+    ByteString Dump();
     BOOL operator==( ResData *pData );
 };
 
@@ -480,11 +511,12 @@ private:
     ByteStringSet aLanguageSet;
     MergeDataHashMap aMap;
     std::vector<ByteString> aLanguages;
-    inline ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID );
+
 
 public:
     MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, BOOL bUTF8 );
     ~MergeDataFile();
+
 
     std::vector<ByteString> GetLanguages();
     MergeData *GetMergeData( ResData *pResData );
@@ -495,8 +527,8 @@ public:
                 const ByteString &nLang , const ByteString &rTEXT,
                 const ByteString &rQHTEXT, const ByteString &rTITLE );
     static USHORT GetLangIndex( USHORT nId );
-
-
+    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID );
+    ByteString Dump();
     void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
 };
@@ -540,3 +572,4 @@ private:
 
 };
 #endif
+
