@@ -511,7 +511,6 @@ char *getline(filep)
             }
             continue;
         }
-#ifdef WIN32
         else if (*p == '/' && *(p+1) == '/') { /* consume comments */
             *p++ = ' ', *p++ = ' ';
             while (*p && *p != '\n')
@@ -521,7 +520,6 @@ char *getline(filep)
             lineno++;
             continue;
         }
-#endif
         else if (*p == '\\') {
             if (*(p+1) == '\n') {
                 *p = ' ';
