@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-23 14:07:20 $
+ *  last change: $Author: jl $ $Date: 2002-07-24 12:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1004,7 +1004,7 @@ static void getJavaPropsFromConfig(JVM * pjvm,
     catch( Exception & e)
     {
         throw JavaNotConfiguredException (OUSTR(
-                  "javavm.cxx: can not find " INI_FILE "or it is corrupt"), Reference<XInterface>());
+                  "javavm.cxx: can not find " INI_FILE " or it is corrupt"), Reference<XInterface>());
     }
     Sequence<OUString> javaProperties = xJavaSection->getKeyNames();
     OUString * pSectionEntry = javaProperties.getArray();
@@ -1230,7 +1230,7 @@ static void getJavaPropsFromEnvironment(JVM * pjvm) throw() {
 
 static void initVMConfiguration(JVM * pjvm,
                                 const Reference<XMultiComponentFactory> & xSMgr,
-                                const Reference<XComponentContext > &xCtx) throw() {
+                                const Reference<XComponentContext > &xCtx) throw(Exception) {
     JVM jvm;
     try {
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
@@ -1252,9 +1252,9 @@ static void initVMConfiguration(JVM * pjvm,
 #endif
     }
 
-    try {
+    try
+    {
         getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
-
     }
     catch(JavaNotConfiguredException& e)
     {
@@ -1355,7 +1355,7 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
 #ifdef UNX
         OUString javaHome(RTL_CONSTASCII_USTRINGPARAM("JAVA_HOME="));
         javaHome += jvm.getJavaHome();
-        const OUString & vmType  = pJvm->getVMType();
+        const OUString & vmType  = jvm.getVMType();
 
         if(!vmType.equals(OUSTR("jre")))
         {
@@ -1635,18 +1635,18 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                 // Java is not enabled. Notify the user via the XInteractionHandler.
                 // If the client selects retry then we jump back to the retry label,otherwise we
                 // throw a JavaDisableException.
-                JavaDisabledException e(OUSTR("JavaVirtualMachine_Impl::getJavaVM " \
+                JavaDisabledException exc(OUSTR("JavaVirtualMachine_Impl::getJavaVM " \
                      "failed because Java is deactivated in the configuration"),
                      Reference< XInterface >());
                 Any anyExc;
-                anyExc <<= e;
+                anyExc <<= exc;
                 SelectedAction  action= doClientInteraction( anyExc);
                 switch( action)
                 {
                 case action_abort:
                     if( pJvm)
                         delete pJvm;
-                    throw e;
+                    throw exc;
                 case action_retry: goto retry;
                 default: goto retry;
                 }
