@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 16:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
 
-            GetViewFrame()->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0, SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON );
             break;
         case SID_CURSORPAGEUP:
         case SID_CURSORPAGEDOWN:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 14:01:21 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 16:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,8 +484,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     //  -> always switch this frame back to normal view
                     //  (ScPreviewShell ctor reads view data)
 
-                    pThisFrame->GetBindings().Execute( SID_VIEWSHELL1,
-                                                NULL, 0, SFX_CALLMODE_ASYNCHRON );
+                    pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_ASYNCHRON );
                 }
                 //  else Fehler (z.B. Ole)
             }
@@ -525,18 +524,21 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 PaintTop();
                 PaintLeft();
                 rBindings.Invalidate( FID_PAGEBREAKMODE );
+                rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
                 rReq.Done();
             }
             break;
 
         case FID_FUNCTION_BOX:
             {
+                USHORT nChildId = ScFunctionChildWindow::GetChildWindowId();
                 if ( rReq.GetArgs() )
-                    pThisFrame->SetChildWindow(ScFunctionChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(FID_FUNCTION_BOX))).GetValue());
+                    pThisFrame->SetChildWindow( nChildId, ((const SfxBoolItem&) (rReq.GetArgs()->Get(FID_FUNCTION_BOX))).GetValue());
                 else
-                    pThisFrame->ToggleChildWindow(ScFunctionChildWindow::GetChildWindowId() );
+                {
+                    pThisFrame->ToggleChildWindow( nChildId );
+                    rReq.AppendItem( SfxBoolItem( FID_FUNCTION_BOX , pThisFrame->HasChildWindow( nChildId ) ) );
+                }
 
                 GetViewFrame()->GetBindings().Invalidate(FID_FUNCTION_BOX);
                 rReq.Done ();
