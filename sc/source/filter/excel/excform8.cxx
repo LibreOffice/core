@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:16 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include "xilink.hxx"
 #endif
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
+
 
 ExcelToSc8::ExcelToSc8( RootData* pRD, XclImpStream& aStr ) :
     ExcelToSc( pRD, aStr ),
@@ -98,21 +102,12 @@ ExcelToSc8::~ExcelToSc8()
 
 BOOL ExcelToSc8::Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab )
 {
-    BOOL bRet = FALSE;
     rFirstTab = rLastTab = 0;
 
     UINT16 nIxti;
     aIn >> nIxti;
 
-    const XclImpXti*        pXti = rLinkMan.GetXti( nIxti );
-    const XclImpSupbook*    pSupbook = rLinkMan.GetSupbook( nIxti );
-    if( pXti && pSupbook )
-    {
-        rFirstTab = pSupbook->GetScTabNum( pXti->mnFirst );
-        rLastTab = pSupbook->GetScTabNum( pXti->mnLast );
-        bRet = TRUE;
-    }
-    return bRet;
+    return rLinkMan.GetScTabRange( rFirstTab, rLastTab, nIxti );
 }
 
 
@@ -475,7 +470,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 aIn >> nUINT16;
                 aIn.Ignore( 2 );
 
-                aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+                aStack << aPool.Store( nUINT16 );
                 break;
             case 0x44:
             case 0x64:
@@ -648,39 +643,50 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
             {
-                sal_uInt16 nXti, nName;
-                aIn >> nXti >> nName;
+                sal_uInt16 nXtiIndex, nName;
+                aIn >> nXtiIndex >> nName;
                 aIn.Ignore( 2 );
-                const XclImpSupbook* pSupbook = rLinkMan.GetSupbook( nXti );
-                if( !pSupbook || pSupbook->IsSelf() )
-                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nName ] );
+
+                if( rLinkMan.IsSelfRef( nXtiIndex ) )
+                {
+                    // internal defined name with explicit sheet, i.e.: =Sheet1!AnyName
+                    aStack << aPool.Store( nName );
+                }
+                else if( const XclImpExtName* pExtName = rLinkMan.GetExternName( nXtiIndex, nName ) )
+                {
+                    switch( pExtName->GetType() )
+                    {
+                        case xlExtName:
+                        case xlExtAddIn:
+                        {
+                            aStack << aPool.Store( ocNoName, pExtName->GetName() );
+                            if( pExtName->GetType() == xlExtName )
+                                pExcRoot->pIR->GetTracer().TraceFormulaExtName();
+                        }
+                        break;
+
+                        case xlExtDDE:
+                        {
+                            String aApplic, aTopic;
+                            if( rLinkMan.GetLinkData( aApplic, aTopic, nXtiIndex ) )
+                            {
+                                TokenId nPar1 = aPool.Store( aApplic );
+                                TokenId nPar2 = aPool.Store( aTopic );
+                                nMerk0 = aPool.Store( pExtName->GetName() );
+                                aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
+                                        << nMerk0 << ocClose;
+                                aPool >> aStack;
+                                pExtName->CreateDdeData(*(pExcRoot->pDoc), aApplic, aTopic );
+                            }
+                        }
+                        break;
+                    }
+                }
                 else
                 {
-                    const XclImpExtName* pExtName = pSupbook->GetExtName( nName );
-                    if( pExtName )
-                    {
-                        String aAppl, aExtDoc;
-                        if( (pExtName->GetType() == xlExtDDE) && pSupbook->GetLink( aAppl, aExtDoc ) )
-                        {
-                            TokenId nPar1 = aPool.Store( aAppl );
-                            TokenId nPar2 = aPool.Store( aExtDoc );
-                            nMerk0 = aPool.Store( pExtName->GetName() );
-                            aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
-                                    << nMerk0 << ocClose;
-                            aPool >> aStack;
-                            pExtName->CreateDdeData(*(pExcRoot->pDoc), aAppl, aExtDoc);
-                        }
-                        else if( (pExtName->GetType() == xlExtName) && pSupbook->IsAddIn() )
-                            aStack << aPool.Store( ocNoName, pExtName->GetAddInName() );
-                        else
-                            aStack << aPool.Store( ocNoName, pExtName->GetName() );
-                    }
-                    else
-                    {
-                        //aStack << ocNoName;
-                        aPool << ocBad;
-                        aPool >> aStack;
-                    }
+                    //aStack << ocNoName;
+                    aPool << ocBad;
+                    aPool >> aStack;
                 }
             }
                 break;
@@ -837,7 +843,6 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
-    const XclImpXti*        pXti;
 
     SingleRefData           aSRD;
     ComplRefData            aCRD;
@@ -1086,27 +1091,21 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
                 aIn >> nIxti >> nRw >> nGrbitCol;
 
-                pXti = rLinkMan.GetXti( nIxti );
-                const XclImpSupbook* pSbE = rLinkMan.GetSupbook( nIxti );
-
-                if( pXti && pSbE )
-                {// in aktuellem Workbook
-//                  if( pSbE->IsSameSheet() )
-                    UINT16  nTabFirst = pXti->mnFirst;
-                    UINT16  nTabLast = pXti->mnLast;
-
-                    aSRD.nTab = nTabFirst;
+                sal_uInt16 nFirstScTab, nLastScTab;
+                if( rLinkMan.GetScTabRange( nFirstScTab, nLastScTab, nIxti ) )
+                {
+                    aSRD.nTab = nFirstScTab;
                     aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
 
-                    if( nTabLast != nTabFirst )
+                    if( nFirstScTab != nLastScTab )
                     {
                         aCRD.Ref1 = aSRD;
                         aCRD.Ref2.nCol = aSRD.nCol;
                         aCRD.Ref2.nRow = aSRD.nRow;
-                        aCRD.Ref2.nTab = nTabLast;
+                        aCRD.Ref2.nTab = nLastScTab;
                         rRangeList.Append( aCRD );
                     }
                     else
@@ -1122,22 +1121,17 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
                 aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
-                pXti = rLinkMan.GetXti( nIxti );
-                const XclImpSupbook* pSbE = rLinkMan.GetSupbook( nIxti );
-
-                if( pXti && pSbE )
+                sal_uInt16 nFirstScTab, nLastScTab;
+                if( rLinkMan.GetScTabRange( nFirstScTab, nLastScTab, nIxti ) )
                 {
-                    UINT16  nTabFirst = pXti->mnFirst;
-                    UINT16  nTabLast = pXti->mnLast;
-
                     SingleRefData   &rR1 = aCRD.Ref1;
                     SingleRefData   &rR2 = aCRD.Ref2;
 
-                    rR1.nTab = nTabFirst;
-                    rR2.nTab = nTabLast;
+                    rR1.nTab = nFirstScTab;
+                    rR2.nTab = nLastScTab;
                     rR1.SetFlag3D( TRUE );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( nTabFirst != nTabLast );
+                    rR2.SetFlag3D( nFirstScTab != nLastScTab );
                     rR2.SetTabRel( FALSE );
 
                     ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
@@ -1246,7 +1240,6 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
     UINT16                  nRow1, nRow2, nCol1, nCol2, nTab1, nTab2;
     UINT16                  nIxti;
 
-    const XclImpXti*        pXti;
     UINT32                  nSeek;
 
     ULONG nMaxPos = aIn.GetRecPos() + nLen;
@@ -1297,13 +1290,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                 aIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
     _3d_common:
-                pXti = rLinkMan.GetXti( nIxti );
-                if( pXti )
-                {
-                    nTab1 = pXti->mnFirst;
-                    nTab2 = pXti->mnLast;
-                }
-                else
+                if( !rLinkMan.GetScTabRange( nTab1, nTab2, nIxti ) )
                     break;
 
                 goto _common;
