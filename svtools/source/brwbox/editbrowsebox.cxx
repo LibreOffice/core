@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 14:25:33 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 15:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ namespace svt
             if ( GetSelectColumnCount( ) )
             {
                 while ( GetSelectColumnCount( ) )
-                    SelectColumnId( FirstSelectedColumn(), sal_False );
+                    SelectColumnPos( FirstSelectedColumn(), sal_False );
                 Select();
             }
         }
@@ -1481,6 +1481,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/04/29 14:25:33  oj
+ *  #98772# enable new imagelist
+ *
  *  Revision 1.6  2002/04/17 11:56:23  oj
  *  #98286# improve accessibility
  *
