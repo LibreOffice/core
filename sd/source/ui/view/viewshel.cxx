@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:50:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1769,6 +1769,9 @@ void ViewShell::ShowUIControls (bool bVisible)
 
     if (mpHorizontalScrollBar.get() != NULL)
         mpHorizontalScrollBar->Show( bVisible );
+
+    if (mpScrollBarBox.get() != NULL)
+        mpScrollBarBox->Show(bVisible);
 
     if (mpContentWindow.get() != NULL)
         mpContentWindow->Show( bVisible );
