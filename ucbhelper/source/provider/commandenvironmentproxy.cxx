@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandenvironmentproxy.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 11:51:28 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 13:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,17 +173,19 @@ Reference< XInteractionHandler > SAL_CALL
 CommandEnvironmentProxy::getInteractionHandler()
     throw ( RuntimeException )
 {
-    if ( !m_pImpl->m_bGotInteractionHandler )
+    if ( m_pImpl->m_xEnv.is() )
     {
-        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_bGotInteractionHandler )
         {
-            m_pImpl->m_xInteractionHandler
-                            = m_pImpl->m_xEnv->getInteractionHandler();
-            m_pImpl->m_bGotInteractionHandler = sal_True;
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            if ( !m_pImpl->m_bGotInteractionHandler )
+            {
+                m_pImpl->m_xInteractionHandler
+                                = m_pImpl->m_xEnv->getInteractionHandler();
+                m_pImpl->m_bGotInteractionHandler = sal_True;
+            }
         }
     }
-
     return m_pImpl->m_xInteractionHandler;
 }
 
@@ -193,17 +195,19 @@ Reference< XProgressHandler > SAL_CALL
 CommandEnvironmentProxy::getProgressHandler()
     throw ( RuntimeException )
 {
-    if ( !m_pImpl->m_bGotProgressHandler )
+    if ( m_pImpl->m_xEnv.is() )
     {
-        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_bGotProgressHandler )
         {
-            m_pImpl->m_xProgressHandler
-                            = m_pImpl->m_xEnv->getProgressHandler();
-            m_pImpl->m_bGotProgressHandler = sal_True;
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            if ( !m_pImpl->m_bGotProgressHandler )
+            {
+                m_pImpl->m_xProgressHandler
+                                = m_pImpl->m_xEnv->getProgressHandler();
+                m_pImpl->m_bGotProgressHandler = sal_True;
+            }
         }
     }
-
     return m_pImpl->m_xProgressHandler;
 }
 
