@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:37:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,10 +1262,10 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         return NULL;
 
     // the very basic information
-    ::rtl::OUString sDataSource, sCommand, sFieldName;
+    ::rtl::OUString sCommand, sFieldName;
     sal_Int32 nCommandType = CommandType::COMMAND;
 
-    _rColumnDescriptor[ daDataSource ]  >>= sDataSource;
+    ::rtl::OUString sDataSource = _rColumnDescriptor.getDataSource();
     _rColumnDescriptor[ daCommand ]     >>= sCommand;
     _rColumnDescriptor[ daColumnName ]  >>= sFieldName;
     _rColumnDescriptor[ daCommandType ] >>= nCommandType;
