@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:51:26 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 10:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,11 +1569,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                     }
                 }
 
-                Rectangle aPoint(VCLPoint(rPoint), Size(0, 0));
+                Point aPoint(VCLPoint(rPoint));
 
-                if (aPoint.IsInside(VCLRectangle(mpHeader->getBounds())))
+                if (VCLRectangle(mpHeader->getBounds()).IsInside(aPoint))
                     xAccessible = mpHeader;
-                else if (aPoint.IsInside(VCLRectangle(mpFooter->getBounds())))
+                else if (VCLRectangle(mpFooter->getBounds()).IsInside(aPoint))
                     xAccessible = mpFooter;
             }
         }
