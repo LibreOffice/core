@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:51:53 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@
 #endif
 #ifndef _MVSAVE_HXX
 #include <mvsave.hxx>
+#endif
+// OD 26.08.2003 #i18103#
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
 #endif
 
 //siehe auch swtable.cxx
@@ -2357,7 +2361,22 @@ void _FndBox::DelFrms( SwTable &rTable )
                         //Ein TabellenFrm muss immer stehenbleiben!
                         if ( pPrev || pFollow )
                         {
-                            pUp->Cut();
+                            // OD 26.08.2003 #i18103# - if table is in a section,
+                            // lock the section, to avoid its delete.
+                            {
+                                SwSectionFrm* pSctFrm = pUp->FindSctFrm();
+                                bool bOldSectLock;
+                                if ( pSctFrm )
+                                {
+                                    bOldSectLock = pSctFrm->IsColLocked();
+                                    pSctFrm->ColLock();
+                                }
+                                pUp->Cut();
+                                if ( pSctFrm && !bOldSectLock )
+                                {
+                                    pSctFrm->ColUnlock();
+                                }
+                            }
                             delete pUp;
                             bDel = FALSE;//Die Row wird mit in den Abgrund
                                          //gerissen.
