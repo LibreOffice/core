@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVisualObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:28:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,24 +83,26 @@
  module com {  module sun {  module star {  module embed {
 
 //=============================================================================
-/** represents common visualisation functionality for embedded objects
+/** represents common visualisation functionality for embedded objects.
  */
 interface XVisualObject: ::com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Provides object with the name of container document
+    /** sets the size of object's visual area.
 
-        @param sName
-            name of the container document
-     */
-    void setContainerName( [in] string sName );
+        <p>
+        The size must be provided in logical units according to map mode the
+        object communicates in.
+        </p>
 
-    //-------------------------------------------------------------------------
-    /** Sets the size of object's visual area
+        <p>
+        If an object is inplace- or ui-active the method must not initiate
+        repainting itself.
+        </p>
 
         @param nAspect
             the aspect specifying the form of object representation
-            can take values from Aspects constant set
+            can take values from <type>Aspects</type> constant set
 
         @param aSize
             the new size of the visual area
@@ -114,18 +116,23 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::uno::Exception
             the object failed to resize
      */
-    void setVisAreaSize( [in] hyper nAspect,
+    void setVisualAreaSize( [in] hyper nAspect,
                          [in] ::com::sun::star::awt::Size aSize )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /** Gets the size of object's visual area
+    /** gets the size of object's visual area.
+
+        <p>
+        The size must be provided in logical units according to map mode the
+        object communicates in.
+        </p>
 
         @param nAspect
             the aspect specifying the form of object representation
-            can take values from Aspects constant set
+            can take values from <type>Aspects</type> constant set
 
         @return
             the size of visual area
@@ -136,22 +143,22 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state
      */
-    ::com::sun::star::awt::Size getVisAreaSize( [in] hyper nAspect )
+    ::com::sun::star::awt::Size getVisualAreaSize( [in] hyper nAspect )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /** Retrieves cached visual representation if any
+    /** retrieves map mode the object communicates in.
 
         @return
-            the cached visual representation of the object
+            the map mode the object communicates in, it can take values from
+            <type>EmbedMapModes</type> constant
 
         @throws ::com::sun::star::uno::Exception
      */
-    any getVisualCache( [in] hyper nAspect )
+    long getMapMode( [in] hyper nAspect )
         raises( ::com::sun::star::uno::Exception );
-
 };
 
 //=============================================================================
