@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:09:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,10 @@ public:
     bool                IsVisibleTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is selected and will be exported. */
     bool                IsSelectedTab( SCTAB nScTab ) const;
-    /** Returns true, if the specified Calc sheet is the active displayed sheet. */
-    bool                IsActiveTab( SCTAB nScTab ) const;
+    /** Returns true, if the specified Calc sheet is the displayed (active) sheet. */
+    bool                IsDisplayedTab( SCTAB nScTab ) const;
+    /** Returns true, if the specified Calc sheet is displayed in right-to-left mode. */
+    bool                IsMirroredTab( SCTAB nScTab ) const;
     /** Returns the Calc name of the specified sheet. */
     const String&       GetScTabName( SCTAB nScTab ) const;
 
@@ -133,15 +135,13 @@ public:
     inline sal_uInt16   GetXclTabCount() const { return mnXclCnt; }
     /** Returns the number of external linked sheets. */
     inline sal_uInt16   GetXclExtTabCount() const { return mnXclExtCnt; }
-    /** Returns the number of codenames (VBA modules connected to sheets). */
-    inline sal_uInt16   GetXclCodenameCount() const { return mnXclCodeCnt; }
     /** Returns the number of exported selected sheets. */
-    inline sal_uInt16   GetXclSelectedCount() const { return mnXclSelected; }
+    inline sal_uInt16   GetXclSelectedCount() const { return mnXclSelCnt; }
 
     /** Returns the Excel index of the active, displayed sheet. */
-    inline sal_uInt16   GetXclActiveTab() const { return mnXclActive; }
+    inline sal_uInt16   GetDisplayedXclTab() const { return mnDisplXclTab; }
     /** Returns the Excel index of the first visible sheet. */
-    inline sal_uInt16   GetXclFirstVisTab() const { return mnXclFirstVis; }
+    inline sal_uInt16   GetFirstVisXclTab() const { return mnFirstVisXclTab; }
 
 private:
     /** Returns true, if any of the passed flags is set for the specified Calc sheet. */
@@ -172,10 +172,9 @@ private:
     SCTAB               mnScCnt;            /// Count of Calc sheets.
     sal_uInt16          mnXclCnt;           /// Count of Excel sheets to be exported.
     sal_uInt16          mnXclExtCnt;        /// Count of external link sheets.
-    sal_uInt16          mnXclCodeCnt;       /// Count of codepages.
-    sal_uInt16          mnXclSelected;      /// Count of selected and exported sheets.
-    sal_uInt16          mnXclActive;        /// Active (selected) sheet.
-    sal_uInt16          mnXclFirstVis;      /// First visible sheet.
+    sal_uInt16          mnXclSelCnt;        /// Count of selected and exported sheets.
+    sal_uInt16          mnDisplXclTab;      /// Displayed (active) sheet.
+    sal_uInt16          mnFirstVisXclTab;   /// First visible sheet.
 
     ScTabVec            maFromSortedVec;    /// Sorted Calc sheet index -> real Calc sheet index.
     ScTabVec            maToSortedVec;      /// Real Calc sheet index -> sorted Calc sheet index.
