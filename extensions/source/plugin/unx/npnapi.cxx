@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.3 2003-03-25 16:03:42 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.4 2003-05-28 12:38:30 vg Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -91,7 +91,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
     if( pMessage = GetNextMessage( FALSE ) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
-        medDebug( 1, "%s\n", GetCommandName( nCommand ) );
+        medDebug( 1, "xhello: %s\n", GetCommandName( nCommand ) );
         switch( nCommand )
         {
             case eNPP_DestroyStream:
@@ -123,7 +123,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                              (char*)&aRet, sizeof( aRet ),
                              "0000", 4,
                              NULL );
-                delete pSave->buf;
+                delete [] pSave->buf;
                 delete m_aInstances.Remove( nInstance );
                 delete instance;
             }
@@ -147,7 +147,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                          (char*)&aRet, sizeof( aRet ),
                          &nStype, sizeof( nStype ),
                          NULL );
-                delete pType;
+                delete [] pType;
             }
             break;
             case eNPP_New:
@@ -179,9 +179,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          NULL );
-                delete pMode;
-                delete pArgc;
-                delete pType;
+                delete [] pMode;
+                delete [] pArgc;
+                delete [] pType;
             }
             break;
             case eNPP_SetWindow:
@@ -214,6 +214,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                                       XtWindow( topLevel ),
                                       DefaultScreen( pAppDisplay )
                                       );
+                    XtMapWidget( (Widget)pInst->pShell );
                     XtMapWidget( (Widget)pInst->pWidget );
                     XRaiseWindow( pAppDisplay, XtWindow((Widget)pInst->pWidget) );
                     XSync( pAppDisplay, False );
@@ -230,7 +231,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          NULL );
-                delete pWindow;
+                delete [] pWindow;
             }
             break;
             case eNPP_StreamAsFile:
@@ -242,7 +243,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 char* fname             = pMessage->GetString();
                 medDebug( 1, "NPP_StreamAsFile %s\n", fname );
                 aPluginFuncs.asfile( instance, pStream, fname );
-                delete fname;
+                delete [] fname;
             }
             break;
             case eNPP_URLNotify:
@@ -253,9 +254,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPReason* pReason       = (NPReason*)pMessage->GetBytes();
                 void** notifyData       = (void**)pMessage->GetBytes();
                 aPluginFuncs.urlnotify( instance, url, *pReason, *notifyData );
-                delete url;
-                delete pReason;
-                delete notifyData;
+                delete [] url;
+                delete [] pReason;
+                delete [] notifyData;
             }
             break;
             case eNPP_WriteReady:
@@ -283,7 +284,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
                          NULL );
-                delete buffer;
+                delete [] buffer;
             }
             break;
             case eNPP_GetMIMEDescription:
@@ -303,8 +304,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 pNP_Initialize =
                     (NPError(*)(NPNetscapeFuncs*, NPPluginFuncs*))
                     dlsym( pPluginLib, "NP_Initialize" );
+                medDebug( !pNP_Initialize, "no NP_Initialize, %s\n", dlerror() );
                 pNP_Shutdown = (NPError(*)())
                     dlsym( pPluginLib, "NP_Shutdown" );
+                medDebug( !pNP_Initialize, "no NP_Shutdown, %s\n", dlerror() );
 
                 medDebug( 1, "entering NP_Initialize\n" );
                 NPError aRet = pNP_Initialize( &aNetscapeFuncs, &aPluginFuncs );
@@ -330,18 +333,18 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
 // begin Netscape plugin api calls
 extern "C" {
 
-    void* NPN_MemAlloc( UINT32 nBytes )
-    {
-        void* pMem = malloc( nBytes );
-        return pMem;
-    }
-
-    void NPN_MemFree( void* pMem )
+void* NPN_MemAlloc( UINT32 nBytes )
 {
-    free( pMem );
+    void* pMem = new char[nBytes];
+    return pMem;
 }
 
-    UINT32 NPN_MemFlush( UINT32 nSize )
+void NPN_MemFree( void* pMem )
+{
+    delete [] (char*)pMem;
+}
+
+UINT32 NPN_MemFlush( UINT32 nSize )
 {
     return 0;
 }
@@ -362,7 +365,7 @@ NPError NPN_DestroyStream( NPP instance, NPStream* stream, NPError reason )
         return NPERR_GENERIC_ERROR;
 
     pConnector->m_aNPWrapStreams.Remove( stream );
-    delete stream->url;
+    delete [] stream->url;
     delete stream;
     // returns NPError
     NPError aRet = pConnector->GetNPError( pMes );
@@ -391,11 +394,13 @@ NPError NPN_DestroyStream( NPP instance, NPStream* stream, NPError reason )
                   POST_STRING(url),
                   POST_STRING(window),
                   NULL );
+    medDebug( !pMes, "geturl: message unaswered\n" );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
     // returns NPError
     NPError aRet = pConnector->GetNPError( pMes );
+    medDebug( aRet, "geturl returns %d\n", (int)aRet );
     delete pMes;
     return aRet;
 }
@@ -528,7 +533,7 @@ NPError NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
         return NPERR_GENERIC_ERROR;
 
     NPError aRet = pConnector->GetNPError( pMes );
-    delete pArray;
+    delete [] pArray;
     delete pMes;
     return aRet;
 }
@@ -551,11 +556,12 @@ const char* NPN_UserAgent( NPP instance )
         Transact( eNPN_UserAgent,
                   &nInstance, sizeof( nInstance ),
                   NULL );
+
     if( ! pMes )
         return pAgent;
 
     if( pAgent )
-        delete pAgent;
+        delete [] pAgent;
     pAgent = pMes->GetString();
 
     delete pMes;
@@ -625,19 +631,23 @@ NPError NPN_GetValue( NPP instance, NPNVariable variable, void* value )
 NPError NPN_SetValue(NPP instance, NPPVariable variable,
                          void *value)
 {
+    medDebug( 1, "NPN_SetValue %d=%p\n", variable, value );
     return 0;
 }
 
 void NPN_InvalidateRect(NPP instance, NPRect *invalidRect)
 {
+    medDebug( 1, "NPN_InvalidateRect\n" );
 }
 
 void NPN_InvalidateRegion(NPP instance, NPRegion invalidRegion)
 {
+    medDebug( 1, "NPN_InvalidateRegion\n" );
 }
 
 void NPN_ForceRedraw(NPP instance)
 {
+    medDebug( 1, "NPN_ForceRedraw\n" );
 }
 
 }
