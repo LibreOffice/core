@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-11 17:04:56 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 #include <osl/mutex.hxx>
 #include <vos/ref.hxx>
-#include <stl/memory>
+#include <memory>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

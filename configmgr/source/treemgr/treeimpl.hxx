@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-14 08:22:28 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@
 
 #include <vos/ref.hxx>
 #include <vos/refernce.hxx>
-#include <stl/vector>
-#include <stl/map>
-#include <stl/memory>
+#include <vector>
+#include <map>
+#include <memory>
 #include <osl/diagnose.h>
 
 namespace configmgr
@@ -297,9 +297,9 @@ namespace configmgr
             void    commitChanges();
             void    makeIndirect(bool bIndirect);
         // external update
-            void    adjustToChanges(NodeChanges& rLocalChanges, Change const& aExternalChange,
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange,
                                     TemplateProvider const& aTemplateProvider);
-            void    adjustToChanges(NodeChanges& rLocalChanges, NodeOffset nNode, Change const& aExternalChange,
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange,
                                     TemplateProvider const& aTemplateProvider);
 
 
@@ -374,14 +374,14 @@ namespace configmgr
             void doFinishCommit(Change& rChange, NodeOffset nNode);
             void doRevertCommit(Change& rChange, NodeOffset nNode);
             void doFailedCommit(Change& rChange, NodeOffset nNode);
-            void doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode,
+            void doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode,
                                     TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
-            void doAdjustToSubChanges(NodeChanges& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
+            void doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
                                         TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
         protected:
             /// set a new parent context for this tree
@@ -553,6 +553,9 @@ namespace configmgr
 
         static
         NodeRef makeNode(TreeImpl& rTree, NodeOffset nOffset);
+
+        static
+        NodeRef makeNode(NodeID const& aNodeID);
 
         static
         bool isSet(NodeRef const& aNode);

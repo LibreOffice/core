@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:49:31 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include "roottreeimpl.hxx"
 #include "nodefactory.hxx"
 #include "noderef.hxx"
-#include "nodechange.hxx"
+#include "nodechangeinfo.hxx"
 #include "cmtreemodel.hxx"
 
 namespace configmgr
@@ -99,7 +99,7 @@ RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
 //-----------------------------------------------------------------------------
 // update on notify method
 //-----------------------------------------------------------------------------
-bool adjustToChanges(   NodeChanges& rLocalChanges,
+bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                         Tree const& aBaseTree, NodeRef const& aBaseNode,
                         Change const& aExternalChange,
                         TemplateProvider const& aTemplateProvider)
@@ -109,11 +109,11 @@ bool adjustToChanges(   NodeChanges& rLocalChanges,
 
     if (!aBaseTree.isEmpty())
     {
-        OSL_ENSURE(rLocalChanges.getCount() == 0, "Should pass empty container to adjustToChanges(...)");
+        OSL_ENSURE(rLocalChanges.empty(), "Should pass empty container to adjustToChanges(...)");
 
         TreeImplHelper::impl(aBaseTree)->adjustToChanges(rLocalChanges, TreeImplHelper::offset(aBaseNode), aExternalChange,aTemplateProvider);
 
-        return rLocalChanges.getCount() != 0;
+        return !rLocalChanges.empty();
     }
     else
         return false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:49:33 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef CONFIGMGR_ROOTTREE_HXX_
 #define CONFIGMGR_ROOTTREE_HXX_
 
+#include <vector>
+
 namespace configmgr
 {
     class ISubtree;
@@ -74,7 +76,7 @@ namespace configmgr
         class Tree; typedef Tree RootTree;
         class TreeImpl;
         class NodeRef;
-        class NodeChanges;
+        class NodeChangesInformation;
         class AbsolutePath;
         class TemplateProvider;
         typedef unsigned int NodeOffset;
@@ -122,7 +124,7 @@ namespace configmgr
                 <TRUE/> if any changes occur in this tree (so rLocalChanges is not empty), <FALSE/> otherwise.
 
         */
-        bool adjustToChanges(   NodeChanges& rLocalChanges,
+        bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                                 Tree const& aBaseTree, NodeRef const& aBaseNode,
                                 Change const& aExternalChange,
                                 TemplateProvider const& aTemplateProvider) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-13 13:50:36 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "notifierimpl.hxx"
 #include "apifactory.hxx"
 #include "apitreeaccess.hxx"
-#include "nodechange.hxx"
+//#include "nodechange.hxx"
 #include "nodechangeinfo.hxx"
 #include "broadcaster.hxx"
 #include "roottree.hxx"
@@ -636,12 +636,13 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 // ---------------------------------------------------------------------------------------------------
 
 static
-void disposeOneRemovedNode(configuration::NodeChange const& , configuration::NodeChangeInfo const& aRemoveInfo, Factory& aFactory)
+void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveInfo, Factory& aFactory)
 {
-    OSL_ENSURE(aRemoveInfo.oldElement.isValid(), "Cannot dispose removed/replaced element: No tree object available");
-    if (aRemoveInfo.oldElement.isValid())
+    OSL_ENSURE(aRemoveInfo.change.element.oldValue.isValid(), "Cannot dispose removed/replaced element: No tree object available");
+    OSL_ENSURE(aRemoveInfo.change.element.isDataChange(), "ERROR: Dispose removed/replaced element: Element did not really change !");
+    if (aRemoveInfo.change.element.oldValue.isValid())
     {
-        configuration::ElementTree aElementTree( aRemoveInfo.oldElement.getBodyPtr() );
+        configuration::ElementTree aElementTree( aRemoveInfo.change.element.oldValue.getBodyPtr() );
 
         SetElement* pSetElement = aFactory.findSetElement(aElementTree );
         if (pSetElement)
@@ -657,28 +658,25 @@ void disposeOneRemovedNode(configuration::NodeChange const& , configuration::Nod
 // ---------------------------------------------------------------------------------------------------
 
 static
-void disposeRemovedNodes(configuration::NodeChanges const& aChanges, Factory& aFactory)
+void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, Factory& aFactory)
 {
-    using configuration::NodeChange;
-    using configuration::NodeChangeInfo;
-    for (NodeChanges::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
+    using configuration::NodeChangeData;
+    using configuration::NodeChangesInformation;
+    for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
     {
-        NodeChangeInfo aInfo;
-        if (it->getChangeInfo(aInfo))
+        switch (it->change.type)
         {
-            switch (aInfo.type)
-            {
-            case NodeChangeInfo::eReplaceElement:
-                if (aInfo.oldElement == aInfo.newElement) break;
+        case NodeChangeData::eReplaceElement:
+            // check if element is actually unchanged !
+            if (! it->change.element.isDataChange()) break;
 
-                // else dispose the old one: fall thru
+            // else dispose the old one: fall thru
 
-            case NodeChangeInfo::eRemoveElement:
-                disposeOneRemovedNode( *it, aInfo, aFactory );
-                break;
+        case NodeChangeData::eRemoveElement:
+            disposeOneRemovedNode( *it, aFactory );
+            break;
 
-            default: break;
-            }
+        default: break;
         }
     }
 }
@@ -747,13 +745,13 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
                 configuration::TemplateProvider aProviderForNewSets = m_aTreeImpl.getProvider().getTemplateProvider();
 
-                NodeChanges aChanges;
+                configuration::NodeChangesInformation aChanges;
 
                 if (configuration::adjustToChanges(aChanges, aTree,aNode, aChange,aProviderForNewSets))
                 {
-                    OSL_ASSERT(aChanges.getCount() > 0);
+                    OSL_ASSERT(aChanges.size() > 0);
 
-                    Broadcaster aSender(m_aTreeImpl.getNotifier().makeBroadcaster(aChanges,false));
+                    Broadcaster aSender(m_aTreeImpl.getNotifier(),aChanges,false);
 
         // Should be improved later. Maybe this is the wrong lock for disposeTree ?
         //          aLocalGuard.downgrade(); // partial clear for broadcast

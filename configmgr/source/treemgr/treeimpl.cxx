@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ void TreeImpl::legacyFailedCommit(Change& rRootChange)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
 {
     OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
@@ -478,7 +478,7 @@ void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, Change const& aExtern
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, NodeOffset nNode, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
 {
     OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
     OSL_PRECOND( name(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
@@ -641,7 +641,7 @@ void TreeImpl::doFailedCommit(Change& rChange, NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
@@ -736,7 +736,7 @@ void TreeImpl::doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doAdjustToSubChanges(NodeChanges& rLocalChanges, SubtreeChange const& aChangesParent, NodeOffset nParentNode,
+void TreeImpl::doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aChangesParent, NodeOffset nParentNode,
                                     TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
     for(SubtreeChange::ChildIterator
