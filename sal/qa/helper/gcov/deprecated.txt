@@ -177,3 +177,37 @@
         rtl_byte_sequence_equals;
         rtl_byte_sequence_getConstArray;
         rtl_byte_sequence_getLength;
+
+# LLA:
+# old test environment need no extra test
+        rtl_tres_create;
+        rtl_tres_destroy;
+
+# LLA:
+# found in source code, marked as deprecated
+#        rtl_locale_getDefault;
+#        rtl_locale_setDefault;
+
+# LLA:
+# marked as deprecated, due to the fact there is no access from outside
+# so this functions are not really accessable
+# They are used in rtl/source/locale.c
+        rtl_hashentry_destroy;
+        rtl_hashfunc;
+        rtl_hashtable_add;
+        rtl_hashtable_destroy;
+        rtl_hashtable_find;
+        rtl_hashtable_grow;
+        rtl_hashtable_init;
+
+# LLA:
+# marked as deprecated by Joachim Lingner 20040414
+        rtl_moduleCount_acquire;
+        rtl_moduleCount_release;
+        rtl_moduleCount_canUnload;
+        rtl_registerModuleForUnloading;
+        rtl_unregisterModuleForUnloading;
+        rtl_unloadUnusedModules;
+        rtl_addUnloadingListener;
+        rtl_removeUnloadingListener;
+
