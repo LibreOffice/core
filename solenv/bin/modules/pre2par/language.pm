@@ -2,9 +2,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 14:32:12 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:09:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,22 +113,22 @@ sub get_language_string_from_language_block
 
 sub get_language_block_from_language_file
 {
-    my ($searchstring, $lngfile) = @_;
+    my ($searchstring, $ulffile) = @_;
 
     my @language_block = ();
 
-    for ( my $i = 0; $i <= $#{$lngfile}; $i++ )
+    for ( my $i = 0; $i <= $#{$ulffile}; $i++ )
     {
-        if ( ${$lngfile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
+        if ( ${$ulffile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
         {
             my $counter = $i;
 
-            push(@language_block, ${$lngfile}[$counter]);
+            push(@language_block, ${$ulffile}[$counter]);
             $counter++;
 
-            while (( $counter <= $#{$lngfile} ) && (!( ${$lngfile}[$counter] =~ /^\s*\[/ )))
+            while (( $counter <= $#{$ulffile} ) && (!( ${$ulffile}[$counter] =~ /^\s*\[/ )))
             {
-                push(@language_block, ${$lngfile}[$counter]);
+                push(@language_block, ${$ulffile}[$counter]);
                 $counter++;
             }
 
@@ -141,18 +141,18 @@ sub get_language_block_from_language_file
 
 ############################################
 # collecting all replace strings
-# in a lng file
+# in a ulf file
 ############################################
 
 sub get_all_replace_strings
 {
-    my ($lngfile) = @_;
+    my ($ulffile) = @_;
 
     my @allstrings = ();
 
-    for ( my $i = 0; $i <= $#{$lngfile}; $i++ )
+    for ( my $i = 0; $i <= $#{$ulffile}; $i++ )
     {
-        if ( ${$lngfile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
+        if ( ${$ulffile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
         {
             my $replacestring = $1;
             if (! pre2par::existence::exists_in_array($replacestring, \@allstrings))
@@ -167,14 +167,14 @@ sub get_all_replace_strings
 
 ############################################
 # localizing the par file with the
-# corresponding lng file
+# corresponding ulf file
 ############################################
 
 sub localize
 {
-    my ($parfile, $lngfile) = @_;
+    my ($parfile, $ulffile) = @_;
 
-    my $allreplacestrings = get_all_replace_strings($lngfile);
+    my $allreplacestrings = get_all_replace_strings($ulffile);
 
     for ( my $i = 0; $i <= $#{$parfile}; $i++ )
     {
@@ -186,11 +186,11 @@ sub localize
             {
                 my $oldstring = ${$allreplacestrings}[$j];
 
-                if ( $oneline =~ /^\s*\w+\s*\((\w+)\)\s*\=/ )
+                if ( $oneline =~ /^\s*\w+\s*\(([\w-]+)\)\s*\=/ )
                 {
                     my $language = $1;   # can be "01" or "en" or "en-US" or ...
 
-                    my $languageblock = get_language_block_from_language_file($oldstring, $lngfile);
+                    my $languageblock = get_language_block_from_language_file($oldstring, $ulffile);
                     my $newstring = get_language_string_from_language_block($languageblock, $language);
 
                     if ( $newstring eq "" ) { $newstring = "\"" . $oldstring . "\""; }
@@ -201,12 +201,12 @@ sub localize
                 }
             }
 
-            if ( $oneline =~ /\b${$allreplacestrings}[$j]\#(\w+)\b/ ) # Only for basic scripts (STR_BASIC_ADABASINST1#01)
+            if ( $oneline =~ /\b${$allreplacestrings}[$j]\#([\w-]+)\b/ ) # Only for basic scripts (STR_BASIC_ADABASINST1#01)
             {
                 my $language = $1;
                 my $oldstring = ${$allreplacestrings}[$j];
 
-                my $languageblock = get_language_block_from_language_file($oldstring, $lngfile);
+                my $languageblock = get_language_block_from_language_file($oldstring, $ulffile);
                 my $newstring = get_language_string_from_language_block($languageblock, $language);
 
                 $oldstring = $oldstring . "\#" . $language;
