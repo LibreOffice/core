@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 11:20:43 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 08:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ sal_Bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::A
 {
     sal_Bool bRet = sal_True;
 
-    if( rStrImpValue.compareToAscii( sXML_x_symbol ) )
+    if( rStrImpValue.equalsAsciiL( sXML_x_symbol, sizeof(sXML_x_symbol)-1 ) )
         rValue <<= (sal_Int16) RTL_TEXTENCODING_SYMBOL;
 
     return bRet;
