@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 14:01:33 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 15:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xContentSeek (NULL)
 , xRootFolder (NULL)
 , xFactory(xNewFactory)
+, bHasEncryptedEntries ( sal_False )
 {
     pRootFolder = new ZipPackageFolder();
     xRootFolder = Reference < XNameContainer > (pRootFolder );
@@ -307,6 +308,7 @@ void ZipPackage::getZipFileContents()
                                 pStream->setSize ( nSize );
 
                                 pStream->SetToBeEncrypted ( sal_True );
+                                bHasEncryptedEntries = sal_True;
                             }
                         }
                     }
@@ -756,6 +758,8 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
+        throw IllegalArgumentException (); // This property is read-only
     else
         throw UnknownPropertyException();
 }
@@ -766,6 +770,11 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
     {
         aAny <<= aEncryptionKey;
+        return aAny;
+    }
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasEncryptedEntries" ) ) )
+    {
+        aAny <<= bHasEncryptedEntries;
         return aAny;
     }
     else
