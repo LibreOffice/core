@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 12:25:52 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace xmloff
             epBorderWidth,
             epFontEmphasis,
             epFontRelief,
+            epListLinkageType,
 
             KNOWN_ENUM_PROPERTIES
         };
@@ -111,6 +112,18 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6.190.1  2003/10/01 09:55:22  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.6.186.1  2003/09/25 14:28:40  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.6.182.1  2003/09/18 14:00:38  fs
+ *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
+ *
+ *  Revision 1.6  2001/06/07 12:25:52  fs
+ *  #86096# enums for FontEmphasis and FontRelief
+ *
  *  Revision 1.5  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *
