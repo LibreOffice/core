@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:21:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,11 @@ SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
 Font* SwNumRule::pDefBulletFont = 0;
 sal_Char* SwNumRule::pDefOutlineName = "Outline";
 
+// #i30312#
 USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
-//cm:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
-        283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
+//inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
+        1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
+        1440*9/4, 1440*5/2
 };
 
 #if defined( UNX ) && defined( GCC )
@@ -573,7 +575,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt->SetIncludeUpperLevels( 1 );
             pFmt->SetStart( 1 );
             pFmt->SetLSpace( lNumIndent );
-            pFmt->SetAbsLSpace( SwNumRule::GetNumIndent( n ) );
+            pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( aDotStr );
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
