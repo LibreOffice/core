@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 15:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,19 @@
 #ifndef _SV_SOICON_HXX
 #define _SV_SOICON_HXX
 
+// base name of a custom icon function (must be declared extern "C")
+// the iconid must be directly appended, eg: vcl_customIcon100
+#define VCL_CUSTOM_ICON_BASE  "vcl_customIcon"
+
+// type of the custom icon function
+typedef void VCL_CUSTOM_ICON_FN( char **&, char **&, char **&, char **&);
+
 class SalDisplay;
 class SalBitmap;
 class Bitmap;
 
-Pixmap GetAppIconPixmap( SalDisplay* );
-Pixmap GetAppIconMask( SalDisplay* );
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
+                          Pixmap& icon_pixmap, Pixmap& icon_mask );
 
 BOOL ReadXPMFile( Display*, const String&, SalBitmap*&, SalBitmap*& );
 BOOL ReadXBMFile( Display*, const String&, SalBitmap*& );

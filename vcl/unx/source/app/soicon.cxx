@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 15:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #define _SV_SOICON_CXX
 
+#include <dlfcn.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -94,16 +95,64 @@
 #ifndef _SV_STRHELPER_HXX
 #include <strhelper.hxx>
 #endif
+#ifndef _SV_SOICON_HXX
+#include <soicon.hxx>
+#endif
 
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 
+#include "soicons.inc"
 
-#include "so.xpm"
+typedef struct {
+    int id;                 // 'resource' id
+    char **xpmdata[4];      // 4 resolutions
+    Pixmap mPixmap[4], mMask[4];    // caches
+    } SOICON;
 
-static Pixmap aAppPixmap = 0, aAppMask = 0;
+static SOICON soicons[] = {
+    {1, _001_star_butterfly_l_xpm, _001_star_butterfly_m_xpm, _001_star_butterfly_s_xpm, _001_star_butterfly_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {2, _002_text_document_l_xpm, _002_text_document_m_xpm, _002_text_document_s_xpm, _002_text_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {3, _003_text_template_l_xpm, _003_text_template_m_xpm, _003_text_template_s_xpm, _003_text_template_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {4, _004_spreadsheet_document_l_xpm, _004_spreadsheet_document_m_xpm, _004_spreadsheet_document_s_xpm, _004_spreadsheet_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {5, _005_spreadsheet_template_l_xpm, _005_spreadsheet_template_m_xpm, _005_spreadsheet_template_s_xpm, _005_spreadsheet_template_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {6, _006_drawing_document_l_xpm, _006_drawing_document_m_xpm, _006_drawing_document_s_xpm, _006_drawing_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {7, _007_drawing_template_l_xpm, _007_drawing_template_m_xpm, _007_drawing_template_s_xpm, _007_drawing_template_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {8, _008_presentation_document_l_xpm, _008_presentation_document_m_xpm, _008_presentation_document_s_xpm, _008_presentation_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {9, _009_presentation_template_l_xpm, _009_presentation_template_m_xpm, _009_presentation_template_s_xpm, _009_presentation_template_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {10, _010_presentation_compressed_l_xpm, _010_presentation_compressed_m_xpm, _010_presentation_compressed_s_xpm, _010_presentation_compressed_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {11, _011_global_document_l_xpm, _011_global_document_m_xpm, _011_global_document_s_xpm, _011_global_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {12, _012_html_document_l_xpm, _012_html_document_m_xpm, _012_html_document_s_xpm, _012_html_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {13, _013_chart_document_l_xpm, _013_chart_document_m_xpm, _013_chart_document_s_xpm, _013_chart_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {14, _014_database_document_l_xpm, _014_database_document_m_xpm, _014_database_document_s_xpm, _014_database_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {15, _015_math_document_l_xpm, _015_math_document_m_xpm, _015_math_document_s_xpm, _015_math_document_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {16, _016_template_l_xpm, _016_template_m_xpm, _016_template_s_xpm, _016_template_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {17, _017_macrolibrary_l_xpm, _017_macrolibrary_m_xpm, _017_macrolibrary_s_xpm, _017_macrolibrary_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {500, _500_setup_l_xpm, _500_setup_m_xpm, _500_setup_s_xpm, _500_setup_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {0, NULL, NULL, NULL,
+        0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
-static void ConvertXpm( SalDisplay* pDisplay )
+
+static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixmap& aMask )
 {
     int nWidth, nHeight, nColors, nCharsPerPixel;
     XColor *pColors;
@@ -112,7 +161,7 @@ static void ConvertXpm( SalDisplay* pDisplay )
     char pColorName[16], pComName[16],pColorString[256];
     BOOL bTransparent = FALSE;
 
-    sscanf( xpmdata[ nElement++ ], "%d%d%d%d", &nWidth, &nHeight,
+    sscanf( xpm[ nElement++ ], "%d%d%d%d", &nWidth, &nHeight,
             &nColors, &nCharsPerPixel );
 #if defined DBG_UTIL || defined DEBUG
     fprintf( stderr, "ConvertXpm: converting width = %d height = %d ncolors = %d chars_per_pixel = %d\n", nWidth, nHeight, nColors, nCharsPerPixel );
@@ -122,7 +171,7 @@ static void ConvertXpm( SalDisplay* pDisplay )
     pColorAlias = new char[ nColors * nCharsPerPixel ];
     while( nElement <= nColors )
     {
-        sscanf( xpmdata[ nElement++ ],"%s %s %s",
+        sscanf( xpm[ nElement++ ],"%s %s %s",
                 pColorName, pComName, pColorString);
         if( strncmp( pColorString, "None", 4 ) )
         {
@@ -137,7 +186,7 @@ static void ConvertXpm( SalDisplay* pDisplay )
     }
     nColors = nColor+1;
 
-    aAppPixmap = XCreatePixmap( pDisplay->GetDisplay(),
+    aPixmap = XCreatePixmap( pDisplay->GetDisplay(),
                                 pDisplay->GetRootWindow(),
                                 nWidth, nHeight,
                                 pDisplay->GetRootVisual()->GetDepth() );
@@ -146,29 +195,29 @@ static void ConvertXpm( SalDisplay* pDisplay )
                                pDisplay->GetScreenNumber() ),
                     BlackPixel( pDisplay->GetDisplay(),
                                 pDisplay->GetScreenNumber() ) );
-    XFillRectangle( pDisplay->GetDisplay(), aAppPixmap,
+    XFillRectangle( pDisplay->GetDisplay(), aPixmap,
                     DefaultGC( pDisplay->GetDisplay(),
                                pDisplay->GetScreenNumber() ),
                     0,0,nWidth,nHeight );
 
-    aAppMask   = XCreatePixmap( pDisplay->GetDisplay(),
+    aMask   = XCreatePixmap( pDisplay->GetDisplay(),
                                 pDisplay->GetRootWindow(),
                                 nWidth, nHeight, 1 );
 
     XGCValues aValues;
     aValues.function   = GXset;
     aValues.foreground = 0xffffffff;
-    GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), aAppMask,
+    GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), aMask,
                             GCFunction|GCForeground, &aValues );
 
-    XFillRectangle( pDisplay->GetDisplay(), aAppMask, aMonoGC,
+    XFillRectangle( pDisplay->GetDisplay(), aMask, aMonoGC,
                     0,0, nWidth, nHeight );
     aValues.function = GXclear;
     XChangeGC( pDisplay->GetDisplay(), aMonoGC, GCFunction, &aValues );
 
     for( nY=0; nY < nHeight; nY++ )
     {
-        char *pRun = xpmdata[ nElement+nY ];
+        char *pRun = xpm[ nElement+nY ];
         for( nX=0; nX < nWidth; nX++ )
         {
             // get color number
@@ -184,7 +233,7 @@ static void ConvertXpm( SalDisplay* pDisplay )
                                            pDisplay->GetScreenNumber() ),
                                 pColors[ nColor ].pixel );
                 XDrawPoint( pDisplay->GetDisplay(),
-                            aAppPixmap,
+                            aPixmap,
                             DefaultGC( pDisplay->GetDisplay(),
                                        pDisplay->GetScreenNumber() ),
                             nX, nY );
@@ -194,7 +243,7 @@ static void ConvertXpm( SalDisplay* pDisplay )
             {
                 bTransparent = TRUE;
                 XDrawPoint( pDisplay->GetDisplay(),
-                            aAppMask, aMonoGC, nX, nY );
+                            aMask, aMonoGC, nX, nY );
             }
             pRun += nCharsPerPixel;
         }
@@ -208,23 +257,95 @@ static void ConvertXpm( SalDisplay* pDisplay )
 #if defined DBG_UTIL || defined DEBUG
         fprintf( stderr, "ConvertXpm: keine Transparenz -> keine Maske\n" );
 #endif
-        XFreePixmap( pDisplay->GetDisplay(), aAppMask );
-        aAppMask = 0;
+        XFreePixmap( pDisplay->GetDisplay(), aMask );
+        aMask = 0;
     }
 }
 
-Pixmap GetAppIconPixmap( SalDisplay *pDisplay )
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
+                          Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
-    if( ! aAppPixmap )
-        ConvertXpm( pDisplay );
-    return aAppPixmap;
-}
+    VCL_CUSTOM_ICON_FN *pCustomIcon;
 
-Pixmap GetAppIconMask( SalDisplay *pDisplay )
-{
-    if( ! aAppPixmap )
-        ConvertXpm( pDisplay );
-    return aAppMask;
+    if( nIcon == 0 )    // 0 means default icon which is icon #1 actually
+        nIcon = 1;
+
+    SOICON *pIcon = soicons;
+    while( pIcon->id )
+    {
+        if( pIcon->id == nIcon )
+            break;
+           pIcon++;
+    }
+
+    if( !pIcon->id )
+    {
+        // call custom function to read icon
+        char customIconFn[256];
+
+        sprintf( customIconFn, "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
+        if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( RTLD_DEFAULT, customIconFn ) )
+                 != NULL )
+        {
+            pIcon = new SOICON[2];  // 2nd entry is terminator
+            memset( pIcon, 0, 2*sizeof( SOICON ) );
+            pIcon->id = nIcon;
+            pCustomIcon( pIcon->xpmdata[0], pIcon->xpmdata[1], pIcon->xpmdata[2], pIcon->xpmdata[3] );
+        }
+        else
+        {
+#if defined DBG_UTIL || defined DEBUG
+            fprintf( stderr, "SelectAppIconPixmap: custom icon function '%s' not found!\n",
+                    customIconFn );
+#endif
+        }
+    }
+
+    DBG_ASSERT( pIcon->id, "SelectAppIconPixmap: Icon not found!");
+
+    if( !pIcon->id )
+        return FALSE;
+
+    // search optimal size
+    int i, maxSize = 0, iIcon=-1;
+    for(i=0; i<4; i++)
+    {
+        int nWidth, nHeight, nColors, nCharsPerPixel;
+        if( !pIcon->xpmdata[i] )
+            continue;
+        sscanf( pIcon->xpmdata[i][0], "%d%d%d%d", &nWidth, &nHeight,
+                &nColors, &nCharsPerPixel );
+        if( iconSize == nWidth )
+        {
+            iIcon = i;
+            break;
+        }
+        if ( nWidth > maxSize )
+        {
+            // use largest icon if sizes don't match
+            maxSize = nWidth;
+            iIcon = i;
+        }
+    }
+
+    DBG_ASSERT( iIcon != -1, "SelectAppIconPixmap: Invalid icon definition found!");
+    if( iIcon == -1 )
+    {
+        if( pCustomIcon )
+            delete [] pIcon;
+        return FALSE;
+    }
+
+    if( !pIcon->mPixmap[iIcon] )
+        ConvertXpm( pDisplay, pIcon->xpmdata[iIcon], pIcon->mPixmap[iIcon], pIcon->mMask[iIcon] );
+
+    icon_pixmap = pIcon->mPixmap[iIcon];
+    icon_mask   = pIcon->mMask[iIcon];
+
+    if( pCustomIcon )
+        delete [] pIcon;
+
+    return TRUE;
 }
 
 static void NextLine( SvStream& rFile, ByteString& rLine, BOOL bXpm2Mode )
