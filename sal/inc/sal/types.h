@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:56:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,21 @@ typedef signed long         sal_Int32;
 typedef unsigned long       sal_uInt32;
 
 #   if (_MSC_VER >= 1000)
-typedef __int64             sal_Int64;
-typedef unsigned __int64    sal_uInt64;
+   typedef __int64             sal_Int64;
+   typedef unsigned __int64    sal_uInt64;
+   //  The following are macros that will add the 64 bit constant suffix.
+#  define SAL_CONST_INT64(x)  x##i64
+#  define SAL_CONST_UINT64(x) x##ui64
+
 #   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux) || defined (sgi)
-typedef long long           sal_Int64;
-typedef unsigned long long  sal_uInt64;
+   //  TODO:  64 bit logic needed.
+   typedef long long           sal_Int64;
+   typedef unsigned long long  sal_uInt64;
+   //  The following are macros that will add the 64 bit constant suffix.
+#  define SAL_CONST_INT64(x)  x##ll
+#  define SAL_CONST_UINT64(x) x##ull
+#else
+#   error "Please define the 64 bit definitions in sal/inc/sal/types.h"
 #endif
 
 /* The following SAL_MIN_INTn defines codify the assumption that the signed
@@ -192,7 +202,7 @@ typedef struct _sal_Sequence
     lack RTTI support, dynamic_cast is not included here).
  */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD
+#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD || defined AIX
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
