@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-27 09:20:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ class StarBASIC;
 
 class SbiScanner
 {
-    String      aBuf;                   // Input-Puffer
-    String      aLine;                  // aktuelle Zeile
+    ::rtl::OUString   aBuf;             // Input-Puffer
+    ::rtl::OUString   aLine;            // aktuelle Zeile
     const sal_Unicode* pLine;           // Pointer
     const sal_Unicode* pSaveLine;       // Merker fuer Line
 protected:
@@ -108,7 +108,7 @@ protected:
 
     void   GenError( SbError );
 public:
-    SbiScanner( const String&, StarBASIC* = NULL );
+    SbiScanner( const ::rtl::OUString&, StarBASIC* = NULL );
    ~SbiScanner();
 
     void  EnableErrors()            { bError = FALSE; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 06:57:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #define _SBIMAGE_HXX
 
 #include "sbintern.hxx"
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
+#endif
 
 // Diese Klasse liest das vom Compiler erzeugte Image ein und verwaltet
 // den Zugriff auf die einzelnen Elemente.
@@ -94,7 +97,7 @@ class SbiImage {
 
 public:
     String aName;                   // Makroname
-    String aSource;                 // Quellcode
+    ::rtl::OUString aOUSource;      // Quellcode
     String aComment;                // Kommentar
     BOOL   bInit;                   // TRUE: Init-Code ist gelaufen
     BOOL   bFirstInit;              // TRUE, wenn das Image das erste mal nach
@@ -108,7 +111,7 @@ public:
 
     const char* GetCode() const     { return pCode;     }
     USHORT      GetCodeSize() const { return nCodeSize; }
-    String&     GetSource()         { return aSource;   }
+    ::rtl::OUString& GetSource32()  { return aOUSource; }
     USHORT      GetBase() const     { return nDimBase;  }
     String      GetString( short nId ) const;
     //const char* GetString( short nId ) const;
