@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:10:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
-#include <com/sun/star/container/XNameContainer.hpp>
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
+#include <com/sun/star/form/XFormsSupplier2.hpp>
+#endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
@@ -133,8 +135,10 @@ namespace xmloff
     protected:
         SvXMLImport&                        m_rImporter;
         OAttribute2Property                 m_aAttributeMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                            m_xForms;   // the forms of the currently imported page
+
+        /// the supplier for the forms of the currently imported page
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormsSupplier2 >
+                                            m_xCurrentPageFormsSupp;
         SvXMLStylesContext*                 m_pAutoStyles;
 
     protected:
