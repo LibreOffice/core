@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 15:09:23 $
+ *  last change: $Author: jl $ $Date: 2001-03-30 15:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@ extern CComModule _Module;
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include "../../source/inc/DtObjFactory.hxx"
+
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer;
@@ -88,6 +91,8 @@ class AWindow: public CWindowImpl<AWindow, CWindow,
     BOOL m_isMTA;
 
     HWND m_hwndEdit;
+
+    CDTransObjFactory m_aDataConverter;
 
 public:
     AWindow(LPCTSTR strName)

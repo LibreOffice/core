@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 15:29:45 $
+ *  last change: $Author: jl $ $Date: 2001-03-30 15:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "atlwindow.hxx"
 #include "targetlistener.hxx"
 #include "sourcelistener.hxx"
-#include "transferable.hxx"
+//#include "transferable.hxx"
 #include <map>
 
 #include <winbase.h>
@@ -202,31 +202,53 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
         ZeroMemory( pBuffer, length + 1);
         ::SendMessageA( m_hwndEdit, WM_GETTEXT, length, (LPARAM) pBuffer);
 
-
-        // call XDragSource::executeDrag from an MTA
-        if( m_isMTA )
+        IDataObject* pData= NULL;
+        HRESULT hr= CreateDataCache( NULL, CLSID_NULL, __uuidof(IDataObject),(void**) &pData);
+        if( pData)
         {
-            DWORD mtaThreadId;
-            ThreadData data;
-            data.source= m_xDragSource;
-            data.transferable= static_cast<XTransferable*>( new CTransferable( A2W(pBuffer)));
-            data.evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
+            FORMATETC format={ CF_TEXT, NULL, DVASPECT_CONTENT, -1, };
 
-            HANDLE hThread= CreateThread( NULL, 0, MTAFunc, &data, 0, &mtaThreadId);
-            // We must wait until the thread copied the ThreadData structure
-            WaitForSingleObject( data.evtThreadReady, INFINITE);
-            CloseHandle( data.evtThreadReady);
-        }
-        else
-        {
-            Reference<XTransferable> data( static_cast<XTransferable*>( new CTransferable( A2W(pBuffer))) );
+            HGLOBAL mem= GlobalAlloc(GHND, length + 1 );
+            void* pMem= GlobalLock( mem);
+            memcpy( pMem, pBuffer, length+1);
+            GlobalUnlock( mem);
 
-            m_xDragSource->startDrag( DragGestureEvent(),
-                ACTION_LINK|ACTION_MOVE|ACTION_COPY,
-                0,
-                0,
-                data,
-                Reference<XDragSourceListener>( static_cast<XDragSourceListener*>(new DragSourceListener() ) ) );
+            STGMEDIUM medium;
+            medium.tymed= TYMED_HGLOBAL;
+            medium.hGlobal= mem;
+            medium.pUnkForRelease= NULL;
+
+            pData->SetData( &format,  &medium, TRUE); // releases HGLOBAL eventually
+
+            Reference<XTransferable> xTrans= m_aDataConverter.createTransferableFromDataObj(
+                                                MultiServiceFactory, pData);
+
+            // call XDragSource::executeDrag from an MTA
+            if( m_isMTA )
+            {
+                DWORD mtaThreadId;
+                ThreadData data;
+                data.source= m_xDragSource;
+                data.transferable= xTrans;
+
+                data.evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
+
+                HANDLE hThread= CreateThread( NULL, 0, MTAFunc, &data, 0, &mtaThreadId);
+                // We must wait until the thread copied the ThreadData structure
+                WaitForSingleObject( data.evtThreadReady, INFINITE);
+                CloseHandle( data.evtThreadReady);
+
+
+            }
+            else
+            {
+                m_xDragSource->startDrag( DragGestureEvent(),
+                    ACTION_LINK|ACTION_MOVE|ACTION_COPY,
+                    0,
+                    0,
+                    xTrans,
+                    Reference<XDragSourceListener>( static_cast<XDragSourceListener*>(new DragSourceListener() ) ) );
+            }
         }
 
         delete[] pBuffer;

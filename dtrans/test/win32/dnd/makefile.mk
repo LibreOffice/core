@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-20 12:55:53 $
+#   last change: $Author: jl $ $Date: 2001-03-30 15:37:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,8 +113,6 @@ APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/dndTest.obj	\
             $(OBJ)$/atlwindow.obj \
             $(OBJ)$/targetlistener.obj \
-            $(SLO)$/implhelper.obj		\
-            $(OBJ)$/transferable.obj	\
             $(OBJ)$/sourcelistener.obj
 
 LIBCIMT=msvcrtd.lib
@@ -128,13 +126,16 @@ APP1STDLIBS= \
     ole32.lib		\
     comsupp.lib		\
     oleaut32.lib	\
-    gdi32.lib			\
-    $(LB)$/dtutils.lib
+    gdi32.lib		\
+    uuid.lib		
 
 APP1LIBS=	\
             $(SOLARLIBDIR)$/imtaolecb.lib\
             $(SOLARLIBDIR)$/user9x.lib\
             $(SOLARLIBDIR)$/tools32.lib\
+            $(SLB)$/dtobjfact.lib	\
+            $(SLB)$/dtutils.lib
+
 
 
 

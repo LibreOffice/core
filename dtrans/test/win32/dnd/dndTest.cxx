@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 15:29:45 $
+ *  last change: $Author: jl $ $Date: 2001-03-30 15:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@ CComModule _Module;
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
-#include "transferable.hxx"
+#include <cppuhelper/servicefactory.hxx>
+//#include "transferable.hxx"
 #include "sourcelistener.hxx"
 
 
