@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:35:17 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
 
+#ifndef _VCL_MAPUNIT_HXX
+#include <vcl/mapunit.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 struct ImpSdXMLExpTransObj2DBase;
@@ -116,7 +120,6 @@ class SdXMLImExTransform2D
     rtl::OUString                   msString;
 
     void EmptyList();
-ImpSdXMLExpTransObj2DBase* FindObject(sal_uInt16 nType, sal_uInt32 nInd = 0L);
 
 public:
     SdXMLImExTransform2D() {}
@@ -129,8 +132,6 @@ public:
     void AddSkewX(double fNew);
     void AddSkewY(double fNew);
     void AddMatrix(const Matrix3D& rNew);
-
-sal_Bool FindRotate(double& rNew, sal_uInt32 nInd = 0L);
 
     sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
     void GetFullTransform(Matrix3D& rFullTrans);
@@ -157,7 +158,7 @@ public:
     void AddRotateZ(double fNew);
     void AddScale(const Vector3D& rNew);
     void AddTranslate(const Vector3D& rNew);
-    void AddMatrix(const Matrix3D& rNew);
+    void AddMatrix(const Matrix4D& rNew);
 
     void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
     sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }

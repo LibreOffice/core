@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@ public:
                            ::rtl::OUStringBuffer& rOut,
                            MapUnit eOutUnit );
     static void AddPercentage( long nVal, ::rtl::OUStringBuffer& rOut );
+    static double GetConversionFactor(::rtl::OUStringBuffer& rUnit,
+        const MapUnit eCoreUnit, const MapUnit eDestUnit);
+    static MapUnit GetUnitFromString(const ::rtl::OUString& rString,
+        MapUnit eDefaultUnit);
 };
 
 
