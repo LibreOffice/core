@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-10-15 10:00:19 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:19:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=config
-
+LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -96,6 +96,20 @@ SLOFILES =	\
         $(SLO)$/viewopt.obj \
         $(SLO)$/swlinguconfig.obj
 
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES = \
+        $(SLO)$/barcfg.obj \
+        $(SLO)$/caption.obj \
+        $(SLO)$/cfgitems.obj \
+        $(SLO)$/dbconfig.obj \
+        $(SLO)$/fontcfg.obj \
+        $(SLO)$/modcfg.obj \
+        $(SLO)$/prtopt.obj \
+        $(SLO)$/uinums.obj \
+        $(SLO)$/usrpref.obj \
+        $(SLO)$/viewopt.obj \
+        $(SLO)$/swlinguconfig.obj
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
