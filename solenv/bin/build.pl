@@ -24,7 +24,7 @@ $CurrentPrj = "";
 $StandDir = GetStandDir();
 $QuantityToBuild = GetQuantityToBuild();
 $BuildAllParents = HowToBuild();
-
+$ENV{mk_tmp} = "1";
 $dmake = GetDmakeCommando();
 BuildAll();
 @TotenEltern = keys %DeadParents;
@@ -102,6 +102,7 @@ sub BuildAll {
     } else {
         BuildPrj(".");
     };
+    $ENV{mk_tmp} = "";
 };
 
 
@@ -123,6 +124,7 @@ sub MakeDir {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
         print "Error $error occurred while making $BuilidDir\n";
+        $ENV{mk_tmp} = "";
         exit();
     };
 };
@@ -229,6 +231,7 @@ sub CorrectPath {
                 ($ENV{GUI} eq "OS2")) {
         s/\//\\/g;
     } else {
+        $ENV{mk_tmp} = "";
         die "\nNo environment set\n";
     };
     return $_;
@@ -303,6 +306,7 @@ DirLoop:
             close(PrjBuildFile);
             return $StandDir;
         } elsif (IsRootDir($StandDir)) {
+            $ENV{mk_tmp} = "";
             die "Found no project to build\n"
         };
     }
@@ -413,6 +417,7 @@ sub FindIndepPrj {
             };
         };
         print "\nhave dead or circular dependencies\n\n";
+        $ENV{mk_tmp} = "";
         exit ();
     };
 };
