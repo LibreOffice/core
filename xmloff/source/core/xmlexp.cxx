@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,6 +1201,9 @@ void SvXMLExport::exportAutoDataStyles()
 {
     if(pNumExport)
         pNumExport->Export(*pNamespaceMap, sal_True);
+
+    if (mxFormExport.is())
+        mxFormExport->exportAutoControlNumberStyles();
 }
 
 OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
