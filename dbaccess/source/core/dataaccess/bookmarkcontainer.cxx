@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-05-04 08:41:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,9 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
 
     if (checkExistence(_rName))
         throw ElementExistException();
+
+    if (0 == _rName.getLength())
+        throw IllegalArgumentException();
 
     // approve the new object
     ::rtl::OUString sNewLink;
