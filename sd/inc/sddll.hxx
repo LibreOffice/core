@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:16:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@ public:
                     // DLL-init/exit-code must be linked to the DLL only
     static void     Init();     // called directly after loading the DLL
     static void     Exit();     // called directly befor unloading the DLL
-
-    static ULONG    DetectFilter(SfxMedium& rMedium, const SfxFilter** pFilter,
-                                 SfxFilterFlags nMust, SfxFilterFlags nDont);
 };
 
 
