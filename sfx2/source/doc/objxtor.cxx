@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-11 13:39:00 $
+ *  last change: $Author: ab $ $Date: 2001-05-11 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ void SfxObjectShell::InitBasicManager_Impl
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
     Any aDialogCont;
     aDialogCont <<= xDialogCont;
-    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDialogCont );
+    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
     pBas->Insert( xUnoObj );
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-23 11:32:18 $
+ *  last change: $Author: ab $ $Date: 2001-05-11 15:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,13 +810,8 @@ BasicManager* SfxApplication::GetBasicManager()
         Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         Any aDialogCont;
         aDialogCont <<= xDialogCont;
-        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDialogCont );
+        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
         pBas->Insert( xUnoObj );
-
-        SbxVariableRef pGlobal = new SbxVariable( SbxOBJECT, pBas );
-        pGlobal->SetFlag( SBX_DONTSTORE );
-        pGlobal->SetName( String( DEFINE_CONST_UNICODE("GlobalScope") ) );
-        pBas->Insert( pGlobal );
 
         // Konstanten
 //ASDBG     RegisterBasicConstants( "so", aConstants, sizeof(aConstants)/sizeof(SfxConstant) );
