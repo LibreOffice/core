@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-05 08:30:32 $
+ *  last change: $Author: dvo $ $Date: 2002-01-11 19:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include "attrlist.hxx"
+#endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 using namespace ::rtl;
@@ -328,7 +331,35 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
             sParent = OUString();
 
         if( sParent != xStyle->getParentStyle() )
-            xStyle->setParentStyle( sParent );
+        {
+            // this may except if setting the parent style forms a
+            // circle in the style depencies; especially if the parent
+            // style is the same as the current style
+            try
+            {
+                xStyle->setParentStyle( sParent );
+            }
+            catch( uno::Exception e )
+            {
+                // according to the API definition, I would expect a
+                // container::NoSuchElementException. But it throws an
+                // uno::RuntimeException instead. I catch
+                // uno::Exception in order to process both of them.
+
+                // We can't set the parent style. For a proper
+                // Error-Message, we should pass in the name of the
+                // style, as well as the desired parent style.
+                Sequence<OUString> aSequence(2);
+
+                // getName() throws no non-Runtime exception:
+                aSequence[0] = xStyle->getName();
+                aSequence[1] = sParent;
+
+                GetImport().SetError(
+                    XMLERROR_FLAG_ERROR | XMLERROR_PARENT_STYLE_NOT_ALLOWED,
+                    aSequence, e.Message, NULL );
+            }
+        }
 
         // connect follow
         OUString sFollow( GetFollow() );
