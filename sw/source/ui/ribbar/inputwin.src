@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:58:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Âß¼­µÄ ~Or";
                         Text[ russian ] = "Ëîãè÷åñêîå Èëè";
                         Text[ polish ] = "Funkcja logiczna LUB";
-                        Text[ japanese ] = "˜_—Ï(Or)";
+                        Text[ japanese ] = "˜_—®(~Or)";
                         Text[ chinese_traditional ] = "ÅŞ¿èªº ~Or";
                         Text[ arabic ] = "Ãæ ãäØŞíÉ";
                         Text[ dutch ] = "Logisch ~Of";
@@ -611,7 +611,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Âß¼­µÄ³ıÍâµÄ Or";
                         Text[ russian ] = "Ëîãè÷åñêîå ğàçäåëèòåëüíîå \"èëè\"";
                         Text[ polish ] = "Wy³¹czna funkcja logiczna LUB";
-                        Text[ japanese ] = "˜_—˜a(Xor)";
+                        Text[ japanese ] = "˜_—®(~xOr)";
                         Text[ chinese_traditional ] = "ÅŞ¿èªº°£¥~ªº Or";
                         Text[ arabic ] = "Ãæ ãäØŞíÉ ÎÇÕÉ";
                         Text[ dutch ] = "Logisch e~xclusief Of";
@@ -640,7 +640,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Âß¼­µÄ ~And";
                         Text[ russian ] = "Ëîãè÷åñêîå ~È";
                         Text[ polish ] = "Funkcja logiczna ORAZ";
-                        Text[ japanese ] = "˜_—Ï(And)";
+                        Text[ japanese ] = "˜_—®(~And)";
                         Text[ chinese_traditional ] = "ÅŞ¿èªº ~And";
                         Text[ arabic ] = "æ ãäØŞíÉ";
                         Text[ dutch ] = "Logisch ~En";
@@ -669,7 +669,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Âß¼­µÄ Not";
                         Text[ russian ] = "Ëîãè÷åñêîå Íå";
                         Text[ polish ] = "Funkcja logiczna NIE";
-                        Text[ japanese ] = "˜_—”Û’è(Not)";
+                        Text[ japanese ] = "˜_—®(Not)";
                         Text[ chinese_traditional ] = "ÅŞ¿èªº Not";
                         Text[ arabic ] = "áÇ ãäØŞíÉ";
                         Text[ dutch ] = "Log~isch Niet";
@@ -805,7 +805,7 @@ Menu MN_CALC_POPUP
             Text[ chinese_simplified ] = "Í³¼Æ¹¦ÄÜ(~T)";
             Text[ russian ] = "Ñòàòèñòè÷åñêèå ôóíêöèè";
             Text[ polish ] = "Funkcje statystyczne";
-            Text[ japanese ] = "“ŒvŠw“IŠÖ”";
+            Text[ japanese ] = "“ŒvŠÖ”";
             Text[ chinese_traditional ] = "²Î­p¥\\¯à(~T)";
             Text[ arabic ] = "ÏÇáÇÊ ÅÍÕÇÆíÉ";
             Text[ dutch ] = "~Statistische functies";
