@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:32 $
+ *  last change:$Date: 2003-02-25 11:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,17 @@ public class _XTextComponent extends MultiMethodTest {
     * of text added before.
     */
     public void _getSelectedText() {
-        oObj.setText("getSelectedText");
+        String text = num ? "753" :  "txt" ;
+        oObj.setText(text);
         oObj.setSelection(new Selection(0,3));
-        tRes.tested("getSelectedText()",oObj.getSelectedText().equals("get"));
+        boolean result = oObj.getSelectedText().equals(text);
+
+        if (! result) {
+            System.out.println("Getting '"+oObj.getSelectedText()+"'");
+            System.out.println("Expected '"+text+"'");
+        }
+
+        tRes.tested("getSelectedText()",result);
     }
 
     /**
