@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     ListBox LB_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , GB_SEARCH_TOP + 11 ) ;
-        Size = MAP_APPFONT ( 54 , 70 ) ;
+        Size = MAP_APPFONT ( 54 , 120 ) ;
         Border = TRUE ;
     };
     #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 54 + 6)
@@ -832,7 +832,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     FixedText FT_SEARCH
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 26 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 27 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "Art" ;
         Text [ English ] = "Type" ;
@@ -858,7 +858,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_AND
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 26 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 27 ) ;
         Size = MAP_APPFONT ( 44 , 10 ) ;
         Check = TRUE ;
         Text = "~Und" ;
@@ -885,7 +885,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_OR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 , GB_SEARCH_TOP + 26 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 , GB_SEARCH_TOP + 27 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Ode~r" ;
         Text [ English ] = "~Or" ;
@@ -911,7 +911,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_EXACT
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 + 45 + 3 , GB_SEARCH_TOP + 26 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 + 45 + 3 , GB_SEARCH_TOP + 27 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "E~xakt" ;
         Text [ English ] = "E~xact" ;
@@ -937,7 +937,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 40 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 42 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "~Pr‰fix" ;
         Text [ English ] = "~Prefix" ;
@@ -963,13 +963,13 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_URL
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 39 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 41 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_POSTFIX
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 55 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 58 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "Su~ffix" ;
         Text [ English ] = "Suffi~x" ;
@@ -995,13 +995,13 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_POSTFIX
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 54 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 57 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 70 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 74 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "~Trenner" ;
         Text [ English ] = "~Separator" ;
@@ -1027,15 +1027,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 69 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 73 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_CASE
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 42 + 3, GB_SEARCH_TOP + 70 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 90 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Right = TRUE;
         Text = "~Schreibstil" ;
         Text [ English ] = "~Case" ;
         Text [ dutch ] = "S~chrijfstijl" ;
@@ -1060,7 +1059,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     ListBox ED_CASE
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 42 + 3 + 50 + 3, GB_SEARCH_TOP + 69 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 89 ) ;
         Size = MAP_APPFONT ( 42 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -1192,21 +1191,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     };
      // nicht ¸bersetzen !
-    String STR_CASE_NONE
-    {
-        Text = "None" ;
-    };
-    String STR_CASE_UPPER
-    {
-        Text = "Upper" ;
-    };
-    String STR_CASE_LOWER
-    {
-        Text = "Lower" ;
-    };
     PushButton PB_NEW
     {
-        Pos = MAP_APPFONT ( 39 , 108 ) ;
+        Pos = MAP_APPFONT ( 39 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "N~eu" ;
         Text [ English ] = "New" ;
@@ -1231,7 +1218,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     PushButton PB_ADD
     {
-        Pos = MAP_APPFONT ( 92 , 108 ) ;
+        Pos = MAP_APPFONT ( 92 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "H~inzuf¸gen" ;
         Text [ English ] = "A~dd" ;
@@ -1257,7 +1244,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     PushButton PB_CHANGE
     {
-        Pos = MAP_APPFONT ( 145 , 108 ) ;
+        Pos = MAP_APPFONT ( 145 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~ƒndern" ;
         Text [ English ] = "Chan~ge" ;
@@ -1283,7 +1270,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 198 , 108 ) ;
+        Pos = MAP_APPFONT ( 198 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Lˆschen" ;
         Text [ English ] = "Dele~te" ;
@@ -1306,54 +1293,6 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "ªË¡¶(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-    };
-    String STR_ERROR_NOFILE
-    {
-        Text[language_user1] = "%1 is a variable, which will be replaced.";
-        Text = "Die Konfigurationsdatei \"%1\" konnte nicht geladen werden.";
-        Text[English] = "Could not load the config file \"%1\".";
-        Text[ english_us ] = "The config file \"%1\" could not be loaded.";
-        Text[ portuguese ] = "Foi impossÌvel carregar o ficheiro de configuraÁ„o \"%1\".";
-        Text[ russian ] = "«‡„ÛÁËÚ¸ ÍÓÌÙË„Û‡ˆËÓÌÌ˚È Ù‡ÈÎ \"%1\" ÌÂ Û‰‡ÂÚÒˇ.";
-        Text[ greek ] = "ƒÂÌ ﬁÙ·Ì ‰ıÌ·Ù¸Ì Ì· ˆÔÒÙ˘ËÂﬂ ÙÔ ·Ò˜ÂﬂÔ ‰È·Ï¸Òˆ˘ÛÁÚ \"%1\".";
-        Text[ dutch ] = "Het configuratiebestand \"%1\" kon niet worden geladen";
-        Text[ french ] = "Impossible de charger le fichier de configuration \"%1\".";
-        Text[ spanish ] = "No se pudo cargar el archivo de configuraciÛn \"%1\".";
-        Text[ italian ] = "Non Ë stato possibile caricare il file di configurazione \"%1\".";
-        Text[ danish ] = "Det var ikke muligt at indlÊse konfigurationsfilen \"%1\".";
-        Text[ swedish ] = "Konfigurationsfilen \"%1\" kunde inte laddas.";
-        Text[ polish ] = "Nie moøna by≥o za≥adowaÊ pliku konfiguracyjnego \"%1\".";
-        Text[ portuguese_brazilian ] = "Could not load the config file \"%1\".";
-        Text[ japanese ] = "ê›íËÃß≤Ÿ\"%1\"ÇÕì«Ç›çûÇ›Ç≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
-        Text[ korean ] = "±∏º∫∆ƒ¿œ\"%1\"¿ª£®∏¶£© ∑ŒµÂ«œ¡ˆ ∏¯«ﬂΩ¿¥œ¥Ÿ.";
-        Text[ chinese_simplified ] = "Œﬁ∑®◊∞»Î≈‰÷√Œƒº˛ \"%1\"°£";
-        Text[ chinese_traditional ] = "µL™k∏¸§J∞t∏m¿…Æ◊\"%1\"°C";
-        Text[ arabic ] = " ⁄–—  Õ„Ì· „·› «· ﬂÊÌ‰ \"%1\".";
-        Text[ turkish ] = "Konfig¸rasyon dosyas˝ \"%1\" y¸klenemedi.";
-    };
-    String STR_ERROR_NOGROUP
-    {
-        Text[language_user1] = "%1 and %2 are a variables, which will be replaced.";
-        Text = "Der Eintrag \"[%1]\" wurde in der\nKonfigurationsdatei \"%2\" nicht gefunden.";
-        Text[English] = "The Entry \"[%1]\" cound not found in the config file \"%2\".";
-        Text[ english_us ] = "The entry \"[%1]\" cound not be found\nin the configuration file \"%2\".";
-        Text[ portuguese ] = "Foi impossÌvel encontrar a entrada \"[%1]\"\nno ficheiro de configuraÁ„o \"%2\".";
-        Text[ russian ] = "«‡ÔËÒ¸ \"[%1]\" ‚ ÍÓÌÙË„Û‡ˆËÓÌÌÓÏ\nÙ‡ÈÎÂ \"%2\" ÌÂ Ì‡È‰ÂÌ‡.";
-        Text[ greek ] = "ƒÂÌ ‚Ò›ËÁÍÂ Á Í·Ù·˜˛ÒÈÛÁ \"[%1]\" ÛÙÔ ·Ò˜ÂﬂÔ ‰È·Ï¸Òˆ˘ÛÁÚ \"%2\".";
-        Text[ dutch ] = "Het item \"[%1]\" is onvindbaar in het\nconfig bestand \"%2\".";
-        Text[ french ] = "Impossible de retrouver l'entrÈe \"[%1]\"\ndans le fichier de configuration \"%2\".";
-        Text[ spanish ] = "La entrada \"[%1]\" no se pudo encontrar\nen el archivo de configuraciÛn \"%2\".";
-        Text[ italian ] = "Non Ë stato possibile trovare la voce \"[%1]\"\nnel file di configurazione \"%2\".";
-        Text[ danish ] = "Det var ikke muligt at finde elementet \"[%1]\"\ni konfigurationsfilen \"%2\".";
-        Text[ swedish ] = "Posten \"[%1]\" hittades inte i\nkonfigurationsfilen \"%2\".";
-        Text[ polish ] = "Wpisu \"[%1]\" nie znaleziono w\n pliku konfiguracyjnym \"%2\".";
-        Text[ portuguese_brazilian ] = "The Entry \"[%1]\" cound not found in the config file \"%2\".";
-        Text[ japanese ] = "çÄñ⁄ \"[%1]\" ÇÕê›íËÃß≤Ÿ \"%2\" ÇÃíÜÇ…å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÅB";
-        Text[ korean ] = "«◊∏Ò\"[%1]\"¿∫ ±∏º∫∆ƒ¿œ\"%2\"ø°º≠ √£¿ª ºˆ æ¯Ω¿¥œ¥Ÿ.";
-        Text[ chinese_simplified ] = "‘⁄≈‰÷√Œƒº˛ \"%2\"÷–Œﬁ∑®’“µΩÃıƒø \"[%1]\" °£";
-        Text[ chinese_traditional ] = "¶b∞t∏m¿…Æ◊\"%2\"§∫®S¶≥ß‰®Ï±¯•ÿ\"[%1]\" °C";
-        Text[ arabic ] = " ⁄–— «·⁄ÀÊ— ⁄·Ï «·≈œŒ«· \"[%1] ›Ì\n„·› «· ﬂÊÌ‰ \"%2\".";
-        Text[ turkish ] = "Giri˛ \"[%1]\",\n \"%2\" konfig¸rasyon dosyas˝nda bulunamad˝.";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
