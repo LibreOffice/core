@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:30:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,7 @@ void SwFlyInCntFrm::MakeAll()
         if ( !bValidPos )
             MakeFlyPos();
 
+/* #111909# objects anchored as characters may exceed right margin!
         if ( bValidPos && bValidSize )
         {
             SwFrm *pFrm = GetAnchor();
@@ -396,6 +397,7 @@ void SwFlyInCntFrm::MakeAll()
                 bWidthClipped = TRUE;
             }
         }
+ */
     }
     Unlock();
 }
