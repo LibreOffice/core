@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #include "flttools.hxx"
 #include "scextopt.hxx"
 #include "stlpool.hxx"
+#include "stlsheet.hxx"
 
 using namespace com::sun::star;
 
@@ -198,7 +199,7 @@ void ExcCondForm::Read( XclImpStream& rIn )
 }
 
 
-void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
+void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv, sal_uInt32 nListIndex )
 {
     if( nNumOfConds )
     {
@@ -247,7 +248,6 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
             nFormatsLen = rIn.GetRecSize() - nFormatsLen;    // >0!
 
             ScDocument& rDoc = GetDoc();
-            String              aStyle( pExcRoot->GetCondFormStyleName( nCondCnt ) );
 
             const ScTokenArray* pFrmla1 = NULL;
             const ScTokenArray* pFrmla2 = NULL;
@@ -277,10 +277,8 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 default:    nPosF = 0;      nPosL = 0;      nPosP = 0;
             }
 
-            SfxStyleSheetBase* pStyleSheet = rDoc.GetStyleSheetPool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
-            SfxItemSet& rStyleItemSet = pStyleSheet ? pStyleSheet->GetItemSet() :
-                rDoc.GetStyleSheetPool()->Make( aStyle, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ).GetItemSet();
-            rStyleItemSet.ClearItem();
+            String aStyleName( XclTools::GetCondFormatStyleName( nListIndex, nCondCnt ) );
+            SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
 
             const XclImpPalette& rPalette = GetPalette();
 
@@ -344,20 +342,14 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 
             if( nPosL )     // line
             {
-                sal_uInt16 nLine, nColor1, nColor2;
+                sal_uInt16 nLineStyle;
+                sal_uInt32 nLineColor;
                 rIn.Seek( nPosL );
-                rIn >> nLine >> nColor1 >> nColor2;
+                rIn >> nLineStyle >> nLineColor;
 
-                XclImpXFBorder aBorder;
-                ::extract_value( aBorder.mnLeftLine,    nLine,    0, 4 );
-                ::extract_value( aBorder.mnRightLine,   nLine,    4, 4 );
-                ::extract_value( aBorder.mnTopLine,     nLine,    8, 4 );
-                ::extract_value( aBorder.mnBottomLine,  nLine,   12, 4 );
-                ::extract_value( aBorder.mnLeftColor,   nColor1,  0, 7 );
-                ::extract_value( aBorder.mnRightColor,  nColor1,  7, 7 );
-                ::extract_value( aBorder.mnTopColor,    nColor2,  0, 7 );
-                ::extract_value( aBorder.mnBottomColor, nColor2,  7, 7 );
-                XclImpXF::SetBorder( rStyleItemSet, rPalette, aBorder );
+                XclImpCellBorder aBorder;
+                aBorder.FillFromCF8( nLineStyle, nLineColor );
+                aBorder.FillToItemSet( rStyleItemSet, rPalette );
             }
 
             if( nPosP )     // pattern (fill)
@@ -366,18 +358,9 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 rIn.Seek( nPosP );
                 rIn >> nPattern >> nColor;
 
-                XclImpXFArea aArea;
-                ::extract_value( aArea.mnForeColor, nColor,    0, 7 );
-                ::extract_value( aArea.mnBackColor, nColor,    7, 7 );
-                ::extract_value( aArea.mnPattern,   nPattern, 10, 6 );
-                if( (aArea.mnPattern == EXC_PATT_NONE) || (aArea.mnPattern == EXC_PATT_SOLID) )
-                {
-                    // overwrite a cell style with "no fill"
-                    // EXC_PATT_SOLID forces creation of a brush item in SetArea()
-                    ::std::swap( aArea.mnForeColor, aArea.mnBackColor );
-                    aArea.mnPattern = EXC_PATT_SOLID;
-                }
-                XclImpXF::SetArea( rStyleItemSet, rPalette, aArea );
+                XclImpCellArea aArea;
+                aArea.FillFromCF8( nPattern, nColor );
+                aArea.FillToItemSet( rStyleItemSet, rPalette );
             }
 
             // convert formulas
@@ -407,7 +390,7 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 rConv.Convert( pFrmla2, nLenForm2, eFT );
             }
 
-            ScCondFormatEntry   aCFE( eMode, pFrmla1, pFrmla2, &rDoc, aPos, aStyle );
+            ScCondFormatEntry   aCFE( eMode, pFrmla1, pFrmla2, &rDoc, aPos, aStyleName );
 
             pScCondForm->AddEntry( aCFE );
 
@@ -758,10 +741,10 @@ void ImportExcel8::Msodrawingselection( void )
 
 void ImportExcel8::Condfmt( void )
 {
-    pActCondForm = new ExcCondForm( pExcRoot, *this );
-
     if( !pCondFormList )
         pCondFormList = new ExcCondFormList;
+
+    pActCondForm = new ExcCondForm( pExcRoot, *this );
 
     pCondFormList->Append( pActCondForm );
 
@@ -772,7 +755,7 @@ void ImportExcel8::Condfmt( void )
 void ImportExcel8::Cf( void )
 {
     if( pActCondForm )
-        pActCondForm->ReadCf( aIn, *pFormConv );
+        pActCondForm->ReadCf( aIn, *pFormConv, static_cast< sal_Int32 >( pCondFormList->Count() - 1 ) );
 }
 
 
@@ -937,7 +920,7 @@ void ImportExcel8::Name( void )
     RangeType           eNameType = RT_ABSAREA;
 
     if( bBuiltIn )
-        XclTools::GetBuiltInName( aName, cFirstChar, nSheet );
+        aName = XclTools::GetBuiltInName( cFirstChar, nSheet );
     else
         ScfTools::ConvertToScDefinedName( aName );
 
@@ -1026,10 +1009,11 @@ void ImportExcel8::PostDocLoad( void )
 
     SfxObjectShell* pShell = GetDocShell();
     XclImpObjectManager& rObjManager = GetObjectManager();
+    Biff8MSDffManager*      pDffMan = NULL;
 
     if( pShell && rObjManager.HasEscherStream() )
     {
-        Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( *pExcRoot, rObjManager,
+        pDffMan = new Biff8MSDffManager( *pExcRoot, rObjManager,
                                             0, 0, pD->GetDrawLayer(), 1440 );
 
         const XclImpAnchorData*         pAnch;
@@ -1111,10 +1095,12 @@ void ImportExcel8::PostDocLoad( void )
             }
         }
 
-        delete pDffMan;
     }
 
-    rObjManager.Apply();
+    rObjManager.Apply(pDffMan);
+
+    if( pDffMan )
+        delete pDffMan;
 
     ImportExcel::PostDocLoad();
 
