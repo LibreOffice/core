@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-21 21:17:28 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
         Text[ japanese ] = "常に次の形式で保存(~V)";
-        Text[ korean ] = "항상 ..로 저장(~V)";
+        Text[ korean ] = "항상 다음 형식으로 저장(~V)";
         Text[ chinese_simplified ] = "自动保存为(~V)";
         Text[ chinese_traditional ] = "自動另存為(~V)";
         Text[ turkish ] = "File formats";
@@ -656,7 +656,7 @@ TabPage RID_SFXPAGE_SAVE
     StringList [ swedish ] =
     {
             < "Textdokument" ;     APP_WRITER    ; > ;
-        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
         < "Tabelldokument" ; APP_CALC      ; > ;
         < "Presentation" ;     APP_IMPRESS   ; > ;
         < "Teckning" ;        APP_DRAW      ; > ;
