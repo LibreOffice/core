@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:52:06 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ public:
 };
 
 // class OfaViewTabPage --------------------------------------------------
+class SvtTabAppearanceCfg;
 
 class OfaViewTabPage : public SfxTabPage
 {
@@ -175,6 +176,8 @@ private:
 
     UINT16          nBigLB_InitialSelection;
     BOOL            bSfxSymbolsAuto;
+
+    SvtTabAppearanceCfg* pAppearanceCfg;
 
     DECL_LINK( OpenGLHdl, CheckBox* );
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
