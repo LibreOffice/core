@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servreg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,54 @@
  *
  *
  ************************************************************************/
-
+#include <rtl/unload.h>
+#include <osl/time.h>
 #include "ole2uno.hxx"
-
+#include "servprov.hxx"
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
-
-
-
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
+#endif
 using namespace rtl;
 using namespace ole_adapter;
+using namespace cppu;
 
+namespace ole_adapter
+{
+rtl_StandardModuleCount globalModuleCount= MODULE_COUNT_INIT;
+
+
+
+Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
+                            throw(Exception)
+{
+    Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr);
+    return xService;
+}
+
+Reference<XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(    const Reference<XMultiServiceFactory> & xSMgr)
+                            throw(Exception)
+{
+    Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr, UNO_OBJECT_WRAPPER_REMOTE_OPT, IUNKNOWN_WRAPPER_IMPL);
+    return xService;
+}
+
+Reference<XInterface> SAL_CALL OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
+                            throw(Exception)
+{
+    Reference<XInterface> xService = *new OleClient_Impl( xSMgr);
+    return xService;
+}
+
+Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
+                            throw (Exception)
+{
+    Reference<XInterface > xService = *new OleServer_Impl(xSMgr);
+    return xService;
+}
+} // end namespace
 
 extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
@@ -78,29 +114,34 @@ extern "C" void * SAL_CALL component_getFactory(
 
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     Reference< XSingleServiceFactory > xFactory;
+    Sequence<OUString> seqServiceNames;
     if (pServiceManager && aImplName.equals(  L"com.sun.star.comp.ole.OleConverter2"  ))
     {
-        xFactory= o2u_getConverterProvider2(
-            reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-            reinterpret_cast< XRegistryKey*>(pRegistryKey));
+        xFactory=  createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
+                                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverter2")),
+                                         ConverterProvider_CreateInstance2, seqServiceNames,
+                                         &globalModuleCount.modCnt );
     }
     else if (pServiceManager && aImplName.equals(  L"com.sun.star.comp.ole.OleConverterVar1"  ))
     {
-        xFactory= o2u_getConverterProviderVar1(
-            reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-            reinterpret_cast< XRegistryKey*>(pRegistryKey));
+        xFactory= createSingleFactory( reinterpret_cast<XMultiServiceFactory*>(pServiceManager),
+                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverterVar1")),
+                                       ConverterProvider_CreateInstanceVar1, seqServiceNames,
+                                       &globalModuleCount.modCnt );
     }
     else if(pServiceManager && aImplName.equals(L"com.sun.star.comp.ole.OleClient"))
     {
-        xFactory= o2u_getClientProvider(
-            reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-            reinterpret_cast< XRegistryKey*>(pRegistryKey));
+        xFactory= createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
+                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleClient")),
+                                       OleClient_CreateInstance, seqServiceNames,
+                                       &globalModuleCount.modCnt);
     }
     else if(pServiceManager && aImplName.equals(L"com.sun.star.comp.ole.OleServer"))
     {
-        xFactory= o2u_getServerProvider(
-            reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-            reinterpret_cast< XRegistryKey*>(pRegistryKey));
+        xFactory= createOneInstanceFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleServer")),
+                                            OleServer_CreateInstance, seqServiceNames,
+                                            &globalModuleCount.modCnt);
     }
 
     if (xFactory.is())
@@ -152,3 +193,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 
+extern "C"  sal_Bool component_canUnload( TimeValue* libUnused)
+{
+    return globalModuleCount.canUnload( &globalModuleCount, libUnused);
+}

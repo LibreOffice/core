@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-20 15:35:34 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
     // Then out and in/out parameters have to be treated differently than
     // with common COM objects.
     sal_Bool bJScriptObject= isJScriptObject();
-//  CComDispatchDriver disp( m_pDispatch);
 
     CComVariant *pVarParams= NULL;
     CComVariant *pVarParamsRef= NULL;
@@ -481,7 +480,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
         {
             pVarParamsRef= new CComVariant[ outParameterCount];
             // build up the parameters for IDispatch::Invoke
-//          sal_Int32 inParamIndex=0;
             sal_Int32 outParamIndex=0;
 
             for( i= 0; i < parameterCount; i++)
@@ -634,7 +632,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
         }
         else // it is an JScriptObject
         {
-//          sal_Int32 inParamIndex= 0;
             for( sal_Int32 i= 0; i< parameterCount; i++)
             {
                 // In parameter
@@ -1050,13 +1047,13 @@ Reference< XInterface > IUnknownWrapper_Impl::createUnoWrapperInstance()
     if( m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper_Impl(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else if( m_nUnoWrapperClass == UNO_OBJECT_WRAPPER_REMOTE_OPT)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new UnoObjectWrapperRemoteOpt(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else
@@ -1065,7 +1062,7 @@ Reference< XInterface > IUnknownWrapper_Impl::createUnoWrapperInstance()
 Reference<XInterface> IUnknownWrapper_Impl::createComWrapperInstance()
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
-                            m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                            m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
@@ -1374,70 +1371,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
 
     return ret;
 }
-// parameter is an array that contains the referenced parameters
-// params is an array of VARIANTs that contains values which are referenced by
-// the VARIANTS in DISPPARAMS::rgvarg
-//sal_Bool IUnknownWrapper_Impl::prepareOutParams( VARIANT* params, sal_uInt32 count )
-//{
-//  sal_Bool ret= sal_True;
-//  ITypeInfo* pType= getTypeInfo();
-//  if(! pType )
-//      return sal_False;
-//  // build the map of function names and their tlb index
-//  if( sal_False == isComTlbIndex())
-//      buildComTlbIndex();
-//
-//  typedef TLBFuncIndexMap::const_iterator cit;
-//  cit itIndex= m_mapComFunc.find( m_usCurrentInvoke );
-//  if( itIndex != m_mapComFunc.end())
-//  {
-//      FUNCDESC* funcDesc= NULL;
-//      if( SUCCEEDED( pType->GetFuncDesc( itIndex->second, &funcDesc)))
-//      {
-//          m_seqCurrentParamTypes.realloc( funcDesc->cParams);
-//          // Examine each param
-//          for( sal_Int16 iparams= 0; iparams < funcDesc->cParams; iparams++)
-//          {
-//              sal_Int32 flags= funcDesc->lprgelemdescParam->paramdesc.wParamFlags;
-//
-//              // out parameter
-//              if(  flags & PARAMFLAG_FOUT &&
-//                  ! (flags & PARAMFLAG_FIN))
-//              {
-//                  m_seqCurrentParamTypes[ iparams]= (sal_Int32) OUT_PARAM;
-//                  VariantClear( &params[iparams] );
-//                  params[ iparams].byref=0;
-//                  // Get the type
-//                  VARTYPE paramType;
-//                  if( getElementTypeDesc( & funcDesc->lprgelemdescParam[iparams].tdesc, paramType))
-//                  {
-//                      // dispparams: VT_VARIANT |VT_BYREF , referenced Value: VT_EMPTY
-//                      if( !( paramType & VT_ARRAY) &&
-//                          (paramType & VT_TYPEMASK) == VT_VARIANT)
-//                          params[iparams].vt= VT_EMPTY;
-//                      else
-//                          params[iparams].vt= (paramType ^ VT_BYREF);
-//                  }
-//                  else
-//                      ret= sal_False;
-//              }
-//              // in/out parameter
-//              else if(flags &  PARAMFLAG_FIN && flags & PARAMFLAG_FOUT )
-//                  m_seqCurrentParamTypes[ iparams]= (sal_Int32) INOUT_PARAM;
-//              // in parameter
-//              else if(flags &  PARAMFLAG_FIN && ! (flags & PARAMFLAG_FOUT ))
-//                  m_seqCurrentParamTypes[ iparams]= (sal_Int32) IN_PARAM;
-//          }
-//          pType->ReleaseFuncDesc( funcDesc);
-//      }
-//      else
-//          ret= sal_False;
-//  }
-//  else
-//      ret= sal_False;
-//
-//  return ret;
-//}
 
 sal_Bool IUnknownWrapper_Impl::getParameterInfo()
 {

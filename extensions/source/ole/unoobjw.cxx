@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-26 08:57:58 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-//#define INVOCATION_SERVICE L"com.sun.star.script.Invocation"
-//#define JSCRIPT_VALUE_FUNC L"_GetValueObject"
-//#define DISPID_JSCRIPT_VALUE_FUNC -1000l
-
 
 
 #if _MSC_VER < 1200
@@ -161,7 +157,6 @@ static HRESULT mapCannotConvertException( CannotConvertException e, unsigned int
 *****************************************************************************/
 
 OMutex globalWrapperMutex;
-//static WrapperMap globalWrapperMap;
 
 /*****************************************************************************
 
@@ -203,19 +198,6 @@ STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * 
     }
     else
         ret= E_NOINTERFACE;
-//    else if (IsEqualIID(riid, IID_IDispatchEx))
-//  {
-//      AddRef();
-//      *ppv = (IDispatchEx*) this;
-//      return NOERROR;
-//  }
-//    else if (IsEqualIID(riid, IID_IConnectionPointContainer))
-//  {
-//      AddRef();
-//      *ppv = (IConnectionPointContainer*) this;
-//      return NOERROR;
-//  }
-//
     return ret;
 }
 
@@ -623,7 +605,7 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
         Reference<XInterface> xInt;
         if( modelDepObject >>= xInt )
         {
-            if( xInt == Reference<XInterface>( static_cast<XWeak*>( this)), UNO_QUERY)
+            if( xInt == Reference<XInterface>( static_cast<XWeak*>( this), UNO_QUERY))
             {
                 VARIANT *pVar= (VARIANT*)CoTaskMemAlloc( sizeof( VARIANT));
                 if( pVar)
@@ -680,14 +662,14 @@ void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArgu
 Reference< XInterface > InterfaceOleWrapper_Impl::createUnoWrapperInstance()
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper_Impl(
-                            m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                            m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
 Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
-                            m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                            m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
@@ -1171,36 +1153,33 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     {
         bHandled= sal_True;
         sal_Bool bStruct= sal_False;
-        Reference<XMultiServiceFactory> fac= o2u_getMultiServiceFactory();
-        if( fac.is() )
-        {
-            Reference<XInterface> xIntCore= fac->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
-            Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
-            if( xRefl.is() )
-            {
-                // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
-                CComVariant arg;
-                if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
-                {
-                    Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
-                    if( classStruct.is())
-                    {
-                        Any anyStruct;
-                        classStruct->createObject( anyStruct);
-                        CComVariant var;
-                        if( anyToVariant( &var, anyStruct ))
-                        {
-                            if( var.vt == VT_DISPATCH)
-                            {
-                                VariantCopy( pvarResult, & var);
-                                bStruct= sal_True;
-                            }
-                        }
 
+
+        Reference<XInterface> xIntCore= m_smgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
+        Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
+        if( xRefl.is() )
+        {
+            // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
+            CComVariant arg;
+            if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
+            {
+                Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
+                if( classStruct.is())
+                {
+                    Any anyStruct;
+                    classStruct->createObject( anyStruct);
+                    CComVariant var;
+                    if( anyToVariant( &var, anyStruct ))
+                    {
+                        if( var.vt == VT_DISPATCH)
+                        {
+                            VariantCopy( pvarResult, & var);
+                            bStruct= sal_True;
+                        }
                     }
+
                 }
             }
-
         }
         ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
     }
@@ -1306,7 +1285,7 @@ UnoObjectWrapperRemoteOpt::~UnoObjectWrapperRemoteOpt()
 Reference< XInterface > UnoObjectWrapperRemoteOpt::createUnoWrapperInstance()
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new UnoObjectWrapperRemoteOpt(
-                                                 m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                                 m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-24 09:31:28 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,14 @@ template< class >
 class UnoConversionUtilities
 {
 public:
-    UnoConversionUtilities(): m_nUnoWrapperClass( INTERFACE_OLE_WRAPPER_IMPL),
-                              m_nComWrapperClass( IUNKNOWN_WRAPPER_IMPL)
+    UnoConversionUtilities( const Reference<XMultiServiceFactory> & smgr):
+        m_nUnoWrapperClass( INTERFACE_OLE_WRAPPER_IMPL),
+        m_nComWrapperClass( IUNKNOWN_WRAPPER_IMPL),
+        m_smgr( smgr)
     {}
-    UnoConversionUtilities( sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
-        : m_nUnoWrapperClass( unoWrapperClass), m_nComWrapperClass( comWrapperClass)
-    {}
-    UnoConversionUtilities( Reference<XMultiServiceFactory> xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
-        : m_xMultiServiceFactory( xFactory), m_nComWrapperClass( comWrapperClass), m_nUnoWrapperClass( unoWrapperClass)
+
+    UnoConversionUtilities( const Reference<XMultiServiceFactory> & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
+        : m_smgr( xFactory), m_nComWrapperClass( comWrapperClass), m_nUnoWrapperClass( unoWrapperClass)
     {}
     // converts only into oleautomation types, that is there is no VT_I1, VT_UI2, VT_UI4
     // a sal_Unicode character is converted into a BSTR
@@ -133,8 +133,6 @@ public:
 
 
     VARTYPE mapTypeClassToVartype( TypeClass type);
-
-//  Reference< XSingleServiceFactory > getInvocationFactory();
     Reference< XSingleServiceFactory > getInvocationFactory(const Any& anyObject);
 
 
@@ -161,33 +159,23 @@ protected:
     sal_uInt8 m_nUnoWrapperClass;
     sal_uInt8 m_nComWrapperClass;
 
-    // This factory is set by calling XInitialization::initialize.
-    // If this ServiceManager is supplied then it is used to create
-    // a remote invocation service, whenever an UNO object is to be converted.
-    // This happens when the service com.sun.star.bridge.OleBridgeSupplierVar1 is
-    // being used to convert an object. The service is used in the plugin
-    // where it converts remote objects ( e.g. the XFrame). Thus the object and
-    // the invocation service are on the remote server.
-    Reference<XMultiServiceFactory> m_xMultiServiceFactory;
+    // The servicemanager is either a local smgr or remote when the service
+    // com.sun.star.bridge.OleBridgeSupplierVar1 is used. This service can be
+    // created by createInstanceWithArguments where one can supply a service
+    // manager that is to be used.
+    // Local service manager as supplied by the loader when the creator function
+    // of the service is being called.
+    Reference<XMultiServiceFactory> m_smgr;
+    // An explicitly supplied service manager when the service
+    // com.sun.star.bridge.OleBridgeSupplierVar1 is used. That can be a remote
+    // manager.
+    Reference<XMultiServiceFactory> m_smgrRemote;
     Reference<XSingleServiceFactory> m_xInvocationFactoryLocal;
     Reference<XSingleServiceFactory> m_xInvocationFactoryRemote;
 
 
 };
 
-//template<class T>
-//Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory()
-//{
-//  if( m_xInvocationFactory.is() )
-//      return Reference< XSingleServiceFactory >( m_xInvocationFactory );
-//
-//  if( m_xMultiServiceFactory.is() )
-//      m_xInvocationFactory= Reference<XSingleServiceFactory >( m_xMultiServiceFactory->createInstance( INVOCATION_SERVICE), UNO_QUERY);
-//  else
-//      m_xInvocationFactory= Reference<XSingleServiceFactory>( o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
-//
-//  return m_xInvocationFactory;
-//}
 
 // Gets the invocation factory depending on the Type in the Any.
 // The factory can be created by a local or remote multi service factory.
@@ -200,20 +188,20 @@ template<class T>
 Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const Any& anyObject)
 {
     Reference< XSingleServiceFactory > retVal;
-
+    OGuard guard( globalWrapperMutex);
     if( anyObject.getValueTypeClass() != TypeClass_STRUCT &&
-        m_xMultiServiceFactory.is() )
+        m_smgrRemote.is() )
     {
         if(  ! m_xInvocationFactoryRemote.is() )
             m_xInvocationFactoryRemote= Reference<XSingleServiceFactory>(
-            m_xMultiServiceFactory->createInstance( INVOCATION_SERVICE), UNO_QUERY);
+            m_smgrRemote->createInstance( INVOCATION_SERVICE), UNO_QUERY);
         retVal= m_xInvocationFactoryRemote;
     }
     else
     {
         if( ! m_xInvocationFactoryLocal.is() )
             m_xInvocationFactoryLocal= Reference<XSingleServiceFactory>(
-            o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
+            m_smgr->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
         retVal= m_xInvocationFactoryLocal;
     }
     return retVal;
@@ -271,8 +259,6 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
             }
             break;
         case TypeClass_INTERFACE: // could also be an IUnknown
-    //      if( SUCCEEDED( hr= VariantChangeType( &var, &var, 0, VT_DISPATCH)))
-    //          retVal= variantToAny(&var, rAny);
             {
             CComVariant varUnk;
             if( SUCCEEDED( hr= VariantChangeType( &varUnk, &var, 0, VT_UNKNOWN)))
@@ -550,10 +536,6 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
         case TypeClass_CHAR:// char
             {
                 // Because VT_UI2 does not conform to oleautomation we convert into VT_I2 instead
-//          V_VT(pVariant) = VT_BSTR;
-//          sal_uInt16 _c = *(sal_uInt16*)rAny.getValue();
-//          pVariant->bstrVal= SysAllocStringLen( &_c, 1);
-//          ret= pVariant->bstrVal ? sal_True : sal_False;
             V_VT(pVariant) = VT_I2;
             V_I2(pVariant) = *(sal_Int16*)rAny.getValue();
             ret = sal_True;
@@ -591,10 +573,7 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
             ret = sal_True;
             break;
         case TypeClass_HYPER:       // INT64
-    //          V_VT(pVariant) = VT_CY;
-    //          V_CY(pVariant).Lo = rAny.getINT64().p.loPart;
-    //          V_CY(pVariant).Lo = rAny.getINT64().p.hiPart;
-    //          ret = sal_True;
+
             break;
         //case TypeClass_UNSIGNED_OCTET:    // ??? not implemented
         //  V_VT(pVariant) = VT_UI1;
@@ -612,9 +591,6 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
             ret = sal_True;
             break;
         case TypeClass_UNSIGNED_HYPER:  // UINT64
-    //          V_VT(pVariant) = VT_UI8;
-    //          V_UI8(pVariant) = rAny.getUINT64();
-    //          ret = sal_True;
             break;
     //  case TypeClass_UNSIGNED_INT:    // int not implemented
     //      break;
@@ -1431,15 +1407,15 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
                 else
                 {
                     Reference< XInterface> xIntAdapterFac;
-                    if( m_xMultiServiceFactory.is())
-                    {
-                        xIntAdapterFac= m_xMultiServiceFactory->createInstance( INTERFACE_ADAPTER_FACTORY);
+//                      if( m_smgr.is())
+//                      {
+                        xIntAdapterFac= m_smgr->createInstance( INTERFACE_ADAPTER_FACTORY);
 
-                    }
-                    else
-                    {
-                        xIntAdapterFac= o2u_getMultiServiceFactory()->createInstance( INTERFACE_ADAPTER_FACTORY);
-                    }
+//                      }
+//                      else
+//                      {
+//                          xIntAdapterFac= o2u_getMultiServiceFactory()->createInstance( INTERFACE_ADAPTER_FACTORY);
+//                      }
 
                     // We create an adapter object that does not only implement the required type but also
                     // all types that the COM object pretends to implement. An COM object must therefore
@@ -1629,7 +1605,8 @@ sal_Bool UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG*
     // put them into the passed in sequence
     for( sal_Int32 i= 0; i< length; i++)
     {
-        OLECHAR* sindex =  (sal_Unicode*)(const sal_Unicode*)OUString::valueOf( i);
+        OUString ousIndex=OUString::valueOf( i);
+        OLECHAR* sindex =  (OLECHAR*)ousIndex.getStr();
 
         if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-20 11:28:16 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
-
+#include <rtl/unload.h>
 
 using namespace std;
 using namespace cppu;
@@ -91,28 +91,10 @@ namespace ole_adapter
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
+extern  rtl_StandardModuleCount globalModuleCount;
 
-
-static  Reference<XMultiServiceFactory> xMultiServiceFactory;
-static Reference<XRegistryKey>      xRegistryKey;
-
-Reference<XMultiServiceFactory> o2u_getMultiServiceFactory()
-{
-    return xMultiServiceFactory;
-}
-
-Reference<XRegistryKey> o2u_getRegistryKey()
-{
-    return xRegistryKey;
-}
 
 extern OMutex globalWrapperMutex;
-Reference<XSingleServiceFactory> getInvocationFactory()
-{
-    OGuard aGuard(globalWrapperMutex);
-    static Reference<XSingleServiceFactory> factory= Reference<XSingleServiceFactory>(o2u_getMultiServiceFactory()->createInstance( INVOCATION_SERVICE), UNO_QUERY);
-    return factory;
-}
 
 /*****************************************************************************
 
@@ -120,12 +102,14 @@ Reference<XSingleServiceFactory> getInvocationFactory()
 
 *****************************************************************************/
 
-ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XSingleServiceFactory>& xSFact, GUID* pGuid)
-    : m_xSingleServiceFactory(xSFact)
+ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFactory>& smgr,
+                                                 const Reference<XSingleServiceFactory>& xSFact, GUID* pGuid)
+    : m_xSingleServiceFactory(xSFact),
+      m_smgr( smgr)
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = o2u_getMultiServiceFactory()->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    Reference<XInterface> xInt = smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
 
     if (xInt.is())
     {
@@ -253,12 +237,14 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int fLock)
 
 *****************************************************************************/
 
-OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(const Reference<XInterface>& xInst, GUID* pGuid)
-    : m_xInst(xInst)
+OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
+                                                         const Reference<XInterface>& xInst, GUID* pGuid)
+    : m_xInst(xInst),
+      m_smgr( smgr)
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = o2u_getMultiServiceFactory()->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
 
     if (xInt.is())
     {
@@ -379,20 +365,26 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::LockServer(int fLock)
 
 *****************************************************************************/
 
-OleConverter_Impl2::OleConverter_Impl2()
+OleConverter_Impl2::OleConverter_Impl2( const Reference<XMultiServiceFactory> &smgr):
+    UnoConversionUtilities<OleConverter_Impl2>( smgr)
 
 {
+    // library unloading support
+    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
 }
 
 // The XMultiServiceFactory is later set by XInitialization
-OleConverter_Impl2::OleConverter_Impl2( sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass ):
-                        UnoConversionUtilities<OleConverter_Impl2>( unoWrapperClass, comWrapperClass  )
+OleConverter_Impl2::OleConverter_Impl2( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass ):
+    UnoConversionUtilities<OleConverter_Impl2>( smgr, unoWrapperClass, comWrapperClass  )
 
 {
+    //library unloading support
+    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
 }
 
 OleConverter_Impl2::~OleConverter_Impl2()
 {
+    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
 // XBridgeSupplier --------------------------------------------------------------
@@ -489,7 +481,7 @@ void SAL_CALL OleConverter_Impl2::initialize( const Sequence< Any >& aArguments 
         Reference < XInterface > xInt;
         aArguments[0] >>= xInt;
         Reference <XMultiServiceFactory> xMulti( xInt, UNO_QUERY);
-        m_xMultiServiceFactory= xMulti;
+        m_smgrRemote= xMulti;
     }
 }
 
@@ -499,13 +491,13 @@ Reference< XInterface > OleConverter_Impl2::createUnoWrapperInstance()
     if( m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper_Impl(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else if( m_nUnoWrapperClass == UNO_OBJECT_WRAPPER_REMOTE_OPT)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new UnoObjectWrapperRemoteOpt(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else
@@ -515,7 +507,7 @@ Reference< XInterface > OleConverter_Impl2::createUnoWrapperInstance()
 Reference< XInterface > OleConverter_Impl2::createComWrapperInstance()
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
-                            m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                            m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
@@ -527,9 +519,12 @@ Reference< XInterface > OleConverter_Impl2::createComWrapperInstance()
 
 *****************************************************************************/
 
-OleClient_Impl::OleClient_Impl()
+OleClient_Impl::OleClient_Impl( const Reference<XMultiServiceFactory>& smgr):
+    UnoConversionUtilities<OleClient_Impl>( smgr)
 {
-    Reference<XInterface> xInt = o2u_getMultiServiceFactory()->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    // library unloading support
+    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
+    Reference<XInterface> xInt;// = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
 
     if (xInt.is())
     {
@@ -541,6 +536,8 @@ OleClient_Impl::OleClient_Impl()
 
 OleClient_Impl::~OleClient_Impl()
 {
+    // library unloading support
+    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
 Sequence< OUString >    SAL_CALL OleClient_Impl::getAvailableServiceNames() throw( RuntimeException )
@@ -618,13 +615,13 @@ Reference< XInterface > OleClient_Impl::createUnoWrapperInstance()
     if( m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper_Impl(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else if( m_nUnoWrapperClass == UNO_OBJECT_WRAPPER_REMOTE_OPT)
     {
         Reference<XWeak> xWeak= static_cast<XWeak*>( new UnoObjectWrapperRemoteOpt(
-                                m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                                m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
         return Reference<XInterface>( xWeak, UNO_QUERY);
     }
     else
@@ -634,7 +631,7 @@ Reference< XInterface > OleClient_Impl::createUnoWrapperInstance()
 Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
 {
     Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
-                            m_xMultiServiceFactory, m_nUnoWrapperClass, m_nComWrapperClass));
+                            m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
@@ -646,9 +643,12 @@ Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
 
 *****************************************************************************/
 
-OleServer_Impl::OleServer_Impl()
+OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
+    m_smgr( smgr)
 {
-    Reference<XInterface> xInt = o2u_getMultiServiceFactory()->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    //library unloading support
+    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
+    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
 
     if (xInt.is())
     {
@@ -657,7 +657,7 @@ OleServer_Impl::OleServer_Impl()
         a >>= m_bridgeSupplier;
     }
 
-    sal_Bool ret = provideInstance(o2u_getMultiServiceFactory(), (GUID*)&OID_ServiceManager);
+    sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager);
 }
 
 OleServer_Impl::~OleServer_Impl()
@@ -668,6 +668,8 @@ OleServer_Impl::~OleServer_Impl()
         (*m_wrapperList.begin())->Release();
         m_wrapperList.pop_front();
     }
+    //library unloading support
+    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 // XInterface --------------------------------------------------
 Any SAL_CALL OleServer_Impl::queryInterface( const Type& aType ) throw(RuntimeException)
@@ -725,7 +727,7 @@ sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& 
 {
     sal_Bool ret = FALSE;
 
-    IClassFactoryWrapper* pFac = new ProviderOleWrapper_Impl(xSFact, guid);
+    IClassFactoryWrapper* pFac = new ProviderOleWrapper_Impl( m_smgr, xSFact, guid);
 
     pFac->AddRef();
 
@@ -738,7 +740,7 @@ sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUI
 {
     sal_Bool    ret = FALSE;
 
-    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl(xInst, guid);
+    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid);
 
     pFac->AddRef();
     m_wrapperList.push_back(pFac);
@@ -746,105 +748,6 @@ sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUI
     return pFac->registerClass();
 }
 
-
-
-/*****************************************************************************
-
-    functions to create the service providers
-
-*****************************************************************************/
-
-Reference<XSingleServiceFactory>    o2u_getConverterProvider2(const Reference<XMultiServiceFactory>&    xMan,
-                                                const Reference<XRegistryKey>&  xKey)
-{
-    static Reference<XSingleServiceFactory> ret = NULL;
-
-    if (!ret.is())
-    {
-        if (!xMultiServiceFactory.is())     xMultiServiceFactory = xMan;
-
-        Sequence<OUString> seqServiceNames;
-        ret = createSingleFactory( xMan, L"com.sun.star.comp.ole.OleConverter2",
-            ConverterProvider_CreateInstance2, seqServiceNames );
-    }
-    return ret;
-}
-
-Reference<XSingleServiceFactory>    o2u_getConverterProviderVar1(const Reference<XMultiServiceFactory>& xMan,
-                                                const Reference<XRegistryKey>&  xKey)
-{
-    static Reference<XSingleServiceFactory> ret = NULL;
-
-    if (!ret.is())
-    {
-        if (!xMultiServiceFactory.is())     xMultiServiceFactory = xMan;
-
-        Sequence<OUString> seqServiceNames;
-        ret = createSingleFactory( xMan, L"com.sun.star.comp.ole.OleConverterVar1",
-            ConverterProvider_CreateInstanceVar1, seqServiceNames );
-    }
-    return ret;
-}
-Reference<XSingleServiceFactory>    o2u_getClientProvider(const Reference<XMultiServiceFactory>& xMan,
-                                          const Reference<XRegistryKey>&    xKey)
-{
-    static Reference<XSingleServiceFactory> ret = NULL;
-
-    if (!ret.is())
-    {
-        if (!xMultiServiceFactory.is())     xMultiServiceFactory = xMan;
-        Sequence<OUString> seqServiceNames;
-        ret = createSingleFactory( xMan, L"com.sun.star.comp.ole.OleClient",
-            OleClient_CreateInstance, seqServiceNames);
-    }
-
-    return ret;
-}
-
-Reference<XSingleServiceFactory>    o2u_getServerProvider(const Reference<XMultiServiceFactory>& xMan,
-                                          const Reference<XRegistryKey>&    xKey)
-{
-    static Reference<XSingleServiceFactory> ret = NULL;
-
-    if (!ret.is())
-    {
-        if (!xMultiServiceFactory.is())     xMultiServiceFactory = xMan;
-        Sequence<OUString> seqServiceNames;
-        ret = createOneInstanceFactory( xMan, L"com.sun.star.comp.ole.OleServer",
-            OleServer_CreateInstance, seqServiceNames);
-    }
-
-    return ret;
-}
-// Creator functions --------------------
-
-Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
-                            throw(Exception)
-{
-    Reference<XInterface> xService = *new OleConverter_Impl2();
-    return xService;
-}
-
-Reference<XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(    const Reference<XMultiServiceFactory> & xSMgr)
-                            throw(Exception)
-{
-    Reference<XInterface> xService = *new OleConverter_Impl2( UNO_OBJECT_WRAPPER_REMOTE_OPT, IUNKNOWN_WRAPPER_IMPL);
-    return xService;
-}
-
-Reference<XInterface> SAL_CALL OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
-                            throw(Exception)
-{
-    Reference<XInterface> xService = *new OleClient_Impl();
-    return xService;
-}
-
-Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
-                            throw (Exception)
-{
-    Reference<XInterface > xService = *new OleServer_Impl();
-    return xService;
-}
 
 
 } // end namespace

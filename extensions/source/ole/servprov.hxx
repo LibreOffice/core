@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ class ProviderOleWrapper_Impl : public IClassFactoryWrapper
 {
 public:
 
-    ProviderOleWrapper_Impl(const Reference<XSingleServiceFactory>& xSFactory, GUID* pGuid);
+    ProviderOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr,
+                             const Reference<XSingleServiceFactory>& xSFactory, GUID* pGuid);
     ~ProviderOleWrapper_Impl();
 
     sal_Bool registerClass();
@@ -147,6 +148,7 @@ protected:
     GUID                m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
+    Reference<XMultiServiceFactory> m_smgr;
 };
 
 /*****************************************************************************
@@ -166,7 +168,7 @@ class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper_Impl(const Reference<XInterface>& xInst, GUID* pGuid);
+    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid);
     ~OneInstanceOleWrapper_Impl();
 
     sal_Bool registerClass();
@@ -189,6 +191,7 @@ protected:
     GUID                m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
+    Reference<XMultiServiceFactory> m_smgr;
 };
 
 /*****************************************************************************
@@ -213,8 +216,8 @@ class OleConverter_Impl2 : public WeakImplHelper2<XBridgeSupplier2, XInitializat
                             public UnoConversionUtilities<OleConverter_Impl2>
 {
 public:
-    OleConverter_Impl2();
-    OleConverter_Impl2( sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
+    OleConverter_Impl2( const Reference<XMultiServiceFactory>& smgr);
+    OleConverter_Impl2( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
     virtual ~OleConverter_Impl2();
 
     // XBridgeSupplier2 ---------------------------------------------------
@@ -231,6 +234,8 @@ public:
     // Abstract struct UnoConversionUtilities
     virtual Reference< XInterface > createUnoWrapperInstance();
     virtual Reference< XInterface > createComWrapperInstance();
+protected:
+
 };
 
 
@@ -247,7 +252,7 @@ class OleClient_Impl : public WeakImplHelper1<XMultiServiceFactory>,
                        public UnoConversionUtilities<OleClient_Impl>
 {
 public:
-    OleClient_Impl();
+    OleClient_Impl( const Reference<XMultiServiceFactory>& smgr);
     ~OleClient_Impl();
 
     // XMultiServiceFactory
@@ -262,7 +267,6 @@ public:
 
     OUString getImplementationName();
 protected:
-
     Reference<XBridgeSupplier2> m_bridgeSupplier;
 };
 
@@ -280,7 +284,7 @@ protected:
 class OleServer_Impl : public OWeakObject, XTypeProvider
 {
 public:
-    OleServer_Impl();
+    OleServer_Impl( const Reference<XMultiServiceFactory> &smgr);
     ~OleServer_Impl();
 
     // XInterface
@@ -299,6 +303,8 @@ protected:
 
     list< IClassFactoryWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;
+
+    Reference<XMultiServiceFactory> m_smgr;
 };
 
 } // end namespace

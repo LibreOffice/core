@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 12:50:08 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,12 +174,12 @@ using namespace std;
 namespace ole_adapter
 {
 // function shared in this component
-Reference<XSingleServiceFactory>    o2u_getConverterProvider2(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-Reference<XSingleServiceFactory>    o2u_getConverterProviderVar1(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-Reference<XSingleServiceFactory>    o2u_getClientProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-Reference<XSingleServiceFactory>    o2u_getServerProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
+//  Reference<XSingleServiceFactory>    o2u_getConverterProvider2(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
+//  Reference<XSingleServiceFactory>    o2u_getConverterProviderVar1(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
+//  Reference<XSingleServiceFactory>    o2u_getClientProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
+//  Reference<XSingleServiceFactory>    o2u_getServerProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
 
-Reference<XMultiServiceFactory> o2u_getMultiServiceFactory();
+//Reference<XMultiServiceFactory>   o2u_getMultiServiceFactory();
 Reference<XRegistryKey>     o2u_getRegistryKey();
 const VARTYPE getVarType( const Any& val);
 Type getType( BSTR type);
