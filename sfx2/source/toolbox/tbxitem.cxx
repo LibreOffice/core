@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:07:55 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #include <svtools/imagemgr.hxx>
@@ -742,7 +745,7 @@ BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
     if (!bValidFallback)
     {
         *pFallback  = DEFINE_CONST_UNICODE("private:factory/");
-        *pFallback += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
+        *pFallback += String(SvtModuleOptions().GetDefaultModuleName());
     }
 
     return FALSE;
