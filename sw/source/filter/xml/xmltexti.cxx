@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -599,7 +602,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     // Copy URL into URL oject on the way.
        INetURLObject aURLObj;
     bool bValidURL = rHRef.getLength() != 0 &&
-                     aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) );
+                     aURLObj.SetURL( URIHelper::SmartRel2Abs(
+                                INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
     if( !bValidURL )
         return xPropSet;
 
@@ -670,7 +674,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SwApplet_Impl aAppletImpl ( aItemSet );
-    aAppletImpl.CreateApplet ( rCode, rName, bMayScript, rHRef );
+    aAppletImpl.CreateApplet ( rCode, rName, bMayScript, rHRef, GetXMLImport().GetBaseURL() );
 
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        aAppletImpl.GetApplet(),
@@ -706,8 +710,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     // either, do not insert plugin and return early. Copy URL into URL oject
     // on the way.
        INetURLObject aURLObj;
+
     bool bValidURL = rHRef.getLength() != 0 &&
-                     aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) );
+                     aURLObj.SetURL( rHRef );
     bool bValidMimeType = rMimeType.getLength() != 0;
     if( !bValidURL && !bValidMimeType )
         return xPropSet;
@@ -854,7 +859,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
             if ( xSet.is() )
             {
                 xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"),
-                    makeAny( ::rtl::OUString( INetURLObject::RelToAbs( rHRef ) ) ) );
+                    makeAny( ::rtl::OUString( URIHelper::SmartRel2Abs(
+                            INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
                 xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"),
                     makeAny( ::rtl::OUString( rName ) ) );
