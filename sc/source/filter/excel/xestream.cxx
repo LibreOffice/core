@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:54:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,13 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XESTREAM_HXX
 #include "xestream.hxx"
 #endif
 
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
+#endif
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
 #endif
