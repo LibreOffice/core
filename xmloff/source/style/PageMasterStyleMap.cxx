@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 11:00:10 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 12:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 // footer
     { "FooterHeight",               XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERHEIGHT },
     { "FooterHeight",               XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERMINHEIGHT },
-    { "FooterDynamic",              XML_NAMESPACE_STYLE,    sXML__empty,                    XML_TYPE_BOOL | MID_FLAG_SPECIAL_ITEM_EXPORT,           CTF_PM_FOOTERDYNAMIC },
+    { "FooterIsDynamicHeight",      XML_NAMESPACE_STYLE,    sXML__empty,                    XML_TYPE_BOOL | MID_FLAG_SPECIAL_ITEM_EXPORT,           CTF_PM_FOOTERDYNAMIC },
     { "FooterLeftMargin",           XML_NAMESPACE_FO,       sXML_margin_left,               XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERFLAG },
     { "FooterRightMargin",          XML_NAMESPACE_FO,       sXML_margin_right,              XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERFLAG },
     { "FooterBodyDistance",         XML_NAMESPACE_FO,       sXML_margin_bottom,             XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERFLAG },
@@ -171,7 +171,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "FooterTopBorderDistance",    XML_NAMESPACE_FO,       sXML_padding_top,               XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERPADDINGTOP },
     { "FooterBottomBorderDistance", XML_NAMESPACE_FO,       sXML_padding_bottom,            XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERPADDINGBOTTOM },
     { "FooterLeftBorderDistance",   XML_NAMESPACE_FO,       sXML_padding_left,              XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERPADDINGLEFT },
-    { "FooterRightBorderDistance",  XML_NAMESPACE_FO,       sXML_padding_right,             XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERPADDINGRIGHT },
+    { "FooterRightBorderDistance",  SXML_NAMESPACE_FO,      sXML_padding_right,             XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_FOOTERPADDINGRIGHT },
     { "FooterShadowFormat",         XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW | MID_FLAG_SPECIAL_ITEM_EXPORT,    CTF_PM_FOOTERFLAG },
     { "FooterBackColor",            XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_SPECIAL_ITEM_EXPORT | MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERFLAG },
     { "FooterBackTransparent",      XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_SPECIAL_ITEM_EXPORT | MID_FLAG_MERGE_ATTRIBUTE,   CTF_PM_FOOTERFLAG },
