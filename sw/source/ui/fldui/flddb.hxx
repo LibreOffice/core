@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:45:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ class SwFldDBPage : public SwFldPage
     ListBox             aTypeLB;
     FixedText           aSelectionFT;
     SwDBTreeList        aDatabaseTLB;
+
+    FixedText           aAddDBFT;
+    PushButton          aAddDBPB;
+
     FixedText           aConditionFT;
     ConditionEdit       aConditionED;
     FixedText           aValueFT;
@@ -112,6 +116,7 @@ class SwFldDBPage : public SwFldPage
     DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);
     DECL_LINK( TreeSelectHdl, SvTreeListBox* pBox );
     DECL_LINK( ModifyHdl, Edit *pED = 0 );
+    DECL_LINK( AddDBHdl, PushButton* );
 
     void                CheckInsert();
 
