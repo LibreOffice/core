@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-09 11:06:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
-    pDrView->InitRedraw( pWin, Region( rRect ) );
+    pDrView->CompleteRedraw( pWin, Region( rRect ) );
 
     if( pWin )
     {
