@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:11:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,12 +1183,12 @@ TabPage RID_SVXPAGE_LINE_DEF
         StringList [ polish ] =
         {
                 < "Kropka" ; Default ; > ;
-            < "Kreska" ; Default ; > ;
+            < "Kreski" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
-                < "ÄÞ¯Ä" ; Default ; > ;
-            < "ÀÞ¯¼­" ; Default ; > ;
+                < "“_" ; Default ; > ;
+            < "”jü" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
@@ -1306,12 +1306,12 @@ TabPage RID_SVXPAGE_LINE_DEF
         StringList [ polish ] =
         {
                 < "Kropka" ; Default ; > ;
-            < "Kreska" ; Default ; > ;
+            < "Kreski" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
-                < "ÄÞ¯Ä" ; Default ; > ;
-            < "ÀÞ¯¼­" ; Default ; > ;
+                < "“_" ; Default ; > ;
+            < "”jü" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
