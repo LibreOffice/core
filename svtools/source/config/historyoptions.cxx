@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:47:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,8 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     // Get names/values for picklist.
     // 4 subkeys for every item!
     OUString sName;
-    for( sal_uInt32 nItem=0; nItem<nPicklistCount; ++nItem )
+    sal_uInt32 nItem;
+    for( nItem=0; nItem<nPicklistCount; ++nItem )
     {
         seqValues[nPosition] >>= aItem.sURL         ;
         ++nPosition;
@@ -508,7 +509,8 @@ void SvtHistoryOptions_Impl::Commit()
 
     // Copy picklist entries to save-list!
     sal_uInt32 nPicklistCount = m_aPicklist.size();
-    for( sal_uInt32 nItem=0; nItem<nPicklistCount; ++nItem )
+    sal_uInt32 nItem;
+    for( nItem=0; nItem<nPicklistCount; ++nItem )
     {
         aItem   = m_aPicklist[nItem];
         sNode   = PROPERTYNAME_PICKLIST + PATHDELIMITER + FIXP + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
@@ -723,7 +725,8 @@ Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& 
     // Add names for picklist to list.
     // 4 subkeys for every item!
     // nPosition is the start point of an history item, nItem an index into right list of node names!
-    for( sal_uInt32 nItem=0; nItem<nPicklistCount; ++nItem )
+    sal_uInt32 nItem;
+    for( nItem=0; nItem<nPicklistCount; ++nItem )
     {
         seqProperties[nPosition] = PROPERTYNAME_PICKLIST + PATHDELIMITER + seqPicklistItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_URL       ;
         ++nPosition;
