@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:06:03 $
+ *  last change: $Author: mba $ $Date: 2000-12-05 15:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,6 +1767,8 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 
     SetPool( &SFX_APP()->GetPool() );
     pDispatcher = new SfxDispatcher(this);
+    if ( !GetBindings().GetDispatcher() )
+        GetBindings().SetDispatcher( pDispatcher );
 
     xObjSh = pObjSh;
     if ( xObjSh.Is() && xObjSh->IsPreview() )
