@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,26 @@ class FuText : public FuConstruct
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+    /** Call this method to tell a text function that the specified
+        object is not in the edit mode anymore, respectively will not
+        be in a short time.  If this method is not called and the edit
+        mode of the object is canceled from the outside, i.e. not by
+        the text function itself, the text function the pointer to the
+        text object is not valid anymore and must not be accessed.
+
+        <p>A better solution would be to make the text function a
+        listener at the text object when the former starts the editing
+        mode of the later.  This, however, would require changes
+        beyond the scope of a bug fix, which brought up the
+        problem (#111862#).</p>
+
+        @param pTextObject
+            The text object which is not being edited anymore.  When
+            this object is not the one used by this text function the
+            call is silentyl ignored.
+    */
+    void TextEditingHasEnded (const SdrTextObj* pTextObject);
 };
 
 
