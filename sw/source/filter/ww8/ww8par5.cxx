@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:06 $
+ *  last change: $Author: cmc $ $Date: 2002-11-12 11:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3070,9 +3070,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
                 case 'h':
                 case 'm':
-                case 's':
                 case 't':
                     ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                case 's':   //worthless fake anchor option
                     bOptions = true;
                     break;
             }

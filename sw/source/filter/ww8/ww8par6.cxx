@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:08 $
+ *  last change: $Author: cmc $ $Date: 2002-11-12 11:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2320,7 +2320,7 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 
 bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
-    sal_uInt8 nOrigSp29 = 0;
+    sal_uInt8 nOrigSp29 = nSp29;
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
@@ -2566,6 +2566,11 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     nLoMgn = rWW.nLoMgn;
     nUpMgn = rWW.nUpMgn;
 
+    /*
+    See issue #i9178# for the 9 anchoring options, and make sure they stay
+    working if you modify the anchoring logic here.
+    */
+
     // Wenn der Fly links, rechts, oben oder unten aligned ist,
     // wird der aeussere Textabstand ignoriert, da sonst
     // der Fly an falscher Position landen wuerde
@@ -2640,14 +2645,16 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
     switch ( nXBind )           // X - Bindung -> Koordinatentransformation
     {
-        case 0:                                 // Hor. Spalte
-        case 1:                                 // Hor. Absatz
+        case 0:
             eHRel = (FLY_PAGE == eAnchor) ? REL_PG_PRTAREA : PRTAREA;
+            break;
+        case 1:                                 // Hor. Absatz
+            eHRel = REL_PG_PRTAREA;
             break;
     /*  case 2:*/                               // Hor. Seite
     /*  case 3:*/                               // Use Default
         default:
-            eHRel = (FLY_PAGE == eAnchor) ? REL_PG_FRAME : FRAME;
+            eHRel = (FLY_AT_CNTNT== eAnchor) ? REL_PG_FRAME : FRAME;
 
             // important: allways set REL_PG_FRAME in sections with columns
             if (eHRel != REL_PG_FRAME)
