@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:10:00 $
+#   last change: $Author: rt $ $Date: 2004-07-29 16:12:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -250,7 +250,7 @@ sub register_unocomponents
 
                 my @regcompoutput = ();
 
-                $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " |";
+                $systemcall = "$$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -501,7 +501,7 @@ sub add_jdklib_into_ld_library_path
 # libraries successfully.
 ##################################################################
 
-sub add_path_to_pathvariable
+sub add_path_to_pathvariable_directory
 {
     my ( $filesarrayref, $searchstring ) = @_;
 
@@ -519,6 +519,49 @@ sub add_path_to_pathvariable
 
         if ( $sourcepath =~ /\Q$searchstring\E\s*$/ )
         {
+            $path = $sourcepath;
+            last;
+        }
+    }
+
+    # adding the path to the PATH variable
+
+    if ( $path ne "" )
+    {
+        my $oldpath = "";
+        if ( $ENV{'PATH'} ) { $oldpath = $ENV{'PATH'}; }
+        else { $oldpath = "\."; }
+        my $newpath = $path . $installer::globals::pathseparator . $oldpath;
+        $ENV{'PATH'} = $newpath;
+
+        my $infoline = "Setting PATH to $ENV{'PATH'}\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##################################################################
+# Adding the path of a specified library to the path variable
+# (for example msvcr70.dll). This is needed to register all
+# libraries successfully.
+##################################################################
+
+sub add_path_to_pathvariable
+{
+    my ( $filesarrayref, $searchstring ) = @_;
+
+    # determining the path
+
+    my $path = "";
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        my $sourcepath = $onefile->{'sourcepath'};
+
+        if ( $sourcepath =~ /\Q$searchstring\E\s*$/ )
+        {
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$sourcepath);
+            installer::remover::remove_ending_pathseparator(\$sourcepath);
             $path = $sourcepath;
             last;
         }
@@ -658,7 +701,8 @@ sub create_services_rdb
         if ( $$regcompfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $searchname for registering uno components!", "create_services_rdb"); }
 
         # For Windows the libraries included into the mozruntime.zip have to be added to the path
-        if ($installer::globals::iswin) { add_path_to_pathvariable($filesarrayref, "mozruntime_zip"); }
+        if ($installer::globals::iswin) { add_path_to_pathvariable_directory($filesarrayref, "mozruntime_zip"); }
+        if ($installer::globals::iswin) { add_path_to_pathvariable($filesarrayref, "msvcr70.dll"); }
 
         # setting the LD_LIBRARY_PATH, needed by regcomp
         # Linux: Take care of the lock daemon. He has to be started!
