@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 14:01:50 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 14:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,17 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Schriftfarbe" ;
                 Text [ ENGLISH ] = "Font color" ;
                 Text[ english_us ] = "Font color";
+                Text[ portuguese ] = "Font color";
+                Text[ russian ] = "Font color";
+                Text[ spanish ] = "Font color";
+                Text[ italian ] = "Font color";
+                Text[ swedish ] = "Font color";
+                Text[ polish ] = "Font color";
+                Text[ portuguese_brazilian ] = "Font color";
+                Text[ japanese ] = "Font color";
+                Text[ korean ] = "Font color";
+                Text[ turkish ] = "Font color";
+                Text[ thai ] = "Font color";
             };
             LB_WN( FONTCOLOR, 6 )
 
@@ -875,7 +886,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Direct Cursor";
                 Text[ portuguese_brazilian ] = "Direct Cursor";
                 Text[ japanese ] = "ダイレクトカーソル";
-                Text[ korean ] = "다이렉트 커서";
+                Text[ korean ] = "커서 위치 직접 조정";
                 Text[ chinese_simplified ] = "直接定位光标";
                 Text[ chinese_traditional ] = "直接定位游標";
                 Text[ turkish ] = "Direct Cursor";
@@ -1351,7 +1362,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 FT_SEP_POS_SIZE( 35 );
                 Text = "Basic Syntaxhervorhebung" ;
                 Text [ ENGLISH ] = "Basic Syntax Highlighting" ;
-                Text[ language_user1 ] = "EM July 31, 2002: Title of a section";
+                Text[ language_user1 ] = "EM J; EM July 31, 2002: Title of a section";
                 Text[ english_us ] = "Basic Syntax Highlighting";
                 Text[ portuguese ] = "Basic Syntax Highlighting";
                 Text[ russian ] = "Basic Syntax Highlighting";
