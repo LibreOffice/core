@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 17:02:45 $
+#   last change: $Author: kz $ $Date: 2005-03-18 18:40:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ IDLFILES=\
     XFormController.idl\
     XFormControllerListener.idl\
     XFormsSupplier.idl\
+    XFormsSupplier2.idl\
     XGrid.idl\
     XGridColumnFactory.idl\
     XGridFieldDataSupplier.idl\
