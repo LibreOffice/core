@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 09:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,6 +733,44 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
     return pBox;
 }
 
+sal_Bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
+{
+    sal_Bool bRet = sal_False;
+    const SwSelBoxes* pSelBoxes = GetSelBoxes();
+    if( pSelBoxes )
+    {
+        const SwTableBox* pBox = GetTableBox( nChildIndex );
+        DBG_ASSERT( pBox != NULL, "We need the table box." );
+        bRet = pSelBoxes->Seek_Entry( const_cast<SwTableBox*>( pBox ) );
+    }
+
+    return bRet;
+}
+
+sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
+                sal_Int32 nSelectedChildIndex ) const
+{
+    // iterate over all children to n-th isAccessibleChildSelected()
+    sal_Int32 nChildren = GetChildCount();
+    if( nSelectedChildIndex >= nChildren )
+        return -1L;
+
+    sal_Int32 n = 0;
+    while( n < nChildren )
+    {
+        if( IsChildSelected( n ) )
+        {
+            if( 0 == nSelectedChildIndex )
+                break;
+            else
+                --nSelectedChildIndex;
+        }
+        ++n;
+    }
+
+    return n < nChildren ? n : -1L;
+}
+
 void SwAccessibleTable::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -866,8 +904,8 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL SwAccessibleTable::getTypes() t
     aTypes.realloc( nIndex + 2 );
 
     ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
     pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTable > * >( 0 ) );
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
 
     return aTypes;
 }
@@ -1396,7 +1434,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // create the new selection
     const SwStartNode* pStartNode = pBox->GetSttNd();
-    if( pSelectedTable == NULL )
+    if( pSelectedTable == NULL || !pCrsrShell->GetTblCrs() )
     {
         // if we're in the wrong table, or there's no table selection
         // at all, then select the current table cell.
@@ -1406,19 +1444,33 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 //      pPaM->Move( fnMoveForward, fnGoNode );
 // //   pCrsrShell->SelTblBox();
 
+        pCrsrShell->StartAction();
+        // Set cursor into current cell. This deletes any table cursor.
         SwPaM aPaM( *pStartNode );
         aPaM.Move( fnMoveForward, fnGoNode );
         Select( aPaM );
+        // Move cursor to the end of the table creating a selection and a table
+        // cursor.
+        pCrsrShell->SetMark();
+        pCrsrShell->MoveTable( fnTableCurr, fnTableEnd );
+        // now set the cursor into the cell again.
+        SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+                                                    : pCrsrShell->GetCrsr();
+        *pPaM->GetPoint() = *pPaM->GetMark();
+        pCrsrShell->EndAction();
+        // we now have one cell selected!
     }
     else
     {
-        // if the cursor is already in this table, and the cursor is
-        // in table mode, expand the current selection (i.e., set
+        // if the cursor is already in this table,
+        // expand the current selection (i.e., set
         // point to new position; keep mark)
         SwPaM aPaM( *pStartNode );
         aPaM.Move( fnMoveForward, fnGoNode );
         aPaM.SetMark();
-        *(aPaM.GetMark()) = *(pCrsrShell->GetCrsr()->GetMark());
+        const SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+                                                    : pCrsrShell->GetCrsr();
+        *(aPaM.GetMark()) = *pPaM->GetMark();
         Select( aPaM );
 
         // if only one box is selected, we select this one in
@@ -1450,20 +1502,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     if( (nChildIndex < 0) || (nChildIndex >= GetChildCount()) )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bRet;
-    const SwSelBoxes* pSelBoxes = GetSelBoxes();
-    if( pSelBoxes == NULL )
-    {
-        bRet = sal_False;
-    }
-    else
-    {
-        const SwTableBox* pBox = GetTableBox( nChildIndex );
-        DBG_ASSERT( pBox != NULL, "We need the table box." );
-        bRet = pSelBoxes->Seek_Entry( const_cast<SwTableBox*>( pBox ) );
-    }
-
-    return bRet;
+    return IsChildSelected( nChildIndex );
 }
 
 void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
@@ -1475,7 +1514,11 @@ void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell != NULL )
+    {
+        pCrsrShell->StartAction();
         pCrsrShell->ClearMark();
+        pCrsrShell->EndAction();
+    }
 }
 
 void SAL_CALL SwAccessibleTable::selectAllAccessible(  )
@@ -1498,7 +1541,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
 
     sal_Int32 nChildren = GetChildCount();
     for( sal_Int32 n = 0; n < nChildren; n++ )
-        if( isAccessibleChildSelected( n ) )
+        if( IsChildSelected( n ) )
             nCount++;
 
     return nCount;
@@ -1512,27 +1555,17 @@ Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
-    // paremter checking (part 1): index higher than child count?
-    sal_Int32 nChildren = GetChildCount();
-    if( (nSelectedChildIndex < 0) || (nSelectedChildIndex >= nChildren) )
+    // paremter checking (part 1): index lower 0
+    if( nSelectedChildIndex < 0 )
         throw IndexOutOfBoundsException();
 
-    // iterate over all children to n-th isAccessibleChildSelected()
-    sal_Int32 nCount = nSelectedChildIndex;
-
-    sal_Int32 n = 0;
-    while( (n < nChildren) && (nCount >= 0) )
-    {
-        if( isAccessibleChildSelected( n ) )
-            nCount--;
-        n++;
-    }
+    sal_Int32 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
 
     // parameter checking (part 2): index higher than selected children?
-    if( nCount >= 0 )
+    if( nChildIndex < 0 )
         throw IndexOutOfBoundsException();
 
-    return getAccessibleChild( n - 1 );
+    return getAccessibleChild( nChildIndex );
 }
 
 void SAL_CALL SwAccessibleTable::deselectSelectedAccessibleChild(
@@ -1543,38 +1576,44 @@ void SAL_CALL SwAccessibleTable::deselectSelectedAccessibleChild(
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
-    if( (nSelectedChildIndex < 0) || (nSelectedChildIndex >= GetChildCount()) )
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+
+    // paremter checking (part 1): index lower 0
+    if( nSelectedChildIndex < 0 || !pCrsrShell )
         throw IndexOutOfBoundsException();
 
-    SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell == NULL )
-        return;
+    sal_Int32 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
 
-    const SwTableBox* pBox = GetTableBox( nSelectedChildIndex );
+    // parameter checking (part 2): index higher than selected children?
+    if( nChildIndex < 0 )
+        throw IndexOutOfBoundsException();
+
+    const SwTableBox* pBox = GetTableBox( nChildIndex );
     DBG_ASSERT( pBox != NULL, "We need the table box." );
 
-    // check whether child is selected
-    const SwSelBoxes* pSelBoxes = GetSelBoxes();
-    if( (pSelBoxes != NULL) &&
-        pSelBoxes->Seek_Entry( const_cast<SwTableBox*>( pBox ) ) )
-    {
-        // If we unselect mark, then clear the whole selection. Otherwise,
-        // reduce selection to mark.
-        if( pBox->GetSttNd()->FindTableBoxStartNode() ==
-            pCrsrShell->GetCrsr()->GetMark()->nNode.GetNode().
-                FindTableBoxStartNode() )
-        {
-            // we're trying to deselect mark -> no more table selection
-            pCrsrShell->ClearMark();
-        }
-        else
-        {
-            // reduce selection to mark
-            pCrsrShell->GetCrsr()->Exchange();
-            pCrsrShell->GetCrsr()->DeleteMark();
-//            pCrsrShell->SelTblBox();
-        }
-    }
-    // else: not selected -> ignore
+    // If we unselect point, then set cursor to mark. If we clear another
+    // selected box, then set cursor to point.
+    // reduce selection to mark.
+    SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+                                                : pCrsrShell->GetCrsr();
+    sal_Bool bDeselectPoint =
+        pBox->GetSttNd() ==
+            pPaM->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+
+    SwPaM aPaM( bDeselectPoint ? *pPaM->GetMark() : *pPaM->GetPoint() );
+
+    pCrsrShell->StartAction();
+
+    // Set cursor into either point or mark
+    Select( aPaM );
+    // Move cursor to the end of the table creating a selection and a table
+    // cursor.
+    pCrsrShell->SetMark();
+    pCrsrShell->MoveTable( fnTableCurr, fnTableEnd );
+    // now set the cursor into the cell again.
+    pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+                                        : pCrsrShell->GetCrsr();
+    *pPaM->GetPoint() = *pPaM->GetMark();
+    pCrsrShell->EndAction();
 }
 

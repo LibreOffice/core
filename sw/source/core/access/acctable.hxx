@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 09:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@ class SwAccessibleTable :
 
     /** get the SwTableBox* for the given child */
     const SwTableBox* GetTableBox( sal_Int32 ) const;
+
+    sal_Bool IsChildSelected( sal_Int32 nChildIndex ) const;
+
+    sal_Int32 GetIndexOfSelectedChild( sal_Int32 nSelectedChildIndex ) const;
 
 protected:
 

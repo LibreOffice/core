@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-13 16:46:15 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 09:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ SwPaM* SwAccessibleParagraph::GetCrsr()
     // cursor/selection either
     SwPaM* pCrsr = NULL;
     SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
-    if( pCrsrShell != NULL )
+    if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
     {
         SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
                             ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
