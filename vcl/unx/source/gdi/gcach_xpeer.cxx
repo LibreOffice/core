@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-09 14:21:55 $
+ *  last change: $Author: hdu $ $Date: 2001-05-23 12:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( pXVisualInfo != NULL )
         XFree( pXVisualInfo );
 
-#ifdef USE_XRENDER
+#if defined(USE_XRENDER)
     // but we prefer the hardware accelerated solution
     int nDummy;
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
@@ -119,7 +119,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     void* pRenderLib = dlopen( "libXrender.so", RTLD_GLOBAL | RTLD_LAZY );
     if( !pRenderLib ) {
         fprintf( stderr, "Display can do XRender, but no libXrender.so installed.\n"
-            "Please install for improved display quality\n" );
+            "Please install for improved display performance\n" );
         return;
     }
 
@@ -244,6 +244,7 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
         }
 #endif // USE_XRENDER
     }
+
 
     if( mnBytesUsed < 0 )   // TODO: eliminate nBytesUsed calc mismatch
         mnBytesUsed = 0;
