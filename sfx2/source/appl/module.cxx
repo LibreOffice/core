@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-27 11:52:30 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 
-//#include <tools/solar.h>
+#include <tools/rcid.h>
 
 #include <cstdarg>
 #include "module.hxx"
@@ -81,7 +81,7 @@
 #include "iodlg.hxx"
 
 #define SfxModule
-#include <sfxslots.hxx>
+#include "sfxslots.hxx"
 
 static SfxModuleArr_Impl* pModules=0;
 
@@ -94,11 +94,12 @@ public:
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
     SfxMenuCtrlFactArr_Impl*    pMenuCtrlFac;
     SfxChildWinFactArr_Impl*    pFactArr;
-    ImageList*                  pImgList;
-    SfxSymbolSet                eSet;
+    ImageList*                  pImgListSmall;
+    ImageList*                  pImgListBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
+    ImageList*                  GetImageList( ResMgr*, BOOL );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -113,7 +114,27 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pStbCtrlFac;
     delete pMenuCtrlFac;
     delete pFactArr;
-    delete pImgList;
+    delete pImgListSmall;
+    delete pImgListBig;
+}
+
+ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig )
+{
+    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
+    if ( !rpList )
+    {
+        ResId aResId( bBig ? RID_DEFAULTIMAGELIST_LC : RID_DEFAULTIMAGELIST_SC, pResMgr );
+        aResId.SetRT( RSC_IMAGELIST );
+
+        DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
+
+        if ( pResMgr->IsAvailable(aResId) )
+            rpList = new ImageList( aResId );
+        else
+            rpList = new ImageList();
+    }
+
+    return rpList;
 }
 
 TYPEINIT1(SfxModule, SfxShell);
@@ -249,7 +270,8 @@ void SfxModule::Construct_Impl()
         pImpl->pStbCtrlFac=0;
         pImpl->pMenuCtrlFac=0;
         pImpl->pFactArr=0;
-        pImpl->pImgList=0;
+        pImpl->pImgListSmall=0;
+        pImpl->pImgListBig=0;
 
         SetPool( &pApp->GetPool() );
     }
@@ -273,6 +295,7 @@ SfxModule::~SfxModule()
                     break;
                 }
             }
+
             delete pImpl;
         }
 
@@ -429,26 +452,11 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr;
 }
 
-ImageList* SfxModule::GetImageList_Impl( SfxSymbolSet eSet )
+ImageList* SfxModule::GetImageList_Impl( BOOL bBig )
 {
-    if ( !pImpl->pImgList || pImpl->eSet != eSet )
-    {
-        pImpl->eSet = eSet;
-        delete pImpl->pImgList;
-        pImpl->pImgList = new ImageList(
-                ResId( eSet == SFX_SYMBOLS_SMALL_COLOR ?
-                RID_DEFAULTIMAGELIST_SC : RID_DEFAULTIMAGELIST_LC,
-                GetResMgr() ) );
-    }
+    return pImpl->GetImageList( pResMgr, bBig );
+}
 
-    return pImpl->pImgList;
-}
-/* ASDBG
-Reflection* SfxModule::GetReflection( UsrUik aUIK )
-{
-    return NULL;
-}
-*/
 SfxTabPage* SfxModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     return NULL;
