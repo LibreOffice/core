@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:52 $
+ *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XPARCELINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
+#endif
 
 namespace scripting_impl
 {
@@ -126,6 +128,19 @@ private:
 
     void updateMaps(Impls_vec vScriptII);
     void writeMetadataHeader(::com::sun::star::uno::Reference < ::com::sun::star::xml::sax::XExtendedDocumentHandler > & );
+    /**
+       This function copies the contents of the source folder into the
+       destination folder. If the destination folder does not exist, it
+       is created. If the destination folder exists, it is deleted and then
+       created. All URIs supported by the relevant XSimpleFileAccess
+       implementation are supported.
+
+        @params src
+            the source folder (file URI)
+
+        @params dest
+            the destination folder (file URI)
+    */
     void copyFolder(const ::rtl::OUString & src, const ::rtl::OUString & dest) throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -227,14 +242,14 @@ public:
     //XParcelInvocationPrep
     //=========================================================================
     /**
-     * Prepare a pracel for invocation
-     * @param parcelURI
-     * URI to the parcel to be prepared
-     *
-     * @return ::rtl::OUString
-     * URI to the prepared parcel
-     */
+        copies a parcel to a temporary location
 
+        @params parcelURI
+            the location of the parcel (file URI) to be copied
+
+        @return
+            <type>::rtl::OUString</type> the new location of the parcel (file URI)
+    */
     ::rtl::OUString SAL_CALL prepareForInvocation( const ::rtl::OUString& parcelURI )
     throw (::com::sun::star::uno::RuntimeException);
     //=========================================================================
