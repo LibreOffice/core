@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
+ *  last change: $Author: cd $ $Date: 2001-11-26 10:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
 
 using namespace vos;
 using namespace rtl;
@@ -88,6 +91,14 @@ using namespace ::com::sun::star::frame;
 
 #define SHOW_SEQUENCE   "-show"
 #define SHOW_LENGTH     5
+
+// Type of pipe we use
+enum PipeMode
+{
+    PIPEMODE_DONTKNOW,
+    PIPEMODE_CREATED,
+    PIPEMODE_CONNECTED
+};
 
 String GetURL_Impl( const String& rName );
 
@@ -279,19 +290,55 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         return IPC_STATUS_BOOTSTRAP_ERROR;
     }
 
-    // look if we are the first Office: try to open the pipe
-    // this should prevent multiple access to the user directory !
+    // Try to  determine if we are the first office or not! This should prevent multiple
+    // access to the user directory !
+    // First we try to create our pipe if this fails we try to connect. We have to do this
+    // in a loop because the the other office can crash or shutdown between createPipe
+    // and connectPipe!!
     pThread->maPipeIdent = pThread->maPipeIdent + OUString::valueOf( (sal_Int32)aDummy.hashCode() );
-    if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, maSecurity ) )
+
+    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
+    do
     {
+        // Try to create pipe
+        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, maSecurity ))
+        {
+            // Pipe created
+            nPipeMode = PIPEMODE_CREATED;
+        }
+        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, maSecurity )) // Creation not successfull, now we try to connect
+        {
+            // Pipe connected to first office
+            nPipeMode = PIPEMODE_CONNECTED;
+        }
+        else
+        {
+            // Wait for second office to be ready
+            TimeValue aTimeValue;
+            aTimeValue.Seconds = 0;
+            aTimeValue.Nanosec = 10000000; // 10ms
+            osl::Thread::wait( aTimeValue );
+        }
+
+    } while ( nPipeMode == PIPEMODE_DONTKNOW );
+
+    if ( nPipeMode == PIPEMODE_CREATED )
+    {
+        // Seems we are the one and only, so start listening thread
+        pGlobalOfficeIPCThread = pThread;
+        pThread->create(); // starts thread
+    }
+    else
+    {
+        // Seems another office is running. Pipe arguments to it and self terminate
         pThread->maStreamPipe = pThread->maPipe;
 
-        // seems another office is running. pipe arguments to it
-        // and self terminate
         ByteString aArguments;
         ULONG nCount = aInfo.getCommandArgCount();
         if ( nCount == 0 )
         {
+            // Use default argument so the first office can distinguish between a real second
+            // office and another program that check the existence of the the pipe!!
             aArguments += ByteString( "-show" );
         }
         else
@@ -315,14 +362,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         delete pThread;
         return IPC_STATUS_2ND_OFFICE;
-    }
-
-    // seems we are the one and only, so start listening thread
-    pThread->maPipe = OPipe( pThread->maPipeIdent, OPipe::TOption_Create, maSecurity );
-    if( pThread->maPipe.isValid() )
-    {
-        pGlobalOfficeIPCThread = pThread;
-        pThread->create(); // starts thread
     }
 
     return IPC_STATUS_OK;
