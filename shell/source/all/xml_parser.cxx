@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_parser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:54:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _XML_PARSER_HXX_
+#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
 #endif
 
-#ifndef _I_XML_PARSER_EVENT_HANDLER_HXX_
+#ifndef I_XML_PARSER_EVENT_HANDLER_HXX_INCLUDED
 #include "internal/i_xml_parser_event_handler.hxx"
 #endif
 
