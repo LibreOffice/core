@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:16:16 $
+ *  last change: $Author: ama $ $Date: 2002-01-10 15:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,11 @@ public:
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+
+#ifdef VERTICAL_LAYOUT
+    virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
+                          const void *pVoid = 0, sal_Bool bNotify = sal_True );
+#endif
 
                  SwCntntFrm *FindLastCntnt();
     inline const SwCntntFrm *FindLastCntnt() const;

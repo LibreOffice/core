@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:42:05 $
+ *  last change: $Author: ama $ $Date: 2002-01-10 15:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2320,6 +2320,22 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         }
     }
 }
+
+#ifdef VERTICAL_LAYOUT
+/*************************************************************************
+|*
+|*  SwTabFrm::Prepare()
+|*
+|*  Created        AMA 01/10/02
+|*  Last Change    AMA 01/10/02
+|*
+|*************************************************************************/
+void SwTabFrm::Prepare( const PrepareHint eHint, const void *, BOOL )
+{
+    if( PREP_BOSS_CHGD == eHint )
+        CheckDirChange();
+}
+#endif
 
 /*************************************************************************
 |*
