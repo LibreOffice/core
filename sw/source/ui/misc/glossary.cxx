@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 09:45:14 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 08:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,11 +662,11 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             aShortNameEdit.SetText(pGlossaryHdl->GetGlossaryShortName(aNameED.GetText()));
             SwNewGlosNameDlg* pNewNameDlg = new SwNewGlosNameDlg(this, aNameED.GetText(),
                                             aShortNameEdit.GetText() );
-            if(pNewNameDlg->Execute() == RET_OK)
-            {
+            if( RET_OK == pNewNameDlg->Execute() &&
                 pGlossaryHdl->Rename( aShortNameEdit.GetText(),
                                         pNewNameDlg->GetNewShort(),
-                                        pNewNameDlg->GetNewName());
+                                        pNewNameDlg->GetNewName()))
+            {
                 SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
                 SvLBoxEntry* pNewEntry = aCategoryBox.InsertEntry(
                         pNewNameDlg->GetNewName(), aCategoryBox.GetParent(pEntry));
