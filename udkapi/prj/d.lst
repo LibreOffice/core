@@ -16,6 +16,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\test
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\performance
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\bridge
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\uno
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\util\logging
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\security
 
@@ -38,6 +39,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\security
 ..\com\sun\star\test\bridge\*.idl %_DEST%\idl%_EXT%\com\sun\star\test\bridge\*.idl
 ..\com\sun\star\text\*.idl %_DEST%\idl%_EXT%\com\sun\star\text\*.idl
 ..\com\sun\star\uno\*.idl %_DEST%\idl%_EXT%\com\sun\star\uno\*.idl
+..\com\sun\star\util\*.idl %_DEST%\idl%_EXT%\com\sun\star\util\*.idl
 ..\com\sun\star\util\logging\*.idl %_DEST%\idl%_EXT%\com\sun\star\util\logging\*.idl
 ..\com\sun\star\security\*.idl %_DEST%\idl%_EXT%\com\sun\star\security\*.idl
 
