@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:58:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,25 +868,21 @@ void PushButton::ImplInitSettings( BOOL bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
-        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-            || IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) )
+        SetBackground();
+        // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
+        // otherwise the formcontrol button will be overdrawn due to PARENTCLIPMODE_NOCLIP
+        // for radio and checkbox this is ok as they shoud appear transparent in documents
+        if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( TRUE );
-            SetBackground();
         }
         else
         {
             EnableChildTransparentMode( FALSE );
             SetParentClipMode( 0 );
             SetPaintTransparent( FALSE );
-
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
         }
     }
 }
