@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ public:
     inline const SdrObject *GetSdrObject() const;
     inline const SwFrm *GetSwFrm() const;
 
-    inline sal_Bool IsAccessible() const;
+    inline sal_Bool IsAccessible( sal_Bool bPagePreview ) const;
     sal_Bool IsBoundAsChar() const;
     inline sal_Bool IsVisibleChildrenOnly() const;
     inline SwRect GetBox() const;
@@ -204,12 +204,13 @@ inline const SwFrm *SwFrmOrObj::GetSwFrm() const
     return pFrm;
 }
 
-inline sal_Bool SwFrmOrObj::IsAccessible() const
+inline sal_Bool SwFrmOrObj::IsAccessible( sal_Bool bPagePreview ) const
 {
     return ( pFrm && pFrm->IsAccessibleFrm() &&
              ( !pFrm->IsCellFrm() ||
               static_cast<const SwCellFrm *>( pFrm )->GetTabBox()
-                                                     ->GetSttNd() != 0 ) ) ||
+                                                     ->GetSttNd() != 0 ) &&
+             ( bPagePreview || !pFrm->IsPageFrm() ) ) ||
            pObj;
 }
 

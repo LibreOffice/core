@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _ACCFRAME_HXX
 #include <accframe.hxx>
+#endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
@@ -166,6 +169,10 @@ protected:
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
     const SwAccessibleMap *GetMap() const { return pMap; }
+
+    /** convenience method to get the SwViewShell through accessibility map */
+    ViewShell* GetShell();
+    const ViewShell* GetShell() const;
 
     /** convenience method to get SwCrsrShell through accessibility map
      * @returns SwCrsrShell, or NULL if none is found */
@@ -442,6 +449,13 @@ const sal_Char sMissingWindow[] = "window is missing";
     {                                                                       \
         THROW_RUNTIME_EXCEPTION( i, sMissingWindow );                       \
     }
+
+
+inline ViewShell* SwAccessibleContext::GetShell()
+{ return GetMap()->GetShell(); }
+
+inline const ViewShell* SwAccessibleContext::GetShell() const
+{ return GetMap()->GetShell(); }
 
 
 #endif

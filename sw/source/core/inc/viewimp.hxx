@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:21:55 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ struct SdrPaintProcRec;
 #ifdef ACCESSIBLE_LAYOUT
 class SwAccessibleMap;
 class SdrObject;
+class Fraction;
 #endif
 
 class SwViewImp
@@ -287,6 +288,13 @@ public:
     // Invalidate frame's relation set (for chained frames)
     void InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
                                           const SwFlyFrm *pFollow );
+
+    // update data for accessible preview
+    void UpdateAccessiblePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
+                                  sal_Int16 nStartPage,
+                                  const Size& rPageSize,
+                                  const Point& rFreePoint,
+                                  const Fraction& rScale );
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();

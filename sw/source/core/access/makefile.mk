@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+#   last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,15 +94,17 @@ SLOFILES =	\
         $(SLO)$/accfootnote.obj \
         $(SLO)$/accframe.obj \
         $(SLO)$/accframebase.obj \
-        $(SLO)$/accfrmobjmap.obj \
         $(SLO)$/accfrmobj.obj \
+        $(SLO)$/accfrmobjmap.obj \
         $(SLO)$/accfrmobjslist.obj \
         $(SLO)$/accgraphic.obj \
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accnotextframe.obj \
+        $(SLO)$/accpage.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj \
+        $(SLO)$/accpreview.obj \
         $(SLO)$/accselectionhelper.obj \
         $(SLO)$/acctable.obj \
         $(SLO)$/acctextframe.obj
@@ -122,8 +124,10 @@ EXCEPTIONSFILES=	\
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accnotextframe.obj \
+        $(SLO)$/accpage.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj \
+        $(SLO)$/accpreview.obj \
         $(SLO)$/accselectionhelper.obj \
         $(SLO)$/acctable.obj \
         $(SLO)$/acctextframe.obj

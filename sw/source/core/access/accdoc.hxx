@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,26 +77,22 @@ class SwRootFrm;
 class SwFEShell;
 class SwFlyFrm;
 
-class SwAccessibleDocument : public SwAccessibleContext,
-                             public drafts::com::sun::star::accessibility::XAccessibleSelection
+/**
+ * base class for SwAccessibleDocument (in this same header file) and
+ * SwAccessiblePreview
+ */
+class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> xParent;
 
-    // Implementation for XAccessibleSelection interface
-    SwAccessibleSelectionHelper aSelectionHelper;
-
 protected:
 
-    // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTISELECTABLE(1)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
-
-    virtual ~SwAccessibleDocument();
+    virtual ~SwAccessibleDocumentBase();
 
 public:
 
-    SwAccessibleDocument(
+    SwAccessibleDocumentBase(
         SwAccessibleMap *pMap );
 
     void SetVisArea();
@@ -129,6 +125,32 @@ public:
 
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException);
+};
+
+
+
+/**
+ * access to an accessible Writer document
+ */
+class SwAccessibleDocument : public SwAccessibleDocumentBase,
+                             public drafts::com::sun::star::accessibility::XAccessibleSelection
+{
+    // Implementation for XAccessibleSelection interface
+    SwAccessibleSelectionHelper aSelectionHelper;
+
+protected:
+
+    // Set states for getAccessibleStateSet.
+    // This drived class additinaly sets MULTISELECTABLE(1)
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+    virtual ~SwAccessibleDocument();
+
+public:
+
+    SwAccessibleDocument(
+        SwAccessibleMap *pMap );
+
 
     //=====  XServiceInfo  ====================================================
 
@@ -194,7 +216,6 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 };
-
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 07:51:04 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,15 @@
 #include "viewsh.hxx"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _FRACT_HXX
+#include <tools/fract.hxx>
+#endif
+
+#include <vector>
+
 class Rectangle;
 class SwFrm;
 class SwRootFrm;
@@ -99,6 +108,7 @@ struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
 class SwFrmOrObj;
+class SwAccPreviewData;
 
 // real states for events
 #define ACC_STATE_EDITABLE 0x01
@@ -130,9 +140,14 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder
     sal_Int32 mnFootnote;
     sal_Int32 mnEndnote;
 
+    /// for page preview: store preview data, VisArea, and mapping of
+    /// preview-to-display coordinates
+    SwAccPreviewData* mpPreview;
+
     sal_Bool mbShapeSelected;
 
     void FireEvent( const SwAccessibleEvent_Impl& rEvent );
+
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
     void InvalidateCursorPosition(
@@ -144,6 +159,10 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder
 
     void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
 
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>
+            _GetDocumentView( sal_Bool bPagePreview );
+
 public:
 
     SwAccessibleMap( ViewShell *pSh );
@@ -151,6 +170,12 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentView();
+
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
+                sal_uInt8 nRow, sal_uInt8 nColumn, sal_Int16 nStartPage,
+                const Size& rPageSize, const Point& rFreePoint,
+                const Fraction& rScale );
 
     ::vos::ORef < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
@@ -171,7 +196,7 @@ public:
                                         sal_Bool bCreate = sal_True );
 
     ViewShell *GetShell() const { return mpVSh; }
-    const SwRect& GetVisArea() const { return mpVSh->VisArea(); }
+    inline const SwRect& GetVisArea() const;
 
     void RemoveContext( const SwFrm *pFrm );
     void RemoveContext( const SdrObject *pObj );
@@ -197,7 +222,14 @@ public:
 
     void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
 
+    // update preview data (and fire events if necessary)
+    void UpdatePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
+                        sal_Int16 nStartPage,
+                        const Size& rPageSize, const Point& rFreePoint,
+                        const Fraction& rScale );
+
     void FireEvents();
+
 
     // IAccessibleViewForwarder
 
@@ -207,6 +239,67 @@ public:
     virtual Size LogicToPixel (const Size& rSize) const;
     virtual Point PixelToLogic (const Point& rPoint) const;
     virtual Size PixelToLogic (const Size& rSize) const;
+
+    // additional Core/Pixel conversions for internal use; also works
+    // for preview
+    Point CoreToPixel (const Point& rPoint) const;
+    Point PixelToCore (const Point& rPoint) const;
+    Rectangle CoreToPixel (const Rectangle& rRect) const;
+    Rectangle PixelToCore (const Rectangle& rRect) const;
+
+private:
+    inline PreviewAdjust(const Point& rPoint, sal_Bool bFromPreview) const;
 };
+
+
+
+// helper class that stores preview data
+class SwAccPreviewData
+{
+    SwRect maVisArea;
+    Fraction maScale;
+
+    typedef std::vector<Rectangle> Rectangles;
+    Rectangles maPreviewRects;
+    Rectangles maLogicRects;
+
+public:
+    SwAccPreviewData();
+    ~SwAccPreviewData();
+
+    void Update( sal_uInt8 nRow,        // # rows in preview
+                 sal_uInt8 nCol,        // # columns in preview
+                 sal_uInt16 nStartPage, // start page (0 is before first page)
+                 const Size& rPageSize, // size of an empty page
+                 const Point& rFreePoint, // free space between pages (x,y)
+                 const Fraction& rScale,// scale factor for preview
+                 ViewShell* pShell );
+
+    const SwRect& GetVisArea() const;
+    Point PreviewToLogic(const Point& rPoint) const;
+    Point LogicToPreview(const Point& rPoint) const;
+
+    MapMode GetMapModeForPreview( ) const;
+
+    /** Adjust the MapMode so that the preview page appears at the
+     * proper position. rPoint identifies the page for which the
+     * MapMode should be adjusted. If bFromPreview is true, rPoint is
+     * a preview coordinate; else it's a document coordinate. */
+    void AdjustMapMode( MapMode& rMapMode,
+                        const Point& rPoint,
+                        sal_Bool bFromPreview ) const;
+
+    void AdjustMapMode( MapMode& rMapMode ) const;
+};
+
+
+
+inline const SwRect& SwAccessibleMap::GetVisArea() const
+{
+    DBG_ASSERT( !mpVSh->IsPreView() || (mpPreview != NULL),
+                "preview without preview data?" );
+    return mpVSh->IsPreView() ? mpPreview->GetVisArea() : mpVSh->VisArea();
+}
+
 
 #endif

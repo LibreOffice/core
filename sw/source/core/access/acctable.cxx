@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ class SwAccessibleTableData_Impl
     Int32PairList_Impl maExtents;   // cell extends for event processing only
     Point   maTabFrmPos;
     const SwTabFrm *mpTabFrm;
+    sal_Bool mbIsInPagePreview;
 
     void CollectData( const SwFrm *pFrm );
     void CollectExtents( const SwFrm *pFrm );
@@ -174,7 +175,8 @@ class SwAccessibleTableData_Impl
                        sal_Bool bColumns ) const;
 
 public:
-    SwAccessibleTableData_Impl( const SwTabFrm *pTabFrm );
+    SwAccessibleTableData_Impl( const SwTabFrm *pTabFrm,
+                                sal_Bool bIsInPagePreview );
 
     const Int32Set_Impl& GetRows() const { return maRows; }
     const Int32Set_Impl& GetColumns() const { return maColumns; }
@@ -225,7 +227,8 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrm *pFrm )
                 maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
                 CollectData( pLower );
             }
-            else if( pLower->IsCellFrm() && rLower.IsAccessible() )
+            else if( pLower->IsCellFrm() &&
+                     rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
             }
@@ -249,7 +252,8 @@ void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
         const SwFrm *pLower = rLower.GetSwFrm();
         if( pLower )
         {
-            if( pLower->IsCellFrm() && rLower.IsAccessible() )
+            if( pLower->IsCellFrm() &&
+                rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 sal_Int32 nRow, nCol;
                 Int32Pair_Impl aCellExtents;
@@ -283,7 +287,8 @@ sal_Bool SwAccessibleTableData_Impl::CompareExtents( const SwFrm *pFrm,
         const SwFrm *pLower = rLower.GetSwFrm();
         if( pLower )
         {
-            if( pLower->IsCellFrm() && rLower.IsAccessible() )
+            if( pLower->IsCellFrm() &&
+                rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 sal_Int32 nRow, nCol;
                 Int32Pair_Impl aCellExtents;
@@ -327,7 +332,7 @@ sal_Bool SwAccessibleTableData_Impl::FindCell(
         ASSERT( pLower, "child should be a frame" );
         if( pLower )
         {
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 ASSERT( pLower->IsCellFrm(), "lower is not a cell frame" );
                 const SwRect& rFrm = pLower->Frm();
@@ -374,7 +379,7 @@ void SwAccessibleTableData_Impl::GetSelection(
         const SwRect& rBox = rLower.GetBox();
         if( pLower && rBox.IsOver( rArea ) )
         {
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 ASSERT( pLower->IsCellFrm(), "lower is not a cell frame" );
                 const SwCellFrm *pCFrm =
@@ -506,9 +511,11 @@ sal_Bool SwAccessibleTableData_Impl::CompareExtents(
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl(
-        const SwTabFrm *pTabFrm ) :
+        const SwTabFrm *pTabFrm,
+        sal_Bool bIsInPagePreview ) :
     mpTabFrm( pTabFrm ),
-    maTabFrmPos( pTabFrm->Frm().Pos() )
+    maTabFrmPos( pTabFrm->Frm().Pos() ),
+    mbIsInPagePreview( bIsInPagePreview )
 {
     CollectData( mpTabFrm );
     CollectExtents( mpTabFrm );
@@ -778,7 +785,7 @@ void SwAccessibleTable::UpdateTableData()
     const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
 
     delete mpTableData;
-    mpTableData = new SwAccessibleTableData_Impl( pTabFrm );
+    mpTableData = new SwAccessibleTableData_Impl( pTabFrm, IsInPagePreview() );
 }
 
 void SwAccessibleTable::ClearTableData()
@@ -1217,7 +1224,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrmOrObj& rChildFrmOrO
         {
             const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
             SwAccessibleTableData_Impl *pNewTableData =
-                new SwAccessibleTableData_Impl( pTabFrm );
+                new SwAccessibleTableData_Impl( pTabFrm, IsInPagePreview() );
             if( !pNewTableData->CompareExtents( GetTableData() ) )
             {
                 FireTableChangeEvent( GetTableData() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,12 @@ public:
     void GetOptimalSize( Size& rSize ) const;
 
     void RepaintCoreRect( const SwRect& rRect );
+
+#ifdef ACCESSIBLE_LAYOUT
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>
+                    CreateAccessible();
+#endif
 };
 
 

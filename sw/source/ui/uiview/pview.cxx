@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,6 +2252,21 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
                         pVScrollbar && pVScrollbar->IsVisible(TRUE) ? pVScrollbar : 0 );
     return bOk;
 }
+
+
+#ifdef ACCESSIBLE_LAYOUT
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible>
+    SwPagePreViewWin::CreateAccessible()
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
+                                                        // happend already!!!
+
+    DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );
+    return GetViewShell()->CreateAccessiblePreview(
+        nRow, nCol, nSttPage, aPgSize,
+        GetViewShell()->GetPreviewFreePix(), aScale );
+}
+#endif
 
 /* -----------------------------06.05.2002 13:18------------------------------
 

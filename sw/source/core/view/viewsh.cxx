@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:22:32 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2202,12 +2202,38 @@ BOOL ViewShell::IsNewLayout() const
     return xAcc;
 }
 
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible >
+ViewShell::CreateAccessiblePreview( sal_uInt8 nRow,
+                                    sal_uInt8 nColumn,
+                                    sal_uInt16 nStartPage,
+                                    const Size& rPageSize,
+                                    const Point& rFreePoint,
+                                    const Fraction& rScale)
+{
+    using ::com::sun::star::uno::Reference;
+    using ::drafts::com::sun::star::accessibility::XAccessible;
+
+    DBG_ASSERT( IsPreView(),
+                "Can't create accessible preview for non-preview ViewShell" );
+
+    // We require a layout and an XModel to be accessible.
+    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
+    ASSERT( GetWin(), "no window, no access" );
+
+    if( pDoc->GetRootFrm() && GetWin() )
+        return Imp()->GetAccessibleMap().GetDocumentPreview(
+                    nRow, nColumn, nStartPage, rPageSize, rFreePoint, rScale );
+    return NULL;
+}
+
 void ViewShell::InvalidateAccessibleFocus()
 {
     if( Imp()->IsAccessible() )
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
 #endif
+
 /* -----------------------------06.05.2002 13:23------------------------------
 
  ---------------------------------------------------------------------------*/

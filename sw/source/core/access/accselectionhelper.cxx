@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,11 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
         if( pFlyFrm )
         {
-            if( rContext.GetParent(pFlyFrm) == rContext.GetFrm() )
+            if( rContext.GetParent(pFlyFrm, rContext.IsInPagePreview()) ==
+                rContext.GetFrm() )
+            {
                 nCount = 1;
+            }
         }
         else
         {
@@ -269,7 +272,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 {
                     const SwFrmOrObj& rChild = *aIter;
                     if( rChild.GetSdrObject() && !rChild.GetSwFrm() &&
-                        rContext.GetParent(rChild) == rContext.GetFrm() &&
+                        rContext.GetParent(rChild, rContext.IsInPagePreview())
+                           == rContext.GetFrm() &&
                          pFEShell->IsObjSelected( *rChild.GetSdrObject() ) )
                     {
                         nCount++;
@@ -302,8 +306,11 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( pFlyFrm )
     {
         if( 0 == nSelectedChildIndex &&
-            rContext.GetParent(pFlyFrm) == rContext.GetFrm() )
+            rContext.GetParent(pFlyFrm, rContext.IsInPagePreview()) ==
+                rContext.GetFrm() )
+        {
             aChild = pFlyFrm;
+        }
     }
     else
     {
@@ -320,7 +327,8 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         {
             const SwFrmOrObj& rChild = *aIter;
             if( rChild.GetSdrObject() && !rChild.GetSwFrm() &&
-                rContext.GetParent(rChild) == rContext.GetFrm() &&
+                rContext.GetParent(rChild, rContext.IsInPagePreview()) ==
+                    rContext.GetFrm() &&
                 pFEShell->IsObjSelected( *rChild.GetSdrObject() ) )
             {
                 if( 0 == nSelectedChildIndex )

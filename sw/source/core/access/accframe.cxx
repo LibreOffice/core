@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@
 // size overlaps with the visible area. The bounding box however is the
 // frame's paint area.
 sal_Int32 SwAccessibleFrame::GetChildCount( const SwRect& rVisArea,
-                                            const SwFrm *pFrm )
+                                            const SwFrm *pFrm,
+                                            sal_Bool bInPagePreview )
 {
     sal_Int32 nCount = 0;
 
@@ -151,14 +152,15 @@ sal_Int32 SwAccessibleFrame::GetChildCount( const SwRect& rVisArea,
     while( aIter != aVisList.end() )
     {
         const SwFrmOrObj& rLower = *aIter;
-        if( rLower.IsAccessible() )
+        if( rLower.IsAccessible( bInPagePreview ) )
         {
             nCount++;
         }
         else if( rLower.GetSwFrm() )
         {
             // There are no unaccessible SdrObjects that count
-            nCount += GetChildCount( rVisArea, rLower.GetSwFrm() );
+            nCount += GetChildCount( rVisArea, rLower.GetSwFrm(),
+                                     bInPagePreview );
         }
         ++aIter;
     }
@@ -167,8 +169,9 @@ sal_Int32 SwAccessibleFrame::GetChildCount( const SwRect& rVisArea,
 }
 
 SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
-                                           const SwFrm *pFrm,
-                                           sal_Int32& rPos )
+                                        const SwFrm *pFrm,
+                                        sal_Int32& rPos,
+                                        sal_Bool bInPagePreview )
 {
     SwFrmOrObj aRet;
 
@@ -182,7 +185,7 @@ SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
             while( aIter != aVisMap.end() && !aRet.IsValid() )
             {
                 const SwFrmOrObj& rLower = (*aIter).second;
-                if( rLower.IsAccessible() )
+                if( rLower.IsAccessible( bInPagePreview ) )
                 {
                     if( 0 == rPos )
                         aRet = rLower;
@@ -192,7 +195,8 @@ SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
                 else if( rLower.GetSwFrm() )
                 {
                     // There are no unaccessible SdrObjects that count
-                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos );
+                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos,
+                                     bInPagePreview );
                 }
                 ++aIter;
             }
@@ -206,7 +210,7 @@ SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
             while( aIter != aVisList.end() && !aRet.IsValid() )
             {
                 const SwFrmOrObj& rLower = *aIter;
-                if( rLower.IsAccessible() )
+                if( rLower.IsAccessible( bInPagePreview ) )
                 {
                     if( 0 == rPos )
                         aRet = rLower;
@@ -216,7 +220,8 @@ SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
                 else if( rLower.GetSwFrm() )
                 {
                     // There are no unaccessible SdrObjects that count
-                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos );
+                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos,
+                                     bInPagePreview );
                 }
                 ++aIter;
             }
@@ -229,7 +234,8 @@ SwFrmOrObj SwAccessibleFrame::GetChild( const SwRect& rVisArea,
 sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
                                            const SwFrm *pFrm,
                                            const SwFrmOrObj& rChild,
-                                           sal_Int32& rPos )
+                                           sal_Int32& rPos,
+                                           sal_Bool bInPagePreview )
 {
     sal_Bool bFound = sal_False;
 
@@ -241,7 +247,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
         while( aIter != aVisMap.end() && !bFound )
         {
             const SwFrmOrObj& rLower = (*aIter).second;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rChild == rLower )
                     bFound = sal_True;
@@ -251,7 +257,8 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild, rPos );
+                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild,
+                                        rPos, bInPagePreview );
             }
             ++aIter;
         }
@@ -265,7 +272,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
         while( aIter != aVisList.end() && !bFound )
         {
             const SwFrmOrObj& rLower = *aIter;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rChild == rLower )
                     bFound = sal_True;
@@ -275,7 +282,8 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild, rPos );
+                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild,
+                                        rPos, bInPagePreview );
             }
             ++aIter;
         }
@@ -285,8 +293,9 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
 }
 
 SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
-                                            const SwFrm *pFrm,
-                                            const Point& rPos )
+                                          const SwFrm *pFrm,
+                                          const Point& rPos,
+                                          sal_Bool bInPagePreview )
 {
     SwFrmOrObj aRet;
 
@@ -301,7 +310,7 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             const SwFrmOrObj& rLower = (*aRIter).second;
             // A frame is returned if it's frame size is inside the visarea
             // and the positiion is inside the frame's paint area.
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rLower.GetBounds().IsInside( rPos ) )
                     aRet = rLower;
@@ -309,7 +318,8 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos );
+                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos,
+                                   bInPagePreview );
             }
             aRIter++;
         }
@@ -326,7 +336,7 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             const SwFrmOrObj& rLower = *aIter;
             // A frame is returned if it's frame size is inside the visarea
             // and the positiion is inside the frame's paint area.
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rLower.GetBounds().IsInside( rPos ) )
                     aRet = rLower;
@@ -334,7 +344,8 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos );
+                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos,
+                                   bInPagePreview );
             }
             ++aIter;
         }
@@ -344,7 +355,8 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
 }
 
 void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
-                             ::std::list< SwFrmOrObj >& rChildren )
+                                     ::std::list< SwFrmOrObj >& rChildren,
+                                     sal_Bool bInPagePreview )
 {
     if( SwFrmOrObjMap::IsSortingRequired( pFrm ) )
     {
@@ -354,14 +366,15 @@ void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
         while( aIter != aVisMap.end() )
         {
             const SwFrmOrObj& rLower = (*aIter).second;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 rChildren.push_back( rLower );
             }
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren );
+                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren,
+                             bInPagePreview );
             }
             ++aIter;
         }
@@ -375,14 +388,15 @@ void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
         while( aIter != aVisList.end() )
         {
             const SwFrmOrObj& rLower = *aIter;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( bInPagePreview ) )
             {
                 rChildren.push_back( rLower );
             }
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren );
+                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren,
+                             bInPagePreview );
             }
             ++aIter;
         }
@@ -391,20 +405,22 @@ void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
 
 void SwAccessibleFrame::MergeLowerBounds( SwRect& rBounds,
                                              const SwRect& rVisArea,
-                                          const SwFrm *pFrm )
+                                          const SwFrm *pFrm,
+                                          sal_Bool bInPagePreview )
 {
     const SwFrmOrObjSList aVisList( rVisArea, pFrm );
     SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
         const SwFrmOrObj& rLower = *aIter;
-        if( rLower.IsAccessible() )
+        if( rLower.IsAccessible( bInPagePreview ) )
         {
             rBounds.Union( rLower.GetBounds() );
         }
         else if( rLower.GetSwFrm() )
         {
-            MergeLowerBounds( rBounds, rVisArea, rLower.GetSwFrm() );
+            MergeLowerBounds( rBounds, rVisArea, rLower.GetSwFrm(),
+                              bInPagePreview );
         }
         ++aIter;
     }
@@ -416,7 +432,7 @@ SwRect SwAccessibleFrame::GetBounds( const SwFrm *pFrm )
         pFrm = GetFrm();
 
     SwFrmOrObj aFrm( pFrm );
-    SwRect aBounds( aFrm.GetBounds().Intersection( aVisArea ) );
+    SwRect aBounds( aFrm.GetBounds().Intersection( maVisArea ) );
     return aBounds;
 }
 
@@ -473,15 +489,17 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
             aFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchor();
         else
             aFrm = pFrm->GetUpper();
-    } while( aFrm.GetSwFrm() && !aFrm.IsAccessible() );
+    } while( aFrm.GetSwFrm() && !aFrm.IsAccessible( IsInPagePreview() ) );
 
     return sal_False;
 }
 
 SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
-                                      const SwFrm *pF ) :
-    aVisArea( rVisArea ),
-    pFrm( pF )
+                                      const SwFrm *pF,
+                                      sal_Bool bIsPagePreview ) :
+    maVisArea( rVisArea ),
+    mpFrm( pF ),
+    mbIsInPagePreview( bIsPagePreview )
 {
 }
 
@@ -489,7 +507,8 @@ SwAccessibleFrame::~SwAccessibleFrame()
 {
 }
 
-const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj )
+const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
+                                           sal_Bool bInPagePreview )
 {
     SwFrmOrObj aParent;
     const SwFrm *pFrm = rFrmOrObj.GetSwFrm();
@@ -502,19 +521,23 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj )
             {
                 // For FLY_IN_CNTNT the parent is the anchor
                 aParent = pFly->GetAnchor();
-                ASSERT( aParent.IsAccessible(),
+                ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
             }
             else
             {
                 // In any other case the parent is the root frm
-                aParent = pFly->FindRootFrm();
+                // (in page preview, the page frame)
+                if( bInPagePreview )
+                    aParent = pFly->FindPageFrm();
+                else
+                    aParent = pFly->FindRootFrm();
             }
         }
         else
         {
             SwFrmOrObj aUpper( pFrm->GetUpper() );
-            while( aUpper.GetSwFrm() && !aUpper.IsAccessible() )
+            while( aUpper.GetSwFrm() && !aUpper.IsAccessible(bInPagePreview) )
                 aUpper = aUpper.GetSwFrm()->GetUpper();
             aParent = aUpper;
         }
@@ -533,7 +556,7 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj )
             {
                 // For FLY_IN_CNTNT the parent is the anchor
                 aParent = pContact->GetAnchor();
-                ASSERT( aParent.IsAccessible(),
+                ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
 
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 07:52:42 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ class SwRegionRects;
 class SwFrm;
 struct SwPrintData;
 class SvtAccessibilityOptions;
+class Fraction;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -418,6 +419,18 @@ public:
 
 #ifdef ACCESSIBLE_LAYOUT
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible >
+            CreateAccessiblePreview( sal_uInt8 nRow,
+                                     sal_uInt8 nColumn,
+                                     sal_uInt16 nStartPage,
+                                     const Size& rPageSize,
+                                     const Point& rFreePoint,
+                                     const Fraction& rScale );
+
+    Point GetPreviewFreePix() const;
+
     void InvalidateAccessibleFocus();
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,10 +726,21 @@ sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
     return sal_True;
 }
 
-void SwAccessibleParagraph::GetEmptyBoundary( Boundary& rBound )
+sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
+    Boundary& rBound,
+    const OUString& rText,
+    sal_Int32 nPos )
+{
+    // HACK:
+    return GetCharBoundary( rBound, rText, nPos );
+}
+
+
+sal_Bool SwAccessibleParagraph::GetEmptyBoundary( Boundary& rBound )
 {
     rBound.startPos = 0;
     rBound.endPos = 0;
+    return sal_True;
 }
 
 
@@ -770,15 +781,18 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
             bRet = GetLineBoundary( rBound, rText, nPos );
             break;
 
-        case /* AccessibleTextType::ATTRIBUTE */ 6:
+        case AccessibleTextType::ATTRIBUTE_RUN:
             bRet = GetAttributeBoundary( rBound, rText, nPos );
+            break;
+
+        case AccessibleTextType::GLYPH:
+            bRet = GetGlyphBoundary( rBound, rText, nPos );
             break;
 
         default:
             // The specification asks us to return an empty string
             // if the text type is invalid.
-            GetEmptyBoundary( rBound );
-            bRet = sal_True;
+            bRet = GetEmptyBoundary( rBound );
             break;
     }
 
@@ -1229,6 +1243,12 @@ OUString SwAccessibleParagraph::getTextAtIndex(
 
     const OUString rText = GetString();
 
+    // implement the silly specification that first position after
+    // text must return an empty string, rather than throwing an
+    // IndexOutOfBoundsException
+    if( nIndex == rText.getLength() )
+        return OUString();
+
     // with error checking
     Boundary aBound;
     sal_Bool bIsWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
@@ -1251,6 +1271,12 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
     CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
+
+    // implement the silly specification that first position after
+    // text must return an empty string, rather than throwing an
+    // IndexOutOfBoundsException
+    if( nIndex == rText.getLength() )
+        return OUString();
 
     // get first word
     Boundary aBound;
@@ -1281,6 +1307,13 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
     CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
+
+    // implement the silly specification that first position after
+    // text must return an empty string, rather than throwing an
+    // IndexOutOfBoundsException
+    if( nIndex == rText.getLength() )
+        return OUString();
+
 
     // get first word, then skip to next word
     Boundary aBound;

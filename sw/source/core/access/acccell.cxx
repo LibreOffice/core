@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
         const SwFrm *pLower = rLower.GetSwFrm();
         if( pLower )
         {
-            if( rLower.IsAccessible()  )
+            if( rLower.IsAccessible( GetMap()->GetShell()->IsPreView() )  )
             {
                 ::vos::ORef< SwAccessibleContext > xAccImpl(
                     GetMap()->GetContextImpl( pLower, sal_False ) );
@@ -243,7 +243,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 void SwAccessibleCell::_InvalidateCursorPos()
 {
 
-    const SwFrm *pParent = GetParent( GetFrm() );
+    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
     ASSERT( pParent->IsTabFrm(), "parent is not a tab frame" );
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
@@ -308,7 +308,7 @@ Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 
 void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 {
-    const SwFrm *pParent = GetParent( GetFrm() );
+    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
@@ -318,7 +318,7 @@ void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
-    const SwFrm *pParent = GetParent( GetFrm() );
+    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,18 @@
 #include "access.hrc"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
 const sal_Char sImplementationName[] = "SwAccessibleDocument";
+
+const sal_Char sPreviewImplementationName[] = "SwAccessibleDocumentPreview";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -121,29 +131,23 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
 
-void SwAccessibleDocument::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
-{
-    SwAccessibleContext::GetStates( rStateSet );
+//
+// SwAccessibleDocumentBase: base class for SwAccessibleDocument and
+// SwAccessiblePreview
+//
 
-    // MULTISELECTABLE
-    rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
-}
-
-SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
+SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *pMap ) :
     SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
                            pMap->GetShell()->GetDoc()->GetRootFrm() ),
-    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
-    aSelectionHelper( *this )
-{
-    SetName( GetResource( STR_ACCESS_DOC_NAME ) );
-}
-
-SwAccessibleDocument::~SwAccessibleDocument()
+    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() )
 {
 }
 
-void SwAccessibleDocument::SetVisArea()
+SwAccessibleDocumentBase::~SwAccessibleDocumentBase()
+{
+}
+
+void SwAccessibleDocumentBase::SetVisArea()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -157,13 +161,13 @@ void SwAccessibleDocument::SetVisArea()
 }
 
 
-Reference< XAccessible> SAL_CALL SwAccessibleDocument::getAccessibleParent (void)
+Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
     return xParent;
 }
 
-sal_Int32 SAL_CALL SwAccessibleDocument::getAccessibleIndexInParent (void)
+sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -180,12 +184,12 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getAccessibleIndexInParent (void)
     return -1L;
 }
 
-OUString SAL_CALL SwAccessibleDocument::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
 {
     return GetResource( STR_ACCESS_DOC_DESC );
 }
 
-awt::Rectangle SAL_CALL SwAccessibleDocument::getBounds()
+awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -202,7 +206,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocument::getBounds()
 }
 
 
-awt::Point SAL_CALL SwAccessibleDocument::getLocation()
+awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
         throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -218,7 +222,7 @@ awt::Point SAL_CALL SwAccessibleDocument::getLocation()
 }
 
 
-::com::sun::star::awt::Point SAL_CALL SwAccessibleDocument::getLocationOnScreen()
+::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -234,7 +238,7 @@ awt::Point SAL_CALL SwAccessibleDocument::getLocation()
 }
 
 
-::com::sun::star::awt::Size SAL_CALL SwAccessibleDocument::getSize()
+::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -248,6 +252,34 @@ awt::Point SAL_CALL SwAccessibleDocument::getLocation()
 
     return aSize;
 }
+
+
+
+//
+// SwAccessibeDocument
+//
+
+void SwAccessibleDocument::GetStates(
+        ::utl::AccessibleStateSetHelper& rStateSet )
+{
+    SwAccessibleContext::GetStates( rStateSet );
+
+    // MULTISELECTABLE
+    rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+}
+
+
+SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
+    SwAccessibleDocumentBase( pMap ),
+    aSelectionHelper( *this )
+{
+    SetName( GetResource( STR_ACCESS_DOC_NAME ) );
+}
+
+SwAccessibleDocument::~SwAccessibleDocument()
+{
+}
+
 
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:21:30 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,17 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
                                                                    pFollow );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
+}
+
+void SwViewImp::UpdateAccessiblePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
+                                         sal_Int16 nStartPage,
+                                         const Size& rPageSize,
+                                         const Point& rFreePoint,
+                                         const Fraction& rScale )
+{
+    if( IsAccessible() )
+        GetAccessibleMap().UpdatePreview( nRow, nColumn, nStartPage,
+                                          rPageSize, rFreePoint, rScale );
 }
 
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()

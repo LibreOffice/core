@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-21 13:17:10 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
         const SwFrmOrObj& rLower = *aIter;
         const SwFrm *pLower = rLower.GetSwFrm();
         SwRect aBox( rLower.GetBox() );
-        if( rLower.IsAccessible() )
+        if( rLower.IsAccessible( GetShell()->IsPreView() ) )
         {
             Action eAction = NONE;
             if( aBox.IsOver( rNewVisArea ) )
@@ -437,7 +437,7 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm *pFrm,
         if( pLower )
         {
             ::vos::ORef< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( GetShell()->IsPreView() ) )
                 xAccImpl = GetMap()->GetContextImpl( pLower, sal_False );
             if( xAccImpl.isValid() )
                 xAccImpl->InvalidateStates( nStates );
@@ -464,7 +464,7 @@ void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
         if( pLower )
         {
             ::vos::ORef< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible() )
+            if( rLower.IsAccessible( GetShell()->IsPreView() ) )
                 xAccImpl = GetMap()->GetContextImpl( pLower, sal_False );
             if( xAccImpl.isValid() )
                 xAccImpl->Dispose( bRecursive );
@@ -585,7 +585,8 @@ void SwAccessibleContext::GetStates(
 SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           sal_Int16 nR,
                                           const SwFrm *pF ) :
-    SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
+    SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
+                       pM->GetShell()->IsPreView() ),
     aAccessibleEventListeners( aListenerMutex ),
     aFocusListeners( aListenerMutex ),
     pMap( pM ),
@@ -600,7 +601,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           const OUString& rName,
                                           sal_Int16 nR,
                                           const SwFrm *pF ) :
-    SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
+    SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
+                       pM->GetShell()->IsPreView() ),
     sName( rName ),
     aAccessibleEventListeners( aListenerMutex ),
     aFocusListeners( aListenerMutex ),
@@ -900,11 +902,13 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     Point aPixPos( 0, 0 );
     if( !aLogBounds.IsEmpty() )
     {
-        aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+        //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+        aPixPos = GetMap()->LogicToPixel( aLogBounds.Pos() );
         if( pParent->IsRootFrm() )
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+            //          Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
             aPixPos.X() -= aParentPixPos.X();
             aPixPos.Y() -= aParentPixPos.Y();
         }
@@ -929,7 +933,8 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     Point aPixPos( 0, 0 );
     if( !aLogBounds.IsEmpty() )
     {
-        aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+        //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+        aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
         aPixPos = pWin->OutputToAbsoluteScreenPixel( aPixPos );
     }
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
@@ -954,7 +959,8 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     // the rectangle. For that reason we first have to do the conversion
     // into pixel and then have to get the size.
     if( !aLogBounds.IsEmpty() )
-        aPixSize = pWin->LogicToPixel( aLogBounds.SVRect() ).GetSize();
+        //      aPixSize = pWin->LogicToPixel( aLogBounds.SVRect() ).GetSize();
+        aPixSize = GetMap()->CoreToPixel( aLogBounds.SVRect() ).GetSize();
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
 
     return aSize;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,27 +76,34 @@
 
 class SwAccessibleFrame
 {
-    SwRect aVisArea;
-    const SwFrm *pFrm;
+    SwRect maVisArea;
+    const SwFrm *mpFrm;
+    const sal_Bool mbIsInPagePreview;
 
     static sal_Int32 GetChildCount( const SwRect& rVisArea,
-                                    const SwFrm *pFrm );
+                                    const SwFrm *pFrm,
+                                    sal_Bool bInPagePreview );
     static SwFrmOrObj GetChild( const SwRect& rVisArea,
                                   const SwFrm *pFrm,
-                                  sal_Int32& rPos );
+                                  sal_Int32& rPos,
+                                sal_Bool bInPagePreview);
     static sal_Bool GetChildIndex( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     const SwFrmOrObj& rChild,
-                                    sal_Int32& rPos );
+                                    sal_Int32& rPos,
+                                    sal_Bool bInPagePreview );
     static SwFrmOrObj GetChildAt( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
-                                    const Point& rPos );
+                                    const Point& rPos,
+                                    sal_Bool bInPagePreview );
     static void GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
-                             ::std::list< SwFrmOrObj >& rChildren );
+                             ::std::list< SwFrmOrObj >& rChildren,
+                             sal_Bool bInPagePreview );
 
     static void MergeLowerBounds( SwRect& rBounds,
                                   const SwRect& rVisArea,
-                                  const SwFrm *pFrm );
+                                  const SwFrm *pFrm,
+                                  sal_Bool bInPagePreview );
 protected:
 
     sal_Bool IsEditable( ViewShell *pVSh ) const;
@@ -107,18 +114,22 @@ protected:
     inline sal_Bool IsShowing( const SwFrmOrObj& rFrmOrObj ) const;
     inline sal_Bool IsShowing() const;
 
-    void ClearFrm() { pFrm = 0; }
+    inline sal_Bool IsInPagePreview() const { return mbIsInPagePreview; }
+
+    void ClearFrm() { mpFrm = 0; }
 
     SwAccessibleFrame( const SwRect& rVisArea,
-                       const SwFrm *pFrm );
+                       const SwFrm *pFrm,
+                       sal_Bool bIsPagePreview );
     virtual ~SwAccessibleFrame();
 
 public:
     // Return the SwFrm this context is attached to.
-    const SwFrm *GetFrm() const { return pFrm; };
+    const SwFrm *GetFrm() const { return mpFrm; };
 
 
-    static const SwFrm *GetParent( const SwFrmOrObj& rFrmOrObj );
+    static const SwFrm *GetParent( const SwFrmOrObj& rFrmOrObj,
+                                   sal_Bool bInPagePreview );
 
 protected:
 
@@ -139,7 +150,7 @@ protected:
     inline void GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const;
 
     inline void SetVisArea( const SwRect& rNewVisArea );
-    const SwRect& GetVisArea() const { return aVisArea; }
+    const SwRect& GetVisArea() const { return maVisArea; }
 
 
     String GetFormattedPageNumber() const;
@@ -147,7 +158,7 @@ protected:
 
 inline sal_Bool SwAccessibleFrame::IsShowing( const SwRect& rFrm ) const
 {
-    return rFrm.IsOver( aVisArea );
+    return rFrm.IsOver( maVisArea );
 }
 
 inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrmOrObj& rFrmOrObj ) const
@@ -164,39 +175,39 @@ inline sal_Bool SwAccessibleFrame::IsShowing() const
 inline const SwFrm *SwAccessibleFrame::GetParent() const
 {
     SwFrmOrObj aFrmOrObj( GetFrm() );
-    return GetParent( aFrmOrObj );
+    return GetParent( aFrmOrObj, IsInPagePreview()  );
 }
 
 inline sal_Int32 SwAccessibleFrame::GetChildCount() const
 {
-    return GetChildCount( aVisArea, pFrm );
+    return GetChildCount( maVisArea, mpFrm, IsInPagePreview() );
 }
 
 inline SwFrmOrObj SwAccessibleFrame::GetChild( sal_Int32 nPos ) const
 {
-    return GetChild( aVisArea, pFrm, nPos );
+    return GetChild( maVisArea, mpFrm, nPos, IsInPagePreview() );
 }
 
 inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrmOrObj& rChild ) const
 {
     sal_Int32 nPos = 0;
-    return GetChildIndex( aVisArea, pFrm, rChild, nPos ) ? nPos : -1L;
+    return GetChildIndex( maVisArea, mpFrm, rChild, nPos, IsInPagePreview() ) ? nPos : -1L;
 }
 
 inline SwFrmOrObj SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
-    return GetChildAt( aVisArea, pFrm, rPos );
+    return GetChildAt( maVisArea, mpFrm, rPos, IsInPagePreview() );
 }
 
 inline void SwAccessibleFrame::GetChildren(
         ::std::list< SwFrmOrObj >& rChildren ) const
 {
-    GetChildren( aVisArea, pFrm, rChildren );
+    GetChildren( maVisArea, mpFrm, rChildren, IsInPagePreview() );
 }
 
 inline void SwAccessibleFrame::SetVisArea( const SwRect& rNewVisArea )
 {
-    aVisArea = rNewVisArea;
+    maVisArea = rNewVisArea;
 }
 #endif
 

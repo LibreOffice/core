@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:48 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,12 +218,15 @@ protected:
     sal_Bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
                                    const rtl::OUString& rText,
                                    sal_Int32 nPos );
-    sal_Bool  GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
-                                    const rtl::OUString& rText,
-                                    sal_Int32 nPos );
+    sal_Bool GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
+                                   const rtl::OUString& rText,
+                                   sal_Int32 nPos );
+    sal_Bool GetGlyphBoundary( com::sun::star::i18n::Boundary& rBound,
+                               const rtl::OUString& rText,
+                               sal_Int32 nPos );
 
     /// generate an empty boundary
-    void GetEmptyBoundary( com::sun::star::i18n::Boundary& rBound );
+    sal_Bool GetEmptyBoundary( com::sun::star::i18n::Boundary& rBound );
 
     /// get boundaries of word/sentence/etc. for specified text type
     /// Does all argument checking, and then delegates to helper methods above.
