@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 11:10:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <plugin/impl.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <osl/thread.h>
 #include <stdio.h>
 static FILE * s_file = 0;
