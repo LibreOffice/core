@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2003-10-27 13:10:32 $
+#   last change: $Author: hr $ $Date: 2003-12-10 13:47:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -371,13 +371,17 @@ sub tag
     my @tag_message = <CVSTAG>;
     close(CVSTAG);
 
-    # no message from CVS means that tag already exists
-    # and has not been moved.
-    return 'success' if !@tag_message;
+    unless ( $options =~ /-F/ && $options =~ /-b/ ) {
+        # No message from CVS means that tag already exists
+        # and has not been moved.
+        # If both -F and -b is given, CVS will always return
+        # message.
+        return 'success' if !@tag_message;
+    }
 
     my $tagged             = 0;
     my $cant_move          = 0;
-    my $connectionfailure = 0;
+    my $connectionfailure  = 0;
     my $invalidfile        = 0;
     foreach (@tag_message) {
         /^T $file/ && ++$tagged;
