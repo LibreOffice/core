@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-11 09:31:41 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 10:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4349,5 +4349,19 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
     return aProp;
 }
 
+//  ----------------------------------------------------
+//  class VCLXMenuWindow
+//  ----------------------------------------------------
+VCLXMenuWindow::VCLXMenuWindow( Menu* pMenu )
+    :mpMenu( pMenu )
+{
+}
 
+VCLXMenuWindow::~VCLXMenuWindow()
+{
+}
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXMenuWindow::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-11 09:32:28 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,6 +1101,21 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
+//  ----------------------------------------------------
+//  class VCLXMenuWindow
+//  ----------------------------------------------------
+class VCLXMenuWindow :  public VCLXWindow
+{
+private:
+    Menu*               mpMenu;
+
+protected:
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+
+public:
+                        VCLXMenuWindow( Menu* pMenu );
+                        ~VCLXMenuWindow();
+};
 
 
 #endif // _TOOLKIT_AWT_VCLXWINDOWS_HXX_
