@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 12:05:05 $
+ *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ namespace bib
             void disposeGridWin();
 
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
+
+            virtual void GetFocus();
     };
 
     //---------------------------------------------------------------------
@@ -166,6 +168,7 @@ namespace bib
     //---------------------------------------------------------------------
     BibGridwin::~BibGridwin()
     {
+        disposeGridWin();
     }
 
     //---------------------------------------------------------------------
@@ -225,8 +228,12 @@ namespace bib
     {
         if ( m_xControl.is() )
         {
-            m_xControlContainer->removeControl( m_xControl );
-            m_xControl->dispose();
+            Reference< awt::XControl > xDel( m_xControl );
+            m_xControl = NULL;
+            m_xGridWin = NULL;
+
+            m_xControlContainer->removeControl( xDel );
+            xDel->dispose();
         }
     }
 
@@ -237,6 +244,13 @@ namespace bib
 
         if ( m_xControl.is() )
             m_xControl->setModel( m_xGridModel );
+    }
+
+    //---------------------------------------------------------------------
+    void BibGridwin::GetFocus()
+    {
+        if(m_xGridWin.is())
+            m_xGridWin->setFocus();
     }
 
     //---------------------------------------------------------------------
@@ -273,10 +287,13 @@ namespace bib
             DELETEZ( pToolBar );
         }
 
-        if ( pGridWin )
+        if( pGridWin )
         {
-            pGridWin->disposeGridWin();
-            DELETEZ( pGridWin );
+            BibGridwin* pDel = pGridWin;
+            pGridWin = NULL;
+            pDel->disposeGridWin();
+//          DELETEZ( pGridWin );
+            delete pDel;
         }
 
     }
@@ -318,6 +335,12 @@ namespace bib
         if ( pToolBar )
             pToolBar->SetXController( m_xController );
 
+    }
+
+    void BibBeamer::GetFocus()
+    {
+        if( pGridWin )
+            pGridWin->GrabFocus();
     }
 
 //.........................................................................

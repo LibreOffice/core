@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ class BibWindowContainer: public DockingWindow
 
         Window*                 GetChild(){return pChild;}
         void                    SetChild(Window* pWin);
+
+        virtual void            GetFocus();
 };
 
 class BibBookContainer: public SplitWindow
@@ -145,6 +147,7 @@ class BibBookContainer: public SplitWindow
 
         void                    createBottomFrame(Window* pWin);
 
+        virtual void            GetFocus();
 };
 
 #endif

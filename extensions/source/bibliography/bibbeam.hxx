@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ namespace bib
             ~BibBeamer();
 
             void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
+
+            virtual void            GetFocus();
     };
 
 //.........................................................................

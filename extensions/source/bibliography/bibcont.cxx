@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,12 @@ BibWindowContainer::BibWindowContainer( Window* pParent,Window* pWin, WinBits nS
 
 BibWindowContainer::~BibWindowContainer()
 {
-    if(pChild!=NULL) delete pChild;
+    if( pChild )
+    {
+        Window* pDel = pChild;
+        pChild = NULL;          // prevents GetFocus for child while deleting!
+        delete pDel;
+    }
 }
 
 void BibWindowContainer::Resize()
@@ -139,6 +144,11 @@ void BibWindowContainer::SetChild(Window* pWin)
     }
 }
 
+void BibWindowContainer::GetFocus()
+{
+    if( pChild )
+        pChild->GrabFocus();
+}
 
 
 BibBookContainer::BibBookContainer(Window* pParent,BibDataManager* pDtMn, WinBits nStyle):
@@ -160,8 +170,13 @@ BibBookContainer::~BibBookContainer()
     if ( xBottomFrameRef.is() )
         xBottomFrameRef->dispose();
 
-    if(pTopWin)
-        delete pTopWin;
+    if( pTopWin )
+    {
+        DockingWindow* pDel = pTopWin;
+        pTopWin = NULL;         // prevents GetFocus for child while deleting!
+        delete pDel;
+    }
+
     if(pBottomWin)
         delete pBottomWin;
     CloseBibModul(pBibMod);
@@ -374,3 +389,8 @@ void BibBookContainer::createBottomFrame(Window* pWin)
 
 }
 
+void BibBookContainer::GetFocus()
+{
+    if( pTopWin )
+        pTopWin->GrabFocus();
+}
