@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:33:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,7 +1562,7 @@ String STR_FIND
     Text [ norwegian ] = "Søke" ;
     Text [ italian ] = "Cerca" ;
     Text [ portuguese_brazilian ] = "Procurar" ;
-    Text [ portuguese ] = "Localizar" ;
+    Text [ portuguese ] = "Procurar" ;
     Text [ finnish ] = "Etsi" ;
     Text [ danish ] = "Søg" ;
     Text [ french ] = "Rechercher" ;
