@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-17 13:06:16 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,11 +370,10 @@ public:
     }
 
     /**
-      Perform a comparison of a substring in this string.
+      Match against a substring appearing in this string.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       This function can't be used for language specific comparison.
 
       @param    str         the object (substring) to be compared.
@@ -392,11 +391,11 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of a substring in this string.
+      Match against a substring appearing in this string, ignoring the case of
+      ASCII letters.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       Character values between 65 and 90 (ASCII A-Z) are interpreted as
       values between 97 and 122 (ASCII a-z).
       This function can't be used for language specific comparison.
