@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,8 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DN, "\\dn" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DOCCOMM, "\\doccomm" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DOCTEMP, "\\doctemp" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DROPCAPLI, "\\dropcapli" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DROPCAPLT, "\\dropcapt" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DROPCAPT, "\\dropcapt" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ABSNOOVRLP, "\\absnoovrlp" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DXFRTEXT, "\\dxfrtext" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DY, "\\dy" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_EDMINS, "\\edmins" );
@@ -1175,7 +1176,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.8 2003-03-27 14:39:42 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.9 2004-02-04 12:08:43 hr Exp $
 
 *************************************************************************/
 
