@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMailMergeBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-26 13:28:30 $
+ *  last change:$Date: 2003-09-08 11:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,15 @@
 
 package ifc.text;
 
-import com.sun.star.text.XMailMergeBroadcaster;
-import com.sun.star.text.XMailMergeListener;
-import com.sun.star.text.MailMergeEvent;
-import com.sun.star.beans.NamedValue;
-import com.sun.star.task.XJob;
-import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.beans.NamedValue;
+import com.sun.star.task.XJob;
+import com.sun.star.text.MailMergeEvent;
+import com.sun.star.text.XMailMergeBroadcaster;
+import com.sun.star.text.XMailMergeListener;
 
 /**
 * Testing <code>com.sun.star.text.XMailMergeBroadcaster</code>
