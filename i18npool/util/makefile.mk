@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.18 $
+#*  $Revision: 1.19 $
 #*
-#*  last change: $Author: rt $ $Date: 2004-01-20 13:43:56 $
+#*  last change: $Author: hr $ $Date: 2004-02-02 19:24:24 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,11 +63,6 @@ PRJ=..
 
 PRJNAME=i18npool
 TARGET=i18npool.uno
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(TARGET)
-.ENDIF
 
 # --- Settings -----------------------------------------------------------
 
