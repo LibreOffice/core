@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2001-09-20 16:21:24 $
+ *  last change: $Author: nf $ $Date: 2001-09-20 16:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,6 +1325,8 @@ USHORT StarWriter::Write( String aFileName )
 {
     sFileName = aFileName;
 
+    FileStat::SetReadOnlyFlag( DirEntry( aFileName ), FALSE );
+
     SvFileStream aFileStream;
 
     aFileStream.Open( aFileName, STREAM_WRITE | STREAM_TRUNC);
@@ -1370,6 +1372,8 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
             aEntry += DirEntry( sName );
             aEntry += DirEntry( sPrjDir );
             aEntry += DirEntry( sSolarFile );
+
+            FileStat::SetReadOnlyFlag( aEntry, FALSE );
 
             SvFileStream aFileStream;
             aFileStream.Open( aEntry.GetFull(), STREAM_WRITE | STREAM_TRUNC);
