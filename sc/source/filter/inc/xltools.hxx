@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,27 +195,69 @@ public:
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
     static sal_uInt16           GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
 
+// font names -----------------------------------------------------------------
+
+    /** Returns the matching Excel font name for a passed Calc font name. */
+    static String               GetXclFontName( const String& rFontName );
+
 // built-in names -------------------------------------------------------------
 
-    /** Returns an Excel built-in name used in NAME records. */
-    static const sal_Char*      GetBuiltInName( sal_Unicode nIndex );
-    /** Stores an Excel built-in name and appends a sheet index.
-        @param rName  The built-in name will be stored here.
-        @param nIndex  Index of the built-in name.
-        @param nSheet  This number will be appended to the string, separated by 3 underline characters. */
-    static void                 GetBuiltInName( String& rName, sal_Unicode nIndex, sal_uInt16 nSheet );
+    /** Returns an Excel built-in defined name used in NAME records.
+        @param nIndex  Excel index of the built-in name. */
+    static String               GetBuiltInName( sal_Unicode nIndex );
+    /** Returns an Excel built-in defined name and appends a sheet index.
+        @param nIndex  Excel index of the built-in name.
+        @param nSheet  This number will be appended to the string. */
+    static String               GetBuiltInName( sal_Unicode nIndex, sal_uInt16 nSheet );
     /** Tests on valid built-in name with sheet index.
         @param rnSheet  Here the parsed sheet index is returned.
         @param rString  The string to be determined.
-        @param nIndex  Index to built-in name to be compared with the string
+        @param nIndex  Index to built-in name to be compared with the string.
         @return  true = The string is valid. */
     static bool                 IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex );
 
-// Languages ------------------------------------------------------------------
+// built-in style names -------------------------------------------------------
+
+    /** Returns the specified built-in cell style name.
+        @param nStyleId  The identifier of the built-in style.
+        @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
+        @return  The style name or an empty string, if the parameters are not valid. */
+    static String               GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    /** Returns true, if the passed string is a name of an Excel built-in style.
+        @param pnStyleId  If not 0, the found style identifier will be returned here.
+        @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
+    static bool                 IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId = NULL, xub_StrLen* pnNextChar = NULL );
+    /** Returns the Excel built-in style identifier of a passed style name.
+        @param rnStyleId  The style identifier is returned here.
+        @param rnLevel  The zero-based outline level for RowLevel and ColLevel styles is returned here.
+        @param rStyleName  The style name to examine.
+        @return  true = passed string is a built-in style name, false = user style. */
+    static bool                 GetBuiltInStyleId(
+                                    sal_uInt8& rnStyleId, sal_uInt8& rnLevel,
+                                    const String& rStyleName );
+    /** Returns the XF index of a built-in style. */
+    static sal_uInt16           GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+
+// conditional formatting style names -----------------------------------------
+
+    /** Returns the style name for a single condition of a conditional formatting.
+        @param nFormat  The zero-based index of the conditional formatting.
+        @param nCondition  The zero-based index of the condition. */
+    static String               GetCondFormatStyleName( sal_Int32 nFormat, sal_uInt16 nCondition );
+    /** Returns true, if the passed string is a name of a conditional format style created by Excel import.
+        @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
+    static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
+
+// languages ------------------------------------------------------------------
 
     /** Converts an Excel country index into a LanguageType ID.
         @return  false = The Excel country ID is unknown. reScLang has not been changed. */
     static bool                 GetScLanguage( LanguageType& reScLang, sal_uInt16 nXclCountry );
+
+private:
+    static const String         maDefNamePrefix;        /// Prefix for built-in defined names.
+    static const String         maStyleNamePrefix;      /// Prefix for built-in cell style names.
+    static const String         maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
 };
 
 
