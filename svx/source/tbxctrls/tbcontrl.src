@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:21:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text [ en-US ] = "Border Color" ;
     Text [ x-comment ] = " ";
 };
-ListBox RID_SVXTBX_STYLE
+ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;
     Size = MAP_APPFONT ( 67 , 86 ) ;
@@ -225,30 +225,45 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
     ImageBitmap = Bitmap { File = "sch10869.bmp" ; };
     MASKCOLOR
 };
+String RID_SVXSTR_CLEARFORM
+{
+    Text = "Formatierung löschen";
+    Text [ en-US ] = "Clear formatting";
+};
+String RID_SVXSTR_MORE
+{
+    Text = "Weitere...";
+    Text [ en-US ] = "More...";
+};
+StringArray RID_SVXSTRARRAY_DEFAULTSTYLES
+{
+    ItemList =
+    {
+        < "Standard" ; 0 ; > ;
+        < "Überschrift 1" ; 0 ; > ;
+        < "Überschrift 2" ; 0 ; > ;
+        < "Überschrift 3" ; 0 ; > ;
+        < "Textkörper" ; 0 ; > ;
+        < "Standard" ; 1 ; > ;
+        < "Überschrift 1" ; 1 ; > ;
+        < "Überschrift 2" ; 1 ; > ;
+        < "Ergebnis" ; 1 ; > ;
+        < "Ergebnis2" ; 1 ; > ;
+    };
+    ItemList [ en-US ] =
+    {
+        < "Default" ; 0 ; > ;
+        < "Heading 1" ; 0 ; > ;
+        < "Heading 2" ; 0 ; > ;
+        < "Heading 3" ; 0 ; > ;
+        < "Text body" ; 0 ; > ;
+        < "Default" ; 1 ; > ;
+        < "Heading 1" ; 1 ; > ;
+        < "Heading 2" ; 1 ; > ;
+        < "Result" ; 1 ; > ;
+        < "Result2" ; 1 ; > ;
+    };
+};
 
 // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
