@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olewrapclient.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ STDMETHODIMP OleWrapperClientSite::OnShowWindow( BOOL bShow )
 {
     OleComponent* pLockComponent = NULL;
 
+    // TODO/LATER: redirect the notification to the main thread so that SolarMutex can be locked
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pOleComp )
