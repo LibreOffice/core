@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-05 07:19:22 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,10 @@ void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor 
 
     rTo.mnAscent        = aMetric.GetAscent();
     rTo.mnDescent       = aMetric.GetDescent();
-    rTo.mnLeading       = aMetric.GetLeading();
-    rTo.mnSlant         = aMetric.GetSlant();
-    rTo.meType          = aMetric.GetType();
+    rTo.mnIntLeading    = aMetric.GetIntLeading();
+    rTo.mnExtLeading    = aMetric.GetExtLeading();
+    rTo.mnSlant     = aMetric.GetSlant();
+    rTo.meType      = aMetric.GetType();
     rTo.mnFirstChar     = 0x0020;   // TODO: where to get this info?
     rTo.mnLastChar      = 0xFFFE;   // TODO: where to get this info?
 
