@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachemapobject3.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-11 13:03:12 $
+ *  last change: $Author: sb $ $Date: 2001-06-12 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ private:
 
     void releaseElement(Object3 * pElement) SAL_THROW(());
 
-    friend Object3; // to access Map, releaseElement()
+    friend class Object3; // to access Map, releaseElement()
 };
 
 class Object3
@@ -132,9 +132,14 @@ private:
     Object3(Object3 &); // not implemented
     void operator =(Object3); // not implemented
 
-    friend ObjectContainer3;
+    friend class ObjectContainer3;
         // to access m_aContainerIt, m_nRefCount, Object3(), ~Object3()
-    friend std::auto_ptr< Object3 >; // to access ~Object3()
+#if defined WNT
+    friend struct std::auto_ptr< Object3 >; // to access ~Object3()
+        // work around compiler bug...
+#else // WNT
+    friend class std::auto_ptr< Object3 >; // to access ~Object3()
+#endif // WNT
 };
 
 } }
