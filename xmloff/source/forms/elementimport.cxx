@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 14:00:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 09:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,6 +686,7 @@ namespace xmloff
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
+        enableTrackAttributes();
     }
 
     //---------------------------------------------------------------------
@@ -698,6 +699,27 @@ namespace xmloff
     }
 
     //=====================================================================
+    //= OTextLikeImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OTextLikeImport::OTextLikeImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+    {
+        enableTrackAttributes();
+    }
+
+    //---------------------------------------------------------------------
+    void OTextLikeImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlImport::StartElement(_rxAttrList);
+
+        // handle the convert-empty-to-null attribute, which's default is different from the property default
+        simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+    }
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
@@ -706,6 +728,8 @@ namespace xmloff
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
+        if (OControlElement::COMBOBOX == m_eElementType)
+            enableTrackAttributes();
     }
 
     //---------------------------------------------------------------------
@@ -724,6 +748,23 @@ namespace xmloff
 
         // everything else
         return OControlImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
+    }
+
+    //---------------------------------------------------------------------
+    void OListAndComboImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlImport::StartElement(_rxAttrList);
+
+        if (OControlElement::COMBOBOX == m_eElementType)
+        {
+            // for the auto-completion
+            // the attribute default does not equal the property default, so in case we did not read this attribute,
+            // we have to simulate it
+            simluateDefaultedAttribute(getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, "false");
+
+            // same for the convert-empty-to-null attribute, which's default is different from the property default
+            simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+        }
     }
 
     //---------------------------------------------------------------------
@@ -921,6 +962,11 @@ namespace xmloff
     {
         switch (_eType)
         {
+            case OControlElement::TEXT:
+            case OControlElement::TEXT_AREA:
+            case OControlElement::FORMATTED_TEXT:
+                return new OTextLikeImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
             case OControlElement::BUTTON:
             case OControlElement::IMAGE:
                 return new OButtonImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
@@ -1010,6 +1056,7 @@ namespace xmloff
             const Reference< XNameContainer >& _rxParentContainer)
         :OFormImport_Base(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, "control")
     {
+        enableTrackAttributes();
     }
 
     //---------------------------------------------------------------------
@@ -1137,6 +1184,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/03/28 14:00:56  fs
+ *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
+ *
  *  Revision 1.16  2001/03/28 12:27:19  fs
  *  #85391# correctly read the list source / list items of combo boxes
  *

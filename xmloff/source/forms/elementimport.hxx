@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 14:00:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 09:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,26 @@ namespace xmloff
     };
 
     //=====================================================================
+    //= OTextLikeImport
+    //=====================================================================
+    /** A specialized version of the <type>OControlImport</type> class, which handles
+        text like controls which have the convert-empty-to-null attribute</p>
+    */
+    class OTextLikeImport : public OControlImport
+    {
+    public:
+        OTextLikeImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+        // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+    };
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
@@ -395,6 +415,8 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
@@ -603,6 +625,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/28 14:00:56  fs
+ *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
+ *
  *  Revision 1.9  2001/03/28 12:26:53  fs
  *  #85391# corrected OComboItemImport
  *
