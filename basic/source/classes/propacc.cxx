@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 11:55:40 $
+ *  last change: $Author: ab $ $Date: 2002-04-29 11:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,7 @@ using namespace rtl;
 //========================================================================
 
 // Deklaration Konvertierung von Sbx nach Uno mit bekannter Zielklasse
-Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetClass );
-Reference<XIdlClass> TypeToIdlClass( const Type& rType );
+Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
 
 //========================================================================
 
@@ -427,7 +426,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     {
         // PropertyValues setzen
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
-                TypeToIdlClass( getCppuType( (Sequence<PropertyValue>*)0 ) ) );
+                getCppuType( (Sequence<PropertyValue>*)0 ) );
         Sequence<PropertyValue> *pArg =
                 (Sequence<PropertyValue>*) aArgAsAny.getValue();
         Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
