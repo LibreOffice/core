@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellatr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:28:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion) const;
 
     inline SwTblBoxNumFormat& operator=( const SwTblBoxNumFormat& rAttr )
     {
@@ -115,9 +112,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion) const;
 
     // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
@@ -147,9 +141,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion) const;
 
     inline SwTblBoxValue& operator=( const SwTblBoxValue& rCmp )
     {
