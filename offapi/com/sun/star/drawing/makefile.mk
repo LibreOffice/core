@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
+#   last change: $Author: cl $ $Date: 2000-11-20 14:22:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/drawing
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    BoundVolume.idl\
     Alignment.idl\
     AreaShape.idl\
     AreaShapeDescriptor.idl\
