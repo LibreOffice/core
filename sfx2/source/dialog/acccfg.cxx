@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,33 +62,16 @@
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#ifndef VCL
-#ifndef _FILDLG_HXX //autogen
-#include <vcl/fildlg.hxx>
-#endif
-#else
-#ifndef _SV_FILEDLG_HXX //autogen
-#include <svtools/filedlg.hxx>
-#endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
-#endif
-#endif
+
+#include <so3/svstor.hxx>
+
 #pragma hdrstop
 
 #include "cfg.hxx"
-
+#include "viewfrm.hxx"
+#include "viewsh.hxx"
 #include "dialog.hrc"
 #include "cfg.hrc"
-
-#ifdef MAC
-#ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
-#endif
-#endif
-
 #include "app.hxx"
 #include "msg.hxx"
 #include "msgpool.hxx"
@@ -367,9 +350,9 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aLoadButton         ( this, ResId( BTN_LOAD ) ),
     aSaveButton         ( this, ResId( BTN_SAVE ) ),
     aResetButton        ( this, ResId( BTN_RESET   ) ),
-    pMgr( SFX_APP()->GetAcceleratorManager() ),
-    bModified(FALSE),
-    bDefault( pMgr->IsDefault() )
+    pMgr( 0 ),
+    bModified( FALSE ),
+    bDefault( TRUE )
 {
     FreeResource();
 
@@ -406,12 +389,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
 //  aEntriesBox.SetFont( SFX_APP()->GetAppFont() );
     aEntriesBox.SetSpaceBetweenEntries( 0 );
     aEntriesBox.SetDragDropMode(0);
-    Init();
-
     aGroupLBox.SetFunctionListBox( &aFunctionBox );
-    aGroupLBox.Init();
-    aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-    aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
 }
 
 void SfxAcceleratorConfigPage::Init()
@@ -442,21 +420,24 @@ void SfxAcceleratorConfigPage::Init()
     SvFileStream aFile( "c:\\accel.log", STREAM_STD_WRITE );
 #endif
 
-    BOOL bItem = pMgr->FirstItem();
-    while ( bItem )
+    const SfxAcceleratorItemList& rItems = pMgr->GetItems();
+    std::vector< SfxAcceleratorConfigItem>::const_iterator p;
+    for ( p = rItems.begin(); p != rItems.end(); p++ )
     {
-        // F"ur alle Eintr"age, die in der Konfiguration enthalten sind, den Funktionsnamen und Hilfetext holen
-        USHORT nPos = KeyCodeToPos( pMgr->GetKeyCode() );
+        SfxAcceleratorConfigItem aItem( *p );
+        USHORT nId = aItem.nId;
+
+        USHORT nPos = KeyCodeToPos( aItem.nCode ? KeyCode( aItem.nCode, aItem.nModifier ) : KeyCode( aItem.nModifier) );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             USHORT nCol = aEntriesBox.TabCount() - 1;
             String aText ('[');
-            aText += SFX_SLOTPOOL().GetSlotName_Impl( pMgr->GetId() );
+            aText += SFX_SLOTPOOL().GetSlotName_Impl( nId );
             aText += ']';
             aEntriesBox.SetEntryText( aText, nPos, nCol );
-            aAccelArr[ nPos ] = pMgr->GetId();
+            aAccelArr[ nPos ] = nId;
             SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
-            pEntry->SetId( pMgr->GetId() );
+            pEntry->SetId( nId );
 
 #ifdef MBA_PUT_ITEMS
             KeyCode aCode = pMgr->GetKeyCode();
@@ -468,8 +449,6 @@ void SfxAcceleratorConfigPage::Init()
             aFile << aText.GetStr() << '\t' << aName.GetStr() << '\n';
 #endif
         }
-
-        bItem = pMgr->NextItem();
     }
 
 //  for ( i=0; i<ACC_FUNCTIONCOUNT; i++ )
@@ -483,22 +462,21 @@ void SfxAcceleratorConfigPage::ResetConfig()
         aAccelArr[i] = 0;
 }
 
-void SfxAcceleratorConfigPage::Apply()
+void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
 {
-    if (!bModified)
+    if ( !bModified )
         return;
 
     if ( bDefault )
     {
-        pMgr->UseDefault();
-        pMgr->SetDefault(TRUE);
+        pAccMgr->UseDefault();
+        pAccMgr->SetDefault(TRUE);
         bModified = FALSE;
         return;
     }
 
     bModified = FALSE;
 
-//(mba)/task    SfxWaitCursor aWait;
     SvUShorts aListOfIds;
 
     // zaehlen
@@ -510,18 +488,20 @@ void SfxAcceleratorConfigPage::Apply()
             ++nCount;
     }
 
-    BOOL bItem = pMgr->FirstItem();
-    while ( bItem )
+    const SfxAcceleratorItemList& rItems = pMgr->GetItems();
+    std::vector< SfxAcceleratorConfigItem>::const_iterator p;
+    for ( p = rItems.begin(); p != rItems.end(); p++ )
     {
+        SfxAcceleratorConfigItem aItem( *p );
+        USHORT nId = aItem.nId;
+
         // Macro-Eintraege referenzieren, da sie sonst beim Clear eventuell
         // entfernt werden koennten !
-
-        if ( SfxMacroConfig::IsMacroSlot( pMgr->GetId() ) )
-            aListOfIds.Insert(pMgr->GetId(), aListOfIds.Count());
-        bItem = pMgr->NextItem();
+        if ( SfxMacroConfig::IsMacroSlot( nId ) )
+            aListOfIds.Insert( nId, aListOfIds.Count() );
     }
 
-    pMgr->Reset(nCount);
+    pAccMgr->Reset(nCount);
 
     // Liste von hinten durchgehen, damit logische Acceleratoren Vorrang
     // vor physikalischen haben.
@@ -541,14 +521,14 @@ void SfxAcceleratorConfigPage::Apply()
                     SFX_APP()->GetMacroConfig()->RegisterSlotId(aAccelArr[i-1]);
             }
 
-            pMgr->AppendItem( aAccelArr[i-1], PosToKeyCode( i-1 ) );
+            pAccMgr->AppendItem( aAccelArr[i-1], PosToKeyCode( i-1 ) );
         }
     }
 
     for (i=0; i<aListOfIds.Count(); i++)
         SFX_APP()->GetMacroConfig()->ReleaseSlotId(aListOfIds[i]);
 
-    pMgr->Reconfigure();
+    pAccMgr->Reconfigure();
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
@@ -557,31 +537,61 @@ IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
         WB_OPEN | WB_STDMODAL | WB_3DLOOK, String( SfxResId( STR_LOADACCELCONFIG) ) );
     if ( aCfgName.Len() )
     {
-//(mba)/task        SfxWaitCursor aWait;
-
+        GetTabDialog()->EnterWait();
         BOOL bCreated = FALSE;
-        SfxConfigManager *pCfgMgr =
-            SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
-        SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
-        if (pOldCfgMgr != pCfgMgr)
+        SfxObjectShellRef xDoc;
+
+        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+        if ( pCfgMgr->GetURL() != aCfgName )
         {
-            if (pCfgMgr->HasConfigItem(pMgr->GetType()))
+            // it was not the global configuration manager
+            // first check if URL points to a document already loaded
+            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+            if ( !xDoc.Is() )
+                // try to load a document from the URL
+                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+            if ( xDoc.Is() )
             {
-                pMgr->ReInitialize(pCfgMgr);
-                aEntriesBox.SetUpdateMode(FALSE);
-                ResetConfig();
-                Init();
-                aEntriesBox.SetUpdateMode(TRUE);
-                aEntriesBox.Invalidate();
-                aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-                pMgr->ReInitialize(pOldCfgMgr);
-                bDefault = FALSE;
-                bModified = TRUE;
+                // get config manager, force creation if there was none before
+                pCfgMgr = xDoc->GetConfigManager( TRUE );
+            }
+            else
+            {
+                // URL doesn't point to a document, must be a single storage
+                bCreated = TRUE;
+                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_READ );
+                if ( xStor->GetError() == ERRCODE_NONE )
+                    pCfgMgr = new SfxConfigManager( xStor );
+                else
+                    pCfgMgr = NULL;
             }
         }
 
-        if ( bCreated )
-            delete pCfgMgr;
+        if ( pCfgMgr )
+        {
+            // create new AcceleratorManager and read configuration
+            // constructing with a SfxConfigManager reads in configuration
+            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
+
+            // put new configuration into TabPage
+            SfxAcceleratorManager* pOld = pMgr;
+            pMgr = pAccMgr;
+            aEntriesBox.SetUpdateMode( FALSE );
+            ResetConfig();
+            Init();
+            aEntriesBox.SetUpdateMode( TRUE );
+            aEntriesBox.Invalidate();
+            aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
+            bDefault = FALSE;
+            bModified = TRUE;
+            pMgr = pOld;
+
+            delete pAccMgr;
+            if ( bCreated )
+                delete pCfgMgr;
+        }
+
+        GetTabDialog()->LeaveWait();
     }
 
     return 0;
@@ -593,54 +603,66 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
         WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String( SfxResId( STR_SAVEACCELCONFIG) ) );
     if ( aCfgName.Len() )
     {
-//(mba)/task        SfxWaitCursor aWait;
-
+        GetTabDialog()->EnterWait();
         BOOL bCreated = FALSE;
-        SfxConfigManager *pCfgMgr =
-            SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
+        BOOL bLoadedDocument = FALSE;
+        SfxObjectShellRef xDoc;
 
-        if ( pCfgMgr == SfxObjectShell::Current()->GetConfigManager() )
+        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+        if ( pCfgMgr->GetURL() != aCfgName )
         {
-            pCfgMgr->Activate(SFX_CFGMANAGER());
-            pMgr->Connect(pCfgMgr);
-            pCfgMgr->AddConfigItem(pMgr);
-        }
-
-        SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
-        if (pOldCfgMgr != pCfgMgr)
-        {
-            pMgr->StoreConfig();
-            pMgr->Connect(pCfgMgr);
-            pCfgMgr->AddConfigItem(pMgr);
-            BOOL bMod = bModified;
-            BOOL bItemModified = pMgr->IsModified();
-            Apply();
-            pMgr->SetModified( TRUE );
-            pCfgMgr->StoreConfig();
-            pMgr->ReInitialize(pOldCfgMgr);
-            pMgr->SetModified( bItemModified );
-            bModified = bMod;
-
-            if (bCreated)
+            // it was not the global configuration manager
+            // first check if URL points to a document already loaded
+            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+            if ( xDoc.Is() )
+                bLoadedDocument = TRUE;
+            else
+                // try to load a document from the URL
+                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+            if ( xDoc.Is() )
             {
-                pCfgMgr->SetModified( TRUE );
-                pCfgMgr->SaveConfig();
-#ifdef MAC
-                SvEaMgr aEaMgr(aCfgName);
-                aEaMgr.SetFileType("Pref");
-#endif
+                // get config manager, force creation if there was none before
+                pCfgMgr = xDoc->GetConfigManager( TRUE );
             }
-
+            else
+            {
+                // URL doesn't point to a document, must be a single storage
+                bCreated = TRUE;
+                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_WRITE, STORAGE_TRANSACTED );
+                if ( xStor->GetError() == ERRCODE_NONE )
+                    pCfgMgr = new SfxConfigManager( xStor );
+                else
+                    pCfgMgr = NULL;
+            }
         }
-        else
+
+        if ( pCfgMgr )
         {
-            Apply();
-            pMgr->SetModified( TRUE );
-            pCfgMgr->StoreConfig();
+            // create new AcceleratorManager and apply changes
+            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
+            Apply( pAccMgr );
+            pAccMgr->SetModified( TRUE );
+            pCfgMgr->StoreConfigItem( *pAccMgr );
+            if ( !bLoadedDocument )
+                pCfgMgr->StoreConfiguration();
+            delete pAccMgr;
+            if ( bCreated )
+                delete pCfgMgr;
+            else
+                pCfgMgr->ReInitialize( pMgr->GetType() );
+
+            // perhaps the document must get a new accelerator manager ! This will automatically be created
+            // when GetAccMgr_Impl() is called on a document that has a configuration in its storage
+            if ( bLoadedDocument )
+            {
+                if ( xDoc->GetAccMgr_Impl()->GetConfigManager() != pCfgMgr )
+                    // config item has global configuration until now, must be changed
+                    // is impossible in the current implementation !
+                    xDoc->GetAccMgr_Impl()->GetConfigManager()->ReConnect( pMgr->GetType(), pCfgMgr );
+            }
         }
 
-        if (bCreated)
-            delete pCfgMgr;
+        GetTabDialog()->LeaveWait();
     }
 
     return 0;
@@ -648,19 +670,21 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
 
 IMPL_LINK( SfxAcceleratorConfigPage, Default, PushButton *, pPushButton )
 {
-    SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
+    // creating a ConfigItem without ConfigManager forces it to use its default
+    SfxAcceleratorManager aMgr( *pMgr, NULL );
+
+    SfxAcceleratorManager* pOld = pMgr;
+    pMgr = &aMgr;
     bDefault = TRUE;
-    bModified = !pMgr->IsDefault();
-    pMgr->StoreConfig();
-    pMgr->ReleaseConfigManager();
-    pMgr->UseDefault();
+    bModified = !pOld->IsDefault();
     aEntriesBox.SetUpdateMode(FALSE);
     ResetConfig();
     Init();
     aEntriesBox.SetUpdateMode(TRUE);
     aEntriesBox.Invalidate();
     aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-    pMgr->ReInitialize(pOldCfgMgr);
+    pMgr = pOld;
+
     return 0;
 }
 
@@ -853,7 +877,7 @@ BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     if ( bModified )
     {
-        Apply();
+        Apply( pMgr );
         bModified = FALSE;
         pMgr->StoreConfig();
         return TRUE;
@@ -863,6 +887,18 @@ BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 
 void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
 {
+    if ( !pMgr )
+    {
+        pMgr = GetTabDialog()->GetViewFrame()->GetViewShell()->GetAccMgr_Impl();
+        if ( !pMgr )
+            pMgr = SFX_APP()->GetAppAccel_Impl();
+
+        bDefault = pMgr->IsDefault();
+        Init();
+        aGroupLBox.Init();
+        aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
+        aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
+    }
 }
 
 

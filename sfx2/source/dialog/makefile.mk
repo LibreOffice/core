@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: os $ $Date: 2001-05-17 11:34:58 $
+#   last change: $Author: mba $ $Date: 2001-06-11 09:59:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,10 +79,10 @@ IMGLST_SRS=$(SRS)$/dialog.srs
 BMP_IN=$(PRJ)$/win/res
 
 SLOFILES =\
+        $(SLO)$/cfg.obj				\
         $(SLO)$/about.obj			\
         $(SLO)$/acccfg.obj			\
         $(SLO)$/basedlgs.obj		\
-        $(SLO)$/cfg.obj				\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\

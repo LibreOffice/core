@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+#   last change: $Author: mba $ $Date: 2001-06-11 09:55:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,8 @@ SRCFILES =  \
         config.src
 
 SLOFILES =	\
-        $(SLO)$/saveopt.obj \
         $(SLO)$/cfgmgr.obj \
+        $(SLO)$/cfgimex.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/misccfg.obj \
         $(SLO)$/evntconf.obj

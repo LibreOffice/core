@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 11:36:44 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ void SfxEventConfiguration::ExecuteEvent(
                         const String aTemplFileName( rDocInfo.GetTemplateFileName() );
                         SvStorageRef aStor = new SvStorage( aTemplFileName );
                         if ( SVSTREAM_OK == aStor->GetError() )
-                            pDoc->GetConfigManager()->SaveConfig( aStor );
+                            pDoc->GetConfigManager()->StoreConfiguration( aStor );
                     }
                 }
 
@@ -516,15 +516,15 @@ const SfxMacroInfo* SfxEventConfiguration::GetMacroInfo
 SfxEventConfigItem_Impl::SfxEventConfigItem_Impl( USHORT nConfigId,
     SfxEventConfiguration *pCfg,
     SfxObjectShell *pObjSh)
-    : SfxConfigItem( nConfigId )
+    : SfxConfigItem( nConfigId, pObjSh ? pObjSh->GetConfigManager() : SFX_APP()->GetConfigManager_Impl() )
     , aMacroTable( 2, 2 )
     , pEvConfig( pCfg )
     , pObjShell( pObjSh )
 {
-    SetInternal(TRUE);
-    SetIndividual(TRUE);
+    Initialize();
 }
 
+/*
 void SfxEventConfigItem_Impl::Init( SfxConfigManager *pMgr )
 {
     if ( GetConfigManager() == pMgr )
@@ -532,6 +532,7 @@ void SfxEventConfigItem_Impl::Init( SfxConfigManager *pMgr )
     else
         ReInitialize( pMgr );
 }
+*/
 
 //==========================================================================
 
@@ -576,7 +577,7 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
         USHORT i;
         for (i=0; i<nCount; i++)
         {
-            SfxMacroInfo aInfo( GetConfigManager_Impl()->GetObjectShell() );
+            SfxMacroInfo aInfo( GetConfigManager()->GetObjectShell() );
             rStream >> nId >> aInfo;
 
             USHORT nCount = aSlotArray.Count();
@@ -637,16 +638,9 @@ BOOL SfxEventConfigItem_Impl::Store(SvStream& rStream)
 
 //==========================================================================
 
-BOOL SfxEventConfigItem_Impl::Reconfigure(SvStream& rStream, BOOL bDefault)
+String SfxEventConfigItem_Impl::GetStreamName() const
 {
-    return SfxConfigItem::Reconfigure(rStream, bDefault);
-}
-
-//==========================================================================
-
-String SfxEventConfigItem_Impl::GetName() const
-{
-    return String(SfxResId(STR_EVENTCONFIG));
+    return SfxConfigItem::GetStreamName( GetType() );
 }
 
 //==========================================================================
@@ -657,8 +651,27 @@ void SfxEventConfigItem_Impl::UseDefault()
     bAlwaysWarning = FALSE;
 
     aMacroTable.DelDtor();
-    SfxConfigItem::UseDefault();
+    SetDefault( TRUE );
 }
+
+int SfxEventConfigItem_Impl::Load( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxEventConfigItem_Impl::GetStreamName(), STREAM_STD_READ );
+    if ( xStream->GetError() )
+        return SfxConfigItem::ERR_READ;
+    else
+        return Load( *xStream );
+}
+
+BOOL SfxEventConfigItem_Impl::Store( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxEventConfigItem_Impl::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
+    if ( xStream->GetError() )
+        return FALSE;
+    else
+        return Store( *xStream );
+}
+
 
 //==========================================================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-18 15:27:02 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,13 @@
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
-#endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
+#include <so3/svstor.hxx>
+
 #pragma hdrstop
 
 #include "cfg.hxx"
@@ -894,8 +891,9 @@ SfxTabPage *CreateEventConfigPage( Window *pParent, const SfxItemSet& rSet )
     return new SfxEventConfigPage( pParent, rSet );
 }
 
-SfxConfigDialog::SfxConfigDialog( Window * pParent, const SfxItemSet* pSet )
-    : SfxTabDialog( pParent, SfxResId( DLG_CONFIG ), pSet )
+SfxConfigDialog::SfxConfigDialog( Window * pParent, const SfxItemSet* pSet, SfxViewFrame* pFrame )
+    : SfxTabDialog( pFrame, pParent, SfxResId( DLG_CONFIG ), pSet )
+    , pViewFrame( pFrame )
     , pMacroInfo( 0 )
     , nObjectBar( 0 )
 {
@@ -914,7 +912,11 @@ SfxConfigDialog::~SfxConfigDialog()
 
 short SfxConfigDialog::Ok()
 {
-    return SfxTabDialog::Ok();
+    USHORT nRet = SfxTabDialog::Ok();
+
+    // configurations in documents are stored with the documents
+    SFX_APP()->GetConfigManager_Impl()->StoreConfiguration();
+    return nRet;
 }
 
 // SfxStatusBarConfigPage::Ctor() **********************************************
@@ -933,26 +935,10 @@ SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSe
 {
     FreeResource();
 
-    SfxViewFrame* pCurrent = SfxViewFrame::Current();
-    while ( pCurrent->GetParentViewFrame_Impl() )
-        pCurrent = pCurrent->GetParentViewFrame_Impl();
-
-    pMgr = pCurrent->GetFrame()->GetWorkWindow_Impl()->GetStatusBarManager_Impl();
-    if ( !pMgr )
-    {
-        bMgrCreated = TRUE;
-        pMgr = new SfxStatusBarManager( this, pCurrent->GetBindings(), SFX_APP() );
-    }
-
     aLoadButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Load      ) );
     aSaveButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Save      ) );
     aResetButton .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Default      ) );
-
-    // aEntriesBox initialisieren
-    aEntriesBox.bDefault = pMgr->IsDefault();
-//(mba)/task    SfxWaitCursor aWait;
-
-    aEntriesBox.SetSelectHdl( LINK(this,SfxStatusBarConfigPage, SelectHdl));
+    aEntriesBox  .SetSelectHdl( LINK(this,SfxStatusBarConfigPage, SelectHdl));
     USHORT nGroup = 0;
     String aGroupName = SFX_SLOTPOOL().SeekGroup(nGroup);
 
@@ -980,9 +966,6 @@ SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSe
 
         aGroupName = SFX_SLOTPOOL().SeekGroup(++nGroup);
     }
-
-    aEntriesBox.bDefault = pMgr->IsDefault();
-    Init();
 }
 
 void SfxStatusBarConfigPage::Init()
@@ -1032,11 +1015,7 @@ void SfxStatusBarConfigPage::ResetConfig()
 SfxStatusBarConfigPage::~SfxStatusBarConfigPage()
 {
     if ( bMgrCreated )
-    {
-        StatusBar *pBar = pMgr->GetStatusBar();
         delete pMgr;
-    }
-
     ResetConfig();
 }
 
@@ -1046,47 +1025,52 @@ IMPL_LINK( SfxStatusBarConfigPage, SelectHdl, SvTreeListBox *, pBox )
 }
 
 
-void SfxStatusBarConfigPage::Apply()
+void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr )
 {
+    if ( !pStbMgr )
+        return;
+
     if (!aEntriesBox.bModified)
         return;
 
     if ( aEntriesBox.bDefault )
     {
-        pMgr->UseDefault();
-        pMgr->SetDefault(TRUE);
+        pStbMgr->UseDefault();
+        pStbMgr->SetDefault(TRUE);
         return;
     }
 
-//(mba)/task    SfxWaitCursor aWait;
-    pMgr->Clear();
+    pStbMgr->Clear();
     long nWidth = 100;
 
-    for (SvLBoxEntry *pEntry = aEntriesBox.First(); pEntry; pEntry = aEntriesBox.Next(pEntry))
+    for ( SvLBoxEntry *pEntry = aEntriesBox.First(); pEntry; pEntry = aEntriesBox.Next(pEntry) )
     {
         if (aEntriesBox.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED)
         {
             USHORT nId =
                 ((SfxStatBarInfo_Impl*) pEntry->GetUserData())->nId;
-            pMgr->AddItem(nId, nWidth);
+            pStbMgr->AddItem(nId, nWidth);
         }
     }
 }
 
 IMPL_LINK( SfxStatusBarConfigPage, Default, PushButton *, pPushButton )
 {
-    SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
+    // creating a ConfigItem without ConfigManager forces it to use its default
+    SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, NULL );
+    SfxStatusBarManager* pOld = pMgr;
+    pMgr = pStbMgr;
+
     aEntriesBox.bDefault = TRUE;
-    aEntriesBox.bModified = !pMgr->IsDefault();
-    pMgr->StoreConfig();
-    pMgr->ReleaseConfigManager();
-    pMgr->UseDefault();
+    aEntriesBox.bModified = !pOld->IsDefault();
     aEntriesBox.SetUpdateMode(FALSE);
     ResetConfig();
     Init();
     aEntriesBox.SetUpdateMode(TRUE);
     aEntriesBox.Invalidate();
-    pMgr->ReInitialize(pOldCfgMgr);
+
+    pMgr = pOld;
+    delete pStbMgr;
     return 0;
 }
 
@@ -1096,33 +1080,72 @@ IMPL_LINK( SfxStatusBarConfigPage, Load, Button *, pButton )
         WB_OPEN | WB_STDMODAL | WB_3DLOOK, String( SfxResId( STR_LOADSTATBARCONFIG) ) );
     if ( aCfgName.Len() )
     {
-//(mba)/task    SfxWaitCursor aWait;
-
+        GetTabDialog()->EnterWait();
         BOOL bCreated = FALSE;
-        SfxConfigManager *pCfgMgr =
-            SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
-        SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
-        if ( pOldCfgMgr != pCfgMgr )
+        BOOL bLoadedDocument = FALSE;
+        SfxObjectShellRef xDoc;
+
+        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+        if ( pCfgMgr->GetURL() != aCfgName )
         {
-            if ( pCfgMgr->HasConfigItem( pMgr->GetType() ) )
+            // it was not the global configuration manager
+            // first check if URL points to a document already loaded
+            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+            if ( xDoc.Is() )
+                bLoadedDocument = TRUE;
+            else
+                // try to load a document from the URL
+                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+            if ( xDoc.Is() )
             {
-                pMgr->ReInitialize( pCfgMgr );
-                aEntriesBox.SetUpdateMode( FALSE );
-                ResetConfig();
-                Init();
-                aEntriesBox.SetUpdateMode( TRUE );
-                aEntriesBox.Invalidate();
-                pMgr->ReInitialize( pOldCfgMgr );
-                aEntriesBox.bDefault = FALSE;
-                aEntriesBox.bModified = TRUE;
+                // get config manager, force creation if there was none before
+                pCfgMgr = xDoc->GetConfigManager( TRUE );
+            }
+            else
+            {
+                // URL doesn't point to a document, must be a single storage
+                bCreated = TRUE;
+                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_READ );
+                if ( xStor->GetError() == ERRCODE_NONE )
+                    pCfgMgr = new SfxConfigManager( xStor );
+                else
+                    pCfgMgr = NULL;
             }
         }
 
-        if ( bCreated )
-            delete pCfgMgr;
+        if ( pCfgMgr )
+        {
+            // create new StatusBarManager and read configuration
+            // constructing with a SfxConfigManager reads in configuration
+            SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
+
+            // put new configuration into TabPage
+            SfxStatusBarManager* pOld = pMgr;
+            pMgr = pStbMgr;
+            aEntriesBox.SetUpdateMode( FALSE );
+            ResetConfig();
+            Init();
+            aEntriesBox.SetUpdateMode( TRUE );
+            aEntriesBox.Invalidate();
+            aEntriesBox.bDefault = FALSE;
+            aEntriesBox.bModified = TRUE;
+            pMgr = pOld;
+
+            delete pStbMgr;
+            if ( bCreated )
+                delete pCfgMgr;
+            else
+                pCfgMgr->ReInitialize( pMgr->GetType() );
+
+            if ( bLoadedDocument && !xDoc->GetConfigManager()->HasConfigItem( pMgr->GetType() ) )
+                // config item has global configuration until now, must be changed
+                pMgr->GetConfigManager()->ReConnect( pMgr->GetType(), pCfgMgr );
+        }
+
+        GetTabDialog()->LeaveWait();
     }
 
-    return 0;
+    return TRUE;
 }
 
 IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
@@ -1131,59 +1154,55 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
         WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String( SfxResId( STR_SAVESTATBARCONFIG) ) );
     if ( aCfgName.Len() )
     {
-//(mba)/task    SfxWaitCursor aWait;
-
+        GetTabDialog()->EnterWait();
         BOOL bCreated = FALSE;
-        SfxConfigManager *pCfgMgr =
-            SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
+        SfxObjectShellRef xDoc;
 
-        if ( pCfgMgr == SfxObjectShell::Current()->GetConfigManager() )
+        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+        if ( pCfgMgr->GetURL() != aCfgName )
         {
-            pCfgMgr->Activate(SFX_CFGMANAGER());
-            pMgr->Connect(pCfgMgr);
-            pCfgMgr->AddConfigItem(pMgr);
-        }
-
-        SfxConfigManager *pOldCfgMgr = pMgr->GetConfigManager_Impl();
-        if (pOldCfgMgr != pCfgMgr)
-        {
-            pMgr->StoreConfig();
-            pMgr->Connect( pCfgMgr );
-            pCfgMgr->AddConfigItem( pMgr );
-            BOOL bMod = aEntriesBox.bModified;
-            pMgr->GetStatusBar()->SetUpdateMode( FALSE );
-            BOOL bItemModified = pMgr->IsModified();
-            Apply();
-            pMgr->SetModified( TRUE );
-            pCfgMgr->StoreConfig();
-            pMgr->ReInitialize( pOldCfgMgr );
-            pMgr->SetModified( bItemModified );
-            pMgr->GetStatusBar()->SetUpdateMode( TRUE );
-            aEntriesBox.bModified = bMod;
-
-            if ( bCreated )
+            // it was not the global configuration manager
+            // first check if URL points to a document already loaded
+            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+            if ( !xDoc.Is() )
+                // try to load a document from the URL
+                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+            if ( xDoc.Is() )
             {
-                pCfgMgr->SetModified( TRUE );
-                pCfgMgr->SaveConfig();
-#ifdef MAC
-                SvEaMgr aEaMgr( aCfgName );
-                aEaMgr.SetFileType( "Pref" );
-#endif
+                // get config manager, force creation if there was none before
+                pCfgMgr = xDoc->GetConfigManager( TRUE );
+            }
+            else
+            {
+                // URL doesn't point to a document, must be a single storage
+                bCreated = TRUE;
+                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_WRITE, STORAGE_TRANSACTED );
+                if ( xStor->GetError() == ERRCODE_NONE )
+                    pCfgMgr = new SfxConfigManager( xStor );
+                else
+                    pCfgMgr = NULL;
             }
         }
-        else
+
+        if ( pCfgMgr )
         {
-            Apply();
-            pMgr->SetModified( TRUE );
-            pCfgMgr->StoreConfig();
+            // create new StatusBarManager and apply changes
+            SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
+            Apply( pStbMgr );
+            pStbMgr->SetModified( TRUE );
+            pCfgMgr->StoreConfigItem( *pStbMgr );
+            pCfgMgr->StoreConfiguration();
+
+            delete pStbMgr;
+            if ( bCreated )
+                delete pCfgMgr;
         }
 
-        if ( bCreated )
-            delete pCfgMgr;
+        GetTabDialog()->LeaveWait();
     }
-    return 0;
-}
 
+    return TRUE;
+}
 
 SfxStatusBarConfigListBox::SfxStatusBarConfigListBox( Window* pParent, const ResId& rResId)
  : SvTreeListBox(pParent, rResId)
@@ -1304,35 +1323,47 @@ BOOL SfxStatusBarConfigPage::FillItemSet( SfxItemSet& )
 {
     if ( aEntriesBox.bModified )
     {
-        Apply();
+        Apply( pMgr );
         aEntriesBox.bModified = FALSE;
         pMgr->StoreConfig();
         return TRUE;
     }
+
     return FALSE;
 }
 
 void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
 {
+    if ( !pMgr )
+    {
+        SfxViewFrame* pCurrent = GetTabDialog()->GetViewFrame();
+        while ( pCurrent->GetParentViewFrame_Impl() )
+            pCurrent = pCurrent->GetParentViewFrame_Impl();
+
+        SfxWorkWindow* pWorkWin = pCurrent->GetFrame()->GetWorkWindow_Impl();
+        pMgr = pWorkWin->GetStatusBarManager_Impl();
+        if ( !pMgr )
+        {
+            pMgr = pWorkWin->MakeStatusBarManager_Impl( TRUE );
+            bMgrCreated = TRUE;
+        }
+
+        aEntriesBox.bDefault = pMgr->IsDefault();
+        Init();
+    }
 }
 
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
-    SfxSimpleFileDialog aFileDlg( pParent, nBits );
+    SfxFileDialog aFileDlg( pParent, nBits );
     aFileDlg.SetText( rTitle );
-#ifdef MAC
-    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("Pref.cfg") );
-#else
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
-#endif
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
     INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath() );
     aFilePath.setFinalSlash();
     String aCfgName = aFilePath.PathToFileName();
-#ifndef MAC
     aCfgName += DEFINE_CONST_UNICODE( "*.cfg" );
     aFileDlg.SetDefaultExt( DEFINE_CONST_UNICODE( "cfg" ) );
-#endif
 
     aFileDlg.SetPath( aCfgName );
     if ( aFileDlg.Execute() )
@@ -1340,34 +1371,4 @@ String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const S
     else
         return String();
 }
-
-SfxConfigManager* SfxConfigDialog::MakeCfgMgr_Impl( const String& rName, BOOL& bCreated )
-{
-    // Zuerst feststellen, ob der Storage schon in Benutzung ist
-    bCreated = FALSE;
-    SfxObjectShell *pDoc = SFX_APP()->DocAlreadyLoaded( rName, TRUE, TRUE );
-    SfxConfigManager *pCfgMgr = 0;
-    if ( !pDoc )
-    {
-        if ( rName != SfxConfigManager::GetDefaultName() )
-        {
-            pCfgMgr = new SfxConfigManager( rName );
-            bCreated = TRUE;
-        }
-        else
-            pCfgMgr = SFX_APP()->GetAppConfigManager_Impl();
-    }
-    else
-    {
-        pCfgMgr = pDoc->GetConfigManager();
-        if ( !pCfgMgr )
-        {
-            pCfgMgr = new SfxConfigManager( 0, SFX_CFGMANAGER() );
-            pDoc->SetConfigManager( pCfgMgr );
-        }
-    }
-
-    return pCfgMgr;
-}
-
 
