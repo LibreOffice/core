@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:37:34 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_POSITIONX,              "PositionX");
     PCR_CONSTASCII_STRING( PROPERTY_POSITIONY,              "PositionY");
     PCR_CONSTASCII_STRING( PROPERTY_STEP,                   "Step");
+    PCR_CONSTASCII_STRING( PROPERTY_WORDLINEMODE,           "FontWordLineMode");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -257,6 +258,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/07 14:37:34  tbe
+ *  added step property
+ *
  *  Revision 1.4  2001/02/22 09:32:45  tbe
  *  added properties for dialog controls
  *
