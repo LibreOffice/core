@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:29:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,8 +607,13 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (!pDoc)
             throw RuntimeException();
         String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex < aTxt.Len()))
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // #108812# aTxt.Len() is valid
             throw IndexOutOfBoundsException();
+
+        // #108812# find a reasonable rectangle for position aTxt.Len().
+        bool bWasBehindText = (nIndex == aTxt.Len());
+        if (bWasBehindText && nIndex)
+            --nIndex;
 
         const SmNode *pTree = pDoc->GetFormulaTree();
         const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( (xub_StrLen) nIndex );
@@ -652,6 +657,10 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aRes.Height = aSize.Height();
             }
         }
+
+        // #108812# take rectangle from last character and move it to the right
+        if (bWasBehindText)
+            aRes.X += aRes.Width;
     }
 
     return aRes;
