@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:41:49 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,26 @@ String RID_STR_LIBISREADONLY
 {
     Text = "Diese Bibliothek ist schreibgeschόtzt.";
     Text [ English ] = "This library is readonly." ;
+    Text[ english_us ] = "This library is read-only.";
+    Text[ portuguese ] = "This library is readonly.";
+    Text[ russian ] = "This library is readonly.";
+    Text[ greek ] = "This library is readonly.";
+    Text[ dutch ] = "This library is readonly.";
+    Text[ french ] = "Cette bibliothθque est en lecture seule.";
+    Text[ spanish ] = "This library is readonly.";
+    Text[ finnish ] = "This library is readonly.";
+    Text[ italian ] = "This library is readonly.";
+    Text[ danish ] = "This library is readonly.";
+    Text[ swedish ] = "Det hδr biblioteket δr skrivskyddat.";
+    Text[ polish ] = "This library is readonly.";
+    Text[ portuguese_brazilian ] = "This library is readonly.";
+    Text[ japanese ] = "γ“γ®οΎ—ο½²οΎοΎοΎ—οΎγ―ζ›ΈγθΎΌγΏδΏθ­·γ•γ‚γ¦γ„γΎγ™γ€‚";
+    Text[ korean ] = "This library is readonly.";
+    Text[ chinese_simplified ] = "θΏ™δΈªη¨‹εΊη±»ζ―ι²ζ”Ήε†™η„γ€‚";
+    Text[ chinese_traditional ] = "η¨‹εΌι΅ζ―ε”―θ®€η„γ€‚";
+    Text[ turkish ] = "This library is readonly.";
+    Text[ arabic ] = "This library is readonly.";
+    Text[ catalan ] = "This library is readonly.";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -592,7 +612,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ dutch ] = "Er werd tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?";
     Text[ chinese_simplified ] = "ε·²η»ζε―»θ‡³ζ€εδΈ€δΈªζ¨΅ε—γ€‚θ¦δ»η¬¬δΈ€δΈªζ¨΅ε—εΌ€ε§‹ζε―»οΌ";
     Text[ greek ] = "Εκτελέστηκε η αναζήτηση έως τη τελευταία λειτουργική μονάδα. Θέλετε να συνεχιστεί η αναζήτηση από τη πρώτη λειτουργική μονάδα;";
-    Text[ korean ] = "λ§μ§€λ§‰ λª¨λ“κΉμ§€ μ°Ύμ•μµλ‹λ‹¤. μ²μ λª¨λ“μ—μ„ μ°ΎκΈ°λ¥Ό κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "λ§μ§€λ§‰ λª¨λ“κΉμ§€ μ°Ύμ•μµλ‹λ‹¤. μ²μ λª¨λ“μ—μ„ μ°ΎκΈ°λ¥Ό κ³„μ†ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Son modόle kadar arama tamamlandύ? Aramaya ilk modόlden devam etmek istiyor musunuz?";
     Text[ catalan ] = "S'ha completat la cerca fins a l'ϊltim mςdul. Voleu continuar des del primer?";
     Text[ finnish ] = "Haku viimeisestδ moduulista on valmis. Jatketaanko ensimmδisestδ moduulista?";
@@ -867,7 +887,7 @@ String RID_STR_QUERYDELMACRO
     Text[ dutch ] = "Wilt u de macro XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤ε® XX οΌ";
     Text[ greek ] = "Θέλετε να διαγραφεί η μακροεντολή ΧΧ;";
-    Text[ korean ] = "λ§¤ν¬λ΅XXμ„(λ¥ΌοΌ‰μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "λ§¤ν¬λ΅XXμ„(λ¥ΌοΌ‰μ‚­μ ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX makrosunu silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir la macro XX?";
     Text[ finnish ] = "Haluatko poistaa makron XX?";
@@ -895,7 +915,7 @@ String RID_STR_QUERYDELDIALOG
     Text[ dutch ] = "Wilt u de dialoog XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤ε―Ήθ― XX οΌ";
     Text[ greek ] = "Θέλετε να διαγραφεί ο διάλογος ΧΧ;";
-    Text[ korean ] = "λ€ν™”μƒμXXμ„(λ¥ΌοΌ‰μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "λ€ν™”μƒμXXμ„(λ¥ΌοΌ‰μ‚­μ ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX diyaloπunu silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir el diΰleg XX?";
     Text[ finnish ] = "Haluatko poistaa valintaikkunan XX?";
@@ -923,7 +943,7 @@ String RID_STR_QUERYDELLIB
     Text[ dutch ] = "Wilt u de bibliotheek XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤η¨‹εΊεΊ“ XX οΌ";
     Text[ greek ] = "Θέλετε να διαγραφεί η βιβλιοθήκη ΧΧ;";
-    Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ ?";
+    Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ„(λ¥Ό) μ‚­μ ν•κ² μµλ‹κΉ ?";
     Text[ turkish ] = "XX kitaplύπύnύ silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa kirjaston XX?";
@@ -951,7 +971,7 @@ String RID_STR_QUERYDELLIBREF
     Text[ dutch ] = "Wilt u de verwijzing naar de bibliotheek XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤η¨‹εΊεΊ“ XX η„εΌ•η”¨οΌ";
     Text[ greek ] = "Θέλετε να διαγραφεί η αναφορά προς τη βιβλιοθήκη ΧΧ;";
-    Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ— μλ” μ°Έμ΅°λ¥Ό μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ— μλ” μ°Έμ΅°λ¥Ό μ‚­μ ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX kitaplύπύna iliώkin referansύ silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir la referθncia a la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa viittauksen kirjastoon XX?";
@@ -979,7 +999,7 @@ String RID_STR_QUERYDELMODULE
     Text[ dutch ] = "Wilt u de module XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤ζ¨΅ε— XX οΌ";
     Text[ greek ] = "Θέλετε να διαγραφεί η λειτουργική μονάδα XX;";
-    Text[ korean ] = "λª¨λ“XXμ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ ?";
+    Text[ korean ] = "λª¨λ“XXμ„(λ¥Ό) μ‚­μ ν•κ² μµλ‹κΉ ?";
     Text[ turkish ] = "XX modόlόnό silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir el mςdul XX?";
     Text[ finnish ] = "Haluatko poistaa moduulin XX?";
@@ -1599,7 +1619,7 @@ String RID_STR_WILLSTOPPRG
     Text[ dutch ] = "U moet uw programma na deze wijziging opnieuw opstarten.\nDoorgaan?";
     Text[ chinese_simplified ] = "ζ›΄ζ”ΉδΉ‹εζ‚¨εΏ…ι΅»ι‡ζ–°ε―ε¨θΏ™δΈªη¨‹εΊγ€‚\nζ‚¨θ¦η»§η»­ε—οΌ";
     Text[ greek ] = "Μετά από αυτή την αλλαγή θα πρέπει να εκκινήσετε το πρόγραμμα ξανά.\nΣυνέχεια;";
-    Text[ korean ] = "μ΄ λ³€κ²½ ν›„,  μ‚¬μ©μμ ν”„λ΅κ·Έλ¨μ„ λ‹¤μ‹ μ‹μ‘ν•΄μ•Ό ν•©λ‹λ‹¤.\nκ³„μ†ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "μ΄ λ³€κ²½ ν›„, μ‚¬μ©μμ ν”„λ΅κ·Έλ¨μ„ λ‹¤μ‹ μ‹μ‘ν•΄μ•Ό ν•©λ‹λ‹¤.\nκ³„μ†ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu deπiώiklikten sonra programύ yeniden baώlatmanύz gerekir.\nDevam etmek istiyor musunuz?";
     Text[ catalan ] = "Haureu de reiniciar el programa desprιs d'aquesta ediciσ\nVoleu continuar?";
     Text[ finnish ] = "Ohjelma on kδynnistettδvδ uudelleen tδmδn muutoksen jδlkeen.\nJatketaanko?";
@@ -1626,7 +1646,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?";
     Text[ chinese_simplified ] = "θ¦ζ›ΏζΆδ½Ώη”¨δΈ­η„ζ¨΅ε—η„ε…¨ιƒ¨ζ–‡ε­—οΌ";
     Text[ greek ] = "Να αντικατασταθεί το κείμενο σε όλες τις τρέχουσες λειτουργικές μονάδες;";
-    Text[ korean ] = "ν™μ„±ν™”λ λª¨λ“  λª¨λ“μ—μ„ ν…μ¤νΈλ¥Ό λ€μ²΄ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "ν™μ„±ν™”λ λª¨λ“  λª¨λ“μ—μ„ ν…μ¤νΈλ¥Ό λ€μ²΄ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu metin tόm etkin modόllerde deπiώtirilsin mi?";
     Text[ catalan ] = "Voleu reemplaηar el text de tots els mςduls actius?";
     Text[ finnish ] = "Haluatko korvata tekstin kaikissa aktiivissa moduuleissa?";
@@ -1666,7 +1686,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ dutch ] = "Bewaker verwijderen";
     QuickHelpText[ chinese_simplified ] = "ιε…¥ζ¥η‹";
     QuickHelpText[ greek ] = "Κατάργηση παρατηρητή";
-    QuickHelpText[ korean ] = "κ°μ‹μγ€€μ κ±°";
+    QuickHelpText[ korean ] = "κ°μ‹μ μ κ±°!";
     QuickHelpText[ turkish ] = "Remove Watch";
     QuickHelpText[ catalan ] = "Eliminar observador";
     QuickHelpText[ finnish ] = "Poista kello";
@@ -2169,7 +2189,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ dutch ] = "Controle weergeven";
             Text[ chinese_simplified ] = "ζ¥η‹";
             Text[ greek ] = "Εμφάνιση παρατηρητή";
-            Text[ korean ] = "κ°μ‹μ λ³΄μ΄κΈ°";
+            Text[ korean ] = "κ°μ‹μ ν‘μ‹";
             Text[ turkish ] = "έzleyici ekle";
             Text[ catalan ] = "Afegeix l'observador";
             Text[ finnish ] = "Lisδδ kello";
@@ -2862,6 +2882,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
