@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 13:46:30 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,26 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
     else if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_glue_point ) ) )
     {
         addGluePoint( xAttrList );
+    }
+    else if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_thumbnail ) ) )
+    {
+        // search attributes for xlink:href
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for(sal_Int16 i=0; i < nAttrCount; i++)
+        {
+            OUString sAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+            if( nPrefix == XML_NAMESPACE_XLINK )
+            {
+                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+                {
+                    maThumbnailURL = xAttrList->getValueByIndex( i );
+                    break;
+                }
+            }
+        }
     }
     else
     {
@@ -640,6 +660,34 @@ void SdXMLShapeContext::SetLayer()
         {
         }
         DBG_ERROR( "could not attach shape to layer!" );
+    }
+}
+
+void SdXMLShapeContext::SetThumbnail()
+{
+    if( 0 == maThumbnailURL.getLength() )
+        return;
+
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if( !xPropSet.is() )
+            return;
+
+        const OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL"));
+
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sProperty ) )
+        {
+            // load the thumbnail graphic and export it to a wmf stream so we can set
+            // it at the api
+
+            const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, sal_False ) );
+            xPropSet->setPropertyValue( sProperty, uno::makeAny( aInternalURL ) );
+        }
+    }
+    catch( uno::Exception e )
+    {
     }
 }
 
@@ -2200,6 +2248,11 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     }
 }
 
+void SdXMLObjectShapeContext::EndElement()
+{
+    SetThumbnail();
+}
+
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
@@ -2327,6 +2380,8 @@ void SdXMLAppletShapeContext::EndElement()
             aAny <<= maAppletCode;
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCode" ) ), aAny );
         }
+
+        SetThumbnail();
     }
 }
 
@@ -2454,6 +2509,8 @@ void SdXMLPluginShapeContext::EndElement()
             aAny <<= maHref;
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ), aAny );
         }
+
+        SetThumbnail();
     }
 }
 
@@ -2549,6 +2606,7 @@ void SdXMLFrameShapeContext::StartElement( const ::com::sun::star::uno::Referenc
         }
 
         SetStyle();
+
         GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
 }
@@ -2577,3 +2635,7 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
+void SdXMLFrameShapeContext::EndElement()
+{
+    SetThumbnail();
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 13:46:30 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ protected:
     rtl::OUString               maTextStyleName;
     rtl::OUString               maPresentationClass;
     rtl::OUString               maShapeName;
+    rtl::OUString               maThumbnailURL;
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;
     sal_Bool                    mbIsPlaceholder;
@@ -130,6 +131,8 @@ protected:
 
     void SetStyle();
     void SetLayer();
+    void SetThumbnail();
+
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
     void AddShape(const char* pServiceName );
     void SetTransformation();
@@ -138,6 +141,7 @@ protected:
     const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
 
     void addGluePoint( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
 public:
     TYPEINFO();
 
@@ -479,6 +483,7 @@ public:
     virtual ~SdXMLObjectShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
@@ -565,6 +570,7 @@ public:
     virtual ~SdXMLFrameShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );

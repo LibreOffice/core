@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 12:58:59 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,6 +1361,26 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
         const sal_Char *pElem = sClassId.getLength() ? sXML_object_ole : sXML_object;
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, pElem, sal_False, sal_True );
+
+        // see if we need to export a thumbnail bitmap
+        OUString aStr;
+        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= aStr;
+        if( aStr.getLength() )
+        {
+            aStr = rExport.AddEmbeddedGraphicObject( aStr );
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr );
+
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_simple));
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_type, aStr );
+
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_embed));
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_show, aStr );
+
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_onLoad));
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_actuate, aStr );
+
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_thumbnail, sal_True, sal_True );
+        }
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
