@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:56:03 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3052,7 +3052,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Kleur";
         Text[ chinese_simplified ] = "ÑÕÉ«";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö";
+        Text[ korean ] = "»ö»ó";
         Text[ turkish ] = "Renk";
     };
     ListBox LB_MAT_SPECULAR
@@ -3230,7 +3230,7 @@ DockingWindow RID_SVXFLOAT_3D
     Text[ chinese_simplified ] = "3 Î¬-Ğ§¹û";
     Text[ russian ] = "İôôåêòû 3-Ì";
     Text[ polish ] = "Efekty 3-W";
-    Text[ japanese ] = "3DŒø‰Ê";
+    Text[ japanese ] = "3D Œø‰Ê";
     Text[ chinese_traditional ] = "3 ºû®ÄªG";
     Text[ arabic ] = "ÊÃËíÑÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ dutch ] = "3D-effecten";
