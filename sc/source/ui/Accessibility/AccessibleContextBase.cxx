@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:07:39 $
+ *  last change: $Author: sab $ $Date: 2002-06-13 12:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ void ScAccessibleContextBase::Init()
 
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
-    CommitDefunc();
+//  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xOwnContext(this);
@@ -616,7 +616,7 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) 
                     }
                     catch(uno::RuntimeException&)
                     {
-                        DBG_ERROR("a object is gone without to remove from Broadcaster");
+//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }

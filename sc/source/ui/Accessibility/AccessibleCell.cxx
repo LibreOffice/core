@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:09:28 $
+ *  last change: $Author: sab $ $Date: 2002-06-13 12:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ uno::Any SAL_CALL ScAccessibleCell::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
 {
     SC_QUERYINTERFACE( XAccessibleText )
-    return ScAccessibleCellBaseImpl::queryInterface(rType);
+    return ScAccessibleCellBase::queryInterface(rType);
 }
 
 void SAL_CALL ScAccessibleCell::acquire()
@@ -358,7 +358,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleCell::getTypes()
     uno::Sequence< uno::Type > aSeq;
     aSeq.realloc(1);
     aSeq[0] = getCppuType((const uno::Reference<XAccessibleText>*)0);
-    return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), aSeq);
+    return comphelper::concatSequences(ScAccessibleCellBase::getTypes(), aSeq);
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
