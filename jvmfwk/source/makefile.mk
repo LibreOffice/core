@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:04:05 $
+#   last change: $Author: hr $ $Date: 2004-11-09 14:02:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ SLOFILES = \
     $(SLO)$/framework.obj \
     $(SLO)$/libxmlutil.obj \
     $(SLO)$/fwkutil.obj \
-    $(SLO)$/elements.obj
+    $(SLO)$/elements.obj \
+    $(SLO)$/fwkbase.obj
 
 
 #LIB1TARGET=$(SLB)$/$(FRAMEWORKLIB).lib
@@ -105,5 +106,18 @@ SHL1STDLIBS += advapi32.lib
 SHL1VERSIONMAP = framework.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
+
+.IF "$(GUI)"=="UNX"
+RCFILE=$(BIN)$/jvmfwk3rc
+.ELIF "$(GUI)"=="WNT"
+RCFILE=$(BIN)$/jvmfwk3.ini
+.END
+
+
 .INCLUDE: target.mk
+$(RCFILE): jvmfwk3rc
+    +-$(COPY) $< $@
+
+ALLTAR: \
+    $(RCFILE)
 
