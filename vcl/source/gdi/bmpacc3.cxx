@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,14 @@
  *
  ************************************************************************/
 
-#define _SV_BMPACC_CXX
-
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
 #include <region.hxx>
