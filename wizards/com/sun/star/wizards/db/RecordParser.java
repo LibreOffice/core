@@ -2,9 +2,9 @@
 *
 *  $RCSfile: RecordParser.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:41:14 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -88,9 +88,6 @@ public class RecordParser extends QueryMetaData {
     XColumnsSupplier xRowSetColumnsSupplier;
     XComponent xRowSetComponent;
     XInteractionHandler xInteraction;
-    long lDateCorrection;
-    //    int[] SelColIndices = null;
-    //    int[] GroupColIndices = null;
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
 
@@ -237,10 +234,10 @@ public class RecordParser extends QueryMetaData {
             XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
             xColumns = xDBCols.getColumns();
             String[] sElementNames = xColumns.getElementNames();
-            CommandType = com.sun.star.sdb.CommandType.COMMAND;
+            setCommandType(com.sun.star.sdb.CommandType.COMMAND);
 
             if (binitializeDBColumns == true)
-                setFieldNames(FieldNames);
+                setFieldNames(FieldNames, xColumns);
 //              super.setFieldColumns(false);
             this.setColindices();
             GroupFieldColumns = getFieldColumnList(GroupFieldNames);
@@ -294,19 +291,6 @@ public class RecordParser extends QueryMetaData {
 
     }
 
-    /*    public int[] getSelectedQueryFields(String[] FieldNames) throws InvalidQueryException{
-            String CurFieldName;
-            String[] AllQueryFieldNames = xColumns.getElementNames();
-            int FieldCount = FieldNames.length;
-            int[] SelColIndices = JavaTools.initializeintArray(FieldCount, -1);
-            for (int i=0; i<FieldCount; i++){
-                CurFieldName = FieldNames[i];
-                SelColIndices[i] = JavaTools.FieldInList(AllQueryFieldNames, CurFieldName)+1;
-                if (SelColIndices[i] == -1)
-                    throw new InvalidQueryException(xMSF, Command);
-            }
-            return SelColIndices;
-        } */
 
     public void dispose() {
         if (xRowSetComponent != null)
