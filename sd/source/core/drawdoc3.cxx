@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-21 12:35:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,7 +1399,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( pRet )
     {
         // try to get some information from stream
