@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:38:40 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 07:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog TAB_TEMPLATE
     Text [ italian ] = "Modello di oggetti grafici" ;
     Text [ portuguese_brazilian ] = "Folhas de Estilo" ;
     Text [ portuguese ] = "Estilos de objecto gráfico" ;
-    Text [ finnish ] = "Tyylitiedostot" ;
+    Text [ finnish ] = "Grafiikkatyylit" ;
     Text [ danish ] = "Grafikobjekttypografi" ;
     Text [ french ] = "Style d'objet graphique" ;
     Text [ swedish ] = "Grafikobjektmall" ;
@@ -127,7 +127,7 @@ TabDialog TAB_TEMPLATE
                 Text [ italian ] = "Area" ;
                 Text [ portuguese_brazilian ] = "Preenchimento" ;
                 Text [ portuguese ] = "Preenchimento" ;
-                Text [ finnish ] = "~Täytä" ;
+                Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
                 Text [ french ] = "Remplissage" ;
                 Text [ swedish ] = "Yta" ;
@@ -173,6 +173,7 @@ TabDialog TAB_TEMPLATE
                 Text[ turkish ] = "Gölge";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sombra";
+                Text[ finnish ] = "Varjostus";
             };
             PageItem
             {
@@ -198,6 +199,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "ÔÝÇÝíÉ";
                 Text[ turkish ] = "Saydamlýk";
                 Text[ catalan ] = "Transparencia";
+                Text[ finnish ] = "Läpikuultavuus";
             };
             PageItem
             {
@@ -238,7 +240,7 @@ TabDialog TAB_TEMPLATE
                 Text [ italian ] = "Rientro e spaziatura" ;
                 Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -284,6 +286,7 @@ TabDialog TAB_TEMPLATE
                 Text[ turkish ] = "Metin";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Texto";
+                Text[ finnish ] = "Teksti";
             };
             PageItem
             {
@@ -311,6 +314,7 @@ TabDialog TAB_TEMPLATE
                 Text[ turkish ] = "Hareketli metin";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Animación de texto";
+                Text[ finnish ] = "Tekstianimaatio";
             };
             PageItem
             {
@@ -339,6 +343,7 @@ TabDialog TAB_TEMPLATE
                 Text[ turkish ] = "Boyutlar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Dimensiones";
+                Text[ finnish ] = "Mitoitus";
             };
             PageItem
             {
@@ -365,6 +370,7 @@ TabDialog TAB_TEMPLATE
                 Text[ turkish ] = "Baðlayýcý";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conector";
+                Text[ finnish ] = "Liitin";
             };
             PageItem
             {
@@ -391,6 +397,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "ãÍÇÐÇÉ";
                 Text[ turkish ] = "Hizalama";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
             PageItem
             {
@@ -401,7 +408,7 @@ TabDialog TAB_TEMPLATE
                 Text [ italian ] = "Tabulazione" ;
                 Text [ portuguese_brazilian ] = "Parágrafo (Tabs)" ;
                 Text [ portuguese ] = "Tabulação" ;
-                Text [ finnish ] = "Kappale (sarkaimet)" ;
+                Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
                 Text [ french ] = "Tabulation" ;
                 Text [ swedish ] = "Tabulator" ;
@@ -452,7 +459,7 @@ TabDialog TAB_TEMPLATE
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Devolver" ;
         Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Palaa" ;
+        Text [ finnish ] = "Edellinen" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "Précédent" ;
         Text [ swedish ] = "Tillbaka" ;
