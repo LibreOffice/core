@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2004-02-03 07:40:51 $
+ *  last change: $Author: kz $ $Date: 2004-03-01 16:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 //#include <vcl/rc.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-
-#include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
