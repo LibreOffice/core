@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:54:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@
 #include <statstr.hrc>
 #endif
 
+#include <SwUndoPageDesc.hxx>
+
 void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
                          SwFrmFmt &rFmt2, SfxPrinter *pPrt, BOOL bCheck )
 {
@@ -354,6 +356,11 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     SwPageDesc *pDesc = aPageDescs[i];
 
+    if (DoesUndo())
+    {
+        AppendUndo(new SwUndoPageDesc(*pDesc, rChged, this));
+    }
+
     //Als erstes wird ggf. gespiegelt.
     if ( rChged.GetUseOn() == PD_MIRROR )
         ((SwPageDesc&)rChged).Mirror();
@@ -391,15 +398,8 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     if( DoesUndo() )
     {
         // hat sich an den Nodes etwas veraendert ?
-        //JP erstmal ein Hack, solange keine Headers/Footers Undofaehig sind
+
         const SwFmtHeader &rOldHead = pDesc->GetMaster().GetHeader();
-        if( rHead.IsActive() != rOldHead.IsActive() ||
-            rChged.IsHeaderShared() != pDesc->IsHeaderShared() )
-        {
-            // erstmal werden alle Undo - Objecte geloescht.
-            ClearRedo();
-            DelAllUndoObj();
-        }
     }
     pDesc->GetMaster().SetAttr( rHead );
     if ( rChged.IsHeaderShared() || !rHead.IsActive() )
@@ -457,15 +457,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     if( DoesUndo() )
     {
         // hat sich an den Nodes etwas veraendert ?
-        //JP erstmal ein Hack, solange keine Headers/Footers Undofaehig sind
         const SwFmtFooter &rOldFoot = pDesc->GetMaster().GetFooter();
-        if( rFoot.IsActive() != rOldFoot.IsActive() ||
-            rChged.IsFooterShared() != pDesc->IsFooterShared() )
-        {
-            // erstmal werden alle Undo - Objecte geloescht.
-            ClearRedo();
-            DelAllUndoObj();
-        }
     }
     pDesc->GetMaster().SetAttr( rFoot );
     if ( rChged.IsFooterShared() || !rFoot.IsActive() )
@@ -602,15 +594,11 @@ void lcl_RemoveFrms( SwFrmFmt& rFmt, FASTBOOL& rbFtnsRemoved )
         }
 }
 
-
-void SwDoc::DelPageDesc( USHORT i )
+// #i7983#
+void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {
-    ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
-    ASSERT( i != 0, "Default Pagedesc loeschen is nicht." );
-    if ( i == 0 )
+    if (0 == pDel)
         return;
-
-    SwPageDesc *pDel = aPageDescs[i];
 
     SwFmtPageDesc aDfltDesc( aPageDescs[0] );
     SwClientIter aIter( *pDel );
@@ -674,6 +662,23 @@ void SwDoc::DelPageDesc( USHORT i )
         ::lcl_RemoveFrms( pDel->GetMaster(), bFtnsRemoved );
         ::lcl_RemoveFrms( pDel->GetLeft(), bFtnsRemoved );
     }
+}
+
+void SwDoc::DelPageDesc( USHORT i )
+{
+    ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
+    ASSERT( i != 0, "Default Pagedesc loeschen is nicht." );
+    if ( i == 0 )
+        return;
+
+    SwPageDesc *pDel = aPageDescs[i];
+
+    if (DoesUndo())
+    {
+        AppendUndo(new SwUndoPageDescDelete(*pDel, this));
+    }
+
+    PreDelPageDesc(pDel); // #i7983#
 
     aPageDescs.Remove( i );
     delete pDel;
@@ -725,6 +730,10 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
                                 GetPrt()->GetOrientation() );
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
+
+    if (DoesUndo())
+        AppendUndo(new SwUndoPageDescCreate(*pNew, this));
+
     SetModified();
     return (aPageDescs.Count()-1);
 }
@@ -1123,6 +1132,47 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
     return 0;
 }
 
+BOOL SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
+{
+    BOOL bResult = FALSE;
+    sal_uInt16 nI;
+    for (nI = 0; nI < aPageDescs.Count(); nI++)
+    {
+        if (aPageDescs[nI]->GetName() == rName)
+        {
+            *pFound = nI;
+            bResult = TRUE;
+            break;
+        }
+    }
 
+    return bResult;
+}
 
+SwPageDesc * SwDoc::GetPageDesc( const String & rName )
+{
+    SwPageDesc * aResult = NULL;
 
+    sal_uInt16 nI;
+
+    if (FindPageDesc(rName, &nI))
+        aResult = aPageDescs[nI];
+
+    return aResult;
+}
+
+void SwDoc::DelPageDesc( const String & rName )
+{
+    sal_uInt16 nI;
+
+    if (FindPageDesc(rName, &nI))
+        DelPageDesc(nI);
+}
+
+void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)
+{
+    sal_uInt16 nI;
+
+    if (FindPageDesc(rName, &nI))
+        ChgPageDesc(nI, rDesc);
+}
