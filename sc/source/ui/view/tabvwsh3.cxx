@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:04:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
-#include <svx/zoom.hxx>
+//CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
@@ -111,6 +111,10 @@
 #include <svtools/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -628,7 +632,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
-                    SvxZoomDialog*  pDlg = NULL;
+                    //CHINA001 SvxZoomDialog*   pDlg = NULL;
+                    AbstractSvxZoomDialog* pDlg = NULL;
                     ScMarkData&     rMark = GetViewData()->GetMarkData();
                     USHORT          nBtnFlags =   SVX_ZOOM_ENABLE_50
                                                 | SVX_ZOOM_ENABLE_75
@@ -643,7 +648,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     aZoomItem.SetValueSet( nBtnFlags );
                     aSet.Put( aZoomItem );
-                    pDlg = new SvxZoomDialog( GetDialogParent(), aSet );
+                    //CHINA001 pDlg = new SvxZoomDialog( GetDialogParent(), aSet );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
+                    {
+                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet, ResId(RID_SVXDLG_ZOOM));
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                     bCancel = ( RET_CANCEL == pDlg->Execute() );
