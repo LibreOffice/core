@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:29:13 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@
 #include "waitoff.hxx"
 #include "scmod.hxx"
 #include "sc.hrc"
+#include "inputopt.hxx"
+#include "warnbox.hxx"
 #include "drwlayer.hxx"
 
 using namespace com::sun::star;
@@ -436,7 +438,9 @@ void ScViewFunc::PasteFromSystem()
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
 
     if (pOwnClip)
-        PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
+        PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
+                        PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                        TRUE );     // allow warning dialog
     else if (pDrawClip)
         PasteDraw();
     else
@@ -518,7 +522,9 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
     Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == 0 && pOwnClip )
-        PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
+        PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
+                        PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                        !bApi );        // allow warning dialog
     else
     {
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
@@ -526,7 +532,8 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
             return FALSE;
 
         bRet = PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                                GetViewData()->GetCurX(), GetViewData()->GetCurY() );
+                                GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                                NULL, FALSE, !bApi );       // allow warning dialog
 
         if ( !bRet && !bApi )
             ErrorMessage(STR_PASTE_ERROR);
@@ -584,7 +591,8 @@ BOOL ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTransfer
 BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction, BOOL bSkipEmpty,
                                     BOOL bTranspose, BOOL bAsLink,
-                                    InsCellCmd eMoveMode, USHORT nUndoExtraFlags )
+                                    InsCellCmd eMoveMode, USHORT nUndoExtraFlags,
+                                    BOOL bAllowDialogs )
 {
     if (!pClipDoc)
     {
@@ -752,6 +760,33 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
         if ( bCut )
             pClipDoc->SetCutMode( bCut );
+    }
+    else
+    {
+        BOOL bAskIfNotEmpty = bAllowDialogs &&
+                                ( nFlags & IDF_CONTENTS ) &&
+                                SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+        if ( bAskIfNotEmpty )
+        {
+            BOOL bIsEmpty = TRUE;
+            USHORT nTabCount = pDoc->GetTableCount();
+            for (USHORT nTab=0; nTab<nTabCount && bIsEmpty; nTab++)
+                if ( rMark.GetTableSelect(nTab) &&
+                        !pDoc->IsBlockEmpty( nTab, aUserRange.aStart.Col(), aUserRange.aStart.Row(),
+                                                   aUserRange.aEnd.Col(), aUserRange.aEnd.Row() ) )
+                    bIsEmpty = FALSE;
+
+            if ( !bIsEmpty )
+            {
+                ScReplaceWarnBox aBox( GetViewData()->GetDialogParent() );
+                if ( aBox.Execute() != RET_YES )
+                {
+                    //  changing the configuration is within the ScReplaceWarnBox
+                    delete pTransClip;
+                    return FALSE;
+                }
+            }
+        }
     }
 
     USHORT nClipStartX;                         // Clipboard-Bereich erweitern

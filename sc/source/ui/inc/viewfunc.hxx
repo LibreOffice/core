@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:25:33 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 15:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ public:
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
                                     InsCellCmd eMoveMode = INS_NONE,
-                                    USHORT nUndoExtraFlags = IDF_NONE );
+                                    USHORT nUndoExtraFlags = IDF_NONE,
+                                    BOOL bAllowDialogs = FALSE );
 
     void            FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL bAsLink );
 
@@ -166,7 +167,7 @@ public:
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                         USHORT nPosX, USHORT nPosY, Point* pLogicPos = NULL,
-                                        BOOL bLink = FALSE );
+                                        BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
     BOOL            PasteObject( const Point&, SvInPlaceObject*, const Size* = NULL );

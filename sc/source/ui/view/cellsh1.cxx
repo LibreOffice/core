@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:29:11 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,7 +1221,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             else
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                    eMoveMode );
+                                    eMoveMode, IDF_NONE, TRUE );    // allow warning dialog
                         }
 
                         if( !pReqArgs )

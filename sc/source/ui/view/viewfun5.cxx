@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-23 17:26:41 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 15:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ using namespace com::sun::star;
 
 BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    USHORT nPosX, USHORT nPosY, Point* pLogicPos, BOOL bLink )
+                    USHORT nPosX, USHORT nPosY, Point* pLogicPos, BOOL bLink, BOOL bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( TRUE );
@@ -211,7 +211,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
                     SetCursor( nPosX, nPosY );
                     Unmark();
-                    PasteFromClip( IDF_ALL, pClipDoc );
+                    PasteFromClip( IDF_ALL, pClipDoc,
+                                    PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                                    bAllowDialogs );
                     delete pClipDoc;
                     bRet = TRUE;
                 }
@@ -498,7 +500,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
 
                 pInsDoc->SetClipArea( aSource );
-                PasteFromClip(IDF_ALL, pInsDoc);
+                PasteFromClip( IDF_ALL, pInsDoc,
+                                PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                                bAllowDialogs );
                 delete pInsDoc;
 
                 bRet = TRUE;
