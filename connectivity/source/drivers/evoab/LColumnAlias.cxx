@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LColumnAlias.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:54:29 $
+ *  last change: $Author: vg $ $Date: 2003-06-03 08:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,12 +190,12 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
                     // which is not allowed (i.e. not in the list of known programmatics).
                 //OSL_TRACE("OColumnAlias::setAlias()before xAliasesNode->getByName()");
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 sal_Bool bExtractionSuccess =
 #endif
                 xMozAliasesNode->getByName( *pProgrammaticNames) >>= sAssignedAlias;
                 OSL_ENSURE( bExtractionSuccess, "OColumnAlias::setAlias: invalid mozilla config data!" );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 bExtractionSuccess =
 #endif
                 xEvoAliasesNode->getByName( *pProgrammaticNames) >>= sHeadLineName;
