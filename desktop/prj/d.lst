@@ -38,6 +38,9 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\pkgchk?????.dll %_DEST%\bin%_EXT%\pkgchk?????.dll
 ..\%__SRC%\lib\libpkgchk?????.so %_DEST%\lib%_EXT%\libpkgchk?????.so
 
+..\%__SRC%\bin\pagein %_DEST%\bin%_EXT%\pagein
+..\%__SRC%\misc\pagein-* %_DEST%\bin%_EXT%\pagein-*
+
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 ..\res\s*.exe %_DEST%\bin%_EXT%\s*.exe
