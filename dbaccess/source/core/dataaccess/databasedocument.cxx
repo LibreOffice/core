@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:01:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,35 +404,7 @@ void ODatabaseSource::store(const ::rtl::OUString& sURL, const Sequence< Propert
     if ( m_bDocumentReadOnly )
         throw IOException();
 
-    try
-    {
-
-//      if ( m_aContainer[E_FORM].get() )
-//      {
-//          Reference<XTransactedObject> xForms(getFormDocuments(),UNO_QUERY);
-//          if ( xForms.is() )
-//              xForms->commit();
-//      }
-
-//      if ( m_aContainer[E_REPORT].get() )
-//      {
-//          Reference<XTransactedObject> xReports(getReportDocuments(),UNO_QUERY);
-//          if ( xReports.is() )
-//              xReports->commit();
-//      }
-        TStorages::iterator aIter = m_aStorages.begin();
-        TStorages::iterator aEnd = m_aStorages.end();
-        for (; aIter != aEnd ; ++aIter)
-        {
-            Reference<XTransactedObject> xTrans(aIter->second,UNO_QUERY);
-            if ( xTrans.is() )
-                xTrans->commit();
-        }
-    }
-    catch(WrappedTargetException)
-    {
-        throw IOException();
-    }
+    commitStorages();
 
     writeStorage(sURL,lArguments);
 
@@ -457,7 +429,8 @@ void SAL_CALL ODatabaseSource::storeAsURL( const ::rtl::OUString& sURL, const Se
     Reference<XSingleServiceFactory> xStorageFactory(m_xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory")) ),UNO_QUERY);
     if ( xStorageFactory.is() )
     {
-        if ( sURL != m_sFileURL )
+        sal_Bool bClearConnections;
+        if ( bClearConnections = (sURL != m_sFileURL) )
         {
             Sequence<Any> aParam(2);
             aParam[0] <<= sURL;
@@ -472,32 +445,50 @@ void SAL_CALL ODatabaseSource::storeAsURL( const ::rtl::OUString& sURL, const Se
             if ( !xStorage.is() )
                 throw IOException();
 
+            if ( m_sConnectURL.compareToAscii("sdbc:embedded:",14) == 0 )
+                clearConnections();
+            commitEmbeddedStorage();
+
             Reference<XStorage> xMyStorage = getStorage();
             if ( xMyStorage.is() )
             {
+                commitStorages();
                 xMyStorage->copyToStorage( xStorage );
             }
 
             disposeStorages();
+            ::comphelper::disposeComponent(xMyStorage);
 
             m_xStorage = xStorage;
-            ::comphelper::disposeComponent(xMyStorage);
 
             m_bDocumentReadOnly = sal_False;
             if ( sURL != m_sFileURL )
             {
                 if ( m_pDBContext )
-                    m_pDBContext->nameChangePrivate(m_sFileURL,sURL);
+                {
+                    if ( m_sFileURL.getLength() )
+                        m_pDBContext->nameChangePrivate(m_sFileURL,sURL);
+                    else
+                        m_pDBContext->registerPrivate(sURL,*this);
+                }
 
-                INetURLObject aURL( m_sName );
+                INetURLObject aURL( sURL );
                 if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                     m_sName = sURL;
             }
-            m_sFileURL = sURL;
 
+            m_sFileURL = sURL;
         }
-        m_aArgs = lArguments;
-        store(m_sFileURL,m_aArgs);
+
+        static ::rtl::OUString s_sStatusIndicator(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
+        static ::rtl::OUString s_sInteractionHandler(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
+        ::comphelper::MediaDescriptor aMedia(lArguments);
+        aMedia.erase(s_sStatusIndicator);
+        aMedia.erase(s_sInteractionHandler);
+        aMedia >> m_aArgs;
+
+        store(m_sFileURL,lArguments);
+
         notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone")));
     }
     else
@@ -716,9 +707,9 @@ Reference<XStorage> ODatabaseSource::getStorage(const ::rtl::OUString& _sStorage
             try
             {
                 xStorage = xMyStorage->openStorageElement(_sStorageName, m_bDocumentReadOnly ? ElementModes::READ : nMode);
-                Reference<XComponent> xComp(xStorage,UNO_QUERY);
-                if ( xComp.is() )
-                    xComp->addEventListener(this);
+                Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
+                if ( xBroad.is() )
+                    xBroad->addTransactionListener(this);
                 aFind = m_aStorages.insert(TStorages::value_type(_sStorageName,xStorage)).first;
             }
             catch(Exception&)
@@ -1116,7 +1107,68 @@ sal_Bool ODatabaseSource::commitEmbeddedStorage()
     }
     return bStore;
 }
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+}
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+    Reference<XStorage> xStorage(aEvent.Source,UNO_QUERY);
+    if ( aFind != m_aStorages.end() && aFind->second == xStorage )
+    {
+        try
+        {
+            Reference<XTransactedObject> xTransact(getStorage(),UNO_QUERY);
+            if ( xTransact.is() )
+                xTransact->commit();
+        }
+        catch(Exception)
+        {
+            OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+        }
+    }
+}
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+}
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+//------------------------------------------------------------------
+void ODatabaseSource::commitStorages()
+{
+    try
+    {
+        TStorages::iterator aIter = m_aStorages.begin();
+        TStorages::iterator aEnd = m_aStorages.end();
+        for (; aIter != aEnd ; ++aIter)
+        {
+            Reference<XTransactedObject> xTrans(aIter->second,UNO_QUERY);
+            if ( xTrans.is() )
+                xTrans->commit();
+        }
+    }
+    catch(WrappedTargetException)
+    {
+        throw IOException();
+    }
+}
+
+void ODatabaseSource::notifyEvent(const ::rtl::OUString& _sEventName)
+{
+    if ( m_xDocEventBroadcaster.is() )
+    {
+        ::com::sun::star::document::EventObject aEvent(*this, _sEventName);
+        m_xDocEventBroadcaster->notifyEvent(aEvent);
+    }
+}
 
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
+
