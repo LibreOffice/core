@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:32:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,9 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 
-    InitLabelResMgr( "iso" );
+    if ( !InitLabelResMgr( "iso" ) )
+        // no "iso" resource -> search for "ooo" resource
+        InitLabelResMgr( "ooo", true );
     pBasic   = new BasicDLL;
 
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
