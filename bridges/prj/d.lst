@@ -27,3 +27,6 @@ mkdir: %_DEST%\inc%_EXT%\bridges\java
 ..\%__SRC%\lib\libprot_uno_uno.* %_DEST%\lib%_EXT%\libprot_uno_uno.*
 ..\%__SRC%\lib\libgcc2_uno.* %_DEST%\lib%_EXT%\libgcc2_uno.*
 ..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\libgcc2_uno*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\libjava_uno*.dylib; fi"
