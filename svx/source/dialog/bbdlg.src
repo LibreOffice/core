@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:46:31 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,14 +106,14 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ dutch ] = "Omranding" ;
                 Text [ spanish ] = "Borde" ;
                 Text [ english_us ] = "Borders" ;
-                Text[ chinese_simplified ] = "±ß¿ò";
+                Text[ chinese_simplified ] = "è¾¹æ¡†";
                 Text[ russian ] = "Îáğàìëåíèå";
                 Text[ polish ] = "Obramowanie";
-                Text[ japanese ] = "ŠO˜g";
-                Text[ chinese_traditional ] = "Ãä®Ø";
+                Text[ japanese ] = "å¤–æ ";
+                Text[ chinese_traditional ] = "é‚Šæ¡†";
                 Text[ arabic ] = "ÇáÍÏæÏ";
                 Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "Å×µÎ¸®";
+                Text[ korean ] = "í…Œë‘ë¦¬";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Borde";
@@ -134,32 +134,33 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ dutch ] = "Achtergrond" ;
                 Text [ spanish ] = "Fondo" ;
                 Text [ english_us ] = "Background" ;
-                Text[ chinese_simplified ] = "±³¾°";
+                Text[ chinese_simplified ] = "èƒŒæ™¯";
                 Text[ russian ] = "Ôîí";
                 Text[ polish ] = "T³o";
-                Text[ japanese ] = "”wŒi";
-                Text[ chinese_traditional ] = "­I´º";
+                Text[ japanese ] = "èƒŒæ™¯";
+                Text[ chinese_traditional ] = "èƒŒæ™¯";
                 Text[ arabic ] = "ÇáÎáİíÉ";
                 Text[ greek ] = "Öüíôï";
-                Text[ korean ] = "¹è°æ";
+                Text[ korean ] = "ë°°ê²½";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fondo";
             };
         };
     };
-    Text[ chinese_simplified ] = "±ß¿òºÍ±³¾°";
+    Text[ chinese_simplified ] = "è¾¹æ¡†å’ŒèƒŒæ™¯";
     Text[ russian ] = "Îáğàìëåíèå / Ôîí";
     Text[ polish ] = "Obramowanie / T³o";
-    Text[ japanese ] = "ŠO˜g/”wŒi";
-    Text[ chinese_traditional ] = "Ãä®Ø©M­I´º";
+    Text[ japanese ] = "å¤–æ /èƒŒæ™¯";
+    Text[ chinese_traditional ] = "é‚Šæ¡†å’ŒèƒŒæ™¯";
     Text[ arabic ] = "ÇáÍÏæÏ / ÇáÎáİíÉ";
     Text[ greek ] = "Ğëáßóéï / Öüíôï";
-    Text[ korean ] = "Å×µÎ¸® / ¹è°æ";
+    Text[ korean ] = "í…Œë‘ë¦¬ / ë°°ê²½";
     Text[ turkish ] = "Kenarlık / Artalan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bordes / Fondo";
 };
  // ********************************************************************** EOF
+
 
 
