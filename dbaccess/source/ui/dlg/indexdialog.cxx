@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 11:44:34 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 15:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ namespace dbaui
         ,m_aHelp                            (this, ResId(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
+        ,m_bEditAgain(sal_False)
         ,m_xORB(_rxORB)
     {
         FreeResource();
@@ -608,6 +609,17 @@ namespace dbaui
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, NOTINTERESTEDIN )
     {
+        if (m_aIndexes.IsEditingActive())
+        {
+            DBG_ASSERT(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
+                // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
+                // and before the event arrived the user clicked onto "close". VERY fast, this user ....
+            m_aIndexes.EndEditing(sal_False);
+            if (m_bEditAgain)
+                // could not commit the new name (started a new - asynchronous - edit trial)
+                return 1L;
+        }
+
         // the currently selected entry
         const SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         DBG_ASSERT(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
@@ -644,6 +656,7 @@ namespace dbaui
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvLBoxEntry*, _pEntry )
     {
+        m_bEditAgain = sal_False;
         m_aIndexes.EditEntry(_pEntry);
         return 0L;
     }
@@ -658,7 +671,7 @@ namespace dbaui
         String sNewName = m_aIndexes.GetEntryText(_pEntry);
 
         OIndexCollection::const_iterator aSameName = m_pIndexes->find(sNewName);
-        if (aSameName != aPosition)
+        if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
         {
             String sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
             sError.SearchAndReplaceAscii("$name$", sNewName);
@@ -666,7 +679,8 @@ namespace dbaui
             aError.Execute();
 
             updateToolbox();
-            PostUserEvent(LINK(this, DbaIndexDialog,OnEditIndexAgain), _pEntry);
+            m_bEditAgain = sal_True;
+            PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry);
             return 0L;
         }
 
@@ -861,6 +875,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/02 11:44:34  fs
+ *  #86434# don't allow to enter an already used index name
+ *
  *  Revision 1.7  2001/04/27 14:19:42  fs
  *  #86464# IsModified before SaveModified
  *
