@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-15 09:54:56 $
+ *  last change: $Author: sb $ $Date: 2002-09-09 10:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,6 +963,13 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
 
     SetCompoundControl( TRUE );
     SetStyle( ImplInitStyle( nWinStyle ) );
+
+    // Base Edit ctor could call Show already, but that would cause problems
+    // with accessibility, as Show might (indirectly) trigger a call to virtual
+    // GetComponentInterface, which is the Edit's base version instead of the
+    // MultiLineEdit's version while in the base Edit ctor:
+    if ((GetStyle() & WB_HIDE) == 0)
+        Show();
 }
 
 MultiLineEdit::~MultiLineEdit()

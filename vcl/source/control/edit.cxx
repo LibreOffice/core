@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-04 13:08:17 $
+ *  last change: $Author: sb $ $Date: 2002-09-09 10:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,10 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
-    if ( !(nStyle & WB_HIDE) )
+
+    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
+    // ctor has already started:
+    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
         Show();
 }
 
