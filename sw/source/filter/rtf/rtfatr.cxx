@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:40:58 $
+ *  last change: $Author: jp $ $Date: 2000-12-12 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,7 +795,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     switch( nScript )
     {
     case ::com::sun::star::i18n::ScriptType::LATIN:
-        rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
+        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
         rWrt.OutULong( nCmplx );
         rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
         rWrt.OutULong( nAsian ) << sRTF_HICH << sRTF_AF;
@@ -803,7 +803,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
         rWrt.OutULong( nLatin );
         break;
     case ::com::sun::star::i18n::ScriptType::ASIAN:
-        rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
+        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
         rWrt.OutULong( nCmplx );
         rWrt.Strm() << sRTF_LTRCH << sRTF_LOCH << sRTF_AF;
         rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
@@ -815,7 +815,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     case ::com::sun::star::i18n::ScriptType::COMPLEX:
         rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
         rWrt.OutULong( nAsian ) << sRTF_LOCH << sRTF_AF;
-        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
+        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_F;
         rWrt.OutULong( nLatin );
         rWrt.Strm() << sRTF_RTLCH << sRTF_F;
         rWrt.OutULong( nCmplx );
@@ -3400,11 +3400,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.7 2000-11-20 16:40:58 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.8 2000-12-12 14:37:48 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2000/11/20 16:40:58  jp
+      BreakIterator moved from text to i18n
+
       Revision 1.6  2000/11/20 09:37:54  jp
       new para attributes - expand para range
 
