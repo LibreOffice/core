@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-09 14:49:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _SFX_TOPFRM_HXX
 #include <sfx2/topfrm.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #include <sfx2/fcontnr.hxx>
@@ -437,6 +440,13 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             case SID_VERSION:
             {
                 GetSlotState( SID_VERSION, SfxObjectShell::GetInterface(), &rSet );
+            }
+            break;
+
+            case SID_HANGUL_HANJA_CONVERSION:
+            {
+                if (!SvtCJKOptions().IsAnyEnabled())
+                    rSet.DisableItem(nWhich);
             }
             break;
 
