@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 12:04:40 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ namespace dbaui
         DECL_LINK( OnModified, void* );
         DECL_LINK( OnCloseDialog, void* );
 
+        DECL_LINK( OnEditIndexAgain, SvLBoxEntry* );
+
     private:
         void OnNewIndex();
         void OnDropIndex();
@@ -204,6 +206,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/02 12:04:40  fs
+ *  #85275# added a help button
+ *
  *  Revision 1.3  2001/03/30 14:10:22  oj
  *  #85298##85297# correct index impl
  *
