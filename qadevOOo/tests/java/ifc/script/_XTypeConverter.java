@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeConverter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:28:04 $
+ *  last change:$Date: 2003-09-08 10:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 
 package ifc.script;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XTypeConverter;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.script.XTypeConverter</code>
