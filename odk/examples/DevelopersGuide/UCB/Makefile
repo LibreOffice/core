@@ -2,13 +2,13 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:28:58 $
+#  last change: $Author: vg $ $Date: 2004-12-23 09:48:22 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
-#  
+#
 #  Copyright (c) 2003 by Sun Microsystems, Inc.
 #  All rights reserved.
 #
@@ -35,9 +35,8 @@
 #  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 #  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#     
+#
 #**************************************************************************
-
 # Builds the UCB examples of the Developers Guide.
 
 PRJ=../../..
@@ -79,7 +78,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 
 UCBExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
@@ -101,3 +100,7 @@ UCBExamples : $(CLASSFILES)
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DEL) resource-*
+	-$(DEL) transfered-resource-*
+	-$(DEL) created-resource-*
+	-$(DEL) renamed-resource-*
