@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 15:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,10 +178,11 @@ inline void __destructAny(
             break;
         }
         ::rtl_freeMemory( pAny->pData );
-#ifdef DEBUG
+#ifdef _DEBUG
         pAny->pData = (void *)0xdeadbeef;
 #endif
     }
+
     ::typelib_typedescriptionreference_release( pType );
 }
 //--------------------------------------------------------------------------------------------------

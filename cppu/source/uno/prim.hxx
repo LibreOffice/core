@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 10:16:11 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 15:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,6 @@ inline void __releaseRef( void ** pRef, uno_ReleaseFunc release ) throw ()
         else
             (*((uno_Interface *)*pRef)->release)( (uno_Interface *)*pRef );
     }
-#ifdef _DEBUG
-    *pRef = (void *)0xdeaddead;
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
