@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:17:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,9 +269,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
-            < "grˆﬂer als" ; Default ; > ;
+            < "gr?er als" ; Default ; > ;
             < "kleiner oder gleich" ; Default ; > ;
-            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "gr?er oder gleich" ; Default ; > ;
             < "ungleich" ; Default ; > ;
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
@@ -500,7 +500,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -565,7 +565,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -811,9 +811,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
-            < "grˆﬂer als" ; Default ; > ;
+            < "gr?er als" ; Default ; > ;
             < "kleiner oder gleich" ; Default ; > ;
-            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "gr?er oder gleich" ; Default ; > ;
             < "ungleich" ; Default ; > ;
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
@@ -1042,7 +1042,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -1107,7 +1107,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -1353,9 +1353,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
-            < "grˆﬂer als" ; Default ; > ;
+            < "gr?er als" ; Default ; > ;
             < "kleiner oder gleich" ; Default ; > ;
-            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "gr?er oder gleich" ; Default ; > ;
             < "ungleich" ; Default ; > ;
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
@@ -1584,7 +1584,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -1649,7 +1649,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
