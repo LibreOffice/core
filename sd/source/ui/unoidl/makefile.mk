@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2001-08-06 12:52:34 $
+#   last change: $Author: hr $ $Date: 2001-08-10 10:50:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,29 +79,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = $(PRJ)$/util$/sd.cxx \
-        unopool.cxx \
-        UnoDocumentSettings.cxx \
-        facreg.cxx \
-        UnoGraphicExporter.cxx \
-        unomodel.cxx    \
-        unopage.cxx     \
-        unoiview.cxx    \
-        unolayer.cxx    \
-        unopres.cxx     \
-        unocpres.cxx    \
-        unoobj.cxx		\
-        unosrch.cxx		\
-        unowcntr.cxx	\
-        unogsfm.cxx		\
-        unogstyl.cxx	\
-        unopsfm.cxx		\
-        unopstyl.cxx	\
-        unokywds.cxx	\
-        unostyls.cxx	\
-        unopback.cxx	\
-        unovwcrs.cxx
-
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/unowcntr.obj
 .ENDIF
@@ -130,7 +107,7 @@ SLOFILES =      \
         $(SLO)$/unovwcrs.obj
 
 SVXLIGHTOBJFILES = \
-        $(SLO)$/unopool.obj \
+        $(OBJ)$/unopool.obj \
         $(OBJ)$/UnoDocumentSettings.obj \
         $(OBJ)$/unomodel.obj    \
         $(OBJ)$/unopage.obj     \
