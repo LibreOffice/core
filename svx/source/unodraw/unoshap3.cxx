@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-17 10:15:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-20 17:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
         { \
             throw lang::IllegalArgumentException(); \
         } \
-        Polygon3D aNewPolygon; \
+        Polygon3D aNewPolygon(nInnerSequenceCount); \
         double* pArrayX = pInnerSequenceX->getArray(); \
         double* pArrayY = pInnerSequenceY->getArray(); \
         double* pArrayZ = pInnerSequenceZ->getArray(); \
@@ -691,6 +691,7 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
         pInnerSequenceX++; \
         pInnerSequenceY++; \
         pInnerSequenceZ++; \
+        aNewPolygon.CheckClosed(); \
         aNewPolyPolygon.Insert(aNewPolygon); \
     } \
 
@@ -705,9 +706,11 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
     for(sal_uInt16 a=0;a<rPolyPoly.Count();a++) \
     { \
         const Polygon3D& rPoly = rPolyPoly[a]; \
-        pOuterSequenceX->realloc((sal_Int32)rPoly.GetPointCount()); \
-        pOuterSequenceY->realloc((sal_Int32)rPoly.GetPointCount()); \
-        pOuterSequenceZ->realloc((sal_Int32)rPoly.GetPointCount()); \
+        sal_Int32 nPointCount(rPoly.GetPointCount()); \
+        if(rPoly.IsClosed()) nPointCount++; \
+        pOuterSequenceX->realloc(nPointCount); \
+        pOuterSequenceY->realloc(nPointCount); \
+        pOuterSequenceZ->realloc(nPointCount); \
         double* pInnerSequenceX = pOuterSequenceX->getArray(); \
         double* pInnerSequenceY = pOuterSequenceY->getArray(); \
         double* pInnerSequenceZ = pOuterSequenceZ->getArray(); \
@@ -716,6 +719,12 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
             *pInnerSequenceX++ = rPoly[b].X(); \
             *pInnerSequenceY++ = rPoly[b].Y(); \
             *pInnerSequenceZ++ = rPoly[b].Z(); \
+        } \
+        if(rPoly.IsClosed()) \
+        { \
+            *pInnerSequenceX++ = rPoly[0].X(); \
+            *pInnerSequenceY++ = rPoly[0].Y(); \
+            *pInnerSequenceZ++ = rPoly[0].Z(); \
         } \
         pOuterSequenceX++; \
         pOuterSequenceY++; \
