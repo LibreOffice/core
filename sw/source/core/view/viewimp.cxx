@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:29 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 
         pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
          pSdrPageView = pDrawView->ShowPage( pRoot->GetDrawPage(), Point());
+        // OD 26.06.2003 #108784# - notify drawing page view about invisible
+        // layers.
+        pSh->GetDoc()->NotifyInvisibleLayers( *pSdrPageView );
     }
     pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
     pDrawView->SetGridSnap( pNewOpt->IsSnap() );
