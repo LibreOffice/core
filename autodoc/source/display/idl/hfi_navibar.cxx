@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_navibar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
+ *  last change: $Author: np $ $Date: 2002-11-15 10:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ extern const String
 const String        C_sTop      = "Overview";
 const String        C_sModule   = "Module";
 const String        C_sUse      = "Use";
-const String        C_sManual   = "Manual";
+const String        C_sManual   = "Devguide";
 const String        C_sIndex    = "Index";
 
 
@@ -159,7 +159,21 @@ HF_IdlNavigationBar::Produce_CeXrefsMainRow( const client & i_ce )
     aNaviMain.Add_StdItem( C_sModule, rLink.c_str() );
 
     aNaviMain.Add_SelfItem( C_sUse );
-    aNaviMain.Add_NoneItem( C_sManual );
+
+    const StringVector &
+        rManualDescrs = i_ce.Secondaries().Links2DescriptionInManual();
+    if (rManualDescrs.size() == 2)
+    {
+        aNaviMain.Add_StdItem(C_sManual, Env().Link2Manual( rManualDescrs.front() ));
+    }
+    else if (rManualDescrs.size() > 2)
+    {
+        aNaviMain.Add_StdItem(C_sManual, C_sLocalManualLinks);
+    }
+    else
+    {
+        aNaviMain.Add_NoneItem( C_sManual );
+    }
 
     Env().Get_LinkTo( rLink.reset(),
                       Env().Linker().PositionOf_Index() );

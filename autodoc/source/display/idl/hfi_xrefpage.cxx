@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_xrefpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
+ *  last change: $Author: np $ $Date: 2002-11-15 10:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ const String
     C_sTitleStart("uses of ");
 const String
     C_sCRLF("\n");
+const String
+    C_sDevMan("References in Developers Guide");
 
 }   // anonymous namespace
 
@@ -107,7 +109,7 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
     if ( rLinks2Refs.size() == 0 )
     {
         rContentDirectory
-            << "References in Developer Manual"
+            << C_sDevMan
             << new Html::LineBreak
             << C_sCRLF;
         return;
@@ -116,12 +118,12 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
 
     rContentDirectory
         >> *new Html::Link("#devmanrefs")
-            << "References in Developer Manual"
+            << C_sDevMan
             << new Html::LineBreak
             << C_sCRLF;
 
     HF_SubTitleTable
-        aList(CurOut(), "devmanrefs", "References in Developer Manual", 1);
+        aList(CurOut(), "devmanrefs", C_sDevMan, 1);
     Xml::Element &
         rOutCell = aList.Add_Row() >>* new Html::TableCell;
 
