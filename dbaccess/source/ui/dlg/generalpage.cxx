@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 11:09:07 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 12:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,13 +695,8 @@ namespace dbaui
                     return sal_False;
             }
         }
-        catch (const CommandAbortedException&)
-        {
-            return sal_False;
-        }
         catch (const Exception&)
         {
-            DBG_ERROR("OGeneralPage::createDirectoryDeep: strange exception caught!");
             return sal_False;
         }
 
@@ -1170,6 +1165,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/31 11:09:07  oj
+ *  #87149# change subprotocol and Propertynames
+ *
  *  Revision 1.7  2001/05/30 15:10:24  fs
  *  #65293# include CommandAbortedException (solaris can't catch incomplete types)
  *
