@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 16:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
 #include "XMLTrackedChangesContext.hxx"
+#endif
+#ifndef SC_XMLEMPTYCONTEXT_HXX
+#include "XMLEmptyContext.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -196,9 +199,18 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         pContext = new ScXMLLabelRangesContext( GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_BODY_TABLE:
-//      if( !GetScImport().GetPaM().GetNode()->FindTableNode() )
-            pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,
-                                              xAttrList );
+        {
+            if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
+            {
+                GetScImport().SetHasRangeOverflow();
+                pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLocalName);
+            }
+            else
+            {
+                pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,
+                                                  xAttrList );
+            }
+        }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
         pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
