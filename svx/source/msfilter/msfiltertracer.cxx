@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfiltertracer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:25:19 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 14:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 
 using namespace ::com::sun::star;
 
-MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, ::uno::Sequence< ::beans::PropertyValue >* pConfigData ) :
+MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequence< beans::PropertyValue >* pConfigData ) :
     mpCfgItem( new FilterConfigItem( rConfigPath, pConfigData ) ),
     mpAttributeList( new SvXMLAttributeList() ),
     mpStream( NULL ),
