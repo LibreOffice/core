@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:40:55 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 10:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
  // pragma ----------------------------------------------------------------
 
  // define ---------------------------------------------------------------
-#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
+#define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
  // RID_SVXPAGE_BORDER ---------------------------------------------------
 TabPage RID_SVXPAGE_BORDER
 {
@@ -106,7 +106,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ portuguese_brazilian ] = "Borda" ;
         Text [ portuguese ] = "DisposiÁ„o de linhas" ;
         Text [ finnish ] = "Viivojen j‰rjestys" ;
-        Text [ danish ] = "Ramme" ;
+        Text [ danish ] = "Linjeplacering" ;
         Text [ french ] = "Disposition des lignes" ;
         Text [ swedish ] = "Linjeplacering" ;
         Text [ dutch ] = "Lijnen" ;
@@ -122,7 +122,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "Ïô∏Í≥ΩÏÑ† ÎØ∏Î¶¨Î≥¥Í∏∞";
         Text[ turkish ] = "«erÁeve";
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
-        Text[ catalan ] = "Marco";
+        Text[ catalan ] = "Marc";
         Text[ thai ] = "‡∏à‡∏±‡∏î‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedText FT_DEFAULT
@@ -149,8 +149,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "Ê®ôÊ∫ñ(~D)";
         Text[ turkish ] = "~Default";
         Text[ arabic ] = "~Default";
-        Text[ catalan ] = "~Default";
-        Text[ thai ] = "~Default";
+        Text[ catalan ] = "~Est‡ndard";
+        Text[ thai ] = "~‡∏Ñ‡πà‡∏≤‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô";
     };
     Control WIN_PRESETS
     {
@@ -184,8 +184,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖËá™Ë®Ç(~U)";
         Text[ turkish ] = "~User-defined";
         Text[ arabic ] = "~User-defined";
-        Text[ catalan ] = "~User-defined";
-        Text[ thai ] = "~User-defined";
+        Text[ catalan ] = "Definit per l'~usuari";
+        Text[ thai ] = "‡∏£‡∏∞‡∏ö‡∏∏~‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
     };
     Control WIN_FRAMESEL
     {
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ portuguese_brazilian ] = "Linhas" ;
         Text [ portuguese ] = "Linha" ;
         Text [ finnish ] = "Viiva" ;
-        Text [ danish ] = "Streg" ;
+        Text [ danish ] = "Linje" ;
         Text [ french ] = "Ligne" ;
         Text [ swedish ] = "Linje" ;
         Text [ dutch ] = "Lijn" ;
@@ -228,7 +228,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "ÏÑ†";
         Text[ turkish ] = "«izgi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌnea";
+        Text[ catalan ] = "LÌnia";
         Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedText FT_STYLE
@@ -289,7 +289,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~Color";
         Text[ arabic ] = "~Color";
         Text[ catalan ] = "~Color";
-        Text[ thai ] = "~Color";
+        Text[ thai ] = "~‡∏™‡∏µ";
     };
     ListBox LB_LINECOLOR
     {
@@ -319,7 +319,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "¿ gauche";
         Text[ spanish ] = "~Izquierda";
         Text[ italian ] = "Sinistra";
-        Text[ danish ] = "Venstre";
+        Text[ danish ] = "~Venstre";
         Text[ swedish ] = "~V‰nster";
         Text[ polish ] = "Z lewej";
         Text[ portuguese_brazilian ] = "Left";
@@ -330,7 +330,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "Ì”«—";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Izquierda";
+        Text[ catalan ] = "Es~querra";
         Text[ finnish ] = "~Vasen:";
         Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢";
     };
@@ -363,7 +363,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "¿ droite";
         Text[ spanish ] = "Derecha";
         Text[ italian ] = "Destra";
-        Text[ danish ] = "H¯jre";
+        Text[ danish ] = "H¯jr~e";
         Text[ swedish ] = "Hˆg~er";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right";
@@ -374,7 +374,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "Ì„Ì‰";
         Text[ turkish ] = "S~a";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Derecha";
+        Text[ catalan ] = "Dreta";
         Text[ finnish ] = "Oikea";
         Text[ thai ] = "‡∏Ç‡∏ß‡∏≤";
     };
@@ -407,7 +407,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "En haut";
         Text[ spanish ] = "Arriba";
         Text[ italian ] = "~Alto";
-        Text[ danish ] = "Top";
+        Text[ danish ] = "T~op";
         Text[ swedish ] = "~Uppe";
         Text[ polish ] = "W gÛrze";
         Text[ portuguese_brazilian ] = "Top";
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "~‹st";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Arriba";
+        Text[ catalan ] = "Su~perior";
         Text[ finnish ] = "~Yl‰osa";
         Text[ thai ] = "~‡∏ö‡∏ô";
     };
@@ -451,7 +451,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "En bas";
         Text[ spanish ] = "Abajo";
         Text[ italian ] = "~Basso";
-        Text[ danish ] = "Bund";
+        Text[ danish ] = "~Bund";
         Text[ swedish ] = "~Nere";
         Text[ polish ] = "W dole";
         Text[ portuguese_brazilian ] = "Bottom";
@@ -461,7 +461,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "‰∏ã(~B)";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Al~t";
-        Text[ catalan ] = "~Abajo";
+        Text[ catalan ] = "In~ferior";
         Text[ finnish ] = "~Alaosa";
         Text[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
@@ -494,7 +494,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "Synchroniser";
         Text[ spanish ] = "~Sincronizar";
         Text[ italian ] = "Sincronizza";
-        Text[ danish ] = "Synkroniser";
+        Text[ danish ] = "S~ynkroniser";
         Text[ swedish ] = "S~ynkronisera";
         Text[ polish ] = "Synchronizuj";
         Text[ portuguese_brazilian ] = "Synchronize";
@@ -505,7 +505,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = " “«„‰";
         Text[ turkish ] = "~E˛itle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sincronizar";
+        Text[ catalan ] = "Sincronitza";
         Text[ finnish ] = "Synkronoi";
         Text[ thai ] = "‡∏ó‡∏≥‡πÉ‡∏´‡πâ‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ï‡∏£‡∏á‡∏Å‡∏±‡∏ô";
     };
@@ -523,7 +523,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "…cart avec le contenu";
         Text[ spanish ] = "Distancia al texto";
         Text[ italian ] = "Distanza dal contenuto";
-        Text[ danish ] = "Indstillinger";
+        Text[ danish ] = "Afstand til indhold";
         Text[ swedish ] = "AvstÂnd till innehÂll";
         Text[ polish ] = "OdstÍp od zawartoúci";
         Text[ portuguese_brazilian ] = "Settings";
@@ -534,7 +534,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "«·„”«›… Õ Ï «·„Õ ÊÌ« ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ConfiguraciÛn";
+        Text[ catalan ] = "Espaiat al contingut";
         Text[ finnish ] = "V‰lit sis‰ltˆˆn";
         Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏ñ‡∏∂‡∏á‡πÄ‡∏ô‡∏∑‡πâ‡∏≠‡∏´‡∏≤";
     };
@@ -566,7 +566,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "ÏúÑÏπò(~P)";
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~PosiciÛn";
+        Text[ catalan ] = "~PosiciÛ";
         Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
     };
     Control WIN_SHADOWS
@@ -592,7 +592,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ spanish ] = "Distancia";
         Text[ finnish ] = "~Et‰isyys";
         Text[ italian ] = "Distan~za";
-        Text[ danish ] = "St¯rrelse";
+        Text[ danish ] = "~Afstand";
         Text[ swedish ] = "~Distans";
         Text[ polish ] = "Odleg≥oúÊ";
         Text[ portuguese_brazilian ] = "Ta~manho";
@@ -602,7 +602,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "ÈñìÈöî(~C)";
         Text[ turkish ] = "~B¸y¸kl¸k";
         Text[ arabic ] = "«·ÕÃ„";
-        Text[ catalan ] = "~TamaÒo";
+        Text[ catalan ] = "~Mida";
         Text[ thai ] = "‡∏£‡∏∞~‡∏¢‡∏∞";
     };
     MetricField ED_SHADOWSIZE
@@ -631,7 +631,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ portuguese_brazilian ] = "C~or" ;
         Text [ portuguese ] = "C~or" ;
         Text [ finnish ] = "~V‰ri" ;
-        Text [ danish ] = "Farve" ;
+        Text [ danish ] = "~Farve" ;
         Text [ french ] = "Couleur" ;
         Text [ swedish ] = "F‰~rg" ;
         Text [ dutch ] = "K~leur" ;
@@ -669,7 +669,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ portuguese_brazilian ] = "Sombra" ;
         Text [ portuguese ] = "Sombras" ;
         Text [ finnish ] = "Varjotyyli" ;
-        Text [ danish ] = "Skygge" ;
+        Text [ danish ] = "Skygger" ;
         Text [ french ] = "Ombre" ;
         Text [ swedish ] = "Skugga" ;
         Text [ dutch ] = "Schaduw" ;
@@ -685,7 +685,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "ÏùåÏòÅ";
         Text[ turkish ] = "Gˆlge";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sombra";
+        Text[ catalan ] = "Estil de l'ombra";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏Å‡∏≤‡∏£‡πÅ‡∏£‡πÄ‡∏á‡∏≤";
     };
 #define _PREVIEW_IDLIST_\
@@ -712,7 +712,7 @@ TabPage RID_SVXPAGE_BORDER
     ImageList ILH_PRE_BITMAPS
     {
         ImageBitmap = Bitmap { File = "prh_eview.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = STD_MASKCOLOR ;
         _PREVIEW_IDLIST_
     };
 #define _SHADOW_IDLIST_             \
@@ -735,18 +735,10 @@ TabPage RID_SVXPAGE_BORDER
     ImageList ILH_SDW_BITMAPS
     {
         ImageBitmap = Bitmap { File = "shh_adow.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = STD_MASKCOLOR ;
         _SHADOW_IDLIST_
     };
-    Text[ catalan ] = "Borde";
+    Text[ catalan ] = "Borders";
     Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏Ç‡∏≠‡∏ö";
 };
  // **********************************************************************
-
-
-
-
-
-
-
-

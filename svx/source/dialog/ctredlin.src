@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:15:39 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 11:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 #include "ctredlin.hrc"
 #include "helpid.hrc"
-#ifndef STD_MASKCOLOR
-#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000;}
-#endif
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+
 TabPage SID_REDLIN_FILTER_PAGE
 {
     String STR_FILTER
@@ -399,7 +399,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "time.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText = "Datum/Uhrzeit einstellen" ;
         QuickHelpText [ ENGLISH ] = "Set date/time" ;
@@ -502,7 +502,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "time.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText = "Datum/Uhrzeit einstellen" ;
         QuickHelpText [ ENGLISH ] = "Set date/time" ;
@@ -746,7 +746,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     Image IMG_TIME_H
     {
         ImageBitmap = Bitmap { File = "time_h.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MASKCOLOR
     };
 };
 TabPage SID_REDLIN_VIEW_PAGE
