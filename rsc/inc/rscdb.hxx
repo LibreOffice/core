@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 14:25:56 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,21 @@
 #include <rscdef.hxx>
 #endif
 
+#include <list>
+
 class RscError;
 class REResourceList;
 class RscTupel;
 class RscCont;
+class RscCmdLine;
+
+struct WriteRcContext
+{
+    FILE *              fOutput;
+    rtl::OString        aOutputRc;
+    rtl::OString        aOutputSysList;
+    RscCmdLine*         pCmdLine;
+};
 
 /****************** R s c T y p C o n ************************************/
 // Liste die alle Basistypen enthaelt
@@ -225,7 +236,7 @@ class RscTypCont
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap,
                                 RscTop * pClassColor );
     RscTop *    InitClassImageList( RscTop * pSuper, RscTop *pClassBitmap,
-                                    RscTop * pClassColor );
+                                    RscTop * pClassColor, RscCont * pStrLst );
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo );
     RscTop *    InitClassSystemWindow( RscTop * pSuper );
@@ -414,7 +425,7 @@ public:
     USHORT      PutSysName( USHORT nRscTyp, char * pName, USHORT nConst,
                             USHORT nId, BOOL bFirst );
     void        ClearSysNames();
-    ERRTYPE     WriteRc( FILE * fOutput );
+    ERRTYPE     WriteRc( WriteRcContext& rContext );
     void        WriteSrc( FILE * fOutput, ULONG nFileIndex,
                           CharSet nCharSet, BOOL bName = TRUE );
     ERRTYPE     WriteHxx( FILE * fOutput, ULONG nFileKey);
@@ -429,4 +440,3 @@ public:
 };
 
 #endif
-
