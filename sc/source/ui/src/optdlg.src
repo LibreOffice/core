@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:16:18 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,6 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 20 , 44 ) ;
         Size = MAP_APPFONT ( 52 , 16 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Minimaler ƒnderungs~wert : Minimaler énderungs~wert */
         Text = "Minimaler ƒnderungs~wert" ;
         Text [ ENGLISH ] = "Minimum Chan~ge" ;
         Text [ ENGLISH_US ] = "~Minimum Change" ;
@@ -485,6 +484,11 @@ TabPage RID_SCPAGE_CALC
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Wert 0 entspricht dem 01.01.1904";
     };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 121 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 50 ) ;
+    };
     FixedLine GB_DATE
     {
         Pos = MAP_APPFONT ( 126 , 3 ) ;
@@ -513,9 +517,14 @@ TabPage RID_SCPAGE_CALC
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
     };
+    FixedLine FL_H_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
     FixedText FT_PREC
     {
-        Pos = MAP_APPFONT ( 160 , 77 ) ;
+        Pos = MAP_APPFONT ( 160 , 78 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Nach~kommastellen" ;
         Text [ ENGLISH ] = "~Precision" ;
@@ -545,16 +554,15 @@ TabPage RID_SCPAGE_CALC
     NumericField ED_PREC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 76 ) ;
+        Pos = MAP_APPFONT ( 229 , 77 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Maximum = 20 ;
         Spin = TRUE ;
     };
     CheckBox BTN_CASE
     {
-        Pos = MAP_APPFONT ( 6 , 76 ) ;
+        Pos = MAP_APPFONT ( 6 , 78 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Groﬂ-/Kleinschreibung beachten : ~Groò-/Kleinschreibung beachten */
         Text = "~Groﬂ-/Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
@@ -581,7 +589,7 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_CALC
     {
-        Pos = MAP_APPFONT ( 6 , 90 ) ;
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Gena~uigkeit wie angezeigt" ;
         Text [ ENGLISH ] = "Calc~ulate as precise as shown" ;
@@ -609,9 +617,8 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_MATCH
     {
-        Pos = MAP_APPFONT ( 6 , 104 ) ;
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Suchkri~terien = und <> m¸ssen auf ganze Zellen zutreffen : Suchkri~terien = und <> m≥ssen auf ganze Zellen zutreffen */
         Text = "Suchkri~terien = und <> m¸ssen auf ganze Zellen zutreffen" ;
         Text [ ENGLISH ] = "Search cri~terias = and <> must match entire cells" ;
         Text [ english_us ] = "Search criteria = and <> must apply to ~whole cells" ;
@@ -636,7 +643,7 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_LOOKUP
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Pos = MAP_APPFONT ( 6 , 119 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text = "Spalten-/Zeilen~beschriftungen automatisch suchen" ;
         Text [ ENGLISH ] = "Search column and row ~labels automatically" ;
@@ -1037,27 +1044,9 @@ TabPage RID_SCPAGE_CONTENT
     FixedLine GB_LINES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Linien" ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text = "Optische Hilfen" ;
         Text [ ENGLISH ] = "Visual aids" ;
-        Text[ english_us ] = "Lines";
-        Text[ portuguese ] = "Linhas";
-        Text[ russian ] = "ÀËÌËË";
-        Text[ greek ] = "√Ò·ÏÏ›Ú";
-        Text[ dutch ] = "Visual aids";
-        Text[ french ] = "Lignes";
-        Text[ spanish ] = "LÌneas";
-        Text[ italian ] = "Linee";
-        Text[ danish ] = "Visual aids";
-        Text[ swedish ] = "Linjer";
-        Text[ polish ] = "Linie";
-        Text[ portuguese_brazilian ] = "Visual aids";
-        Text[ japanese ] = "ê¸";
-        Text[ korean ] = "Visual aids";
-        Text[ chinese_simplified ] = "œﬂÃı";
-        Text[ chinese_traditional ] = "Ωu±¯";
-        Text[ turkish ] = "Visual aids";
-        Text[ arabic ] = "ŒÿÊÿ";
     };
     CheckBox CB_GRID
     {
@@ -1225,6 +1214,11 @@ TabPage RID_SCPAGE_CONTENT
         Text[ arabic ] = "„ﬁ«»÷ ﬂ»Ì—…";
         Text[ turkish ] = "B~¸y¸k Áekme noktalar˝";
         Text[ language_user1 ] = " ";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 125 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 93 ) ;
     };
     FixedLine GB_DISPLAY
     {
@@ -1447,7 +1441,7 @@ TabPage RID_SCPAGE_CONTENT
     FixedLine GB_OBJECT
     {
         Pos = MAP_APPFONT ( 6 , 108 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Objekte" ;
         Text [ ENGLISH ] = "Objects" ;
         Text[ chinese_simplified ] = "∂‘œÛ";
@@ -1475,7 +1469,7 @@ TabPage RID_SCPAGE_CONTENT
     FixedText FT_OBJGRF
     {
         Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
         Text = "~Objekte/Grafiken" ;
         Text [ ENGLISH ] = "Objects/Images" ;
         Text [ norwegian ] = "Objects/Images" ;
@@ -1502,13 +1496,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_OBJGRF
     {
-        Pos = MAP_APPFONT ( 86 , 119 ) ;
+        Pos = MAP_APPFONT ( 83 , 119 ) ;
         LB_OBJECTMODE
     };
     FixedText FT_DIAGRAM
     {
         Pos = MAP_APPFONT ( 12 , 137 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
         Text = "~Diagramme" ;
         Text [ ENGLISH ] = "Charts" ;
         Text [ norwegian ] = "Charts" ;
@@ -1535,13 +1529,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 86 , 135 ) ;
+        Pos = MAP_APPFONT ( 83 , 135 ) ;
         LB_OBJECTMODE
     };
     FixedText FT_DRAW
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
         Text = "~Zeichenobjekte" ;
         Text [ ENGLISH ] = "Draw objects" ;
         Text [ norwegian ] = "Draw objects" ;
@@ -1568,8 +1562,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_DRAW
     {
-        Pos = MAP_APPFONT ( 86 , 151 ) ;
+        Pos = MAP_APPFONT ( 83 , 151 ) ;
         LB_OBJECTMODE
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 125 , 115 ) ;
+        Size = MAP_APPFONT ( 4 , 64 ) ;
     };
     FixedLine GB_WINDOW
     {
@@ -1758,7 +1757,7 @@ TabPage RID_SCPAGE_LAYOUT
     FixedLine GB_UNIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "~Metriken" ;
         Text [ ENGLISH ] = "Metrics" ;
         Text[ english_us ] = "Metrics";
@@ -2133,6 +2132,11 @@ TabPage RID_SCPAGE_LAYOUT
         First = 50 ;
         Last = 2000 ;
     };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 125 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 50 ) ;
+    };
     FixedLine GB_LINK
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
@@ -2163,27 +2167,8 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Verkn¸pfungen beim Laden aktualisieren" ;
-        Text [ English ] = "Update links while loading" ;
-        Text[ italian ] = "Aggiorna collegamenti durante il caricamento";
-        Text[ portuguese_brazilian ] = "Refresh links";
-        Text[ portuguese ] = "Actualizar ligaÁıes ao carregar";
-        Text[ danish ] = "Opdater kÊder under indlÊsning";
-        Text[ french ] = "Actualiser les liens lors du chargement";
-        Text[ swedish ] = "Uppdatera l‰nkar vid laddning";
-        Text[ dutch ] = "Verbindingen bij het laden actualiseren";
-        Text[ spanish ] = "Actualizar vÌnculos al cargar";
-        Text[ english_us ] = "Update links when loading";
-        Text[ chinese_simplified ] = "‘⁄◊∞»Î ±∏¸–¬¡¥Ω”";
-        Text[ russian ] = "Œ·ÌÓ‚ÎˇÚ¸ ÒÒ˚ÎÍË ÔË Á‡„ÛÁÍÂ";
-        Text[ polish ] = "Aktualizuj ≥πcza podczas ≥adowania";
-        Text[ japanese ] = "ƒﬁ∑≠“›ƒì«Ç›çûÇ›éûÇ…ÿ›∏ÇÃçXêV";
-        Text[ chinese_traditional ] = "∏¸§JÆ…ßÛ∑s±∂Æ|";
-        Text[ arabic ] = " ÕœÌÀ «·«— »«ÿ«  ⁄‰œ «· Õ„Ì·";
-        Text[ greek ] = "≈ÌÁÏ›Ò˘ÛÁ Ù˘Ì ÛıÌ‰›ÛÂ˘Ì Í·Ù‹ ÙÁ ˆ¸ÒÙ˘ÛÁ";
-        Text[ korean ] = "∑ŒµÂ Ω√ø°°°ø¨∞· ∞ªΩ≈";
-        Text[ turkish ] = "Y¸klerken balant˝lar˝ g¸ncelle";
-        Text[ language_user1 ] = " ";
+        Text = "Verkn¸pfungen beim ÷ffnen aktualisieren" ;
+        Text [ English ] = "Update links while opening" ;
     };
     RadioButton RB_ALWAYS
     {

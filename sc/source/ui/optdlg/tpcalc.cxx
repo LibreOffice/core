@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 14:49:56 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aGbDate         ( this, ScResId( GB_DATE ) ),
         aFtPrec         ( this, ScResId( FT_PREC ) ),
         aEdPrec         ( this, ScResId( ED_PREC ) ),
-
+        aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
+        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
         aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
         nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
@@ -135,6 +136,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
                                     GetDocOptions() ) ),
         pLocalOptions   ( new ScDocOptions )
 {
+    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     Init();
     FreeResource();
     SetExchangeSupport();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-05 16:12:35 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,13 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aVScrollCB( this,       ResId(CB_VSCROLL        )),
     aTblRegCB( this,        ResId(CB_TBLREG         )),
     aOutlineCB( this,       ResId(CB_OUTLINE        )),
+    aSeparator1FL    (this, ResId(FL_SEPARATOR1 )),
+    aSeparator2FL    (this, ResId(FL_SEPARATOR2)),
     pLocalOptions(0)
 {
     FreeResource();
+    aSeparator1FL.SetStyle( aSeparator1FL.GetStyle() | WB_VERT );
+    aSeparator2FL.SetStyle( aSeparator2FL.GetStyle() | WB_VERT );
     SetExchangeSupport();
     Link aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
     aObjGrfLB.  SetSelectHdl(aSelObjHdl);
@@ -453,7 +457,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     aUnitLB( this,          ResId(LB_UNIT           )),
     aTabFT( this,           ResId( FT_TAB           )),
     aTabMF( this,           ResId( MF_TAB           )),
-
+    aSeparatorFL( this,     ResId( FL_SEPARATOR         )),
     aLinkFT(this, ResId(FT_UPDATE_LINKS )),
     aAlwaysRB   (this, ResId(RB_ALWAYS  )),
     aRequestRB  (this, ResId(RB_REQUEST )),
@@ -471,6 +475,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     pDoc(NULL)
 {
     FreeResource();
+    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     SetExchangeSupport();
 
     aUnitLB.    SetSelectHdl( LINK( this, ScTpLayoutOptions, MetricHdl ) );

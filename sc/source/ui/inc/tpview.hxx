@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-05 16:11:31 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ class ScTpContentOptions : public SfxTabPage
     CheckBox        aHandleCB;
     CheckBox        aBigHandleCB;
 
+    FixedLine       aSeparator1FL;
+
     FixedLine       aDisplayGB;
     CheckBox        aFormulaCB;
     CheckBox        aNilCB;
@@ -121,6 +123,8 @@ class ScTpContentOptions : public SfxTabPage
     ListBox         aDiagramLB;
     FixedText       aDrawFT;
     ListBox         aDrawLB;
+
+    FixedLine       aSeparator2FL;
 
     FixedLine       aWindowGB;
     CheckBox        aRowColHeaderCB;
@@ -162,6 +166,7 @@ class ScTpLayoutOptions : public SfxTabPage
     FixedText       aTabFT;
     MetricField     aTabMF;
 
+    FixedLine       aSeparatorFL;
     FixedLine       aLinkGB;
     FixedText       aLinkFT;
     RadioButton     aAlwaysRB;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,19 +104,20 @@ private:
                 ~ScTpCalcOptions();
 
 private:
+    FixedLine       aGbZRefs;
     CheckBox        aBtnIterate;
     FixedText       aFtSteps;
     NumericField    aEdSteps;
     FixedText       aFtEps;
     Edit            aEdEps;
-    FixedLine       aGbZRefs;
 
+    FixedLine       aSeparatorFL;
+    FixedLine       aGbDate;
     RadioButton     aBtnDateStd;
     RadioButton     aBtnDateSc10;
     RadioButton     aBtnDate1904;
 
-    FixedLine       aGbDate;
-
+    FixedLine       aHSeparatorFL;
     CheckBox        aBtnCase;
     CheckBox        aBtnCalc;
     CheckBox        aBtnMatch;
