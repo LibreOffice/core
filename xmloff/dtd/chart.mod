@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.12 2001-01-30 13:55:21 cl Exp $
+	$Id: chart.mod,v 1.13 2001-03-28 19:25:33 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -118,7 +118,8 @@
 
 <!-- Plot-Area specification -->
 
-<!ELEMENT chart:plot-area (chart:axis*,
+<!ELEMENT chart:plot-area (dr3d:light*,
+						   chart:axis*,
 						   chart:categories?,
 						   chart:series*,
 						   chart:wall?,

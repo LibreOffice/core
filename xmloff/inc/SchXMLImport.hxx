@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 12:30:53 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 19:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ enum SchXMLPlotAreaElemTokenMap
     XML_TOK_PA_SERIES,
     XML_TOK_PA_CATEGORIES,
     XML_TOK_PA_WALL,
-    XML_TOK_PA_FLOOR
+    XML_TOK_PA_FLOOR,
+    XML_TOK_PA_LIGHT_SOURCE
 };
 
 enum SchXMLSeriesElemTokenMap
