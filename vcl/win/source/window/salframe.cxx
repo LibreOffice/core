@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:50 $
+ *  last change: $Author: th $ $Date: 2000-11-03 14:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,6 @@ SalFrame::SalFrame()
     maFrameData.mbHandleIME         = FALSE;
     maFrameData.mbSpezIME           = FALSE;
     maFrameData.mbAtCursorIME       = FALSE;
-    maFrameData.mbCompositionMode   = FALSE;
     maFrameData.mbCandidateMode     = FALSE;
     memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
     maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
@@ -1333,33 +1332,50 @@ void SalFrame::Sync()
 
 void SalFrame::SetInputContext( SalInputContext* pContext )
 {
-    BOOL bIME = pContext->mnOptions != 0;
-    if ( bIME == maFrameData.mbIME )
-        return;
-
-    maFrameData.mbIME = bIME;
-    if ( !bIME )
+    BOOL bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
+    if ( bIME )
     {
-        ImmAssociateContext( maFrameData.mhWnd, 0 );
-        maFrameData.mbHandleIME = FALSE;
+        if ( !maFrameData.mbIME )
+        {
+            maFrameData.mbIME = TRUE;
+
+            if ( maFrameData.mhDefIMEContext )
+            {
+                ImmAssociateContext( maFrameData.mhWnd, maFrameData.mhDefIMEContext );
+                UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
+                maFrameData.mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
+                maFrameData.mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
+                maFrameData.mbHandleIME = !maFrameData.mbSpezIME;
+            }
+        }
+
+        // When the application can't handle IME messages, then the
+        // System should handle the IME handling
+        if ( !(pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT) )
+            maFrameData.mbHandleIME = FALSE;
+
+        // Set the Font for IME Handling
+        if ( pContext->mpFont )
+        {
+            HIMC hIMC = ImmGetContext( maFrameData.mhWnd );
+            if ( hIMC )
+            {
+                LOGFONTW aLogFont;
+                ImplGetLogFontFromFontSelect( pContext->mpFont, aLogFont );
+                ImmSetCompositionFontW( hIMC, &aLogFont );
+                ImmReleaseContext( maFrameData.mhWnd, hIMC );
+            }
+        }
     }
     else
     {
-        if ( maFrameData.mhDefIMEContext )
+        if ( maFrameData.mbIME )
         {
-            ImmAssociateContext( maFrameData.mhWnd, maFrameData.mhDefIMEContext );
-            UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
-            maFrameData.mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
-            maFrameData.mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
-            maFrameData.mbHandleIME = !maFrameData.mbSpezIME;
+            maFrameData.mbIME = FALSE;
+            maFrameData.mbHandleIME = FALSE;
+            ImmAssociateContext( maFrameData.mhWnd, 0 );
         }
     }
-}
-
-// -----------------------------------------------------------------------
-
-void SalFrame::UpdateExtTextInputArea()
-{
 }
 
 // -----------------------------------------------------------------------
@@ -3278,37 +3294,30 @@ static BOOL ImplHandleIMEStartComposition( HWND hWnd )
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
+        HIMC hIMC = ImmGetContext( hWnd );
+        if ( hIMC )
+        {
+            // Cursor-Position ermitteln und aus der die Default-Position fuer
+            // das Composition-Fenster berechnen
+            SalExtTextInputPosEvent aPosEvt;
+            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                        SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
+            COMPOSITIONFORM aForm;
+            memset( &aForm, 0, sizeof( aForm ) );
+            if ( (aPosEvt.mnX == -1) && (aPosEvt.mnY == -1) )
+                aForm.dwStyle |= CFS_DEFAULT;
+            else
+            {
+                aForm.dwStyle          |= CFS_FORCE_POSITION;
+                aForm.ptCurrentPos.x    = aPosEvt.mnX;
+                aForm.ptCurrentPos.y    = aPosEvt.mnY;
+            }
+            ImmSetCompositionWindow( hIMC, &aForm );
+            ImmReleaseContext( hWnd, hIMC );
+        }
+
         if ( pFrame->maFrameData.mbHandleIME )
         {
-            HIMC hIMC = ImmGetContext( hWnd );
-            if ( hIMC )
-            {
-                // Cursor-Position ermitteln und aus der die Default-Position fuer
-                // das Composition-Fenster berechnen
-                SalCursorPosEvent aCursorPosEvt;
-                pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                            SALEVENT_CURSORPOS, (void*)&aCursorPosEvt );
-                COMPOSITIONFORM aForm;
-                memset( &aForm, 0, sizeof( aForm ) );
-                if ( !aCursorPosEvt.mnWidth || !aCursorPosEvt.mnHeight )
-                    aForm.dwStyle |= CFS_DEFAULT;
-                else
-                {
-                    aForm.dwStyle          |= CFS_POINT;
-                    aForm.ptCurrentPos.x    = aCursorPosEvt.mnX;
-                    aForm.ptCurrentPos.y    = aCursorPosEvt.mnY;
-                }
-                ImmSetCompositionWindow( hIMC, &aForm );
-
-                // Den InputContect-Font ermitteln und diesem dem Composition-Fenster
-                // bekannt machen
-
-                ImmReleaseContext( hWnd, hIMC );
-            }
-
-            pFrame->maFrameData.mbCompositionMode = TRUE;
-            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                        SALEVENT_STARTEXTTEXTINPUT, (void*)NULL );
             if ( pFrame->maFrameData.mbAtCursorIME )
                 bDef = FALSE;
         }
@@ -3324,13 +3333,35 @@ static BOOL ImplHandleIMEStartComposition( HWND hWnd )
 static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 {
     BOOL bDef = TRUE;
-    if ( lParam & (GCS_RESULTSTR | GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS) )
-    {
-        ImplSalYieldMutexAcquireWithWait();
+    ImplSalYieldMutexAcquireWithWait();
 
-        SalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame && pFrame->maFrameData.mbHandleIME &&
-            (pFrame->maFrameData.mbCompositionMode || !(lParam & GCS_RESULTSTR)) )
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if ( pFrame && (!lParam || (lParam & GCS_RESULTSTR)) )
+    {
+        // Wir restaurieren den Background-Modus bei jeder Texteingabe,
+        // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
+        if ( pFrame->maFrameData.mpGraphics &&
+             pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC )
+            SetBkMode( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC, TRANSPARENT );
+    }
+
+    if ( pFrame && pFrame->maFrameData.mbHandleIME )
+    {
+        if ( !lParam )
+        {
+            SalExtTextInputEvent aEvt;
+            aEvt.mnTime             = GetMessageTime();
+            aEvt.mpTextAttr         = NULL;
+            aEvt.mnCursorPos        = 0;
+            aEvt.mnDeltaStart       = 0;
+            aEvt.mbOnlyCursor       = FALSE;
+            aEvt.mnCursorFlags      = 0;
+            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                        SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                        SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+        }
+        else if ( lParam & (GCS_RESULTSTR | GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS) )
         {
             HIMC hIMC = ImmGetContext( hWnd );
             if ( hIMC )
@@ -3341,109 +3372,108 @@ static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
                 aEvt.mnCursorPos        = 0;
                 aEvt.mnDeltaStart       = 0;
                 aEvt.mbOnlyCursor       = FALSE;
-                aEvt.mbCursorVisible    = !pFrame->maFrameData.mbCandidateMode;
-
-                LONG            nTextLen;
-                xub_Unicode*    pTextBuf = NULL;
-                LONG            nAttrLen;
-                WIN_BYTE*       pAttrBuf = NULL;
-                BOOL            bLastCursor = FALSE;
+                aEvt.mnCursorFlags      = 0;
                 if ( lParam & GCS_RESULTSTR )
                 {
-                    nTextLen = ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, 0, 0 ) / sizeof( WCHAR );
+                    bDef = FALSE;
+
+                    LONG nTextLen = ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, 0, 0 ) / sizeof( WCHAR );
                     if ( nTextLen >= 0 )
                     {
-                        pTextBuf = new xub_Unicode[nTextLen];
+                        WCHAR* pTextBuf = new WCHAR[nTextLen];
                         ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
+                        aEvt.maText = XubString( pTextBuf, (xub_StrLen)nTextLen );
+                        delete pTextBuf;
                     }
 
-                    bLastCursor = TRUE;
-                    aEvt.mbCursorVisible = TRUE;
-                    bDef = FALSE;
+                    aEvt.mnCursorPos = aEvt.maText.Len();
+                    pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                                SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+                    pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                                SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
                 }
-                else if ( pFrame->maFrameData.mbAtCursorIME )
+
+                if ( pFrame->maFrameData.mbAtCursorIME &&
+                     (lParam & (GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS)) )
                 {
                     bDef = FALSE;
-                    if ( lParam & (GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS) )
-                    {
-                        nTextLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 ) / sizeof( WCHAR );
-                        if ( nTextLen >= 0 )
-                        {
-                            pTextBuf = new xub_Unicode[nTextLen];
-                            ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-                        }
+                    if ( pFrame->maFrameData.mbCandidateMode )
+                        aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
+                    if ( lParam & CS_NOMOVECARET )
+                        aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_OVERWRITE;
 
-                        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, 0, 0 );
+                    USHORT* pSalAttrAry = NULL;
+                    WCHAR*  pTextBuf = NULL;
+                    LONG    nTextLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 ) / sizeof( WCHAR );
+                    if ( nTextLen >= 0 )
+                    {
+                        pTextBuf = new WCHAR[nTextLen];
+                        ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
+                    }
+
+                    aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
+                    aEvt.mnDeltaStart = LOWORD( ImmGetCompositionStringW( hIMC, GCS_DELTASTART, 0, 0 ) );
+
+                    if ( lParam == GCS_CURSORPOS )
+                        aEvt.mbOnlyCursor = TRUE;
+
+                    if ( pTextBuf )
+                    {
+                        aEvt.maText = XubString( pTextBuf, (xub_StrLen)nTextLen );
+                        delete pTextBuf;
+
+                        WIN_BYTE*   pAttrBuf = NULL;
+                        LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, 0, 0 );
                         if ( nAttrLen >= 0 )
                         {
                             pAttrBuf = new WIN_BYTE[nAttrLen];
                             ImmGetCompositionStringW( hIMC, GCS_COMPATTR, pAttrBuf, nAttrLen );
                         }
 
-                        aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
-                        aEvt.mnDeltaStart = LOWORD( ImmGetCompositionStringW( hIMC, GCS_DELTASTART, 0, 0 ) );
-
-                        if ( lParam == GCS_CURSORPOS )
-                            aEvt.mbOnlyCursor = TRUE;
-                    }
-                }
-
-                USHORT* pSalAttrAry = NULL;
-                if ( pTextBuf )
-                {
-                    aEvt.maText = XubString( pTextBuf, (USHORT)nTextLen );
-                    delete pTextBuf;
-                    if ( pAttrBuf )
-                    {
-                        xub_StrLen nTextLen = aEvt.maText.Len();
-                        if ( nTextLen )
+                        if ( pAttrBuf )
                         {
-                            pSalAttrAry = new USHORT[nTextLen];
-                            memset( pSalAttrAry, 0, nTextLen*sizeof( USHORT ) );
-                            for ( xub_StrLen i = 0; (i < nTextLen) && (i < nAttrLen); i++ )
+                            xub_StrLen nTextLen = aEvt.maText.Len();
+                            if ( nTextLen )
                             {
-                                WIN_BYTE nWinAttr = pAttrBuf[i];
-                                USHORT   nSalAttr;
-                                if ( nWinAttr == ATTR_TARGET_CONVERTED )
+                                pSalAttrAry = new USHORT[nTextLen];
+                                memset( pSalAttrAry, 0, nTextLen*sizeof( USHORT ) );
+                                for ( xub_StrLen i = 0; (i < nTextLen) && (i < nAttrLen); i++ )
                                 {
-                                    nSalAttr = SAL_EXTTEXTINPUT_ATTR_TARGETCONVERTED | SAL_EXTTEXTINPUT_ATTR_UNDERLINE | SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
-                                    aEvt.mbCursorVisible = FALSE;
+                                    WIN_BYTE nWinAttr = pAttrBuf[i];
+                                    USHORT   nSalAttr;
+                                    if ( nWinAttr == ATTR_TARGET_CONVERTED )
+                                    {
+                                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE | SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                                        aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
+                                    }
+                                    else if ( nWinAttr == ATTR_CONVERTED )
+                                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                                    else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
+                                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                                    else if ( nWinAttr == ATTR_INPUT_ERROR )
+                                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_REDTEXT | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                                    else /* ( nWinAttr == ATTR_INPUT ) */
+                                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                                    pSalAttrAry[i] = nSalAttr;
                                 }
-                                else if ( nWinAttr == ATTR_CONVERTED )
-                                    nSalAttr = SAL_EXTTEXTINPUT_ATTR_CONVERTED | SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
-                                else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
-                                    nSalAttr = SAL_EXTTEXTINPUT_ATTR_TARGETNOTCONVERTED | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
-                                else if ( nWinAttr == ATTR_INPUT_ERROR )
-                                    nSalAttr = SAL_EXTTEXTINPUT_ATTR_INPUTERROR | SAL_EXTTEXTINPUT_ATTR_REDTEXT | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
-                                else /* ( nWinAttr == ATTR_INPUT ) */
-                                    nSalAttr = SAL_EXTTEXTINPUT_ATTR_INPUT | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
-                                pSalAttrAry[i] = nSalAttr;
+                                aEvt.mpTextAttr = pSalAttrAry;
                             }
-                            aEvt.mpTextAttr = pSalAttrAry;
+                            delete pAttrBuf;
                         }
-                        delete pAttrBuf;
                     }
-                    if ( bLastCursor )
-                        aEvt.mnCursorPos = aEvt.maText.Len();
+
+                    pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                                SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+                    if ( pSalAttrAry )
+                        delete pSalAttrAry;
                 }
 
                 ImmReleaseContext( hWnd, hIMC );
-
-                // Handler rufen und wenn wir ein Attribute-Array haben, danach
-                // wieder zerstoeren
-                if ( !bDef )
-                {
-                    pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                                SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
-                }
-                if ( pSalAttrAry )
-                    delete pSalAttrAry;
             }
-
-            ImplSalYieldMutexRelease();
         }
     }
 
+    ImplSalYieldMutexRelease();
     return bDef;
 }
 
@@ -3458,15 +3488,6 @@ static BOOL ImplHandleIMEEndComposition( HWND hWnd )
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame && pFrame->maFrameData.mbHandleIME )
     {
-        // Wir restaurieren den Background-Modus bei jeder Texteingabe,
-        // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
-        if ( pFrame->maFrameData.mpGraphics &&
-             pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC )
-            SetBkMode( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC, TRANSPARENT );
-
-        pFrame->maFrameData.mbCompositionMode = FALSE;
-        pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                    SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
         if ( pFrame->maFrameData.mbAtCursorIME )
             bDef = FALSE;
     }
@@ -3499,53 +3520,21 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
                 LONG nBufLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 );
                 if ( nBufLen >= 1 )
                 {
-                    USHORT nCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
-                    SalExtTextInputPosEvent aEvt;
-                    aEvt.mnTime         = GetMessageTime();
-                    aEvt.mnFirstPos     = nCursorPos;
-                    aEvt.mnChars        = nBufLen/sizeof(sal_Unicode) - nCursorPos;
-                    aEvt.mpPosAry       = new SalExtCharPos[aEvt.mnChars];
-                    memset( aEvt.mpPosAry, 0, aEvt.mnChars*sizeof(SalExtCharPos) );
-
+                    SalExtTextInputPosEvent aPosEvt;
                     pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                                SALEVENT_EXTTEXTINPUTPOS, (void*)&aEvt );
+                                                SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
 
-                    long nMinLeft   = aEvt.mpPosAry[0].mnX;
-                    long nMinTop    = aEvt.mpPosAry[0].mnY;
-                    long nMaxBottom = aEvt.mpPosAry[0].mnY+aEvt.mpPosAry[0].mnHeight;
-                    long nMaxRight  = nMinLeft;
-                    USHORT i = 0;
-                    while ( i < aEvt.mnChars )
-                    {
-                        // Solange wir uns auf der gleichen Zeile bewegen,
-                        // ermitteln wir die Rechteck-Grenzen
-                        if ( !aEvt.mpPosAry[i].mnHeight ||
-                             (aEvt.mpPosAry[i].mnY < nMaxBottom-1) )
-                        {
-                            if ( aEvt.mpPosAry[i].mnX < nMinLeft )
-                                nMinLeft = aEvt.mpPosAry[i].mnX;
-                            if ( aEvt.mpPosAry[i].mnX+aEvt.mpPosAry[0].mnWidth > nMaxRight )
-                                nMaxRight = aEvt.mpPosAry[i].mnX+aEvt.mpPosAry[0].mnWidth;
-                            if ( aEvt.mpPosAry[i].mnY < nMinTop )
-                                nMinTop = aEvt.mpPosAry[i].mnY;
-                            i++;
-                        }
-                        else
-                            break;
-                    }
-
+                    // Vertical !!!
                     CANDIDATEFORM aForm;
                     aForm.dwIndex           = 0;
                     aForm.dwStyle           = CFS_EXCLUDE;
-                    aForm.ptCurrentPos.x    = aEvt.mpPosAry[0].mnX;
-                    aForm.ptCurrentPos.y    = nMaxBottom+1;
-                    aForm.rcArea.left       = nMinLeft;
-                    aForm.rcArea.top        = nMinTop;
-                    aForm.rcArea.right      = nMaxRight+1;
-                    aForm.rcArea.bottom     = nMaxBottom+1;
+                    aForm.ptCurrentPos.x    = aPosEvt.mnX;
+                    aForm.ptCurrentPos.y    = aPosEvt.mnY+1;
+                    aForm.rcArea.left       = aPosEvt.mnX;
+                    aForm.rcArea.top        = aPosEvt.mnY;
+                    aForm.rcArea.right      = aForm.rcArea.left+aPosEvt.mnExtWidth+1;
+                    aForm.rcArea.bottom     = aForm.rcArea.top+aPosEvt.mnHeight+1;
                     ImmSetCandidateWindow( hIMC, &aForm );
-
-                    delete aEvt.mpPosAry;
                 }
 
                 ImmReleaseContext( hWnd, hIMC );
@@ -3563,7 +3552,6 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
         ImplSalYieldMutexRelease();
     }
 }
-
 
 // -----------------------------------------------------------------------
 
