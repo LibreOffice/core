@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:10:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String KEY_VERSION_CHECK
     Text[ italian ] = "Attenzione: non � stato possibile salvare tutte le immagini EPS importate nel livello1\nin quanto ne esistono alcune in un livello superiore!";
     Text[ portuguese_brazilian ] = "Aviso: N�o foi poss�vel salvar todas as imagens EPS importadas no n�vel1,\npois algumas est�o em um n�vel superior!!";
     Text[ portuguese ] = "Aten��o: foi imposs�vel guardar todas as imagens EPS importadas no n�vel 1,\numa vez que algumas se encontram num n�vel superior!";
-    Text[ danish ] = "Advarsel: Det var ikke muligt at gemme alle importerede EPS-billeder p� niveau1,\nfordi nogle foreligger p� et h�jere niveau !";
+    Text[ danish ] = "Advarsel: Det var ikke muligt at gemme alle importerede EPS-billeder p� niveau1,\nfordi nogle foreligger p� et h�jere niveau!";
     Text[ french ] = "Attention : Les graphiques EPS import�s n'ont pas tous pu �tre enregistr�s au niveau1\ncar certains d'entre eux sont d'un niveau sup�rieur !";
     Text[ swedish ] = "OBS: All importerad EPS-grafik kunde inte sparas p� Level1,\neftersom en del finns p� en h�gre niv� !";
     Text[ dutch ] = "Let op: niet alle ge�mporteerde EPS-afbeeldingen kunnen onder Niveau1 worden opgeslagen,\nomdat enkele zich op een hoger niveau bevinden!";
@@ -94,7 +94,10 @@ String KEY_VERSION_CHECK
     Text[ hebrew ] = "‮אזהרה: לא ניתן לשמור את כל הגרפיקה ה EPS ברמה 1\nכי חלק מהם ברמה גבוהה יותר‬";
     Text[ hindi ] = "चेतावनी: आयात की हुयी सभी EPS सुचित्र को सतह1 में संचित नहीं कर सकते है\nक्योंकि उनमें से कुछ उच्च सतह का है!";
     Text[ slovak ] = "Upozornenie: Nie všetky importované EPS obrázky mohli byť uložené na úrovni1\npreto sú niektoré na vyšších úrovniach!";
+    Text[ hungarian ] = "Figyelmeztetés: Nem minden importált EPS-ábra menthető el 1. szintűként, \nmert vannak köztük magasabb szintűek is!";
+    Text[ slovenian ] = "Opozorilo: Vseh uvoženih EPS grafik ni mogoče shraniti na ravni 1,\nker so nekatere na višji ravni!";
 };
+
 
 
 
