@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:58:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ Menu MN_SPELL_POPUP
             HelpID = HID_LINGU_SPELLING_DLG ;
             Text = "~Rechtschreibprόfung..." ;
             Text [ English ] = "~Spelling..." ;
-            Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
+            Text[ language_user1 ] = "; triple dots (...) are required now at the end of the text";
             Text [ english_us ] = "~Spellcheck..." ;
             Text [ italian ] = "Controllo ~ortografico..." ;
             Text [ spanish ] = "~Revisiσn ortogrαfica..." ;
@@ -91,8 +91,8 @@ Menu MN_SPELL_POPUP
             Text[ arabic ] = "~ΚΟήνή ΕγαΗΖν";
             Text[ dutch ] = "~Spellingcontrole...";
             Text[ chinese_simplified ] = "ζ‹Όε†™ζ£€ζ¥(~S)...";
-            Text[ greek ] = "Ορθογ~ραφία";
-            Text[ korean ] = "λ§μ¶¤λ²• κ²€μ‚¬...";
+            Text[ greek ] = "~Ορθογραφικός έλεγχος...";
+            Text[ korean ] = "λ§μ¶¤λ²• κ²€μ‚¬(~S)...";
             Text[ turkish ] = "έ~mla denetimi...";
             Text[ catalan ] = "Ortogra~fia";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus...";
@@ -204,7 +204,7 @@ Menu MN_SPELL_POPUP
             Text[ arabic ] = "ΚΥΝνΝ ΚαήΗΖν";
             Text[ dutch ] = "Auto~Correctie";
             Text[ chinese_simplified ] = "θ‡ªε¨ζ›΄ζ­£";
-            Text[ greek ] = "Αυτο~Διόρθωση";
+            Text[ greek ] = "Αυτόματη ~Διόρθωση";
             Text[ korean ] = "μλ™ μμ •";
             Text[ turkish ] = "Otomatik dόzeltme";
             Text[ language_user1 ] = " ";
@@ -351,6 +351,8 @@ String STR_HYP_OK
     Text[ hindi ] = "ΰ¤Ήΰ¤Ύΰ¤‡ΰ¤«ΰ¤¨ΰ¥‡ΰ¤¶ΰ¤¨ ΰ¤Έΰ¤®ΰ¤Ύΰ¤ªΰ¥ΰ¤¤ ΰ¤Ήΰ¥ΰ¤†";
     Text[ slovak ] = "Delenie slov je ukonΔenΓ©";
 };
+
+
 
 
 
