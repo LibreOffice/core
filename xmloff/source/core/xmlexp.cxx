@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-11 15:52:23 $
+ *  last change: $Author: mtg $ $Date: 2001-03-14 15:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,12 @@ void SvXMLExport::_InitCtor()
         pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK, sXML_np_xlink,
                                    sXML_n_xlink, XML_NAMESPACE_XLINK );
     }
+    if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
+    {
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG, sXML_np_config,
+                                   sXML_n_config, XML_NAMESPACE_CONFIG );
+    }
+
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
         pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC, sXML_np_dc,
