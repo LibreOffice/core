@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:47:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ToolBox RID_TBX_FORMULA
             Text [ english_us ] = "Apply" ;
             /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */
             Text[ chinese_simplified ] = "Ê¹ÓÃ";
-            Text[ russian ] = "Âûïîëíèòü";
+            Text[ russian ] = "Ïğèìåíèòü";
             Text[ polish ] = "Zastosuj";
             Text[ japanese ] = "“K—p‚·‚é";
             Text[ chinese_traditional ] = "¨Ï¥Î";
@@ -1123,7 +1123,7 @@ String STR_FORMULA
         Text [ english_us ] = "Apply" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */\
         Text[ chinese_simplified ] = "Ó¦ÓÃ";\
-        Text[ russian ] = "Âûïîëíèòü";\
+        Text[ russian ] = "Ïğèìåíèòü";\
         Text[ polish ] = "Zastosuj";\
         Text[ japanese ] = "“K—p‚·‚é";\
         Text[ chinese_traditional ] = "¨Ï¥Î";\
