@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 13:37:49 $
+ *  last change: $Author: os $ $Date: 2001-03-23 15:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ class SwXTextField : public cppu::WeakImplHelper5
     SwDoc*                      m_pDoc;
 
     sal_Bool                        m_bIsDescriptor;
+    sal_Bool                        m_bCallUpdate;
     sal_uInt16                      m_nServiceId;
     SwFieldProperties_Impl*     m_pProps;
     String                      m_sTypeName;

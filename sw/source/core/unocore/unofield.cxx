@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 13:37:54 $
+ *  last change: $Author: os $ $Date: 2001-03-23 15:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1682,7 +1682,8 @@ SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
     m_pDoc(0),
     m_nServiceId(nServiceId),
     m_bIsDescriptor(nServiceId != USHRT_MAX),
-    m_pProps(new SwFieldProperties_Impl)
+    m_pProps(new SwFieldProperties_Impl),
+    m_bCallUpdate(sal_False)
 {
     //Set visible as default!
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
@@ -1697,7 +1698,8 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     m_pDoc(pDc),
     m_nServiceId(USHRT_MAX),
     m_bIsDescriptor(sal_False),
-    m_pProps(0)
+    m_pProps(0),
+    m_bCallUpdate(sal_False)
 {
     pFmtFld->GetFld()->GetTyp()->Add(this);
     //TODO: GetObject impl., darin soll das fuer dieses FmtFld bereits vorhandene
@@ -2294,6 +2296,8 @@ void SwXTextField::attachToRange(
         m_pDoc = pDoc;
         m_bIsDescriptor = sal_False;
         DELETEZ(m_pProps);
+        if(m_bCallUpdate)
+            update();
     }
     else
         throw IllegalArgumentException();
@@ -2704,6 +2708,8 @@ void SwXTextField::update(  ) throw (RuntimeException)
             break;
         }
     }
+    else
+        m_bCallUpdate = sal_True;
 }
 /* -----------------19.03.99 14:11-------------------
  *
