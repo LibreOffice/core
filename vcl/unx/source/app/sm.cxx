@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:59:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ inline void SMprintf( const char* pFormat, ... )
 {
 #if OSL_DEBUG_LEVEL > 1
     FILE* fp = fopen( "/tmp/sessionlog.txt", bFirstAssert ? "w" : "a" );
+    if(!fp) return;
     bFirstAssert = false;
     va_list ap;
     va_start( ap, pFormat );
