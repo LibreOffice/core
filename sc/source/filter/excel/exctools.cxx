@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:01:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,19 +104,13 @@
 
 RootData::RootData( void )
 {
-    fRowScale = 1.0;
-    pDoc = NULL;
-    pScRangeName = NULL;
-
-    eDateiTyp = eHauptDateiTyp = BiffX;
+    eDateiTyp = BiffX;
     pExtSheetBuff = NULL;
     pTabNameBuff = NULL;
     pShrfmlaBuff = NULL;
     pExtNameBuff = NULL;
     pFmlaConverter = NULL;
-    pCharset = NULL;
 
-    bCellCut = FALSE;
     bChartTab = FALSE;
 
     pAutoFilterBuffer = NULL;
@@ -128,8 +122,6 @@ RootData::RootData( void )
 
     pObjRecs = NULL;
     pEscher = NULL;
-
-    bWriteVBAStorage = FALSE;
 
     pIR = NULL;
     pER = NULL;
@@ -469,9 +461,9 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 
     // #111896# modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.
-    ScExtDocOptions* pExtDocOptions = r.GetExtDocOptions();
-    if(pExtDocOptions && nTab < pExtDocOptions->nActTab)
-        pExtDocOptions->SetActTab((pExtDocOptions->nActTab) + 1);
+    ScExtDocSettings& rDocSett = rRoot.GetExtDocOptions().GetDocSettings();
+    if( (static_cast< SCCOL >( nTab ) < rDocSett.mnDisplTab) && (rDocSett.mnDisplTab < MAXTAB) )
+        ++rDocSett.mnDisplTab;
     rRoot.GetTabInfo().InsertScTab( nNewTab );
 }
 
