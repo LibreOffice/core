@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:36:05 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "¤§«e(~B)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
-        Text[ korean ] = "ÀÌÀü(~B)";
+        Text[ korean ] = "ÀÌÀü";
         Text[ turkish ] = "ön~üne";
         Text[ language_user1 ] = " ";
     };
@@ -157,7 +157,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "¤§«á(~F)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ÀÌÈÄ(~F)";
+        Text[ korean ] = "ÀÌÈÄ";
         Text[ turkish ] = "ar~kasına";
         Text[ language_user1 ] = " ";
     };
@@ -236,7 +236,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "¼Æ¥Ø(~A)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "~Áñéèìüò";
-        Text[ korean ] = "°³¼ö(~A)";
+        Text[ korean ] = "°³¼ö";
         Text[ turkish ] = "~Adet";
         Text[ language_user1 ] = " ";
     };
@@ -253,10 +253,10 @@ ModalDialog DLG_INS_ROW_COL
         Text [ french ] = " Lignes" ;
         Text [ swedish ] = " rader" ;
         Text [ dutch ] = " rijen" ;
-        Text [ spanish ] = "  Filas" ;
+        Text [ spanish ] = "Filas" ;
         Text [ english_us ] = " Rows" ;
         Text[ chinese_simplified ] = "ĞĞ";
-        Text[ russian ] = "Ñòğîêè";
+        Text[ russian ] = " ñòğîêè";
         Text[ polish ] = " Wiersze";
         Text[ japanese ] = "s";
         Text[ chinese_traditional ] = "¦æ";
@@ -279,10 +279,10 @@ ModalDialog DLG_INS_ROW_COL
         Text [ french ] = " Colonnes" ;
         Text [ swedish ] = " kolumner" ;
         Text [ dutch ] = " kolommen" ;
-        Text [ spanish ] = "  Columnas" ;
+        Text [ spanish ] = "Columnas" ;
         Text [ english_us ] = " Columns" ;
         Text[ chinese_simplified ] = "À¸";
-        Text[ russian ] = "Êîëîíêè";
+        Text[ russian ] = " êîëîíêè";
         Text[ polish ] = " Kolumny";
         Text[ japanese ] = "—ñ";
         Text[ chinese_traditional ] = "Äæ";
