@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:37:23 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
         Text[ japanese ] = "ι–‰γγ‚‹";
-        Text[ korean ] = "Close";
+        Text[ korean ] = "λ‹«κΈ°";
         Text[ chinese_simplified ] = "ε…³ι—­";
         Text[ chinese_traditional ] = "ι—ι–‰";
         Text[ turkish ] = "Close";
@@ -278,7 +278,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "ζ‡ε®(~A)...";
         Text[ arabic ] = "ΚΪννδ...";
         Text[ greek ] = "Αντιστοίχιση...";
-        Text[ korean ] = "λ°°μ •(~A)...";
+        Text[ korean ] = "μ§€μ •(~A)...";
         Text[ turkish ] = "Ata...";
         Text[ catalan ] = "~Assigna...";
     };
@@ -337,7 +337,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "εªι™¤(~D)...";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "μ κ±°(~D)...";
+        Text[ korean ] = "μ‚­μ (~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
     };
@@ -559,6 +559,7 @@ String RID_STR_RUN
     Text[ turkish ] = "Yόrόt";
     Text[ catalan ] = "Executar";
 };
+
 
 
 
