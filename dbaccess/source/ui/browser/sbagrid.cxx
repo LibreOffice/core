@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 10:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,41 +875,60 @@ void SbaGridHeader::ImplSelect(sal_uInt16 nId)
 }
 
 //---------------------------------------------------------------------------------------
+void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
+{
+    if (_rMEvt.IsLeft())
+        if (_rMEvt.GetClicks() != 2)
+        {
+            ImplStartColumnDrag(_rMEvt.GetPosPixel());
+            return;
+        }
+
+    FmGridHeader::MouseButtonDown(_rMEvt);
+}
+
+//---------------------------------------------------------------------------------------
+sal_Bool SbaGridHeader::ImplStartColumnDrag(const Point& _rMousePos)
+{
+    sal_uInt16 nId = GetItemId(_rMousePos);
+    sal_Bool bResizingCol = sal_False;
+    if (HEADERBAR_ITEM_NOTFOUND != nId)
+    {
+        Rectangle aColRect = GetItemRect(nId);
+        aColRect.Left() += nId ? 3 : 0; // the handle col (nId == 0) does not have a left margin for resizing
+        aColRect.Right() -= 3;
+        bResizingCol = !aColRect.IsInside(_rMousePos);
+    }
+    if (!bResizingCol)
+    {
+        // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
+        // occures earlier (while the mouse button is down)
+        // so for optical reasons we select the column before really starting the drag operation.
+        ImplSelect(nId);
+
+        ((SbaGridControl*)GetParent())->GetDataWindow().Command(
+            CommandEvent(
+                Point(
+                    _rMousePos.X() + GetPosPixel().X(),     // we aren't left-justified with our parent, in contrast to the data window
+                    _rMousePos.Y() - GetSizePixel().Height()
+                ),
+                COMMAND_STARTDRAG,
+                sal_True
+            )
+        );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+//---------------------------------------------------------------------------------------
 void SbaGridHeader::Command( const CommandEvent& rEvt )
 {
     sal_Bool bHandled = sal_False;
     if (COMMAND_STARTDRAG == rEvt.GetCommand())
     {
-        Point aPos( rEvt.GetMousePosPixel() );
-
-        sal_uInt16 nId = GetItemId(aPos);
-        sal_Bool bResizingCol = sal_False;
-        if (HEADERBAR_ITEM_NOTFOUND != nId)
-        {
-            Rectangle aColRect = GetItemRect(nId);
-            aColRect.Left() += nId ? 3 : 0; // the handle col (nId == 0) does not have a left margin for resizing
-            aColRect.Right() -= 3;
-            bResizingCol = !aColRect.IsInside(aPos);
-        }
-        if (!bResizingCol)
-        {
-            // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
-            // occures earlier (while the mouse button is down)
-            // so for optical reasons we select the column before really starting the drag operation.
-            ImplSelect(nId);
-
-            ((SbaGridControl*)GetParent())->GetDataWindow().Command(
-                CommandEvent(
-                    Point(
-                        aPos.X() + GetPosPixel().X(),       // we aren't left-justified with our parent, in contrast to the data window
-                        aPos.Y() - GetSizePixel().Height()
-                    ),
-                    COMMAND_STARTDRAG,
-                    rEvt.IsMouseEvent()
-                )
-            );
-            bHandled = sal_True;
-        }
+        bHandled = ImplStartColumnDrag(rEvt.GetMousePosPixel());
     }
 
     if (!bHandled)

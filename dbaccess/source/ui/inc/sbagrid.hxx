@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:42:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 10:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,12 @@ namespace dbaui
         virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     private:
+        // Window overridables
+        void MouseButtonDown( const MouseEvent& rMEvt );
+
         void ImplSelect(sal_uInt16 nId);
+
+        sal_Bool ImplStartColumnDrag(const Point& _rMousePos);
     };
 
     // =========================================================================
