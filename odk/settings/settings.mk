@@ -53,6 +53,7 @@ PACKAGE_LIB_DIR=windows.plt
 OSEP=^<
 CSEP=^>
 QUOTE=
+QM=
 
 DEL=del
 DELRECURSIVE=rd /S /Q
@@ -133,6 +134,7 @@ SHAREDLIB_OUT=$(OUT_LIB)
 OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
+QM=\"
 
 DEL=rm -f
 DELRECURSIVE=rm -rf
@@ -165,7 +167,7 @@ SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/
 CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5
 CC_OUTPUT_SWITCH=-o 
 
-LIBRARY_LINK_FLAGS=-w -PIC -temp=/tmp -R /usr/lib -G -lthread -instances=static 
+LIBRARY_LINK_FLAGS=-w -PIC -temp=/tmp '-R $$ORIGIN' -norunpath -G -lthread -instances=static 
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH)
 LINK_JAVA_LIBS=-L$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)
 
@@ -220,6 +222,7 @@ endif
 OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
+QM=\"
     
 DEL=rm -f
 DELRECURSIVE=rm -rf
@@ -260,7 +263,7 @@ CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV)
 
 CC_OUTPUT_SWITCH=-o
 
-LIBRARY_LINK_FLAGS=-shared
+LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
 
 ifeq "$(PROCTYPE)" "ppc"
 LIBRARY_LINK_FLAGS+=-fPIC
