@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:56:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vos/module.hxx>
-#include <sfx2/interno.hxx>
 #include <svx/msoleexp.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svx/svxerr.hxx>
@@ -116,9 +115,8 @@ SdPPTFilter::~SdPPTFilter()
 sal_Bool SdPPTFilter::Import()
 {
     sal_Bool    bRet = sal_False;
-    SvStorage*  pStorage;
-
-    if( ( pStorage = mrMedium.GetStorage() ) != NULL )
+    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), FALSE );
+    if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
         document is propably a PPT95 containing PPT97 */
@@ -126,10 +124,10 @@ sal_Bool SdPPTFilter::Import()
         String sDualStorage( RTL_CONSTASCII_USTRINGPARAM( "PP97_DUALSTORAGE" ) );
         if ( pStorage->IsContained( sDualStorage ) )
         {
-            xDualStorage = pStorage->OpenStorage( sDualStorage, STREAM_STD_READ );
+            xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM("PowerPoint Document") ), STREAM_STD_READ );
+        SvStream* pDocStream = pStorage->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("PowerPoint Document") ), STREAM_STD_READ );
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
@@ -172,14 +170,14 @@ sal_Bool SdPPTFilter::Export()
     {
         if( mxModel.is() )
         {
-            SvStorageRef    xStorRef;
+            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
             ExportPPT       PPTExport = ( ExportPPT ) pLibrary->getSymbol( ::rtl::OUString::createFromAscii("ExportPPT") );
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
                 pViewShell->GetView()->EndTextEdit();
             */
-            if( PPTExport && ( xStorRef = mrMedium.GetOutputStorage() ).Is() )
+            if( PPTExport && xStorRef.Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
                 SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
@@ -201,6 +199,7 @@ sal_Bool SdPPTFilter::Export()
                     CreateStatusIndicator();
 
                 bRet = PPTExport( xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
+                xStorRef->Commit();
             }
         }
         delete pLibrary;
@@ -217,13 +216,13 @@ void SdPPTFilter::PreSaveBasic()
         SvxImportMSVBasic aMSVBas( (SfxObjectShell&) mrDocShell, *xDest, FALSE, FALSE );
         aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
 
-        SvStorageRef xOverhead = xDest->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+        SvStorageRef xOverhead = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
         if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
         {
-            SvStorageRef xOverhead2 = xOverhead->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+            SvStorageRef xOverhead2 = xOverhead->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
             if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
             {
-                SvStorageStreamRef xTemp = xOverhead2->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
+                SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
                 if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
                 {
                     UINT32 nLen = xTemp->GetSize();
