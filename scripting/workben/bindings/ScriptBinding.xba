@@ -218,8 +218,7 @@ function ReadXMLToArray( bindingType as string ) as boolean
 					end if				
 					scriptName = scriptName + ExtractKeyCodeFromXMLLine( xmlline )
 					scriptNames( scriptCount ) = scriptName
-				&apos;	msgbox( &quot;scriptNames( &quot; + scriptCount + &quot; )  &quot; + scriptNames( scriptCount ) )
-					scriptLinePosition( scriptCount ) = lineCount
+								scriptLinePosition( scriptCount ) = lineCount
 					scriptCount = scriptCount + 1
 				end if
 			end if
@@ -230,8 +229,6 @@ function ReadXMLToArray( bindingType as string ) as boolean
 	
 	&apos;Set global variable numberOfLines (lineCount is one too many at end of the loop)
 	numberOfLines = lineCount - 1
-	&apos;Set global variable scriptCount (it is one too many at end of the loop)
-	scriptCount = scriptCount - 1
 	&apos;Set global variable menuCount (it is one too many at end of the loop)
 	menuCount = menuCount - 1
 	
