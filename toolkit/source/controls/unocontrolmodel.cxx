@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 12:05:22 $
+ *  last change: $Author: mt $ $Date: 2001-10-12 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
 
             case BASEPROPERTY_AUTOCOMPLETE:
+            case BASEPROPERTY_SCALEIMAGE:
             case BASEPROPERTY_ENABLED:
             case BASEPROPERTY_PRINTABLE:            aDefault <<= (sal_Bool) sal_True;   break;
 
