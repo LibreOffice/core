@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-09-26 16:45:28 $
+ *  last change: $Author: jbu $ $Date: 2002-11-19 08:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include <cstdarg>
 #include <cstdio>
+#include <stdio.h>
+#include <stdarg.h>
 
 #include <rtl/logfile.h>
 
