@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:26:32 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,20 @@ namespace dbaui
 
         FreeResource();
 
-        DBG_ASSERT(m_aDisplayNames.size() == m_aNames.size(),
-            "OCharsetDisplay::OCharsetDisplay: invalid number of display names!");
+        if (m_aDisplayNames.size() != m_aNames.size())
+        {
+            DBG_ERROR("OCharsetDisplay::OCharsetDisplay: invalid number of display names!");
+            if (m_aDisplayNames.size() < m_aNames.size())
+            {
+                m_aDisplayNames.reserve(m_aNames.size());
+                while (m_aDisplayNames.size() < m_aNames.size())
+                    m_aDisplayNames.push_back(::rtl::OUString::createFromAscii("<unknown>"));
+            }
+            else
+            {
+                DBG_ERROR("OCharsetDisplay::OCharsetDisplay: this is serious ... more display names than logical names!");
+            }
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -231,6 +243,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/29 22:26:32  fs
+ *  #80003# re-implemented, now base on dbtools::OCharsetMap
+ *
  *  Revision 1.1  2000/10/05 10:08:39  fs
  *  initial checkin
  *
