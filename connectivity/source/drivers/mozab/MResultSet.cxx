@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:40:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,11 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #endif
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* _DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -396,7 +396,7 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 rowIndex) throw(SQLException, RuntimeEx
                 ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
             }
         }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         else {
             OSL_TRACE("Row[%d] is NOT Bound", i );
         }
@@ -761,11 +761,11 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     if ( m_aParameterRow.isValid() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->size() + 1, "More parameters than values found" );
         rMatchString = (*m_aParameterRow)[(sal_uInt16)m_nParamIndex];
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OSL_TRACE("Prop Value       : %s\n", OUtoCStr( rMatchString ) );
 #endif
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     else {
         OSL_TRACE("Prop Value       : Invalid ParameterRow!\n" );
     }
@@ -796,11 +796,11 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 OSL_TRACE("Prop Column Name : %s\n", OUtoCStr( aColName ) );
                 if ( m_aParameterRow.isValid() ) {
                     aParameterValue = (*m_aParameterRow)[(sal_uInt16)i];
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     OSL_TRACE("Prop Value       : %s\n", OUtoCStr( aParameterValue ) );
 #endif
                 }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 else {
                     OSL_TRACE("Prop Value       : Invalid ParameterRow!\n" );
                 }
@@ -1086,7 +1086,7 @@ void OResultSet::fillRowData()
     for (sal_Int32 i = 1; aIter != m_xColumns->end();++aIter, i++)
     {
         (*aIter)->getPropertyValue(sProprtyName) >>= sName;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OSL_TRACE("Query Columns : (%d) %s\n", i, OUtoCStr(sName) );
 #endif
         m_aAttributeStrings.push_back( sName );
@@ -1147,7 +1147,7 @@ void OResultSet::fillRowData()
         ::dbtools::throwGenericSQLException(
                     ::rtl::OUString::createFromAscii("Error querying addressbook"),NULL);
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "executeQuery returned %d\n", rv );
 
     OSL_TRACE( "\tOUT OResultSet::fillRowData()\n" );
@@ -1291,7 +1291,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
 
                     OSL_TRACE("OrderbyColumnNumber->size() = %d",m_aOrderbyColumnNumber.size());
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
                         OSL_TRACE("Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
@@ -1313,7 +1313,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     }
 
                     m_pKeySet = m_pSortIndex->CreateKeySet();
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     for( i = 0; i < m_pKeySet->size(); i++ )
                         OSL_TRACE("Sorted: %d -> %d", i, (*m_pKeySet)[i] );
 #endif
@@ -1423,7 +1423,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
                             // ...
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                         OSL_TRACE("Set Col Mapping: %d -> %d", nSelectColumnPos, nTableColumnPos );
 #endif
                         _rColMapping[nSelectColumnPos] = nTableColumnPos;
@@ -1463,7 +1463,7 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
 
     while ( nRow > (sal_uInt32)nNumberOfRecords && !m_aQuery.queryComplete() ) {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("validRow: waiting...");
 #endif
             m_aQuery.checkRowAvailable( nRow );
@@ -1478,7 +1478,7 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
         OSL_TRACE("validRow(%u): return False", nRow);
         return sal_False;
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE("validRow(%u): return True", nRow);
 #endif
     return sal_True;
@@ -1550,7 +1550,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)
 {
     m_aColMapping = _aColumnMapping;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("Set Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
