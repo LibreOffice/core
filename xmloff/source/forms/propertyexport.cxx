@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:09:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,6 @@ namespace xmloff
 
             Any aValue;
             ::rtl::OUString sValue;
-            ::rtl::OUString sTypeDescription;
 
             // loop through all the properties which are yet to be exported
             for (   ConstStringSetIterator  aProperty = m_aRemainingProps.begin();
@@ -277,10 +276,10 @@ namespace xmloff
 
                 // now that we have the first sub-tag we need the form:properties element
                 if (!pPropertiesTag)
-                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
+                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, sal_True, sal_True);
 
                 // add the name attribute
-                AddAttribute(XML_NAMESPACE_FORM, "property-name", *aProperty);
+                AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, *aProperty);
 
                 // get the value
                 aValue = m_xProps->getPropertyValue(*aProperty);
@@ -305,33 +304,39 @@ namespace xmloff
                 // modified by BerryJia for Bug102407
                 com::sun::star::beans::Property aPropertyStruct;
                 aPropertyStruct = m_xPropertyInfo->getPropertyByName(*aProperty);
-                AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aPropertyStruct.Type));
+                token::XMLTokenEnum eValueType =
+                            implGetPropertyXMLType(aPropertyStruct.Type);
+                sal_Bool bIsVoid = !bIsSequence &&
+                        TypeClass_VOID == aValue.getValueType().getTypeClass();
+                if( bIsVoid )
+                    AddAttribute(XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE,
+                                 token::XML_VOID );
+                else
+                    AddAttribute(XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE,
+                                 eValueType);
+                token::XMLTokenEnum eValue =
+                        token::XML_BOOLEAN == eValueType
+                            ? token::XML_BOOLEAN_VALUE
+                            : (token::XML_STRING == eValueType
+                                    ? token::XML_STRING_VALUE
+                                    : token::XML_VALUE);
 
-                if (bIsSequence)
-                    // we have a special attribute indicating that the property is a list
-                    AddAttribute(XML_NAMESPACE_FORM, "property-is-list", m_sValueTrue);
-
-                // start the property tag
-                SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property", sal_True, sal_True);
-
-                if (!bIsSequence)
+                if( !bIsSequence && !bIsVoid )
                 {   // the simple case
                     //add by BerryJia for Bug102407
-                    if(TypeClass_VOID == aValue.getValueType().getTypeClass())
-                    {
-                        AddAttribute(XML_NAMESPACE_FORM, "property-is-void", ::rtl::OUString::createFromAscii("true"));
-                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
-                    }
-                    else
-                    {
-                        sValue = implConvertAny(aValue);
-                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
-                            // (no whitespace inside the tag)
-                        m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
-                    }
-                    // done with this property
-                    continue;
+                    sValue = implConvertAny(aValue);
+                    AddAttribute(XML_NAMESPACE_OFFICE, eValue, sValue );
                 }
+
+
+                // start the property tag
+                SvXMLElementExport aValueTag(m_rContext.getGlobalContext(),
+                        XML_NAMESPACE_FORM,
+                        bIsSequence ? token::XML_LIST_PROPERTY
+                                    : token::XML_PROPERTY, sal_True, sal_True);
+
+                if (!bIsSequence)
+                    continue;
 
                 // the not-that-simple case, we need to iterate through the sequence elements
                 IIterator* pSequenceIterator = NULL;
@@ -364,12 +369,15 @@ namespace xmloff
                 }
                 if (pSequenceIterator)
                 {
-                    ::rtl::OUString sCurrent;
                     while (pSequenceIterator->hasMoreElements())
                     {
-                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
-                            // (no whitespace inside the tag)
-                        m_rContext.getGlobalContext().GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
+                        sValue =
+                            implConvertAny(pSequenceIterator->nextElement());
+                        AddAttribute(XML_NAMESPACE_OFFICE, eValue, sValue );
+                        SvXMLElementExport aValueTag(
+                                m_rContext.getGlobalContext(),
+                                XML_NAMESPACE_FORM, token::XML_LIST_VALUE,
+                                sal_True, sal_False);
                     }
                 }
                 delete pSequenceIterator;
@@ -750,38 +758,25 @@ namespace xmloff
 
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OPropertyExport::implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType)
+    token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType)
     {
-        // possible types we can write (either because we recognize them directly or because we convert _rValue
-        // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
-
         // handle the type description
         switch (_rType.getTypeClass())
         {
             case TypeClass_STRING:
-                return s_sTypeString;
+                return token::XML_STRING;
             case TypeClass_DOUBLE:
-                return s_sTypeDouble;
-            case TypeClass_BOOLEAN:
-                return s_sTypeBoolean;
             case TypeClass_BYTE:
             case TypeClass_SHORT:
-                return s_sTypeShort;
             case TypeClass_LONG:
-                return s_sTypeInteger;
             case TypeClass_HYPER:
-                return s_sTypeLong;
             case TypeClass_ENUM:
-                return s_sTypeInteger;
+                return token::XML_FLOAT;
+            case TypeClass_BOOLEAN:
+                return token::XML_BOOLEAN;
 
             default:
-                return s_sTypeDouble;
+                return token::XML_FLOAT;
         }
     }
 
@@ -811,6 +806,24 @@ namespace xmloff
             "OPropertyExport::AddAttributeASCII: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue);
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue)
+    {
+        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).getLength(),
+            "OPropertyExport::AddAttribute: already have such an attribute");
+
+        m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue);
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )
+    {
+        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).getLength(),
+            "OPropertyExport::AddAttribute: already have such an attribute");
+
+        m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _eValue);
     }
 
     //---------------------------------------------------------------------
