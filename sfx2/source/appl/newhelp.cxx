@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-27 13:03:39 $
+ *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1962,7 +1962,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
 
 IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 {
-    SetFactory( pListener->GetFactory(), sal_False );
+    SetFactory( pListener->GetFactory() );
     return 0;
 }
 
@@ -1971,7 +1971,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
 {
     String aModuleName = pListener->GetURL().GetToken( 2, '/' );
-    SetFactory( aModuleName, sal_False );
+    SetFactory( aModuleName );
     if ( IsWait() )
         LeaveWait();
     pIndexWin->GrabFocusBack();
@@ -2061,11 +2061,9 @@ void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow_Impl::SetFactory( const String& rFactory, sal_Bool bStart )
+void SfxHelpWindow_Impl::SetFactory( const String& rFactory )
 {
     pIndexWin->SetFactory( rFactory, sal_True );
-    if ( bStart )
-        pHelpInterceptor->SetFactory( rFactory );
 }
 
 // -----------------------------------------------------------------------
@@ -2073,7 +2071,8 @@ void SfxHelpWindow_Impl::SetFactory( const String& rFactory, sal_Bool bStart )
 void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
 {
     INetURLObject aObj( rURL );
-    SetFactory( aObj.GetHost(), sal_True );
+    SetFactory( aObj.GetHost() );
+    pHelpInterceptor->SetStartURL( rURL );
 }
 
 // -----------------------------------------------------------------------

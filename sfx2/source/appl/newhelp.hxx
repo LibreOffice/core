@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 14:06:24 $
+ *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ public:
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
-    void                SetFactory( const String& rFactory, sal_Bool bStart );
+    void                SetFactory( const String& rFactory );
     void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
 };

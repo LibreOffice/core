@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 09:55:54 $
+ *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,19 +147,16 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
 
 // -----------------------------------------------------------------------
 
-void HelpInterceptor_Impl::SetFactory( const String& rFactory )
+void HelpInterceptor_Impl::SetStartURL( const String& rURL )
 {
     DBG_ASSERT( !m_pHistory, "invalid history" );
     if ( !m_pHistory )
     {
         m_pHistory = new HelpHistoryList_Impl;
-        String aURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
-        aURL += rFactory;
-        aURL += String( DEFINE_CONST_UNICODE("/start") );
-        AppendConfigToken_Impl( aURL, sal_True );
-        m_pHistory->Insert( new HelpHistoryEntry_Impl( aURL ), ((ULONG)0x0) );
+        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), ((ULONG)0x0) );
         m_nCurPos = m_pHistory->Count() - 1;
     }
+    m_aCurrentURL = rURL;
 }
 
 // -----------------------------------------------------------------------

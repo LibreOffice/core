@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 08:26:26 $
+ *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
     ~HelpInterceptor_Impl();
 
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    void                    SetFactory( const String& rFactory );
+    void                    SetStartURL( const String& rURL );
     String                  GetCurrentURL() const { return m_aCurrentURL; }
 
     // XDispatchProvider
