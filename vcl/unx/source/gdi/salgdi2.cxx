@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-22 17:42:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,9 +267,9 @@ int X11SalGraphics::Clip( XLIB_Region   pRegion,
     XRectangle aRect;
     XClipBox( pRegion, &aRect );
 
-    if( nX + nDX <= aRect.x || nX >= aRect.x + aRect.width )
+    if( int(nX + nDX) <= int(aRect.x) || nX >= int(aRect.x + aRect.width) )
         return RectangleOut;
-    if( nY + nDY <= aRect.y || nY >= aRect.y + aRect.height )
+    if( int(nY + nDY) <= int(aRect.y) || nY >= int(aRect.y + aRect.height) )
         return RectangleOut;
 
     if( nX < aRect.x )
@@ -278,7 +278,7 @@ int X11SalGraphics::Clip( XLIB_Region   pRegion,
         nDX   -= aRect.x - nX;
         nX     = aRect.x;
     }
-    else if( nX + nDX > aRect.x + aRect.width )
+    else if( int(nX + nDX) > int(aRect.x + aRect.width) )
         nDX = aRect.x + aRect.width - nX;
 
     if( nY < aRect.y )
@@ -287,7 +287,7 @@ int X11SalGraphics::Clip( XLIB_Region   pRegion,
         nDY   -= aRect.y - nY;
         nY     = aRect.y;
     }
-    else if( nY + nDY > aRect.y + aRect.height )
+    else if( int(nY + nDY) > int(aRect.y + aRect.height) )
         nDY = aRect.y + aRect.height - nY;
 
     return RectangleIn;
@@ -423,7 +423,7 @@ void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, D
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end() && ! pFrame; ++it )
         {
             const SystemEnvData* pEnvData = (*it)->GetSystemData();
-            if( pEnvData->aWindow == aWindow )
+            if( Drawable(pEnvData->aWindow) == aWindow )
                 pFrame = *it;
         }
         if( ! pFrame )
@@ -765,50 +765,54 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     if( bPrinter_ && !bVirDev_ )
         return NULL;
 
+    bool bFakeWindowBG = false;
+
+    // normalize
+    if( nDX < 0 )
+    {
+        nX += nDX;
+        nDX = -nDX;
+    }
+    if ( nDY < 0 )
+    {
+        nY += nDY;
+        nDY = -nDY;
+    }
+
     if( bWindow_ && !bVirDev_ )
     {
-        // normalize
-        if( nDX < 0 )
-        {
-            nX += nDX;
-            nDX = -nDX;
-        }
-        if ( nDY < 0 )
-        {
-            nY += nDY;
-            nDY = -nDY;
-        }
-
         XWindowAttributes aAttrib;
 
         XGetWindowAttributes( GetXDisplay(), GetDrawable(), &aAttrib );
         if( aAttrib.map_state != IsViewable )
+            bFakeWindowBG = true;
+        else
         {
-            stderr0( "X11SalGraphics::GetBitmap drawable not viewable\n" );
-            return NULL;
-        }
+            long nOrgDX = nDX, nOrgDY = nDY;
 
-        // am Window clippen (eg)
-        if ( nX < 0 )
-        {
-            nDX += nX;
-            nX   = 0;
-        }
-        if ( nY < 0 )
-        {
-            nDY += nY;
-            nY   = 0;
-        }
-        if( nX + nDX > aAttrib.width )
-            nDX = aAttrib.width  - nX;
-        if( nY + nDY > aAttrib.height )
-            nDY = aAttrib.height - nY;
+            // clip to window size
+            if ( nX < 0 )
+            {
+                nDX += nX;
+                nX   = 0;
+            }
+            if ( nY < 0 )
+            {
+                nDY += nY;
+                nY   = 0;
+            }
+            if( nX + nDX > aAttrib.width )
+                nDX = aAttrib.width  - nX;
+            if( nY + nDY > aAttrib.height )
+                nDY = aAttrib.height - nY;
 
-        // nun alles ok ?
-        if( nDX <= 0 || nDY <= 0 )
-        {
-            stderr0( "X11SalGraphics::GetBitmap zero sized bitmap after clipping\n" );
-            return NULL;
+            // inside ?
+            if( nDX <= 0 || nDY <= 0 )
+            {
+                bFakeWindowBG = true;
+                nDX = nOrgDX;
+                nDY = nOrgDY;
+            }
         }
     }
 
@@ -818,8 +822,11 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     if( &GetDisplay()->GetColormap() != &GetColormap() )
         nBitCount = 1;
 
+    if( ! bFakeWindowBG )
+        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), nBitCount, nX, nY, nDX, nDY );
+    else
+        pSalBitmap->Create( Size( nDX, nDY ), (nBitCount > 8) ? 24 : nBitCount, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
 
-    pSalBitmap->ImplCreateFromDrawable( GetDrawable(), nBitCount, nX, nY, nDX, nDY );
     return pSalBitmap;
 }
 
@@ -865,8 +872,6 @@ void X11SalGraphics::invert( long       nX,
                                 long        nDY,
                                 SalInvert   nFlags )
 {
-    SalDisplay *pDisp = GetDisplay();
-
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
     {
