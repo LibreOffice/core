@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
             }
         }
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("BibPosListener::positioned: something went wrong !");
     }
@@ -661,7 +661,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
             }
         }
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
     }

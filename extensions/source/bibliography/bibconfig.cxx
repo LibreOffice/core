@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:36:54 $
+ *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,80 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
  ---------------------------------------------------------------------------*/
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)
 {
+    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
+    {
+        const Mapping* pMapping = pMappingsArr->GetObject(i);
+        sal_Bool bURLEqual = rDesc.sDataSource.equals(pMapping->sURL);
+        if(rDesc.sTableOrQuery == pMapping->sTableName && bURLEqual)
+        {
+            pMappingsArr->DeleteAndDestroy(i, 1);
+            break;
+        }
+    }
+    Mapping* pNew = new Mapping(*pSetMapping);
+    pMappingsArr->Insert(pNew, pMappingsArr->Count());
+    SetModified();
+
+/*  SfxAppIniManagerProperty aProp;
+    GetpApp()->Property( aProp );
+    SfxIniManager* pIniMan = aProp.GetIniManager();
+    if(pIniMan)
+    {
+        //kill all old entries an rewrite all mappings
+        String sTempEntry;
+        sal_uInt16 nIdx = USHRT_MAX;
+        do
+        {
+            String sDBKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
+            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
+            if(USHRT_MAX != nIdx)
+            {
+                sDBKey += nIdx;
+                sMapKey += nIdx;
+            }
+            sTempEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
+                                            sDBKey );
+            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey);
+            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey);
+            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
+        }while(sTempEntry.Len());
+
+        nIdx = USHRT_MAX;
+        for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
+        {
+            const Mapping* pMapping = pMappingsArr->GetObject(i);
+
+            String sDataTableEntry(pMapping->sURL);
+            sDataTableEntry = pIniMan->UsePathVars( sDataTableEntry );
+            sDataTableEntry += ';';
+            sDataTableEntry += pMapping->sTableName;
+
+            String sDBKey = C2S(BIBLIOGRAPHY_INI_DB_ENTRY);
+            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
+            if(USHRT_MAX != nIdx)
+            {
+                sDBKey += nIdx;
+                sMapKey += nIdx;
+            }
+            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey, sDataTableEntry );
+
+            String sEntry;
+            for(sal_uInt16 nColumn = 0; nColumn < COLUMN_COUNT; nColumn++)
+            {
+                if(!pMapping->aColumnPairs[nColumn].sLogicalColumnName.Len() ||
+                    !pMapping->aColumnPairs[nColumn].sRealColumnName.Len())
+                    break;
+                sEntry += pMapping->aColumnPairs[nColumn].sLogicalColumnName;
+                sEntry += PAIR_TOKEN;
+                sEntry += pMapping->aColumnPairs[nColumn].sRealColumnName;
+                sEntry += MAP_TOKEN;
+            }
+            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey, sEntry );
+
+            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
+        }
+        pIniMan->Flush();
+    }*/
 }
 /*
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ BibModul::~BibModul()
 {
     delete pResMgr;
     delete pBibConfig;
+    pBibConfig = 0;
     xRegistry = 0;
     //delete pRegistry;
 }

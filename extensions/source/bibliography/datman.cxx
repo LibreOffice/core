@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DATA_XDATABASEFAVORITES_HPP_
 #include <com/sun/star/data/XDatabaseFavorites.hpp>     // TODO : this is obsolete ....
@@ -266,68 +272,56 @@ BOOL lcl_IsCaseSensitive(const String& rPathURL)
         sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = nCompare != 0;
     }
-    catch(...){}
+    catch(Exception& rEx){}
 */  return bCaseSensitive;
 }
 /* -----------------17.01.00 14:38-------------------
 
  --------------------------------------------------*/
-uno::Reference< sdbc::XConnection >  getConnection(const rtl::OUString& _rURL)
+Reference< sdbc::XConnection >  getConnection(const rtl::OUString& _rURL)
 {
     // first get the sdb::DataSource corresponding to the url
-    uno::Reference< sdbc::XDataSource >  xDataSource;
+    Reference< sdbc::XDataSource >  xDataSource;
     // is it a favorite title ?
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-    uno::Reference< XNameAccess >  xNamingContext(xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseAccessContext")), UNO_QUERY);
+    Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    Reference<XInterface> xNamingContextIfc = xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseContext"));
+    Reference< XNameAccess >  xNamingContext(xNamingContextIfc, UNO_QUERY);
     if (xNamingContext.is() && xNamingContext->hasByName(_rURL))
     {
-        DBG_ASSERT(uno::Reference< XNamingService > (xNamingContext, UNO_QUERY).is(), "::getDataSource : no uno::NamingService interface on the sdb::DatabaseAccessContext !");
-        xDataSource = uno::Reference< sdbc::XDataSource > (uno::Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
+        DBG_ASSERT(Reference< XNamingService > (xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
+        xDataSource = Reference< sdbc::XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
     }
-    if (!xDataSource.is())
-    {
-        // is it a file url ?
-        uno::Reference< XDatabaseEnvironment >  xEnvironment(xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseEnvironment")), UNO_QUERY);
-        if (xEnvironment.is())
-        {
-            try
-            {
-                xDataSource = uno::Reference< sdbc::XDataSource > (xEnvironment->getDatabaseAccess(_rURL), UNO_QUERY);
-            }
-            catch(sdbc::SQLException&)
-            {
-                xDataSource = NULL;
-                // TODO : a real error handling
-            }
-            catch(...)
-            {
-                xDataSource = NULL;
-            }
-        }
-    }
-
     // build the connection from the data source
-    uno::Reference< sdbc::XConnection >  xConn;
+    Reference< sdbc::XConnection >  xConn;
     if (xDataSource.is())
     {
         // need user/pwd for this
         rtl::OUString sUser, sPwd;
-        uno::Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
-        uno::Reference< XPropertySetInfo >  xInfo = xDataSourceProps.is() ? xDataSourceProps->getPropertySetInfo() : uno::Reference< XPropertySetInfo > ();
+        Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
+        Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
+/*      Reference< XPropertySetInfo >  xInfo = xDataSourceProps.is() ? xDataSourceProps->getPropertySetInfo() : Reference< XPropertySetInfo > ();
         if (xInfo.is() && xInfo->hasPropertyByName(C2U("User")))
             xDataSourceProps->getPropertyValue(C2U("User")) >>= sUser;
         if (xInfo.is() && xInfo->hasPropertyByName(C2U("Password")))
             xDataSourceProps->getPropertyValue(C2U("Password"))>>= sPwd;
-
+*/
         try
         {
-            xConn = xDataSource->getConnection(sUser, sPwd);
+
+            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler"));
+            Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
+            xConn = xComplConn->connectWithCompletion(xIHdl);
+//          xConn = xDataSource->getConnection(sUser, sPwd);
         }
         catch(sdbc::SQLException&)
         {
             // TODO : a real error handling
         }
-        catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
         {
         }
 
@@ -338,16 +332,16 @@ uno::Reference< sdbc::XConnection >  getConnection(const rtl::OUString& _rURL)
 /* -----------------17.01.00 14:46-------------------
 
  --------------------------------------------------*/
-uno::Reference< sdbc::XConnection >  getConnection(const uno::Reference< XInterface > & xRowSet)
+Reference< sdbc::XConnection >  getConnection(const Reference< XInterface > & xRowSet)
 {
-    uno::Reference< sdbc::XConnection >  xConn;
+    Reference< sdbc::XConnection >  xConn;
     try
     {
-        uno::Reference< XPropertySet >  xFormProps(xRowSet, UNO_QUERY);
+        Reference< XPropertySet >  xFormProps(xRowSet, UNO_QUERY);
         if (!xFormProps.is())
             return xConn;
 
-        xConn = uno::Reference< sdbc::XConnection > (*(uno::Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
+        xConn = Reference< sdbc::XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
         if (!xConn.is())
         {
             OUString uTmp;
@@ -355,7 +349,11 @@ uno::Reference< sdbc::XConnection >  getConnection(const uno::Reference< XInterf
             xConn = getConnection(uTmp);
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("exception in getConnection");
     }
@@ -365,11 +363,11 @@ uno::Reference< sdbc::XConnection >  getConnection(const uno::Reference< XInterf
 /* -----------------17.01.00 16:07-------------------
 
  --------------------------------------------------*/
-uno::Reference< XNameAccess >  getColumns(const uno::Reference< XForm > & xForm)
+Reference< XNameAccess >  getColumns(const Reference< XForm > & xForm)
 {
-    uno::Reference< XNameAccess >  xReturn;
+    Reference< XNameAccess >  xReturn;
     // check if the form is alive
-    uno::Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xForm, UNO_QUERY);
+    Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xForm, UNO_QUERY);
     if (xSupplyCols.is())
         xReturn = xSupplyCols->getColumns();
 
@@ -377,8 +375,8 @@ uno::Reference< XNameAccess >  getColumns(const uno::Reference< XForm > & xForm)
     {   // no ....
         xReturn = NULL;
         // -> get the table the form is bound to and ask it for their columns
-        uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(getConnection(xForm), UNO_QUERY);
-        uno::Reference< XPropertySet >  xFormProps(xForm, UNO_QUERY);
+        Reference< sdbcx::XTablesSupplier >  xSupplyTables(getConnection(xForm), UNO_QUERY);
+        Reference< XPropertySet >  xFormProps(xForm, UNO_QUERY);
         if (xFormProps.is() && xSupplyTables.is())
         {
             try
@@ -387,10 +385,10 @@ uno::Reference< XNameAccess >  getColumns(const uno::Reference< XForm > & xForm)
                     "::getColumns : invalid form (has no table as data source) !");
                 rtl::OUString sTable;
                 xFormProps->getPropertyValue(C2U("Command")) >>= sTable;
-                uno::Reference< XNameAccess >  xTables = xSupplyTables->getTables();
+                Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
-                    xSupplyCols = uno::Reference< sdbcx::XColumnsSupplier > (
-                        *(uno::Reference< XInterface > *)xTables->getByName(sTable).getValue(), UNO_QUERY);
+                    xSupplyCols = Reference< sdbcx::XColumnsSupplier > (
+                        *(Reference< XInterface > *)xTables->getByName(sTable).getValue(), UNO_QUERY);
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
             }
@@ -406,10 +404,6 @@ uno::Reference< XNameAccess >  getColumns(const uno::Reference< XForm > & xForm)
                 sMsg.AppendAscii(") ...");
                 DBG_ERROR( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
 #endif
-            }
-            catch(...)
-            {
-                DBG_ERROR("::getColumns : catched a strange exception (no uno::Exception) ...");
             }
 
         }
@@ -630,9 +624,9 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aListBoxes[30] = &aCustom5LB;
 
     aListBoxes[0]->InsertEntry(sNone);
-    uno::Reference< XNameAccess >  xFields = getColumns(pDatMan->getDatabaseForm());
+    Reference< XNameAccess >  xFields = getColumns(pDatMan->getDatabaseForm());
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
-    uno::Sequence<rtl::OUString> aNames = xFields->getElementNames();
+    Sequence<rtl::OUString> aNames = xFields->getElementNames();
     sal_Int32 nFieldsCount = aNames.getLength();
     const rtl::OUString* pNames = aNames.getConstArray();
 
@@ -714,6 +708,7 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
     aDesc.sDataSource = pDatMan->getActiveDataSource();
     aDesc.sTableOrQuery = pDatMan->getActiveDataTable();
     aDesc.nCommandType = CommandType::TABLE;
+    pDatMan->ResetIdentifierMapping();
     pConfig->SetMapping(aDesc, &aNew);
     EndDialog(RET_OK);
     return 0;
@@ -765,12 +760,12 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     aSelectionLB.SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
     try
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-        uno::Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
+        Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
         // TODO : XDatabaseFavorites is an obsolete interface, the whole dialog has to be based on
         // the sdb::DatabaseAccessContext service
 
-        uno::Sequence< beans::PropertyValue > aFavs = xFav->getFavorites();
+        Sequence< beans::PropertyValue > aFavs = xFav->getFavorites();
         const beans::PropertyValue* pValues = aFavs.getConstArray();
 
         Size aSize = aSelectionHB.GetSizePixel();
@@ -812,7 +807,11 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         aSelectionLB.GetModel()->Resort();
 
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl")
     }
@@ -883,8 +882,8 @@ BibDataManager::BibDataManager(BibRegistry * pRegistry) :
  --------------------------------------------------*/
 BibDataManager::~BibDataManager()
 {
-    uno::Reference< XLoadable >  xLoad(xForm, UNO_QUERY);
-    uno::Reference< lang::XComponent >  xComp(xForm, UNO_QUERY);
+    Reference< XLoadable >  xLoad(xForm, UNO_QUERY);
+    Reference< lang::XComponent >  xComp(xForm, UNO_QUERY);
     if (xForm.is())
     {
         RemoveMeAsUidListener();
@@ -896,44 +895,48 @@ BibDataManager::~BibDataManager()
     }
 }
 //------------------------------------------------------------------------
-void BibDataManager::InsertFields(const uno::Reference< XFormComponent > & xGrid)
+void BibDataManager::InsertFields(const Reference< XFormComponent > & xGrid)
 {
     if (!xGrid.is())
         return;
 try
 {
-    uno::Reference< XNameAccess >  xFields = getColumns(xForm);
+    Reference< XNameAccess >  xFields = getColumns(xForm);
     if (!xFields.is())
         return;
 
-    uno::Reference< XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
-    uno::Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
+    Reference< XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
+    Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
 
-    uno::Reference< XPropertySet >  xField;
+    Reference< XPropertySet >  xField;
 
-    uno::Sequence<rtl::OUString> aFields(xFields->getElementNames());
+    Sequence<rtl::OUString> aFields(xFields->getElementNames());
     const rtl::OUString* pFields = aFields.getConstArray();
     sal_Int32 nCount=aFields.getLength();
-    uno::Any aElement;
+    Any aElement;
     for( sal_Int32 i=0; i<nCount; i++ )
     {
         rtl::OUString aCurrentColName= pFields[i];
 
         aElement = xFields->getByName(aCurrentColName);
-        xField = *(uno::Reference< XPropertySet > *)aElement.getValue();
+        xField = *(Reference< XPropertySet > *)aElement.getValue();
 
         sal_Int32 nFormatKey = *(sal_Int32*)xField->getPropertyValue(FM_PROP_FORMATKEY).getValue();
 
-        uno::Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(getControlName(nFormatKey));
+        Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(getControlName(nFormatKey));
 
         Any aColName; aColName <<= aCurrentColName;
         xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
         xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
 
-        xColContainer->insertByName(aCurrentColName, uno::Any(&xCurrentCol, ::getCppuType((Reference<XPropertySet>*)0)));
+        xColContainer->insertByName(aCurrentColName, Any(&xCurrentCol, ::getCppuType((Reference<XPropertySet>*)0)));
     }
 }
-catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
 {
     DBG_ERROR("Exception in BibDataManager::InsertFields")
 }
@@ -943,35 +946,39 @@ catch(...)
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-uno::Reference< awt::XControlModel >  BibDataManager::createGridModel()
+Reference< awt::XControlModel >  BibDataManager::createGridModel()
 {
     return createGridModel(xForm);
 }
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-uno::Reference< awt::XControlModel >  BibDataManager::createGridModel(const uno::Reference< XForm > & xDbForm)
+Reference< awt::XControlModel >  BibDataManager::createGridModel(const Reference< XForm > & xDbForm)
 {
     try
     {
-        uno::Reference< XPropertySet >  aFormPropSet( xDbForm, UNO_QUERY );
-        uno::Any aDbSource=aFormPropSet->getPropertyValue(C2U("Command"));
+        Reference< XPropertySet >  aFormPropSet( xDbForm, UNO_QUERY );
+        Any aDbSource=aFormPropSet->getPropertyValue(C2U("Command"));
         rtl::OUString aName=*(OUString*)aDbSource.getValue();
 
         //xGridModel=loadGridModel(aName);
           xGridModel=loadGridModel(gGridName);
 
-        uno::Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
+        Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
 
         if(xNameCont->hasByName(aName))
         {
             xNameCont->removeByName(aName);
         }
 
-        xNameCont->insertByName(aName, uno::Any(&xGridModel, ::getCppuType((Reference<XFormComponent>*)0)));
+        xNameCont->insertByName(aName, Any(&xGridModel, ::getCppuType((Reference<XFormComponent>*)0)));
 
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::createGridModel: something went wrong !");
     }
@@ -982,23 +989,23 @@ uno::Reference< awt::XControlModel >  BibDataManager::createGridModel(const uno:
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-uno::Reference< XForm >  BibDataManager::getDatabaseForm()
+Reference< XForm >  BibDataManager::getDatabaseForm()
 {
     return xForm;
 }
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
+Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 {
-    uno::Reference< XForm >  xResult;
+    Reference< XForm >  xResult;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-        xForm = uno::Reference< XForm > (xMgr->createInstance( C2U("com.sun.star.form.component.Form") ),
+        Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        xForm = Reference< XForm > (xMgr->createInstance( C2U("com.sun.star.form.component.Form") ),
                                                                             UNO_QUERY );
 
-        uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
+        Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
 
         aDataSourceURL = rDesc.sDataSource;
         if(aPropertySet.is())
@@ -1014,12 +1021,12 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDe
             aVal <<= (sal_Int32)50;
             aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
 
-            uno::Reference< sdbc::XConnection >  xConnection = getConnection(rDesc.sDataSource);
-            uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
-            uno::Reference< XNameAccess >  xTables = xSupplyTables.is() ?
-                                xSupplyTables->getTables() : uno::Reference< XNameAccess > ();
+            Reference< sdbc::XConnection >  xConnection = getConnection(rDesc.sDataSource);
+            Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
+            Reference< XNameAccess >  xTables = xSupplyTables.is() ?
+                                xSupplyTables->getTables() : Reference< XNameAccess > ();
 
-            uno::Sequence<rtl::OUString> aTableNameSeq;
+            Sequence<rtl::OUString> aTableNameSeq;
             if (xTables.is())
                 aTableNameSeq = xTables->getElementNames();
 
@@ -1034,12 +1041,12 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDe
                     rDesc.nCommandType = CommandType::TABLE;
                 }
 
-                uno::Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-                uno::Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
+                Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
+                Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
                 if(!xKey.is())
                     xKey = xRoot->createKey(aActiveDataTable);
 
-                xSourceProps=uno::Reference< XPropertySet > (xKey, UNO_QUERY);
+                xSourceProps=Reference< XPropertySet > (xKey, UNO_QUERY);
 
                 aVal <<= aActiveDataTable;
                 aPropertySet->setPropertyValue(C2U("Command"), aVal);
@@ -1047,10 +1054,10 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDe
                 aPropertySet->setPropertyValue(C2U("CommandType"), aVal);
 
 
-                uno::Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
-                uno::Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
+                Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
                 xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
@@ -1065,7 +1072,11 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDe
             }
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::createDatabaseForm: something went wrong !");
     }
@@ -1074,20 +1085,24 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDe
     return xResult;
 }
 //------------------------------------------------------------------------
-uno::Sequence<rtl::OUString> BibDataManager::getDataSources()
+Sequence<rtl::OUString> BibDataManager::getDataSources()
 {
-    uno::Sequence<rtl::OUString> aTableNameSeq;
+    Sequence<rtl::OUString> aTableNameSeq;
 
     try
     {
-        uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(getConnection(xForm), UNO_QUERY);
-        uno::Reference< XNameAccess >  xTables;
+        Reference< sdbcx::XTablesSupplier >  xSupplyTables(getConnection(xForm), UNO_QUERY);
+        Reference< XNameAccess >  xTables;
         if (xSupplyTables.is())
             xTables = xSupplyTables->getTables();
         if (xTables.is())
             aTableNameSeq = xTables->getElementNames();
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getDataSources: something went wrong !");
     }
@@ -1101,7 +1116,7 @@ rtl::OUString BibDataManager::getActiveDataTable()
     return aActiveDataTable;
 }
 //------------------------------------------------------------------------
-uno::Reference< XSQLQueryComposer >  BibDataManager::getParser()
+Reference< XSQLQueryComposer >  BibDataManager::getParser()
 {
     return xParser;
 }
@@ -1112,16 +1127,20 @@ void BibDataManager::setFilter(const rtl::OUString& rQuery)
     {
         xParser->setFilter(rQuery);
         rtl::OUString aQuery=xParser->getFilter();
-        uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
+        Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
         Any aVal; aVal <<= aQuery;
         aPropertySet->setPropertyValue(C2U("Filter"), aVal);
         BOOL bVal = sal_True;
         aVal.setValue(&bVal, ::getBooleanCppuType());
         aPropertySet->setPropertyValue(C2U("ApplyFilter"), aVal);
-        uno::Reference< XLoadable >  xLoadable(xForm, UNO_QUERY );
+        Reference< XLoadable >  xLoadable(xForm, UNO_QUERY );
         xLoadable->reload();
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::setFilterOnActiveDataSource: something went wrong !");
     }
@@ -1135,15 +1154,19 @@ rtl::OUString BibDataManager::getFilter()
     rtl::OUString aQueryString;
     try
     {
-        uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
-        uno::Any aQuery=aPropertySet->getPropertyValue(C2U("Filter"));
+        Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
+        Any aQuery=aPropertySet->getPropertyValue(C2U("Filter"));
 
         if(aQuery.getValueType() == ::getCppuType((OUString*)0))
         {
             aQueryString=*(OUString*)aQuery.getValue();
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getFilterOnActiveDataSource: something went wrong !");
     }
@@ -1153,10 +1176,10 @@ rtl::OUString BibDataManager::getFilter()
 
 }
 //------------------------------------------------------------------------
-uno::Sequence<rtl::OUString> BibDataManager::getQueryFields()
+Sequence<rtl::OUString> BibDataManager::getQueryFields()
 {
-    uno::Sequence<rtl::OUString> aFieldSeq;
-    uno::Reference< XNameAccess >  xFields = getColumns(xForm);
+    Sequence<rtl::OUString> aFieldSeq;
+    Reference< XNameAccess >  xFields = getColumns(xForm);
     if (xFields.is())
         aFieldSeq = xFields->getElementNames();
     return aFieldSeq;
@@ -1170,7 +1193,11 @@ void BibDataManager::setQueryField(const rtl::OUString& rQuery)
         xSourceProps->setPropertyValue(C2U("QueryField"),aQuery);
 
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::setQueryField")
     }
@@ -1182,11 +1209,11 @@ rtl::OUString BibDataManager::getQueryField()
     rtl::OUString aFieldString;
     try
     {
-        uno::Any aField=xSourceProps->getPropertyValue(C2U("QueryField"));
+        Any aField=xSourceProps->getPropertyValue(C2U("QueryField"));
 
         if(aField.getValueType() == ::getVoidCppuType())
         {
-            uno::Sequence<rtl::OUString> aSeq=getQueryFields();
+            Sequence<rtl::OUString> aSeq=getQueryFields();
             const rtl::OUString* pFields = aSeq.getConstArray();
             if(aSeq.getLength()>0)
             {
@@ -1199,7 +1226,11 @@ rtl::OUString BibDataManager::getQueryField()
         }
 
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::getQueryField")
     }
@@ -1212,7 +1243,7 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
 {
     try
     {
-        uno::Any aQuery;
+        Any aQuery;
         aQuery <<= rQuery;
         xSourceProps->setPropertyValue(C2U("QueryText"), aQuery);
 
@@ -1232,7 +1263,11 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
         setFilter(aQueryString);
 
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::StartQueryWith")
     }
@@ -1244,13 +1279,17 @@ rtl::OUString BibDataManager::getQueryString()
     rtl::OUString aQueryString;
     try
     {
-        uno::Any aQuery=xSourceProps->getPropertyValue(C2U("QueryText"));
+        Any aQuery=xSourceProps->getPropertyValue(C2U("QueryText"));
         if(aQuery.getValueType() == ::getCppuType((OUString*)0))
         {
             aQueryString=*(OUString*)aQuery.getValue();
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::getQueryString")
     }
@@ -1266,17 +1305,17 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
     //unloadDatabase();
     rtl::OUString uTable;
     aDataSourceURL = rURL;
-    uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
+    Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
     if(aPropertySet.is())
     {
         Any aVal; aVal <<= rURL;
         aPropertySet->setPropertyValue(C2U("DataSourceName"), aVal);
-        uno::Sequence<rtl::OUString> aTableNameSeq;
-        uno::Reference< sdbc::XConnection >  xConnection = getConnection(xForm);
-        uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
+        Sequence<rtl::OUString> aTableNameSeq;
+        Reference< sdbc::XConnection >  xConnection = getConnection(xForm);
+        Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
         if(xSupplyTables.is())
         {
-            uno::Reference< XNameAccess >  xAccess = xSupplyTables->getTables();
+            Reference< XNameAccess >  xAccess = xSupplyTables->getTables();
             aTableNameSeq = xAccess->getElementNames();
         }
         if(aTableNameSeq.getLength() > 0)
@@ -1301,8 +1340,8 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
         //aEvent.Source     = (XDispatch *) this;
         aEvent.FeatureDescriptor = getActiveDataTable();
 
-        uno::Sequence<rtl::OUString> aStringSeq = getDataSources();
-        aEvent.State.setValue(&aStringSeq, ::getCppuType((uno::Sequence<rtl::OUString>*)0));
+        Sequence<rtl::OUString> aStringSeq = getDataSources();
+        aEvent.State.setValue(&aStringSeq, ::getCppuType((Sequence<rtl::OUString>*)0));
 
         if(pToolbar)
         {
@@ -1314,7 +1353,7 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
         {
             aURL.Complete =C2U(".uno:Bib/newGridModel");
             aEvent.FeatureURL = aURL;
-            uno::Reference< awt::XControlModel >  xModel = createGridModel();
+            Reference< awt::XControlModel >  xModel = createGridModel();
             aEvent.State.setValue(&xModel, ::getCppuType((Reference<awt::XControlModel>*)0));
             pGridWin->statusChanged( aEvent );
         }
@@ -1329,14 +1368,14 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
     try
     {
         sal_Bool bFlag=sal_False;
-        uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
+        Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
 
         if(aPropertySet.is())
         {
-            uno::Reference< sdbc::XConnection >  xConnection = getConnection(xForm);
-            uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
-            uno::Reference< XNameAccess >  xAccess = xSupplyTables->getTables();
-            uno::Sequence<rtl::OUString> aTableNameSeq = xAccess->getElementNames();
+            Reference< sdbc::XConnection >  xConnection = getConnection(xForm);
+            Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
+            Reference< XNameAccess >  xAccess = xSupplyTables->getTables();
+            Sequence<rtl::OUString> aTableNameSeq = xAccess->getElementNames();
             sal_uInt32 nCount = aTableNameSeq.getLength();
             const rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
 
@@ -1358,18 +1397,18 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                     saveGridModel(xGridModel);
                 }*/
 
-                uno::Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-                uno::Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
+                Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
+                Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
 
                 if(!xKey.is())
                     xKey = xRoot->createKey(aActiveDataTable);
 
-                xSourceProps=uno::Reference< XPropertySet > (xKey, UNO_QUERY);
+                xSourceProps=Reference< XPropertySet > (xKey, UNO_QUERY);
 
-                uno::Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
-                uno::Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
+                Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
                 xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
@@ -1391,7 +1430,11 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 pBibView->UpdatePages();
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::setActiveDataTable: something went wrong !");
     }
@@ -1402,7 +1445,7 @@ void BibDataManager::loadDatabase()
 {
     if(xForm.is())
     {
-        uno::Reference< XLoadable >  xFormAsLoadable(xForm, UNO_QUERY );
+        Reference< XLoadable >  xFormAsLoadable(xForm, UNO_QUERY );
         DBG_ASSERT(xFormAsLoadable.is(), "BibDataManager::loadDatabase : invalid form !");
         xFormAsLoadable->load();
         xFormAsLoadable->reload();  // why ? may be very expensive !
@@ -1416,42 +1459,46 @@ void BibDataManager::unloadDatabase()
     if(xForm.is())
     {
         RemoveMeAsUidListener();
-        uno::Reference< XLoadable >  xFormAsLoadable(xForm, UNO_QUERY );
+        Reference< XLoadable >  xFormAsLoadable(xForm, UNO_QUERY );
         DBG_ASSERT(xFormAsLoadable.is(), "BibDataManager::unloadDatabase : invalid form !");
         xFormAsLoadable->unload();
     }
 }
 //------------------------------------------------------------------------
-uno::Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUString& rName)
+Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUString& rName)
 {
-    uno::Reference< awt::XControlModel >  xModel;
+    Reference< awt::XControlModel >  xModel;
 
     try
     {
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-        uno::Reference< XInterface >  xObject = xMgr->createInstance(C2U("com.sun.star.form.component.GridControl"));
-        xModel=uno::Reference< awt::XControlModel > ( xObject, UNO_QUERY );
-        uno::Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
-        uno::Any aDbSource; aDbSource <<= rName;
+    Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< XInterface >  xObject = xMgr->createInstance(C2U("com.sun.star.form.component.GridControl"));
+        xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
+        Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
+        Any aDbSource; aDbSource <<= rName;
         xPropSet->setPropertyValue( C2U("Name"),aDbSource);
         rtl::OUString aControlName(C2U("com.sun.star.form.control.ExtendedGridControl"));
-        uno::Any aAny; aAny <<= aControlName;
+        Any aAny; aAny <<= aControlName;
         xPropSet->setPropertyValue( C2U("DefaultControl"),aAny );
 
-        uno::Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
+        Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
         InsertFields(aFormComp);
 
         rtl::OUString uProp(C2U("HelpURL"));
-        uno::Reference< XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
+        Reference< XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
         if(xPropInfo->hasPropertyByName(uProp))
         {
             String sId(C2S("HID:"));
             sId += HID_BIB_DB_GRIDCTRL;
-            uno::Any aVal; aVal <<= OUString(sId);
+            Any aVal; aVal <<= OUString(sId);
             xPropSet->setPropertyValue(uProp, aVal);
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::loadGridModel: something went wrong !");
     }
@@ -1460,51 +1507,59 @@ uno::Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::O
     return xModel;
 }
 //------------------------------------------------------------------------
-/*void BibDataManager::saveGridModel(const uno::Reference< awt::XControlModel > & rGridModel)
+/*void BibDataManager::saveGridModel(const Reference< awt::XControlModel > & rGridModel)
 {
     try
     {
-        uno::Reference< XPersistObject >  aPersistObject(rGridModel, UNO_QUERY );
+        Reference< XPersistObject >  aPersistObject(rGridModel, UNO_QUERY );
 
-        uno::Any aGridModel(&aPersistObject, ::getCppuType((const XPersistObject*)0));
+        Any aGridModel(&aPersistObject, ::getCppuType((const XPersistObject*)0));
 
         xSourceProps->setPropertyValue(gGridName,aGridModel);
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("::saveGridModelData: something went wrong !");
     }
 
 }*/
 //------------------------------------------------------------------------
-uno::Reference< XPropertySet >  BibDataManager::createGlobalProperties()
+Reference< XPropertySet >   BibDataManager::createGlobalProperties()
 {
     try
     {
-        uno::Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-        uno::Reference< registry::XRegistryKey >  xKey = xRoot->openKey(gGlobalName);
+        Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
+        Reference< registry::XRegistryKey >  xKey = xRoot->openKey(gGlobalName);
         if(!xKey.is())
             xKey = xRoot->createKey(gGlobalName);
 
-        return uno::Reference< XPropertySet > (xKey, UNO_QUERY);
+        return Reference< XPropertySet > (xKey, UNO_QUERY);
     }
 
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getViewProperties: something went wrong !");
     }
 
-    return uno::Reference< XPropertySet > ();
+    return Reference< XPropertySet > ();
 }
 //------------------------------------------------------------------------
 void BibDataManager::setViewSize(long nSize)
 {
     try
     {
-        uno::Any aViewSize; aViewSize <<= (sal_Int32) nSize;
+        Any aViewSize; aViewSize <<= (sal_Int32) nSize;
         xGlobalProps->setPropertyValue(gViewSize,aViewSize);
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::setViewSize: something went wrong !");
     }
@@ -1516,14 +1571,18 @@ long BibDataManager::getViewSize()
     long nSize=0;
     try
     {
-        uno::Any aViewSize=xGlobalProps->getPropertyValue(gViewSize);
+        Any aViewSize=xGlobalProps->getPropertyValue(gViewSize);
 
         if(aViewSize.getValueType() != ::getVoidCppuType())
         {
             aViewSize >>= nSize;
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getViewSize: something went wrong !");
     }
@@ -1534,10 +1593,14 @@ void BibDataManager::setBeamerSize(long nSize)
 {
     try
     {
-        uno::Any aBeamerSize; aBeamerSize <<= (sal_Int32) nSize;
+        Any aBeamerSize; aBeamerSize <<= (sal_Int32) nSize;
         xGlobalProps->setPropertyValue(gBeamerSize,aBeamerSize);
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::setBeamerSize: something went wrong !");
     }
@@ -1549,37 +1612,45 @@ long BibDataManager::getBeamerSize()
     long nSize=0;
     try
     {
-        uno::Any aBeamerSize=xGlobalProps->getPropertyValue(gBeamerSize);
+        Any aBeamerSize=xGlobalProps->getPropertyValue(gBeamerSize);
 
         if(aBeamerSize.getValueType() != ::getVoidCppuType())
         {
             aBeamerSize >>= nSize;
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getBeamerSize: something went wrong !");
     }
     return nSize;
 }
 //------------------------------------------------------------------------
-uno::Reference< XPropertySet >  BibDataManager::getViewProperties()
+Reference< XPropertySet >   BibDataManager::getViewProperties()
 {
     try
     {
-        uno::Reference< registry::XRegistryKey >  xKey = uno::Reference< registry::XRegistryKey > (xSourceProps, UNO_QUERY);
-        uno::Reference< registry::XRegistryKey >  xViewKey=xKey->openKey(gViewName);
+        Reference< registry::XRegistryKey >  xKey = Reference< registry::XRegistryKey > (xSourceProps, UNO_QUERY);
+        Reference< registry::XRegistryKey >  xViewKey=xKey->openKey(gViewName);
         if(!xViewKey.is())
         {
             xViewKey=xKey->createKey(gViewName);
         }
-        return uno::Reference< XPropertySet > (xViewKey, UNO_QUERY);
+        return Reference< XPropertySet > (xViewKey, UNO_QUERY);
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::getViewProperties: something went wrong !");
     }
-    return uno::Reference< XPropertySet > ();
+    return Reference< XPropertySet > ();
 }
 //------------------------------------------------------------------------
 rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
@@ -1620,36 +1691,36 @@ rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     return aResStr;
 }
 //------------------------------------------------------------------------
-uno::Reference< awt::XControlModel >  BibDataManager::loadControlModel(const rtl::OUString& rName, sal_Bool bForceListBox)
+Reference< awt::XControlModel >  BibDataManager::loadControlModel(const rtl::OUString& rName, sal_Bool bForceListBox)
 {
-    uno::Reference< awt::XControlModel >  xModel;
+    Reference< awt::XControlModel >  xModel;
 
     rtl::OUString aName(C2U("View_"));
     aName+=rName;
 
     try
     {
-        uno::Reference< io::XPersistObject >  aObject;
-        uno::Any aControlModel=xSourceProps->getPropertyValue(aName);
+        Reference< io::XPersistObject >  aObject;
+        Any aControlModel=xSourceProps->getPropertyValue(aName);
         if(aControlModel.getValueType() == ::getCppuType((Reference<io::XPersistObject>*)0))
         {
-            aObject=*(uno::Reference< io::XPersistObject > *)aControlModel.getValue();
+            aObject=*(Reference< io::XPersistObject > *)aControlModel.getValue();
         }
 
         if(!aObject.is() )
         {
-            uno::Reference< XNameAccess >  xFields = getColumns(xForm);
+            Reference< XNameAccess >  xFields = getColumns(xForm);
             if (!xFields.is())
                 return xModel;
-            uno::Reference< XPropertySet >  xField;
+            Reference< XPropertySet >  xField;
 
-            uno::Any aElement;
+            Any aElement;
 
             if(xFields->hasByName(rName))
             {
                 aElement = xFields->getByName(rName);
-                xField = *(uno::Reference< XPropertySet > *)aElement.getValue();
-                uno::Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : uno::Reference< XPropertySetInfo > ();
+                xField = *(Reference< XPropertySet > *)aElement.getValue();
+                Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
                 sal_Int32 nFormatKey = 0;
                 if (xInfo.is() && xInfo->hasPropertyByName(FM_PROP_FORMATKEY))
                     xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
@@ -1661,48 +1732,56 @@ uno::Reference< awt::XControlModel >  BibDataManager::loadControlModel(const rtl
                 else
                     aInstanceName += getControlName(nFormatKey);
 
-                uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-                uno::Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
-                xModel=uno::Reference< awt::XControlModel > ( xObject, UNO_QUERY );
-                uno::Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
-                uno::Any aFieldName; aFieldName <<= aName;
+                Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+                Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
+                xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
+                Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
+                Any aFieldName; aFieldName <<= aName;
                 xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
 
-                uno::Any aDbSource; aDbSource <<= rName;
+                Any aDbSource; aDbSource <<= rName;
                 xPropSet->setPropertyValue(FM_PROP_CONTROLSOURCE,aDbSource);
 
-                uno::Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
+                Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
-                uno::Reference< XNameContainer >  xNameCont(xForm, UNO_QUERY);
-                xNameCont->insertByName(aName, uno::Any(&xModel, ::getCppuType((Reference<XFormComponent>*)0)));
+                Reference< XNameContainer >  xNameCont(xForm, UNO_QUERY);
+                xNameCont->insertByName(aName, Any(&xModel, ::getCppuType((Reference<XFormComponent>*)0)));
             }
         }
         else
         {
-            xModel=uno::Reference< awt::XControlModel > (aObject,UNO_QUERY );
+            xModel=Reference< awt::XControlModel > (aObject,UNO_QUERY );
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::loadControlModel: something went wrong !");
     }
     return xModel;
 }
 //------------------------------------------------------------------------
-void BibDataManager::saveCtrModel(const rtl::OUString& rName,const uno::Reference< awt::XControlModel > & rCtrModel)
+void BibDataManager::saveCtrModel(const rtl::OUString& rName,const Reference< awt::XControlModel > & rCtrModel)
 {
     try
     {
         rtl::OUString aName(C2U("View_"));
         aName+=rName;
 
-        uno::Reference< io::XPersistObject >  aPersistObject(rCtrModel, UNO_QUERY );
+        Reference< io::XPersistObject >  aPersistObject(rCtrModel, UNO_QUERY );
 
-        uno::Any aModel(&aPersistObject, ::getCppuType((Reference<io::XPersistObject>*)0));
+        Any aModel(&aPersistObject, ::getCppuType((Reference<io::XPersistObject>*)0));
 
         xSourceProps->setPropertyValue(aName,aModel);
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::saveCtrModel: something went wrong !");
     }
@@ -1715,11 +1794,15 @@ void BibDataManager::disposing( const lang::EventObject& Source )
     {
 //      if ( xForm.is())
 //      {
-//          uno::Reference< XPropertySet >  aPropSet(xForm, UNO_QUERY );
+//          Reference< XPropertySet >  aPropSet(xForm, UNO_QUERY );
 //          aPropSet->removePropertyChangeListener(FM_PROP_EDITMODE, this);
 //      }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::propertyChange: something went wrong !");
     }
@@ -1728,7 +1811,7 @@ void BibDataManager::disposing( const lang::EventObject& Source )
 
 }
 //------------------------------------------------------------------------
-void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( uno::RuntimeException )
+void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( RuntimeException )
 {
     try
     {
@@ -1737,19 +1820,23 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
         {
             if( evt.NewValue.getValueType() == ::getCppuType((Reference<io::XInputStream>*)0) )
             {
-                uno::Reference< io::XDataInputStream >  xStream(
-                    *(const uno::Reference< io::XInputStream > *)evt.NewValue.getValue(), UNO_QUERY );
+                Reference< io::XDataInputStream >  xStream(
+                    *(const Reference< io::XInputStream > *)evt.NewValue.getValue(), UNO_QUERY );
                 aUID <<= xStream->readUTF();
             }
             else
                 aUID = evt.NewValue;
 
-            uno::Reference< sdbcx::XRowLocate >  xLocate(xBibCursor, UNO_QUERY);
+            Reference< sdbcx::XRowLocate >  xLocate(xBibCursor, UNO_QUERY);
             DBG_ASSERT(xLocate.is(), "BibDataManager::propertyChange : invalid cursor !");
             bFlag = xLocate->moveToBookmark(aUID);
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("::propertyChange: something went wrong !");
     }
@@ -1761,11 +1848,11 @@ void BibDataManager::SetMeAsUidListener()
 {
 try
 {
-    uno::Reference< XNameAccess >  xFields = getColumns(xForm);
+    Reference< XNameAccess >  xFields = getColumns(xForm);
     if (!xFields.is())
         return;
 
-    uno::Sequence<rtl::OUString> aFields(xFields->getElementNames());
+    Sequence<rtl::OUString> aFields(xFields->getElementNames());
     const rtl::OUString* pFields = aFields.getConstArray();
     sal_Int32 nCount=aFields.getLength();
     String StrUID(C2S(STR_UID));
@@ -1783,17 +1870,21 @@ try
 
     if(theFieldName.len()>0)
     {
-        uno::Reference< XPropertySet >  xPropSet;
-        uno::Any aElement;
+        Reference< XPropertySet >  xPropSet;
+        Any aElement;
 
         aElement = xFields->getByName(theFieldName);
-        xPropSet = *(uno::Reference< XPropertySet > *)aElement.getValue();
+        xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
 
         xPropSet->addPropertyChangeListener(FM_PROP_VALUE, this);
     }
 
 }
-catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
 {
     DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener")
 }
@@ -1805,12 +1896,12 @@ void BibDataManager::RemoveMeAsUidListener()
 {
 try
 {
-    uno::Reference< XNameAccess >  xFields = getColumns(xForm);
+    Reference< XNameAccess >  xFields = getColumns(xForm);
     if (!xFields.is())
         return;
 
 
-    uno::Sequence<rtl::OUString> aFields(xFields->getElementNames());
+    Sequence<rtl::OUString> aFields(xFields->getElementNames());
     const rtl::OUString* pFields = aFields.getConstArray();
     sal_Int32 nCount=aFields.getLength();
     String StrUID(C2S(STR_UID));
@@ -1828,17 +1919,21 @@ try
 
     if(theFieldName.len()>0)
     {
-        uno::Reference< XPropertySet >  xPropSet;
-        uno::Any aElement;
+        Reference< XPropertySet >  xPropSet;
+        Any aElement;
 
         aElement = xFields->getByName(theFieldName);
-        xPropSet = *(uno::Reference< XPropertySet > *)aElement.getValue();
+        xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
 
         xPropSet->removePropertyChangeListener(FM_PROP_VALUE, this);
     }
 
 }
-catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
 {
     DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener")
 }
@@ -1853,8 +1948,8 @@ sal_Bool BibDataManager::moveRelative(sal_Int32 nCount)
     sal_Bool bRet = sal_False;
     try
     {
-        uno::Reference< XResultSet >  xCursor(xForm, UNO_QUERY);
-        uno::Reference< XResultSetUpdate >  xCursorUpdate(xForm, UNO_QUERY);
+        Reference< XResultSet >  xCursor(xForm, UNO_QUERY);
+        Reference< XResultSetUpdate >  xCursorUpdate(xForm, UNO_QUERY);
         if (xCursor.is() && xCursorUpdate.is())
         {
             bRet = xCursor->relative(nCount);
@@ -1862,7 +1957,11 @@ sal_Bool BibDataManager::moveRelative(sal_Int32 nCount)
                 xCursorUpdate->moveToInsertRow();
         }
     }
-    catch(...)
+#ifdef DBG_UTIL
+        catch(Exception& e )
+#else
+        catch(Exception&)
+#endif
     {
         DBG_ERROR("Exception in BibDataManager::moveRelative")
     }

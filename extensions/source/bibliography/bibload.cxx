@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
             DBG_ERROR( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
 #endif
         }
-        catch(...)
+        catch(Exception& rEx)
         {
             DBG_ERROR("BibliographyLoader::GetDataCursor : could not execute the result set !");
             bSuccess = sal_False;
@@ -661,7 +661,7 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
             while(xCursor->next());
         }
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("Exception in BibliographyLoader::getByName")
     }
@@ -698,7 +698,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
             while (xCursor->next());
         }
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
@@ -732,7 +732,7 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
             while(xCursor->next());
         }
     }
-    catch(...)
+    catch(Exception& rEx)
     {
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
