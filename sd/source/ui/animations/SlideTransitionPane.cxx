@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:32:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #endif
 #ifndef _SD_UNDO_ANIM_HXX
 #include "undoanim.hxx"
+#endif
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+#ifndef _SDDLL_HXX
+#include "sddll.hxx"
 #endif
 
 #include <algorithm>
@@ -567,7 +573,7 @@ SlideTransitionPane::SlideTransitionPane(
     maRB_ADVANCE_ON_MOUSE.SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
     maRB_ADVANCE_AUTO.SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
     maMF_ADVANCE_AUTO_AFTER.SetModifyHdl( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
-
+    maCB_AUTO_PREVIEW.SetClickHdl( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
 }
 
@@ -882,6 +888,9 @@ void SlideTransitionPane::updateControls()
         maRB_ADVANCE_AUTO.Check( aEffect.mePresChange == PRESCHANGE_AUTO );
         maMF_ADVANCE_AUTO_AFTER.SetValue( aEffect.mnTime );
     }
+
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    maCB_AUTO_PREVIEW.Check( pOptions->IsPreviewTransitions() == sal_True );
 
     mbUpdatingControls = false;
 
@@ -1246,6 +1255,13 @@ IMPL_LINK( SlideTransitionPane, SoundListBoxSelected, void *, EMPTYARG )
 IMPL_LINK( SlideTransitionPane, LoopSoundBoxChecked, void *, EMPTYARG )
 {
     applyToSelectedPages();
+    return 0;
+}
+
+IMPL_LINK( SlideTransitionPane, AutoPreviewClicked, void *, EMPTYARG )
+{
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    pOptions->SetPreviewTransitions( maCB_AUTO_PREVIEW.IsChecked() ? sal_True : sal_False );
     return 0;
 }
 
