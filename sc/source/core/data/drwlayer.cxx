@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:58 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#include <sot/exchange.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
@@ -99,7 +100,6 @@
 #include <vcl/virdev.hxx>
 #include <offmgr/app.hxx>
 #include <sch/schdll.hxx>
-#include <sch/schdll0.hxx>
 #include <sch/memchrt.hxx>
 
 #include "drwlayer.hxx"
@@ -1556,7 +1556,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
-                if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
+                if ( aIPObj.Is() && SotExchange::IsChart( *aIPObj->GetSvFactory() ) )
                 {
                     SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
                     if ( pChartData )
