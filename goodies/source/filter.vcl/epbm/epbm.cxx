@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epbm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:31:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ public:
 //=================== Methoden von PBMWriter ==============================
 
 PBMWriter::PBMWriter() :
-    mpAcc       ( NULL ),
-    mbStatus    ( TRUE )
+    mbStatus    ( TRUE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -195,7 +195,7 @@ void PBMWriter::ImplWriteBody()
 {
     if ( mnMode == 0 )
     {
-        BYTE    nBYTE;
+        BYTE    nBYTE = 0;
         for ( ULONG y = 0; y < mnHeight; y++ )
         {
             ULONG x;
@@ -286,8 +286,9 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 // ------------------------------------------------------------------------
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // ---------------
 // - Win16 trash -
