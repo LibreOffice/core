@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,7 +1349,12 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             // caption object doesn't have to change the object position.
             // Thus, keep the position, before the caption point is set and
             // restore it afterwards.
-            awt::Point aKeepedPosition( getPosition() );
+            awt::Point aKeepedPosition( 0, 0 );
+            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
+                 getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
+            {
+                    aKeepedPosition = getPosition();
+            }
             // <--
             if( pFmt && pFmt->GetDoc()->GetRootFrm() )
             {
@@ -1461,18 +1466,25 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::Transformation>
                     // without conversion to layout direction as below
-                    uno::Reference< beans::XPropertySet > xPrSet;
-                    const uno::Type& rPSetType =
-                        ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-                    if ( aPSet.getValueType() != rPSetType || !aPSet.getValue() )
-                        throw uno::RuntimeException();
-                    xPrSet = *(uno::Reference< beans::XPropertySet >*)aPSet.getValue();
-                    aRet = xPrSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")) );
                 }
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pMap->nWID )
                 {
                     aRet <<= pFmt->GetPositionLayoutDir();
+                }
+                // <--
+                // --> OD 2004-10-28 #i36248#
+                else if ( FN_SHAPE_STARTPOSITION_IN_HORI_L2R == pMap->nWID )
+                {
+                    // get property <::drawing::Shape::StartPosition>
+                    // without conversion to layout direction as below
+                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) );
+                }
+                else if ( FN_SHAPE_ENDPOSITION_IN_HORI_L2R == pMap->nWID )
+                {
+                    // get property <::drawing::Shape::EndPosition>
+                    // without conversion to layout direction as below
+                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) );
                 }
                 // <--
                 else
@@ -1533,19 +1545,28 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::Transformation>
                         // without conversion to layout direction as below
-                        uno::Reference< beans::XPropertySet > xPrSet;
-                        const uno::Type& rPSetType =
-                            ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                        uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-                        if ( aPSet.getValueType() != rPSetType || !aPSet.getValue() )
-                            throw uno::RuntimeException();
-                        xPrSet = *(uno::Reference< beans::XPropertySet >*)aPSet.getValue();
-                        aRet = xPrSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")) );
                     }
                     break;
                     case FN_SHAPE_POSITION_LAYOUT_DIR:
                     {
                         aRet <<= pImpl->GetPositionLayoutDir();
+                    }
+                    break;
+                    // <--
+                    // --> OD 2004-08-06 #i36248#
+                    case FN_SHAPE_STARTPOSITION_IN_HORI_L2R:
+                    {
+                        // get property <::drawing::Shape::StartPosition>
+                        // without conversion to layout direction as below
+                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) );
+                    }
+                    break;
+                    case FN_SHAPE_ENDPOSITION_IN_HORI_L2R:
+                    {
+                        // get property <::drawing::Shape::StartPosition>
+                        // without conversion to layout direction as below
+                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) );
                     }
                     break;
                     // <--
@@ -1556,14 +1577,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
         }
         else
         {
-            uno::Reference< beans::XPropertySet >  xPrSet;
-            const uno::Type& rPSetType =
-                ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-            uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-            if(aPSet.getValueType() != rPSetType || !aPSet.getValue())
-                throw uno::RuntimeException();
-            xPrSet = *(uno::Reference< beans::XPropertySet >*)aPSet.getValue();
-            aRet = xPrSet->getPropertyValue(rPropertyName);
+            aRet = _getPropAtAggrObj( rPropertyName );
 
             // --> OD 2004-07-28 #i31698# - convert the position (translation)
             // of the drawing object in the transformation
@@ -1574,10 +1588,52 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 aRet <<= _ConvertTransformationToLayoutDir( aMatrix );
             }
             // <--
+            // --> OD 2004-10-28 #i36248#
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) )
+            {
+                awt::Point aStartPos;
+                aRet >>= aStartPos;
+                aRet <<= _ConvertStartPosToLayoutDir( aStartPos );
+            }
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) )
+            {
+                awt::Point aEndPos;
+                aRet >>= aEndPos;
+                aRet <<= _ConvertEndPosToLayoutDir( aEndPos );
+            }
+            // <--
         }
     }
     return aRet;
 }
+
+/** method to get property from aggregation object
+
+    OD 2004-10-28 #i36248#
+
+    @author OD
+*/
+uno::Any SwXShape::_getPropAtAggrObj( const ::rtl::OUString& _rPropertyName )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
+           uno::RuntimeException )
+{
+    uno::Any aRet;
+
+    uno::Reference< beans::XPropertySet >  xPrSet;
+    const uno::Type& rPSetType =
+                ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+    uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
+    if ( aPSet.getValueType() != rPSetType || !aPSet.getValue() )
+    {
+        throw uno::RuntimeException();
+    }
+    xPrSet = *(uno::Reference< beans::XPropertySet >*)aPSet.getValue();
+    aRet = xPrSet->getPropertyValue( _rPropertyName );
+
+    return aRet;
+}
+
+
 /* -----------------------------02.11.00 09:41--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2468,6 +2524,98 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             setPropertyValue( aVertPosPropStr, aVertPos );
         }
     }
+}
+
+/** method to convert start and end position of the drawing object to the
+    Writer specific position, which is the attribute position in layout direction
+
+    OD 2004-10-28 #i36248#
+
+    @author OD
+*/
+void SwXShape::__ConvertStartEndPosToLayoutDir( awt::Point& _rioStartPos,
+                                                awt::Point& _rioEndPos )
+{
+    awt::Point aPos( getPosition() );
+    awt::Size aSize( getSize() );
+
+    if ( _rioStartPos.X == _rioEndPos.X )
+    {
+        _rioStartPos.X = aPos.X;
+        _rioEndPos.X = aPos.X;
+    }
+    else if ( _rioStartPos.X < _rioEndPos.X )
+    {
+        _rioStartPos.X = aPos.X;
+        _rioEndPos.X = aPos.X + aSize.Width;
+    }
+    else
+    {
+        _rioEndPos.X = aPos.X;
+        _rioStartPos.X = aPos.X + aSize.Width;
+    }
+
+    if ( _rioStartPos.Y == _rioEndPos.Y )
+    {
+        _rioStartPos.Y = aPos.Y;
+        _rioEndPos.Y = aPos.Y;
+    }
+    else if ( _rioStartPos.Y < _rioEndPos.Y )
+    {
+        _rioStartPos.Y = aPos.Y;
+        _rioEndPos.Y = aPos.Y + aSize.Height;
+    }
+    else
+    {
+        _rioEndPos.Y = aPos.Y;
+        _rioStartPos.Y = aPos.Y + aSize.Height;
+    }
+}
+
+/** method to convert start position of the drawing object to the
+    Writer specific position, which is the attribute position in layout direction
+
+    OD 2004-10-28 #i36248#
+
+    @author OD
+*/
+awt::Point SwXShape::_ConvertStartPosToLayoutDir( const awt::Point& _aStartPos )
+{
+    awt::Point aStartPos( _aStartPos );
+    awt::Point aEndPos( 0, 0 );
+    SvxShape* pSvxShape( GetSvxShape() );
+    if ( pSvxShape )
+    {
+        pSvxShape->_getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) )
+                                                                >>= aEndPos;
+
+        __ConvertStartEndPosToLayoutDir( aStartPos, aEndPos );
+    }
+
+    return aStartPos;
+}
+
+/** method to convert end position of the drawing object to the
+    Writer specific position, which is the attribute position in layout direction
+
+    OD 2004-10-28 #i36248#
+
+    @author OD
+*/
+awt::Point SwXShape::_ConvertEndPosToLayoutDir( const awt::Point& _aEndPos )
+{
+    awt::Point aEndPos( _aEndPos );
+    awt::Point aStartPos( 0, 0 );
+    SvxShape* pSvxShape( GetSvxShape() );
+    if ( pSvxShape )
+    {
+        pSvxShape->_getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) )
+                                                                >>= aStartPos;
+
+        __ConvertStartEndPosToLayoutDir( aStartPos, aEndPos );
+    }
+
+    return aEndPos;
 }
 
 /*-- 31.05.01 09:59:19---------------------------------------------------
