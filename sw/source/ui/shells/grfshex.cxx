@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 11:12:36 $
+ *  last change: $Author: obo $ $Date: 2001-07-23 10:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ BOOL SwTextShell::InsertGraphicDlg()
     Sequence<OUString> aListBoxEntries(aFormats.Count());
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
-    String sGraphicFormat(SW_RESSTR(STR_POOLFRM_GRAPHIC));
+    String sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
     for(i = 0; i < aFormats.Count(); ++i)
     {
         pEntries[i] = *aFormats[i];
