@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tbe $ $Date: 2001-07-25 07:51:32 $
+#   last change: $Author: kz $ $Date: 2001-08-15 15:28:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,11 +143,6 @@ SHL1STDLIBS=        \
     $(SOTLIB) \
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)
-
-.IF "$(TF_UCB)" == ""
-SHL1STDLIBS+=\
-        $(CHAOSLIB)
-.ENDIF
 
 .IF "$(GUI)" == "UNX"
 SHL1STDLIBS+= $(SMLIB)
