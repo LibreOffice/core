@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 08:43:03 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 12:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,22 +266,31 @@ void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
         // we need a name for the insertion
-        if ( nKeyType == KeyType::FOREIGN )
+        try
         {
             ::rtl::OUString aSchema,aTable;
             ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
-
-            Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+            Reference< XResultSet > xResult;
+            sal_Int32 nColumn = 12;
+            if ( nKeyType == KeyType::FOREIGN )
+                xResult = m_pTable->getMetaData()->getImportedKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
                                                                                         ,aSchema
                                                                                         ,aTable);
+            else
+            {
+                xResult = m_pTable->getMetaData()->getPrimaryKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                                                                                        ,aSchema
+                                                                                        ,aTable);
+                nColumn = 6;
+            }
             if ( xResult.is() )
             {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
                 while( xResult->next() )
                 {
-                    ::rtl::OUString sName = xRow->getString(12);
+                    ::rtl::OUString sName = xRow->getString(nColumn);
                     ObjectMap::iterator aIter = m_aNameMap.find(sName);
                     if( aIter == m_aNameMap.end()) // this name wasn't inserted yet so it must be te new one
                     {
@@ -290,6 +299,9 @@ void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
                     }
                 }
             }
+        }
+        catch(const SQLException&)
+        {
         }
     }
 }
@@ -309,9 +321,22 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
 
         Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
 
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP CONSTRAINT "));
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
-        aSql += ::dbtools::quoteName( aQuote,_sElementName);
+        sal_Int32 nKeyType = KeyType::PRIMARY;
+        if ( xKey.is() )
+        {
+            ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+            xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
+        }
+        if ( !_sElementName.getLength() && KeyType::PRIMARY == nKeyType )
+        {
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP PRIMARY KEY"));
+        }
+        else
+        {
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP CONSTRAINT "));
+            ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+            aSql += ::dbtools::quoteName( aQuote,_sElementName);
+        }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if ( xStmt.is() )
