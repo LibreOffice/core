@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartOASISTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:43:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,15 @@ void XMLChartOASISTransformerContext::StartElement(
                 OSL_ENSURE( IsXMLToken( aLocalName, XML_CLASS ),
                                "unexpected class token" );
                 {
-                    OUString aChartClass;
-                    sal_uInt16 nPrefix =
-                        GetTransformer().GetNamespaceMap().GetKeyByAttrName(
-                                                            rAttrValue,
-                                                            &aChartClass );
                     if( XML_NAMESPACE_CHART == nPrefix )
                     {
-                        pMutableAttrList->SetValueByIndex( i, aChartClass );
+                        pMutableAttrList->SetValueByIndex( i, aLocalName );
                     }
                     else if ( XML_NAMESPACE_OOO == nPrefix )
                     {
                         pMutableAttrList->SetValueByIndex( i,
                                                 GetXMLToken(XML_ADD_IN ) );
-                        aAddInName = aChartClass;
+                        aAddInName = aLocalName;
                     }
                 }
                 break;
