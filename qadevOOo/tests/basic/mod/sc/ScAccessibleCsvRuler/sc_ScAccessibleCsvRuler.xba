@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessibleCsvRuler.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:58:50 $ 
+'*  last change:$Date: 2003-05-27 12:10:13 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -94,11 +94,11 @@ On Error Goto ErrHndl
     wait(1000)
     oWin = tk.getActiveTopWindow()
     xRoot = utils.at_getAccessibleObject(oWin)
-    accButton = utils.at_getAccessibleObjectForRole(xRoot,35,"Cancel")
-    accRB = utils.at_getAccessibleObjectForRole(xRoot,37,"Fixed")
+    accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
+    accRB = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.RADIO_BUTTON,"Fixed")
     accRB.doAccessibleAction(0)
     wait(1000)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,49,"Ruler")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TEXT,"Ruler")
     Out.Log("Implementation name: "+oObj.getImplementationName())
     accText = oObj.getText()
     Out.Log("Text: "+accText)
