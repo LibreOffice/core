@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:32:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Formato";
     };
     ListBox LB_FORMAT
     {
@@ -148,6 +149,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     CheckBox BTN_NUMFORMAT
     {
@@ -178,6 +180,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "¼ýÀÚ Çü½Ä(~N)";
         Text[ turkish ] = "Sayý f~ormatý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato nu~mérico";
     };
     CheckBox BTN_BORDER
     {
@@ -208,6 +211,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "Å×µÎ¸®(~B)";
         Text[ turkish ] = "~Kenarlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Borde";
     };
     CheckBox BTN_FONT
     {
@@ -238,6 +242,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "±Û²Ã(~O)";
         Text[ turkish ] = "Yazýti~pi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fuen~te";
     };
     CheckBox BTN_PATTERN
     {
@@ -268,6 +273,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÆÐÅÏ(~P)";
         Text[ turkish ] = "~Desen";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mo~delo";
     };
     CheckBox BTN_ALIGNMENT
     {
@@ -298,6 +304,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "¸ÂÃã(~T)";
         Text[ turkish ] = "~Hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Orienta~ción";
     };
     GroupBox GB_FORMAT
     {
@@ -327,6 +334,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "Æ÷¸ËÆÃ";
         Text[ turkish ] = "Formatlama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato";
     };
     OKButton BTN_OK
     {
@@ -371,6 +379,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "µ¡ºÙÀÓ(~M)";
         Text[ turkish ] = "Ay~rýntýlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones";
     };
     PushButton BTN_ADD
     {
@@ -400,6 +409,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     PushButton BTN_REMOVE
     {
@@ -429,6 +439,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton BTN_RENAME
     {
@@ -456,6 +467,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)";
         Text[ turkish ] = "Yeniden~adlandýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiar ~nombre";
     };
     HelpButton BTN_HELP
     {
@@ -488,6 +500,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÀÚµ¿¼­½Ä Ãß°¡";
         Text[ turkish ] = "Otomatik formatlamayý ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Añadir AutoFormato";
     };
     String STR_ADD_LABEL
     {
@@ -514,6 +527,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre";
     };
     String STR_DEL_TITLE
     {
@@ -540,6 +554,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÀÚµ¿¼­½Ä »èÁ¦";
         Text[ turkish ] = "Otomatik formatlamayý sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar AutoFormato";
     };
     String STR_DEL_MSG
     {
@@ -566,6 +581,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "´ÙÀ½°ú°°Àº ÀÚµ¿¼­½ÄÀº¡¡»èÁ¦µË´Ï´Ù :";
         Text[ turkish ] = "Aþaðýdaki otomatik formatlama silinecek:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El siguiente AutoFormato se eliminará:";
     };
     String STR_RENAME_TITLE
     {
@@ -590,6 +606,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÀÚµ¿¼­½Ä ÀÌ¸§ ¹Ù²Ù±â";
         Text[ turkish ] = "Otomatik formatlamayý yeniden adlandýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiar nombre del AutoFormato";
     };
     String STR_BTN_CLOSE
     {
@@ -616,6 +633,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "~Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     String STR_JAN
     {
@@ -642,6 +660,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "1¿ù";
         Text[ turkish ] = "Ock";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ene";
     };
     String STR_FEB
     {
@@ -668,6 +687,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "2¿ù";
         Text[ turkish ] = "Þub";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Feb";
     };
     String STR_MAR
     {
@@ -694,6 +714,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "3¿ù";
         Text[ turkish ] = "Mar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mar";
     };
     String STR_NORTH
     {
@@ -720,6 +741,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ºÏÂÊ";
         Text[ turkish ] = "Kuzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Norte";
     };
     String STR_MID
     {
@@ -746,6 +768,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "°¡¿îµ¥";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Centro";
     };
     String STR_SOUTH
     {
@@ -772,6 +795,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "³²ÂÊ";
         Text[ turkish ] = "Güney";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sur";
     };
     String STR_SUM
     {
@@ -798,6 +822,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "ÇÕ°è";
         Text[ turkish ] = "Toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Suma";
     };
     String STR_INVALID_AFNAME
     {
@@ -826,6 +851,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§À» ÀÔ·ÂÇß½À´Ï´Ù.\n¿ä±¸µÈ ÀÚµ¿¼­½ÄÀº¡¡¸¸µé¾î Áú ¼ö¾ø½À´Ï´Ù. \n´Ù¸¥ ÀÌ¸§À¸·Î ´Ù½Ã ½ÃµµÇÏ½Ê½Ã¿À..";
         Text[ turkish ] = "Geçersiz bir ad girdiniz.\nOtomatik formatlama oluþturulamadý.\nBaþka bir ad seçiniz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ha indicado un nombre no válido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre.";
     };
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     Text[ russian ] = "Àâòîôîðìàò";
@@ -837,6 +863,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text[ korean ] = "ÀÚµ¿¼­½Ä";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AutoFormato";
 };
 ModalDialog DLG_SWDLG_STRINPUT
 {
