@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2003-04-28 13:31:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ using namespace ::com::sun::star::uno;
 struct IMPL_SfxBaseModel_DataContainer
 {
     SfxObjectShellRef                               m_pObjectShell          ;
-    SfxObjectShellLock                              m_pObjectShellLock      ;
+    //SfxObjectShellLock                                m_pObjectShellLock      ;
     OUSTRING                                        m_sURL                  ;
     sal_uInt16                                      m_nControllerLockCount  ;
     OMULTITYPEINTERFACECONTAINERHELPER              m_aInterfaceContainer   ;
@@ -319,7 +319,7 @@ struct IMPL_SfxBaseModel_DataContainer
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
             :   m_pObjectShell          ( pObjectShell  )
-            ,   m_pObjectShellLock      ( pObjectShell  )
+//          ,   m_pObjectShellLock      ( pObjectShell  )
             ,   m_sURL                  ( String()      )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_aInterfaceContainer   ( aMutex        )
@@ -329,7 +329,6 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_bClosed               ( sal_False     )
     {
     }
-
 } ;
 
 SIZE impl_Size_Object2Struct( const Size& aSize )
@@ -594,6 +593,10 @@ REFERENCE< XSTARBASICACCESS > implGetStarBasicAccess( SfxObjectShell* pObjectShe
 
 REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( RUNTIMEEXCEPTION )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
@@ -611,6 +614,10 @@ void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRI
     const OUSTRING& ExternalSourceURL, const OUSTRING& LinkTargetURL )
         throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
@@ -626,6 +633,10 @@ void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRI
     const OUSTRING& Language, const OUSTRING& Source )
         throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
@@ -641,6 +652,10 @@ void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRI
     const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
         throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
@@ -671,6 +686,10 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTI
         }
     }
 */
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     return m_pData->m_xParent;
 }
 
@@ -680,6 +699,7 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTI
 
 void SAL_CALL SfxBaseModel::setParent(const REFERENCE< XINTERFACE >& Parent) throw(NOSUPPORTEXCEPTION, RUNTIMEEXCEPTION)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( Parent.is() && getParent().is() )
         // only set parent when no parent is available
         throw NOSUPPORTEXCEPTION();
@@ -709,7 +729,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     {
         // Rekursion vermeiden
         SfxObjectShellRef pShell;
-        SfxObjectShellLock pShellLock;
+        //SfxObjectShellLock pShellLock;
 
         {
             // am I "ThisComponent" in AppBasic?
@@ -729,17 +749,17 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
             }
 
             pShell = m_pData->m_pObjectShell;
-            pShellLock = m_pData->m_pObjectShellLock;
+            //pShellLock = m_pData->m_pObjectShellLock;
             EndListening( *pShell );
             m_pData->m_pObjectShell = SfxObjectShellRef();
-            m_pData->m_pObjectShellLock = SfxObjectShellLock();
+            //m_pData->m_pObjectShellLock = SfxObjectShellLock();
         }
 
         // Bei dispose keine Speichern-R"uckfrage
         if ( pShell->IsEnableSetModified() && !pShell->Get_Impl()->bClosing )
             pShell->SetModified( sal_False );
         pShell->Get_Impl()->bDisposing = TRUE;
-        pShellLock = SfxObjectShellLock();
+        //pShellLock = SfxObjectShellLock();
         SfxObjectShellClose_Impl( 0, (void*) pShell );
     }
 
@@ -757,6 +777,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XEVENTLISTENER >&
     throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -771,6 +792,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XEVENTLISTENER
     throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -784,15 +806,12 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XEVENTLISTENER
 REFERENCE< XDOCUMENTINFO > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pData->m_xDocumentInfo.is() && m_pData->m_pObjectShell.Is() )
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = new SfxDocumentInfoObject( m_pData->m_pObjectShell ) ;
-    }
 
     return m_pData->m_xDocumentInfo;
 }
@@ -804,6 +823,10 @@ REFERENCE< XDOCUMENTINFO > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com:
 void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
     throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+
     REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNO_QUERY );
     REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNO_QUERY );
     REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
@@ -815,7 +838,6 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
     else if ( xDocListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), xListener );
 /*
-    ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nCount = m_pData->m_seqControllers.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
@@ -840,6 +862,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
     throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
 
     if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAscii( "SetEmbedded" ) )
     {
@@ -898,7 +922,10 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
 
 OUSTRING SAL_CALL SfxBaseModel::getURL() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     return m_pData->m_sURL ;
 }
 
@@ -908,7 +935,9 @@ OUSTRING SAL_CALL SfxBaseModel::getURL() throw(::com::sun::star::uno::RuntimeExc
 
 SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -981,7 +1010,10 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
 void SAL_CALL SfxBaseModel::connectController( const REFERENCE< XCONTROLLER >& xController )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
     SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount + 1 );
     for ( sal_uInt32 n = 0; n < nOldCount; n++ )
@@ -996,7 +1028,10 @@ void SAL_CALL SfxBaseModel::connectController( const REFERENCE< XCONTROLLER >& x
 
 void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >& xController ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
     if ( !nOldCount )
         return;
@@ -1023,6 +1058,9 @@ void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >
 
 void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
     ++m_pData->m_nControllerLockCount ;
 }
 
@@ -1032,6 +1070,9 @@ void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::Runti
 
 void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
     --m_pData->m_nControllerLockCount ;
 }
 
@@ -1041,6 +1082,9 @@ void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::Run
 
 sal_Bool SAL_CALL SfxBaseModel::hasControllersLocked() throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
     return ( m_pData->m_nControllerLockCount != 0 ) ;
 }
 
@@ -1051,11 +1095,11 @@ sal_Bool SAL_CALL SfxBaseModel::hasControllersLocked() throw(::com::sun::star::u
 REFERENCE< XCONTROLLER > SAL_CALL SfxBaseModel::getCurrentController() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     // get the last active controller of this model
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pData->m_xCurrent.is() )
         return m_pData->m_xCurrent;
 
@@ -1071,10 +1115,10 @@ void SAL_CALL SfxBaseModel::setCurrentController( const REFERENCE< XCONTROLLER >
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    ::osl::MutexGuard aGuard( m_aMutex );
     m_pData->m_xCurrent = xCurrentController;
 }
 
@@ -1085,6 +1129,7 @@ void SAL_CALL SfxBaseModel::setCurrentController( const REFERENCE< XCONTROLLER >
 REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1115,10 +1160,10 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com
 sal_Bool SAL_CALL SfxBaseModel::isModified() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    ::osl::MutexGuard aGuard( m_aMutex );
     return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->IsModified() : sal_False;
 }
 
@@ -1130,14 +1175,12 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
         throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     if ( m_pData->m_pObjectShell.Is() )
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         m_pData->m_pObjectShell->SetModified(bModified);
-    }
 }
 
 //________________________________________________________________________________________________________
@@ -1147,6 +1190,7 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
 void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -1160,6 +1204,7 @@ void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >
 void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -1173,7 +1218,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENE
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( m_pData->m_bClosed )
+    if ( !m_pData || m_pData->m_bClosed )
         return;
 
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
@@ -1197,6 +1242,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
 
     // no own objections against closing!
 
+    m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
     pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
     {
@@ -1226,6 +1272,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
 void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -1239,6 +1286,7 @@ void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >&
 void SAL_CALL SfxBaseModel::removeCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -1252,11 +1300,11 @@ void SAL_CALL SfxBaseModel::removeCloseListener( const REFERENCE< XCLOSELISTENER
 SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     // Printer beschaffen
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
     if ( !pViewFrm )
@@ -1306,12 +1354,7 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::
 void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
 {
-    // object already disposed?
-    if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
-
     // alten Printer beschaffen
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
     if ( !pViewFrm )
@@ -1419,6 +1462,11 @@ void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,Sfx
 void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     SfxViewShell* pViewSh = NULL;
     SfxPrinter* pPrinter = NULL;
     sal_uInt16 nChangeFlags = 0;
@@ -1536,11 +1584,12 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     // get view for sfx printing capabilities
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
     if ( !pViewFrm )
@@ -1723,6 +1772,7 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
 sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1736,6 +1786,7 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
 OUSTRING SAL_CALL SfxBaseModel::getLocation() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1749,6 +1800,7 @@ OUSTRING SAL_CALL SfxBaseModel::getLocation() throw(::com::sun::star::uno::Runti
 sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1762,12 +1814,12 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::Runtim
 void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
             if ( m_pData->m_pObjectShell->DoSave() )
@@ -1787,12 +1839,12 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         impl_store( m_pData->m_pObjectShell, rURL, rArgs, sal_False );
 
         SEQUENCE< PROPERTYVALUE > aSequence ;
@@ -1810,12 +1862,12 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         impl_store( m_pData->m_pObjectShell, rURL, rArgs, sal_True );
     }
 }
@@ -1831,6 +1883,7 @@ void SAL_CALL SfxBaseModel::initNew()
                ::com::sun::star::uno::Exception)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1838,7 +1891,6 @@ void SAL_CALL SfxBaseModel::initNew()
     DBG_ASSERT( m_pData->m_pObjectShell.Is(), "Model is useless without an ObjectShell" );
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if( m_pData->m_pObjectShell->GetMedium() )
             throw DOUBLEINITIALIZATIONEXCEPTION();
 
@@ -1865,6 +1917,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                ::com::sun::star::uno::Exception)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1873,7 +1926,6 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if( m_pData->m_pObjectShell->GetMedium() )
             throw DOUBLEINITIALIZATIONEXCEPTION();
 
@@ -1911,6 +1963,10 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                                 m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTREAD;
         m_pData->m_pObjectShell->ResetError();
 
+        // remove lock without closing (it is set in the LoadEnvironment, because the document
+        // is loaded in a hidden mode)
+        m_pData->m_pObjectShell->RemoveOwnerLock();
+
         if ( !m_pData->m_bLoadState )
         {
             throw SfxIOException_Impl( nErrCode );
@@ -1946,6 +2002,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
@@ -1953,7 +2010,6 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
@@ -2057,6 +2113,11 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
         throw (::com::sun::star::uno::RuntimeException)
 {
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     sal_Int32 nSuppFlavors = supportsMetaFileHandle_Impl() ? 5 : 3;
     SEQUENCE< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
 
@@ -2099,6 +2160,11 @@ SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
 sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor )
         throw (::com::sun::star::uno::RuntimeException)
 {
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
@@ -2125,7 +2191,6 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
 }
 
 
-#if SUPD>614
 //--------------------------------------------------------------------------------------------------------
 //  XEventsSupplier
 //--------------------------------------------------------------------------------------------------------
@@ -2133,8 +2198,9 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
 REFERENCE< XNAMEREPLACE > SAL_CALL SfxBaseModel::getEvents() throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        return NULL;
+        throw DISPOSEDEXCEPTION();
 
     if ( ! m_pData->m_xEvents.is() )
     {
@@ -2151,6 +2217,7 @@ REFERENCE< XNAMEREPLACE > SAL_CALL SfxBaseModel::getEvents() throw( RUNTIMEEXCEP
 void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -2164,12 +2231,12 @@ void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XDOCEVENTLISTENER
 void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
 }
-#endif
 
 //________________________________________________________________________________________________________
 //  SfxListener
@@ -2232,13 +2299,14 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 addTitle_Impl( m_pData->m_seqArguments, aTitle );
             }
+/*
             else if ( pSimpleHint->GetId() == SFX_HINT_DYING
                 || pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
             {
                 SfxObjectShellLock pShellLock = m_pData->m_pObjectShellLock;
                 m_pData->m_pObjectShellLock = SfxObjectShellLock();
             }
-
+*/
         }
 
         SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
@@ -2318,6 +2386,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 void SfxBaseModel::changing()
 {
     // object already disposed?
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -2427,7 +2497,6 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
     }
 }
 
-#if SUPD>614
 //********************************************************************************************************
 
 void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
@@ -2460,9 +2529,13 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
 
 REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)
 {
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     if ( m_pData->m_pObjectShell.Is() && !m_pData->m_contViewData.is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         SfxViewFrame *pActFrame = SfxViewFrame::Current();
         if ( !pActFrame || pActFrame->GetObjectShell() != m_pData->m_pObjectShell )
             pActFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame));
@@ -2502,10 +2575,13 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
 
 void SAL_CALL SfxBaseModel::setViewData( const REFERENCE < XINDEXACCESS >& aData ) throw(::com::sun::star::uno::RuntimeException)
 {
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
     m_pData->m_contViewData = aData;
 }
-
-#endif
 
 /** calls all XEventListeners */
 void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) const
@@ -2543,6 +2619,7 @@ sal_Bool SfxBaseModel::hasEventListeners() const
 void SAL_CALL SfxBaseModel::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
@@ -2552,6 +2629,7 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const ::com::sun::star::uno::Re
 void SAL_CALL SfxBaseModel::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
