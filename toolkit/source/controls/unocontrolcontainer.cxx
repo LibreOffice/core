@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-26 09:59:43 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 16:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,19 +271,6 @@ void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeExcept
 
     UnoControlBase::dispose();
 }
-
-void UnoControlContainer::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-}
-
-void UnoControlContainer::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-}
-
 
 // ::com::sun::star::lang::XEventListener
 void UnoControlContainer::disposing( const ::com::sun::star::lang::EventObject& rEvt ) throw(::com::sun::star::uno::RuntimeException)
