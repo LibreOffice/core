@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 07:54:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message = "Vorlage existiert bereits. Überschreiben?" ;
         Message [ ENGLISH ] = "Template already exists. Overwrite?" ;
         Message [ norwegian ] = "Malen finnes allerede. Skriv over?" ;
-        Message [ italian ] = "Il modello esiste già. Sovrascrivere?" ;
+        Message [ italian ] = "Il modello esiste già. Volete sovrascriverlo?" ;
         Message [ portuguese_brazilian ] = "O modelo j? existe. Sobregravar?" ;
         Message [ portuguese ] = "O modelo já existe. Deseja substituí-lo?" ;
         Message [ finnish ] = "Tyyli on jo olemassa. Korvataanko?" ;
@@ -163,7 +163,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸²Ğ´Ëü£¿";
         Message[ russian ] = "Ñòèëü óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
         Message[ polish ] = "Styl ju¿ istnieje. Zast¹piæ innym?";
-        Message[ japanese ] = "½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©?";
+        Message[ japanese ] = "½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
         Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C­nÂĞ¼g¡H";
         Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ãÓÈŞÇğ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
         Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
@@ -173,4 +173,5 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
     };
 };
+
 
