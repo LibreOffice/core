@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 12:16:18 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 15:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,8 +1039,22 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     long nSizX=0;
     long nSizY=0;
     long nRotateAngle=0;
-    long nRotateX=0;
-    long nRotateY=0;
+
+    // #86909#
+    sal_Bool bModeIsRotate(eDragMode == SDRDRAG_ROTATE);
+    long nRotateX(0);
+    long nRotateY(0);
+    long nOldRotateX(0);
+    long nOldRotateY(0);
+    if(bModeIsRotate)
+    {
+        Point aRotateAxe(aRef1);
+        if(GetPageViewCount()==1)
+            GetPageViewPvNum(0)->LogicToPagePos(aRotateAxe);
+        nRotateX = nOldRotateX = aRotateAxe.X();
+        nRotateY = nOldRotateY = aRotateAxe.Y();
+    }
+
     long nNewShearAngle=0;
     long nShearAngle=0;
     long nShearX=0;
@@ -1084,12 +1098,16 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     // Rotation
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,TRUE,&pPoolItem)) {
         nRotateAngle=((const SfxInt32Item*)pPoolItem)->GetValue()-nOldRotateAngle;
-        bRotate=nRotateAngle!=0;
-        if (bRotate) {
-            nRotateX=((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
-            nRotateY=((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
-        }
+        bRotate = (nRotateAngle != 0);
     }
+
+    // #86909# pos rot point x
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, TRUE ,&pPoolItem))
+        nRotateX = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
+
+    // #86909# pos rot point y
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, TRUE ,&pPoolItem))
+        nRotateY = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
 
     // Shear
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,TRUE,&pPoolItem)) {
@@ -1166,6 +1184,15 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             GetPageViewPvNum(0)->PagePosToLogic(aRef);
         }
         RotateMarkedObj(aRef,nRotateAngle);
+    }
+
+    // #86909# set rotation point position
+    if(bModeIsRotate && (nRotateX != nOldRotateX || nRotateY != nOldRotateY))
+    {
+        Point aNewRef1(nRotateX, nRotateY);
+        if (GetPageViewCount()==1)
+            GetPageViewPvNum(0)->PagePosToLogic(aNewRef1);
+        SetRef1(aNewRef1);
     }
 
     // Shear
