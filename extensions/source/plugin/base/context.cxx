@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 10:31:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,12 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( ::rtl::OUStringToOString( url, m_aEncoding ) );
 
+        rtl::OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         // the mimetype cannot be specified
         plugin->provideNewStream( ::rtl::OUString(),
                                   Reference< XActiveDataSource >(),
-                                  aURL.GetMainURL(INetURLObject::DECODE_TO_IURI),
-                                  0, 0, sal_False );
+                                  aUrl,
+                                  0, 0, (sal_Bool)(aUrl.compareToAscii( "file:", 5 ) == 0) );
         return;
     }
 
