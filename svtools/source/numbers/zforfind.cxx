@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
+ *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1938,7 +1938,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
 
 void ImpSvNumberInputScan::InitText()
 {
-    sal_Int16 j, nElems;
+    sal_Int32 j, nElems;
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     const CalendarWrapper* pCal = pFormatter->GetCalendar();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
+ *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,13 @@ public:
     Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
 
-    void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge)
+    void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
+            BOOL bSystemToSystem = FALSE )
     {
         bConvertMode = TRUE;
         eNewLnge = eNewLge;
         eTmpLnge = eTmpLge;
+        bConvertSystemToSystem = bSystemToSystem;
     }
     void SetConvertMode(BOOL bMode) { bConvertMode = bMode; }
                                                 // Veraendert nur die Bool-Variable
@@ -213,10 +215,13 @@ private:                            // ---- privater Teil
                                                 // Land/Sprache, aus der der
     LanguageType eTmpLnge;                      // gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
-    String sOldDecSep;                          // Dezimalsymbol der Ausgangs-
-    String sOldThousandSep;                     // spr., analog Tausenderpunkt
-    String sOldDateSep;                         // Datums- und Zeitsymbol
-    String sOldTimeSep;
+    BOOL bConvertSystemToSystem;                // Whether the conversion is
+                                                // from one system locale to
+                                                // another system locale (in
+                                                // this case the automatic
+                                                // currency symbol is converted
+                                                // too).
+
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
 
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
@@ -260,6 +265,9 @@ private:                            // ---- privater Teil
         { return rStr.GetChar(0) == ch && rStr.Len() == 1; }
         // Yes, for efficiency get the character first and then compare length
         // because in most places where this is used the string is one char.
+
+    // remove "..." and \... quotes from rStr, return how many chars removed
+    static xub_StrLen RemoveQuotes( String& rStr );
 
 #endif //_ZFORSCAN_CXX
 };

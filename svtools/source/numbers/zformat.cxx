@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2000-12-06 17:18:14 $
+ *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,6 @@ SvNumberformat::SvNumberformat(String& rString,
         if (eSymbolType == SYMBOLTYPE_COLOR)
         {
             NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
-#ifndef DOS
             if (NumFor[nIndex].GetColor() == NULL)  // Fehler
             {
                 bCancel = TRUE;                     // Abbruch for
@@ -541,10 +540,6 @@ SvNumberformat::SvNumberformat(String& rString,
                 nPosOld = nPos;                     // Position vor String
                 eSymbolType = ImpNextSymbol(rString, nPos, sStr);
             }
-#else
-                bCancel = TRUE;                     // Abbruch for
-                nCheckPos = nPos;
-#endif
         }
         if (eSymbolType == SYMBOLTYPE_FORMAT)
         {
@@ -1114,8 +1109,12 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     ULONG nKey;
     short nType = eType;
     String aFormatString( sFormatstring );
-    rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType, nKey,
-        eConvertFrom, eConvertTo );
+    if ( bSystem )
+        rConverter.PutandConvertEntrySystem( aFormatString, nCheckPos, nType,
+            nKey, eConvertFrom, eConvertTo );
+    else
+        rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
+            nKey, eConvertFrom, eConvertTo );
     const SvNumberformat* pFormat = rConverter.GetEntry( nKey );
     DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion ohne Format" );
     if ( pFormat )

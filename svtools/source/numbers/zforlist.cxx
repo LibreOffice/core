@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2000-11-28 16:49:01 $
+ *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,9 +368,7 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
 //          ULONG nPos = ImpGetLastCLEntryKey(CLOffset, eLge);
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-#ifndef DOS
                 Sound::Beep();
-#endif
                 DBG_ERROR("SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
@@ -404,6 +402,25 @@ BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
     pFormatScanner->SetConvertMode(FALSE);
     return bRes;
 }
+
+
+BOOL SvNumberFormatter::PutandConvertEntrySystem(String& rString,
+                                           xub_StrLen& nCheckPos,
+                                           short& nType,
+                                           ULONG& nKey,
+                                           LanguageType eLnge,
+                                           LanguageType eNewLnge)
+{
+    BOOL bRes;
+    if (eNewLnge == LANGUAGE_DONTKNOW)
+        eNewLnge = UNKNOWN_SUBSTITUTE;
+
+    pFormatScanner->SetConvertMode(eLnge, eNewLnge, TRUE);
+    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
+    pFormatScanner->SetConvertMode(FALSE);
+    return bRes;
+}
+
 
 void SvNumberFormatter::DeleteEntry(ULONG nKey)
 {
@@ -485,7 +502,7 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
             // nVersion < SV_NUMBERFORMATTER_VERSION_SYSTORE
             // nVersion < SV_NUMBERFORMATTER_VERSION_KEYWORDS
             if ( !pConverter )
-                pConverter = new SvNumberFormatter( eSysLang );
+                pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
             NfHackConversion eHackConversion = pEntry->Load(
                 rStream, aHdr, pConverter, *pStringScanner );
             switch ( eHackConversion )
@@ -522,7 +539,7 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
                 if ( eSaveSysLang != eLoadSysLang )
                 {   // SYSTEM verschieden
                     if ( !pConverter )
-                        pConverter = new SvNumberFormatter( eSysLang );
+                        pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
                     if ( nVersion < SV_NUMBERFORMATTER_VERSION_KEYWORDS )
                     {
                         switch ( eSaveSysLang )
@@ -574,7 +591,7 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
                             default:
                                 // alte english nach neuem anderen
                                 if ( !pConverter )
-                                    pConverter = new SvNumberFormatter( eSysLang );
+                                    pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
                                 pEntry->ConvertLanguage( *pConverter,
                                     LANGUAGE_ENGLISH_US, eLoadLang, bSystem );
                         }
@@ -2215,9 +2232,7 @@ SvULONGTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter& rTable)
                 nNewKey = nPos+1;
                 if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-#ifndef DOS
                     Sound::Beep();
-#endif
                     DBG_ERROR(
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
