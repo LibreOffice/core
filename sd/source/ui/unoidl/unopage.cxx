@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:08:20 $
+ *  last change: $Author: cl $ $Date: 2001-12-14 15:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1775,6 +1775,14 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
             pPage->SetSize( pSdPage->GetSize() );
             pPage->SetOrientation( pSdPage->GetOrientation() );
             ((SdPage*)pPage)->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
+
+            // set notes master also
+            SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (pPage->GetPageNum()-1)>>1, PK_NOTES );
+
+            pNotesPage->RemoveMasterPage(0);
+            USHORT nNum = pPage->GetMasterPageNum(0) + 1;
+            pNotesPage->InsertMasterPage(nNum);
+            pNotesPage->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
 
             mpModel->SetModified();
         }
