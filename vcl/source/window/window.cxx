@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:48:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,10 +782,17 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
-        if( ! (nFrameStyle & ~SAL_FRAME_STYLE_CLOSEABLE) && // closeable only is ok, useful for undecorated floaters
-            ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) )
-            )
-            nFrameStyle = SAL_FRAME_STYLE_FLOAT; // hmmm, was '0' before ????
+        // check for undecorated floating window
+        if( // 1. floating windows that are not moveable/sizeable (only closeable allowed)
+            ( !(nFrameStyle & ~SAL_FRAME_STYLE_CLOSEABLE) &&
+            ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
+            // 2. borderwindows of floaters with ownerdraw decoration
+            ( ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
+        {
+            nFrameStyle = SAL_FRAME_STYLE_FLOAT;
+            if( nStyle & WB_OWNERDRAWDECORATION )
+                nFrameStyle |= (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_NOSHADOW);
+        }
         else if( mbFloatWin )
             nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
 
@@ -886,6 +893,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             }
         }
 
+        // add ownerdraw decorated frame windows to list in the top-most frame window
+        // so they can be hidden on lose focus
+        if( nStyle & WB_OWNERDRAWDECORATION )
+            ImplGetOwnerDrawList().push_back( this );
+
         // delay settings initialization until first "real" frame
         // this relies on the IntroWindow not needing any system settings
         if ( !pSVData->maAppData.mbSettingsInit &&
@@ -917,6 +929,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
             OutputDevice::SetSettings( pParent->GetSettings() );
         }
+
     }
 
     const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
@@ -1115,6 +1128,15 @@ void Window::ImplCallMove()
         {
             g = mpParentFrame->GetGeometry();
             maPos -= Point( g.nX, g.nY );
+        }
+        // the client window and and all its subclients have the same position as the borderframe
+        // this is important for floating toolbars where the borderwindow is a floating window
+        // which has another borderwindow (ie the system floating window)
+        Window *pClientWin = mpClientWindow;
+        while( pClientWin )
+        {
+            pClientWin->maPos = maPos;
+            pClientWin = pClientWin->mpClientWindow;
         }
     }
 
@@ -1335,6 +1357,8 @@ ImplWinData* Window::ImplGetWinData() const
         mpWinData->mbMouseOver      = FALSE;
         mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
         mpWinData->mpSalControlHandle  = NULL;
+        mpWinData->mpSmartHelpId    = NULL;
+        mpWinData->mpSmartUniqueId  = NULL;
    }
 
     return mpWinData;
@@ -3306,6 +3330,10 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         if ( bNewPos )
             bUpdateSysObjPos = ImplUpdatePos();
 
+        // the borderwindow always specifies the position for its client window
+        if ( mpBorderWindow )
+            maPos = mpBorderWindow->maPos;
+
         if ( mpClientWindow )
         {
             mpClientWindow->ImplPosSizeWindow( mpClientWindow->mnLeftBorder,
@@ -3329,11 +3357,11 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
             }
         }
-        else
-        {
-            if ( mpBorderWindow )
-                maPos = mpBorderWindow->maPos;
-        }
+//        else
+//        {
+//            if ( mpBorderWindow )
+//                maPos = mpBorderWindow->maPos;
+//        }
 
         // Move()/Resize() werden erst bei Show() gerufen, damit min. eins vor
         // einem Show() kommt
@@ -4293,6 +4321,17 @@ Window::~Window()
     // remove associated data structures from dockingmanager
     ImplGetDockingManager()->RemoveWindow( this );
 
+
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
+
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 
@@ -4566,6 +4605,12 @@ Window::~Window()
         // Native widget support
         delete mpWinData->mpSalControlHandle;
         mpWinData->mpSalControlHandle = NULL;
+
+        if ( mpWinData->mpSmartHelpId )
+            delete mpWinData->mpSmartHelpId;
+        if ( mpWinData->mpSmartUniqueId )
+            delete mpWinData->mpSmartUniqueId;
+
         delete mpWinData;
     }
 
@@ -5656,12 +5701,16 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
     ImplInitResolutionSettings();
 
-    if( nChangeFlags & SETTINGS_STYLE )
+    if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {
-        if ( mnStyle & WB_3DLOOK )
-            SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
-        else
-            SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+        Wallpaper aWallpaper = GetBackground();
+        if( !aWallpaper.IsBitmap() && !aWallpaper.IsGradient() )
+        {
+            if ( mnStyle & WB_3DLOOK )
+                SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
+            else
+                SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+        }
     }
 
     if ( nChangeFlags )
@@ -6457,7 +6506,24 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
             pFrameWin = pFrameWin->mpFrameData->mpNextFrame;
         }
 
-
+        // the same for ownerdraw floating windows
+        if( mbFrame )
+        {
+            ::std::vector< Window* >& rList = mpFrameData->maOwnerDrawList;
+            ::std::vector< Window* >::iterator p = rList.begin();
+            while( p != rList.end() )
+            {
+                // Is Window in the path from this window
+                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( (*p), TRUE ) )
+                {
+                    // Is Window not in the exclude window path or not the
+                    // exclude window, than change the status
+                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), TRUE ) )
+                        (*p)->EnableInput( bEnable, bChild );
+                }
+                p++;
+            }
+        }
     }
 }
 
@@ -8696,9 +8762,6 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
 {
-    extern void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri );
-    extern Color ImplHSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri );
-
     if( rRect.IsEmpty() )
         return;
 
@@ -8716,10 +8779,10 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     {
         // constrast too low
         USHORT h,s,b;
-        ImplRGBtoHSB( aSelectionFillCol, h, s, b );
+        aSelectionFillCol.RGBtoHSB( h, s, b );
         if( b > 50 )    b -= 40;
         else            b += 40;
-        aSelectionFillCol = ImplHSBtoRGB( h, s, b );
+        aSelectionFillCol.SetColor( Color::HSBtoRGB( h, s, b ) );
         aSelectionBorderCol = aSelectionFillCol;
     }
 
