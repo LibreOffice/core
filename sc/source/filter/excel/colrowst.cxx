@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:33:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ColRowSettings::~ColRowSettings()
 
 void ColRowSettings::Reset( void )
 {
-    UINT16  nC;
+    SCCOL   nC;
     for( nC = 0 ; nC <= MAXCOL ; nC++ )
     {
         pColHidden[ nC ] = FALSE;
@@ -137,13 +137,13 @@ void ColRowSettings::Reset( void )
 }
 
 
-void ColRowSettings::Apply( sal_uInt16 nScTab )
+void ColRowSettings::Apply( SCTAB nScTab )
 {
     if( !bDirty )
         return;
 
-    INT32                   nC;
-    UINT16                  nStart = 0;
+    SCCOLROW                nC;
+    SCROW                   nStart = 0;
     UINT16                  nWidth;
     UINT16                  nLastWidth = ( pWidth[ 0 ] >= 0 )? ( UINT16 ) pWidth[ 0 ] : nDefWidth;
     ScDocument&             rD = *pExcRoot->pDoc;
@@ -166,9 +166,9 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
             // Column hidden: remember original column width and set width 0.
             // Needed for #i11776#, no HIDDEN flags in the document, until
             // filters and outlines are inserted.
-            pWidth[ nC ] = rD.GetColWidth( UINT16( nC ), nScTab );
+            pWidth[ nC ] = rD.GetColWidth( static_cast<SCCOL>( nC ), nScTab );
         }
-        rD.SetColWidth( UINT16( nC ), nScTab, nWidth );
+        rD.SetColWidth( static_cast<SCCOL>( nC ), nScTab, nWidth );
     }
 
     // Row-Bemachung
@@ -210,12 +210,12 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
 
             if( nFlags & ( ROWFLAG_HIDDEN | ROWFLAG_MAN ) )
             {
-                BYTE        nSCFlags = rD.GetRowFlags( UINT16( nC ), nScTab );
+                BYTE        nSCFlags = rD.GetRowFlags( nC , nScTab );
 
                 if( nFlags & ROWFLAG_MAN )
                     nSCFlags |= CR_MANUALSIZE;
 
-                rD.SetRowFlags( UINT16( nC ), nScTab, nSCFlags );
+                rD.SetRowFlags( nC, nScTab, nSCFlags );
             }
         }
         else
@@ -227,7 +227,7 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
             // Row hidden: remember original row height and set height 0.
             // Needed for #i11776#, no HIDDEN flags in the document, until
             // filters and outlines are inserted.
-            pHeight[ nC ] = rD.GetRowHeight( UINT16( nC ), nScTab );
+            pHeight[ nC ] = rD.GetRowHeight( nC, nScTab );
         }
 
         if( nLastHeight != nHeight )
@@ -237,13 +237,13 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
             if( nLastHeight )
                 rD.SetRowHeightRange( nStart, nC - 1, nScTab, nLastHeight );
 
-            nStart = UINT16( nC );
+            nStart = nC;
             nLastHeight = nHeight;
         }
     }
 
     if( nLastHeight && nMaxRow >= 0 )
-        rD.SetRowHeightRange( nStart, UINT16( nMaxRow ), nScTab, nLastHeight );
+        rD.SetRowHeightRange( nStart, static_cast<SCROW>( nMaxRow ), nScTab, nLastHeight );
 
     if( pExtTabOpt )
         pExcRoot->pIR->GetExtDocOptions().Add( *this );
@@ -254,11 +254,11 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
 }
 
 
-void ColRowSettings::SetHiddenFlags( sal_uInt16 nScTab )
+void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = *pExcRoot->pDoc;
 
-    for( sal_uInt16 nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
         if( pColHidden[ nScCol ] )
         {
@@ -270,7 +270,7 @@ void ColRowSettings::SetHiddenFlags( sal_uInt16 nScTab )
         }
     }
 
-    for( sal_uInt16 nScRow = 0; nScRow <= nMaxRow; ++nScRow )
+    for( SCROW nScRow = 0; nScRow <= nMaxRow; ++nScRow )
     {
         if( pRowFlags[ nScRow ] & ROWFLAG_HIDDEN )
         {
@@ -284,12 +284,12 @@ void ColRowSettings::SetHiddenFlags( sal_uInt16 nScTab )
 }
 
 
-void ColRowSettings::HideColRange( UINT16 nColFirst, UINT16 nColLast )
+void ColRowSettings::HideColRange( SCCOL nColFirst, SCCOL nColLast )
 {
     DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::HideColRange(): First > Last?!" );
-    DBG_ASSERT( nColLast <= MAXCOL, "+ColRowSettings::HideColRange(): ungueltige Column" );
+    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::HideColRange(): ungueltige Column" );
 
-    if( nColLast > MAXCOL )
+    if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
 
     BOOL*   pHidden;
@@ -301,12 +301,12 @@ void ColRowSettings::HideColRange( UINT16 nColFirst, UINT16 nColLast )
 }
 
 
-void ColRowSettings::SetWidthRange( UINT16 nColFirst, UINT16 nColLast, UINT16 nNew )
+void ColRowSettings::SetWidthRange( SCCOL nColFirst, SCCOL nColLast, UINT16 nNew )
 {
     DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::SetColWidthRange(): First > Last?!" );
-    DBG_ASSERT( nColLast <= MAXCOL, "+ColRowSettings::SetColWidthRange(): ungueltige Column" );
+    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::SetColWidthRange(): ungueltige Column" );
 
-    if( nColLast > MAXCOL )
+    if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
 
     INT32*  pWidthCount;
@@ -319,20 +319,20 @@ void ColRowSettings::SetWidthRange( UINT16 nColFirst, UINT16 nColLast, UINT16 nN
 }
 
 
-void ColRowSettings::SetDefaultXF( UINT16 nColFirst, UINT16 nColLast, UINT16 nXF )
+void ColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
 {
     DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::SetDefaultXF(): First > Last?!" );
-    DBG_ASSERT( nColLast <= MAXCOL, "+ColRowSettings::SetDefaultXF(): ungueltige Column" );
+    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::SetDefaultXF(): ungueltige Column" );
 
-    if( nColLast > MAXCOL )
+    if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
 
     const XclImpRoot& rRoot = *pExcRoot->pIR;
 
     // #109555# assign the default column formatting here to ensure
     // that explicit cell formatting is not overwritten.
-    for( sal_uInt16 nCol = nColFirst; nCol <= nColLast; ++nCol )
-        rRoot.GetXFIndexBuffer().SetColumnDefXF(nCol,nXF);
+    for( SCCOL nCol = nColFirst; nCol <= nColLast; ++nCol )
+        rRoot.GetXFIndexBuffer().SetColumnDefXF(static_cast<sal_uInt16>(nCol),nXF);
 }
 
 
@@ -343,7 +343,7 @@ void ColRowSettings::SetDefaults( UINT16 nWidth, UINT16 nHeight )
 }
 
 
-void ColRowSettings::_SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
+void ColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
     pHeight[ nRow ] = ( UINT16 ) ( ( double ) ( nExcelHeight & 0x7FFF ) * pExcRoot->fRowScale );
 
@@ -376,21 +376,21 @@ void ColRowSettings::ReadSplit( XclImpStream& rIn )
     else
         pExtTabOpt->nActPane = rIn.ReaduInt8();
 
-    pExtTabOpt->nTabNum = pExcRoot->pIR->GetCurrScTab();
+    pExtTabOpt->nTabNum = static_cast<sal_uInt16>(pExcRoot->pIR->GetCurrScTab());
 }
 
 
-void ColRowSettings::SetVisCorner( UINT16 nCol, UINT16 nRow )
+void ColRowSettings::SetVisCorner( SCCOL nCol, SCROW nRow )
 {
-    GetExtTabOpt().nLeftCol = nCol;
-    GetExtTabOpt().nTopRow = nRow;
+    GetExtTabOpt().nLeftCol = static_cast<sal_uInt16>(nCol);
+    GetExtTabOpt().nTopRow = static_cast<sal_uInt16>(nRow);
 }
 
 
 
 void ColRowSettings::SetFrozen( const BOOL bFrozen )
 {
-    GetExtTabOpt().nTabNum = pExcRoot->pIR->GetCurrScTab();
+    GetExtTabOpt().nTabNum = static_cast<sal_uInt16>(pExcRoot->pIR->GetCurrScTab());
     GetExtTabOpt().bFrozen = bFrozen;
 }
 
@@ -418,7 +418,7 @@ ScExtTabOptions::ScExtTabOptions() :
 
 void ScExtTabOptions::SetSelection( const ScRange& r )
 {
-    if( r.aStart.Row() <= MAXROW && r.aEnd.Row() <= MAXROW )
+    if( ValidRow(r.aStart.Row()) && ValidRow(r.aEnd.Row()) )
     {
         bValidSel = TRUE;
         aLastSel = r;
@@ -430,7 +430,7 @@ void ScExtTabOptions::SetSelection( const ScRange& r )
 
 void ScExtTabOptions::SetDimension( const ScRange& r )
 {
-    if( r.aStart.Row() <= MAXROW && r.aEnd.Row() <= MAXROW )
+    if( ValidRow(r.aStart.Row()) && ValidRow(r.aEnd.Row()) )
     {
         bValidDim = TRUE;
         aDim = r;
@@ -479,7 +479,7 @@ void ScExtDocOptions::Reset()
     nZoom = 100;
 
     ppExtTabOpts = new ScExtTabOptions *[ MAXTAB + 1 ];
-    for( UINT16 nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
+    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
         ppExtTabOpts[ nCnt ] = NULL;
 
     pCodenameWB = NULL;
@@ -510,7 +510,7 @@ ScExtDocOptions::~ScExtDocOptions()
     if( pOleSize )
         delete pOleSize;
 
-    for( UINT16 nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
+    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
     {
         if( ppExtTabOpts[ nCnt ] )
             delete ppExtTabOpts[ nCnt ];
@@ -550,7 +550,7 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
     nCurCol = rCpy.nCurCol;
     nCurRow = rCpy.nCurRow;
 
-    for( UINT16 nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
+    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
     {
         const ScExtTabOptions*  pT = rCpy.ppExtTabOpts[ nCnt ];
         if( pT )
@@ -581,7 +581,7 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
 }
 
 
-void ScExtDocOptions::SetExtTabOptions( UINT16 nTabNum, ScExtTabOptions* pTabOpt )
+void ScExtDocOptions::SetExtTabOptions( SCTAB nTabNum, ScExtTabOptions* pTabOpt )
 {
     if( ppExtTabOpts[ nTabNum ] )
         delete ppExtTabOpts[ nTabNum ];
@@ -600,11 +600,11 @@ void ScExtDocOptions::SetGridCol( const Color& rColor )
 
 void ScExtDocOptions::SetActTab( UINT16 nTab )
 {
-    nActTab = ( nTab <= MAXTAB )? nTab : MAXTAB;
+    nActTab = ( nTab <= static_cast<sal_uInt16>(MAXTAB) )? nTab : static_cast<sal_uInt16>(MAXTAB);
 }
 
 
-void ScExtDocOptions::SetOleSize( USHORT nFirstCol, USHORT nFirstRow, USHORT nLastCol, USHORT nLastRow )
+void ScExtDocOptions::SetOleSize( SCCOL nFirstCol, SCROW nFirstRow, SCCOL nLastCol, SCROW nLastRow )
 {
     if( pOleSize )
     {
@@ -618,8 +618,8 @@ void ScExtDocOptions::SetOleSize( USHORT nFirstCol, USHORT nFirstRow, USHORT nLa
 
 void ScExtDocOptions::SetCursor( UINT16 nCol, UINT16 nRow )
 {
-    nCurCol = ( nCol <= MAXCOL )? nCol : MAXCOL;
-    nCurRow = ( nRow <= MAXROW )? nRow : MAXROW;
+    nCurCol = ( nCol <= static_cast<sal_uInt16>(MAXCOL) )? nCol : static_cast<sal_uInt16>(MAXCOL);
+    nCurRow = ( nRow <= static_cast<sal_uInt16>(MAXROW) )? nRow : static_cast<sal_uInt16>(MAXROW);
 }
 
 
@@ -635,9 +635,9 @@ void ScExtDocOptions::SetZoom( UINT16 nZaehler, UINT16 nNenner )
 
 void ScExtDocOptions::Add( const ColRowSettings& rCRS )
 {
-    const UINT16 nTab = rCRS.pExcRoot->pIR->GetCurrScTab();
+    const SCTAB nTab = rCRS.pExcRoot->pIR->GetCurrScTab();
 
-    if( nTab <= MAXTAB )
+    if( ValidTab(nTab) )
     {
         if( rCRS.pExtTabOpt )
         {
