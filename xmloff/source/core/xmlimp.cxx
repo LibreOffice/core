@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:16:13 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 11:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
@@ -212,6 +213,9 @@ void SvXMLImport::_InitCtor()
     pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_META_IDX, sXML_np__meta_old,
                                sXML_n_meta_old, XML_NAMESPACE_META );
     sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+
+    if (xNumberFormatsSupplier.is())
+        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 SvXMLImport::SvXMLImport() throw () :
@@ -220,7 +224,8 @@ SvXMLImport::SvXMLImport() throw () :
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventImportHelper( NULL )
 {
     _InitCtor();
 }
@@ -237,8 +242,6 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     pEventImportHelper( NULL )
 {
     _InitCtor();
-    if (xNumberFormatsSupplier.is())
-        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
@@ -255,8 +258,6 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     pEventImportHelper( NULL )
 {
     _InitCtor();
-    if (xNumberFormatsSupplier.is())
-        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 SvXMLImport::~SvXMLImport() throw ()
@@ -264,6 +265,7 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pNamespaceMap;
     delete pUnitConv;
     delete pContexts;
+    delete pEventImportHelper;
     if (pNumImport)
         delete pNumImport;
     if (pProgressBarHelper)
@@ -502,6 +504,17 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     xModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !xModel.is() )
         throw lang::IllegalArgumentException();
+
+    DBG_ASSERT( !pNumImport, "number format import already exists." );
+    if( pNumImport )
+    {
+        delete pNumImport;
+        pNumImport = 0;
+    }
+    xNumberFormatsSupplier = Reference < XNumberFormatsSupplier > ( xModel,
+                                                                    UNO_QUERY );
+    if (xNumberFormatsSupplier.is())
+        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 // XInitialize
