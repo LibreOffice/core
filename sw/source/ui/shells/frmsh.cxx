@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:11:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,7 +1128,6 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
             const SvxBorderLine* pLine = ((const SvxBoxItem&)aFrameSet.Get(RES_BOX)).GetTop();
             rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR));
         }
-        rSet.Put(SfxUInt16Item(SID_ATTR_BORDER, TRUE)); // Rahmencontroller: letzte Zeile einklappen
     }
 }
 
