@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:15:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,14 @@ QueryBox QBX_CONFIRM_DELETE_MENU
 {
     Message [ de ] = "Sind Sie sicher, dass Sie das Menü '%MENUNAME' löschen möchten?";
     Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?";
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+};
+
+QueryBox QBX_CONFIRM_DELETE_TOOLBAR
+{
+    Message [ de ] = "Die Symbolleiste beinhaltet keine Befehle mehr. Soll die Symbolleiste gelöscht werden?";
+    Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
