@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfldui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:29:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
             switch(eDataType)
             {
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
