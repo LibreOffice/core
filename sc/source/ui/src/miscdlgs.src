@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:50:30 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ chinese_traditional ] = "´¡¤J¾ãÄæ(~C)";
         Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ ßÇãáÉ";
         Text[ greek ] = "ÅéóáãùãŞ ïëüêëçñçò óôŞëçò";
-        Text[ korean ] = "ÀüÃ¼ ¿­¡¡»ğÀÔ(~C)";
+        Text[ korean ] = "ÀüÃ¼ ¿­ »ğÀÔ(~C)";
         Text[ turkish ] = "Tam s~ütun ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar ~columnas completas";
@@ -364,7 +364,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ chinese_traditional ] = "´¡¤J¾ã¦C(~W)";
         Text[ arabic ] = "ÅÏÑÇÌ Õİæİ ßÇãáÉ";
         Text[ greek ] = "ÅéóáãùãŞ ïëüêëçñçò ãñáììŞò";
-        Text[ korean ] = "ÀüÃ¼ Çà¡¡»ğÀÔ(~W)";
+        Text[ korean ] = "ÀüÃ¼ Çà »ğÀÔ(~W)";
         Text[ turkish ] = "Tam s~atır ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar ~filas completas";
@@ -862,7 +862,7 @@ ModalDialog RID_SCDLG_INSCONT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "È«²¿²åÈë(~P)";
         Text[ russian ] = "Âñòàâèòü âñå";
-        Text[ polish ] = "Wklej wszystko";
+        Text[ polish ] = "Wstaw wszystko";
         Text[ japanese ] = "‚·‚×‚Ä‘}“ü(~P)";
         Text[ chinese_traditional ] = "¥ş³¡´¡¤J(~P)";
         Text[ arabic ] = "áÕŞ Çáßá";
@@ -980,14 +980,14 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ spanish ] = "Fórmu~las" ;
         Text [ english_us ] = "~Formulas" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¹«Ê½(~U)";
+        Text[ chinese_simplified ] = "¹«Ê½(~F)";
         Text[ russian ] = "Ôîğìóëû";
         Text[ polish ] = "Formu³y";
-        Text[ japanese ] = "”®(~U)";
-        Text[ chinese_traditional ] = "¤½¦¡(~U)";
+        Text[ japanese ] = "”®(~F)";
+        Text[ chinese_traditional ] = "¤½¦¡(~F)";
         Text[ arabic ] = "ÇáÕíÛ";
         Text[ greek ] = "Ôığïé";
-        Text[ korean ] = "¼ö½Ä(~U)";
+        Text[ korean ] = "¼ö½Ä(~F)";
         Text[ turkish ] = "~Formül";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fórmu~las";
@@ -1324,7 +1324,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "~Ligar" ;
         Text[ chinese_simplified ] = "Á´½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü";
-        Text[ polish ] = "£¹cz";
+        Text[ polish ] = "Po³¹cz";
         Text[ japanese ] = "Øİ¸(~L)";
         Text[ chinese_traditional ] = "±¶®|(~L)";
         Text[ arabic ] = "ÑÈØ";
@@ -1487,7 +1487,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     Text[ chinese_simplified ] = "²åÈëÄÚÈİ";
     Text[ russian ] = "Ñïåöèàëüíàÿ âñòàâêà";
-    Text[ polish ] = "Wklej zawartoœæ";
+    Text[ polish ] = "Wstaw zawartoœæ";
     Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯";
     Text[ chinese_traditional ] = "´¡¤J¤º®e";
     Text[ arabic ] = "áÕŞ ÎÇÕ";
@@ -2350,7 +2350,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text[ arabic ] = "ÊÍÏíÏ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "ÅğéëïãŞ";
-    Text[ korean ] = "¼±ÅÃ";
+    Text[ korean ] = "¼±Á¤";
     Text[ turkish ] = "Seçim";
     Text[ catalan ] = "Selección";
 };
@@ -2428,7 +2428,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ chinese_traditional ] = "Áô¤Jªº¤u§@ªí";
         Text[ arabic ] = "ÇáÌÏÇæá ÇáãÎİíÉ";
         Text[ greek ] = "Êñõöïß ğßíáêåò";
-        Text[ korean ] = "¼û°ÜÁø¡¡½ÃÆ®";
+        Text[ korean ] = "¼û°ÜÁø ½ÃÆ®";
         Text[ turkish ] = "Gizlenmiş tablolar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hojas ocultas";
@@ -2979,11 +2979,11 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ PORTUGUESE_BRAZILIAN ] = "Valor max." ;
         Text [ SWEDISH ] = "Ma~xvärde" ;
         Text [ PORTUGUESE ] = "Valor ~final" ;
-        Text[ chinese_simplified ] = "ÖÕÖ¹Öµ(~V)";
+        Text[ chinese_simplified ] = "×îÖÕÊıÖµ(~V)";
         Text[ russian ] = "Êîíå÷íîå çíà÷åíèå";
         Text[ polish ] = "Wartoœæ koñcowa";
         Text[ japanese ] = "’â~’l(~V)";
-        Text[ chinese_traditional ] = "²×¤î­È(~V)";
+        Text[ chinese_traditional ] = "³Ì²×¼Æ­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ ÇáäåÇÆíÉ";
         Text[ greek ] = "ÔåëéêŞ ôéìŞ";
         Text[ korean ] = "Á¾·á °ª(~V)";
@@ -3088,7 +3088,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ chinese_traditional ] = "¶¶§Ç";
     Text[ arabic ] = "ÊÚÈÆÉ ÇáÓáÓáÉ";
     Text[ greek ] = "ÓõìğëŞñùóç óåéñÜò";
-    Text[ korean ] = "½Ã¸®Áî Ã¤¿ì±â";
+    Text[ korean ] = "¿¬¼ÓÀ¸·Î Ã¤¿ì±â";
     Text[ turkish ] = "Sırayı doldur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rellenar series";
@@ -3221,7 +3221,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ chinese_traditional ] = "±Ò°Ê¥Î©ó";
         Text[ arabic ] = "ÊäÔíØ ãä ÃÌá";
         Text[ greek ] = "Åíåñãïğïßçóç ãéá";
-        Text[ korean ] = "ÀÇ¡¡È°¼ºÈ­";
+        Text[ korean ] = "ÀÇ È°¼ºÈ­";
         Text[ turkish ] = "Şunun için etkinleştir:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Activar para";
@@ -3249,7 +3249,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ chinese_traditional ] = "¨ú®ø¸s²Õ";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÊäÔíØ ãä ÃÌá";
         Text[ greek ] = "Áğåíåñãïğïßçóç ãéá";
-        Text[ korean ] = "¿¡¡¡´ëÇØ ÇØÁ¦";
+        Text[ korean ] = "ÀÇ ½ÇÇà Ãë¼Ò";
         Text[ turkish ] = "Şunun için etkinliğini kaldır:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desactivar para";
@@ -3616,7 +3616,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ chinese_traditional ] = "²M³æ(~L)";
         Text[ arabic ] = "ÇáŞÇÆãÉ";
         Text[ greek ] = "Ëßóôá";
-        Text[ korean ] = "¸ñ·Ï£¨L)(~L)";
+        Text[ korean ] = "¸ñ·Ï(~L)";
         Text[ turkish ] = "~Liste";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Lista";
@@ -3675,7 +3675,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤u§@²Õ";
     Text[ arabic ] = "İÑíŞ %PRODUCTNAME Calc";
     Text[ greek ] = "Ç ïìÜäá ôïõ %PRODUCTNAME Calc";
-    Text[ korean ] = "StarCalc ÆÀ";
+    Text[ korean ] = "%PRODUCTNAME Calc Team";
     Text[ turkish ] = "StarCalc Ekibi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El equipo de %PRODUCTNAME Calc";
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
 
 
