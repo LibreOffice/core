@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+#   last change: $Author: jbu $ $Date: 2001-04-18 10:55:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,9 +136,11 @@ APP1STDLIBS=\
 
 .INCLUDE :  target.mk
 
+$(MISC)$/stripped_scanner.ll : scanner.ll
+    +tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
 
-$(MISC)$/scanner.cxx:	scanner.ll
-    +flex -o$(MISC)$/scanner.cxx scanner.ll
+$(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
+    +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
 $(MISC)$/parser.cxx: parser.yy
     +bison -v -d -o$(MISC)$/parser.cxx parser.yy
