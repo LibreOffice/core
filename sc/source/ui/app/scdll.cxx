@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:28:09 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #endif
 #include <svx/formatpaintbrushctrl.hxx>
 #include "tbinsert.hxx"
+
+#include <svx/xmlsecctrl.hxx>
+
 
 // Child-Windows
 #include "reffact.hxx"
@@ -326,6 +329,8 @@ void ScDLL::Init()
     SvxSelectionModeControl         ::RegisterControl(SID_STATUS_SELMODE,   pMod);
     SvxZoomStatusBarControl         ::RegisterControl(SID_ATTR_ZOOM,        pMod);
     SvxModifyControl                ::RegisterControl(SID_DOC_MODIFIED,     pMod);
+    XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
+
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
 
     // Svx-Menue-Controller
@@ -450,6 +455,10 @@ void ScDLL::FillStatusBar(StatusBar &rStatusBar)
     // Dokument geaendert
     rStatusBar.InsertItem( SID_DOC_MODIFIED,
                             SvxModifyControl::GetDefItemWidth(rStatusBar));
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
 
     // Mail
     rStatusBar.InsertItem( SID_MAIL_NOTIFY,
