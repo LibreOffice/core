@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:27:34 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ void getDefaultLocaleFromConfig(stoc_javavm::JVM * pjvm,
             }
 
             if(country.getLength()) {
-                rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.region="));
+                rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.country="));
                 prop += country;
 
                 pjvm->pushProp(prop);
@@ -512,13 +512,22 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
         rtl::ByteSequence seq;
         if(pIniFile->readLine(seq) == osl::File::E_None)
         {
+            if (seq.getLength() == 0)
+            {
+                //test for EOF. readLine returns E_None even if  EOF has been passed.
+                sal_Bool bEOF = sal_False;
+                osl::File::RC rc = pIniFile->isEndOfFile( & bEOF);
+                if (bEOF == sal_True || rc != osl::File::E_None)
+                    break;
+                else
+                    continue;
+            }
             rtl::OString line((sal_Char*)seq.getArray(),seq.getLength());
             if(line.match(sJavaSection, 0))
             {
                 bSectionFound= true;
                 break;
             }
-
         }
         else
             break;
@@ -532,6 +541,17 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
             rtl::ByteSequence seq;
             if(pIniFile->readLine(seq) == osl::File::E_None)
             {
+                if (seq.getLength() == 0)
+                {
+                    //test for EOF. readLine returns E_None even if  EOF has been passed.
+                    sal_Bool bEOF = sal_False;
+                    osl::File::RC rc = pIniFile->isEndOfFile( & bEOF);
+                    if (bEOF == sal_True || rc != osl::File::E_None)
+                        break;
+                    else
+                        continue;
+                }
+
                 //check if another Section starts
                 rtl::OUString line((sal_Char*)seq.getArray(), seq.getLength(),
                                    RTL_TEXTENCODING_UTF8);
@@ -549,7 +569,7 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
                         || *pIndex == '/'
                         || *pIndex == '\''
                         || *pIndex == '#')
-                        goto nextLine;
+                        continue;
 
 
                     //the line must not contain spaces or tabs
@@ -559,15 +579,10 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
                            && *pIndex != '=')
                         pIndex ++;
                     if(pIndex == pEnd || *pIndex != '=')
-                        goto nextLine;   // no '=' found
+                        continue;
                 }
                 // Ok, store the line
                 pjvm->pushProp(line.trim());
-            nextLine:
-                sal_Bool bEOF = true;
-                pIniFile->isEndOfFile(&bEOF);
-                if(bEOF)
-                    break;
             }
             else
                 break;
@@ -585,11 +600,14 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
 void getJavaPropsFromEnvironment(stoc_javavm::JVM * pjvm) throw() {
 
     const char * pClassPath = getenv("CLASSPATH");
-    //sometimes pClassPath contains only seperator, then we donot call addSystemClasspath
-    rtl::OUString usCP(pClassPath, strlen(pClassPath), osl_getThreadTextEncoding());
-    if ( ! (usCP.getLength() == 1 && usCP[0] == SAL_PATHSEPARATOR))
+    if (pClassPath)
     {
-        pjvm->addSystemClasspath(usCP);
+        //sometimes pClassPath contains only seperator, then we donot call addSystemClasspath
+        rtl::OUString usCP(pClassPath, strlen(pClassPath), osl_getThreadTextEncoding());
+        if ( ! (usCP.getLength() == 1 && usCP[0] == SAL_PATHSEPARATOR))
+        {
+            pjvm->addSystemClasspath(usCP);
+        }
     }
     pjvm->setRuntimeLib(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DEF_JAVALIB)));
@@ -597,7 +615,8 @@ void getJavaPropsFromEnvironment(stoc_javavm::JVM * pjvm) throw() {
 
     // See if properties have been set and parse them
     const char * pOOjavaProperties = getenv(PROPERTIES_ENV);
-    if(pOOjavaProperties) {
+    if(pOOjavaProperties)
+    {
         rtl::OUString properties(rtl::OUString(pOOjavaProperties,
                                                strlen(pOOjavaProperties),
                                                osl_getThreadTextEncoding()));
@@ -848,7 +867,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         //we do not look fore settings from the environment.
         getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(NoJavaIniException& e)
+    catch(NoJavaIniException & e)
     {
         //no java.ini. This can be the case when the setup runs and java was used for accessibility etc.
         bPropsFail= sal_True;
@@ -1131,21 +1150,21 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 
                 if (!askForRetry(rException.TargetException))
                 {
-                    if (rException.TargetException.isExtractableTo(
-                            getCppuType(
-                                static_cast<
-                                    css::java::JavaNotConfiguredException * >(
-                                        0)))
-                        || rException.TargetException.isExtractableTo(
-                            getCppuType(
-                                static_cast<
-                                    css::java::MissingJavaRuntimeException * >(
-                                        0)))
-                        || rException.TargetException.isExtractableTo(
-                            getCppuType(
-                                static_cast<
-                                  css::java::JavaVMCreationFailureException * >(
-                                        0))))
+//                     if (rException.TargetException.isExtractableTo(
+//                             getCppuType(
+//                                 static_cast<
+//                                     css::java::JavaNotConfiguredException * >(
+//                                         0)))
+//                         || rException.TargetException.isExtractableTo(
+//                             getCppuType(
+//                                 static_cast<
+//                                     css::java::MissingJavaRuntimeException * >(
+//                                         0)))
+//                         || rException.TargetException.isExtractableTo(
+//                             getCppuType(
+//                                 static_cast<
+//                                   css::java::JavaVMCreationFailureException * >(
+//                                        0))))
                         //cppu::throwException(rException.TargetException);
                     //throw;
                     return css::uno::Any();
