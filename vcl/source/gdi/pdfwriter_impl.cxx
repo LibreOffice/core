@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-08 19:38:57 $
+ *  last change: $Author: rt $ $Date: 2002-10-09 13:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,8 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
                         cChar -= 0xf000;
                     else
                     {
-                        ByteString aChar( String( cChar ), RTL_TEXTENCODING_MS_1252 );
+                        String aString( cChar);
+                        ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
                         cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
                     }
                 }
@@ -2231,7 +2232,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
                     cChar -= 0xf000;
                 else
                 {
-                    ByteString aChar( String( cChar ), RTL_TEXTENCODING_MS_1252 );
+                    String aString( cChar);
+                    ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
                     cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
                 }
             }
