@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tv $ $Date: 2001-01-26 12:48:29 $
+#   last change: $Author: tv $ $Date: 2001-06-05 16:21:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,7 @@ TARGET=miscconfiggeneral
 
 
 ZIP1TARGET      = $(CONFIG_SERVER_NOLANG_TARGET)
-ZIP1LIST        = SOFFICE.CFG                   \
-                = srcheng.ini
+ZIP1LIST        = srcheng.ini
 
 
 ZIP2TARGET      = $(CONFIG_USER_TARGET)
