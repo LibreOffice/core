@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.39 2002-05-10 07:55:03 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.40 2002-05-14 09:30:32 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2002-05-10 07:55:03 $ $Revision: 1.39 $
+//	$Author: hr $ $Date: 2002-05-14 09:30:32 $ $Revision: 1.40 $
 //
 // Description:
 //
