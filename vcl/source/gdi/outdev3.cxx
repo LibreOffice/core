@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-19 06:27:13 $
+ *  last change: $Author: sb $ $Date: 2002-08-21 10:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6867,8 +6867,6 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
     xub_StrLen nLen, BOOL bOptimize ) const
 {
-    // FIXME  Do not include any empty polygons in the vector.
-
     BOOL bRet = FALSE;
     rVector.clear();
 
@@ -6936,7 +6934,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     if( bRet || (OUTDEV_PRINTER == meOutDevType) )
         return bRet;
 
-    // fall back to bitmap measurement method ----------------------------------
+    // fall back to bitmap conversion ------------------------------------------
 
     // Here, we can savely assume that the mapping between characters and glyphs
     // is one-to-one.
@@ -6970,8 +6968,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     if (pSalLayout == 0)
         return false;
     long nWidth = xVDev->ImplGetTextWidth(*pSalLayout);
-    long nHeight = xVDev->mpFontEntry->mnLineHeight + mnEmphasisAscent
-        + mnEmphasisDescent;
+    long nHeight = xVDev->mpFontEntry->mnLineHeight + xVDev->mnEmphasisAscent
+        + xVDev->mnEmphasisDescent;
     pSalLayout->Release();
 
     double fScaleX
@@ -6979,50 +6977,90 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     double fScaleY
         = nHeight == 0 ? 0.0 : static_cast< double >(nOrgHeight) / nHeight;
 
+    // calculate offset when nBase!=nIndex
+    // TODO: fix offset calculation for Bidi case
+    nXOffset = 0;
+    if( nBase != nIndex )
+    {
+        xub_StrLen nStart = std::min( nBase, nIndex );
+        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
+        pSalLayout = xVDev->ImplLayout( rStr, nStart, nLength, Point(0,0) );
+        if( pSalLayout )
+        {
+            nXOffset = pSalLayout->FillDXArray( NULL );
+            pSalLayout->Release();
+            if( nBase > nIndex)
+                nXOffset = -nXOffset;
+        }
+    }
+
+    bRet = true;
     for (xub_StrLen i = nIndex; i < nIndex + nLen; ++i)
     {
+        bool bSuccess = false;
+
         // draw character into virtual device
-        xVDev.reset(new VirtualDevice(1));
         pSalLayout = xVDev->ImplLayout(rStr, i, 1, Point(0, 0));
         if (pSalLayout == 0)
             return false;
         long nCharWidth = xVDev->ImplGetTextWidth(*pSalLayout);
 
         Point aOffset(nCharWidth / 2, 8);
-        pSalLayout->SetDrawPosition( aOffset - Point(mnTextOffX, mnTextOffY) );
-        Size aSize( nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y() );
-        xVDev->SetOutputSizePixel(aSize);
-        xVDev->ImplDrawText(*pSalLayout);
+        Size aSize(nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y());
+        bSuccess = xVDev->SetOutputSizePixel(aSize);
+        if (bSuccess)
+        {
+            pSalLayout->SetDrawPosition(aOffset);
+            xVDev->Erase();
+            xVDev->ImplDrawText(*pSalLayout);
+        }
         pSalLayout->Release();
 
-        // convert character image into outline
-        Bitmap aBmp(xVDev->GetBitmap(Point(0, 0), aSize));
-
-        PolyPolygon aPolyPoly;
-        if (!aBmp.Vectorize(aPolyPoly,
-                            BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES))
-            return false;
-
-        // convert units to logical width
-        for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
+        if (bSuccess)
         {
-            Polygon& rPoly = aPolyPoly[j];
-            for (USHORT k = 0; k < rPoly.GetSize(); ++k)
+            // convert character image into outline
+            Bitmap aBmp(xVDev->GetBitmap(Point(0, 0), aSize));
+
+            PolyPolygon aPolyPoly;
+            if (aBmp.Vectorize(aPolyPoly,
+                               BMP_VECTORIZE_OUTER
+                               | BMP_VECTORIZE_REDUCE_EDGES))
             {
-                Point& rPt = rPoly[k];
-                rPt.X() = FRound( (rPt.X() - aOffset.X()) * fScaleX);
-                rPt.Y() = FRound( (rPt.Y() - aOffset.Y()) * fScaleY);
+                // convert units to logical width
+                for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
+                {
+                    Polygon& rPoly = aPolyPoly[j];
+                    for (USHORT k = 0; k < rPoly.GetSize(); ++k)
+                    {
+                        Point& rPt = rPoly[k];
+                        rPt.X() = FRound(ImplDevicePixelToLogicWidth(
+                                             nXOffset + rPt.X() - aOffset.X()
+                                             - xVDev->mnTextOffX)
+                                         * fScaleX);
+                        rPt.Y() = FRound(ImplDevicePixelToLogicHeight(
+                                             rPt.Y() - aOffset.Y()
+                                             - xVDev->mnTextOffY)
+                                         * fScaleY);
+                    }
+                }
+
+                if (GetFont().GetOrientation() != 0)
+                    aPolyPoly.Rotate(Point(0, 0),
+                                     GetFont().GetOrientation());
+
+                // Ignore "empty" glyphs:
+                if (aPolyPoly.Count() > 0)
+                    rVector.push_back(aPolyPoly);
             }
+            else
+                bSuccess = false;
         }
 
-        // #83068#
-        if( GetFont().GetOrientation() )
-            aPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
-
-        rVector.push_back(aPolyPoly);
+        nXOffset += nCharWidth;
+        bRet = bRet && bSuccess;
     }
 
-    return true;
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
