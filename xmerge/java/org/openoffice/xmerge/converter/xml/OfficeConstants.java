@@ -164,6 +164,9 @@ public interface OfficeConstants {
     /** Element tag for <i>text:p</i>. */
     public final static String TAG_PARAGRAPH = "text:p";
 
+    /** Element tag for <i>text:</i>. */
+    public final static String TAG_TEXT = "text:";
+
     /** Element tag for <i>text:h</i>. */
     public final static String TAG_HEADING = "text:h";
 

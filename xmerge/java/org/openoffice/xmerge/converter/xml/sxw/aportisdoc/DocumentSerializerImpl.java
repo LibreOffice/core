@@ -392,7 +392,12 @@ public final class DocumentSerializerImpl
             traverseParaContents(node);
             log("</FIELD>");
 
-        } else {
+        }else if (nodeName.startsWith(TAG_TEXT)) {
+            log("<Unknown text Field>");
+            traverseParaContents(node);
+            log("</Unknown text Field>");
+
+        }else {
 
             log("<OTHERS " + XmlUtil.getNodeInfo(node) + " />");
         }
