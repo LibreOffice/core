@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-18 15:30:25 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENC_CAST( val ) ((rtl_TextEncoding) val)
 
 #endif /* _SOLAR_RSC_INVOKED */
-
 
 #define RTL_TEXTENCODING_DONTKNOW               (RTL_TEXTENC_CAST( 0 ))
 #define RTL_TEXTENCODING_MS_1252                (RTL_TEXTENC_CAST( 1 ))
