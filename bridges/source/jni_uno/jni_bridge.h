@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:56 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,64 +58,60 @@
  *
  *
  ************************************************************************/
-#ifndef _JNI_BRIDGE_H_
-#define _JNI_BRIDGE_H_
+#if ! defined INCLUDED_JNI_BRIDGE_H
+#define INCLUDED_JNI_BRIDGE_H
 
 #include "jni_base.h"
 #include "jni_info.h"
 #include "jni_helper.h"
 
-#include <bridges/java/jvmcontext.hxx>
+#include "osl/diagnose.h"
+#include "osl/interlck.h"
 
-#include <osl/diagnose.h>
-#include <osl/interlck.h>
+#include "uno/mapping.h"
+#include "uno/dispatcher.h"
 
-#include <uno/mapping.h>
-#include <uno/dispatcher.h>
-
-#include <com/sun/star/uno/XInterface.hpp>
+#include "com/sun/star/uno/XInterface.hpp"
 
 
-namespace jni_bridge
+namespace jni_uno
 {
 
 //==== holds environments and mappings =============================================================
-struct jni_Bridge;
-struct jni_Mapping : public uno_Mapping
+struct Bridge;
+struct Mapping : public uno_Mapping
 {
-    jni_Bridge * m_bridge;
+    Bridge * m_bridge;
 };
 //==================================================================================================
-struct jni_Bridge
+struct Bridge
 {
     mutable oslInterlockedCount m_ref;
 
     uno_ExtEnvironment *        m_uno_env;
     uno_Environment *           m_java_env;
+
+    Mapping                     m_java2uno;
+    Mapping                     m_uno2java;
+
     JNI_info const *            m_jni_info;
 
-    jni_Mapping                 m_java2uno;
-    jni_Mapping                 m_uno2java;
+    //
+    ~Bridge() SAL_THROW( () );
+    Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env );
 
-    bool                        m_registered_java2uno;
-
-    ~jni_Bridge() SAL_THROW( () );
-    jni_Bridge(
-        uno_Environment * java_env, uno_ExtEnvironment * uno_env,
-        bool register_java2uno ) SAL_THROW( () );
-
-    void acquire() const SAL_THROW( () );
-    void release() const SAL_THROW( () );
+    void acquire() const;
+    void release() const;
 
     // jni_data.cxx
     void map_to_uno(
-        JNI_attach const & attach,
+        JNI_context const & jni,
         void * uno_data, jvalue java_data,
         typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
         bool assign, bool out_param,
         bool special_wrapped_integral_types = false ) const;
     void map_to_java(
-        JNI_attach const & attach,
+        JNI_context const & jni,
         jvalue * java_data, void const * uno_data,
         typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
         bool in_param, bool out_param,
@@ -123,27 +119,27 @@ struct jni_Bridge
 
     // jni_uno2java.cxx
     void handle_uno_exc(
-        JNI_attach const & attach, uno_Any * uno_exc ) const;
+        JNI_context const & jni, uno_Any * uno_exc ) const;
     void call_java(
         jobject javaI, JNI_type_info const * info, sal_Int32 function_pos,
         typelib_TypeDescriptionReference * return_type,
         typelib_MethodParameter * params, sal_Int32 nParams,
         void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
     jobject map_uno2java(
-        JNI_attach const & attach,
+        JNI_context const & jni,
         uno_Interface * pUnoI, JNI_type_info const * info ) const;
 
     // jni_java2uno.cxx
     void handle_java_exc(
-        JNI_attach const & attach, JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const;
+        JNI_context const & jni, JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const;
     jobject call_uno(
-        JNI_attach const & attach,
+        JNI_context const & jni,
         uno_Interface * pUnoI, typelib_TypeDescription * member_td,
         typelib_TypeDescriptionReference * return_tdref,
         sal_Int32 nParams, typelib_MethodParameter const * pParams,
         jobjectArray jo_args ) const;
     uno_Interface * map_java2uno(
-        JNI_attach const & attach,
+        JNI_context const & jni,
         jobject javaI, JNI_type_info const * info ) const;
 };
 

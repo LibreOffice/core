@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2002-10-28 18:20:35 $
+#   last change: $Author: dbo $ $Date: 2002-12-06 10:26:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SLOFILES= \
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS= \
+    $(JVMACCESSLIB)			\
     $(CPPULIB)			\
     $(SALLIB)
 

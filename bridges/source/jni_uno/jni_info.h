@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:58 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,24 @@
  *
  *
  ************************************************************************/
-#ifndef _JNI_INFO_H_
-#define _JNI_INFO_H_
-
-#include "jni_base.h"
+#if ! defined INCLUDED_JNI_INFO_H
+#define INCLUDED_JNI_INFO_H
 
 #include <hash_map>
 
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
+#include "jni_base.h"
 
-#include <uno/environment.h>
-#include <typelib/typedescription.hxx>
+#include "osl/mutex.hxx"
+#include "rtl/ustring.hxx"
+#include "rtl/strbuf.hxx"
 
-#include <com/sun/star/uno/Type.hxx>
+#include "uno/environment.h"
+#include "typelib/typedescription.hxx"
+
+#include "com/sun/star/uno/Type.hxx"
 
 
-namespace jni_bridge
+namespace jni_uno
 {
 
 //==================================================================================================
@@ -91,12 +91,10 @@ struct JNI_type_info
     jfieldID *                                  m_fields;
     jmethodID                                   m_ctor;
 
-    JNI_type_info(
-        JNI_attach const & attach, typelib_InterfaceTypeDescription * td );
-    JNI_type_info(
-        JNI_attach const & attach, typelib_CompoundTypeDescription * td );
+    JNI_type_info( JNI_context const & jni, typelib_InterfaceTypeDescription * td );
+    JNI_type_info( JNI_context const & jni, typelib_CompoundTypeDescription * td );
 
-    static void _delete( JNI_attach const & attach, JNI_type_info * that ) SAL_THROW( () );
+    static void _delete( JNI_context const & jni, JNI_type_info * that ) SAL_THROW( () );
 };
 //==================================================================================================
 struct JNI_type_info_holder
@@ -109,10 +107,12 @@ struct JNI_type_info_holder
 //==================================================================================================
 typedef ::std::hash_map< ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
 
+struct Bridge;
+
 //==================================================================================================
 class JNI_info
 {
-    uno_Environment *           m_java_env;
+    Bridge const *              m_bridge; // unacquired pointer to owner
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
 
@@ -193,24 +193,24 @@ public:
     jfieldID                    m_field_JNI_proxy_m_oid;
 
     //
-    JNI_info( uno_Environment * java_env );
     ~JNI_info() SAL_THROW( () );
+    JNI_info( Bridge const * bridge );
 
     //
     JNI_type_info const * get_type_info(
-        JNI_attach const & attach, typelib_TypeDescription * td ) const;
+        JNI_context const & jni, typelib_TypeDescription * td ) const;
     JNI_type_info const * get_type_info(
-        JNI_attach const & attach, ::rtl::OUString const & uno_name ) const;
+        JNI_context const & jni, ::rtl::OUString const & uno_name ) const;
     //
     inline void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const;
     //
     inline jobject java_env_getRegisteredInterface(
-        JNI_attach const & attach, jstring oid, jobject type ) const;
+        JNI_context const & jni, jstring oid, jobject type ) const;
     inline jobject java_env_registerInterface(
-        JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const;
+        JNI_context const & jni, jobject javaI, jstring oid, jobject type ) const;
     inline void java_env_revokeInterface(
-        JNI_attach const & attach, jstring oid, jobject type ) const;
+        JNI_context const & jni, jstring oid, jobject type ) const;
 };
 //__________________________________________________________________________________________________
 inline void JNI_info::append_sig(
@@ -301,40 +301,40 @@ inline void JNI_info::append_sig(
 }
 //__________________________________________________________________________________________________
 inline jobject JNI_info::java_env_getRegisteredInterface(
-    JNI_attach const & attach, jstring oid, jobject type ) const
+    JNI_context const & jni, jstring oid, jobject type ) const
 {
     jvalue args[ 2 ];
     args[ 0 ].l = oid;
     args[ 1 ].l = type;
-    jobject jo_iface = attach->CallObjectMethodA(
+    jobject jo_iface = jni->CallObjectMethodA(
         m_object_java_env, m_method_IEnvironment_getRegisteredInterface, args );
-    attach.ensure_no_exception();
+    jni.ensure_no_exception();
     return jo_iface;
 }
 //__________________________________________________________________________________________________
 inline jobject JNI_info::java_env_registerInterface(
-    JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const
+    JNI_context const & jni, jobject javaI, jstring oid, jobject type ) const
 {
-    JLocalAutoRef jo_string_array( attach, attach->NewObjectArray( 1, m_class_String, oid ) );
-    attach.ensure_no_exception();
+    JLocalAutoRef jo_string_array( jni, jni->NewObjectArray( 1, m_class_String, oid ) );
+    jni.ensure_no_exception();
     jvalue args[ 3 ];
     args[ 0 ].l = javaI;
     args[ 1 ].l = jo_string_array.get();
     args[ 2 ].l = type;
-    jobject jo_iface = attach->CallObjectMethodA(
+    jobject jo_iface = jni->CallObjectMethodA(
         m_object_java_env, m_method_IEnvironment_registerInterface, args );
-    attach.ensure_no_exception();
+    jni.ensure_no_exception();
     return jo_iface;
 }
 //__________________________________________________________________________________________________
 inline void JNI_info::java_env_revokeInterface(
-    JNI_attach const & attach, jstring oid, jobject type ) const
+    JNI_context const & jni, jstring oid, jobject type ) const
 {
     jvalue args[ 2 ];
     args[ 0 ].l = oid;
     args[ 1 ].l = type;
-    attach->CallVoidMethodA( m_object_java_env, m_method_IEnvironment_revokeInterface, args );
-    attach.ensure_no_exception();
+    jni->CallVoidMethodA( m_object_java_env, m_method_IEnvironment_revokeInterface, args );
+    jni.ensure_no_exception();
 }
 
 }

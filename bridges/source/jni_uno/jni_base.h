@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-20 09:57:28 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,33 @@
  *
  *
  ************************************************************************/
-#ifndef _JNI_BASE_H_
-#define _JNI_BASE_H_
+#if ! defined INCLUDED_JNI_BASE_H
+#define INCLUDED_JNI_BASE_H
 
 #if defined (__SUNPRO_CC) || defined (__SUNPRO_C)
+// workaround solaris include trouble on jumbo
 #include <stdarg.h>
 namespace std
 {
 typedef __va_list va_list;
 }
 #endif
-#include <jni.h>
 #include <memory>
 
-#include <rtl/alloc.h>
-#include <rtl/ustring.hxx>
+#include "jvmaccess/virtualmachine.hxx"
 
-#include <uno/environment.h>
-#include <typelib/typedescription.h>
+#include "osl/diagnose.h"
+
+#include "rtl/alloc.h"
+#include "rtl/ustring.hxx"
+
+#include "uno/environment.h"
+#include "typelib/typedescription.h"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
-struct JavaVMContext;
-
-namespace jni_bridge
+namespace jni_uno
 {
 class JNI_info;
 
@@ -101,13 +103,13 @@ struct BridgeRuntimeError
 //==================================================================================================
 struct rtl_mem
 {
-    inline static void * operator new ( size_t nSize ) SAL_THROW( () )
+    inline static void * operator new ( size_t nSize )
         { return rtl_allocateMemory( nSize ); }
-    inline static void operator delete ( void * mem ) SAL_THROW( () )
+    inline static void operator delete ( void * mem )
         { if (mem) rtl_freeMemory( mem ); }
-    inline static void * operator new ( size_t, void * mem ) SAL_THROW( () )
+    inline static void * operator new ( size_t, void * mem )
         { return mem; }
-    inline static void operator delete ( void *, void * ) SAL_THROW( () )
+    inline static void operator delete ( void *, void * )
         {}
 
     static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
@@ -128,15 +130,15 @@ class TypeDescr
 {
     typelib_TypeDescription * m_td;
 
-    inline TypeDescr( TypeDescr const & );
-    inline TypeDescr & operator = ( TypeDescr const & );
+    TypeDescr( TypeDescr & ); // not impl
+    void operator = ( TypeDescr ); // not impl
 
 public:
-    inline TypeDescr( typelib_TypeDescriptionReference * td_ref );
+    inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
     inline ~TypeDescr() SAL_THROW( () )
         { TYPELIB_DANGER_RELEASE( m_td ); }
 
-    inline typelib_TypeDescription * get() const SAL_THROW( () )
+    inline typelib_TypeDescription * get() const
         { return m_td; }
 };
 //__________________________________________________________________________________________________
@@ -155,34 +157,53 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
 //##################################################################################################
 
 //==================================================================================================
-class JNI_attach
+class JNI_context
 {
-    sal_uInt32                  m_thread_id;
-    ::JavaVMContext *           m_context;
-    JNI_info const *            m_jni_info;
-    JavaVM *                    m_vm;
-    JNIEnv *                    m_env;
-    bool                        m_revoke;
-    bool                        m_detach;
+    JNI_info const * m_jni_info;
+    JNIEnv *         m_env;
 
-public:
-    ~JNI_attach() SAL_THROW( () );
-    JNI_attach( uno_Environment * java_env );
-    JNI_attach( uno_Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () );
-
-    inline JavaVM * get_vm() const SAL_THROW( () )
-        { return m_vm; }
-    inline JNIEnv * get_jni_env() const SAL_THROW( () )
-        { return m_env; }
-    inline JNI_info const * get_jni_info() const SAL_THROW( () )
-        { return m_jni_info; }
-
-    inline JNIEnv * operator -> () const SAL_THROW( () )
-        { return m_env; }
+    JNI_context( JNI_context & ); // not impl
+    void operator = ( JNI_context ); // not impl
 
     void throw_bridge_error() const;
+public:
+    inline explicit JNI_context( JNI_info const * jni_info, JNIEnv * env )
+        : m_jni_info( jni_info ),
+          m_env( env )
+        {}
+
+    inline JNI_info const * get_info() const
+        { return m_jni_info; }
+
+    inline JNIEnv * operator -> () const
+        { return m_env; }
+    inline JNIEnv * get_jni_env() const
+        { return m_env; }
+
     inline void ensure_no_exception() const
         { if (JNI_FALSE != m_env->ExceptionCheck()) throw_bridge_error(); }
+};
+
+//==================================================================================================
+class JNI_guarded_context
+    : private ::jvmaccess::VirtualMachine::AttachGuard,
+      public JNI_context
+{
+    JNI_guarded_context( JNI_guarded_context & ); // not impl
+    void operator = ( JNI_guarded_context ); // not impl
+
+public:
+    JNI_guarded_context(
+        JNI_info const * jni_info, ::jvmaccess::VirtualMachine * vm_access )
+        // workaround this by catching internally CreationException
+//         try
+        : AttachGuard( vm_access ),
+          JNI_context( jni_info, AttachGuard::getEnvironment() )
+        {}
+//         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+//         {
+//             throw BridgeRuntimeError( OUSTR("attaching to java vm failed!") );
+//         }
 };
 
 //##################################################################################################
@@ -190,72 +211,72 @@ public:
 //==================================================================================================
 class JLocalAutoRef
 {
-    JNI_attach const * m_attach;
-    mutable jobject m_jo;
+    JNI_context const & m_jni;
+    jobject m_jo;
 
 public:
-    inline JLocalAutoRef() SAL_THROW( () )
-        : m_attach( 0 ),
+    inline JLocalAutoRef( JNI_context const & jni )
+        : m_jni( jni ),
           m_jo( 0 )
         {}
-    inline explicit JLocalAutoRef( JNI_attach const & attach, jobject jo ) SAL_THROW( () )
-        : m_attach( &attach ),
+    inline explicit JLocalAutoRef( JNI_context const & jni, jobject jo )
+        : m_jni( jni ),
           m_jo( jo )
         {}
-    inline JLocalAutoRef( JLocalAutoRef const & auto_ref ) SAL_THROW( () );
+    inline JLocalAutoRef( JLocalAutoRef & auto_ref );
     inline ~JLocalAutoRef() SAL_THROW( () );
 
-    inline jobject get() const SAL_THROW( () )
+    inline jobject get() const
         { return m_jo; }
-    inline bool is() const SAL_THROW( () )
+    inline bool is() const
         { return (0 != m_jo); }
-    inline jobject release() SAL_THROW( () );
-    inline void reset() SAL_THROW( () );
-    inline void reset( JNI_attach const & attach, jobject jo ) SAL_THROW( () );
-    inline JLocalAutoRef & operator = ( JLocalAutoRef const & auto_ref ) SAL_THROW( () );
+    inline jobject release();
+    inline void reset();
+    inline void reset( jobject jo );
+    inline JLocalAutoRef & operator = ( JLocalAutoRef & auto_ref );
 };
 //__________________________________________________________________________________________________
 inline JLocalAutoRef::~JLocalAutoRef() SAL_THROW( () )
 {
     if (0 != m_jo)
-        (*m_attach)->DeleteLocalRef( m_jo );
+        m_jni->DeleteLocalRef( m_jo );
 }
 //__________________________________________________________________________________________________
-inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef const & auto_ref ) SAL_THROW( () )
-    : m_attach( auto_ref.m_attach ),
+inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef & auto_ref )
+    : m_jni( auto_ref.m_jni ),
       m_jo( auto_ref.m_jo )
 {
     auto_ref.m_jo = 0;
 }
 //__________________________________________________________________________________________________
-inline jobject JLocalAutoRef::release() SAL_THROW( () )
+inline jobject JLocalAutoRef::release()
 {
     jobject jo = m_jo;
     m_jo = 0;
     return jo;
 }
 //__________________________________________________________________________________________________
-inline void JLocalAutoRef::reset() SAL_THROW( () )
+inline void JLocalAutoRef::reset()
 {
     if (0 != m_jo)
-        (*m_attach)->DeleteLocalRef( m_jo );
+        m_jni->DeleteLocalRef( m_jo );
     m_jo = 0;
 }
 //__________________________________________________________________________________________________
-inline void JLocalAutoRef::reset( JNI_attach const & attach, jobject jo ) SAL_THROW( () )
+inline void JLocalAutoRef::reset( jobject jo )
 {
     if (jo != m_jo)
     {
         if (0 != m_jo)
-            (*m_attach)->DeleteLocalRef( m_jo );
+            m_jni->DeleteLocalRef( m_jo );
         m_jo = jo;
     }
-    m_attach = &attach;
 }
 //__________________________________________________________________________________________________
-inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef const & auto_ref ) SAL_THROW( () )
+inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 {
-    reset( *auto_ref.m_attach, auto_ref.m_jo );
+    OSL_ASSERT( m_jni.get_jni_env() == auto_ref.m_jni.get_jni_env() );
+    reset( auto_ref.m_jo );
     auto_ref.m_jo = 0;
     return *this;
 }

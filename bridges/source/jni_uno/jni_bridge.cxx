@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-18 13:07:52 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,15 @@
 
 #include "jni_bridge.h"
 
-#include <rtl/unload.h>
-#include <rtl/strbuf.hxx>
-#include <uno/lbnames.h>
+#include "rtl/unload.h"
+#include "rtl/strbuf.hxx"
+#include "uno/lbnames.h"
 
 
 using namespace ::std;
 using namespace ::rtl;
 using namespace ::osl;
-using namespace ::jni_bridge;
+using namespace ::jni_uno;
 
 namespace
 {
@@ -77,21 +77,21 @@ extern "C"
 {
 
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL jni_Mapping_acquire( uno_Mapping * mapping )
+void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+    Mapping const * that = static_cast< Mapping const * >( mapping );
     that->m_bridge->acquire();
 }
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL jni_Mapping_release( uno_Mapping * mapping )
+void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+    Mapping const * that = static_cast< Mapping const * >( mapping );
     that->m_bridge->release();
 }
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL jni_Mapping_java2uno(
+void SAL_CALL Mapping_java2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
@@ -112,12 +112,16 @@ void SAL_CALL jni_Mapping_java2uno(
     {
         try
         {
-            jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
-            jni_Bridge const * bridge = that->m_bridge;
-            JNI_attach attach( bridge->m_java_env );
+            Mapping const * that = static_cast< Mapping const * >( mapping );
+            Bridge const * bridge = that->m_bridge;
+
+            JNI_guarded_context jni(
+                bridge->m_jni_info,
+                reinterpret_cast< ::jvmaccess::VirtualMachine * >( bridge->m_java_env->pContext ) );
+
             JNI_type_info const * info =
-                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
-            *ppUnoI = bridge->map_java2uno( attach, javaI, info );
+                bridge->m_jni_info->get_type_info( jni, (typelib_TypeDescription *)td );
+            *ppUnoI = bridge->map_java2uno( jni, javaI, info );
         }
         catch (BridgeRuntimeError & err)
         {
@@ -128,10 +132,14 @@ void SAL_CALL jni_Mapping_java2uno(
             OSL_ENSURE( 0, cstr_msg.getStr() );
 #endif
         }
+        catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+        {
+            OSL_ENSURE( 0, "[jni_uno bridge error] attaching current thread to java failed!" );
+        }
     }
 }
 //--------------------------------------------------------------------------------------------------
-void SAL_CALL jni_Mapping_uno2java(
+void SAL_CALL Mapping_uno2java(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
@@ -144,22 +152,25 @@ void SAL_CALL jni_Mapping_uno2java(
 
     try
     {
-        jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
-        jni_Bridge const * bridge = that->m_bridge;
-        JNI_attach attach( bridge->m_java_env );
+        Mapping const * that = static_cast< Mapping const * >( mapping );
+        Bridge const * bridge = that->m_bridge;
+
+        JNI_guarded_context jni(
+            bridge->m_jni_info,
+            reinterpret_cast< ::jvmaccess::VirtualMachine * >( bridge->m_java_env->pContext ) );
 
         if (0 != *ppJavaI)
         {
-            attach->DeleteGlobalRef( *ppJavaI );
+            jni->DeleteGlobalRef( *ppJavaI );
             *ppJavaI = 0;
         }
         if (0 != pUnoI)
         {
             JNI_type_info const * info =
-                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
-            jobject jlocal = bridge->map_uno2java( attach, pUnoI, info );
-            *ppJavaI = attach->NewGlobalRef( jlocal );
-            attach->DeleteLocalRef( jlocal );
+                bridge->m_jni_info->get_type_info( jni, (typelib_TypeDescription *)td );
+            jobject jlocal = bridge->map_uno2java( jni, pUnoI, info );
+            *ppJavaI = jni->NewGlobalRef( jlocal );
+            jni->DeleteLocalRef( jlocal );
         }
     }
     catch (BridgeRuntimeError & err)
@@ -171,88 +182,82 @@ void SAL_CALL jni_Mapping_uno2java(
         OSL_ENSURE( 0, cstr_msg.getStr() );
 #endif
     }
+    catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    {
+        OSL_ENSURE( 0, "[jni_uno bridge error] attaching current thread to java failed!" );
+    }
 }
 //__________________________________________________________________________________________________
-void SAL_CALL jni_Bridge_free( uno_Mapping * mapping )
+void SAL_CALL Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    jni_Mapping * that = static_cast< jni_Mapping * >( mapping );
+    Mapping * that = static_cast< Mapping * >( mapping );
     delete that->m_bridge;
 }
 
 }
-}
-
-namespace jni_bridge
-{
 
 //==================================================================================================
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
+}
+
+namespace jni_uno
+{
+
 //__________________________________________________________________________________________________
-void jni_Bridge::acquire() const SAL_THROW( () )
+void Bridge::acquire() const SAL_THROW( () )
 {
     if (1 == osl_incrementInterlockedCount( &m_ref ))
     {
-        if (m_registered_java2uno)
-        {
-            uno_Mapping * mapping = const_cast< jni_Mapping * >( &m_java2uno );
-            ::uno_registerMapping(
-                &mapping, jni_Bridge_free,
-                m_java_env, (uno_Environment *)m_uno_env, 0 );
-        }
-        else
-        {
-            uno_Mapping * mapping = const_cast< jni_Mapping * >( &m_uno2java );
-            ::uno_registerMapping(
-                &mapping, jni_Bridge_free,
-                (uno_Environment *)m_uno_env, m_java_env, 0 );
-        }
+        uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
+        uno_registerMapping( &mapping, Bridge_free, m_java_env, (uno_Environment *)m_uno_env, 0 );
+        OSL_ASSERT( mapping == const_cast< Mapping * >( &m_java2uno ) );
+        mapping = const_cast< Mapping * >( &m_uno2java );
+        uno_registerMapping( &mapping, Bridge_free, (uno_Environment *)m_uno_env, m_java_env, 0 );
+        OSL_ASSERT( mapping == const_cast< Mapping * >( &m_uno2java ) );
     }
 }
 //__________________________________________________________________________________________________
-void jni_Bridge::release() const SAL_THROW( () )
+void Bridge::release() const SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( &m_ref ))
     {
-        ::uno_revokeMapping(
-            m_registered_java2uno
-            ? const_cast< jni_Mapping * >( &m_java2uno )
-            : const_cast< jni_Mapping * >( &m_uno2java ) );
+        uno_revokeMapping( const_cast< Mapping * >( &m_java2uno ) );
+        uno_revokeMapping( const_cast< Mapping * >( &m_uno2java ) );
     }
 }
 //__________________________________________________________________________________________________
-jni_Bridge::jni_Bridge(
-    uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool register_java2uno )
-    SAL_THROW( () )
-        : m_ref( 1 ),
-          m_uno_env( uno_env ),
-          m_java_env( java_env ),
-          m_registered_java2uno( register_java2uno )
+Bridge::Bridge(
+    uno_Environment * java_env, uno_ExtEnvironment * uno_env )
+    : m_ref( 0 ),
+      m_uno_env( uno_env ),
+      m_java_env( java_env )
 {
+    m_jni_info = new JNI_info( this );
+
     OSL_ASSERT( 0 != m_java_env && 0 != m_uno_env );
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_java_env->acquire)( m_java_env );
-    JavaVMContext * jvm_context = reinterpret_cast< JavaVMContext * >( java_env->pContext );
-    m_jni_info = reinterpret_cast< JNI_info * >( jvm_context->m_extra );
 
     // java2uno
-    m_java2uno.acquire = jni_Mapping_acquire;
-    m_java2uno.release = jni_Mapping_release;
-    m_java2uno.mapInterface = (uno_MapInterfaceFunc)jni_Mapping_java2uno;
+    m_java2uno.acquire = Mapping_acquire;
+    m_java2uno.release = Mapping_release;
+    m_java2uno.mapInterface = Mapping_java2uno;
     m_java2uno.m_bridge = this;
     // uno2java
-    m_uno2java.acquire = jni_Mapping_acquire;
-    m_uno2java.release = jni_Mapping_release;
-    m_uno2java.mapInterface = jni_Mapping_uno2java;
+    m_uno2java.acquire = Mapping_acquire;
+    m_uno2java.release = Mapping_release;
+    m_uno2java.mapInterface = Mapping_uno2java;
     m_uno2java.m_bridge = this;
 
     (*g_moduleCount.modCnt.acquire)( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
-jni_Bridge::~jni_Bridge()
-    SAL_THROW( () )
+Bridge::~Bridge() SAL_THROW( () )
 {
+    delete m_jni_info;
+
     (*m_java_env->release)( m_java_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
 
@@ -262,73 +267,7 @@ jni_Bridge::~jni_Bridge()
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-JNI_attach::JNI_attach( uno_Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () )
-    : m_thread_id( ::osl::Thread::getCurrentIdentifier() ),
-      m_env( jni_env ),
-      m_detach( false )
-{
-    OSL_ASSERT( 0 == rtl_ustr_ascii_compare( java_env->pTypeName->buffer, "java" ) );
-    m_context = (JavaVMContext *)java_env->pContext;
-    m_vm = m_context->_pJavaVM;
-    m_jni_info = (JNI_info const *)m_context->m_extra;
-
-    MutexGuard guard( m_context->_mutex );
-    pair< JavaVMContext::t_map::iterator, bool > insertion(
-        m_context->_registeredThreadMap.insert(
-            JavaVMContext::t_map::value_type(
-                m_thread_id, JavaVMContext::t_entry( 1, m_env ) ) ) );
-    m_revoke = insertion.second;
-}
-//__________________________________________________________________________________________________
-JNI_attach::JNI_attach( uno_Environment * java_env )
-    : m_thread_id( ::osl::Thread::getCurrentIdentifier() )
-{
-    OSL_ASSERT( 0 == rtl_ustr_ascii_compare( java_env->pTypeName->buffer, "java" ) );
-    m_context = (JavaVMContext *)java_env->pContext;
-    m_vm = m_context->_pJavaVM;
-    m_jni_info = (JNI_info const *)m_context->m_extra;
-
-    MutexGuard guard( m_context->_mutex );
-    pair< JavaVMContext::t_map::iterator, bool > insertion(
-        m_context->_registeredThreadMap.insert(
-            JavaVMContext::t_map::value_type(
-                m_thread_id, JavaVMContext::t_entry( 1, 0 ) ) ) );
-    if (insertion.second)
-    {
-        m_revoke = true;
-        jint res = m_vm->AttachCurrentThread( (void **)&m_env, 0 );
-        insertion.first->second.second = m_env;
-        if (0 < res)
-        {
-            m_detach = false;
-            throw BridgeRuntimeError( OUSTR("AttachCurrentThread() failed!") );
-        }
-        m_detach = true;
-    }
-    else
-    {
-        m_revoke = false;
-        m_env = insertion.first->second.second;
-        m_detach = false;
-    }
-}
-//__________________________________________________________________________________________________
-JNI_attach::~JNI_attach() SAL_THROW( () )
-{
-    if (m_revoke)
-    {
-        MutexGuard guard( m_context->_mutex );
-        size_t erased = m_context->_registeredThreadMap.erase( m_thread_id );
-        OSL_ASSERT( 1 == erased );
-    }
-    if (m_detach)
-    {
-        jint res = m_vm->DetachCurrentThread();
-        OSL_ASSERT( 0 == res );
-    }
-}
-//__________________________________________________________________________________________________
-void JNI_attach::throw_bridge_error() const
+void JNI_context::throw_bridge_error() const
 {
     JLocalAutoRef jo_exc( *this, m_env->ExceptionOccurred() );
     m_env->ExceptionClear();
@@ -389,7 +328,7 @@ void JNI_attach::throw_bridge_error() const
 
 }
 
-using namespace ::jni_bridge;
+using namespace ::jni_uno;
 
 extern "C"
 {
@@ -399,10 +338,10 @@ namespace
 void SAL_CALL java_env_disposing( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
-    JavaVMContext * context = reinterpret_cast< JavaVMContext * >( java_env->pContext );
-    delete reinterpret_cast< JNI_info * >( context->m_extra );
+    ::jvmaccess::VirtualMachine * machine =
+          reinterpret_cast< ::jvmaccess::VirtualMachine * >( java_env->pContext );
     java_env->pContext = 0;
-    delete context;
+    machine->release();
 }
 }
 //##################################################################################################
@@ -412,20 +351,10 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     java_env->environmentDisposing = java_env_disposing;
     java_env->pExtEnv = 0; // no extended support
     OSL_ASSERT( 0 != java_env->pContext );
-    try
-    {
-        ((JavaVMContext *)java_env->pContext)->m_extra = new JNI_info( java_env );
-    }
-    catch (BridgeRuntimeError & err)
-    {
-#ifdef _DEBUG
-        OStringBuffer buf( 64 );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("### error initializing (jni) java environment: ") );
-        buf.append( OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OString msg( buf.makeStringAndClear() );
-        OSL_ENSURE( 0, msg.getStr() );
-#endif
-    }
+
+    ::jvmaccess::VirtualMachine * machine =
+          reinterpret_cast< ::jvmaccess::VirtualMachine * >( java_env->pContext );
+    machine->acquire();
 }
 //##################################################################################################
 void SAL_CALL uno_ext_getMapping(
@@ -467,24 +396,37 @@ void SAL_CALL uno_ext_getMapping(
 
         uno_Mapping * mapping = 0;
 
-        if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ) &&
-            to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        try
         {
-            jni_Bridge * bridge = new jni_Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
-            mapping = &bridge->m_java2uno;
-            uno_registerMapping(
-                &mapping, jni_Bridge_free,
-                pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
+            if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ) &&
+                to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+            {
+                Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv ); // ref count = 0
+                bridge->acquire(); // 0->1 registers both mappings
+                mapping = &bridge->m_java2uno;
+            }
+            else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
+                     to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ))
+            {
+                Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv ); // ref count = 0
+                bridge->acquire(); // 0->1 registers both mappings
+                mapping = &bridge->m_uno2java;
+            }
         }
-        else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
-                 to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ))
+        catch (BridgeRuntimeError & err)
         {
-            jni_Bridge * bridge = new jni_Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
-            mapping = &bridge->m_uno2java;
-            uno_registerMapping(
-                &mapping, jni_Bridge_free,
-                (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
+#ifdef _DEBUG
+            OString cstr_msg(
+                OUStringToOString(
+                    OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, cstr_msg.getStr() );
+#endif
         }
+        catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+        {
+            OSL_ENSURE( 0, "[jni_uno bridge error] attaching current thread to java failed!" );
+        }
+
         *ppMapping = mapping;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-28 17:31:02 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,12 @@
 
 using namespace ::rtl;
 
-namespace jni_bridge
+namespace jni_uno
 {
 
 //__________________________________________________________________________________________________
-jobject jni_Bridge::map_uno2java(
-    JNI_attach const & attach,
+jobject Bridge::map_uno2java(
+    JNI_context const & jni,
     uno_Interface * pUnoI, JNI_type_info const * info ) const
 {
     // get oid
@@ -87,10 +87,10 @@ jobject jni_Bridge::map_uno2java(
     OUString oid( pOid, SAL_NO_ACQUIRE );
 
     // getRegisteredInterface()
-    JLocalAutoRef jo_oid( attach, ustring_to_jstring( attach, oid.pData ) );
+    JLocalAutoRef jo_oid( jni, ustring_to_jstring( jni, oid.pData ) );
     JLocalAutoRef jo_iface(
-        attach, m_jni_info->java_env_getRegisteredInterface(
-            attach, (jstring)jo_oid.get(), info->m_jo_type ) );
+        jni, m_jni_info->java_env_getRegisteredInterface(
+            jni, (jstring)jo_oid.get(), info->m_jo_type ) );
 
     if (! jo_iface.is()) // no registered iface
     {
@@ -111,10 +111,10 @@ jobject jni_Bridge::map_uno2java(
         args[ 4 ].l = info->m_jo_type;
         args[ 5 ].l = jo_oid.get();
         jo_iface.reset(
-            attach, attach->CallStaticObjectMethodA(
+            jni->CallStaticObjectMethodA(
                 m_jni_info->m_class_JNI_proxy,
                 m_jni_info->m_method_JNI_proxy_create, args ) );
-        attach.ensure_no_exception();
+        jni.ensure_no_exception();
     }
 
     return jo_iface.release();
@@ -123,7 +123,7 @@ jobject jni_Bridge::map_uno2java(
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-void jni_Bridge::handle_uno_exc( JNI_attach const & attach, uno_Any * uno_exc ) const
+void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 {
     if (typelib_TypeClass_EXCEPTION == uno_exc->pType->eTypeClass)
     {
@@ -139,7 +139,7 @@ void jni_Bridge::handle_uno_exc( JNI_attach const & attach, uno_Any * uno_exc ) 
         try
         {
             map_to_java(
-                attach, &java_exc, uno_exc->pData, uno_exc->pType, 0,
+                jni, &java_exc, uno_exc->pData, uno_exc->pType, 0,
                 true /* in */, false /* no out */ );
         }
         catch (...)
@@ -148,8 +148,8 @@ void jni_Bridge::handle_uno_exc( JNI_attach const & attach, uno_Any * uno_exc ) 
             throw;
         }
         uno_any_destruct( uno_exc, 0 );
-        JLocalAutoRef jo_exc( attach, java_exc.l );
-        jint res = attach->Throw( (jthrowable)jo_exc.get() );
+        JLocalAutoRef jo_exc( jni, java_exc.l );
+        jint res = jni->Throw( (jthrowable)jo_exc.get() );
         if (0 != res)
         {
             OUStringBuffer buf( 64 );
@@ -176,8 +176,8 @@ union largest
     uno_Any a;
 };
 //__________________________________________________________________________________________________
-jobject jni_Bridge::call_uno(
-    JNI_attach const & attach,
+jobject Bridge::call_uno(
+    JNI_context const & jni,
     uno_Interface * pUnoI, typelib_TypeDescription * member_td,
     typelib_TypeDescriptionReference * return_type /* 0 indicates void return */,
     sal_Int32 nParams, typelib_MethodParameter const * pParams,
@@ -200,7 +200,7 @@ jobject jni_Bridge::call_uno(
     void * uno_ret = (mem + (nParams * sizeof (void *)));
     largest * uno_args_mem = (largest *)(mem + (nParams * sizeof (void *)) + return_size);
 
-    OSL_ASSERT( (0 == nParams) || (nParams == attach->GetArrayLength( jo_args )) );
+    OSL_ASSERT( (0 == nParams) || (nParams == jni->GetArrayLength( jo_args )) );
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         typelib_MethodParameter const & param = pParams[ nPos ];
@@ -217,14 +217,14 @@ jobject jni_Bridge::call_uno(
 
         if (param.bIn)
         {
-            JLocalAutoRef jo_arg( attach, attach->GetObjectArrayElement( jo_args, nPos ) );
-            attach.ensure_no_exception();
+            JLocalAutoRef jo_arg( jni, jni->GetObjectArrayElement( jo_args, nPos ) );
+            jni.ensure_no_exception();
             jvalue java_arg;
             java_arg.l = jo_arg.get();
             try
             {
                 map_to_uno(
-                    attach, uno_args[ nPos ], java_arg, type, 0,
+                    jni, uno_args[ nPos ], java_arg, type, 0,
                     false /* no assign */, sal_False != param.bOut,
                     true /* special wrapped integral types */ );
             }
@@ -261,12 +261,12 @@ jobject jni_Bridge::call_uno(
                 {
                     // get out holder array[ 1 ]
                     JLocalAutoRef jo_out_holder(
-                        attach, attach->GetObjectArrayElement( jo_args, nPos ) );
-                    attach.ensure_no_exception();
+                        jni, jni->GetObjectArrayElement( jo_args, nPos ) );
+                    jni.ensure_no_exception();
                     jvalue java_arg;
                     java_arg.l = jo_out_holder.get();
                     map_to_java(
-                        attach, &java_arg, uno_args[ nPos ], param.pTypeRef, 0,
+                        jni, &java_arg, uno_args[ nPos ], param.pTypeRef, 0,
                         true /* in */, true /* out holder */ );
                 }
                 catch (...)
@@ -295,7 +295,7 @@ jobject jni_Bridge::call_uno(
             {
                 jvalue java_ret;
                 map_to_java(
-                    attach, &java_ret, uno_ret, return_type, 0,
+                    jni, &java_ret, uno_ret, return_type, 0,
                     true /* in */, false /* no out */,
                     true /* special_wrapped_integral_types */ );
                 return java_ret.l;
@@ -320,14 +320,14 @@ jobject jni_Bridge::call_uno(
             }
         }
 
-        handle_uno_exc( attach, uno_exc );
+        handle_uno_exc( jni, uno_exc );
         return 0;
     }
 }
 
 }
 
-using namespace ::jni_bridge;
+using namespace ::jni_uno;
 
 extern "C"
 {
@@ -338,21 +338,21 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
     jstring jo_decl_class, jstring jo_method, jobjectArray jo_args /* may be 0 */ )
     SAL_THROW_EXTERN_C()
 {
-    jni_Bridge const * bridge = reinterpret_cast< jni_Bridge const * >( bridge_handle );
+    Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
-    JNI_attach attach( bridge->m_java_env, jni_env );
+    JNI_context jni( jni_info, jni_env );
 
     try
     {
-        OUString method_name( jstring_to_oustring( attach, jo_method ) );
+        OUString method_name( jstring_to_oustring( jni, jo_method ) );
 #ifdef DEBUG
         OUStringBuffer trace_buf( 64 );
         trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("java->uno call: ") );
         trace_buf.append( method_name );
         trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
         JLocalAutoRef jo_oid(
-            attach, attach->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
-        trace_buf.append( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
+            jni, jni->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
+        trace_buf.append( jstring_to_oustring( jni, (jstring)jo_oid.get() ) );
         OString cstr_msg(
             OUStringToOString( trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( cstr_msg.getStr() );
@@ -363,23 +363,23 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
         {
             // oid
             JLocalAutoRef jo_oid(
-                attach, attach->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
+                jni, jni->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
             // type
-            JLocalAutoRef jo_type( attach, attach->GetObjectArrayElement( jo_args, 0 ) );
-            attach.ensure_no_exception();
+            JLocalAutoRef jo_type( jni, jni->GetObjectArrayElement( jo_args, 0 ) );
+            jni.ensure_no_exception();
 
             JLocalAutoRef jo_type_name(
-                attach, attach->GetObjectField(
+                jni, jni->GetObjectField(
                     jo_type.get(), jni_info->m_field_Type__typeName ) );
             if (! jo_type_name.is())
                 throw BridgeRuntimeError( OUSTR("incomplete type object: no type name!") );
-            OUString type_name( jstring_to_oustring( attach, (jstring)jo_type_name.get() ) );
-            JNI_type_info const * info = jni_info->get_type_info( attach, type_name );
+            OUString type_name( jstring_to_oustring( jni, (jstring)jo_type_name.get() ) );
+            JNI_type_info const * info = jni_info->get_type_info( jni, type_name );
 
             // getRegisteredInterface() already tested in JNI_proxy
             // perform queryInterface call on binary uno interface
             uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(
-                attach->GetLongField(
+                jni->GetLongField(
                     jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
 
             uno_Any uno_ret;
@@ -399,7 +399,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                     {
                         try
                         {
-                            jo_ret = bridge->map_uno2java( attach, pUnoRet, info );
+                            jo_ret = bridge->map_uno2java( jni, pUnoRet, info );
                         }
                         catch (...)
                         {
@@ -413,7 +413,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
             }
             else
             {
-                bridge->handle_uno_exc( attach, uno_exc );
+                bridge->handle_uno_exc( jni, uno_exc );
                 return 0;
             }
         }
@@ -421,10 +421,10 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
         // determine exact interface td
         typelib_TypeDescription * orig_td =
             reinterpret_cast< typelib_TypeDescription * >(
-                attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
+                jni->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
         typelib_InterfaceTypeDescription * td =
             reinterpret_cast< typelib_InterfaceTypeDescription * >( orig_td );
-        OUString iface_name( jstring_to_oustring( attach, jo_decl_class ) );
+        OUString iface_name( jstring_to_oustring( jni, jo_decl_class ) );
         while ((0 != td) &&
                !reinterpret_cast< OUString const * >(
                    &((typelib_TypeDescription *)td)->pTypeName )->equals( iface_name ))
@@ -444,7 +444,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
 
         uno_Interface * pUnoI =
             reinterpret_cast< uno_Interface * >(
-                attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
+                jni->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
 
         typelib_TypeDescriptionReference ** ppAllMembers = td->ppAllMembers;
         for ( sal_Int32 nPos = td->nAllMembers; nPos--; )
@@ -469,7 +469,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                     typelib_InterfaceMethodTypeDescription * method_td =
                         (typelib_InterfaceMethodTypeDescription *)member_td.get();
                     return bridge->call_uno(
-                        attach, pUnoI, member_td.get(),
+                        jni, pUnoI, member_td.get(),
                         method_td->pReturnTypeRef, method_td->nParams, method_td->pParams,
                         jo_args );
                 }
@@ -493,7 +493,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                         typelib_InterfaceAttributeTypeDescription * attribute_td =
                             (typelib_InterfaceAttributeTypeDescription *)member_td.get();
                         return bridge->call_uno(
-                            attach, pUnoI, member_td.get(),
+                            jni, pUnoI, member_td.get(),
                             attribute_td->pAttributeTypeRef, 0, 0,
                             jo_args );
                     }
@@ -509,7 +509,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                             param.bIn = sal_True;
                             param.bOut = sal_False;
                             return bridge->call_uno(
-                                attach, pUnoI, member_td.get(),
+                                jni, pUnoI, member_td.get(),
                                 0 /* indicates void return */, 1, &param,
                                 jo_args );
                         }
@@ -533,8 +533,18 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
         OString cstr_msg(
             OUStringToOString(
                 OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( cstr_msg.getStr() );
-        jint res = attach->ThrowNew( jni_info->m_class_RuntimeException, cstr_msg.getStr() );
+        OSL_ENSURE( 0, cstr_msg.getStr() );
+        jint res = jni->ThrowNew( jni_info->m_class_RuntimeException, cstr_msg.getStr() );
+        OSL_ASSERT( 0 == res );
+        return 0;
+    }
+    catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    {
+        OString cstr_msg(
+            RTL_CONSTASCII_STRINGPARAM(
+                "[jni_uno bridge error] attaching current thread to java failed!") );
+        OSL_ENSURE( 0, cstr_msg.getStr() );
+        jint res = jni->ThrowNew( jni_info->m_class_RuntimeException, cstr_msg.getStr() );
         OSL_ASSERT( 0 == res );
         return 0;
     }
@@ -544,19 +554,19 @@ JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )
     SAL_THROW_EXTERN_C()
 {
-    jni_Bridge const * bridge = reinterpret_cast< jni_Bridge const * >( bridge_handle );
+    Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
-    JNI_attach attach( bridge->m_java_env, jni_env );
+    JNI_context jni( jni_info, jni_env );
 
     uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(
-        attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
+        jni->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
     typelib_TypeDescription * td = reinterpret_cast< typelib_TypeDescription * >(
-        attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
+        jni->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
 
 #ifdef DEBUG
     JLocalAutoRef jo_oid(
-        attach, attach->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
-    OUString oid( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
+        jni, jni->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
+    OUString oid( jstring_to_oustring( jni, (jstring)jo_oid.get() ) );
     OString cstr_msg(
         OUStringToOString(
             OUSTR("freeing java uno proxy: ") + oid, RTL_TEXTENCODING_ASCII_US ) );

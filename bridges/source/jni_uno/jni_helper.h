@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:57 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,18 @@
  *
  *
  ************************************************************************/
-#ifndef _JNI_HELPER_H_
-#define _JNI_HELPER_H_
+#if ! defined INCLUDED_JNI_HELPER_H
+#define INCLUDED_JNI_HELPER_H
 
 #include "jni_base.h"
 #include "jni_info.h"
 
 
-namespace jni_bridge
+namespace jni_uno
 {
 
 //--------------------------------------------------------------------------------------------------
-inline void jstring_to_ustring( JNI_attach const & attach, rtl_uString ** out_ustr, jstring jstr )
+inline void jstring_to_ustring( JNI_context const & jni, rtl_uString ** out_ustr, jstring jstr )
 {
     if (0 == jstr)
     {
@@ -77,12 +77,12 @@ inline void jstring_to_ustring( JNI_attach const & attach, rtl_uString ** out_us
     }
     else
     {
-        jsize len = attach->GetStringLength( jstr );
+        jsize len = jni->GetStringLength( jstr );
         ::std::auto_ptr< rtl_mem > mem(
             rtl_mem::allocate( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
         rtl_uString * ustr = (rtl_uString *)mem.get();
-        attach->GetStringRegion( jstr, 0, len, (jchar *)ustr->buffer );
-        attach.ensure_no_exception();
+        jni->GetStringRegion( jstr, 0, len, (jchar *)ustr->buffer );
+        jni.ensure_no_exception();
         ustr->refCount = 1;
         ustr->length = len;
         ustr->buffer[ len ] = '\0';
@@ -93,98 +93,98 @@ inline void jstring_to_ustring( JNI_attach const & attach, rtl_uString ** out_us
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline ::rtl::OUString jstring_to_oustring( JNI_attach const & attach, jstring jstr )
+inline ::rtl::OUString jstring_to_oustring( JNI_context const & jni, jstring jstr )
 {
     rtl_uString * ustr = 0;
-    jstring_to_ustring( attach, &ustr, jstr );
+    jstring_to_ustring( jni, &ustr, jstr );
     return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
 }
 //--------------------------------------------------------------------------------------------------
-inline jstring ustring_to_jstring( JNI_attach const & attach, rtl_uString const * ustr )
+inline jstring ustring_to_jstring( JNI_context const & jni, rtl_uString const * ustr )
 {
-    jstring jstr = attach->NewString( (jchar const *)ustr->buffer, ustr->length );
-    attach.ensure_no_exception();
+    jstring jstr = jni->NewString( (jchar const *)ustr->buffer, ustr->length );
+    jni.ensure_no_exception();
     return jstr;
 }
 
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline jclass find_class( JNI_attach const & attach, char const * class_name )
+inline jclass find_class( JNI_context const & jni, char const * class_name )
 {
-    jclass jo_class = attach->FindClass( class_name );
-    attach.ensure_no_exception();
+    jclass jo_class = jni->FindClass( class_name );
+    jni.ensure_no_exception();
     return jo_class;
 }
 //--------------------------------------------------------------------------------------------------
-inline jclass find_class( JNI_attach const & attach, ::rtl::OUString const & class_name )
+inline jclass find_class( JNI_context const & jni, ::rtl::OUString const & class_name )
 {
     ::rtl::OString cstr_name( ::rtl::OUStringToOString( class_name, RTL_TEXTENCODING_ASCII_US ) );
-    return find_class( attach, cstr_name );
+    return find_class( jni, cstr_name );
 }
 //--------------------------------------------------------------------------------------------------
-inline jclass get_class( JNI_attach const & attach, jobject jo )
+inline jclass get_class( JNI_context const & jni, jobject jo )
 {
-    jclass jo_class = (jclass)attach->CallObjectMethodA(
-        jo, attach.get_jni_info()->m_method_Object_getClass, 0 );
-    attach.ensure_no_exception();
+    jclass jo_class = (jclass)jni->CallObjectMethodA(
+        jo, jni.get_info()->m_method_Object_getClass, 0 );
+    jni.ensure_no_exception();
     return jo_class;
 }
 //--------------------------------------------------------------------------------------------------
-inline ::rtl::OUString get_class_name( JNI_attach const & attach, jobject jo )
+inline ::rtl::OUString get_class_name( JNI_context const & jni, jobject jo )
 {
-    JLocalAutoRef jo_class( attach, get_class( attach, jo ) );
+    JLocalAutoRef jo_class( jni, get_class( jni, jo ) );
     JLocalAutoRef jo_name(
-        attach, attach->CallObjectMethodA(
-            jo_class.get(), attach.get_jni_info()->m_method_Class_getName, 0 ) );
-    attach.ensure_no_exception();
-    return jstring_to_oustring( attach, (jstring)jo_name.get() );
+        jni, jni->CallObjectMethodA(
+            jo_class.get(), jni.get_info()->m_method_Class_getName, 0 ) );
+    jni.ensure_no_exception();
+    return jstring_to_oustring( jni, (jstring)jo_name.get() );
 }
 
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline jobject create_type( JNI_attach const & attach, jclass clazz )
+inline jobject create_type( JNI_context const & jni, jclass clazz )
 {
-    JNI_info const * jni_info = attach.get_jni_info();
+    JNI_info const * jni_info = jni.get_info();
     jvalue arg;
     arg.l = clazz;
     jobject jo_type =
-        attach->NewObjectA( jni_info->m_class_Type, jni_info->m_ctor_Type_with_Class, &arg );
-    attach.ensure_no_exception();
+        jni->NewObjectA( jni_info->m_class_Type, jni_info->m_ctor_Type_with_Class, &arg );
+    jni.ensure_no_exception();
     return jo_type;
 }
 //--------------------------------------------------------------------------------------------------
 inline jobject create_type(
-    JNI_attach const & attach, typelib_TypeDescriptionReference * type )
+    JNI_context const & jni, typelib_TypeDescriptionReference * type )
 {
-    JNI_info const * jni_info = attach.get_jni_info();
+    JNI_info const * jni_info = jni.get_info();
     jvalue args[ 2 ];
     // get type class
     args[ 0 ].i = type->eTypeClass;
     JLocalAutoRef jo_type_class(
-        attach, attach->CallStaticObjectMethodA(
+        jni, jni->CallStaticObjectMethodA(
             jni_info->m_class_TypeClass, jni_info->m_method_TypeClass_fromInt, args ) );
-    attach.ensure_no_exception();
+    jni.ensure_no_exception();
     // construct type
-    JLocalAutoRef jo_type_name( attach, ustring_to_jstring( attach, type->pTypeName ) );
+    JLocalAutoRef jo_type_name( jni, ustring_to_jstring( jni, type->pTypeName ) );
     args[ 0 ].l = jo_type_name.get();
     args[ 1 ].l = jo_type_class.get();
-    jobject jo_type = attach->NewObjectA(
+    jobject jo_type = jni->NewObjectA(
         jni_info->m_class_Type, jni_info->m_ctor_Type_with_Name_TypeClass, args );
-    attach.ensure_no_exception();
+    jni.ensure_no_exception();
     return jo_type;
 }
 
 //--------------------------------------------------------------------------------------------------
-inline jobject compute_oid( JNI_attach const & attach, jobject jo )
+inline jobject compute_oid( JNI_context const & jni, jobject jo )
 {
-    JNI_info const * jni_info = attach.get_jni_info();
+    JNI_info const * jni_info = jni.get_info();
     jvalue arg;
     arg.l= jo;
-    jobject jo_oid = attach->CallStaticObjectMethodA(
+    jobject jo_oid = jni->CallStaticObjectMethodA(
         jni_info->m_class_UnoRuntime, jni_info->m_method_UnoRuntime_generateOid, &arg );
-    attach.ensure_no_exception();
+    jni.ensure_no_exception();
     return jo_oid;
 }
 
