@@ -2,9 +2,9 @@
 #
 #   $RCSfile: verinfo.rc,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-06-30 14:27:30 $
+#   last change: $Author: obo $ $Date: 2004-05-28 14:43:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************/
 
-#define VERSION			7
+#define VERSION			8
 //#define SUBVERSION		0
 //#define VERVARIANT		0
 // .0 + VER_CONCEPT
@@ -74,7 +74,7 @@
 
 #define VER_DAY			1
 #define VER_MONTH		6
-#define VER_YEAR		2003
+#define VER_YEAR		2004
 
 // -----------------------------------------------------------------------
 
