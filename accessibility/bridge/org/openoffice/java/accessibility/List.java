@@ -412,6 +412,10 @@ public class List extends DescendantManager implements javax.accessibility.Acces
 
             /** Gets the AccessibleText associated with this object that has a graphical representation */
             public javax.accessibility.AccessibleText getAccessibleText() {
+
+                if (disposed)
+                    return null;
+
                 try {
                     XAccessibleText unoAccessibleText = (XAccessibleText)
                         UnoRuntime.queryInterface(XAccessibleText.class, unoAccessibleContext);
