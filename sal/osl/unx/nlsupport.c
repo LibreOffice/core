@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2002-01-02 12:15:39 $
+ *  last change: $Author: obr $ $Date: 2002-01-16 12:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,9 +268,11 @@ const _pair _nl_language_list[] = {
     { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
     { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
     { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
-    { "BIG5",           RTL_TEXTENCODING_BIG5           },
+    { "BIG5",           RTL_TEXTENCODING_BIG5           }, /* zh_CN.BIG5 */
+    { "BIG5-HKSCS",     RTL_TEXTENCODING_BIG5_HKSCS     }, /* zh_CN.BIG5HK */
     { "CNS11643",       RTL_TEXTENCODING_EUC_TW         }, /* zh_TW.EUC */
     { "EUCJP",          RTL_TEXTENCODING_EUC_JP         }, /* ja_JP.eucjp */
+    { "GB18030",        RTL_TEXTENCODING_GB_18030       }, /* zh_CN.GB18030 */
     { "GB2312",         RTL_TEXTENCODING_GB_2312        }, /* zh_CN */
     { "GBK",            RTL_TEXTENCODING_GBK            }, /* zh_CN.GBK */
     { "ISO8859-1",      RTL_TEXTENCODING_ISO_8859_1     },
@@ -322,7 +324,7 @@ const _pair _nl_language_list[] = {
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
     { "BALTIC",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
     { "BIG5",                       RTL_TEXTENCODING_BIG5 },        /* locale: zh_TW */
-    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5 },        /* locale: zh_HK */
+    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* locale: zh_CN.BIG5HK */
     { "BS_4730",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
     { "BS_VIEWDATA",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
     { "CP1250",                     RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
@@ -662,6 +664,8 @@ const _pair _full_locale_list[] = {
 
 const _pair _locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
+    { "big5hk",       RTL_TEXTENCODING_BIG5_HKSCS  },
+    { "gb18030",      RTL_TEXTENCODING_GB_18030    },
     { "euc",          RTL_TEXTENCODING_EUC_JP      },
     { "iso8859-1",    RTL_TEXTENCODING_ISO_8859_1  },
     { "iso8859-10",   RTL_TEXTENCODING_ISO_8859_10 },
