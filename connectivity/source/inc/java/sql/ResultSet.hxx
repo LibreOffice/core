@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:14:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,15 +114,15 @@ namespace connectivity
     **  java_sql_ResultSet
     */
         typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
-                                                                                                ::com::sun::star::sdbc::XRow,
-                                                                                                ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                                                                ::com::sun::star::util::XCancellable,
-                                                                                                ::com::sun::star::sdbc::XWarningsSupplier,
-                                                                                                ::com::sun::star::sdbc::XResultSetUpdate,
-                                                                                                ::com::sun::star::sdbc::XRowUpdate,
-                                                                                                ::com::sun::star::sdbc::XCloseable,
-                                                                                                ::com::sun::star::sdbc::XColumnLocate,
-                                                                                                ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
+                                                        ::com::sun::star::sdbc::XRow,
+                                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                        ::com::sun::star::util::XCancellable,
+                                                        ::com::sun::star::sdbc::XWarningsSupplier,
+                                                        ::com::sun::star::sdbc::XResultSetUpdate,
+                                                        ::com::sun::star::sdbc::XRowUpdate,
+                                                        ::com::sun::star::sdbc::XCloseable,
+                                                        ::com::sun::star::sdbc::XColumnLocate,
+                                                        ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
     class java_sql_ResultSet :  public comphelper::OBaseMutex,
                                 public  java_sql_ResultSet_BASE,
@@ -167,16 +167,12 @@ namespace connectivity
                                                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const;
+        virtual ~java_sql_ResultSet();
     public:
         DECLARE_SERVICE_INFO();
         static jclass getMyClass();
-        virtual ~java_sql_ResultSet();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj,java_sql_Statement_Base* pStmt=NULL ) :    java_sql_ResultSet_BASE(m_aMutex),
-                                                                OPropertySetHelper(java_sql_ResultSet_BASE::rBHelper),
-                                                                m_xStatement(*pStmt),
-                                                                java_lang_Object( pEnv, myObj )
-                                                                {}
+        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj,java_sql_Statement_Base* pStmt=NULL );
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
