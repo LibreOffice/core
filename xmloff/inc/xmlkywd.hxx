@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 18:57:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 11:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,8 @@ XML_CONSTASCII_ACTION( sXML_dde_connection, "dde-connection" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decl, "dde-connection-decl" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decls, "dde-connection-decls" );
 XML_CONSTASCII_ACTION( sXML_dde_item, "dde-item" );
+XML_CONSTASCII_ACTION( sXML_dde_link, "dde-link" );
+XML_CONSTASCII_ACTION( sXML_dde_links, "dde-links" );
 XML_CONSTASCII_ACTION( sXML_dde_source, "dde-source" );
 XML_CONSTASCII_ACTION( sXML_dde_topic, "dde-topic" );
 XML_CONSTASCII_ACTION( sXML_decimal_places, "decimal-places" );
