@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 18:02:18 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 16:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@
 //#define _SFX_PRINTER_HXX
 #define _SFXGENLINK_HXX
 #define _SFXHINTPOST_HXX
-#define _SFXDOCINF_HXX
+//#define _SFXDOCINF_HXX
 #define _SFXLINKHDL_HXX
 //#define _SFX_PROGRESS_HXX
 
@@ -231,7 +231,7 @@
 //#define _SFX_CLIENTSH_HXX
 //#define _SFXDOCINF_HXX
 //#define _SFX_OBJFAC_HXX
-#define _SFX_DOCFILT_HXX
+//#define _SFX_DOCFILT_HXX
 //#define _SFXDOCFILE_HXX ***
 //define _VIEWFAC_HXX
 //#define _SFXVIEWFRM_HXX
@@ -547,7 +547,7 @@
 //#define _SFX_PRINTER_HXX
 #define _SFXGENLINK_HXX
 #define _SFXHINTPOST_HXX
-#define _SFXDOCINF_HXX
+// #define _SFXDOCINF_HXX
 #define _SFXLINKHDL_HXX
 //#define _SFX_PROGRESS_HXX
 
@@ -630,6 +630,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/docfile.hxx>
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
 #include <svtools/pathoptions.hxx>
@@ -2059,25 +2061,62 @@ void __EXPORT ScDrawLayer::SetChanged( FASTBOOL bFlg /* =TRUE */ )
 
 SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
-    rStreamInfo.mbDeleteAfterUse = FALSE;
-    SvStream* pStream = NULL;
+    SvStorage*  pStor = pDoc->GetDocumentShell() ? pDoc->GetDocumentShell()->GetMedium()->GetStorage() : NULL;
+    SvStream*   pRet = NULL;
 
-    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
-    if (pDocSh)
+    if( pStor )
     {
-        SvStorage* pStor = pDocSh->GetStorage();
-
-        if (pStor)
+        if( rStreamInfo.maUserData.Len() &&
+            ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
+              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
         {
-            pStream = pStor->OpenStream(
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
-                        STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-            pStream->SetVersion(pStor->GetVersion());
-            pStream->SetKey( pStor->GetKey() ); // Passwort setzen
+            const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
+
+            // graphic from picture stream in picture storage in XML package
+            if( aPicturePath.GetTokenCount( '/' ) == 2 )
+            {
+                const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
+
+                if( !xPictureStorage.Is() )
+                {
+                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
+
+                    if( pStor->IsContained( aPictureStorageName ) &&
+                        pStor->IsStorage( aPictureStorageName )  )
+                    {
+                        ( (ScDrawLayer*) this )->xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ | STREAM_WRITE );
+                    }
+                }
+
+                if( xPictureStorage.Is() &&
+                    xPictureStorage->IsContained( aPictureStreamName ) &&
+                    xPictureStorage->IsStream( aPictureStreamName ) )
+                {
+                    pRet = xPictureStorage->OpenStream( aPictureStreamName );
+                }
+            }
         }
+        else
+        {
+            pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
+                                      STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+
+            if( pRet )
+            {
+                pRet->SetVersion( pStor->GetVersion() );
+                pRet->SetKey( pStor->GetKey() );
+            }
+        }
+
+        rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
     }
 
-    return pStream;
+    return pRet;
+}
+
+void ScDrawLayer::ReleasePictureStorage()
+{
+    xPictureStorage.Clear();
 }
 
 SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const

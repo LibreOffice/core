@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:53:43 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 16:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,12 @@
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -114,6 +115,7 @@ public:
 class ScDrawLayer: public FmFormModel
 {
 private:
+    SvStorageRef    xPictureStorage;
     String          aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
@@ -139,6 +141,8 @@ public:
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
+
+    void            ReleasePictureStorage();
 
     BOOL            HasObjects() const;
 

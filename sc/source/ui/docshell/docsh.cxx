@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:29:17 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 16:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "chartlis.hxx"
 #include "hints.hxx"
 #include "xmlwrap.hxx"
+#include "drwlayer.hxx"
 
 #include "docsh.hxx"
 
@@ -1244,7 +1245,12 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
 void __EXPORT ScDocShell::HandsOff()
 {
+    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+
     SfxInPlaceObject::HandsOff();
+
+    if( pDrawLayer )
+        pDrawLayer->ReleasePictureStorage();
 }
 
 
