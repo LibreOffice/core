@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4797,13 +4797,20 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            ULONG nHelpId = GetHelpId( nItemId );
-            if ( nHelpId )
+            String aCommand = GetItemCommand( nItemId );
+            ULONG  nHelpId  = GetHelpId( nItemId );
+
+            if ( aCommand.Len() || nHelpId )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId, this );
+                {
+                    if ( aCommand.Len() )
+                        pHelp->Start( aCommand, this );
+                    else if ( nHelpId )
+                        pHelp->Start( nHelpId, this );
+                }
                 return;
             }
         }
