@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:31:50 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1961,7 +1961,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             return;
         }
 
-        // OD 18.11.2003 #110978# - always check Writer fly frames, that are
+        // OD 18.11.2003 #113049# - always check Writer fly frames, that are
         // anchored to character.
         //sal_Bool bChkAtCnt = sal_False;
         const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
@@ -2112,7 +2112,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                             {
                                 ++nAutoCnt;
                                 ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
-                                ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
+                                // OD 11.11.2003 #i22341#
+                                if ( pFly->IsFlyAtCntFrm() )
+                                {
+                                    static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+                                }
 
                                 // OD 07.10.2003 #110978# - no format of the fly frame
                                 /*
