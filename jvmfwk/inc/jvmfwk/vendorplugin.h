@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:49:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #include "jvmfwk/framework.h"
 #include "rtl/ustring.h"
+#ifdef SOLAR_JAVA
 #include "jni.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
