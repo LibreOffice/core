@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:24:42 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,16 @@ namespace configmgr
         void initialize();
 
     public:
+         // XServiceInfo
+        virtual rtl::OUString SAL_CALL getImplementationName()
+            throw (uno::RuntimeException) ;
+        virtual sal_Bool SAL_CALL supportsService(
+            const rtl::OUString& aServiceName)
+            throw (uno::RuntimeException) ;
+        virtual uno::Sequence<rtl::OUString> SAL_CALL
+            getSupportedServiceNames(void) throw (uno::RuntimeException) ;
+
+
         typedef uno::Sequence < beans::NamedValue >             Overrides;
         /** Constructs a Context based on the given arguments and context.
             @param _xContext
