@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ DockingWindow RID_SVXCTRL_COLOR
     };
     Text [ swedish ] = "F�rger" ;
     Text [ danish ] = "Farver" ;
-    Text [ portuguese_brazilian ] = "Farben" ;
+    Text [ portuguese_brazilian ] = "Cores" ;
     Text [ portuguese ] = "Cores" ;
     Text[ chinese_simplified ] = "颜色";
     Text[ russian ] = "�����";
@@ -111,8 +111,20 @@ DockingWindow RID_SVXCTRL_COLOR
     Text[ catalan ] = "Colors";
     Text[ finnish ] = "V�rit";
     Text[ thai ] = "สี";
+    Text[ czech ] = "Barvy";
+    Text[ hebrew ] = "‮צבעים‬";
+    Text[ hindi ] = "रंग";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
