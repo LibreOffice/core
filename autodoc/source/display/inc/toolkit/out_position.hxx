@@ -2,9 +2,9 @@
  *
  *  $RCSfile: out_position.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ class Position
 
 /// @return No delimiter at start, with delimiter at end.
 const char *        get_UpLink(
-                        intt                i_depth );
+                        uintt                   i_depth );
 
 
 // IMPLEMENTATION
