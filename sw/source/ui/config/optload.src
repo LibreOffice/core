@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:40:20 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Actualizar";
         Text[ russian ] = "Ξανξβλενθε";
         Text[ greek ] = "Ενημέρωση";
-        Text[ dutch ] = "Upddate";
+        Text[ dutch ] = "Actualiseren";
         Text[ french ] = "Actualisation";
         Text[ spanish ] = "Actualizaciσn";
         Text[ italian ] = "Aggiorna";
@@ -254,7 +254,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Ca~mpos";
         Text[ russian ] = "Οξλÿ";
         Text[ greek ] = "Αυτόματη ενημέρωση ~εντολών πεδίων";
-        Text[ dutch ] = "V~eldopdrachten automatisch";
+        Text[ dutch ] = "V~eldopdrachten";
         Text[ french ] = "Champs";
         Text[ spanish ] = "~Campos";
         Text[ finnish ] = "F~eldbefehle automatisch";
@@ -282,7 +282,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "~Grαficos";
         Text[ russian ] = "Δθΰγπΰμμϋ";
         Text[ greek ] = "Αυτόματη ενημέρωση δια~γραμμάτων";
-        Text[ dutch ] = "~Diagrammen automatisch";
+        Text[ dutch ] = "~Diagrammen";
         Text[ french ] = "Diagrammes";
         Text[ spanish ] = "~Diagramas";
         Text[ finnish ] = "Dia~gramme automatisch";
@@ -431,7 +431,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ danish ] = "Mεleenhed";
         Text [ french ] = "Unitι de mesure";
         Text [ swedish ] = "~Mεttenhet";
-        Text [ dutch ] = "Maateenheid";
+        Text [ dutch ] = "~Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
         Text[ chinese_simplified ] = "ε®ι‡ε•δ½";
@@ -467,7 +467,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ danish ] = "Tabulatorafstand";
         Text [ french ] = "Espace entre les tabulations";
         Text [ swedish ] = "Tabulatorav~stεnd";
-        Text [ dutch ] = "Tabstops";
+        Text [ dutch ] = "~Tabstop";
         Text [ spanish ] = "Distancia entre tabuladores";
         Text [ english_us ] = "Tab stops";
     Text[ chinese_simplified ] = "ε¶θ΅¨η¬¦ι—΄ι”";
@@ -595,7 +595,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Alinhar posiηγo de tabulaηγo";
         Text[ russian ] = "Βϋπξβνÿςό οξηθφθώ ςΰασλÿφθθ";
         Text[ greek ] = "Σ~τοίχιση θέσης στηλοθέτη";
-        Text[ dutch ] = "Align tab stop position";
+        Text[ dutch ] = "~Tabpositie definiλren";
         Text[ french ] = "Aligner la position de tabulation";
         Text[ spanish ] = "Ajustar posiciσn de tabulador";
         Text[ italian ] = "Allinea posizione tabulazione";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
