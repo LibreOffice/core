@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 07:00:00 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ void __EXPORT ScUndoDeleteTab::Undo()
             {
                 pDoc->SetLink( theTabs[i], pRefUndoDoc->GetLinkMode(theTabs[i]), pRefUndoDoc->GetLinkDoc(theTabs[i]),
                                     pRefUndoDoc->GetLinkFlt(theTabs[i]), pRefUndoDoc->GetLinkOpt(theTabs[i]),
-                                    pRefUndoDoc->GetLinkTab(theTabs[i]) );
+                                    pRefUndoDoc->GetLinkTab(theTabs[i]), pRefUndoDoc->GetLinkRefreshDelay(theTabs[i]) );
                 bLink = TRUE;
             }
 
@@ -1055,6 +1055,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 {
                     aFltName = pDoc->GetLinkFlt(i);
                     aOptions = pDoc->GetLinkOpt(i);
+                    nRefreshDelay = pDoc->GetLinkRefreshDelay(i);
                 }
                 else
                     DBG_ASSERT(aFltName == pDoc->GetLinkFlt(i) &&
@@ -1086,9 +1087,9 @@ void ScUndoRemoveLink::DoChange( BOOL bLink ) const
     String aEmpty;
     for (USHORT i=0; i<nCount; i++)
         if (bLink)      // establish link
-            pDoc->SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i] );
+            pDoc->SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
         else            // remove link
-            pDoc->SetLink( pTabs[i], SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty );
+            pDoc->SetLink( pTabs[i], SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
     pDocShell->UpdateLinks();
 }
 

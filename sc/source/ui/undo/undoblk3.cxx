@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:50:18 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,7 +1631,8 @@ void __EXPORT ScUndoRefreshLink::Undo()
                                    pDoc->GetLinkDoc(nTab),
                                    pDoc->GetLinkFlt(nTab),
                                    pDoc->GetLinkOpt(nTab),
-                                   pDoc->GetLinkTab(nTab) );
+                                   pDoc->GetLinkTab(nTab),
+                                   pDoc->GetLinkRefreshDelay(nTab) );
             }
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
@@ -1640,7 +1641,8 @@ void __EXPORT ScUndoRefreshLink::Undo()
 //          pDoc->TransferDrawPage( pUndoDoc, nTab, nTab );
             pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
-                                 pUndoDoc->GetLinkTab(nTab) );
+                                 pUndoDoc->GetLinkTab(nTab),
+                                 pUndoDoc->GetLinkRefreshDelay(nTab) );
         }
 
     pDocShell->PostPaintGridAll();
@@ -1673,7 +1675,8 @@ void __EXPORT ScUndoRefreshLink::Redo()
                            pRedoDoc->GetLinkDoc(nTab),
                            pRedoDoc->GetLinkFlt(nTab),
                            pRedoDoc->GetLinkOpt(nTab),
-                           pRedoDoc->GetLinkTab(nTab) );
+                           pRedoDoc->GetLinkTab(nTab),
+                           pRedoDoc->GetLinkRefreshDelay(nTab) );
         }
 
     pDocShell->PostPaintGridAll();

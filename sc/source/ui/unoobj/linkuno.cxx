@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:50:56 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ const SfxItemPropertyMap* lcl_GetSheetLinkMap()
         {MAP_CHAR_LEN(SC_UNONAME_FILTER),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FILTOPT),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LINKURL),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_REFDELAY), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {0,0,0,0}
     };
     return aSheetLinkMap_Impl;
@@ -183,7 +184,7 @@ void SAL_CALL ScSheetLinkObj::refresh() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
-        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName() );
+        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName(), NULL, pLink->GetRefreshDelay() );
 }
 
 void SAL_CALL ScSheetLinkObj::addRefreshListener(
@@ -227,6 +228,13 @@ void ScSheetLinkObj::Refreshed_Impl()
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
 
+void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
+{
+    ScTableLink* pLink = GetLink_Impl();
+    if( pLink )
+        pLink->SetRefreshDelay( (ULONG) nRefresh );
+}
+
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSheetLinkObj::getPropertySetInfo()
@@ -262,6 +270,12 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    {
+        sal_Int32 nRefresh;
+        if ( aValue >>= nRefresh )
+            setRefreshDelay( nRefresh );
+    }
 }
 
 uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -277,6 +291,8 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const rtl::OUString& aProper
         aRet <<= getFilter();
     else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+        aRet <<= getRefreshDelay();
     return aRet;
 }
 
@@ -310,7 +326,8 @@ void ScSheetLinkObj::setFileName(const rtl::OUString& rNewName)
             if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
                 pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
-                                pDoc->GetLinkTab(nTab) );   // nur Datei aendern
+                                pDoc->GetLinkTab(nTab),
+                                pDoc->GetLinkRefreshDelay(nTab) );  // nur Datei aendern
 
         //  Links updaten
         //! Undo !!!
@@ -344,7 +361,7 @@ void ScSheetLinkObj::setFilter(const rtl::OUString& Filter)
     if (pLink)
     {
         String aFilterStr = Filter;
-        pLink->Refresh( aFileName, aFilterStr );
+        pLink->Refresh( aFileName, aFilterStr, NULL, pLink->GetRefreshDelay() );
     }
 }
 
@@ -365,8 +382,24 @@ void ScSheetLinkObj::setFilterOptions(const rtl::OUString& FilterOptions)
     if (pLink)
     {
         String aOptStr = FilterOptions;
-        pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr );
+        pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr, pLink->GetRefreshDelay() );
     }
+}
+
+sal_Int32 ScSheetLinkObj::getRefreshDelay(void) const
+{
+    ScUnoGuard aGuard;
+    sal_Int32 nRet;
+    ScTableLink* pLink = GetLink_Impl();
+    if (pLink)
+        nRet = (sal_Int32) pLink->GetRefreshDelay();
+    return nRet;
+}
+
+void ScSheetLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
+{
+    ScUnoGuard aGuard;
+    ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-17 19:35:35 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6466,7 +6466,8 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         else if ( nMode == sheet::SheetLinkMode_VALUE )
             nLinkMode = SC_LINK_VALUE;
 
-        pDoc->SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString );
+        ULONG nRefresh = 0;
+        pDoc->SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString, nRefresh );
 
         pDocSh->UpdateLinks();                  // ggf. Link eintragen oder loeschen
         SfxBindings* pBindings = pDocSh->GetViewBindings();
