@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:43:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
@@ -218,6 +221,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::ucb;
+using namespace ::com::sun::star::sdb;
 using namespace ::comphelper;
 using namespace ::cppu;
 
@@ -345,10 +349,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( TEXT_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
-    if ( m_pCollection->hasAuthentication(DST_CALC))
-        declarePath( SPREADSHEET_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( SPREADSHEET_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    declarePath( SPREADSHEET_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
     if ( m_pCollection->hasAuthentication(DST_ODBC))
         declarePath( ODBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
@@ -945,8 +946,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             m_pImpl->saveChanges(*m_pOutSet);
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
             SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
-            Reference<XStorable> xStore(xDatasource,UNO_QUERY);
-            Reference<XComponent> xComponent(xDatasource,UNO_QUERY);
+            Reference<XStorable> xStore(getDataSourceOrModel(xDatasource),UNO_QUERY);
+            Reference<XComponent> xComponent(xStore,UNO_QUERY);
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
             if ( xStore.is() )
             {
@@ -1076,21 +1077,6 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
 
 
 //-------------------------------------------------------------------------
-    void ODbTypeWizDialogSetup::OpenDatabaseDocument(const ::rtl::OUString& _sPath)
-    {
-        // get the desktop object
-        sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
-        Reference< XComponentLoader > xFrameLoader(getORB()->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-        if ( xFrameLoader.is() )
-        {
-            xFrameLoader->loadComponentFromURL(
-                _sPath,
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
-                nFrameSearchFlag,
-                Sequence<PropertyValue >() );
-        }
-    }
-
 
     short ODbTypeWizDialogSetup::Execute()
     {
@@ -1199,24 +1185,6 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
             return sal_False;
         }
     }
-
-
-    //------------------------------------------------------------------
-    sal_Bool ODbTypeWizDialogSetup::StartTableWizard()
-    {
-        try
-        {
-            ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-            ::std::auto_ptr<OLinkedDocumentsAccess> oLinkedDocument(new OLinkedDocumentsAccess(this, getORB(), NULL, NULL));
-            oLinkedDocument->newTableWithPilot(sPath, NULL);
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(sal_False, "ODbTypeWizDialogSetup::newTable: caught an exception while loading the object!");
-        }
-        return sal_True;
-    }
-
 
 //.........................................................................
 }   // namespace dbaui
