@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-19 10:12:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #pragma hdrstop
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
@@ -371,8 +374,10 @@ void SfxObjectShell::SetTemplate(sal_Bool bIs)
 
 void SfxObjectShell::EnableSetModified( sal_Bool bEnable )
 {
-    DBG_ASSERT( bEnable != pImp->m_bEnableSetModified,
-                "EnableSetModified 2x mit dem gleichen Wert gerufen" );
+#ifdef DBG_UTIL
+    if ( bEnable == pImp->m_bEnableSetModified )
+        DBG_WARNING( "SFX_PERSIST: EnableSetModified 2x mit dem gleichen Wert gerufen" );
+#endif
     pImp->m_bEnableSetModified = bEnable;
 }
 
@@ -380,7 +385,7 @@ void SfxObjectShell::EnableSetModified( sal_Bool bEnable )
 
 sal_Bool SfxObjectShell::IsEnableSetModified() const
 {
-    return pImp->m_bEnableSetModified;
+    return pImp->m_bEnableSetModified && !IsReadOnly();
 }
 
 //-------------------------------------------------------------------------
@@ -425,8 +430,10 @@ sal_Bool SfxObjectShell::IsModified()
 
 void SfxObjectShell::SetModified( sal_Bool bModifiedP )
 {
-    DBG_ASSERT( bModifiedP || IsEnableSetModified(),
-                "SetModified( sal_False ), obwohl IsEnableSetModified() == sal_False" )
+#ifdef DBG_UTIL
+    if ( !bModifiedP && !IsEnableSetModified() )
+        DBG_WARNING( "SFX_PERSIST: SetModified( sal_False ), obwohl IsEnableSetModified() == sal_False" )
+#endif
 
     if( !IsEnableSetModified() )
         return;
@@ -475,23 +482,8 @@ void SfxObjectShell::ModifyChanged()
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
     pSfxApp->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
-    }
-
-//--------------------------------------------------------------------
-/*
-SfxInPlaceObject* SfxObjectShell::GetInPlaceObject() const
-{
-    if( !pImp->pInPlaceObj && !pImp->bSetInPlaceObj )
-    {
-        // try to cast
-        SvInPlaceObjectRef xSvIP( (SfxObjectShell *)this );
-        if ( xSvIP.Is() )
-            pImp->pInPlaceObj = (SfxInPlaceObject*) &xSvIP;
-        pImp->bSetInPlaceObj = sal_True;
-    }
-    return pImp->pInPlaceObj;
 }
-*/
+
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::IsReadOnlyUI() const
@@ -1139,6 +1131,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     if ( bSetModifiedTRUE )
         SetModified( sal_True );
+    else
+        SetModified( sal_False );
 
     if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
       && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
@@ -1778,6 +1772,14 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
     }
 
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    if ( pUpdateDocItem && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE )
+    {
+        // no execution of macros if all updates and dialogs prohibited
+        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+        return;
+    }
+
     // get setting from configuration if required
     sal_Int16 nAutoConformation = 0;
     if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG
@@ -1888,14 +1890,11 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
                     MacroWarning aDlg( NULL, true );
-
                     aDlg.SetDocumentURL( aReferer );
-
                     if( nNumOfInfos > 1 )
                         aDlg.SetStorage( xStore, aScriptingSignatureInformations );
                     else
                         aDlg.SetCertificate( aScriptingSignatureInformations[ 0 ].Signer );
-
                     USHORT nRet = aDlg.Execute();
                     pImp->nMacroMode = ( nRet == RET_OK ) ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
                     return;
