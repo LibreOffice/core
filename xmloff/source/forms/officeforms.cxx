@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@ namespace xmloff
     {
         // the complete attribute name to look for
         ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
-            getOfficeFormsAttributeNamespace(_eAttribute),
-            ::rtl::OUString::createFromAscii(getOfficeFormsAttributeName(_eAttribute)));
+            OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
+            ::rtl::OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
 
         // get and convert the value
         ::rtl::OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
@@ -210,8 +210,8 @@ namespace xmloff
 
         // add the attribute
         _rExp.AddAttribute(
-            getOfficeFormsAttributeNamespace(_eAttribute),
-            getOfficeFormsAttributeName(_eAttribute),
+            OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
+            OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute),
             aValue.makeStringAndClear());
     }
 
