@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-08 13:35:48 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 class CommandExtTextInputData;
 class Font;
 
@@ -78,6 +80,7 @@ class SwExtTextInput : public SwPaM
     String sOverwriteText;
     BOOL bInsText : 1;
     BOOL bIsOverwriteCursor : 1;
+    LanguageType eInputLanguage;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing = 0 );
     virtual ~SwExtTextInput();
@@ -90,6 +93,8 @@ public:
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
     BOOL IsOverwriteCursor() const      { return bIsOverwriteCursor; }
     void SetOverwriteCursor( BOOL bFlag );
+    LanguageType GetLanguage() const { return eInputLanguage;}
+    void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 
 #endif  //_EXTINPUT_HXX
