@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-28 18:19:22 $
+ *  last change: $Author: vg $ $Date: 2002-05-31 13:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2781,14 +2781,6 @@ int OutputDevice::ImplNewFont()
                 0x21, 0x20, NULL,
                 (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
                 &pKernPairs, nKernPairs );
-            pFontEntry->mnWidthFactor = nFactor;
-
-            if( !pFontEntry->mnWidthFactor )
-                pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
-/*TODO: remove
-            else
-                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
-*/
 #endif
 
             pFontEntry->mbFixedFont     = pFontEntry->maMetric.mePitch == PITCH_FIXED;
