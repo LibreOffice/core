@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4461,7 +4461,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                 ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
             if( bLinkGrf )
             {
-                UniString aName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
+                UniString aName( ::URIHelper::SmartRel2Abs( INetURLObject(maBaseURL), aFilename, URIHelper::GetMaybeFileHdl(), true, false,
                                                                     INetURLObject::WAS_ENCODED,
                                                                         INetURLObject::DECODE_UNAMBIGUOUS ) );
                 sal_Bool bSetFileName = TRUE;
@@ -5776,6 +5776,7 @@ SV_IMPL_OP_PTRARR_SORT(MSDffImportRecords, MSDffImportRec_Ptr)
 //---------------------------------------------------------------------------
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
+                                 const String& rBaseURL,
                                  long      nOffsDgg_,
                                  SvStream* pStData_,
                                  SdrModel* pSdrModel_,// s. unten: SetModel()
@@ -5802,7 +5803,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nSvxMSDffOLEConvFlags( 0 ),
      pEscherBlipCache( NULL ),
      mpTracer( pTracer ),
-     mbTracing( sal_False )
+     mbTracing( sal_False ),
+     maBaseURL( rBaseURL )
 {
     if ( mpTracer )
     {
@@ -5834,7 +5836,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
         pStData->Seek( nOldPosData );
 }
 
-SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, MSFilterTracer* pTracer )
+SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MSFilterTracer* pTracer )
     :DffPropertyReader( *this ),
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
      pFormModel( NULL ),
@@ -5853,7 +5855,8 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, MSFilterTracer* pTracer )
      nSvxMSDffOLEConvFlags( 0 ),
      pEscherBlipCache( NULL ),
      mpTracer( pTracer ),
-     mbTracing( sal_False )
+     mbTracing( sal_False ),
+     maBaseURL( rBaseURL )
 {
     if ( mpTracer )
     {
