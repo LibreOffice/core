@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">&apos;  *****  BASIC  *****
-&apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden kÃƒÂ¶nnen.
+&apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
 &apos; Evt. Erkennen der Arbeitsverzeichnisse von MS Office
-&apos; Filternamen fÃƒÂ¼r Ziel-XML-Dokumente und deren Extensionen feststellen (auch fÃƒÂ¼r StarMath)
-&apos; Extension fÃƒÂ¼r XML-Vorlagen klÃƒÆ’Ã‚Â¤ren
+&apos; Filternamen fuer Ziel-XML-Dokumente und deren Extensionen feststellen (auch fuer StarMath)
+&apos; Extension fuer XML-Vorlagen klaeren
 Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
@@ -92,7 +92,7 @@ Dim iCurStep as Integer
 		Case 4
 			FillStep_Summary()
 		Case 3
-&apos;Todo: mÃƒÆ’Ã‚Â¼ssen auch beim ZurÃƒÆ’Ã‚Â¼cksteppen wirklich die Importpfade auf ihre GÃƒÆ’Ã‚Â¼ltigkeit hin ÃƒÆ’Ã‚Â¼berprÃƒÆ’Ã‚Â¼ft werden?
+&apos;Todo: muessen auch beim Zuruecksteppen wirklich die Importpfade auf ihre Gueltigkeit hin Ueberprueft werden?
 			FillStep_InputPaths(Applcount-1, False)
 		Case 2
 			If SaveStep_InputPath Then
@@ -157,7 +157,6 @@ Dim sBitmapPath as String
 	Else
 		sBitmapPath = SOBitmapPath &amp; &quot;Import_&quot; &amp; CurStep &amp; &quot;.bmp&quot;
 	End If
-	Set Bitmap = LoadPicture (sBitmapPath)
 	ImportDialog.ImportPreview.ImageURL = sBitmapPath
 End Sub
 
