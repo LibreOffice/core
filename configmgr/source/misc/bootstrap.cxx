@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-10 16:53:39 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 09:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@
 
 // general settings
 #define SETTING_SERVERTYPE                  "servertype"
+#define SETTING_SESSIONCLASS               "_session_class_"
+
 // portal settings
 #define SETTING_SERVICE                     "service"
 // remote settings
@@ -154,6 +156,10 @@
 #define SETTING_ASYNC                       "lazywrite"
 // deprecated and obsolete
 #define SETTING_ROOTPATH                    "rootpath"
+
+// ---------------------------------------------------------------------------------------
+#define SERVICE_USERSESSION                 "configuration"
+#define SERVICE_ADMINSESSION                "adminconfiguration"
 // ---------------------------------------------------------------------------------------
 
 namespace configmgr
@@ -908,18 +914,27 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
+
+    sal_Bool ConnectionSettings::isAdminSession() const
+    {
+        OSL_ENSURE(haveSetting(SETTING_SESSIONCLASS),"Cannot determine session class");
+
+        return getSetting(SETTING_SESSIONCLASS).toString().equalsAscii(SERVICE_ADMINSESSION);
+
+    }
+// ---------------------------------------------------------------------------------------
+
     void ConnectionSettings::setUserSession()
     {
         OSL_ENSURE(isLocalSession() || isRemoteSession(),"Invalid/No session type for user session");
         OSL_ENSURE(getSessionType().compareToAscii(SETUP_SESSION_IDENTIFIER) != 0, "WARNING: Explicit creation of 'setup' sessions is obsolete. Create 'AdministrationProvider' service instead");
 
+        OUString const sService( RTL_CONSTASCII_USTRINGPARAM(SERVICE_USERSESSION) );
+
         if( !hasService() && isServiceRequired() )
         {
-            char const c_sDefaultService[] = "configuration";
+            CFG_TRACE_INFO("No service set for user session. Using default service '%s'",OUSTRING2ASCII(sService));
 
-            CFG_TRACE_INFO("No service set for user session. Using default service '%s'",c_sDefaultService);
-
-            OUString const sService( RTL_CONSTASCII_USTRINGPARAM(c_sDefaultService) );
             this->setService(sService, Settings::SO_DEFAULT);
         }
 
@@ -929,6 +944,8 @@ namespace configmgr
             putSetting( SETTING_ASYNC, Settings::Setting(aDefaultAsync, Settings::SO_DEFAULT) );
             OSL_ASSERT( hasAsyncSetting() && getAsyncSetting() );
         }
+
+        putSetting(SETTING_SESSIONCLASS,Settings::Setting(sService, Settings::SO_DEFAULT));
     }
 
 // ---------------------------------------------------------------------------------------
@@ -950,13 +967,12 @@ namespace configmgr
                 OSL_ENSURE(getSessionType().compareToAscii(SETUP_SESSION_IDENTIFIER) != 0, "WARNING: Explicit creation of 'setup' sessions is obsolete. ");
         }
 
+        OUString const sService( RTL_CONSTASCII_USTRINGPARAM(SERVICE_ADMINSESSION) );
+
         if( !hasService() && isServiceRequired() )
         {
-            char const c_sDefaultService[] = "adminconfiguration";
+            CFG_TRACE_INFO("No service set for admin session. Using default service '%s'",OUSTRING2ASCII(sService));
 
-            CFG_TRACE_INFO("No service set for admin session. Using default service '%s'",c_sDefaultService);
-
-            OUString const sService( RTL_CONSTASCII_USTRINGPARAM(c_sDefaultService) );
             this->setService(sService, Settings::SO_DEFAULT);
         }
 
@@ -972,6 +988,8 @@ namespace configmgr
             CFG_TRACE_INFO("Settings for Admin session: Using 'all locales' by default");
             this->setAnyLocale(Settings::SO_DEFAULT);
         }
+
+        putSetting(SETTING_SESSIONCLASS,Settings::Setting(sService, Settings::SO_DEFAULT));
     }
 
 // ---------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 09:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ namespace configmgr
 
         // get a special setting
         OUString    getSessionType() const;
+        sal_Bool    isAdminSession() const;
 
         OUString    getUser() const;
         OUString    getPassword() const;
