@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 10:45:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -243,56 +246,96 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     // schon geaendert haben (zum Beispiel durch Umbenennen)
     Reference< XController >    xController;
     sal_Bool bSuccess = sal_True;
-    if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI).EqualsAscii(".component:DB/FormGridView"))
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI).EqualsAscii(".component:DB/DataSourceBrowser"))// construct the control
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_QUERYDESIGN))// construct the control
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_TABLEDESIGN))// construct the control
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_RELATIONDESIGN))// construct the control
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
+    sal_Bool bAttachModel = sal_False;
+    if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_FORMGRIDVIEW) )
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
+    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_DATASOURCEBROWSER) )// construct the control
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_QUERYDESIGN)) )// construct the control
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_TABLEDESIGN)) ) // construct the control
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_RELATIONDESIGN)) )// construct the control
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
     else
         OSL_ENSURE(0,"wrong dispatch url!");
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
     if(bSuccess = xController.is())
     {
-        // and initialize
-        try
+        if ( bAttachModel )
         {
-            Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
-            Sequence< Any > aArgs(m_aArgs.getLength()+1);
+            Reference<XModel> xModel;
+            PropertyValue aValue;
+            const PropertyValue* pIter  = m_aArgs.getConstArray();
+            const PropertyValue* pEnd       = pIter + m_aArgs.getLength();
 
-            Any* pBegin = aArgs.getArray();
-            Any* pEnd   = pBegin + aArgs.getLength();
-            *pBegin <<= aFrame;
-            const PropertyValue* pIter      = m_aArgs.getConstArray();
-            const PropertyValue* pIterEnd   = pIter + m_aArgs.getLength();
-            for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
+            for(;pIter != pEnd;++pIter)
             {
-                *pBegin <<= *pIter;
+                if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCE))
+                {
+                    xModel.set(pIter->Value,UNO_QUERY);
+                    break;
+                }
+                else if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCENAME))
+                {
+                    ::rtl::OUString sDataSource;
+                    pIter->Value >>= sDataSource;
+                    Reference< XNameAccess > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+                    try
+                    {
+                        xModel.set(xDatabaseContext->getByName(sDataSource),UNO_QUERY);
+                    }
+                    catch(Exception)
+                    {
+                    }
+                    break;
+                }
             }
-
-            xIni->initialize(aArgs);
+            if ( bSuccess = ( xModel.is() && xModel->getURL().getLength() != 0) )
+            {
+                xController->attachModel(xModel);
+                xModel->connectController( xController );
+                xModel->setCurrentController(xController);
+            }
         }
-        catch(Exception&)
+        if ( bSuccess )
         {
-            bSuccess = sal_False;
+            ::vos::OGuard aGuard(Application::GetSolarMutex());
+            // and initialize
+            try
+            {
+                Reference<XInitialization > xIni(xController,UNO_QUERY);
+                PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+                Sequence< Any > aArgs(m_aArgs.getLength()+1);
+
+                Any* pBegin = aArgs.getArray();
+                Any* pEnd   = pBegin + aArgs.getLength();
+                *pBegin <<= aFrame;
+                const PropertyValue* pIter      = m_aArgs.getConstArray();
+                const PropertyValue* pIterEnd   = pIter + m_aArgs.getLength();
+                for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
+                {
+                    *pBegin <<= *pIter;
+                }
+
+                xIni->initialize(aArgs);
+            }
+            catch(Exception&)
+            {
+                bSuccess = sal_False;
+            }
         }
 
     }
 
     if (bSuccess && rListener.is())
-        rListener->loadFinished(this);
-    else if (!bSuccess && rListener.is())
     {
-        rFrame->setComponent(NULL, NULL);
-        rListener->loadCancelled(this);
+        if ( xController.is() && rFrame.is() )
+            xController->attachFrame(rFrame);
+        rListener->loadFinished(this);
     }
+    else if (!bSuccess && rListener.is())
+        rListener->loadCancelled(this);
 }
 
 // -----------------------------------------------------------------------
