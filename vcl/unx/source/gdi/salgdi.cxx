@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:57:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALGDI_CXX
-
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1089,27 +1086,10 @@ void X11SalGraphics::drawPolyPolygon( ULONG         nPoly,
             ULONG       i, n;
             XLIB_Region pXRegA  = NULL;
 
-#ifdef CLIPPING
-            Size aOutSize = pOutDev->GetOutputSizePixel();
-
-            ClipRectangle aClippingRect( Point(0,0),
-                                         Point(aOutSize.Width(), aOutSize.Height()) );
-
-            ULONG nMax = pPoints[0];
-            for( i = 1; i < nPoly; i++ )
-                if( pPoints[i] > nMax )
-                    nMax = pPoints[i];
-
-            SalPolyLine Points( nMax * 2 );
-
             for( i = 0; i < nPoly; i++ )
             {
-                n = aClippingRect.ClipPolygon( pPoints[i], pPtAry[i], &Points[0] );
-#else
-            for( i = 0; i < nPoly; i++ ) {
                 n = pPoints[i];
                 SalPolyLine Points( n, pPtAry[i] );
-#endif
                 if( n > 2 )
                 {
                     XLIB_Region pXRegB = XPolygonRegion( &Points[0], n+1, WindingRule );
@@ -1208,7 +1188,6 @@ void X11SalGraphics::invert( ULONG nPoints,
     {
 #endif
 
-        SalDisplay *pDisp = GetDisplay();
         SalPolyLine Points ( nPoints, pPtAry );
 
         GC pGC;
