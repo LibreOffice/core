@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:09:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 08:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,8 +384,10 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         // get the table/view names
         const ::rtl::OUString* pTables = NULL;
         const ::rtl::OUString* pViews = NULL;
-        pTables = _rTables.getConstArray();
-        pViews = _rViews.getConstArray();
+        if(_rTables.getLength())
+            pTables = _rTables.getConstArray();
+        if(_rViews.getLength())
+            pViews = _rViews.getConstArray();
 
         ::rtl::OUString sCatalog, sSchema, sName;
         SvLBoxEntry* pCat = NULL;
@@ -526,6 +528,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/29 07:09:53  oj
+ *  show views the correct way
+ *
  *  Revision 1.9  2001/02/23 15:16:28  oj
  *  use namespace
  *
