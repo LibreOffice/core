@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:17:55 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:50:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,41 +65,13 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=sw3io
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-    sw3io.cxx		\
-    sw3attr.cxx 	\
-    swacorr.cxx 	\
-    sw3block.cxx	\
-    sw3doc.cxx		\
-    sw3field.cxx	\
-    sw3fmts.cxx 	\
-    sw3imp.cxx		\
-    sw3misc.cxx 	\
-    sw3nodes.cxx	\
-    sw3npool.cxx	\
-    sw3num.cxx		\
-    sw3page.cxx 	\
-    sw3redln.cxx 	\
-    sw3sectn.cxx	\
-    sw3style.cxx	\
-    sw3table.cxx	\
-    sw3gsect.cxx	\
-    swacorr.cxx 	\
-    crypter.cxx
 
 SLOFILES = \
     $(SLO)$/sw3io.obj	\
