@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-08-27 09:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,28 @@ public:
     const String& GetSym()          { return aSym;  }
     SbxDataType GetType()           { return eScanType; }
     double    GetDbl()              { return nVal;  }
+};
+
+class BasicSimpleCharClass
+{
+public:
+    static BOOL isAlpha( sal_Unicode c )
+    {
+        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        return bRet;
+    }
+
+    static BOOL isDigit( sal_Unicode c )
+    {
+        BOOL bRet = (c >= '0' && c <= '9');
+        return bRet;
+    }
+
+    static BOOL isAlphaNumeric( sal_Unicode c )
+    {
+        BOOL bRet = isDigit( c ) || isAlpha( c );
+        return bRet;
+    }
 };
 
 
