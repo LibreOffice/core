@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binarycache.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2003-06-30 14:07:30 $
+*  last change: $Author: kz $ $Date: 2005-01-18 13:28:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -229,12 +229,14 @@ namespace configmgr
             return aEntity.equals(mOwnerEntity);
         }
         // -----------------------------------------------------------------------------
+        const OUString k_DefaultOwner( RTL_CONSTASCII_USTRINGPARAM( "$(DefaultData)"));
 
         bool BinaryCache::readComponentData(MergedComponentData & aComponentData,
                                 MultiServiceFactory const & aFactory,
                                 OUString const & aComponent,
                                 OUString const & aEntity,
-                                OUString const & aLocale,
+                                localehelper::Locale const & aRequestedLocale,
+                                localehelper::LocaleSequence & outKnownLocales,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers,
                                 bool bIncludeTemplates)
@@ -245,7 +247,7 @@ namespace configmgr
                 RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BinaryCache", "jb99855", "configmgr: BinaryCache::readComponentData() - enabled");
                 BinaryReadHandler aCacheReader(getCacheFileURL(aComponent),aComponent,aFactory);
 
-                if(aCacheReader.validateHeader(pLayers, nNumLayers, mOwnerEntity, aLocale ))
+                if(aCacheReader.validateHeader(pLayers, nNumLayers, k_DefaultOwner, aRequestedLocale, outKnownLocales))
                 {
                     RTL_LOGFILE_CONTEXT_AUTHOR(aLog1, "configmgr::backend::BinaryCache", "jb99855", "configmgr: BinaryCache::readComponentData() - cache hit");
                     aComponentData.setSchemaRoot( aCacheReader.readComponentTree() );
@@ -266,7 +268,7 @@ namespace configmgr
                                 MultiServiceFactory const & aFactory,
                                 OUString const & aComponent,
                                 OUString const & aEntity,
-                                OUString const & aLocale,
+                                localehelper::LocaleSequence const & aKnownLocales,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers)
         {
@@ -277,7 +279,7 @@ namespace configmgr
                 BinaryWriteHandler aCacheWriter(getCacheFileURL(aComponent),aComponent, aFactory);
 
                 //write data to cache
-                if (aCacheWriter.generateHeader(pLayers, nNumLayers, mOwnerEntity, aLocale))
+                if (aCacheWriter.generateHeader(pLayers, nNumLayers, k_DefaultOwner, aKnownLocales))
                 {
                     aCacheWriter.writeComponentTree(aComponentData.getSchemaTree());
                     aCacheWriter.writeTemplatesTree(aComponentData.getTemplatesTree());
