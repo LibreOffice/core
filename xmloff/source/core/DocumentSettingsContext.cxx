@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-11 15:53:39 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 11:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,36 +82,117 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
+class XMLMyList
+{
+    std::list<beans::PropertyValue> aProps;
+    sal_uInt32                      nCount;
+public:
+    XMLMyList() : nCount(0) {}
+    ~XMLMyList() {}
+
+    void push_back(beans::PropertyValue& aProp) { aProps.push_back(aProp); nCount++; }
+    void FillSequence(uno::Sequence<beans::PropertyValue>& rSeq);
+};
+
+void XMLMyList::FillSequence(uno::Sequence<beans::PropertyValue>& rSeq)
+{
+    if(nCount)
+    {
+        DBG_ASSERT(nCount == aProps.size(), "wrong count of PropertyValue");
+        rSeq.realloc(nCount);
+        beans::PropertyValue* pProps = rSeq.getArray();
+        std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+        while (aItr != aProps.end())
+        {
+            *pProps = *aItr;
+            pProps++;
+            aItr++;
+        }
+    }
+}
+
+//=============================================================================
+
 class XMLConfigItemSetContext : public SvXMLImportContext
 {
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&    rProps;
+    XMLMyList                   aProps;
+    beans::PropertyValue        aProp;
+    com::sun::star::uno::Any&   rAny;
 
 public:
     XMLConfigItemSetContext(SvXMLImport rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+                                    com::sun::star::uno::Any& rAny);
     virtual ~XMLConfigItemSetContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const NAMESPACE_RTL(OUString)& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    void AddPropertyValue() { aProps.push_back(aProp); }
+
     virtual void EndElement();
 };
 
+//=============================================================================
+
+SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT nPrefix,
+                        const NAMESPACE_RTL(OUString)& rLocalName,
+                        const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                        beans::PropertyValue& rProp)
+{
+    SvXMLImportContext *pContext = 0;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+
+        if (nPrefix == XML_NAMESPACE_CONFIG)
+        {
+            if (aLocalName.compareToAscii(sXML_name) == 0)
+                rProp.Name = sValue;
+        }
+    }
+
+    if (nPrefix == XML_NAMESPACE_CONFIG)
+    {
+        if (rLocalName.compareToAscii(sXML_config_item) == 0)
+        {
+            //pContext = new XMLConfigItemContext(GetImport(), nPrefix, rLocalName, xAttrList, aProp.Value);
+        }
+        else if(rLocalName.compareToAscii(sXML_config_item_map_named))
+        {
+        }
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+
+    return pContext;
+}
+
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
-                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                    uno::Sequence<beans::PropertyValue>& rTempViewProps,
-                    uno::Sequence<beans::PropertyValue>& rTempConfigProps )
-    : SvXMLImportContext( rImport, nPrfx, rLName ),
-    rViewProps(rTempViewProps),
-    rConfigProps(rTempConfigProps)
+                    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
 }
@@ -144,15 +225,14 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT nPref
         }
     }
 
-
     if (nPrefix == XML_NAMESPACE_CONFIG)
     {
         if (rLocalName.compareToAscii(sXML_config_item_set) == 0)
         {
             if (sName.compareToAscii(sXML_view_settings) == 0)
-                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, rViewProps);
+                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aViewProps);
             else if (sName.compareToAscii(sXML_configuration_settings) == 0)
-                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, rConfigProps);
+                pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aConfigProps);
         }
     }
 
@@ -164,13 +244,27 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT nPref
 
 void XMLDocumentSettingsContext::EndElement()
 {
+    uno::Sequence<beans::PropertyValue> aSeqViewProps;
+    if (aViewProps >>= aSeqViewProps)
+        GetImport().SetViewSettings(aSeqViewProps);
+    else
+        DBG_ERROR("the any does not contain a sequence");
+    uno::Sequence<beans::PropertyValue> aSeqConfigProps;
+    if (aConfigProps >>= aSeqConfigProps)
+        GetImport().SetConfigurationSettings(aSeqConfigProps);
+    else
+        DBG_ERROR("the any does not contain a sequence");
 }
+
+//=============================================================================
 
 XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                    uno::Sequence<beans::PropertyValue>& rTempProps )
+                    uno::Any& rTempAny )
     : SvXMLImportContext( rImport, nPrfx, rLName ),
-    rProps(rTempProps)
+    rAny(rTempAny),
+    aProps(),
+    aProp()
 {
     // here are no attributes
 }
@@ -184,38 +278,7 @@ SvXMLImportContext *XMLConfigItemSetContext::CreateChildContext( USHORT nPrefix,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
-    rtl::OUString sName;
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        if (nPrefix == XML_NAMESPACE_CONFIG)
-        {
-            if (aLocalName.compareToAscii(sXML_name) == 0)
-                sName = sValue;
-        }
-    }
-
-
-    if (nPrefix == XML_NAMESPACE_CONFIG)
-    {
-        if (rLocalName.compareToAscii(sXML_config_item) == 0)
-        {
-            // add a PropertyValue to the sequence and create the context
-        }
-    }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
-    return pContext;
+    return CreateSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList, aProp);
 }
 
 void XMLConfigItemSetContext::EndElement()
