@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-11 13:08:21 $
+#   last change: $Author: hjs $ $Date: 2001-09-13 10:20:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -530,7 +530,7 @@ NEWCHARSET=TRUE
 ######################################################
 
 .IF "$(TARGETTYPE)"==""
-TARGETTYPE=GUI
+TARGETTYPE=CUI
 .ENDIF
 
 .IF "$(TARGETTHREAD)"==""
