@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-06 17:13:57 $
+ *  last change: $Author: kr $ $Date: 2001-03-08 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-03-06 17:13:57 $
+ * @version     $Revision: 1.6 $ $ $Date: 2001-03-08 12:28:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -89,7 +89,7 @@ public class JavaThreadPool implements IThreadPool {
 
 
     protected Hashtable _jobQueues  = new Hashtable();
-    protected Hashtable _disposeIds = new Hashtable();
+      protected Hashtable _disposeIds = new Hashtable();
     protected boolean   _disposed = false;
 
 
@@ -161,6 +161,21 @@ public class JavaThreadPool implements IThreadPool {
         return getThreadId(Thread.currentThread());
     }
 
+
+    public void removeJobQueue(ThreadID threadId) {
+        _jobQueues.remove(threadId);
+          _disposeIds.remove(threadId);
+    }
+
+    public void addJobQueue(ThreadID threadId, JobQueue jobQueue/*, Object disposeId*/) {
+        if(_disposed) throw new RuntimeException("ThreadPool.addThread(" + threadId + ") - is disposed");
+
+          if(DEBUG) System.err.println("##### ThreadPool.addThread:" + threadId);
+
+        _jobQueues.put(threadId, jobQueue);
+//          _disposeIds.put(threadId, disposeId);
+    }
+
     /**
      * Adds a <code>JobQueue</code> for the given thread under the given <code>ThreadID</code>
      * with the given disposeId.
@@ -175,7 +190,7 @@ public class JavaThreadPool implements IThreadPool {
           if(DEBUG) System.err.println("##### ThreadPool.addThread:" + threadId);
 
         JobQueue jobQueue = null;
-        synchronized(_jobQueues) {
+        synchronized(this) {
             jobQueue = (JobQueue)_jobQueues.get(threadId);
             if(jobQueue == null) {
                 if(syncQueue != null)
@@ -183,15 +198,11 @@ public class JavaThreadPool implements IThreadPool {
                 else
                     jobQueue = new JobQueue(this, threadId, createWorkerThread);
 
-                _jobQueues.put(threadId, jobQueue);
-
-                if(disposeId != null)
-                    _disposeIds.put(threadId, disposeId);
-                _jobQueues.notifyAll();
+                  if(disposeId != null)
+                      _disposeIds.put(threadId, disposeId);
             }
-
-            ++ jobQueue._add_count;
         }
+        jobQueue.acquire();
 
         return jobQueue;
     }
@@ -237,18 +248,8 @@ public class JavaThreadPool implements IThreadPool {
 
         JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
 
-        if(jobQueue != null) {
-            synchronized(_jobQueues) {
-                -- jobQueue._add_count;
-
-                if(jobQueue._add_count <= 0) {
-                    _jobQueues.remove(threadId);
-                    _disposeIds.remove(threadId);
-                    jobQueue.dispose();
-                    _jobQueues.notifyAll();
-                }
-            }
-        }
+        if(jobQueue != null)
+            jobQueue.release();
     }
 
     /**
@@ -271,6 +272,8 @@ public class JavaThreadPool implements IThreadPool {
      * @param disposeId the dispose id
      * @see com.sun.star.lib.uno.environments.remote.IThreadPool#putJob
      */
+    private Object _syncPutJob = new Object();
+
     public void putJob(Job job, Object disposeId)  throws InterruptedException {
         if(_disposed) throw new RuntimeException("ThreadPool.putJob - is disposed");
 
@@ -280,25 +283,16 @@ public class JavaThreadPool implements IThreadPool {
 
         if(DEBUG) System.err.println("#### ThreadPool.putJob:" + threadId + " " + job + " " + _jobQueues);
 
-        jobQueue = (JobQueue)_jobQueues.get(threadId);
+        synchronized(_syncPutJob) {
+            jobQueue = (JobQueue)_jobQueues.get(threadId);
+            if(jobQueue == null) {
+                if(job.getOperation() == null) // a reply? and no thread for it?
+                    throw new RuntimeException(getClass().getName() + ".putJob - no thread for reply " + threadId);
 
-
-
-        if(jobQueue == null) {
-            synchronized(_jobQueues) {
-                jobQueue = (JobQueue)_jobQueues.get(threadId);
-                if(jobQueue == null) {
-                    if(job.getOperation() == null) // a reply? and no thread for it?
-                        throw new RuntimeException(getClass().getName() + ".putJob - no thread for reply " + threadId);
-
-                    // add a new JobQueue for this job
-                    addThread(true, threadId, disposeId, null);
-                    jobQueue = (JobQueue)_jobQueues.get(threadId);
-                }
+                jobQueue = new JobQueue(this, threadId, true);
             }
+            jobQueue.putJob(job, disposeId);
         }
-
-        jobQueue.putJob(job, disposeId);
     }
 
     /**
@@ -351,7 +345,7 @@ public class JavaThreadPool implements IThreadPool {
     public void dispose(Object disposeId) {
           if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose:" + disposeId);
         // clear all jobqueues
-        synchronized(_jobQueues) {
+        /*synchronized(_jobQueues)*/ {
             Enumeration elements = _jobQueues.elements();
             while(elements.hasMoreElements()) {
                 JobQueue jobQueue = (JobQueue)elements.nextElement();
@@ -377,15 +371,13 @@ public class JavaThreadPool implements IThreadPool {
             System.err.println("Warning! ThreadPool.dipose - there are active JobQueus:" + _jobQueues.size());
 
         // clear all jobqueues
-        synchronized(_jobQueues) {
-            Enumeration elements = _jobQueues.elements();
-            while(elements.hasMoreElements())
-                ((JobQueue)elements.nextElement()).clear();
+        Enumeration elements = _jobQueues.elements();
+        while(elements.hasMoreElements())
+            ((JobQueue)elements.nextElement()).clear();
 
-            _jobQueues.clear();
-            _jobQueues.notifyAll();
+        _jobQueues.clear();
+        _jobQueues.notifyAll();
 
-            _jobQueues = null;
-        }
+        _jobQueues = null;
     }
 }
