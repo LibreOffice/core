@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ public:
         m_desc(manager, name, bytes, index) {}
 
     virtual ~Constructor() {}
+
+    virtual sal_Bool SAL_CALL isDefaultConstructor() throw (RuntimeException)
+    { return m_desc.getName().getLength() == 0; }
 
     virtual rtl::OUString SAL_CALL getName() throw (RuntimeException)
     { return m_desc.getName(); }
@@ -383,6 +386,20 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
                 new Sequence< Reference< XServiceConstructorDescription > >(
                     ctorCount));
         for (sal_uInt16 i = 0; i < ctorCount; ++i) {
+            rtl::OUString name(reader.getMethodName(i));
+            if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
+                || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("void")))
+                || (name.getLength() == 0
+                    && (ctorCount != 1 || reader.getMethodParameterCount(i) != 0
+                        || reader.getMethodExceptionCount(i) != 0)))
+            {
+                throw RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "Service has bad constructors")),
+                    static_cast< OWeakObject * >(this));
+            }
             (*ctors)[i] = new Constructor(
                 _xTDMgr, reader.getMethodName(i), _aBytes, i);
         }
