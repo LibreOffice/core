@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _PathSettings.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:31:28 $
+ *  last change:$Date: 2003-09-08 11:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,9 @@
 package ifc.util;
 
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
-import com.sun.star.lang.XMultiServiceFactory;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
 
 /**
  * Testing <code>com.sun.star.util.PathSettings</code>
