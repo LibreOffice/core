@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-24 11:35:24 $
+ *  last change: $Author: cl $ $Date: 2002-08-02 13:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ swedish ] = "~Manuell diabildsväxling" ;
         Text [ dutch ] = "~Dia´s handmatig wisselen" ;
         Text [ spanish ] = "Avan~ce manual de diapositivas" ;
-        Text [ english_us ] = "~Change slides manually" ;
+        Text [ english_us ] = "Change slides ~manually" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ‰‹å·¥æ›´æ¢å¹»ç¯ç‰‡(~C)";
         Text[ russian ] = "Ñìåíà ñëàéäà âğó÷íóş";
