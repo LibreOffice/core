@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:38:19 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,7 +1506,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
     while( nIndex >= 0 )
     {
         pRow = (*m_pRowList)[nIndex];
-        OFieldDescription *pFieldDescr = pRow->GetActFieldDescr();
+        OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
         if(!pFieldDescr)
             return sal_False;
         else
@@ -1728,7 +1728,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     ::std::vector<OTableRow*>::const_iterator aIter = m_pRowList->begin();
     for(;aIter != m_pRowList->end();++aIter)
     {
-        OFieldDescription *pFieldDescr = (*aIter)->GetActFieldDescr();
+        OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && (*aIter)->IsPrimaryKey() )
         {
             nIndex = m_pRowList->end() - aIter;
@@ -1748,7 +1748,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
             //////////////////////////////////////////////////////////////////////
             // Key setzen
             OTableRow* pRow = (*m_pRowList)[nIndex];
-            OFieldDescription *pFieldDescr = pRow->GetActFieldDescr();
+            OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
             if(pFieldDescr)
                 AdjustFieldDescription(pFieldDescr,aInsertedPrimKeys,nIndex,sal_False,sal_True);
 
