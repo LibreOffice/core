@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:35:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ japanese ] = "Ç¢Ç¢Ç¶ÅAÃ®∞ŸƒﬁÇÕëIëÇµÇ‹ÇπÇÒÅB";
         Text[ korean ] = "æ∆¥œø¿, « µÂ¥¬ º±≈√µ«¡ˆ æ Ω¿¥œ¥Ÿ.";
         Text[ chinese_simplified ] = "∑Ò£¨≤ª“™—°‘Ò»Œ∫Œ◊÷∂Œ°£";
-        Text[ chinese_traditional ] = "ß_°A§£≠nøÔæ‹°C";
+        Text[ chinese_traditional ] = "ß_°A§£≠nøÔæ‹•Ù¶ÛƒÊ¶Ï°C";
         Text[ turkish ] = "No, one particular field is not going to be selected.";
         Text[ arabic ] = "ﬂ·«° ·« √—Ìœ «Œ Ì«— √Ì Õﬁ·.";
         Text[ catalan ] = "No, no debe ser seleccionado ning˙n campo.";
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/17 20:35:26  kz
+ *  Merge SRC638: 17.07.01 - 22:34:31
+ *
  *  Revision 1.15  2001/07/13 21:11:19  kz
  *  Merge SRC638: 13.07.01 - 23:10:23
  *
@@ -637,6 +640,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
