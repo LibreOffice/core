@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:17:56 $
+ *  last change: $Author: rt $ $Date: 2004-04-07 12:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3214,7 +3214,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                     {
                         static uno::Sequence< OUString > SvxShape_RectServices;
 
-                        SvxServiceInfoHelper::addToSequence( SvxShape_RectServices,14,
+                        SvxServiceInfoHelper::addToSequence( SvxShape_RectServices,13,
                             sUNO_service_drawing_RectangleShape,
 
                             sUNO_service_drawing_Shape,
