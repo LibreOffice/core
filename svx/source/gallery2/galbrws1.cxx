@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
+ *  last change: $Author: ka $ $Date: 2000-11-17 10:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,8 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
         case( MN_DELETE  ):
         {
-            mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
+            if( QueryBox( this, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETETHEME ) ) ).Execute() == RET_YES )
+                mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
         }
         break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
+ *  last change: $Author: ka $ $Date: 2000-11-17 10:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ GalleryValueSet::GalleryValueSet( GalleryBrowser2* pParent, GalleryTheme* pTheme
         mpTheme ( pTheme )
 {
     EnableDrop( TRUE );
+    EnableFullItemMode( FALSE );
 }
 
 // ------------------------------------------------------------------------
@@ -177,38 +178,7 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 aGraphic.Draw( pDev, aPos, aSize );
             }
 
-            if( GetStyle() & WB_NAMEFIELD )
-            {
-                String aItemText;
-
-                if( mpTheme->IsImported() )
-                {
-                    INetURLObject aPathTmp( mpTheme->GetParent()->GetImportURL( mpTheme->GetName() ) );
-
-                    aPathTmp.removeSegment();
-                    aPathTmp.Append( mpTheme->GetObjectURL( nId - 1 ).GetName() );
-                    aItemText = aPathTmp.GetMainURL();
-                }
-                else
-                    aItemText = mpTheme->GetObjectURL( nId - 1 ).GetMainURL();
-
-                if( pObj->GetTitle().Len() )
-                {
-                    String aTitleItemText( pObj->GetTitle() );
-
-                    if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
-                    {
-                        aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-                        aTitleItemText += aItemText;
-                        aTitleItemText += ')';
-                    }
-
-                    aItemText = aTitleItemText;
-                }
-
-                SetItemText( nId, aItemText );
-            }
-
+            SetItemText( nId, GalleryBrowser2::GetItemText( *mpTheme, *pObj ) );
             mpTheme->ReleaseObject( pObj );
         }
     }
@@ -218,8 +188,12 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 void GalleryValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    BOOL bDefOnly = ( rMEvt.GetClicks() > 1 ) && rMEvt.IsMod1();
+
     ValueSet::MouseButtonDown( rMEvt );
-    GetParent()->MouseButtonDown( rMEvt );
+
+    if( !bDefOnly )
+        GetParent()->MouseButtonDown( rMEvt );
 }
 
 // ------------------------------------------------------------------------
@@ -686,39 +660,52 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
         if( !mpValueSet->IsNoSelection() && ( nObjPos < mpCurTheme->GetObjectCount() ) )
         {
-            SgaObject*  pObj = mpCurTheme->AcquireObject( nObjPos );
+            SgaObject* pObj = mpCurTheme->AcquireObject( nObjPos );
 
-            aInfoText += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
-
-            if( mpCurTheme->IsImported() )
+            if( pObj )
             {
-                INetURLObject aPathTmp( mpCurTheme->GetParent()->GetImportURL( mpCurTheme->GetName() ) );
-
-                aPathTmp.removeSegment();
-                aPathTmp.Append( mpCurTheme->GetObjectURL( nObjPos ).GetName() );
-                aInfoText += aPathTmp.GetMainURL();
+                aInfoText = GetItemText( *mpCurTheme, *pObj );
+                mpCurTheme->ReleaseObject( pObj );
             }
-            else if( pObj && pObj->GetTitle().Len() )
-            {
-                String aTitleItemText( pObj->GetTitle() );
-
-                if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
-                {
-                    aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-                    aTitleItemText += mpCurTheme->GetObjectURL( nObjPos ).GetMainURL();
-                    aTitleItemText += ')';
-                }
-
-                aInfoText += aTitleItemText;
-            }
-            else
-                aInfoText += mpCurTheme->GetObjectURL( nObjPos ).GetMainURL();
-
-            mpCurTheme->ReleaseObject( pObj );
         }
     }
 
     maInfoBar.SetText( aInfoText );
+}
+
+// -----------------------------------------------------------------------------
+
+String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj )
+{
+    String aRet( rTheme.GetName() );
+
+    aRet += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+
+    if( rTheme.IsImported() )
+    {
+        INetURLObject aPathTmp( rTheme.GetParent()->GetImportURL( rTheme.GetName() ) );
+
+        aPathTmp.removeSegment();
+        aPathTmp.Append( rObj.GetURL().GetName() );
+        aRet += aPathTmp.GetMainURL();
+    }
+    else if( rObj.GetTitle().Len() )
+    {
+        String aTitleItemText( rObj.GetTitle() );
+
+        if( rObj.GetObjKind() != SGA_OBJ_SVDRAW )
+        {
+            aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+            aTitleItemText += rObj.GetURL().GetMainURL();
+            aTitleItemText += ')';
+        }
+
+        aRet += aTitleItemText;
+    }
+    else
+        aRet += rObj.GetURL().GetMainURL();
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------------

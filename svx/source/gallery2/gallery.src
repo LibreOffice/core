@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 20:59:17 $
+ *  last change: $Author: ka $ $Date: 2000-11-17 10:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,6 +1313,12 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ korean ] = "ÀÌ °³Ã¼¸¦\n Á´¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu nesneyi gerçekten\nsilmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_DELETETHEME
+{
+    Text = "Möchten Sie dieses Thema\nwirklich löschen?" ;
+    Text [ ENGLISH ] = "Do you really want to\n delete this theme?" ;
+    Text [ english_us ] = "Do you really want to\ndelete this theme?" ;
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
 {
