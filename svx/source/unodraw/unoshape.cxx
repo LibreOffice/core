@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:02:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3041,6 +3041,11 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
     pObj->ClearMergedItem(); // nWhich == 0 => all
+    if (pObj->ISA( SdrGrafObj )) {
+        // defaults for graphic objects have changed:
+        pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+        pObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+    }
     pModel->SetChanged();
 }
 
