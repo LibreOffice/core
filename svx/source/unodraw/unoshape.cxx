@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-22 13:33:33 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 13:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1683,14 +1683,17 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&pObj->GetItem(XATTR_FILLBMP_STRETCH);
                 XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&pObj->GetItem(XATTR_FILLBMP_TILE);
 
-                if( pStretchItem && pTileItem )
+                if( pTileItem && pTileItem->GetValue() )
                 {
-                    if( pTileItem->GetValue() )
-                        aAny <<= (sal_Int32)drawing::BitmapMode_REPEAT;
-                    else if( pStretchItem->GetValue() )
-                        aAny <<= (sal_Int32)drawing::BitmapMode_STRETCH;
-                    else
-                        aAny <<= (sal_Int32)drawing::BitmapMode_NO_REPEAT;
+                    aAny <<= drawing::BitmapMode_REPEAT;
+                }
+                else if( pStretchItem && pStretchItem->GetValue() )
+                {
+                    aAny <<= drawing::BitmapMode_STRETCH;
+                }
+                else
+                {
+                    aAny <<= drawing::BitmapMode_NO_REPEAT;
                 }
                 break;
             }
