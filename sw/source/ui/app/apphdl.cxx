@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:25:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,12 +851,29 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
         SfxStringItem aURL(SID_FILE_NAME, rURL);
         SfxBoolItem aReadOnly(SID_DOC_READONLY, FALSE);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+        SfxBoolItem aHidden( SID_HIDDEN, TRUE );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                            &aURL, &aReadOnly, &aReferer, &aTargetFrameName, 0);
+                            &aURL, &aReadOnly, &aHidden, &aReferer, &aTargetFrameName, 0);
         SfxShell* pShell = pItem ? pItem->GetShell() : 0;
-        pNewView = pShell ?  PTR_CAST(SwView, static_cast< SfxViewFrame*>(pShell)->GetViewShell()) : 0;
+
+        if(pShell)
+        {
+            SfxViewShell* pViewShell = pShell->GetViewShell();
+            if(pViewShell)
+            {
+                if( pViewShell->ISA(SwView) )
+                {
+                    pNewView = PTR_CAST(SwView,pViewShell);
+                    pNewView->GetViewFrame()->GetFrame()->Appear();
+                }
+                else
+                {
+                    pViewShell->GetViewFrame()->DoClose();
+                }
+            }
+        }
     }
     else
     {
@@ -965,9 +982,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     pMMConfig->SetSourceView(pView);
 
                     //set the first used database as default source on the config item
-                    SvStringsDtor aDBNameList(5, 1);
-                    SvStringsDtor aAllDBNames(5, 5);
-                    pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
                     if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(
                                     FN_PARAM_DATABASE_PROPERTIES, sal_False, &pItem))
                     {
@@ -999,6 +1013,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     }
                     else
                     {
+                        SvStringsDtor aDBNameList(5, 1);
+                        SvStringsDtor aAllDBNames(5, 5);
+                        pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
                         if(aDBNameList.Count())
                         {
                             String sDBName = *aDBNameList[0];
@@ -1009,12 +1026,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
                             //set the currently used database for the wizard
                             pMMConfig->SetCurrentDBData( aDBData );
                         }
-                    }
-                    if(aDBNameList.Count())
-                    {
-                        // if fields are available there is usually no need of an addressblock and greeting
-                        pMMConfig->SetAddressBlock(sal_False);
-                        pMMConfig->SetGreetingLine(sal_False, sal_False);
                     }
                 }
                 bool bDeleteConfigItem = true;
@@ -1033,15 +1044,20 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     bDeleteConfigItem = true;
                     if(nRet == RET_LOAD_DOC)
                     {
-                        pView = lcl_LoadDoc(pView, pWizard->GetReloadDocument());
+                        SwView* pNewView = lcl_LoadDoc(pView, pWizard->GetReloadDocument());
                         delete pWizard;
-                        if(pView)
+                        if(pNewView)
                         {
+                            pView = pNewView;
                             pMMConfig->DocumentReloaded();
                             //new source view!
                             pMMConfig->SetSourceView( pView );
                             pWizard = pFact->CreateMailMergeWizard(*pView, *pMMConfig);
                             pWizard->ShowPage( nRestartPage );
+                        }
+                        else
+                        {
+                            pWizard = pFact->CreateMailMergeWizard(*pView, *pMMConfig);
                         }
                     }
                     else if( nRet == RET_TARGET_CREATED )
