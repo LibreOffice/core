@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:23:24 $
+ *  last change: $Author: vg $ $Date: 2001-05-11 09:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ namespace connectivity
         //==================================================================
         // Index Seitenverweis
         //==================================================================
-        SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen
+        SV_DECL_REF(ONDXPage) // Basisklasse da weitere Informationen gehalten werden muessen
 
 
         class ONDXPagePtr : public ONDXPageRef
