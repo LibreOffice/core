@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:22:08 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:50:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=swg
 
-AUTOSEG=true
 #ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -73,10 +72,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
