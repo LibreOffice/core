@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:57:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace dbaui
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
         SvLBoxEntry*                m_pSelectedEntry;
+        SvLBoxEntry*                m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IController*                m_pContextMenuActionListener;
 
