@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:51:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,14 +561,24 @@ sal_uInt8 OCX_Control::ExportBorder(sal_uInt16 nBorder,sal_uInt8 &rBorderStyle)
         default:
         case 1:
             nRet = 2;
-            rBorderStyle = 1;
+            rBorderStyle = 0;
             break;
         case 2:
-            nRet = 3;
+            nRet = 0;
             rBorderStyle = 1;
             break;
     }
     return nRet;
+}
+
+sal_Int16 OCX_Control::ImportSpecEffect( sal_uInt8 nSpecialEffect ) const
+{
+    return (nSpecialEffect == 0) ? 2 : 1;
+}
+
+sal_uInt8 OCX_Control::ExportSpecEffect( sal_Int16 nApiEffect ) const
+{
+    return (nApiEffect == 2) ? 0 : 2;
 }
 
 sal_Bool OCX_Control::ReadFontData(SvStorageStream *pS)
@@ -713,6 +723,9 @@ sal_Bool OCX_CommandButton::Import(
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
+    // fake transparent push button by setting window background color
+    if( !fBackStyle )
+        nBackColor = 0x80000005;
     aTmp <<= ImportColor(nBackColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
@@ -725,11 +738,18 @@ sal_Bool OCX_CommandButton::Import(
 
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
+    bTemp = fWordWrap != 0;
+    aTmp = bool2any(bTemp);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
+
+    aTmp = bool2any( mbTakeFocus );
+    xPropSet->setPropertyValue( WW8_ASCII2STR( "FocusOnClick" ), aTmp );
 
     aFontData.Import(xPropSet);
     return sal_True;
@@ -775,9 +795,17 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     sal_uInt8 nTemp=0;//fEnabled;
     if (fEnabled)
         nTemp |= 0x02;
+    if (fBackStyle)
+        nTemp |= 0x08;
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
-    *rContents << sal_uInt8(0x00);
+
+    nTemp = 0;
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    fWordWrap = any2bool(aTmp);
+    if (fWordWrap)
+        nTemp |= 0x80;
+    *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
     SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
@@ -788,6 +816,9 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
 
     *rContents << rSize.Width;
     *rContents << rSize.Height;
+
+    // "take focus on click" is directly in content flags, not in option field...
+    mbTakeFocus = any2bool( rPropSet->getPropertyValue( WW8_ASCII2STR( "FocusOnClick" ) ) );
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -801,7 +832,10 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     if (aCaption.HasData())
         nTmp |= 0x08;
     *rContents << nTmp;
-    *rContents << sal_uInt8(0x00);
+    nTmp = 0x00;
+    if( !mbTakeFocus )  // flag is set, if option is off
+        nTmp |= 0x02;
+    *rContents << nTmp;
     *rContents << sal_uInt8(0x00);
     *rContents << sal_uInt8(0x00);
 
@@ -989,6 +1023,13 @@ sal_Bool OCX_OptionButton::Import(
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
+    // background color: fBackStyle==0 -> transparent
+    if( fBackStyle )
+        aTmp <<= ImportColor(nBackColor);
+    else
+        aTmp = uno::Any();
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
         bTemp = sal_False;
@@ -997,8 +1038,15 @@ sal_Bool OCX_OptionButton::Import(
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
+    bTemp = fWordWrap != 0;
+    aTmp = bool2any(bTemp);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+
+    aTmp <<= ImportSpecEffect( nSpecialEffect );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
 
     if (pValue)
     {
@@ -1037,15 +1085,31 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
+    else
+        fBackStyle = 0;
+
     sal_uInt8 nTemp=0;//=fEnabled;
     if (fEnabled)
         nTemp |= 0x02;
+    if (fBackStyle)
+        nTemp |= 0x08;
     *rContents << nTemp;
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x00);
-    *rContents << sal_uInt8(0x00);
+    nTemp = 0;
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    fWordWrap = any2bool(aTmp);
+    if (fWordWrap)
+        nTemp |= 0x80;
+    *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
+    *rContents << ExportColor(nBackColor);
+    pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
@@ -1070,6 +1134,16 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
     aCaption.WriteLenField( *rContents );
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
+    if (aTmp.hasValue())
+    {
+        sal_Int16 nApiSpecEffect;
+        aTmp >>= nApiSpecEffect;
+        nSpecialEffect = ExportSpecEffect( nApiSpecEffect );
+    }
+    *rContents << nSpecialEffect;
+    pBlockFlags[3] |= 0x04;
 
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
@@ -1181,21 +1255,14 @@ sal_Bool OCX_TextBox::Import(
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
-    sal_Bool bTemp;
-    if (fEnabled)
-        bTemp = sal_True;
-    else
-        bTemp = sal_False;
-    aTmp = bool2any(bTemp);
+    aTmp = bool2any( fEnabled != 0 );
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
-    if (fLocked)
-        bTemp = sal_True;
-    else
-        bTemp = sal_False;
-    aTmp = bool2any(bTemp);
+    aTmp = bool2any( fLocked != 0 );
     xPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
+    aTmp = bool2any( fHideSelection != 0 );
+    xPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
@@ -1203,8 +1270,13 @@ sal_Bool OCX_TextBox::Import(
     aTmp <<= ImportColor(nBackColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
-    sal_Bool bTmp=fMultiLine;
-    aTmp = bool2any(bTmp);
+    aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    aTmp <<= ImportColor( nBorderColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+
+    aTmp = bool2any( fMultiLine != 0 );
     xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     sal_uInt16 nTmp = static_cast<sal_uInt16>(nMaxLength);
@@ -1243,11 +1315,6 @@ sal_Bool OCX_TextBox::Import(
     nTmp = nPasswordChar;
     aTmp <<= nTmp;
     xPropSet->setPropertyValue( WW8_ASCII2STR("EchoChar"), aTmp);
-
-
-    aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
-
 
     if (pValue)
     {
@@ -1293,11 +1360,13 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x48);
     *rContents << sal_uInt8(0x80);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
-    fMultiLine = any2bool(aTmp);
-    nTemp = 0x2C;
+    fMultiLine = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine")));
+    fHideSelection = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("HideInactiveSelection")));
+    nTemp = 0x0C;
     if (fMultiLine)
         nTemp |= 0x80;
+    if( fHideSelection )
+        nTemp |= 0x20;
     *rContents << nTemp;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
@@ -1352,6 +1421,12 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
         pBlockFlags[2] |= 0x40;
 
     Align(rContents,4,TRUE);
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBorderColor;
+    *rContents << ExportColor(nBorderColor);
+    pBlockFlags[3] |= 0x02;
+
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
@@ -1499,7 +1574,6 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
         pBlockFlags[2] |= 0x40;
 #endif
 
-    Align(rContents,4,TRUE);
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
@@ -1591,9 +1665,8 @@ sal_Bool OCX_ToggleButton::Import(
     const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
     uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
 {
-
     OUString sServiceName =
-        WW8_ASCII2STR("com.sun.star.form.component.CheckBox");
+        WW8_ASCII2STR("com.sun.star.form.component.CommandButton");
     uno::Reference< uno::XInterface >  xCreate =
         rServiceFactory->createInstance( sServiceName );
     if( !xCreate.is() )
@@ -1611,6 +1684,9 @@ sal_Bool OCX_ToggleButton::Import(
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
+    aTmp = bool2any(true);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Toggle"), aTmp );
+
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
         bTemp = sal_False;
@@ -1619,18 +1695,24 @@ sal_Bool OCX_ToggleButton::Import(
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
-    bTemp = nMultiState;
+    bTemp = fWordWrap != 0;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TriState"), aTmp);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+
+    // fake transparent toggle button by setting window background color
+    if( !fBackStyle )
+        nBackColor = 0x80000005;
+    aTmp <<= ImportColor(nBackColor);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     if (pValue)
     {
         INT16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
-        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
+        xPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
     }
 
     if (pCaption)
@@ -1641,6 +1723,155 @@ sal_Bool OCX_ToggleButton::Import(
 
     aFontData.Import(xPropSet);
     return sal_True;
+}
+
+sal_Bool OCX_ToggleButton::Export(
+    SvStorageRef &rObj, const uno::Reference< beans::XPropertySet> &rPropSet,
+    const awt::Size& rSize )
+{
+    static sal_uInt8 __READONLY_DATA aCompObj[] = {
+            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+            0xFF, 0xFF, 0xFF, 0xFF, 0x60, 0x1D, 0xD2, 0x8B,
+            0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+            0x00, 0x60, 0x02, 0xF3, 0x21, 0x00, 0x00, 0x00,
+            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+            0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+            0x32, 0x2E, 0x30, 0x20, 0x54, 0x6F, 0x67, 0x67,
+            0x6C, 0x65, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E,
+            0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D, 0x62,
+            0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F, 0x62,
+            0x6A, 0x65, 0x63, 0x74, 0x00, 0x15, 0x00, 0x00,
+            0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E, 0x54,
+            0x6F, 0x67, 0x67, 0x6C, 0x65, 0x42, 0x75, 0x74,
+            0x74, 0x6F, 0x6E, 0x2E, 0x31, 0x00, 0xF4, 0x39,
+            0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+
+    {
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    xStor->Write(aCompObj,sizeof(aCompObj));
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
+    }
+
+    {
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    xStor3->Write(aObjInfo,sizeof(aObjInfo));
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
+    }
+
+    static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
+        0x54, 0x00, 0x6F, 0x00, 0x67, 0x00, 0x67, 0x00,
+        0x6C, 0x00, 0x65, 0x00, 0x42, 0x00, 0x75, 0x00,
+        0x74, 0x00, 0x74, 0x00, 0x6F, 0x00, 0x6E, 0x00,
+        0x31, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    {
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
+    }
+
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+
+    return WriteContents(xContents,rPropSet,rSize);
+}
+
+sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
+    const uno::Reference< beans::XPropertySet > &rPropSet,
+    const awt::Size &rSize)
+{
+    sal_Bool bRet=sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
+    rContents->SeekRel(12);
+
+    pBlockFlags[0] = 0;
+    pBlockFlags[1] = 0x01;
+    pBlockFlags[2] = 0;
+    pBlockFlags[3] = 0x80;
+    pBlockFlags[4] = 0;
+    pBlockFlags[5] = 0;
+    pBlockFlags[6] = 0;
+    pBlockFlags[7] = 0;
+
+    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    fEnabled = any2bool(aTmp);
+
+    sal_uInt8 nTemp=fEnabled;
+    if (fEnabled)
+        nTemp = nTemp << 1;
+    if (fBackStyle)
+        nTemp |= 0x08;
+    *rContents << nTemp;
+    pBlockFlags[0] |= 0x01;
+    *rContents << sal_uInt8(0x00);
+    nTemp = 0;
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    fWordWrap = any2bool(aTmp);
+    if (fWordWrap)
+        nTemp |= 0x80;
+    *rContents << nTemp;
+    *rContents << sal_uInt8(0x00);
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
+    *rContents << ExportColor(nBackColor);
+    pBlockFlags[0] |= 0x02;
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
+    *rContents << ExportColor(nForeColor);
+    pBlockFlags[0] |= 0x04;
+
+    nStyle = 6;
+    *rContents << nStyle;
+    pBlockFlags[0] |= 0x40;
+
+    Align(rContents,4,TRUE);
+    nValueLen = 1|SVX_MSOCX_COMPRESSED;
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("State"));
+    INT16 nDefault;
+    aTmp >>= nDefault;
+    *rContents << nValueLen;
+    pBlockFlags[2] |= 0x40;
+
+    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    aCaption.WriteLenField( *rContents );
+    if (aCaption.HasData())
+        pBlockFlags[2] |= 0x80;
+
+    Align(rContents,4,TRUE);
+    *rContents << rSize.Width;
+    *rContents << rSize.Height;
+
+    nDefault += 0x30;
+    *rContents << sal_uInt8(nDefault);
+    *rContents << sal_uInt8(0x00);
+
+    aCaption.WriteCharArray( *rContents );
+
+    Align(rContents,4,TRUE);
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
+    bRet = aFontData.Export(rContents,rPropSet);
+    rContents->Seek(nOldPos);
+    *rContents << nStandardId;
+    *rContents << nFixedAreaLen;
+
+    *rContents << pBlockFlags[0];
+    *rContents << pBlockFlags[1];
+    *rContents << pBlockFlags[2];
+    *rContents << pBlockFlags[3];
+    *rContents << pBlockFlags[4];
+    *rContents << pBlockFlags[5];
+    *rContents << pBlockFlags[6];
+    *rContents << pBlockFlags[7];
+
+    DBG_ASSERT((rContents.Is() &&
+        (SVSTREAM_OK==rContents->GetError())),"damn");
+    return bRet;
 }
 
 sal_Bool OCX_Label::Import(
@@ -1683,6 +1914,9 @@ sal_Bool OCX_Label::Import(
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
+    aTmp <<= ImportColor( nBorderColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+
     bTemp=fWordWrap;
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
@@ -1721,20 +1955,17 @@ sal_Bool OCX_ComboBox::Import(
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
-    sal_Bool bTmp=fEnabled;
-    aTmp = bool2any(bTmp);
+    aTmp = bool2any(fEnabled != 0);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
-    bTmp=fLocked;
-    aTmp = bool2any(bTmp);
+    aTmp = bool2any(fLocked != 0);
     xPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
-    if (nDropButtonStyle)
-        bTmp=sal_True;
-    else
-        bTmp=sal_False;
-    aTmp = bool2any(bTmp);
+    aTmp = bool2any( nDropButtonStyle != 0 );
     xPropSet->setPropertyValue( WW8_ASCII2STR("Dropdown"), aTmp);
+
+    aTmp = bool2any( fHideSelection != 0 );
+    xPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
@@ -1750,6 +1981,9 @@ sal_Bool OCX_ComboBox::Import(
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    aTmp <<= ImportColor( nBorderColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
 
     sal_Int16 nTmp=static_cast<sal_Int16>(nMaxLength);
     aTmp <<= nTmp;
@@ -1792,7 +2026,12 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x48);
     *rContents << sal_uInt8(0x80);
-    *rContents << sal_uInt8(0x2C);
+
+    nTemp = 0x0C;
+    fHideSelection = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("HideInactiveSelection")));
+    if( fHideSelection )
+        nTemp |= 0x20;
+    *rContents << nTemp;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
@@ -1840,6 +2079,12 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
         pBlockFlags[2] |= 0x40;
 
     Align(rContents,4,TRUE);
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBorderColor;
+    *rContents << ExportColor(nBorderColor);
+    pBlockFlags[3] |= 0x02;
+
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
@@ -1977,6 +2222,9 @@ sal_Bool OCX_ListBox::Import(
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
+    aTmp <<= ImportColor( nBorderColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+
     aFontData.Import(xPropSet);
     return sal_True;
 }
@@ -2027,6 +2275,14 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    sal_Int16 nBorder;
+    aTmp >>= nBorder;
+    nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
+    Align(rContents,2,TRUE);
+    *rContents << nBorderStyle;
+    pBlockFlags[0] |= 0x10;
+
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiSelection"));
     nMultiState = any2bool(aTmp);
 
@@ -2040,7 +2296,6 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-
     Align(rContents,4,TRUE);
 
 #if 0
@@ -2052,6 +2307,17 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     Align(rContents,4,TRUE);
 #endif
 
+    Align(rContents,4,TRUE);
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBorderColor;
+    *rContents << ExportColor(nBorderColor);
+    pBlockFlags[3] |= 0x02;
+
+    *rContents << nSpecialEffect;
+    pBlockFlags[3] |= 0x04;
+
+    Align(rContents,4,TRUE);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -2383,6 +2649,9 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
         *pS >> nAccelerator;
     }
 
+    // "take focus on click" is directly in content flags, not in option field...
+    mbTakeFocus = (pBlockFlags[1] & 0x02) == 0;     // option is on, if flag is not set
+
     if (pBlockFlags[1] & 0x04)
     {
         Align(pS,2);
@@ -2563,6 +2832,13 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     if (aCaption.HasData())
         pBlockFlags[0] |= 0x08;
 
+    Align(rContents,4,TRUE);
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    if (aTmp.hasValue())
+        aTmp >>= nBorderColor;
+    *rContents << ExportColor(nBorderColor);
+    pBlockFlags[0] |= 0x80;
+
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
     sal_Int16 nBorder;
     aTmp >>= nBorder;
@@ -2670,12 +2946,14 @@ struct OCX_map
     const char *sName;
 };
 
-static const int NO_OCX=18;
-
-OCX_map aOCXTab[NO_OCX] =
+OCX_map aOCXTab[] =
 {
+    // Command button MUST be at index 0
     {&OCX_CommandButton::Create,"D7053240-CE69-11CD-a777-00dd01143c57",
         form::FormComponentType::COMMANDBUTTON,"CommandButton"},
+    // Toggle button MUST be at index 1
+    {&OCX_ToggleButton::Create,"8BD21D60-EC42-11CE-9e0d-00aa006002f3",
+        form::FormComponentType::COMMANDBUTTON,"ToggleButton"},
     {&OCX_Label::Create, "978C9E23-D4B0-11CE-bf2d-00aa003f40d0",
         form::FormComponentType::FIXEDTEXT,"Label"},
     {&OCX_TextBox::Create,"8BD21D10-EC42-11CE-9e0d-00aa006002f3",
@@ -2688,8 +2966,6 @@ OCX_map aOCXTab[NO_OCX] =
         form::FormComponentType::CHECKBOX,"CheckBox"},
     {&OCX_OptionButton::Create,"8BD21D50-EC42-11CE-9e0d-00aa006002f3",
         form::FormComponentType::RADIOBUTTON,"OptionButton"},
-    {&OCX_ToggleButton::Create,"8BD21D60-EC42-11CE-9e0d-00aa006002f3",
-        -1,"ToggleButton"},
     {&OCX_Image::Create,"4C599241-6926-101B-9992-00000b65c6f9",
         form::FormComponentType::IMAGECONTROL,"Image"},
     {&OCX_FieldControl::Create,"8BD21D10-EC42-11CE-9e0d-00aa006002f3",
@@ -2715,6 +2991,8 @@ OCX_map aOCXTab[NO_OCX] =
     {&OCX_GroupBox::Create,"",
         form::FormComponentType::GROUPBOX,""}
 };
+
+const int NO_OCX = sizeof( aOCXTab ) / sizeof( *aOCXTab );
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls(SfxObjectShell *pDSh, SwPaM *pP) :
     pDocSh(pDSh), pPaM(pP), nEdit(0), nCheckbox(0)
@@ -2787,18 +3065,29 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
     }
 //End nasty hack
 
-    //sal_Int16  nClassId = FormComponentType::COMMANDBUTTON;
+    const OCX_map* pEntry = 0;
 
-    for (int i=0;i<NO_OCX;i++)
+    // distinguish between push button and toggle button
+    if( nClassId == form::FormComponentType::COMMANDBUTTON )
     {
-        if ( nClassId == aOCXTab[i].nId )
-        {
-            rId.AppendAscii(aOCXTab[i].sId);
-            rName.AppendAscii(aOCXTab[i].sName);
-            return(aOCXTab[i].pCreate());
-        }
+        pEntry = any2bool(xPropSet->getPropertyValue(WW8_ASCII2STR("Toggle"))) ?
+            (aOCXTab + 1) : aOCXTab;
     }
-    return(NULL);
+    else
+    {
+        for( int i = 2; (i < NO_OCX) && !pEntry; ++i )
+            if( nClassId == aOCXTab[ i ].nId )
+                pEntry = aOCXTab + i;
+    }
+
+    if( pEntry )
+    {
+        rId.AppendAscii( pEntry->sId );
+        rName.AppendAscii( pEntry->sName );
+        return pEntry->pCreate();
+    }
+
+    return 0;
 }
 
 
@@ -2981,6 +3270,13 @@ sal_Bool OCX_CheckBox::Import(
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
+    // background color: fBackStyle==0 -> transparent
+    if( fBackStyle )
+        aTmp <<= ImportColor(nBackColor);
+    else
+        aTmp = uno::Any();
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
         bTemp = sal_False;
@@ -2989,16 +3285,19 @@ sal_Bool OCX_CheckBox::Import(
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
+    bTemp = fWordWrap != 0;
+    aTmp = bool2any(bTemp);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
-#if 0
-    aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
-#endif
 
     bTemp = nMultiState;
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TriState"), aTmp);
+
+    aTmp <<= ImportSpecEffect( nSpecialEffect );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
 
     if (pValue)
     {
@@ -3037,14 +3336,30 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    fBackStyle = aTmp.hasValue() ? 1 : 0;
+    if (fBackStyle)
+        aTmp >>= nBackColor;
+
     sal_uInt8 nTemp=fEnabled;
     if (fEnabled)
         nTemp = nTemp << 1;
+    if (fBackStyle)
+        nTemp |= 0x08;
     *rContents << nTemp;
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x00);
+    nTemp = 0;
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    fWordWrap = any2bool(aTmp);
+    if (fWordWrap)
+        nTemp |= 0x80;
+    *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
-    *rContents << sal_uInt8(0x00);
+
+    *rContents << ExportColor(nBackColor);
+    pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
@@ -3073,6 +3388,17 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     aCaption.WriteLenField( *rContents );
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
+
+    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
+    if (aTmp.hasValue())
+    {
+        sal_Int16 nApiSpecEffect;
+        aTmp >>= nApiSpecEffect;
+        nSpecialEffect = ExportSpecEffect( nApiSpecEffect );
+    }
+    Align(rContents,4,TRUE);
+    *rContents << nSpecialEffect;
+    pBlockFlags[3] |= 0x04;
 
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
@@ -3260,7 +3586,10 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontStrikeout"), aTmp);
     }
 
-    aTmp <<= sal_Int16(nFontSize/20);
+    // 2004-09-17: very strange way of storing font sizes...
+    // 1pt->30, 2pt->45, 3pt->60, 4pt->75, 5pt->105, 6pt->120, 7pt->135
+    // 8pt->165, 9pt->180, 10pt->195, 11pt->225, ...
+    aTmp <<= sal_Int16( (nFontSize <= 30) ? 1 : ((nFontSize + 10) / 20) );
     rPropSet->setPropertyValue( WW8_ASCII2STR("FontHeight"), aTmp);
 }
 
@@ -3303,7 +3632,10 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         if (nFontHeight)
         {
             nFlags |= 0x04;
-            nFontSize = static_cast<sal_uInt32>(nFontHeight*20);
+            // 2004-09-17: very strange way of storing font sizes:
+            // 1pt->30, 2pt->45, 3pt->60, 4pt->75, 5pt->105, 6pt->120, 7pt->135
+            // 8pt->165, 9pt->180, 10pt->195, 11pt->225, ...
+            nFontSize = (nFontHeight == 1) ? 30 : (static_cast<sal_uInt32>((nFontHeight*4+1)/3)*15);
             *rContent << nFontSize;
         }
 
