@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
+ *  last change: $Author: cl $ $Date: 2001-12-05 15:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,6 +1980,13 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
             sal_Bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST;
+
+            if( pMap->nWID == SDRATTR_ECKENRADIUS )
+            {
+                sal_Int32 nCornerRadius;
+                if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) )
+                    throw IllegalArgumentException();
+            }
 
             SfxItemSet* pSet;
             if( mbIsMultiPropertyCall && !bIsNotPersist )
