@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-01 15:06:28 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     if (xPSet.is())
                     {
                         sal_Bool bB = sal_True;
-                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Dropdown" ) ), uno::Any(&bB,::getBooleanCppuType()));
+                        xPSet->setPropertyValue( DLGED_PROP_DROPDOWN, uno::Any(&bB,::getBooleanCppuType()));
                     }
                  }
                  catch(...)
@@ -188,7 +188,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     {
                         uno::Any aValue;
                         aValue <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
-                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) ), aValue );
+                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, aValue );
                     }
                  }
                  catch(...)
@@ -210,7 +210,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     {
                         uno::Any aValue;
                         aValue <<= (sal_Int32) 1;
-                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) ), aValue );
+                        xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, aValue );
                     }
                  }
                  catch(...)
