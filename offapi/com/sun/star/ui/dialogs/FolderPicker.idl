@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderPicker.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,13 @@ module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
 
-interface XFolderPicker;
+ published interface XFolderPicker;
 
 //=============================================================================
 /** A FolderPicker service.
 */
 
-service FolderPicker
+published service FolderPicker
 {
     //-------------------------------------------------------------------------
     /** Provides the ability to execute a FolderPicker dialog and
