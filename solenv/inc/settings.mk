@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2001-03-28 16:05:22 $
+#   last change: $Author: nf $ $Date: 2001-04-18 11:40:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1095,8 +1095,8 @@ SVIDL=svidl.exe
 LDUMP=ldump -Gy
 .ENDIF
 .ELSE
-LDUMP=ldump2
-LDUMP2=ldump2
+LDUMP=ldump4
+LDUMP2=ldump4
 .ENDIF
 
 .IF "$(MKDEPENDALL)"!=""
