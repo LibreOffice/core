@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:06:52 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
                 // ohne Nummer immer ohne FirstLineOffset!!!!
                 short nFOfst;
-                if( pColl->GetOutlineLevel() & NO_NUMLEVEL )
+                if( ! IsNum(pColl->GetOutlineLevel()) )
                     nFOfst = 0;
                 else
                     nFOfst = rNFmt.GetFirstLineOffset();
@@ -263,7 +263,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     {
         SwTxtNode* pNd = rArr[ n ]->GetTxtNode();
         ASSERT( pNd, "was ist das fuer ein Node?" );
-        if( ( 1 << (pNd->GetTxtColl()->GetOutlineLevel() & ~NO_NUMLEVEL )
+        if( ( 1 << (GetRealLevel(pNd->GetTxtColl()->GetOutlineLevel()))
             & nChgFmtLevel ))
             pNd->NumRuleChgd();
     }
@@ -804,22 +804,51 @@ void SwDoc::SetOutlineLSpace( BYTE nLevel, short nFirstLnOfst, USHORT nLSpace )
 
 // --- Nummerierung -----------------------------------------
 
-void SwNumRuleInfo::MakeList( SwDoc& rDoc )
+void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
 {
-    SwModify* pMod;
-    const SfxPoolItem* pItem;
-    USHORT i, nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-    for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = rDoc.GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-            ((SwNumRuleItem*)pItem)->GetValue() == rName )
+    // -> #111955#
+    if (bOutline)
+    {
+        const SwOutlineNodes & rOutlineNodes = rDoc.GetNodes().GetOutLineNds();
+
+        for (int i = 0; i < rOutlineNodes.Count(); i++)
         {
-            if( pMod->IsA( TYPE( SwFmt )) )
-                pMod->GetInfo( *this );
-            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-                AddNode( *(SwTxtNode*)pMod );
+            SwTxtNode & aNode = *((SwTxtNode *) rOutlineNodes[i]);
+
+            if (aNode.IsOutlineNum())
+                AddNode(aNode);
         }
+    }
+    // <- #111955#
+    else
+    {
+        SwModify* pMod;
+        const SfxPoolItem* pItem;
+        USHORT i, nMaxItems = rDoc.GetAttrPool().GetItemCount
+            ( RES_PARATR_NUMRULE);
+        for( i = 0; i < nMaxItems; ++i )
+        {
+            pItem = rDoc.GetAttrPool().GetItem( RES_PARATR_NUMRULE, i );
+            if( 0 != pItem)
+            {
+                pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn();
+                if (0 != pMod &&
+                    ((SwNumRuleItem*)pItem)->GetValue().Len() &&
+                    ((SwNumRuleItem*)pItem)->GetValue() == rName )
+                {
+                    if( pMod->IsA( TYPE( SwFmt )) )
+                        pMod->GetInfo( *this );
+                    else
+                    {
+                        SwTxtNode* pModTxtNode = (SwTxtNode*)pMod;
+                        if( pModTxtNode->GetNodes().IsDocNodes() &&
+                            0 != pModTxtNode->GetNum(FALSE) )
+                            AddNode( *pModTxtNode );
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -870,8 +899,8 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
         nFirst < nLast; ++nFirst )
     {
         SwTxtNode* pTxtNd = pUpd->GetList().GetObject( nFirst );
-        if( pTxtNd->GetNum() && ( nLvl = (~NO_NUMLEVEL &
-            pTxtNd->GetNum()->GetLevel() ) ) < MAXLEVEL )
+        if( pTxtNd->GetNum() &&
+            ( nLvl = (pTxtNd->GetNum()->GetRealLevel()) ) < MAXLEVEL )
         {
             if( nChgFmtLevel & ( 1 << nLvl ))
             {
@@ -1052,7 +1081,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
 
 #ifndef NUM_RELSPACE
                     BYTE nLvl = !pTxtNd->GetNum() ? NO_NUMBERING
-                                    : pTxtNd->GetNum()->GetLevel() & ~NO_NUMLEVEL;
+                        : pTxtNd->GetNum()->GetRealLevel();
                     if( nLvl < MAXLEVEL && (nChgFmtLevel & ( 1 << nLvl )) &&
                         pOld->IsRuleLSpace( *pTxtNd ) )
                             pTxtNd->SetNumLSpace( TRUE );
@@ -1271,7 +1300,7 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
 #ifndef NUM_RELSPACE
             BYTE nLvl = !pTxtNd->GetNum() ? NO_NUMBERING
-                            : pTxtNd->GetNum()->GetLevel() & ~NO_NUMLEVEL;
+                            : pTxtNd->GetNum()->GetRealLevel();
             if( nLvl < MAXLEVEL && (nChgFmtLevel & ( 1 << nLvl )) &&
                 pOldRule->IsRuleLSpace( *pTxtNd ) )
                     pTxtNd->SetNumLSpace( TRUE );
@@ -1288,48 +1317,6 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
 BOOL SwDoc::NoNum( const SwPaM& rPam )
 {
-#if 0
-// Vielleich koennte man die Funktion auch so definieren:
-// den Bereich auf nicht Nummeriert setzen - sprich NO_NUMLEVEL.
-//
-    ULONG nStt = rPam.GetPoint()->nNode.GetIndex(),
-            nEnd = rPam.GetMark()->nNode.GetIndex();
-    if( nStt > nEnd )
-    {
-        ULONG nTmp = nStt; nStt = nEnd; nEnd = nTmp;
-    }
-
-    const SfxPoolItem* pItem;
-    const String* pName;
-    String sNumRule;
-    for( ; nStt <= nEnd; ++nStt )
-    {
-        SwTxtNode* pTNd = GetNodes()[ nStt ]->GetTxtNode();
-        if( pTNd && 0 != ( pItem = pTNd->GetNoCondAttr(
-            RES_PARATR_NUMRULE, TRUE ) ) &&
-            ( pName = &((SwNumRuleItem*)pItem)->GetValue())->Len() )
-        {
-            SwNodeNum aNum;
-            if( pTNd->GetNum() )
-                aNum = *pTNd->GetNum();
-            aNum.SetLevel( aNum.GetLevel() | NO_NUMLEVEL );
-            pTNd->UpdateNum( aNum );
-
-            if( *pName != sNumRule )
-            {
-                sNumRule = *pName;
-                SwNumRule* pRule = FindNumRulePtr( *pName );
-                pRule->SetInvalidRule( TRUE );
-            }
-        }
-    }
-
-    // dann noch alle Updaten
-    UpdateNumRule();
-
-    // irgendetwas wurde geupdatet
-    return 0 != n;
-#else
 
     BOOL bRet = SplitNode( *rPam.GetPoint() );
     // ist ueberhaupt Nummerierung im Spiel ?
@@ -1343,7 +1330,7 @@ BOOL SwDoc::NoNum( const SwPaM& rPam )
         if( pNum && pRule )
         {
             SwNodeNum aNum( *pNum );
-            aNum.SetLevel( aNum.GetLevel() | NO_NUMLEVEL );
+            aNum.SetNoNum( TRUE );
             pNd->UpdateNum( aNum );
 #ifndef NUM_RELSPACE
             pNd->SetNumLSpace( TRUE );
@@ -1355,8 +1342,6 @@ BOOL SwDoc::NoNum( const SwPaM& rPam )
             bRet = FALSE;   // keine Nummerierung , ?? oder immer TRUE ??
     }
     return bRet;
-
-#endif
 }
 
 BOOL SwDoc::DelNumRules( const SwPaM& rPam )
@@ -1411,7 +1396,7 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
             if( pAttrSet && SFX_ITEM_SET == pAttrSet->GetItemState(
                 RES_LR_SPACE, FALSE, (const SfxPoolItem**)&pLRSpace ) &&
                 ( !pTNd->GetNum() ||
-                  (( nLvl = (~NO_NUMLEVEL & pTNd->GetNum()->GetLevel() )) <
+                  (( nLvl = pTNd->GetNum()->GetRealLevel() ) <
                     MAXLEVEL && ( pRule->Get( nLvl ).GetAbsLSpace()
                                             == pLRSpace->GetTxtLeft() )) ))
             {
@@ -1438,7 +1423,10 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
             else
                 pTNd->SwCntntNode::SetAttr( aEmptyRule );
 
-            pTNd->UpdateNum( SwNodeNum( NO_NUMBERING ));
+            if (0 != pTNd->GetNumRule())
+                pTNd->UpdateNum( SwNodeNum( 0 ));
+            else
+                pTNd->UpdateNum( SwNodeNum( NO_NUMBERING ));
 
             if( RES_CONDTXTFMTCOLL == pTNd->GetFmtColl()->Which() )
                 pTNd->ChkCondColl();
@@ -1474,9 +1462,9 @@ BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
         else if( nNumber < rUpper )
             rUpper = nNumber;
     }
-    else if( nNumber & NO_NUMLEVEL )
+    else if( !IsNum(nNumber))
     {
-        nNumber &= ~NO_NUMLEVEL;
+        SetNoNum(&nNumber, FALSE);
         if( bOverUpper ? FALSE : nSrchNum > nNumber )
             bRet = TRUE;
         else if( nNumber > rLower )
@@ -1518,10 +1506,10 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
         return FALSE;
 
     register BYTE nTmpNum = pNd->GetNum()->GetLevel(),
-                  nSrchNum = nTmpNum & ~NO_NUMLEVEL;
+                  nSrchNum = GetRealLevel(nTmpNum);
 
     SwNodeIndex aIdx( rPos.nNode );
-    if( nTmpNum & NO_NUMLEVEL )
+    if( !IsNum(nTmpNum) )
     {
         // falls gerade mal NO_NUMLEVEL an ist, so such den vorherigen Node
         // mit Nummerierung
@@ -1534,8 +1522,8 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
                 if( pNd->GetNum() && pRule == pNd->GetNumRule() )
                 {
                     nTmpNum = pNd->GetNum()->GetLevel();
-                    if( !( nTmpNum & NO_NUMLEVEL &&
-                         (( nTmpNum & ~NO_NUMLEVEL ) >= nSrchNum )) )
+                    if( !( ! IsNum(nTmpNum) &&
+                         (GetRealLevel(nTmpNum) >= nSrchNum )) )
                         break;      // gefunden
                 }
                 else
@@ -1657,8 +1645,8 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
             ( pName = &((SwNumRuleItem*)pItem)->GetValue())->Len() )
         {
             BYTE nLevel = pTNd->GetNum()->GetLevel();
-            if( ( -1 == nDiff && 0 < ( nLevel & ~NO_NUMLEVEL )) ||
-                ( 1 == nDiff && MAXLEVEL - 1 > ( nLevel & ~NO_NUMLEVEL ) ) )
+            if( ( -1 == nDiff && 0 < GetRealLevel(nLevel)) ||
+                ( 1 == nDiff && MAXLEVEL - 1 > GetRealLevel(nLevel) ) )
             {
                 nLevel += nDiff;
                 SwNodeNum aNum( *pTNd->GetNum() );
@@ -1986,8 +1974,7 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel, BOOL bOutline )
                 0 != ( pNum = pTNd->GetNum()) &&
                 0 != ( pRule = FindNumRulePtr(
                     ((SwNumRuleItem*)pItem)->GetValue() )) )) &&
-        (bDel ? 0 != ( pNum->GetLevel() & NO_NUMLEVEL )
-             : 0 == ( pNum->GetLevel() & NO_NUMLEVEL ) ) &&
+        (bDel ? 0 != pNum->GetRealLevel() : 0 == pNum->GetRealLevel()) &&
         SVX_NUM_NUMBER_NONE != pRule->Get( GetRealLevel(pNum->GetLevel()) ).GetNumberingType() )
     {
         if( DoesUndo() )
@@ -1997,9 +1984,9 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel, BOOL bOutline )
         }
         SwNodeNum aNum( *pNum );
         if( bDel )
-            aNum.SetLevel( aNum.GetLevel() & ~NO_NUMLEVEL );
+            aNum.SetNoNum( FALSE );
         else
-            aNum.SetLevel( aNum.GetLevel() | NO_NUMLEVEL );
+            aNum.SetNoNum( TRUE );
 
         if( bOutline )
         {
@@ -2027,9 +2014,9 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
     const SfxPoolItem* pItem;
     SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
 
-    if( pTNd && 0 != ( pItem = pTNd->GetNoCondAttr( RES_PARATR_NUMRULE, TRUE ) ) &&
-        ((SwNumRuleItem*)pItem)->GetValue().Len() )
-        pRet = FindNumRulePtr( ((SwNumRuleItem*)pItem)->GetValue() );
+    if( pTNd )
+        pRet = pTNd->GetNumRule();
+
     return pRet;
 }
 
@@ -2192,11 +2179,272 @@ void SwDoc::UpdateNumRule()
     for( USHORT n = 0; n < rNmTbl.Count(); ++n )
         if( rNmTbl[ n ]->IsInvalidRule() )
             UpdateNumRule( rNmTbl[ n ]->GetName(), ULONG_MAX );
+
+
 }
 
-void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
+// -> #111955#
+/**
+   Reset numbering to start values.
+
+   @param rNum                   the numbering to reset
+   @param rNumRule               the numbering rule to take the start values
+                                 from
+   @param nStartLevel            the level to start
+   @param bInitializedLevels     array to mark reset levels in
+
+   All values in rNum that have a level >= nStartLevel are set to
+   their start level. The start level is looked up in rNumRule. For
+   all levels >= nStartLevel the accroding entry in bInitializedLevels
+   is set to true.
+*/
+void lcl_NodeNumReset(SwNodeNum & rNum, const SwNumRule & rNumRule,
+                      int nStartLevel, bool * bInitializedLevels)
 {
-    SwNumRuleInfo aUpd( rName );
+    for (int i = nStartLevel; i < MAXLEVEL; i++)
+    {
+        rNum.GetLevelVal()[i] = rNumRule.Get(i).GetStart();
+        bInitializedLevels[i] = true;
+    }
+}
+
+/**
+   Update numbering for all nodes that have a certain numbering rule.
+
+   @param rName           name of the numbering rule to search for
+   @param nUpdatePos      document position to start at
+ */
+void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdatePos )
+{
+    SwNumRule * pRule = FindNumRulePtr(rName);
+    ASSERT(pRule, "numrule not found");
+    if (pRule == NULL)
+        return;
+
+    UpdateNumRule(*pRule, nUpdatePos);
+}
+
+/**
+   Update numbering for all nodes that have a certain numbering rule.
+
+   @param rRule           numbering rule to search for
+   @param nUpdatePos      document position to start at
+   @param bOutline        TRUE:   update outline numbering
+                          FALSE:  update normal numbering
+ */
+void SwDoc::UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
+                           BOOL bOutline)
+{
+    /* If old numbering is activated use the old algorithm. */
+    if (IsOldNumbering())
+    {
+        UpdateNumRuleOld(rRule, nUpdatePos);
+
+        return;
+    }
+
+    /* Get all paragraphs with the given numbering rule from the
+       document. */
+    SwNumRuleInfo aNumRuleInfo(rRule.GetName());
+    aNumRuleInfo.MakeList(*this, bOutline);
+
+    /* If there are no matching paragraphs we are done. */
+    if (aNumRuleInfo.GetList().Count() == 0)
+        return;
+
+    /* ULONG_MAX -> process all paragraphs found */
+    if (nUpdatePos == ULONG_MAX)
+        nUpdatePos = 0;
+    else /* nUpdatePos is still the position in the document. Convert
+            to position in the list of found paragraphs. */
+        aNumRuleInfo.GetList().SearchKey(nUpdatePos, &nUpdatePos);
+
+    /* Temporal numbering holding the values to be changed in the
+       current node*/
+    SwNodeNum aNum(0);
+    /* Array for initialized levels.
+    bInitializedLevels[i] == true -> level i is initialized.
+    */
+    bool bInitializedLevels[MAXLEVEL];
+    /* flag for initialized continuous numbering. */
+    bool bInitialized = false;
+    /* counter for continuous numbering */
+    int nCount = 0;
+
+    /* If all paragraphs found are to be processed initialize all
+       levels with their start values.*/
+    if (nUpdatePos == 0)
+    {
+        for (int i = 0; i < MAXLEVEL; i++)
+            bInitializedLevels[i] = false;
+
+        lcl_NodeNumReset(aNum, rRule, 0, bInitializedLevels);
+
+        nCount = rRule.Get(0).GetStart();
+        bInitialized = true;
+    }
+    else /* If we start at a certain paragraph fill aNum/nCount with
+            values from that paragraph. Mark all levels as initalized,
+            including continuous numbering. */
+    {
+        for (int i = 0; i < MAXLEVEL; i++)
+            bInitializedLevels[i] = true;
+
+        aNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+            GetNum(bOutline);
+
+        nCount = aNum.GetLevelVal()[aNum.GetRealLevel()];
+        bInitialized = true;
+    }
+
+    /* The old level is the level of the first node to process. */
+    SwNodeNum * pNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+        GetNum();
+    BYTE nOldLevel = pNum ? pNum->GetLevel() : 0;
+
+    /* Iterate over all nodes to process. */
+    while(nUpdatePos < aNumRuleInfo.GetList().Count())
+    {
+        /* Get the current node. */
+        SwTxtNode * pTxtNode = aNumRuleInfo.GetList().GetObject(nUpdatePos);
+
+        /* If the current node has a conditional paragraph style,
+           ensure the current node gets the resulting style. */
+        if( RES_CONDTXTFMTCOLL == pTxtNode->GetFmtColl()->Which() )
+            pTxtNode->ChkCondColl();
+
+        /* Get old numbering of the current node. */
+        const SwNodeNum * pOldNum = pTxtNode->GetNum(bOutline);
+
+        // #111955# fixed loop due to not increasing nUpdatePos when
+        // pOldNum == 0
+        if (pOldNum)
+        {
+            BYTE nLevel = pOldNum->GetRealLevel();
+
+            /* If numbering restarts at the current node ...*/
+            if (pOldNum->IsStart())
+            {
+                /* Fill aNum with start values of current level and
+                   subsequent levels. */
+                lcl_NodeNumReset(aNum, rRule, nLevel, bInitializedLevels);
+
+                /* Fill nCount with start values for continuous numbering. */
+                nCount = rRule.Get(0).GetStart();
+                bInitialized = true;
+            }
+            /* If numbering restarts with a specific value ...*/
+            else if (pOldNum->HasSetValue())
+            {
+                /* Fill aNum with start values of current level and
+                   subsequent levels. This also marks the current level as
+                   initialized. Set specific value for current level. */
+                lcl_NodeNumReset(aNum, rRule, nLevel, bInitializedLevels);
+                aNum.GetLevelVal()[nLevel] = pOldNum->GetSetValue();
+
+                /* Fill nCount with the specific start value. */
+                nCount = pOldNum->GetSetValue();
+                bInitialized = true;
+            }
+            /* If the current node is the first in a row of nodes of its
+               level initialize the subsequent levels. */
+            else if (nOldLevel != nLevel)
+            {
+                lcl_NodeNumReset(aNum, rRule, nLevel + 1, bInitializedLevels);
+            }
+            nOldLevel = nLevel;
+
+            int i;
+
+            /* All previous levels are initialized. */
+            for (i = nLevel - 1; i >= 0; i--)
+                bInitializedLevels[i] = false;
+
+            /* If the level of the current node is initialized do not
+               increase the value for this level. Mark this level as
+               uninitialized. */
+            if (bInitializedLevels[nLevel])
+                bInitializedLevels[nLevel] = false;
+            else /* If the level of the current node was not initialized
+                    increase the value for this level. */
+                aNum.GetLevelVal()[nLevel]++;
+
+            /* If the continuous numbering was initialized. mark it as
+               uninitialized and do not increase the value for the
+               continuous numbering. */
+            if (bInitialized)
+                bInitialized = false;
+            else /* If the continuous numbering was not initialized,
+                    increase its value. */
+                nCount++;
+
+            /* If the current numbering is continuous set the value for
+               the current level to the value of the continous
+               numbering. Mark the current numbering as
+               continous. Otherwise mark the current numbering as
+               non-continuous. */
+            if (rRule.IsContinusNum())
+            {
+                aNum.GetLevelVal()[nLevel] = nCount;
+                aNum.SetContinuousNum();
+            }
+            else
+            {
+                aNum.SetContinuousNum(FALSE);
+            }
+
+            /* bChanged = true -> the current node's numbering has to be altered. */
+            bool bChanged = false;
+
+            /* the numbering to replace the current numbering */
+            SwNodeNum aTmpNum = *pOldNum;
+
+            if (aNum.IsContinuousNum() != aTmpNum.IsContinuousNum())
+            {
+                /* Continuous numbering has been activated or deactivated
+                   -> change the numbering of the current node. */
+                aTmpNum.SetContinuousNum(aNum.IsContinuousNum());
+                aTmpNum.GetLevelVal()[nLevel] = nCount;
+                bChanged = true;
+            }
+
+            /* For each level synchronize the local numbering (aNum)
+               with the numbering to be set in the current node
+               (aTmpNum). If there are differences propagate the value
+               fom aNum to aTmpNum. In this case the numbering of the
+               current node. */
+            for (i = 0; i < MAXLEVEL; i++)
+            {
+                if (aTmpNum.GetLevelVal()[i] != aNum.GetLevelVal()[i])
+                {
+                    aTmpNum.GetLevelVal()[i] = aNum.GetLevelVal()[i];
+                    bChanged = true;
+                }
+            }
+
+            /* If the current node's numbering is to be changed change the
+               according normal or outline numbering. */
+            if (bChanged)
+            {
+                if (bOutline)
+                    pTxtNode->UpdateOutlineNum(aTmpNum);
+                else
+                    pTxtNode->UpdateNum(aTmpNum);
+            }
+        }
+        else
+        {
+            ASSERT(0, "No numrule!");
+        }
+
+        nUpdatePos++;
+    }
+}
+
+// pre-SRC680-numbering
+void SwDoc::UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdPos )
+{
+    SwNumRuleInfo aUpd( rRule.GetName() );
     aUpd.MakeList( *this );
 
     if( ULONG_MAX == nUpdPos )
@@ -2204,7 +2452,8 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
     else
         aUpd.GetList().SearchKey( nUpdPos, &nUpdPos );
 
-    SwNumRule* pRule = FindNumRulePtr( rName );
+    const SwNumRule* pRule = &rRule;
+
     if( nUpdPos < aUpd.GetList().Count() )
     {
         USHORT nInitLevels = USHRT_MAX; // Bitfeld fuer die Levels!
@@ -2223,7 +2472,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
             if( pPrev->GetNum() )
             {
                 const SwNodeNum* pPrevNdNum = pPrev->GetNum();
-                if( pPrevNdNum->GetLevel() & NO_NUMLEVEL )
+                if( ! pPrevNdNum->IsNum() )
                 {
                     // OD 10.12.2002 #106111# - use correct search level
                     BYTE nSrchLvl = GetRealLevel( pStt->GetNum()->GetLevel() );
@@ -2238,14 +2487,14 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                         if( 0 != ( pPrevNdNum = pPrev->GetNum() ))
                         {
                             // uebergeordnete Ebene
-                            if( nSrchLvl > (pPrevNdNum->GetLevel() &~ NO_NUMLEVEL))
+                            if( nSrchLvl > pPrevNdNum->GetRealLevel())
                             {
                                 pPrevNdNum = 0;
                                 break;
                             }
                             // gleiche Ebene und kein NO_NUMLEVEL
-                            if( nSrchLvl == (pPrevNdNum->GetLevel() &~ NO_NUMLEVEL)
-                                && !( pPrevNdNum->GetLevel() & NO_NUMLEVEL ))
+                            if( nSrchLvl == pPrevNdNum->GetRealLevel()
+                                && pPrevNdNum->IsNum())
                                 break;
 
                             pPrevNdNum = 0;
@@ -2311,7 +2560,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 }
             }
 
-            if( NO_NUMLEVEL & nLevel )      // NoNum mit Ebene
+            if( ! IsNum(nLevel ))       // NoNum mit Ebene
             {
                 BYTE nPrevLvl = GetRealLevel( aNum.GetLevel() ),
                     nCurrLvl = GetRealLevel( nLevel );
@@ -2327,8 +2576,10 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 aNum.SetLevel( nLevel );
                 pStt->UpdateNum( aNum );
             }
-            else if( NO_NUM != nLevel )
+            else //if( NO_NUM != nLevel )
             {
+                ASSERT(NO_NUM != nLevel, "NO_NUM?");
+
                 // beim Format mit Bitmap die Graphicen schon mal anfordern
                 const SwNumFmt* pNumFmt = pRule->GetNumFmt( GetRealLevel( nLevel ));
                 if( pNumFmt && SVX_NUM_BITMAP == pNumFmt->GetNumberingType() )
@@ -2428,7 +2679,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
 
                 // ohne Nummer immer ohne FirstLineOffset!!!!
                 short nFOfst = rNFmt.GetFirstLineOffset();
-                if( nLevel & NO_NUMLEVEL ) nFOfst = 0;
+                if( ! IsNum(nLevel)) nFOfst = 0;
                 aLR.SetTxtFirstLineOfstValue( nFOfst );
                 aLR.SetTxtLeft( rNFmt.GetAbsLSpace() );
 
@@ -2448,6 +2699,4 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
     if( pRule )
         pRule->SetInvalidRule( FALSE );
 }
-
-
-
+// <- #111955#
