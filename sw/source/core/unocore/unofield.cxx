@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:51:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2399,11 +2399,11 @@ const SwField*  SwXTextField::GetField() const
 SwPosition * SwXTextField::GetPosition()
 {
     SwPosition * pResult = NULL;
-    SwFmtFld * pFmtFld = GetFldFmt();
+    const SwFmtFld * pFmtFld = GetFldFmt();
 
     if (pFmtFld)
     {
-        SwTxtFld * pTxtFld = pFmtFld->GetTxtFld();
+        const SwTxtFld * pTxtFld = pFmtFld->GetTxtFld();
 
         if (pTxtFld)
             pResult = pTxtFld->GetPosition();
