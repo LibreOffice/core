@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-26 17:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,12 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case ND_TABLENODE:
         case ND_STARTNODE:
             {
+                if( !nInsPos )          // empty section -> nothing to do
+                {
+                    aRg.aEnd--;
+                    break;
+                }
+
                 if( !nLevel )       // es wird eine Stufe runter gestuft
                 {
                     // erzeuge die Runterstufung
