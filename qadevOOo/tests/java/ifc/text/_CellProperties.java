@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CellProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-27 16:58:39 $
+ *  last change:$Date: 2003-09-08 11:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.text;
 
-import com.sun.star.container.XNameContainer;
-import com.sun.star.xml.AttributeData;
 import lib.MultiPropertyTest;
+
+import com.sun.star.container.XNameContainer;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.xml.AttributeData;
 
 /**
 * Testing <code>com.sun.star.text.CellProperties</code>
