@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:26:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public:
             BOOL    IsMasterPageCachingAllowed() const
                     { return(bAllowMasterPageCaching); }
 
-    virtual void    InitRedraw(OutputDevice* pOutDev, const Region& rReg);
+    virtual void    InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc=NULL );
     virtual void    InvalidateOneWin(::Window& rWin);
     virtual void    InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
 
