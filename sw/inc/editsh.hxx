@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 18:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,6 +698,8 @@ public:
     void SetTblBoxFormulaAttrs( const SfxItemSet& rSet );
 
     BOOL IsTableBoxTextFormat() const;
+    String GetTableBoxText() const;
+
     // Change Modus erfragen/setzen
     USHORT GetTblChgMode() const;
     void SetTblChgMode( USHORT eMode );

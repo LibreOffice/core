@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-08 14:32:55 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 18:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,28 @@ BOOL SwEditShell::IsTableBoxTextFormat() const
     return !GetDoc()->GetNumberFormatter()->IsNumberFormat( rTxt, nFmt, fVal );
 }
 
+String SwEditShell::GetTableBoxText() const
+{
+    String sRet;
+    if( !IsTableMode() )
+    {
+        SwTableBox *pBox = 0;
+        SwPaM *pCrsr = GetCrsr();
+        {
+            SwFrm *pFrm = GetCurrFrm();
+            do {
+                pFrm = pFrm->GetUpper();
+            } while ( pFrm && !pFrm->IsCellFrm() );
+            if ( pFrm )
+                pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+        }
+
+        ULONG nNd;
+        if( pBox && ULONG_MAX != ( nNd = pBox->IsValidNumTxtNd() ) )
+            sRet = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
+    }
+    return sRet;
+}
 
 BOOL SwEditShell::SplitTable( USHORT eMode )
 {
