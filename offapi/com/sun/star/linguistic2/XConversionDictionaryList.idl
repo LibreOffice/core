@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConversionDictionaryList.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:10:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ interface XConversionDictionaryList : com::sun::star::uno::XInterface
             <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
 
         @param nTextConversionOptions
-            Combination of <type scope="com::sun::star::i18n">TextConversionOptions</type>
+            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type>
             values.
 
         @throws com::sun::star::lang::IllegalArgumentException
