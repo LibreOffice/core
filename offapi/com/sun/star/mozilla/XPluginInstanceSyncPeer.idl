@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstanceSyncPeer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** This interface is an extention for <type>XPluginInstancePeer</type> interface.
     An object can support this interface in addition to <type>XPluginInstancePeer</type> interface.
  */
-interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
+published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
