@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-30 13:53:56 $
+#   last change: $Author: hr $ $Date: 2001-12-21 12:24:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,10 +194,10 @@ STDLIBGUIST=-lX11 -ldl -lm
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
 
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
-FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
+#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR=ar
