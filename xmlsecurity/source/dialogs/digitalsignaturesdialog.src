@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,18 @@
  ************************************************************************/
 
 #include "dialogs.hrc"
+#include "helpids.hrc"
 
 ModalDialog RID_XMLSECDLG_DIGSIG
 {
-//  HelpId = HID_XMLSECDLG_DIGSIG;
+    HelpId = HID_XMLSEC_DLG_DIGSIG;
     Size = MAP_APPFONT( DS_WIDTH, DS_HEIGHT );
     OutputSize = TRUE;
     Closeable = TRUE;
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text = "Digitale Signaturen";
+    Text [ de ] = "Digitale Signaturen";
     Text [ en-US ] = "Digital Signatures";
 
     FixedText FT_HINT_DOC
@@ -78,27 +79,28 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text = "The following have signed the document content";
-        Text [ en-US ] = "The following have signed the document content";
+        Text [ de ] = "Die Folgenden haben den Dokumentinhalt signiert:";
+        Text [ en-US ] = "The following have signed the document content:";
     };
     FixedText FT_HINT_BASIC
     {
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text = "The following have signed the document macro";
-        Text [ en-US ] = "The following have signed the document macro";
+        Text [ de ] = "Die Folgenden haben die Dokumentmakros signiert:";
+        Text [ en-US ] = "The following have signed the document macro:";
     };
     FixedText FT_HINT_PACK
     {
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text = "The following have signed this package";
-        Text [ en-US ] = "The following have signed this package";
+        Text [ de ] = "Die Folgenden haben das Paket signiert:";
+        Text [ en-US ] = "The following have signed this package:";
     };
     Control LB_SIGNATURES
     {
+        HelpId = HID_XMLSEC_CTRL_SIGNATURESDLG;
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_1 );
         Size = MAP_APPFONT( DS_LB_WIDTH, DS_ROW_2-DS_ROW_1 );
         SVLook = TRUE;
@@ -106,8 +108,8 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     String STR_HEADERBAR
     {
-        Text = "\tSigner\tDigital ID Issued by\tDate";
-        Text [ en-US ] = "\tSigner\tDigital ID Issued by\tDate";
+        Text [ de ] = "\tSigniert durch\tDigitale Signatur ausgestellt durch\tDatum";
+        Text [ en-US ] = "\tSigned by\tDigital ID issued by\tDate";
     };
     FixedImage IMG_STATE_VALID
     {
@@ -124,7 +126,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text = "Die Signaturen in diesem Dokument sind gültig.";
+        Text [ de ] = "Die Signaturen in diesem Dokument sind gültig.";
         Text [ en-US ] = "The signatures in this document are valid";
     };
     FixedImage IMG_STATE_BROKEN
@@ -142,28 +144,28 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text = "Die Signaturen in diesem Dokument sind ungültig.";
+        Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig.";
         Text [ en-US ] = "The signatures in this document are invalid";
     };
     PushButton BTN_VIEWCERT
     {
         Pos = MAP_APPFONT( DS_COL_1, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_2-DS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Zertifikat anzeigen...";
+        Text [ de ] = "Zertifikat anzeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
         Pos = MAP_APPFONT( DS_COL_3, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_4-DS_COL_3, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Hinzufügen...";
+        Text [ de ] = "Hinzufügen...";
         Text [ en-US ] = "Add...";
     };
     PushButton BTN_REMOVECERT
     {
         Pos = MAP_APPFONT( DS_COL_5, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_6-DS_COL_5, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Entfernen";
+        Text [ de ] = "Entfernen";
         Text [ en-US ] = "Remove";
     };
     FixedLine FL_BOTTOM_SEP
@@ -188,3 +190,4 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
 };
+
