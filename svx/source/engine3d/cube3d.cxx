@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,14 @@
 #include "e3dcmpt.hxx"
 #endif
 
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
 TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 
 /*************************************************************************
@@ -150,44 +158,48 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL bBezier) const
 |*
 \************************************************************************/
 
-void E3dCubeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+::basegfx::B3DPolyPolygon E3dCubeObj::Get3DLineGeometry() const
 {
+    ::basegfx::B3DPolyPolygon aRetval;
+
     // add geometry describing polygons to rLinePolyPolygon
-    Polygon3D aNewUpper(5);
-    aNewUpper[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
-    aNewUpper[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
-    aNewUpper[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
-    aNewUpper[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
-    aNewUpper[4] = aNewUpper[0];
-    rLinePolyPolygon.Insert(aNewUpper);
+    ::basegfx::B3DPolygon aNewUpper;
+    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewUpper.append(aNewUpper.getB3DPoint(0));
+    aRetval.append(aNewUpper);
 
-    Polygon3D aNewLower(5);
-    aNewLower[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z());
-    aNewLower[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
-    aNewLower[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
-    aNewLower[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z());
-    aNewLower[4] = aNewLower[0];
-    rLinePolyPolygon.Insert(aNewLower);
+    ::basegfx::B3DPolygon aNewLower;
+    aNewLower.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z()));
+    aNewLower.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
+    aNewLower.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
+    aNewLower.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z()));
+    aNewLower.append(aNewLower.getB3DPoint(0));
+    aRetval.append(aNewLower);
 
-    Polygon3D aNewVertical(2);
-    aNewVertical[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z());
-    aNewVertical[1] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
-    rLinePolyPolygon.Insert(aNewVertical);
+    ::basegfx::B3DPolygon aNewVertical;
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z()));
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aRetval.append(aNewVertical);
 
-    aNewVertical[0] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
-    aNewVertical[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
-    rLinePolyPolygon.Insert(aNewVertical);
+    aNewVertical.clear();
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aRetval.append(aNewVertical);
 
-    aNewVertical[0] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
-    aNewVertical[1] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
-    rLinePolyPolygon.Insert(aNewVertical);
+    aNewVertical.clear();
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aRetval.append(aNewVertical);
 
-    aNewVertical[0] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z());
-    aNewVertical[1] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
-    rLinePolyPolygon.Insert(aNewVertical);
+    aNewVertical.clear();
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z()));
+    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aRetval.append(aNewVertical);
 
-    // don't call parent
-    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    return aRetval;
 }
 
 /*************************************************************************
@@ -318,32 +330,32 @@ void E3dCubeObj::CreateGeometry()
 |*
 \************************************************************************/
 
-void E3dCubeObj::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-    if(nVersion < 3800)
-    {
-        // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-        ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-    }
-
-    // call parent, schreibt die SubList (alte Geometrie) raus
-    E3dCompoundObject::WriteData(rOut);
-
-    E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
-    rOut << aCubePos;
-    rOut << aCubeSize;
-    rOut << BOOL(bPosIsCenter);
-    rOut << nSideFlags;
-
-    if(nVersion < 3800)
-    {
-        // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-        ((E3dCompoundObject*)this)->ReCreateGeometry();
-    }
-#endif
-}
+//BFS01void E3dCubeObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
+//BFS01 }
+//BFS01
+//BFS01 // call parent, schreibt die SubList (alte Geometrie) raus
+//BFS01 E3dCompoundObject::WriteData(rOut);
+//BFS01
+//BFS01 E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
+//BFS01 rOut << aCubePos;
+//BFS01 rOut << aCubeSize;
+//BFS01 rOut << BOOL(bPosIsCenter);
+//BFS01 rOut << nSideFlags;
+//BFS01
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -351,40 +363,40 @@ void E3dCubeObj::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dCubeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    // call parent
-    E3dCompoundObject::ReadData(rHead, rIn);
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    BOOL bAllDone(FALSE);
-    if(AreBytesLeft())
-    {
-        E3dIOCompat aIoCompat(rIn, STREAM_READ);
-        if(aIoCompat.GetVersion() >= 1)
-        {
-            BOOL bTmp;
-            rIn >> aCubePos;
-            rIn >> aCubeSize;
-            rIn >> bTmp; bPosIsCenter = bTmp;
-            rIn >> nSideFlags;
-            bAllDone = TRUE;
-        }
-    }
-
-    if(!bAllDone)
-    {
-        // Geometrie aus erzeugten PolyObj's rekonstruieren
-        const Volume3D& rVolume = GetLocalBoundVolume();
-        aCubeSize = rVolume.MaxVec() - rVolume.MinVec();
-        aCubePos = rVolume.MinVec();
-        bPosIsCenter = FALSE;
-        nSideFlags = CUBE_FULL;
-    }
-
-    // Geometrie neu erzeugen, mit oder ohne E3dPolyObj's
-    ReCreateGeometry();
-}
+//BFS01void E3dCubeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 // call parent
+//BFS01 E3dCompoundObject::ReadData(rHead, rIn);
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 BOOL bAllDone(FALSE);
+//BFS01 if(AreBytesLeft())
+//BFS01 {
+//BFS01     E3dIOCompat aIoCompat(rIn, STREAM_READ);
+//BFS01     if(aIoCompat.GetVersion() >= 1)
+//BFS01     {
+//BFS01         BOOL bTmp;
+//BFS01         rIn >> aCubePos;
+//BFS01         rIn >> aCubeSize;
+//BFS01         rIn >> bTmp; bPosIsCenter = bTmp;
+//BFS01         rIn >> nSideFlags;
+//BFS01         bAllDone = TRUE;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(!bAllDone)
+//BFS01 {
+//BFS01     // Geometrie aus erzeugten PolyObj's rekonstruieren
+//BFS01     const Volume3D& rVolume = GetLocalBoundVolume();
+//BFS01     aCubeSize = rVolume.MaxVec() - rVolume.MinVec();
+//BFS01     aCubePos = rVolume.MinVec();
+//BFS01     bPosIsCenter = FALSE;
+//BFS01     nSideFlags = CUBE_FULL;
+//BFS01 }
+//BFS01
+//BFS01 // Geometrie neu erzeugen, mit oder ohne E3dPolyObj's
+//BFS01 ReCreateGeometry();
+//BFS01}
 
 /*************************************************************************
 |*
@@ -479,4 +491,4 @@ void E3dCubeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCube3d);
 }
 
-
+// eof
