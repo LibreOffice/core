@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-19 12:40:45 $
+ *  last change: $Author: th $ $Date: 2001-07-25 11:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,10 +184,10 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbSingleLine        = FALSE;
     mbScroll            = FALSE;
     mbColored           = FALSE;
+    mbSmallInvalidate   = FALSE;
 
-    if ( GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE
-         || (nStyle & WB_SINGLELINE)
-         )
+    if ( (GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE) ||
+         (nStyle & WB_SINGLELINE) )
         mbSingleLine = TRUE;
 
     if ( mbSingleLine )
@@ -567,11 +567,15 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
                     {
                         pItem->mbFullVisible = FALSE;
                         pItem->maRect.SetEmpty();
+                        mbSmallInvalidate = FALSE;
                     }
                     else
                     {
                         aSize = pItem->maRect.GetSize();
-                        pItem->maRect = Rectangle( Point( nX, nY ), aSize );
+                        Rectangle aNewRect( Point( nX, nY ), aSize );
+                        if ( mbSmallInvalidate && (pItem->maRect != aNewRect) )
+                            mbSmallInvalidate = FALSE;
+                        pItem->maRect = aNewRect;
                         nX += aSize.Width();
                     }
 
@@ -611,7 +615,10 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
                     nLinePosAry[nLines] = nPos;
                 }
 
-                pItem->maRect = Rectangle( Point( nX, nY ), aSize );
+                Rectangle aNewRect( Point( nX, nY ), aSize );
+                if ( mbSmallInvalidate && (pItem->maRect != aNewRect) )
+                    mbSmallInvalidate = FALSE;
+                pItem->maRect = aNewRect;
                 pItem->mnLine = nLines;
                 pItem->mbFullVisible = TRUE;
 
@@ -1125,6 +1132,8 @@ void TabControl::Paint( const Rectangle& rRect )
 
     if ( HasFocus() )
         ImplShowFocus();
+
+    mbSmallInvalidate = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -1140,24 +1149,19 @@ void TabControl::Resize()
     BOOL bTabPage = ImplPosCurTabPage();
     // Feststellen, was invalidiert werden muss
     Size aNewSize = Control::GetOutputSizePixel();
-    long nWidthTest = aNewSize.Width();
-    BOOL bSmallInvalidate = TRUE;
-    BOOL bWidthChanged = (nWidthTest != mnLastWidth);
+    long nNewWidth = aNewSize.Width();
     if ( mbScroll )
-        bSmallInvalidate = FALSE;
-    else if ( bWidthChanged )
+        mbSmallInvalidate = FALSE;
+    else
     {
-        if ( mnLastWidth < nWidthTest )
-            nWidthTest = mnLastWidth;
-
         ImplTabItem* pItem;
         pItem = mpItemList->First();
         while ( pItem )
         {
             if ( !pItem->mbFullVisible ||
-                 (pItem->maRect.Right()-2 >= nWidthTest) )
+                 (pItem->maRect.Right()-2 >= nNewWidth) )
             {
-                bSmallInvalidate = FALSE;
+                mbSmallInvalidate = FALSE;
                 break;
             }
 
@@ -1165,7 +1169,7 @@ void TabControl::Resize()
         }
     }
 
-    if ( bSmallInvalidate )
+    if ( mbSmallInvalidate )
     {
         Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
         aRect.Left()   -= TAB_OFFSET+TAB_BORDER_LEFT;
