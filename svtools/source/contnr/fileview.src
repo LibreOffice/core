@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:11:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[English] = "Type";
     Text[ english_us ] = "Type";
     Text[ portuguese ] = "Type";
-    Text[ russian ] = "Type";
+    Text[ russian ] = "Òèï";
     Text[ greek ] = "Type";
     Text[ dutch ] = "Type";
     Text[ french ] = "Type";
@@ -160,9 +160,9 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ italian ] = "Type";
     Text[ danish ] = "Type";
     Text[ swedish ] = "Typ";
-    Text[ polish ] = "Type";
+    Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
-    Text[ japanese ] = "Type";
+    Text[ japanese ] = "í—Ş";
     Text[ korean ] = "Type";
     Text[ chinese_simplified ] = "Type";
     Text[ chinese_traditional ] = "Type";
@@ -323,7 +323,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ English ] = "Delete" ;
             Text[ english_us ] = "Delete";
             Text[ portuguese ] = "Delete";
-            Text[ russian ] = "Delete";
+            Text[ russian ] = "Óäàëèòü";
             Text[ greek ] = "Delete";
             Text[ dutch ] = "~Wissen";
             Text[ french ] = "Delete";
@@ -332,9 +332,9 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ italian ] = "Delete";
             Text[ danish ] = "Delete";
             Text[ swedish ] = "~Radera";
-            Text[ polish ] = "Delete";
+            Text[ polish ] = "~Usuñ";
             Text[ portuguese_brazilian ] = "Delete";
-            Text[ japanese ] = "Delete";
+            Text[ japanese ] = "íœ";
             Text[ korean ] = "Delete";
             Text[ chinese_simplified ] = "Delete";
             Text[ chinese_traditional ] = "Delete";
@@ -350,7 +350,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ English ] = "Rename" ;
             Text[ english_us ] = "Rename";
             Text[ portuguese ] = "Rename";
-            Text[ russian ] = "Rename";
+            Text[ russian ] = "Ïåğåèìåíîâàòü";
             Text[ greek ] = "Rename";
             Text[ dutch ] = "~Naam wijzigen";
             Text[ french ] = "Rename";
@@ -359,9 +359,9 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ italian ] = "Rename";
             Text[ danish ] = "Rename";
             Text[ swedish ] = "~Byt namn";
-            Text[ polish ] = "Rename";
+            Text[ polish ] = "~Zmieñ nazwê";
             Text[ portuguese_brazilian ] = "Rename";
-            Text[ japanese ] = "Rename";
+            Text[ japanese ] = "–¼‘O‚Ì•ÏX";
             Text[ korean ] = "Rename";
             Text[ chinese_simplified ] = "Rename";
             Text[ chinese_traditional ] = "Rename";
@@ -411,7 +411,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ dutch ] = "Item:" ;
         Text [ english_us ] = "Entry:" ;
         Text = "Eintrag:" ;
-        Text [ swedish ] = "Inmatning:" ;
+        Text [ swedish ] = "Post:" ;
         Text [ danish ] = "Element:" ;
         Text [ italian ] = "Registrazione:" ;
         Text [ spanish ] = "Entrada:" ;
@@ -421,7 +421,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ chinese_simplified ] = "ÌõÄ¿£º";
         Text [ russian ] = "Çàïèñü:";
         Text [ polish ] = "Wpis:";
-        Text [ japanese ] = "“ü—Í:";
+        Text [ japanese ] = "€–Ú:";
         Text [ chinese_traditional ] = "¶µ¥Ø¡G";
         Text [ arabic ] = ":ÅÏÎÇá";
         Text[ dutch ] = "Item:";
@@ -448,7 +448,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Size = MAP_APPFONT ( 209 , 22 ) ;
         Text = "Sind Sie sicher, dass Sie die selektierten Daten löschen wollen?" ;
         Text [ english_us ] = "Are you sure you want to delete the selected data?" ;
-        Text [ swedish ] = "Är Du säker på att Du vill radera de markerade data?" ;
+        Text [ swedish ] = "Är du säker på att du vill radera de markerade data?" ;
         Text [ danish ] = "Er du sikker på, at du vil slette de markerede data?" ;
         Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
         Text [ spanish ] = "¿Desea realmente eliminar los datos seleccionados?" ;
@@ -459,7 +459,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İ£¿";
         Text [ russian ] = "Âû óâåğåíû â òîì, ÷òî õîòèòå óäàëèòü âûäåëåííûå äàííûå?";
         Text [ polish ] = "Czy na pewno usun¹æ zaznaczone dane?";
-        Text [ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+        Text [ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
         Text [ chinese_traditional ] = "±z¯u­n§R°£¿ï¨úªº¸ê®Æ¡H";
         Text [ arabic ] = "åá ÊÑíÏ ÈÇáÊÃßíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
         Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
@@ -567,5 +567,6 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
