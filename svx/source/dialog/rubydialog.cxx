@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:39:55 $
+ *  last change: $Author: os $ $Date: 2001-02-16 14:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,16 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HPP_
+#include <com/sun/star/text/RubyAdjust.hpp>
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::text;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::style;
+using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace rtl;
 
@@ -177,7 +181,7 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aCharStyleLB(this,          ResId(LB_CHAR_STYLE     )),
     aStylistPB(this,            ResId(PB_STYLIST        )),
     aPreviewFT(this,            ResId(FT_PREVIEW        )),
-    aPreviewWin(this,           ResId(WIN_PREVIEW       )),
+    aPreviewWin(*this,          ResId(WIN_PREVIEW       )),
     aApplyPB(this,              ResId(PB_APPLY          )),
     aClosePB(this,              ResId(PB_CLOSE          )),
     aHelpPB(this,               ResId(PB_HELP           )),
@@ -185,6 +189,7 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     sRubyText(ResId(ST_RUBY)),
     pBindings(pBind),
     nLastPos(0),
+    nCurrentEdit(0),
     pImpl(new SvxRubyData_Impl)
 {
     FreeResource();
@@ -208,6 +213,10 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aScrollSB.SetEndScrollHdl( aScrLk );
     aScrollSB.EnableDrag();
 
+    Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
+    for(USHORT i = 0; i < 8; i++)
+        aEditArr[i]->SetModifyHdl(aEditLk);
+
     long nWidth = aHeaderHB.GetSizePixel().Width();
     aHeaderHB.InsertItem( 1, sBaseText, nWidth/2 );
     aHeaderHB.InsertItem( 2, sRubyText, nWidth/2 );
@@ -230,12 +239,12 @@ SvxRubyDialog::~SvxRubyDialog()
  ---------------------------------------------------------------------------*/
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
+    for(USHORT i = 1; i < aCharStyleLB.GetEntryCount(); i++)
     {
         void* pData = aCharStyleLB.GetEntryData(i);
         delete (OUString*)pData;
+        aCharStyleLB.RemoveEntry(i);
     }
-    aCharStyleLB.Clear();
 }
 /* -----------------------------09.01.01 17:17--------------------------------
 
@@ -255,7 +264,7 @@ void SvxRubyDialog::Activate()
     SfxModelessDialog::Activate();
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    aStylistPB.Enable(eState < SFX_ITEM_SET || !pState || !((SfxBoolItem*)pState)->GetValue());
+    aStylistPB.Enable(eState < SFX_ITEM_AVAILABLE || !pState || !((SfxBoolItem*)pState)->GetValue());
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame()->GetController();
@@ -324,6 +333,7 @@ void SvxRubyDialog::Activate()
         pImpl->xSelection = xRubySel;
         pImpl->aRubyValues = xRubySel->getRubyList(aAutoDetectionCB.IsChecked());
         Update();
+        aPreviewWin.Invalidate();
     }
 }
 /* -----------------------------29.01.01 15:26--------------------------------
@@ -431,11 +441,22 @@ void SvxRubyDialog::Update()
         aAdjustLB.SetNoSelection();
     if(sCharStyleName.getLength())
         aCharStyleLB.SelectEntry(sCharStyleName);
+    else if(bCharStyleEqual)
+        aCharStyleLB.SelectEntryPos(0);
     else
         aCharStyleLB.SetNoSelection();
 
     ScrollHdl_Impl(&aScrollSB);
-}/* -----------------------------31.01.01 14:09--------------------------------
+}
+/* -----------------------------16.02.01 14:01--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
+{
+    rBase = aEditArr[nCurrentEdit * 2]->GetText();
+    rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
+}
+/* -----------------------------31.01.01 14:09--------------------------------
 
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
@@ -451,6 +472,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     SetText(nPos++, aLeft3ED, aRight3ED);
     SetText(nPos, aLeft4ED, aRight4ED);
     SetLastPos(nPos - 3);
+    aPreviewWin.Invalidate();
     return 0;
 }
 /* -----------------------------30.01.01 14:48--------------------------------
@@ -515,6 +537,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
         }
         SetModified(TRUE);
     }
+    aPreviewWin.Invalidate();
     return 0;
 }
 /* -----------------------------01.02.01 10:06--------------------------------
@@ -522,7 +545,9 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
 {
-    OUString* pName = (OUString*) aCharStyleLB.GetEntryData(aCharStyleLB.GetSelectEntryPos());
+    OUString sStyleName;
+    if(aCharStyleLB.GetSelectEntryPos())
+        sStyleName = *(OUString*) aCharStyleLB.GetEntryData(aCharStyleLB.GetSelectEntryPos());
     for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
     {
         Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
@@ -530,12 +555,31 @@ IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
             if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCharStyleName)))
-                pProps[nProp].Value <<= *pName;
+            {
+                pProps[nProp].Value <<= sStyleName;
+            }
         }
         SetModified(TRUE);
     }
     return 0;
 }
+/* -----------------------------16.02.01 08:35--------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
+{
+    for(USHORT i = 0; i < 8; i++)
+    {
+        if(pEdit == aEditArr[i])
+        {
+            nCurrentEdit = i / 2;
+            break;
+        }
+    }
+    aPreviewWin.Invalidate();
+    return 0;
+}
+
 /* -----------------------------29.01.01 15:44--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -564,14 +608,116 @@ IMPL_LINK(SvxRubyDialog, DragHdl_Impl, HeaderBar*, pHead)
     SetUpdateMode(TRUE);
     return 0;
 }
+/* -----------------------------16.02.01 08:09--------------------------------
+
+ ---------------------------------------------------------------------------*/
+RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
+        Window(&rParent, rResId),
+        rParentDlg(rParent)
+{
+    SetMapMode(MAP_TWIP);
+    Size aWinSize = GetOutputSize();
+
+    Font aFont = GetFont();
+    aFont.SetHeight(aWinSize.Height() / 4);
+    SetFont(aFont);
+}
 /* -----------------------------29.01.01 14:05--------------------------------
 
  ---------------------------------------------------------------------------*/
 void RubyPreview::Paint( const Rectangle& rRect )
 {
-    Size aWinSize = GetOutputSizePixel();
+    Size aWinSize = GetOutputSize();
     Rectangle aRect(Point(0, 0), aWinSize);
     SetFillColor( Color( COL_WHITE ) );
     DrawRect(aRect);
+
+    String sBaseText, sRubyText;
+    rParentDlg.GetCurrentText(sBaseText, sRubyText);
+
+    long nTextHeight = GetTextHeight();
+    long nBaseWidth = GetTextWidth(sBaseText);
+    long nRubyWidth = GetTextWidth(sRubyText);
+
+    USHORT nAdjust = rParentDlg.aAdjustLB.GetSelectEntryPos();
+    //use center if no adjustment is available
+    if(nAdjust > 4)
+        nAdjust = 1;
+
+    //which part is stretched ?
+    sal_Bool bRubyStretch = nBaseWidth >= nRubyWidth;
+
+    long nCenter = aWinSize.Width() / 2;
+    long nLeftStart = nCenter - (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
+    long nRightEnd = nCenter + (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
+
+    long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
+    long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
+    long nYOutput, nOutTextWidth;
+    String sOutputText;
+
+    if(bRubyStretch)
+    {
+        DrawText( Point( nLeftStart , nYBase),  sBaseText );
+        nYOutput = nYRuby;
+        sOutputText = sRubyText;
+        nOutTextWidth = nRubyWidth;
+    }
+    else
+    {
+        DrawText( Point( nLeftStart , nYRuby),  sRubyText );
+        nYOutput = nYBase;
+        sOutputText = sBaseText;
+        nOutTextWidth = nBaseWidth;
+    }
+
+    switch(nAdjust)
+    {
+        case RubyAdjust_LEFT:
+            DrawText( Point( nLeftStart , nYOutput),  sOutputText );
+        break;
+        case RubyAdjust_RIGHT:
+            DrawText( Point( nRightEnd - nOutTextWidth, nYOutput),  sOutputText );
+        break;
+        case RubyAdjust_INDENT_BLOCK:
+        {
+            long nCharWidth = GetTextWidth(String::CreateFromAscii("X"));
+            if(nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
+            {
+                nCharWidth /= 2;
+                nLeftStart += nCharWidth;
+                nRightEnd -= nCharWidth;
+            }
+        }
+        // no break!
+        case RubyAdjust_BLOCK:
+        if(sOutputText.Len() > 1)
+        {
+            xub_StrLen nCount = sOutputText.Len();
+            long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
+            for(xub_StrLen i = 0; i < nCount; i++)
+            {
+                sal_Unicode cChar = sOutputText.GetChar(i);
+                DrawText( Point( nLeftStart , nYOutput),  cChar);
+                long nCharWidth = GetTextWidth(cChar);
+                nLeftStart += nCharWidth + nSpace;
+            }
+            break;
+        }
+        //no break;
+        case RubyAdjust_CENTER:
+            DrawText( Point( nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText );
+        break;
+
+    }
 }
+/* -----------------------------16.02.01 15:12--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void RubyEdit::GetFocus()
+{
+    GetModifyHdl().Call(this);
+    Edit::GetFocus();
+}
+
 

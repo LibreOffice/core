@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:41:31 $
+ *  last change: $Author: os $ $Date: 2001-02-16 14:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,92 +68,91 @@ ModelessDialog RID_SVXDLG_RUBY
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
+    HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 210 , 210 ) ;
+    Size = MAP_APPFONT ( 207 , 195 ) ;
     Text = "Phonetisches Leitzeichen" ;
     Text [ ENGLISH ] = "Ruby" ;
-//  Sizeable = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-//  Zoomable = TRUE ;
     CheckBox CB_AUTO_DETECT
     {
-        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
         Size = MAP_APPFONT ( 186 , 12 ) ;
         Text = "Automatische Erkennung" ;
         Text [ ENGLISH ] = "Auto detection" ;
     };
     Window HB_HEADER
     {
-        Pos = MAP_APPFONT ( 12 , 20 ) ;
-        Size = MAP_APPFONT ( 180 , 20 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 195 , 20 ) ;
     };
     Edit ED_LEFT_1
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Hide = False;
         Border = TRUE;
     };
     Edit ED_RIGHT_1
     {
-        Pos = MAP_APPFONT ( 99 , 40 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 99 , 30 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_2
     {
-        Pos = MAP_APPFONT ( 12 ,  52) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 ,  42) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_2
     {
-        Pos = MAP_APPFONT ( 99 , 52 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 99 , 42 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_3
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 54 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_3
     {
-        Pos = MAP_APPFONT ( 99 , 64 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 99 , 54 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_4
     {
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_4
     {
-        Pos = MAP_APPFONT ( 99 , 76 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
+        Pos = MAP_APPFONT ( 99 , 66 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         Border = TRUE;
     };
     ScrollBar SB_SCROLL
     {
-        Pos = MAP_APPFONT ( 187 , 40 ) ;
-        Size = MAP_APPFONT ( 10 , 48 ) ;
+        Pos = MAP_APPFONT ( 193 , 30 ) ;
+        Size = MAP_APPFONT ( 8 , 48 ) ;
         VScroll = TRUE ;
         Drag = TRUE ;
     };
     FixedText FT_ADJUST
     {
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 6 , 82 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Ausrichtung" ;
         Text [ ENGLISH ] = "Adjust" ;
     };
     ListBox LB_ADJUST
     {
-        Pos = MAP_APPFONT ( 12 , 113) ;
+        Pos = MAP_APPFONT ( 6 , 93) ;
         Size = MAP_APPFONT ( 40 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
@@ -176,54 +175,62 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     FixedText FT_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 55 , 100 ) ;
+        Pos = MAP_APPFONT ( 49 , 82 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Zeichenvorlage für Ruby-Text" ;
         Text [ ENGLISH ] = "Character style for ruby text" ;
     };
     ListBox LB_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 55 , 113) ;
+        Pos = MAP_APPFONT ( 49 , 93) ;
         Size = MAP_APPFONT ( 99 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
+        StringList =
+        {
+            < "<Keine>" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "<None>" ; > ;
+        };
     };
     PushButton PB_STYLIST
     {
-        Pos = MAP_APPFONT ( 157 , 112 ) ;
+        Pos = MAP_APPFONT ( 151 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Stylist" ;
         Text [ ENGLISH ] = "Stylist" ;
     };
     FixedText FT_PREVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Pos = MAP_APPFONT ( 6, 110 ) ;
         Size = MAP_APPFONT ( 195 , 8 ) ;
         Text = "Vorschau:" ;
         Text [ ENGLISH ] = "Preview:" ;
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 139 ) ;
+        Pos = MAP_APPFONT ( 6 , 121 ) ;
         Size = MAP_APPFONT ( 195 , 50 ) ;
     };
     OKButton PB_APPLY
     {
-        Pos = MAP_APPFONT ( 51 , 192 ) ;
+        Pos = MAP_APPFONT ( 45 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Übernehmen" ;
         Text [ ENGLISH ] = "Apply" ;
     };
     PushButton PB_CLOSE
     {
-        Pos = MAP_APPFONT (  104, 192 ) ;
+        Pos = MAP_APPFONT (  98, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Shließen" ;
         Text [ ENGLISH ] = "Close" ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 157 , 192 ) ;
+        Pos = MAP_APPFONT ( 151 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String ST_BASE

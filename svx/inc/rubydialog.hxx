@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:38:13 $
+ *  last change: $Author: os $ $Date: 2001-02-16 14:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,15 @@
 #endif
 
 
+class SvxRubyDialog;
 class RubyPreview : public Window
 {
 protected:
     virtual void Paint( const Rectangle& rRect );
+    SvxRubyDialog&  rParentDlg;
 
 public:
-    RubyPreview(Window* pParent, const ResId& rResId) :
-        Window(pParent, rResId){}
+    RubyPreview(SvxRubyDialog& rParent, const ResId& rResId);
 };
 
 class SvxRubyChildWindow : public SfxChildWindow
@@ -111,17 +112,28 @@ class SvxRubyChildWindow : public SfxChildWindow
 
 };
 struct SvxRubyData_Impl;
+class RubyEdit  : public Edit
+{
+    virtual void        GetFocus();
+public:
+    RubyEdit(Window* pParent, const ResId& rResId) :
+        Edit(pParent, rResId){}
+};
+
+
 class SvxRubyDialog : public SfxModelessDialog
 {
+    friend class RubyPreview;
+
     HeaderBar           aHeaderHB;
-    Edit                aLeft1ED;
-    Edit                aRight1ED;
-    Edit                aLeft2ED;
-    Edit                aRight2ED;
-    Edit                aLeft3ED;
-    Edit                aRight3ED;
-    Edit                aLeft4ED;
-    Edit                aRight4ED;
+    RubyEdit                aLeft1ED;
+    RubyEdit                aRight1ED;
+    RubyEdit                aLeft2ED;
+    RubyEdit                aRight2ED;
+    RubyEdit                aLeft3ED;
+    RubyEdit                aRight3ED;
+    RubyEdit                aLeft4ED;
+    RubyEdit                aRight4ED;
 
     Edit*               aEditArr[8];
     ScrollBar           aScrollSB;
@@ -146,6 +158,7 @@ class SvxRubyDialog : public SfxModelessDialog
     String              sRubyText;
 
     long                nLastPos;
+    long                nCurrentEdit;
     BOOL                bModified;
 
     SfxBindings*    pBindings;
@@ -159,6 +172,7 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(ScrollHdl_Impl, ScrollBar*);
     DECL_LINK(AdjustHdl_Impl, ListBox*);
     DECL_LINK(CharStyleHdl_Impl, ListBox*);
+    DECL_LINK(EditModifyHdl_Impl, Edit*);
 
     void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
     void                GetText();
@@ -196,6 +210,7 @@ class SvxRubyDialog : public SfxModelessDialog
             aApplyPB.Enable(bEnable);
         }
 
+        void    GetCurrentText(String& rBase, String& rRuby);
 public:
 
                         SvxRubyDialog( SfxBindings *pBindings, SfxChildWindow *pCW,
