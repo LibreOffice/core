@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:43:31 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1783,7 +1783,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 }
 
                 SbxBaseRef xOldVar;
-                SbxVariable *pCompVar = NULL;
+                StarBASIC* pBas = NULL;
                 if ( pSh )
                 {
                     if ( pBasMgr != pAppMgr )
@@ -1792,8 +1792,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                     if ( pBasMgr == pAppMgr )
                     {
                         // document is executed via AppBASIC, adjust "ThisComponent" variable
-                        StarBASIC* pBas = pAppMgr->GetLib(0);
-                        pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
+                        pBas = pAppMgr->GetLib(0);
+                        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
                         ::com::sun::star::uno::Any aAny;
@@ -1833,9 +1833,13 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 pRet->SetFlags( nFlags );
 
                 nErr = SbxBase::GetError();
-                if ( pCompVar )
+                if ( pBas )
+                {
+                    SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
                     // reset "ThisComponent" to prior value
-                    pCompVar->PutObject( xOldVar );
+                    if( pCompVar )
+                        pCompVar->PutObject( xOldVar );
+                }
 
                 if ( pSh && pSh->GetModel().is() )
                        // remove flag for modal mode
