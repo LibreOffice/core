@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ namespace dbaui
 
         virtual void criticalFail();
 
-        virtual void            AddSupportedFeatures();
+        virtual void            describeSupportedFeatures();
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
