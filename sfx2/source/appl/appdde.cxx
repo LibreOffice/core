@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:43:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,8 @@
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "sfxsids.hrc"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "helper.hxx"
+#include "docfile.hxx"
 
 //========================================================================
 
