@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:44:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü àâòîôîğìàò #?";
         Text[ polish ] = "Czy na pewno usun¹æ Autoformat #?";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä # ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
-        Text[ chinese_traditional ] = "±z¯u­n§R°£¦Û°Ê®æ¦¡ # ?";
+        Text[ chinese_traditional ] = "¯u­n§R°£¦Û°Ê®æ¦¡ # ?";
         Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí #¿";
         Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ç ÁõôïÌïñöŞ #;";
         Text[ korean ] = "# ÀÚµ¿¼­½ÄÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
@@ -759,7 +759,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ french ] = "Milieu" ;
         Text [ swedish ] = "Mitten" ;
         Text [ dutch ] = "Midden" ;
-        Text [ spanish ] = "Centro" ;
+        Text [ spanish ] = "Centrado" ;
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "ÖĞ";
         Text[ russian ] = "Ñåğåäèíà";
@@ -840,6 +840,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato";
 };
+
 
 
 
