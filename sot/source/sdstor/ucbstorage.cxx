@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:48:39 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,20 +465,26 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
     switch ( nFormat )
     {
         case SOT_FORMATSTR_ID_STARWRITER_8 :
+        case SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE :
             return SvGlobalName( SO3_SW_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITERWEB_8 :
             return SvGlobalName( SO3_SWWEB_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITERGLOB_8 :
             return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARDRAW_8 :
+        case SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE :
             return SvGlobalName( SO3_SDRAW_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARIMPRESS_8 :
+        case SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE :
             return SvGlobalName( SO3_SIMPRESS_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARCALC_8 :
+        case SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE :
             return SvGlobalName( SO3_SC_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARCHART_8 :
+        case SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE :
             return SvGlobalName( SO3_SCH_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARMATH_8 :
+        case SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE :
             return SvGlobalName( SO3_SM_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITER_60 :
             return SvGlobalName( SO3_SW_CLASSID_60 );
