@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:13:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,12 +883,21 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
 }
 
 // -----------------------------------------------------------------------------
-Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rsDataSourceName, sal_Bool _bStartListening)
+Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bStartListening)
+{
+    const ::rtl::OUString sNoContext;
+    return connect( _rDataSourceName, sNoContext, sNoContext, _bStartListening );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XConnection > OGenericUnoController::connect(
+    const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rContextInformation,
+    const ::rtl::OUString& _rContextDetails, sal_Bool _bStartListening )
 {
     WaitObject aWaitCursor(getView());
 
-    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView());
-    Reference<XConnection> xConnection = aConnector.connect(_rsDataSourceName);
+    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView(), _rContextInformation, _rContextDetails);
+    Reference<XConnection> xConnection = aConnector.connect(_rDataSourceName);
 
     // be notified when connection is in disposing
     if (_bStartListening)
