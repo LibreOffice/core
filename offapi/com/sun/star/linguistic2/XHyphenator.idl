@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 16:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,14 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** provides functionality for hyphenation of single words.
 
-    <P>It's three main functionalities are to provide a suitable position for
+    <P>Its three main functionalities are to provide a suitable position for
     breaking lines within a word, query about the existence of an alternative
-    spelling at a specific position of a word and providing a list of
+    spelling at a specific position of a word and provide a list of
     possible hyphenation positions within a word.</P>
 
     <P>A hyphenation position for a word with n characters is represented
     by a value in the range from 0 to n-2, indicating the position
-    of the character after which the hyphenation is done. That is
+    of the character after which the hyphenation is done. That is,
     it is after the first and before the last character.</P>
 
     <P>A valid hyphenation position is a hyphenation position that
@@ -121,13 +121,13 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
     /** tries to find a valid hyphenation position relative
         to the beginning of a word.
 
-        <P>Note: some languages (eg. arabic) are written from right
-        to left!</P>
+        <P>Note: Some languages, for example arabic, are written from right
+        to left.</P>
 
         @returns
             the XHyphenatedWord for the last valid hyphenation position
-             that is less or equal to nMaxLeading - 1.
-            If there is no such valid hyphenation position <NULL/> is returned.
+             that is less than or equal to nMaxLeading - 1.
+            If there is no such valid hyphenation position, <NULL/> is returned.
 
         @param  aWord
             is the word to be hyphenated.
@@ -135,14 +135,14 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         @param  aLocale
             defines the language to be used.
 
-            <P>If the language is not supported an IllegalArgumentException
+            <P>If the language is not supported, an IllegalArgumentException
             exception is raised.</P>
 
         @param  nMaxLeading
             specifies the maximum number of characters to remain
             before the hyphen in the hyphenated word.
 
-            <P>It has to be greater or equal 0.</P>
+            <P>It has to be greater than or equal to 0.</P>
 
         @param aProperties
             provides property values to be used for this function call only.
@@ -160,7 +160,7 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /** checks wether hyphenation at a position in a word will result in
+    /** checks whether hyphenation at a position in a word will result in
         an alternative spelling or not.
 
         <P>An alternative spelling position is a hyphen position where,
@@ -169,7 +169,7 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
          "B&auml;kker" if hyphenation is done after the "c".</P>
 
         <P>The hyphenation position needs not to be a valid one to be an
-        alternative spelling position!</P>
+        alternative spelling position.</P>
 
         @returns
             the information about the alternative spelling found at the
@@ -177,19 +177,19 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             found, <NULL/> is returned.
 
         @param  aWord
-            is the (original) word to be looked at for having an alternative
+            is the original word to be looked at for having an alternative
             spelling if hyphenation is done at position nIndex.
 
         @param aLocale
             specifies the language to be used.
 
-            <P>If the language is not supported an IllegalArgumentException
+            <P>If the language is not supported, an IllegalArgumentException
             exception is raised.</P>
 
         @param  nIndex
             is the position in the word to be looked at.
 
-            <P>If the length of the word is n the value of this
+            <P>If the length of the word is n, the value of this
             parameter has to be in the range from 0 to n-2.</P>
 
         @param aProperties
@@ -208,10 +208,10 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /** returns information abou all possible hyphenation positions of a word.
+    /** returns information about all possible hyphenation positions of a word.
 
         @returns
-            a <type scope="com::sun::star::linguistic2">XPossibleHyphens</type>
+            an <type scope="com::sun::star::linguistic2">XPossibleHyphens</type>
             for the given word and language if there are any hyphenation
             positions. <NULL/> otherwise.
 
@@ -222,7 +222,7 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         @param  aLocale
             defines the language of the word.
 
-            <P>If the language is not supported an IllegalArgumentException
+            <P>If the language is not supported, an IllegalArgumentException
             exception is raised.</P>
 
         @param aProperties
