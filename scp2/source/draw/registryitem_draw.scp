@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_draw.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:47:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "macros.inc"
 
+// MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -177,6 +178,126 @@ RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Versionind
     Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\VersionIndependentProgID";
     Value = "soffice.StarDrawDocument.6";
 End
+
+// MSOLE embedded object in OASIS file format
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\AuxUserType\3";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\InprocHandler32";
+    Value = "ole32.dll";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\ProgID";
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\VersionIndependentProgID";
+    Value = "opendocument.DrawDocument.1";
+End
+
+
 
 RegistryItem gid_Regitem_Sda_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -598,7 +719,7 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "opendocument.DrawDocument.1\CLSID";
-    Value = "{41662FC2-0D57-4aff-AB27-AD2E12E7C273}";
+    Value = "{448BB771-CFE2-47C4-BCDF-1FBF378E202C}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
