@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:46:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ CC=				gcc
 CXX=			g++
 CDEFS+=			-D_USE_NAMESPACE=1 -DX86 -DNEW_SOLAR -DSTLPORT_VERSION=400
 CDEFS+=			-D_REENTRANT -D_PTHREADS -D_THREAD_SAFE
-CFLAGS+= -w -c $(INCLUDE)
+CFLAGS+= -c $(INCLUDE)
 CFLAGS+= -I/usr/X11R6/include
 CFLAGSCC= -pipe
 CFLAGSCXX= -pipe -fno-for-scope -fpermissive
