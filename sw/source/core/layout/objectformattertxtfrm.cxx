@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:25:50 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _OBJECTFORMATTERTXTFRM_HXX
 #include <objectformattertxtfrm.hxx>
 #endif
-
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
@@ -104,6 +103,32 @@
 #ifndef _LAYACT_HXX
 #include <layact.hxx>
 #endif
+
+// --> OD 2004-12-03 #115759# - little helper class to forbid follow formatting
+// for the given text frame
+class SwForbidFollowFormat
+{
+private:
+    SwTxtFrm& mrTxtFrm;
+    const bool bOldFollowFormatAllowed;
+
+public:
+    SwForbidFollowFormat( SwTxtFrm& _rTxtFrm )
+        : mrTxtFrm( _rTxtFrm ),
+          bOldFollowFormatAllowed( _rTxtFrm.FollowFormatAllowed() )
+    {
+        mrTxtFrm.ForbidFollowFormat();
+    }
+
+    ~SwForbidFollowFormat()
+    {
+        if ( bOldFollowFormatAllowed )
+        {
+            mrTxtFrm.AllowFollowFormat();
+        }
+    }
+};
+// <--
 
 // =============================================================================
 // implementation of class <SwObjectFormatterTxtFrm>
@@ -215,7 +240,13 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
             // determine, if anchor text frame has previous frame
             const bool bDoesAnchorHadPrev = ( mrAnchorTxtFrm.GetIndPrev() != 0 );
 
-            mrAnchorTxtFrm.Calc();
+            // --> OD 2004-12-03 #115759# - optimization:
+            // format of follow not needed. Thus, forbid it.
+            {
+                SwForbidFollowFormat aForbidFollowFormat( mrAnchorTxtFrm );
+                mrAnchorTxtFrm.Calc();
+            }
+            // <--
 
             // --> OD 2004-10-22 #i35911#
             if ( _rAnchoredObj.HasClearedEnvironment() )
@@ -331,7 +362,13 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         //       previous frames of the anchor frame. The format of the previous
         //       frames is needed to get a correct result of format of the
         //       anchor frame for the following check for moved forward anchors
-        mrAnchorTxtFrm.Calc();
+        // --> OD 2004-12-03 #115759# - optimization:
+        // format of follow not needed. Thus, forbid it.
+        {
+            SwForbidFollowFormat aForbidFollowFormat( mrAnchorTxtFrm );
+            mrAnchorTxtFrm.Calc();
+        }
+        // <--
 
         sal_uInt32 nToPageNum( 0L );
         SwAnchoredObject* pObj = 0L;
