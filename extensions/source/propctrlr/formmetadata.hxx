@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:04:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,23 @@ namespace pcr
         ::rtl::OUString sName;
         String          sDisplayName;
         sal_Int32       nHelpId;
+        sal_uInt32      nUniqueBrowseId;
         sal_Int32       nIndex;
 
-        EventDisplayDescription(sal_Int32 _nId, const ::rtl::OUString& _rName, const UniString& _rDisplayName, sal_Int32 _nHelpId)
-            :nIndex(_nId)
-            ,sName(_rName)
-            ,sDisplayName(_rDisplayName)
-            ,nHelpId(_nHelpId)
+        EventDisplayDescription( const ::rtl::OUString& _rName )
+            :nIndex( 0 )
+            ,sName( _rName )
+            ,nHelpId( 0 )
+            ,nUniqueBrowseId( 0 )
+            {
+            }
+        EventDisplayDescription( sal_Int32 _nId, const sal_Char* _pAsciiName, USHORT _nDisplayNameResId,
+            sal_Int32 _nHelpId, sal_uInt32 _nUniqueBrowseId )
+            :nIndex( _nId )
+            ,sName( ::rtl::OUString::createFromAscii( _pAsciiName ) )
+            ,sDisplayName( ModuleRes( _nDisplayNameResId ) )
+            ,nHelpId( _nHelpId )
+            ,nUniqueBrowseId( _nUniqueBrowseId )
             {
             }
     };
@@ -285,6 +295,8 @@ namespace pcr
     #define PROPERTY_ID_SHOW_RECORDACTIONS   138
     #define PROPERTY_ID_SHOW_FILTERSORT      139
     #define PROPERTY_ID_TEXTTYPE             140
+    #define PROPERTY_ID_AUTOLINEBREAK        141
+    #define PROPERTY_ID_LINEEND_FORMAT       142
 
 //............................................................................
 } // namespace pcr
