@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-07 21:29:00 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String RID_SVXSTR_SEARCH_STYLES
     Text [ italian ] = "Includi modelli" ;
     Text [ portuguese_brazilian ] = "Inclusive folhas de estilo" ;
     Text [ portuguese ] = "Incluindo ~estilos" ;
-    Text [ finnish ] = "Sis?llytet??n tyylit" ;
+    Text [ finnish ] = "Sisällytetään tyylit" ;
     Text [ danish ] = "Inklusive typografier" ;
     Text [ french ] = "Y compris les styles" ;
     Text [ swedish ] = "Inklusive ~mallar" ;
@@ -191,7 +191,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "C~erca" ;
         Text [ portuguese_brazilian ] = "P~rocurar por" ;
         Text [ portuguese ] = "L~ocalizar" ;
-        Text [ finnish ] = "~Etsitt?v? merkkijono" ;
+        Text [ finnish ] = "~Etsittävä merkkijono" ;
         Text [ danish ] = "Søg efter" ;
         Text [ french ] = "R~echercher" ;
         Text [ swedish ] = "S~ök efter" ;
@@ -365,7 +365,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ dutch ] = "E~xact dezelfde tekens";
         Text[ french ] = "Respecter la ~casse";
         Text[ spanish ] = "Coincidencia e~xacta";
-        Text[ finnish ] = "Sama kirjainkoko";
+        Text[ finnish ] = "Sa~ma kirjainkoko";
         Text[ italian ] = "Ricerca esatta";
         Text[ danish ] = "Søg eksakt";
         Text[ swedish ] = "E~xakt sökning";
@@ -389,7 +389,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "I~ndietro" ;
         Text [ portuguese_brazilian ] = "Para ?tr~s" ;
         Text [ portuguese ] = "~Para trás" ;
-        Text [ finnish ] = "~Taaksep?in" ;
+        Text [ finnish ] = "~Taaksepäin" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "~Vers le haut" ;
         Text [ swedish ] = "Ba~klänges" ;
@@ -449,7 +449,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Espressione re~golare" ;
         Text [ portuguese_brazilian ] = "Express es Re~gulares" ;
         Text [ portuguese ] = "~Expressão regular" ;
-        Text [ finnish ] = "~S??nn?liset lausekkeet" ;
+        Text [ finnish ] = "~Säännölliset lausekkeet" ;
         Text [ danish ] = "Regulært udtryk" ;
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "Reguljärt uttr~yck" ;
@@ -479,7 +479,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Cerca modelli" ;
         Text [ portuguese_brazilian ] = "Procurar por Fo~lhas de estilo" ;
         Text [ portuguese ] = "Locali~zar estilos" ;
-        Text [ finnish ] = "~Etsitt?v?t tyylit" ;
+        Text [ finnish ] = "~Etsittävät tyylit" ;
         Text [ danish ] = "Søg efter typografier" ;
         Text [ french ] = "Recherche de st~yles" ;
         Text [ swedish ] = "Sök efter ~formatmallar" ;
@@ -549,7 +549,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ dutch ] = "Rekening houden met letterbreedte";
         Text[ french ] = "Respecter la chasse";
         Text[ spanish ] = "Considerar ancho de carácter";
-        Text[ finnish ] = "Halb-/normalbreite Formen";
+        Text[ finnish ] = "Puolileveät/täysleveät lomakkeet";
         Text[ italian ] = "Considera la larghezza dei caratteri";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Ta hänsyn till teckenbredd";
@@ -589,7 +589,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "Sounds like (Japanese)";
         Text[ arabic ] = "ßÊÇÈÉ ãÔÇÈåÉ(íÇÈÇäíÉ)";
         Text[ catalan ] = "Ortografía similar (Japonés)";
-        Text[ finnish ] = "Ähnl. Schreibweise (Jap.)";
+        Text[ finnish ] = "Muistuttaa (japania)";
     };
     PushButton PB_JAP_OPTIONS
     {
@@ -727,7 +727,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Cerca in" ;
         Text [ portuguese_brazilian ] = "Buscar Em" ;
         Text [ portuguese ] = "Procurar em" ;
-        Text [ finnish ] = "Etsi kohteesta" ;
+        Text [ finnish ] = "Hakukohde" ;
         Text [ danish ] = "Søg i" ;
         Text [ french ] = "Où chercher ?" ;
         Text [ swedish ] = "Sök i" ;
@@ -823,7 +823,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Modo ricerca" ;
         Text [ portuguese_brazilian ] = "Direção de Busca" ;
         Text [ portuguese ] = "Direcção de procura" ;
-        Text [ finnish ] = "Hakusuunta" ;
+        Text [ finnish ] = "Haun suunta" ;
         Text [ danish ] = "Søgeretning" ;
         Text [ french ] = "Sens" ;
         Text [ swedish ] = "Sökriktning" ;
@@ -905,7 +905,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "Tablo seçenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Considerar todas las hojas";
-        Text[ finnish ] = "Lisäobjektit";
+        Text[ finnish ] = "Asetukset";
     };
     PushButton BTN_SEARCH_ALL
     {
@@ -1074,7 +1074,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "E~xtra" ;
         Text [ portuguese_brazilian ] = "~Mais" ;
         Text [ portuguese ] = "~Opções" ;
-        Text [ finnish ] = "~Lis??" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Flere" ;
         Text [ french ] = "O~ptions" ;
         Text [ swedish ] = "~Fler" ;
@@ -1107,7 +1107,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Attri~buti..." ;
         Text [ portuguese_brazilian ] = "Atri~butos..." ;
         Text [ portuguese ] = "Atri~butos..." ;
-        Text [ finnish ] = "~M??ritteet..." ;
+        Text [ finnish ] = "~Määritteet..." ;
         Text [ danish ] = "Attributter..." ;
         Text [ french ] = "Attri~buts..." ;
         Text [ swedish ] = "Attri~but..." ;
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
