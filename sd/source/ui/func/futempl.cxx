@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:15:45 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "futempl.hxx"
+
 #include <svx/editdata.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
@@ -114,25 +116,37 @@
 #include "sdpage.hxx"
 #include "stlpool.hxx"
 #include "app.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "drviewsh.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "tabtempl.hxx"
-#include "viewshel.hxx"
-#include "futempl.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "res_bmp.hrc"
 #include "glob.hrc"
 #include "prlayout.hxx"         // enum PresentationObjects
 #include "prltempl.hrc"         // TAB_PRES_LAYOUT_TEMPLATE_x
 #include "prltempl.hxx"
 #include "sdresid.hxx"
-#include "outlview.hxx"         // class SdOutlineView
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
 #include "strings.hrc"
 #include "helpids.h"
 
+namespace sd {
 
 TYPEINIT1( FuTemplate, FuPoor );
 
@@ -142,9 +156,13 @@ TYPEINIT1( FuTemplate, FuPoor );
 |*
 \************************************************************************/
 
-FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                        SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+FuTemplate::FuTemplate (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     USHORT nSlotId = rReq.GetSlot();
@@ -574,15 +592,18 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                         ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-                        if ( pViewSh->ISA( SdDrawViewShell ) )
+                        if ( pViewSh->ISA(DrawViewShell ) )
                         {
-                            PageKind ePageKind = ( (SdDrawViewShell*) pViewShell )->GetPageKind();
+                            PageKind ePageKind = static_cast<DrawViewShell*>(
+                                pViewShell)->GetPageKind();
                             if( ePageKind == PK_NOTES || ePageKind == PK_HANDOUT )
                             {
                                 SdPage* pPage = pViewSh->GetActualPage();
 
-                                if( ( (SdDrawViewShell*) pViewShell )->GetEditMode() == EM_MASTERPAGE )
-                                    pPage = (SdPage*) pPage->GetMasterPage( 0 );
+                                if (static_cast<DrawViewShell*>(pViewShell)
+                                    ->GetEditMode() == EM_MASTERPAGE)
+                                    pPage = static_cast<SdPage*>(
+                                        pPage->GetMasterPage(0 ));
 
                                 if( pPage )
                                 {
@@ -676,7 +697,7 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         {
             if (pView->HasMarkedObj() &&
                 pView->GetMarkList().GetMarkCount() == 1 ||
-                pView->ISA(SdOutlineView))
+                pView->ISA(OutlineView))
             {
                 pStyleSheet = pView->GetStyleSheet();
 
@@ -705,3 +726,4 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 }
 
 
+} // end of namespace sd
