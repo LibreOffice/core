@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-17 15:35:11 $
+ *  last change: $Author: mba $ $Date: 2001-10-10 10:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,25 +387,33 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
     }
     else
     {
-        if ( FileBase::getFileURLFromSystemPath( aPath, aTmp )  == FileBase::E_None )
+        if( FileBase::getSystemPathFromFileURL( m_aProgPath, aTmp ) == FileBase::E_None )
         {
-            nIdx = aPath.indexOf( m_aProgPath );
+            nIdx = aPath.indexOf( aTmp );
             while ( nIdx != -1 )
             {
-                aPath = aPath.replaceAt( nIdx, m_aProgPath.Len(), SUBSTITUTE_PROGPATH );
-                nIdx = aPath.indexOf( m_aProgPath );
+                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_PROGPATH );
+                nIdx = aPath.indexOf( aTmp );
             }
-            nIdx = aPath.indexOf( m_aUserPath );
+        }
+
+        if( FileBase::getSystemPathFromFileURL( m_aUserPath, aTmp ) == FileBase::E_None )
+        {
+            nIdx = aPath.indexOf( aTmp );
             while ( nIdx != -1 )
             {
-                aPath = aPath.replaceAt( nIdx, m_aUserPath.Len(), SUBSTITUTE_USERPATH );
-                nIdx = aPath.indexOf( m_aUserPath );
+                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_USERPATH );
+                nIdx = aPath.indexOf( aTmp );
             }
-            nIdx = aPath.indexOf( m_aInstPath );
+        }
+
+        if( FileBase::getSystemPathFromFileURL( m_aInstPath, aTmp ) == FileBase::E_None )
+        {
+            nIdx = aPath.indexOf( aTmp );
             while ( nIdx != -1 )
             {
-                aPath = aPath.replaceAt( nIdx, m_aInstPath.Len(), SUBSTITUTE_INSTPATH );
-                nIdx = aPath.indexOf( m_aInstPath );
+                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_INSTPATH );
+                nIdx = aPath.indexOf( aTmp );
             }
         }
     }
@@ -454,7 +462,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(inst) any longer" );
             nReplaceLength = REPLACELENGTH_INST;
-    //        aReplacement = m_aInstPath;
+            aReplacement = m_aInstPath;
             aReplacement = m_aInstURL;
 
         }
@@ -466,7 +474,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(user) any longer" );
             nReplaceLength = REPLACELENGTH_USERPATH;
-    //        aReplacement = m_aUserPath;
+            aReplacement = m_aUserPath;
             aReplacement = m_aUserURL;
         }
         else
@@ -477,7 +485,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(prog) any longer" );
             nReplaceLength = REPLACELENGTH_PROG;
-    //        aReplacement = m_aProgPath;
+            aReplacement = m_aProgPath;
             aReplacement = m_aProgURL;
         }
         else
@@ -487,7 +495,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_USERPATH;
-    //        aReplacement = m_aUserPath;
+            aReplacement = m_aUserPath;
             aReplacement = m_aUserURL;
         }
         else
@@ -497,7 +505,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_PROGPATH;
-    //        aReplacement = m_aProgPath;
+            aReplacement = m_aProgPath;
             aReplacement = m_aProgURL;
         }
         else
@@ -507,7 +515,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_INSTPATH;
-    //        aReplacement = m_aInstPath;
+            aReplacement = m_aInstPath;
             aReplacement = m_aInstURL;
         }
         else
@@ -766,8 +774,8 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 
     if ( bConvertLocal )
     {
-        String aReturn;
-        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
+        ::rtl::OUString aReturn;
+        ::osl::FileBase::getSystemPathFromFileURL( aWorkText, aReturn );
         return aReturn;
     }
 
@@ -785,9 +793,13 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     if ( aAny >>= aOfficePath )
     {
         // "OFFICEINSTALL" is the physical path name of the office installation directory
-        // it is always on the machine where the office program is running
-        aTmp = aOfficePath;
-        m_aInstPath = aTmp;
+        // it is always on the machine where the office program is running and it is
+        // stored as an osl compatible file URL
+        // convert and make sure that it is correctly encoded
+        // ( shouldn't it be converted already after conversion ?! )
+        FileBase::getFileURLFromSystemPath( aOfficePath, aTmp );
+        INetURLObject aObj( aTmp );
+        m_aInstPath = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -796,17 +808,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
     {
         // "OFFICEINSTALLURL" is a UCB compatible URL for the office installation directory
-        // in the Webtop this MUST be set, in Office it can be retrieved by converting the
-        // physical name for this directory
-        m_aInstURL = aOfficePath;
-        if ( !m_aInstURL.Len() )
-        {
-            // convert and make sure that it is correctly encoded
-            // ( shouldn't it be converted already after conversion ?! )
-            FileBase::getFileURLFromSystemPath( m_aInstPath, aTmp );
-            INetURLObject aObj( aTmp );
-            m_aInstURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
-        }
+        // in the Webtop this MUST be set, in FATOffice it is the osl URL of the instpath
+        if ( aOfficePath.getLength() )
+            m_aInstURL = aOfficePath;
+        else
+            m_aInstURL = m_aInstPath;
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -815,8 +821,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     OUString aUserPath;
     if ( aAny >>= aUserPath )
     {
-        aTmp = aUserPath;
-        m_aUserPath = aTmp;
+        FileBase::getFileURLFromSystemPath( aUserPath, aTmp );
+        INetURLObject aObj( aTmp );
+        m_aUserPath = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -824,13 +831,10 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::USERINSTALLURL );
     if ( !aAny.hasValue() || ( aAny >>= aUserPath ) )
     {
-        m_aUserURL = aUserPath;
-        if ( !m_aUserURL.Len() )
-        {
-            FileBase::getFileURLFromSystemPath( m_aUserPath, aTmp );
-            INetURLObject aObj( aTmp );
-            m_aUserURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
-        }
+        if ( aUserPath.getLength() )
+            m_aUserURL = aUserPath;
+        else
+            m_aUserURL = m_aUserPath;
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -843,10 +847,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     {
         ::rtl::OUString aTmpProgPath;
         aTmp = aProgName.copy( 0, lastIndex );
-        FileBase::getSystemPathFromFileURL( aTmp, aTmpProgPath );
-        m_aProgPath = aTmpProgPath;
         INetURLObject aObj( aTmp );
-        m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
+        m_aProgPath = m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
