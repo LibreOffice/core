@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,9 @@ void ViewShell::InitPrt( SfxPrinter *pPrt, OutputDevice *pPDFOut )
 
 void ViewShell::SetPrt( SfxPrinter *pNew )
 {
-    GetDoc()->SetPrt( pNew );
+    // If the reference device was the printer,
+    // we have to set the new reference device
+    GetDoc()->SetPrt( pNew, sal_True );
 }
 
 /******************************************************************************
