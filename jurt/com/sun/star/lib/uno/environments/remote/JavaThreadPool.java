@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-08 12:28:12 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2001-03-08 12:28:12 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:56:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -184,7 +184,7 @@ public class JavaThreadPool implements IThreadPool {
      * @param  threadId              the thread id to use
      * @param  disposeId             the dispose id
      */
-    public JobQueue addThread(boolean createWorkerThread, ThreadID threadId, Object disposeId, JobQueue syncQueue) throws InterruptedException {
+    public JobQueue addThread(boolean createWorkerThread, ThreadID threadId, Object disposeId, JobQueue syncQueue) {
         if(_disposed) throw new RuntimeException("ThreadPool.addThread(" + threadId + ") - is disposed");
 
           if(DEBUG) System.err.println("##### ThreadPool.addThread:" + threadId);
@@ -216,7 +216,7 @@ public class JavaThreadPool implements IThreadPool {
      * @see                 #enter
      * @see com.sun.star.lib.uno.environments.remote.IThreadPool#addThread
      */
-    public void addThread(Object disposeId) throws InterruptedException {
+    public void addThread(Object disposeId) {
         if(_disposed) throw new RuntimeException("ThreadPool.addThread - is disposed");
 
         addThread(false, getThreadId(Thread.currentThread()), disposeId, null);
@@ -274,7 +274,7 @@ public class JavaThreadPool implements IThreadPool {
      */
     private Object _syncPutJob = new Object();
 
-    public void putJob(Job job, Object disposeId)  throws InterruptedException {
+    public void putJob(Job job, Object disposeId) {
         if(_disposed) throw new RuntimeException("ThreadPool.putJob - is disposed");
 
         JobQueue jobQueue = null;
@@ -302,7 +302,7 @@ public class JavaThreadPool implements IThreadPool {
      * @result   the result of final reply
      * @param threadId   the thread id to use
      */
-    public Object enter(int waitTime, ThreadID threadId) throws java.lang.Exception {
+    public Object enter(int waitTime, ThreadID threadId) throws Throwable {
         if(_disposed) throw new RuntimeException("ThreadPool.enter - is disposed");
 
         JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
@@ -327,11 +327,11 @@ public class JavaThreadPool implements IThreadPool {
      * <p>
      * @see com.sun.star.lib.uno.environments.remote.IThreadPool#enter
      */
-    public Object enter(int waitTime) throws java.lang.Exception {
+    public Object enter(int waitTime) throws Throwable {
         return enter(waitTime, getThreadId());
     }
 
-    public Object enter() throws java.lang.Exception {
+    public Object enter() throws Throwable {
         return enter(0);
     }
 

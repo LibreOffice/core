@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-17 16:14:21 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2001-04-17 16:14:21 $
+ * @version     $Revision: 1.13 $ $ $Date: 2001-05-04 11:56:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -154,7 +154,8 @@ public class JobQueue {
             try {
                 _javaThreadPool.enter(5000);
             }
-            catch(java.lang.Exception exception) {
+            catch(Throwable exception) {
+//              catch(java.lang.Exception exception) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
                     System.err.println(getClass().getName() + " - exception occurred:" + exception);
                     exception.printStackTrace(System.err);
@@ -326,7 +327,7 @@ public class JobQueue {
      * @return a job or null if timed out
      * @param  waitTime        the maximum amount of time to wait for a job
      */
-    private Job removeJob(int waitTime) throws InterruptedException {
+    private Job removeJob(int waitTime) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
 
         Job job = null;
@@ -334,7 +335,12 @@ public class JobQueue {
             // wait max. waitTime time for a job to enter the queue
             boolean waited = false;
             while(_head == null && waitTime >= 0 && !waited) {
-                wait(waitTime);
+                try {
+                    wait(waitTime);
+                }
+                catch(InterruptedException interruptedException) {
+                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - caught:" + interruptedException);
+                }
 
                 // signal that we have already waited once
                 waited = true;
@@ -360,7 +366,12 @@ public class JobQueue {
                 // wait for async queue to be empty and last job to be done
                 while(_async_jobQueue._active || _async_jobQueue._head != null) {
                     if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
-                    _async_jobQueue.wait(10);
+                    try {
+                        _async_jobQueue.wait(10);
+                    }
+                    catch(InterruptedException interruptedException) {
+                        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - caught:" + interruptedException);
+                    }
                 }
             }
         }
@@ -437,7 +448,7 @@ public class JobQueue {
      * @return the result of the final job (reply)
      * @param  disposeId  a dispose id
      */
-    Object enter(Object disposeId) throws Exception {
+    Object enter(Object disposeId) throws Throwable {
         return enter(0, disposeId); // wait infinitly
     }
 
@@ -448,7 +459,7 @@ public class JobQueue {
      * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitly)
      * @param  disposeId  a dispose id
      */
-    Object enter(int waitTime, Object disposeId) throws Exception {
+    Object enter(int waitTime, Object disposeId) throws Throwable {
         if(DEBUG) System.err.println("#####" + getClass().getName() + ".enter: " + _threadId);
 
         boolean quit = false;

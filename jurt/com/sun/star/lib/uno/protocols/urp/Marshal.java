@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-06 17:09:08 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,13 @@ package com.sun.star.lib.uno.protocols.urp;
 import java.io.ByteArrayInputStream;
 import java.util.Hashtable;
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.MappingException;
 
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -107,7 +107,16 @@ class Marshal implements IMarshal {
 
     static private final M_InterfaceReference __null_M_InterfaceReference = new M_InterfaceReference("", (short)0xffff);
 
+    static final Class __anyArray;
 
+    static {
+        try {
+            __anyArray = Class.forName("[Lcom.sun.star.uno.Any;");
+        }
+        catch(ClassNotFoundException classNotFoundException) {
+            throw new com.sun.star.uno.RuntimeException("urp.Marshal.<cinit> - unexpected:" + classNotFoundException);
+        }
+    }
 
     static class M_ThreadId {
         public byte  full[];
@@ -153,13 +162,14 @@ class Marshal implements IMarshal {
         _threadIdCache = new Cache(cacheSize);
     }
 
-    void writeAny(Object object) throws Exception {
+    void writeAny(Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeAny:" + object);
 
         TypeDescription typeDescription = null;
 
         if(object == null)
-            typeDescription = TypeDescription.__void_TypeDescription;
+            typeDescription = TypeDescription.getTypeDescription(XInterface.class);
+//              typeDescription = TypeDescription.__void_TypeDescription;
 
         else if(object instanceof Any) {
             Any any = (Any)object;
@@ -177,21 +187,44 @@ class Marshal implements IMarshal {
         writeObject(typeDescription, object);
     }
 
-    void writeBoolean(Boolean zBoolean) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBoolean:" + zBoolean);
-
-        _dataOutput.writeBoolean(zBoolean.booleanValue());
+    void writeboolean(boolean bool) {
+        try {
+            _dataOutput.writeBoolean(bool);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeboolean - unexpected: " + iOException);
+        }
     }
 
-    void writebyte(byte zbyte) throws Exception {
+    void writeBoolean(Boolean zBoolean) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBoolean:" + zBoolean);
+
+        writeboolean(zBoolean.booleanValue());
+    }
+
+    void writebyte(byte zbyte) {
         int ibyte = zbyte & 0xff;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writebyte:" + ibyte);
 
-        _dataOutput.writeByte(ibyte);
+        try {
+            _dataOutput.writeByte(ibyte);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writebyte - unexpected: " + iOException);
+        }
     }
 
-    void writebyteSequence(byte bytes[]) throws Exception {
+    void write(byte bytes[]) {
+        try {
+            _dataOutput.write(bytes);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".write - unexpected: " + iOException);
+        }
+    }
+
+    void writebyteSequence(byte bytes[]) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writebyteSequence:" + bytes);
 
         int size = 0;
@@ -204,34 +237,56 @@ class Marshal implements IMarshal {
         writeCompressedInt(size);
 
         if(size != 0)
-            _dataOutput.write(bytes);
+            write(bytes);
     }
 
-    void writeByte(Byte zByte) throws Exception {
+    void writeByte(Byte zByte) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeByte:" + zByte);
 
-        _dataOutput.writeByte(zByte.byteValue());
+        writebyte(zByte.byteValue());
     }
 
-    void writeCharacter(Character character) throws Exception {
+    void writechar(char zchar) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writechar:" + zchar);
+
+        try {
+            _dataOutput.writeChar(zchar);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writechar - unexpected: " + iOException);
+        }
+    }
+
+    void writeCharacter(Character character) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeCharacter:" + character);
 
-        _dataOutput.writeChar(character.charValue());
+        writechar(character.charValue());
     }
 
-    void writeDouble(Double zDouble) throws Exception {
+    void writedouble(double zdouble) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writedouble:" + zdouble);
+
+        try {
+            _dataOutput.writeDouble(zdouble);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writedouble - unexpected: " + iOException);
+        }
+    }
+
+    void writeDouble(Double zDouble) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeDouble:" + zDouble);
 
-        _dataOutput.writeDouble(zDouble.doubleValue());
+        writedouble(zDouble.doubleValue());
     }
 
-    void writeEnum(Enum enum) throws Exception {
+    void writeEnum(Enum enum) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeEnum:" + enum + " " + enum.getValue());
 
         writeint(enum.getValue());
     }
 
-    void writeThrowable(TypeDescription typeDescription, Throwable throwable) throws Exception {
+    void writeThrowable(TypeDescription typeDescription, Throwable throwable) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThrowable:" + throwable);
 
         String message = throwable.getMessage();
@@ -240,31 +295,58 @@ class Marshal implements IMarshal {
         writeStruct(typeDescription, throwable);
     }
 
-    void writeFloat(Float zFloat) throws Exception {
+    void writefloat(float zfloat) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writefloat:" + zfloat);
+
+        try {
+            _dataOutput.writeFloat(zfloat);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writefloat - unexpected: " + iOException);
+        }
+    }
+
+    void writeFloat(Float zFloat) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeFloat:" + zFloat);
 
-        _dataOutput.writeFloat(zFloat.floatValue());
+        writefloat(zFloat.floatValue());
     }
 
-    void writeInteger(Integer integer) throws Exception {
+    void writeInteger(Integer integer) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeInteger:" + integer);
 
-        _dataOutput.writeInt(integer.intValue());
+        writeint(integer.intValue());
     }
 
-    void writeint(int zint) throws Exception {
+    void writeint(int zint) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeint:" + zint);
 
-        _dataOutput.writeInt(zint);
+        try {
+            _dataOutput.writeInt(zint);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeint - unexpected: " + iOException);
+        }
     }
 
-    void writeLong(Long zLong) throws Exception {
+    void writelong(long zlong) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writelong:" + zlong);
+
+        try {
+            _dataOutput.writeLong(zlong);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writelong - unexpected: " + iOException);
+        }
+    }
+
+    void writeLong(Long zLong) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeLong:" + zLong);
 
-        _dataOutput.writeLong(zLong.longValue());
+        writelong(zLong.longValue());
     }
 
-    public void writeObject(TypeDescription typeDescription, Object object) throws Exception {
+    public void writeObject(TypeDescription typeDescription, Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeObject: <" + typeDescription + "> <" + object + ">");
 
         switch(typeDescription.getTypeClass().getValue()) {
@@ -299,7 +381,7 @@ class Marshal implements IMarshal {
         }
     }
 
-    void writeOid(String oid) throws Exception {
+    void writeOid(String oid) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeOid:" + oid);
 
         M_InterfaceReference m_InterfaceReference = null;
@@ -320,14 +402,14 @@ class Marshal implements IMarshal {
         writeObject(__M_InterfaceReferenceTypeDescription, m_InterfaceReference);
     }
 
-    void writeReference(TypeDescription typeDescription, Object object) throws Exception {
+    void writeReference(TypeDescription typeDescription, Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + typeDescription + " " + object);
 
         // map the object to universe
         writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, new Type(typeDescription)) : null);
     }
 
-    void writeSequence(TypeDescription typeDescription, Object object) throws Exception {
+    void writeSequence(TypeDescription typeDescription, Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + typeDescription + " " + object);
 
         if(typeDescription.getTypeClass() == TypeClass.BYTE) // write a byte sequence ?
@@ -348,39 +430,49 @@ class Marshal implements IMarshal {
         }
     }
 
-    void writeShort(Short zShort) throws Exception {
+    void writeShort(Short zShort) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeShort:" + zShort);
 
-        _dataOutput.writeShort(zShort.shortValue());
+        writeshort(zShort.shortValue());
     }
 
-    void writeshort(short zshort) throws Exception {
+    void writeshort(short zshort) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeshort:" + zshort);
 
-        _dataOutput.writeShort(zshort);
+        try {
+            _dataOutput.writeShort(zshort);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeshort - unexpected: " + iOException);
+        }
     }
 
-    void writeCompressedInt(int size) throws Exception {
+    void writeCompressedInt(int size) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeCompressedInt:" + size);
 
         if(size >= 255) {
-            _dataOutput.writeByte((byte)0xff);
-            _dataOutput.writeInt(size);
+            writebyte((byte)0xff);
+            writeint(size);
         }
         else
-            _dataOutput.writeByte((byte)size);
+            writebyte((byte)size);
     }
 
-    void writeString(String string) throws Exception {
+    void writeString(String string) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeString:" + string);
 
-        byte bytes[] = string.getBytes("UTF8");
+        try {
+            byte bytes[] = string.getBytes("UTF8");
 
-        writeCompressedInt(bytes.length);
-        _dataOutput.write(bytes);
+            writeCompressedInt(bytes.length);
+            write(bytes);
+        }
+        catch(UnsupportedEncodingException unsupportedEncodingException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeString - unexpected:" + unsupportedEncodingException);
+        }
     }
 
-    void writeStruct(TypeDescription typeDescription, Object object) throws Exception {
+    void writeStruct(TypeDescription typeDescription, Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + typeDescription + " " + object);
 
         Field fields[] = typeDescription.getFields();
@@ -394,7 +486,7 @@ class Marshal implements IMarshal {
                 if(memberTypeInfo != null) { // do we have any type infos?
                     if(memberTypeInfo.isAny()) // is the member any any?
                         if(zInterface.isArray())
-                            zInterface = Class.forName("[Lcom.sun.star.uno.Any;");
+                            zInterface = __anyArray;
                         else
                             zInterface = Any.class;
 
@@ -406,19 +498,30 @@ class Marshal implements IMarshal {
                         if(!XInterface.class.isAssignableFrom(fields[i].getType())) // is the member type not derived of XInterface ?
                             xInterface = XInterface.class; // ensure that we write at least an XInterface
 
-                        if(zInterface.isArray())
-                            zInterface = Class.forName("[L" + xInterface.getName() + ";");
+                        if(zInterface.isArray()) {
+                            try {
+                                zInterface = Class.forName("[L" + xInterface.getName() + ";");
+                            }
+                            catch(ClassNotFoundException classNotFoundException) {
+                                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeStruct - unexpected:" + classNotFoundException);
+                            }
+                        }
                         else
                             zInterface = xInterface;
                     }
                 }
 
-                writeObject(TypeDescription.getTypeDescription(zInterface), fields[i].get(object));
+                try {
+                    writeObject(TypeDescription.getTypeDescription(zInterface), fields[i].get(object));
+                }
+                catch(IllegalAccessException illegalAccessException) {
+                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeStruct - unexpected:" + illegalAccessException);
+                }
             }
         }
     }
 
-    void writeThreadID(ThreadID threadID) throws Exception {
+    void writeThreadID(ThreadID threadID) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThreadID:" + threadID);
 
         boolean found[] = new boolean[1];
@@ -433,11 +536,12 @@ class Marshal implements IMarshal {
         writeObject(__M_ThreadIdTypeDescription, m_ThreadId);
     }
 
-    void writeTypeDescrption(TypeDescription typeDescription) throws Exception {
+    void writeTypeDescrption(TypeDescription typeDescription) {
         TypeClass typeClass = typeDescription.getTypeClass();
 
         if(TypeDescription.isTypeClassSimple(typeClass))
-            _dataOutput.writeByte((byte)typeClass.getValue()); // write the typeclass value
+            writebyte((byte)typeClass.getValue()); // write the typeclass value
+
         else {
             boolean found[] = new boolean[1];
             short index;
@@ -447,19 +551,19 @@ class Marshal implements IMarshal {
             else
                 index = (short)0xffff;
 
-            _dataOutput.writeByte((byte)(typeClass.getValue() | (found[0] ? 0x0 : 0x80))); // write the typeclass value
+            writebyte((byte)(typeClass.getValue() | (found[0] ? 0x0 : 0x80))); // write the typeclass value
 
-            _dataOutput.writeShort(index); // write the cache index
+            writeshort(index); // write the cache index
 
             if(!found[0]) // if not found in cache and the type is complex, write the type name
                 writeString(typeDescription.getTypeName());
         }
     }
 
-    void writeUnion(Union union) throws Exception {
+    void writeUnion(Union union) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeUnion:" + union);
 
-        throw new Exception("Marshal.writeUnion is not implemented yet!!!");
+        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeUnion is not implemented yet!!!");
     }
 
     public byte []reset() {

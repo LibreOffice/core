@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IProtocol.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-19 16:24:57 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,10 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
  * This interface provides an abstraction for protocols
  * for remote bridges.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-04-19 16:24:57 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-05-04 11:56:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IMessage
  * @see         com.sun.star.lib.uno.environments.remote.Job
- * @since       UDK1.0
  */
 public interface IProtocol {
     /**
@@ -97,7 +96,7 @@ public interface IProtocol {
      * @return  thread read job.
      * @see     com.sun.star.lib.uno.environments.remote.Job
      */
-    IMessage readMessage(InputStream inputStream) throws Exception;
+    IMessage readMessage(InputStream inputStream) throws IOException;
 
 
     public void writeRequest(String oid,
@@ -106,11 +105,11 @@ public interface IProtocol {
                              ThreadID threadId,
                              Object params[],
                              Boolean synchron[],
-                             Boolean mustReply[]) throws Exception;
+                             Boolean mustReply[]);
 
-    public void writeReply(boolean exception, ThreadID threadId, Object result) throws Exception;
+    public void writeReply(boolean exception, ThreadID threadId, Object result);
 
-    public void flush(java.io.DataOutput  dataOutput) throws Exception;
+    public void flush(java.io.DataOutput dataOutput) throws IOException;
 
 
     /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-20 10:28:13 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2001-04-20 10:28:13 $
+ * @version     $Revision: 1.8 $ $ $Date: 2001-05-04 11:57:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -162,7 +162,7 @@ public class urp extends Protocol {
         return "urp";
     }
 
-    private Object readReply(byte header, boolean exception[]) throws Exception {
+    private Object readReply(byte header, boolean exception[]) {
         if((header & NEWTID) != 0) // new thread id ?
             _in_threadId = _unmarshal.readThreadID();
 
@@ -195,7 +195,7 @@ public class urp extends Protocol {
     }
 
 
-    private Object []readParams(MethodDescription methodDescription) throws Exception {
+    private Object []readParams(MethodDescription methodDescription) {
         TypeDescription in_sig[] = methodDescription.getInSignature();
         TypeDescription out_sig[] = methodDescription.getOutSignature();
 
@@ -218,7 +218,7 @@ public class urp extends Protocol {
     }
 
 
-    private void readShortRequest(byte header, String operation[], Object param[][], boolean synchron[]) throws Exception  {
+    private void readShortRequest(byte header, String operation[], Object param[][], boolean synchron[]) {
         ++ _requestsRecieved;
 
         int methodId = 0;
@@ -242,7 +242,7 @@ public class urp extends Protocol {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShortRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
-    private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[], boolean mustReply[]) throws Exception  {
+    private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[], boolean mustReply[]) {
         ++ _requestsRecieved;
 
         // read the extended flags
@@ -286,7 +286,7 @@ public class urp extends Protocol {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readLongRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
-    private Object readMessage(String operation[], Object param[], boolean synchron[], boolean mustReply[], boolean exception[]) throws Exception {
+    private Object readMessage(String operation[], Object param[], boolean synchron[], boolean mustReply[], boolean exception[]) {
         byte header = _unmarshal.readbyte();
 
         Class signature[];
@@ -317,7 +317,7 @@ public class urp extends Protocol {
                              ThreadID threadId,
                              Object params[],
                              Boolean synchron[],
-                             Boolean mustReply[]) throws Exception
+                             Boolean mustReply[])
    {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeRequest:" + oid + " " + zInterface + " " + operation);
 
@@ -441,7 +441,7 @@ public class urp extends Protocol {
             putPendingRequest(_out_threadId, new Object[]{params, out_sig, methodDescription.getReturnSig()});
     }
 
-    public void writeReply(boolean exception, ThreadID threadId, Object result) throws Exception {
+    public void writeReply(boolean exception, ThreadID threadId, Object result) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReply:" + exception + " " + threadId + " " + result);
 
         ++ _message_count;
@@ -483,7 +483,7 @@ public class urp extends Protocol {
     }
 
 
-    private byte []readBlock(DataInput dataInput) throws Exception {
+    private byte []readBlock(DataInput dataInput) throws IOException {
         int size = dataInput.readInt();
         int message_count = dataInput.readInt();
 
@@ -496,7 +496,7 @@ public class urp extends Protocol {
         return bytes;
     }
 
-    private void writeBlock(DataOutput  dataOutput, byte bytes[], int message_count) throws Exception {
+    private void writeBlock(DataOutput  dataOutput, byte bytes[], int message_count) throws IOException {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
 
           if(message_count != 1)
@@ -568,7 +568,7 @@ public class urp extends Protocol {
             return _oid;
         }
 
-        public Object getData(Object params[][]) throws Exception {
+        public Object getData(Object params[][]) {
             params[0]    = _params;
 
             return _result;
@@ -582,7 +582,7 @@ public class urp extends Protocol {
      * @see     com.sun.star.lib.uno.environments.remote.Job
      * @see                  com.sun.star.lib.uno.environments.remote.IProtocol#readJob
      */
-    public IMessage readMessage(InputStream inputStream) throws Exception {
+    public IMessage readMessage(InputStream inputStream) throws IOException {
         IMessage iMessage = null;
 
           while(iMessage == null) { // try hard to get a message
@@ -632,7 +632,7 @@ public class urp extends Protocol {
     }
 
 
-    public void flush(DataOutput  dataOutput) throws Exception {
+    public void flush(DataOutput dataOutput) throws IOException {
         if(_message_count > 0) {
             writeBlock(dataOutput, _marshal.reset(), _message_count);
 

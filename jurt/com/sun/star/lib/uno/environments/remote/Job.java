@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-12 16:49:23 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2001-03-12 16:49:23 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:56:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -116,7 +116,7 @@ public class Job {
      * @param o_outs        the out parameters of the call as out parameters
      * @param o_out_sig     the out signature as an out parameter
      */
-    protected Object dispatch_MethodCall(Object params[]) throws Exception {
+    protected Object dispatch_MethodCall(Object params[]) throws InvocationTargetException, IllegalAccessException {
           Method method = _iMessage.getInterface().getMethodDescription(_iMessage.getOperation()).getMethod();
 
           if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispatch_MethodCall:" + _object + " " + method.getName() + " " + params);
@@ -134,7 +134,7 @@ public class Job {
      * @param o_outs        the out parameters of the call as out parameters
      * @param o_out_sig     the out signature as an out parameter
      */
-    protected Object dispatch_queryInterface(Type type) throws Exception {
+    protected Object dispatch_queryInterface(Type type) {
         Class zInterface = ((TypeDescription)type.getTypeDescription()).getZClass();
 
         Object result = null;
@@ -154,13 +154,15 @@ public class Job {
      * <p>
      * @return  returns true if the operation is a reply
      */
-    public Object execute() throws Exception {
+    public Object execute() throws Throwable {
         Object params[][] = new Object[1][];
 
         Object result = _iMessage.getData(params);
 
+         if(DEBUG) System.err.println("##### " + getClass().getName() + ".execute:" + result);
+
         if(_iMessage.isException())
-            throw (Exception)result;
+            throw (Throwable)result;
 
         try {
             if(_iMessage.getOperation() != null) { // it is a request
@@ -175,8 +177,12 @@ public class Job {
                     _iReceiver.sendReply(false, _iMessage.getThreadID(), xresult);
             }
         }
-        catch(InvocationTargetException invocationTargetException) {
-            Throwable throwable = invocationTargetException.getTargetException();;
+          catch(Exception exception) {
+//          catch(InvocationTargetException invocationTargetException) {
+            Throwable throwable = exception;
+
+            if(exception instanceof InvocationTargetException)
+                throwable = ((InvocationTargetException)exception).getTargetException();;
 
             if(DEBUG) System.err.println("##### Job.execute - exception occured:" + throwable);
 

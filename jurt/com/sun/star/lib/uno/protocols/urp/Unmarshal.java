@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-20 11:57:33 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,14 @@ package com.sun.star.lib.uno.protocols.urp;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -116,7 +119,7 @@ class Unmarshal implements IUnmarshal {
         _dataInput            = new DataInputStream(_inputStream);
     }
 
-    Object readAny() throws Exception {
+    Object readAny() {
         TypeDescription typeDescription = readTypeDescription();
         Object object = readObject(typeDescription);
 
@@ -130,106 +133,225 @@ class Unmarshal implements IUnmarshal {
         return object;
     }
 
-    Boolean readBoolean() throws Exception {
-        Boolean result =  new Boolean(_dataInput.readBoolean());
+    boolean readboolean() {
+        boolean bool;
+
+        try {
+            bool = _dataInput.readBoolean();
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readboolean - unexpected:" + iOException);
+        }
+
+        return bool;
+    }
+
+    Boolean readBoolean() {
+        Boolean result =  new Boolean(readboolean());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readBoolean:" + result);
 
         return result;
     }
 
-    Byte readByte() throws Exception {
-        Byte result = new Byte(_dataInput.readByte());
+    Byte readByte() {
+        Byte result = new Byte(readbyte());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readByte:" + result);
 
         return result;
     }
 
-    byte readbyte() throws Exception {
-          byte result = (byte)(_dataInput.readByte() & 0xff);
+    byte readbyte() {
+        try {
+            byte result = (byte)(_dataInput.readByte() & 0xff);
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readbyte:" + (result & 0xff));
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readbyte:" + (result & 0xff));
 
-        return result;
+            return result;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readByte - unexpected:" + iOException);
+        }
     }
 
-    byte []readbyteSequence() throws Exception {
+    void read(byte bytes[]) {
+        try {
+            _inputStream.read(bytes);
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".read:" + bytes);
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".read - unexpected:" + iOException);
+        }
+    }
+
+    byte []readbyteSequence() {
         int size = readCompressedInt();
         byte bytes[] = new byte[size];
 
-        _inputStream.read(bytes);
+        read(bytes);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readbyteSequence:" + bytes);
 
         return bytes;
     }
 
-    Character readCharacter() throws Exception {
-        Character result = new Character(_dataInput.readChar());
+    char readchar() {
+        try {
+            char zchar = _dataInput.readChar();
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readChar:" + zchar);
+
+            return zchar;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readChar - unexpected:" + iOException);
+        }
+    }
+
+    Character readCharacter() {
+        Character result = new Character(readchar());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readChar:" + result);
 
         return result;
     }
 
-    Double readDouble() throws Exception {
-        Double result = new Double(_dataInput.readDouble());
+    double readdouble() {
+        try {
+            double zdouble = _dataInput.readDouble();
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readDouble:" + zdouble);
+
+            return zdouble;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readDouble - unexpected:" + iOException);
+        }
+    }
+
+    Double readDouble() {
+        Double result = new Double(readdouble());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readDouble:" + result);
 
         return result;
     }
 
-    Enum readEnum(TypeDescription typeDescription) throws Exception {
-        Integer index = readInteger();
+    Enum readEnum(TypeDescription typeDescription) {
+        try {
+            Integer index = readInteger();
 
-        Method fromInt = typeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
-        Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
+            Method fromInt = typeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
+            Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
 
-        return result;
+            return result;
+        }
+        catch(NoSuchMethodException noSuchMethodException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + noSuchMethodException);
+        }
+        catch(InvocationTargetException invocationTargetException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + invocationTargetException);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + illegalAccessException);
+        }
     }
 
-    Throwable readThrowable(TypeDescription typeDescription) throws Exception {
-        String message = readString();
+    Throwable readThrowable(TypeDescription typeDescription) {
+        try {
+            String message = readString();
 
-        Constructor constructor = typeDescription.getZClass().getConstructor(new Class[]{String.class});
-        Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
+            Constructor constructor = typeDescription.getZClass().getConstructor(new Class[]{String.class});
+            Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
 
-        readStruct(typeDescription, throwable);
+            readStruct(typeDescription, throwable);
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
 
-        return throwable;
+            return throwable;
+        }
+        catch(NoSuchMethodException noSuchMethodException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + noSuchMethodException);
+        }
+        catch(InvocationTargetException invocationTargetException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + invocationTargetException);
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + illegalAccessException);
+        }
+        catch(InstantiationException instantiationException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + instantiationException);
+        }
     }
 
-    Float readFloat() throws Exception {
-        Float result = new Float(_dataInput.readFloat());
+    float readfloat() {
+        try {
+            float zfloat = _dataInput.readFloat();
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readFloat:" + zfloat);
+
+            return zfloat;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readfloat - unexpected:" + iOException);
+        }
+    }
+
+    Float readFloat() {
+        Float result = new Float(readfloat());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readFloat:" + result);
 
         return result;
     }
 
-    Integer readInteger() throws Exception {
-        Integer result = new Integer(_dataInput.readInt());
+    int readint() {
+        try {
+            int zint = _dataInput.readInt();
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readint:" + zint);
+
+            return zint;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readint - unexpected:" + iOException);
+        }
+    }
+
+    Integer readInteger() {
+        Integer result = new Integer(readint());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readInteger:" + result);
 
         return result;
     }
 
-    Long readLong() throws Exception {
-        Long result = new Long(_dataInput.readLong());
+    long readlong() {
+        try {
+            long zlong = _dataInput.readLong();
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readlong:" + zlong);
+
+            return zlong;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readlong - unexpected:" + iOException);
+        }
+    }
+
+    Long readLong() {
+        Long result = new Long(readlong());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readLong:" + result);
 
         return result;
     }
 
-    public Object readObject(TypeDescription typeDescription) throws Exception {
+    public Object readObject(TypeDescription typeDescription) {
         Object result = null;
 
         switch(typeDescription.getTypeClass().getValue()) {
@@ -271,7 +393,7 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    String readOid() throws Exception {
+    String readOid() {
         Marshal.M_InterfaceReference m_InterfaceReference = (Marshal.M_InterfaceReference)readObject(Marshal.__M_InterfaceReferenceTypeDescription);
 
         String oid = null;
@@ -290,7 +412,7 @@ class Unmarshal implements IUnmarshal {
         return oid;
     }
 
-    Object readReference(TypeDescription typeDescription) throws Exception {
+    Object readReference(TypeDescription typeDescription) {
         Object oid = readOid();;
 
         // the result is a null ref, in case cache and oid are invalid
@@ -305,7 +427,7 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    Object readSequence(TypeDescription typeDescription) throws Exception {
+    Object readSequence(TypeDescription typeDescription) {
         Object result = null;
         if(typeDescription.getTypeClass() == TypeClass.BYTE) // read a byte sequence ?
               result = readbyteSequence();
@@ -329,43 +451,53 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    Short readShort() throws Exception {
-        Short result = new Short(_dataInput.readShort());
+    Short readShort() {
+        Short result = new Short(readshort());
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShort:" + result);
 
         return result;
     }
 
-    short readshort() throws Exception {
-        short result = _dataInput.readShort();
+    short readshort() {
+        try {
+            short result = _dataInput.readShort();
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readshort:" + result);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readshort:" + result);
 
-        return result;
+            return result;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readshort - unexpected:" + iOException);
+        }
     }
 
-    int readCompressedInt() throws Exception {
-        int result = _dataInput.readByte() & 0xff;
+    int readCompressedInt() {
+        int result = readbyte() & 0xff;
 
         if(result == 255) // if 255 then there follows a complete int
-            result = _dataInput.readInt();
+            result = readint();
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readCompressedInt:" + result);
 
         return result;
     }
 
-    String readString() throws Exception {
-        int utflen = readCompressedInt(); // the size of the string
+    String readString() {
+        try {
+            int utflen = readCompressedInt(); // the size of the string
 
-        byte bytes[] = new byte[utflen];
-        _inputStream.read(bytes);
+            byte bytes[] = new byte[utflen];
+            read(bytes);
 
-        return new String(bytes, "UTF8");
+            return new String(bytes, "UTF8");
+        }
+        catch(UnsupportedEncodingException unsupportedEncodingException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readString - unexpected:" + unsupportedEncodingException);
+        }
     }
 
-    void readStruct(TypeDescription typeDescription, Object object) throws Exception {
+    void readStruct(TypeDescription typeDescription, Object object) {
         Field fields[] = typeDescription.getFields();
 
         for(int i = 0; i < fields.length; ++ i) {
@@ -378,7 +510,7 @@ class Unmarshal implements IUnmarshal {
                 if(memberTypeInfo != null) {
                     if(memberTypeInfo.isAny()) // is the member an any?
                         if(zInterface.isArray())
-                            zInterface = Class.forName("[Lcom.sun.star.uno.Any;");
+                            zInterface = Marshal.__anyArray;
                         else
                             zInterface = Any.class;
 
@@ -405,29 +537,48 @@ class Unmarshal implements IUnmarshal {
                             -- array_deepness;
                         }
 
-                        if(array_prefix.length() != 0)
-                            xInterface = Class.forName(array_prefix + "L" + xInterface.getName() + ";");
+                        if(array_prefix.length() != 0) {
+                            try {
+                                xInterface = Class.forName(array_prefix + "L" + xInterface.getName() + ";");
+                            }
+                            catch(ClassNotFoundException classNotFoundException) {
+                                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + classNotFoundException);
+                            }
+                        }
 
                         zInterface = xInterface;
                     }
                 }
 
-                fields[i].set(object, readObject(TypeDescription.getTypeDescription(zInterface)));
+                try {
+                    fields[i].set(object, readObject(TypeDescription.getTypeDescription(zInterface)));
+                }
+                catch(IllegalAccessException illegalAccessException) {
+                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
+                }
             }
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readStruct:" + object);
     }
 
-    Object readStruct(TypeDescription typeDescription) throws Exception {
-        Object object = typeDescription.getZClass().newInstance();
+    Object readStruct(TypeDescription typeDescription) {
+        try {
+            Object object = typeDescription.getZClass().newInstance();
 
-        readStruct(typeDescription, object);
+            readStruct(typeDescription, object);
 
-        return object;
+            return object;
+        }
+        catch(IllegalAccessException illegalAccessException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
+        }
+        catch(InstantiationException instantiationException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + instantiationException);
+        }
     }
 
-    ThreadID readThreadID() throws Exception {
+    ThreadID readThreadID() {
         Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.__M_ThreadIdTypeDescription);
 
         ThreadID threadId = null;
@@ -446,8 +597,22 @@ class Unmarshal implements IUnmarshal {
         return threadId;
     }
 
-    TypeDescription readTypeDescription() throws Exception {
-        int typeClassValue = _dataInput.readUnsignedByte() & 0xff;
+
+    int readunsignedbyte() {
+        try {
+            int result = (byte)(_dataInput.readUnsignedByte() & 0xff);
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readunsignedbyte:" + result);
+
+            return result;
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readunsignedbyte - unexpected:" + iOException);
+        }
+    }
+
+    TypeDescription readTypeDescription() {
+        int typeClassValue = readunsignedbyte() & 0xff;
 
         TypeClass typeClass = TypeClass.fromInt(typeClassValue & 0x7f);
         TypeDescription typeDescription = null;
@@ -456,18 +621,24 @@ class Unmarshal implements IUnmarshal {
             typeDescription = TypeDescription.getTypeDescription(typeClass);
 
         else {
-            short index = _dataInput.readShort(); // the cache index
+            try {
+                short index = readshort(); // the cache index
 
-            if(index != (short)0xffff) { // shall we update the cache?
-                if((typeClassValue & 0x80) != 0) // update the cache?
-                    _typeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
+                if(index != (short)0xffff) { // shall we update the cache?
+                    if((typeClassValue & 0x80) != 0) {// update the cache?
+                        _typeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
 //                      _typeDescriptionCache[index] = TypeDescription.getType(typeClass, readString());
+                    }
 
-                typeDescription = _typeDescriptionCache[index];
-            }
-            else
-                typeDescription = TypeDescription.getTypeDescription(readString());
+                    typeDescription = _typeDescriptionCache[index];
+                }
+                else
+                    typeDescription = TypeDescription.getTypeDescription(readString());
 //                  type = TypeDescription.getType(typeClass, readString());
+            }
+            catch(ClassNotFoundException classNotFoundException) {
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readTypeDescription - unexpected:" + classNotFoundException);
+            }
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readType:" + typeDescription);
@@ -475,8 +646,8 @@ class Unmarshal implements IUnmarshal {
         return typeDescription;
     }
 
-    Union readUnion(TypeDescription typeDescription) throws Exception {
-        throw new Exception("Unmarshal.readUnion - not implemented!!!");
+    Union readUnion(TypeDescription typeDescription) {
+        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readUnion - not implemented!!!");
     }
 
     void reset(byte bytes[]) {
@@ -484,7 +655,12 @@ class Unmarshal implements IUnmarshal {
         _dataInput = new DataInputStream(_inputStream);
     }
 
-    int bytesLeft() throws Exception {
-        return _inputStream.available();
+    int bytesLeft() {
+        try {
+            return _inputStream.available();
+        }
+        catch(IOException iOException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".bytesLeft - unexpected:" + iOException);
+        }
     }
 }

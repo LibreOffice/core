@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IThreadPool.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various
  * threadpool implementations.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-05-04 11:56:03 $
  * @author      Joerg Budischewski
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @since       UDK1.0
@@ -86,12 +86,12 @@ public interface IThreadPool {
      * @param  disposeId    the dipose id with which the thread can be interrupted while staying in the queue
      * @see                 #enter
      */
-    public void addThread(Object disposeId) throws InterruptedException;
+    public void addThread(Object disposeId);
 
     /**
      * Removes the jobQueue for the current thread.
      */
-    public void removeThread() throws InterruptedException;
+    public void removeThread();
 
     /**
      * Queues a job into the jobQueue of the thread belonging to the jobs threadId.
@@ -99,7 +99,7 @@ public interface IThreadPool {
      * @param job       the job
      * @param disposeId the dispose id
      */
-    public void putJob(Job job, Object disposeId) throws InterruptedException;
+    public void putJob(Job job, Object disposeId);
 
     /**
      * Lets the current thread enter the ThreadPool.
@@ -107,7 +107,7 @@ public interface IThreadPool {
      * the ThreadPool when it gets a reply job.
      * <p>
      */
-    public Object enter() throws java.lang.Exception;
+    public Object enter() throws Throwable;
 
     /**
      * Interrupts all threads which have associated the dispose id.
