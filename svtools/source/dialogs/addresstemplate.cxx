@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 16:41:25 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,14 @@
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
 #endif
+
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
+#include <algorithm>
 
 // .......................................................................
 namespace svt
@@ -1142,8 +1150,8 @@ namespace svt
             // the new row for the focus
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
             // normalize
-            nNewFocusRow = min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
-            nNewFocusRow = max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
+            nNewFocusRow = std::min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
+            nNewFocusRow = std::max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
             // set the new focus (in the same column)
             m_pImpl->pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
         }
