@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:55:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,9 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
-
 // =======================================================================
 // GlyphCache
 // =======================================================================
-
-GlyphCache* GlyphCache::mpSingleton = 0;
-
-// -----------------------------------------------------------------------
 
 GlyphCache::GlyphCache( ULONG nMaxSize )
 :   mnMaxSize(nMaxSize),
@@ -107,14 +102,15 @@ GlyphCache::~GlyphCache()
 
 // -----------------------------------------------------------------------
 
-#ifdef IRIX
-size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
-#else
-inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
+#ifndef IRIX
+inline
 #endif
+size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: does it pay much to improve this hash function?
-    size_t nHash = size_t( rFontSelData.mpFontData->mpSysData );
+    if( !rFontSelData.mpFontData )
+        return 0;
+    size_t nHash = rFontSelData.mpFontData->GetFontId() << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += rFontSelData.mbVertical;
@@ -123,69 +119,84 @@ inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectDat
 
 // -----------------------------------------------------------------------
 
-bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
+bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const ImplFontSelectData& rB) const
 {
-    if( (rA.mpFontData != NULL) && (rB.mpFontData != NULL)
-    &&  (rA.mpFontData->mpSysData == rB.mpFontData->mpSysData )
-    &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight == rB.mnWidth)))
-    &&  (rA.mnHeight        == rB.mnHeight)
-    &&  (rA.mnOrientation   == rB.mnOrientation)
-    &&  (rA.mbVertical      == rB.mbVertical)
-    &&  (rA.mbNonAntialiased== rB.mbNonAntialiased) )
-        return true;
-    return false;
+    if( (rA.mpFontData == NULL)
+    ||  (rB.mpFontData == NULL)
+    ||  (rA.mpFontData->GetFontId() != rB.mpFontData->GetFontId()) )
+        return false;
+
+    if( (rA.mnHeight         != rB.mnHeight)
+    ||  (rA.mnOrientation    != rB.mnOrientation)
+    ||  (rA.mbVertical       != rB.mbVertical)
+    ||  (rA.mbNonAntialiased != rB.mbNonAntialiased) )
+        return false;
+
+    if( (rA.mnWidth != rB.mnWidth)
+    && ((rA.mnHeight != rB.mnWidth) || (rA.mnWidth != 0)) )
+        return false;
+
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+GlyphCache& GlyphCache::GetInstance()
+{
+    static GlyphCache aGlyphCache( 1500000 );
+    return aGlyphCache;
 }
 
 // -----------------------------------------------------------------------
 
 void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 {
-    if( mpSingleton )
+    GlyphCache& rGlyphCache = GetInstance();
+    if( rGlyphCache.mpPeer == &rPeer )
         return;
 
-    static GlyphCache aGlyphCache( 1500000 );
-    aGlyphCache.mpPeer = &rPeer;
+    rGlyphCache.mpPeer = &rPeer;
 
     if( bInitFonts )
     {
         if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-            aGlyphCache.AddFontPath( String::CreateFromAscii( pFontPath ) );
+            rGlyphCache.AddFontPath( String::CreateFromAscii( pFontPath ) );
         const String& rFontPath = Application::GetFontPath();
         if( rFontPath.Len() > 0 )
-            aGlyphCache.AddFontPath( rFontPath );
+            rGlyphCache.AddFontPath( rFontPath );
     }
-
-    mpSingleton = &aGlyphCache;
 }
 
 // -----------------------------------------------------------------------
 
 // this gets called when the upper layers want to remove the related ImplFontData
-void GlyphCache::RemoveFont( const ImplFontData* pFontData )
+void GlyphCache::RemoveFont( int nFontId )
 {
-    bool bNeedCurrentGC = false;
-    FontList::iterator it_next = maFontList.begin(), it;
+    FontList::iterator it_next = maFontList.begin();
     while( it_next != maFontList.end() )
     {
-        it = it_next++;
-        if( pFontData != it->first.mpFontData )
+        FontList::iterator it = it_next++;
+        ImplFontData* pFontFace = it->first.mpFontData;
+        if( nFontId != pFontFace->GetFontId() )
             continue;
 
         // found matching pFontData => remove entry if not referenced
         ServerFont* pSF = it->second;
         if( pSF && (pSF->GetRefCount() <= 0) )
         {
-            bNeedCurrentGC |= (pSF == mpCurrentGCFont);
+            if( pSF == mpCurrentGCFont )
+                mpCurrentGCFont = NULL;
             delete pSF;
         }
         maFontList.erase( it );
     }
 
     // when current GC font has been destroyed get another one
-    if( bNeedCurrentGC )
+    if( !mpCurrentGCFont )
     {
-        it = maFontList.begin();
-        mpCurrentGCFont = (it != maFontList.end()) ? it->second : NULL;
+        it_next = maFontList.begin();
+        if( it_next != maFontList.end() )
+            mpCurrentGCFont = it_next->second;
     }
 }
 
@@ -219,23 +230,19 @@ void GlyphCache::AddFontPath( const String& rFontPath )
 // -----------------------------------------------------------------------
 
 void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
-                              int nFontId, const ImplFontData* pFontData,
-                              const unicodeKernMap* pKern
-                              )
+    int nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
 {
     if( mpFtManager )
-        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, pFontData, pKern );
+        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA, pExtraKern );
 }
 
 // -----------------------------------------------------------------------
 
-long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
+void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
 {
-    long nCount = 0;
     if( mpFtManager )
-        nCount += mpFtManager->FetchFontList( pList );
-    // nCount += VirtDevServerFont::FetchFontList( pList );
-    return nCount;
+        mpFtManager->AnnounceFonts( pList );
+    // VirtDevServerFont::AnnounceFonts( pList );
 }
 
 // -----------------------------------------------------------------------
@@ -256,9 +263,9 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
 
     // font not cached yet => create new font item
     ServerFont* pNew = NULL;
-    // TODO: pNew = VirtDevServerFont::CreateFont( rFontSelData );
-    if( !pNew && mpFtManager )
+    if( mpFtManager )
         pNew = mpFtManager->CreateFont( rFontSelData );
+    // TODO: pNew = VirtDevServerFont::CreateFont( rFontSelData );
 
     maFontList[ rFontSelData ] = pNew;
     if( pNew )
@@ -336,10 +343,10 @@ void GlyphCache::GarbageCollect()
         if( maFontList.size() >= 100 )
         {
             // remove unreferenced fonts
-            FontList::iterator it_next = maFontList.begin(), it;
+            FontList::iterator it_next = maFontList.begin();
             while( it_next != maFontList.end() )
             {
-                it = it_next++;
+                FontList::iterator it = it_next++;
                 ServerFont* pSF = it->second;
                 if( (pSF != NULL)
                 &&  (pSF->GetRefCount() <= 0)
@@ -403,23 +410,25 @@ inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGly
 // ServerFont
 // =======================================================================
 
-ServerFont::ServerFont( const ImplFontSelectData& rFSD, const glyphKernMap* pKern, const unicodeKernMap* pUniKern )
+ServerFont::ServerFont( const ImplFontSelectData& rFSD )
 :   maFontSelData(rFSD),
     mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
     mpPrevGCFont( NULL ),
     mpNextGCFont( NULL ),
-    nCos( 0x10000),
-    nSin( 0),
-    mpKernPairs( pKern ),
-    mpUnicodeKernPairs( pUniKern )
+    mnCos( 0x10000),
+    mnSin( 0)
 {
+    // TODO: move update of mpFontEntry into FontEntry class when
+    // it becomes reponsible for the ServerFont instantiation
+    ((ImplServerFontEntry*)rFSD.mpFontEntry)->SetServerFont( this );
+
     if( rFSD.mnOrientation != 0 )
     {
         const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
-        nCos = (long)( 0x10000 * cos( dRad ) + 0.5 );
-        nSin = (long)( 0x10000 * sin( dRad ) + 0.5 );
+        mnCos = static_cast<long>( 0x10000 * cos( dRad ) + 0.5 );
+        mnSin = static_cast<long>( 0x10000 * sin( dRad ) + 0.5 );
     }
 }
 
@@ -440,65 +449,6 @@ long ServerFont::Release() const
 {
     DBG_ASSERT( mnRefCount > 0, "ServerFont: RefCount underflow" );
     return --mnRefCount;
-}
-
-// -----------------------------------------------------------------------
-
-int ServerFont::GetGlyphKernValue( int left, int right ) const
-{
-    int kern = 0;
-    if( mpKernPairs )
-    {
-        std::map< int, std::map< int, int > >::const_iterator left_it =
-            mpKernPairs->find( left );
-        if( left_it != mpKernPairs->end() )
-        {
-            std::map< int, int >::const_iterator right_it = left_it->second.find( right );
-            if( right_it != left_it->second.end() )
-                kern = right_it->second;
-        }
-    }
-    return kern*(maFontSelData.mnWidth ? maFontSelData.mnWidth : maFontSelData.mnHeight)/1000;
-}
-
-// -----------------------------------------------------------------------
-
-ULONG ServerFont::GetKernPairs( struct ImplKernPairData** ppKernPairs ) const
-{
-    int nKernEntry = 0;
-    unicodeKernMap::const_iterator left_it;
-    std::map< sal_Unicode, int >::const_iterator right_it;
-    if( mpUnicodeKernPairs )
-    {
-        // count the kern entries
-        for( left_it = mpUnicodeKernPairs->begin(); left_it != mpUnicodeKernPairs->end(); ++left_it )
-        {
-            nKernEntry += left_it->second.size();
-        }
-    }
-
-    // allocate kern pair table
-    if( nKernEntry )
-    {
-        *ppKernPairs = new ImplKernPairData[ nKernEntry ];
-
-        // fill in kern pairs
-        nKernEntry = 0;
-        for( left_it = mpUnicodeKernPairs->begin(); left_it != mpUnicodeKernPairs->end(); ++left_it )
-        {
-            for( right_it = left_it->second.begin(); right_it != left_it->second.end(); ++right_it )
-            {
-                (*ppKernPairs)[ nKernEntry ].mnChar1 = (USHORT)left_it->first;
-                (*ppKernPairs)[ nKernEntry ].mnChar2 = (USHORT)right_it->first;
-                (*ppKernPairs)[ nKernEntry ].mnKern = right_it->second*(maFontSelData.mnWidth ? maFontSelData.mnWidth : maFontSelData.mnHeight)/1000;
-                nKernEntry++;
-            }
-        }
-    }
-    else
-        *ppKernPairs = NULL;
-
-    return (ULONG)nKernEntry;
 }
 
 // -----------------------------------------------------------------------
@@ -546,14 +496,87 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
 
 Point ServerFont::TransformPoint( const Point& rPoint ) const
 {
-    if( nCos == 0x10000 )
+    if( mnCos == 0x10000 )
         return rPoint;
     // TODO: use 32x32=>64bit intermediate
-    const double dCos = nCos * (1.0 / 0x10000);
-    const double dSin = nSin * (1.0 / 0x10000);
+    const double dCos = mnCos * (1.0 / 0x10000);
+    const double dSin = mnSin * (1.0 / 0x10000);
     long nX = (long)(rPoint.X() * dCos + rPoint.Y() * dSin);
     long nY = (long)(rPoint.Y() * dCos - rPoint.X() * dSin);
     return Point( nX, nY );
+}
+
+// =======================================================================
+
+ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
+:   ImplFontEntry( rFSD ),
+    mpServerFont( NULL )
+{}
+
+// -----------------------------------------------------------------------
+
+ImplServerFontEntry::~ImplServerFontEntry()
+{
+    // TODO: remove the ServerFont here instead of in the GlyphCache
+}
+
+// =======================================================================
+
+ExtraKernInfo::ExtraKernInfo( int nFontId )
+:   mnFontId( nFontId ),
+    mbInitialized( false )
+{}
+
+//--------------------------------------------------------------------------
+
+bool ExtraKernInfo::HasKernPairs() const
+{
+    if( !mbInitialized )
+        Initialize();
+    return !maUnicodeKernPairs.empty();
+}
+
+//--------------------------------------------------------------------------
+
+int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
+{
+    if( !mbInitialized )
+        Initialize();
+
+    // return early if no kerning available
+    if( maUnicodeKernPairs.empty() )
+        return 0;
+
+    // allocate kern pair table
+    int nKernCount = maUnicodeKernPairs.size();
+    *ppKernPairs = new ImplKernPairData[ nKernCount ];
+
+    // fill in unicode kern pairs with the kern value scaled to the font width
+    ImplKernPairData* pKernData = *ppKernPairs;
+    UnicodeKernPairs::const_iterator it =  it = maUnicodeKernPairs.begin();
+    for(; it != maUnicodeKernPairs.end(); ++it )
+        *(pKernData++) = *it;
+
+    return nKernCount;
+}
+
+//--------------------------------------------------------------------------
+
+int ExtraKernInfo::GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight ) const
+{
+    if( !mbInitialized )
+        Initialize();
+
+    if( maUnicodeKernPairs.empty() )
+        return 0;
+
+    ImplKernPairData aKernPair = { cLeft, cRight, 0 };
+    UnicodeKernPairs::const_iterator it = maUnicodeKernPairs.find( aKernPair );
+    if( it == maUnicodeKernPairs.end() )
+        return 0;
+
+    int nUnscaledValue = (*it).mnKern;
+    return nUnscaledValue;
 }
 
 // =======================================================================
