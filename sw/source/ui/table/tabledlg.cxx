@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:35:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _OFA_HTMLCFG_HXX //autogen
 #include <offmgr/htmlcfg.hxx>
@@ -1667,6 +1670,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aPageNoNF       (this, SW_RES(NF_PAGENUM        )),
     aKeepCB         (this, SW_RES(CB_KEEP           )),
     aSplitCB        (this, SW_RES(CB_SPLIT          )),
+    aSplitRowCB     (this, SW_RES(CB_SPLIT_ROW      )),
     aHeadLineCB     (this, SW_RES(CB_HEADLINE       )),
     aVertOrientFL   (this, SW_RES(FL_VERT_ORIENT    )),
     aTopRB          (this, SW_RES(RB_VERT_TOP       )),
@@ -1689,6 +1693,10 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
         LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
     aPgBrkRB.SetClickHdl(
         LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
+    aSplitCB.SetClickHdl(
+        LINK( this, SwTextFlowPage, SplitHdl_Impl));
+    aSplitRowCB.SetClickHdl(
+        LINK( this, SwTextFlowPage, SplitRowHdl_Impl));
 
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
@@ -1698,6 +1706,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     {
         aKeepCB.Hide();
         aSplitCB.Hide();
+        aSplitRowCB.Hide();
     }
 }
 
@@ -1731,7 +1740,11 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         bModified |= 0 != rSet.Put( SvxFmtKeepItem( aKeepCB.IsChecked()));
 
     if(aSplitCB.IsChecked() != aSplitCB.GetSavedValue())
-        bModified |= 0 != rSet.Put( SwFmtLayoutSplit( !aSplitCB.IsChecked()));
+        bModified |= 0 != rSet.Put( SwFmtLayoutSplit( aSplitCB.IsChecked()));
+
+    if(aSplitRowCB.IsChecked() != aSplitRowCB.GetSavedValue())
+        bModified |= 0 != rSet.Put( SwFmtRowSplit( aSplitRowCB.IsChecked()));
+
 
     const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( rSet, RES_BREAK );
     const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( rSet, RES_PAGEDESC );
@@ -1849,9 +1862,21 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         }
         if(SFX_ITEM_SET == rSet.GetItemState( RES_LAYOUT_SPLIT, FALSE, &pItem ))
         {
-            aSplitCB.Check( !((const SwFmtLayoutSplit*)pItem)->GetValue() );
-            aSplitCB.SaveValue();
+            aSplitCB.Check( ((const SwFmtLayoutSplit*)pItem)->GetValue() );
         }
+        else
+            aSplitCB.Check();
+
+        aSplitCB.SaveValue();
+        SplitHdl_Impl(&aSplitCB);
+
+        if(SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pItem ))
+        {
+            aSplitRowCB.Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
+        }
+        else
+            aSplitRowCB.SetState(STATE_DONTKNOW);
+        aSplitRowCB.SaveValue();
 
         if(bPageBreak)
         {
@@ -2105,7 +2130,22 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
         PageBreakPosHdl_Impl( &aPgBrkBeforeRB );
     return 0;
 }
-
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
+IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
+{
+    aSplitRowCB.Enable(pBox->IsChecked());
+    return 0;
+}
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
+IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
+{
+    pBox->EnableTriState(FALSE);
+    return 0;
+}
 /*-----------------30.05.97 07:37-------------------
 
 --------------------------------------------------*/
