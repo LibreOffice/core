@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:43:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,17 @@
                 <info>
                     <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
                 </info>
+            </prop>
+            <prop oor:name="Properties" oor:type="xs:int">
+                <info>
+                    <desc xml:lang="en-US">
+                    Additional information about a single command. 
+                    Bit 0 = Command has an image.
+                    Bit 1 = Image must be mirrored  (CTL/vertical text).
+                    Bit 2 = Image must be rotated (CTL/vertical text).
+                    </desc>
+                </info>
+                <value>0</value>
             </prop>
         </group>
 	</templates>
