@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
+ *  last change: $Author: tl $ $Date: 2002-01-04 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
     {
         // is this a MathType Storage?
         MathType aEquation( aText );
-        if (bSuccess = aEquation.Parse(rMedium.GetStorage()))
+        if (bSuccess = (1 == aEquation.Parse(rMedium.GetStorage())))
             Parse();
     }
     else
@@ -794,14 +794,42 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 
 BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
 {
-    BOOL     bSuccess = FALSE;
-    SvStream *pStream = rMedium.GetInStream();
+    BOOL        bSuccess = FALSE;
+    SvStream   *pStream = rMedium.GetInStream();
+    String      aTemp = aText;
 
     if (pStream)
     {
-        bSuccess = ImportSM20File( pStream, TRUE );
-        rMedium.CloseInStream();
+        const String& rFltName = rMedium.GetFilter()->GetFilterName();
+        if ( rFltName.EqualsAscii(MATHML_XML) )
+        {
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
+            bSuccess = 0 == aEquation.Import(rMedium);
+        }
+        else
+        {
+            bSuccess = ImportSM20File( pStream );
+            rMedium.CloseInStream();
+        }
     }
+
+    if( bSuccess )
+    {
+        aTemp += aText;
+        aText  = aTemp;
+
+        Parse();
+        SetModified(TRUE);
+        SmViewShell *pViewSh = SmGetActiveView();
+        if (pViewSh)
+        {
+            SfxBindings &rBnd = pViewSh->GetViewFrame()->GetBindings();
+            rBnd.Invalidate(SID_GRAPHIC);
+            rBnd.Invalidate(SID_TEXT);
+        }
+    }
+
     return bSuccess;
 }
 
@@ -856,12 +884,12 @@ BOOL SmDocShell::Load(SvStorage *pStor)
         }
         else
         {
-            bRet = 0 != Try3x (pStor, STREAM_READWRITE);
+            bRet = Try3x(pStor, STREAM_READWRITE);
 
             if( !bRet )
             {
                 pStor->Remove(String::CreateFromAscii(pStarMathDoc));
-                bRet = 0 != Try2x (pStor, STREAM_READWRITE);
+                bRet = Try2x(pStor, STREAM_READWRITE);
                 pStor->Remove(C2S("\1Ole10Native"));
             }
             else
@@ -887,7 +915,7 @@ BOOL SmDocShell::Load(SvStorage *pStor)
 BOOL SmDocShell::Insert(SvStorage *pStor)
 {
     String aTemp = aText;
-    BOOL bRet = TRUE, bChkOldVersion = TRUE;
+    BOOL bRet = FALSE, bChkOldVersion = TRUE;
 
     String aTmpStr( C2S( "Equation Native" ));
     if( pStor->IsStream( aTmpStr ))
@@ -906,12 +934,12 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLWrapper aEquation(xModel);
         SfxMedium aMedium(pStor);
-        bRet = aEquation.Import(aMedium);
+        bRet = 0 == aEquation.Import(aMedium);
     }
-    else if (!Try3x (pStor, STREAM_STD_READ))
+    else if (!(bRet = Try3x(pStor, STREAM_STD_READ)))
     {
-        pStor->Remove (String::CreateFromAscii(pStarMathDoc));
-        bRet = !Try2x (pStor, STREAM_STD_READ);
+        pStor->Remove(String::CreateFromAscii(pStarMathDoc));
+        bRet = Try2x(pStor, STREAM_STD_READ);
         pStor->Remove(C2S("\1Ole10Native"));
     }
 
@@ -1106,7 +1134,7 @@ BOOL SmDocShell::SaveCompleted(SvStorage * pStor)
 
 
 
-BOOL SmDocShell::ImportSM20File(SvStream *pStream, BOOL bInsert)
+BOOL SmDocShell::ImportSM20File(SvStream *pStream)
 {
     void ReadSM20SymSet(SvStream*, SmSymSet*);
 
@@ -1133,20 +1161,8 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream, BOOL bInsert)
             {
                 case 'T':
                     pStream->ReadByteString( aByteStr );
-                    aBuffer = ImportString( aByteStr );
-                    if (! bInsert)
-                    {
-                        aText = aBuffer;
-                        Parse();
-                    }
-                    else
-                    {
-                        SmViewShell *pViewSh = SmGetActiveView();
-                        if (pViewSh)
-                            pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                                    SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
-                                    new SfxStringItem(SID_INSERTTEXT, aBuffer), 0L);
-                    }
+                    aText = ImportString( aByteStr );
+                    Parse();
                     break;
 
                 case 'D':

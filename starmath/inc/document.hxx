@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
+ *  last change: $Author: tl $ $Date: 2002-01-04 13:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
     virtual BOOL        ConvertFrom(SfxMedium &rMedium);
             BOOL        InsertFrom(SfxMedium &rMedium);
 
-    BOOL                ImportSM20File(SvStream *pStream, BOOL bInsert = FALSE);
+    BOOL                ImportSM20File(SvStream *pStream);
 
     void                UpdateText();
 
