@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:15:39 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #define _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include "xmlprmap.hxx"
+#endif
+#ifndef _XMLOFF_XMLEXPPR_HXX
+#include "xmlexppr.hxx"
+#endif
+
 struct XMLPropertyMapEntry;
 //.........................................................................
 namespace xmloff
@@ -72,6 +79,24 @@ namespace xmloff
 
     void initializePropertyMaps();
 
+    //=====================================================================
+    //= OFormExportPropertyMapper
+    //=====================================================================
+    class OFormExportPropertyMapper : public SvXMLExportPropertyMapper
+    {
+    public:
+        OFormExportPropertyMapper( const UniReference< XMLPropertySetMapper >& _rMapper );
+
+        void handleSpecialItem(
+            SvXMLAttributeList&                         _rAttrList,
+            const XMLPropertyState&                     _rProperty,
+            const SvXMLUnitConverter&                   _rUnitConverter,
+            const SvXMLNamespaceMap&                    _rNamespaceMap,
+            const ::std::vector< XMLPropertyState >*    _pProperties,
+            sal_uInt32                                  _nIdx
+        ) const;
+    };
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -81,6 +106,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/18 15:15:39  fs
+ *  initial checkin - property maps
+ *
  *
  *  Revision 1.0 14.12.00 10:26:48  fs
  ************************************************************************/

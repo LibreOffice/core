@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-22 13:37:16 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,13 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+#ifndef _XMLOFF_CONTEXTID_HXX_
+#include "contextid.hxx"
+#endif
+
+#ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
+#include "controlpropertymap.hxx"
+#endif
 
 #include <string.h>
 
@@ -113,7 +120,7 @@ namespace xmloff
         MAP_ASCII( "FontWidth",             XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 ),
         MAP_ASCII( "FontWordLineMode",      XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 ),
         MAP_ASCII( "TextColor",             XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 ),
-        MAP_CONST( PROPERTY_FORMATKEY,      XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING, 0 ),
+        MAP_CONST( PROPERTY_FORMATKEY,      XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING | MID_FLAG_NO_PROPERTY_EXPORT | MID_FLAG_SPECIAL_ITEM, CTF_FORMS_DATA_STYLE ),
         MAP_ASCII( "FontEmphasisMark",      XML_NAMESPACE_STYLE,    XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
         MAP_ASCII( "FontRelief",                XML_NAMESPACE_STYLE,    XML_FONT_RELIEF,            XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 ),
         MAP_ASCII( "TextLineColor",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
@@ -150,6 +157,25 @@ namespace xmloff
         }
     }
 
+    //=====================================================================
+    //= OFormExportPropertyMapper
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OFormExportPropertyMapper::OFormExportPropertyMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
+        :SvXMLExportPropertyMapper( _rMapper )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OFormExportPropertyMapper::handleSpecialItem( SvXMLAttributeList& _rAttrList, const XMLPropertyState& _rProperty, const SvXMLUnitConverter& _rUnitConverter,
+        const SvXMLNamespaceMap& _rNamespaceMap, const ::std::vector< XMLPropertyState >* _pProperties,
+        sal_uInt32 _nIdx ) const
+    {
+        // ignore the number style of grid columns - this is formatted elsewhere
+        if ( CTF_FORMS_DATA_STYLE != getPropertySetMapper()->GetEntryContextId( _rProperty.mnIndex ) )
+            SvXMLExportPropertyMapper::handleSpecialItem( _rAttrList, _rProperty, _rUnitConverter, _rNamespaceMap, _pProperties, _nIdx );
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -157,6 +183,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/10/22 13:37:16  fs
+ *  #102407# corrected the MAP macro - old version generated invalid lengths for the PROPERTY_xxx strings
+ *
  *  Revision 1.13  2002/02/21 15:07:27  hr
  *  #65293#: include <string.h>
  *
