@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:16:00 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 06:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
 #endif
+#ifndef SW_UNOMID_HXX
+#include <unomid.h>
+#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -92,6 +95,9 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+// declarations
+void lcl_setPageDesc(SwDoc*, const uno::Any&, SfxItemSet& ); // from unoobj.cxx
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -127,11 +133,22 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
-    SfxPoolItem * pNewItem = rItem.Clone();
-    pNewItem->PutValue( aValue, pMap->nMemberId);
-    pDoc->SetDefault(*pNewItem);
-    delete pNewItem;
+    if (RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId)
+    {
+        SfxItemSet aSet( pDoc->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
+        aSet.Put(rItem);
+        lcl_setPageDesc( pDoc, aValue, aSet );
+        pDoc->SetDefault(aSet.Get(RES_PAGEDESC));
+    }
+    else
+    {
+        SfxPoolItem * pNewItem = rItem.Clone();
+        pNewItem->PutValue( aValue, pMap->nMemberId);
+        pDoc->SetDefault(*pNewItem);
+        delete pNewItem;
+    }
 }
 
 
