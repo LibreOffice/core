@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-13 19:10:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-14 09:15:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -279,7 +279,7 @@ $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
 #fallback
 LOCALDESC=$(shell find . -name $(SHL1TARGET).xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%.xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
