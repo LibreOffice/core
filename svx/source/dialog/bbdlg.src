@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:40:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog RID_SVXDLG_BBDLG
     Text [ italian ] = "Bordo / Sfondo" ;
     Text [ portuguese_brazilian ] = "Margem / Fundo" ;
     Text [ portuguese ] = "Contorno/Plano de fundo" ;
-    Text [ finnish ] = "Reunaviiva / tausta" ;
+    Text [ finnish ] = "Reuna/tausta" ;
     Text [ danish ] = "Ramme / Baggrund" ;
     Text [ french ] = "Bordure / Arrière-plan" ;
     Text [ swedish ] = "Inramning/ Bakgrund" ;
@@ -99,7 +99,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
