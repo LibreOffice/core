@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:39:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ typedef std::vector< SvxConfigEntry* > SvxEntries;
 class SvxConfigDialog : public SfxTabDialog
 {
 public:
-    SvxConfigDialog( Window*, const SfxItemSet*, SfxViewFrame* pFrame );
+    SvxConfigDialog( Window*, const SfxItemSet* );
     ~SvxConfigDialog();
 
     void                        ActivateTabPage( USHORT );
@@ -311,11 +311,13 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
 
-    SvxConfigEntry( USHORT nInitId, const String& rInitStr,
-                    const String& rHelpText, bool bPopup = FALSE );
+    SvxConfigEntry( const ::rtl::OUString& rDisplayName,
+                    const ::rtl::OUString& rCommandURL,
+                    bool bPopup = FALSE );
 
     SvxConfigEntry()
-        :   nId( 0 ),
+        :
+            nId( 0 ),
             bPopUp( FALSE ),
             bIsUserDefined( FALSE ),
             bIsMain( FALSE ),
@@ -327,9 +329,6 @@ public:
 
     ~SvxConfigEntry();
 
-    USHORT  GetId() const { return nId; }
-    void    SetId( USHORT nNew );
-
     const ::rtl::OUString&      GetCommand() const { return aCommand; }
     void    SetCommand( const String& rCmd ) { aCommand = rCmd; }
 
@@ -337,7 +336,7 @@ public:
     void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = TRUE; }
     bool    HasChangedName() const { return bStrEdited; }
 
-    const ::rtl::OUString&      GetHelpText() const { return aHelpText; }
+    const ::rtl::OUString&      GetHelpText() ;
     void    SetHelpText( const String& rStr ) { aHelpText = rStr; }
 
     const ::rtl::OUString&      GetHelpURL() const { return aHelpURL; }
@@ -349,7 +348,7 @@ public:
     void    SetUserDefined( bool bOn = TRUE ) { bIsUserDefined = bOn; }
     bool    IsUserDefined() const { return bIsUserDefined; }
 
-    bool    IsBinding() const { return nId != 0 && !bPopUp; }
+    bool    IsBinding() const { return !bPopUp; }
     bool    IsSeparator() const { return nId == 0; }
 
     SvxEntries* GetEntries() const { return pEntries; }
@@ -464,6 +463,9 @@ protected:
     // the ResourceURL to select when opening the dialog
     rtl::OUString                       m_aURLToSelect;
 
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::frame::XFrame > m_xFrame;
+
     SvxConfigPage( Window*, /* const ResId&, */ const SfxItemSet& );
     virtual ~SvxConfigPage();
 
@@ -497,6 +499,8 @@ protected:
     void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
 
 public:
+
+    static bool     CanConfig( const ::rtl::OUString& rModuleId );
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
