@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: as $ $Date: 2001-08-22 13:03:33 $
+ *  last change: $Author: as $ $Date: 2001-08-30 13:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,22 +458,23 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XTask > xActiveTask = xDesktop->getActiveTask();
 
-    if ( xActiveTask.is() )
-    {
-        // try to find the help frame
-        ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
-        xFrame = Reference < XDispatchProvider > (
-            xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
-    }
     Sequence < PropertyValue > aProps;
-    sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
+    sal_Int32 nFlag = FrameSearchFlag::ALL;
     sal_Bool bHelpTaskExists = sal_False;
     if ( aTicket.Len() )
     {
         xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
+        nFlag  = FrameSearchFlag::TASKS | FrameSearchFlag::CREATE;
     }
     else
     {
+        if ( xActiveTask.is() )
+        {
+            // try to find the help frame
+            ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
+            xFrame = Reference < XDispatchProvider > (
+                xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
+        }
         // otherwise the URL can be dispatched to the help frame
         if ( !xFrame.is() )
         {
@@ -508,7 +509,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
             DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aURL );
         Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
-                                DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
+                                DEFINE_CONST_UNICODE("OFFICE_HELP"), nFlag );
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aProps );
 
