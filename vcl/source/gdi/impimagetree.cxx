@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:32:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,17 +303,28 @@ void ImplImageTree::implCheckUserCache()
     {
         try
         {
-            DateTime aZipDateTime, aUserDirDateTime;
+            ::DateTime aZipDateTime, aCacheFileDateTime;
+            const uno::Sequence< ::rtl::OUString > aCacheFiles( mxFileAccess->getFolderContents( rUserDirURL, false ) );
 
             ::utl::typeConvert( mxFileAccess->getDateTimeModified( rZipURL ), aZipDateTime );
-            ::utl::typeConvert( mxFileAccess->getDateTimeModified( rUserDirURL ), aUserDirDateTime );
 
-            if( aZipDateTime > aUserDirDateTime )
+            for( sal_Int32 i = 0; i < aCacheFiles.getLength(); ++i )
             {
-                const uno::Sequence< ::rtl::OUString > aCacheFiles( mxFileAccess->getFolderContents( rUserDirURL, false ) );
+                const ::rtl::OUString aCacheFile( aCacheFiles[ i ] );
 
-                for( sal_Int32 i = 0; i < aCacheFiles.getLength(); ++i )
-                    mxFileAccess->kill( aCacheFiles[ i ] );
+                try
+                {
+                    ::utl::typeConvert( mxFileAccess->getDateTimeModified( aCacheFile ), aCacheFileDateTime );
+
+                    if( aZipDateTime > aCacheFileDateTime )
+                        mxFileAccess->kill( aCacheFile );
+                }
+                catch( const ucb::CommandAbortedException& )
+                {
+                }
+                catch( const uno::Exception& )
+                {
+                }
             }
         }
         catch( const ucb::CommandAbortedException& )
@@ -353,7 +364,7 @@ bool ImplImageTree::implLoadFromStream( SvStream& rIStm,
 
 // ------------------------------------------------------------------------------
 
-bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn )
+bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, bool bSearchLanguageDependent )
 {
     const BmpExHashMap::const_iterator  aBmpExFindIter( aBmpExHashMap.find( rName ) );
 
@@ -366,7 +377,70 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn )
 
         if( mxNameAcc.is() || ( implInit() && mxNameAcc.is() ) )
         {
-            if( mxNameAcc->hasByName( rName ) )
+            if( bSearchLanguageDependent )
+            {
+                // try to get image from local subdirectory
+                const ::rtl::OUString   aDash( ::rtl::OUString::createFromAscii( "-" ) );
+                const lang::Locale&     rLocale = Application::GetSettings().GetUILocale();
+                ::rtl::OUString         aSubDir[3]; // array must be expanded if more locale variants are checked!
+                int                     nSubDirs=0;
+                ::rtl::OUString         aLocaleStr( rLocale.Language );
+
+                aSubDir[nSubDirs++] = aLocaleStr;
+                if( rLocale.Country.getLength() )
+                {
+                    ( aLocaleStr += aDash ) += rLocale.Country;
+                    aSubDir[nSubDirs++] = aLocaleStr;
+
+                    if( rLocale.Variant.getLength() )
+                    {
+                        ( aLocaleStr += aDash ) += rLocale.Variant;
+                        aSubDir[nSubDirs++] = aLocaleStr;
+                    }
+                }
+
+                for( --nSubDirs; nSubDirs >= 0; nSubDirs-- )
+                {
+                    // check all locale variants, starting with the most detailed one
+                    if( aSubDir[nSubDirs].getLength() )
+                    {
+                        const sal_uInt32 nPos = rName.lastIndexOf( '/' );
+
+                        if( -1 != nPos )
+                        {
+                            ::rtl::OUString aLocaleName( rName.copy( 0, nPos + 1 ) );
+
+                            aLocaleName += aSubDir[nSubDirs];
+                            aLocaleName += ::rtl::OUString::createFromAscii( "/" );
+                            aLocaleName += rName.copy( nPos + 1 );
+
+                            if( mxNameAcc->hasByName( aLocaleName ) )
+                            {
+                                try
+                                {
+                                    uno::Reference< io::XInputStream > xIStm;
+
+                                    if( ( mxNameAcc->getByName( aLocaleName ) >>= xIStm ) && xIStm.is() )
+                                    {
+                                        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+
+                                        if( pIStm )
+                                        {
+                                            implLoadFromStream( *pIStm, aLocaleName, rReturn );
+                                            delete pIStm;
+                                        }
+                                    }
+                                }
+                                catch( const uno::Exception & )
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( rReturn.IsEmpty() && mxNameAcc->hasByName( rName ) )
             {
                 try
                 {
