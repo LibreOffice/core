@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-09 08:30:35 $
+ *  last change: $Author: tl $ $Date: 2001-05-17 13:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ static const char * aMathPropNames[] =
 };
 
 
+//! Beware of order according to *_BEGIN *_END defines in format.hxx !
+//! see respective load/save routines here
 static const char * aFormatPropNames[] =
 {
     "StandardFormat/Textmode",
@@ -166,33 +168,33 @@ static const char * aFormatPropNames[] =
     "StandardFormat/Distance/Horizontal",
     "StandardFormat/Distance/Vertical",
     "StandardFormat/Distance/Root",
-    "StandardFormat/Distance/SubScript",
     "StandardFormat/Distance/SuperScript",
-    "StandardFormat/Distance/LowerLimit",
-    "StandardFormat/Distance/UpperLimit",
-    "StandardFormat/Distance/OperatorSize",
-    "StandardFormat/Distance/OperatorSpace",
+    "StandardFormat/Distance/SubScript",
     "StandardFormat/Distance/Numerator",
     "StandardFormat/Distance/Denominator",
     "StandardFormat/Distance/Fraction",
     "StandardFormat/Distance/StrokeWidth",
+    "StandardFormat/Distance/UpperLimit",
+    "StandardFormat/Distance/LowerLimit",
     "StandardFormat/Distance/BracketSize",
     "StandardFormat/Distance/BracketSpace",
-    "StandardFormat/Distance/NormalBracketSize",
     "StandardFormat/Distance/MatrixRow",
     "StandardFormat/Distance/MatrixColumn",
     "StandardFormat/Distance/OrnamentSize",
     "StandardFormat/Distance/OrnamentSpace",
+    "StandardFormat/Distance/OperatorSize",
+    "StandardFormat/Distance/OperatorSpace",
     "StandardFormat/Distance/LeftSpace",
     "StandardFormat/Distance/RightSpace",
     "StandardFormat/Distance/TopSpace",
     "StandardFormat/Distance/BottomSpace",
+    "StandardFormat/Distance/NormalBracketSize",
     "StandardFormat/VariableFont",
     "StandardFormat/FunctionFont",
     "StandardFormat/NumberFont",
     "StandardFormat/TextFont",
-    "StandardFormat/SansFont",
     "StandardFormat/SerifFont",
+    "StandardFormat/SansFont",
     "StandardFormat/FixedFont"
 };
 
@@ -982,7 +984,6 @@ void SmMathConfig::LoadFormat()
         for (i = FNT_BEGIN;  i < FNT_END;  ++i)
         {
             Font aFnt;
-            aFnt.SetSize( pFormat->GetBaseSize() );
 
             if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
             {
@@ -993,6 +994,7 @@ void SmMathConfig::LoadFormat()
             }
             ++pVal;
 
+            aFnt.SetSize( pFormat->GetBaseSize() );
             pFormat->SetFont( i, aFnt );
         }
 
