@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 22:47:13 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ greek ] = "Automatic";
     Text[ dutch ] = "Automatisch";
     Text[ french ] = "Automatique";
-    Text[ spanish ] = "Automatic";
+    Text[ spanish ] = "Automático";
     Text[ italian ] = "Automatic";
     Text[ danish ] = "Automatic";
     Text[ swedish ] = "Automatic";
@@ -147,7 +147,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ greek ] = "Óýíïëï ÷áñáêôÞñùí";
     Text[ dutch ] = "Charset";
     Text[ french ] = "Jeu de caractères";
-    Text[ spanish ] = "Character Set";
+    Text[ spanish ] = "Juego de caracteres";
     Text[ italian ] = "Character Set";
     Text[ danish ] = "Character Set";
     Text[ swedish ] = "Teckenuppsättning";
@@ -172,7 +172,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ greek ] = "Ëåîéêü";
     Text[ dutch ] = "Woordenboek";
     Text[ french ] = "Dictionnaire";
-    Text[ spanish ] = "Dictionary";
+    Text[ spanish ] = "Diccionario";
     Text[ italian ] = "Dictionary";
     Text[ danish ] = "Dictionary";
     Text[ swedish ] = "Dictionary";
