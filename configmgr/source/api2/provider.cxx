@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,10 @@
  ************************************************************************/
 #include "provider.hxx"
 
-#ifndef CONFIGMGR_MODULE_HXX_
-#include "configmodule.hxx"
+#ifndef _CONFIGMGR_TRACER_HXX_
+#include "tracer.hxx"
 #endif
+
 #ifndef CONFIGMGR_CMTREEMODEL_HXX
 #include "cmtreemodel.hxx"
 #endif
@@ -84,6 +85,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
 
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
@@ -97,15 +101,48 @@ namespace configmgr
     using ::vos::ORef;
     using namespace osl;
 
+    // -----------------------------------------------------------------------------
+    typedef ::cppu::WeakImplHelper1<lang::XEventListener> XEventListener_BASE;
+    class OProviderDisposingListener : public XEventListener_BASE
+    {
+        OProvider* m_pProvider;
+
+    public:
+        OProviderDisposingListener(OProvider* pProvider)
+            :m_pProvider(pProvider){}
+
+        virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+            {
+                CFG_TRACE_INFO("Service Manager disposed, disposing the provider");
+                if (m_pProvider)
+                    m_pProvider->disposing(rEvt);
+            }
+    };
+
     //=============================================================================
     //= OProvider
     //=============================================================================
     //-----------------------------------------------------------------------------
-    OProvider::OProvider(Module& aModule, ServiceInfo const* pInfo)
+    OProvider::OProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceInfo const* pInfo)
               :ServiceComponentImpl(pInfo)
               ,OPropertyContainer(ServiceComponentImpl::rBHelper)
-              ,m_aModule(aModule)
+              ,m_xServiceFactory(_xServiceFactory)
     {
+        m_xDisposeListener = new OProviderDisposingListener(this);
+        uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->addEventListener(m_xDisposeListener);
+    }
+
+    //-----------------------------------------------------------------------------
+    OProvider::~OProvider()
+    {
+        if (m_xDisposeListener.is() && m_xServiceFactory.is())
+        {
+            uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
+            if (xComponent.is())
+                xComponent->removeEventListener(m_xDisposeListener);
+        }
     }
 
     // XTypeProvider
@@ -132,17 +169,35 @@ namespace configmgr
         return aRet;
     }
 
+    //-----------------------------------------------------------------------------
+    void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+    {
+        {
+            ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
+            m_xDisposeListener = NULL;
+            m_xServiceFactory = NULL;
+        }
+        dispose();
+    }
 
     //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing()
     {
-        if (isConnected())
         {
-            ::osl::MutexGuard aGuard(m_aProviderMutex);
-            if (isConnected())
-                disconnect();
+            ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
+            if (m_xDisposeListener.is() && m_xServiceFactory.is())
+            {
+                uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->removeEventListener(m_xDisposeListener);
+            }
+
+            m_xServiceFactory = NULL;
+            m_xDisposeListener = NULL;
         }
+
         ServiceComponentImpl::disposing();
+        OPropertyContainer::disposing();
     }
 
     // com::sun::star::lang::XUnoTunnel
@@ -173,7 +228,6 @@ namespace configmgr
         }
         return pId->getImplementationId();
     }
-
 } // namespace configmgr
 
 

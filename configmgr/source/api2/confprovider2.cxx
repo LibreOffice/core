@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
-#endif
-#ifndef CONFIGMGR_MODULE_HXX_
-#include "configmodule.hxx"
 #endif
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
@@ -179,53 +176,49 @@ namespace configmgr
     //=============================================================================
     ServiceInfo const& OConfigurationProvider::staticServiceInfo = aProviderInfo;
     //-----------------------------------------------------------------------------
-    OConfigurationProvider::OConfigurationProvider(Module& aModule)
-                           :OProvider(aModule,&aProviderInfo)
+    OConfigurationProvider::OConfigurationProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
+                           :OProvider(_xServiceFactory,&aProviderInfo)
                            ,m_pImpl(NULL)
     {
         registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH,            0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
     }
 
     //-----------------------------------------------------------------------------
-    void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw(uno::Exception)
+    OConfigurationProvider::~OConfigurationProvider()
+    {
+        delete m_pImpl;
+    }
+
+    //-----------------------------------------------------------------------------
+    void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw (uno::Exception)
     {
         ::rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("configuration"));
         ConnectionSettings aSettings(_rSettings);
         aSettings.setService(sService);
 
-        IConfigSession* pNewSession = m_aModule.connect(aSettings);
+        IConfigSession* pNewSession = aSettings.createConnection(m_xServiceFactory);
         if (!pNewSession)
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration registry. Please check your settings."), NULL);
-        m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_aModule, _rSettings);
-        m_aModule.setProvider(this);
+        m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_xServiceFactory, _rSettings);
     }
 
     //-----------------------------------------------------------------------------
-    void OConfigurationProvider::disconnect()
+    void SAL_CALL OConfigurationProvider::disposing()
     {
         if (m_pImpl)
-        {
-            m_aModule.disconnect();
-            m_aModule.disposing(this);
-            delete m_pImpl;
-            m_pImpl = NULL;
-        }
-    }
+            m_pImpl->dispose();
 
-    //-----------------------------------------------------------------------------
-    bool OConfigurationProvider::isConnected() const
-    {
-        return (m_pImpl != NULL) ? true : false;
+        OProvider::disposing();
     }
 
     //-----------------------------------------------------------------------------
     uno::Reference< uno::XInterface > SAL_CALL OConfigurationProvider::createInstance( const OUString& aServiceSpecifier )
         throw(uno::Exception, uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aProviderMutex);
+
+        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         CFG_TRACE_INFO("going to create a read access instance for %s", "missing unicode conversion");
-
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
         {
             // it's a known service name - try to create without args
@@ -248,7 +241,7 @@ namespace configmgr
         OConfigurationProvider::createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& aArguments )
             throw(uno::Exception, uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aProviderMutex);
+        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
         {
@@ -264,7 +257,6 @@ namespace configmgr
 
         aMoreArguments[0] <<= aServiceSpecifier;
         std::copy(aArguments.getConstArray(),aArguments.getConstArray() + nLength, aMoreArguments.getArray()+1);
-
         return m_pImpl->createReadAccess(aMoreArguments);
     }
 
@@ -272,17 +264,13 @@ namespace configmgr
     uno::Sequence< OUString > SAL_CALL OConfigurationProvider::getAvailableServiceNames(  )
         throw(uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aProviderMutex);
-
         sal_Int32 nCount = 0;
-
         {
-            for (int i= 0; i<getCreateServiceDataCount(); ++i)
+            for (int i= 0; i< getCreateServiceDataCount(); ++i)
                 nCount += countServices(getCreateServiceData()[i].info);
         }
 
         uno::Sequence< OUString > aNames(nCount);
-
         if (nCount > 0)
         {
             sal_Int32 n = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:20 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
@@ -256,6 +257,22 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
     return sal_False;
 }
+
+namespace configmgr
+{
+    // ------------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL instantiateAdminProvider( Reference< XMultiServiceFactory > const& rServiceManager )
+    {
+        return Reference< XMultiServiceFactory >( new configmgr::OAdminProvider( rServiceManager ) );
+    }
+
+    // ------------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL instantiateConfigProvider( Reference< XMultiServiceFactory > const& rServiceManager )
+    {
+        return Reference< XMultiServiceFactory > ( new configmgr::OConfigurationProvider(rServiceManager) );
+    }
+};
+
 
 //---------------------------------------------------------------------------------------
 extern "C" void* SAL_CALL component_getFactory(

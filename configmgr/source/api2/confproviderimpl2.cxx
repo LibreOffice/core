@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dg $ $Date: 2001-01-29 08:47:27 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
 #endif
-#ifndef CONFIGMGR_MODULE_HXX_
-#include "configmodule.hxx"
-#endif
-
 #ifndef _CONFIGMGR_TREECACHE_HXX_
 #include "treecache.hxx"
 #endif
@@ -102,8 +98,8 @@ namespace configmgr
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
-    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, IConfigSession* _pSession, Module& _rModule, const ConnectionSettings& _rSettings)
-                               :OProviderImpl(_pProvider, _pSession, _rModule, _rSettings)
+    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, IConfigSession* _pSession, const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, const ConnectionSettings& _rSettings)
+                               :OProviderImpl(_pProvider, _pSession, _xServiceFactory, _rSettings)
     {
     }
     //--------------------------------------------------------------------------

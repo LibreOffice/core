@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef CONFIGMGR_API_PROVIDER_HXX_
 #include "provider.hxx"
 #endif
-#ifndef CONFIGMGR_MODULE_HXX_
-#include "configmodule.hxx"
-#endif
 #ifndef _CONFIGMGR_TREECACHE_HXX_
 #include "treecache.hxx"
 #endif
@@ -147,17 +144,24 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::OProviderImpl(OProvider* _pProvider,
                                  IConfigSession* _pSession,
-                                 Module& _rModule, const ConnectionSettings& _rSettings)
-                  :m_xDefaultOptions(new OOptions(_rModule.getConverter()))
-                  ,m_pNewProviders(0)
+                                 const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
+                                 const ConnectionSettings& _rSettings)
+                  :m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
+                  ,m_pSession(_pSession)
     {
+        uno::Reference< script::XTypeConverter > xConverter(
+            _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))), uno::UNO_QUERY);
+        OSL_ENSHURE(xConverter.is(), "Module::Module : could not create an instance of the type converter !");
+
+        m_xDefaultOptions = new OOptions(xConverter);
+
         // this is a hack asking the session if caching should be supported or not
         // at the time we have complete notification support this hack isn't necessary anymore
         if (!_pSession->allowsCachingHack())
             m_xDefaultOptions->setNoCache(sal_True);
 
-        m_pTreeMgr = new TreeManager(_pSession, new OOptions(_rModule.getConverter()));
+        m_pTreeMgr = new TreeManager(_pSession, new OOptions(xConverter));
         m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
@@ -199,50 +203,22 @@ namespace configmgr
         }
         m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
         m_xDefaultOptions->setDefaultUser(sDefaultUser);
-
-        OProviderImplDisposingListener *pListener = new OProviderImplDisposingListener(this);
-        m_xEventListener = pListener;
-
-        uno::Reference<com::sun::star::lang::XComponent> xComponent(_rModule.getServiceManager(), uno::UNO_QUERY);
-        m_xComponent = xComponent;
-        if (xComponent.is())
-        {
-            xComponent->addEventListener(m_xEventListener);
-            // CFG_TRACE_INFO("insert disposeListener.");
-        }
     }
 
     //-----------------------------------------------------------------------------
     OProviderImpl::~OProviderImpl()
     {
-        delete m_pNewProviders;
         m_pTreeMgr->release();
         m_pTreeMgr = NULL;
-
-        // Second fall, Providerimpl will be destroyed befor ServiceMgr send disposing
-        if (m_xEventListener.is() && m_xComponent.is())
-        {
-            m_xComponent->removeEventListener(m_xEventListener);
-        }
+        delete m_pNewProviders;
+        delete m_pSession;
     }
 
     // --------------------------------- disposing ---------------------------------
-
-    void SAL_CALL OProviderImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+    void SAL_CALL OProviderImpl::dispose() throw()
     {
-        // stop lasy writing
-        if (m_pTreeMgr)
-        {
-            m_pTreeMgr->disableAsync();
-
-            // first fall, ServiceMgr send disposing
-            // if (m_xComponent.is())
-            // {
-            //     m_xComponent->removeEventListener(m_xEventListener);
-            // }
-            m_xComponent = NULL;
-            m_xEventListener = NULL;
-        }
+        m_pTreeMgr->dispose();
+        m_pSession->close();
     }
 
     //-----------------------------------------------------------------------------
