@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 09:26:01 $
+ *  last change: $Author: pb $ $Date: 2000-09-27 08:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,30 +834,46 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     ConfigItem( ASCII_STR("Office.Common/Path") )
 
 {
-    // only temporary
-    INetURLObject aOfficePath( Application::GetAppFileName(), INET_PROT_FILE );
-    aOfficePath.removeSegment();
-    aOfficePath.removeFinalSlash();
+    ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
+    Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
+    OUString aOfficePath;
+    if ( aAny >>= aOfficePath )
+    {
+        INetURLObject aOfficePathObj( aOfficePath, INET_PROT_FILE );
+        aOfficePathObj.removeFinalSlash();
+        m_aInstPath = aOfficePathObj.getFSysPath( INetURLObject::FSYS_DETECT );
+        m_aInstURL = aOfficePathObj.GetMainURL();
+        aOfficePathObj.insertName( ASCII_STR( "program" ) );
+        m_aProgPath = aOfficePathObj.getFSysPath( INetURLObject::FSYS_DETECT );
+        m_aProgURL = aOfficePathObj.GetMainURL();
+    }
+    else
+    {
+        DBG_ERRORFILE( "wrong any type" );
+    }
 
-    m_aProgPath = aOfficePath.getFSysPath( INetURLObject::FSYS_DETECT );
-    m_aProgURL = aOfficePath.GetMainURL();
-
-    aOfficePath.removeSegment();
-    aOfficePath.removeFinalSlash();
-    m_aInstPath = aOfficePath.getFSysPath( INetURLObject::FSYS_DETECT );
-    m_aInstURL = aOfficePath.GetMainURL();
-
-    aOfficePath.insertName( ASCII_STR("user") );
-    aOfficePath.removeFinalSlash();
-    m_aUserPath = aOfficePath.getFSysPath( INetURLObject::FSYS_DETECT );
-    m_aUserURL = aOfficePath.GetMainURL();
+    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
+    OUString aUserPath;
+    if ( aAny >>= aUserPath )
+    {
+        INetURLObject aUserPathObj( aUserPath, INET_PROT_FILE );
+        aUserPathObj.removeFinalSlash();
+        m_aUserPath = aUserPathObj.getFSysPath( INetURLObject::FSYS_DETECT );
+        m_aUserURL = aUserPathObj.GetMainURL();
+    }
+    else
+    {
+        DBG_ERRORFILE( "wrong any type" );
+    }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
-    SfxIniManager* pIniMgr = SfxIniManager::Get();
-    if ( pIniMgr )
+    Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    OUString aLocaleStr;
+    if ( aLocale >>= aLocaleStr )
+        m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr, '_' );
+    else
     {
-        String aLocale = pIniMgr->Get( SFX_KEY_LANGUAGE );
-        m_eLanguageType = ConvertIsoStringToLanguage( aLocale, '_' );
+        DBG_ERRORFILE( "wrong any type" );
     }
 
     Sequence< OUString > aNames = GetPathPropertyNames();
