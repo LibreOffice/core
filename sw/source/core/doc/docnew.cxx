@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 20:41:28 $
+ *  last change: $Author: mib $ $Date: 2002-06-26 11:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,13 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         pLinkMgr->SetPersist( pDocShell );
         //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
         if( pDrawModel )
+        {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
+            if( !pDocShell )
+                pDrawModel->ClearPersist();
+            ASSERT( pDrawModel->GetPersist() == GetPersist(),
+                    "draw model's persist is out of sync" );
+        }
     }
 }
 
