@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-16 10:49:43 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 12:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,12 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 0xa9:
+            if ((nVersion < 3) && (nTypeFace == 0x82))
+                nChar = '\'';
             rRet.Append(nChar);
             bRet=TRUE;
             break;
