@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:32:37 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 07:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3225,7 +3225,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_PREVWINDOW :
         {
             SfxWorkWindow *pWork = GetFrame()->GetWorkWindow_Impl();
-            pWork->ActivateNextChild_Impl( rReq.GetSlot() == SID_NEXTWINDOW ? TRUE :FALSE );
+            if ( !pWork->ActivateNextChild_Impl( rReq.GetSlot() == SID_NEXTWINDOW ? TRUE :FALSE ) )
+            {
+                GetViewShell()->GetWindow()->GrabFocus();
+                pWork->SetActiveChild_Impl( NULL );
+            }
             rReq.Done();
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:09:34 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 07:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2875,12 +2875,6 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
     if ( aList.Count() == 0 )
         return FALSE;
 
-    // Wenn der Focus in der Task liegt, ist pActiveChild zu ignorieren
-    SfxFrame *pTask = SfxViewFrame::Current()->GetFrame();
-    BOOL bTaskActive = pTask->GetWindow().HasChildPathFocus();
-
-    // F"ur das Taskfenster einen Dummy-Eintrag in die Liste
-//    USHORT nDummy =0xFFFF;
     USHORT nTopValue  = ChildTravelValue( SFX_ALIGN_LOWESTTOP );
     for ( i=0; i<aList.Count(); i++ )
     {
@@ -2889,21 +2883,13 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
             break;
     }
 
-//    aList.Insert( nDummy, i );
-
     USHORT n = bForward ? 0 : aList.Count()-1;
-    if ( bTaskActive )
-        n = i;
-
     SfxChild_Impl *pAct=NULL;
-    if ( pActiveChild && !bTaskActive )
+    if ( pActiveChild )
     {
         // Das aktive Fenster suchen
         for ( n=0; n<aList.Count(); n++ )
         {
-//            if ( aList[n] == nDummy )
-//                continue;
-
             SfxChild_Impl* pCli = (*pChilds)[aList[n]];
             if ( pCli && pCli->pWin && ( pCli->pWin == pActiveChild || !pActiveChild ) )
             {
@@ -2913,6 +2899,10 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
         }
     }
 
+    // dummy entries for the container window
+    aList.Insert( 0xFFFF, 0 );
+    aList.Insert( 0xFFFF, aList.Count() );
+    n = n + 1;
     if ( pAct )
     {
         for ( USHORT i=0; i<SFX_SPLITWINDOWS_MAX; i++ )
@@ -2930,217 +2920,52 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
         // pAct ist ein direktes ChildWindow
         // mit dem Nachfolger bzw. Vorg"anger des aktiven Fensters weitermachen
         if ( bForward )
-            n = n+1<aList.Count() ? n+1 : 0;
+            n = n+1;
         else
-            n = n>0 ? n-1 : aList.Count() - 1;
+            n = n-1;
+
+        if ( n == 0 || n == aList.Count()-1 )
+            return FALSE;
     }
 
-    USHORT nStart = n;
     for( ;; )
     {
-/*
-        if ( aList[n] == nDummy )
+        SfxChild_Impl* pCli = (*pChilds)[aList[n]];
+        if ( pCli->pWin )
         {
-            // Das n"achste Fenster ist das Taskfenster
-            SfxWorkWindow* pTaskWin = pTask->GetWorkWindow_Impl();
-            if ( pActiveChild && !bTaskActive )
-                pTaskWin->pActiveChild = NULL;
-            if ( pTaskWin->ActivateNextChild_Impl( bForward ) )
-                return TRUE;
-        }
-        else
- */
-        {
-            SfxChild_Impl* pCli = (*pChilds)[aList[n]];
-            if ( pCli == pAct )
-                // Alle durchgesehen
-                break;
-            else if ( pCli->pWin )
+            SfxChild_Impl* pNext = pCli;
+            for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
             {
-                SfxChild_Impl* pNext = pCli;
-                for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+                // Eventuell ist pNext ein Splitwindow
+                SfxSplitWindow *p = pSplit[n];
+                if ( pNext->pWin == p )
                 {
-                    // Eventuell ist pNext ein Splitwindow
-                    SfxSplitWindow *p = pSplit[n];
-                    if ( pNext->pWin == p )
-                    {
-                        // Das erste/letzte Fenster dort aktivieren
-                        p->SetActiveWindow_Impl( NULL );
-                        pNext = NULL;
-                        if( p->ActivateNextChild_Impl( bForward ) )
-                            return TRUE;
-                        break;
-                    }
-                }
-
-                if ( pNext )
-                {
-                    pNext->pWin->GrabFocus();
-                    pActiveChild = pNext->pWin;
-                    return TRUE;
-                }
-            }
-        }
-
-        if ( bForward )
-            n = n+1<aList.Count() ? n+1 : 0;
-        else
-            n = n>0 ? n-1 : aList.Count() - 1;
-
-        if ( n == nStart )
-            // Alle durchgesehen
-            break;
-    }
-
-    return FALSE;
-}
-
-/*
-BOOL SfxTaskWorkWin_Impl::ActivateNextChild_Impl( BOOL bForward )
-{
-    // Alle Kinder gem"a\s Liste sortieren
-    SvUShorts aList;
-    USHORT i;
-    for (i=SFX_OBJECTBAR_MAX; i<pChilds->Count(); i++)
-    {
-        SfxChild_Impl *pCli = (*pChilds)[i];
-        if ( pCli && pCli->bCanGetFocus && pCli->pWin )
-        {
-            USHORT k;
-            for (k=0; k<aList.Count(); k++)
-                if ( ChildTravelValue((*pChilds)[aList[k]]->eAlign) > ChildTravelValue(pCli->eAlign) )
+                    // Das erste/letzte Fenster dort aktivieren
+                    p->SetActiveWindow_Impl( NULL );
+                    pNext = NULL;
+                    if( p->ActivateNextChild_Impl( bForward ) )
+                        return TRUE;
                     break;
-            aList.Insert(i,k);
+                }
+            }
+
+            if ( pNext )
+            {
+                pNext->pWin->GrabFocus();
+                pActiveChild = pNext->pWin;
+                return TRUE;
+            }
         }
-    }
 
-    BOOL bFrameActive = pTask->GetActiveFrame()->GetWindow().HasChildPathFocus();
+        if ( bForward )
+            n = n+1;
+        else
+            n = n-1;
 
-    // F"ur das Taskfenster einen Dummy-Eintrag in die Liste
-    USHORT nDummy =0xFFFF;
-    USHORT nTopValue  = ChildTravelValue( SFX_ALIGN_LOWESTTOP );
-    for ( i=0; i<aList.Count(); i++ )
-    {
-        SfxChild_Impl* pCli = (*pChilds)[aList[i]];
-        if ( pCli->pWin && ChildTravelValue( pCli->eAlign ) > nTopValue )
+        if ( n == 0 || n == aList.Count()-1 )
             break;
-    }
-
-    aList.Insert( nDummy, i );
-
-    // Index des aktiven Fensters
-    USHORT n = bForward ? 0 : aList.Count()-1;
-    if ( bFrameActive )
-        n = i;
-
-    SfxChild_Impl *pAct=NULL;
-    if ( pActiveChild && !bFrameActive )
-    {
-        // Das aktive Fenster suchen
-        for ( n=0; n<aList.Count(); n++ )
-        {
-            if ( aList[n] == nDummy )
-                continue;
-
-            SfxChild_Impl* pCli = (*pChilds)[aList[n]];
-            if ( pCli && pCli->pWin && ( pCli->pWin == pActiveChild || !pActiveChild ) )
-            {
-                pAct = pCli;
-                break;
-            }
-        }
-    }
-
-    if ( pAct )
-    {
-        for ( USHORT i=0; i<SFX_SPLITWINDOWS_MAX; i++ )
-        {
-            // Eventuell ist pAct ein Splitwindow
-            SfxSplitWindow *p = pSplit[i];
-            if ( pAct->pWin == p )
-            {
-                if( p->ActivateNextChild_Impl( bForward ) )
-                    return TRUE;
-                break;
-            }
-        }
-    }
-
-    if ( pAct || bFrameActive )
-    {
-        // mit dem Nachfolger bzw. Vorg"anger des aktiven Fensters weitermachen
-        if ( bForward )
-        {
-            n = n+1;
-            if ( n == aList.Count() )
-                return FALSE;
-        }
-        else
-        {
-            if ( n == 0 )
-                return FALSE;
-            n = n-1;
-        }
-    }
-
-    for( ;; )
-    {
-        if ( aList[n] == nDummy )
-        {
-            SfxFrame *pFrame = pTask->GetFrame_Impl( bForward ? 0 : ( pTask->GetFrameCount_Impl() - 1 ) );
-            if ( !pFrame->ActivateNextChildWindow_Impl( bForward ) )
-                pFrame->GetFrameInterface()->activate();
-            return TRUE;
-        }
-        else
-        {
-            SfxChild_Impl* pCli = (*pChilds)[aList[n]];
-            if ( pCli == pAct )
-                // Alle durchgesehen
-                break;
-            else if ( pCli->pWin )
-            {
-                SfxChild_Impl* pNext = pCli;
-                for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
-                {
-                    // Eventuell ist pNext ein Splitwindow
-                    SfxSplitWindow *p = pSplit[n];
-                    if ( pNext->pWin == p )
-                    {
-                        // Das erste/letzte Fenster dort aktivieren
-                        p->SetActiveWindow_Impl( NULL );
-                        pNext = NULL;
-                        if( p->ActivateNextChild_Impl( bForward ) )
-                            return TRUE;
-                        break;
-                    }
-                }
-
-                if ( pNext )
-                {
-                    pNext->pWin->GrabFocus();
-                    pActiveChild = pNext->pWin;
-                    return TRUE;
-                }
-            }
-        }
-
-        if ( bForward )
-        {
-            n = n+1;
-            if ( n == aList.Count() )
-                break;
-        }
-        else
-        {
-            if ( n == 0 )
-                break;
-            n = n-1;
-        }
-
     }
 
     return FALSE;
 }
- */
 
