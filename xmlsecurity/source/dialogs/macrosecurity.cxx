@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-20 15:42:47 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 06:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiSer
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
 
-    MacroSecurityTP*    mpLevelTP = new MacroSecurityLevelTP( &maTabCtrl, this );
-    MacroSecurityTP*    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP( &maTabCtrl, this );
+    mpLevelTP = new MacroSecurityLevelTP( &maTabCtrl, this );
+    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP( &maTabCtrl, this );
 
     maTabCtrl.SetTabPage( RID_XMLSECTP_SECLEVEL, mpLevelTP );
     maTabCtrl.SetTabPage( RID_XMLSECTP_TRUSTSOURCES, mpTrustSrcTP );
