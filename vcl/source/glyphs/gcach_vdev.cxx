@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-17 09:40:08 $
+ *  last change: $Author: hdu $ $Date: 2000-11-17 10:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,15 +121,15 @@ void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor 
 
     rFactor = 1;
 
-    rTo.mnWidth         = aFSD.mnWidth;
     rTo.mnAscent        = aMetric.GetAscent();
     rTo.mnDescent       = aMetric.GetDescent();
     rTo.mnLeading       = aMetric.GetLeading();
     rTo.mnSlant         = aMetric.GetSlant();
     rTo.meType          = aMetric.GetType();
-    rTo.mnFirstChar     = 0x0020;   // TODO: where to get this info
-    rTo.mnLastChar      = 0xFFFE;   // TODO: where to get this info
+    rTo.mnFirstChar     = 0x0020;   // TODO: where to get this info?
+    rTo.mnLastChar      = 0xFFFE;   // TODO: where to get this info?
 
+    rTo.mnWidth         = aFSD.mnWidth;
     rTo.maName          = aFSD.maName;
     rTo.maStyleName     = aFSD.maStyleName;
     rTo.mnOrientation   = aFSD.mnOrientation;
@@ -202,19 +202,22 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
     ULONG nPairs = vdev.GetKerningPairCount();
     if( nPairs > 0 )
     {
-        KerningPair* pKernPairs = new KerningPair[ nPairs ];
+        KerningPair* const pKernPairs = new KerningPair[ nPairs ];
         vdev.GetKerningPairs( nPairs, pKernPairs );
 
         *ppImplKernPairs = new ImplKernPairData[ nPairs ];
-        ImplKernPairData* pImplKernPair = *ppImplKernPairs;
+        ImplKernPairData* pTo = *ppImplKernPairs;
+        KerningPair* pFrom = pKernPairs;
         for ( ULONG n = 0; n < nPairs; n++ )
         {
-            pImplKernPair->mnChar1  = pKernPairs->nChar1;
-            pImplKernPair->mnChar2  = pKernPairs->nChar2;
-            pImplKernPair->mnKern   = pKernPairs->nKern;
-            ++pImplKernPair;
-            ++pKernPairs;
+            pTo->mnChar1    = pFrom->nChar1;
+            pTo->mnChar2    = pFrom->nChar2;
+            pTo->mnKern     = pFrom->nKern;
+            ++pFrom;
+            ++pTo;
         }
+
+        delete[] pKernPairs;
     }
 
     return nPairs;
