@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:32:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     Control VS_VALUES
     {
@@ -143,6 +144,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     Control VS_VALUES
     {
@@ -187,6 +189,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     Control VS_VALUES
     {
@@ -231,6 +234,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     Control VS_VALUES
     {
@@ -265,6 +269,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ arabic ] = "ÑÈØ ÇáÕæÑ";
         Text[ turkish ] = "Grafiðe baðlantý oluþtur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vincular imágenes";
     };
     FixedText FT_ERROR
     {
@@ -293,6 +298,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ korean ] = "°¶·¯¸® -ÁÖÁ¦ '±Û¸Ó¸®±âÈ£'¿¡´Â ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "'Madde iþaretleri' galeri konusu altýnda grafik mevcut deðil.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No hay imágenes en el tema 'Bullets' de la Galería.";
     };
 };
 /**************************************************************************/
@@ -333,6 +339,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "·¹º§";
         Text[ turkish ] = "Düzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nivel";
     };
     MultiListBox LB_LEVEL
     {
@@ -368,6 +375,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato";
     };
     FixedText FT_FMT
     {
@@ -394,6 +402,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¹øÈ£¸Å±â±â(~N)";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nu~meración";
     };
     ListBox LB_FMT
     {
@@ -696,6 +705,20 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verknüpft - Grafik verknüpft" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "1, 2, 3, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "A, B, C, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "a, b, c, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "I, II, III, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "i, ii, iii, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "A, .., AA, .., AAA, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "a, .., aa, .., aaa, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Viñeta" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Imagen" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Imagen vinculada" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -725,6 +748,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "Àü¿¡";
         Text[ turkish ] = "Baþýna ekle:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Delante";
     };
     Edit ED_PREFIX
     {
@@ -763,6 +787,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "ÈÄ¿¡";
         Text[ turkish ] = "Sonuna ekle:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "D~etrás";
     };
     Edit ED_SUFFIX
     {
@@ -798,6 +823,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¹®ÀÚ À¯Çü(~C):";
         Text[ turkish ] = "Karakter þablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ catalan ] = "Es~tilo de carácter:";
     };
     ListBox LB_CHARFMT
     {
@@ -832,6 +858,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "»ö:";
         Text[ turkish ] = "Renk:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Color:";
     };
     ListBox LB_BUL_COLOR
     {
@@ -867,6 +894,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "»ó´ëÀû Å©±â(~R):";
         Text[ turkish ] = "Orantýlý boyut:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño relativo:";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -911,6 +939,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¿Ïº®ÇÏ°Ô";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Completo";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -955,6 +984,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¿¡¼­ ½ÃÀÛ";
         Text[ turkish ] = "Baþlangýç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~mpezar en";
     };
     NumericField ED_START
     {
@@ -998,6 +1028,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "±âÈ£ º¸ÀÌ±â";
         Text[ turkish ] = "Simgeyi görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mostrar símbolo";
     };
     FixedText FT_ALIGN
     {
@@ -1026,6 +1057,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¸ÂÃã(~A)";
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Alineación";
     };
     ListBox LB_ALIGN
     {
@@ -1160,6 +1192,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Orta" ; > ;
         < "Sað" ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda" ; > ;
+        < "Centrado" ; > ;
+        < "Derecha" ; > ;
+    };
     };
     String STR_BULLET
     {
@@ -1186,6 +1224,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¹®ÀÚ";
         Text[ turkish ] = "Karakter";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~arácter";
     };
     PushButton PB_BULLET
     {
@@ -1221,6 +1260,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "±×·¡ÇÈ";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen";
     };
     MenuButton MB_BITMAP
     {
@@ -1259,6 +1299,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ korean ] = "...ÆÄÀÏ·ÎºÎÅÍ";
                     Text[ turkish ] = "Dosyadan...";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "De archivo...";
                 };
                 MenuItem
                 {
@@ -1287,6 +1328,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "...¼±ÅÃ";
         Text[ turkish ] = "Seçim...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selec~ción...";
     };
     FixedText FT_SIZE
     {
@@ -1314,6 +1356,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MF_WIDTH
     {
@@ -1360,6 +1403,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MF_HEIGHT
     {
@@ -1406,6 +1450,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "Á¶Á¤";
         Text[ turkish ] = "Orantýlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sincronización";
     };
     FixedText FT_ORIENT
     {
@@ -1433,6 +1478,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¹æÇâ";
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Orientación";
     };
     ListBox LB_ORIENT
     {
@@ -1694,6 +1740,18 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Satýr ortada" ; > ;
         < "Satýr altta" ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Encima de línea de refefencia" ; > ;
+        < "Centro de línea de referencia" ; > ;
+        < "Debajo de línea de referencia" ; > ;
+        < "Carácter arriba" ; > ;
+        < "Carácter centrado" ; > ;
+        < "Carácter abajo" ; > ;
+        < "Línea superior" ; > ;
+        < "Línea centro" ; > ;
+        < "Línea inferior" ; > ;
+    };
     };
     GroupBox GB_SAME_LEVEL
     {
@@ -1720,6 +1778,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¸ðµç ¼öÁØ";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Todos los niveles";
     };
     CheckBox CB_SAME_LEVEL
     {
@@ -1746,6 +1805,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¿¬¼ÓÀûÀ¸·Î ¹øÈ£¸Å±â±â(~C)";
         Text[ turkish ] = "Sürekli numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración c~onsecutiva";
     };
     GroupBox GB_PREVIEW
     {
@@ -1772,6 +1832,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_PREVIEW
     {
@@ -1800,6 +1861,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "µe´Y¥DÃD[¶µ¥Ø½s¸¹]¤¤¨S¦³¹Ï§Î¡C";
         Text[ turkish ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ Ýí ãæÖæÚ ÇáÌÇáíÑí 'Bullets'.";
+        Text[ catalan ] = "No existen imágenes en el tema 'Viñetas' de la Gallery.";
     };
 
 };
@@ -1841,6 +1903,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "¼öÁØ";
         Text[ turkish ] = "Düzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nivel";
     };
     MultiListBox LB_LEVEL
     {
@@ -1877,6 +1940,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "À§Ä¡¿Í °£°Ý";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Konum ve aralýk";
+        Text[ catalan ] = "Posición y espacio";
     };
     FixedText FT_BORDERDIST
     {
@@ -1904,6 +1968,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "µé¿©¾²±â";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sangría";
     };
     CheckBox CB_RELATIVE
     {
@@ -1930,6 +1995,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Relati~vo";
     };
     MetricField MF_BORDERDIST
     {
@@ -1975,6 +2041,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "ÅØ½ºÆ®¿¡¡¡´ëÇÑ °£°Ý";
         Text[ turkish ] = "Metin uzaklýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Distancia al texto";
     };
     MetricField MF_INDENT
     {
@@ -2019,6 +2086,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "ÃÖ¼Ò°£°Ý,  ¹øÈ£ <-> ÅØ½ºÆ®";
         Text[ turkish ] = "Asgari aralýk: Numara <-> Metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia mínima número <-> texto";
     };
     MetricField MF_NUMDIST
     {
@@ -2064,6 +2132,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "¹øÈ£¸Å±â±â ¸ÂÃã(~U)";
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Alineación de numeración";
     };
     ListBox LB_ALIGN
     {
@@ -2197,6 +2266,12 @@ TabPage RID_SVXPAGE_NUM_POSITION
         < "Orta" ; > ;
         < "Sað" ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda" ; > ;
+        < "Centrado" ; > ;
+        < "Derecha" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -2223,6 +2298,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "±âº»°ª";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterminado";
     };
     GroupBox GB_PREVIEW
     {
@@ -2249,6 +2325,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_PREVIEW
     {
@@ -2282,6 +2359,7 @@ String RID_STR_EDIT_GRAPHIC
     Text[ korean ] = "¿¬°á";
     Text[ turkish ] = "Baðlantý oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vincular";
 };
 String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
 String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
