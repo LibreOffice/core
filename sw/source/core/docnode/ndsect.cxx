@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:39:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,22 +788,6 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     SetModified();
 }
 
-void SwDoc::ChgSectionPasswd(
-        const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
-        const SwSection& rSection )
-{
-    SwSectionNode* pSectNd = 0;
-    pSectNd = rSection.GetFmt()->GetSectionNode( TRUE );
-
-    if( DoesUndo() )
-        ClearRedo();
-
-    if( pSectNd )
-        pSectNd->GetSection().SetPasswd( rNew );
-
-    SetModified();
-}
-
 /* -----------------19.02.99 09:31-------------------
  * LockFrms wurde im InsertSection genutzt, um zu verhindern, dass
  * SectionFrms durch das DelFrms zerstoert werden. Dies ist durch
@@ -1036,6 +1020,7 @@ SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
     rFmt.UnlockModify();
 }
 
+#if OSL_DEBUG_LEVEL > 1
 //Hier werden ueberfluessige SectionFrms entfernt
 SwFrm* SwClearDummies( SwFrm* pFrm )
 {
@@ -1063,6 +1048,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
     }
     return pFrm;
 }
+#endif
 
 SwSectionNode::~SwSectionNode()
 {
