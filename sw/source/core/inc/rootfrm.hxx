@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:09:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,13 @@ public:
     void   SetFixSize( SzPtr );
 #endif
     Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
+
+    //! Searches for the content frame that is closest to
+    //! the passed position. Additionally the parameter 'offset'
+    //! defines a direction [+/-] in which to step relative to
+    //! frame we found.
+    Point GetContentFromPos( const Point &rPoint, int offset ) const;
+
     virtual void ChgSize( const Size& aNewSize );
 
     inline void SetIdleFlags();
