@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GraphicFilter.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:32:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,34 +63,34 @@
 <oor:component-schema oor:name="GraphicFilter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
         <author>SJ</author>
-        <desc xml:lang="en-US">Contains specialized data for internal graphic filter.</desc>
+        <desc >Contains specialized data for internal graphic filter.</desc>
     </info>
     <templates>
 		<group oor:name="Filter">
-            <info><desc xml:lang="en-US">Lists of all internal graphic filters.</desc></info>
+            <info><desc>Lists of all internal graphic filters.</desc></info>
             <prop oor:name="Type" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Supported content type of this filter. Must be an internal type name.</desc></info>
+                <info><desc>Supported content type of this filter. Must be an internal type name.</desc></info>
             </prop>
             <prop oor:name="FormatName" oor:type="xs:string">
-                <info><desc xml:lang="en-US">A shortname, which describe the grafik format.</desc></info>
+                <info><desc>A shortname, which describe the grafik format.</desc></info>
             </prop>
             <prop oor:name="RealFilterName" oor:type="xs:string">
-                <info><desc xml:lang="en-US">The internal filter name of a real document filter (mostly draw).</desc></info>
+                <info><desc>The internal filter name of a real document filter (mostly draw).</desc></info>
             </prop>
             <prop oor:name="UIComponent" oor:type="xs:string">
-                <info><desc xml:lang="en-US">The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
+                <info><desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
             </prop>
             <prop oor:name="Flags" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">Specify the filter in some further properties (e.g. import/export/..).</desc></info>
+                <info><desc>Specify the filter in some further properties (e.g. import/export/..).</desc></info>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Localized name of the filter, whch can be shown at the UI.</desc></info>
+                <info><desc>Localized name of the filter, whch can be shown at the UI.</desc></info>
             </prop>
 		</group>
 	</templates>
 	<component>
         <set oor:name="Filters" oor:node-type="Filter">
-            <info><desc xml:lang="en-US">Lists the registered office filters.</desc></info>
+            <info><desc>Lists the registered office filters.</desc></info>
         </set>
 	</component>
 </oor:component-schema>
