@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@ TabPage RID_SVXPAGE_POSITION
         Text[ italian ] = "Posizione ~X";
         Text[ portuguese_brazilian ] = "Posi???o ~X";
         Text[ portuguese ] = "Posi???o ~X";
-        Text[ danish ] = "Position X";
+        Text[ danish ] = "Position ~X";
         Text[ french ] = "Position ~X";
         Text[ swedish ] = "Position ~X";
         Text[ dutch ] = "Positie ~X";
         Text[ spanish ] = "Posici??n ~X";
         Text[ english_us ] = "Position ~X";
         Text[ russian ] = "???????? ~X";
-        Text[ greek ] = "??????? ~X";
+        Text[ greek ] = "���� ~X";
         Text[ polish ] = "Pozycja ~X";
         Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ ~X";
         Text[ korean ] = "�?\"��? X(~X)";
@@ -113,7 +113,9 @@ TabPage RID_SVXPAGE_POSITION
         Text[ czech ] = "Pozice X";
         Text[ hebrew ] = "Position ~X";
         Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��~X";
-        Text[ slovak ] = "Poz��cia ~X";
+        Text[ slovak ] = "Pozﾴ?ﾢﾴ?ﾢcia ~X";
+        Text[ hungarian ] = "~X pozíció";
+        Text[ slovenian ] = "Položaj ~X";
     };
     FixedText FT_POS_Y
     {
@@ -125,12 +127,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ swedish ] = "Position ~Y";
     Text[ italian ] = "Posizione ~Y";
         Text[ portuguese ] = "Posi???o ~Y";
-        Text[ danish ] = "Position Y";
+        Text[ danish ] = "Position ~Y";
         Text[ dutch ] = "Positie~Y";
         Text[ spanish ] = "Posici??n ~Y";
         Text[ english_us ] = "Position ~Y";
         Text[ russian ] = "???????? ~Y";
-        Text[ greek ] = "??????? ~Y";
+        Text[ greek ] = "���� ~Y";
         Text[ polish ] = "Pozycja ~Y";
         Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ ~Y";
         Text[ korean ] = "�?\"��? Y(~Y)";
@@ -145,7 +147,9 @@ TabPage RID_SVXPAGE_POSITION
         Text[ czech ] = "Pozice Y";
         Text[ hebrew ] = "Position ~Y";
         Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��~Y";
-        Text[ slovak ] = "Poz��cia ~Y";
+        Text[ slovak ] = "Pozﾴ?ﾢﾴ?ﾢcia ~Y";
+        Text[ hungarian ] = "~Y pozíció";
+        Text[ slovenian ] = "Položaj ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -195,7 +199,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ spanish ] = "Posici??n" ;
         Text [ english_us ] = "Position" ;
         Text[ russian ] = "????????";
-        Text[ greek ] = "???????";
+        Text[ greek ] = "����";
         Text[ polish ] = "Pozycja";
         Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ";
         Text[ korean ] = "�?\"��?";
@@ -206,10 +210,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posici??";
         Text[ thai ] = "����??�??��?";
-        Text[ czech ] = "Um��st�>n��";
+        Text[ czech ] = "Umﾴ?ﾢﾴ?ﾢstﾴ?ﾢ>nﾴ?ﾢﾴ?ﾢ";
         Text[ hebrew ] = "�թ�?�?��-�?�ժ";
         Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     Control CTL_RECT
     {
@@ -230,7 +236,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText [ french ] = "Point de base" ;
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText[ russian ] = "?'??????????? ?,??????";
-        QuickHelpText[ greek ] = "????????? ???????,";
+        QuickHelpText[ greek ] = "������ �����";
         QuickHelpText[ polish ] = "Punkt podstawy";
         QuickHelpText[ japanese ] = "Ɵ?Ɵ��,�Ɵ?�,�Ɵ�Ɵ?";
         QuickHelpText[ korean ] = "����Ս�?";
@@ -243,10 +249,12 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ catalan ] = "Punt base";
         QuickHelpText[ finnish ] = "Peruspiste";
         QuickHelpText[ thai ] = "Base point";
-        QuickHelpText[ czech ] = "Zǭkladn�� bod";
+        QuickHelpText[ czech ] = "Základní bod";
         QuickHelpText[ hebrew ] = "Basispunkt";
         QuickHelpText[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        QuickHelpText[ slovak ] = "Zǭkladnǫ bod";
+        QuickHelpText[ slovak ] = "Základný bod";
+        QuickHelpText[ hungarian ] = "Alappont";
+        QuickHelpText[ slovenian ] = "Temeljna točka";
     };
     GroupBox GB_ANCHOR
     {
@@ -265,7 +273,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ portuguese_brazilian ] = "Ancoragem" ;
         Text [ portuguese ] = "?,ncora" ;
         Text[ russian ] = "???????";
-        Text[ greek ] = "?'????????????";
+        Text[ greek ] = "��������";
         Text[ polish ] = "Zakotwiczenie";
         Text[ japanese ] = "�,�Ɵ��,�Ɵ�";
         Text[ korean ] = "����� �?\"��?";
@@ -277,10 +285,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ catalan ] = "Ancoratge";
         Text[ finnish ] = "Ankkurointi";
         Text[ thai ] = "???";
-        Text[ czech ] = "Ukotven��";
+        Text[ czech ] = "Ukotvenﾴ?ﾢﾴ?ﾢ";
         Text[ hebrew ] = "Verankerung";
         Text[ hindi ] = "���?����?��?���?����?����?����?����?��-���?����?����?����?����?����?��,���?����?��-";
         Text[ slovak ] = "Ukotvenie";
+        Text[ hungarian ] = "Horgonyzás";
+        Text[ slovenian ] = "Sidranje";
     };
     FixedText FT_ANCHOR
     {
@@ -295,11 +305,11 @@ TabPage RID_SVXPAGE_POSITION
         Text [ french ] = "~Ancre" ;
         Text [ dutch ] = "~Anker" ;
         Text [ swedish ] = "~Ankare" ;
-        Text [ danish ] = "Anker" ;
+        Text [ danish ] = "~Forankring" ;
         Text [ portuguese ] = "~?,ncora" ;
         Text [ portuguese_brazilian ] = "?,ncora" ;
         Text[ russian ] = "???????";
-        Text[ greek ] = "~?'????????????";
+        Text[ greek ] = "~������";
         Text[ polish ] = "~Zakotwiczenie";
         Text[ japanese ] = "�,�Ɵ��,�Ɵ���?�?�(~A)";
         Text[ korean ] = "����� �?\"��?(~A)";
@@ -311,10 +321,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ catalan ] = "~Ancora";
         Text[ finnish ] = "~Ankkuri";
         Text[ thai ] = "~???";
-        Text[ czech ] = "Ukotven��";
+        Text[ czech ] = "Ukotvenﾴ?ﾢﾴ?ﾢ";
         Text[ hebrew ] = "�թ���-�'�?�ժ";
         Text[ hindi ] = "~���?����?��?���?����?����?����?����?��-���?����?����?��";
         Text[ slovak ] = "~Ukotvenie";
+        Text[ hungarian ] = "~Horgony";
+        Text[ slovenian ] = "Za~sidraj";
     };
     ListBox LB_ANCHOR
     {
@@ -370,7 +382,7 @@ TabPage RID_SVXPAGE_POSITION
             < "Til afsnit" ; > ;
             < "Som tegn" ; > ;
             < "Til siden" ; > ;
-            < "Til rammen" ; > ;
+            < "Til ramme" ; > ;
         };
         stringlist [ italian ] =
         {
@@ -409,10 +421,10 @@ TabPage RID_SVXPAGE_POSITION
     };
     StringList [ greek ] =
     {
-            < "??\"??? ????????????????" ; > ;
-        < "??, ??????????\"??????," ; > ;
-        < "??\"?? ??????????" ; > ;
-        < "??\"? ???????????" ; > ;
+            < "���� ���������" ; > ;
+        < "�� ����������" ; > ;
+        < "��� ������" ; > ;
+        < "��� �������" ; > ;
     };
     StringList [ polish ] =
     {
@@ -495,8 +507,8 @@ TabPage RID_SVXPAGE_POSITION
     {
          < "Na odstavec" ; > ;
         < "Jako znak" ; > ;
-        < "Na strǭnku" ; > ;
-        < "Na rǭmec" ; > ;
+        < "Na stránku" ; > ;
+        < "Na rámec" ; > ;
     };
     StringList [ hebrew ] =
     {
@@ -516,9 +528,23 @@ TabPage RID_SVXPAGE_POSITION
     {
          < "Na odstavec" ; > ;
         < "Ako znak" ; > ;
-        < "Na strǭnku" ; > ;
-        < "Na rǭmec" ; > ;
+        < "Na stránku" ; > ;
+        < "Na rámec" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Bekezdésig" ; > ;
+        < "Karakterként" ; > ;
+            < "Oldalra" ; > ;
+            < "Keretbe" ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Na odstavek" ; > ;
+        < "Kot znak" ; > ;
+            < "Na stran" ; > ;
+            < "Na okvir" ; > ;
+        };
     };
     FixedText FT_ORIENT
     {
@@ -652,16 +678,16 @@ TabPage RID_SVXPAGE_POSITION
         };
         stringlist [ danish ] =
         {
-            < "Fra oven" ; > ;
-            < "Foroven" ; > ;
+            < "Fra toppen" ; > ;
+            < "Over" ; > ;
             < "Centreret" ; > ;
-            < "Forneden" ; > ;
-            < "Tegn ??erst" ; > ;
-            < "Tegn centreret" ; > ;
-            < "Tegn nederst" ; > ;
-            < "R??kke ??erst" ; > ;
-            < "R??kke centreret" ; > ;
-            < "R??kke nederst" ; > ;
+            < "Under" ; > ;
+            < "Toppen af tegnet" ; > ;
+            < "Midten af tegnet" ; > ;
+            < "Bunden af tegnet" ; > ;
+            < "Toppen af linjen" ; > ;
+            < "Midten af linjen" ; > ;
+            < "Bunden af linjen" ; > ;
         };
         stringlist [ portuguese ] =
         {
@@ -691,16 +717,16 @@ TabPage RID_SVXPAGE_POSITION
     };
     StringList [ greek ] =
     {
-            < "?'???? ??????" ; > ;
-        < "?????" ; > ;
-        < "??\"? ?????\"???" ; > ;
-        < "????\"??" ; > ;
-        < "??????????\"??????, ??????" ; > ;
-        < "??????????\"??????, ??\"? ?????\"???" ; > ;
-        < "??????????\"??????, ??\"? ?????\"???" ; > ;
-        < "?\"??????? ??????" ; > ;
-        < "?\"??????? ??\"? ?????\"???" ; > ;
-        < "?\"??????? ???\"??" ; > ;
+            < "��� ��� ������" ; > ;
+        < "�����" ; > ;
+        < "�������������" ; > ;
+        < "����" ; > ;
+        < "������ ��� ���������" ; > ;
+        < "������ ��� ���������" ; > ;
+        < "��� ���� ����� ��� ���������" ; > ;
+        < "���� ������ ��� �������" ; > ;
+        < "��� ������ ��� �������" ; > ;
+        < "��� ���� ����� ��� �������" ; > ;
     };
     StringList [ polish ] =
     {
@@ -848,15 +874,15 @@ TabPage RID_SVXPAGE_POSITION
     StringList [ czech ] =
     {
          < "Shora" ; > ;
-        < "Vǫ��e" ; > ;
-        < "Na stﾏ?ed" ; > ;
-        < "N���e" ; > ;
+        < "Vý�?��?�e" ; > ;
+        < "Na st���?ed" ; > ;
+        < "Nﾴ?ﾢﾴ?ﾢﾴ?ﾢe" ; > ;
         < "Vrchol znaku" ; > ;
-        < "Stﾏ?ed znaku" ; > ;
+        < "St���?ed znaku" ; > ;
         < "Pata znaku" ; > ;
-        < "Vrchol �?ǭdku" ; > ;
-        < "St�?ed �?ǭdku" ; > ;
-        < "Pata �?ǭdku" ; > ;
+        < "Vrchol �?�?ádku" ; > ;
+        < "St�?�?ed �?�?ádku" ; > ;
+        < "Pata �?�?ádku" ; > ;
     };
     StringList [ hebrew ] =
     {
@@ -892,11 +918,37 @@ TabPage RID_SVXPAGE_POSITION
         < "Pod" ; > ;
         < "Vrchol znaku" ; > ;
         < "Stred znaku" ; > ;
-        < "P��ta znaku" ; > ;
+        < "Pﾴ?ﾢﾴ?ﾢta znaku" ; > ;
         < "Vrchol riadku" ; > ;
         < "Stred riadku" ; > ;
-        < "P��ta riadku" ; > ;
+        < "Pﾴ?ﾢﾴ?ﾢta riadku" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Felülről" ; > ;
+        < "Felett" ; > ;
+            < "Középre igazított" ; > ;
+            < "Alatt" ; > ;
+            < "Karakter teteje" ; > ;
+            < "Karakter közepe" ; > ;
+            < "Karakter alja" ; > ;
+            < "Sor teteje" ; > ;
+            < "Sor közepe" ; > ;
+            < "Sor alja" ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Od zgoraj" ; > ;
+        < "Nad" ; > ;
+            < "Na sredini" ; > ;
+            < "Spodaj" ; > ;
+            < "Nad znakom" ; > ;
+            < "Na sredini znaka" ; > ;
+            < "Pod znakom" ; > ;
+            < "Nad vrstico" ; > ;
+            < "Na sredini vrstice" ; > ;
+            < "Na dnu vrstice" ; > ;
+        };
     };
     TriStateBox TSB_PROTECT
     {
@@ -911,7 +963,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ portuguese_brazilian ] = "~Proteger" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojaa" ;
-        Text [ danish ] = "Beskyt" ;
+        Text [ danish ] = "~Beskyt" ;
         Text [ french ] = "Prot?ger" ;
         Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
@@ -919,7 +971,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ russian ] = "?-??????";
-        Text[ greek ] = "???~???\"???????";
+        Text[ greek ] = "����~�����";
         Text[ polish ] = "Chr~o?\"";
         Text[ japanese ] = "��?���(~O)";
         Text[ korean ] = "���?�(~O)";
@@ -933,10 +985,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ czech ] = "Zamknout";
         Text[ hebrew ] = "Sch~Ǭtzen";
         Text[ hindi ] = "~���?����?����?��-���?����?��?���?����?����?����?����?����?��-���?����?����?��";
-        Text[ slovak ] = "~Zamknǧ��";
+        Text[ slovak ] = "~Zamknú�?��?�";
+        Text[ hungarian ] = "~Védelem";
+        Text[ slovenian ] = "Z~aščiti";
     };
     Text[ russian ] = "????????";
-    Text[ greek ] = "???????";
+    Text[ greek ] = "����";
     Text[ polish ] = "Pozycja";
     Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ";
     Text[ korean ] = "�?\"��?";
@@ -947,10 +1001,12 @@ TabPage RID_SVXPAGE_POSITION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posici??";
     Text[ thai ] = "����??�??��?";
-    Text[ czech ] = "Um��st�>n��";
+    Text[ czech ] = "Umﾴ?ﾢﾴ?ﾢstﾴ?ﾢ>nﾴ?ﾢﾴ?ﾢ";
     Text[ hebrew ] = "�թ�?�?��-�?�ժ";
     Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��";
     Text[ slovak ] = "Umiestnenie";
+    Text[ hungarian ] = "Pozíció";
+    Text[ slovenian ] = "Položaj";
 };
  // RID_SVXPAGE_SIZE ---------------------------------------------------------
 TabPage RID_SVXPAGE_SIZE
@@ -966,7 +1022,7 @@ TabPage RID_SVXPAGE_SIZE
     Text [ portuguese_brazilian ] = "Tamanho" ;
     Text [ portuguese ] = "Tamanho" ;
     Text [ finnish ] = "Koko" ;
-    Text [ danish ] = "St??relse" ;
+    Text [ danish ] = "St�rrelse" ;
     Text [ french ] = "Taille" ;
     Text [ swedish ] = "Storlek" ;
     Text [ dutch ] = "Grootte" ;
@@ -984,14 +1040,14 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "Le~veys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "~Breedte" ;
         Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "Wi~dth" ;
         Text[ russian ] = "????????";
-        Text[ greek ] = "~????\"??,,";
+        Text[ greek ] = "~������";
         Text[ polish ] = "~Szeroko?>??";
         Text[ japanese ] = "��?(~D)";
         Text[ korean ] = "�\"?��\"(~D)";
@@ -1002,10 +1058,12 @@ TabPage RID_SVXPAGE_SIZE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ampla~da";
         Text[ thai ] = "��'���?��?~�����?";
-        Text[ czech ] = "����?ka";
+        Text[ czech ] = "ﾴ?ﾢﾴ?ﾢﾴ?ﾢﾴ?ﾢ?ka";
         Text[ hebrew ] = "�թ��-�-�'�ժ";
         Text[ hindi ] = "���?����?��?���?����?��?~���?���ϋ���?���ϋ���?����?����?��?";
-        Text[ slovak ] = "����~rka";
+        Text[ slovak ] = "ﾴ?ﾢﾴ?ﾢﾴ?ﾢﾴ?ﾢ~rka";
+        Text[ hungarian ] = "~Szélesség";
+        Text[ slovenian ] = "Ši~rina";
     };
     FixedText FT_HEIGHT
     {
@@ -1020,14 +1078,14 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "K~orkeus" ;
-        Text [ danish ] = "H??de" ;
+        Text [ danish ] = "H~�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H~??jd" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "H~eight" ;
         Text[ russian ] = "?'?<??????";
-        Text[ greek ] = "??~????,,";
+        Text[ greek ] = "�~���";
         Text[ polish ] = "W~ysoko?>??";
         Text[ japanese ] = "��?�?-(~E)";
         Text[ korean ] = "�?'�?�(~E)";
@@ -1038,10 +1096,12 @@ TabPage RID_SVXPAGE_SIZE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~l??a";
         Text[ thai ] = "��'���???~��?";
-        Text[ czech ] = "Vǫ��ka";
+        Text[ czech ] = "Vý�?��?�ka";
         Text[ hebrew ] = "�թ�'�-�'�\"�ժ";
         Text[ hindi ] = "���?����?��?���?����?��?~���?����?��?���?����?����?��?";
-        Text[ slovak ] = "~Vǫ��ka";
+        Text[ slovak ] = "~Vý�?��?�ka";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "Vi~šina";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -1092,7 +1152,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText [ portuguese ] = "Ponto de base" ;
         QuickHelpText[ russian ] = "?'??????????? ?,??????";
-        QuickHelpText[ greek ] = "????????? ???????,";
+        QuickHelpText[ greek ] = "������ �����";
         QuickHelpText[ polish ] = "Punkt podstawy";
         QuickHelpText[ japanese ] = "Ɵ?Ɵ��,�Ɵ?�,�Ɵ�Ɵ?";
         QuickHelpText[ korean ] = "����Ս�?";
@@ -1105,10 +1165,12 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ catalan ] = "Punt base";
         QuickHelpText[ finnish ] = "Peruspiste";
         QuickHelpText[ thai ] = "Base point";
-        QuickHelpText[ czech ] = "Zǭkladn�� bod";
+        QuickHelpText[ czech ] = "Základní bod";
         QuickHelpText[ hebrew ] = "Basispunkt";
         QuickHelpText[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        QuickHelpText[ slovak ] = "Zǭkladnǫ bod";
+        QuickHelpText[ slovak ] = "Základný bod";
+        QuickHelpText[ hungarian ] = "Alappont";
+        QuickHelpText[ slovenian ] = "Temeljna točka";
     };
     CheckBox CBX_SCALE
     {
@@ -1123,11 +1185,11 @@ TabPage RID_SVXPAGE_SIZE
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
         Text [ swedish ] = "Anpassa ~proportionellt" ;
-        Text [ danish ] = "Proportional" ;
+        Text [ danish ] = "~Bevar st�rrelsesforhold" ;
         Text [ portuguese_brazilian ] = "~Manter propor???o" ;
         Text [ portuguese ] = "Pr~oporcional" ;
         Text[ russian ] = "???????????,?? ??????????????";
-        Text[ greek ] = "~?'???????????";
+        Text[ greek ] = "~������ ���������";
         Text[ polish ] = "~Zachowaj proporcje";
         Text[ japanese ] = "����-�(~K)";
         Text[ korean ] = "��\"�?�?\" ���\"�-?��? ���-(~K)";
@@ -1139,10 +1201,12 @@ TabPage RID_SVXPAGE_SIZE
         Text[ catalan ] = "~Iguala";
         Text[ finnish ] = "S??ilyt?? ~suhde";
         Text[ thai ] = "~?����??��?����?��?�??��?";
-        Text[ czech ] = "Zachovat pomﾎ>r";
+        Text[ czech ] = "Zachovat pom���>r";
         Text[ hebrew ] = "~Abgleich";
         Text[ hindi ] = "~���?����?��?���?����?����?����?���ϋ���?����?����?����?�� ���?����?����?��-���?����?��<";
-        Text[ slovak ] = "~Zachovaﾏﾾ pomer";
+        Text[ slovak ] = "~Zachova��Ŵ�� pomer";
+        Text[ hungarian ] = "~Rögzített méretarány";
+        Text[ slovenian ] = "~Ohrani razmerje";
     };
     GroupBox GRP_SIZE
     {
@@ -1157,14 +1221,14 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "Tamanho" ;
         Text [ portuguese ] = "Tamanho" ;
         Text [ finnish ] = "Koko" ;
-        Text [ danish ] = "St??relse" ;
+        Text [ danish ] = "St�rrelse" ;
         Text [ french ] = "Taille" ;
         Text [ swedish ] = "Storlek" ;
         Text [ dutch ] = "Grootte" ;
         Text [ spanish ] = "Tama??o" ;
         Text [ english_us ] = "Size" ;
         Text[ russian ] = "?????????";
-        Text[ greek ] = "????????????,,";
+        Text[ greek ] = "�������";
         Text[ polish ] = "Rozmiar";
         Text[ japanese ] = "�,��,��,�";
         Text[ korean ] = "�?����";
@@ -1178,7 +1242,9 @@ TabPage RID_SVXPAGE_SIZE
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "�թ�'�-�\"�?�ժ";
         Text[ hindi ] = "���?���ϋ���?����?����?����?����?���ϋ���?����?����?����?��";
-        Text[ slovak ] = "Ve��kos��";
+        Text[ slovak ] = "Veﾴ?ﾢﾴ?ﾢkosﾴ?ﾢﾴ?ﾢ";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     TriStateBox TSB_PROTECT
     {
@@ -1193,7 +1259,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "~Proteger" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojaa" ;
-        Text [ danish ] = "Beskyt" ;
+        Text [ danish ] = "~Beskyt" ;
         Text [ french ] = "Prot?ger" ;
         Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
@@ -1201,7 +1267,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ russian ] = "?-??????";
-        Text[ greek ] = "???~???\"???????";
+        Text[ greek ] = "�~��������";
         Text[ polish ] = "Chr~o?\"";
         Text[ japanese ] = "��?���(~O)";
         Text[ korean ] = "���?�(~O)";
@@ -1215,7 +1281,9 @@ TabPage RID_SVXPAGE_SIZE
         Text[ czech ] = "Zamknout";
         Text[ hebrew ] = "Sch~Ǭtzen";
         Text[ hindi ] = "~���?����?����?��-���?����?��?���?����?����?����?����?����?��-���?����?����?��";
-        Text[ slovak ] = "~Zamknǧ��";
+        Text[ slovak ] = "~Zamknú�?��?�";
+        Text[ hungarian ] = "~Védelem";
+        Text[ slovenian ] = "Z~aščiti";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -1230,7 +1298,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ spanish ] = "Ajustar ancho al texto" ;
         Text [ french ] = "Adapter la lar~geur au texte" ;
         Text [ swedish ] = "Anpassa br~edd till text" ;
-        Text [ danish ] = "Tilpas bredde til tekst" ;
+        Text [ danish ] = "Tilpas ~bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
         Text [ portuguese_brazilian ] = "Ajustar a ~largura ao texto" ;
         Text[ russian ] = "?'?<?????????,?? ????????? ????,??????,??";
@@ -1246,10 +1314,12 @@ TabPage RID_SVXPAGE_SIZE
         Text[ catalan ] = "~Adapta l'amplada al text";
         Text[ finnish ] = "Sovita ~leveys tekstiin";
         Text[ thai ] = "~��?���?��'���?��?�����?��???�,���\"��?��'���?";
-        Text[ czech ] = "P�?izp��sobit ����?ku textu";
+        Text[ czech ] = "Pﾴ?ﾢ?izpﾴ?ﾢﾴ?ﾢsobit ﾴ?ﾢﾴ?ﾢﾴ?ﾢﾴ?ﾢ?ku textu";
         Text[ hebrew ] = "Br~eite an Text anpassen";
         Text[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ? ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ? ~ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ<ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        Text[ slovak ] = "~Prisp��sobi�� ����rku na text";
+        Text[ slovak ] = "~Prispﾴ?ﾢﾴ?ﾢsobiﾴ?ﾢﾴ?ﾢ ﾴ?ﾢﾴ?ﾢﾴ?ﾢﾴ?ﾢrku na text";
+        Text[ hungarian ] = "~Szélesség igazítása a szöveghez";
+        Text[ slovenian ] = "~Prilagodi širino besedilu";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -1266,7 +1336,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ spanish ] = "~Ajustar altura al texto" ;
         Text [ french ] = "Adapter la haute~ur au texte" ;
         Text [ swedish ] = "Anpassa h??jd till text" ;
-        Text [ danish ] = "Tilpas h??de til tekst" ;
+        Text [ danish ] = "Tilpas h�j~de til tekst" ;
         Text [ portuguese ] = "Ajustar ~altura ao texto" ;
         Text [ portuguese_brazilian ] = "Ajustar a  ~altura ao texto" ;
         Text[ russian ] = "?'?<?????????,?? ???????? ????,??????,??";
@@ -1282,13 +1352,15 @@ TabPage RID_SVXPAGE_SIZE
         Text[ catalan ] = "~Adapta l'al??da al texto";
         Text[ finnish ] = "Sovita ~korkeus tekstiin";
         Text[ thai ] = "��?���?��'���?~??��?��???�,���\"��?��'���?";
-        Text[ czech ] = "P�?izp��sobit vǫ��ku textu";
+        Text[ czech ] = "P�?�?izp�?��?�sobit vý�?��?�ku textu";
         Text[ hebrew ] = "H��h~e an Text anpassen";
         Text[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ? ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ? ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ<ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?~ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        Text[ slovak ] = "Prisp��sobi�� ~vǫ��ku na text";
+        Text[ slovak ] = "Prisp�?��?�sobi�?��?� ~vý�?��?�ku na text";
+        Text[ hungarian ] = "~Magasság igazítása a szöveghez";
+        Text[ slovenian ] = "Prilagodi ~višino besedilu";
     };
     Text[ russian ] = "?????????";
-    Text[ greek ] = "????????????,,";
+    Text[ greek ] = "�������";
     Text[ polish ] = "Rozmiar";
     Text[ japanese ] = "�,��,��,�";
     Text[ korean ] = "�?����";
@@ -1302,7 +1374,9 @@ TabPage RID_SVXPAGE_SIZE
     Text[ czech ] = "Velikost";
     Text[ hebrew ] = "�թ�'�-�\"�?�ժ";
     Text[ hindi ] = "���?���ϋ���?����?����?����?����?���ϋ���?����?����?����?��";
-    Text[ slovak ] = "Ve��kos��";
+    Text[ slovak ] = "Veﾴ?ﾢﾴ?ﾢkosﾴ?ﾢﾴ?ﾢ";
+    Text[ hungarian ] = "Méret";
+    Text[ slovenian ] = "Velikost";
 };
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
 TabPage RID_SVXPAGE_ANGLE
@@ -1334,14 +1408,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ portuguese_brazilian ] = "Posi???o ~X" ;
         Text [ portuguese ] = "Posi???o ~X" ;
         Text [ finnish ] = "Sijainti ~X" ;
-        Text [ danish ] = "Position X" ;
+        Text [ danish ] = "Position ~X" ;
         Text [ french ] = "Position ~X" ;
         Text [ swedish ] = "Position ~X" ;
         Text [ dutch ] = "Positie ~X" ;
         Text [ spanish ] = "Posici??n ~X" ;
         Text [ english_us ] = "Position ~X" ;
         Text[ russian ] = "???????? ~X";
-        Text[ greek ] = "??????? ~X";
+        Text[ greek ] = "���� ~X";
         Text[ polish ] = "Pozycja ~X";
         Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ ~X";
         Text[ korean ] = "�?\"��? X(~X)";
@@ -1355,7 +1429,9 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Pozice X";
         Text[ hebrew ] = "Position ~X";
         Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��~X";
-        Text[ slovak ] = "Poz��cia ~X";
+        Text[ slovak ] = "Pozﾴ?ﾢﾴ?ﾢcia ~X";
+        Text[ hungarian ] = "~X pozíció";
+        Text[ slovenian ] = "Položaj ~X";
     };
     FixedText FT_POS_Y
     {
@@ -1368,14 +1444,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ portuguese_brazilian ] = "Posi???o ~Y" ;
         Text [ portuguese ] = "Posi???o ~Y" ;
         Text [ finnish ] = "Sijainti ~Y" ;
-        Text [ danish ] = "Position Y" ;
+        Text [ danish ] = "Position ~Y" ;
         Text [ french ] = "Position ~Y" ;
         Text [ swedish ] = "Position ~Y" ;
         Text [ dutch ] = "Positie ~Y" ;
         Text [ spanish ] = "Posici??n ~Y" ;
         Text [ english_us ] = "Position ~Y" ;
         Text[ russian ] = "???????? ~Y";
-        Text[ greek ] = "??????? ~Y";
+        Text[ greek ] = "���� ~Y";
         Text[ polish ] = "Pozycja ~Y";
         Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ ~Y";
         Text[ korean ] = "�?\"��? Y(~Y)";
@@ -1389,7 +1465,9 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Pozice Y";
         Text[ hebrew ] = "Position ~Y";
         Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��~Y";
-        Text[ slovak ] = "Poz��cia ~Y";
+        Text[ slovak ] = "Pozﾴ?ﾢﾴ?ﾢcia ~Y";
+        Text[ hungarian ] = "~Y pozíció";
+        Text[ slovenian ] = "Položaj ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -1432,14 +1510,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ portuguese_brazilian ] = "?,ngulo" ;
         Text [ portuguese ] = "~?,ngulo" ;
         Text [ finnish ] = "~Kulma" ;
-        Text [ danish ] = "Vinkel" ;
+        Text [ danish ] = "~Vinkel" ;
         Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "??n~gulo" ;
         Text [ english_us ] = "~Angle" ;
         Text[ russian ] = "??????";
-        Text[ greek ] = "~?\"???????";
+        Text[ greek ] = "~�����";
         Text[ polish ] = "~K??t";
         Text[ japanese ] = "��'���(~A)";
         Text[ korean ] = "��?�?\"(~A)";
@@ -1450,10 +1528,12 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Angle";
         Text[ thai ] = "~?���?";
-        Text[ czech ] = "�?hel";
+        Text[ czech ] = "ﾴ?ﾢ?hel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~���?����?��-���?����?��<���?���ϋ�";
         Text[ slovak ] = "~Uhol";
+        Text[ hungarian ] = "~Szög";
+        Text[ slovenian ] = "~Kot";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1474,14 +1554,14 @@ TabPage RID_SVXPAGE_ANGLE
         SpinSize = 500 ;
         CustomUnitText [ portuguese_brazilian ] = " graus" ;
         CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ danish ] = "grader" ;
+        CustomUnitText [ danish ] = " grader" ;
         CustomUnitText [ italian ] = "Gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degr?s" ;
         CustomUnitText [ dutch ] = "Graden" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ russian ] = " ??????????";
-        CustomUnitText[ greek ] = "?????????,,";
+        CustomUnitText[ greek ] = "������";
         CustomUnitText[ polish ] = " st.";
         CustomUnitText[ japanese ] = "���";
         CustomUnitText[ korean ] = "ﾉ?\"";
@@ -1493,10 +1573,12 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ finnish ] = " astetta";
         CustomUnitText[ thai ] = " ?��??��";
-        CustomUnitText[ czech ] = " stup�?��";
+        CustomUnitText[ czech ] = " stupﾴ?ﾢ?ﾴ?ﾢﾴ?ﾢ";
         CustomUnitText[ hebrew ] = " �թ�?���?�-���ժ";
         CustomUnitText[ hindi ] = " ���?���ϋ���?���ϋ���?����?��-���?����?��?���?����?����?����?����?����?����?����?����?��?";
-        CustomUnitText[ slovak ] = " stupﾏ?ov";
+        CustomUnitText[ slovak ] = " stup���?ov";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
     };
     Control CTL_RECT
     {
@@ -1517,7 +1599,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText [ dutch ] = "Rotatiepunt" ;
         QuickHelpText [ portuguese ] = "Ponto de rota???o" ;
         QuickHelpText[ russian ] = "??????? ????????????";
-        QuickHelpText[ greek ] = "????????? ??????????\"???????,";
+        QuickHelpText[ greek ] = "������ �����������";
         QuickHelpText[ polish ] = "Punkt rotacyjny";
         QuickHelpText[ japanese ] = "�>?����?-�?>�,<�,�";
         QuickHelpText[ korean ] = "ﾡ??ﾍ?\"ﾍ??";
@@ -1530,10 +1612,12 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ catalan ] = "Punt de rotaci??";
         QuickHelpText[ finnish ] = "Kiertopiste";
         QuickHelpText[ thai ] = "Rotation point";
-        QuickHelpText[ czech ] = "Rota�?n�� bod";
+        QuickHelpText[ czech ] = "Rotační bod";
         QuickHelpText[ hebrew ] = "Rotationspunkt";
         QuickHelpText[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        QuickHelpText[ slovak ] = "Rota�?nǫ bod";
+        QuickHelpText[ slovak ] = "Rotačný bod";
+        QuickHelpText[ hungarian ] = "Forgatási pont";
+        QuickHelpText[ slovenian ] = "Točka obračanja";
     };
     Control CTL_ANGLE
     {
@@ -1554,14 +1638,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ portuguese_brazilian ] = "Piv??" ;
         Text [ portuguese ] = "Ponto de rota???o" ;
         Text [ finnish ] = "Keskipiste" ;
-        Text [ danish ] = "Rotationspunkt" ;
+        Text [ danish ] = "Pivoteringspunkt" ;
         Text [ french ] = "Point de rotation" ;
         Text [ swedish ] = "Rotationspunkt" ;
         Text [ dutch ] = "Draaipunt" ;
         Text [ spanish ] = "Punto de rotaci??n" ;
         Text [ english_us ] = "Pivot point" ;
         Text[ russian ] = "??????,?? ?????????";
-        Text[ greek ] = "????????? ??????????\"???????,,";
+        Text[ greek ] = "������ ���������";
         Text[ polish ] = "Punkt obrotu";
         Text[ japanese ] = "�>?���Ɵ?�,�Ɵ�Ɵ?";
         Text[ korean ] = "ﾡ??ﾍ?\"ﾍ??";
@@ -1572,10 +1656,12 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centre de gir";
         Text[ thai ] = "��?���??���'����?";
-        Text[ czech ] = "Rota�?n�� bod";
+        Text[ czech ] = "Rotaﾴ?ﾢ?nﾴ?ﾢﾴ?ﾢ bod";
         Text[ hebrew ] = "Drehpunkt";
         Text[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?";
-        Text[ slovak ] = "Centrǭlny bod";
+        Text[ slovak ] = "Centrálny bod";
+        Text[ hungarian ] = "Forgatási pont";
+        Text[ slovenian ] = "Točka vrtenja";
     };
     GroupBox GRP_ANGLE
     {
@@ -1595,7 +1681,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ spanish ] = "??ngulo de rotaci??n" ;
         Text [ english_us ] = "Rotation angle" ;
         Text[ russian ] = "?????? ?????????";
-        Text[ greek ] = "?\"??????? ??????????\"???????,,";
+        Text[ greek ] = "����� �����������";
         Text[ polish ] = "K??t obrotu";
         Text[ japanese ] = "�>?�����'���";
         Text[ korean ] = "�??��\"��?";
@@ -1606,13 +1692,15 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Angle de gir";
         Text[ thai ] = "?���???���?";
-        Text[ czech ] = "Rota�?n�� ǧhel";
+        Text[ czech ] = "Rota�?�?n�?��?� úhel";
         Text[ hebrew ] = "Drehwinkel";
         Text[ hindi ] = "���?����?��?���?����?��?���?���ϋ���?����?����?����?�� ���?����?��-���?����?��<���?���ϋ�";
-        Text[ slovak ] = "Uhol rotǭcie";
+        Text[ slovak ] = "Uhol rotácie";
+        Text[ hungarian ] = "Forgatási szög";
+        Text[ slovenian ] = "Kot sukanja";
     };
     Text[ russian ] = "??????";
-    Text[ greek ] = "?\"???????";
+    Text[ greek ] = "�����";
     Text[ polish ] = "K??t";
     Text[ japanese ] = "��'���";
     Text[ korean ] = "��?�?\"";
@@ -1623,10 +1711,12 @@ TabPage RID_SVXPAGE_ANGLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Angle";
     Text[ thai ] = "?���?";
-    Text[ czech ] = "�?hel";
+    Text[ czech ] = "ﾴ?ﾢ?hel";
     Text[ hebrew ] = "Winkel";
     Text[ hindi ] = "���?����?��-���?����?��<���?���ϋ�";
     Text[ slovak ] = "Uhol";
+    Text[ hungarian ] = "Szög";
+    Text[ slovenian ] = "Kot";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -1644,7 +1734,7 @@ TabPage RID_SVXPAGE_SLANT
     Text [ french ] = "Inclinaison / rayon d'angle" ;
     Text [ dutch ] = "Schuintrekken / hoekradius" ;
     Text [ swedish ] = "Snedst??ll/h??rnradie" ;
-    Text [ danish ] = "H??ldning / hj??neradius" ;
+    Text [ danish ] = "H�ldning / hj�rneradius" ;
     Text [ portuguese ] = "Inclinar /Raio do ?ngulo" ;
     Text [ portuguese_brazilian ] = "Inclina???o / Raio do Canto" ;
     FixedText FT_RADIUS
@@ -1659,11 +1749,11 @@ TabPage RID_SVXPAGE_SLANT
         Text [ spanish ] = "Ra~dio" ;
         Text [ french ] = "Rayon" ;
         Text [ swedish ] = "~Radie" ;
-        Text [ danish ] = "Radius" ;
+        Text [ danish ] = "~Radius" ;
         Text [ portuguese_brazilian ] = "~Raio" ;
         Text [ portuguese ] = "~Raio" ;
         Text[ russian ] = "????????";
-        Text[ greek ] = "?'~??\"?????";
+        Text[ greek ] = "����~��";
         Text[ polish ] = "~Promie?\"";
         Text[ japanese ] = "�??��\"(~R)";
         Text[ korean ] = "��?��Չ�\"(~R)";
@@ -1675,10 +1765,12 @@ TabPage RID_SVXPAGE_SLANT
         Text[ catalan ] = "~Radi";
         Text[ finnish ] = "~S??de";
         Text[ thai ] = "~?���??�,�";
-        Text[ czech ] = "Polomﾎ>r";
+        Text[ czech ] = "Polom���>r";
         Text[ hebrew ] = "~Radius";
         Text[ hindi ] = "~ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ";
         Text[ slovak ] = "Polome~r";
+        Text[ hungarian ] = "~Sugár";
+        Text[ slovenian ] = "~Polmer";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -1707,11 +1799,11 @@ TabPage RID_SVXPAGE_SLANT
         Text [ spanish ] = "??~ngulo" ;
         Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
-        Text [ danish ] = "Vinkel" ;
+        Text [ danish ] = "~Vinkel" ;
         Text [ portuguese ] = "~?,ngulo" ;
         Text [ portuguese_brazilian ] = "?,ngulo" ;
         Text[ russian ] = "??????";
-        Text[ greek ] = "~?\"???????";
+        Text[ greek ] = "~�����";
         Text[ polish ] = "~K??t";
         Text[ japanese ] = "��'���(~A)";
         Text[ korean ] = "��?�?\"(~A)";
@@ -1723,10 +1815,12 @@ TabPage RID_SVXPAGE_SLANT
         Text[ catalan ] = "~Angle";
         Text[ finnish ] = "~Kulma";
         Text[ thai ] = "~?���?";
-        Text[ czech ] = "�?hel";
+        Text[ czech ] = "ﾴ?ﾢ?hel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~���?����?��-���?����?��<���?���ϋ�";
         Text[ slovak ] = "~Uhol";
+        Text[ hungarian ] = "~Szög";
+        Text[ slovenian ] = "~Kot";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1752,11 +1846,11 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText [ french ] = " degr?s" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ danish ] = "grader" ;
+        CustomUnitText [ danish ] = " grader" ;
         CustomUnitText [ portuguese_brazilian ] = " graus" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ russian ] = " ??????????";
-        CustomUnitText[ greek ] = "?????????,,";
+        CustomUnitText[ greek ] = "������";
         CustomUnitText[ polish ] = " st.";
         CustomUnitText[ japanese ] = "���";
         CustomUnitText[ korean ] = "ﾉ?\"";
@@ -1768,10 +1862,12 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ finnish ] = " astetta";
         CustomUnitText[ thai ] = " ?��??��";
-        CustomUnitText[ czech ] = " stup�?��";
+        CustomUnitText[ czech ] = " stupﾴ?ﾢ?ﾴ?ﾢﾴ?ﾢ";
         CustomUnitText[ hebrew ] = " �թ�?���?�-���ժ";
         CustomUnitText[ hindi ] = " ���?���ϋ���?���ϋ���?����?��-���?����?��?���?����?����?����?����?����?����?����?����?��?";
-        CustomUnitText[ slovak ] = " stupﾏ?ov";
+        CustomUnitText[ slovak ] = " stup���?ov";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
     };
     /*
     Control CTL_ANGLE
@@ -1794,11 +1890,11 @@ TabPage RID_SVXPAGE_SLANT
         Text [ spanish ] = "Radio de ?ngulo" ;
         Text [ french ] = "Rayon d'angle" ;
         Text [ swedish ] = "H??rnradie" ;
-        Text [ danish ] = "Hj??neradius" ;
+        Text [ danish ] = "Hj�rneradius" ;
         Text [ portuguese_brazilian ] = "Raio do canto" ;
         Text [ portuguese ] = "Raio do ?ngulo" ;
         Text[ russian ] = "???????? ????????????????????????";
-        Text[ greek ] = "?'??\"????? ??????????,,";
+        Text[ greek ] = "������ ������";
         Text[ polish ] = "Promie?\" krzywizny";
         Text[ japanese ] = "��'�?��??��\"";
         Text[ korean ] = "���\"?�ݪ ��?�?\"";
@@ -1810,10 +1906,12 @@ TabPage RID_SVXPAGE_SLANT
         Text[ catalan ] = "Radi de l'angle";
         Text[ finnish ] = "Kulmas??de";
         Text[ thai ] = "?���??�,�?���?";
-        Text[ czech ] = "Polomﾎ>r rohu";
+        Text[ czech ] = "Polom���>r rohu";
         Text[ hebrew ] = "Eckenradius";
         Text[ hindi ] = "ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ-ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫﾋﾨﾫ?ﾋﾨﾫ";
         Text[ slovak ] = "Polomer rohu";
+        Text[ hungarian ] = "Sarok sugara";
+        Text[ slovenian ] = "Polmer kota";
     };
     GroupBox GRP_SLANT
     {
@@ -1829,11 +1927,11 @@ TabPage RID_SVXPAGE_SLANT
         Text [ french ] = "Inclinaison" ;
         Text [ dutch ] = "Schuintrekken" ;
         Text [ swedish ] = "Snedst??ll" ;
-        Text [ danish ] = "H??ldning" ;
+        Text [ danish ] = "H�ldning" ;
         Text [ portuguese_brazilian ] = "Inclinar" ;
         Text [ portuguese ] = "Inclinar" ;
         Text[ russian ] = "?????????";
-        Text[ greek ] = "?>????";
+        Text[ greek ] = "����";
         Text[ polish ] = "Pochyl";
         Text[ japanese ] = "�,�-?�?-�?>�,<";
         Text[ korean ] = "���?���";
@@ -1845,10 +1943,12 @@ TabPage RID_SVXPAGE_SLANT
         Text[ catalan ] = "Inclina";
         Text[ finnish ] = "Kallista";
         Text[ thai ] = "���?�,�?��?";
-        Text[ czech ] = "Skosen��";
+        Text[ czech ] = "Skosenﾴ?ﾢﾴ?ﾢ";
         Text[ hebrew ] = "Schr��gstellen";
         Text[ hindi ] = "���?������?�������Ϩ���?������?������?���>���?������?������?���";
         Text[ slovak ] = "Skosenie";
+        Text[ hungarian ] = "Dőlés";
+        Text[ slovenian ] = "Nagnjenost";
     };
     /*
     TriStateBox TSB_VERTICAL
@@ -1861,7 +1961,7 @@ TabPage RID_SVXPAGE_SLANT
     };
 */
     Text[ russian ] = "?????????/???????? ????????????????????????";
-    Text[ greek ] = "?>???? / ?'??\"????? ??????????,,";
+    Text[ greek ] = "���� / ������ ������";
     Text[ polish ] = "Pochyl/Promie?\" naro??nika";
     Text[ japanese ] = "�,�-?��'���/��'�?��??��\"";
     Text[ korean ] = "���?���/���\"?�ݪ ��?�?\"";
@@ -1873,10 +1973,12 @@ TabPage RID_SVXPAGE_SLANT
     Text[ catalan ] = "Inclinaci??Radi d'angle";
     Text[ finnish ] = "Kallistus-/kulmas??de";
     Text[ thai ] = "���?�,�?��? / ?���??�,�?���?";
-    Text[ czech ] = "Skosen�� / polom�>r rohu";
+    Text[ czech ] = "Skosenﾴ?ﾢﾴ?ﾢ / polomﾴ?ﾢ>r rohu";
     Text[ hebrew ] = "Schr��gstellen / Eckenradius";
     Text[ hindi ] = "���?������?�������Ϩ���?������?������?���>���?������?������?���/ ���?������?���-���?������������?������?������?������?������?��� ���?������?���-���?������?������?������?������?���������?���?������?������?������?������?������?������?������?���";
-    Text[ slovak ] = "SkosenǸ rohy";
+    Text[ slovak ] = "Skosené rohy";
+    Text[ hungarian ] = "Dőlés és sarok sugara";
+    Text[ slovenian ] = "Nagnjenost / Polmer kota";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -1894,7 +1996,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text [ portuguese_brazilian ] = "Posi???o e Tamanho" ;
     Text [ portuguese ] = "Posi???o e tamanho" ;
     Text [ finnish ] = "Sijainti ja koko" ;
-    Text [ danish ] = "Placering og st??relse" ;
+    Text [ danish ] = "Placering og st�rrelse" ;
     Text [ french ] = "Position et taille" ;
     Text [ swedish ] = "Position och storlek" ;
     Text [ dutch ] = "Positie en grootte" ;
@@ -1926,7 +2028,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ english_us ] = "Position" ;
                 PageResID = RID_SVXPAGE_POSITION ;
                 Text[ russian ] = "????????";
-                Text[ greek ] = "???????";
+                Text[ greek ] = "����";
                 Text[ polish ] = "Pozycja";
                 Text[ japanese ] = "ﾄﾫ?ﾇﾫﾩ";
                 Text[ korean ] = "�?\"��?";
@@ -1937,10 +2039,12 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posici??";
                 Text[ thai ] = "����??�??��?";
-                Text[ czech ] = "Um��st�>n��";
+                Text[ czech ] = "Umﾴ?ﾢﾴ?ﾢstﾴ?ﾢ>nﾴ?ﾢﾴ?ﾢ";
                 Text[ hebrew ] = "�թ�?�?��-�?�ժ";
                 Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?��";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Pozíció";
+                Text[ slovenian ] = "Položaj";
             };
             PageItem
             {
@@ -1954,7 +2058,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ portuguese_brazilian ] = "Tamanho" ;
                 Text [ portuguese ] = "Tamanho" ;
                 Text [ finnish ] = "Koko" ;
-                Text [ danish ] = "St??relse" ;
+                Text [ danish ] = "St�rrelse" ;
                 Text [ french ] = "Taille" ;
                 Text [ swedish ] = "Storlek" ;
                 Text [ dutch ] = "Grootte" ;
@@ -1962,7 +2066,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ english_us ] = "Size" ;
                 PageResID = RID_SVXPAGE_SIZE ;
                 Text[ russian ] = "?????????";
-                Text[ greek ] = "????????????,,";
+                Text[ greek ] = "�������";
                 Text[ polish ] = "Rozmiar";
                 Text[ japanese ] = "�,��,��,�";
                 Text[ korean ] = "�?����";
@@ -1976,7 +2080,9 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ czech ] = "Velikost";
                 Text[ hebrew ] = "�թ�'�-�\"�?�ժ";
                 Text[ hindi ] = "���?���ϋ���?����?����?����?����?���ϋ���?����?����?����?��";
-                Text[ slovak ] = "Ve��kos��";
+                Text[ slovak ] = "Veﾴ?ﾢﾴ?ﾢkosﾴ?ﾢﾴ?ﾢ";
+                Text[ hungarian ] = "Méret";
+                Text[ slovenian ] = "Velikost";
             };
             PageItem
             {
@@ -1996,7 +2102,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ english_us ] = "Rotation" ;
                 PageResID = RID_SVXPAGE_ANGLE ;
                 Text[ russian ] = "?'??????????";
-                Text[ greek ] = "?????????\"??????";
+                Text[ greek ] = "����������";
                 Text[ polish ] = "Obr??";
                 Text[ japanese ] = "ﾆ>?ﾊﾯﾽ";
                 Text[ korean ] = "ﾡ??ﾍ?\"";
@@ -2010,7 +2116,9 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ czech ] = "Rotace";
                 Text[ hebrew ] = "�թ���?�'�-�'�ժ";
                 Text[ hindi ] = "���?����?��?���?����?��?���?���ϋ���?����?����?����?��";
-                Text[ slovak ] = "Rotǭcia";
+                Text[ slovak ] = "Rotácia";
+                Text[ hungarian ] = "Elforgatás";
+                Text[ slovenian ] = "Sukanje";
             };
             PageItem
             {
@@ -2026,11 +2134,11 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ french ] = "Inclinaison / rayon d'angle" ;
                 Text [ dutch ] = "Schuintrekken/hoekradius" ;
                 Text [ swedish ] = "Snedst??ll/h??rnradie" ;
-                Text [ danish ] = "H??ldning / hj??neradius" ;
+                Text [ danish ] = "H�ldning / hj�rneradius" ;
                 Text [ portuguese_brazilian ] = "Inclina???o / Raio do canto" ;
                 Text [ portuguese ] = "Inclinar / Raio do ?ngulo" ;
                 Text[ russian ] = "?????????/???????? ????????????????????????";
-                Text[ greek ] = "?>???? / ?'??\"????? ??????????,,";
+                Text[ greek ] = "���� / ������ ������";
                 Text[ polish ] = "Pochyl/Promie?\" naro??nika";
                 Text[ japanese ] = "�,�-?��'���/��'�?��??��\"";
                 Text[ korean ] = "���?���/���\"?�ݪ ��?�?\"";
@@ -2042,15 +2150,17 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ catalan ] = "Inclinaci??Radi d'angle";
                 Text[ finnish ] = "Kallistus-/kulmas??de";
                 Text[ thai ] = "���?�,�?��? / ?���??�,�?���?";
-                Text[ czech ] = "Skosen�� / polom�>r rohu";
+                Text[ czech ] = "Skosenﾴ?ﾢﾴ?ﾢ / polomﾴ?ﾢ>r rohu";
                 Text[ hebrew ] = "Schr��gstellen / Eckenradius";
                 Text[ hindi ] = "���?������?�������Ϩ���?������?������?���>���?������?������?���/ ���?������?���-���?������������?������?������?������?������?��� ���?������?���-���?������?������?������?������?���������?���?������?������?������?������?������?������?������?���";
-                Text[ slovak ] = "SkosenǸ rohy";
+                Text[ slovak ] = "Skosené rohy";
+                Text[ hungarian ] = "Dőlés és sarok sugara";
+                Text[ slovenian ] = "Nagnjenost / Polmer kota";
             };
         };
     };
     Text[ russian ] = "????????????? ???????????";
-    Text[ greek ] = "??????? ????? ???????????,,";
+    Text[ greek ] = "���� ��� �������";
     Text[ polish ] = "Pozycja i rozmiar";
     Text[ japanese ] = "��?����?��,��,��,�";
     Text[ korean ] = "�?\"��? ��? �?����";
@@ -2061,12 +2171,30 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posici??i mida";
     Text[ thai ] = "����??�??��?��?��?��\"?��?";
-    Text[ czech ] = "Um��st�>n�� a velikost";
+    Text[ czech ] = "Umﾴ?ﾢﾴ?ﾢstﾴ?ﾢ>nﾴ?ﾢﾴ?ﾢ a velikost";
     Text[ hebrew ] = "Position und Gr���?e";
     Text[ hindi ] = "���?����?����?����?���ϋ���?����?����?����?����?����?��\"���?����?����?����?���ϋ���?����?����?����?����?���ϋ���?����?����?����?��";
-    Text[ slovak ] = "Umiestnenie a ve��kos��";
+    Text[ slovak ] = "Umiestnenie a veﾴ?ﾢﾴ?ﾢkosﾴ?ﾢﾴ?ﾢ";
+    Text[ hungarian ] = "Pozíció és méret";
+    Text[ slovenian ] = "Položaj in velikost";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
