@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-16 09:45:25 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 07:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,10 +851,10 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
     }
 }
 
-void SdrAttrObj::ItemSetChanged()
+void SdrAttrObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // call parent
-    SdrObject::ItemSetChanged();
+    SdrObject::ItemSetChanged(rSet);
 
     // own modifications
     bBoundRectDirty = TRUE;

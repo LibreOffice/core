@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-16 09:45:05 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 07:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,10 @@
 #include <editeng.hxx>
 #endif
 
+#ifndef _SVX_POSTITEM_HXX //autogen
+#include <svx/postitem.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
@@ -246,7 +250,7 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
 
-void SdrTextObj::ItemSetChanged()
+void SdrTextObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // handle outliner attributes
     ImpForceItemSet();
@@ -292,7 +296,7 @@ void SdrTextObj::ItemSetChanged()
         SendRepaintBroadcast();
 
     // call parent
-    SdrAttrObj::ItemSetChanged();
+    SdrAttrObj::ItemSetChanged(rSet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,8 +329,9 @@ void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
             for ( USHORT nPara = 0; nPara < nParaCount; nPara++ )
             {
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( nPara );
+                SfxStyleFamily eFam = pSheet->GetFamily();
 
-                if( pSheet && !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
+                if( pSheet && ( !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO ) )
                 {
                     SfxItemSet aSet( pSheet->GetItemSet() );
                     aSet.Put( pOutliner->GetParaAttribs( nPara ), FALSE );
