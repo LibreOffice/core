@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:44:43 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
 #endif
+#ifndef _SFXSMPLHINT_HXX
+#include <svtools/smplhint.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -175,12 +181,44 @@ void SAL_CALL ScAccessibleContextBase::disposing()
             xBroadcaster->removeEventListener(this);
         mxParent = NULL;
     }
+
+    ScAccessibleContextBaseWeakImpl::disposing();
+}
+
+//=====  XInterface  =====================================================
+
+uno::Any SAL_CALL ScAccessibleContextBase::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
+{
+    uno::Any aAny (ScAccessibleContextBaseWeakImpl::queryInterface(rType));
+    return aAny.hasValue() ? aAny : ScAccessibleContextBaseImplEvent::queryInterface(rType);
+}
+
+void SAL_CALL ScAccessibleContextBase::acquire()
+    throw ()
+{
+    ScAccessibleContextBaseWeakImpl::acquire();
+}
+
+void SAL_CALL ScAccessibleContextBase::release()
+    throw ()
+{
+    ScAccessibleContextBaseWeakImpl::release();
 }
 
 //=====  SfxListener  =====================================================
 
 void ScAccessibleContextBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    if (rHint.ISA( SfxSimpleHint ) )
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        if (rRef.GetId() == SFX_HINT_DYING)
+        {
+            // it seems the Broadcaster is dying, since the view is dying
+            dispose();
+        }
+    }
 }
 
 //=====  XAccessible  =========================================================
@@ -538,6 +576,12 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 }
 
 //=====  XTypeProvider  =======================================================
+
+uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
+        throw (uno::RuntimeException)
+{
+    return comphelper::concatSequences(ScAccessibleContextBaseWeakImpl::getTypes(), ScAccessibleContextBaseImplEvent::getTypes());
+}
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:43:57 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,10 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #include <unotools/servicehelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -119,18 +122,22 @@ class Rectangle;
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::WeakAggComponentImplHelper6<
+typedef cppu::WeakAggComponentImplHelper5<
                 ::drafts::com::sun::star::accessibility::XAccessible,
                 ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
                 ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener,
                 ::com::sun::star::lang::XServiceInfo
                 > ScAccessibleContextBaseWeakImpl;
+
+typedef cppu::ImplHelper1<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener
+                > ScAccessibleContextBaseImplEvent;
 
 class ScAccessibleContextBase
     :   public comphelper::OBaseMutex,
         public ScAccessibleContextBaseWeakImpl,
+        public ScAccessibleContextBaseImplEvent,
         public SfxListener
 {
 public:
@@ -148,6 +155,16 @@ public:
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    ///=====  XInterface  =====================================================
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessible  =====================================================
 
@@ -309,6 +326,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XTypeProvider  ===================================================
+
+     /// returns the possible types
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a implementation id.
     */
