@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:44:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
-
-#include "root.hxx"
-extern const sal_Char*  pPivotCacheStorageName;
 
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_HIDDEN;
@@ -905,12 +902,8 @@ void XclExpPivotCache::WriteDconref( XclExpStream& rStrm ) const
 
 void XclExpPivotCache::WriteCacheStream()
 {
-    if( !mpRD->pPivotCacheStorage )
-        mpRD->pPivotCacheStorage =
-            GetRootStorage()->OpenStorage(
-                String::CreateFromAscii(pPivotCacheStorageName), STREAM_STD_WRITE );
-    SvStorageStreamRef xSvStrm = mpRD->pPivotCacheStorage->OpenStream(
-        ScfTools::GetHexStr( maPCInfo.mnStrmId ), STREAM_READWRITE | STREAM_TRUNC );
+    SvStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    SvStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
     if( xSvStrm.Is() )
     {
         XclExpStream aStrm( *xSvStrm, GetRoot() );
