@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellFailure.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 15:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** these define the various types for spellchecking to fail verification.
+/** these define the various return types for spellchecking to fail verification.
 
     <P>A value of this type may be obtained as part of the
     <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
@@ -79,7 +79,7 @@ module com { module sun { module star { module linguistic2 {
 constants SpellFailure
 {
     //-------------------------------------------------------------------------
-    /** The word is a negativ one, i.e. it should not be used.
+    /** The word is a negative one, that is, it should not be used.
     */
     const short IS_NEGATIVE_WORD = 2;
 
