@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:01:37 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH_US ] = "Settings";
         Text[ italian ] = "Impostazioni";
         Text[ portuguese_brazilian ] = "Einstellungen";
-        Text[ portuguese ] = "Predefinições";
+        Text[ portuguese ] = "Definições";
         Text[ danish ] = "Indstillinger";
         Text[ french ] = "Paramètres";
         Text[ swedish ] = "Inställningar";
