@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequenceashashmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:17:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,15 @@
 //_______________________________________________
 // includes
 
+#ifndef INCLUDED_HASH_MAP
 #include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
+
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -82,6 +89,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_IllegalTypeException_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
 #endif
 
 // see method dbg_dumpToFile() below!
@@ -109,12 +119,15 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-typedef ::std::hash_map< ::rtl::OUString                    ,
-                         ::com::sun::star::uno::Any         ,
-                         ::rtl::OUStringHash                ,
-                         ::std::equal_to< ::rtl::OUString > > SequenceAsHashMapBase;
+struct SequenceAsHashMapBase : public ::std::hash_map<
+    ::rtl::OUString                    ,
+    ::com::sun::star::uno::Any         ,
+    ::rtl::OUStringHash                ,
+    ::std::equal_to< ::rtl::OUString > >
+{
+};
 
-class SequenceAsHashMap : public SequenceAsHashMapBase
+class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 {
     //-------------------------------------------
     public:
