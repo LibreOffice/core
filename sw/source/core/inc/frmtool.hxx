@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:57:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,13 @@ public:
 
 class SwCntntNotify : public SwFrmNotify
 {
+private:
+    // OD 08.01.2004 #i11859#
+    bool    mbChkHeightOfLastLine;
+    SwTwips mnHeightOfLastLine;
+
     SwCntntFrm *GetCnt() { return (SwCntntFrm*)pFrm; }
+
 public:
     SwCntntNotify( SwCntntFrm *pCntFrm );
     ~SwCntntNotify();
