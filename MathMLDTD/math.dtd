@@ -1,3 +1,24 @@
+<!-- Copyright 1997-1999  World Wide Web Consortium,    -->
+<!-- (Massachusetts Institute of Technology,            -->
+<!--  Institut National de Recherche en Informatique et en Automatique, -->
+<!--  Keio University). All Rights Reserved.            -->
+<!-- http://www.w3.org/Consortium/Legal/                -->
+
+<!-- Modified DTD for MathML 1.01                       -->
+<!--                                                    -->
+<!-- Original DTD:                                      -->
+<!--    http://www.w3.org/1999/07/REC-MathML-19990707/mmlents.zip  -->
+<!--                                                    -->
+<!-- modified 20. June 2001:                            -->
+<!-- 1) added "math:" namespace prefix                  -->
+<!-- 2) removed entity include files                    -->
+<!-- 3) added copyright notice above to comply with     -->
+<!--    W3C IPR Software Notice                         -->
+<!-- 4) added this comment block                        -->
+<!-- Modifications are intended to ease validation      -->
+<!-- of MathML files written by StarMath 6.0            -->
+
+
 <!-- Content model for content and presentation        -->
 <!--  and browser interface tags in MathML              -->
 <!-- initial draft 9.May.1997          syntax = XML     -->
@@ -17,21 +38,21 @@
 <!-- general attribute definitions for class & style & id & other -->
 <!-- : attributes shared by all mathml elements        -->
 
-<!ENTITY % att-globalatts      'class CDATA #IMPLIED
-                                 style CDATA #IMPLIED
-                                 id    ID    #IMPLIED
-                                 other CDATA #IMPLIED'  >
+<!ENTITY % att-globalatts      'math:class CDATA #IMPLIED
+                                 math:style CDATA #IMPLIED
+                                 math:id    ID    #IMPLIED
+                                 math:other CDATA #IMPLIED'  >
 
 <!-- *************************************************  -->
 <!-- Presentation element set                           -->
 
 <!-- presentation attribute definitions -->
 
-<!ENTITY % att-fontsize        'fontsize CDATA #IMPLIED'             >
-<!ENTITY % att-fontweight      'fontweight (normal | bold) #IMPLIED'  >
-<!ENTITY % att-fontstyle       'fontstyle (normal | italic) #IMPLIED' >
-<!ENTITY % att-fontfamily      'fontfamily CDATA   #IMPLIED'         >
-<!ENTITY % att-color           'color CDATA   #IMPLIED'              >
+<!ENTITY % att-fontsize        'math:fontsize CDATA #IMPLIED'             >
+<!ENTITY % att-fontweight      'math:fontweight (normal | bold) #IMPLIED'  >
+<!ENTITY % att-fontstyle       'math:fontstyle (normal | italic) #IMPLIED' >
+<!ENTITY % att-fontfamily      'math:fontfamily CDATA   #IMPLIED'         >
+<!ENTITY % att-color           'math:color CDATA   #IMPLIED'              >
 
 <!ENTITY % att-fontinfo      '%att-fontsize;
                              %att-fontweight;
@@ -39,19 +60,19 @@
                              %att-fontfamily;
                              %att-color;'  >
 
-<!ENTITY % att-form        'form (prefix | infix | postfix) #IMPLIED' >
-<!ENTITY % att-fence       'fence (true | false ) #IMPLIED'    >
-<!ENTITY % att-separator   'separator (true | false ) #IMPLIED'    >
-<!ENTITY % att-lspace      'lspace CDATA  #IMPLIED'       >
-<!ENTITY % att-rspace      'rspace CDATA  #IMPLIED'       >
-<!ENTITY % att-stretchy    'stretchy (true | false ) #IMPLIED'     >
-<!ENTITY % att-symmetric   'symmetric (true | false ) #IMPLIED'    >
-<!ENTITY % att-maxsize     'maxsize CDATA #IMPLIED'       >
-<!ENTITY % att-minsize     'minsize CDATA #IMPLIED'       >
-<!ENTITY % att-largeop           'largeop (true | false ) #IMPLIED' >
-<!ENTITY % att-movablelimits     'movablelimits (true | false )
+<!ENTITY % att-form        'math:form (prefix | infix | postfix) #IMPLIED' >
+<!ENTITY % att-fence       'math:fence (true | false ) #IMPLIED'    >
+<!ENTITY % att-separator   'math:separator (true | false ) #IMPLIED'    >
+<!ENTITY % att-lspace      'math:lspace CDATA  #IMPLIED'       >
+<!ENTITY % att-rspace      'math:rspace CDATA  #IMPLIED'       >
+<!ENTITY % att-stretchy    'math:stretchy (true | false ) #IMPLIED'     >
+<!ENTITY % att-symmetric   'math:symmetric (true | false ) #IMPLIED'    >
+<!ENTITY % att-maxsize     'math:maxsize CDATA #IMPLIED'       >
+<!ENTITY % att-minsize     'math:minsize CDATA #IMPLIED'       >
+<!ENTITY % att-largeop           'math:largeop (true | false ) #IMPLIED' >
+<!ENTITY % att-movablelimits     'math:movablelimits (true | false )
 #IMPLIED' >
-<!ENTITY % att-accent               'accent (true | false)  #IMPLIED'>
+<!ENTITY % att-accent               'math:accent (true | false)  #IMPLIED'>
 
 <!ENTITY % att-opinfo '%att-form;
                         %att-fence;
@@ -66,52 +87,52 @@
                         %att-movablelimits;
                         %att-accent;'         >
 
-<!ENTITY % att-width             'width CDATA #IMPLIED'   >
-<!ENTITY % att-height            'height CDATA #IMPLIED' >
-<!ENTITY % att-depth             'depth CDATA #IMPLIED'   >
+<!ENTITY % att-width             'math:width CDATA #IMPLIED'   >
+<!ENTITY % att-height            'math:height CDATA #IMPLIED' >
+<!ENTITY % att-depth             'math:depth CDATA #IMPLIED'   >
 
 <!ENTITY % att-sizeinfo          '%att-width;
                                   %att-height;
                                   %att-depth;'          >
 
-<!ENTITY % att-lquote              'lquote CDATA #IMPLIED'   >
-<!ENTITY % att-rquote              'rquote CDATA #IMPLIED'   >
+<!ENTITY % att-lquote              'math:lquote CDATA #IMPLIED'   >
+<!ENTITY % att-rquote              'math:rquote CDATA #IMPLIED'   >
 
-<!ENTITY % att-linethickness        'linethickness CDATA #IMPLIED' >
+<!ENTITY % att-linethickness        'math:linethickness CDATA #IMPLIED' >
 
-<!ENTITY % att-scriptlevel          'scriptlevel CDATA #IMPLIED'>
-<!ENTITY % att-displaystyle         'displaystyle (true | false)
+<!ENTITY % att-scriptlevel          'math:scriptlevel CDATA #IMPLIED'>
+<!ENTITY % att-displaystyle         'math:displaystyle (true | false)
 #IMPLIED'>
-<!ENTITY % att-scriptsizemultiplier 'scriptsizemultiplier CDATA
+<!ENTITY % att-scriptsizemultiplier 'math:scriptsizemultiplier CDATA
 #IMPLIED'  >
-<!ENTITY % att-scriptminsize        'scriptminsize CDATA #IMPLIED'>
-<!ENTITY % att-background           'background CDATA #IMPLIED' >
+<!ENTITY % att-scriptminsize        'math:scriptminsize CDATA #IMPLIED'>
+<!ENTITY % att-background           'math:background CDATA #IMPLIED' >
 
-<!ENTITY % att-open                 'open CDATA #IMPLIED' >
-<!ENTITY % att-close                'close CDATA #IMPLIED' >
-<!ENTITY % att-separators           'separators CDATA #IMPLIED' >
+<!ENTITY % att-open                 'math:open CDATA #IMPLIED' >
+<!ENTITY % att-close                'math:close CDATA #IMPLIED' >
+<!ENTITY % att-separators           'math:separators CDATA #IMPLIED' >
 
-<!ENTITY % att-subscriptshift       'subscriptshift CDATA #IMPLIED'>
-<!ENTITY % att-superscriptshift     'superscriptshift CDATA #IMPLIED'    >
+<!ENTITY % att-subscriptshift       'math:subscriptshift CDATA #IMPLIED'>
+<!ENTITY % att-superscriptshift     'math:superscriptshift CDATA #IMPLIED'    >
 
-<!ENTITY % att-accentunder          'accentunder (true | false)
+<!ENTITY % att-accentunder          'math:accentunder (true | false)
 #IMPLIED'>
 
-<!ENTITY % att-align                'align CDATA #IMPLIED'           >
-<!ENTITY % att-rowalign             'rowalign CDATA #IMPLIED'    >
-<!ENTITY % att-columnalign          'columnalign CDATA #IMPLIED'   >
-<!ENTITY % att-groupalign           'groupalign CDATA #IMPLIED'    >
-<!ENTITY % att-alignmentscope       'alignmentscope CDATA #IMPLIED'  >
+<!ENTITY % att-align                'math:align CDATA #IMPLIED'           >
+<!ENTITY % att-rowalign             'math:rowalign CDATA #IMPLIED'    >
+<!ENTITY % att-columnalign          'math:columnalign CDATA #IMPLIED'   >
+<!ENTITY % att-groupalign           'math:groupalign CDATA #IMPLIED'    >
+<!ENTITY % att-alignmentscope       'math:alignmentscope CDATA #IMPLIED'  >
 
-<!ENTITY % att-rowspacing           'rowspacing CDATA #IMPLIED'      >
-<!ENTITY % att-columnspacing        'columnspacing CDATA #IMPLIED'   >
-<!ENTITY % att-rowlines             'rowlines CDATA #IMPLIED'           >
-<!ENTITY % att-columnlines          'columnlines CDATA #IMPLIED'         >
-<!ENTITY % att-frame                'frame (none | solid | dashed)
+<!ENTITY % att-rowspacing           'math:rowspacing CDATA #IMPLIED'      >
+<!ENTITY % att-columnspacing        'math:columnspacing CDATA #IMPLIED'   >
+<!ENTITY % att-rowlines             'math:rowlines CDATA #IMPLIED'           >
+<!ENTITY % att-columnlines          'math:columnlines CDATA #IMPLIED'         >
+<!ENTITY % att-frame                'math:frame (none | solid | dashed)
 #IMPLIED'  >
-<!ENTITY % att-framespacing         'framespacing CDATA #IMPLIED'       >
-<!ENTITY % att-equalrows            'equalrows CDATA #IMPLIED'         >
-<!ENTITY % att-equalcolumns         'equalcolumns CDATA #IMPLIED'     >
+<!ENTITY % att-framespacing         'math:framespacing CDATA #IMPLIED'       >
+<!ENTITY % att-equalrows            'math:equalrows CDATA #IMPLIED'         >
+<!ENTITY % att-equalcolumns         'math:equalcolumns CDATA #IMPLIED'     >
 
 <!ENTITY % att-tableinfo           '%att-align;
                                    %att-rowalign;
@@ -128,59 +149,59 @@
                                    %att-equalcolumns;
                                    %att-displaystyle;'        >
 
-<!ENTITY % att-rowspan              'rowspan CDATA #IMPLIED'         >
-<!ENTITY % att-columnspan           'columnspan CDATA #IMPLIED'      >
+<!ENTITY % att-rowspan              'math:rowspan CDATA #IMPLIED'         >
+<!ENTITY % att-columnspan           'math:columnspan CDATA #IMPLIED'      >
 
-<!ENTITY % att-edge                  'edge (left | right)  #IMPLIED ' >
+<!ENTITY % att-edge                  'math:edge (left | right)  #IMPLIED ' >
 
-<!ENTITY % att-actiontype            'actiontype CDATA #IMPLIED' >
-<!ENTITY % att-selection             'selection CDATA #IMPLIED ' >
+<!ENTITY % att-actiontype            'math:actiontype CDATA #IMPLIED' >
+<!ENTITY % att-selection             'math:selection CDATA #IMPLIED ' >
 
 <!-- presentation token schemata with content-->
 
-<!ENTITY % ptoken "mi | mn | mo | mtext | ms" >
+<!ENTITY % ptoken "math:mi | math:mn | math:mo | math:mtext | math:ms" >
 
-<!ATTLIST mi        %att-fontinfo;
+<!ATTLIST math:mi        %att-fontinfo;
                     %att-globalatts;    >
 
-<!ATTLIST mn        %att-fontinfo;
+<!ATTLIST math:mn        %att-fontinfo;
                     %att-globalatts;    >
 
-<!ATTLIST mo        %att-fontinfo;
+<!ATTLIST math:mo        %att-fontinfo;
                     %att-opinfo;
                     %att-globalatts;     >
 
-<!ATTLIST mtext     %att-fontinfo;
+<!ATTLIST math:mtext     %att-fontinfo;
                     %att-globalatts;     >
 
-<!ATTLIST ms        %att-fontinfo;
+<!ATTLIST math:ms        %att-fontinfo;
                     %att-lquote;
                     %att-rquote;
                     %att-globalatts;          >
 
 <!-- empty presentation token schemata -->
 
-<!ENTITY % petoken  "mspace" >
-<!ELEMENT mspace     EMPTY  >
+<!ENTITY % petoken  "math:mspace" >
+<!ELEMENT math:mspace     EMPTY  >
 
-<!ATTLIST mspace    %att-sizeinfo;
+<!ATTLIST math:mspace    %att-sizeinfo;
                     %att-globalatts;       >
 
 <!-- presentation general layout schemata -->
 
-<!ENTITY % pgenschema "mrow|mfrac|msqrt|mroot|
-                    mstyle|merror|mpadded| mphantom|mfenced" >
+<!ENTITY % pgenschema "math:mrow|math:mfrac|math:msqrt|math:mroot|
+                    math:mstyle|math:merror|math:mpadded| math:mphantom|math:mfenced" >
 
-<!ATTLIST mrow      %att-globalatts;   >
+<!ATTLIST math:mrow      %att-globalatts;   >
 
-<!ATTLIST mfrac     %att-linethickness;
+<!ATTLIST math:mfrac     %att-linethickness;
                     %att-globalatts; >
 
-<!ATTLIST msqrt     %att-globalatts;   >
+<!ATTLIST math:msqrt     %att-globalatts;   >
 
-<!ATTLIST mroot     %att-globalatts;   >
+<!ATTLIST math:mroot     %att-globalatts;   >
 
-<!ATTLIST mstyle    %att-fontinfo;
+<!ATTLIST math:mstyle    %att-fontinfo;
                     %att-opinfo;
                     %att-lquote;
                     %att-rquote;
@@ -203,72 +224,72 @@
                                         %att-selection;
                     %att-globalatts;          >
 
-<!ATTLIST merror    %att-globalatts;   >
+<!ATTLIST math:merror    %att-globalatts;   >
 
-<!ATTLIST mpadded   %att-sizeinfo;
+<!ATTLIST math:mpadded   %att-sizeinfo;
                     %att-lspace;
                     %att-globalatts;     >
 
-<!ATTLIST mphantom  %att-globalatts;     >
+<!ATTLIST math:mphantom  %att-globalatts;     >
 
-<!ATTLIST mfenced   %att-open;
+<!ATTLIST math:mfenced   %att-open;
                     %att-close;
                     %att-separators;
                     %att-globalatts;     >
 
 <!-- presentation  layout schemata : scripts and limits -->
 
-<!ENTITY % pscrschema  "msub|msup|msubsup|
-                    munder|mover|munderover|mmultiscripts" >
+<!ENTITY % pscrschema  "math:msub|math:msup|math:msubsup|
+                    math:munder|math:mover|math:munderover|math:mmultiscripts" >
 
-<!ATTLIST msub      %att-subscriptshift;
+<!ATTLIST math:msub      %att-subscriptshift;
                     %att-globalatts;     >
 
-<!ATTLIST msup      %att-superscriptshift;
+<!ATTLIST math:msup      %att-superscriptshift;
                     %att-globalatts;          >
 
-<!ATTLIST msubsup   %att-subscriptshift;
+<!ATTLIST math:msubsup   %att-subscriptshift;
                     %att-superscriptshift;
                     %att-globalatts;          >
 
-<!ATTLIST munder    %att-accentunder;
+<!ATTLIST math:munder    %att-accentunder;
                     %att-globalatts;          >
 
-<!ATTLIST mover     %att-accent;
+<!ATTLIST math:mover     %att-accent;
                     %att-globalatts;           >
 
-<!ATTLIST munderover %att-accent;
+<!ATTLIST math:munderover %att-accent;
                      %att-accentunder;
                      %att-globalatts;      >
 
-<!ATTLIST mmultiscripts
+<!ATTLIST math:mmultiscripts
                     %att-subscriptshift;
                     %att-superscriptshift;
                     %att-globalatts;          >
 
 <!-- presentation layout schemata: script empty elements -->
 
-<!ENTITY % pscreschema "mprescripts|none" >
+<!ENTITY % pscreschema "math:mprescripts|math:none" >
 
-<!ELEMENT mprescripts    EMPTY          >
-<!ATTLIST mprescripts   %att-globalatts;      >
+<!ELEMENT math:mprescripts    EMPTY          >
+<!ATTLIST math:mprescripts   %att-globalatts;      >
 
-<!ELEMENT none          EMPTY          >
-<!ATTLIST none          %att-globalatts;      >
+<!ELEMENT math:none          EMPTY          >
+<!ATTLIST math:none          %att-globalatts;      >
 
 <!-- presentation layout schemata: tables -->
 
-<!ENTITY % ptabschema "mtable|mtr|mtd" >
+<!ENTITY % ptabschema "math:mtable|math:mtr|math:mtd" >
 
-<!ATTLIST mtable    %att-tableinfo;
+<!ATTLIST math:mtable    %att-tableinfo;
                     %att-globalatts;      >
 
-<!ATTLIST mtr       %att-rowalign;
+<!ATTLIST math:mtr       %att-rowalign;
                     %att-columnalign;
                     %att-groupalign;
                     %att-globalatts; >
 
-<!ATTLIST mtd       %att-rowalign;
+<!ATTLIST math:mtd       %att-rowalign;
                     %att-columnalign;
                     %att-groupalign;
                     %att-rowspan;
@@ -279,21 +300,21 @@
 
 <!-- empty presentation layout schemata -->
 
-<!ENTITY % peschema "maligngroup | malignmark" >
+<!ENTITY % peschema "math:maligngroup | math:malignmark" >
 
-<!ELEMENT  malignmark  EMPTY          >
+<!ELEMENT  math:malignmark  EMPTY          >
 
-<!ATTLIST malignmark    %att-edge;
+<!ATTLIST math:malignmark    %att-edge;
                         %att-globalatts;      >
 
-<!ELEMENT maligngroup    EMPTY          >
-<!ATTLIST maligngroup   %att-groupalign;
+<!ELEMENT math:maligngroup    EMPTY          >
+<!ATTLIST math:maligngroup   %att-groupalign;
                         %att-globalatts;      >
 
 <!-- presentation action schemata -->
 
-<!ENTITY % pactions "maction" >
-<!ATTLIST maction   %att-actiontype;
+<!ENTITY % pactions "math:maction" >
+<!ATTLIST math:maction   %att-actiontype;
                     %att-selection;
                     %att-globalatts;     >
 
@@ -312,452 +333,452 @@
 <!-- Content element set                                -->
 <!-- attribute definitions                              -->
 
-<!ENTITY % att-base              'base CDATA "10"'           >
-<!ENTITY % att-closure           'closure CDATA "closed"'    >
-<!ENTITY % att-definition        'definitionURL CDATA ""'    >
-<!ENTITY % att-encoding          'encoding CDATA ""'         >
-<!ENTITY % att-nargs             'nargs CDATA "1"'           >
-<!ENTITY % att-occurence         'occurence CDATA "function-model"'  >
-<!ENTITY % att-order             'order CDATA "numeric"'         >
-<!ENTITY % att-scope             'scope CDATA "local"'         >
-<!ENTITY % att-type              'type CDATA #IMPLIED'         >
+<!ENTITY % att-base              'math:base CDATA "10"'           >
+<!ENTITY % att-closure           'math:closure CDATA "closed"'    >
+<!ENTITY % att-definition        'math:definitionURL CDATA ""'    >
+<!ENTITY % att-encoding          'math:encoding CDATA ""'         >
+<!ENTITY % att-nargs             'math:nargs CDATA "1"'           >
+<!ENTITY % att-occurence         'math:occurence CDATA "function-model"'  >
+<!ENTITY % att-order             'math:order CDATA "numeric"'         >
+<!ENTITY % att-scope             'math:scope CDATA "local"'         >
+<!ENTITY % att-type              'math:type CDATA #IMPLIED'         >
 
 <!-- content leaf token elements -->
 
-<!ENTITY % ctoken "ci | cn" >
+<!ENTITY % ctoken "math:ci | math:cn" >
 
-<!ATTLIST ci   %att-type;
+<!ATTLIST math:ci   %att-type;
                %att-globalatts;     >
 
-<!ATTLIST cn   %att-type;
+<!ATTLIST math:cn   %att-type;
                %att-base;
                %att-globalatts;     >
 
 <!-- content elements - specials -->
 
-<!ENTITY % cspecial "apply | reln | lambda" >
+<!ENTITY % cspecial "math:apply | math:reln | math:lambda" >
 
-<!ATTLIST apply   %att-globalatts;     >
+<!ATTLIST math:apply   %att-globalatts;     >
 
-<!ATTLIST reln    %att-globalatts;     >
+<!ATTLIST math:reln    %att-globalatts;     >
 
-<!ATTLIST lambda  %att-globalatts;     >
+<!ATTLIST math:lambda  %att-globalatts;     >
 
 <!-- content elements - others -->
 
-<!ENTITY % cother "condition | declare | sep" >
+<!ENTITY % cother "math:condition | math:declare | math:sep" >
 
-<!ATTLIST condition       %att-globalatts;     >
+<!ATTLIST math:condition       %att-globalatts;     >
 
-<!ATTLIST declare         %att-type;
+<!ATTLIST math:declare         %att-type;
                           %att-scope;
                           %att-nargs;
                           %att-occurence;
                           %att-definition;
                           %att-globalatts;     >
 
-<!ELEMENT sep       EMPTY >
-<!ATTLIST sep       %att-globalatts;     >
+<!ELEMENT math:sep       EMPTY >
+<!ATTLIST math:sep       %att-globalatts;     >
 
 <!-- content elements - semantic mapping -->
 
-<!ENTITY % csemantics "semantics | annotation | annotation-xml" >
+<!ENTITY % csemantics "math:semantics | math:annotation | math:annotation-xml" >
 
-<!ATTLIST semantics         %att-definition;
+<!ATTLIST math:semantics         %att-definition;
                             %att-globalatts;     >
 
-<!ATTLIST annotation        %att-encoding;
+<!ATTLIST math:annotation        %att-encoding;
                             %att-globalatts;     >
 
-<!ATTLIST annotation-xml    %att-encoding;
+<!ATTLIST math:annotation-xml    %att-encoding;
                             %att-globalatts;     >
 
 <!-- content elements - constructors -->
 
-<!ENTITY % cconstructor "interval | list | matrix | matrixrow | set |
-vector" >
+<!ENTITY % cconstructor "math:interval | math:list | math:matrix | math:matrixrow | math:set |
+math:vector" >
 
-<!ATTLIST interval     %att-closure;
+<!ATTLIST math:interval     %att-closure;
                        %att-globalatts;     >
 
-<!ATTLIST set          %att-globalatts;     >
+<!ATTLIST math:set          %att-globalatts;     >
 
-<!ATTLIST list         %att-order;
+<!ATTLIST math:list         %att-order;
                        %att-globalatts;     >
 
-<!ATTLIST vector       %att-globalatts;     >
+<!ATTLIST math:vector       %att-globalatts;     >
 
-<!ATTLIST matrix       %att-globalatts;     >
+<!ATTLIST math:matrix       %att-globalatts;     >
 
-<!ATTLIST matrixrow    %att-globalatts;     >
+<!ATTLIST math:matrixrow    %att-globalatts;     >
 
 <!-- content elements - operators -->
 
-<!ENTITY % cfuncop1ary "inverse | ident " >
+<!ENTITY % cfuncop1ary "math:inverse | math:ident " >
 
-<!ELEMENT inverse          EMPTY       >
-<!ATTLIST inverse     %att-definition;
+<!ELEMENT math:inverse          EMPTY       >
+<!ATTLIST math:inverse     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cfuncopnary "fn |  compose" >
+<!ENTITY % cfuncopnary "math:fn |  math:compose" >
 
-<!ATTLIST fn     %att-definition;
+<!ATTLIST math:fn     %att-definition;
                  %att-globalatts;     >
 
-<!ELEMENT ident       EMPTY       >
-<!ATTLIST ident       %att-definition;
+<!ELEMENT math:ident       EMPTY       >
+<!ATTLIST math:ident       %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT compose     EMPTY       >
-<!ATTLIST compose     %att-definition;
+<!ELEMENT math:compose     EMPTY       >
+<!ATTLIST math:compose     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % carithop1ary "abs | conjugate | exp | factorial" >
+<!ENTITY % carithop1ary "math:abs | math:conjugate | math:exp | math:factorial" >
 
-<!ELEMENT exp         EMPTY       >
-<!ATTLIST exp         %att-definition;
+<!ELEMENT math:exp         EMPTY       >
+<!ATTLIST math:exp         %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT abs         EMPTY       >
-<!ATTLIST abs         %att-definition;
+<!ELEMENT math:abs         EMPTY       >
+<!ATTLIST math:abs         %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT conjugate   EMPTY       >
-<!ATTLIST conjugate   %att-definition;
+<!ELEMENT math:conjugate   EMPTY       >
+<!ATTLIST math:conjugate   %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT factorial   EMPTY       >
-<!ATTLIST factorial   %att-definition;
+<!ELEMENT math:factorial   EMPTY       >
+<!ATTLIST math:factorial   %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % carithop1or2ary "minus" >
+<!ENTITY % carithop1or2ary "math:minus" >
 
-<!ELEMENT minus       EMPTY       >
-<!ATTLIST minus       %att-definition;
+<!ELEMENT math:minus       EMPTY       >
+<!ATTLIST math:minus       %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % carithop2ary "quotient | divide | power | rem" >
+<!ENTITY % carithop2ary "math:quotient | math:divide | math:power | math:rem" >
 
-<!ELEMENT quotient       EMPTY       >
-<!ATTLIST quotient       %att-definition;
+<!ELEMENT math:quotient       EMPTY       >
+<!ATTLIST math:quotient       %att-definition;
                          %att-globalatts;     >
 
-<!ELEMENT divide       EMPTY       >
-<!ATTLIST divide       %att-definition;
+<!ELEMENT math:divide       EMPTY       >
+<!ATTLIST math:divide       %att-definition;
                        %att-globalatts;     >
 
-<!ELEMENT power          EMPTY       >
-<!ATTLIST power       %att-definition;
+<!ELEMENT math:power          EMPTY       >
+<!ATTLIST math:power       %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT rem          EMPTY       >
-<!ATTLIST rem        %att-definition;
+<!ELEMENT math:rem          EMPTY       >
+<!ATTLIST math:rem        %att-definition;
                      %att-globalatts;     >
 
-<!ENTITY % carithopnary "plus | times | max | min | gcd" >
+<!ENTITY % carithopnary "math:plus | math:times | math:max | math:min | math:gcd" >
 
-<!ELEMENT plus          EMPTY       >
-<!ATTLIST plus        %att-definition;
+<!ELEMENT math:plus          EMPTY       >
+<!ATTLIST math:plus        %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT max          EMPTY       >
-<!ATTLIST max         %att-definition;
+<!ELEMENT math:max          EMPTY       >
+<!ATTLIST math:max         %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT min          EMPTY       >
-<!ATTLIST min         %att-definition;
+<!ELEMENT math:min          EMPTY       >
+<!ATTLIST math:min         %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT times          EMPTY       >
-<!ATTLIST times     %att-definition;
+<!ELEMENT math:times          EMPTY       >
+<!ATTLIST math:times     %att-definition;
                     %att-globalatts;     >
 
-<!ELEMENT gcd          EMPTY       >
-<!ATTLIST gcd     %att-definition;
+<!ELEMENT math:gcd          EMPTY       >
+<!ATTLIST math:gcd     %att-definition;
                   %att-globalatts;     >
 
-<!ENTITY % carithoproot "root" >
+<!ENTITY % carithoproot "math:root" >
 
-<!ELEMENT root          EMPTY       >
-<!ATTLIST root     %att-definition;
+<!ELEMENT math:root          EMPTY       >
+<!ATTLIST math:root     %att-definition;
                    %att-globalatts;     >
 
-<!ENTITY % clogicopquant "exists | forall" >
+<!ENTITY % clogicopquant "math:exists | math:forall" >
 
-<!ELEMENT exists          EMPTY       >
-<!ATTLIST exists     %att-definition;
+<!ELEMENT math:exists          EMPTY       >
+<!ATTLIST math:exists     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT forall          EMPTY       >
-<!ATTLIST forall     %att-definition;
+<!ELEMENT math:forall          EMPTY       >
+<!ATTLIST math:forall     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % clogicopnary "and | or | xor" >
+<!ENTITY % clogicopnary "math:and | math:or | math:xor" >
 
-<!ELEMENT and          EMPTY       >
-<!ATTLIST and     %att-definition;
+<!ELEMENT math:and          EMPTY       >
+<!ATTLIST math:and     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT or          EMPTY       >
-<!ATTLIST or     %att-definition;
+<!ELEMENT math:or          EMPTY       >
+<!ATTLIST math:or     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT xor          EMPTY       >
-<!ATTLIST xor     %att-definition;
+<!ELEMENT math:xor          EMPTY       >
+<!ATTLIST math:xor     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % clogicop1ary "not" >
+<!ENTITY % clogicop1ary "math:not" >
 
-<!ELEMENT not          EMPTY       >
-<!ATTLIST not     %att-definition;
+<!ELEMENT math:not          EMPTY       >
+<!ATTLIST math:not     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % clogicop2ary "implies" >
+<!ENTITY % clogicop2ary "math:implies" >
 
-<!ELEMENT implies          EMPTY       >
-<!ATTLIST implies     %att-definition;
+<!ELEMENT math:implies          EMPTY       >
+<!ATTLIST math:implies     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % ccalcop "log | int | diff | partialdiff" >
+<!ENTITY % ccalcop "math:log | math:int | math:diff | math:partialdiff" >
 
-<!ELEMENT log          EMPTY       >
-<!ATTLIST log     %att-definition;
+<!ELEMENT math:log          EMPTY       >
+<!ATTLIST math:log     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT int          EMPTY       >
-<!ATTLIST int     %att-definition;
+<!ELEMENT math:int          EMPTY       >
+<!ATTLIST math:int     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT diff          EMPTY       >
-<!ATTLIST diff     %att-definition;
+<!ELEMENT math:diff          EMPTY       >
+<!ATTLIST math:diff     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT partialdiff          EMPTY       >
-<!ATTLIST partialdiff     %att-definition;
+<!ELEMENT math:partialdiff          EMPTY       >
+<!ATTLIST math:partialdiff     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % ccalcop1ary "ln" >
+<!ENTITY % ccalcop1ary "math:ln" >
 
-<!ELEMENT ln          EMPTY       >
-<!ATTLIST ln     %att-definition;
+<!ELEMENT math:ln          EMPTY       >
+<!ATTLIST math:ln     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % csetop2ary "setdiff" >
+<!ENTITY % csetop2ary "math:setdiff" >
 
-<!ELEMENT setdiff          EMPTY       >
-<!ATTLIST setdiff     %att-definition;
+<!ELEMENT math:setdiff          EMPTY       >
+<!ATTLIST math:setdiff     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % csetopnary "union | intersect" >
+<!ENTITY % csetopnary "math:union | math:intersect" >
 
-<!ELEMENT union          EMPTY       >
-<!ATTLIST union     %att-definition;
+<!ELEMENT math:union          EMPTY       >
+<!ATTLIST math:union     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT intersect          EMPTY       >
-<!ATTLIST intersect     %att-definition;
+<!ELEMENT math:intersect          EMPTY       >
+<!ATTLIST math:intersect     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cseqop "sum | product | limit" >
+<!ENTITY % cseqop "math:sum | math:product | math:limit" >
 
-<!ELEMENT sum          EMPTY       >
-<!ATTLIST sum     %att-definition;
+<!ELEMENT math:sum          EMPTY       >
+<!ATTLIST math:sum     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT product          EMPTY       >
-<!ATTLIST product     %att-definition;
+<!ELEMENT math:product          EMPTY       >
+<!ATTLIST math:product     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT limit          EMPTY       >
-<!ATTLIST limit     %att-definition;
+<!ELEMENT math:limit          EMPTY       >
+<!ATTLIST math:limit     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % ctrigop "sin | cos | tan | sec | csc | cot | sinh
-                | cosh | tanh | sech | csch | coth
-                | arcsin | arccos | arctan" >
+<!ENTITY % ctrigop "math:sin | math:cos | math:tan | math:sec | math:csc | math:cot | math:sinh
+                | math:cosh | math:tanh | math:sech | math:csch | math:coth
+                | math:arcsin | math:arccos | math:arctan" >
 
-<!ELEMENT sin          EMPTY       >
-<!ATTLIST sin     %att-definition;
+<!ELEMENT math:sin          EMPTY       >
+<!ATTLIST math:sin     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT cos          EMPTY       >
-<!ATTLIST cos     %att-definition;
+<!ELEMENT math:cos          EMPTY       >
+<!ATTLIST math:cos     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT tan          EMPTY       >
-<!ATTLIST tan     %att-definition;
+<!ELEMENT math:tan          EMPTY       >
+<!ATTLIST math:tan     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT sec          EMPTY       >
-<!ATTLIST sec     %att-definition;
+<!ELEMENT math:sec          EMPTY       >
+<!ATTLIST math:sec     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT csc          EMPTY       >
-<!ATTLIST csc     %att-definition;
+<!ELEMENT math:csc          EMPTY       >
+<!ATTLIST math:csc     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT cot          EMPTY       >
-<!ATTLIST cot     %att-definition;
+<!ELEMENT math:cot          EMPTY       >
+<!ATTLIST math:cot     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT sinh          EMPTY       >
-<!ATTLIST sinh     %att-definition;
+<!ELEMENT math:sinh          EMPTY       >
+<!ATTLIST math:sinh     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT cosh          EMPTY       >
-<!ATTLIST cosh     %att-definition;
+<!ELEMENT math:cosh          EMPTY       >
+<!ATTLIST math:cosh     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT tanh          EMPTY       >
-<!ATTLIST tanh     %att-definition;
+<!ELEMENT math:tanh          EMPTY       >
+<!ATTLIST math:tanh     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT sech          EMPTY       >
-<!ATTLIST sech     %att-definition;
+<!ELEMENT math:sech          EMPTY       >
+<!ATTLIST math:sech     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT csch          EMPTY       >
-<!ATTLIST csch     %att-definition;
+<!ELEMENT math:csch          EMPTY       >
+<!ATTLIST math:csch     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT coth          EMPTY       >
-<!ATTLIST coth     %att-definition;
+<!ELEMENT math:coth          EMPTY       >
+<!ATTLIST math:coth     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT arcsin          EMPTY       >
-<!ATTLIST arcsin     %att-definition;
+<!ELEMENT math:arcsin          EMPTY       >
+<!ATTLIST math:arcsin     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT arccos          EMPTY       >
-<!ATTLIST arccos     %att-definition;
+<!ELEMENT math:arccos          EMPTY       >
+<!ATTLIST math:arccos     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT arctan          EMPTY       >
-<!ATTLIST arctan     %att-definition;
+<!ELEMENT math:arctan          EMPTY       >
+<!ATTLIST math:arctan     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cstatopnary "mean | sdev | variance | median | mode" >
+<!ENTITY % cstatopnary "math:mean | math:sdev | math:variance | math:median | math:mode" >
 
-<!ELEMENT mean          EMPTY       >
-<!ATTLIST mean     %att-definition;
+<!ELEMENT math:mean          EMPTY       >
+<!ATTLIST math:mean     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT sdev          EMPTY       >
-<!ATTLIST sdev     %att-definition;
+<!ELEMENT math:sdev          EMPTY       >
+<!ATTLIST math:sdev     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT variance          EMPTY       >
-<!ATTLIST variance     %att-definition;
+<!ELEMENT math:variance          EMPTY       >
+<!ATTLIST math:variance     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT median          EMPTY       >
-<!ATTLIST median     %att-definition;
+<!ELEMENT math:median          EMPTY       >
+<!ATTLIST math:median     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT mode          EMPTY       >
-<!ATTLIST mode     %att-definition;
+<!ELEMENT math:mode          EMPTY       >
+<!ATTLIST math:mode     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cstatopmoment "moment" >
+<!ENTITY % cstatopmoment "math:moment" >
 
-<!ELEMENT moment          EMPTY       >
-<!ATTLIST moment     %att-definition;
+<!ELEMENT math:moment          EMPTY       >
+<!ATTLIST math:moment     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % clalgop1ary "determinant | transpose" >
+<!ENTITY % clalgop1ary "math:determinant | math:transpose" >
 
-<!ELEMENT determinant          EMPTY       >
-<!ATTLIST determinant     %att-definition;
+<!ELEMENT math:determinant          EMPTY       >
+<!ATTLIST math:determinant     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT transpose          EMPTY       >
-<!ATTLIST transpose     %att-definition;
+<!ELEMENT math:transpose          EMPTY       >
+<!ATTLIST math:transpose     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % clalgopnary "selector" >
+<!ENTITY % clalgopnary "math:selector" >
 
-<!ELEMENT selector          EMPTY       >
-<!ATTLIST selector     %att-definition;
+<!ELEMENT math:selector          EMPTY       >
+<!ATTLIST math:selector     %att-definition;
                       %att-globalatts;     >
 
 <!-- content elements -  relations  -->
 
-<!ENTITY % cgenrel2ary "neq" >
+<!ENTITY % cgenrel2ary "math:neq" >
 
-<!ELEMENT neq          EMPTY       >
-<!ATTLIST neq     %att-definition;
+<!ELEMENT math:neq          EMPTY       >
+<!ATTLIST math:neq     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cgenrelnary "eq | leq | lt | geq | gt" >
+<!ENTITY % cgenrelnary "math:eq | math:leq | math:lt | math:geq | math:gt" >
 
-<!ELEMENT eq          EMPTY       >
-<!ATTLIST eq     %att-definition;
+<!ELEMENT math:eq          EMPTY       >
+<!ATTLIST math:eq     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT gt          EMPTY       >
-<!ATTLIST gt     %att-definition;
+<!ELEMENT math:gt          EMPTY       >
+<!ATTLIST math:gt     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT lt          EMPTY       >
-<!ATTLIST lt     %att-definition;
+<!ELEMENT math:lt          EMPTY       >
+<!ATTLIST math:lt     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT geq          EMPTY       >
-<!ATTLIST geq     %att-definition;
+<!ELEMENT math:geq          EMPTY       >
+<!ATTLIST math:geq     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT leq          EMPTY       >
-<!ATTLIST leq     %att-definition;
+<!ELEMENT math:leq          EMPTY       >
+<!ATTLIST math:leq     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % csetrel2ary "in | notin | notsubset | notprsubset" >
+<!ENTITY % csetrel2ary "math:in | math:notin | math:notsubset | math:notprsubset" >
 
-<!ELEMENT in          EMPTY       >
-<!ATTLIST in     %att-definition;
+<!ELEMENT math:in          EMPTY       >
+<!ATTLIST math:in     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT notin          EMPTY       >
-<!ATTLIST notin     %att-definition;
+<!ELEMENT math:notin          EMPTY       >
+<!ATTLIST math:notin     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT notsubset          EMPTY       >
-<!ATTLIST notsubset     %att-definition;
+<!ELEMENT math:notsubset          EMPTY       >
+<!ATTLIST math:notsubset     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT notprsubset          EMPTY       >
-<!ATTLIST notprsubset     %att-definition;
+<!ELEMENT math:notprsubset          EMPTY       >
+<!ATTLIST math:notprsubset     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % csetrelnary "subset | prsubset" >
+<!ENTITY % csetrelnary "math:subset | math:prsubset" >
 
-<!ELEMENT subset          EMPTY       >
-<!ATTLIST subset     %att-definition;
+<!ELEMENT math:subset          EMPTY       >
+<!ATTLIST math:subset     %att-definition;
                       %att-globalatts;     >
 
-<!ELEMENT prsubset          EMPTY       >
-<!ATTLIST prsubset     %att-definition;
+<!ELEMENT math:prsubset          EMPTY       >
+<!ATTLIST math:prsubset     %att-definition;
                       %att-globalatts;     >
 
-<!ENTITY % cseqrel2ary "tendsto" >
+<!ENTITY % cseqrel2ary "math:tendsto" >
 
-<!ELEMENT tendsto          EMPTY       >
-<!ATTLIST tendsto     %att-definition;
+<!ELEMENT math:tendsto          EMPTY       >
+<!ATTLIST math:tendsto     %att-definition;
                       %att-type;
                       %att-globalatts;     >
 
 <!-- content elements -  quantifiers  -->
 
-<!ENTITY % cquantifier "lowlimit | uplimit | bvar | degree | logbase" >
+<!ENTITY % cquantifier "math:lowlimit | math:uplimit | math:bvar | math:degree | math:logbase" >
 
-<!ATTLIST lowlimit  %att-globalatts;     >
+<!ATTLIST math:lowlimit  %att-globalatts;     >
 
-<!ATTLIST uplimit  %att-globalatts;     >
+<!ATTLIST math:uplimit  %att-globalatts;     >
 
-<!ATTLIST bvar     %att-globalatts;     >
+<!ATTLIST math:bvar     %att-globalatts;     >
 
-<!ATTLIST degree   %att-globalatts;     >
+<!ATTLIST math:degree   %att-globalatts;     >
 
-<!ATTLIST logbase  %att-globalatts;     >
+<!ATTLIST math:logbase  %att-globalatts;     >
 
 <!-- operator groups -->
 
@@ -787,9 +808,9 @@ vector" >
 
 <!-- content constructs for substitution in presentation structures -->
 
-<!ENTITY % ContInPres "ci | cn  | apply  | fn | lambda | reln
-                    | interval | list | matrix |matrixrow
-                    | set | vector | semantics" > <!--dpc-->
+<!ENTITY % ContInPres "math:ci | math:cn  | math:apply  | math:fn | math:lambda | math:reln
+                    | math:interval | math:list | math:matrix |math:matrixrow
+                    | math:set | math:vector | math:semantics" > <!--dpc-->
 
 <!-- *************************************************  -->
 
@@ -807,87 +828,87 @@ vector" >
 <!--  content token elements (may hold embedded presentation constructs)
 -->
 
-<!ELEMENT ci       (#PCDATA | %PresInCont;)*   >
-<!ELEMENT cn       (#PCDATA | sep | %PresInCont;)*   >
+<!ELEMENT math:ci       (#PCDATA | %PresInCont;)*   >
+<!ELEMENT math:cn       (#PCDATA | math:sep | %PresInCont;)*   >
 
 <!--  content special elements    -->
 
-<!ELEMENT apply      (%ContentExpression;)   >
-<!ELEMENT reln       (%ContentExpression;)   >
-<!ELEMENT lambda     (%ContentExpression;)   >
+<!ELEMENT math:apply      (%ContentExpression;)   >
+<!ELEMENT math:reln       (%ContentExpression;)   >
+<!ELEMENT math:lambda     (%ContentExpression;)   >
 
 <!--  content other elements    -->
 
-<!ELEMENT condition      (%ContentExpression;)   >
-<!ELEMENT declare        (%ContentExpression;)   >
+<!ELEMENT math:condition      (%ContentExpression;)   >
+<!ELEMENT math:declare        (%ContentExpression;)   >
 
 <!--  content semantics elements    -->
 
-<!ELEMENT semantics              (%ContentExpression;)   >
-<!ELEMENT annotation             (#PCDATA)                >
-<!ELEMENT annotation-xml         (%ContentExpression;)   >
+<!ELEMENT math:semantics              (%ContentExpression;)   >
+<!ELEMENT math:annotation             (#PCDATA)                >
+<!ELEMENT math:annotation-xml         (%ContentExpression;)   >
 
 <!--  content constructor elements    -->
 
-<!ELEMENT interval       (%ContentExpression;)   >
-<!ELEMENT set            (%ContentExpression;)   >
-<!ELEMENT list           (%ContentExpression;)   >
-<!ELEMENT vector         (%ContentExpression;)   >
-<!ELEMENT matrix         (%ContentExpression;)   >
-<!ELEMENT matrixrow      (%ContentExpression;)   >
+<!ELEMENT math:interval       (%ContentExpression;)   >
+<!ELEMENT math:set            (%ContentExpression;)   >
+<!ELEMENT math:list           (%ContentExpression;)   >
+<!ELEMENT math:vector         (%ContentExpression;)   >
+<!ELEMENT math:matrix         (%ContentExpression;)   >
+<!ELEMENT math:matrixrow      (%ContentExpression;)   >
 
 <!--  content operator element (user-defined)    -->
 
-<!ELEMENT fn       (%ContentExpression;)   >
+<!ELEMENT math:fn       (%ContentExpression;)   >
 
 <!--  content quantifier elements    -->
 
-<!ELEMENT lowlimit       (%ContentExpression;)   >
-<!ELEMENT uplimit        (%ContentExpression;)   >
-<!ELEMENT bvar           (%ContentExpression;)   >
-<!ELEMENT degree         (%ContentExpression;)   >
-<!ELEMENT logbase        (%ContentExpression;)   >
+<!ELEMENT math:lowlimit       (%ContentExpression;)   >
+<!ELEMENT math:uplimit        (%ContentExpression;)   >
+<!ELEMENT math:bvar           (%ContentExpression;)   >
+<!ELEMENT math:degree         (%ContentExpression;)   >
+<!ELEMENT math:logbase        (%ContentExpression;)   >
 
 <!-- *************************************************  -->
 <!-- presentation layout schema contain tokens, layout and content
 schema  -->
 
-<!ELEMENT mstyle          (%PresExpression;)                      >
-<!ELEMENT merror          (%PresExpression;)                      >
-<!ELEMENT mphantom        (%PresExpression;)                      >
-<!ELEMENT mrow            (%PresExpression;)                      >
-<!ELEMENT mfrac           (%PresExpression;)                      >
-<!ELEMENT msqrt           (%PresExpression;)                      >
-<!ELEMENT mroot           (%PresExpression;)                      >
-<!ELEMENT msub            (%PresExpression;)                      >
-<!ELEMENT msup            (%PresExpression;)                      >
-<!ELEMENT msubsup         (%PresExpression;)                      >
-<!ELEMENT mmultiscripts   (%PresExpression;)                      >
-<!ELEMENT munder          (%PresExpression;)                      >
-<!ELEMENT mover           (%PresExpression;)                      >
-<!ELEMENT munderover      (%PresExpression;)                      >
-<!ELEMENT mtable          (%PresExpression;)                      >
-<!ELEMENT mtr             (%PresExpression;)                      >
-<!ELEMENT mtd             (%PresExpression;)                      >
-<!ELEMENT maction         (%PresExpression;)                      >
-<!ELEMENT mfenced         (%PresExpression;)                      >
-<!ELEMENT mpadded         (%PresExpression;)                      >
+<!ELEMENT math:mstyle          (%PresExpression;)                      >
+<!ELEMENT math:merror          (%PresExpression;)                      >
+<!ELEMENT math:mphantom        (%PresExpression;)                      >
+<!ELEMENT math:mrow            (%PresExpression;)                      >
+<!ELEMENT math:mfrac           (%PresExpression;)                      >
+<!ELEMENT math:msqrt           (%PresExpression;)                      >
+<!ELEMENT math:mroot           (%PresExpression;)                      >
+<!ELEMENT math:msub            (%PresExpression;)                      >
+<!ELEMENT math:msup            (%PresExpression;)                      >
+<!ELEMENT math:msubsup         (%PresExpression;)                      >
+<!ELEMENT math:mmultiscripts   (%PresExpression;)                      >
+<!ELEMENT math:munder          (%PresExpression;)                      >
+<!ELEMENT math:mover           (%PresExpression;)                      >
+<!ELEMENT math:munderover      (%PresExpression;)                      >
+<!ELEMENT math:mtable          (%PresExpression;)                      >
+<!ELEMENT math:mtr             (%PresExpression;)                      >
+<!ELEMENT math:mtd             (%PresExpression;)                      >
+<!ELEMENT math:maction         (%PresExpression;)                      >
+<!ELEMENT math:mfenced         (%PresExpression;)                      >
+<!ELEMENT math:mpadded         (%PresExpression;)                      >
 
 <!-- presentation tokens contain PCDATA or malignmark constructs -->
 
-<!ELEMENT mi     (#PCDATA | malignmark )*        >
-<!ELEMENT mn     (#PCDATA | malignmark )*        >
-<!ELEMENT mo     (#PCDATA | malignmark )*        >
-<!ELEMENT mtext  (#PCDATA | malignmark )*        >
-<!ELEMENT ms     (#PCDATA | malignmark )*        >
+<!ELEMENT math:mi     (#PCDATA | math:malignmark )*        >
+<!ELEMENT math:mn     (#PCDATA | math:malignmark )*        >
+<!ELEMENT math:mo     (#PCDATA | math:malignmark )*        >
+<!ELEMENT math:mtext  (#PCDATA | math:malignmark )*        >
+<!ELEMENT math:ms     (#PCDATA | math:malignmark )*        >
 
 <!-- *************************************************  -->
 <!-- browser interface definition -->
 
 <!-- attributes for top level math element -->
 
-<!ENTITY  %     att-macros      'macros CDATA #IMPLIED' >
-<!ENTITY  %     att-mode        'mode   CDATA #IMPLIED' >
+<!ENTITY  %     att-macros      'math:macros CDATA #IMPLIED' >
+<!ENTITY  %     att-mode        'math:mode   CDATA #IMPLIED' >
 
 <!ENTITY  %     att-topinfo    '%att-globalatts;
                                 %att-macros;
@@ -895,12 +916,12 @@ schema  -->
 
 <!-- attributes for browser interface element element -->
 
-<!ENTITY  %     att-name        'name CDATA #IMPLIED' >
-<!ENTITY  %     att-baseline    'baseline CDATA #IMPLIED' >
-<!ENTITY  %     att-overflow    'overflow
+<!ENTITY  %     att-name        'math:name CDATA #IMPLIED' >
+<!ENTITY  %     att-baseline    'math:baseline CDATA #IMPLIED' >
+<!ENTITY  %     att-overflow    'math:overflow
 (scroll|elide|truncate|scale) "scroll"' >
-<!ENTITY  %     att-altimg      'altimg CDATA #IMPLIED' >
-<!ENTITY  %     att-alttext     'alttext CDATA #IMPLIED' >
+<!ENTITY  %     att-altimg      'math:altimg CDATA #IMPLIED' >
+<!ENTITY  %     att-alttext     'math:alttext CDATA #IMPLIED' >
 
 <!ENTITY  %     att-browif      '%att-type;
                                 %att-name;
@@ -916,96 +937,20 @@ schema  -->
 <!-- math has the browser info attributes iff it is the
     browser interface element also -->
 
-<!ELEMENT math       (%MathExpression;)    >
+<!ELEMENT math:math       (%MathExpression;)    >
 
-<!ATTLIST  math         %att-topinfo;
+<!ATTLIST  math:math         %att-topinfo;
                         %att-browif;   >
 
 
 <!-- ENTITY sets -->
 
-<!-- ISO 9573-13 -->
-
-<!ENTITY % ent-isoamsa SYSTEM "isoamsa.ent" >
-%ent-isoamsa;
-
-<!ENTITY % ent-isoamsb SYSTEM "isoamsb.ent" >
-%ent-isoamsb;
-
-<!ENTITY % ent-isoamsc SYSTEM "isoamsc.ent" >
-%ent-isoamsc;
-
-<!ENTITY % ent-isoamsn SYSTEM "isoamsn.ent" >
-%ent-isoamsn;
-
-<!ENTITY % ent-isoamso SYSTEM "isoamso.ent" >
-%ent-isoamso;
-
-<!ENTITY % ent-isoamsr SYSTEM "isoamsr.ent" >
-%ent-isoamsr;
-
-<!ENTITY % ent-isogrk3 SYSTEM "isogrk3.ent" >
-%ent-isogrk3;
-
-<!ENTITY % ent-isogrk4 SYSTEM "isogrk4.ent" >
-%ent-isogrk4;
-
-<!ENTITY % ent-isomfrk SYSTEM "isomfrk.ent" >
-%ent-isomfrk;
-
-<!ENTITY % ent-isomopf SYSTEM "isomopf.ent" >
-%ent-isomopf;
-
-<!ENTITY % ent-isomscr SYSTEM "isomscr.ent" >
-%ent-isomscr;
-
-<!ENTITY % ent-isotech SYSTEM "isotech.ent" >
-%ent-isotech;
-
-
-
-<!-- ISO 8879 -->
-
-<!ENTITY % ent-isobox SYSTEM "isobox.ent" >
-%ent-isobox;
-
-<!ENTITY % ent-isocyr1 SYSTEM "isocyr1.ent" >
-%ent-isocyr1;
-
-<!ENTITY % ent-isocyr2 SYSTEM "isocyr2.ent" >
-%ent-isocyr2;
-
-<!ENTITY % ent-isodia SYSTEM "isodia.ent" >
-%ent-isodia;
-
-<!ENTITY % ent-isogrk1 SYSTEM "isogrk1.ent" >
-%ent-isogrk1;
-
-<!ENTITY % ent-isogrk2 SYSTEM "isogrk2.ent" >
-%ent-isogrk2;
-
-<!ENTITY % ent-isolat1 SYSTEM "isolat1.ent" >
-%ent-isolat1;
-
-<!ENTITY % ent-isolat2 SYSTEM "isolat2.ent" >
-%ent-isolat2;
-
-<!ENTITY % ent-isonum SYSTEM "isonum.ent" >
-%ent-isonum;
-
-<!ENTITY % ent-isopub SYSTEM "isopub.ent" >
-%ent-isopub;
-
-<!-- MathML aliases for characters defined above -->
-
-<!ENTITY % ent-mmlalias SYSTEM "mmlalias.ent" >
-%ent-mmlalias;
+<!-- ... removed ... -->
 
 
 <!-- MathML new characters -->
 
-<!ENTITY % ent-mmlextra SYSTEM "mmlextra.ent" >
-%ent-mmlextra;
+<!-- ... removed ... -->
 
 <!-- end of ENTITY sets -->
 <!-- end of DTD fragment -->
