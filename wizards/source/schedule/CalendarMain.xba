@@ -6,7 +6,7 @@ Const _DEBUG = 0
 
 &apos; CalenderMain
 Public sCurLangLocale as String
-
+Public sCurCountryLocale as String
 &apos; Dieses Flag dient zur Abfrage ob die individuellen Daten abgespeichert werden sollen.
 Public bCalOwnDataChanged as Boolean
 
@@ -66,14 +66,15 @@ Public DlgCalModel as Object
 Sub CalAutopilotTable()
 Dim BitmapDir as String
 Dim iThisMonth as Integer
-&apos; On Error Goto ErrorHandler
+&apos;On Error Goto ErrorHandler
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	bSelectByMouseMove = True
-	&apos; HauptRoutine zur Erstellung des Kalenders
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	oDocument = ThisComponent
 	oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	ToggleWindow(False)
 	sCurLangLocale = oDocument.CharLocale.Language
+	sCurCountryLocale = oDocument.CharLocale.Country
+
 	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;DlgCalendar&quot;)
 	DlgCalModel = DlgCalendar.Model
     LoadLanguage(sCurLangLocale)
@@ -108,11 +109,11 @@ Dim iThisMonth as Integer
 	iThisMonth = Month(Now)
 	DlgCalendar.GetControl(&quot;lstMonth&quot;).SelectItemPos(iThisMonth-1, True)
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
+	DlgCalModel.cmdGoOn.DefaultButton = True
 	ToggleWindow(True)
 	DlgCalendar.Execute()
 	DlgCalendar.Dispose()
 	Exit Sub
-
 ErrorHandler:
     MsgBox(sError$, 16, sWizardTitle$)
 End Sub
@@ -146,6 +147,8 @@ Dim SelYear as String
 	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 	iSelYear = DlgCalModel.txtYear.Value
+&apos;	sCurLangLocale = &quot;zh&quot;
+&apos;	sCurCountryLocale = &quot;TW&quot;
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
 			If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then
@@ -174,6 +177,14 @@ Dim SelYear as String
 			Call FindWholeYearHolidays_PL(iSelYear)
 		Case cLANGUAGE_RUSSIAN
 			Call FindWholeYearHolidays_RU(iSelYear)
+		Case cLANGUAGE_JAPANESE
+			Call FindWholeYearHolidays_JP(iSelYear)
+		Case cLANGUAGE_CHINESE
+			If sCurCountryLocale = &quot;TW&quot; Then
+				Call FindWholeYearHolidays_TW(iSelYear)
+			Else
+
+			End If
 	End Select
 
 	Call CalInsertOwnDataInTables(iSelYear)
@@ -182,7 +193,7 @@ Dim SelYear as String
 		oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 		oSheet = oSheets.GetbyIndex(0)
 		oSheet.Name = sCalendarTitle$ + &quot; &quot; + iSelYear
-&apos;		oDocument.AddActionLock
+		oDocument.AddActionLock
 		Call CalCreateYearTable(iSelYear)
 	ElseIf DlgCalModel.optMonth.State = 1 Then
 		Dim iMonth
@@ -190,11 +201,11 @@ Dim SelYear as String
 		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
 		oSheet = oSheets.GetbyIndex(0)
 		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames(iMonth-1)
-&apos;		oDocument.AddActionLock
+		oDocument.AddActionLock
 		Call CalCreateMonthTable(iSelYear, iMonth)
 	End If
 
-&apos;	oDocument.RemoveActionLock
+	oDocument.RemoveActionLock
 	oSheet.protect(&quot;&quot;)
 	oStatusLine.End
 	DlgCalendar.EndExecute()

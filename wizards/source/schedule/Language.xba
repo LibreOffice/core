@@ -49,17 +49,6 @@ Const dlgShortMonth = 1225
 			BLNameList(16) = &quot;Thüringen&quot;
 
 			DlgCalModel.lstHolidays.StringItemList() = BLNameList()
-&apos;			Dim FirstItem as String
-&apos;
-&apos;			FirstItem = GetResText(1100)
-&apos;			DlgCalModel.lstSpecBankholidays.AddItem(FirstItem)
-&apos;			For i = 1 To Ubound(BLNameList())
-&apos;				DlgCalModel.cmbState.AddItem(BLNameList(i))
-&apos;			Next i 
-		Else 
-&apos;			printdbgInfo DlgCalendar.GetControl(&quot;lblSpecBankholidays&quot;)
-&apos;			DlgCalendar.GetControl(&quot;lblSpecBankholidays&quot;).Visible = False
-&apos;			DlgCalendar.GetControl(&quot;lstSpecBankholidays&quot;).Visible = False
 		End If
 		sWizardTitle$ = GetResText(1300)
 		sError$ = GetResText(1301)

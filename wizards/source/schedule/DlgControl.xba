@@ -83,6 +83,7 @@ Dim ListIndex as Integer
 	Select Case sCurLangLocale
 		Case  cLANGUAGE_GERMAN
 			If bSelectByMouseMove Then
+&apos;				oStatusLine.SetText(aEvent.X &amp; &quot; ; &quot; &amp; aEvent.Y)
 				ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
 				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
 			End If
@@ -102,30 +103,6 @@ End Sub
 Sub MouseLeavesImage
 	bSelectbyMouseMove = True
 End Sub
-
-
-&apos;Sub CalChangeGeneralMonth()
-&apos;
-&apos;	Dim MonthToCheck$
-&apos;	Dim ValMonthToCheck%
-&apos;
-&apos;	MonthToCheck$ = DlgCalModel.txtMonth.Text
-&apos;	ValMonthToCheck% = Val(MonthToCheck$)
-&apos;
-&apos;	If (ValMonthToCheck% &gt;= 1) And (ValMonthToCheck% &lt;=12) Then
-&apos;		DlgCalModel.txtMonth.Text = cCalShortMonthNames$(ValMonthToCheck%)
-&apos;		Exit Sub
-&apos;	End If
-&apos;
-&apos;	If CalGetIntOfShortMonthName%(Trim(Left(MonthToCheck$, 3))) = 0 Then
-&apos;		Beep
-&apos;		DlgCalModel.txtMonth.Text = DlgCalModel.txtMonth.Tag
-&apos;	Else
-&apos;		DlgCalModel.txtMonth.Text = Trim(Left(MonthToCheck, 3))
-&apos;	End If
-&apos;
-&apos;End Sub
-
 
 
 Sub CalClearInputMask()

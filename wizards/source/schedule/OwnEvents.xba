@@ -242,9 +242,10 @@ Dim bDoEnable as Boolean
 End Sub
 
 
-Sub GetOwnMonth
+Sub GetOwnMonth()
 Dim EvYear as Integer
 	EvYear = GetOwnYear()
 	CurOwnMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0) + 1
 	DlgCalModel.txtOwnEventDay.ValueMax = CalMaxDayInMonth(EvYear, CurOwnMonth)
+	CheckInsertedDates()
 End Sub</script:module>

@@ -26,13 +26,10 @@ Dim oRangeBlank as Object
 Dim sBlankStyle as String
 &apos;	On Error Goto ErrorHandling
 	oStatusLine.Start(&quot;&quot;,140)	&apos;GetResText(sProgress)
-
 	iDate = DateSerial(iSelYear,1,1)
-
-	&apos; Insert year
 	oYearCell = oSheet.GetCellRangeByName(&quot;Year&quot;)
 	oYearCell.Value = iSelYear
-	&apos; Insert holidays
+
 	CalMonth = 1
 	CalDay = 0
 	s = 10
@@ -47,7 +44,7 @@ Dim sBlankStyle as String
 		End If
 		ColPos = NewYearColumn+(2*CalMonth)
 		RowPos = NewYearRow + CalDay
-		FormatCalCells(ColPos,RowPos,i)			
+		FormatCalCells(ColPos,RowPos,i)
 	Next
 	If NOT CalIsLeapYear(iSelYear) Then
 		&apos; Delete 29th February if necessary

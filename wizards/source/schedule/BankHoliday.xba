@@ -135,22 +135,19 @@ End Sub
 
 &apos; Finds eg the first,second Monday in a month
 &apos; Note: in This Function the week starts with the Sunday
-Function GetMonthDate(iWeekDay, iMonth, iCount as Integer)
+Function GetMonthDate(YearInt as Integer, iMonth as Integer, iWeekDay as Integer, iOffset as Integer)
 Dim bFound as Boolean
-Dim i as Integer
-Dim lDate as Integer
+Dim lDate as Long
 	&apos;	1st Tue in Nov : Election Day, Half
 	bFound = False
-	i = 0
-	lDate = DateSerial(YearInt%, iMonth, 1)
-	While Not bFound
-		If (iWeekDay = WeekDay(lDate)) Then i = i + 1
-		If (i &lt; iCount) Then
-			lDate = lDate + 1
-		Else
+	lDate = DateSerial(YearInt, iMonth, 1)
+	Do
+		If iWeekDay = WeekDay(lDate) Then 
 			bFound = True
+		Else
+			lDate = lDate + 1
 		End If
-	Wend
-	GetMonthDate = lDate
+	Loop Until bFound
+	GetMonthDate = lDate + iOffset
 End Function
 </script:module>

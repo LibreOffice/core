@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HolidayGerman" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="GermanHolidays" script:language="StarBasic">Option Explicit
 
 Sub Main()
 	Call CalAutopilotTable()
@@ -8,58 +8,58 @@ End Sub
 
 Function CalGetGermanLandAtMousePos(byval X as single, byval Y as single) as Integer
 	CalChoosenLand = 0
-	If (X&gt;68)And(X&lt;125)And(Y&gt;116)And(Y&lt;176) Then
+	If (X&gt;73)And(X&lt;130)And(Y&gt;121)And(Y&lt;181) Then
 		CalChoosenLand = CalBLBayern
 
-	ElseIf (X&gt;36)And(X&lt;84)And(Y&gt;131)And(Y&lt;178) Then 
+	ElseIf (X&gt;41)And(X&lt;89)And(Y&gt;136)And(Y&lt;183) Then 
 		CalChoosenLand = CalBLBadenWuert
 		
-	ElseIf (X&gt;9)And(X&lt;26)And(Y&gt;128)And(Y&lt;139) Then 
+	ElseIf (X&gt;14)And(X&lt;31)And(Y&gt;133)And(Y&lt;144) Then 
 		CalChoosenLand = CalBLSaarland
 		
-	ElseIf (X&gt;8)And(X&lt;37)And(Y&gt;107)And(Y&lt;141) Then 
+	ElseIf (X&gt;13)And(X&lt;42)And(Y&gt;111)And(Y&lt;146) Then 
 		CalChoosenLand = CalBLRheinlandPfalz
 		
-	ElseIf (X&gt;5)And(X&lt;53)And(Y&gt;65)And(Y&lt;107) Then 
+	ElseIf (X&gt;10)And(X&lt;58)And(Y&gt;70)And(Y&lt;112) Then 
 		CalChoosenLand = CalBLNordrheinWest
 
-	ElseIf (X&gt;39)And(X&lt;70)And(Y&gt;87)And(Y&lt;131) Then 
+	ElseIf (X&gt;44)And(X&lt;75)And(Y&gt;92)And(Y&lt;136) Then 
 		CalChoosenLand = CalBLHessen
 
-	ElseIf (X&gt;70)And(X&lt;105)And(Y&gt;83)And(Y&lt;116) Then 
+	ElseIf (X&gt;75)And(X&lt;110)And(Y&gt;88)And(Y&lt;120) Then 
 		CalChoosenLand = CalBLThueringen
 		
-	ElseIf (X&gt;105)And(X&lt;150)And(Y&gt;82)And(Y&lt;107) Then 
+	ElseIf (X&gt;110)And(X&lt;155)And(Y&gt;87)And(Y&lt;112) Then 
 		CalChoosenLand = CalBLSachsen
 		
-	ElseIf (X&gt;47)And(X&lt;85)And(Y&gt;6)And(Y&lt;37) Then 
+	ElseIf (X&gt;52)And(X&lt;90)And(Y&gt;11)And(Y&lt;42) Then 
 		CalChoosenLand = CalBLSchlHolstein
 
-	ElseIf (X&gt;74)And(X&lt;85)And(Y&gt;37)And(Y&lt;43) Then 
+	ElseIf (X&gt;79)And(X&lt;90)And(Y&gt;42)And(Y&lt;48) Then 
 		CalChoosenLand = CalBLHamburg
 
-	ElseIf (X&gt;85)And(X&lt;138)And(Y&gt;18)And(Y&lt;45) Then 
+	ElseIf (X&gt;90)And(X&lt;143)And(Y&gt;23)And(Y&lt;50) Then 
 		CalChoosenLand = CalBLMeckPomm
 
-	ElseIf (X&gt;49)And(X&lt;55)And(Y&gt;41)And(Y&lt;47) Then 
+	ElseIf (X&gt;54)And(X&lt;60)And(Y&gt;46)And(Y&lt;52) Then 
 		CalChoosenLand = CalBLBremen
 
-	ElseIf (X&gt;51)And(X&lt;65)And(Y&gt;53)And(Y&lt;60) Then 
+	ElseIf (X&gt;53)And(X&lt;67)And(Y&gt;55)And(Y&lt;62) Then 
 		CalChoosenLand = CalBLBremen
 
-	ElseIf (X&gt;23)And(X&lt;85)And(Y&gt;38)And(Y&lt;67) Then 
+	ElseIf (X&gt;25)And(X&lt;87)And(Y&gt;40)And(Y&lt;69) Then 
 		CalChoosenLand = CalBLNiedersachsen
 
-	ElseIf (X&gt;53)And(X&lt;85)And(Y&gt;67)And(Y&lt;83) Then 
+	ElseIf (X&gt;55)And(X&lt;87)And(Y&gt;69)And(Y&lt;85) Then 
 		CalChoosenLand = CalBLNiedersachsen
 
-	ElseIf (X&gt;85)And(X&lt;105)And(Y&gt;45)And(Y&lt;83) Then 
+	ElseIf (X&gt;87)And(X&lt;107)And(Y&gt;47)And(Y&lt;85) Then 
 		CalChoosenLand = CalBLSachsenAnhalt
 
-	ElseIf (X&gt;116)And(X&lt;130)And(Y&gt;58)And(Y&lt;68) Then 
+	ElseIf (X&gt;122)And(X&lt;135)And(Y&gt;62)And(Y&lt;72) Then 
 		CalChoosenLand = CalBLBerlin
 
-	ElseIf (X&gt;105)And(X&lt;144)And(Y&gt;45)And(Y&lt;82) Then 
+	ElseIf (X&gt;107)And(X&lt;146)And(Y&gt;47)And(Y&lt;84) Then 
 		CalChoosenLand = CalBLBrandenburg
 	End If
 &apos;	If (CalChoosenLand &gt;= Lbound(BLNameList)) AND ((CalChoosenLand &lt;= Ubound(BLNameList))) Then
