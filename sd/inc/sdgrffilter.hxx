@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:41:33 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,22 +71,23 @@
 
 class SdGRFFilter : public SdFilter
 {
+public:
+    SdGRFFilter (
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress );
+    virtual ~SdGRFFilter (void);
+
+    virtual sal_Bool        Import();
+    virtual sal_Bool        Export();
+
+    static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
+
 private:
 
     static GDIMetaFile      ImplRemoveClipRegionActions( const GDIMetaFile& rMtf );
     static BitmapEx         ImplGetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSizePixel = NULL );
 
-public:
-
-                            SdGRFFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
-                            ~SdGRFFilter();
-
-    virtual sal_Bool        Import();
-    virtual sal_Bool        Export();
-
-public:
-
-    static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
 };
 
 #endif // _SD_SDGRFFILTER_HXX
