@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-27 14:22:30 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 17:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,10 +139,10 @@
 #include <unotools/streamwrap.hxx>
 #endif
 #ifndef _SV_XMLAUTOCORRECTIMPORT_HXX
-#include "SvXMLAutoCorrectImport.hxx"
+#include <SvXMLAutoCorrectImport.hxx>
 #endif
 #ifndef _SV_XMLAUTOCORRECTEXPORT_HXX
-#include "SvXMLAutoCorrectExport.hxx"
+#include <SvXMLAutoCorrectExport.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -2715,10 +2715,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     MakeUserStorage_Impl();
 
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    /*
     SvStorageRef xStg = aMedium.GetOutputStorage();
-    */
-    SvStorageRef xStg = aMedium.GetStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
 /*  if( bRet )
@@ -2772,10 +2769,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 
     String sLong;
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    /*
     SvStorageRef xStg = aMedium.GetOutputStorage();
-    */
-    SvStorageRef xStg = aMedium.GetStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
     if( bRet )
