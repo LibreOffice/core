@@ -1,0 +1,42 @@
+    <node oor:name="StarOffice XML (Math)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>math_StarOffice_XML_Math</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">%productname% %formatversion% - Formuła</value>
+            <value xml:lang="hu">%productname% %formatversion%-képlet</value>
+            <value xml:lang="ja">%productname% %formatversion% 数式</value>
+            <value xml:lang="es">%productname% %formatversion% - Fórmula</value>
+            <value xml:lang="tr">%productname% %formatversion% Formula</value>
+            <value xml:lang="ru">%productname% %formatversion% Формула</value>
+            <value xml:lang="th">%productname% %formatversion% Formula</value>
+            <value xml:lang="x-comment">%productname% %formatversion% Formel</value>
+            <value xml:lang="ca">%productname% %formatversion% Formula</value>
+            <value xml:lang="el">Μαθ. Τύπος %productname% %formatversion%</value>
+            <value xml:lang="zh-CN">%productname% %formatversion% 公式</value>
+            <value xml:lang="pt">%productname% %formatversion% Fórmula</value>
+            <value xml:lang="cs">Vzorec %productname% %formatversion%</value>
+            <value xml:lang="fr">%productname% %formatversion% Formule</value>
+            <value xml:lang="ar">%productname% %formatversion% Formula</value>
+            <value xml:lang="zh-TW">%productname% %formatversion% 公式</value>
+            <value xml:lang="sl">%productname% %formatversion% Formula</value>
+            <value xml:lang="fi">%productname% %formatversion% Formula</value>
+            <value xml:lang="hi-IN">%productname% %formatversion% Formula</value>
+            <value xml:lang="en-US">%productname% %formatversion% Formula</value>
+            <value xml:lang="sk">Vzorec %productname% %formatversion%</value>
+            <value xml:lang="he">‮נוסחה %productname% %formatversion%‬</value>
+            <value xml:lang="sv">%productname% %formatversion% formel</value>
+            <value xml:lang="da">%productname% %formatversion%-formel</value>
+            <value xml:lang="de">%productname% %formatversion% Formel</value>
+            <value xml:lang="ko">%productname% %formatversion% 수식</value>
+            <value xml:lang="nl">%productname% %formatversion% Formule</value>
+            <value xml:lang="pt-BR">Fórmula %productname% %formatversion% </value>
+            <value xml:lang="it">%productname% %formatversion% Formula</value>
+            <value xml:lang="x-translate">%productname% %formatversion% Formel</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT</value></prop>
+    </node>
