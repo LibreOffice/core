@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:52:59 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 11:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,9 +1125,12 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
     String aURL = pIconWin->GetSelectedIconURL();
     if ( !aURL.Len() )
         aURL = pIconWin->GetCursorPosIconURL();
-    pFileWin->OpenRoot( aURL );
-    pIconWin->InvalidateIconControl();
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
+    if ( pFileWin->GetRootURL() != aURL )
+    {
+        pFileWin->OpenRoot( aURL );
+        pIconWin->InvalidateIconControl();
+        aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
+    }
     return 0;
 }
 
