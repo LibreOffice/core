@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:39:59 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:44:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,23 +80,23 @@ SLOFILES= \
 #	$(SLO)$/$(COMP1TYPELIST)_description.obj
 
 SHL1TARGET= $(TARGET)
+SHL1IMPLIB=	i$(TARGET)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(VOSLIB)       \
-        $(TOOLSLIB)       \
-        $(UCBHELPERLIB)       \
         $(UNOTOOLSLIB) \
-        $(CPPUHELPERLIB) 
+        $(TOOLSLIB) \
+        $(VOSLIB) \
+        $(UCBHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=		i$(TARGET)
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 # --- Targets ------------------------------------------------------
 
