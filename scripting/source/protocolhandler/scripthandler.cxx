@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.17 $
+*  $Revision: 1.18 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-19 08:27:07 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:08:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -77,6 +77,8 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <vcl/abstdlg.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <util/util.hxx>
@@ -197,6 +199,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
+    bool bCaughtException = FALSE;
+    Any aException;
 
     OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s and %d args\n",
     ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer, lArgs.getLength() );
@@ -279,38 +283,78 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
             bSuccess = sal_True;
         }
-
         // Office doesn't handle exceptions rethrown here very well, it cores,
         // all we can is log them and then set fail for the dispatch event!
         // (if there is a listener of course)
-        catch ( RuntimeException & e )
+        catch ( reflection::InvocationTargetException & ite )
         {
-            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotificationn caught RuntimeException: %s",
-            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
-            );
             ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException: "
-            );
-            reason.concat( e.Message );
+        "ScriptProtocolHandler::dispatch: caught InvocationTargetException: " );
+
+            reason = reason.concat( ite.Message );
+
+            OSL_TRACE( ::rtl::OUStringToOString(
+                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
             invokeResult <<= reason;
+
+            aException = makeAny( ite );
+            bCaughtException = TRUE;
+           }
+           catch ( provider::ScriptFrameworkErrorException& se )
+           {
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+        "ScriptProtocolHandler::dispatch: caught CannotConvertException: " );
+
+            reason = reason.concat( se.Message );
+
+            OSL_TRACE( ::rtl::OUStringToOString(
+                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+            invokeResult <<= reason;
+
+            aException = makeAny( se );
+            bCaughtException = TRUE;
+           }
+           catch ( ::com::sun::star::uno::RuntimeException& rte )
+           {
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+                "ScriptProtocolHandler::dispatch: caught RuntimeException: " );
+
+            reason = reason.concat( rte.Message );
+
+            OSL_TRACE( ::rtl::OUStringToOString(
+                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+            invokeResult <<= reason;
+
+            aException = makeAny( rte );
+            bCaughtException = TRUE;
         }
         catch ( Exception & e )
         {
-            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotificationn caught Exception: %s",
-            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
-            );
             ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-            "ScriptProtocolHandler::dispatchWithNotification: caught  Exception: "
-            );
-            reason.concat( e.Message );
+                "ScriptProtocolHandler::dispatch: caught Exception: " );
+
+            reason = reason.concat( e.Message );
+
+            OSL_TRACE( ::rtl::OUStringToOString(
+                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
             invokeResult <<= reason;
+
+            aException = makeAny( e );
+            bCaughtException = TRUE;
         }
 #ifdef _DEBUG
         catch ( ... )
         {
             ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-            "ScriptProtocolHandler::dispatchWithNotification: caught unknown exception "
-            );
+                "ScriptProtocolHandler::dispatch: caught unknown exception" );
+
+            OSL_TRACE( ::rtl::OUStringToOString(
+                reason, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
             invokeResult <<= reason;
         }
 #endif
@@ -324,6 +368,23 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         );
         invokeResult <<= reason;
     }
+
+    if ( bCaughtException )
+    {
+        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+
+        if ( pFact != NULL )
+        {
+            VclAbstractDialog* pDlg =
+                pFact->CreateScriptErrorDialog( NULL, aException );
+
+            if ( pDlg != NULL )
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
+        }
+       }
 
     if ( xListener.is() )
     {
