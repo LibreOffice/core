@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-06 17:13:00 $
+ *  last change: $Author: sj $ $Date: 2000-11-10 10:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef SVX_LIGHT
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
@@ -1703,17 +1705,18 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
 #ifdef DBG_EXTRACTOLEOBJECTS
 
             static sal_Int32 nCount;
-
             String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbgole" ) ) );
             aFileName.Append( String::CreateFromInt32( nCount++ ) );
-
-            INetURLObject aURL;
-            aURL.SetSmartURL( Application::GetAppFileName() );
+            INetURLObject aURL( Application::GetAppFileName(), INET_PROT_FILE );
             aURL.SetName( aFileName );
-            SvFileStream aDbgOut( aURL.PathToFileName(), STREAM_TRUNC | STREAM_WRITE );
-            pDest->Seek( STREAM_SEEK_TO_END );
-            aDbgOut.Write( pDest->GetData(), pDest->Tell() );
-            pDest->Seek( STREAM_SEEK_TO_BEGIN );
+            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+            if ( pDbgOut )
+            {
+                pDest->Seek( STREAM_SEEK_TO_END );
+                pDbgOut->Write( pDest->GetData(), pDest->Tell() );
+                pDest->Seek( STREAM_SEEK_TO_BEGIN );
+                delete pDbgOut;
+            }
 #endif
             if ( !aZCodec.EndCompression() )
                 delete pDest;
