@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-18 18:13:06 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,7 @@ protected:
     void            ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd = FALSE );
     void            ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDown );
     long            ImplGetStartY() const;
+    Rectangle       ImplGetItemRect( USHORT nPos );
 
 public:
                     MenuFloatingWindow( Menu* pMenu, Window* pParent, WinBits nStyle );
@@ -441,6 +442,7 @@ private:
     USHORT          ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( BOOL bPreSelectFirst );
     BOOL            ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu = TRUE );
+    Rectangle       ImplGetItemRect( USHORT nPos );
 
                     DECL_LINK( CloserHdl, PushButton* );
                     DECL_LINK( FloatHdl, PushButton* );
@@ -498,7 +500,7 @@ static ULONG ImplChangeTipTimeout( ULONG nTimeout, Window *pWindow )
        return nRet;
 }
 
-static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighlightedItem, const HelpEvent& rHEvt )
+static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighlightedItem, const HelpEvent& rHEvt, const Rectangle &rHighlightRect )
 {
     BOOL bDone = FALSE;
     USHORT nId = 0;
@@ -513,7 +515,12 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
 
     if ( ( rHEvt.GetMode() & HELPMODE_BALLOON ) && pMenuWindow )
     {
-        Point aPos = rHEvt.GetMousePosPixel();
+        Point aPos;
+        if( rHEvt.KeyboardActivated() )
+            aPos = rHighlightRect.Center();
+        else
+            aPos = rHEvt.GetMousePosPixel();
+
         Rectangle aRect( aPos, Size() );
         if( pMenu->GetHelpText( nId ).Len() )
             Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
@@ -3027,6 +3034,42 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
     }
 }
 
+Rectangle MenuFloatingWindow::ImplGetItemRect( USHORT nPos )
+{
+    Rectangle aRect;
+    Size    aSz = GetOutputSizePixel();
+    USHORT  nBorder = nScrollerHeight;
+    long    nStartY = ImplGetStartY();
+    long    nY = nBorder+nStartY;
+    long    nX = 0;
+
+    if ( pMenu->pLogo )
+        nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
+
+    USHORT nCount = (USHORT)pMenu->pItemList->Count();
+    for ( USHORT n = 0; n < nCount; n++ )
+    {
+        MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
+        if ( n == nPos )
+        {
+            DBG_ASSERT( pMenu->ImplIsVisible( n ), "ImplGetItemRect: Item not visible!" );
+            if ( pData->eType != MENUITEM_SEPARATOR )
+            {
+                aRect = Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
+                if ( pData->nBits & MIB_POPUPSELECT )
+                {
+                    long nFontHeight = GetTextHeight();
+                    aRect.Right() -= nFontHeight + nFontHeight/4;
+                }
+            }
+            break;
+        }
+        nY += pData->aSz.Height();
+    }
+    return aRect;
+}
+
+
 void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 {
     USHORT n = nHighlightedItem;
@@ -3285,7 +3328,9 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
         EndExecute();
         pW = NULL;
     }
-    if( !ImplHandleHelpEvent( pW, pM, nId, rHEvt ) )
+
+    Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
+    if( !ImplHandleHelpEvent( pW, pM, nId, rHEvt, aHighlightRect ) )
         Window::RequestHelp( rHEvt );
 }
 
@@ -3610,6 +3655,26 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
     }
 }
 
+Rectangle MenuBarWindow::ImplGetItemRect( USHORT nPos )
+{
+    Rectangle aRect;
+    long nX = 0;
+    ULONG nCount = pMenu->pItemList->Count();
+    for ( ULONG n = 0; n < nCount; n++ )
+    {
+        MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
+        if ( n == nPos )
+        {
+            if ( pData->eType != MENUITEM_SEPARATOR )
+                aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), pData->aSz.Height()-2 ) );
+            break;
+        }
+
+        nX += pData->aSz.Width();
+    }
+    return aRect;
+}
+
 void MenuBarWindow::KeyInput( const KeyEvent& rKEvent )
 {
     if ( !ImplHandleKeyEvent( rKEvent ) )
@@ -3880,7 +3945,9 @@ void MenuBarWindow::RequestHelp( const HelpEvent& rHEvt )
     USHORT nId = nHighlightedItem;
     if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
         ChangeHighlightItem( ITEMPOS_INVALID, TRUE );
-    if( !ImplHandleHelpEvent( this, pMenu, nId, rHEvt ) )
+
+    Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
+    if( !ImplHandleHelpEvent( this, pMenu, nId, rHEvt, aHighlightRect ) )
         Window::RequestHelp( rHEvt );
 }
 
