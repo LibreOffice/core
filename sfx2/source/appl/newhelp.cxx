@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:07:51 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -197,6 +200,9 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
 #endif
@@ -208,6 +214,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef _SVTOOLS_SVTDATA_HXX
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -240,6 +249,10 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
+
 using namespace ::ucb;
 using namespace com::sun::star::ucb;
 
@@ -254,6 +267,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
+
+using namespace ::comphelper;
 
 extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
@@ -276,6 +291,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_SEARCHDIALOG    1008
 #define TBI_SOURCEVIEW      1009
 #define TBI_SELECTIONMODE   1010
+#define TBI_ONSTARTUP       1011
 
 #define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
@@ -289,8 +305,12 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
 #define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
 #define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
+#define USERITEM_NAME           DEFINE_CONST_OUSTRING("UserItem")
 
-#define USERITEM_NAME           rtl::OUString::createFromAscii( "UserItem" )
+#define PACKAGE_SETUP           DEFINE_CONST_OUSTRING("/org.openoffice.Setup")
+#define PATH_OFFICE_FACTORIES   DEFINE_CONST_OUSTRING("Office/Factories/")
+#define KEY_HELP_ON_OPEN        DEFINE_CONST_OUSTRING("ooSetupFactoryHelpOnOpen")
+#define KEY_UI_NAME             DEFINE_CONST_OUSTRING("ooSetupFactoryUIName")
 
 #define PARSE_URL( aURL ) \
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
@@ -2158,16 +2178,19 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
-    Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP ),
+    Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
     aToolBox            ( this, 0 ),
+    aOnStartupCB        ( this, SfxResId( RID_HELP_ONSTARTUP_BOX ) ),
     aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
     aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
+    aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ) ),
     pHelpWin            ( pParent ),
     pTextWin            ( new TextWin_Impl( this ) ),
     pSrchDlg            ( NULL ),
+    nMinPos             ( 0 ),
     bIsDebug            ( sal_False ),
     bIsIndexOn          ( sal_False ),
     bIsInClose          ( sal_False ),
@@ -2199,8 +2222,11 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
     aToolBox.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
     aToolBox.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
+
     InitToolBoxImages();
     aToolBox.Show();
+    InitOnStartupBox( false );
+    aOnStartupCB.SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
 
     aSelectTimer.SetTimeoutHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
     aSelectTimer.SetTimeout( 1000 );
@@ -2210,6 +2236,9 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
         bIsDebug = sal_True;
 
     SvtMiscOptions().AddListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
+
+    if ( aOnStartupCB.GetHelpId() == 0 )
+        aOnStartupCB.SetHelpId( HID_HELP_ONSTARTUP_BOX );
 }
 
 // -----------------------------------------------------------------------
@@ -2299,6 +2328,105 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
     SvtMiscOptions aMiscOptions;
     if ( aMiscOptions.GetToolboxStyle() != aToolBox.GetOutStyle() )
         aToolBox.SetOutStyle( aMiscOptions.GetToolboxStyle() );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
+{
+    sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
+
+    Reference< XMultiServiceFactory > xMultiServiceFac = ::comphelper::getProcessServiceFactory();
+    Reference< XInterface > xConfig;
+    ::rtl::OUString sPath( PATH_OFFICE_FACTORIES );
+    sPath += sCurrentFactory;
+    ::rtl::OUString sKey( KEY_HELP_ON_OPEN );
+
+    bool bHideBox = false;
+    sal_Bool bHelpAtStartup = sal_False;
+    try
+    {
+        xConfiguration = ConfigurationHelper::openConfig(
+            xMultiServiceFac, PACKAGE_SETUP, ConfigurationHelper::E_STANDARD );
+        if ( xConfiguration.is() )
+        {
+            Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
+            aAny >>= bHelpAtStartup;
+        }
+    }
+    catch( Exception& )
+    {
+        bHideBox = true;
+    }
+
+    if ( bHideBox )
+        aOnStartupCB.Hide();
+    else
+    {
+        // detect module name
+        String sModuleName;
+
+        if ( xConfiguration.is() )
+        {
+            ::rtl::OUString sTemp;
+            sKey = KEY_UI_NAME;
+            try
+            {
+                Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
+                aAny >>= sTemp;
+            }
+            catch( Exception& )
+            {
+                DBG_ERRORFILE( "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception" );
+            }
+            sModuleName = String( sTemp );
+        }
+
+        if ( sModuleName.Len() > 0 )
+        {
+            // set module name in checkbox text
+            String sText( aOnStartupText );
+            sText.SearchAndReplace( String::CreateFromAscii( "%MODULENAME" ), sModuleName );
+            aOnStartupCB.SetText( sText );
+            // and show it
+            aOnStartupCB.Show();
+            // set check state
+            aOnStartupCB.Check( bHelpAtStartup );
+            aOnStartupCB.SaveValue();
+
+            // calculate and set optimal width of the onstartup checkbox
+            String sCBText( DEFINE_CONST_UNICODE( "XXX" ) );
+            sCBText += aOnStartupCB.GetText();
+            long nTextWidth = aOnStartupCB.GetTextWidth( sCBText );
+            Size aSize = aOnStartupCB.GetSizePixel();
+            aSize.Width() = nTextWidth;
+            aOnStartupCB.SetSizePixel( aSize );
+            SetOnStartupBoxPosition();
+        }
+
+        if ( !bOnlyText )
+        {
+            // set position of the checkbox
+            Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+            Size aTBSize = aToolBox.GetSizePixel();
+            Size aCBSize = aOnStartupCB.GetSizePixel();
+            Point aPnt = aToolBox.GetPosPixel();
+            aPnt.X() += aTBSize.Width() + a3Size.Width();
+            aPnt.Y() += ( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
+            aOnStartupCB.SetPosPixel( aPnt );
+            nMinPos = aPnt.X();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
+{
+    long nX = Max( GetOutputSizePixel().Width() - aOnStartupCB.GetSizePixel().Width(), nMinPos );
+    Point aPos = aOnStartupCB.GetPosPixel();
+    aPos.X() = nX;
+    aOnStartupCB.SetPosPixel( aPos );
 }
 
 // -----------------------------------------------------------------------
@@ -2517,17 +2645,37 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
+{
+    if ( xConfiguration.is() )
+    {
+        sal_Bool bChecked = pBox->IsChecked();
+        ::rtl::OUString sPath( PATH_OFFICE_FACTORIES );
+        sPath += sCurrentFactory;
+        try
+        {
+            ConfigurationHelper::writeRelativeKey(
+                xConfiguration, sPath, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
+            ConfigurationHelper::flush( xConfiguration );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
+        }
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpTextWindow_Impl::Resize()
 {
-    Size aWinSize = GetOutputSizePixel();
-    Size aSize = aToolBox.GetSizePixel();
-    aSize.Width() = aWinSize.Width();
-    aToolBox.SetSizePixel( aSize );
-
-    long nToolBoxHeight = aSize.Height() + TOOLBOX_OFFSET;
-    aSize = aWinSize;
+    Size aSize = GetOutputSizePixel();
+    long nToolBoxHeight = aToolBox.GetSizePixel().Height() + TOOLBOX_OFFSET;
     aSize.Height() -= nToolBoxHeight;
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
+    SetOnStartupBoxPosition();
 }
 
 // -----------------------------------------------------------------------
@@ -2634,6 +2782,11 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         {
             // <STRG><F4> or <STRG><W> -> close top frame
             pHelpWin->CloseWindow();
+            nDone = 1;
+        }
+        else if ( KEY_TAB == nKey && aOnStartupCB.HasChildPathFocus() )
+        {
+            aToolBox.GrabFocus();
             nDone = 1;
         }
     }
