@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ czech ] = "Tisknout oblast";
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "छपाई फैलाव";
+        Text[ slovak ] = "Tlač oblasti";
     };
     ListBox LB_PRINTAREA
     {
@@ -298,6 +299,12 @@ ModelessDialog RID_SCDLG_AREAS
         < "- उपभोक्ता से परिभाषित -" ; Default ; > ;
         < "- चुनाव -" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "- nič -" ; Default ; > ;
+        < "- užívateľom definované -" ; Default ; > ;
+        < "- výber -" ; Default ; > ;
+    };
     };
     Edit ED_PRINTAREA
     {
@@ -336,6 +343,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedLine FL_REPEATROW
     {
@@ -368,6 +376,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ czech ] = "Opakovat řádky";
         Text[ hebrew ] = "Wiederholungs~zeile";
         Text[ hindi ] = "दुहरानेवाला पंक्तियाँ";
+        Text[ slovak ] = "Riadky na opakovanie";
     };
     ListBox LB_REPEATROW
     {
@@ -515,6 +524,11 @@ ModelessDialog RID_SCDLG_AREAS
          < "- कोई नहीं -" ; Default ; > ;
         < "- उपभोक्ता से परिभाषित -" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "- nič -" ; Default ; > ;
+        < "- užívateľom definované -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATROW
     {
@@ -553,6 +567,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedLine FL_REPEATCOL
     {
@@ -585,6 +600,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ czech ] = "Opakovat sloupce";
         Text[ hebrew ] = "Wiederholungs~spalte";
         Text[ hindi ] = "दुहरानेवाला स्तंभें";
+        Text[ slovak ] = "Stĺpce na opakovanie";
     };
     ListBox LB_REPEATCOL
     {
@@ -732,6 +748,11 @@ ModelessDialog RID_SCDLG_AREAS
          < "- कोई नहीं -" ; Default ; > ;
         < "- उपभोक्ता से परिभाषित -" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "- nič -" ; Default ; > ;
+        < "- užívateľom definované -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATCOL
     {
@@ -770,6 +791,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     Text [ swedish ] = "Redigera utskriftsomr�den" ;
     Text [ danish ] = "Rediger udskriftsomr�de" ;
@@ -790,6 +812,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ czech ] = "Upravit oblasti tisku";
     Text[ hebrew ] = "Druckbereiche bearbeiten";
     Text[ hindi ] = "छपाई फैलाव का संपादन";
+    Text[ slovak ] = "Upraviť oblasti tlače";
 };
 TabPage RID_SCPAGE_TABLE
 {
@@ -830,6 +853,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Nadpisy sloupců a řádků";
         Text[ hebrew ] = "Zeilen- & Sp~altenköpfe";
         Text[ hindi ] = "~स्तंभ और पंक्ति शीर्षकें";
+        Text[ slovak ] = "Záhlavia stĺp~cov a riadokov";
     };
     CheckBox BTN_GRID
     {
@@ -863,6 +887,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Mřížka";
         Text[ hebrew ] = "Tabellen~gitter";
         Text[ hindi ] = "~जाल";
+        Text[ slovak ] = "Mriež~ka";
     };
     CheckBox BTN_NOTES
     {
@@ -896,6 +921,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Poznámky";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "~टिप्पणी";
+        Text[ slovak ] = "~Poznámky";
     };
     CheckBox BTN_OBJECTS
     {
@@ -929,6 +955,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Objekty/Obrázky";
         Text[ hebrew ] = "~Objekte/Grafiken";
         Text[ hindi ] = "~वस्तु/सुचित्र";
+        Text[ slovak ] = "~Objekty/obrázky";
     };
     CheckBox BTN_CHARTS
     {
@@ -962,6 +989,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Grafy";
         Text[ hebrew ] = "~Diagramme";
         Text[ hindi ] = "चा~र्ट";
+        Text[ slovak ] = "G~rafy";
     };
     CheckBox BTN_DRAWINGS
     {
@@ -995,6 +1023,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Kresby";
         Text[ hebrew ] = "Zeichenob~jekte";
         Text[ hindi ] = "~रेखाचित्र वस्तु";
+        Text[ slovak ] = "Kres~by (obrázky)";
     };
     CheckBox BTN_FORMULAS
     {
@@ -1028,6 +1057,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
+        Text[ slovak ] = "Vzorc~e";
     };
     CheckBox BTN_NULLVALS
     {
@@ -1061,6 +1091,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Nulové hodnoty";
         Text[ hebrew ] = "N~ullwerte";
         Text[ hindi ] = "शून्य मू~ल्य";
+        Text[ slovak ] = "N~ulové hodnoty";
     };
     FixedLine FL_PRINT
     {
@@ -1093,6 +1124,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Tisknout";
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
+        Text[ slovak ] = "Tlač";
     };
     RadioButton BTN_TOPDOWN
     {
@@ -1126,6 +1158,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Shora dolů, pak vpravo";
         Text[ hebrew ] = "Von o~ben nach unten, dann nach rechts";
         Text[ hindi ] = "~ऊपर से निचे, और दाहिनी ओर";
+        Text[ slovak ] = "Od vrchu nadol, po~tom vpravo";
     };
     RadioButton BTN_LEFTRIGHT
     {
@@ -1160,6 +1193,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Zleva doprava, pak dolů";
         Text[ hebrew ] = "Von Lin~ks-nach-rechts, dann nach unten";
         Text[ hindi ] = "बा~याँ ओर से दाहिनी ओर, और नीचे की ओर";
+        Text[ slovak ] = "Zľava do prava, potom dol~e";
     };
     FixedImage BMP_PAGEDIR
     {
@@ -1218,6 +1252,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Číslo první stránky";
         Text[ hebrew ] = "Erste Seiten~zahl";
         Text[ hindi ] = "पहिला ~पृष्ठ संख्या";
+        Text[ slovak ] = "Číslo ~prvej stránky";
     };
     NumericField ED_PAGENO
     {
@@ -1262,6 +1297,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Uspořádání stránky";
         Text[ hebrew ] = "‮סדר הדפסות הדפים‬";
         Text[ hindi ] = "पृष्ठ क्रम";
+        Text[ slovak ] = "Usporiadanie stránky";
     };
     RadioButton BTN_SCALEALL
     {
@@ -1294,6 +1330,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Upravit měřítko tisku";
         Text[ hebrew ] = "Ausdruck verk~leinern/vergrößern";
         Text[ hindi ] = "छपाई किया हुआ शीट् को घटाओ/बढ़ाओ";
+        Text[ slovak ] = "Zväčšiť/zmenšiť tlač";
     };
     RadioButton BTN_SCALEPAGENUM
     {
@@ -1326,6 +1363,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Tisk přizpůsobit na určený počet stránek";
         Text[ hebrew ] = "Ausdruck auf Seitenzahl an~passen";
         Text[ hindi ] = "~पृष्ठों में छपाई किया हुआ शीट् को योग्य बनाओ";
+        Text[ slovak ] = "Prispôsobiť tlač počtu strá~n";
     };
     MetricField ED_SCALEALL
     {
@@ -1384,8 +1422,11 @@ TabPage RID_SCPAGE_TABLE
         Text[ czech ] = "Měřítko";
         Text[ hebrew ] = "‮התאמת גודל‬";
         Text[ hindi ] = "स्केल";
+        Text[ slovak ] = "Pravítko";
     };
 };
+
+
 
 
 
