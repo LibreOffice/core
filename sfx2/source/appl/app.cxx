@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 11:34:02 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@ SfxApplication::SfxApplication()
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pApp->PreInit();
 
+    pCfgMgr = new SfxConfigManager;
+
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -384,7 +386,11 @@ SfxApplication::~SfxApplication()
 
     if ( !bDowning )
         Deinitialize();
+
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+    SfxObjectFactory::RemoveAll_Impl();
+
+    delete pCfgMgr;
     delete pImp;
     delete pAppData_Impl;
     pApp = 0;
@@ -463,107 +469,6 @@ SfxObjectShell* SfxApplication::GetActiveObjectShell() const
 }
 
 //--------------------------------------------------------------------
-#if SUPD<594
-sal_uInt32 SfxApplication::InsertEventHdl
-(
-    const GenLink&  rLink   /*  Link, der auf ein StarView-UserEvent
-                                gerufen werden soll. */
-)
-
-/*  [Beschreibung]
-
-    Diese Methode fuegt einen Handler fuer ein StarView-UserEnvent
-    ein und liefert die Id fuer das Event zurueck.
-
-    PostAppEvent() mit dieser Id ruft daher den eingefuegen Handler.
-
-    Somit koennen verschiedenen, sich gegenseitig unbekannte Programmteile
-    in derselben Applikation koexistieren und UserEvents verschicken.
-*/
-
-{
-    return ( pImp->pEventHdl->Insert( new GenLink(rLink) ) ) + DYNAMIC_USERID_OFFSET;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::RemoveEventHdl
-(
-    sal_uInt32 nId               /*  Id des StarView-UserEvents, das entfernt
-                                werden soll. */
-)
-
-/*  [Beschreibung]
-
-    Diese Methode entfernt den unter der Id nId eingefuegten Handler
-    fuer StarView-UserEvents. Die Id wird damit zur Wiederverwendung
-    freigegeben, darf also nicht mehr verwendet werden, bis sie durch
-    ein erneutes <SfxApplication::InsertEventHdl()> wieder
-    zurueckgegeben wurde.
-
-    */
-
-{
-    delete (GenLink*) pImp->pEventHdl->Remove( nId - DYNAMIC_USERID_OFFSET );
-}
-#endif
-
-//--------------------------------------------------------------------
-
-#if SUPD<594
-void SfxApplication::UserEvent
-(
-    sal_uInt32       nEvent          /*  Id des StarView-UserEvents */,
-
-    void*       pEventData      /*  Event-Daten abhaengig von der Event-Id */
-)
-
-/*  [Beschreibung]
-
-    StarView-Handler zum Ausfuehrend eines UserEvents.
-
-    In SFx-Applikationen muessen die Event-Ids durch die Methode
-    <SfxApplication::InsertEventHdl()> ermittelt werden. Sollte eine
-    Subklasse von SfxApplication diese Methode ueberladen, mu"s die
-    Basisimplementierung gerufen werden.
-
-    */
-
-{
-    // z.b. ein Channel-Agent kann so Directories updaten
-    if ( SID_RELOAD == nEvent && pEventData )
-    {
-        String aString = S2U( (const char*) pEventData );
-        SFX_APP()->Broadcast( SfxDirEntryHint( 0, aString ) );
-        return;
-    }
-
-    if ( nEvent >= DYNAMIC_USERID_OFFSET )
-    {
-        GenLink* pLink = (GenLink*) pImp->pEventHdl->Get( nEvent-DYNAMIC_USERID_OFFSET );
-        if ( pLink )
-        {
-            pLink->Call( (SfxHint*) pEventData );
-            return;
-        }
-    }
-
-    if ( nEvent == ULONG_MAX )
-    {
-        if ( pEventData )
-            DELETEZ(pAppData_Impl->pProgress);
-        else
-        {
-            pAppData_Impl->pProgress = new SfxProgress(0, String(SfxResId(RID_PLUGIN)), 0, sal_True);
-            pAppData_Impl->pProgress->Lock();
-        }
-    }
-    else
-        DBG_ERROR( "unregistered user event occured" );
-}
-#endif
-
-//--------------------------------------------------------------------
 
 sal_Bool IsTemplate_Impl( const String& aPath )
 {
@@ -598,11 +503,7 @@ String GetURL_Impl( const String& rName )
     ::rtl::OUString aProgName, aTmp;
     ::vos::OStartupInfo aInfo;
     aInfo.getExecutableFile( aProgName );
-#ifdef TF_FILEURL
     aTmp = aProgName;
-#else
-    ::osl::FileBase::getFileURLFromNormalizedPath( aProgName, aTmp );
-#endif
     INetURLObject aObj( aTmp );
     bool bWasAbsolute;
     INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
@@ -981,10 +882,11 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         {
             if ( pNew )
             {
-                pNew->GetEnv_Impl()->ActivateConfig();
+//                pNew->GetEnv_Impl()->ActivateConfig();
             }
             else
             {
+/*
                 SfxObjectShell *pObjSh = pViewFrame->GetObjectShell();
                 if ( pObjSh->GetConfigManager())
                 {
@@ -997,7 +899,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                     pAppData_Impl->pAppCfg->ActivateTask( pViewFrame );
                     pAppData_Impl->pAppCfg->Activate(pCfgMgr);
                 }
-
+*/
                 SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
                 pDisp->Flush();
                 pDisp->Update_Impl(sal_True);
@@ -1029,8 +931,8 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         }
         else
         {
-            pCfgMgr->ActivateTask( NULL );
-            pAppData_Impl->pAppCfg->Activate( pCfgMgr );
+//            pCfgMgr->ActivateTask( NULL );
+//            pAppData_Impl->pAppCfg->Activate( pCfgMgr );
         }
     }
 }
@@ -1525,14 +1427,7 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
 ResMgr* SfxApplication::GetSfxResManager()
 {
     if ( !pImp->pSfxResManager )
-    {
         pImp->pSfxResManager = CreateResManager("sfx");
-#if 0                                   // SFX on demand
-        if ( !Resource::GetResManager() )
-            Resource::SetResManager( pImp->pSfxResManager );
-#endif
-    }
-
     return pImp->pSfxResManager;
 }
 
@@ -1788,12 +1683,6 @@ void SfxApplication::GrabFocus( Window *pAlternate )
     pAppData_Impl->pDefFocusWin = 0;
 }
 
-#if 0
-SfxFrame* SfxApplication::GetTargetFrame( const SfxItemSet* pSet, sal_Bool& rbOwner  )
-{
-    return GetTargetFrame_Impl( pSet, rbOwner  );
-}
-#endif
 
 SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
 {
@@ -1847,10 +1736,8 @@ SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
     return *pImp->pObjShells;
 }
 
-#if SUPD>605
 void SfxApplication::Invalidate( USHORT nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
-#endif
