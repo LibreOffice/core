@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IdPropArrayHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:43:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #include <cppuhelper/propshlp.hxx>
 
 namespace comphelper
@@ -84,6 +87,8 @@ namespace comphelper
     //  OIdPropertyArrayUsageHelper
     //************************************************************
     namespace cppu { class IPropertyArrayHelper; }
+    template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex
+            : public rtl::Static< ::osl::Mutex, OIdPropertyArrayUsageHelperMutex<TYPE> > {};
 
     typedef std::map< sal_Int32, ::cppu::IPropertyArrayHelper*, std::less< sal_Int32 > > OIdPropertyArrayMap;
     template <class TYPE>
@@ -92,13 +97,12 @@ namespace comphelper
     protected:
         static sal_Int32                        s_nRefCount;
         static OIdPropertyArrayMap*             s_pMap;
-        static ::osl::Mutex                     s_aMutex;
 
     public:
         OIdPropertyArrayUsageHelper();
         virtual ~OIdPropertyArrayUsageHelper()
         {
-            ::osl::MutexGuard aGuard(s_aMutex);
+            ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
             OSL_ENSURE(s_nRefCount > 0, "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
             if (!--s_nRefCount)
             {
@@ -119,7 +123,7 @@ namespace comphelper
         /** used to implement the creation of the array helper which is shared amongst all instances of the class.
             This method needs to be implemented in derived classes.
             <BR>
-            The method gets called with s_aMutex acquired.
+            The method gets called with Mutex acquired.
             <BR>
             as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
             assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
@@ -135,13 +139,11 @@ namespace comphelper
     template<class TYPE>
     OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = NULL;
 
-    template<class TYPE>
-    ::osl::Mutex                    OIdPropertyArrayUsageHelper< TYPE >::s_aMutex;
     //------------------------------------------------------------------
     template <class TYPE>
     OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
     {
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
         // create the map if necessary
         if (s_pMap == NULL)
             s_pMap = new OIdPropertyArrayMap();
@@ -153,7 +155,7 @@ namespace comphelper
     ::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
     {
         OSL_ENSURE(s_nRefCount, "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
         // do we have the array already?
         if (! (*s_pMap)[nId] )
         {
