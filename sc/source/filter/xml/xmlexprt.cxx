@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-23 12:45:14 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2797,7 +2797,8 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                             {
                                 if (GetCellText(aCell1) && GetCellText(aCell2))
                                 {
-                                    bIsEqual = (aCell1.sStringValue == aCell2.sStringValue);
+                                    bIsEqual = (aCell1.sStringValue == aCell2.sStringValue) &&
+                                               (aCell1.xCell->getFormula() == aCell2.xCell->getFormula());
                                 }
                                 else
                                     bIsEqual = sal_False;
