@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-04 12:13:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 13:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 
 #include <limits>
 #include <algorithm>
-
-#ifndef _SOLAR_H
-#include <tools/solar.h> // F_PI definition, no link dependency
+#ifndef  _USE_MATH_DEFINES
+#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
 #endif
+#include <math.h>           // M_PI definition
 
 #ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -149,7 +149,7 @@ namespace
     public:
         AngleErrorFunctor( const double& angleBounds ) :
             // take positive branch, convert from degree to radiant
-            mfTanAngle( tan( fabs(angleBounds)/180.0*F_PI ) ),
+            mfTanAngle( tan( fabs(angleBounds)/180.0*M_PI ) ),
             mfLastTanAngle( ::std::numeric_limits<double>::max() )
         {
         }
