@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 13:19:44 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,15 @@ INT32       GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL        IsUpper( const String &rText, INT16 nLanguage );
-BOOL        IsLower( const String &rText, INT16 nLanguage );
+BOOL        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage );
+BOOL        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage );
+
+inline BOOL        IsUpper( const String &rText, INT16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
+inline BOOL        IsLower( const String &rText, INT16 nLanguage )     { return IsLower( rText, 0, rText.Len(), nLanguage ); }
+
 String      ToLower( const String &rText, INT16 nLanguage );
+String      ToUpper( const String &rText, INT16 nLanguage );
+String      ToTitle( const String &rText, INT16 nLanguage );
 sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage );
 sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage );
 BOOL        HasDigits( const String &rText );
