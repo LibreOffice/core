@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:56:52 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,9 +245,9 @@ void lcl_ConvertTabsToSpaces( String& rLine )
 }
 
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
-                           SfxObjectShell* pShell, String aLibName, String aName, ::rtl::OUString& aModule )
-        :IDEBaseWindow( pParent, pBas, pShell, aLibName, aName )
+ModulWindow::ModulWindow( ModulWindowLayout* pParent, SfxObjectShell* pShell, String aLibName,
+                          String aName, ::rtl::OUString& aModule )
+        :IDEBaseWindow( pParent, pShell, aLibName, aName )
         ,aXEditorWindow( this )
         ,m_aModule( aModule )
 {
@@ -255,7 +255,18 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
     nValid = VALIDWINDOW;
     pLayout = pParent;
     aXEditorWindow.Show();
-    xModule = (SbModule*)pBas->FindModule( aName );
+
+    BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+    if ( pBasMgr )
+    {
+        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+        if ( pBasic )
+        {
+            xBasic = pBasic;
+            xModule = (SbModule*)pBasic->FindModule( aName );
+        }
+    }
+
     SetBackground();
 }
 
@@ -341,8 +352,6 @@ void ModulWindow::CheckCompileBasic()
             }
 
             pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
-
-            //BasicIDE::MarkDocShellModified( GetBasic() );
 
             aStatus.bError = !bDone;
             aStatus.bIsRunning = FALSE;
@@ -944,7 +953,7 @@ void __EXPORT ModulWindow::UpdateData()
             setTextEngineText( GetEditEngine(), xModule->GetSource32() );
             GetEditView()->SetSelection( aSel );
             GetEditEngine()->SetModified( FALSE );
-            BasicIDE::MarkDocShellModified( GetBasic() );
+            BasicIDE::MarkDocShellModified( GetShell() );
         }
     }
 }
@@ -1181,8 +1190,6 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
                 TextView* pView = GetEditView();
                 if ( pView )
                 {
-//                  USHORT nId = pView->IsInsertMode() ? RID_STR_INSERTMODE : RID_STR_OVERWRITEMODE;
-//                  SfxStringItem aItem( SID_ATTR_INSERT, String( IDEResId( nId ) ) );
                     SfxBoolItem aItem( SID_ATTR_INSERT, pView->IsInsertMode() );
                     rSet.Put( aItem );
                 }
@@ -1381,12 +1388,12 @@ void __EXPORT ModulWindow::BasicStopped()
     GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
 }
 
-String ModulWindow::CreateSbxDescription()
+BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
 {
-    String aDescription = IDEBaseWindow::CreateSbxDescription();
-    aDescription += ';';
-    aDescription += GetName();
-    return aDescription;
+    SfxObjectShell* pShell( GetShell() );
+    String aLibName( GetLibName() );
+    LibraryLocation eLocation = BasicIDE::GetLibraryLocation( pShell, aLibName );
+    return BasicEntryDescriptor( pShell, eLocation, aLibName, GetName(), OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly( BOOL b )
