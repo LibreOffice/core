@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 00:44:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,18 @@
 #include "stlsheet.hxx"
 #include "glob.hrc"
 #include "glob.hxx"
+
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
+#endif
 
 #define MAX_PRESOBJ     5              // Max. Anzahl Praesentationsobjekte
 
@@ -429,7 +441,23 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         case PRESOBJ_PAGE:
         {
             //Notizseite am SdrPageObj vermerken
-            pSdrObj = new SdrPageObj(pModel->GetPage(GetPageNum() - 1));
+            sal_uInt16 nDestPageNum(GetPageNum());
+
+            if(nDestPageNum)
+            {
+                // decrement only when != 0, else we get a 0xffff
+                nDestPageNum -= 1;
+            }
+
+            if(nDestPageNum < pModel->GetPageCount())
+            {
+                pSdrObj = new SdrPageObj(pModel->GetPage(nDestPageNum));
+            }
+            else
+            {
+                pSdrObj = new SdrPageObj();
+            }
+
             pSdrObj->SetResizeProtect(TRUE);
         }
         break;
@@ -725,7 +753,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                         {
                             SdPage* pPage = ((SdDrawDocument*) pModel)->GetSdPage(i, ePageKind);
 
-                            if (pPage && pPage->GetMasterPage(0) == this)
+                            if (pPage && this == &(pPage->TRG_GetMasterPage()))
                             {
                                 // Seite hoert auf diese MasterPage, daher
                                 // AutoLayout anpassen
@@ -796,7 +824,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
 
     if (!bMaster)
     {
-        pMasterPage = (SdPage*) GetMasterPage(0);
+        pMasterPage = (SdPage*)(&(TRG_GetMasterPage()));
     }
 
     if (!pMasterPage)
@@ -918,7 +946,18 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
                 {
                     Rectangle aRect(aPos, aSize);
                     SdrPageObj* pPageObj = (SdrPageObj*) pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, FALSE, aRect, TRUE);
-                    pPageObj->SetReferencedPage(pModel->GetPage(2 * nPgNum + 1));
+
+                    const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
+
+                    if(nDestinationPageNum < pModel->GetPageCount())
+                    {
+                        pPageObj->SetReferencedPage(pModel->GetPage(nDestinationPageNum));
+                    }
+                    else
+                    {
+                        pPageObj->SetReferencedPage(0L);
+                    }
+
                     nPgNum++;
                     aPos.X() += aPartArea.Width() + nGapW;
                 }
@@ -1126,8 +1165,19 @@ Rectangle SdPage::GetTitleRect() const
 
             Size aPartArea = aTitleSize;
             Size aSize;
+            sal_uInt16 nDestPageNum(GetPageNum());
+            SdrPage* pPage = 0L;
 
-            SdrPage* pPage = pModel->GetPage( GetPageNum() - 1 );
+            if(nDestPageNum)
+            {
+                // only decrement if != 0, else we get 0xffff
+                nDestPageNum -= 1;
+            }
+
+            if(nDestPageNum < pModel->GetPageCount())
+            {
+                pPage = pModel->GetPage(nDestPageNum);
+            }
 
             if ( pPage )
             {
@@ -1219,14 +1269,14 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
         return;
     }
 
-    SdPage* pMasterPage = (SdPage*) GetMasterPage(0);
+    SdPage& rMasterPage = (SdPage&)TRG_GetMasterPage();
 
     Rectangle aTitleRect;
     Rectangle aLayoutRect;
     BOOL bFound = FALSE;
 
-    SdrObject* pMasterTitle = pMasterPage->GetPresObj( PRESOBJ_TITLE );
-    SdrObject* pMasterOutline = pMasterPage->GetPresObj( ePageKind==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
+    SdrObject* pMasterTitle = rMasterPage.GetPresObj( PRESOBJ_TITLE );
+    SdrObject* pMasterOutline = rMasterPage.GetPresObj( ePageKind==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
 
     if( pMasterTitle )
         aTitleRect = pMasterTitle->GetLogicRect();
@@ -3265,7 +3315,7 @@ HeaderFooterSettings& SdPage::getHeaderFooterSettings()
 {
     if( ePageKind == PK_HANDOUT && !bMaster )
     {
-        return ((SdPage*)GetMasterPage(0))->maHeaderFooterSettings;
+        return (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings);
     }
     else
     {
@@ -3273,22 +3323,21 @@ HeaderFooterSettings& SdPage::getHeaderFooterSettings()
     }
 }
 
-bool SdPage::checkVisibility( SdrPaintProcRec* pRecord, bool bEdit )
+bool SdPage::checkVisibility(
+    ::sdr::contact::ViewObjectContact& rOriginal,
+    ::sdr::contact::DisplayInfo& rDisplayInfo,
+    bool bEdit )
 {
-    if( !FmFormPage::checkVisibility( pRecord, bEdit ) )
+    if( !FmFormPage::checkVisibility( rOriginal, rDisplayInfo, bEdit ) )
         return false;
 
-    SdrObject* pObj = pRecord->pObj;
+    SdrObject* pObj = rOriginal.GetViewContact().TryToGetSdrObject();
     if( pObj == NULL )
         return false;
 
-    const bool bIsPrinting = pRecord->rOut.GetOutDev()->GetOutDevType() == OUTDEV_PRINTER;
-
-
-    const SdrPageView* pPageView = pRecord->rInfoRec.pPV;
-    const ::sdr::contact::DisplayInfo* pDisplayInfo = pPageView ? pPageView->GetCurrentPaintingDisplayInfo() : 0;
-
-    const bool bIsInsidePageObj = pPageView && pDisplayInfo && pPageView->GetPage() != pDisplayInfo->GetProcessedPage();
+    const bool bIsPrinting(rDisplayInfo.OutputToPrinter());
+    const SdrPageView* pPageView = rDisplayInfo.GetPageView();
+    const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != rDisplayInfo.GetProcessedPage());
 
     // empty presentation objects only visible during edit mode
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
@@ -3306,19 +3355,13 @@ bool SdPage::checkVisibility( SdrPaintProcRec* pRecord, bool bEdit )
 
             if((eKind == PRESOBJ_FOOTER) || (eKind == PRESOBJ_HEADER) || (eKind == PRESOBJ_DATETIME) || (eKind == PRESOBJ_SLIDENUMBER) )
             {
-                const bool bMasterObj = (pRecord->rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) != 0;
+                const bool bMasterObj(rDisplayInfo.GetMasterPagePainting());
                 if( bMasterObj || ( pPage->GetPageKind() == PK_HANDOUT && bIsPrinting ) )
                 {
                     if( pPageView )
                     {
                         // get the page that is currently painted
-                        SdPage* pPage;
-
-                        // if we paint a display info, we need to get that page
-                        if( pDisplayInfo  )
-                            pPage = (SdPage*) pDisplayInfo->GetProcessedPage();
-                        else
-                            pPage = (SdPage*) pPageView->GetPage();
+                        SdPage* pPage = (SdPage*)rDisplayInfo.GetProcessedPage();
 
                         if( pPage )
                         {
