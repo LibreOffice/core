@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TableWizard.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $  $Date: 2005-01-28 15:54:16 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
             </prop>
             <prop oor:name="Name">
                 <value xml:lang="en-US">Business</value>
-                <value xml:lang="en-US">Geschäftlich</value>
+                <value xml:lang="de">Geschäftlich</value>
             </prop>
             <node oor:name="Tables">
                 <node oor:name="categories" oor:op="replace">
@@ -568,11 +568,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">PaymentTerms</value>
-                                <value xml:lang="en-US">Zahlungsbedingungen</value>
+                                <value xml:lang="de">Zahlungsbedingungen</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PaymntTerm</value>
-                                <value xml:lang="en-US">Zahlungbed</value>
+                                <value xml:lang="de">Zahlungbed</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1341,7 +1341,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="en-US">Telefonr</value>
+                                <value xml:lang="de">Telefonr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2278,11 +2278,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">DateHired</value>
-                                <value xml:lang="en-US">Eintrittsdatum</value>
+                                <value xml:lang="de">Eintrittsdatum</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">DateHired</value>
-                                <value xml:lang="en-US">Eintritdat</value>
+                                <value xml:lang="de">Eintritdat</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>91</value>
@@ -2294,11 +2294,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">DepartmentID</value>
-                                <value xml:lang="en-US">AbteilungsID</value>
+                                <value xml:lang="de">AbteilungsID</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">DeprtmntID</value>
-                                <value xml:lang="en-US">AbteilngID</value>
+                                <value xml:lang="de">AbteilngID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -3308,11 +3308,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">PaymentTerms</value>
-                                <value xml:lang="en-US">Zahlungsbedingungen</value>
+                                <value xml:lang="de">Zahlungsbedingungen</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PaymntTerm</value>
-                                <value xml:lang="en-US">Zahlungbed</value>
+                                <value xml:lang="de">Zahlungbed</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -5344,9 +5344,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">StatusID</value>
+                                <value xml:lang="de">StatusID</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">StatusID</value>
+                                <value xml:lang="de">StatusID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -7581,9 +7583,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">FilmID</value>
+                                <value xml:lang="de">FilmID</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FilmID</value>
+                                <value xml:lang="de">FilmID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
