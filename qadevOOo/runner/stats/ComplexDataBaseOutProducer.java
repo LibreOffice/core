@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDataBaseOutProducer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-11-02 11:46:17 $
+ *  last change:$Date: 2005-02-02 13:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,13 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
             }
         }
         return true;
+    }
+
+    public Object getWatcher() {
+        return null;
+    }
+
+    public void setWatcher(Object watcher) {
     }
 
 }
