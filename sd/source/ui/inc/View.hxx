@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:57:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ public:
     VirtualDevice*          CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel);
 
     void                    LockRedraw(BOOL bLock);
+    bool IsRedrawLocked (void) const;
 
     BOOL                    IsMorphingAllowed() const;
     BOOL                    IsVectorizeAllowed() const;
