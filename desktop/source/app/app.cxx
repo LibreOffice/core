@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-05 07:17:19 $
+ *  last change: $Author: mba $ $Date: 2001-11-06 15:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,8 +1109,9 @@ void Desktop::Main()
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
 #ifdef TIMEBOMB
+/*
     Date aDate;
-    Date aFinalDate( 31, 03, 2002 );
+    Date aFinalDate( 31, 03, 2010 );
     if ( aFinalDate < aDate )
     {
         String aMsg;
@@ -1119,6 +1120,7 @@ void Desktop::Main()
         aBox.Execute();
         return;
     }
+*/
 #endif
 
     sal_Bool bTerminate = pCmdLineArgs->IsTerminateAfterInit();
