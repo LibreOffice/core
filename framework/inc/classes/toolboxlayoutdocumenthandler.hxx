@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: toolboxdocumenthandler.hxx,v $
+ *  $RCSfile: toolboxlayoutdocumenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-18 09:49:48 $
+ *  last change: $Author: cd $ $Date: 2001-06-18 09:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_CLASSES_TOOLBOXDOCUMENTHANDLER_HXX_
-#define __FRAMEWORK_CLASSES_TOOLBOXDOCUMENTHANDLER_HXX_
+#ifndef __FRAMEWORK_CLASSES_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
+#define __FRAMEWORK_CLASSES_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
 
 #ifndef __FRAMEWORK_CLASSES_TOOLBOXCONFIGURATION_HXX_
 #include <classes/toolboxconfiguration.hxx>
@@ -107,37 +107,39 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocumentHandler,
-                                    private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
-                                    public ::cppu::OWeakObject
+class OReadToolBoxLayoutDocumentHandler : public ::com::sun::star::xml::sax::XDocumentHandler,
+                                          private ThreadHelpBase,   // Struct for right initalization of lock member! Must be first of baseclasses.
+                                          public ::cppu::OWeakObject
 {
     public:
-        enum ToolBox_XML_Entry
+        enum ToolBoxLayout_XML_Entry
         {
-            TB_ELEMENT_TOOLBAR,
-            TB_ELEMENT_TOOLBARITEM,
-            TB_ELEMENT_TOOLBARSPACE,
-            TB_ELEMENT_TOOLBARBREAK,
-            TB_ELEMENT_TOOLBARSEPARATOR,
-            TB_ATTRIBUTE_TEXT,
-            TB_ATTRIBUTE_BITMAP,
-            TB_ATTRIBUTE_URL,
-            TB_ATTRIBUTE_ITEMBITS,
-            TB_ATTRIBUTE_VISIBLE,
-            TB_ATTRIBUTE_WIDTH,
-            TB_ATTRIBUTE_USER,
-            TB_XML_ENTRY_COUNT
+            TBL_ELEMENT_TOOLBARLAYOUTS,
+            TBL_ELEMENT_TOOLBARLAYOUT,
+            TBL_ELEMENT_TOOLBARCONFIGITEMS,
+            TBL_ELEMENT_TOOLBARCONFIGITEM,
+            TBL_ATTRIBUTE_ID,
+            TBL_ATTRIBUTE_TOOLBARNAME,
+            TBL_ATTRIBUTE_CONTEXT,
+            TBL_ATTRIBUTE_FLOATINGLINES,
+            TBL_ATTRIBUTE_DOCKINGLINES,
+            TBL_ATTRIBUTE_ALIGN,
+            TBL_ATTRIBUTE_FLOATING,
+            TBL_ATTRIBUTE_FLOATINGPOSLEFT,
+            TBL_ATTRIBUTE_FLOATINGPOSTOP,
+            TBL_ATTRIBUTE_VISIBLE,
+            TBL_ATTRIBUTE_STYLE,
+            TBL_XML_ENTRY_COUNT
         };
 
         enum ToolBox_XML_Namespace
         {
-            TB_NS_TOOLBAR,
-            TB_NS_XLINK,
-            TB_XML_NAMESPACES_COUNT
+            TBL_NS_TOOLBAR,
+            TBL_XML_NAMESPACES_COUNT
         };
 
-        OReadToolBoxDocumentHandler( ToolBoxDescriptor& aToolBoxItems );
-        virtual ~OReadToolBoxDocumentHandler();
+        OReadToolBoxLayoutDocumentHandler( ToolBoxLayoutDescriptor& aToolBoxLayoutItems );
+        virtual ~OReadToolBoxLayoutDocumentHandler();
 
         // XInterface
         virtual void SAL_CALL acquire() throw( ::com::sun::star::uno::RuntimeException )
@@ -187,65 +189,55 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::std::hash_map<  ::rtl::OUString                 ,
-                                                        ToolBox_XML_Entry               ,
-                                                        OUStringHashCode                ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+        class ToolBoxLayoutHashMap : public ::std::hash_map< ::rtl::OUString                ,
+                                                             ToolBoxLayout_XML_Entry        ,
+                                                             OUStringHashCode               ,
+                                                             ::std::equal_to< ::rtl::OUString > >
         {
             public:
                 inline void free()
                 {
-                    ToolBoxHashMap().swap( *this );
+                    ToolBoxLayoutHashMap().swap( *this );
                 }
         };
 
-        sal_Bool                                                                    m_bToolBarStartFound;
-        sal_Bool                                                                    m_bToolBarEndFound;
-        sal_Bool                                                                    m_bToolBarItemStartFound;
-        sal_Bool                                                                    m_bToolBarSpaceStartFound;
-        sal_Bool                                                                    m_bToolBarBreakStartFound;
-        sal_Bool                                                                    m_bToolBarSeparatorStartFound;
-        ToolBoxHashMap                                                              m_aToolBoxMap;
-        ToolBoxDescriptor&                                                          m_aToolBoxItems;
+        sal_Bool                                                                    m_bToolBarLayoutsStartFound;
+        sal_Bool                                                                    m_bToolBarLayoutsEndFound;
+        sal_Bool                                                                    m_bToolBarLayoutStartFound;
+        sal_Bool                                                                    m_bToolBarConfigListStartFound;
+        sal_Bool                                                                    m_bToolBarConfigItemStartFound;
+        ToolBoxLayoutHashMap                                                        m_aToolBoxMap;
+        ToolBoxLayoutDescriptor&                                                    m_aToolBoxItems;
+        ToolBoxConfigDescriptor*                                                    m_pCurrentToolBoxConfigs;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
 };
 
-class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class OWriteToolBoxLayoutDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
-        OWriteToolBoxDocumentHandler(
-            const ToolBoxDescriptor& aToolBoxItems,
+        OWriteToolBoxLayoutDocumentHandler(
+            const ToolBoxLayoutDescriptor& aToolBoxLayoutItems,
             ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > );
-        virtual ~OWriteToolBoxDocumentHandler();
+        virtual ~OWriteToolBoxLayoutDocumentHandler();
 
-        void WriteToolBoxDocument() throw
+        void WriteToolBoxLayoutDocument() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const ToolBoxItemDescriptor* ) throw
+        virtual void WriteToolBoxLayoutItem( const ToolBoxLayoutItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteToolBoxSpace() throw
+        virtual void WriteToolBoxConfigItem( const ToolBoxConfigItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteToolBoxBreak() throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
-
-        virtual void WriteToolBoxSeparator() throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
-
-        const ToolBoxDescriptor&                                                            m_aToolBoxItems;
+        const ToolBoxLayoutDescriptor&                                                      m_aToolBoxLayoutItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
         ::rtl::OUString                                                                     m_aXMLToolbarNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
         ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
 };
 
 } // namespace framework
