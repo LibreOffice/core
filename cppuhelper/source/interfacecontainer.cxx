@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:29 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,9 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
             if( ((OInterfaceContainerHelper*)(*iter).second)->getLength() )
                 // yes, put the type in the array
                 pArray[i++] = (*iter).first;
-            iter++;
+            ++iter;
         }
-        if( i != nSize ) {
+        if( (t_type2ptr::size_type)i != nSize ) {
             // may be empty container, reduce the sequence to the right size
             aInterfaceTypes = ::com::sun::star::uno::Sequence< Type >( pArray, i );
         }
@@ -614,9 +614,9 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
             if( ((OInterfaceContainerHelper*)(*iter).second)->getLength() )
                 // yes, put the type in the array
                 pArray[i++] = (*iter).first;
-            iter++;
+            ++iter;
         }
-        if( i != nSize ) {
+        if( (t_long2ptr::size_type)i != nSize ) {
             // may be empty container, reduce the sequence to the right size
             aInterfaceTypes = ::com::sun::star::uno::Sequence< sal_Int32 >( pArray, i );
         }

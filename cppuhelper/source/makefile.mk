@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-14 13:17:37 $
+#   last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ UNOTYPES= \
         com.sun.star.uno.XWeak 				\
         com.sun.star.uno.XAggregation 			\
         com.sun.star.uno.XComponentContext		\
-        com.sun.star.uno.XUnloadingPreference    \
+        com.sun.star.uno.XUnloadingPreference    	\
+        com.sun.star.uno.XCurrentContext		\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
         com.sun.star.lang.XMultiComponentFactory 	\
@@ -96,6 +97,7 @@ UNOTYPES= \
         com.sun.star.lang.XServiceInfo 			\
         com.sun.star.lang.XInitialization 		\
         com.sun.star.lang.XEventListener 		\
+        com.sun.star.security.XAccessController		\
         com.sun.star.reflection.XIdlReflection 		\
         com.sun.star.reflection.XIdlClass 		\
         com.sun.star.reflection.XIdlClassProvider	\
@@ -144,7 +146,8 @@ SLOFILES= \
         $(SLO)$/component.obj		\
         $(SLO)$/shlib.obj		\
         $(SLO)$/tdmgr.obj		\
-        $(SLO)$/implementationentry.obj
+        $(SLO)$/implementationentry.obj	\
+        $(SLO)$/access_control.obj
 
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 

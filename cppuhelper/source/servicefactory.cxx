@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@ void addFactories(
     Reference< lang::XMultiComponentFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (Exception) );
+//--------------------------------------------------------------------------------------------------
+Reference< lang::XSingleComponentFactory > createDefaultAccessController()
+    SAL_THROW( () );
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL createInstance(
@@ -227,7 +230,7 @@ Reference< XComponentContext > bootstrapInitialContext(
     // basic context values
     ContextEntry_Init entry;
     ::std::vector< ContextEntry_Init > context_values;
-    context_values.reserve( 5 );
+    context_values.reserve( 6 );
 
     // read out singleton infos from registry
     if (services_xRegistry.is())
@@ -274,6 +277,12 @@ Reference< XComponentContext > bootstrapInitialContext(
     entry.bLateInitService = false;
     entry.name = OUSTR("/singletons/com.sun.star.lang.theServiceManager");
     entry.value <<= xSF;
+    context_values.push_back( entry );
+
+    // ac
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.security.theAccessController");
+    entry.value <<= createDefaultAccessController();
     context_values.push_back( entry );
 
     // tdmgr

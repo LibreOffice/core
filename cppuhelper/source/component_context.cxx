@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -87,8 +88,8 @@
 
 #include <hash_map>
 
-#define SMGR_NAME "/singletons/com.sun.star.lang.theServiceManager"
-#define TDMGR_NAME "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
+#define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
+#define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -107,7 +108,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 {
     OSL_ASSERT( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("void") );
+        return OUSTR("void");
 
     OUStringBuffer buf( 64 );
     buf.append( (sal_Unicode)'(' );
@@ -146,11 +147,11 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
-            buf.append( ppMemberNames[nPos] );
+            buf.append( ppMemberNames[ nPos ] );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
             typelib_TypeDescription * pMemberType = 0;
-            TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
-            buf.append( val2str( (char *)pVal + pMemberOffsets[nPos], pMemberType->pWeakRef ) );
+            TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[ nPos ] );
+            buf.append( val2str( (char *)pVal + pMemberOffsets[ nPos ], pMemberType->pWeakRef ) );
             TYPELIB_DANGER_RELEASE( pMemberType );
             if (nPos < (nDescr -1))
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
@@ -219,11 +220,11 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         sal_Int32 nPos = ((typelib_EnumTypeDescription *)pTypeDescr)->nEnumValues;
         while (nPos--)
         {
-            if (pValues[nPos] == *(int *)pVal)
+            if (pValues[ nPos ] == *(sal_Int32 *)pVal)
                 break;
         }
         if (nPos >= 0)
-            buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[nPos] );
+            buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[ nPos ] );
         else
             buf.append( (sal_Unicode)'?' );
 
@@ -316,22 +317,38 @@ static inline void __dispose( Reference< XInterface > const & xInstance )
 }
 
 //==================================================================================================
-class Disposer_Impl
+class DisposingForwarder
     : public WeakImplHelper1< lang::XEventListener >
 {
     Reference< lang::XComponent > m_xTarget;
 
-public:
-    inline Disposer_Impl( Reference< lang::XComponent > const & xTarget )
+    inline DisposingForwarder( Reference< lang::XComponent > const & xTarget )
         SAL_THROW( () )
         : m_xTarget( xTarget )
         { OSL_ASSERT( m_xTarget.is() ); }
+public:
+    // listens at source for disposing, then disposes target
+    static inline void listen(
+        Reference< lang::XComponent > const & xSource,
+        Reference< lang::XComponent > const & xTarget )
+        SAL_THROW( (RuntimeException) );
 
     virtual void SAL_CALL disposing( lang::EventObject const & rSource )
         throw (RuntimeException);
 };
 //__________________________________________________________________________________________________
-void Disposer_Impl::disposing( lang::EventObject const & rSource )
+inline void DisposingForwarder::listen(
+    Reference< lang::XComponent > const & xSource,
+    Reference< lang::XComponent > const & xTarget )
+    SAL_THROW( (RuntimeException) )
+{
+    if (xSource.is())
+    {
+        xSource->addEventListener( new DisposingForwarder( xTarget ) );
+    }
+}
+//__________________________________________________________________________________________________
+void DisposingForwarder::disposing( lang::EventObject const & rSource )
     throw (RuntimeException)
 {
     m_xTarget->dispose();
@@ -584,7 +601,7 @@ void ComponentContext::disposing()
     ::fprintf( stderr, "> disposing context %p\n", this );
 #endif
 
-    Reference< lang::XComponent > xTDMgr; // to be disposed separately
+    Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
     // first dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
@@ -593,7 +610,8 @@ void ComponentContext::disposing()
         ContextEntry * pEntry = iPos->second;
 
         // service manager disposed separately
-        if (!m_xSMgr.is() || !iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_NAME) ))
+        if (!m_xSMgr.is() ||
+            !iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
         {
             Reference< lang::XComponent > xComp;
 
@@ -612,10 +630,15 @@ void ComponentContext::disposing()
 
             if (xComp.is())
             {
-                if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_NAME) ))
+                if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_SINGLETON) ))
                 {
                     // disposed separately
                     xTDMgr = xComp;
+                }
+                else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_SINGLETON) ))
+                {
+                    // disposed separately
+                    xAC = xComp;
                 }
                 else
                 {
@@ -629,6 +652,12 @@ void ComponentContext::disposing()
     if (m_bDisposeSMgr)
     {
         __dispose( m_xSMgr );
+    }
+
+    // third dispose of ac
+    if (xAC.is())
+    {
+        xAC->dispose();
     }
 
     // last dispose of tdmgr: revoke callback from cppu runtime
@@ -657,7 +686,7 @@ ComponentContext::ComponentContext(
     {
         ContextEntry_Init const & rEntry = pEntries[ nEntries ];
 
-        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_NAME) ))
+        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
         {
             rEntry.value >>= m_xSMgr;
         }
@@ -679,19 +708,10 @@ ComponentContext::ComponentContext(
 
     m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
 
-    if (m_xDelegate.is())
+    if (m_xDelegate.is() && !m_xSMgr.is())
     {
-        Reference< lang::XComponent > xComp( m_xDelegate, UNO_QUERY );
-        OSL_ENSURE( xComp.is(), "### component context should export lang::XComponent!" );
-        if (xComp.is())
-        {
-            xComp->addEventListener( new Disposer_Impl( this ) );
-        }
-        if (! m_xSMgr.is())
-        {
-            m_xSMgr = m_xDelegate->getServiceManager();
-            m_bDisposeSMgr = false;
-        }
+        m_xSMgr = m_xDelegate->getServiceManager();
+        m_bDisposeSMgr = false;
     }
 }
 
@@ -886,9 +906,12 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
         ::fprintf( stderr, ">>> dumping out ConfigurationComponentContext %p m_singletons:\n", this );
         typedef ::std::map< OUString, Any > t_sorted; // sorted map
         t_sorted sorted;
+        {
+        MutexGuard guard( m_mutex );
         for ( t_singletons::const_iterator iPos( m_singletons.begin() ); iPos != m_singletons.end(); ++iPos )
         {
             sorted[ iPos->first ] = makeAny( iPos->second );
+        }
         }
         {
         for ( t_sorted::const_iterator iPos( sorted.begin() ); iPos != sorted.end(); ++iPos )
@@ -928,13 +951,15 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
             t_singletons::const_iterator const iFind( m_singletons.find( rName ) );
             if (iFind == m_singletons.end())
             {
-                m_singletons[ rName ] = xInstance;
+                ::std::pair< t_singletons::iterator, bool > insertion(
+                    m_singletons.insert( t_singletons::value_type( rName, xInstance ) ) );
+                OSL_ENSURE( insertion.second, "### inserting new singleton failed?!" );
                 return makeAny( xInstance );
             }
             else // inited in the meantime
             {
                 guard.clear();
-                // => try to dispose this object
+                // => try to dispose created object
                 __dispose( xInstance );
                 return makeAny( iFind->second );
             }
@@ -978,13 +1003,36 @@ void ConfigurationComponentContext::disposing()
     ::fprintf( stderr, "> disposing cfg context %p\n", this );
 #endif
 
+    Reference< XInterface > xSMgr, xTDMgr, xAC;
+
     // first dispose all context objects
     t_singletons::const_iterator iPos( m_singletons.begin() );
     for ( ; iPos != m_singletons.end(); ++iPos )
     {
-        __dispose( iPos->second );
+        // to be disposed separately
+        if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
+        {
+            xSMgr = iPos->second;
+        }
+        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_SINGLETON) ))
+        {
+            xTDMgr = iPos->second;
+        }
+        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_SINGLETON) ))
+        {
+            xAC = iPos->second;
+        }
+
+        else
+        {
+            __dispose( iPos->second );
+        }
     }
     m_singletons.clear();
+
+    __dispose( xSMgr );
+    __dispose( xAC );
+    __dispose( xTDMgr );
 
     // dispose context values map
     ComponentContext::disposing();
@@ -996,7 +1044,12 @@ Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
     Reference< XComponentContext > const & xDelegate )
     SAL_THROW( () )
 {
-    return new ConfigurationComponentContext( pEntries, nEntries, xDelegate );
+    ConfigurationComponentContext * p = new ConfigurationComponentContext(
+        pEntries, nEntries, xDelegate );
+    Reference< XComponentContext > xContext( p );
+    // listen delegate for disposing, to dispose this (wrapping) context first.
+    DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
+    return xContext;
 }
 
 //##################################################################################################
@@ -1007,7 +1060,11 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
 {
     if (nEntries > 0)
     {
-        return new ComponentContext( pEntries, nEntries, xDelegate );
+        ComponentContext * p = new ComponentContext( pEntries, nEntries, xDelegate );
+        Reference< XComponentContext > xContext( p );
+        // listen delegate for disposing, to dispose this (wrapping) context first.
+        DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
+        return xContext;
     }
     else
     {
