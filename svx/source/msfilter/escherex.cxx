@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-09 16:25:26 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 15:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -806,12 +809,12 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
     {
         sal_Bool        bMirrored = sal_False;
-        sal_Bool        bBitmapTile = sal_False;
         GraphicAttr*    pGraphicAttr = NULL;
         GraphicObject   aGraphicObject;
         String          aGraphicUrl;
         ByteString      aUniqueId;
 
+        ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
         ::com::sun::star::uno::Any aAny;
 
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
@@ -913,7 +916,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                                 aGraphicObject = Graphic( aBitmap );
 
                         }
-                        bBitmapTile = sal_True;
+                        eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
                         aUniqueId = aGraphicObject.GetUniqueID();
                     }
                 }
@@ -935,8 +938,8 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
                 if ( bFillBitmap )
                 {
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ), sal_True ) )
-                        aAny >>= bBitmapTile;
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
+                        aAny >>= eBitmapMode;
                 }
                 else
                 {
@@ -960,7 +963,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         }
                     }
                 }
-                if ( bBitmapTile )
+                if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
                 else
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
