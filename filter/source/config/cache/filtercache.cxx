@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:59:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #include "filtercache.hxx"
-#include "cacheupdatelistener.hxx"
+#include "lateinitlistener.hxx"
 #include "macros.hxx"
 #include "constant.hxx"
 
@@ -74,6 +74,10 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -82,15 +86,31 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
+#include <com/sun/star/beans/XProperty.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#include <comphelper/sequenceasvector.hxx>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
 
-#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#ifndef _UNOTOOLS_CONFIGPATHES_HXX_
 #include <unotools/configpathes.hxx>
 #endif
 
@@ -100,6 +120,10 @@
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
+#endif
+
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -122,20 +146,121 @@ namespace css = ::com::sun::star;
 // definitions
 
 /*-----------------------------------------------
-    28.10.2003 08:48
+    15.03.2004 08:59
 -----------------------------------------------*/
 FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_xSMGR     (::comphelper::getProcessServiceFactory())
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
+    RTL_LOGFILE_TRACE("{ (as96863) FilterCache lifetime");
 }
 
 /*-----------------------------------------------
-    25.06.2003 10:03
+    15.03.2004 08:59
 -----------------------------------------------*/
 FilterCache::~FilterCache()
 {
+    RTL_LOGFILE_TRACE("} (as96863) FilterCache lifetime");
+    // no assertions during creation/destruction of this filtercache
+    // Because its used inside a SingletonRef<> construct ...
+    // And assertions have the risk of reintrance problems ... :-(
+}
+
+/*-----------------------------------------------
+    03.03.2004 11:27
+-----------------------------------------------*/
+FilterCache* FilterCache::clone() const
+{
+    // SAFE -> ----------------------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    FilterCache* pClone = new FilterCache();
+
+    // Dont copy the configuration access points here.
+    // They will be created on demand inside the cloned instance,
+    // if they are needed.
+
+    pClone->m_xSMGR                      = m_xSMGR;
+
+    pClone->m_lTypes                     = m_lTypes;
+    pClone->m_lDetectServices            = m_lDetectServices;
+    pClone->m_lFilters                   = m_lFilters;
+    pClone->m_lFrameLoaders              = m_lFrameLoaders;
+    pClone->m_lContentHandlers           = m_lContentHandlers;
+    pClone->m_lExtensions2Types          = m_lExtensions2Types;
+    pClone->m_lURLPattern2Types          = m_lURLPattern2Types;
+
+    pClone->m_sActLocale                 = m_sActLocale;
+    pClone->m_sFormatName                = m_sFormatName;
+    pClone->m_sFormatVersion             = m_sFormatVersion;
+
+    pClone->m_eFillState                 = m_eFillState;
+
+    pClone->m_lChangedTypes              = m_lChangedTypes;
+    pClone->m_lChangedFilters            = m_lChangedFilters;
+    pClone->m_lChangedDetectServices     = m_lChangedDetectServices;
+    pClone->m_lChangedFrameLoaders       = m_lChangedFrameLoaders;
+    pClone->m_lChangedContentHandlers    = m_lChangedContentHandlers;
+
+    return pClone;
+    // <- SAFE ----------------------------------
+}
+
+/*-----------------------------------------------
+    03.03.2004 14:39
+-----------------------------------------------*/
+void FilterCache::takeOver(const FilterCache& rClone)
+{
+    // SAFE -> ----------------------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    // a)
+    // Dont copy the configuration access points here!
+    // We must use our own ones ...
+
+    // b)
+    // Further we can ignore the uno service manager.
+    // We should already have a valid instance.
+
+    // c)
+    // Take over only changed items!
+    // Otherwhise we risk the following scenario:
+    // c1) clone_1 contains changed filters
+    // c2) clone_2 container changed types
+    // c3) clone_1 take over changed filters and unchanged types
+    // c4) clone_2 take over unchanged filters(!) and changed types(!)
+    // c5) c4 overwrites c3!
+
+    if (rClone.m_lChangedTypes.size()>0)
+        m_lTypes = rClone.m_lTypes;
+    if (rClone.m_lChangedDetectServices.size()>0)
+        m_lDetectServices = rClone.m_lDetectServices;
+    if (rClone.m_lChangedFilters.size()>0)
+        m_lFilters = rClone.m_lFilters;
+    if (rClone.m_lChangedFrameLoaders.size()>0)
+        m_lFrameLoaders = rClone.m_lFrameLoaders;
+    if (rClone.m_lChangedContentHandlers.size()>0)
+        m_lContentHandlers = rClone.m_lContentHandlers;
+
+    m_lChangedTypes.clear();
+    m_lChangedDetectServices.clear();
+    m_lChangedFilters.clear();
+    m_lChangedFrameLoaders.clear();
+    m_lChangedContentHandlers.clear();
+
+    m_sActLocale     = rClone.m_sActLocale;
+    m_sFormatName    = rClone.m_sFormatName;
+    m_sFormatVersion = rClone.m_sFormatVersion;
+
+    m_eFillState     = rClone.m_eFillState;
+
+    // renew all dependencies and optimizations
+    // Because we cant be shure, that changed filters on one clone
+    // and changed types of another clone work together.
+    // But here we can check against the lates changes ...
+    impl_validateAndOptimize();
+    // <- SAFE ----------------------------------
 }
 
 /*-----------------------------------------------
@@ -192,12 +317,15 @@ void FilterCache::load(EFillState eRequired,
             m_sFormatVersion = DEFAULT_FORMATVERSION;
         }
 
+        // Support the old configuration support. Read it only one times during office runtime!
+        impl_readOldFormat();
+
         // enable "loadOnDemand" feature ...
         // Create uno listener, which waits for finishing the office startup
         // and starts a thread, which calls loadAll() at this filter cache.
         // Note: Its not a leak to create this listener with new here.
         // It kills itself after working!
-        CacheUpdateListener* pUpdate = new CacheUpdateListener(m_xSMGR);
+        LateInitListener* pLateInit = new LateInitListener(m_xSMGR);
     }
 
     // ------------------------------------------
@@ -367,7 +495,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 }
 
 /*-----------------------------------------------
-    27.10.2003 08:51
+    03.03.2004 11:28
 -----------------------------------------------*/
 void FilterCache::removeItem(      EItemType        eType,
                              const ::rtl::OUString& sItem)
@@ -383,7 +511,7 @@ void FilterCache::removeItem(      EItemType        eType,
 
     CacheItemList::iterator pItem = rList.find(sItem);
     if (pItem == rList.end())
-        pItem = impl_loadItemOnDemand(eType, sItem);
+        pItem = impl_loadItemOnDemand(eType, sItem); // throws NoSuchELementException!
     rList.erase(pItem);
 
     impl_addItem2FlushList(eType, sItem);
@@ -410,9 +538,126 @@ void FilterCache::setItem(      EItemType        eType ,
     CacheItem aItem = aValue;
     aItem[PROPNAME_NAME] <<= sItem;
     aItem.validateUINames(m_sActLocale);
+
+    // remove implicit properties as e.g. FINALIZED or MANDATORY
+    // They cant be saved here and must be readed on demand later, if they are needed.
+    removeStatePropsFromItem(aItem);
+
     rList[sItem] = aItem;
 
     impl_addItem2FlushList(eType, sItem);
+}
+
+/*-----------------------------------------------
+    27.10.2003 08:14
+-----------------------------------------------*/
+void FilterCache::addStatePropsToItem(      EItemType        eType,
+                                      const ::rtl::OUString& sItem,
+                                            CacheItem&       rItem)
+    throw(css::uno::Exception)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    // Note: Opening of the configuration layer throws some exceptions
+    // if it failed. So we dont must check any reference here ...
+    css::uno::Reference< css::container::XNameAccess > xPackage;
+    css::uno::Reference< css::container::XNameAccess > xSet;
+    switch(eType)
+    {
+        case E_TYPE :
+            {
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
+                xPackage->getByName(CFGSET_TYPES) >>= xSet;
+            }
+            break;
+
+        case E_FILTER :
+            {
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY);
+                xPackage->getByName(CFGSET_FILTERS) >>= xSet;
+            }
+            break;
+
+        case E_FRAMELOADER :
+            {
+                /* TODO
+                    Hack -->
+                        The default frame loader cant be located inside te normal set of frame loaders.
+                        Its an atomic property inside the misc cfg package. So we cant retrieve the information
+                        about FINALIZED and MANDATORY very easy ... :-(
+                        => set it to readonly/required everytimes :-)
+                */
+                css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
+                ::rtl::OUString sDefaultFrameLoader;
+                if (
+                    (aDirectValue >>= sDefaultFrameLoader) &&
+                    (sDefaultFrameLoader.getLength()     ) &&
+                    (sItem.equals(sDefaultFrameLoader)   )
+                   )
+                {
+                    rItem[PROPNAME_FINALIZED] <<= sal_True;
+                    rItem[PROPNAME_MANDATORY] <<= sal_True;
+                    return;
+                }
+                /* <-- HACK */
+
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+                xPackage->getByName(CFGSET_FRAMELOADERS) >>= xSet;
+            }
+            break;
+
+        case E_CONTENTHANDLER :
+            {
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+                xPackage->getByName(CFGSET_CONTENTHANDLERS) >>= xSet;
+            }
+            break;
+    }
+
+    try
+    {
+        css::uno::Reference< css::beans::XProperty > xItem;
+        xSet->getByName(sItem) >>= xItem;
+        css::beans::Property aDescription = xItem->getAsProperty();
+
+        sal_Bool bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
+        sal_Bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
+
+        rItem[PROPNAME_FINALIZED] <<= bFinalized;
+        rItem[PROPNAME_MANDATORY] <<= bMandatory;
+    }
+    catch(const css::container::NoSuchElementException&)
+    {
+        /*  Ignore exceptions for missing elements inside configuration.
+            May by the following reason exists:
+                -   The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
+                    we got it from the old package org.openoffice.Office/TypeDetection. We dont migrate such items
+                    automaticly to the new format. Because it will disturb e.g. the deinstallation of an external filter
+                    package. Because such external filter can remove the old file - but not the automaticly created new one ...
+
+            => mark item as FINALIZED / MANDATORY, we dont support writing to the old format
+        */
+        rItem[PROPNAME_FINALIZED] <<= sal_True;
+        rItem[PROPNAME_MANDATORY] <<= sal_True;
+    }
+
+    // <- SAFE
+}
+
+/*-----------------------------------------------
+    05.03.2004 10:36
+-----------------------------------------------*/
+void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
+    throw(css::uno::Exception)
+{
+    CacheItem::iterator pIt;
+    pIt = rItem.find(PROPNAME_FINALIZED);
+    if (pIt != rItem.end())
+        rItem.erase(pIt);
+    pIt = rItem.find(PROPNAME_MANDATORY);
+    if (pIt != rItem.end())
+        rItem.erase(pIt);
 }
 
 /*-----------------------------------------------
@@ -484,7 +729,14 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
             case E_ITEM_ADDED :
             {
                 css::uno::Reference< css::container::XNameReplace > xItem (xFactory->createInstance(), css::uno::UNO_QUERY);
-                CacheItemList::const_iterator                       pItem = rCache.find(sItem);
+
+                // special case. no exception - but not a valid item => set must be finalized or mandatory!
+                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                if (!xItem.is())
+                    throw css::uno::Exception(::rtl::OUString::createFromAscii("Cant add item. Set is finalized or mandatory!"),
+                                              css::uno::Reference< css::uno::XInterface >()                                   );
+
+                CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
                 xAddRemoveSet->insertByName(sItem, css::uno::makeAny(xItem));
             }
@@ -494,6 +746,13 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
             {
                 css::uno::Reference< css::container::XNameReplace > xItem;
                 xSet->getByName(sItem) >>= xItem;
+
+                // special case. no exception - but not a valid item => it must be finalized or mandatory!
+                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                if (!xItem.is())
+                    throw css::uno::Exception(::rtl::OUString::createFromAscii("Cant change item. Its finalized or mandatory!"),
+                                              css::uno::Reference< css::uno::XInterface >()                                    );
+
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
             }
@@ -602,6 +861,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
 
     ::rtl::OUString                              sPath      ;
     css::uno::Reference< css::uno::XInterface >* pConfig = 0;
+    css::uno::Reference< css::uno::XInterface >  xOld       ;
     ::rtl::OString                               sRtlLog    ;
     switch(eProvider)
     {
@@ -635,6 +895,16 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
+        case E_PROVIDER_OLD :
+        {
+            // This special provider is used to work with
+            // the old configuration format only. Its not cached!
+            sPath   = CFGPACKAGE_TD_OLD;
+            pConfig = &xOld;
+            sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OLD)");
+        }
+        break;
+
         default : throw css::uno::Exception(::rtl::OUString::createFromAscii("These configuration node isnt supported here for open!"), 0);
     }
 
@@ -654,7 +924,18 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                                   css::uno::Reference< css::uno::XInterface >());
     }
 
-    /*TODO start listening ... */
+    /* TODO
+        - think about me
+            Problem. We will be informed about own changes too.
+            So it wouldnt be eay to differ between changes from
+            our own code and other configuration access points ...
+
+    // Start listening for changes on that configuration access.
+    // We must not control the lifetime of this listener. Itself
+    // checks, when ist time to die :-)
+    CacheUpdateListener* pListener = new CacheUpdateListener(m_xSMGR);
+    pListener->startListening(*pConfig);
+    */
 
     return *pConfig;
     // <- SAFE
@@ -814,7 +1095,7 @@ void FilterCache::impl_validateAndOptimize()
         // create an optimized registration for this type to
         // its set list of extensions/url pattern. If its a "normal" type
         // set it at the end of this optimized list. But if its
-        // a "Preferred" one - set it to the fron of this list.
+        // a "Preferred" one - set it to the front of this list.
         // Of course multiple "Preferred" registrations can occure
         // (they shouldnt - but they can!) ... Ignore it. The last
         // preferred type is useable in the same manner then every
@@ -852,9 +1133,12 @@ void FilterCache::impl_validateAndOptimize()
                 lTypesForURLPattern.push_back(sType);
         }
 
+        /* TODO think about checking of cross reference if multiple container
+                instances are used ...
+
+        #if OSL_DEBUG_LEVEL > 1
         // check some other properties too ...
         // especialy cross references to other cache items.
-        #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUString sPrefFilter;
         aType[PROPNAME_PREFERREDFILTER] >>= sPrefFilter;
         if (!sPrefFilter.getLength())
@@ -900,6 +1184,7 @@ void FilterCache::impl_validateAndOptimize()
             continue;
         }
         #endif
+        */
     }
 
     // create dependencies between the global default frame loader
@@ -1553,19 +1838,26 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         case E_TYPE :
         {
             pIt = aItem.find(PROPNAME_PREFERREDFILTER);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_PREFERREDFILTER, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_PREFERREDFILTER, pIt->second);
             pIt = aItem.find(PROPNAME_DETECTSERVICE);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_DETECTSERVICE, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_DETECTSERVICE, pIt->second);
             pIt = aItem.find(PROPNAME_URLPATTERN);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_URLPATTERN, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_URLPATTERN, pIt->second);
             pIt = aItem.find(PROPNAME_EXTENSIONS);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_EXTENSIONS, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_EXTENSIONS, pIt->second);
             pIt = aItem.find(PROPNAME_PREFERRED);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_PREFERRED, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_PREFERRED, pIt->second);
             pIt = aItem.find(PROPNAME_MEDIATYPE);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_MEDIATYPE, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_MEDIATYPE, pIt->second);
             pIt = aItem.find(PROPNAME_CLIPBOARDFORMAT);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_CLIPBOARDFORMAT, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_CLIPBOARDFORMAT, pIt->second);
 
             css::uno::Reference< css::container::XNameReplace > xUIName;
             xItem->getByName(PROPNAME_UINAME) >>= xUIName;
@@ -1577,19 +1869,26 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         case E_FILTER :
         {
             pIt = aItem.find(PROPNAME_TYPE);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_TYPE, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_TYPE, pIt->second);
             pIt = aItem.find(PROPNAME_FILEFORMATVERSION);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_FILEFORMATVERSION, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_FILEFORMATVERSION, pIt->second);
             pIt = aItem.find(PROPNAME_UICOMPONENT);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_UICOMPONENT, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_UICOMPONENT, pIt->second);
             pIt = aItem.find(PROPNAME_FILTERSERVICE);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_FILTERSERVICE, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_FILTERSERVICE, pIt->second);
             pIt = aItem.find(PROPNAME_DOCUMENTSERVICE);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_DOCUMENTSERVICE, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_DOCUMENTSERVICE, pIt->second);
             pIt = aItem.find(PROPNAME_USERDATA);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_USERDATA, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_USERDATA, pIt->second);
             pIt = aItem.find(PROPNAME_TEMPLATENAME);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_TEMPLATENAME, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_TEMPLATENAME, pIt->second);
 
             // special handling for flags! Convert it from an integer flag field back
             // to a list of names ...
@@ -1620,7 +1919,8 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         case E_CONTENTHANDLER :
         {
             pIt = aItem.find(PROPNAME_TYPES);
-            if (pIt != aItem.end()) xItem->replaceByName(PROPNAME_TYPES, pIt->second);
+            if (pIt != aItem.end())
+                xItem->replaceByName(PROPNAME_TYPES, pIt->second);
         }
         break;
     }
@@ -1785,6 +2085,212 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
     }
 
     return nField;
+}
+
+/*-----------------------------------------------
+    12.02.2004 08:40
+-----------------------------------------------*/
+void FilterCache::impl_interpretDataVal4Type(const ::rtl::OUString& sValue,
+                                                   sal_Int32        nProp ,
+                                                   CacheItem&       rItem )
+{
+    switch(nProp)
+    {
+        // Preferred
+        case 0:     {
+                        if (sValue.toInt32() == 1)
+                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(sal_True);
+                        else
+                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(sal_False);
+                    }
+                    break;
+        // MediaType
+        case 1:     rItem[PROPNAME_MEDIATYPE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // ClipboardFormat
+        case 2:     rItem[PROPNAME_CLIPBOARDFORMAT] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // URLPattern
+        case 3:     rItem[PROPNAME_URLPATTERN] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+                    break;
+        // Extensions
+        case 4:     rItem[PROPNAME_EXTENSIONS] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+                    break;
+    }
+}
+
+/*-----------------------------------------------
+    12.02.2004 08:50
+-----------------------------------------------*/
+void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
+                                                     sal_Int32        nProp ,
+                                                     CacheItem&       rItem )
+{
+    switch(nProp)
+    {
+        // Order
+        case 0:     {
+                        sal_Int32 nOrder = sValue.toInt32();
+                        if (nOrder > 0)
+                        {
+                            OSL_ENSURE(sal_False, "FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!\n");
+                            _FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
+                        }
+                    }
+                    break;
+        // Type
+        case 1:     rItem[PROPNAME_TYPE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // DocumentService
+        case 2:     rItem[PROPNAME_DOCUMENTSERVICE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // FilterService
+        case 3:     rItem[PROPNAME_FILTERSERVICE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // Flags
+        case 4:     rItem[PROPNAME_FLAGS] <<= sValue.toInt32();
+                    break;
+        // UserData
+        case 5:     rItem[PROPNAME_USERDATA] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+                    break;
+        // FileFormatVersion
+        case 6:     rItem[PROPNAME_FILEFORMATVERSION] <<= sValue.toInt32();
+                    break;
+        // TemplateName
+        case 7:     rItem[PROPNAME_TEMPLATENAME] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+        // [optional!] UIComponent
+        case 8:     rItem[PROPNAME_UICOMPONENT] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+                    break;
+    }
+}
+
+/*-----------------------------------------------
+    12.02.2004 08:30
+    TODO work on a cache copy first, which can be flushed afterwards
+         That would be usefully to gurantee a consistent cache.
+-----------------------------------------------*/
+void FilterCache::impl_readOldFormat()
+    throw(css::uno::Exception)
+{
+    static ::rtl::OUString TYPES_SET  = ::rtl::OUString::createFromAscii("Types"  );
+    static ::rtl::OUString FILTER_SET = ::rtl::OUString::createFromAscii("Filters");
+
+    // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
+    // Its optional and shouldnt disturb our normal work!
+    // E.g. we must check, if the package exists ...
+
+    css::uno::Reference< css::container::XNameAccess > xCfg;
+    try
+    {
+        css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
+        xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY);
+        if (!xCfg.is())
+            return;
+    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(const css::uno::Exception&)
+        { return; }
+
+    // May be there is no type set ...
+    if (xCfg->hasByName(TYPES_SET))
+    {
+        css::uno::Reference< css::container::XNameAccess > xSet;
+        xCfg->getByName(TYPES_SET) >>= xSet;
+        const css::uno::Sequence< ::rtl::OUString > lItems = xSet->getElementNames();
+        const ::rtl::OUString*                      pItems = lItems.getConstArray();
+        for (sal_Int32 i=0; i<lItems.getLength(); ++i)
+            m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
+    }
+
+    // May be there is no filter set ...
+    if (xCfg->hasByName(FILTER_SET))
+    {
+        css::uno::Reference< css::container::XNameAccess > xSet;
+        xCfg->getByName(FILTER_SET) >>= xSet;
+        const css::uno::Sequence< ::rtl::OUString > lItems = xSet->getElementNames();
+        const ::rtl::OUString*                      pItems = lItems.getConstArray();
+        for (sal_Int32 i=0; i<lItems.getLength(); ++i)
+            m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
+    }
+}
+
+/*-----------------------------------------------
+    12.02.2004 08:30
+-----------------------------------------------*/
+CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+                                              EItemType                                           eType,
+                                        const ::rtl::OUString&                                    sItem)
+    throw(css::uno::Exception)
+{
+    css::uno::Reference< css::container::XNameAccess > xItem;
+    xSet->getByName(sItem) >>= xItem;
+    if (!xItem.is())
+        throw css::uno::Exception(
+                ::rtl::OUString::createFromAscii("Cant read old item."),
+                css::uno::Reference< css::uno::XInterface >());
+
+    CacheItem aItem;
+
+    // Installed
+    // Isnt used any longer!
+
+    // UIName
+    impl_readPatchUINames(xItem, aItem);
+
+    // Data
+    ::rtl::OUString sData;
+    OUStringList    lData;
+    xItem->getByName(::rtl::OUString::createFromAscii("Data")) >>= sData;
+    lData = impl_tokenizeString(sData, (sal_Unicode)',');
+    if (
+        (!sData.getLength()) ||
+        (lData.size()<1    )
+       )
+    {
+        throw css::uno::Exception(
+                ::rtl::OUString::createFromAscii("Cant read old item property DATA."),
+                css::uno::Reference< css::uno::XInterface >());
+    }
+
+    sal_Int32 nProp = 0;
+    for (OUStringList::const_iterator pProp  = lData.begin();
+                                      pProp != lData.end()  ;
+                                    ++pProp                 )
+    {
+        const ::rtl::OUString& sProp = *pProp;
+        switch(eType)
+        {
+            case E_TYPE :
+                impl_interpretDataVal4Type(sProp, nProp, aItem);
+                break;
+
+            case E_FILTER :
+                impl_interpretDataVal4Filter(sProp, nProp, aItem);
+                break;
+        }
+        ++nProp;
+    }
+
+    return aItem;
+}
+
+/*-----------------------------------------------
+    12.02.2004 08:15
+-----------------------------------------------*/
+OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
+                                                    sal_Unicode      cSeperator)
+{
+    OUStringList lData  ;
+    sal_Int32    nToken = 0;
+    do
+    {
+        ::rtl::OUString sToken = sData.getToken(0, cSeperator, nToken);
+        lData.push_back(sToken);
+    }
+    while(nToken >= 0);
+    return lData;
 }
 
     } // namespace config
