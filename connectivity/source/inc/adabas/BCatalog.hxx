@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:44:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,9 @@ namespace connectivity
         public:
             OAdabasCatalog(SQLHANDLE _aConnectionHdl,OAdabasConnection* _pCon);
 
-            OAdabasConnection*  getConnection() { return m_pConnection; }
+            OAdabasConnection*      getConnection()     const { return m_pConnection; }
+            sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}
+            sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
         };
     }
 }
