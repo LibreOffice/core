@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:20:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ friend class BrowseBox;
     FASTBOOL        bInCommand;     // TRUE while in Command
     FASTBOOL        bNoScrollBack;  // nur vorwaerts scrollen
     FASTBOOL        bNoHScroll;     // kein horizontaler Scrollbar
+    FASTBOOL        bNoVScroll;     // no vertical scrollbar
     FASTBOOL        bAutoHScroll;   // autohide horizontaler Scrollbar
     FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
     FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
