@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:00:50 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -252,7 +251,7 @@ void ImportExcel8::Note( void )
                     if( const XclImpString* pString = pNoteObj->GetString() )
                     {
                         ::std::auto_ptr< EditTextObject > pEditObj(
-                        XclImpStringHelper::CreateTextObject( GetRoot(), *pString ) );
+                            XclImpStringHelper::CreateNoteObject( GetRoot(), *pString ) );
                         bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
 
                         ScDocument* pDoc = GetDocPtr();
