@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:03:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1784,7 +1784,8 @@ BOOL lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml,
     for( USHORT nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes ); nSelBoxes; )
     {
         SwTableBox* pBox = aBoxes[ --nSelBoxes ];
-        for( USHORT i = 0; i < rCells.Count(); ++i )
+        USHORT i;
+        for( i = 0; i < rCells.Count(); ++i )
             if( rCells[ i ]->GetTabBox() == pBox )
                 break;      // gefunden
 
