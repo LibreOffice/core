@@ -1,3 +1,6 @@
+/** dbo
+    permissions
+*/
 grant user "dbo"{
       permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write ";
       permission com.sun.star.io.FilePermission "-", "read ,write";
@@ -11,12 +14,18 @@ grant user "dbo"{
 grant user "jbu" {
 permission com.sun.star.security.RuntimePermission "JBU";
 permission com.sun.star.io.FilePermission  "file:///home/jbu/-" ,"read,write,";
-permission com.sun.star.connection.SocketPermission "jbu-11096","resolve";
+/*jbu resolve*/permission com.sun.star.connection.SocketPermission "jbu-11096","resolve";
  permission com.sun.star.io.FilePermission "*",",read,write";};	grant user "root"{permission com.sun.star.security.AllPermission;};
 
+// granted to anyone
  grant
 {
+	// read out this file
+	permission com.sun.star.io.FilePermission "../../test/security/test_security.policy",
+						  "read";
+
 	permission com.sun.star.security.RuntimePermission "DEF";
+	permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
 	permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
 	permission com.sun.star.io.FilePermission "file:///tmp/-", "read, write";
 	permission com.sun.star.io.FilePermission "file:///etc/profile", "read,,";
@@ -25,3 +34,4 @@ permission com.sun.star.connection.SocketPermission "jbu-11096","resolve";
 	permission com.sun.star.connection.SocketPermission "*.sun.com:1024-", "resolve";
  } ;
 
+# eof
