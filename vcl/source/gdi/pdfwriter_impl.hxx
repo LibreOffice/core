@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ public:
         PDFWriter::PageTransition   m_eTransition;
         sal_uInt32                  m_nTransTime;
         sal_uInt32                  m_nDuration;
+        bool                        m_bHasWidgets;
 
         PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
         ~PDFPage();
@@ -404,6 +405,7 @@ public:
         sal_Int32                   m_nFlags;
         sal_Int32                   m_nParent; // if not 0, parent's object number
         std::vector<sal_Int32>      m_aKids; // widget children, contains object numbers
+        sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
         sal_Int32                   m_nRadioGroup;
         sal_Int32                   m_nMaxLen;
         std::list<rtl::OUString>    m_aListEntries;
@@ -441,6 +443,16 @@ public:
 
     typedef std::map<PDFWriter::StructAttribute, PDFStructureAttribute > PDFStructAttributes;
 
+    struct PDFStructureElementKid // for Kids entries
+    {
+        sal_Int32 nObject;  // an object number if nMCID is -1,
+                            // else the page object relevant to MCID
+        sal_Int32 nMCID;    // an MCID if >= 0
+
+        PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
+        PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
+    };
+
     struct PDFStructureElement
     {
         sal_Int32                                           m_nObject;
@@ -450,7 +462,7 @@ public:
         sal_Int32                                           m_nFirstPageObject;
         bool                                                m_bOpenMCSeq;
         std::list< sal_Int32 >                              m_aChildren; // indices into strucure vector
-        rtl::OStringBuffer                                  m_aKids;
+        std::list< PDFStructureElementKid >                 m_aKids;
         PDFStructAttributes                                 m_aAttributes;
         Rectangle                                           m_aBBox;
         rtl::OUString                                       m_aActualText;
@@ -580,6 +592,17 @@ private:
         sal_Int32       m_nLayoutMode;
         sal_Int32       m_nTransparentPercent;
         sal_uInt16      m_nFlags;
+        sal_uInt16      m_nUpdateFlags;
+
+        static const sal_uInt16 updateFont                  = 0x0001;
+        static const sal_uInt16 updateMapMode               = 0x0002;
+        static const sal_uInt16 updateLineColor             = 0x0004;
+        static const sal_uInt16 updateFillColor             = 0x0008;
+        static const sal_uInt16 updateTextLineColor         = 0x0010;
+        static const sal_uInt16 updateClipRegion            = 0x0020;
+        static const sal_uInt16 updateAntiAlias             = 0x0040;
+        static const sal_uInt16 updateLayoutMode            = 0x0080;
+        static const sal_uInt16 updateTransparentPercent    = 0x0100;
 
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
@@ -588,7 +611,8 @@ private:
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
                 m_nTransparentPercent( 0 ),
-                m_nFlags( 0xffff )
+                m_nFlags( 0xffff ),
+                m_nUpdateFlags( 0xffff )
         {}
         GraphicsState( const GraphicsState& rState ) :
                 m_aFont( rState.m_aFont ),
@@ -600,7 +624,8 @@ private:
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
                 m_nTransparentPercent( rState.m_nTransparentPercent ),
-                m_nFlags( rState.m_nFlags )
+                m_nFlags( rState.m_nFlags ),
+                m_nUpdateFlags( rState.m_nUpdateFlags )
         {
         }
 
@@ -616,6 +641,7 @@ private:
             m_nLayoutMode           = rState.m_nLayoutMode;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
             m_nFlags                = rState.m_nFlags;
+            m_nUpdateFlags          = rState.m_nUpdateFlags;
             return *this;
         }
     };
@@ -728,6 +754,11 @@ private:
     // for recommend file id computation
     sal_Int32 emitInfoDict( rtl::OString& rIDOut );
 
+    // acrobat reader 5 and 6 use the order of the annotations
+    // as their tab order; since PDF1.5 one can make the
+    // tab order explicit by using the structure tree
+    void sortWidgets();
+
     // default appearences for widgets
     sal_Int32 findRadioGroupWidget( sal_Int32 nGroup );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
@@ -802,7 +833,10 @@ public:
     void pop();
 
     void setFont( const Font& rFont )
-    { m_aGraphicsStack.front().m_aFont = rFont; }
+    {
+        m_aGraphicsStack.front().m_aFont = rFont;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+    }
 
     void setMapMode( const MapMode& rMapMode );
     void setMapMode() { setMapMode( m_aMapMode ); }
@@ -811,32 +845,52 @@ public:
     const MapMode& getMapMode() { return m_aGraphicsStack.front().m_aMapMode; }
 
     void setLineColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor; }
+    {
+        m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLineColor;
+    }
 
     void setFillColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor; }
+    {
+        m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFillColor;
+    }
 
     void setTextLineColor()
-    { m_aGraphicsStack.front().m_aTextLineColor = Color( COL_TRANSPARENT ); }
+    {
+        m_aGraphicsStack.front().m_aTextLineColor = Color( COL_TRANSPARENT );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateTextLineColor;
+    }
 
     void setTextLineColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aTextLineColor = rColor; }
+    {
+        m_aGraphicsStack.front().m_aTextLineColor = rColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateTextLineColor;
+    }
 
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
         m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextFillColor()
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( Color( COL_TRANSPARENT ) );
         m_aGraphicsStack.front().m_aFont.SetTransparent( TRUE );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aFont.SetColor( rColor ); }
+    {
+        m_aGraphicsStack.front().m_aFont.SetColor( rColor );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+    }
 
     void clearClipRegion()
-    { m_aGraphicsStack.front().m_aClipRegion.SetNull(); }
+    {
+        m_aGraphicsStack.front().m_aClipRegion.SetNull();
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+    }
 
     void setClipRegion( const Region& rRegion );
 
@@ -847,13 +901,22 @@ public:
     bool intersectClipRegion( const Region& rRegion );
 
     void setLayoutMode( sal_Int32 nLayoutMode )
-    { m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode; }
+    {
+        m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLayoutMode;
+    }
 
     void setTextAlign( TextAlign eAlign )
-    { m_aGraphicsStack.front().m_aFont.SetAlign( eAlign ); }
+    {
+        m_aGraphicsStack.front().m_aFont.SetAlign( eAlign );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+    }
 
     void setAntiAlias( sal_Int32 nAntiAlias )
-    { m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias; }
+    {
+        m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateAntiAlias;
+    }
 
     /* actual drawing functions */
     void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
