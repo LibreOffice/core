@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hgzip.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:35:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,17 @@
  *
  ************************************************************************/
 
-/* $Id: hgzip.h,v 1.1 2003-10-15 14:35:46 dvo Exp $ */
+/* $Id: hgzip.h,v 1.2 2004-06-28 16:39:26 hjs Exp $ */
 
 #ifndef _HWPGZIP_H_
 #define _HWPGZIP_H_
 
 // DVO: add zlib/ prefix
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include "zlib/zlib.h"
+#endif
 
 class HStream;
 /**

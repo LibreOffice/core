@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hiodev.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:40:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hiodev.cpp,v 1.1 2003-10-15 14:40:14 dvo Exp $ */
+/* $Id: hiodev.cpp,v 1.2 2004-06-28 16:39:42 hjs Exp $ */
 
 #ifdef __GNUG__
 #pragma implementation "hiodev.h"
@@ -70,7 +70,11 @@
 #include <stdio.h>
 #include <errno.h>
 // DVO: add zlib/ prefix
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include <zlib/zlib.h>
+#endif
 #ifdef WIN32
 # include <io.h>
 #else
