@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:43:51 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 16:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ portuguese ] = "PosiÁ„o" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "Fonction" ;
-        Text [ swedish ] = "Befattning" ;
+        Text [ french ] = "Position" ;
+        Text [ swedish ] = "Placering" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "PosiciÛn" ;
         Text [ english_us ] = "Position" ;
@@ -119,7 +119,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ portuguese ] = "PosiÁ„o ~X" ;
         Text [ finnish ] = "Sijainti ~X" ;
         Text [ danish ] = "Position X" ;
-        Text [ french ] = "Position ~X" ;
+        Text [ french ] = "Position X" ;
         Text [ swedish ] = "Position ~X" ;
         Text [ dutch ] = "Positie ~X" ;
         Text [ spanish ] = "PosiciÛn ~X" ;
@@ -149,7 +149,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ portuguese ] = "PosiÁ„o ~Y" ;
         Text [ finnish ] = "Sijainti ~Y" ;
         Text [ danish ] = "Position Y" ;
-        Text [ french ] = "Position ~Y" ;
+        Text [ french ] = "Position Y" ;
         Text [ swedish ] = "Position ~Y" ;
         Text [ dutch ] = "Positie~Y" ;
         Text [ spanish ] = "PosiciÛn ~Y" ;
@@ -245,7 +245,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText[ russian ] = "“Ó˜Í‡ ÓÒÌÓ‚˚";
         QuickHelpText[ polish ] = "Punkt podstawy";
-        QuickHelpText[ japanese ] = "Âü∫Ê∫ñ„Éù„Ç§„É≥„Éà";
+        QuickHelpText[ japanese ] = "Âü∫ÁÇπ";
         QuickHelpText[ chinese_simplified ] = "Âü∫ÁÇπ";
         QuickHelpText[ chinese_traditional ] = "Âü∫Èªû";
         QuickHelpText[ arabic ] = "‰ﬁÿ… «·«‰ÿ·«ﬁ";
@@ -306,7 +306,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "~Breedte" ;
-        Text [ spanish ] = "Ancho" ;
+        Text [ spanish ] = "~Ancho" ;
         Text [ english_us ] = "Wi~dth" ;
         Text[ chinese_simplified ] = "ÂÆΩÂ∫¶(~D)";
         Text[ russian ] = "ÿËËÌ‡";
@@ -429,7 +429,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         QuickHelpText [ portuguese ] = "Ponto de base" ;
         QuickHelpText[ russian ] = "“Ó˜Í‡ ÓÒÌÓ‚˚";
         QuickHelpText[ polish ] = "Punkt podstawy";
-        QuickHelpText[ japanese ] = "Âü∫Ê∫ñ„Éù„Ç§„É≥„Éà";
+        QuickHelpText[ japanese ] = "Âü∫ÁÇπ";
         QuickHelpText[ chinese_simplified ] = "Âü∫ÁÇπ";
         QuickHelpText[ chinese_traditional ] = "Âü∫Èªû";
         QuickHelpText[ arabic ] = "‰ﬁÿ… «·«‰ÿ·«ﬁ";
@@ -454,7 +454,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ spanish ] = "~Igualar" ;
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
-        Text [ swedish ] = "Anpassa proportionellt" ;
+        Text [ swedish ] = "~Anpassa proportionellt" ;
         Text [ danish ] = "Proportional" ;
         Text [ portuguese_brazilian ] = "~Abgleich" ;
         Text [ portuguese ] = "Pr~oporcional" ;
@@ -486,17 +486,17 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ russian ] = "Protect";
         Text[ greek ] = "Protect";
         Text[ dutch ] = "Protect";
-        Text[ french ] = "Protect";
-        Text[ spanish ] = "Protect";
+        Text[ french ] = "ProtÈger";
+        Text[ spanish ] = "Proteger";
         Text[ finnish ] = "Protect";
-        Text[ italian ] = "Protect";
+        Text[ italian ] = "Proteggi";
         Text[ danish ] = "Protect";
-        Text[ swedish ] = "Protect";
+        Text[ swedish ] = "Skydda";
         Text[ polish ] = "Protect";
         Text[ portuguese_brazilian ] = "Protect";
-        Text[ japanese ] = "Protect";
+        Text[ japanese ] = "‰øùË≠∑";
         Text[ korean ] = "Î≥¥Ìò∏";
-        Text[ chinese_simplified ] = "Protect";
+        Text[ chinese_simplified ] = "‰øùÊä§";
         Text[ chinese_traditional ] = "‰øùË≠∑";
         Text[ turkish ] = "Protect";
         Text[ arabic ] = "Protect";
@@ -517,14 +517,14 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ greek ] = "»›ÛÁ";
         Text[ dutch ] = "Pos~itie";
         Text[ french ] = "Position";
-        Text[ spanish ] = "PosiciÛn";
+        Text[ spanish ] = "P~osiciÛn";
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
         Text[ danish ] = "Placering";
-        Text[ swedish ] = "~Befattning";
+        Text[ swedish ] = "~Position";
         Text[ polish ] = "~Pozycja";
         Text[ portuguese_brazilian ] = "~Position";
-        Text[ japanese ] = "‰ΩçÁΩÆ(~P)";
+        Text[ japanese ] = "‰ΩçÁΩÆ";
         Text[ korean ] = "ÏúÑÏπò(~P)";
         Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
         Text[ chinese_traditional ] = "‰ΩçÁΩÆ(~O)";
@@ -546,17 +546,17 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ russian ] = "~Size";
         Text[ greek ] = "~Size";
         Text[ dutch ] = "~Size";
-        Text[ french ] = "~Size";
-        Text[ spanish ] = "~Size";
+        Text[ french ] = "Taille";
+        Text[ spanish ] = "~TamaÒo";
         Text[ finnish ] = "~Size";
-        Text[ italian ] = "~Size";
+        Text[ italian ] = "~Dimensione";
         Text[ danish ] = "~Size";
-        Text[ swedish ] = "~Size";
+        Text[ swedish ] = "~Storlek";
         Text[ polish ] = "~Size";
         Text[ portuguese_brazilian ] = "~Size";
-        Text[ japanese ] = "~Size";
-        Text[ korean ] = "~Size";
-        Text[ chinese_simplified ] = "~Size";
+        Text[ japanese ] = "„Çµ„Ç§„Ç∫";
+        Text[ korean ] = "ÌÅ¨Í∏∞";
+        Text[ chinese_simplified ] = "Â§ßÂ∞è(~S)";
         Text[ chinese_traditional ] = "Â§ßÂ∞è(~S)";
         Text[ turkish ] = "~Size";
         Text[ arabic ] = "~Size";
@@ -585,7 +585,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ polish ] = "Konfiguracja";
         Text[ portuguese_brazilian ] = "Adjust";
         Text[ japanese ] = "ÈÅ©Âêà";
-        Text[ korean ] = "Ï°∞Ï†à";
+        Text[ korean ] = "ÎßûÏ∂îÍ∏∞";
         Text[ chinese_simplified ] = "Ë∞ÉÊï¥";
         Text[ chinese_traditional ] = "Ë™øÊï¥";
         Text[ arabic ] = "÷»ÿ";
@@ -605,8 +605,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         TabStop = TRUE ;
         Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
         Text [ italian ] = "~Adatta la larghezza al testo" ;
-        Text [ spanish ] = "Ajustar ancho al texto" ;
-        Text [ french ] = "Adapter la lar~geur au texte" ;
+        Text [ spanish ] = "Ajustar el ~ancho al texto" ;
+        Text [ french ] = "Adapter la largeur au texte" ;
         Text [ swedish ] = "Anpassa br~edd till text" ;
         Text [ danish ] = "Tilpas bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
@@ -635,7 +635,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         TabStop = TRUE ;
         Text [ dutch ] = "Hoo~gte aan tekst aanpassen" ;
         Text [ italian ] = "Adatta l'alt~ezza al testo" ;
-        Text [ spanish ] = "~Ajustar altura al texto" ;
+        Text [ spanish ] = "~Ajustar la altura al texto" ;
         Text [ french ] = "Adapter la hauteur au texte" ;
         Text [ swedish ] = "A~npassa hˆjd till text" ;
         Text [ danish ] = "Tilpas h¯jde til tekst" ;
@@ -648,7 +648,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "ÂíåÂÖßÊñáÈ´òÂ∫¶Â∞çÈΩä(~H)";
         Text[ arabic ] = "„·«¡„… «·«— ›«⁄ ··‰’";
         Text[ greek ] = "–ÒÔÛ·ÒÏÔ„ﬁ ˝¯ÔıÚ ˘Ú ÒÔÚ ÍÂﬂÏÂÌÔ";
-        Text[ korean ] = "ÌÖçÏä§Ìä∏Ïóê ÎÜíÏù¥ ÎßûÏ∂§(~H)";
+        Text[ korean ] = "ÌÖçÏä§Ìä∏Ïóê ÎÜíÏù¥ ÎßûÏ∂îÍ∏∞(~H)";
         Text[ turkish ] = "Y¸kseklii, metne gˆre a~yarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ajustar altura al texto";
@@ -688,7 +688,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "ÈéñÂÆö";
         Text[ arabic ] = "≈—”«¡";
         Text[ greek ] = "¡„Í˝Ò˘ÛÁ";
-        Text[ korean ] = "ÏúÑÏπò Í≥†Ï†ï";
+        Text[ korean ] = "ÏïµÏª§";
         Text[ turkish ] = "Sabitleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Anclaje";
@@ -705,20 +705,20 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ english_us ] = "~Anchor" ;
         Text [ italian ] = "~Ancoraggio" ;
         Text [ spanish ] = "~Ancla" ;
-        Text [ french ] = "~Ancre" ;
+        Text [ french ] = "Ancre" ;
         Text [ dutch ] = "~Anker" ;
         Text [ swedish ] = "~Ankare" ;
         Text [ danish ] = "Anker" ;
         Text [ portuguese ] = "~¬ncora" ;
         Text [ portuguese_brazilian ] = "~Anker" ;
-        Text[ chinese_simplified ] = "Ê†áËÆ∞(~A)";
+        Text[ chinese_simplified ] = "ÈîÅÂÆö(~A)";
         Text[ russian ] = "œË‚ˇÁÍ‡";
         Text[ polish ] = "Kotwica";
-        Text[ japanese ] = "„Ç¢„É≥„Ç´„Éº(~A)";
+        Text[ japanese ] = "„Ç¢„É≥„Ç´„ÉºË®òÂè∑(~A)";
         Text[ chinese_traditional ] = "Á∏ÆÂÆö(~A)";
         Text[ arabic ] = "„—”«…";
         Text[ greek ] = "¡„Í˝Ò˘ÛÁ";
-        Text[ korean ] = "ÏúÑÏπò Í≥†Ï†ï(~A)";
+        Text[ korean ] = "ÏïµÏª§(~A)";
         Text[ turkish ] = "~Sabitleyici";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ancla";
@@ -913,14 +913,14 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ greek ] = "»›ÛÁ";
         Text[ dutch ] = "~Positie";
         Text[ french ] = "Position";
-        Text[ spanish ] = "PosiciÛn";
+        Text[ spanish ] = "P~osiciÛn";
         Text[ finnish ] = "~Sijainti";
         Text[ italian ] = "Posizione";
         Text[ danish ] = "Placering";
-        Text[ swedish ] = "~Befattning";
+        Text[ swedish ] = "~Position";
         Text[ polish ] = "~Pozycja";
         Text[ portuguese_brazilian ] = "~Position";
-        Text[ japanese ] = "‰ΩçÁΩÆ(~P)";
+        Text[ japanese ] = "‰ΩçÁΩÆ";
         Text[ korean ] = "ÏúÑÏπò(~P)";
         Text[ chinese_simplified ] = "‰ΩçÁΩÆ(~P)";
         Text[ chinese_traditional ] = "‰ΩçÁΩÆ(~P)";
@@ -996,9 +996,9 @@ TabPage RID_SVXPAGE_POSITION_SIZE
             < "Car·cter arriba" ; > ;
             < "Car·cter centrado" ; > ;
             < "Car·cter abajo" ; > ;
-            < "LÌnea superior" ; > ;
+            < "LÌnea arriba" ; > ;
             < "LÌnea centrada" ; > ;
-            < "LÌnea inferior" ; > ;
+            < "LÌnea abajo" ; > ;
         };
         stringlist [ french ] =
         {
@@ -1009,9 +1009,9 @@ TabPage RID_SVXPAGE_POSITION_SIZE
             < "DÈcalage haut" ; > ;
             < "CaractËre centrÈ" ; > ;
             < "DÈcalage bas" ; > ;
-            < "Ligne vers le bord supÈrieur" ; > ;
+            < "Ligne en haut" ; > ;
             < "Ligne centrÈe" ; > ;
-            < "Ligne infÈrieure" ; > ;
+            < "Ligne en bas" ; > ;
         };
         stringlist [ dutch ] =
         {
@@ -1043,7 +1043,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         {
             < "UppifrÂn" ; > ;
             < "Uppe" ; > ;
-            < "Centrerad" ; > ;
+            < "Centrerat" ; > ;
             < "Nere" ; > ;
             < "Tecken uppe" ; > ;
             < "Tecken centrerat" ; > ;
@@ -1081,10 +1081,10 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         StringList [ chinese_simplified ] =
         {
                 < "‰ªé‰∏ä" ; > ;
-            < "Âêë‰∏ä" ; > ;
+            < "‰∏ä" ; > ;
             < "Â±Ö‰∏≠" ; > ;
-            < "Âêë‰∏ã" ; > ;
-            < "Â≠ó‰Ωì‰∏äÊñπ" ; > ;
+            < "‰∏ã" ; > ;
+            < "Â≠óÁ¨¶‰∏äÊñπ" ; > ;
             < "Â≠óÁ¨¶Â±Ö‰∏≠" ; > ;
             < "Â≠óÁ¨¶‰∏ãÊñπ" ; > ;
             < "Ë°å‰∏äÊñπ" ; > ;
@@ -1133,9 +1133,9 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         StringList [ chinese_traditional ] =
         {
                 < "Âæû‰∏ä" ; > ;
-            < "Âêë‰∏ä" ; > ;
+            < "‰∏ä" ; > ;
             < "ÁΩÆ‰∏≠" ; > ;
-            < "Âêë‰∏ã" ; > ;
+            < "‰∏ã" ; > ;
             < "Â≠óÂÖÉ‰∏äÊñπ" ; > ;
             < "Â≠óÂÖÉÁΩÆ‰∏≠" ; > ;
             < "Â≠óÂÖÉ‰∏ãÊñπ" ; > ;
@@ -1178,9 +1178,9 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         < "Î¨∏Ïûê ÏúÑ" ; > ;
         < "Î¨∏Ïûê Í∞ÄÏö¥Îç∞" ; > ;
         < "Î¨∏Ïûê ÏïÑÎûò" ; > ;
-        < "Ï§Ñ ÏúÑ" ; > ;
-        < "Ï§Ñ Í∞ÄÏö¥Îç∞" ; > ;
-        < "Ï§Ñ ÏïÑÎûò" ; > ;
+        < "Ìñâ ÏúÑ" ; > ;
+        < "Ìñâ Í∞ÄÏö¥Îç∞" ; > ;
+        < "Ìñâ ÏïÑÎûò" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1252,18 +1252,18 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     Text[ russian ] = "Position and Size";
     Text[ greek ] = "Position and Size";
     Text[ dutch ] = "Position and Size";
-    Text[ french ] = "Position and Size";
-    Text[ spanish ] = "Position and Size";
+    Text[ french ] = "Position et taille";
+    Text[ spanish ] = "PosiciÛn y tamaÒo";
     Text[ finnish ] = "Position and Size";
-    Text[ italian ] = "Position and Size";
+    Text[ italian ] = "Posizione e dimensione";
     Text[ danish ] = "Position and Size";
-    Text[ swedish ] = "Position and Size";
+    Text[ swedish ] = "Position och storlek";
     Text[ polish ] = "Position and Size";
     Text[ portuguese_brazilian ] = "Position and Size";
-    Text[ japanese ] = "Position and Size";
-    Text[ korean ] = "Position and Size";
-    Text[ chinese_simplified ] = "Position and Size";
-    Text[ chinese_traditional ] = "Position and Size";
+    Text[ japanese ] = "‰ΩçÁΩÆ„Å®„Çµ„Ç§„Ç∫";
+    Text[ korean ] = "ÏúÑÏπòÏôÄ ÌÅ¨Í∏∞";
+    Text[ chinese_simplified ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";
+    Text[ chinese_traditional ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";
     Text[ turkish ] = "Position and Size";
     Text[ arabic ] = "Position and Size";
     Text[ catalan ] = "Position and Size";
