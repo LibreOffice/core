@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 09:30:06 $
+ *  last change: $Author: oj $ $Date: 2001-12-04 14:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,15 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             pInfo->nMinimumScale    = xRow->getShort (14);
             pInfo->nMaximumScale    = xRow->getShort (15);
             pInfo->nNumPrecRadix    = xRow->getInt (18);
+            // check if values are less than zero like it happens in a oracle jdbc driver
+            if( pInfo->nPrecision < 0)
+                pInfo->nPrecision = 0;
+            if( pInfo->nMinimumScale < 0)
+                pInfo->nMinimumScale = 0;
+            if( pInfo->nMaximumScale < 0)
+                pInfo->nMaximumScale = 0;
+            if( pInfo->nNumPrecRadix < 0)
+                pInfo->nNumPrecRadix = 10;
 
             String aName;
             switch(pInfo->nType)
