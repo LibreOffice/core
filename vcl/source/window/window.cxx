@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-31 07:57:29 $
+ *  last change: $Author: cdt $ $Date: 2002-05-31 09:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         }
         else
         {
-            pFrame->Create( nStyle, pFrame->GetEventHdlInterface(),
+            pFrame->Create( nStyle, pFrame->GetEventHdlInterface(), GetAccessible()->getAccessibleContext(),
                             aToken,
                             pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
         }
