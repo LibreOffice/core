@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-26 22:28:27 $
+#   last change: $Author: rt $ $Date: 2004-11-30 16:05:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -284,7 +284,7 @@ APP6NOSAL=TRUE
 APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
 APP6VERINFO=verinfo.rc
 APP6LINKRES=$(MISC)$/soffice.res
-APP6ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
         $(OBJ)$/officeloader.obj
 
@@ -294,7 +294,7 @@ APP7NOSAL=TRUE
 APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
 APP7VERINFO=ooverinfo.rc
 APP7LINKRES=$(MISC)$/ooffice.res
-APP7ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
+APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
         $(OBJ)$/officeloader.obj
 .ENDIF # WNT
