@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 10:26:08 $
+ *  last change: $Author: vg $ $Date: 2001-10-22 20:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "Carregar";
         Text[ russian ] = "Загрузить";
         Text[ greek ] = "Load";
-        Text[ dutch ] = "Load";
+        Text[ dutch ] = "Laden";
         Text[ french ] = "Charger";
         Text[ spanish ] = "Cargar";
         Text[ finnish ] = "Load";
@@ -134,7 +134,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "~Carregar definiзхes personalizadas com o documento";
         Text[ russian ] = "Загружать вместе с документом настройки, заданные пользователем";
         Text[ greek ] = "Load user-defined settings with the document";
-        Text[ dutch ] = "Load user-defined settings with the document";
+        Text[ dutch ] = "Door gebruiker ge-definieerde instellingen samen met het document laden";
         Text[ french ] = "Chargement des paramиtres utilisateur avec le document";
         Text[ spanish ] = "Cargar la configuraciуn de usuario al cargar el documento";
         Text[ finnish ] = "Load user-defined settings with the document";
@@ -467,7 +467,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "~Tipo de documento";
         Text[ russian ] = "Тип документа";
         Text[ greek ] = "Фэрпт еггсЬцпх";
-        Text[ dutch ] = "Document";
+        Text[ dutch ] = "~Documenttype";
         Text[ french ] = "Type de document";
         Text[ spanish ] = "Tipo de documento";
         Text[ finnish ] = "Dokument";
@@ -494,7 +494,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "G~uardar sempre como";
         Text[ russian ] = "Всегда сохранять как";
         Text[ greek ] = "РЬнфб брпиЮкехуз щт";
-        Text[ dutch ] = "Bestandsformaten";
+        Text[ dutch ] = "Altijd op~slaan als";
         Text[ french ] = "Enregistrer systйmatiquement comme";
         Text[ spanish ] = "Guardar siempre como";
         Text[ finnish ] = "Dateiformate";
@@ -735,6 +735,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
