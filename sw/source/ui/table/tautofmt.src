@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:35:39 $
+ *  last change: $Author: hjs $ $Date: 2001-06-29 02:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,25 @@ ModalDialog DLG_AUTOFMT_TABLE
         Size = MAP_APPFONT ( 243 , 8 ) ;
         Text = "Format" ;
         Text [ english_us ] = "Format" ;
+        Text[ portuguese ] = "Formatar";
+        Text[ russian ] = "‘ÓÏ‡ÚËÓ‚‡ÌËÂ";
+        Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ";
+        Text[ dutch ] = "Opmaak";
+        Text[ french ] = "Formatage";
+        Text[ spanish ] = "Formato";
+        Text[ finnish ] = "Muotoilu";
+        Text[ italian ] = "Formattazione";
+        Text[ danish ] = "Formatering";
+        Text[ swedish ] = "Format";
+        Text[ polish ] = "Format";
+        Text[ portuguese_brazilian ] = "Formatos";
+        Text[ japanese ] = "èëéÆ";
+        Text[ korean ] = "∆˜∏À∆√";
+        Text[ chinese_simplified ] = "∏Ò ΩªØ";
+        Text[ chinese_traditional ] = "ÆÊ¶°§∆";
+        Text[ turkish ] = "Formatlama";
+        Text[ arabic ] = " ‰”Ìﬁ";
+        Text[ catalan ] = "Formato";
     };
     ListBox LB_FORMAT
     {
@@ -851,5 +870,6 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
 
 
