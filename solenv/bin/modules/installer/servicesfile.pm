@@ -536,6 +536,12 @@ sub include_regcomp_into_ld_library_path
 sub prepare_classpath_for_java_registration
 {
     my ( $includepatharrayref ) = @_;
+    my $local_pathseparator = $installer::globals::pathseparator;
+
+    if( $^O =~ /cygwin/i )
+    {   # $CLASSPATH must use DOS separator even when using cygwin's perl
+        $local_pathseparator = ';';
+    }
 
     for ( my $i = 0; $i <= $#installer::globals::regcompjars; $i++ )
     {
@@ -548,7 +554,7 @@ sub prepare_classpath_for_java_registration
         my $oldclasspathstring = "";
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
         else { $oldclasspathstring = "\."; }
-        my $classpathstring = $$jarfileref . $installer::globals::pathseparator . $oldclasspathstring;
+        my $classpathstring = $$jarfileref . $local_pathseparator . $oldclasspathstring;
         if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" )) {
             $classpathstring =~ s/\//\\/g;      # guw.pl likes '\' in $PATH.
         }
@@ -675,11 +681,15 @@ sub add_jrepath_into_path
     my $oldpath = "";
     if ( $ENV{'PATH'} ) { $oldpath = $ENV{'PATH'}; }
     else { $oldpath = "\."; }
-    my $newpath = $installer::globals::jrepath . $installer::globals::pathseparator . $oldpath;
-    $ENV{'PATH'} = $newpath;
 
-    my $infoline = "Setting PATH to $ENV{'PATH'}\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    if ( $installer::globals::jrepath ne "" )
+    {
+        my $newpath = $installer::globals::jrepath . $installer::globals::pathseparator . $oldpath;
+        $ENV{'PATH'} = $newpath;
+
+        my $infoline = "Setting PATH to $ENV{'PATH'}\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 #######################################################################################
@@ -752,6 +762,14 @@ sub create_services_rdb
     installer::logger::include_header_into_logfile("Creating $servicesname:");
 
     my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
+
+    if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
+    {   # $servicesdir is used as a parameter for regcomp and has to be DOS style
+        $servicesdir = qx{guw.pl echo "$servicesdir"};
+        chomp($servicesdir);
+        $servicesdir =~ s/\\/\//g;
+    }
+
     push(@installer::globals::removedirs, $servicesdir);
 
     my $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
