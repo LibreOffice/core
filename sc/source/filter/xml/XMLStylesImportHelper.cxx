@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-26 05:30:32 $
+ *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ScMyStyleRanges::ScMyStyleRanges()
     pDateTimeList(NULL),
     pPercentList(NULL),
     pLogicalList(NULL),
+    pUndefinedList(NULL),
     pCurrencyList(NULL)
 {
 }
@@ -126,6 +127,8 @@ ScMyStyleRanges::~ScMyStyleRanges()
         delete pPercentList;
     if (pLogicalList)
         delete pLogicalList;
+    if (pUndefinedList)
+        delete pUndefinedList;
     if (pCurrencyList)
         delete pCurrencyList;
 }
@@ -226,6 +229,13 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
             AddRange(rRange, pLogicalList, pStyleName, nType, rImport, nMaxRanges);
         }
         break;
+        case util::NumberFormat::UNDEFINED:
+        {
+            if (!pUndefinedList)
+                pUndefinedList = new ScRangeList();
+            AddRange(rRange, pUndefinedList, pStyleName, nType, rImport, nMaxRanges);
+        }
+        break;
         default:
         {
             DBG_ERROR("wrong type");
@@ -273,6 +283,8 @@ void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const sal_Int16 nDx, c
         pPercentList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
     if (pLogicalList)
         pLogicalList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
+    if (pUndefinedList)
+        pUndefinedList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
     if (pCurrencyList)
     {
         ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->begin();
@@ -328,6 +340,8 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLIm
         SetStylesToRanges(pPercentList, pStyleName, util::NumberFormat::PERCENT, NULL, rImport);
     if (pLogicalList)
         SetStylesToRanges(pLogicalList, pStyleName, util::NumberFormat::LOGICAL, NULL, rImport);
+    if (pUndefinedList)
+        SetStylesToRanges(pUndefinedList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
     if (pCurrencyList)
     {
         ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->begin();

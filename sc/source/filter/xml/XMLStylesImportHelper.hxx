@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
+ *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ class ScMyStyleRanges : public SvRefBase
     ScRangeList*            pDateTimeList;
     ScRangeList*            pPercentList;
     ScRangeList*            pLogicalList;
+    ScRangeList*            pUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
     void AddRange(const ScRange& rRange, ScRangeList* pList,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 16:01:16 $
+ *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         }
     }
     if (pOUFormula)
-        nCellType = util::NumberFormat::NUMBER;
+        nCellType = util::NumberFormat::UNDEFINED;
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
 
@@ -342,7 +342,7 @@ sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) c
                             if (IsXMLToken(sOUValue, XML_BOOLEAN))
                                 return util::NumberFormat::LOGICAL;
                             else
-                                return 0;
+                                return util::NumberFormat::UNDEFINED;
 }
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
