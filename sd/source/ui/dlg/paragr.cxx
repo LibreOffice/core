@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 15:29:21 $
+ *  last change: $Author: dl $ $Date: 2001-05-08 13:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SVX_PARAGRPH_HXX //autogen
 #include <svx/paragrph.hxx>
 #endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 #include "paragr.hxx"
 #include "sdresid.hxx"
@@ -88,7 +91,11 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
     FreeResource();
 
     AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+
+    SvtCJKOptions aCJKOptions;
+    if( aCJKOptions.IsAsianTypographyEnabled() )
+        AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,0);
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
 }
