@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCellRangeData.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:31 $
+ *  last change:$Date: 2003-09-08 10:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sheet;
 
-import com.sun.star.sheet.XCellRangeData;
 import lib.MultiMethodTest;
 import util.ValueComparer;
+
+import com.sun.star.sheet.XCellRangeData;
 
 public class _XCellRangeData extends MultiMethodTest {
 
