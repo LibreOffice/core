@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:12:19 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,14 +563,14 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         if( !pFilterEntry->maImportTemplate.matchIgnoreAsciiCase( sTemplatePath ) )
         {
             INetURLObject aSourceURL( pFilterEntry->maImportTemplate );
-            if( aSourceURL.GetName().Len() != 0 )
+            if( aSourceURL.GetName().getLength() != 0 )
             {
                 OUString aDestURL( sTemplatePath );
                 aDestURL += pFilterEntry->maFilterName;
                 aDestURL += OUString( sal_Unicode('/') );
                 if( createDirectory( aDestURL ) )
                 {
-                    aDestURL += OUString( aSourceURL.GetName() );
+                    aDestURL += aSourceURL.GetName();
 
                     SvFileStream aInputStream(pFilterEntry->maImportTemplate, STREAM_READ );
                     Reference< XInputStream > xIS( new utl::OInputStreamWrapper( aInputStream ) );
