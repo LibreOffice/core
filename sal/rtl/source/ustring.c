@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:04:21 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 16:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,8 +807,10 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                     do
                     {
                         /* Check ASCII range */
+/* SBLLINK!
                         OSL_ENSURE( ((unsigned char)*pStr) <= 127,
-                                    "rtl_string2UString() - UTF8 test is encoding is wrong" );
+                                    "rtl_string2UString() - UTF8 test encoding is wrong" );
+*/
 
                         *pBuffer = *pStr;
                         pBuffer++;
