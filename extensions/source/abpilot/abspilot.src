@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:09:56 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Hide            = TRUE;
     Text[ portuguese ] = "Autopiloto da fonte de dados dos endereηos";
     Text[ russian ] = "Μΰρςεπ θρςξχνθκξβ δΰννϋυ ΰδπερξβ";
-    Text[ greek ] = "Autopilot Address Book Data Source";
+    Text[ greek ] = "Αυτόματος πιλότος για προέλευση δεδομένων διευθύνσεων";
     Text[ dutch ] = "Autopiloot Adresgegevensbron";
     Text[ french ] = "AutoPilote de source de donnιes des adresses";
     Text[ spanish ] = "Piloto automαtico de fuente de datos de la libreta de direcciones";
@@ -128,7 +128,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
         Text[ portuguese ] = "O %PRODUCTNAME permite-lhe o acesso a dados de endereηos jα disponνveis no seu sistema.\nPara isso ι criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endereηo na forma de tabelas.\n\nEste AutoPiloto ajuda-o a configurar essa fonte de dados.";
         Text[ russian ] = "%PRODUCTNAME οπεδξρςΰβλÿες βξημξζνξρςό δξρςσοΰ κ ρσωερςβσώωθμ β ρθρςεμε ΰδπερνϋμ δΰννϋμ.\nΔλÿ ύςξγξ ασδσς ρξηδΰνϋ θρςξχνθκθ δΰννϋυ %PRODUCTNAME, β κξςξπϋυ βΰψθ ΰδπερνϋε κνθγθ ασδσς δξρςσονϋ β βθδε ςΰαλθφ.\n\nΜΰρςεπ οξμξζες οπθ ρξηδΰνθθ ςΰκθυ θρςξχνθκξβ δΰννϋυ.";
-        Text[ greek ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ greek ] = "Το %PRODUCTNAME σάς επιτρέπει να προσπελάσετε δεδομένα διευθύνσεων που βρίσκονται ήδη στο σύστημά σας. Για να γίνει αυτό, θα δημιουργηθεί μια προέλευση δεδομένων για το %PRODUCTNAME μέσα στην οποία θα είναι διαθέσιμα τα δεδομένα διευθύνσεων σε μορφή πίνακα.\n\nΑυτός ο αυτόματος πιλότος σάς βοηθά να δημιουργήσετε την προέλευση δεδομένων.";
         Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds op uw systeem beschikbaar zijn. Daartoe wordt er een %PRODUCTNAME-gegevensbron gemaakt via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze AutoPiloot ondersteunt u bij het inrichten van deze gegevensbron.";
         Text[ french ] = "%PRODUCTNAME permet l'accθs aux donnιes des adresses prιsentes dans votre systθme. Cette fonction nιcessite la crιation d'une source de donnιes %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du paramιtrage de cette source de donnιes.";
         Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se crearα una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarαn disponibles en tablas.\n\nEl Piloto automαtico le apoya durante la creaciσn de esta fuente de datos.";
@@ -162,7 +162,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Please select the type of your external address book:";
         Text[ portuguese ] = "Seleccione o tipo do seu livro de endereηos externo:";
         Text[ russian ] = "Βϋαεπθςε ςθο βνεψνει ΰδπερνξι κνθγθ:";
-        Text[ greek ] = "Please choose the type of your external address book:";
+        Text[ greek ] = "Επιλέξτε τον τύπο του εξωτερικού σας βιβλίου διευθύνσεων:";
         Text[ dutch ] = "Kies het type van uw externe adresboek:";
         Text[ french ] = "Sιlectionnez le type du carnet d'adresses externe :";
         Text[ spanish ] = "Seleccione el tipo de libreta de direcciones externa:";
@@ -197,7 +197,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Mozilla / Netscape";
         Text[ portuguese ] = "Mozilla / Netscape 6.x";
         Text[ russian ] = "ΐδπερνΰÿ κνθγΰ Mozilla / Netscape 6.x";
-        Text[ greek ] = "Mozilla / Netscape";
+        Text[ greek ] = "Mozilla / Netscape 6.x";
         Text[ dutch ] = "Mozilla / Netscape 6.x";
         Text[ french ] = "Mozilla / Netscape";
         Text[ spanish ] = "Mozilla / Netscape";
@@ -247,6 +247,10 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ turkish ] = "Evolution";
         Text[ arabic ] = "Evolution";
         Text[ catalan ] = "Evolution";
+        Text[ czech ] = "Evolution";
+        Text[ slovak ] = "Evolution";
+        Text[ hebrew ] = "Evolution";
+        Text[ thai ] = "Evolution";
     };
     RadioButton RB_LDAP
     {
@@ -258,7 +262,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "LDAP address data";
         Text[ portuguese ] = "Endereηos LDAP";
         Text[ russian ] = "ΐδπερΰ LDAP";
-        Text[ greek ] = "LDAP address data";
+        Text[ greek ] = "Δεδομένα διευθύνσεων LDAP";
         Text[ dutch ] = "LDAP-adresbestand";
         Text[ french ] = "Stock des adresses LDAP";
         Text[ spanish ] = "Datos de las direcciones LDAP ";
@@ -291,7 +295,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Outlook address book";
         Text[ portuguese ] = "Livro de endereηos Outlook";
         Text[ russian ] = "ΐδπερνΰÿ κνθγΰ β Outlook";
-        Text[ greek ] = "Outlook address book";
+        Text[ greek ] = "Βιβλίο διευθύνσεων του Outlook";
         Text[ dutch ] = "Outlook-adresboek";
         Text[ french ] = "Carnet d'adresses Outlook";
         Text[ spanish ] = "Libreta de direcciones de Outlook";
@@ -324,7 +328,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Windows system address book";
         Text[ portuguese ] = "Livro de endereηos do sistema Windows";
         Text[ russian ] = "ΐδπερνΰÿ κνθγΰ Windows";
-        Text[ greek ] = "Windows system address book";
+        Text[ greek ] = "Βιβλίο διευθύνσεων του συστήματος των Windows";
         Text[ dutch ] = "Windows-systeemadresboek";
         Text[ french ] = "Carnet d'adresses du systθme Windows";
         Text[ spanish ] = "Libreta de direcciones del sistema de Windows";
@@ -357,7 +361,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Other external data source";
         Text[ portuguese ] = "Outra fonte de dados externa";
         Text[ russian ] = "Δπσγξι βνεψνθι θρςξχνθκ δΰννϋυ";
-        Text[ greek ] = "Other external data source";
+        Text[ greek ] = "Άλλη εξωτερική προέλευση δεδομένων";
         Text[ dutch ] = "andere externe gegevensbron";
         Text[ french ] = "Autre source de donnιes externe";
         Text[ spanish ] = "Otras fuentes de datos externas";
@@ -382,7 +386,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endereηos!";
     Text[ russian ] = "Δξαπξ οξζΰλξβΰςό β Μΰρςεπ θρςξχνθκξβ δΰννϋυ ΰδπερξβ!";
-    Text[ greek ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ greek ] = "Καλώς ορίσατε στον αυτόματο πιλότο για προέλευση δεδομένων διευθύνσεων";
     Text[ dutch ] = "Welkom bij de AutoPiloot voor het inrichten van adresgegevensbronnen";
     Text[ french ] = "Bienvenue dans l'AutoPilote pour le paramιtrage des sources de donnιes des adresses !";
     Text[ spanish ] = "Bienvenido al Piloto automαtico de fuentes de datos de direcciones";
@@ -430,7 +434,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text [ english_us ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
         Text[ portuguese ] = "Para configurar a nova fonte de dados sγo ainda necessαrias algumas informaηυes.\n\nClique no botγo abaixo para abrir a respectiva caixa de diαlogo. Indique aν os parβmetros necessαrios.";
         Text[ russian ] = "Δλÿ ρξηδΰνθÿ νξβϋυ θρςξχνθκξβ δΰννϋυ νεξαυξδθμϋ δξοξλνθςελόνϋε νΰρςπξικθ.\n\nΝΰζμθςε κνξοκσ, πΰροξλξζεννσώ βνθησ, χςξαϋ ξςκπϋςό δθΰλξγξβξε ξκνξ, β κξςξπξμ μξζνξ ββερςθ νεδξρςΰώωσώ θντξπμΰφθώ.";
-        Text[ greek ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ greek ] = "Για να ρυθμίσουμε τη νέα πηγή δεδομένων, απαιτούνται πρόσθετες πληροφορίες.n\nΚάντε κλικ στο παρακάτω κουμπί για να ανοίξετε ένα άλλο πλαίσιο διαλόγου στο οποίο εισάγετε στη συνέχεια τις απαραίτητες πληροφορίες.";
         Text[ dutch ] = "Om de nieuwe gegevensbron in te richten, zijn nog meer gegevens vereist.\n\nZodra u op de knop hieronder klikt, wordt er nog een dialoogvenster geopend. Geef daarin de ontbrekende instellingen op.";
         Text[ french ] = "Des informations supplιmentaires sont requises pour le paramιtrage de la nouvelle source de donnιes.\n\nUtilisez le bouton ci-dessous pour ouvrir une autre boξte de dialogue permettant de dιfinir les paramθtres manquants.";
         Text[ spanish ] = "Para configurar la nueva fuente de datos se necesita otra informaciσn.\n\nPara ello, en cuanto pulse sobre el botσn que se encuentra abajo se abrirα otro diαlogo. Introduzca en ιl la informaciσn requerida.";
@@ -503,7 +507,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text [ english_us ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
         Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo ΰ fonte de dados.\nAntes de continuar, verifique as definiηυes ou seleccione outro tipo (pαgina anterior) para a fonte de dados dos endereηos.";
         Text[ russian ] = "Νεβξημξζνξ σρςΰνξβθςό ρξεδθνενθε ρ θρςξχνθκξμ δΰννϋυ.\nΟπεζδε, χεμ οπξδξλζθςό οπξφερρ, οπξβεπόςε νΰρςπξικθ θλθ βϋαεπθςε (νΰ οπεδϋδσωει ρςπΰνθφε) δπσγξι ςθο θρςξχνθκΰ.";
-        Text[ greek ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης με την προέλευση δεδομένων.\nΠριν συνεχίσετε, ελέγξτε τις ρυθμίσεις που έγιναν ή (στην προηγούμενη σελίδα) επιλέξτε έναν άλλο τύπο προέλευσης δεδομένων διευθύνσεων.";
         Text[ dutch ] = "De verbinding met de gegevensbron kan niet tot stand worden gebracht.\nControleer eerst de gedefinieerde instellingen of kies (op de vorige pagina) een ander type adresgegevensbron.";
         Text[ french ] = "La connexion ΰ la source de donnιes n'a pas pu κtre ιtablie.\nAvant de poursuivre, vιrifiez le paramιtrage effectuι ou choisissez (sur la page prιcιdente) un autre type pour la source de donnιes des adresses.";
         Text[ spanish ] = "No se pudo efectuar la conexiσn a la fuente de datos.\nAntes de continuar, compruebe la configuraciσn realizada o elija (en la ficha anterior) otro tipo para la fuente de datos de direcciones.";
@@ -528,7 +532,7 @@ TabPage RID_PAGE_ADMININVOKATION
     };
     Text[ portuguese ] = "Definiηυes adicionais";
     Text[ russian ] = "Δξοξλνθςελόνϋε νΰρςπξικθ";
-    Text[ greek ] = "Additional Settings";
+    Text[ greek ] = "Πρόσθετες ρυθμίσεις";
     Text[ dutch ] = "Extra instellingen";
     Text[ french ] = "Paramθtres supplιmentaires";
     Text[ spanish ] = "Configuraciσn adicional";
@@ -575,7 +579,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text [ english_us ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
         Text[ portuguese ] = "A fonte de dados externa seleccionada contιm vαrios stocks de endereηos.\nSeleccione o que irα ser mais usado.";
         Text[ russian ] = "Βϋαπΰννϋε βνεψνθε θρςξχνθκθ δΰννϋυ ρξδεπζΰς νερκξλόκξ ΰδπερνϋυ κνθγ.\nΒϋαεπθςε βπσχνσώ ςε, ρ κξςξπϋμ βϋ ασδεςε πΰαξςΰςό δΰλόψε.";
-        Text[ greek ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ greek ] = "Η εξωτερική προέλευση δεδομένων που έχετε επιλέξει περιέχει περισσότερα από ένα βιβλία διευθύνσεων.\nΕπιλέξτε αυτό με το οποίο θέλετε να εργαστείτε κυρίως:";
         Text[ dutch ] = "De door u geselecteerde externe gegevensbron bevat meerdere adresbestanden.\nKies daaruit diegene waarmee u hoofdzakelijk wilt werken:";
         Text[ french ] = "La source de donnιes externe que vous avez choisie contient plusieurs stocks d'adresses.\nSιlectionnez celui avec lequel vous voulez principalement travailler :";
         Text[ spanish ] = "La fuente de datos externa que ha seleccionado contiene varias existencias de direcciones.\nSeleccione la que vaya a utilizar principalmente:";
@@ -611,7 +615,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     Text[ portuguese ] = "Seleccionar tabela";
     Text[ russian ] = "Βϋαξπ ςΰαλθφϋ";
-    Text[ greek ] = "Select Table";
+    Text[ greek ] = "Επιλογή πίνακα";
     Text[ dutch ] = "Tabel selecteren";
     Text[ french ] = "Sιlection de table";
     Text[ spanish ] = "Seleccionar tabla";
@@ -664,7 +668,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text [ english_us ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
         Text[ portuguese ] = "Para poder utilizar os dados dos endereηos nos seus modelos de documentos, o %PRODUCTNAME tem de reconhecer os campos que contκm os dados concretos.\n\nExemplo: os endereηos electrσnicos podem estar guardados num determinado campo com o nome que lhe parecer mais conveniente (e-mail, email ou EM, etc.)\n\nUtilize o botγo abaixo para abrir outra caixa de diαlogo que lhe permite definir estes parβmetros para a fonte de dados.";
         Text[ russian ] = "Δλÿ θροξλόηξβΰνθÿ ΰδπερξβ β ψΰαλξνΰυ, %PRODUCTNAME δξλζεν ηνΰςό οξλÿ θ κξνκπεςνϋε δΰννϋε, κξςξπϋε ρξδεπζΰςρÿ β ύςθυ οξλÿυ.\n\nΝΰοπθμεπ, ΰδπερΰ ύλεκςπξννξι οξχςϋ μξγσς αϋςό ρξυπΰνενϋ β οξλε ρ θμενεμ \"E-Mail\" θλθ \"έλεκςπξννΰÿ οξχςΰ\" θλθ ρ κΰκθμ-λθαξ δπσγθμ θμενεμ.\n\nΝΰζΰβ νΰ κνξοκσ, νΰυξδÿωσώρÿ βνθησ, μξζνξ βϋοξλνθςό ύςθ νΰρςπξικθ.";
-        Text[ greek ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ greek ] = "Για να συμπεριλάβετε τα δεδομένα διευθύνσεων μέσα στα πρότυπά σας, το %PRODUCTNAME πρέπει να γνωρίζει ποια πεδία περιέχουν ποια δεδομένα.\n\nΓια παράδειγμα, θα μπορούσατε να έχετε αποθηκεύσει τις διευθύνσεις ηλεκτρονικού ταχυδρομείου σε ένα πεδίο με όνομα \"email\" ή \"E-mail\" ή \"EM\" - ή κάτι τελείως διαφορετικό.\n\nΚάντε κλικ στο παρακάτω κουμπί για να ανοίξει ένα άλλο παράθυρο διαλόγου, όπου μπορείτε να εισάγετε τις ρυθμίσεις για την προέλευση δεδομένων.";
         Text[ dutch ] = "Om de adresgegevens in uw sjabloondocumenten te kunnen gebruiken, moet %PRODUCTNAME weten welke velden welke concrete gegevens bevatten.\n\nU kunt bijvoorbeeld de e-mailadressen hebben opgeslagen in een veld met de naam \"E-mail\", \"EMail\", of \"EM\", of onder een andere naam.\n\nAls u op de knop hieronder klikt, wordt er een dialoogvenster geopend waarin u de instellingen voor uw gegevensbron kunt opgeven.";
         Text[ french ] = "Afin de pouvoir utiliser les donnιes des adresses dans les modθles, %PRODUCTNAME doit reconnaξtre les champs contenant les donnιes concrθtes.\n\nExemple : les adresses e-mail pourront avoir ιtι stockιes dans un champ prιcis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre boξte de dialogue permettant de dιfinir ces paramθtres pour la source de donnιes.";
         Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber quι campos contienen quι datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electrσnicas en un campo con el nombre \"correo-e\", Correo e\", \"email\" o con un nombre completamente distinto.\n\nSi pulsa el botσn que se encuentra mαs abajo, se abrirα otro diαlogo en el que podrα configurar la fuente de datos.";
@@ -698,7 +702,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text [ english_us ] = "Field Assignment";
         Text[ portuguese ] = "Atribuir campos";
         Text[ russian ] = "Νΰηνΰχενθε οξλει";
-        Text[ greek ] = "Αντιστοίχιση πεδίου";
+        Text[ greek ] = "Ανάθεση πεδίου";
         Text[ dutch ] = "Veldindeling";
         Text[ french ] = "Assignation des champs";
         Text[ spanish ] = "Asignaciσn de campo";
@@ -730,7 +734,7 @@ TabPage RID_PAGE_FIELDMAPPING
     };
     Text[ portuguese ] = "Atribuiηγo de campos";
     Text[ russian ] = "Νΰηνΰχενθε οξλÿ";
-    Text[ greek ] = "Αντιστοίχιση πεδίου";
+    Text[ greek ] = "Ανάθεση πεδίου";
     Text[ dutch ] = "Veldindeling";
     Text[ french ] = "Assignation des champs";
     Text[ spanish ] = "Asignaciσn de campo";
@@ -777,7 +781,7 @@ TabPage RID_PAGE_FINAL
         Text [ english_us ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
         Text[ portuguese ] = "Estas sγo todas as informaηυes necessαrias para a integraηγo dos seus dados relacionados com endereηos no %PRODUCTNAME.\n\nAgora sσ falta indicar o nome para o registo da fonte de dados no %PRODUCTNAME.";
         Text[ russian ] = "Θντξπμΰφθÿ, νεξαυξδθμΰÿ δλÿ θνςεγπΰφθθ δΰννϋυ β %PRODUCTNAME ρξαπΰνΰ.\n\nΞρςΰλξρό ββερςθ θμÿ, οξδ κξςξπϋμ θρςξχνθκ δΰννϋυ ασδες ηΰπεγθρςπθπξβΰν β %PRODUCTNAME.";
-        Text[ greek ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ greek ] = "Αυτές ήταν όλες οι απαραίτητες πληροφορίες για να ενσωματώσετε τα δεδομένα διευθύνσεων μέσα στο %PRODUCTNAME.\n\nΤώρα, εισαγάγετε απλά το όνομα με το οποίο θέλετε να δηλώσετε την προέλευση δεδομένων στο %PRODUCTNAME.";
         Text[ dutch ] = "Dat waren alle vereiste gegevens voor de integratie van uw adresgegevens in %PRODUCTNAME.\n\nVoer nu nog de naam in waaronder de gegevensbron in %PRODUCTNAME moet worden geregistreerd.";
         Text[ french ] = "Toutes les informations requises pour l'intιgration des donnιes des adresses dans %PRODUCTNAME sont ΰ prιsent rιunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de donnιes dans %PRODUCTNAME.";
         Text[ spanish ] = "Ahora dispone de la informaciσn necesaria para integrar los datos de las direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que desee registrar la fuente de datos en %PRODUCTNAME.";
@@ -812,7 +816,7 @@ TabPage RID_PAGE_FINAL
         Group = TRUE;
         Text[ portuguese ] = "Tνtulo";
         Text[ russian ] = "Θμÿ";
-        Text[ greek ] = "Title";
+        Text[ greek ] = "Όνομα";
         Text[ dutch ] = "Titel";
         Text[ french ] = "Titre";
         Text[ spanish ] = "Tνtulo";
@@ -857,7 +861,7 @@ Text[ japanese ] = "γ‚Ώγ‚¤γƒγƒ«";
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.";
         Text [ portuguese ] = "Jα existe uma fonte de dados com este nome. Os nomes das fontes de dados sγo ϊnicos, por esta razγo terα de seleccionar outro nome.";
         Text [ russian ] = "Θρςξχνθκθ δΰννϋυ ρ ςΰκθμ θμενεμ σζε ρσωερςβσώς. Θμενΰ θρυξδνϋυ δΰννϋυ δξλζνϋ αϋςό σνθκΰλόνϋμθ. Νεξαυξδθμξ οπθρβξθςό δπσγξε θμÿ.";
-        Text [ greek ] = "Υπάρχει ήδη μια προέλευση δεδομένων με αυτό το όνομα. Κάθε όνομα των προελεύσεων των δεδομένων επιτρέπεται να υπάρχει μόνο μια φορά. Παρακα";
+        Text [ greek ] = "Μια άλλη προέλευση δεδομένων έχει ήδη αυτό το όνομα. Πρέπει να διαλέξετε ένα άλλο όνομα, επειδή οι προελεύσεις δεδομένων πρέπει να έχουν μοναδικά ονόματα.";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a dιjΰ ιtι attribuι ΰ une autre source de donnιes. Ιtant donnι que les sources de donnιes doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
         Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ϊnico.";
@@ -882,7 +886,7 @@ Text[ japanese ] = "γ‚Ώγ‚¤γƒγƒ«";
     };
     Text[ portuguese ] = "Tνtulo da fonte de dados";
     Text[ russian ] = "Θμÿ θρςξχνθκΰ δΰννϋυ";
-    Text[ greek ] = "Data Source Title";
+    Text[ greek ] = "Όνομα προέλευσης δεδομένων";
     Text[ dutch ] = "Gegevensbronnen-titel";
     Text[ french ] = "Titre de la source de donnιes";
     Text[ spanish ] = "Tνtulo de la fuente de datos";
@@ -916,7 +920,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message [ english_us ] = "Please select a type of address book.";
     Message[ portuguese ] = "Seleccione um tipo de livro de endereηos";
     Message[ russian ] = "Βϋαεπθςε ςθο ΰδπερνξι κνθγθ";
-    Message[ greek ] = "Bitte wδhlen sie einen Adressbuch-Typ aus";
+    Message[ greek ] = "Επιλέξτε έναν τύπο βιβλίου διευθύνσεων.";
     Message[ dutch ] = "Kies een adresboektype.";
     Message[ french ] = "Sιlectionnez un type de carnet d'adresses !";
     Message[ spanish ] = "Seleccione un tipo de libreta de direcciones";
@@ -953,7 +957,7 @@ QueryBox RID_QRY_NOTABLES
     Message [ english_us ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
     Message[ portuguese ] = "A fonte de dados nγo contιm nenhuma tabela.\nMesmo assim, configurα-la como fonte de dados dos endereηos?";
     Message[ russian ] = "έςθ θρυξδνϋε δΰννϋε νε ρξδεπζΰς νθ ξδνξι ςΰαλθφϋ.\nΣρςΰνξβθςό θυ β κΰχερςβε θρςξχνθκξβ δΰννϋυ ΰδπερξβ?";
-    Message[ greek ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ greek ] = "Η προέλευση δεδομένων δεν περιέχει πίνακες.\nΕίστε βέβαιοι ότι θέλετε να την ορίσετε ως προέλευση δεδομένων διευθύνσεων;";
     Message[ dutch ] = "De gegevensbron bevat geen tabel.\nWilt u deze toch als adresgegevensbron inrichten?";
     Message[ french ] = "La source de donnιes ne contient aucune table.\nVoulez-vous tout de mκme la paramιtrer comme source de donnιes des adresses ?";
     Message[ spanish ] = "La fuente de datos no contiene tablas.\nΏDesea no obstante configurarla como fuente de datos de direcciones?";
@@ -1016,7 +1020,7 @@ String RID_STR_ADMINDIALOGTITLE
     Text [ english_us ] = "Create Address Data Source";
     Text[ portuguese ] = "Criar fonte de dados dos endereηos";
     Text[ russian ] = "Ρξηδΰςό θρςξχνθκ δΰννϋυ ΰδπερξβ";
-    Text[ greek ] = "Create Address Data Source";
+    Text[ greek ] = "Δημιουργία προέλευσης δεδομένων διευθύνσεων";
     Text[ dutch ] = "Adresgegevensbron maken";
     Text[ french ] = "Crιation de la source de donnιes des adresses";
     Text[ spanish ] = "Crear fuente de datos de direcciones";
@@ -1047,7 +1051,7 @@ String RID_STR_NOCONNECTION
     Text [ english_us ] = "The connection could not be established.";
     Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo.";
     Text[ russian ] = "Νεβξημξζνξ σρςΰνξβθςό ρξεδθνενθε.";
-    Text[ greek ] = "The connection could not be established.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης.";
     Text[ dutch ] = "De verbinding kan niet tot stand worden gebracht.";
     Text[ french ] = "Impossible d'ιtablir la connexion !";
     Text[ spanish ] = "No se pudo realizar la conexiσn.";
@@ -1078,7 +1082,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text [ english_us ] = "Please check the settings made for the data source.";
     Text[ portuguese ] = "Verifique as definiηυes da fonte de dados.";
     Text[ russian ] = "Οπξβεπόςε νΰρςπξικθ θρςξχνθκΰ δΰννϋυ.";
-    Text[ greek ] = "Please check the settings made for the data source.";
+    Text[ greek ] = "Ελέγξτε τις ρυθμίσεις που έχουν γίνει για την προέλευση δεδομένων.";
     Text[ dutch ] = "Controleer de instellingen voor de gegevensbron.";
     Text[ french ] = "Vιrifiez les paramθtres pour la source de donnιes.";
     Text[ spanish ] = "Compruebe la configuraciσn para la fuente de datos.";
@@ -1109,7 +1113,7 @@ String RID_STR_FIELDDIALOGTITLE
     Text [ english_us ] = "Address Data - Field Assignment";
     Text[ portuguese ] = "Dados de endereηos - Atribuiηγo de campos";
     Text[ russian ] = "ΐδπερνϋε δΰννϋε: νΰηνΰχενθε οξλει";
-    Text[ greek ] = "Address Data - Field Assignment";
+    Text[ greek ] = "Δεδομένα διευθύνσεων - Ανάθεση πεδίου";
     Text[ dutch ] = "Adresgegevens - veldtoewijzing";
     Text[ french ] = "Donnιes des adresses - Assignation des champs";
     Text[ spanish ] = "Datos de direcciones - asignaciσn de campo";
@@ -1145,7 +1149,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
     Text[ portuguese ] = "Nγo hα campos atribuνdos.\nSe nγo pretender atribuir os campos agora, poderα fazκ-lo mais tarde em:\nmenu \"Ficheiro - Modelos - Fonte do livro de endereηos...\"";
     Text[ russian ] = "Β νΰρςξÿωθι μξμενς οξλÿ νε οπθρβξενϋ.\n Θυ μξζνξ οπθρβξθςό λθαξ ρειχΰρ, λθαξ οξηζε,\nβ μενώ \"Τΰιλ - Ψΰαλξνϋ - Θρςξχνθκ ΰδπερνξι κνθγθ...\"";
-    Text[ greek ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ greek ] = "Δεν έχουν ανατεθεί πεδία αυτήν τη στιγμή.\nΜπορείτε να αναθέσετε πεδία τώρα ή να το κάνετε αργότερα επιλέγοντας:\n\"Αρχείο - Πρότυπο - Προέλευση δεδομένων του βιβλίου διευθύνσεων...\"";
     Text[ dutch ] = "Momenteel zijn er geen velden toegewezen.\nAls u op dit moment geen velden wilt toewijzen, kunt u dit op een later tijdstip doen:\nMenu \"Bestand - Sjabloon - Adresboekbron...\"";
     Text[ french ] = "Aucun champ n'est assignι.\nSi vous ne souhaitez pas procιder ΰ l'assignation pour le moment, vous pourrez le faire plus tard sous :\n\"Fichier - Modθle de document - Source du carnet d'adresses ...\"";
     Text[ spanish ] = "Actualmente no existen campos asignados.\nSi no puede llevar a cabo de momento ninguna asignaciσn, lo puede hacer posteriormente en cualquier momento:\nMenϊ \"Archivo - Plantillas - Fuente de libreta de direcciones...\"";
@@ -1176,7 +1180,7 @@ String RID_STR_ABP_SUCCESS
     Text [ english_us ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
     Text[ portuguese ] = "O seu livro de endereηos externo foi registado no %PRODUCTNAME.\nOs dados dos endereηos podem ser agora utilizados como qualquer outra fonte de dados.";
     Text[ russian ] = "Πεγθρςπΰφθÿ βνεψνει ΰδπερνξι κνθγθ β %PRODUCTNAME οπξψλΰ σροεψνξ.\nÒεοεπό ΰδπερΰ δξρςσονϋ νΰπÿδσ ρ δπσγθμθ θρςξχνθκΰμθ δΰννϋυ.";
-    Text[ greek ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ greek ] = "Το εξωτερικό σας βιβλίο διευθύνσεων δηλώθηκε με επιτυχία στο %PRODUCTNAME.\nΤώρα μπορείτε να χρησιμοποιείτε τα δεδομένα διευθύνσεων όπως κάθε άλλη προέλευση δεδομένων.";
     Text[ dutch ] = "Uw externe adresboek is in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
     Text[ french ] = "Vous pouvez dιsormais accιder aux donnιes des adresses depuis %PRODUCTNAME. La touche F4 permet par ex. d'ouvrir la vue de la source de donnιes correspondante.";
     Text[ spanish ] = "La libreta de direcciones externa se ha registrado en %PRODUCTNAME.\nAhora puede utilizar los datos de las direcciones como cualquier otra fuente de datos.";
@@ -1185,7 +1189,7 @@ String RID_STR_ABP_SUCCESS
     Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemfψrt.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
     Text[ swedish ] = "Nu kan du anvδnda dina adressdata i %PRODUCTNAME.\nDu kan till exempel φppna datakδllvyn genom att trycka pε F4 och arbeta med dina adressdata dδr.";
     Text[ polish ] = "Zewnκtrzna ksiΉΏka adresowa zosta³a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych moΏna teraz uΏywaζ tak jak innego rσd³a danych.";
-    Text[ portuguese_brazilian ] = "O seu livro de endereηos externo foi registado no %PRODUCTNAME.\nOs dados dos endereηos podem ser agora utilizados como qualquer outra fonte de dados.";
+    Text[ portuguese_brazilian ] = "O seu livro de endereηos externo foi registrado no %PRODUCTNAME.\nOs dados dos endereηos podem ser agora utilizados como qualquer outra fonte de dados.";
     Text[ japanese ] = "γ“γ‚γ§ %PRODUCTNAME γ‹γ‚‰γ‚Άγƒ‰γƒ¬γ‚ΉεΈ³γƒ‡γƒΌγ‚ΏγΈγ‚Άγ‚―γ‚»γ‚Ήγ§γγ‚‹γ‚γ†γ«γªγ‚γΎγ—γγ€‚δΎ‹γγ°γ€F4γ‚­γƒΌγ‚’ζΌγ—γ¦γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚Ήγƒ“γƒ¥γƒΌγ‚’ι–‹γγ¨γ€γγ“γ‹γ‚‰γ‚Άγƒ‰γƒ¬γ‚ΉεΈ³γƒ‡γƒΌγ‚Ώγ«γ‚Άγ‚―γ‚»γ‚Ήγ™γ‚‹γ“γ¨γγ§γγΎγ™γ€‚";
     Text[ korean ] = "μ΄μ  %PRODUCTNAMEμ—μ„ μ‚¬μ©μμ μ£Όμ† λ°μ΄ν„°λ΅ μ•΅μ„Έμ¤ν•  μ μμµλ‹λ‹¤.\nμλ¥Ό λ“¤μ–΄ F4λ¥Ό λλ¬ λ°μ΄ν„° μ›λ³Έ λ³΄κΈ°λ¥Ό μ—¬μ‹­μ‹μ¤. μ΄μ  μ£Όμ† λ°μ΄ν„°λ΅ μ›ν•μ‹λ” μ‘μ—…μ„ ν•  μ μμµλ‹λ‹¤. ";
     Text[ chinese_simplified ] = "η°ε¨οΌε¤–ζ¥η„ι€θ®―η°Ώε·²η»ζεε°η™»θ®°ε° %PRODUCTNAME ι‡γ€‚\nθΏ™ζ ·οΌζ‚¨ε°±θƒ½ε¤ε¦‚εδ½Ώη”¨δ»»δ½•δΈ€δΈªε…¶δ»–η„ζ•°ζ®ζΊδΈ€ζ ·ιζ„δ½Ώη”¨ζ‚¨η„ι€θ®―η°ΏοΌδΎ‹ε¦‚ζ‰ F4 ε°±ε―δ»¥ζ‰“εΌ€ζ•°ζ®ζΊγ€‚";
@@ -1205,6 +1209,7 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
+
 
 
 
