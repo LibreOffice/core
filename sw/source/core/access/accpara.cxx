@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
+ *  last change: $Author: mib $ $Date: 2002-08-13 16:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,10 +1244,11 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     // translate core coordinates into accessibility coordinates
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
-    aCoreRect -= GetBounds().TopLeft();
-    MapMode aMapMode = pWin->GetMapMode();
-    aMapMode.SetOrigin( Point() );
-    Rectangle aScreenRect( pWin->LogicToPixel( aCoreRect.SVRect(), aMapMode ));
+
+    Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
+    Point aFrmLogPos( GetBounds().Pos() ); // twip rel to doc root
+    Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogPos ) );
+    aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
     // convert into AWT Rectangle
     return com::sun::star::awt::Rectangle(
@@ -1281,10 +1282,14 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
     Point aPoint( rPoint.X, rPoint.Y );
+    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
+    Point aPixPos( GetMap()->CoreToPixel( aLogBounds.Pos() ) );
+    aPoint.X() += aPixPos.X();
+    aPoint.Y() += aPixPos.Y();
     MapMode aMapMode = pWin->GetMapMode();
-    aMapMode.SetOrigin( Point() );
-    Point aCorePoint = pWin->PixelToLogic( aPoint, aMapMode );
-    aCorePoint += GetBounds().TopLeft();
+    Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
+    if( !aLogBounds.IsInside( aCorePoint ) )
+        return -1;
 
     // ask core for position
     DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
@@ -1294,7 +1299,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
 
     return bSuccess ?
         GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
-        : 0;
+        : -1L;
 }
 
 OUString SwAccessibleParagraph::getSelectedText()
@@ -1392,7 +1397,7 @@ OUString SwAccessibleParagraph::getTextRange(
     if ( IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
     {
         OrderRange( nStartIndex, nEndIndex );
-        return sText.copy(nStartIndex, nEndIndex-nStartIndex+1 );
+        return sText.copy(nStartIndex, nEndIndex-nStartIndex );
     }
     else
         throw IndexOutOfBoundsException();
