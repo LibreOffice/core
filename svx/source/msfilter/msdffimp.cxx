@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-13 10:53:00 $
+ *  last change: $Author: sj $ $Date: 2002-05-17 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,18 +1286,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
 
         if ( eXFill == XFILL_GRADIENT )
         {
-            long nAngle = 1800;
-
-            // FadeAngle der Fuellung feststellen
-            INT32 nFadeAngle = GetPropertyValue( DFF_Prop_fillAngle, 0 );
-            if ( nFadeAngle )
-                nFadeAngle = 1800 + ( 3600 - ( ( Fix16ToAngle( nFadeAngle ) + 5 ) / 10 ) );
-            else
-                nFadeAngle = 1800;
-
-            // FadeAngle auf Objektrotation aufschlagen
-            if ( nFadeAngle )
-                nAngle = nAngle + nFadeAngle;
+            sal_Int32 nAngle = 3600 - ( ( Fix16ToAngle( GetPropertyValue( DFF_Prop_fillAngle, 0 ) ) + 5 ) / 10 );
 
             // Rotationswinkel in Bereich zwingen
             while ( nAngle >= 3600 )
@@ -1305,26 +1294,25 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             while ( nAngle < 0 )
                 nAngle += 3600;
 
-            long nFocus = GetPropertyValue( DFF_Prop_fillFocus, 0 );
+            sal_Int32 nFocus = GetPropertyValue( DFF_Prop_fillFocus, 0 );
             XGradientStyle eGrad = XGRAD_LINEAR;
-            BOOL bChgColors(FALSE);
+            sal_Int32 nChgColors = 0;
 
-            if ( nFadeAngle == 1800 )
-                bChgColors = !bChgColors;
+            if ( !nAngle )
+                nChgColors ^= 1;
 
             if ( !nFocus )
-                bChgColors = !bChgColors;
+                nChgColors ^= 1;
             else if ( nFocus < 0 )      // Bei negativem Focus sind die Farben zu tauschen
             {
                 nFocus =- nFocus;
-                bChgColors = !bChgColors;
+                nChgColors ^= 1;
             }
             if( nFocus > 40 && nFocus < 60 )
             {
                 eGrad = XGRAD_AXIAL;    // Besser gehts leider nicht
-                bChgColors = !bChgColors;
+                nChgColors ^= 1;
             }
-
             USHORT nFocusX = (USHORT)nFocus;
             USHORT nFocusY = (USHORT)nFocus;
 
@@ -1334,7 +1322,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                 {
                     eGrad = XGRAD_RECT;
                     nFocusY = nFocusX = 50;
-                    bChgColors = !bChgColors;
+                    nChgColors ^= 1;
                 }
                 break;
                 case mso_fillShadeCenter :
@@ -1342,20 +1330,19 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                     eGrad = XGRAD_RECT;
                     nFocusX = ( IsProperty( DFF_Prop_fillToRight ) ) ? 100 : 0;
                     nFocusY = ( IsProperty( DFF_Prop_fillToBottom ) ) ? 100 : 0;
-                    bChgColors = !bChgColors;
+                    nChgColors ^= 1;
                 }
                 break;
             }
             Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ) );
             Color aCol2( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ) );
 
-            if ( bChgColors )
+            if ( nChgColors )
             {
                 Color aZwi( aCol1 );
                 aCol1 = aCol2;
                 aCol2 = aZwi;
             }
-
             XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
             aGrad.SetStartIntens( 100 );
             aGrad.SetEndIntens( 100 );
