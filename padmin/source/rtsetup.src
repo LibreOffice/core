@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-07 11:46:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 12:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ spanish ] = "Dispositivo";
                 Text[ italian ] = "Apparecchio";
                 Text[ danish ] = "Device";
-                Text[ swedish ] = "Apparat";
+                Text[ swedish ] = "Enhet";
                 Text[ polish ] = "Sprzêt";
                 Text[ portuguese_brazilian ] = "Device";
                 Text[ japanese ] = "ÃÞÊÞ²½";
@@ -1528,3 +1528,4 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "Please enter the fax number.";
     Text[ catalan ] = "Indique el número de fax";
 };
+
