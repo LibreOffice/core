@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-15 13:58:43 $
+ *  last change: $Author: er $ $Date: 2001-01-15 15:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,19 +370,10 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         // calculate correct file name
         if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
         {
-            String      aTimeStr( UniString::CreateFromInt32( Time().GetTime() ) );
-            String      aName( aURL.getName() );
-            xub_StrLen  nNameLen = aName.Len();
-
-            if( nNameLen > 3 )
-            {
-                nNameLen -= 3;
-
-                if( aName.GetChar( nNameLen - 1 ) == sal_Unicode( '.' ) )
-                    --nNameLen;
-            }
-
-            aURL.setName( aName.Insert( aTimeStr.Insert( sal_Unicode('_'), 0 ), nNameLen ) );
+            String aName( aURL.getBase() );
+            aName += '_';
+            aName += UniString::CreateFromInt32( Time().GetTime() );
+            aURL.setBase( aName );
         }
 
         if( ( nFlags & XOUTBMP_USE_NATIVE_IF_POSSIBLE ) &&
