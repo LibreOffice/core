@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:56:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ Menu MN_ANCHOR_POPUP
             Text[ turkish ] = "Sayfa";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Página";
+            Text[ finnish ] = "Sivu";
         };
         MenuItem
         {
@@ -120,6 +121,7 @@ Menu MN_ANCHOR_POPUP
             Text[ turkish ] = "Paragrafa";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Párrafo";
+            Text[ finnish ] = "Kappale";
         };
         MenuItem
         {
@@ -148,6 +150,7 @@ Menu MN_ANCHOR_POPUP
             Text[ turkish ] = "Karaktere";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Al carácter";
+            Text[ finnish ] = "Ät-merkki";
         };
         MenuItem
         {
@@ -176,6 +179,7 @@ Menu MN_ANCHOR_POPUP
             Text[ turkish ] = "Karakter olarak";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Como carácter";
+            Text[ finnish ] = "Merkkinä";
         };
         MenuItem
         {
@@ -204,6 +208,7 @@ Menu MN_ANCHOR_POPUP
             Text[ turkish ] = "Çerçeve";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Marco";
+            Text[ finnish ] = "Kehys";
         };
     };
 };
