@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-07-26 20:19:35 $
+ *  last change: $Author: er $ $Date: 2002-11-14 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,101 +66,106 @@
 #include <com/sun/star/i18n/LanguageCountryInfo.idl>
 #include <com/sun/star/i18n/Currency.idl>
 #include <com/sun/star/i18n/Calendar.idl>
+#include <com/sun/star/i18n/LocaleDataItem.idl>
+#include <com/sun/star/i18n/ForbiddenCharacters.idl>
+#include <com/sun/star/i18n/FormatElement.idl>
+#include <com/sun/star/i18n/Implementation.idl>
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
+//============================================================================
 
+/**
+    Access locale specific data as it is defined in XML locale data
+    files compiled into the binary data libraries liblocaledata*.so
+    respectively localedata*.dll.
 
-struct FormatElement {
-    string formatCode;
-    string formatName;
-    string formatKey;
-    string formatType;
-    string formatUsage;
-    short  formatIndex;
-    boolean isDefault;
-};
-
-
-
-struct LocaleDataItem {
-    string unoID;
-    string dateSeparator;
-    string thousandSeparator;
-    string decimalSeparator;
-    string timeSeparator;
-    string time100SecSeparator;
-    string listSeparator;
-    string quotationStart;
-    string quotationEnd;
-    string doubleQuotationStart;
-    string doubleQuotationEnd;
-    string timeAM;
-    string timePM;
-    string measurementSystem;
-    string LongDateDayOfWeekSeparator;
-    string LongDateDaySeparator;
-    string LongDateMonthSeparator;
-    string LongDateYearSeparator;
-};
-
-struct Implementation {
-    string unoID;
-    boolean isDefault;
-};
-
-struct ForbiddenCharacters {
-    string beginLine;
-    string endLine;
-};
-
-constants reservedWords {
-    const short TRUE_WORD             = 0;
-    const short FALSE_WORD            = 1;
-    const short QUARTER1_WORD         = 2;
-    const short QUARTER2_WORD         = 3;
-    const short QUARTER3_WORD         = 4;
-    const short QUARTER4_WORD         = 5;
-    const short ABOVE_WORD            = 6;
-    const short BELOW_WORD            = 7;
-    const short QUARTER1_ABBREVIATION = 8;
-    const short QUARTER2_ABBREVIATION = 9;
-    const short QUARTER3_ABBREVIATION = 10;
-    const short QUARTER4_ABBREVIATION = 11;
-
-    //! Yes, this must be the count of known reserved words and one more than
-    //! the maximum number used above!
-    const short COUNT                 = 12;
-};
-
-
+    <p> For XML locale data files definitions see <a
+    href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/locale.dtd">
+    the DTD file </a> (or the <a
+    href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata_ascii/Attic/locale.dtd">
+    old Attic version </a> for OOo1.0/SO6.0). </p>
+ */
 
 interface XLocaleData: com::sun::star::uno::XInterface
 {
+    //------------------------------------------------------------------------
+    /** returns the LC_INFO locale information.
+     */
+    LanguageCountryInfo getLanguageCountryInfo(
+                                [in] com::sun::star::lang::Locale aLocale );
 
-    LanguageCountryInfo getLanguageCountryInfo([in]  com::sun::star::lang::Locale rLocale);
-    LocaleDataItem getLocaleItem ([in]  com::sun::star::lang::Locale rLocale);
+    //------------------------------------------------------------------------
+    /** returns LC_CTYPE separators and markers.
+     */
+    LocaleDataItem      getLocaleItem(
+                                [in] com::sun::star::lang::Locale aLocale );
 
-    sequence<Calendar> getAllCalendars ([in] com::sun::star::lang::Locale rLocale);
-    sequence<Currency> getAllCurrencies  ([in] com::sun::star::lang::Locale rLocale);
-    sequence<FormatElement> getAllFormats ([in] com::sun::star::lang::Locale rLocale);
+    //------------------------------------------------------------------------
+    /** returns all LC_CALENDAR calendars for a locale.
+     */
+    sequence<Calendar>  getAllCalendars(
+                                [in] com::sun::star::lang::Locale aLocale );
 
-    sequence<Implementation> getCollatorImplementations ([in] com::sun::star::lang::Locale rLocale);
-    sequence<string> getSearchOptions([in] com::sun::star::lang::Locale rLocale);
-    sequence<string> getCollationOptions([in] com::sun::star::lang::Locale rLocale);
+    //------------------------------------------------------------------------
+    /** returns all LC_CURRENCY currencies for a locale.
+     */
+    sequence<Currency>  getAllCurrencies(
+                                [in] com::sun::star::lang::Locale aLocale );
 
-    sequence<string> getTransliterations([in] com::sun::star::lang::Locale rLocale);
-    ForbiddenCharacters getForbiddenCharacters ([in] com::sun::star::lang::Locale rLocale);
-    sequence<string> getReservedWord ([in] com::sun::star::lang::Locale rLocale);
+    //------------------------------------------------------------------------
+    /** returns all LC_FORMAT format elements for a locale.
+     */
+    sequence<FormatElement> getAllFormats(
+                                [in] com::sun::star::lang::Locale aLocale );
 
+    //------------------------------------------------------------------------
+    /** returns all LC_COLLATION collators for a locale.
+     */
+    sequence<Implementation> getCollatorImplementations(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all LC_SEARCH search options for a locale.
+     */
+    sequence<string>    getSearchOptions(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all LC_COLLATION collation options for a locale.
+     */
+    sequence<string>    getCollationOptions(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all LC_TRANSLITERATION transliterations for a locale.
+     */
+    sequence<string>    getTransliterations(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all LC_MISC forbidden charatcers for a locale.
+     */
+    ForbiddenCharacters getForbiddenCharacters (
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all LC_MISC reserved words for a locale.
+
+        @see reservedWords
+     */
+    sequence<string>    getReservedWord(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** returns all available locales.
+     */
     sequence<com::sun::star::lang::Locale> getAllInstalledLocaleNames();
 };
 
-//=============================================================================
-
+//============================================================================
 }; }; }; };
-
+//============================================================================
 #endif
