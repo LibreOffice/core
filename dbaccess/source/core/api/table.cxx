@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:35:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -383,7 +388,7 @@ void ODBTable::flush_NoBroadcast_NoCommit()
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+    throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 
 // XAlterTable,
@@ -434,11 +439,11 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
         }
         else
             // not supported
-            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+            throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ALTER_COLUMN_DEF),*this,SQLSTATE_GENERAL,1000,Any() );
     }
     else
         // not supported
-        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
     m_pColumns->refresh();
 }
 // -------------------------------------------------------------------------
