@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:12:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "~Num." ;
         Text [ norwegian ] = "~Num." ;
         Text [ italian ] = "~Num." ;
-        Text [ portuguese_brazilian ] = "~N£m." ;
+        Text [ portuguese_brazilian ] = "~N?m." ;
         Text [ portuguese ] = "~Quantidade" ;
         Text [ finnish ] = "~Määrä" ;
         Text [ danish ] = "Antal" ;
@@ -154,7 +154,7 @@ TabPage TP_COLUMN
         Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
         Text[ danish ] = "Udjævn kolonner";
         Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
-        Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
+        Text[ polish ] = "Roz³ó¿ zawarto?æ równomiernie na wszystkie kolumny";
         Text[ portuguese_brazilian ] = "Balance columns";
         Text[ japanese ] = "“à—e‚ğ’i‘g‚İ‘S‘Ì‚Å‹Ï“™‚É”z•ª‚·‚é";
         Text[ korean ] = "³»¿ëÀ» ¸ğµç ´Ü¿¡ °ÉÃÄ ÀÏÁ¤ÇÏ°Ô ºĞ¹è(~B)";
@@ -400,7 +400,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Automatic ~width" ;
         Text [ norwegian ] = "Automatic ~width" ;
         Text [ italian ] = "~Larghezza autom." ;
-        Text [ portuguese_brazilian ] = "Autom tica ~largura" ;
+        Text [ portuguese_brazilian ] = "Autom?tica ~largura" ;
         Text [ portuguese ] = "~Largura automática" ;
         Text [ finnish ] = "~Automaattinen leveys" ;
         Text [ danish ] = "Automatisk bredde" ;
@@ -412,7 +412,7 @@ TabPage TP_COLUMN
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿í¶È(~W)";
         Text[ russian ] = "Àâòîì. øèğèíà";
-        Text[ polish ] = "Automatyczna szerokoœæ";
+        Text[ polish ] = "Automatyczna szeroko?æ";
         Text[ japanese ] = "•©“®’²®(~W)";
         Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã¼e«×(~W)";
         Text[ arabic ] = "ÚÑÖ ÊáŞÇÆí";
@@ -615,7 +615,7 @@ TabPage TP_COLUMN
         Text [ swedish ] = "Hö~jd" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "~Height" ;
+        Text [ english_us ] = "H~eight" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "¸ß(~H)";
         Text[ russian ] = "Âûñîòà";
@@ -778,7 +778,7 @@ TabPage TP_COLUMN
     StringList [ polish ] =
     {
             < "Na górze" ; Default ; > ;
-        < "Wyœrodkowany" ; Default ; > ;
+        < "Wy?rodkowany" ; Default ; > ;
         < "Na dole" ; Default ; > ;
     };
     StringList [ japanese ] =
