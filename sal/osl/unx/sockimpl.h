@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sockimpl.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:32:08 $
+ *  last change: $Author: mfe $ $Date: 2001-02-26 16:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ typedef struct _oslSocketImpl {
     int                 m_nLastError;
     oslCloseCallback    m_CloseCallback;
     void*               m_CallbackArg;
+#if defined(LINUX)
+    sal_Bool            m_bIsAccepting;
+    sal_Bool            m_bIsInShutdown;
+#endif
 } oslSocketImpl;
 
 oslSocketImpl* __osl_createSocketImpl(int Socket);
