@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:16:20 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,12 +836,14 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
     mrEE.SetText( *pTextObj );
 
     // font information
-    const XclExpFont* pFirstFont = GetFontBuffer().GetFont( 0 );
     XclFontData aFontData, aNewData;
-    if( pFirstFont )
+    if( const XclExpFont* pFirstFont = GetFontBuffer().GetFont( EXC_FONT_APP ) )
+    {
         aFontData = pFirstFont->GetFontData();
+        (aFontData.mnHeight += 10) /= 20;   // using pt here, not twips
+    }
     else
-        aFontData.mnHeight = 10;    // using pt here, not twips
+        aFontData.mnHeight = 10;
 
     const FontList* pFontList = NULL;
     if( SfxObjectShell* pDocShell = GetDocShell() )
@@ -903,7 +905,8 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 aNewData.mnHeight = static_cast< sal_uInt16 >(
                     static_cast< const SvxFontHeightItem& >( aEditSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() );
                 (aNewData.mnHeight += 10) /= 20;
-                if( aFontData.mnHeight != aNewData.mnHeight )
+                bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
+                if( bFontHtChanged )
                     aParaText.Append( '&' ).Append( String::CreateFromInt32( aNewData.mnHeight ) );
 
                 // underline
@@ -988,6 +991,14 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 {
                     String aPortionText( mrEE.GetText( aSel ) );
                     aPortionText.SearchAndReplaceAll( String( '&' ), String( RTL_CONSTASCII_USTRINGPARAM( "&&" ) ) );
+                    // #i17440# space between font height and numbers in text
+                    if( bFontHtChanged && aParaText.Len() && aPortionText.Len() )
+                    {
+                        sal_Unicode cLast = aParaText.GetChar( aParaText.Len() - 1 );
+                        sal_Unicode cFirst = aPortionText.GetChar( 0 );
+                        if( ('0' <= cLast) && (cLast <= '9') && ('0' <= cFirst) && (cFirst <= '9') )
+                            aParaText.Append( ' ' );
+                    }
                     aParaText.Append( aPortionText );
                 }
             }
