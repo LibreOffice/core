@@ -2,9 +2,9 @@
  *
  *  $RCSfile: axhost.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-06 14:46:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,3 +91,5 @@ public:
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 #endif
+
+
