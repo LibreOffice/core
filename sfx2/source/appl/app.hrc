@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:02:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@
 
 #define RID_INVALID_URL_MSG                     (RID_SFX_APP_START + 182)
 #define RID_INVALID_URL_TITLE                   (RID_SFX_APP_START + 183)
+#define RID_DESKTOP                             (RID_SFX_APP_START + 184)
 
 #endif // #ifndef _SFX_APP_HRC
 
