@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-04 16:34:33 $
+ *  last change: $Author: iha $ $Date: 2002-10-23 15:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
 #endif
 
 #include <svx/dialogs.hrc>
@@ -325,15 +322,9 @@ void SdModule::Execute(SfxRequest& rReq)
                     if( pPilotDlg->GetStartType() == ST_OPEN )
                     {
                         String aFileToOpen = aDocPath;
-                        if(aFileToOpen.Len() == 0)
-                        {
-                            sfx2::FileDialogHelper aFileDlg( WB_OPEN, SdDrawDocShell::Factory() );
-                            if ( aFileDlg.Execute() == ERRCODE_NONE )
-                                aFileToOpen = aFileDlg.GetPath();
-                        }
-
                         delete pPilotDlg;
 
+                        DBG_ASSERT( aFileToOpen.Len()!=0, "The autopilot should have asked for a file itself already!" );
                         if(aFileToOpen.Len() != 0)
                         {
                             SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
