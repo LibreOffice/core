@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:03:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ portuguese ] = "T~ipo";
         Text[ russian ] = "���";
         Text[ greek ] = "�����";
-        Text[ dutch ] = "~Type";
+        Text[ dutch ] = "T~ype";
         Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ finnish ] = "~Tyyppi";
@@ -608,6 +608,8 @@ String STR_QUERY_FULL_JOIN
     Text[ hindi ] = "'%1' और '%2' के सब अभिलेख सम्मिलित है";
     Text[ slovak ] = "Zahŕňa všetky záznamy z tabuľky'%1' a '%2'.";
 };
+
+
 
 
 
