@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3330,12 +3330,16 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setWidth( nTmp );
+            Size aSize( aRect.GetSize() );
+            aSize.Width() = nTmp;
+            aRect.SetSize( aSize );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setHeight( nTmp );
+            Size aSize( aRect.GetSize() );
+            aSize.Height() = nTmp;
+            aRect.SetSize( aSize );
         }
         pValue++;
     }
