@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:59:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,15 +111,15 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "~Always";
         Text[ portuguese ] = "~Sempre";
         Text[ danish ] = "Altid";
-        Text[ french ] = "Toujours";
+        Text[ french ] = "~Toujours";
         Text[ swedish ] = "Allt~id";
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
-        Text[ english_us ] = "Always";
+        Text[ english_us ] = "~Always";
         Text[ chinese_simplified ] = "×ÜÊÇ";
         Text[ russian ] = "Âñåãäà";
         Text[ polish ] = "Zawsze";
-        Text[ japanese ] = "í‚É";
+        Text[ japanese ] = "í‚É‚·‚é";
         Text[ chinese_traditional ] = "Á`¬O";
     Text[ arabic ] = "ÏÇÆãÇğ";
     Text[ greek ] = "ĞÜíôá";
@@ -138,15 +138,15 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "On request";
         Text[ portuguese ] = "A ~pedido";
         Text[ danish ] = "På anmodning";
-        Text[ french ] = "Sur demande";
+        Text[ french ] = "Sur de~mande";
         Text[ swedish ] = "~På begäran";
         Text[ dutch ] = "Op aan~vraag";
         Text[ spanish ] = "A ~petición";
-        Text[ english_us ] = "On request";
+        Text[ english_us ] = "~On request";
         Text[ chinese_simplified ] = "ÔÚÇëÇóÊ±";
         Text[ russian ] = "Ïî òğåáîâàíèş";
         Text[ polish ] = "Na ¿¹danie";
-        Text[ japanese ] = "•K—v‚É‰‚¶‚Ä";
+        Text[ japanese ] = "Šm”F‚·‚é";
         Text[ chinese_traditional ] = "¦b½Ğ¨D®É";
     Text[ arabic ] = "ÈÚÏ ÇáÇÓÊİÓÇÑ";
     Text[ greek ] = "Óå æŞôçóç";
@@ -165,15 +165,15 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Never";
         Text[ portuguese ] = "~Nunca";
         Text[ danish ] = "Aldrig";
-        Text[ french ] = "Jamais";
+        Text[ french ] = "~Jamais";
         Text[ swedish ] = "A~ldrig";
         Text[ dutch ] = "~Nooit";
         Text[ spanish ] = "~Nunca";
-        Text[ english_us ] = "Never";
+        Text[ english_us ] = "~Never";
         Text[ chinese_simplified ] = "ÓÀÔ¶²»";
         Text[ russian ] = "Íèêîãäà";
         Text[ polish ] = "Nigdy";
-        Text[ japanese ] = "•s•K—v";
+        Text[ japanese ] = "‚µ‚È‚¢";
         Text[ chinese_traditional ] = "¥Ã»·¤£";
     Text[ arabic ] = "ÈÊÇÊÇğ";
     Text[ greek ] = "Ğïôİ";
@@ -196,10 +196,10 @@ TabPage TP_OPTLOAD_PAGE
         Text [ danish ] = "Kun for det aktuelle dokument" ;
         Text [ portuguese ] = "~Apenas para documento activo" ;
         Text[ portuguese_brazilian ] = "~Nur für das aktuelle Dokument";
-        Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ";
+        Text[ chinese_simplified ] = "Ö»ÊÊÓÃÓÚµ±Ç°µÄÎÄµµ";
         Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
         Text[ polish ] = "Tylko dla aktualnego dokumentu";
-        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚¾‚¯";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì‚İ";
         Text[ chinese_traditional ] = "¶È¥Î©ó·í«eªº¤å¥ó";
     Text[ arabic ] = "ááãÓÊäÏ ÇáÍÇáí İŞØ";
     Text[ greek ] = "Ìüíï ãéá ôï ğáñüí İããñáöï";
@@ -250,8 +250,8 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Uppdat~era fältkommandon automatiskt";
         Text[ polish ] = "Aktualizuj pola automatycznie";
         Text[ portuguese_brazilian ] = "Update fields automatically";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚ğ©“®“I‚ÉXV(~F)";
-        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ×Ö¶ÎÃüÁî(~F)";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚ğ©“®XV‚·‚é(~F)";
+        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ×Ö¶ÎÃüÁî";
         Text[ chinese_traditional ] = "¦Û°Ê§ó·sÄæ¦ì«ü¥O";
     Text[ arabic ] = "ÊÍÏíË ÇáÍŞæá ÊáŞÇÆíÇğ";
     Text[ greek ] = "Áõôüìáôç åíçìİñùóç ~åíôïëşí ğåäßùí";
@@ -269,15 +269,15 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Actualizar ~gráficos automaticamente";
         Text[ russian ] = "Îáíîâëÿòü äèàãğàììû àâòîìàòè÷åñêè";
         Text[ dutch ] = "~Diagrammen automatisch actualiseren";
-        Text[ french ] = "Actualiser automatiquement les diagrammes";
+        Text[ french ] = "Actualiser automatiquement les dia~grammes";
         Text[ spanish ] = "Actualizar ~diagramas automáticamente";
         Text[ italian ] = "Aggiorna i diagrammi automaticamente";
         Text[ danish ] = "Opdater diagrammer automatisk";
         Text[ swedish ] = "Uppdatera dia~gram automatiskt";
         Text[ polish ] = "Aktualizuj wykresy automatycznie";
         Text[ portuguese_brazilian ] = "Update charts automatically";
-        Text[ japanese ] = "¸Ş×Ì‚ğ©“®“I‚ÉXV(~C)";
-        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂÍ¼±í(~C)";
+        Text[ japanese ] = "¸Ş×Ì‚ğ©“®XV‚·‚é(~C)";
+        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂÍ¼±í";
         Text[ chinese_traditional ] = "¦Û°Ê§ó·s¹Ïªí";
     Text[ arabic ] = "ÊÍÏíË ÇáÑÓæã ÇáÈíÇäíÉ ÊáŞÇÆíÇğ";
     Text[ greek ] = "Áõôüìáôç åíçìİñùóç äéá~ãñáììÜôùí";
@@ -292,18 +292,18 @@ TabPage TP_OPTLOAD_PAGE
         Text = "Nur für das aktuelle D~okument" ;
         Text [ English ] = "Current document only" ;
         Text [ dutch ] = "~Alleen in het actuele document" ;
-        Text [ english_us ] = "Current document only" ;
+        Text [ english_us ] = "Current document onl~y" ;
         Text [ italian ] = "Solo per il documento corrente" ;
-        Text [ spanish ] = "Solo para el documento ~actual" ;
-        Text [ french ] = "Uniquement pour le document ~actif" ;
+        Text [ spanish ] = "Sólo para el documento ~actual" ;
+        Text [ french ] = "Uniquement pour le d~ocument actif" ;
         Text [ swedish ] = "Bara för det aktuella d~okumentet" ;
         Text [ danish ] = "Kun for det aktuelle dokument" ;
         Text [ portuguese ] = "~Apenas para documento actual" ;
         Text[ portuguese_brazilian ] = "~Nur für das aktuelle Dokument";
-        Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ";
+        Text[ chinese_simplified ] = "Ö»ÊÊÓÃÓÚµ±Ç°µÄÎÄµµ";
         Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
         Text[ polish ] = "Tylko dla aktualnego dokumentu";
-        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚¾‚¯";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì‚İ";
         Text[ chinese_traditional ] = "¶È¥Î©ó·í«eªº¤å¥ó";
     Text[ arabic ] = "ááãÓÊäÏ ÇáÍÇáí İŞØ";
     Text[ greek ] = "Ìüíï ãéá ôï ğáñüí İããñáö~ï";
@@ -354,8 +354,8 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Addera alla stycke- och tabell~avstånd i det aktuella dokumentet";
         Text[ polish ] = "Dodaj w aktualnym dokumencie wszystkie odstêpy akapitów i tabel";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
-        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚É‚·‚×‚Ä‚Ì’i—‚¨‚æ‚Ñ•\\‚ÌŠÔŠu‚ğ•t‰Á‚·‚é";
-        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚÀ©´óËùÓĞ¶ÎÂäºÍ±í¸ñÖ®¼äµÄ¼ä¸ô(~S)";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ‰ÁZ‚·‚é";
+        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚÀ©´óËùÓĞ¶ÎÂäºÍ±í¸ñÖ®¼äµÄ¼ä¸ô";
         Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤ºÂX¤j©Ò¦³¬q¸¨©Mªí®æ¤§¶¡ªº¶¡¹j";
     Text[ arabic ] = "ÅÖÇİÉ ãÓÇİÉ ÇáÊÈÇÚÏ Åáì ßá İŞÑÇÊ æÌÏÇæá ÇáãÓÊäÏ ÇáÍÇáí";
         Text[ greek ] = "¢èñïéóìá üëùí ôùí ~áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôï ôñİ÷ïí İããñáöï";
@@ -375,15 +375,15 @@ TabPage TP_OPTLOAD_PAGE
     Text[ greek ] = "¢èñïéóìá ôùí áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôçí áñ÷Ş ôçò óåëßäáò";
     Text[ dutch ] = "~Alinea- en tabellenafstanden invoegen aan paginabegin.";
     Text[ french ] = "Additionner les ~espaces entre paragraphes et tableaux en début de page";
-    Text[ spanish ] = "Su~mar espacios de tablas y párrafos a los comienzos de página";
+    Text[ spanish ] = "Su~mar espacios de tablas y párrafos a los comienzos de páginas";
     Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
     Text[ danish ] = "Læg afsnits- og tabelafstande til ved sidebegyndelser";
     Text[ swedish ] = "Lägg till stycke- och ta~bellavstånd i början av sidor";
     Text[ polish ] = "Dodaj odstêpy a~kapitów i tabel na pocz¹tku stron";
     Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
-    Text[ japanese ] = "’i—‚¨‚æ‚Ñ•\\ŠÔŠu‚ğÍß°¼Ş‚Ìn‚ß‚É•t‰Á‚·‚é";
+    Text[ japanese ] = "Íß°¼Ş‚Ìn‚ß‚É’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ•t‚¯‚é";
     Text[ korean ] = "ÆäÀÌÁö ½ÃÀÛ¿¡ ´Ü¶ô°ú Ç¥ °£°İ Ãß°¡";
-    Text[ chinese_simplified ] = "ÔÚÒ³ÃæÆğÊ¼´¦Ôö¼Ó¶ÎÂäºÍ±í¸ñµÄ¼ä¸ô";
+    Text[ chinese_simplified ] = "ÔÚÒ³ÃæÆğÊ¼´¦¼ÓÈë¶ÎÂäºÍ±í¸ñµÄ¼ä¸ô";
     Text[ chinese_traditional ] = "¦b­¶¶}ÀY¦ì¸m¥[¤J¬q¸¨»Pªí®æ¤§¶¡ªº¶¡¹j";
     Text[ arabic ] = "ÅÖÇİÉ ÇáİŞÑÉ æÊÈÇÚÏ ÇáÌÏÇæá Åáì ÈÏÇíÉ ÇáÕİÍÇÊ";
     Text[ turkish ] = "Paragraf ve tablo aralıklarını sayfa başlarına ekle";
