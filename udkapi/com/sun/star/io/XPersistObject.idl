@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistObject.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-11 13:36:41 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 09:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ interface XObjectOutputStream;
      itself again (by using the read method). Therefor it must be
      createable by name via a factory, which is in general
      the global service manager. The create and read mechanism
-     is implemented by the <type>com::sun::star::io::ObjectInputStream</type>.
+     is implemented by the <type scope="com::sun::star::io">ObjectInputStream</type>.
 
      <p>The serialization format (the series of strings, integers, objects) must
      be specified at the specification of the concrete service.
@@ -148,7 +148,4 @@ interface XPersistObject: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
