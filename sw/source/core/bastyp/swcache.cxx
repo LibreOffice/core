@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 13:13:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 13:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,12 +198,12 @@ SwCache::~SwCache()
     static USHORT nOpenMode = STREAM_WRITE | STREAM_TRUNC;
     String sExt(String::CreateFromAscii(".log"));
     utl::TempFile aTempFile( String::CreateFromAscii("swcache"), &sExt );
-    SvFileStream* pStream = aTempFile.GetStream( nOpenMode );
+    SvStream* pStream = aTempFile.GetStream( nOpenMode );
     nOpenMode = STREAM_WRITE;
 
-    if( !aStream.GetError() )
+    if( !pStream->GetError() )
     {
-        aStream.Seek( STREAM_SEEK_TO_END );
+        pStream->Seek( STREAM_SEEK_TO_END );
         ByteString sOut( aName ); sOut += '\n';
         (( sOut += "Anzahl neuer Eintraege:             " ) += nAppend )+= '\n';
         (( sOut += "Anzahl Insert auf freie Plaetze:    " ) += nInsertFree )+= '\n';
@@ -219,9 +219,9 @@ SwCache::~SwCache()
         (( sOut += "Anzahl Cache-Erweiterungen:         " ) += nIncreaseMax )+= '\n';
         (( sOut += "Anzahl Cache-Verkleinerungen:       " ) += nDecreaseMax )+= '\n';
 
-        aStream << sOut.GetBuffer()
-                << "-------------------------------------------------------"
-                << endl;
+        *pStream << sOut.GetBuffer()
+                 << "-------------------------------------------------------"
+                 << endl;
     }
     Check();
 #endif
