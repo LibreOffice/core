@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 16:31:36 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 18:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@ class ScDocument;
 class ScMatrix;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
-
-#define SC_DDE_DEFAULT      0
-#define SC_DDE_ENGLISH      1
-#define SC_DDE_TEXT         2
 
 class ScDdeLink : public SvBaseLink, public SfxBroadcaster
 {
