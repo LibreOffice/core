@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: fs $ $Date: 2001-12-20 13:30:16 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:41:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,18 +62,17 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=dialogs
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
-SRCFILES=		filedlg2.src	\
+SRS1NAME=$(TARGET)
+SRC1FILES=		filedlg2.src	\
                 prnsetup.src	\
                 printdlg.src	\
                 colrdlg.src		\
