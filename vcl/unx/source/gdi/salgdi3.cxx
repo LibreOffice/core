@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:04:39 $
+ *  last change: $Author: hdu $ $Date: 2002-07-19 17:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,10 +1028,10 @@ void SalGraphicsData::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     Point aPos;
     static const int MAXGLYPHS = 160;
+    long aGlyphAry[ MAXGLYPHS ];
     int nMaxGlyphs = rLayout.GetOrientation() ? 1 : MAXGLYPHS;
     for( int nStart = 0;;)
     {
-        long aGlyphAry[ MAXGLYPHS ];
         int nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, NULL );
         if( !nGlyphs )
             break;
@@ -1465,27 +1465,30 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
     if( maGraphicsData.m_pPrinterGfx != NULL )
     {
 #define MAX_GLYPHS 160
-        const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>( rSalLayout );
         long        aGlyphAry[MAX_GLYPHS];
+        long        aWidthAry[MAX_GLYPHS];
         sal_Int32   aIdxAry[MAX_GLYPHS];
         sal_Unicode aUnicodes[MAX_GLYPHS];
         memset( aUnicodes, 0, sizeof(aUnicodes));
         Point aPos;
+        bool bIsTruetype = (psp::PrintFontManager::get().getFontType( maGraphicsData.m_pPrinterGfx->GetFontID() ) == psp::fonttype::TrueType);
+        const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>( rSalLayout );
         int nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-        for( int nStart = 0, nGlyphs = 1; nGlyphs > 0; )
+        for( int nStart = 0;; )
         {
-            nGlyphs = rLayout.GetNextGlyphs( MAX_GLYPHS, aGlyphAry, aPos, nStart, aIdxAry );
-            if( nGlyphs )
+            int nGlyphs = rLayout.GetNextGlyphs( MAX_GLYPHS, aGlyphAry, aPos, nStart, aWidthAry );
+            if( !nGlyphs )
+                break;
+
+            long nXOffset = 0;
+            for( int j = 0; j < nGlyphs; j++ )
             {
-                for( int j = 0; j < nGlyphs; j++ )
-                    aIdxAry[ j ] /= nUnitsPerPixel;
-                if( psp::PrintFontManager::get().getFontType( maGraphicsData.m_pPrinterGfx->GetFontID() ) != psp::fonttype::TrueType )
-                {
-                    for( int i = 0; i < nGlyphs; i++ )
-                        aUnicodes[i] = aGlyphAry[i];
-                }
-                maGraphicsData.m_pPrinterGfx->DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphs, aIdxAry+1 );
+                nXOffset += aWidthAry[ i ];
+                aIdxAry[ j ] = nXOffset / nUnitsPerPixel;
+                aUnicodes[i] = bIsTruetype ? 0 : aGlyphAry[i];
             }
+
+            maGraphicsData.m_pPrinterGfx->DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphs, aIdxAry );
         }
     }
     else
