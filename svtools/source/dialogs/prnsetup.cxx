@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:50:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <vcl/print.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <svtdata.hxx>
 #include "prnsetup.hrc"
@@ -308,10 +310,10 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
     maFiLocation    ( this, SvtResId( FI_LOCATION ) ),
     maFtComment     ( this, SvtResId( FT_COMMENT ) ),
     maFiComment     ( this, SvtResId( FI_COMMENT ) ),
+    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) ),
     maBtnOK         ( this, SvtResId( BTN_OK ) ),
     maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SvtResId( BTN_HELP ) ),
-    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) )
+    maBtnHelp       ( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
 
