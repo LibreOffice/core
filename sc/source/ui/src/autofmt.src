@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:08:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "~Formát";
     };
     Window WND_PREVIEW
     {
@@ -165,6 +166,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Automaticky přizpůsobit výšku a šířku";
         Text[ hebrew ] = "Breite/Höhe an~passen";
         Text[ hindi ] = "चौड़ाई और ऊँचाई को स्व~यं योग्य बनाओ";
+        Text[ slovak ] = "A~utomaticky prispôsobiť šírku a výšku";
     };
     CheckBox BTN_BORDER
     {
@@ -200,6 +202,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Okraje";
         Text[ hebrew ] = "‮מסגרות‬";
         Text[ hindi ] = "~किनारें";
+        Text[ slovak ] = "Okr~aje";
     };
     CheckBox BTN_FONT
     {
@@ -235,6 +238,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "फॉ~न्ट";
+        Text[ slovak ] = "Písm~o";
     };
     CheckBox BTN_PATTERN
     {
@@ -270,6 +274,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Vzor";
         Text[ hebrew ] = "~Muster";
         Text[ hindi ] = "~नमूना";
+        Text[ slovak ] = "Vzo~rka";
     };
     CheckBox BTN_ALIGNMENT
     {
@@ -305,6 +310,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "~Ausrichtung";
         Text[ hindi ] = "पंक्तिकर~ण";
+        Text[ slovak ] = "~Zarovnanie";
     };
     CheckBox BTN_NUMFORMAT
     {
@@ -340,6 +346,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Formát čísla";
         Text[ hebrew ] = "‮תבנית מספר‬";
         Text[ hindi ] = "~संख्या रचना";
+        Text[ slovak ] = "For~mát čísla";
     };
     FixedLine FL_FORMATTING
     {
@@ -374,6 +381,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Formátování";
         Text[ hebrew ] = "Formatierung";
         Text[ hindi ] = "रचना करना";
+        Text[ slovak ] = "Formátovanie";
     };
     OKButton BTN_OK
     {
@@ -434,6 +442,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_REMOVE
     {
@@ -469,6 +478,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
 
     PushButton BTN_RENAME
@@ -504,6 +514,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Přejmenovat";
         Text[ hebrew ] = "Um~benennen";
         Text[ hindi ] = "~पुनः नाम दो";
+        Text[ slovak ] = "P~remenovať";
     };
 
     HelpButton BTN_HELP
@@ -545,6 +556,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Přidat automatický formát";
         Text[ hebrew ] = "AutoFormat hinzufügen";
         Text[ hindi ] = "स्वचालित रचना जोड़ो";
+        Text[ slovak ] = "Pridať automatický formát";
     };
 
     String STR_RENAME_TITLE
@@ -576,6 +588,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Přejmenovat automatický formát";
         Text[ hebrew ] = "Autoformat umbenennen";
         Text[ hindi ] = "स्वचालित रचना को पुनः नाम दो";
+        Text[ slovak ] = "Premenovať automatický formát";
     };
 
     String STR_ADD_LABEL
@@ -608,6 +621,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
+        Text[ slovak ] = "Názov";
     };
     String STR_DEL_TITLE
     {
@@ -640,6 +654,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Odstranit automatický formát";
         Text[ hebrew ] = "AutoFormat löschen";
         Text[ hindi ] = "स्वचालित रचना को मिटाओ";
+        Text[ slovak ] = "Odstrániť automatický formát";
     };
     String STR_DEL_MSG
     {
@@ -672,6 +687,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Opravdu chcete smazat automatický formát # ?";
         Text[ hebrew ] = "Wollen Sie das AutoFormat # wirklich löschen?";
         Text[ hindi ] = "आप सचमुच # स्वचालित रचना को मिटाना चाहते है?";
+        Text[ slovak ] = "Určite chcete zmazať # AutoFomat?";
     };
     String STR_BTN_CLOSE
     {
@@ -704,6 +720,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     String STR_JAN
     {
@@ -735,6 +752,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Led";
         Text[ hebrew ] = "Jan";
         Text[ hindi ] = "जनवरी";
+        Text[ slovak ] = "Jan";
     };
     String STR_FEB
     {
@@ -766,6 +784,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Úno";
         Text[ hebrew ] = "Feb";
         Text[ hindi ] = "फरवरी";
+        Text[ slovak ] = "Feb";
     };
     String STR_MAR
     {
@@ -798,6 +817,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Bře";
         Text[ hebrew ] = "Mär";
         Text[ hindi ] = "मार्च";
+        Text[ slovak ] = "Mar";
     };
     String STR_NORTH
     {
@@ -829,6 +849,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Sever";
         Text[ hebrew ] = "Nord";
         Text[ hindi ] = "उत्तर";
+        Text[ slovak ] = "Sever";
     };
     String STR_MID
     {
@@ -860,6 +881,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Střed";
         Text[ hebrew ] = "Mitte";
         Text[ hindi ] = "मध्य";
+        Text[ slovak ] = "Stred";
     };
     String STR_SOUTH
     {
@@ -892,6 +914,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Jih";
         Text[ hebrew ] = "Süd";
         Text[ hindi ] = "दक्षिण";
+        Text[ slovak ] = "Juh";
     };
     String STR_SUM
     {
@@ -923,6 +946,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ czech ] = "Celkem";
         Text[ hebrew ] = "Summe";
         Text[ hindi ] = "कुल";
+        Text[ slovak ] = "Celkom";
     };
     Text[ chinese_simplified ] = "自动格式";
     Text[ russian ] = "����������";
@@ -939,7 +963,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ czech ] = "Automatický formát";
     Text[ hebrew ] = "‮עיצוב אוטומטי‬";
     Text[ hindi ] = "स्वचालित रचना";
+    Text[ slovak ] = "Automatický formát";
 };
+
+
 
 
 
