@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polyscan.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #include <string.h>
 #include <tools/new.hxx>
 #include "salbtype.hxx"
-#include "poly.hxx"
 #include "polyscan.hxx"
+
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
+#endif
 
 // ----------------
 // - PolyScanline -
