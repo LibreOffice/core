@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:11:38 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
     Text[ chinese_traditional ] = "ε…¨ιƒ¨δ»£ζ›Ώ";
     Text[ arabic ] = "ΗΣΚΘΟΗα Ηαία";
     Text[ greek ] = "Αντικατ. όλα";
-    Text[ korean ] = "λª¨λ‘ λ€μ²΄";
+    Text[ korean ] = "λª¨λ‘ λ°”κΎΈκΈ°";
     Text[ turkish ] = "Tόmόnό deπiώtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Reemplazar todo";
@@ -278,7 +278,7 @@ String RID_SVXITEMS_SEARCHSTYL_CHAR
     Text[ chinese_traditional ] = "ε­—ε…ƒζ¨£εΌ";
     Text[ arabic ] = "δγΨ ΗαΓΝΡέ";
     Text[ greek ] = "Στυλ χαρακτήρων";
-    Text[ korean ] = "λ¬Έμ μ ν•";
+    Text[ korean ] = "λ¬Έμ ν…ν”λ¦Ώ";
     Text[ turkish ] = "Karakter biηimi";
     Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     Text[ catalan ] = "Estilo de caracteres";
@@ -305,7 +305,7 @@ String RID_SVXITEMS_SEARCHSTYL_PARA
     Text[ chinese_traditional ] = "ζ®µθ½ζ¨£εΌ";
     Text[ arabic ] = "δγΨ έήΡΙ";
     Text[ greek ] = "Πρότυπο παραγράφου";
-    Text[ korean ] = "λ‹¨λ½ μ ν•";
+    Text[ korean ] = "λ‹¨λ½ ν…ν”λ¦Ώ";
     Text[ turkish ] = "Paragraf biηimi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Estilo de pαrrafo";
@@ -332,7 +332,7 @@ String RID_SVXITEMS_SEARCHSTYL_FRAME
     Text[ chinese_traditional ] = "θ¨ζ΅†ζ¨£εΌ";
     Text[ arabic ] = "δγΨ ίΗΟΡ";
     Text[ greek ] = "Στυλ πλαισίου";
-    Text[ korean ] = "ν”„λ μ„ μ ν•";
+    Text[ korean ] = "ν”„λ μ„ ν…ν”λ¦Ώ";
     Text[ turkish ] = "Ηerηeve biηimi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Estilo de marcos";
@@ -359,7 +359,7 @@ String RID_SVXITEMS_SEARCHSTYL_PAGE
     Text[ chinese_traditional ] = "ι ιΆζ¨£εΌ";
     Text[ arabic ] = "δγΨ ΥέΝΙ";
     Text[ greek ] = "Πρότυπο σελίδας";
-    Text[ korean ] = "νμ΄μ§€ μ ν•";
+    Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ";
     Text[ turkish ] = "Sayfa biηimi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Estilo de pαgina";
@@ -1896,7 +1896,7 @@ String RID_SVXITEMS_WEIGHT_ULTRABOLD
     Text[ chinese_traditional ] = "η‰Ήη²—";
     Text[ arabic ] = "ΪΡνΦ ααΫΗνΙ";
     Text[ greek ] = "πολύ έντονα";
-    Text[ korean ] = "κµµκ² (ultra)";
+    Text[ korean ] = "μ•„μ£Ό κµµκ²";
     Text[ turkish ] = "Ηok kalύn";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ultra negrita";
@@ -2109,7 +2109,7 @@ String RID_SVXITEMS_UL_LONGDASH
     Text[ chinese_traditional ] = "εΊ•η·(ι•·εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (ΤυΡσΨ ΨζναΙ)";
     Text[ greek ] = "Yπογράμμιση (Μεγάλη παύλα)";
-    Text[ korean ] = "λ°‘μ¤„ (κΈ΄ λ€μ‹)";
+    Text[ korean ] = "λ°‘μ¤„(κΈ΄ λ€μ‹)";
     Text[ turkish ] = "Altύ ηizili (uzun ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (trazo largo)";
@@ -2135,7 +2135,7 @@ String RID_SVXITEMS_UL_DASHDOT
     Text[ chinese_traditional ] = "εΊ•η·(ι»εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (δήΨΙ ΤΡΨΙ)";
     Text[ greek ] = "Yπογράμμιση (Τελεία Παύλα)";
-    Text[ korean ] = "λ°‘μ¤„ (μΌμ  μ‡„μ„ )";
+    Text[ korean ] = "λ°‘μ¤„(μΌμ  μ‡„μ„ )";
     Text[ turkish ] = "Altύ ηizili (nokta ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (punto trazo)";
@@ -2161,7 +2161,7 @@ String RID_SVXITEMS_UL_DASHDOTDOT
     Text[ chinese_traditional ] = "εΊ•η·(ι»ι»εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (δήΨΙ δήΨΙ ΤΡΨΙ)";
     Text[ greek ] = "Yπογράμμιση (Τελεία Τελεία Παύλα)";
-    Text[ korean ] = "λ°‘μ¤„ (μ΄μ  μ‡„μ„ )";
+    Text[ korean ] = "λ°‘μ¤„(μ΄μ  μ‡„μ„ )";
     Text[ turkish ] = "Altύ ηizili (nokta nokta ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (punto punto trazo)";
@@ -2187,7 +2187,7 @@ String RID_SVXITEMS_UL_SMALLWAVE
     Text[ chinese_traditional ] = "εΊ•η·(ε°ζ³Άζµªη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (γζΜΙ ΥΫνΡΙ)";
     Text[ greek ] = "Yπογράμμιση (Κύμα μικρό)";
-    Text[ korean ] = "λ°‘μ¤„ (μ‘μ€ νμ„ )";
+    Text[ korean ] = "λ°‘μ¤„(μ‘μ€ νμ„ )";
     Text[ turkish ] = "Altύ ηizili (kόηόk dalga)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (ondulaciσn pequeρa)";
@@ -2213,7 +2213,7 @@ String RID_SVXITEMS_UL_WAVE
     Text[ chinese_traditional ] = "εΊ•η·(ζ³Άζµªη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (γζΜΙ)";
     Text[ greek ] = "Yπογράμμιση (Κύμα)";
-    Text[ korean ] = "λ°‘μ¤„ (νμ„ )";
+    Text[ korean ] = "λ°‘μ¤„(νμ„ )";
     Text[ turkish ] = "Altύ ηizili (dalga)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (ondulado)";
@@ -2239,7 +2239,7 @@ String RID_SVXITEMS_UL_DOUBLEWAVE
     Text[ chinese_traditional ] = "εΊ•η·(ι›™ζ³Άζµªη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν (γζΜΙ γÒΟζΜΙ)";
     Text[ greek ] = "Yπογράμμιση (Κύμα διπλό)";
-    Text[ korean ] = "λ°‘μ¤„ (μ΄μ¤‘ νμ„ )";
+    Text[ korean ] = "λ°‘μ¤„(μ΄μ¤‘ νμ„ )";
     Text[ turkish ] = "Altύ ηizili (ηift dalga)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (ondulado doble)";
@@ -2343,7 +2343,7 @@ String RID_SVXITEMS_UL_BOLDLONGDASH
     Text[ chinese_traditional ] = "εΊ•η·(η²—ε‹ι•·εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν ΪΡνΦ (ΤΡΨΙ ΨζναΙ)";
     Text[ greek ] = "Υπογράμμιση (Μεγάλη παύλα, έντονα)";
-    Text[ korean ] = "λ°‘μ¤„ (μΌμ  μ‡„μ„ , κµµκ²)";
+    Text[ korean ] = "λ°‘μ¤„(μΌμ  μ‡„μ„ , κµµκ²)";
     Text[ turkish ] = "Altύ ηizili (uzun kalύn ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (trazo negrita largo)";
@@ -2369,7 +2369,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOT
     Text[ chinese_traditional ] = "εΊ•η·(η²—ε‹ι»εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν ΪΡνΦ (δήΨΙ ΤΡΨΙ)";
     Text[ greek ] = "Υπογράμμιση (Τελεία-Παύλα, έντονα)";
-    Text[ korean ] = "λ°‘μ¤„ (μΌμ  μ‡„μ„ , κµµκ²)";
+    Text[ korean ] = "λ°‘μ¤„(μΌμ  μ‡„μ„ , κµµκ²)";
     Text[ turkish ] = "Altύ ηizili (kalύn nokta ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (punto trazo negrita)";
@@ -2395,7 +2395,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOTDOT
     Text[ chinese_traditional ] = "εΊ•η·(η²—ε‹ι»ι»εƒη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν ΪΡνΦ (δήΨΙ δήΨΙ ΤΡΨΙ)";
     Text[ greek ] = "Υπογράμμιση (Τελεία-Τελεία-Παύλα, έντονα)";
-    Text[ korean ] = "λ°‘μ¤„ (μ΄μ  μ‡„μ„ , κµµκ²)";
+    Text[ korean ] = "λ°‘μ¤„(μ΄μ  μ‡„μ„ , κµµκ²)";
     Text[ turkish ] = "Altύ ηizili (kalύn nokta nokta ηizgi)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (punto punto trazo negrita)";
@@ -2421,7 +2421,7 @@ String RID_SVXITEMS_UL_BOLDWAVE
     Text[ chinese_traditional ] = "εΊ•η·(η²—ε‹ζ³Άζµªη·)";
     Text[ arabic ] = "ΞΨ ΚΝΚν ΪΡνΦ (γζΜΙ)";
     Text[ greek ] = "Υπογράμμιση (Έντονη κυματιστή παύλα)";
-    Text[ korean ] = "λ°‘μ¤„ (κµµμ€ νμ„ )";
+    Text[ korean ] = "λ°‘μ¤„(κµµμ€ νμ„ )";
     Text[ turkish ] = "Altύ ηizili (kalύn dalga)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado (ondulado negrita)";
@@ -2826,7 +2826,7 @@ String RID_SVXITEMS_ESCAPEMENT_AUTO
     Text[ chinese_traditional ] = "θ‡ªε‹•";
     Text[ arabic ] = "ΚαήΗΖν";
     Text[ greek ] = "αυτόματα";
-    Text[ korean ] = "μλ™μΌλ΅";
+    Text[ korean ] = "μλ™";
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "automαtico";
@@ -3281,7 +3281,7 @@ String RID_ATTR_TABSTOP
     Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦";
     Text[ arabic ] = "ΪαΗγΗΚ ΗαΜΟζαΙ";
     Text[ greek ] = "Στηλοθέτες";
-    Text[ korean ] = "νƒ­ μ •μ§€";
+    Text[ korean ] = "νƒ­ μ„μΉ";
     Text[ turkish ] = "Sekme duraklarύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabuladores";
@@ -3782,7 +3782,7 @@ String RID_ATTR_CHAR_CHARSETCOLOR
     Text[ polish ] = "Kolor zbioru znakσw";
     Text[ portuguese_brazilian ] = "Charset Color";
     Text[ japanese ] = "ζ–‡ε­—ε—γ®θ‰²";
-    Text[ korean ] = "λ¬Έμμ§‘ν•©  μƒ‰μƒ";
+    Text[ korean ] = "λ¬Έμμ§‘ν•© μƒ‰μƒ";
     Text[ chinese_simplified ] = "ε­—η¬¦ι›†ιΆθ‰²";
     Text[ chinese_traditional ] = "ε­—ε‹ι΅”θ‰²";
     Text[ arabic ] = "αζδ γΜγζΪΙ ΗαΓΝΡέ";
@@ -4279,7 +4279,7 @@ String RID_ATTR_PARA_MODEL
     Text[ chinese_traditional ] = "ι ιΆζ¨£εΌ";
     Text[ arabic ] = "δγΨ ΥέΝΙ";
     Text[ greek ] = "Πρότυπο σελίδας";
-    Text[ korean ] = "νμ΄μ§€ μ ν•";
+    Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ";
     Text[ turkish ] = "Sayfa biηimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de pαgina";
@@ -4359,7 +4359,7 @@ String RID_SINGLE_LINE1
     Text[ chinese_traditional ] = "ε–®οΉη΄°";
     Text[ arabic ] = "γέΡΟ΅ ΡένΪ";
     Text[ greek ] = "Απλό, λεπτό";
-    Text[ korean ] = "λ‹¨μΌ, μ–‡μ";
+    Text[ korean ] = "λ‹¨μΌ, μ–‡κ²";
     Text[ turkish ] = "Tek, έnce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sencilla, delgada";
@@ -4385,7 +4385,7 @@ String RID_SINGLE_LINE2
     Text[ chinese_traditional ] = "ε–®οΉη²—";
     Text[ arabic ] = "γέΡΟ΅ ΛΞνδ";
     Text[ greek ] = "Απλό, παχύ";
-    Text[ korean ] = "λ‹¨μΌ, λ‘κΊΌμ›€";
+    Text[ korean ] = "λ‹¨μΌ, κµµκ²";
     Text[ turkish ] = "Tek, Kalύn";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sencilla, gruesa";
@@ -4411,7 +4411,7 @@ String RID_SINGLE_LINE3
     Text[ chinese_traditional ] = "ε–®οΉεΎη²—";
     Text[ arabic ] = "γέΡΟ΅ ΛΞνδ ΜΟΗπ";
     Text[ greek ] = "Απλό, πολύ παχύ";
-    Text[ korean ] = "λ‹¨μΌ, λ§¤μ° λ‘κΊΌμ›€";
+    Text[ korean ] = "λ‹¨μΌ, μ•„μ£Ό κµµκ²";
     Text[ turkish ] = "Tek, Ηok kalύn";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sencilla, muy gruesa";
@@ -4598,7 +4598,7 @@ String RID_DOUBLE_LINE5
     Text[ chinese_traditional ] = "ι›™οΌε…§οΌη΄°η·οΌε¤–οΌη²—οΌι–“ι”οΌε¤§";
     Text[ arabic ] = "γÒΟζΜ΅ ΗαΟΗΞα: ΞΨ Οήνή΅ ΗαΞΗΡΜ: ΛΞνδ΅ ΗαΚΘΗΪΟ: ίΘνΡ";
     Text[ greek ] = "Διπλή, Εσωτερικά: λεπτή γραμμή, Εξωτερικά: έντονη, Απόσταση: μικρή";
-    Text[ korean ] = "μ΄μ¤‘, μ•: κ°€λ” μ„ , λ°”κΉ¥: λ‘κ»κ², κ°„κ²©: ν¬κ²";
+    Text[ korean ] = "μ΄μ¤‘, μ•: κ°€λ” μ„ , λ°”κΉ¥: κµµκ², κ°„κ²©: ν¬κ²";
     Text[ turkish ] = "Ηift, έη: ince ηizgi, Dύώ: kalύn, Aralύk: bόyόk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doble, interior: Lνnea fina, exterior: gruesa, Espacio: grande";
@@ -4625,7 +4625,7 @@ String RID_DOUBLE_LINE6
     Text[ chinese_traditional ] = "ι›™οΌε…§οΌη΄°η·οΌε¤–οΌεΎη²—οΌι–“ι”οΌε¤§";
     Text[ arabic ] = "γÒΟζΜ΅ ΗαΟΗΞα: ΞΨ Οήνή΅ ΗαΞΗΡΜ: ΛΞνδ ΜΟΗπ΅ ΗαΚΘΗΪΟ: ίΘνΡ";
     Text[ greek ] = "Διπλή, Εσωτερικά: λεπτή γραμμή, Εξωτερικά: πολύ έντονη, Απόσταση: μεγάλη";
-    Text[ korean ] = "μ΄μ¤‘, μ•: κ°€λ” μ„ , λ°”κΉ¥: λ§¤μ° λ‘κ»κ², κ°„κ²©: ν¬κ²";
+    Text[ korean ] = "μ΄μ¤‘, μ•: κ°€λ” μ„ , λ°”κΉ¥: μ•„μ£Ό κµµκ², κ°„κ²©: ν¬κ²";
     Text[ turkish ] = "Ηift, έη: ince ηizgi, Dύώ: ηok kalύn, Aralύk: bόyόk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doble, interior: Lνnea fina, exterior: muy gruesa, Espacio: grande";
@@ -4652,7 +4652,7 @@ String RID_DOUBLE_LINE7
     Text[ chinese_traditional ] = "ι›™οΌε…§οΌη΄°οΌε¤–οΌη²—οΌι–“ι”οΌε¤§";
     Text[ arabic ] = "γÒΟζΜ΅ ΗαΟΗΞα: ΡένΪ΅ ΗαΞΗΡΜ: ΛΞνδ΅ ΗαΚΘΗΪΟ: ίΘνΡ";
     Text[ greek ] = "Διπλά, Εσωτερικά: λεπτό, Εξωτερικά: παχύ, Απόσταση: μεγάλη";
-    Text[ korean ] = "μ΄μ¤‘, μ•: μ–‡κ², λ°”κΉ¥: λ‘κ»κ², κ°„κ²©: ν¬κ²";
+    Text[ korean ] = "μ΄μ¤‘, μ•: μ–‡κ², λ°”κΉ¥: κµµκ², κ°„κ²©: ν¬κ²";
     Text[ turkish ] = "Ηift, έη: ince, Dύώ: kalύn, Aralύk: bόyόk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doble, interior: fina, exterior: gruesa, Espacio: grande";
@@ -4706,7 +4706,7 @@ String RID_DOUBLE_LINE9
     Text[ chinese_traditional ] = "ι›™οΌε…§οΌη²—οΌε¤–οΌεΎη²—οΌι–“ι”οΌε¤§";
     Text[ arabic ] = "γÒΟζΜ΅ ΗαΟΗΞα: ΛΞνδ΅ ΗαΞΗΡΜ: ΛΞνδ ΜΟΗπ΅ ΗαΚΘΗΪΟ: ίΘνΡ";
     Text[ greek ] = "Διπλά, Εσωτερικά: παχύ, Εξωτερικά: πολύ έντονο, Απόσταση: μεγάλη";
-    Text[ korean ] = "μ΄μ¤‘, μ•: λ‘κ»κ², λ°”κΉ¥: λ§¤μ° λ‘κ»κ², κ°„κ²©: ν¬κ²";
+    Text[ korean ] = "μ΄μ¤‘, μ•: λ‘κ»κ², λ°”κΉ¥: μ•„μ£Ό κµµκ², κ°„κ²©: ν¬κ²";
     Text[ turkish ] = "Ηift, έη: kalύn, Dύώ: ηok kalύn, Aralύk: bόyόk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doble, interior: gruesa, Exterior: muy gruesa, Espacio: grande";
@@ -4733,7 +4733,7 @@ String RID_DOUBLE_LINE10
     Text[ chinese_traditional ] = "ι›™οΌε…§οΌεΎη²—οΌε¤–οΌη²—οΌι–“ι”οΌε¤§";
     Text[ arabic ] = "γÒΟζΜ΅ ΗαΟΗΞα: ίΘνΡ ΜΟΗπ΅ ΗαΞΗΡΜ: ΛΞνδ΅ ΗαΚΘΗΪΟ: ίΘνΡ";
     Text[ greek ] = "Διπλά, Εσωτερικά:πολύ παχύ, Εξωτερικά: παχύ, Απόσταση: μεγάλη";
-    Text[ korean ] = "μ΄μ¤‘, μ•: λ§¤μ° λ‘κ»κ², λ°”κΉ¥: λ‘κ»κ², κ°„κ²©: ν¬κ²";
+    Text[ korean ] = "μ΄μ¤‘, μ•: λ§¤μ° κµµκ², λ°”κΉ¥: κµµκ², κ°„κ²©: ν¬κ²";
     Text[ turkish ] = "Ηift, έη: ηok kalύn, Dύώ: kalύn, Aralύk: bόyόk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doble, interior: muy gruesa, Exterior: gruesa, Espacio: grande";
@@ -4785,7 +4785,7 @@ String RID_SVXITEMS_HORJUST_STANDARD
     Text[ chinese_traditional ] = "ζ°΄εΉ³ε°ι½ ζ¨™ζΊ–";
     Text[ arabic ] = "γΝΗΠΗΙ ΓέήνΙ ήνΗΣνΙ";
     Text[ greek ] = "Οριζόντια στοίχιση ως προεπιλογή";
-    Text[ korean ] = "μν‰ λ§μ¶¤,  κΈ°λ³Έ";
+    Text[ korean ] = "μν‰ λ§μ¶¤, κΈ°λ³Έ";
     Text[ turkish ] = "Yatay hizalama (standart)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaciσn horizontal estαndar";
@@ -4947,7 +4947,7 @@ String RID_SVXITEMS_VERJUST_STANDARD
     Text[ chinese_traditional ] = "ζ¨™ζΊ–ε‚η›΄ε°ι½";
     Text[ arabic ] = "γΝΗΠΗΙ ΡΓΣνΙ ήνΗΣνΙ";
     Text[ greek ] = "Οριζόντια στοίχιση ως προεπιλογή";
-    Text[ korean ] = "μμ§ λ§μ¶¤,  κΈ°λ³Έ";
+    Text[ korean ] = "μμ§ λ§μ¶¤, κΈ°λ³Έ";
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaciσn vertical estαndar";
@@ -5055,7 +5055,7 @@ String RID_SVXITEMS_ORI_STANDARD
     Text[ chinese_traditional ] = "ζ¨™ζΊ–θΌΈε…¥ζ–Ήε‘";
     Text[ arabic ] = "ΗΚΜΗε ΗαίΚΗΘΙ ΗαΗέΚΡΗΦν";
     Text[ greek ] = "Προεπιλογή κατεύθυνσης γραφής";
-    Text[ korean ] = "μ“°κΈ°λ°©ν–¥ ν‘μ¤€";
+    Text[ korean ] = "μ“°κΈ° λ°©ν–¥ ν‘μ¤€";
     Text[ turkish ] = "Standart yazma yφnό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orientaciσn predeterminada";
@@ -5298,7 +5298,7 @@ String RID_SVXITEMS_AUTOKERN_FALSE
     Text[ chinese_traditional ] = "ε­—ζ―ι–“ι”δΈη›Έη­‰";
     Text[ arabic ] = "ΘΟζδ Κήδνδ ΓΝΡέ ÒζΜν";
     Text[ greek ] = "Χωρίς διαγραμμάτωση ανά ζεύγη";
-    Text[ korean ] = "μ»¤λ‹, μ  μ•„λ‹";
+    Text[ korean ] = "μ»¤λ‹, μ μ•„λ‹";
     Text[ turkish ] = "Aralύk azaltma yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin ajuste par entre caracteres";
@@ -5889,7 +5889,7 @@ String RID_SVXITEMS_BOXINF_TABLE_TRUE
     Text[ chinese_traditional ] = "θ΅¨ζ Ό";
     Text[ arabic ] = "ΗαΜΟζα";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "ν…μ΄λΈ”";
+    Text[ korean ] = "μ‹νΈ";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla";
@@ -5916,7 +5916,7 @@ String RID_SVXITEMS_BOXINF_TABLE_FALSE
     Text[ chinese_traditional ] = "δΈζ―θ΅¨ζ Ό";
     Text[ arabic ] = "ΘΟζδ ΜΟζα";
     Text[ greek ] = "Όχι πίνακα";
-    Text[ korean ] = "ν…μ΄λΈ” μ—†μ";
+    Text[ korean ] = "μ‹νΈ μ—†μ";
     Text[ turkish ] = "Tablo deπil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin tabla";
@@ -6671,7 +6671,7 @@ String RID_SVXITEMS_PAGE_COMPLETE
     Text[ chinese_traditional ] = "ι ιΆε‚™θ¨»οΌ ";
     Text[ arabic ] = "ζΥέ ΗαΥέΝΙ: ";
     Text[ greek ] = "Περιγραφή σελίδας: ";
-    Text[ korean ] = "μª½ μ„¤λª…: ";
+    Text[ korean ] = "νμ΄μ§€ μ„¤λª…: ";
     Text[ turkish ] = "Sayfa aηύklamasύ: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Descripciσn de la pαgina:  ";
@@ -7133,7 +7133,7 @@ String RID_SVXITEMS_HYPHEN_MINTRAIL
     Text[ chinese_traditional ] = "ε­—ε…ƒε¨θ΅ι¦–";
     Text[ arabic ] = "ΓΝΡέ ΪδΟ ΘΟΗνΙ ΗαΣΨΡ";
     Text[ greek ] = "Χαρακτήρες στην αρχή της γραμμής";
-    Text[ korean ] = "μ¤„ μ‹μ‘λ¶€λ¶„μ— λ¬Έμ";
+    Text[ korean ] = "μ¤„ μ‹μ‘ λ¶€λ¶„μ— λ¬Έμ";
     Text[ turkish ] = "Satύr baώύnda karakterler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "caracteres al comienzo de la lνnea";
@@ -7187,7 +7187,7 @@ String RID_SVXITEMS_PAGEMODEL_COMPLETE
     Text[ chinese_traditional ] = "ι ιΆζ¨£εΌοΌ ";
     Text[ arabic ] = "δγΨ ΗαΥέΝΙ: ";
     Text[ greek ] = "Πρότυπο σελίδας: ";
-    Text[ korean ] = "μª½ μ ν•: ";
+    Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ: ";
     Text[ turkish ] = "Sayfa biηimi: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de pαgina:  ";
@@ -7214,7 +7214,7 @@ String RID_SVXITEMS_KERNING_COMPLETE
     Text[ chinese_traditional ] = "ε­—ζ―ι–“ι”η›Έη­‰ ";
     Text[ arabic ] = "Κήδνδ ΗαΓΝΡέ ";
     Text[ greek ] = "Διαγραμμάτωση ";
-    Text[ korean ] = "μ»¤λ‹ ";
+    Text[ korean ] = "μ»¤λ‹";
     Text[ turkish ] = "Aralύk azaltma ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajuste entre caracteres   ";
@@ -7554,7 +7554,7 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
     Text[ polish ] = "Kσ³ko wype³nione ";
     Text[ portuguese_brazilian ] = "Filled ring ";
     Text[ japanese ] = "ε΅—γ‚γ¤γ¶γ—γ®δΈΈ ";
-    Text[ korean ] = "μ±„μ›μ§„ μ› ";
+    Text[ korean ] = "μ±„μ΄ μ› ";
     Text[ chinese_simplified ] = "ε……ε΅«η„ε†ε½Ά ";
     Text[ chinese_traditional ] = "ε……ε΅«η„ε“ε½Ά ";
     Text[ turkish ] = "Filled ring ";
@@ -8172,6 +8172,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
