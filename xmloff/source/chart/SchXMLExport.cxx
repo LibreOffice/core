@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:51:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,10 +676,14 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                 switch( aLegendPos )
                 {
                     case chart::ChartLegendPosition_LEFT:
-                        msString = GetXMLToken(XML_LEFT);
+//                      msString = GetXMLToken(XML_LEFT);
+                        // #i35421# change left->start (not clear why this was done)
+                        msString = GetXMLToken(XML_START);
                         break;
                     case chart::ChartLegendPosition_RIGHT:
-                        msString = GetXMLToken(XML_RIGHT);
+//                      msString = GetXMLToken(XML_RIGHT);
+                        // #i35421# change right->end (not clear why this was done)
+                        msString = GetXMLToken(XML_END);
                         break;
                     case chart::ChartLegendPosition_TOP:
                         msString = GetXMLToken(XML_TOP);
