@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unload.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-07 09:28:33 $
+ *  last change: $Author: jl $ $Date: 2001-06-11 15:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
         if( pFunc)
         {
             //register module for the first time, set ref count to 1
-            g_moduleMap[module]= make_pair(1, pFunc);
+            g_moduleMap[module]= make_pair((sal_uInt32)1, pFunc);
         }
         else
             ret= sal_False;
