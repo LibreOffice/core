@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-30 14:13:45 $
+ *  last change: $Author: svesik $ $Date: 2001-04-18 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-#include <stl/list>
+#include <list>
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
