@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-11 07:31:01 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/processfactory.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
@@ -501,8 +499,7 @@ void WallpaperSink_Impl::RequestData( WallpaperLoader *pWallpaper,
     _pWallpaper = pWallpaper;
 
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > xMgr(
-            utl::getProcessServiceFactory() );
+        com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if ( !xMgr.is() )
         return;
 

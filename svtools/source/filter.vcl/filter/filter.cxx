@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-23 08:52:55 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #if defined UNX && defined ALPHA
 #include <fstream.hxx>
 #endif
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
@@ -2334,7 +2334,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
         {
             if( !rOStm.GetError() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
                 if( xMgr.is() )
                 {
