@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_funcdecl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,5 +112,3 @@ HF_FunctionDeclaration::Add_RaisesLine( const char * i_sRaisesText,
         << new Xml::XmlCode("( </p>\n");
     return *pNames;
 }
-
- 
