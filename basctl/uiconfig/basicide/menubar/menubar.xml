@@ -41,16 +41,7 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menu menu:id=".uno:ToolbarsMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:FunctionBarVisible" menu:helpid="5910" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ObjectBarVisible" menu:helpid="5905" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ToolBarVisible" menu:helpid="5909" menu:label="" />
-                    <menu:menuitem menu:id=".uno:InsertHyperlink" menu:helpid="10360" menu:label="" />
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:ConfigureToolboxVisible" menu:helpid="5908" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
             <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
             <menu:menuseparator/>
