@@ -133,3 +133,4 @@ hedabu: ..\inc\linksrc.hxx %_DEST%\inc%_EXT%\sfx2\linksrc.hxx
 hedabu: ..\inc\linkdlg.hxx %_DEST%\inc%_EXT%\sfx2\linkdlg.hxx
 hedabu: ..\inc\querystatus.hxx %_DEST%\inc%_EXT%\sfx2\querystatus.hxx
 hedabu: ..\inc\sfxstatuslistener.hxx %_DEST%\inc%_EXT%\sfx2\sfxstatuslistener.hxx
+hedabu: ..\inc\QuerySaveDocument.hxx %_DEST%\inc%_EXT%\sfx2\QuerySaveDocument.hxx
