@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-27 15:25:54 $
+#   last change: $Author: hr $ $Date: 2005-02-11 16:32:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ ZIP3LIST=javascript
 
 ZIP4FLAGS=-r
 ZIP4TARGET=ScriptsPython
-ZIP4LIST=python
+ZIP4LIST=python/HelloWorld.py python/Capitalise.py python/pythonSamples
 
 ZIP5FLAGS=-r
 ZIP5TARGET=scriptbindinglib
