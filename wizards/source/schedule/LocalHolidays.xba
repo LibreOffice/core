@@ -45,7 +45,6 @@ Dim lDate&amp;
 End Sub
 
 
-
 Sub FindWholeYearHolidays_FI(ByVal YearInt as Integer)
 	Dim OsternDate&amp;
 	&apos; New Year
@@ -79,9 +78,9 @@ Dim lDate&amp;, VierterAdvent&amp;
 	&apos;New Year
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;Nytårsdag&quot;, cHolidayType_Full)
 	lDate = CalEasterTable (YearInt)
-	&apos; carnival
+	&apos;&quot;Fasching&quot;
 	CalInsertBankholiday(lDate-49, &quot;Fastelavn&quot;, cHolidayType_Half)
-	&apos;&quot;Maundy Tuesday
+	&apos;&quot;Gründonnerstag&quot;
 	CalInsertBankholiday(lDate-3, &quot;Skærtorsdag&quot;, cHolidayType_Full)
 	&apos;&quot;Good Friday  &quot;
 	CalInsertBankholiday(lDate-2, &quot;Langfredag&quot;, cHolidayType_Full)
@@ -147,7 +146,6 @@ Dim lDate&amp;
 	CalInsertBankholiday(lDate, &quot;Pasqua&quot;, cHolidayType_Full)
 	CalInsertBankholiday(lDate+1, &quot;Lunedì dell&apos;Angelo&quot;, cHolidayType_Full)
 End Sub
-
 
 
 Sub FindWholeYearHolidays_TRK(ByVal YearInt as Integer)
@@ -274,7 +272,6 @@ Dim lDate as Long
 	&apos; All Saints Day
 	CalInsertBankholiday(lDate+56, &quot;Των Αγίων Πάντων&quot;, cHolidayType_Full)
 End Sub
-
 
 
 Sub FindWholeYearHolidays_SPAIN(ByVal YearInt as Integer)
@@ -540,7 +537,7 @@ End Sub
 Sub FindWholeYearHolidays_CN(YearInt as Integer)
 	CalculateChineseNewYear(YearInt)
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)			&apos; New Year
-	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)           &apos; Women&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)                       &apos; Women&apos;s Day
 	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)			&apos; Day of the deads
 	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)			&apos; International Labour Day
 	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)			&apos; Children&apos;s Day
@@ -629,6 +626,7 @@ Function CalculateJapaneseSpringDay(iSelYear as Integer)
 		CalculateJapaneseSpringDay() = Int(20.8431 + 0.242194)* (iSelYear-1980) - (Int((iSelYear-1980)/4))
 	End If
 End Function
+
 
 
 Function CalculateJapaneseAutumnDay(iSelYear as Integer)

@@ -114,7 +114,6 @@ ErrorHandling:
 End Sub
 
 
-
 Sub FormatCalCells(ColPos,RowPos,i as Integer)
 Dim oNameCell, oDateCell as Object
 Dim iCellValue as Long

@@ -12,7 +12,6 @@ Public Const cLANGUAGE_SPANISH = &quot;es&quot;, cLANGUAGE_SWEDISH = &quot;sv&qu
 
 Public BLNameList(0 To 16) as String
 
-
 &apos; R e s o u r c e   s t r i n g   c o n s t a n t s
 &apos; -------------------------------------------------
 &apos; Dialog labels start at 1000

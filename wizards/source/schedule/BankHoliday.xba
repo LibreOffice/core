@@ -124,24 +124,28 @@ End Function
 
 
 Sub CalInsertOwnDataInTables(ByVal iSelYear as Integer)
-	&apos; inserts the individual data from the table into the previously unsorted list
+	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
+	&apos;	bereits erstellte unsortierte Tabelle ein.	
 Dim CurEventName as String
-Dim CurEvYear as Integer
-Dim CurEvMonth as Integer
-Dim CurEvDay as Integer
+Dim CurYear as Integer
+Dim CurMonth as Integer
+Dim CurDay as Integer
 Dim LastIndex as Integer
 Dim i as Integer
-Dim DateStr as String
 	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
 	For i = 0 To LastIndex
-		If GetSelectedDateUnits(CurEvDay, CurEvMonth, CurEvYear, i) &lt;&gt; SBDATEUNDEFINED Then
-			If (CurEvYear = iSelYear) Or (CurEvYear = SBYEARUNDEFINED) Then
+		CurYear = CalGetYearOfEvent(i)
+		If DlgCalModel.lstOwnData.StringItemList(i) &lt;&gt; &quot;&quot; Then
+			If (CurYear = iSelYear) Or (CurYear = 0) Then
+				CurMonth = CalGetMonthofEvent(i)
+				CurDay = CalGetDayofEvent(i)
 				CurEventName = CalGetNameOfEvent(i)
-				CalInsertBankholiday(DateSerial(CurEvYear, CurEvMonth, CurEvDay), CurEventName, cHolidayType_Own)
+				CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
 			End If
 		End If
 	Next
 End Sub
+
 
 
 &apos; Finds eg the first,second Monday in a month
@@ -163,6 +167,7 @@ Dim lDate as Long
 End Function
 
 
+
 &apos; Finds the next weekday after a fixed date
 &apos; e.g. Midsummerfeast in Sweden: next Saturday after 20th June
 Function GetNextWeekDay(iYear as Integer, iMonth as Integer, iDay as Integer, iWeekDay as Integer)
@@ -180,7 +185,7 @@ End Function
 
 Sub AddFollowUpHolidays(ByVal lStartDate as Long, iCount as Integer, HolidayName as String, iType as Integer)
 Dim lDate as Long
-	For lDate = lStartDate + 1 To lStartDate + 4
+	For lDate = lStartDate + 1 To lStartDate + iCount
 		CalInsertBankholiday(lDate, HolidayName, iType)
 	Next lDate
 End Sub
