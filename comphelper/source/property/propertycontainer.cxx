@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-14 15:10:09 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 16:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,45 +334,42 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
         }
         break;
         case PropertyDescription::ltDerivedClassRealType:
-            // here we don't allow MAYBEVOID properties, so the type check is simple
-            // (remember that we don't support value conversions, so the value type has to be exactly the one
-            // required for the property)
+            // let the UNO runtime library do any possible conversion
+            // this may include a change of the type - for instance, if a LONG is required,
+            // but a short is given, then this is valid, as it can be converted without any potential
+            // data loss
 
-            // TODO: could we not even us uno_type_assignData for all types, not only for interfaces?
-
-            // okay, it was a lie, we have a conversion for interfaces ...
             Any aProperlyTyped;
             const Any* pNewValue = &_rValue;
 
             if (!_rValue.getValueType().equals(aPos->aType))
             {
-                sal_Bool bInterfaceQueried = sal_False;
-                // check if it are interfaces we can query for
-                if  (   (TypeClass_INTERFACE == _rValue.getValueTypeClass())
-                    &&  (TypeClass_INTERFACE == aPos->aType.getTypeClass())
+                sal_Bool bConverted = sal_False;
+
+                // a temporary any of the correct (required) type
+                aProperlyTyped = Any( NULL, aPos->aType.getTypeLibType() );
+                    // (need this as we do not want to overwrite the derived class member here)
+
+                if (    uno_type_assignData(
+                            const_cast<void*>(aProperlyTyped.getValue()), aProperlyTyped.getValueType().getTypeLibType(),
+                            const_cast<void*>(_rValue.getValue()), _rValue.getValueType().getTypeLibType(),
+                            cpp_queryInterface, cpp_acquire, cpp_release
+                        )
                     )
                 {
-                    // a temporary any of the correct (required) type
-                    aProperlyTyped = Any( NULL, aPos->aType.getTypeLibType() );
-                        // (need this as we do not want to overwrite the derived class member here)
-
-                    if (    uno_type_assignData(
-                                const_cast<void*>(aProperlyTyped.getValue()), aProperlyTyped.getValueType().getTypeLibType(),
-                                const_cast<void*>(_rValue.getValue()), _rValue.getValueType().getTypeLibType(),
-                                cpp_queryInterface, cpp_acquire, cpp_release
-                            )
-                        )
-                    {
-                        // could query for the requested interface
-                        bInterfaceQueried = sal_True;
-                        pNewValue = &aProperlyTyped;
-                    }
+                    // could query for the requested interface
+                    bConverted = sal_True;
+                    pNewValue = &aProperlyTyped;
                 }
 
-                if ( !bInterfaceQueried )
+                if ( !bConverted )
+                    // TODO: error message
                     throw IllegalArgumentException();
             }
 
+            // from here on, we should have the proper type
+            OSL_ENSURE( pNewValue->getValueType() == aPos->aType,
+                "OPropertyContainer::convertFastPropertyValue: conversion failed!" );
             bModified = !uno_type_equalData(
                             aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType(),
                             const_cast<void*>(pNewValue->getValue()), aPos->aType.getTypeLibType(),
@@ -559,6 +556,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2002/08/14 15:10:09  fs
+ *  #102329# convertFastPropertyValue: when the value is stored in an Any, and the property type is some XInterface-derivee, allow for queryInterface-calls, too (necessary for Java-calls)
+ *
  *  Revision 1.10  2002/01/09 15:05:39  fs
  *  #96068# uno_type_assignData instead of uno_type_copyData
  *
