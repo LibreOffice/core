@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:21:16 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2126,7 +2126,7 @@ Resource RID_GLOBSTR
         Text[ greek ] = "Change case";
         Text[ dutch ] = "Hoofd-/kleine letters belangrijk";
         Text[ french ] = "Casse/Caractères";
-        Text[ spanish ] = "Change case";
+        Text[ spanish ] = "Mayúsculas/minúsculas";
         Text[ italian ] = "Maiuscole/minuscole";
         Text[ danish ] = "Change case";
         Text[ swedish ] = "Bokstäver/tecken";
@@ -3323,7 +3323,7 @@ Resource RID_GLOBSTR
         Text[ swedish ] = "Källområdet innehåller delresultat som kan förvanska resultatet. Ska det ändå användas";
         Text[ polish ] = "Obszar Ÿród³owy zawiera sumy poœrednie, które mog¹ sfa³szowaæ wynik. Czy u¿yæ go pomimo tego?";
         Text[ portuguese_brazilian ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ japanese ] = "‚±‚Ì¿°½”ÍˆÍ‚É‚ÍA‹È‚ª‚Á‚½Œ‹‰Ê‚ğ“±‚­‰Â”\\«‚Ì‚ ‚é¬Œv‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B‚»‚ê‚ğg—p‚µ‚Ü‚·‚©B";
+        Text[ japanese ] = "‚±‚Ì¿°½”ÍˆÍ‚É‚ÍA³‚µ‚­‚È‚¢‡Œv‚ğo‚·‰Â”\\«‚Ì‚ ‚é¬Œv‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·Bg—p‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
         Text[ korean ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ chinese_simplified ] = "Õâ¸öÔ´ÇøÓòº¬ÓĞÒ»Ğ©¿ÉÄÜ»áÓ°Ïìµ½¼ÆËã½á¹ûµÄ×Ô¶¯ÇóºÍ¹«Ê½¡£»¹ÊÇÒªÊ¹ÓÃËü£¿";
         Text[ chinese_traditional ] = "³o­Ó·½°Ï°ì§t¦³¤@¨Ç¥i¯à·|¼vÅT¨ì­pºâµ²ªGªº¤p­p¤½¦¡¡CÁÙ¬O­n¨Ï¥Î¥¦¡H";
