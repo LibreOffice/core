@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:21:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ private:
 
     DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
     virtual ~SplashScreen();
+    void loadConfig();
     void initBitmap();
     void updateStatus();
 
@@ -127,8 +128,11 @@ private:
     static osl::Mutex _aMutex;
     Reference< XMultiServiceFactory > _rFactory;
 
-    VirtualDevice _vdev;
+    VirtualDevice   _vdev;
     Bitmap          _aIntroBmp;
+    Color           _cProgressColor;
+    OUString        _sExecutePath;
+
     sal_Int32 _iMax;
     sal_Int32 _iProgress;
     sal_Bool _bPaintBitmap;
@@ -137,7 +141,6 @@ private:
     long _height, _width, _tlx, _tly, _barwidth;
     const long _xoffset, _yoffset, _barspace;
     long _barheight;
-
 
 public:
     static const char* interfaces[];
