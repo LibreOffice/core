@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:56:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2043,7 +2043,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, BOOL bSelectFrm,
     if( bSelectFrm )
     {
         // Rahmen/Objecte selektieren
-        if( pPt && !SFX_APP()->IsDispatcherLocked() )
+        if( pPt && !rSh.GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
         {
             rSh.GetView().NoRotate();
             if( rSh.SelectObj( *pPt ))
