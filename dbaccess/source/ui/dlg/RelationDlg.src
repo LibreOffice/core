@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.11 2001-06-21 15:07:11 fme Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.12 2001-06-29 02:09:14 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: fme $ $Date: 2001-06-21 15:07:11 $ $Revision: 1.11 $
+ //  $Author: kz $ $Date: 2001-06-29 02:09:14 $ $Revision: 1.12 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -42,7 +42,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ greek ] = "εμπλεκόμενοι πίνακες";
         Text[ dutch ] = "betrokken tabellen";
         Text[ french ] = "Tables impliquιes";
-        Text[ spanish ] = "tablas implicadas";
+        Text[ spanish ] = "Tablas consideradas";
         Text[ italian ] = "Tabelle considerate";
         Text[ danish ] = "involverede tabeller";
         Text[ swedish ] = "inkluderade tabeller";
@@ -88,7 +88,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ greek ] = "εμπλεκόμενα πεδία";
         Text[ dutch ] = "betrokken velden";
         Text[ french ] = "Champs impliquιs";
-        Text[ spanish ] = "campos implicados";
+        Text[ spanish ] = "campos considerados";
         Text[ italian ] = "Campi considerati";
         Text[ danish ] = "involverede felter";
         Text[ swedish ] = "inkluderade fδlt";
@@ -123,7 +123,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ russian ] = "Οΰπΰμεςπϋ ξανξβλενθÿ";
         Text[ polish ] = "Aktualizacja opcji";
         Text[ japanese ] = "XVµΜίΌ®έ";
-        Text[ chinese_traditional ] = "§σ·sΏο¶µ";
+        Text[ chinese_traditional ] = "§σ·sªΊΏο¶µ";
         Text[ arabic ] = "ΞνΗΡΗΚ ΗαΚΝΟνΛ";
         Text[ greek ] = "Ενημέρωση επιλογών";
         Text[ korean ] = "Ύχµ¥ΐΜΖ® ΏΙΌΗ";
@@ -261,11 +261,11 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ french ] = "Options de suppression" ;
         Text [ dutch ] = "Wisopties" ;
         Text [ portuguese ] = "Opηυes de eliminaηγo" ;
-        Text[ chinese_simplified ] = "ΙΎ³ύΡ΅Οξ";
+        Text[ chinese_simplified ] = "ΙΎ³ύµΔΡ΅Οξ";
         Text[ russian ] = "Οΰπΰμεςπϋ σδΰλενθÿ";
         Text[ polish ] = "Opcje usuwania";
         Text[ japanese ] = "νµΜίΌ®έ";
-        Text[ chinese_traditional ] = "§R°£Ώο¶µ";
+        Text[ chinese_traditional ] = "§R°£ªΊΏο¶µ";
         Text[ arabic ] = "ΞνΗΡΗΚ ΗαΝΠέ";
         Text[ greek ] = "Επιλογές διαγραφής";
         Text[ korean ] = "»θΑ¦ ΏΙΌΗ";
@@ -430,4 +430,5 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ catalan ] = "Relaciones";
     Text[ finnish ] = "Suhteet";
 };
+
 
