@@ -49,7 +49,8 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 ErrorOcurred:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrWhileLoadStyles$, 16, WebWiz_gWizardName$)
-&apos;		CancelHTMLWizard()
+		RESUME EXITSUB
+EXITSUB:		
 	End If
 End Function
 

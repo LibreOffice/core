@@ -22,6 +22,7 @@ Public Style(MaxStyles, 8) as String
 Public Layout$(MaxLayouts, 2)
 
 Public TextureDir$, BulletDir$, GraphicsDir$, GalleryDir$, PhotosDir$
+Public SOBitmapPath as String
 Public CurrentBullet$, CurrentPrev$, CurrentNext$, CurrentHome$, CurrentTop$
 Public FileStr as String
 
@@ -59,9 +60,16 @@ On Local Error Goto GlobalErrorHandler
 	SetProgressValue(2)
 	oBaseDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
+	If Not GetWebWizardPaths() Then
+		oBaseDocument.dispose()
+		Exit Sub
+	End If
 	LoadLanguage
 	SetProgressValue(10)
-	GetPaths()
+	If Not GetWebWizardPaths() Then
+		oBaseDocument.dispose()
+		Exit Sub
+	End If
 	Layout() = getListBoxArrays(oUcb, &quot;/cnt&quot;)
 	GetCurIndex(DialogModel, Layout(),2)
 	SetProgressValue(30)
@@ -88,7 +96,9 @@ On Local Error Goto GlobalErrorHandler
 GLOBALERRORHANDLER:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
-&apos;		CancelHTMLWizard()
+		oBaseDocument.dispose()
+		RESUME EXITWIZARD
+EXITWIZARD:
 	End If
 End Sub
 
@@ -297,7 +307,13 @@ Dim sExtension as String
 	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
+	&apos; It has to be made sure that the TemplatePath &lt;&gt; &quot;&quot;
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
+	If TemplatePath = &quot;&quot; Then
+		Dim NullList()
+		getListBoxArrays() = NullList()
+		Exit Function
+	End If
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
 	If sFileFilter = &quot;/cnt&quot; Then
 		DimCount = 2
@@ -347,9 +363,9 @@ Dim sExtension as String
 		End If
 	Next i
 	If sFileFilter = &quot;/cnt&quot; Then
-		ReDim PreServe List(a-1,2) as String
+		ReDim Preserve List(a-1,2) as String
 	Else
-		ReDim PreServe List(a-1,8) as String
+		ReDim Preserve List(a-1,8) as String
 	End If
 	If Not bItemfound Then
 		MsgBox(WebWiz_gErrContentNotFound$, 16, WebWiz_gWizardName$)
