@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:40:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,27 @@ using namespace std;
 static ByteString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
+
+template<class T>
+String lcl_dbg_out_SvPtrArr(const T & rArr)
+{
+    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    for (sal_Int16 n = 0; n < rArr.Count(); n++)
+    {
+        if (n > 0)
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+
+        if (rArr[n])
+            aStr += lcl_dbg_out(*rArr[n]);
+        else
+            aStr += String("(null)", RTL_TEXTENCODING_ASCII_US);
+    }
+
+    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+
+    return aStr;
+}
 
 const char * dbg_out(const void * pVoid)
 {
@@ -454,6 +475,13 @@ static String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
     sprintf(sBuffer, "%p", &rFrmFmt);
 
     aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
+    aResult += String("(", RTL_TEXTENCODING_ASCII_US);
+    aResult += rFrmFmt.GetName();
+    aResult += String(")", RTL_TEXTENCODING_ASCII_US);
+
+    if (rFrmFmt.IsAuto())
+        aResult += String("*", RTL_TEXTENCODING_ASCII_US);
+
     aResult += String(" ,", RTL_TEXTENCODING_ASCII_US);
     aResult += lcl_dbg_out(rFrmFmt.FindLayoutRect());
     aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
@@ -501,7 +529,52 @@ static const String lcl_AnchoredFrames(const SwNode & rNode)
     return aResult;
 }
 
-static const String lcl_dbg_out(const SwNode & rNode)
+static String lcl_dbg_out_NumType(sal_Int16 nType)
+{
+    String aTmpStr;
+
+    switch (nType)
+    {
+    case SVX_NUM_NUMBER_NONE:
+        aTmpStr += String(" NONE", RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    case SVX_NUM_CHARS_UPPER_LETTER:
+        aTmpStr += String(" CHARS_UPPER_LETTER",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    case SVX_NUM_CHARS_LOWER_LETTER:
+        aTmpStr += String(" CHARS_LOWER_LETTER",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    case SVX_NUM_ROMAN_UPPER:
+        aTmpStr += String(" ROMAN_UPPER",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    case SVX_NUM_ROMAN_LOWER:
+        aTmpStr += String(" ROMAN_LOWER",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    case SVX_NUM_ARABIC:
+        aTmpStr += String(" ARABIC",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    default:
+        aTmpStr += String(" ??",
+                          RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    }
+
+    return aTmpStr;
+}
+
+static String lcl_dbg_out(const SwNode & rNode)
 {
     String aTmpStr;
 
@@ -551,44 +624,8 @@ static const String lcl_dbg_out(const SwNode & rNode)
                 if (pNumFmt)
                 {
                     aTmpStr += String(" NumFmt: ", RTL_TEXTENCODING_ASCII_US);
-
-                    switch (pNumFmt->GetNumberingType())
-                    {
-                    case SVX_NUM_NUMBER_NONE:
-                        aTmpStr += String(" NONE", RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    case SVX_NUM_CHARS_UPPER_LETTER:
-                        aTmpStr += String(" CHARS_UPPER_LETTER",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    case SVX_NUM_CHARS_LOWER_LETTER:
-                        aTmpStr += String(" CHARS_LOWER_LETTER",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    case SVX_NUM_ROMAN_UPPER:
-                        aTmpStr += String(" ROMAN_UPPER",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    case SVX_NUM_ROMAN_LOWER:
-                        aTmpStr += String(" ROMAN_LOWER",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    case SVX_NUM_ARABIC:
-                        aTmpStr += String(" ARABIC",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    default:
-                        aTmpStr += String(" ??",
-                                          RTL_TEXTENCODING_ASCII_US);
-
-                        break;
-                    }
+                    aTmpStr +=
+                        lcl_dbg_out_NumType(pNumFmt->GetNumberingType());
                 }
             }
         }
@@ -740,7 +777,7 @@ const char * dbg_out(const SwUndos & rUndos)
     return dbg_out(lcl_dbg_out(rUndos));
 }
 
-String lcl_dbg_out(const SwRewriter & rRewriter)
+static String lcl_dbg_out(const SwRewriter & rRewriter)
 {
     String aResult;
 
@@ -752,6 +789,68 @@ String lcl_dbg_out(const SwRewriter & rRewriter)
 const char * dbg_out(const SwRewriter & rRewriter)
 {
     return dbg_out(lcl_dbg_out(rRewriter));
+}
+
+static String lcl_dbg_out(const SvxNumberFormat & rFmt)
+{
+    String aResult;
+
+    aResult = lcl_dbg_out_NumType(rFmt.GetNumberingType());
+
+    return aResult;
+}
+
+static String lcl_dbg_out(const SwNumRule & rRule)
+{
+    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    aResult += rRule.GetName();
+    aResult += String(" [", RTL_TEXTENCODING_ASCII_US);
+
+    for (BYTE n = 0; n < MAXLEVEL; n++)
+    {
+        if (n > 0)
+            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+
+        aResult += lcl_dbg_out(rRule.Get(n));
+    }
+
+    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+
+    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwNumRule & rRule)
+{
+    return dbg_out(lcl_dbg_out(rRule));
+}
+
+static String lcl_dbg_out(const SwTxtFmtColl & rFmt)
+{
+    String aResult(rFmt.GetName());
+
+    aResult += String("(", RTL_TEXTENCODING_ASCII_US);
+    aResult += String::CreateFromInt32(rFmt.GetOutlineLevel());
+    aResult += String(")", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwTxtFmtColl & rFmt)
+{
+    return dbg_out(lcl_dbg_out(rFmt));
+}
+
+String lcl_dbg_out(const SwFrmFmts & rFrmFmts)
+{
+    return lcl_dbg_out_SvPtrArr<SwFrmFmts>(rFrmFmts);
+}
+
+const char * dbg_out(const SwFrmFmts & rFrmFmts)
+{
+    return dbg_out(lcl_dbg_out(rFrmFmts));
 }
 
 String lcl_dbg_out(const SwNumRuleTbl & rTbl)
@@ -850,6 +949,5 @@ const char * dbg_out(const SwFormTokens & rTokens)
 {
     return dbg_out(lcl_dbg_out(rTokens));
 }
-
 #endif // DEBUG
 
