@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2003-04-02 07:41:09 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:19:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ CFLAGS +=  -DHAVE_EXPAT_H
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GR
 .ENDIF
-
 
 # --- General -----------------------------------------------------
 
