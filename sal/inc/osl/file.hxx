@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-21 11:28:17 $
+ *  last change: $Author: tra $ $Date: 2001-08-07 13:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ public:
         oslVolumeDeviceHandle   newHandle = rDevice._aHandle;
 
         if ( newHandle )
-            osl_acquireVolumeDeviceHandle( _aHandle );
+            osl_acquireVolumeDeviceHandle( newHandle );
 
         if ( _aHandle )
             osl_releaseVolumeDeviceHandle( _aHandle );
@@ -338,7 +338,7 @@ public:
 #define VolumeInfoMask_UsedSpace      osl_VolumeInfo_Mask_UsedSpace
 #define VolumeInfoMask_FreeSpace      osl_VolumeInfo_Mask_FreeSpace
 #define VolumeInfoMask_MaxNameLength  osl_VolumeInfo_Mask_MaxNameLength
-#define VolumeInfoMask_MaxPathLength  osl_VolumeInfo_Mask_MaxPathLengt
+#define VolumeInfoMask_MaxPathLength  osl_VolumeInfo_Mask_MaxPathLength
 #define VolumeInfoMask_FileSystemName osl_VolumeInfo_Mask_FileSystemName
 
 class Directory;
