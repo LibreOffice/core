@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Terminal=false
+Icon=impress
+Type=Application
+Categories=Application;Office;
+Exec=openoffice -impress %U
+TryExec=openoffice-impress
+MimeType=application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint
+Name=%PRODUCTNAME Impress
+Commment=Create a new presentation

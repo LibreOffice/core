@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Terminal=false
+Icon=math
+Type=Application
+Categories=Application;Office;
+Exec=openoffice -math %U
+TryExec=openoffice-math
+MimeType=application/vnd.sun.xml.math;application/vnd.stardivision.math
+Name=%PRODUCTNAME Math
+Comment=Create a new formula
