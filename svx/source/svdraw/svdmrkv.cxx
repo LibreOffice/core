@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:29:48 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 18:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,9 +931,10 @@ void SdrMarkView::SetMarkHandles()
                 USHORT nAnz=(USHORT)pMrkGlue->GetCount();
                 for (USHORT nNum=0; nNum<nAnz; nNum++) {
                     USHORT nId=pMrkGlue->GetObject(nNum);
-                    USHORT nNum=pGPL->FindGluePoint(nId);
-                    if (nNum!=SDRGLUEPOINT_NOTFOUND) {
-                        const SdrGluePoint& rGP=(*pGPL)[nNum];
+                    //nNum changed to nNumGP because already used in for loop
+                    USHORT nNumGP=pGPL->FindGluePoint(nId);
+                    if (nNumGP!=SDRGLUEPOINT_NOTFOUND) {
+                        const SdrGluePoint& rGP=(*pGPL)[nNumGP];
                         Point aPos(rGP.GetAbsolutePos(*pObj));
                         SdrHdl* pGlueHdl=new SdrHdl(aPos,HDL_GLUE);
                         pGlueHdl->SetObj(pObj);
