@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:30:16 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Border = TRUE;
             SVLook = TRUE;
             TabStop = TRUE ;
-            HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS;
+            HelpId = HID_DSADMIN_DATASOURCE_NEWDS;
 
             Text = "Neue Datenquelle";
             Text [ english ] = "Ne~w data source";
@@ -125,7 +125,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             TabStop = TRUE ;
             Pos = MAP_APPFONT ( 2, 22 ) ;
             Size = MAP_APPFONT ( 56, 196 ) ;
-            HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST;
+            HelpId = HID_DSADMIN_DATASOURCE_DSLIST;
         };
     };
 
@@ -1862,6 +1862,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2000/12/03 10:30:16  fs
+ *  #79820# some new help ids
+ *
  *  Revision 1.16  2000/12/01 08:08:42  kz
  *  Merge SRC614: 01.12.00 - 09:07:46
  *

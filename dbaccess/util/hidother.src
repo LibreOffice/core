@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 11:40:56 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@ hidspecial HID_DSADMIN_CHARSET_DBASE                    { HelpId = HID_DSADMIN_C
 hidspecial HID_DSADMIN_CHARSET_TEXT                     { HelpId = HID_DSADMIN_CHARSET_TEXT; };
 hidspecial HID_DSADMIN_CHARSET_ADABAS                   { HelpId = HID_DSADMIN_CHARSET_ADABAS; };
 hidspecial HID_DSADMIN_CONNURL_JDBCPAGE                 { HelpId = HID_DSADMIN_CONNURL_JDBCPAGE; };
-hidspecial HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS        { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS; };
-hidspecial HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST       { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST; };
 hidspecial HID_ADMINDLG_CONNECTERROR                    { HelpId = HID_ADMINDLG_CONNECTERROR; };
 hidspecial HID_DSADMIN_TABCONTROL                       { HelpId = HID_DSADMIN_TABCONTROL; };
 hidspecial HID_DSADMIN_PAGE_GENERAL                     { HelpId = HID_DSADMIN_PAGE_GENERAL; };
@@ -128,6 +126,9 @@ hidspecial HID_GENERIC_SQL_ERROR                        { HelpId = HID_GENERIC_S
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/05 11:40:56  fs
+ *  #80539# HID_GENERIC_SQL_ERROR
+ *
  *  Revision 1.3  2000/12/03 10:36:03  fs
  *  #79820# some new help ids
  *
