@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-31 14:22:44 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 16:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 
 // XGridColumnFactory
 //------------------------------------------------------------------------------
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     const Sequence< ::rtl::OUString >& rColumnTypes = frm::getColumnTypes();
     return createColumn(::internal::findPos(ColumnType, rColumnTypes));
@@ -381,14 +381,14 @@ Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) cons
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OGridControlModel::getColumnTypes()
+StringSequence SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return frm::getColumnTypes();
 }
 
 // XReset
 //-----------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::reset()
+void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -404,13 +404,13 @@ void SAL_CALL OGridControlModel::reset()
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
+void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
+void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -693,7 +693,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
     {
@@ -1049,13 +1049,13 @@ void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, 
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGridControlModel::getServiceName()
+::rtl::OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -1171,7 +1171,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::read(_rxInStream);
 
