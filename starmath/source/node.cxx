@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:56:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2841,7 +2841,6 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD1();
 
-    Size  aOldSize = GetFont().GetSize();
     if (pSym = rDocShell.GetSymSetManager().GetSymbolByName(GetToken().aText))
     {
         SetText( pSym->GetCharacter() );
@@ -2852,7 +2851,8 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         SetText( GetToken().aText );
         GetFont() = rFormat.GetFont(FNT_VARIABLE);
     }
-    GetFont().SetSize(aOldSize);
+    // use same font size as is used for variables
+    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetSize() );
 
     //! eigentlich sollten nur WEIGHT_NORMAL und WEIGHT_BOLD vorkommen...
     //! In der sms-Datei gibt es jedoch zB auch 'WEIGHT_ULTRALIGHT'
