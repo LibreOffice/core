@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:37:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,12 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifdef REFERENCE
+#undef REFERENCE
+#endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
@@ -263,6 +268,26 @@ void FmFormView::Init()
     }
 
     SfxObjectShell* pObjShell = pFormModel->GetObjectShell();
+    if ( pObjShell && pObjShell->GetMedium() )
+    {
+        const SfxPoolItem *pItem=0;
+        if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            Sequence< PropertyValue> aSeq;
+            ( ((SfxUnoAnyItem*)pItem)->GetValue() ) >>= aSeq;
+            const PropertyValue* pIter  = aSeq.getConstArray();
+            const PropertyValue* pEnd   = pIter + aSeq.getLength();
+            for( ; pIter != pEnd ; ++pIter)
+            {
+                if ( pIter->Name.equalsAscii("ApplyFormDesignMode") )
+                {
+                    pIter->Value >>= bInitDesignMode;
+                    break;
+                }
+            }
+        }
+    }
+
     sal_Bool bReadOnly = sal_False;
     if( pObjShell )
         bReadOnly = pObjShell->IsReadOnly();
@@ -630,7 +655,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         return NULL;
 
     ODataAccessDescriptor aColumnDescriptor;
-    aColumnDescriptor[ daDataSource ]       <<= sDataSource;
+    aColumnDescriptor.setDataSource(sDataSource);
     aColumnDescriptor[ daCommand ]          <<= sObjectName;
     aColumnDescriptor[ daCommandType ]      <<= nObjectType;
     aColumnDescriptor[ daColumnName ]       <<= sFieldName;
