@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:36:51 $
+ *  last change: $Author: oj $ $Date: 2001-01-10 12:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,22 @@
 #define ODBC_UI_LIBRARY "libodbc.so"
 #endif
 
+// just to go with calling convention of windows
+// so don't touch this
+#if defined(WIN) || defined(WNT)
+#define SQL_API __stdcall
+#endif // defined(WIN) || defined(WNT)
+
 #ifndef __SQLEXT_H
 #include <odbc/sqlext.h>
 #endif
+
+#if defined(WIN) || defined(WNT)
+#undef SQL_API
+#define SQL_API __stdcall
+#endif // defined(WIN) || defined(WNT)
+// from here on you can do what you want to
+
 
 #else
 
@@ -103,6 +116,7 @@
 namespace dbaui
 {
 //.........................................................................
+
 
 #ifdef HAVE_ODBC_SUPPORT
 typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
@@ -322,6 +336,9 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/30 15:36:51  fs
+ *  don't append the description of the ODBC data source to the DSN name
+ *
  *  Revision 1.3  2000/10/26 13:47:46  kz
  *  chg. cast & ifdef WIN
  *
