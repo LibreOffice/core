@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-23 12:56:32 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,26 +422,7 @@ OStartupInfo::~OStartupInfo()
 
 sal_Bool OStartupInfo::acceptIOResource(OSocket& rSocket)
 {
-    if (! m_IoResources)
-    {
-        m_IoResources= new oslIOResource[MAX_RESOURCES];
-        m_NoResources = 0;
-
-        VOS_ASSERT(m_IoResources != 0);
-
-        if (osl_getIOResources(m_IoResources, MAX_RESOURCES) != osl_Process_E_None)
-            m_IoResources[0].Type = osl_Process_TypeNone;
-    }
-
-    if (m_IoResources[m_NoResources].Type == osl_Process_TypeSocket)
-    {
-        rSocket = OSocket(m_IoResources[m_NoResources].Descriptor.Socket);
-
-        m_NoResources++;
-
-        return sal_True;
-    }
-
+    // jbu : functionality removed from vos
     return sal_False;
 }
 
