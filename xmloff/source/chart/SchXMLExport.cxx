@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:29:58 $
+ *  last change: $Author: bm $ $Date: 2000-12-07 18:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,11 +949,20 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             }
             else
             {
+                // #81525# convert addresses for xy charts
+                // this should be done by calc in the future
                 if( maSeriesAddresses.getLength() > nSeries )
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
                                            maSeriesAddresses[ nSeries ].DataRangeAddress );
                 }
+
+                // this is what should be done in the future:
+//                  if( maSeriesAddresses.getLength() > nSeries - mnDomainAxes )
+//                  {
+//                      mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
+//                                             maSeriesAddresses[ nSeries - mnDomainAxes  ].DataRangeAddress );
+//                  }
             }
 
             if( bHasTwoYAxes )
@@ -1007,11 +1016,19 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 }
                 else
                 {
-                    if( maSeriesAddresses.getLength() > nSeries &&
-                        maSeriesAddresses[ nSeries ].DomainRangeAddresses.getLength() > nDomain )
+                    // #81525# convert addresses for xy charts
+                    // this should be done by calc in the future
+                    if( maSeriesAddresses.getLength() > 0 )
                     {
-                        msStringBuffer.append( maSeriesAddresses[ nSeries ].DomainRangeAddresses[ nDomain ] );
+                        msStringBuffer.append( maSeriesAddresses[ 0 ].DataRangeAddress );
                     }
+
+                    // this is what should be done in the future:
+//                      if( maSeriesAddresses.getLength() > nSeries &&
+//                          maSeriesAddresses[ nSeries ].DomainRangeAddresses.getLength() > nDomain )
+//                      {
+//                          msStringBuffer.append( maSeriesAddresses[ nSeries ].DomainRangeAddresses[ nDomain ] );
+//                      }
                 }
 
                 msString = msStringBuffer.makeStringAndClear();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-06 17:05:00 $
+ *  last change: $Author: bm $ $Date: 2000-12-07 18:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ void SchXMLChartContext::EndElement()
             sal_Int32 nLength = maSeriesAddresses.getLength();
             sal_Int32 nIdx;
             uno::Sequence< rtl::OUString > aStrSeq( nLength * 2 + 1 );
+            sal_Bool bHasDomain = sal_False;
 
             for( nIdx = 0; nIdx < nLength; nIdx++ )
             {
@@ -396,7 +397,10 @@ void SchXMLChartContext::EndElement()
 
                 // domains
                 if( maSeriesAddresses[ nIdx ].DomainRangeAddresses.getLength())
+                {
                     xTableAddressMapper->mapStrings( maSeriesAddresses[ nIdx ].DomainRangeAddresses );
+                    bHasDomain = sal_True;
+                }
             }
             // categories
             aStrSeq[ nLength * 2 ] = msCategoriesAddress;
@@ -405,10 +409,27 @@ void SchXMLChartContext::EndElement()
             xTableAddressMapper->mapStrings( aStrSeq );
 
             // write back
+            sal_Int32 nOffset = 0;
             for( nIdx = 0; nIdx < nLength; nIdx++ )
             {
-                maSeriesAddresses[ nIdx ].DataRangeAddress = aStrSeq[ nIdx * 2 ];
-                maSeriesAddresses[ nIdx ].LabelAddress = aStrSeq[ nIdx * 2 + 1 ];
+                // #81525# convert addresses for xy charts
+                // this should be done by calc in the future
+                if( nIdx == 0 &&
+                    bHasDomain )
+                {
+                    // enlarge the sequence
+                    maSeriesAddresses.realloc( maSeriesAddresses.getLength() + 1 );
+
+                    // copy the domain as first series
+                    if( maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses.getLength() > 0 )
+                        maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress =
+                            maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses[ 0 ];
+                    // the current data range becomes the second series
+                    nOffset++;
+                }
+
+                maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress = aStrSeq[ nIdx * 2 ];
+                maSeriesAddresses[ nIdx + nOffset ].LabelAddress = aStrSeq[ nIdx * 2 + 1 ];
             }
             msCategoriesAddress = aStrSeq[ nLength * 2 ];
         }
