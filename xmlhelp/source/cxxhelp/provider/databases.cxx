@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:26:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,11 @@
  *
  ************************************************************************/
 
-
+#ifdef SYSTEM_DB3
+#include <db3/db_cxx.h>
+#else
 #include <berkeleydb/db_cxx.h>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
