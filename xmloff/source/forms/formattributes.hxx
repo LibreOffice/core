@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:00 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 13:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace xmloff
     #define CCA_TAB_STOP                0x00080000
     #define CCA_TITLE                   0x00100000
     #define CCA_VALUE                   0x00200000
+    #define CCA_ORIENTATION             0x00400000
 
     // flags for database control atttributes
     #define DA_BOUND_COLUMN             0x00000001
@@ -165,6 +166,9 @@ namespace xmloff
     #define SCA_IS_TRISTATE             0x00000800
     #define SCA_STATE                   0x00001000
     #define SCA_COLUMN_STYLE_NAME       0x00002000
+    #define SCA_STEP_SIZE               0x00004000
+    #define SCA_PAGE_STEP_SIZE          0x00008000
+    #define SCA_REPEAT_DELAY            0x00010000
 
     // attributes of the office:forms element
     enum OfficeFormsAttributes
@@ -353,6 +357,19 @@ namespace xmloff
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_Int16 _nAttributeDefault);
 
+        /** add a attribute assignment referring to an int32 property to the map
+
+            @param _pAttributeName
+                the name of the attrribute
+            @param _rPropertyName
+                the name of the property assigned to the attribute
+            @param _nAttributeDefault
+                the default value for the attribute.
+        */
+        void    addInt32Property(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Int32 _nAttributeDefault );
+
         /** add a attribute assignment referring to an enum property to the map
 
             @param _pAttributeName
@@ -382,48 +399,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMATTRIBUTES_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7.22.2  2003/11/24 15:08:57  obo
- *  undo last change
- *
- *  Revision 1.7  2003/10/21 08:39:13  obo
- *  INTEGRATION: CWS formcelllinkage (1.6.160); FILE MERGED
- *  2003/10/01 09:55:19 fs 1.6.160.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.6.160.1  2003/10/01 09:55:19  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.6.156.1  2003/09/25 14:28:38  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.6.152.2  2003/09/18 14:00:37  fs
- *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
- *
- *  Revision 1.6.152.1  2003/09/17 12:26:53  fs
- *  #18999# #19367# persistence for cell value and cell range bindings
- *
- *  Revision 1.6  2002/10/25 07:54:55  fs
- *  #104402# +SCA_COLUMN_STYLE_NAME
- *
- *  Revision 1.5  2001/03/20 13:33:39  fs
- *  #83970# +getOfficeFormsAttributeName(/-space)
- *
- *  Revision 1.4  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.3  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:01:46  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 13.11.00 17:49:43  fs
- ************************************************************************/
 
