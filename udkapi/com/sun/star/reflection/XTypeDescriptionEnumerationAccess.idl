@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:21:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,11 +158,13 @@ interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
             </table>
 
         @throws NoSuchTypeNameException
-            in case that the given type name does not exist.
+            in case that the given module name does not exist. This exception
+            will never be thrown in case moduleName is the empty string.
 
         @throws InvalidTypeNameException
-            in case that the given type name does exist, but does not specify
-            an UNOIDL module.
+            in case that the given module name does exist, but does not specify
+            an UNOIDL module. This exception will never be thrown in case
+            moduleName is the empty string.
       */
     XTypeDescriptionEnumeration
     createTypeDescriptionEnumeration(
