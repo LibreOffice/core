@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-14 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;
+class   ScFormatRangeStyles;
 
 //==============================================================================
 
@@ -318,6 +319,12 @@ struct ScMyCell
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
 
+    sal_Int32                   nValidationIndex;
+    sal_Int32                   nStyleIndex;
+    sal_Int32                   nNumberFormat;
+
+    sal_Bool                    bIsAutoStyle : 1;
+
     sal_Bool                    bHasShape : 1;
     sal_Bool                    bIsMergedBase : 1;
     sal_Bool                    bIsCovered : 1;
@@ -378,7 +385,7 @@ public:
 
     void                        SetCurrentTable(const sal_Int32 nTable);
 
-    sal_Bool                    GetNext(ScMyCell& aCell);
+    sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };
 
 #endif

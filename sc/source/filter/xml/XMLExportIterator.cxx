@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-10 08:43:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-14 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef SC_XMLEXPORTSHAREDDATA_HXX
 #include "XMLExportSharedData.hxx"
+#endif
+#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
+#include "XMLStylesExportHelper.hxx"
 #endif
 
 #include <algorithm>
@@ -680,7 +683,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
     }
 }
 
-sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
+sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
     table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
@@ -717,6 +720,11 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
 
         SetMatrixCellData( aCell );
         HasAnnotation( aCell );
+        sal_Bool bIsAutoStyle;
+        aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
+            aCell.aCellAddress.Column, aCell.aCellAddress.Row,
+            bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat);
+        aCell.bIsAutoStyle = bIsAutoStyle;
     }
     return bFoundCell;
 }
