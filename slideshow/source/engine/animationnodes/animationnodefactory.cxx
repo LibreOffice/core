@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:02:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,10 +247,7 @@ namespace presentation
                 ENSURE_AND_THROW( xIterNode.is(),
                                   "implCreateIteratedNodes(): Invalid node" );
 
-                // TODO(F2): getIterateInterval() yields a procentual time shift.
-                // Currently, we're assuming 2 seconds total animation runtime,
-                // which might of course be totally wrong.
-                const double nIntervalTimeout( xIterNode->getIterateInterval() / 50.0 );
+                const double nIntervalTimeout( xIterNode->getIterateInterval() );
 
 
                 // valid iterate interval? We're ruling out monstrous
