@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:10:53 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,14 +646,14 @@ ModelessDialog RID_SCDLG_CHANGES
     Text [ french ] = "Accepter ou rejeter les modifications" ;
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
     Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
-    Text[ chinese_simplified ] = "½ÓÊÜ»òÈ¡Ïû¸ü¸Ä";
+    Text[ chinese_simplified ] = "½ÓÊÜ»òÉáÆú¸ü¸ÄÄÚÈİ";
     Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
     Text[ japanese ] = "•ÏX‰ÓŠ‚ÌŠm”F";
-    Text[ chinese_traditional ] = "±µ¨ü©Î¨ú®øÅÜ§ó";
+    Text[ chinese_traditional ] = "±µ¨ü©Î±Ë±óÅÜ§ó?®e";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ";
     Text[ dutch ] = "Wijzigingen accepteren of verwerpen";
-    Text[ chinese_simplified ] = "½ÓÊÜ»òÈ¡Ïû¸ü¸Ä";
+    Text[ chinese_simplified ] = "½ÓÊÜ»òÉáÆú¸ü¸ÄÄÚÈİ";
     Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
     Text[ korean ] = "º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Değişiklikleri kabul/redd et";
@@ -889,6 +889,7 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
 
 
 
