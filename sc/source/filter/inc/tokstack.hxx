@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ enum E_TYPE
     T_RefA, // Area Reference
     T_RN,   // Range Name
     T_Ext,  // irgendwas Unbekanntes mit Funktionsnamen
+    T_Nlf,  // token for natural language formula
     T_Error // fuer Abfrage im Fehlerfall
 };
 
@@ -133,6 +134,15 @@ class TokenPool
         UINT16                      nP_Ext;
         UINT16                      nP_ExtAkt;
 
+        struct  NLFCONT
+        {
+            SingleRefData           aRef;
+                                    NLFCONT( const SingleRefData& r ) : aRef( r )   {}
+        };
+        NLFCONT**                   ppP_Nlf;
+        UINT16                      nP_Nlf;
+        UINT16                      nP_NlfAkt;
+
         UINT16*                     pElement;   // Array mit Indizes fuer Elemente
         E_TYPE*                     pType;      // ...mit Typ-Info
         UINT16*                     pSize;      // ...mit Laengenangabe (Anz. UINT16)
@@ -151,6 +161,7 @@ class TokenPool
         void                        GrowId( void );
         void                        GrowElement( void );
         void                        GrowExt( void );
+        void                        GrowNlf( void );
         void                        GetElement( const UINT16 nId );
         void                        GetElementRek( const UINT16 nId );
     public:
@@ -173,6 +184,7 @@ class TokenPool
 
         TokenId                     Store( const DefTokenId eId, const String& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
+        TokenId                     StoreNlf( const SingleRefData& rTr );
         inline TokenId              LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );

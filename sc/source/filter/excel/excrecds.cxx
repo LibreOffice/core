@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2225,12 +2225,15 @@ UINT16 ExcDefcolwidth::GetLen( void ) const
 
 
 
-ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF,
-                        ScDocument& rDoc, ExcEOutline& rOutline )
+ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF, RootData& rRoot, ExcEOutline& rOutline )
 {
+    ScDocument&     rDoc = *rRoot.pDoc;
+
     nFirstCol = nLastCol = nCol;
+
     nXF = nNewXF;
-    SetWidth( rDoc.GetColWidth( nCol, nTab ) );
+
+    SetWidth( rDoc.GetColWidth( nCol, nTab ), rRoot.fColScale );
 
     BYTE nColFlags = rDoc.GetColFlags( nCol, nTab );
     nOptions = 0x0000;
@@ -2245,12 +2248,13 @@ ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF,
         nOptions |= EXC_COL_COLLAPSED;
 }
 
-void ExcColinfo::SetWidth( UINT16 nWidth )
+void ExcColinfo::SetWidth( UINT16 nWidth, double fColScale )
 {
     double  f = nWidth;
     f *= 1328.0 / 25.0;
     f += 90.0;
     f *= 1.0 / 23.0;
+    f /= fColScale;
 
     nColWidth = (UINT16) f;
 }

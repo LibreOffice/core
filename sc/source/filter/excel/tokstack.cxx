@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@ TokenPool::TokenPool( void )
     ppP_Ext = new EXTCONT*[ nP_Ext ];
     memset( ppP_Ext, NULL, sizeof( EXTCONT* ) * nP_Ext );
 
+    nP_Nlf = 16;
+    ppP_Nlf = new NLFCONT*[ nP_Nlf ];
+    memset( ppP_Nlf, NULL, sizeof( NLFCONT* ) * nP_Nlf );
+
     pScToken = new ScTokenArray;
 
     Reset();
@@ -171,6 +175,13 @@ TokenPool::~TokenPool()
             delete ppP_Ext[ n ];
     }
     delete[] ppP_Ext;
+
+    for( n = 0 ; n < nP_Nlf ; n++ )
+    {
+        if( ppP_Nlf[ n ] )
+            delete ppP_Nlf[ n ];
+    }
+    delete[] ppP_Nlf;
 
     delete pScToken;
 }
@@ -281,7 +292,22 @@ void TokenPool::GrowExt( void )
     memcpy( ppNew, ppP_Ext, sizeof( EXTCONT* ) * nP_Ext );
 
     delete[] ppP_Ext;
+    ppP_Ext = ppNew;
     nP_Ext = nNewSize;
+}
+
+
+void TokenPool::GrowNlf( void )
+{
+    UINT16      nNewSize = nP_Nlf * 2;
+
+    NLFCONT**   ppNew = new NLFCONT*[ nNewSize ];
+
+    memcpy( ppNew, ppP_Nlf, sizeof( NLFCONT* ) * nP_Nlf );
+
+    delete[] ppP_Nlf;
+    ppNew = ppP_Nlf;
+    nP_Nlf = nNewSize;
 }
 
 
@@ -310,24 +336,33 @@ void TokenPool::GetElement( const UINT16 nId )
                 pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) nId ] ] );
                 break;
             case T_RefA:
-            {
+                {
                 ComplRefData    aComplRefData;
                 aComplRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
                 aComplRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
                 pScToken->AddDoubleReference( aComplRefData );
-            }
+                }
                 break;
             case T_RN:
                 pScToken->AddName( pElement[ nId ] );
                 break;
             case T_Ext:
-            {
+                {
                 UINT16          n = pElement[ nId ];
                 EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
-                    ScToken*    pTok = pScToken->AddExternal( p->aText.GetBuffer() );
-            }
+                    /*ScToken*  pTok = */pScToken->AddExternal( p->aText.GetBuffer() );
+                }
+                break;
+            case T_Nlf:
+                {
+                UINT16          n = pElement[ nId ];
+                NLFCONT*        p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
+
+                if( p )
+                        pScToken->AddColRowName( p->aRef );
+                }
                 break;
             default:
                 DBG_ERROR("-TokenPool::GetElement(): Zustand undefiniert!?");
@@ -369,24 +404,33 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) *pAkt ] ] );
                     break;
                 case T_RefA:
-                {
+                    {
                     ComplRefData    aComplRefData;
                     aComplRefData.Ref1 = *ppP_RefTr[ pElement[ ( TokenId ) *pAkt ] ];
                     aComplRefData.Ref2 = *ppP_RefTr[ pElement[ ( TokenId ) *pAkt ] + 1 ];
                     pScToken->AddDoubleReference( aComplRefData );
-                }
+                    }
                     break;
                 case T_RN:
                     pScToken->AddName( pElement[ ( TokenId ) *pAkt ] );
                     break;
                 case T_Ext:
-                {
+                    {
                     UINT16      n = pElement[ ( TokenId ) *pAkt ];
                     EXTCONT*    p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                     if( p )
-                        ScToken*    pTok = pScToken->AddExternal( p->aText.GetBuffer() );
-                }
+                        /*ScToken*  pTok = */pScToken->AddExternal( p->aText.GetBuffer() );
+                    }
+                    break;
+                case T_Nlf:
+                    {
+                    UINT16      n = pElement[ ( TokenId ) *pAkt ];
+                    NLFCONT*    p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
+
+                    if( p )
+                        pScToken->AddColRowName( p->aRef );
+                    }
                     break;
                 default:
                     DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
@@ -565,9 +609,34 @@ TokenId TokenPool::Store( const DefTokenId e, const String& r )
 }
 
 
+TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
+{
+    if( nElementAkt >= nElement )
+        GrowElement();
+
+    if( nP_NlfAkt >= nP_Nlf )
+        GrowNlf();
+
+    pElement[ nElementAkt ] = nP_NlfAkt;
+    pType[ nElementAkt ] = T_Nlf;
+
+    if( ppP_Nlf[ nP_NlfAkt ] )
+    {
+        ppP_Nlf[ nP_NlfAkt ]->aRef = rTr;
+    }
+    else
+        ppP_Nlf[ nP_NlfAkt ] = new NLFCONT( rTr );
+
+    nElementAkt++;
+    nP_NlfAkt++;
+
+    return ( TokenId ) nElementAkt;
+}
+
+
 void TokenPool::Reset( void )
 {
-    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = 0;
+    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = 0;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,9 +1045,8 @@ private:
     //----------------------------------------------------------------
     void                    SaveCont( SvStream& );
 public:
-                            ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nXF,
-                                ScDocument& rDoc, ExcEOutline& rOutline );
-    void                    SetWidth( UINT16 nWidth );
+                            ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nXF, RootData&, ExcEOutline& rOutline );
+    void                    SetWidth( UINT16 nWidth, double fColScale );
 
     BOOL                    Expand( ExcColinfo* pExp );
                                 // wenn sich this mit pExp erweitern laesst, wird pExp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,13 +621,13 @@ void ExcTable::FillAsTable( void )
     Add( pExcDefColWidth );
 
     // COLINFO records
-    ExcColinfo* pLastColInfo = new ExcColinfo( 0, nScTab, nDefXF, rDoc, aExcOLCol );
+    ExcColinfo* pLastColInfo = new ExcColinfo( 0, nScTab, nDefXF, rR, aExcOLCol );
     ExcColinfo* pNewColInfo;
 
     Add( pLastColInfo );
     for( UINT16 iCol = 1; iCol <= MAXCOL; iCol++ )
     {
-        pNewColInfo = new ExcColinfo( iCol, nScTab, nDefXF, rDoc, aExcOLCol );
+        pNewColInfo = new ExcColinfo( iCol, nScTab, nDefXF, rR, aExcOLCol );
         if( !pLastColInfo->Expand( pNewColInfo ) )
         {
             pLastColInfo = pNewColInfo;

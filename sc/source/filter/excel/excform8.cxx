@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
     const SupbookBuffer&    rSupbookBuffer = *pExcRoot->pSupbookBuffer;
     const Xti*              pXti;
     const CharSet           eCharSet = *pExcRoot->pCharset;
+    UINT32                  nExtCnt = 0;
 
     SingleRefData           aSRD;
     aSRD.InitFlags();
@@ -383,6 +384,88 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                 }
 
                 aStack << aPool.Store( aString );
+                break;
+            case 0x18:                                          // natural language formula
+                {
+                UINT8   nEptg;
+                UINT16  nCol, nRow;
+                Read( nEptg );
+                switch( nEptg )
+                {                           //  name        size    ext     type
+                    case 0x01:              //  Lel         4       -       err
+                        Ignore( 4 );
+                        goto _ocbad;
+                        break;
+                    case 0x02:              //  Rw          4       -       ref
+                    case 0x03:              //  Col         4       -       ref
+                    case 0x06:              //  RwV         4       -       val
+                    case 0x07:              //  ColV        4       -       val
+                        Read( nRow );
+                        Read( nCol );
+
+                        aSRD.InitAddress( ScAddress( nCol & 0x7FFFF, nRow, aEingPos.Tab() ) );
+
+                        if( nEptg == 0x02 || nEptg == 0x06 )
+                            aSRD.SetRowRel( TRUE );
+                        else
+                            aSRD.SetColRel( TRUE );
+
+                        aSRD.CalcRelFromAbs( aEingPos );
+
+                        aStack << aPool.StoreNlf( aSRD );
+                        break;
+                    case 0x0A:              //  Radical     13      -       ref
+                        Read( nRow );
+                        Read( nCol );
+                        Ignore( 9 );
+
+                        aSRD.InitAddress( ScAddress( nCol & 0x7FFFF, nRow, aEingPos.Tab() ) );
+
+                        aSRD.SetColRel( TRUE );
+
+                        aSRD.CalcRelFromAbs( aEingPos );
+
+                        aStack << aPool.StoreNlf( aSRD );
+                        break;
+                    case 0x0B:              //  RadicalS    13      x       ref
+                        Ignore( 13 );
+                        nExtCnt++;
+                        goto _ocbad;
+                        break;
+                    case 0x0C:              //  RwS         4       x       ref
+                        Ignore( 4 );
+                        nExtCnt++;
+                        goto _ocbad;
+                        break;
+                    case 0x0D:              //  ColS        4       x       ref
+                        Ignore( 4 );
+                        nExtCnt++;
+                        goto _ocbad;
+                        break;
+                    case 0x0E:              //  RwSV        4       x       val
+                        Ignore( 4 );
+                        nExtCnt++;
+                        goto _ocbad;
+                        break;
+                    case 0x0F:              //  ColSV       4       x       val
+                        Ignore( 4 );
+                        nExtCnt++;
+                        goto _ocbad;
+                        break;
+                    case 0x10:              //  RadicalLel  4       -       err
+                        Ignore( 4 );
+                        goto _ocbad;
+                        break;
+                    case 0x1D:              //  SxName      4       -       val
+                        Ignore( 4 );
+//                      goto _ocbad;
+//                      break;
+                    default:
+                    _ocbad:
+                        aPool << ocBad;
+                        aPool >> aStack;
+                }
+                }
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {

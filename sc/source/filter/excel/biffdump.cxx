@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4636,6 +4636,94 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 }
                 t += "\"";
             }
+                break;
+            case 0x18:
+                {
+#define D(name,size,ext,type)   {ByteString s( "eptg " );__AddDec(s,(UINT16)nEptg);s+=": ";     \
+                                s+=name;s+=" [";__AddDec(s,(UINT16)size);s+="] ";s+=type;       \
+                                if(ext)s+=" + ext";CLOSE(s);ContDump(size);nBytesLeft-=size;}
+                UINT8   nEptg;
+                *pIn >> nEptg;
+                nBytesLeft--;
+
+                switch( nEptg )
+                {                           //  name        size    ext     type
+                    case 0x00:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    case 0x01:              //  Lel         4       -       err
+                        D( "Lel", 4, 0, "err" );
+                        break;
+                    case 0x02:              //  Rw          4       -       ref
+                        D( "Rw", 4, 0, "ref" );
+                        break;
+                    case 0x03:              //  Col         4       -       ref
+                        D( "Col", 4, 0, "ref" );
+                        break;
+                    case 0x04:              //  res
+                    case 0x05:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    case 0x06:              //  RwV         4       -       val
+                        D( "RwV", 4, 0, "val" );
+                        break;
+                    case 0x07:              //  ColV        4       -       val
+                        D( "ColV", 4, 0, "val" );
+                        break;
+                    case 0x08:              //  res
+                    case 0x09:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    case 0x0A:              //  Radical     13      -       ref
+                        D( "Radical", 13, 0, "ref" );
+                        break;
+                    case 0x0B:              //  RadicalS    13      x       ref
+                        D( "RadicalS", 13, 1, "ref" );
+                        break;
+                    case 0x0C:              //  RwS         4       x       ref
+                        D( "RwS", 4, 1, "ref" );
+                        break;
+                    case 0x0D:              //  ColS        4       x       ref
+                        D( "ColS", 4, 1, "ref" );
+                        break;
+                    case 0x0E:              //  RwSV        4       x       val
+                        D( "RwSV", 4, 1, "val" );
+                        break;
+                    case 0x0F:              //  ColSV       4       x       val
+                        D( "ColSV", 4, 1, "val" );
+                        break;
+                    case 0x10:              //  RadicalLel  4       -       err
+                        D( "RadicalLel", 4, 0, "err" );
+                        break;
+                    case 0x11:              //  res
+                    case 0x12:              //  res
+                    case 0x13:              //  res
+                    case 0x14:              //  res
+                    case 0x15:              //  res
+                    case 0x16:              //  res
+                    case 0x17:              //  res
+                    case 0x18:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    case 0x19:              //  invalid values
+                    case 0x1A:              //  invalid values
+                        D( "invalid vals", 0, 0, "" );
+                        break;
+                    case 0x1B:              //  res
+                    case 0x1C:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    case 0x1D:              //  SxName      4       -       val
+                        D( "SxName", 4, 0, "val" );
+                        break;
+                    case 0x1E:              //  res
+                        D( "res", 0, 0, "" );
+                        break;
+                    default:
+                        D( " # UNKNOWN # ", 0, 0, "" );
+                }
+#undef  D
+                }
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {

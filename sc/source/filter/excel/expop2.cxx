@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <svx/svxmsbas.hxx>
+#include <tools/solmath.hxx>
 
 #include "scerrors.hxx"
 #include "scextopt.hxx"
@@ -136,6 +137,22 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
         pExcRoot->bBreakSharedFormula = aBreakSharedFormula.ToInt32() != 0;
     else
         pExcRoot->bBreakSharedFormula = TRUE;
+
+    // Optionen aus INI-File
+    SfxIniManager*          pIniManager = SFX_INIMANAGER();
+    String                  aColScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELCOLSCALE" ) );
+    String                  aRowScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELROWSCALE" ) );
+    const International&    rIntl = *ScGlobal::pScInternational;
+    DBG_ASSERT( ScGlobal::pScInternational, "-ExportBiff5::ExportBiff5(): International puddemacht?!" );
+    int                     nDummy;
+
+    pExcRoot->fColScale = SolarMath::StringToDouble( aColScale.GetBuffer(), rIntl, nDummy );
+    if( pExcRoot->fColScale <= 0.0 )
+        pExcRoot->fColScale = 1.0;
+
+    pExcRoot->fRowScale = SolarMath::StringToDouble( aRowScale.GetBuffer(), rIntl, nDummy );
+    if( pExcRoot->fRowScale <= 0.0 )
+        pExcRoot->fRowScale = 1.0;
 
     pExcDoc = new ExcDocument( pExcRoot );
 }
