@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
+ *  last change: $Author: dvo $ $Date: 2001-11-27 15:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,18 @@
 #endif
 
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
+
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -172,6 +182,80 @@ void XMLErrors::AddRecord(
 {
     aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage,
                                     nRow, nColumn, rPublicId, rSystemId ) );
+
+#ifndef PRODUCT
+
+    // give detailed assertion on this message
+
+    OUStringBuffer sMessage;
+
+    sMessage.appendAscii( "An error or a warning has occured during XML import/export!\n" );
+
+    // ID & flags
+    sMessage.appendAscii( "Error-Id: 0x");
+    sMessage.append( nId, 16 );
+    sMessage.appendAscii( "\n    Flags: " );
+    sal_Int32 nFlags = (nId & XMLERROR_MASK_FLAG);
+    sMessage.append( nFlags >> 28, 16 );
+    if( (nFlags & XMLERROR_FLAG_WARNING) != 0 )
+        sMessage.appendAscii( " WARNING" );
+    if( (nFlags & XMLERROR_FLAG_ERROR) != 0 )
+        sMessage.appendAscii( " ERRROR" );
+    if( (nFlags & XMLERROR_FLAG_SEVERE) != 0 )
+        sMessage.appendAscii( " SEVERE" );
+    sMessage.appendAscii( "\n    Class: " );
+    sal_Int32 nClass = (nId & XMLERROR_MASK_CLASS);
+    sMessage.append( nClass >> 16, 16 );
+    if( (nClass & XMLERROR_CLASS_IO) != 0 )
+        sMessage.appendAscii( " IO" );
+    if( (nClass & XMLERROR_CLASS_FORMAT) != 0 )
+        sMessage.appendAscii( " FORMAT" );
+    if( (nClass & XMLERROR_CLASS_API) != 0 )
+        sMessage.appendAscii( " API" );
+    if( (nClass & XMLERROR_CLASS_OTHER) != 0 )
+        sMessage.appendAscii( " OTHER" );
+    sMessage.appendAscii( "\n    Number: " );
+    sal_Int32 nNumber = (nId & XMLERROR_MASK_NUMBER);
+    sMessage.append( nNumber, 16 );
+    sMessage.appendAscii( "\n");
+
+    // the parameters
+    sMessage.appendAscii( "Parameters:\n" );
+    sal_Int32 nLength = rParams.getLength();
+    const OUString* pParams = rParams.getConstArray();
+    for( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        sMessage.appendAscii( "    " );
+        sMessage.append( i );
+        sMessage.appendAscii( ": " );
+        sMessage.append( pParams[i] );
+        sMessage.appendAscii( "\n" );
+    }
+
+    // the exception message
+    sMessage.appendAscii( "Exception-Message: " );
+    sMessage.append( rExceptionMessage );
+    sMessage.appendAscii( "\n" );
+
+    // position (if given)
+    if( (nRow != -1) || (nColumn != -1) )
+    {
+        sMessage.appendAscii( "Position:\n    Public Identifier: " );
+        sMessage.append( rPublicId );
+        sMessage.appendAscii( "\n    System Identifier: " );
+        sMessage.append( rSystemId );
+        sMessage.appendAscii( "\n    Row, Column: " );
+        sMessage.append( nRow );
+        sMessage.appendAscii( "," );
+        sMessage.append( nColumn );
+        sMessage.appendAscii( "\n" );
+    }
+
+    // convert to byte string and signal the error
+    ByteString aError( String( sMessage.makeStringAndClear() ),
+                       RTL_TEXTENCODING_ASCII_US );
+    DBG_ERROR( aError.GetBuffer() );
+#endif
 }
 
 void XMLErrors::AddRecord(

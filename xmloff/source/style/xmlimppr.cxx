@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-13 17:58:24 $
+ *  last change: $Author: dvo $ $Date: 2001-11-27 15:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,11 @@ void SvXMLImportPropertyMapper::importXML(
         sal_Int32 nIndex =  nStartIdx - 1;
         sal_uInt32 nFlags = 0;  // flags of actual property map entry
         sal_Bool bFound = sal_False;
+
+        // for better error reporting: this should be set true if no
+        // warning is needed
+        sal_Bool bNoWarning = sal_False;
+
         do
         {
             // find an entry for this attribute
@@ -270,10 +275,20 @@ void SvXMLImportPropertyMapper::importXML(
                     }
                     else
                     {
+                        sal_uInt32 nOldSize = rProperties.size();
+
                         bSet = handleSpecialItem( aNewProperty, rProperties,
                                                   rValue, rUnitConverter,
                                                      rNamespaceMap );
+
+                        // no warning if handleSpecialItem added properties
+                        bNoWarning |= ( nOldSize != rProperties.size() );
                     }
+
+                    // no warning if we found could set the item. This
+                    // 'remembers' bSet across multi properties.
+                    bNoWarning |= bSet;
+
                     // store the property in the given vector
                     if( bSet )
                     {
@@ -284,9 +299,11 @@ void SvXMLImportPropertyMapper::importXML(
                     }
                     else
                     {
-                        // warn about unknown value (unless it's a
-                        // multi property; then we get another chance)
-                        if( (nFlags & MID_FLAG_MULTI_PROPERTY) == 0 )
+                        // warn about unknown value. Unless it's a
+                        // multi property: Then we get another chance
+                        // to set the value.
+                        if( !bNoWarning &&
+                            ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
                         {
                             Sequence<OUString> aSeq(2);
                             aSeq[0] = rAttrName;
