@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:30:34 $
+ *  last change: $Author: jsc $ $Date: 2001-04-02 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,12 +1496,18 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
                             }
 
                             xImpl->closeKey();
+                            // close and reopen is necessary for java
+                            xReg->close();
+                            xReg->open(aTempName, sal_False, sal_True);
                             xReg->destroy();
                             return seqImpl;
                         }
                     }
 
                     xImpl->closeKey();
+                    // close and reopen is necessary for java
+                    xReg->close();
+                    xReg->open(aTempName, sal_False, sal_True);
                     xReg->destroy();
                 }
                 catch(MergeConflictException&)
