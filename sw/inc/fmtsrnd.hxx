@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtsrnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,14 @@ inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
     return *this;
 }
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.hxx; revisit with gcc3
 inline const SwFmtSurround &SwAttrSet::GetSurround(BOOL bInP) const
     { return (const SwFmtSurround&)Get( RES_SURROUND,bInP); }
 
 inline const SwFmtSurround &SwFmt::GetSurround(BOOL bInP) const
     { return aSet.GetSurround(bInP); }
+#endif
 
 #endif
 
