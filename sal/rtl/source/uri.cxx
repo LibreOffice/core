@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-24 10:17:50 $
+ *  last change: $Author: sb $ $Date: 2002-10-08 07:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "rtl/uri.hxx"
+#include "rtl/uri.h"
 
 #include "osl/diagnose.h"
 #include "rtl/textenc.h"
@@ -71,8 +71,6 @@
 #include "sal/types.h"
 
 #include <cstddef>
-
-using rtl::Uri;
 
 namespace {
 
