@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 13:57:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
+#include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -164,6 +170,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
             ,m_xQueryComposer(_rxQueryComposer)
             ,m_xColumns(_rxCols)
             ,m_xConnection(_rxConnection)
+            ,m_xMetaData(_rxConnection->getMetaData())
 {
     DBG_CTOR(DlgFilterCrit,NULL);
     // Den String fuer noEntry in die ListBoxen der Feldnamen schreiben
@@ -361,8 +368,7 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
 {
     ::rtl::OUString aFilter(_rField.GetSelectEntry());
     // first quote the field name
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference<XDatabaseMetaData>();
-    ::rtl::OUString aQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+    ::rtl::OUString aQuote  = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
     aFilter = ::dbtools::quoteName(aQuote,aFilter);
 
     aFilter += ::rtl::OUString::createFromAscii(" ");
@@ -407,6 +413,7 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
         aFilter += ::rtl::OUString::createFromAscii(" ");
         String aTemp = _rValue.GetText();
         ::Replace_OS_PlaceHolder(aTemp);
+        addQuoting(_rField.GetSelectEntry(),aTemp);
         aFilter += aTemp.GetBuffer();
     }
     return aFilter;
@@ -540,6 +547,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             SelectField( aLB_WHEREFIELD1, _rItem.Name );
             ListSelectHdl(&aLB_WHEREFIELD1);
             aLB_WHERECOMP1.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP1));
+            correctCondition(_rItem.Name,aStr);
             aET_WHEREVALUE1.SetText( aStr );
         }
         break;
@@ -550,6 +558,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             SelectField( aLB_WHEREFIELD2, _rItem.Name );
             ListSelectHdl(&aLB_WHEREFIELD2);
             aLB_WHERECOMP2.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP2));
+            correctCondition(_rItem.Name,aStr);
             aET_WHEREVALUE2.SetText( aStr );
         }
         break;
@@ -560,6 +569,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             SelectField( aLB_WHEREFIELD3, _rItem.Name );
             ListSelectHdl(&aLB_WHEREFIELD3);
             aLB_WHERECOMP3.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP3));
+            correctCondition(_rItem.Name,aStr);
             aET_WHEREVALUE3.SetText( aStr );
         }
         break;
@@ -768,5 +778,67 @@ String DlgFilterCrit::BuildWherePart()
 
     return m_xQueryComposer->getFilter();
 }
+// -----------------------------------------------------------------------------
+void DlgFilterCrit::correctCondition(const ::rtl::OUString& _rColumnName,String& _rCondition)
+{
+
+    Reference<XPropertySet> xColumn;
+    if(m_xColumns->hasByName(_rColumnName))
+        m_xColumns->getByName(_rColumnName) >>= xColumn;
+
+    if(!m_xMetaData.is() || !xColumn.is())
+        return;
+    sal_Int32 nType = 0;
+    xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+    Reference< XResultSet> xRs = m_xMetaData->getTypeInfo();
+    Reference< XRow> xRow(xRs,UNO_QUERY);
+    // Information for a single SQL type
+    // Loop on the result set
+    while (xRs->next())
+    {
+        if(nType == xRow->getShort(2))
+        {
+            String sPreSuffix = xRow->getString(4);
+            if(!xRow->wasNull() && _rCondition.Search(sPreSuffix) == 0) // found prefix so remove it
+                _rCondition.Erase(0,sPreSuffix.Len());
+            sPreSuffix = xRow->getString(5);
+            if(!xRow->wasNull() && _rCondition.SearchCharBackward(sPreSuffix.GetBuffer()) == (_rCondition.Len()-sPreSuffix.Len())) // found suffix so remove it
+                _rCondition.Erase(_rCondition.Len()-1,1);
+
+            break;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition) const
+{
+
+    Reference<XPropertySet> xColumn;
+    if(m_xColumns->hasByName(_rColumnName))
+        m_xColumns->getByName(_rColumnName) >>= xColumn;
+
+    if(!m_xMetaData.is() || !xColumn.is())
+        return;
+    sal_Int32 nType = 0;
+    xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+    Reference< XResultSet> xRs = m_xMetaData->getTypeInfo();
+    Reference< XRow> xRow(xRs,UNO_QUERY);
+    // Information for a single SQL type
+    String aCondition = _rCondition;
+    // Loop on the result set
+    while (xRs->next())
+    {
+        if(nType == xRow->getShort(2))
+        {
+            aCondition = String(xRow->getString(4));
+            aCondition += _rCondition;
+            aCondition += String(xRow->getString(5));
+            break;
+        }
+    }
+    _rCondition = aCondition;
+}
+// -----------------------------------------------------------------------------
+
 
 

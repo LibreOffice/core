@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 14:19:57 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace com
             namespace sdbc
             {
                 class XConnection;
+                class XDatabaseMetaData;
             }
             namespace container
             {
@@ -148,9 +149,10 @@ namespace dbaui
         String          aSTR_NOENTRY;
         String          aSTR_COMPARE_OPERATORS;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> m_xQueryComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>     m_xQueryComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
 
 
         void            SelectField( ListBox& rBox, const String& rField );
@@ -161,6 +163,8 @@ namespace dbaui
         ::connectivity::OSQLPredicateType GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
         USHORT          GetSelectionPos(::connectivity::OSQLPredicateType eType,const ListBox& rListBox) const;
         ::rtl::OUString getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue) const;
+        void            correctCondition(const ::rtl::OUString& _rColumnName,String& _rCondition);
+        void            addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition)  const;
 
     public:
         DlgFilterCrit(  Window * pParent,
