@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:49:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text = "~Optionsfelder";
         Text [ english ] = "~Option Fields";
         Text [ english_us ] = "~Option fields";
-        Text[ portuguese ] = "~Campos de opηγo";
+        Text[ portuguese ] = "~Botυes de opηγo";
         Text[ russian ] = "~Οξλÿ οΰπΰμεςπξβ";
         Text[ greek ] = "Πεδία επιλ~ογών";
         Text[ dutch ] = "~Optievelden";
@@ -204,7 +204,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text = "Soll ein Optionsfeld standardmδίig ausgewδhlt sein?";
         Text [ english ] = "Should one option field be selected as a default?";
         Text [ english_us ] = "Should one option field be selected as a default?";
-        Text[ portuguese ] = "Seleccionar um campo de opηγo como padrγo?";
+        Text[ portuguese ] = "Seleccionar um botγo de opηγo como padrγo?";
         Text[ russian ] = "Βϋαπΰςό κΰκξε-λθαξ οξλε οΰπΰμεςπξβ β κΰχερςβε ρςΰνδΰπςνξγξ?";
         Text[ greek ] = "Θέλετε να είναι επιλεγμένο ως προεπιλογή κάποιο πεδίο επιλογής;";
         Text[ dutch ] = "Wilt u een bepaald optieveld als standaard selecteren ?";
@@ -579,7 +579,7 @@ String RID_STR_GROUPWIZ_DBFIELD
     Text [ arabic ] = "νγίδί ΝέΩ ήνγΙ γΜγζΪΙ ΗαΞνΗΡΗΚ έν Νήα ήΗΪΟΙ ΘνΗδΗΚ Γζ ΗΣΚΞΟΗγε έν ΪγανΙ αΗΝήΙ.";
     Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
     Text [ chinese_simplified ] = "ΔϊΔάΉ»½«Ρ΅ΟξΠ΅ΧιµΔΚύΦµ΄ζΘλÒ»ΈφΚύΎέΏβ»ςÒΤΊσµχΣΓΛό΅£";
-    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή της ομάδας επιλογής σε ένα πεδίο βάσης δεδομένων ή να το χρησιμοποιήσετε μελλοντικά για κάποια ενέργεια.";
+    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή της ομάδας επιλογής σε ένα πεδίο βάσης δεδομένων ή να το χρησιμοποιήσετε μελλοντικά για κάποια ενέργει";
     Text [ korean ] = "ΏΙΌΗ ±Χ·μΐΗ °ªΐ» µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµεΏ΅ ΐϊΐεΗΟ°Ε³ª ΎΥΐΈ·ΞΐΗ ΐΫΎχΏ΅ »ηΏλΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text [ turkish ] = "Seηenek alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da bu deπeri daha sonra yapύlacak bir iώlemde kullanabilirsiniz.";
     Text[ catalan ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acciσn posterior.";
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/06/13 22:49:56  kz
+ *  Merge SRC633: 06/14/01 - 00:49:13
+ *
  *  Revision 1.11  2001/06/08 22:29:16  vg
  *  Merge SRC633: 09.06.01 - 00:28:39
  *
@@ -625,6 +628,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
