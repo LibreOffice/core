@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: pw $ $Date: 2000-10-23 14:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL; aURL.SetSmartURL( pDashList->GetName() );
+            INetURLObject   aURL( pDashList->GetName(), INET_PROT_FILE );
 
             if ( aURL.getBase().Len() > 18 )
             {

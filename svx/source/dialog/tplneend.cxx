@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
+ *  last change: $Author: pw $ $Date: 2000-10-23 14:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL; aURL.SetSmartURL( pLineEndList->GetName() );
+            INetURLObject   aURL( pLineEndList->GetName(), INET_PROT_FILE );
 
             if ( aURL.getBase().Len() > 18 )
             {
