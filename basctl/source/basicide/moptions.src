@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:06:07 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ ModalDialog RID_MACROOPTIONS
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "विवरण";
         Text[ slovak ] = "Popis";
+        Text[ hungarian ] = "Leírás";
+        Text[ slovenian ] = "Opis";
     };
     MultiLineEdit RID_ME_DESCR
     {
@@ -163,7 +165,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ portuguese_brazilian ] = "Informa��es de Ajuda" ;
         Text [ portuguese ] = "Informa��es - Ajuda" ;
         Text [ finnish ] = "Ohjetiedot" ;
-        Text [ danish ] = "Hj�lp-information" ;
+        Text [ danish ] = "Hj�lpeinformation" ;
         Text [ french ] = "Informations - Aide" ;
         Text [ swedish ] = "Hj�lp-information" ;
         Text [ dutch ] = "Help-informatie" ;
@@ -185,6 +187,8 @@ ModalDialog RID_MACROOPTIONS
         Text[ hebrew ] = "Hilfe-Informationen";
         Text[ hindi ] = "सहायता सूचना";
         Text[ slovak ] = "Pomocník";
+        Text[ hungarian ] = "Súgószöveg";
+        Text[ slovenian ] = "Pomoč";
     };
     FixedText RID_FT_HELPID
     {
@@ -198,7 +202,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ portuguese_brazilian ] = "ID da Ajuda" ;
         Text [ portuguese ] = "Ajuda - Identifica��o" ;
         Text [ finnish ] = "Ohjetunnus" ;
-        Text [ danish ] = "Hj�lp-identifikation" ;
+        Text [ danish ] = "Hj�lpeidentifikation" ;
         Text [ french ] = "ID de l'aide" ;
         Text [ swedish ] = "Hj�lp-identifikation" ;
         Text [ dutch ] = "Help-ID" ;
@@ -220,6 +224,8 @@ ModalDialog RID_MACROOPTIONS
         Text[ hebrew ] = "Hilfe-Identifikation";
         Text[ hindi ] = "सहायता ID";
         Text[ slovak ] = "ID Pomocníka";
+        Text[ hungarian ] = "Súgó azonosítója";
+        Text[ slovenian ] = "ID pomoči";
     };
     NumericField RID_NF_HELPID
     {
@@ -243,7 +249,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ portuguese_brazilian ] = "Nome do arquivo de ajuda" ;
         Text [ portuguese ] = "Nome do ficheiro de ajuda" ;
         Text [ finnish ] = "Ohjetiedoston nimi" ;
-        Text [ danish ] = "Hj�lp-filnavn" ;
+        Text [ danish ] = "Hj�lpefilnavn" ;
         Text [ french ] = "Nom du fichier de l'aide" ;
         Text [ swedish ] = "Hj�lp-filnamn" ;
         Text [ dutch ] = "Help-bestandsnaam" ;
@@ -265,6 +271,8 @@ ModalDialog RID_MACROOPTIONS
         Text[ hebrew ] = "Hilfe-Dateiname";
         Text[ hindi ] = "सहायता फाइल का नाम";
         Text[ slovak ] = "Meno súboru obsahujúceho pomocníka";
+        Text[ hungarian ] = "Súgófájl neve";
+        Text[ slovenian ] = "Ime datoteke pomoči";
     };
     Edit RID_ED_HELPNAME
     {
@@ -289,7 +297,10 @@ ModalDialog RID_MACROOPTIONS
     Text[ hebrew ] = "‮תאור‬";
     Text[ hindi ] = "विवरण";
     Text[ slovak ] = "Popis";
+    Text[ hungarian ] = "Leírás";
+    Text[ slovenian ] = "Opis";
 };
+
 
 
 
