@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:09:46 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2017,18 +2017,23 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         // limit for the repaint offset
         const long nFormatRepaint = GetInfo().GetPaintOfst();
 
-        if ( nReformat < GetInfo().GetLineStart() + 5 )
+        if ( nReformat < GetInfo().GetLineStart() + 3 )
             return 0;
 
-        // step back for smoother repaint
+        // step back two positions for smoother repaint
         nReformat -= 2;
 
-        // --> FME 2004-09-27 #i28795#, #i34607#
-        // step back three more characters for complex scripts
+        // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
+        // step back six(!) more characters for complex scripts
         // this is required e.g., for Khmer (thank you, Javier!)
         const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
         if ( ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
-            nReformat -= 3;
+        {
+            if ( nReformat > GetInfo().GetLineStart() + 6 )
+                nReformat -= 6;
+            else
+                nReformat = GetInfo().GetLineStart();
+        }
         // <--
 
         // Weird situation: Our line used to end with a hole portion
