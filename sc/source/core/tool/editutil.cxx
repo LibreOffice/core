@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 17:33:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 18:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
-    if ( bForceToTop || eJust == SVX_VER_JUSTIFY_TOP )
+    if ( eJust == SVX_VER_JUSTIFY_TOP )
         nPixDifY = nTopMargin;
     else
     {
@@ -184,7 +184,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
 
         pDev->SetMapMode(aMode);
 
-        if ( nTextHeight > nCellY + nTopMargin )
+        if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
             nPixDifY = 0;                           // zu gross -> oben anfangen
         else
         {
