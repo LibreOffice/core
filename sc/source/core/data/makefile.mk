@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 10:26:16 $
+#   last change: $Author: hr $ $Date: 2004-08-03 11:32:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,63 +80,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-    bcaslot.cxx \
-    docpool.cxx \
-    poolhelp.cxx \
-    column.cxx \
-    column2.cxx \
-    column3.cxx \
-    document.cxx \
-    documen2.cxx \
-    documen3.cxx \
-    documen4.cxx \
-    documen5.cxx \
-    documen6.cxx \
-    documen7.cxx \
-    documen8.cxx \
-    documen9.cxx \
-    fillinfo.cxx \
-    table1.cxx \
-    table2.cxx \
-    table3.cxx \
-    table4.cxx \
-    table5.cxx \
-    table6.cxx \
-    olinetab.cxx \
-    patattr.cxx \
-    cell.cxx \
-    cell2.cxx \
-    attarray.cxx \
-    attrib.cxx \
-    global.cxx \
-    global2.cxx \
-    globalx.cxx \
-    markarr.cxx \
-    markdata.cxx \
-    dociter.cxx \
-    drwlayer.cxx \
-    userdat.cxx \
-    drawpage.cxx \
-    stlsheet.cxx \
-    stlpool.cxx \
-    dptabsrc.cxx \
-    dptabres.cxx \
-    dptabdat.cxx \
-    dpshttab.cxx \
-    dpsdbtab.cxx \
-    dpoutput.cxx \
-    dpobject.cxx \
-    dpsave.cxx \
-    pivot.cxx \
-    pivot2.cxx \
-    dbdocutl.cxx \
-    pagepar.cxx \
-    conditio.cxx \
-    validat.cxx \
-    scimpexpmsg.cxx \
-    sortparam.cxx
-
 SLOFILES =  \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/docpool.obj \
@@ -182,9 +125,11 @@ SLOFILES =  \
     $(SLO)$/dptabdat.obj \
     $(SLO)$/dpshttab.obj \
     $(SLO)$/dpsdbtab.obj \
+    $(SLO)$/dpgroup.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpsave.obj \
+    $(SLO)$/dpdimsave.obj \
     $(SLO)$/pivot.obj \
     $(SLO)$/pivot2.obj \
     $(SLO)$/dbdocutl.obj \
