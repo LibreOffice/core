@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 09:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,6 +928,7 @@ friend class WW8FormulaControl;
                         BOOL*       pbTestTxbxContainsText = 0,
                         long*       pnStartCp      = 0,
                         long*       pnEndCp        = 0,
+                        BOOL*       pbContainsGraphics = 0,
                         SvxMSDffImportRec* pRecord = 0);
     BOOL TxbxChainContainsRealText( USHORT nTxBxS,
                                     long&  rStartCp,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:32 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 09:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
             rEndCp -= 1;
     }
     else
-        rEndCp -= 2;
+        rEndCp -= 1;
     return TRUE;
 }
 
@@ -1027,6 +1027,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                      BOOL*       pbTestTxbxContainsText,
                                      long*       pnStartCp,
                                      long*       pnEndCp,
+                                     BOOL*       pbContainsGraphics,
                                      SvxMSDffImportRec* pRecord)
 {
     SwFrmFmt* pFlyFmt = 0;
@@ -1036,9 +1037,10 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
     String aString;
     long nStartCp, nEndCp, nNewStartCp;
-    BOOL bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp,
-                                             nTxBxS, nSequence ) &&
-                        GetTxbxText( aString, nStartCp, nEndCp );
+    BOOL bContainsGraphics=FALSE;
+    BOOL bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
+        nSequence ) && GetTxbxText( aString, nStartCp, nEndCp );
+
     nNewStartCp = nStartCp;
 
     if( !pbTestTxbxContainsText )
@@ -1089,138 +1091,134 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                             aString.Erase( i, 1 );
                     }
                     else if( 0x15 == aString.GetChar( i ) )
-                    {
                         aString.Erase( i, 1 );
-                    }
                 }
             }
         }
-        if (1 == aString.Len())
+
+        if (1 != aString.Len())
+        {
+            if ( (STRING_NOTFOUND != aString.Search(0x1)) ||
+                (STRING_NOTFOUND != aString.Search(0x8)) )
+                bContainsGraphics=TRUE;
+        }
+        else        // May be a single graphic or object
         {
             BOOL bDone = TRUE;
             switch( aString.GetChar(0) )
             {
-                case 0x1:if( !pbTestTxbxContainsText )
+                case 0x1:
+                    if( !pbTestTxbxContainsText )
+                    {
+                        WW8ReaderSave aSave(this,nNewStartCp + nDrawCpO -1);
+                        BOOL bOldEmbeddObj = bEmbeddObj;
+                        //bEmbedd Ordinarily would have been set by field
+                        //parse, but this is impossible here so...
+                        bEmbeddObj = TRUE;
+
+                        // 1st look for OLE- or Graph-Indicator Sprms
+                        WW8PLCFx_Cp_FKP* pChp = pPlcxMan->GetChpPLCF();
+                        WW8PLCFxDesc aDesc;
+                        pChp->GetSprms( &aDesc );
+                        WW8SprmIter aSprmIter( aDesc.pMemPos, aDesc.nSprmsLen,
+                            GetFib().nVersion );
+
+                        const BYTE* pParams = aSprmIter.GetAktParams();
+                        for( int nLoop = 0; nLoop < 2; ++nLoop )
                         {
-                            WW8ReaderSave aSave(this,nNewStartCp + nDrawCpO -1);
-                            BOOL bOldEmbeddObj = bEmbeddObj;
-                            //bEmbedd Ordinarily would have been set by field
-                            //parse, but this is impossible here so...
-                            bEmbeddObj = TRUE;
-
-                            // 1st look for OLE- or Graph-Indicator Sprms
-                            WW8PLCFx_Cp_FKP* pChp = pPlcxMan->GetChpPLCF();
-                            WW8PLCFxDesc aDesc;
-                            pChp->GetSprms( &aDesc );
-                            WW8SprmIter aSprmIter( aDesc.pMemPos, aDesc.nSprmsLen,
-                                                   GetFib().nVersion );
-
-                            //BOOL bRead_Obj    = FALSE;
-                            //BOOL bRead_PicLoc = FALSE;
-                            const BYTE* pParams = aSprmIter.GetAktParams();
-                            for( int nLoop = 0; nLoop < 2; ++nLoop )
+                            while( aSprmIter.GetSprms()
+                                && (0 != (pParams = aSprmIter.GetAktParams())) )
                             {
-                                while(     aSprmIter.GetSprms()
-                                        && (0 != (pParams = aSprmIter.GetAktParams())) )
+                                USHORT nAktId = aSprmIter.GetAktId();
+                                switch( nAktId )
                                 {
-                                    USHORT nAktId = aSprmIter.GetAktId();
-                                    switch( nAktId )
-                                    {
-                                        case     75:
-                                        case    118:
-                                        case 0x080A:
-                                        case 0x0856:
-                                            //if( !bRead_Obj )
-                                            //{
-                                                Read_Obj(nAktId, pParams, 1);
-                                            //  bRead_Obj = TRUE;
-                                            //}
-                                            break;
-                                        case     68:  // Read_Pic()
-                                        case 0x6A03:
-                                        case 0x680E:
-                                            //if( !bRead_PicLoc )
-                                            //{
-                                                Read_PicLoc(nAktId, pParams, 1);
-                                            //  bRead_PicLoc = TRUE;
-                                            //}
-                                            break;
-                                    }
-                                    aSprmIter++;
+                                    case     75:
+                                    case    118:
+                                    case 0x080A:
+                                    case 0x0856:
+                                            Read_Obj(nAktId, pParams, 1);
+                                        break;
+                                    case     68:  // Read_Pic()
+                                    case 0x6A03:
+                                    case 0x680E:
+                                            Read_PicLoc(nAktId, pParams, 1);
+                                        break;
                                 }
-
-                                //if( bRead_Obj || bRead_PicLoc ) break;
-                                if( !nLoop )
-                                {
-                                    pChp->GetPCDSprms(  aDesc );
-                                    aSprmIter.SetSprms( aDesc.pMemPos,
-                                        aDesc.nSprmsLen );
-                                }
-                                //if( bRead_Obj || bRead_PicLoc ) break;
+                                aSprmIter++;
                             }
-                            aSave.Restore(this);
-                            bEmbeddObj=bOldEmbeddObj;
 
-                            // then import either an OLE of a Graphic
-                            if( bObj )
+                            //if( bRead_Obj || bRead_PicLoc ) break;
+                            if( !nLoop )
                             {
-                                if( bMakeSdrGrafObj && pTextObj &&
-                                    pTextObj->GetUpGroup() )
+                                pChp->GetPCDSprms(  aDesc );
+                                aSprmIter.SetSprms( aDesc.pMemPos,
+                                    aDesc.nSprmsLen );
+                            }
+                            //if( bRead_Obj || bRead_PicLoc ) break;
+                        }
+                        aSave.Restore(this);
+                        bEmbeddObj=bOldEmbeddObj;
+
+                        // then import either an OLE of a Graphic
+                        if( bObj )
+                        {
+                            if( bMakeSdrGrafObj && pTextObj &&
+                                pTextObj->GetUpGroup() )
+                            {
+                                // SdrOleObj/SdrGrafObj anstatt des
+                                // SdrTextObj in dessen Gruppe einsetzen
+
+                                Graphic aGraph;
+                                SdrObject* pNew = ImportOleBase( aGraph, FALSE,
+                                    0, 0 );
+
+                                if( !pNew )
                                 {
-                                    // SdrOleObj/SdrGrafObj anstatt des
-                                    // SdrTextObj in dessen Gruppe einsetzen
-
-                                    Graphic aGraph;
-                                    SdrObject* pNew = ImportOleBase( aGraph,
-                                                                FALSE, 0, 0 );
-                                    if( !pNew )
-                                    {
-                                        pNew = new SdrGrafObj;
-                                        ((SdrGrafObj*)pNew)->SetGraphic( aGraph );
-                                    }
-                                    if( !pDrawModel )
-                                        GrafikCtor();
-
-                                    pNew->SetModel( pDrawModel );
-                                    pNew->SetLogicRect( pTextObj->GetBoundRect() );
-                                    pNew->SetLayer( pTextObj->GetLayer() );
-
-                                    pTextObj->GetUpGroup()->GetSubList()->
-                                        ReplaceObject( pNew, pTextObj->GetOrdNum() );
+                                    pNew = new SdrGrafObj;
+                                    ((SdrGrafObj*)pNew)->SetGraphic(aGraph);
                                 }
-                                else
-                                    pFlyFmt = ImportOle();
-                                bObj = FALSE;
+
+                                if( !pDrawModel )
+                                    GrafikCtor();
+
+                                pNew->SetModel( pDrawModel );
+                                pNew->SetLogicRect( pTextObj->GetBoundRect() );
+                                pNew->SetLayer( pTextObj->GetLayer() );
+
+                                pTextObj->GetUpGroup()->GetSubList()->
+                                    ReplaceObject(pNew, pTextObj->GetOrdNum());
                             }
                             else
-                            {
-                                InsertTxbxAttrs(nNewStartCp,
-                                                nNewStartCp+1,
-                                                TRUE);
-                                //InsertTxbxCharAttrs(nNewStartCp, nNewStartCp+1, TRUE);
-                                pFlyFmt = ImportGraf(
-                                        bMakeSdrGrafObj ? pTextObj : 0,
-                                        pOldFlyFmt,
-                                         pTextObj
-                                          ? (nDrawHell == pTextObj->GetLayer())
-                                          : FALSE );
-                            }
+                                pFlyFmt = ImportOle();
+                            bObj = FALSE;
                         }
-                        break;
+                        else
+                        {
+                            InsertTxbxAttrs(nNewStartCp,nNewStartCp+1,TRUE);
+                            pFlyFmt = ImportGraf(bMakeSdrGrafObj ? pTextObj : 0,
+                                pOldFlyFmt,
+                                pTextObj ?  (nDrawHell == pTextObj->GetLayer())
+                                : FALSE );
+                        }
+                    }
+                    break;
                 case 0x8:
-                        if ( (!pbTestTxbxContainsText) && (!bObj) )
-                            pFlyFmt = Read_GrafLayer( nPosCp );
-                        break;
-                default:bDone = FALSE;
-                        break;
+                    if ( (!pbTestTxbxContainsText) && (!bObj) )
+                        pFlyFmt = Read_GrafLayer( nPosCp );
+                    break;
+                default:
+                    bDone = FALSE;
+                    break;
             }
+
             if( bDone )
             {
                 if( pFlyFmt )
                 {
                     if( pRecord )
                     {
-                        SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+                        SfxItemSet aFlySet( rDoc.GetAttrPool(),
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
                         Rectangle aInnerDist(   pRecord->nDxTextLeft,
                                                 pRecord->nDyTextTop,
@@ -1235,28 +1233,22 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                         pFlyFmt->SetAttr( aFlySet );
 
-
                         MatchWrapDistancesIntoFlyFmt( pRecord, pFlyFmt );
                     }
-
                 }
                 aString.Erase();
                 rbEraseTextObj = (0 != pFlyFmt);
             }
         }
-
     }
 
     if( pnStartCp )
         *pnStartCp = nStartCp;
     if( pnEndCp )
-        *pnEndCp   = nEndCp;
+        *pnEndCp = nEndCp;
 
     if( pbTestTxbxContainsText )
-    {
-        *pbTestTxbxContainsText    =    bTextWasRead
-                                     && ! rbEraseTextObj;
-    }
+        *pbTestTxbxContainsText = bTextWasRead && ! rbEraseTextObj;
     else if( !rbEraseTextObj )
     {
         if( bTextWasRead )
@@ -1284,6 +1276,8 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     }
 
     pStrm->Seek( nOld );
+    if (pbContainsGraphics)
+        *pbContainsGraphics = bContainsGraphics;
     return pFlyFmt;
 }
 
@@ -1292,10 +1286,8 @@ BOOL SwWW8ImplReader::TxbxChainContainsRealText( USHORT nTxBxS,
                                                  long&  rEndCp )
 {
     BOOL bErase, bContainsText;
-    InsertTxbxText( 0,0,nTxBxS,USHRT_MAX,0,0,0, bErase,
-                                                &bContainsText,
-                                                &rStartCp,
-                                                &rEndCp );
+    InsertTxbxText( 0,0,nTxBxS,USHRT_MAX,0,0,0, bErase, &bContainsText,
+        &rStartCp, &rEndCp );
     return bContainsText;
 }
 
@@ -1321,8 +1313,9 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
         (INT16)SVBT16ToShort( pHd->dya ) );
 
     long nStartCpFly,nEndCpFly;
+    BOOL bContainsGraphics;
     InsertTxbxText(PTR_CAST(SdrTextObj,pObj), &aSize, 0, 0, 0, 0, FALSE,
-        bDummy,0,&nStartCpFly,&nEndCpFly);
+        bDummy,0,&nStartCpFly,&nEndCpFly,&bContainsGraphics);
 
     InsertObj( pObj, SVBT16ToShort( pDo->dhgt ) );
 
@@ -1342,11 +1335,17 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     pObj->SetItemSetAndBroadcast(aSet);
 
     //Cannot properly have draw objects in header, here with txtbox we can
-    //convert it successfully to a flyframe
-    if (bHdFtFtnEdn)
+    //convert it successfully to a flyframe, nor can we support graphics
+    //in text drawboxes
+    if (bHdFtFtnEdn || bContainsGraphics)
     {
         SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
             RES_FRMATR_END-1);
+
+        aFlySet.Put(SwFmtFrmSize(ATT_MIN_SIZE, aSize.Width(), aSize.Height()));
+        aFlySet.Put(SwFmtSurround(SURROUND_THROUGHT));
+        if (SVBT16ToShort( pDo->dhgt ) & 0x2000)
+            aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
 
         //InnerDist is all 0 as word 6 doesn't store distance from borders and
         //neither does it store the border style so its always simple
@@ -1366,6 +1365,8 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
 
         if (nEndCpFly-nStartCpFly)
         {
+            WW8AnchoringProperties aAnchoring;
+            aAnchoring.Remove(*pPaM->GetPoint(),*this,pCtrlStck);
             WW8ReaderSave aSave( this );
 
             // set Pam into the FlyFrame
@@ -1380,6 +1381,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
                 : MAN_TXBX_HDFT );
 
             aSave.Restore( this );
+            aAnchoring.Insert(pCtrlStck);
         }
 
         if( pObj->GetPage() )
@@ -2562,7 +2564,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
             pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrmFmt,
             (pSdrTextObj != pTrueObject) || (0 != pGroupObject),
-            bEraseThisObject, FALSE, 0, 0, pRecord);
+            bEraseThisObject, FALSE, 0, 0, 0, pRecord);
 
         // wurde dieses Objekt ersetzt ??
         if( bEraseThisObject )
