@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:42:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #endif
 #ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
-#endif
-
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
 #endif
 
 #ifndef _FMTFIELD_HXX_
