@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,9 +256,10 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     sQName.append ( (*aIter).second->sPrefix);
                     sQName.append ( sal_Unicode(':') );
                     sQName.append ( rLocalName );
-                    OUString *pString = new OUString ( rLocalName ), &rString = sQName.makeStringAndClear();
-                    const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = rString;
-                    return rString;
+                    OUString *pString = new OUString ( rLocalName );
+                    OUString sString = sQName.makeStringAndClear();
+                    const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = sString;
+                    return sString;
                 }
                 else
                 {
