@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-18 13:48:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ static void sal_PrintImage( char *s, XImage*p )
 
 // -----------------------------------------------------------------------------
 
-#if defined DEBUG && defined SALGDI2_TESTTRANS
+#if (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )                              \
 {                                                                   \
     XCopyArea( pXDisp, _def_drawable, aDrawable, _GetCopyGC(),      \
@@ -118,9 +118,9 @@ static void sal_PrintImage( char *s, XImage*p )
                pPosAry->mnDestWidth, pPosAry->mnDestHeight,         \
                0, 0 );                                              \
 }
-#else // DEBUG && defined SALGDI2_TESTTRANS
+#else // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )
-#endif // DEBUG && defined SALGDI2_TESTTRANS
+#endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -366,7 +366,7 @@ GC SalGraphicsData::SetMask( int           &nX,
 
     if( !hPixmap )
     {
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
         fprintf( stderr, "SalGraphicsData::SetMask !hPixmap\n" );
 #endif
         return NULL;
