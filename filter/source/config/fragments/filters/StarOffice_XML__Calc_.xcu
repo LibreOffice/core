@@ -1,4 +1,4 @@
-    <node oor:name="StarOffice XML (Calc)" oor:op="replace">
+    <node oor:name="StarOffice XML (Calc)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>calc_StarOffice_XML_Calc</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">%productname% %formatversion% 表計算ドキュメント</value>
             <value xml:lang="es">%productname% %formatversion% Hoja de cálculo</value>
             <value xml:lang="tr">%productname% %formatversion% Hesap Çizelgesi</value>
-            <value xml:lang="ru">%productname% %formatversion% Электронная таблица</value>
+            <value xml:lang="ru">%productname% %formatversion% Электронна�? таблица</value>
             <value xml:lang="th">%productname% %formatversion% Spreadsheet</value>
             <value xml:lang="x-comment">%productname% %formatversion% Tabellendokument</value>
             <value xml:lang="ca">%productname% %formatversion% Spreadsheet</value>
-            <value xml:lang="el">Υπολογιστικό φύλλο %productname% %formatversion%</value>
+            <value xml:lang="el">Υπολογιστικό φ�?λλο %productname% %formatversion%</value>
             <value xml:lang="zh-CN">%productname% %formatversion% 工作表文档</value>
             <value xml:lang="pt">%productname% %formatversion% Folha de cálculo</value>
             <value xml:lang="cs">Sešit %productname% %formatversion%</value>
@@ -38,5 +38,5 @@
             <value xml:lang="it">%productname% %formatversion% Foglio elettronico</value>
             <value xml:lang="x-translate">%productname% %formatversion% Tabellendokument</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN</value></prop>
     </node>
