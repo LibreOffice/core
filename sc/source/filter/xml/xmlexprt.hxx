@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:57:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString               sElemTab;
     rtl::OUString               sElemP;
     sal_Int32                   nOpenRow;
-    sal_uInt16                  nCurrentTable;
+    sal_Int32                   nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;
     sal_Bool                    bRowHeaderOpen : 1;
     sal_Bool                    mbShowProgress : 1;
@@ -173,7 +173,7 @@ class ScXMLExport : public SvXMLExport
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
-                                                        const sal_uInt16 nTable);
+                                                        const sal_Int32 nTable);
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
@@ -183,9 +183,9 @@ class ScXMLExport : public SvXMLExport
         const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
     void OpenHeaderColumn();
     void CloseHeaderColumn();
-    void ExportColumns(const sal_uInt16 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
+    void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
-        const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_uInt16 nSheet);
+        const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
     void WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
     void OpenHeaderRows();
@@ -193,7 +193,7 @@ class ScXMLExport : public SvXMLExport
     void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
     void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
         const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenRow(const sal_uInt16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
+    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
     void CloseRow(const sal_Int32 nRow);
     sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
     sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
