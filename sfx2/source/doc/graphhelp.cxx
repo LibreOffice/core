@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:45:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,9 +438,15 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
 
 //---------------------------------------------------------------
 // static
-sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile, sal_Bool bSigned, SvStream* pStream )
+sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
+                                                        sal_Bool bSigned,
+                                                        const uno::Reference< io::XStream >& xStream )
 {
     sal_Bool bResult = sal_False;
+    SvStream* pStream = NULL;
+
+    if ( xStream.is() )
+        pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
 
     if ( pMetaFile && pStream && !pStream->GetError() )
     {
@@ -457,10 +463,12 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile, 
         if ( bResult )
             bResult = ( !aResultBitmap.IsEmpty()
                         && GraphicConverter::Export( *pStream, aResultBitmap, CVT_PNG ) == 0
-                        && !pStream->GetError() );
+                        && ( pStream->Flush(), !pStream->GetError() ) );
 
         if ( pSignatureBitmap )
             delete pSignatureBitmap;
+
+        delete pStream;
     }
 
     return bResult;
@@ -468,9 +476,14 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile, 
 
 //---------------------------------------------------------------
 // static
-sal_Bool GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx& aBitmap, SvStream* pStream )
+sal_Bool GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx& aBitmap,
+                                                                 const uno::Reference< io::XStream >& xStream )
 {
     sal_Bool bResult = sal_False;
+    SvStream* pStream = NULL;
+
+    if ( xStream.is() )
+        pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
 
     if ( pStream && !pStream->GetError() )
     {
@@ -483,9 +496,13 @@ sal_Bool GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx&
                                     aResultBitmap );
 
         if ( bResult )
+        {
             bResult = ( !aResultBitmap.IsEmpty()
                         && GraphicConverter::Export( *pStream, aResultBitmap, CVT_PNG ) == 0
-                        && !pStream->GetError() );
+                        && ( pStream->Flush(), !pStream->GetError() ) );
+        }
+
+        delete pStream;
     }
 
     return bResult;
@@ -493,10 +510,10 @@ sal_Bool GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx&
 
 //---------------------------------------------------------------
 // static
-sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, SvStream* pStream )
+sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
 {
     sal_Bool bResult = sal_False;
-    if ( nResID && pStream && !pStream->GetError() )
+    if ( nResID && xStream.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
         if ( xServiceManager.is() )
@@ -519,41 +536,14 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, SvStream
                     uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
                     if ( xGraphic.is() )
                     {
-                        //TODO: use wrapper when it is integrated
-                        uno::Reference< io::XStream > xOutStream(
-                            xServiceManager->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                            uno::UNO_QUERY );
+                        uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
+                        aStoreProps[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aStoreProps[0].Value <<= xStream;
+                        aStoreProps[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                        aStoreProps[1].Value <<= ::rtl::OUString::createFromAscii( "image/png" );
 
-                        if ( xOutStream.is() )
-                        {
-                            uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                            aStoreProps[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
-                            aStoreProps[0].Value <<= xOutStream;
-                            aStoreProps[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
-                            aStoreProps[1].Value <<= ::rtl::OUString::createFromAscii( "image/png" );
-
-                            xGraphProvider->storeGraphic( xGraphic, aStoreProps );
-                            uno::Reference< io::XSeekable > xSeekable( xOutStream, uno::UNO_QUERY );
-                            uno::Reference< io::XInputStream > xInStream = xOutStream->getInputStream();
-                            if ( xSeekable.is() && xInStream.is() )
-                            {
-                                xSeekable->seek( 0 );
-                                pStream->SetStreamSize( 0 );
-                                pStream->Seek( 0 );
-
-                                uno::Sequence< sal_Int8 > aBuf( 32000 );
-                                sal_Int32 nRead = 0;
-                                do
-                                {
-                                    nRead = xInStream->readBytes( aBuf, 32000 );
-                                    if ( nRead < 32000 )
-                                        aBuf.realloc( nRead );
-                                    pStream->Write( aBuf.getArray(), nRead );
-                                } while( nRead == 32000 && !pStream->GetError() );
-                                bResult = !pStream->GetError();
-                            }
-                        }
+                        xGraphProvider->storeGraphic( xGraphic, aStoreProps );
+                        bResult = sal_True;
                     }
                 }
             }
@@ -561,9 +551,6 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, SvStream
             {
             }
         }
-
-
-
     }
 
     return bResult;
