@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 13:19:24 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 14:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,7 @@ void NumericFormatter::ImplInit()
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
     mbThousandSep       = TRUE;
+    mbShowTrailingZeros = TRUE;
 
     // Fuer Felder...
     mnSpinSize          = 1;
@@ -573,6 +574,17 @@ void NumericFormatter::SetDecimalDigits( USHORT nDigits )
 
 // -----------------------------------------------------------------------
 
+void NumericFormatter::SetShowTrailingZeros( BOOL bShowTrailingZeros )
+{
+    if ( mbShowTrailingZeros != bShowTrailingZeros )
+    {
+        mbShowTrailingZeros = bShowTrailingZeros;
+        ReformatAll();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 USHORT NumericFormatter::GetDecimalDigits() const
 {
     return mnDecimalDigits;
@@ -591,7 +603,7 @@ void NumericFormatter::SetValue( long nNewValue )
 
 XubString NumericFormatter::CreateFieldText( long nValue ) const
 {
-    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep() );
+    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() );
 }
 
 // -----------------------------------------------------------------------
