@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredlines.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:24:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@ SwRedlinesBaseClass;
 class SwXRedlines : public SwRedlinesBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXRedlines();
 public:
     SwXRedlines(SwDoc* pDoc);
-    virtual ~SwXRedlines();
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -119,9 +121,11 @@ class SwXRedlineEnumeration : public SwSimpleEnumerationBaseClass,
 {
     SwDoc* pDoc;
     USHORT nCurrentIndex;
+protected:
+    virtual ~SwXRedlineEnumeration();
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);
-    virtual ~SwXRedlineEnumeration();
+
 
     //XEnumeration
     virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
