@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:45:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -60,7 +60,7 @@ public class SpreadsheetDocHelper
 
 // __  private members  ___________________________________________
 
-    private final String  msConnectString  = "socket,host=localhost,port=8100";
+    private final String  msConnectString  = "socket,host=localhost,port=2083";
     private final String  msDataSheetName  = "Data";
 
     private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
