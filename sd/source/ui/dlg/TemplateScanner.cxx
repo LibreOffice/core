@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:09:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
+#include <comphelper/documentconstants.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::ucb;
 using namespace ::com::sun::star;
@@ -96,10 +100,10 @@ const OUString DOCTEMPLATES     = OUString::createFromAscii ("com.sun.star.frame
 //  These strings are used to find impress templates in the tree of
 //  template files.  Should probably be determined dynamically.
 const OUString IMPRESS_BIN_TEMPLATE = OUString::createFromAscii ("application/vnd.stardivision.impress");
-const OUString IMPRESS_XML_TEMPLATE = OUString::createFromAscii ("application/vnd.sun.xml.impress");
+const OUString IMPRESS_XML_TEMPLATE = MIMETYPE_VND_SUN_XML_IMPRESS;
 // The following id comes from the bugdoc in #i2764#.
 const OUString IMPRESS_XML_TEMPLATE_B = OUString::createFromAscii ("Impress 2.0");
-const OUString IMPRESS_XML_TEMPLATE_OASIS = OUString::createFromAscii ("application/x-vnd.oasis.openoffice.presentation");
+const OUString IMPRESS_XML_TEMPLATE_OASIS = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION;
 
 } // end of anonymous namespace
 
