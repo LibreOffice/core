@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 15:47:35 $
+ *  last change: $Author: avy $ $Date: 2001-03-14 10:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1401,7 +1401,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
             }
             if(!bDone)
-                throw (IllegalArgumentException());
+                throw IllegalArgumentException();
         }
         else
         {
