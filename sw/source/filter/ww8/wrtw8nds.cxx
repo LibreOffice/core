@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-14 15:37:45 $
+ *  last change: $Author: cmc $ $Date: 2002-11-21 11:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,6 @@ void WW8_SwAttrIter::SetCharSet(const SwTxtAttr& rAttr, bool bStart)
         {
             mychsiter aIter = std::find(maCharSets.begin(), maCharSets.end(),
                 aEntry);
-            ASSERT(aIter != maCharSets.end(), "Pop entry that isn't there ?");
             if (aIter != maCharSets.end())
                 maCharSets.erase(aIter);
         }
