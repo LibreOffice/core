@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:39:09 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 07:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ greek ] = "Εισαγωγή συνάρτησης σε υπολογιστικό φύλλο";
         QuickHelpText[ korean ] = "Insert Function";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Funktion in Rechenblatt einfόgen";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
