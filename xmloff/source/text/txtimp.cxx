@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: mib $ $Date: 2002-01-17 13:11:44 $
+ *  last change: $Author: dvo $ $Date: 2002-08-28 09:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,7 +1118,22 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if( !bSameNumRules )
             {
                 aAny <<= xNewNumRules;
-                xPropSet->setPropertyValue( sNumberingRules, aAny );
+
+                // #102607# This may except when xNewNumRules contains
+                // a Writer-NumRule-Implementation bug gets applied to
+                // a shape. Since this may occur inside a document
+                // (e.g. when edited), this must be handled
+                // gracefully.
+                try
+                {
+                    xPropSet->setPropertyValue( sNumberingRules, aAny );
+                }
+                catch( Exception e )
+                {
+                    ; // I would really like to use a warning here,
+                      // but I can't access the XMLErrorHandler from
+                      // here.
+                }
             }
 
             XMLTextListItemContext *pListItem = GetListItem();
