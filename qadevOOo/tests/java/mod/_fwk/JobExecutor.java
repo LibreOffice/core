@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:47:48 $
+ *  last change:$Date: 2003-09-08 11:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._fwk;
 
+import java.io.PrintWriter;
+
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.utils;
+
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.comp.helper.RegistryServiceFactory;
@@ -72,7 +81,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.task.XJob;
@@ -80,14 +88,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XChangesBatch;
-import java.io.PrintWriter;
-import lib.Status;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-//import tools.SOLink;
-import util.utils;
 
 /**
  * Test for object that implements the following interfaces :
@@ -230,11 +230,6 @@ public class JobExecutor extends TestCase {
 
         String regFile = utils.getOfficeURL((XMultiServiceFactory)Param.getMSF()) + "/types.rdb";
 
-        if (!configured || !serviceRegistered) {
-            log.println("Destroying SOffice ...");
-//            SOLink link = Param.getSOLink();
-//            link.destroyConnection();
-        }
 
         if (!serviceRegistered) {
             try {

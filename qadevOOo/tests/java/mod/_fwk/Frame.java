@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:47:38 $
+ *  last change:$Date: 2003-09-08 11:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,19 @@
 
 package mod._fwk;
 
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
+
 import lib.StatusException;
-import lib.Status;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.util.*;
-import com.sun.star.beans.*;
-import com.sun.star.uno.XInterface;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.frame.*;
-import com.sun.star.uno.UnoRuntime;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.SOfficeFactory;
-import util.DesktopTools;
+
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object that implements the following interfaces :

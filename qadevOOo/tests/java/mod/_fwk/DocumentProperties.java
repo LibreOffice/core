@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:47:28 $
+ *  last change:$Date: 2003-09-08 11:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,19 @@
 
 package mod._fwk;
 
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
+
 import lib.StatusException;
-import lib.Status;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-import com.sun.star.text.XTextDocument;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.SOfficeFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.UnoRuntime;
+
 import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
