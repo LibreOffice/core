@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:39:45 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,13 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     ULONG no;
     for (no=0; no<nAnz; no++) {
         SdrObject* pSO=rSrcList.GetObj(no);
-        SdrObject* pDO=pSO->Clone(pPage,pModel);
+
+        // #116235#
+        //SdrObject* pDO=pSO->Clone(pPage,pModel);
+        SdrObject* pDO = pSO->Clone();
+        pDO->SetModel(pModel);
+        pDO->SetPage(pPage);
+
         if (pDO!=NULL) {
             NbcInsertObject(pDO,CONTAINER_APPEND,&aReason);
         } else {
