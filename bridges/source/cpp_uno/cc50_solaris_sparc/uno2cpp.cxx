@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:39:54 $
+ *  last change: $Author: dbo $ $Date: 2001-04-11 14:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,14 +410,15 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     }
     default:
     {
-        ::com::sun::star::uno::RuntimeException aExc;
-        aExc.Message = OUString::createFromAscii("illegal member type description!");
-        aExc.Context = pThis->pCppI;
+        ::com::sun::star::uno::RuntimeException aExc(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
         typelib_TypeDescription * pTD = 0;
-        const Type & rExcType = ::getCppuType( (const ::com::sun::star::uno::RuntimeException *)0 );
+        Type const & rExcType = ::getCppuType( &aExc );
         TYPELIB_DANGER_GET( &pTD, rExcType.getTypeLibType() );
-        uno_any_construct( *ppException, &aExc, pTD, 0 );
+        // binary identical null reference
+        ::uno_any_construct( *ppException, &aExc, pTD, 0 );
         TYPELIB_DANGER_RELEASE( pTD );
     }
     }
