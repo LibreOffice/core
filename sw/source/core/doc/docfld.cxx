@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:08:36 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,13 +1086,17 @@ void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
 
 String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
-    String sDBNumNm( rDBFld.GetDBName( &rDoc ));
+    SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
+    String sDBNumNm;
+    SwDBData aDocData = rDoc.GetDBData();
 
-    if( sDBNumNm != rDoc.GetDBName() )
+    if( aDBData != aDocData )
+    {
+        sDBNumNm = aDBData.sDataSource;
         sDBNumNm += DB_DELIM;
-    else
-        sDBNumNm.Erase();
-
+        sDBNumNm += String(aDBData.sCommand);
+        sDBNumNm += DB_DELIM;
+    }
     sDBNumNm += SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD);
 
     return sDBNumNm;
@@ -1132,12 +1136,10 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
             {
                 SwDBNumSetField* pDBFld = (SwDBNumSetField*)pFld;
 
-                String sDBName(pDBFld->GetDBName(&rDoc));
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
+                SwDBData aDBData(pDBFld->GetDBData(&rDoc));
 
                 if( pDBFld->IsCondValid() &&
-                    pMgr->OpenDataSource( sSourceName, sTableName ))
+                    pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
                     rCalc.VarChange( lcl_GetDBVarName( rDoc, *pDBFld),
                                     pDBFld->GetFormat() );
             }
@@ -1145,11 +1147,9 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
         case RES_DBNEXTSETFLD:
             {
                 SwDBNextSetField* pDBFld = (SwDBNextSetField*)pFld;
-                String sDBName(pDBFld->GetDBName(&rDoc));
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
+                SwDBData aDBData(pDBFld->GetDBData(&rDoc));
                 if( !pDBFld->IsCondValid() ||
-                    !pMgr->OpenDataSource( sSourceName, sTableName ))
+                    !pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
                     break;
 
                 String sDBNumNm(lcl_GetDBVarName( rDoc, *pDBFld));
@@ -1415,12 +1415,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
             // Feld Evaluieren
             ((SwDBField*)pFld)->Evaluate();
 
-                String sDBName(((SwDBField*)pFld)->GetDBName());
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
+                SwDBData aDBData(((SwDBField*)pFld)->GetDBData());
 
-            if( pMgr->OpenDataSource( sSourceName, sTableName ))
-                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(sSourceName, sTableName));
+            if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
+                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand));
 
             const String& rName = pFld->GetTyp()->GetName();
 
@@ -1591,7 +1589,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     else
         ((SwDBNumSetField&)rDBFld).SetCondValid( bPar1 );
 
-    if( rDBFld.GetRealDBName().Len() )
+    if( rDBFld.GetRealDBData().sDataSource.getLength() )
     {
         // Eine bestimmte Datenbank bearbeiten
         if( RES_DBNEXTSETFLD == nFldType )
@@ -1599,14 +1597,11 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
         else
             ((SwDBNumSetField&)rDBFld).Evaluate(this);
 
-        String sDBName( rDBFld.GetDBName(this) );
+        SwDBData aDBData( rDBFld.GetDBData(this) );
 
-        String sSourceName(sDBName.GetToken(0, DB_DELIM));
-        String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
-
-        if( pMgr->OpenDataSource( sSourceName, sTableName ))
+        if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
             rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
-                        pMgr->GetSelectedRecordId(sSourceName, sTableName) );
+                        pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand) );
     }
     else
     {
@@ -1672,16 +1667,16 @@ void SwDoc::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
         pUpdtFlds->InsDelFldInFldLst( bIns, rFld );
 }
 
-String SwDoc::GetDBName()
+SwDBData SwDoc::GetDBData()
 {
     return GetDBDesc();
 }
 
-const String& SwDoc::GetDBDesc()
+const SwDBData& SwDoc::GetDBDesc()
 {
-    if (!aDBName.Len())
-        aDBName = GetNewDBMgr()->GetAddressDBName();
-    return aDBName;
+    if (!aDBData.sDataSource.getLength())
+        aDBData = GetNewDBMgr()->GetAddressDBName();
+    return aDBData;
 }
 
 void SwDoc::SetInitDBFields( BOOL b )
@@ -1692,7 +1687,15 @@ void SwDoc::SetInitDBFields( BOOL b )
 /*--------------------------------------------------------------------
     Beschreibung: Alle von Feldern verwendete Datenbanken herausfinden
  --------------------------------------------------------------------*/
-
+String lcl_DBDataToString(const SwDBData& rData)
+{
+    String sRet = rData.sDataSource;
+    sRet += DB_DELIM;
+    sRet += (String)rData.sCommand;
+    sRet += DB_DELIM;
+    sRet += String::CreateFromInt32(rData.nCommandType);
+    return sRet;
+}
 void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
                             const SvStringsDtor* pAllDBNames )
 {
@@ -1737,19 +1740,19 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
         {
             case RES_DBFLD:
                 AddUsedDBToList( rDBNameList,
-                                ((SwDBField*)pFld)->GetDBName() );
+                                lcl_DBDataToString(((SwDBField*)pFld)->GetDBData() ));
                 break;
 
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 AddUsedDBToList( rDBNameList,
-                                ((SwDBNameInfField*)pFld)->GetRealDBName() );
+                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData() ));
                 break;
 
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 AddUsedDBToList( rDBNameList,
-                                ((SwDBNameInfField*)pFld)->GetRealDBName() );
+                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData() ));
                 // kein break  // JP: ist das so richtig ??
 
             case RES_HIDDENTXTFLD:
@@ -2001,6 +2004,11 @@ void SwDoc::RenameUserFld( const String& rOldName, const String& rNewName,
 void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                             const String& rNewName )
 {
+    SwDBData aNewDBData;
+    aNewDBData.sDataSource = rNewName.GetToken(0, DB_DELIM);
+    aNewDBData.sCommand = rNewName.GetToken(1, DB_DELIM);
+    aNewDBData.nCommandType = (short)rNewName.GetToken(2, DB_DELIM).ToInt32();
+
     String sFormel;
     USHORT n;
 
@@ -2036,12 +2044,12 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
         switch( pFld->GetTyp()->Which() )
         {
             case RES_DBFLD:
-                if( IsNameInArray( rOldNames, ((SwDBField*)pFld)->GetDBName()))
+                if( IsNameInArray( rOldNames, lcl_DBDataToString(((SwDBField*)pFld)->GetDBData())))
                 {
                     SwDBFieldType* pOldTyp = (SwDBFieldType*)pFld->GetTyp();
 
                     SwDBFieldType* pTyp = (SwDBFieldType*)InsertFldType(
-                            SwDBFieldType(this, pOldTyp->GetColumnName(), rNewName));
+                            SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData));
 
                     pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
                     pFld->ChgTyp(pTyp);
@@ -2056,9 +2064,9 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 if( IsNameInArray( rOldNames,
-                                ((SwDBNameInfField*)pFld)->GetRealDBName()))
+                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
-                    ((SwDBNameInfField*)pFld)->SetDBName(rNewName);
+                    ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
                     bExpand = TRUE;
                 }
                 break;
@@ -2066,9 +2074,9 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 if( IsNameInArray( rOldNames,
-                                ((SwDBNameInfField*)pFld)->GetRealDBName()))
+                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
-                    ((SwDBNameInfField*)pFld)->SetDBName(rNewName);
+                    ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
                     bExpand = TRUE;
                 }
                 // kein break;
@@ -2498,12 +2506,10 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
             case RES_DBNUMSETFLD:
             {
-                String sDBName(((SwDBNumSetField*)pFld)->GetDBName(&rDoc));
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
+                SwDBData aDBData(((SwDBNumSetField*)pFld)->GetDBData(&rDoc));
 
                 if( bIsDBMgr &&
-                    rDoc.GetNewDBMgr()->OpenDataSource( sSourceName, sTableName )&&
+                    rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
                     GETFLD_ALL == eGetMode ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNumSetField*)pFld)->IsCondValid()))
@@ -2512,12 +2518,10 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             break;
             case RES_DBNEXTSETFLD:
             {
-                String sDBName(((SwDBNextSetField*)pFld)->GetDBName(&rDoc));
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
+                SwDBData aDBData(((SwDBNextSetField*)pFld)->GetDBData(&rDoc));
 
                 if( bIsDBMgr &&
-                    rDoc.GetNewDBMgr()->OpenDataSource( sSourceName, sTableName )&&
+                    rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
                     GETFLD_ALL == eGetMode ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNextSetField*)pFld)->IsCondValid() ))

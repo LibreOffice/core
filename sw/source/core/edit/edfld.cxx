@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,19 +627,19 @@ void SwEditShell::UpdateFlds( SwField &rFld )
  Liefert den logischen fuer die Datenbank zurueck
  --------------------------------------------------*/
 
-String SwEditShell::GetDBName() const
+SwDBData SwEditShell::GetDBData() const
 {
-    return GetDoc()->GetDBName();
+    return GetDoc()->GetDBData();
 }
 
-const String& SwEditShell::GetDBDesc() const
+const SwDBData& SwEditShell::GetDBDesc() const
 {
     return GetDoc()->GetDBDesc();
 }
 
-void SwEditShell::ChgDBName(const String& rNewName)
+void SwEditShell::ChgDBData(const SwDBData& rNewData)
 {
-    GetDoc()->ChgDBName(rNewName);
+    GetDoc()->ChgDBData(rNewData);
 }
 
 void SwEditShell::GetAllUsedDB( SvStringsDtor& rDBNameList,

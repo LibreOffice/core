@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,15 +476,16 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             // nur der Name interressiert
             if( STRING_NOTFOUND != (nPos = aSaveStr.Search( '.' )) )
                 aSaveStr.Erase( nPos );
-
+            SwDBData aData;
+            aData.sDataSource = aSaveStr;
             if( bField )
             {
                 pFldType = pDoc->GetSysFldType( RES_DBNAMEFLD );
                 pDoc->Insert( *pPam, SwFmtFld( SwDBNameField(
-                                (SwDBNameFieldType*)pFldType, aEmptyStr ) ));
+                                (SwDBNameFieldType*)pFldType, SwDBData() ) ));
             }
             else
-                pDoc->ChgDBName( aSaveStr );        // MS: Keine DBInfo verwenden
+                pDoc->ChgDBData( aData );       // MS: Keine DBInfo verwenden
             SkipGroup();        // ueberlese den Rest
         }
         break;
@@ -492,7 +493,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         {
             // ein Datenbank - Feld: nur der Name interressiert
             // bis zum Ende vom String ist das der Feldname
-            SwDBFieldType aTmp( pDoc, aSaveStr, aEmptyStr );    // Hack(OM): Erstmal Leerstring
+            SwDBFieldType aTmp( pDoc, aSaveStr, SwDBData() );   //
             SwDBField aDBFld( (SwDBFieldType*)pDoc->InsertFldType( aTmp ));
 
             aDBFld.ChangeFormat( UF_STRING );
@@ -797,11 +798,14 @@ INSINGLECHAR:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.2 2001-02-21 12:45:23 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.51  2000/09/18 16:04:50  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 15:29:30 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             {
                 {SW_PROP_NAME(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
@@ -583,6 +584,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             {
                 {SW_PROP_NAME(UNO_NAME_CONDITION),        FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE,   0},
                 {0,0,0,0}
@@ -595,6 +597,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
             {
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,   0},
                 {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE,   0},
@@ -621,6 +624,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDBNameFieldPropMap       [] =
             {
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
@@ -799,6 +803,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDBFieldTypePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
@@ -1033,7 +1038,8 @@ SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId) :
     m_bIsDescriptor(sal_True),
     fParam1(0.),
     bParam1(FALSE),
-    nParam1(-1)
+    nParam1(-1),
+    nParam2(0)
 {
 }
 /*-- 14.12.98 11:08:33---------------------------------------------------
@@ -1143,11 +1149,11 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 break;
                 case RES_DBFLD :
                 {
-                    String sDBName = sTypeName;//dbname
-                    sDBName += DB_DELIM;
-                    sDBName += sParam2; //table
-                    //sParam3 //column
-                    SwDBFieldType aType(m_pDoc, sParam3,  sDBName);
+                    SwDBData aData;
+                    aData.sDataSource = sTypeName;
+                    aData.sCommand = sParam2;
+                    aData.nCommandType = nParam2;
+                    SwDBFieldType aType(m_pDoc, sParam3,  aData);
                     pType = m_pDoc->InsertFldType(aType);
                 }
                 break;
@@ -1180,7 +1186,9 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     }
     else
     {
-        if(nResTypeId == RES_USERFLD)
+        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+            aValue >>= nParam2;
+        else if(nResTypeId == RES_USERFLD)
         {
             if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTENT))
             {
@@ -1310,6 +1318,11 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         else if(pType)
         {   //TODO: Properties fuer die uebrigen Feldtypen einbauen
             pType->QueryValue(aRet, rPropertyName);
+        }
+        else
+        {
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+                aRet <<= nParam2;
         }
     }
     else
@@ -2000,42 +2013,46 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_DATABASE_NAME:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNAMEFLD);
-                String sDBName(m_pProps->sPar1);
-                sDBName += DB_DELIM;
-                sDBName += m_pProps->sPar2;
-                pFld = new SwDBNameField((SwDBNameFieldType*)pFldType, sDBName);
+                SwDBData aData;
+                aData.sDataSource = m_pProps->sPar1;
+                aData.sCommand = m_pProps->sPar2;
+                aData.nCommandType = m_pProps->nSHORT1;
+                pFld = new SwDBNameField((SwDBNameFieldType*)pFldType, aData);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET:
             {
-                String sDBName(m_pProps->sPar1);
-                sDBName += DB_DELIM;
-                sDBName += m_pProps->sPar2;
+                SwDBData aData;
+                aData.sDataSource = m_pProps->sPar1;
+                aData.sCommand = m_pProps->sPar2;
+                aData.nCommandType = m_pProps->nSHORT1;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNEXTSETFLD);
                 pFld = new SwDBNextSetField((SwDBNextSetFieldType*)pFldType,
                         m_pProps->sPar3, aEmptyStr,
-                        sDBName);
+                        aData);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET:
             {
-                String sDBName(m_pProps->sPar1);
-                sDBName += DB_DELIM;
-                sDBName += m_pProps->sPar2;
+                SwDBData aData;
+                aData.sDataSource = m_pProps->sPar1;
+                aData.sCommand = m_pProps->sPar2;
+                aData.nCommandType = m_pProps->nSHORT1;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNUMSETFLD);
                 pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)pFldType,
-                    m_pProps->sPar3, String::CreateFromInt32(m_pProps->nFormat), sDBName);
+                    m_pProps->sPar3, String::CreateFromInt32(m_pProps->nFormat), aData);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM:
             {
-                String sDBName(m_pProps->sPar1);
-                sDBName += DB_DELIM;
-                sDBName += m_pProps->sPar2;
+                SwDBData aData;
+                aData.sDataSource = m_pProps->sPar1;
+                aData.sCommand = m_pProps->sPar2;
+                aData.nCommandType = m_pProps->nSHORT1;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBSETNUMBERFLD);
                 pFld = new SwDBSetNumberField(
                         (SwDBSetNumberFieldType*)pFldType,
-                        sDBName,
+                        aData,
                         m_pProps->nUSHORT1);
                 ((SwDBSetNumberField*)pFld)->SetSetNumber(m_pProps->nFormat);
             }

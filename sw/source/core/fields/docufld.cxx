@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:56:23 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,11 @@ String SwHiddenTxtField::GetDBName(const String& rName, SwDoc *pDoc)
         if( STRING_NOTFOUND != nPos )
             return rName.Copy( 0, nPos );
     }
-    return pDoc->GetDBName();
+    SwDBData aData = pDoc->GetDBData();
+    String sRet = aData.sDataSource;
+    sRet += DB_DELIM;
+    sRet += String(aData.sCommand);
+    return sRet;
 }
 
 /*--------------------------------------------------------------------

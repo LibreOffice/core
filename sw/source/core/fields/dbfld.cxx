@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:23:54 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,67 +124,30 @@ String lcl_DBTrennConv(const String& aContent)
     Beschreibung: DatenbankFeldTyp
  --------------------------------------------------------------------*/
 
-SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const String& rDBNam ) :
+SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData& rDBData ) :
     SwValueFieldType( pDocPtr, RES_DBFLD ),
+    aDBData(rDBData),
     nRefCnt(0),
-    aName(rNam)
+    sColumn(rNam)
 {
-    if (rDBNam.Len())
-    {
-        String sNewName(rDBNam);// Datenbankname muss nicht unbedingt in rNam enthalten sein!
-        if (rDBNam.Len())
-            sNewName += DB_DELIM;
-        sNewName += GetColumnName();
-        aName = sNewName;
-    }
-    else    // Entweder kein Datenbankname, oder er ist in rNam bereits enthalten
-        aName = rNam;
+    sName =  aDBData.sDataSource;
+    sName += DB_DELIM;
+    sName += (String)aDBData.sCommand;
+    sName += DB_DELIM;
+    sName += GetColumnName();
 }
-
 //------------------------------------------------------------------------------
 
 SwFieldType* SwDBFieldType::Copy() const
 {
-    SwDBFieldType* pTmp = new SwDBFieldType(GetDoc(), aName, aEmptyStr);
+    SwDBFieldType* pTmp = new SwDBFieldType(GetDoc(), sColumn, aDBData);
     return pTmp;
 }
 
 //------------------------------------------------------------------------------
-
 const String& SwDBFieldType::GetName() const
 {
-    return aName;
-}
-
-//------------------------------------------------------------------------------
-
-String SwDBFieldType::GetColumnName()
-{
-    USHORT nPos = aName.Len();
-
-    // Letztes Token zuruekliefern
-    while( nPos )
-        if( DB_DELIM == (BYTE)aName.GetChar( --nPos )  )
-        {
-            ++nPos;
-            break;
-        }
-
-    return aName.Copy( nPos );
-}
-
-//------------------------------------------------------------------------------
-
-String SwDBFieldType::GetDBName()
-{
-    USHORT nPos;
-
-    if ((nPos = aName.Search(DB_DELIM)) != STRING_NOTFOUND)
-    {
-        if ((nPos = aName.Search(DB_DELIM, nPos + 1)) != STRING_NOTFOUND)
-            return aName.Copy(0, nPos);
-    }
-    return aEmptyStr;
+    return sName;
 }
 
 //------------------------------------------------------------------------------
@@ -212,40 +175,33 @@ BOOL    SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, const String&
 {
     USHORT nToken = USHRT_MAX;
     if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME     ))
-        nToken = 0;
+        rAny <<= aDBData.sDataSource;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
-        nToken = 1;
+        rAny <<= aDBData.sCommand;
+    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+        rAny <<= aDBData.nCommandType;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_COLUMN_NAME))
-        nToken = 2;
-    if(nToken != USHRT_MAX)
-    {
-        String sRet = aName.GetToken(nToken, DB_DELIM);
-        rAny <<= OUString(sRet);
-    }
+        rAny <<= (OUString)sColumn;
     return nToken != USHRT_MAX;
 }
-
+/* -----------------24.02.99 14:51-------------------
+ *
+ * --------------------------------------------------*/
 BOOL    SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    USHORT nToken = USHRT_MAX;
-    BOOL bReInitClients = FALSE;
+    OUString sTmp;
+    sal_Bool bRet = rAny >>= sTmp;
     if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME     ))
-        nToken = 0;
+        rAny >>= aDBData.sDataSource;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
-        nToken = 1;
+        rAny >>= aDBData.sCommand;
+    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+        rAny >>= aDBData.nCommandType;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_COLUMN_NAME))
     {
-        nToken = 2;
-        bReInitClients = TRUE;
-    }
-    if(nToken != USHRT_MAX)
-    {
-        const String sOld = aName.GetToken(nToken, DB_DELIM);
-
-        OUString sSet;
-        rAny >>= sSet;
-        aName.SetToken(nToken, DB_DELIM, sSet);
-        if(bReInitClients && !sOld.Equals(String(sSet)))
+        sal_Bool bUpdate = sTmp != (OUString)sColumn;
+        sColumn = sTmp;
+        if(bUpdate)
         {
             SwClientIter aIter( *this );
             SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
@@ -264,7 +220,7 @@ BOOL    SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, const Str
             }
         }
     }
-    return nToken != USHRT_MAX;
+    return bRet;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDBField
@@ -428,11 +384,9 @@ void SwDBField::Evaluate()
     // erstmal loeschen
     bValidValue = FALSE;
     double nValue = DBL_MAX;
-    String sTmpName(GetDBName());
+    const SwDBData& aTmpData = GetDBData();
 
-    String sDataSource(sTmpName.GetToken(0, DB_DELIM));
-    String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
-    if(!pMgr || !pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
+    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
         return ;
 
     ULONG nFmt;
@@ -443,12 +397,12 @@ void SwDBField::Evaluate()
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);
     if( !( nSubType & SUB_OWN_FMT ) )
-        SetFormat( nFmt = pMgr->GetColumnFmt( sDataSource, sDataTableOrQuery,
+        SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
                                         aContent, pDocFormatter, GetLanguage() ));
 
     if( DBL_MAX != nValue )
     {
-        sal_Int32 nColumnType = pMgr->GetColumnType(sDataSource, sDataTableOrQuery, aContent);
+        sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aContent);
         if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
                  DataType::TIMESTAMP )
 
@@ -570,22 +524,22 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, const String& rP
     Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
  --------------------------------------------------------------------*/
 
-SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const String& rDBName, ULONG nFmt) :
+SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt) :
     SwField(pTyp, nFmt),
-    sDBName(rDBName)
+    aDBData(rDBData)
 {
 }
 
 //------------------------------------------------------------------------------
 
-String SwDBNameInfField::GetDBName(SwDoc* pDoc)
+SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
 {
-    String sTmp;
-    if (sDBName.Len())
-        sTmp=sDBName;
+    SwDBData aRet;
+    if(aDBData.sDataSource.getLength())
+        aRet = aDBData;
     else
-        sTmp=pDoc->GetDBName();
-    return (sTmp);
+        aRet = pDoc->GetDBData();
+    return aRet;
 }
 
 //------------------------------------------------------------------------------
@@ -596,12 +550,12 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 
     if(bName)
     {
-        if (sDBName.Len())
+        if (aDBData.sDataSource.getLength())
         {
             sStr += ':';
-            sStr += SFX_APP()->LocalizeDBName(INI2NATIONAL, sDBName.GetToken(0, DB_DELIM));
+            sStr += String(aDBData.sDataSource);
             sStr += DB_DELIM;
-            sStr += sDBName.GetToken(1, DB_DELIM);
+            sStr += String(aDBData.sCommand);
         }
     }
     return lcl_DBTrennConv(sStr);
@@ -613,13 +567,11 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
 {
     if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME))
-    {
-        rAny <<= OUString(sDBName.GetToken(0, DB_DELIM));
-    }
+        rAny <<= aDBData.sDataSource;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
-    {
-        rAny <<= OUString(sDBName.GetToken(1, DB_DELIM));
-    }
+        rAny <<= aDBData.sCommand;
+    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+        rAny <<= aDBData.nCommandType;
     else
     {
         DBG_ERROR("was war das fuer ein Typ?")
@@ -632,20 +584,16 @@ BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, const String&
 --------------------------------------------------*/
 BOOL    SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
 {
-    OUString uTemp;
+    sal_Bool bRet;
     if(rProperty.EqualsAscii(UNO_NAME_DATA_BASE_NAME))
-    {
-        rAny >>= uTemp;
-        sDBName.SetToken(0, DB_DELIM, uTemp);
-    }
+        bRet = rAny >>= aDBData.sDataSource;
     else if(rProperty.EqualsAscii(UNO_NAME_DATA_TABLE_NAME))
-    {
-        rAny >>= uTemp;
-        sDBName.SetToken(1, DB_DELIM, uTemp);
-    }
+        bRet = rAny >>= aDBData.sCommand;
+    else if(rProperty.EqualsAscii(UNO_NAME_DATA_COMMAND_TYPE))
+        rAny >>= aDBData.nCommandType;
     else
-        return FALSE;
-    return TRUE;
+        bRet = FALSE;
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -672,8 +620,8 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const String& rCond,
                                    const String& rDummy,
-                                   const String& rDBName) :
-    SwDBNameInfField(pTyp, rDBName), aCond(rCond), bCondValid(TRUE)
+                                   const SwDBData& rDBData) :
+    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(TRUE)
 {}
 
 //------------------------------------------------------------------------------
@@ -688,7 +636,7 @@ String SwDBNextSetField::Expand() const
 SwField* SwDBNextSetField::Copy() const
 {
     SwDBNextSetField *pTmp = new SwDBNextSetField((SwDBNextSetFieldType*)GetTyp(),
-                                         aCond, aEmptyStr, GetDBName());
+                                         aCond, aEmptyStr, GetDBData());
     pTmp->bCondValid = bCondValid;
     return pTmp;
 }
@@ -697,11 +645,9 @@ SwField* SwDBNextSetField::Copy() const
 void SwDBNextSetField::Evaluate(SwDoc* pDoc)
 {
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
-    String sTmpName(GetDBName());
-    String sDataSource(sTmpName.GetToken(0, DB_DELIM));
-    String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
+    const SwDBData& rData = GetDBData();
     if( !bCondValid ||
-            !pMgr || !pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
+            !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand))
         return ;
     pMgr->ToNextMergeRecord();
 }
@@ -785,8 +731,8 @@ SwFieldType* SwDBNumSetFieldType::Copy() const
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
                                  const String& rCond,
                                  const String& rDBNum,
-                                 const String& rDBName) :
-    SwDBNameInfField(pTyp, rDBName),
+                                 const SwDBData& rDBData) :
+    SwDBNameInfField(pTyp, rDBData),
     aCond(rCond),
     aPar2(rDBNum),
     bCondValid(TRUE)
@@ -804,7 +750,7 @@ String SwDBNumSetField::Expand() const
 SwField* SwDBNumSetField::Copy() const
 {
     SwDBNumSetField *pTmp = new SwDBNumSetField((SwDBNumSetFieldType*)GetTyp(),
-                                         aCond, aPar2, GetDBName());
+                                         aCond, aPar2, GetDBData());
     pTmp->bCondValid = bCondValid;
     return pTmp;
 }
@@ -812,11 +758,10 @@ SwField* SwDBNumSetField::Copy() const
 void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 {
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
-    String sTmpName(GetDBName());
-    String sDataSource(sTmpName.GetToken(0, DB_DELIM));
-    String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
+    const SwDBData& aTmpData = GetDBData();
+
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
-                        pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
+                        pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
     {   // Bedingug OK -> aktuellen Set einstellen
         pMgr->ToRecordId(Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
     }
@@ -898,8 +843,11 @@ SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
 String SwDBNameFieldType::Expand(ULONG nFmt) const
 {
     ASSERT( nFmt >= FF_BEGIN && nFmt < FF_END, "Expand: kein guelt. Fmt!" );
-
-    return(pDoc->GetDBName());
+    const SwDBData aData = pDoc->GetDBData();
+    String sRet(aData.sDataSource);
+    sRet += '.';
+    sRet += (String)aData.sCommand;
+    return sRet;
 }
 //------------------------------------------------------------------------------
 
@@ -915,8 +863,8 @@ SwFieldType* SwDBNameFieldType::Copy() const
     Beschreibung: Name der angedockten DB
  --------------------------------------------------------------------*/
 
-SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const String& rDBName, ULONG nFmt)
-    : SwDBNameInfField(pTyp, rDBName, nFmt)
+SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt)
+    : SwDBNameInfField(pTyp, rDBData, nFmt)
 {}
 
 //------------------------------------------------------------------------------
@@ -930,7 +878,7 @@ String SwDBNameField::Expand() const
 
 SwField* SwDBNameField::Copy() const
 {
-    SwDBNameField *pTmp = new SwDBNameField((SwDBNameFieldType*)GetTyp(), GetDBName());
+    SwDBNameField *pTmp = new SwDBNameField((SwDBNameFieldType*)GetTyp(), GetDBData());
     pTmp->ChangeFormat(GetFormat());
     pTmp->SetLanguage(GetLanguage());
     return pTmp;
@@ -974,9 +922,9 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
  --------------------------------------------------------------------*/
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
-                                       const String& rDBName,
+                                       const SwDBData& rDBData,
                                        ULONG nFmt)
-    : SwDBNameInfField(pTyp, rDBName, nFmt), nNumber(0)
+    : SwDBNameInfField(pTyp, rDBData, nFmt), nNumber(0)
 {}
 
 //------------------------------------------------------------------------------
@@ -999,10 +947,8 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
     if (!pMgr->IsInMerge())
         return;
 
-    String sTmpName(GetDBName());
-    String sDataSource(sTmpName.GetToken(0, DB_DELIM));
-    String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
-    if(!pMgr || !pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
+    const SwDBData& aTmpData = GetDBData();
+    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
     {
         nNumber = 0;
         return ;
@@ -1016,7 +962,7 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 SwField* SwDBSetNumberField::Copy() const
 {
     SwDBSetNumberField *pTmp =
-        new SwDBSetNumberField((SwDBSetNumberFieldType*)GetTyp(), GetDBName(), GetFormat());
+        new SwDBSetNumberField((SwDBSetNumberFieldType*)GetTyp(), GetDBData(), GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSetNumber(nNumber);
     return pTmp;

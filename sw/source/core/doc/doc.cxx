@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-08 14:32:20 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,11 @@ SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
  * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
  * durch den RTF Parser und fuer die EditShell.
  */
-void SwDoc::ChgDBName(const String& rNewName)
+void SwDoc::ChgDBData(const SwDBData& rNewData)
 {
-    if( !aDBName.Equals( rNewName ) )
+    if( rNewData != aDBData )
     {
-        aDBName = rNewName;
+        aDBData = rNewData;
         SetModified();
     }
     GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();

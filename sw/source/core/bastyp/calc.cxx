@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 20:32:47 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,11 @@ String SwCalc::GetDBName(const String& rName)
         if( STRING_NOTFOUND != nPos )
             return rName.Copy( 0, nPos );
     }
-    return rDoc.GetDBName();
+    SwDBData aData = rDoc.GetDBData();
+    String sRet = aData.sDataSource;
+    sRet += DB_DELIM;
+    sRet += String(aData.sCommand);
+    return sRet;
 }
 
 //------------------------------------------------------------------------------

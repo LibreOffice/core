@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ void SwRTFWriter::MakeHeader()
         Strm() << pOut;
     }
 
-    if( pDoc->_GetDBDesc().Len() )
+    if( pDoc->_GetDBDesc().sDataSource.getLength() )
     {
         // stelle erstmal fest, ob ueberhaupt Datenbankfelder benutzt werden!
         const SwFldTypes* pTypes = pDoc->GetFldTypes();
@@ -625,7 +625,11 @@ void SwRTFWriter::MakeHeader()
             {
                 Strm() << '{' << sRTF_FIELD;
                 OutComment( *this, sRTF_FLDINST ) << " DATA ";
-                RTFOutFuncs::Out_String( Strm(), pDoc->GetDBName(),
+                SwDBData aData = pDoc->GetDBData();
+                String sOut(aData.sDataSource);
+                sOut += DB_DELIM;
+                sOut += (String)aData.sCommand;
+                RTFOutFuncs::Out_String( Strm(), sOut,
                                         DEF_ENCODING, bWriteHelpFmt );
                 Strm() << "}{" << sRTF_FLDRSLT << " }}";
                 break;
@@ -1416,189 +1420,4 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 {
     xRet = new SwRTFWriter( rFltName );
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.6 2001-02-13 16:56:38 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2001/02/13 09:24:35  jp
-      Bug #83787#: export default attributes, which are different to RTF-specification
-
-      Revision 1.4  2001/02/06 15:55:19  mib
-      real 6.0 file format
-
-      Revision 1.3  2000/11/16 09:57:36  jp
-      export CJK attributes
-
-      Revision 1.2  2000/10/09 13:31:40  jp
-      Bug #78626#: _OutFont - dontknow is a valid value
-
-      Revision 1.1.1.1  2000/09/18 17:14:56  hr
-      initial import
-
-      Revision 1.202  2000/09/18 16:04:51  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.201  2000/08/22 20:51:18  jp
-      OutHeader: don't ask for DBName
-
-      Revision 1.200  2000/08/04 10:48:32  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; use rtfout functions
-
-      Revision 1.199  2000/07/04 16:23:30  jp
-      AMA_TEST define removed
-
-      Revision 1.198  2000/05/09 17:23:08  jp
-      Changes for Unicode
-
-      Revision 1.197  2000/03/03 16:22:05  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.196  2000/03/03 15:21:02  os
-      StarView remainders removed
-
-      Revision 1.195  2000/02/24 18:30:25  jp
-      Bug #73485#: write right follow of pagedesc, initialize the akt. pagedesc
-
-      Revision 1.194  2000/01/25 20:10:34  jp
-      Bug #72146#: _OutFont - replace system/dontknow charset to the current charset
-
-      Revision 1.193  1999/11/22 18:00:05  jp
-      OutSectionNode: dont skip to top parent section
-
-      Revision 1.192  1999/10/25 12:16:40  jp
-      get font charset over RTL-Function
-
-      Revision 1.191  1999/08/05 20:53:50  JP
-      write flyfrms before the paragraph and not behind
-
-
-      Rev 1.190   05 Aug 1999 22:53:50   JP
-   write flyfrms before the paragraph and not behind
-
-      Rev 1.189   22 Jul 1999 20:01:10   JP
-   read&write footer and header height
-
-      Rev 1.188   23 Jun 1999 19:12:30   JP
-   optimize for NumRules, interface of FindPos_Bkmk has changed
-
-      Rev 1.187   16 Jun 1999 19:49:06   JP
-   Change interface of base class Writer
-
-      Rev 1.186   04 May 1999 15:00:02   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.185   06 Apr 1999 17:00:18   JP
-   Bug #64361#: MakeHeader - ggfs. ersten PageDesc vom 1.Node besorgen
-
-      Rev 1.184   19 Mar 1999 17:08:06   JP
-   Bug #63772#: Spaltige Bereiche im-/exportieren
-
-      Rev 1.183   18 Mar 1999 09:51:54   JP
-   Task #63049#: Numerierung mit rel. Einzuegen
-
-      Rev 1.182   16 Mar 1999 23:20:00   JP
-   Task #63049#: Einzuege bei NumRules relativ
-
-      Rev 1.181   05 Mar 1999 14:44:34   JP
-   Bug #57749#: spaltige Bereiche schreiben - alle Section-Typen
-
-      Rev 1.180   04 Mar 1999 19:59:22   JP
-   Bug #57749#: spaltige Bereiche schreiben
-
-      Rev 1.179   17 Nov 1998 10:45:52   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.178   09 Nov 1998 17:28:46   JP
-   Bug #58817#: StyleTabelle wieder schreiben
-
-      Rev 1.177   30 Oct 1998 18:30:26   JP
-   Task #58596#: neues Flag an der Writerklasse -> schreibe nur die 1. Tabelle
-
-      Rev 1.176   28 Oct 1998 10:36:12   JP
-   Bug #58565#: Assert im OutHeader behoben
-
-      Rev 1.175   11 Aug 1998 12:16:36   JP
-   Bug #54796#: fehlender Numerierunstyp und Bugfixes
-
-      Rev 1.174   06 Aug 1998 21:45:56   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.173   04 Jun 1998 19:28:08   JP
-   Bug #50887#: Font bei Grafik-NumFormaten ist 0, also default Font schreiben
-
-      Rev 1.172   13 May 1998 17:15:22   JP
-   OutRTFPageDesc: beim 1.PageDesc keinen Sectionbreak schreiben
-
-      Rev 1.171   11 May 1998 22:50:32   JP
-   Zeichenvorlagen schreiben
-
-      Rev 1.170   11 May 1998 16:46:50   JP
-   RTF-CharFormate ausgeben
-
-      Rev 1.169   05 May 1998 14:00:26   JP
-   linke/rechte Header/Footer korrekt rausschreiben
-
-      Rev 1.168   20 Apr 1998 17:43:20   JP
-   neu: Numerierung lesen/schreiben
-
-      Rev 1.167   03 Apr 1998 18:51:56   JP
-   RTF-Parser um neue Tokens erweitert
-
-      Rev 1.166   20 Feb 1998 13:36:40   MA
-   headerfiles gewandert
-
-      Rev 1.165   29 Jan 1998 21:35:24   JP
-   GetEndOfIcons ersetzt durch GetEndOfExtras, das auf GetEndOfRedlines mappt
-
-      Rev 1.164   27 Jan 1998 21:50:18   JP
-   GetNumDepend durch GetDepends ersetzt
-
-      Rev 1.163   26 Nov 1997 15:05:30   MA
-   headerfiles
-
-      Rev 1.162   09 Oct 1997 14:27:52   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.161   12 Sep 1997 10:57:22   OS
-   ITEMID_* definiert
-
-      Rev 1.160   03 Sep 1997 08:58:52   OS
-   Header
-
-      Rev 1.159   29 Aug 1997 13:53:24   JP
-   VCL Color Anpassung
-
-      Rev 1.158   15 Aug 1997 12:51:42   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.157   11 Aug 1997 17:48:44   OS
-   Header-Umstellung
-
-      Rev 1.156   07 Aug 1997 15:06:36   OM
-   Headerfile-Umstellung
-
-      Rev 1.155   07 Apr 1997 16:35:10   JP
-   Das ShowProgressFlag der Writerklasse auswerten
-
-      Rev 1.154   17 Feb 1997 12:03:44   MA
-   opt: Outline schneller schreiben wenn Gliederung nur im Body
-
-      Rev 1.153   15 Feb 1997 17:57:14   JP
-   OutStyleTab: pAttrSet Pointer wieder clearen
-
-      Rev 1.152   15 Feb 1997 17:00:22   JP
-   neu: nur Gliederungsabsaetze schreiben
-
-      Rev 1.151   14 Jan 1997 08:51:42   MA
-   includes
-
-*************************************************************************/
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_COUNT_EMPTY_LINES                      
 const SwPropNameLen __FAR_DATA  UNO_NAME_RESTART_AT_EACH_PAGE                   (MAP_CHAR_LEN("RestartAtEachPage"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_BASE_NAME                         (MAP_CHAR_LEN("DataBaseName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_TABLE_NAME                        (MAP_CHAR_LEN("DataTableName"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_COMMAND_TYPE                      (MAP_CHAR_LEN("DataCommandType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_COLUMN_NAME                       (MAP_CHAR_LEN("DataColumnName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_DATA_BASE_FORMAT                    (MAP_CHAR_LEN("DataBaseFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATE                                   (MAP_CHAR_LEN("Date"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 10:27:59 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2245,10 +2245,16 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << aFldStt.GetBuffer() << "\\\\filename ";
             break;
     case RES_DBNAMEFLD:
+    {
             rWrt.Strm() << aFldStt.GetBuffer() << "\\\\data ";
-            RTFOutFuncs::Out_String( rWrt.Strm(), rWrt.pDoc->GetDBName(),
+            SwDBData aData = rWrt.pDoc->GetDBData();
+            String sOut(aData.sDataSource);
+            sOut += DB_DELIM;
+            sOut += (String)aData.sCommand;
+            RTFOutFuncs::Out_String( rWrt.Strm(), sOut,
                                     DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
-            break;
+    }
+    break;
     case RES_AUTHORFLD:
             rWrt.Strm() << aFldStt.GetBuffer() << "\\\\author ";
             break;
@@ -3630,11 +3636,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.12 2001-02-16 10:27:59 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.13 2001-02-21 12:45:23 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/16 10:27:59  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.11  2001/02/13 16:56:38  jp
       export CJK Font attributes
 

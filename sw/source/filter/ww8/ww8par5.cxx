@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-31 14:32:46 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #endif
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
+#endif
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
 #endif
 
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
@@ -2060,7 +2063,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc*, String& rStr )
             break;
         }
     }
-    SwDBFieldType aD( &rDoc, aName, aEmptyStr );    // Datenbank: Nichts
+    SwDBFieldType aD( &rDoc, aName, SwDBData() );   // Datenbank: Nichts
     SwFieldType* pFT = rDoc.InsertFldType( aD );
     SwDBField aFld( (SwDBFieldType*)pFT );
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
@@ -2073,7 +2076,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, String& )
     SwDBNextSetFieldType aN;
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, aEmptyStr, aEmptyStr,
-                            aEmptyStr );        // Datenbank: Nichts
+                            SwDBData() );       // Datenbank: Nichts
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return F_OK;
 }
@@ -2084,7 +2087,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
     SwDBSetNumberFieldType aN;
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBSetNumberField aFld( (SwDBSetNumberFieldType*)pFT,
-                           aEmptyStr );         // Datenbank: Nichts
+                           SwDBData() );            // Datenbank: Nichts
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return F_OK;
 }
@@ -2881,12 +2884,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.8 2001-01-31 14:32:46 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.9 2001-02-21 12:45:25 os Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/01/31 14:32:46  cmc
+      #83156# Hush ASSERT on nested hyperlink import
+
       Revision 1.7  2001/01/18 11:58:46  cmc
       #82900# Needed the more sophisticated relative url converter for hyperlinks
 

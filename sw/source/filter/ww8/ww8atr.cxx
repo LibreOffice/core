@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-20 19:38:38 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1651,10 +1651,15 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case RES_DBNAMEFLD:
+    {
         aStr.ASIGN_ASC( "DATENBANK " );         // ok ??
-        aStr += rWrt.pDoc->GetDBName();
+        SwDBData aData = rWrt.pDoc->GetDBData();
+        aStr += (String)aData.sDataSource;
+        aStr += DB_DELIM;
+        aStr += (String)aData.sCommand;
         rWW8Wrt.OutField( pFld, 78, aStr );
-        break;
+    }
+    break;
 
     case RES_AUTHORFLD:
         rWW8Wrt.OutField( pFld, (AF_SHORTCUT & nSubType ? 61 : 60),
@@ -3653,6 +3658,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/20 19:38:38  cmc
+      CJK Combined Characters Word Export
+
       Revision 1.8  2001/02/15 20:08:10  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 
