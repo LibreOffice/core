@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,10 +1671,15 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
 
                     if( rOLEObj.IsOleRef() )    //Noch nicht geladen
                     {
-                        const SotFactory* pFact = rOLEObj.GetOleRef()->GetSvFactory();
-                        long nObj = ::lcl_IsSOObject( *pFact );
-                        bInclude = ( (nOLEOptions & TOO_OTHER) && 0 == nObj)
-                                                    || (0 != (nOLEOptions & nObj));
+                        com::sun::star::uno::Reference < com::sun::star::embed::XClassifiedObject >
+                                xClass( rOLEObj.GetOleRef(), com::sun::star::uno::UNO_QUERY );
+                        if ( xClass.is() )
+                        {
+                            SvGlobalName aName = SvGlobalName( xClass->getClassID() );
+                            long nObj = ::lcl_IsSOObject( aName );
+                            bInclude = ( (nOLEOptions & TOO_OTHER) && 0 == nObj)
+                                                        || (0 != (nOLEOptions & nObj));
+                        }
                     }
                     else
                     {
