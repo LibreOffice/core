@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMAHANDLER_HPP_
 #include <com/sun/star/configuration/backend/XSchemaHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -102,7 +105,9 @@ namespace configmgr
         :   public SchemaBuilder_Base
         {
         public:
-            SchemaBuilder( const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider = NULL );
+            typedef uno::Reference< uno::XComponentContext > Context;
+
+            SchemaBuilder(Context const & xContext, const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider = NULL );
             virtual ~SchemaBuilder();
 
         // checking the result
@@ -185,7 +190,6 @@ namespace configmgr
             MergedComponentData &   m_aData;
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
-            ITemplateDataProvider *  m_aTemplateProvider;
         };
 // -----------------------------------------------------------------------------
 
