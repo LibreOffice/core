@@ -61,6 +61,7 @@ package installer::epmfile;
 
 use Cwd;
 use installer::converter;
+use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -192,7 +193,11 @@ sub put_files_into_epmfile
         my $destination = $onefile->{'destination'};
         my $sourcepath = $onefile->{'sourcepath'};
 
-        my $line = "f $unixrights root $group $destination $sourcepath\n";
+        my $filetype = "f";
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if ( $styles =~ /\bCONFIGFILE\b/ ) { $filetype = "c"; }
+        my $line = "$filetype $unixrights root $group $destination $sourcepath\n";
 
         push(@{$epmfileref}, $line)
     }
@@ -960,6 +965,116 @@ sub determine_installdir_ooo
 }
 
 ############################################################
+# Setting the tab content into the file container
+############################################################
+
+sub set_tab_into_datafile
+{
+    my ($changefile, $filesref) = @_;
+
+    my @newclasses = ();
+    my $newclassesstring = "";
+
+    if ( $installer::globals::issolarispkgbuild )
+    {
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        {
+            my $onefile = ${$filesref}[$i];
+
+            if ( $onefile->{'SolarisClass'} )
+            {
+                my $sourcepath = $onefile->{'sourcepath'};
+
+                for ( my $j = 0; $j <= $#{$changefile}; $j++ )
+                {
+                    if (( ${$changefile}[$j] =~ /^\s*f\s+none\s+/ ) && ( ${$changefile}[$j] =~ /\=\Q$sourcepath\E\s+/ ))
+                    {
+                        my $oldline = ${$changefile}[$j];
+                        ${$changefile}[$j] =~ s/f\s+none/e $onefile->{'SolarisClass'}/;
+                        my $newline = ${$changefile}[$j];
+                        $oldline =~ s/\s*$//;
+                        $newline =~ s/\s*$//;
+
+                        my $infoline = "TAB: Changing content from \"$oldline\" to \"$newline\" .\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        # collecting all new classes
+                        if (! installer::existence::exists_in_array($onefile->{'SolarisClass'}, \@newclasses))
+                        {
+                            push(@newclasses, $onefile->{'SolarisClass'});
+                        }
+
+                        last;
+                    }
+                }
+            }
+        }
+
+        $newclassesstring = installer::converter::convert_array_to_space_separated_string(\@newclasses);
+    }
+
+    if ( $installer::globals::islinuxrpmbuild )
+    {
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        {
+            my $onefile = ${$filesref}[$i];
+
+            if ( $onefile->{'SpecFileContent'} )
+            {
+                my $destination = $onefile->{'destination'};
+
+                for ( my $j = 0; $j <= $#{$changefile}; $j++ )
+                {
+                    if ( ${$changefile}[$j] =~ /^\s*(\%attr\(.*\))\s+(\".*?\Q$destination\E\"\s*)$/ )
+                    {
+                        my $begin = $1;
+                        my $end = $2;
+
+                        my $oldline = ${$changefile}[$j];
+                        ${$changefile}[$j] = $begin . " " . $onefile->{'SpecFileContent'} . " " . $end;
+                        my $newline = ${$changefile}[$j];
+
+                        $oldline =~ s/\s*$//;
+                        $newline =~ s/\s*$//;
+
+                        my $infoline = "TAB: Changing content from \"$oldline\" to \"$newline\" .\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        last;
+                    }
+                }
+            }
+        }
+    }
+
+    return $newclassesstring;
+}
+
+############################################################
+# Including additional classes into the pkginfo file
+############################################################
+
+sub include_classes_into_pkginfo
+{
+    my ($changefile, $classesstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*CLASSES\=none/ )
+        {
+            ${$changefile}[$i] =~ s/\s*$//;
+            my $oldline = ${$changefile}[$i];
+            ${$changefile}[$i] = ${$changefile}[$i] . " " . $classesstring . "\n";
+            my $newline = ${$changefile}[$i];
+            $newline =~ s/\s*$//;
+
+            my $infoline = "pkginfo file: Changing content from \"$oldline\" to \"$newline\" .\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -970,7 +1085,7 @@ sub determine_installdir_ooo
 
 sub prepare_packages
 {
-    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref) = @_;
+    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref, $filesref) = @_;
 
     my $filename = "";
     my $newline = "";
@@ -1010,6 +1125,8 @@ sub prepare_packages
         set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
         set_packager_in_specfile($changefile);
         set_license_in_specfile($changefile, $variableshashref);
+        set_tab_into_datafile($changefile, $filesref);
+        # check_requirements_in_specfile($changefile);
         installer::files::save_file($completefilename, $changefile);
     }
 
@@ -1027,11 +1144,43 @@ sub prepare_packages
 
         my $prototypefile = installer::files::read_file($prototypefilename);
         make_prototypefile_relocatable($prototypefile, $relocatablepath);
+        my $classesstring = set_tab_into_datafile($prototypefile, $filesref);
+        if ($classesstring)
+        {
+            include_classes_into_pkginfo($changefile, $classesstring);
+            installer::files::save_file($completefilename, $changefile);
+        }
         installer::files::save_file($prototypefilename, $prototypefile);
 
     }
 
     return $newepmdir;
+}
+
+############################################################
+# Linux requirement for perl is changed by epm from
+# /usr/bin/perl to perl .
+# Requires: perl
+############################################################
+
+sub check_requirements_in_specfile
+{
+    my ( $specfile ) = @_;
+
+    for ( my $i = 0; $i <= $#{$specfile}; $i++ )
+    {
+        if (( ${$specfile}[$i] =~ /^\s*Requires/ ) && ( ${$specfile}[$i] =~ /\bperl\b/ ) && ( ! (  ${$specfile}[$i] =~ /\/usr\/bin\/perl\b/ )))
+        {
+            my $oldline = ${$specfile}[$i];
+            ${$specfile}[$i] =~ s/perl/\/usr\/bin\/perl/;
+            my $newline = ${$specfile}[$i];
+
+            $oldline =~ s/\s*$//;
+            $newline =~ s/\s*$//;
+            my $infoline = "Spec File: Changing content from \"$oldline\" to \"$newline\".\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+    }
 }
 
 ###############################################################################
