@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 11:52:41 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,7 @@ class ODatabaseForm :public OFormComponents
     sal_Bool                    m_bLoaded : 1;
     sal_Bool                    m_bSubForm : 1;
     sal_Bool                    m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
+    sal_Bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
@@ -538,6 +539,23 @@ private:
     void    reset_impl(bool _bAproveByListeners);
 
     sal_Bool    implEnsureConnection();
+
+    // connection sharing
+
+    /// checks if we can re-use (aka share) the connection of the given parent
+    sal_Bool    canShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
+
+    /// starts sharing the connection with the parent
+    void        doShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
+
+    /// stops sharing the connection with the parent
+    void        stopSharingConnection( );
+
+    /// called when the connection which we share with our parent is beeing disposed
+    void        disposingSharedConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn );
+
+    /// checks if we currently share our connection with our parent
+    sal_Bool    isSharingConnection( ) const { return m_bSharingConnection; }
 
     // error handling
     void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
