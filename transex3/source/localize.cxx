@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2002-09-09 12:38:22 $
+ *  last change: $Author: ihi $ $Date: 2002-11-08 10:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,13 +193,15 @@ const ByteString SourceTreeLocalizer::GetProjectName( BOOL bAbs )
         DirEntry aTest = aCur + DirEntry(PRJ_DIR_NAME) + DirEntry(DLIST_NAME);
         if ( aTest.Exists() )
         {
-            // HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             // HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if (( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Equals("webinstall") ) ||
-                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Equals("portal") ) ||
-                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Equals("xulclient") ) ||
-                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Search( "wdk_" ) == 0 ))
+                               ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Equals("portal") ) ||
+                               ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Equals("xulclient") ) ||
+                               ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Search( "wdk_" ) == 0 ))
                     return "";
             // end HACK !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
             if ( bAbs )
                 return ByteString( aCur.GetFull(), RTL_TEXTENCODING_ASCII_US );
@@ -520,8 +522,28 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         sCandidate = ExeTable[ ++nIndex ][ 0 ];
 
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
-    if ( !sCandidate.Equals( "NULL" ) && aEntry.Exists()) {
-        DirEntry aOut( Export::GetTempFile());
+
+    if ( !sCandidate.Equals( "NULL" ) ) {
+        if( !aEntry.Exists()) {
+            DirEntryKind theDir=FSYS_KIND_FILE;
+            Dir myDir( aEntry.GetPath(), theDir);
+            DirEntry current;
+            BOOL found=FALSE;
+            for(int x=0; x < myDir.Count() && !found;){
+                current=myDir[x++];
+                StringCompare result=current.GetName().CompareIgnoreCaseToAscii( aEntry.GetName() );
+                if( result==COMPARE_EQUAL ){
+                    fprintf(stderr,"WARNING: %s not found\n", ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US).GetBuffer() );
+                    fprintf(stderr,"but use  %s instead \n" , ByteString(current.GetFull(), RTL_TEXTENCODING_ASCII_US).GetBuffer() );
+                    aEntry=current;
+                    found=TRUE;
+                }
+            }
+            if(!found)  return TRUE;
+
+        }
+
+        DirEntry aOut( Export::GetTempFile() );
         ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
         ByteString sCommand( ExeTable[ nIndex ][ 1 ] );
@@ -556,13 +578,19 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         }
         else {
             FileStat::SetReadOnlyFlag( aEntry, FALSE );
-            SvFileStream aOutStream( aEntry.GetFull(), STREAM_STD_WRITE | STREAM_TRUNC );
+            String myStr2(aEntry.GetFull());
+            String aTemp22 = String::CreateFromAscii("_tmp");
+            myStr2.Append(aTemp22);
+
+            ByteString test(myStr2,RTL_TEXTENCODING_ASCII_US);
+            SvFileStream aOutStream( myStr2, STREAM_STD_WRITE | STREAM_TRUNC );
+
             if ( !aOutStream.IsOpen()) {
-                fprintf( stderr,
-                    "ERROR: Unable to open file %s for modification!\n",
-                    sFile.GetBuffer());
+                ByteString test2(myStr2,RTL_TEXTENCODING_ASCII_US);
+                fprintf( stderr,"ERROR: Unable to open file %s for modification!\n", test2.GetBuffer());
                 aInStream.Close();
             }
+
             else {
                 ByteString sLine;
                 aOutStream.SetLineDelimiter( LINEEND_CRLF );
@@ -573,12 +601,27 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
                 }
                 aInStream.Close();
                 aOutStream.Close();
-            }
-        }
 
-        aOldCWD.SetCWD();
-        aOut.Kill();
-    }
+                DirEntry myTempFile(ByteString(myStr2,RTL_TEXTENCODING_ASCII_US));      // xxx_tmp ->
+                DirEntry myFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));// xxx
+
+                DirEntry oldFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));
+
+                if(oldFile.Kill()==ERRCODE_NONE){
+                    if(myTempFile.MoveTo(myFile)!=ERRCODE_NONE){
+                        fprintf( stderr, "ERROR: Can't rename file %s\n",ByteString(myStr2,RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                    }
+                }
+                else{
+                    fprintf( stderr, "ERROR: Can't remove file %s\n",ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                }
+            } // else
+
+            aOldCWD.SetCWD();
+            aOut.Kill();
+        }   // else
+
+    }       // if ( !sCandidate.Equals( "NULL" ) )
 
     return TRUE;
 }
@@ -607,20 +650,6 @@ BOOL SourceTreeLocalizer::ExecuteMerge()
 
                 ByteString sPrj( sOldFileName.GetToken( 0, '#' ));
                 ByteString sFile( sOldFileName.GetToken( 1, '#' ));
-
-                //
-                // Hack: Special handling for known misspelled file names (lowercase problem)
-                //
-
-                sFile.SearchAndReplace(
-                    "source\\adabas\\adabasnewdb.src",
-                    "source\\adabas\\AdabasNewDb.src"
-                );
-
-                //
-                // end Hack
-                //
-
                 ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
 
                 if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
