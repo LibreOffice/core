@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 09:17:33 $
+ *  last change: $Author: vg $ $Date: 2002-11-29 09:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
     {
         BitmapEx bmpSource( rBmpEx );
 
-        Rectangle originalPixelRect(Point(), bmpSource.GetSizePixel());
+        Rectangle originalPixelRect = Rectangle(Point(), bmpSource.GetSizePixel());
 
         Point srcPt( map(rPt) );
         Size srcSize( map(rSz) );
@@ -845,7 +845,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
             // AS: Christian, I also don't understand why bNeedToMapClipRect is necessary, but it
             //  works like a charm.  Sometimes the map event is missing from the metafile, but why?
             Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
-            Rectangle clipRect(Point(), clipSize);
+            Rectangle clipRect = Rectangle(Point(), clipSize);
             destRect.Intersection( clipRect );
 
             Rectangle cropRect(destRect);
@@ -1185,7 +1185,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             aMatrix[2][0] = 0.0; aMatrix[2][1] = 0.0; aMatrix[2][2] = 1.0;
 
             // scale bitmap
-            Rectangle originalPixelRect(Point(), aGraphic.GetBitmapEx().GetSizePixel());
+            Rectangle originalPixelRect = Rectangle(Point(), aGraphic.GetBitmapEx().GetSizePixel());
 
             double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
             double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
