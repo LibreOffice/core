@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:35:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,7 @@ public:
                rtl::OString const & documentation,
                rtl::OString const & fileName,
                RTTypeClass      RTTypeClass,
+               bool             published,
                const OString&   typeName,
                sal_uInt16       superTypeCount,
                sal_uInt16       FieldCount,
@@ -803,6 +804,7 @@ TypeWriter::TypeWriter(typereg_Version version,
                        rtl::OString const & documentation,
                        rtl::OString const & fileName,
                        RTTypeClass      RTTypeClass,
+                       bool             published,
                        const OString&   typeName,
                        sal_uInt16       superTypeCount,
                        sal_uInt16       fieldCount,
@@ -810,7 +812,9 @@ TypeWriter::TypeWriter(typereg_Version version,
                        sal_uInt16       referenceCount)
     : m_refCount(1)
     , m_version(version)
-    , m_typeClass(RTTypeClass)
+    , m_typeClass(
+        static_cast< enum RTTypeClass >(
+            RTTypeClass | (published ? RT_TYPE_PUBLISHED : 0)))
      , m_typeName(typeName)
     , m_nSuperTypes(superTypeCount)
     , m_doku(documentation)
@@ -1489,7 +1493,7 @@ static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
 
 void * typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
-    rtl_uString const * fileName, RTTypeClass typeClass,
+    rtl_uString const * fileName, RTTypeClass typeClass, sal_Bool published,
     rtl_uString const * typeName, sal_uInt16 superTypeCount,
     sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
     SAL_THROW_EXTERN_C()
@@ -1497,8 +1501,8 @@ void * typereg_writer_create(
     try {
         return new TypeWriter(
             version, toByteString(documentation), toByteString(fileName),
-            typeClass, toByteString(typeName), superTypeCount, fieldCount,
-            methodCount, referenceCount);
+            typeClass, published, toByteString(typeName), superTypeCount,
+            fieldCount, methodCount, referenceCount);
     } catch (std::bad_alloc &) {
         return 0;
     }
@@ -1529,7 +1533,7 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     sal_uInt16 superTypeCount = rtl_uString_getLength(superTypeName) == 0
         ? 0 : 1;
     TypeWriterImpl t = typereg_writer_create(
-        TYPEREG_VERSION_0, empty.pData, empty.pData, typeClass, typeName,
+        TYPEREG_VERSION_0, empty.pData, empty.pData, typeClass, false, typeName,
         superTypeCount, fieldCount, methodCount, referenceCount);
     if (superTypeCount > 0) {
         typereg_writer_setSuperTypeName(t, 0, superTypeName);
