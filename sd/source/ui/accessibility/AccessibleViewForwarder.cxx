@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 14:45:10 $
+ *  last change: $Author: af $ $Date: 2002-06-03 15:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,19 @@
 
 namespace accessibility {
 
+/** For the time beeing, the implementation of this class will not use the
+    member mrDevice.  Instead the device is retrieved from the view
+    everytime it is used.  This is necessary because the device has to stay
+    up-to-date with the current view and the class has to stay compatible.
+    May change in the future.
+*/
 
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId)
     : mpView (pView),
       mnWindowId (nWindowId),
       mrDevice (*pView->GetWin(nWindowId))
 {
+    OSL_ASSERT (mpView != NULL);
     // empty
 }
 
@@ -112,6 +119,7 @@ AccessibleViewForwarder::~AccessibleViewForwarder (void)
 void AccessibleViewForwarder::SetView (SdrPaintView* pView)
 {
     mpView = pView;
+    OSL_ASSERT (mpView != NULL);
 }
 
 
@@ -135,9 +143,10 @@ Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 
 Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
-    Rectangle aBBox (static_cast<Window*>(&mrDevice)->GetWindowExtentsRelative(NULL));
-    return mrDevice.LogicToPixel (rPoint)
-        + aBBox.TopLeft();
+    OSL_ASSERT (mpView != NULL);
+    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
+    Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
+    return pDevice->LogicToPixel (rPoint) + aBBox.TopLeft();
 }
 
 
@@ -145,7 +154,9 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 
 Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
-    return mrDevice.LogicToPixel (rSize);
+    OSL_ASSERT (mpView != NULL);
+    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
+    return pDevice->LogicToPixel (rSize);
 }
 
 
@@ -153,7 +164,9 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 
 Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
-    return mrDevice.PixelToLogic (rPoint);
+    OSL_ASSERT (mpView != NULL);
+    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
+    return pDevice->PixelToLogic (rPoint);
 }
 
 
@@ -161,7 +174,9 @@ Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 
 Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
-    return mrDevice.PixelToLogic (rSize);
+    OSL_ASSERT (mpView != NULL);
+    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
+    return pDevice->PixelToLogic (rSize);
 }
 
 
