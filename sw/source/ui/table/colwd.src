@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:58:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_COL_WIDTH
     Text [ italian ] = "Larghezza colonna" ;
     Text [ portuguese_brazilian ] = "Largura da coluna" ;
     Text [ portuguese ] = "Largura da coluna" ;
-    Text [ finnish ] = "Sarakeleveys" ;
+    Text [ finnish ] = "Sarakkeen leveys" ;
     Text [ danish ] = "Kolonnebredde" ;
     Text [ french ] = "Largeur de colonne" ;
     Text [ swedish ] = "Kolumnbredd" ;
@@ -190,7 +190,7 @@ ModalDialog DLG_COL_WIDTH
         Text [ italian ] = "Colonna" ;
         Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ portuguese ] = "~Coluna" ;
-        Text [ finnish ] = "~Palsta" ;
+        Text [ finnish ] = "~Sarake" ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "~Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
