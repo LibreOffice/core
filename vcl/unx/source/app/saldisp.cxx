@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 00:32:54 $
+ *  last change: $Author: oisin $ $Date: 2001-01-19 14:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,7 +986,7 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             sscanf( pProperties, "%li", &nProperties_ );
         else
         {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
+#if defined DBG_UTIL || defined SUN || defined LINUX
             nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
             // Server Bugs & Properties
@@ -1015,7 +1015,7 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 #ifdef ARM32 // ??? Server! nicht Client ???
                 nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
 #endif
-#if defined LINUX || defined FREEBSD
+#ifdef LINUX
                 // otherwm and olwm are a kind of default, which are not detected
                 // carefully. if we are running linux (i.e. not netbsd) on an xfree
                 // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -1157,6 +1157,27 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 #ifdef DBG_UTIL
         hRefWindow_         = (XLIB_Window)ILLEGAL_POINTER;
 #endif
+#if defined(_USE_PRINT_EXTENSION_)
+
+      pScreen_            = ScreenOfDisplay( pDisp_, nScreen_ );
+      hRootWindow_        = RootWindowOfScreen( pScreen_ );
+      pRootVisual_        = pVisual_;
+
+      XSetWindowAttributes aXWAttributes;
+      aXWAttributes.border_pixel              = 0;
+      aXWAttributes.background_pixel          = 0;
+      aXWAttributes.colormap                  = hXColmap;
+      hRefWindow_                             = XCreateWindow( pDisp_,
+                                                               hRootWindow_,
+                                                               0, 0, 16, 16, 0,
+                                                               pVisual_->GetDepth(),
+                                                               InputOutput,
+                                                               pVisual_->GetVisual(),
+                                                               CWBorderPixel|CWBackPixel|CWColormap,
+                                                               &aXWAttributes );
+
+#endif
+
         hInvert50_          = None;
         bLocal_             = TRUE; /* always true for xprinter */
         mbLocalIsValid      = TRUE; /* yes bLocal_ is initialized */
@@ -2640,14 +2661,12 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
              && pFrame->maFrameData.GetShellWindow() != aWindow;
              pFrame = pFrame->maFrameData.GetNextFrame() )
           ;
-        if( pFrame ) {
-          XLIB_Window window= pFrame->maFrameData.GetWindow();
-          if ( mpInputMethod->FilterEvent( pEvent , window) )
+        if( pFrame )
+          if ( mpInputMethod->FilterEvent( pEvent ) )
         return 0;
-        }
       }
     else
-      if ( mpInputMethod->FilterEvent( pEvent, None ) )
+      if ( mpInputMethod->FilterEvent( pEvent ) )
         return 0;
 
     DtIntegrator::HandleXEvent( pEvent );
