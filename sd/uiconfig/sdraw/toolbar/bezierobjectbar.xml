@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="helpid:10126" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierMove" toolbar:helpid="helpid:10121" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BezierInsert" toolbar:helpid="helpid:10119" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierDelete" toolbar:helpid="helpid:10120" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BezierCutLine" toolbar:helpid="helpid:10127" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BezierConvert" toolbar:helpid="helpid:27065" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierEdge" toolbar:helpid="helpid:27066" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BezierSmooth" toolbar:helpid="helpid:10123" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric" toolbar:helpid="helpid:27067" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierClose" toolbar:helpid="helpid:10122" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierEliminatePoints" toolbar:helpid="helpid:27030" toolbar:text="" />
+</toolbar:toolbar>
