@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 13:42:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 #ifndef _SHELLIO_HXX
 #define _SHELLIO_HXX
 
+#include <com/sun/star/uno/Reference.h>
+
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -97,9 +103,8 @@ class SfxItemPool;
 class SfxItemSet;
 class SfxMedium;
 class SvPtrarr;
-class SvStorage;
 class SotStorage;
-class SvStorageStreamRef;
+class SotStorageStreamRef;
 class SvStream;
 class SvStrings;
 class SvStringsSortDtor;
@@ -209,7 +214,8 @@ public:
 class SwReader: public SwDocFac
 {
     SvStream* pStrm;
-    SvStorage* pStg;
+    SotStorage* pStg;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
     SwPaM* pCrsr;
@@ -221,14 +227,16 @@ public:
      * JP 25.04.95: oder falls es mitgegeben wird, in dieses.
      *              Sonderfall fuer Load mit Sw3Reader
      */
-    SwReader( SvStorage&, const String& rFilename, SwDoc *pDoc = 0 );
+    // SwReader( SvStream&, const String& rFilename, SwDoc *pDoc = 0 );
+    SwReader( SotStorage&, const String& rFilename, SwDoc *pDoc = 0 );
+    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwDoc *pDoc = 0 );
     SwReader( SfxMedium&, const String& rFilename, SwDoc *pDoc = 0 );
     /*
      * In ein existierendes Dokument einlesen, Dokument und
      * Position im Dokument werden aus dem SwPaM uebernommen.
      */
     SwReader( SvStream&, const String& rFilename, SwPaM& );
-    SwReader( SvStorage&, const String& rFilename, SwPaM& );
+    SwReader( SotStorage&, const String& rFilename, SwPaM& );
     SwReader( SfxMedium&, const String& rFilename, SwPaM& );
 
     /*
@@ -263,7 +271,8 @@ class Reader
 
 protected:
     SvStream* pStrm;
-    SvStorage* pStg;
+    SotStorage* pStg;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
     SwgReaderOption aOpt;
@@ -352,7 +361,7 @@ class StgReader : public Reader
     String aFltName;
 
 protected:
-    ULONG OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize );
+    ULONG OpenMainStream( SotStorageStreamRef& rRef, USHORT& rBuffSize );
 
 public:
     virtual int GetReaderType();
@@ -513,7 +522,8 @@ public:
 
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
             ULONG Write( SwPaM&, SvStream&,  const String* = 0 );
-    virtual ULONG Write( SwPaM&, SvStorage&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
     virtual void SetPasswd( const String& );
     virtual void SetVersion( const String&, long );
@@ -589,7 +599,8 @@ class StgWriter : public Writer
 {
 protected:
     String aFltName;
-    SvStorage* pStg;
+    SotStorage* pStg;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
     // Fehler beim Aufruf erzeugen
     virtual ULONG WriteStream();
@@ -599,9 +610,10 @@ public:
     StgWriter() : Writer(), pStg( 0 ) {}
 
     virtual BOOL IsStgWriter() const;
-    virtual ULONG Write( SwPaM&, SvStorage&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
-    SvStorage& GetStorage() const       { return *pStg; }
+    SotStorage& GetStorage() const       { return *pStg; }
     const String& GetFltName() const    { return aFltName; }
     void SetFltName( const String& r )  { aFltName = r; }
 };
@@ -632,7 +644,8 @@ public:
 class SwWriter
 {
     SvStream* pStrm;
-    SvStorage* pStg;
+    SotStorage* pStg;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;
 
     SwPaM* pOutPam;
@@ -647,9 +660,10 @@ public:
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, BOOL bWriteAll = FALSE );
 
-//  SwWriter( SvStorage&, SwCrsrShell &,BOOL bWriteAll = FALSE );
-    SwWriter( SvStorage&, SwDoc & );
-//  SwWriter( SvStorage&, SwPaM&, BOOL bWriteAll = FALSE );
+//  SwWriter( SotStorage&, SwCrsrShell &,BOOL bWriteAll = FALSE );
+    SwWriter( SotStorage&, SwDoc & );
+    SwWriter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, SwDoc& );
+//  SwWriter( SotStorage&, SwPaM&, BOOL bWriteAll = FALSE );
 
     SwWriter( SfxMedium&, SwCrsrShell &,BOOL bWriteAll = FALSE );
     SwWriter( SfxMedium&, SwDoc & );
@@ -694,6 +708,7 @@ public:
                                     const SfxFilter** ppFlt = 0 );
 
     static FASTBOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
+    static FASTBOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
