@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 13:54:24 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 10:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,11 +542,11 @@ Any SAL_CALL HierarchyContent::execute( const Command& aCommand,
     else
     {
         //////////////////////////////////////////////////////////////////
-        // Unknown command
+        // Unsupported command
         //////////////////////////////////////////////////////////////////
 
         VOS_ENSURE( sal_False,
-                    "HierarchyContent::execute - unknown command!" );
+                    "HierarchyContent::execute - unsupported command!" );
         throw CommandAbortedException();
     }
 
@@ -1175,23 +1175,22 @@ void HierarchyContent::setPropertyValues(
                 {
                     if ( aNewValue != m_aProps.aTitle )
                     {
-                        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-                        m_aProps.aTitle = aNewValue;
-                        m_aProps.aName
-                            = HierarchyContentProvider::encodeSegment(
-                                                                aNewValue );
+                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                         // modified title -> modified URL -> exchange !
                         if ( m_eState == PERSISTENT )
                             bExchange = sal_True;
-
-                        aGuard.clear();
 
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = makeAny( m_aProps.aTitle );
                         aEvent.NewValue     = makeAny( aNewValue );
 
                         aChanges.getArray()[ nChanged ] = aEvent;
+
+                        m_aProps.aTitle = aNewValue;
+                        m_aProps.aName
+                            = HierarchyContentProvider::encodeSegment(
+                                                                aNewValue );
                         nChanged++;
                     }
                 }
@@ -1211,16 +1210,15 @@ void HierarchyContent::setPropertyValues(
                     {
                         if ( aNewValue != m_aProps.aTargetURL )
                         {
-                            osl::ClearableGuard< osl::Mutex > aGuard(
-                                                                    m_aMutex );
-                            m_aProps.aTargetURL = aNewValue;
-                            aGuard.clear();
+                            osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                             aEvent.PropertyName = rValue.Name;
                             aEvent.OldValue = makeAny( m_aProps.aTargetURL );
                             aEvent.NewValue = makeAny( aNewValue );
 
                             aChanges.getArray()[ nChanged ] = aEvent;
+
+                            m_aProps.aTargetURL = aNewValue;
                             nChanged++;
                         }
                     }
@@ -1243,11 +1241,11 @@ void HierarchyContent::setPropertyValues(
                 {
                     Any aOldValue = xAdditionalPropSet->getPropertyValue(
                                                                 rValue.Name );
-                    xAdditionalPropSet->setPropertyValue(
-                                                rValue.Name, rValue.Value );
-
                     if ( aOldValue != rValue.Value )
                     {
+                        xAdditionalPropSet->setPropertyValue(
+                                                rValue.Name, rValue.Value );
+
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = aOldValue;
                         aEvent.NewValue     = rValue.Value;
