@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:13:03 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 14:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,8 @@ _FileListEntry::_FileListEntry( const String& rFileName,
     else
     {
         INetURLObject aObj( rFileName, INET_PROT_FILE );
-        aBaseName = aObj.getName();
+        aBaseName = aObj.getName( INetURLObject::LAST_SEGMENT, true,
+                                  INetURLObject::DECODE_WITH_CHARSET );
     }
 }
 
@@ -194,8 +195,10 @@ BOOL _FileListEntry::DeleteObjectShell()
         {
             // Falls konvertiert im eigenen Format speichern
             INetURLObject aObj( aFileName );
+            String aTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true,
+                                          INetURLObject::DECODE_WITH_CHARSET );
             bRet = aDocShell->PreDoSaveAs_Impl(
-                aObj.getName(), aDocShell->GetFactory().GetFilter(0)->GetName(), 0 );
+                        aTitle, aDocShell->GetFactory().GetFilter(0)->GetName(), 0 );
         }
     }
     if( bOwner)
@@ -678,22 +681,21 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
 
 {
     SvLBoxEntry *pParent = pCaller->FirstSelected();
-    if(nIdx!=USHRT_MAX)
-        pParent=pCaller->GetParent(pParent);
-    if(pTemplates->CopyFrom(nRegion, nIdx, rName))
+    if( nIdx!=USHRT_MAX )
+        pParent = pCaller->GetParent(pParent);
+    if( pTemplates->CopyFrom( nRegion, nIdx, rName ) )
     {
         // pCaller aktualisieren
         if( nIdx == USHRT_MAX )
             nIdx = 0;
         else nIdx++;
 
-        INetURLObject aURL( rName );
-        SvLBoxEntry *pEntry = pCaller->InsertEntry( aURL.GetName(),
+        SvLBoxEntry *pEntry = pCaller->InsertEntry( rName,
                                                     pCaller->GetOpenedBmp(1),
                                                     pCaller->GetClosedBmp(1),
                                                     pParent, TRUE, nIdx);
         pCaller->Update();
-        pCaller->EditEntry(pEntry);
+        pCaller->EditEntry( pEntry );
         bModified = TRUE;
         return TRUE;
     }
