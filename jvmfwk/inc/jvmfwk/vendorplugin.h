@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 09:30:35 $
+ *  last change: $Author: jl $ $Date: 2004-04-22 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ typedef enum
     JFW_PLUGIN_E_ERROR,
     JFW_PLUGIN_E_INVALID_ARG,
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT,
-    JFW_PLUGIN_E_FAILED_REQUIREMENTS,
+    JFW_PLUGIN_E_FAILED_VERSION,
     JFW_PLUGIN_E_NO_JRE
 } javaPluginError;
 
@@ -114,7 +114,7 @@ javaPluginError getAllJavaInfos(
     JFW_PLUGIN_E_ERROR
     JFW_PLUGIN_E_INVALID_ARG
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT
-    JFW_PLUGIN_E_FAILED_REQUIREMENTS
+    JFW_PLUGIN_E_FAILED_VERSION
     JFW_PLUGIN_E_NO_JRE
  */
 javaPluginError getJavaInfoByPath(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 12:16:19 $
+ *  last change: $Author: jl $ $Date: 2004-04-22 12:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 & pInfo);
             if (plerr == JFW_PLUGIN_E_NO_JRE)
                 continue;
-            if (plerr == JFW_PLUGIN_E_FAILED_REQUIREMENTS)
+            if (plerr == JFW_PLUGIN_E_FAILED_VERSION)
                 continue;
             else if (plerr !=JFW_PLUGIN_E_NONE)
             {   //delete JavaInfo objects
@@ -276,7 +276,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     return errcode;
 }
 
-javaFrameworkError SAL_CALL jfw_startJava(JavaVMOption *arOptions, sal_Int32 cOptions,
+javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOptions,
                                  JavaVM **ppVM, JNIEnv **ppEnv)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
@@ -414,7 +414,7 @@ javaFrameworkError SAL_CALL jfw_startJava(JavaVMOption *arOptions, sal_Int32 cOp
 }
 
 
-javaFrameworkError SAL_CALL jfw_findAndSelectJava(JavaInfo **pInfo)
+javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
@@ -583,7 +583,7 @@ void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo)
     rtl_freeMemory(pInfo);
 }
 
-javaFrameworkError SAL_CALL jfw_getSelectedJava(JavaInfo **ppInfo)
+javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
@@ -610,7 +610,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJava(JavaInfo **ppInfo)
     return errcode;
 }
 
-javaFrameworkError SAL_CALL jfw_isJavaRunning(sal_Bool *bRunning)
+javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
     if (bRunning == NULL)
@@ -629,8 +629,6 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     if (pPath == NULL || ppInfo == NULL)
         return JFW_E_INVALID_ARG;
     javaFrameworkError errcode = JFW_E_NONE;
-//        sal_Int64 nFeatureFlags = 0L;
-//    jfw::CJavaInfo aCurrentInfo;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
      jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
@@ -691,19 +689,25 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             *ppInfo = pInfo;
             break;
         }
-        else if(plerr == JFW_PLUGIN_E_FAILED_REQUIREMENTS)
+        else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
         {//found JRE but it has the wrong version
             *ppInfo = NULL;
+            errcode = JFW_E_FAILED_VERSION;
             break;
         }
+        else if (plerr = JFW_PLUGIN_E_NO_JRE)
+        {// plugin does not recognize this path as belonging to JRE
+            continue;
+        }
+        OSL_ASSERT(0);
     }
-    if (*ppInfo == NULL)
+    if (*ppInfo == NULL && errcode != JFW_E_FAILED_VERSION)
         errcode = JFW_E_NOT_RECOGNIZED;
     return errcode;
 }
 
 
-javaFrameworkError SAL_CALL jfw_setSelectedJava(JavaInfo const *pInfo)
+javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;

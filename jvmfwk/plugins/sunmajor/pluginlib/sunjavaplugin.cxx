@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:36:12 $
+ *  last change: $Author: jl $ $Date: 2004-04-22 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ javaPluginError getJavaInfoByPath(
                 stoc_javadetect::JavaInfo::compareVersions(
                     sVersion, sTheMinVersion);
             if (nRes < 0)
-                return JFW_PLUGIN_E_FAILED_REQUIREMENTS;
+                return JFW_PLUGIN_E_FAILED_VERSION;
         }
 
         rtl::OUString sTheMaxVersion((rtl_uString*) sMaxVersion);
@@ -220,7 +220,7 @@ javaPluginError getJavaInfoByPath(
                 stoc_javadetect::JavaInfo::compareVersions(
                     sVersion, sTheMaxVersion);
             if (nRes > 0)
-                return JFW_PLUGIN_E_FAILED_REQUIREMENTS;
+                return JFW_PLUGIN_E_FAILED_VERSION;
         }
 
         if (arExcludeList > 0)
@@ -232,7 +232,7 @@ javaPluginError getJavaInfoByPath(
                     stoc_javadetect::JavaInfo::compareVersions(
                         sVersion, sExVer);
                 if (nRes == 0)
-                    return JFW_PLUGIN_E_FAILED_REQUIREMENTS;
+                    return JFW_PLUGIN_E_FAILED_VERSION;
             }
         }
 

@@ -4,12 +4,12 @@ UDK_3_0_0 {
     jfw_freeJavaInfo;
     jfw_areEqualJavaInfo;
     jfw_findAllJREs;
-    jfw_findAndSelectJava;
-    jfw_startJava;
-    jfw_isJavaRunning;
+    jfw_findAndSelectJRE;
+    jfw_startVM;
+    jfw_isVMRunning;
     jfw_getJavaInfoByPath;
-    jfw_setSelectedJava;
-    jfw_getSelectedJava;
+    jfw_setSelectedJRE;
+    jfw_getSelectedJRE;
     jfw_setEnabled;
     jfw_getEnabled;
     jfw_setVMParameters;
