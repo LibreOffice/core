@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 10:10:13 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 08:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,9 +516,16 @@ FASTBOOL SdrOle2Obj::HasSetName() const
 
 void SdrOle2Obj::SetName(const XubString& rStr)
 {
-    Disconnect();
+    sal_Bool bInitialName = 0 == aName.Len();
+
+    if( !bInitialName )
+        Disconnect();
+
     aName=rStr;
-    Connect();
+
+    if( !bInitialName )
+        Connect();
+
     SetChanged();
 }
 
@@ -800,25 +807,29 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         aGeo.nTan=0.0;
         SetRectsDirty();
     }
-    ImpSetVisAreaSize();
+    if( (NULL == pModel) || !pModel->isLocked() )
+        ImpSetVisAreaSize();
 }
 
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::SetGeoData(rGeo);
-    ImpSetVisAreaSize();
+    if( (NULL == pModel) || !pModel->isLocked() )
+        ImpSetVisAreaSize();
 }
 
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
-    ImpSetVisAreaSize();
+    if( (NULL == pModel) || !pModel->isLocked() )
+        ImpSetVisAreaSize();
 }
 
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
-    ImpSetVisAreaSize();
+    if( (NULL == pModel) || !pModel->isLocked() )
+        ImpSetVisAreaSize();
 }
 
 FASTBOOL SdrOle2Obj::HasGDIMetaFile() const
@@ -958,7 +969,8 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
-    ImpSetVisAreaSize();
+    if( (NULL == pModel) || !pModel->isLocked() )
+        ImpSetVisAreaSize();
 }
 
 BOOL SdrOle2Obj::Unload()
