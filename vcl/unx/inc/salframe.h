@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:54:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,8 @@ public:
     virtual ULONG               GetCurrentModButtons();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
+
+    static void SaveYourselfDone( SalFrame* );
 };
 
 #ifdef _SV_SALDISP_HXX
