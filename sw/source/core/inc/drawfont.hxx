@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 09:43:30 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 12:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,11 @@ class SwDrawTextInfo
                             // is right in front of a hole portion or a
                             // fix margin portion.
     BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
+#ifdef BIDI
+    BOOL bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
+                            // line numbering
+#endif
+
     SwDrawTextInfo();       // nicht zulaessig
 public:
 #ifndef PRODUCT
@@ -392,7 +397,11 @@ public:
     {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
         nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
         bBullet = bB; pUnderFnt = 0; bGreyWave = bSpaceStop =
+#ifdef BIDI
+        bSnapToGrid = bIgnoreFrmRTL = FALSE;
+#else
         bSnapToGrid = FALSE;
+#endif
         pFrm = 0;
 
 #ifndef PRODUCT
@@ -523,6 +532,10 @@ public:
     }
     BOOL SnapToGrid() const {
         return bSnapToGrid;
+    }
+
+    BOOL IsIgnoreFrmRTL() const {
+        return bIgnoreFrmRTL;
     }
 
     void SetOut( OutputDevice &rNew ){ pOut = &rNew;
@@ -656,6 +669,10 @@ public:
 
     void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
     void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew; }
+
+#ifdef BIDI
+    void SetIgnoreFrmRTL( BOOL bNew ) { bIgnoreFrmRTL = bNew; }
+#endif
 
     void Shift( USHORT nDir );
 
