@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: bei $ $Date: 2001-09-14 06:44:59 $
+#   last change: $Author: as $ $Date: 2002-02-15 07:50:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ IDLFILES=\
     XComponentEnumerationAccess.idl\
     XContainer.idl\
     XContainerListener.idl\
+    XContainerQuery.idl\
     XContentEnumerationAccess.idl\
     XElementAccess.idl\
     XEnumeration.idl\
