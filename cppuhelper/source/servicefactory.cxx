@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2000-10-19 14:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,14 +294,6 @@ static Reference< XMultiServiceFactory > createImplServiceFactory( const OUStrin
                                                                    const OUString & rBootstrapPath )
     throw( ::com::sun::star::uno::Exception )
 {
-    // mappings held to avoid binding unloading...
-    Mapping aCpp2Uno(
-        OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
-    Mapping aUno2Cpp(
-        OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
-
     Reference< XSingleServiceFactory > xSMFac( loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("smgr") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.ORegistryServiceManager") ),
