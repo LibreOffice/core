@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:49:04 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "¦ζ(~W)";
         Text[ arabic ] = "Υέ";
         Text[ greek ] = "Γραμμή";
-        Text[ korean ] = "Ηΰ(~W)";
+        Text[ korean ] = "Ηΰ(~)";
         Text[ turkish ] = "S~atύr";
     };
     NumericField FLD_ROW
@@ -285,7 +285,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "³]Έm...";
         Text[ arabic ] = "...ΕΪΟΗΟ";
         Text[ greek ] = "~Εγκατάσταση...";
-        Text[ korean ] = "Ό³Α€...";
+        Text[ korean ] = "ΌΒΎχ...";
         Text[ turkish ] = "Ayarlar...";
     };
     GroupBox GB_PRINTER
