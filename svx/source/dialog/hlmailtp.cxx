@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 13:35:02 $
+ *  last change: $Author: iha $ $Date: 2002-12-12 18:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
     String aStrURL = maCbbReceiver.GetText();
     String aScheme = GetSchemeFromURL(aStrURL);
 
-    INetURLObject aURL(aStrURL);
+    INetURLObject aURL(aStrURL,GetSmartProtocolFromButtons());
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
