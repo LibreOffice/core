@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:38:24 $
+ *  last change: $Author: cd $ $Date: 2001-11-13 14:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <classes/taskcreator.hxx>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
+#include <classes/argumentanalyzer.hxx>
+#endif
+
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
 #endif
@@ -153,6 +157,18 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -199,37 +215,11 @@ namespace framework{
 #define PROPERTYNAME_ACTIVECOMPONENT            DECLARE_ASCII("ActiveComponent" )
 #define PROPERTYNAME_ACTIVEFRAME                DECLARE_ASCII("ActiveFrame"     )
 #define PROPERTYNAME_ISPLUGGED                  DECLARE_ASCII("IsPlugged"       )
-/*OBSOLETE
-#define PROPERTYNAME_HASBEAMER                  DECLARE_ASCII("HasBeamer"       )
-#define PROPERTYNAME_HASCOMMONTASKBAR           DECLARE_ASCII("HasCommonTaskBar")
-#define PROPERTYNAME_HASDESIGNER                DECLARE_ASCII("HasDesigner"     )
-#define PROPERTYNAME_HASEXPLORER                DECLARE_ASCII("HasExplorer"     )
-#define PROPERTYNAME_HASFUNCTIONBAR             DECLARE_ASCII("HasFunctionBar"  )
-#define PROPERTYNAME_HASMACROBAR                DECLARE_ASCII("HasMacroBar"     )
-#define PROPERTYNAME_HASNAVIGATOR               DECLARE_ASCII("HasNavigator"    )
-#define PROPERTYNAME_HASOBJECTBAR               DECLARE_ASCII("HasObjectBar"    )
-#define PROPERTYNAME_HASOPTIONBAR               DECLARE_ASCII("HasOptionBar"    )
-#define PROPERTYNAME_HASSTATUSBAR               DECLARE_ASCII("HasStatusBar"    )
-#define PROPERTYNAME_HASTOOLBAR                 DECLARE_ASCII("HasToolBar"      )
-*/
 
 // handle of properties
 #define PROPERTYHANDLE_ACTIVECOMPONENT          1
 #define PROPERTYHANDLE_ACTIVEFRAME              2
 #define PROPERTYHANDLE_ISPLUGGED                3
-/*OBSOLETE
-#define PROPERTYHANDLE_HASBEAMER                3
-#define PROPERTYHANDLE_HASCOMMONTASKBAR         4
-#define PROPERTYHANDLE_HASDESIGNER              5
-#define PROPERTYHANDLE_HASEXPLORER              6
-#define PROPERTYHANDLE_HASFUNCTIONBAR           7
-#define PROPERTYHANDLE_HASMACROBAR              8
-#define PROPERTYHANDLE_HASNAVIGATOR             9
-#define PROPERTYHANDLE_HASOBJECTBAR             10
-#define PROPERTYHANDLE_HASOPTIONBAR             11
-#define PROPERTYHANDLE_HASSTATUSBAR             12
-#define PROPERTYHANDLE_HASTOOLBAR               13
-*/
 
 // count of ALL properties
 #define PROPERTYCOUNT                           3
@@ -245,7 +235,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_11                    (   Desktop                                                  ,
+DEFINE_XINTERFACE_12                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo               ),
@@ -257,10 +247,11 @@ DEFINE_XINTERFACE_11                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XFrame                    ),
                                             DIRECT_INTERFACE( css::lang::XComponent                 ),
                                             DIRECT_INTERFACE( css::frame::XStatusListener           ),
-                                            DIRECT_INTERFACE( css::lang::XEventListener             )
+                                            DIRECT_INTERFACE( css::lang::XEventListener             ),
+                                            DIRECT_INTERFACE( css::task::XInteractionHandler        )
                                         )
 
-DEFINE_XTYPEPROVIDER_11                 (   Desktop                                                 ,
+DEFINE_XTYPEPROVIDER_12                 (   Desktop                                                 ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::frame::XDesktop                                    ,
@@ -271,7 +262,8 @@ DEFINE_XTYPEPROVIDER_11                 (   Desktop                             
                                             css::frame::XFrame                                      ,
                                             css::lang::XComponent                                   ,
                                             css::frame::XStatusListener                             ,
-                                            css::lang::XEventListener
+                                            css::lang::XEventListener                               ,
+                                            css::task::XInteractionHandler
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   Desktop                                                 ,
@@ -356,20 +348,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_eLoadState            ( E_NOTSET                                      )
-        // Init Properties
-        /*OBSOLETE
-        ,   m_bHasBeamer            ( sal_True                                      )
-        ,   m_bHasCommonTaskBar     ( sal_True                                      )
-        ,   m_bHasDesigner          ( sal_True                                      )
-        ,   m_bHasExplorer          ( sal_True                                      )
-        ,   m_bHasFunctionBar       ( sal_True                                      )
-        ,   m_bHasMacroBar          ( sal_True                                      )
-        ,   m_bHasNavigator         ( sal_True                                      )
-        ,   m_bHasObjectBar         ( sal_True                                      )
-        ,   m_bHasOptionBar         ( sal_True                                      )
-        ,   m_bHasStatusBar         ( sal_True                                      )
-        ,   m_bHasToolbar           ( sal_True                                      )
-        */
+        ,   m_aInteractionRequest   (                                               )
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further informations!
         #endif
@@ -864,6 +843,17 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         // and map this information for us! (see classes DispatchProvider/BaseDispatcher for further informations)
         xDispatcher->addStatusListener( static_cast< css::frame::XStatusListener* >( this ), aURL );
 
+        // We should set us as interaction handler for possible exceptions during load proccess ...
+        // But we shouldn't do that - if anyone already is set!
+        // Our interaction handler is called back in method "handle()". We set right condition there
+        // to break following loop and throw detected exception from here again!
+        css::uno::Sequence< css::beans::PropertyValue > lOwnArguments( lArguments    );
+        ArgumentAnalyzer                                aAnalyzer    ( lOwnArguments );
+        if( aAnalyzer.existArgument( E_INTERACTIONHANDLER ) == sal_False )
+        {
+            aAnalyzer.setArgument( E_INTERACTIONHANDLER, static_cast< css::task::XInteractionHandler* >(this) );
+        }
+
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
@@ -872,7 +862,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         aWriteLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
-        xDispatcher->dispatch( aURL, lArguments );
+        xDispatcher->dispatch( aURL, lOwnArguments );
 
         // ... we must wait for asynchron result of this dispatch()-operation!
         // Attention: Don't use lock here ... dispatcher call us back!
@@ -885,26 +875,50 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         // We can remove us as listener!
         xDispatcher->removeStatusListener( static_cast< css::frame::XStatusListener* >( this ), aURL );
 
-        // Try to get new current component.
-        // Look for result of loading.
-        // If loading was successful we can return a component.
-        // Attention: Don't react for failed or successfully loading operations ... our dispatcher do that for us!
+        // Which reaction was detected ... interaction request or loading state?
+        // Test it ...
 
-        // First make snapshot of our asynchron status informations by using a lock.
+        // But - first make snapshot of our asynchron status informations by using a lock.
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
         ReadGuard aReadLock( m_aLock );
-        ELoadState                                eState       = m_eLoadState;
-        css::uno::Reference< css::frame::XFrame > xLoadTarget  = m_xLastFrame;
-                                                  m_xLastFrame = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
+        ELoadState                                eState                = m_eLoadState;
+                                                  m_eLoadState          = E_NOTSET;
+
+        css::uno::Reference< css::frame::XFrame > xLoadTarget           = m_xLastFrame;
+                                                  m_xLastFrame          = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
+
+        css::uno::Any                             aRequest              = m_aInteractionRequest;
+                                                  m_aInteractionRequest = css::uno::Any();
         aReadLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
-        if(
-            ( eState           == E_SUCCESSFUL  )   &&
-            ( xLoadTarget.is() == sal_True      )
-          )
+        switch( eState )
         {
-            xComponent = impl_getFrameComponent( xLoadTarget );
+            //case E_FAILED     :   ... nothing to do here ... we must return our default ... NULL!
+            case E_SUCCESSFUL   :   {
+                                        // Try to get new current component.
+                                        if( xLoadTarget.is() == sal_True )
+                                        {
+                                            xComponent = impl_getFrameComponent( xLoadTarget );
+                                        }
+                                    }
+                                    break;
+            case E_INTERACTION  :   {
+                                        // Interaction indicates throwed exception during load proccess.
+                                        // Forward io exceptions to user ...
+                                        css::ucb::InteractiveIOException           exIOInteractive ;
+                                        css::ucb::InteractiveAugmentedIOException  exIOAugmented   ;
+
+                                        if( m_aInteractionRequest >>= exIOInteractive )
+                                            throw css::io::IOException( exIOInteractive.Message, static_cast< ::cppu::OWeakObject* >(this) );
+                                        else
+                                        if( m_aInteractionRequest >>= exIOAugmented )
+                                            throw css::io::IOException( exIOAugmented.Message, static_cast< ::cppu::OWeakObject* >(this) );
+
+                                        // ... but unknown exceptions shouldnt be forwarded. Use default return value of NULL to
+                                        // tell user failed state of load operation!
+                                    }
+                                    break;
         }
     }
     // Return result of this operation.
@@ -1483,15 +1497,17 @@ void SAL_CALL Desktop::statusChanged( const css::frame::FeatureStateEvent& aEven
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
         WriteGuard aWriteLock( m_aLock );
 
-        m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
-        m_eLoadState = E_FAILED                                   ;
-
-        if(
-            ( aEvent.IsEnabled  == sal_True     )    &&
-            ( aEvent.State     >>= m_xLastFrame )
-          )
+        if( m_eLoadState != E_INTERACTION )
         {
-            m_eLoadState = E_SUCCESSFUL;
+            m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
+            m_eLoadState = E_FAILED                                   ;
+            if(
+                ( aEvent.IsEnabled  == sal_True     )    &&
+                ( aEvent.State     >>= m_xLastFrame )
+              )
+            {
+                m_eLoadState = E_SUCCESSFUL;
+            }
         }
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
     }
@@ -1514,6 +1530,59 @@ void SAL_CALL Desktop::statusChanged( const css::frame::FeatureStateEvent& aEven
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException )
 {
     LOG_ERROR( "Desktop::disposing()", "Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." )
+}
+
+/*-************************************************************************************************************//**
+    @interface  XInteractionHandler
+    @short      callback for loadComponentFromURL for detected exceptions during load proccess
+    @descr      In this case we must cancel loading and throw these detected exception again as result
+                of our own called method.
+
+    @attention  a)
+                Normal loop in loadComponentFromURL() breaks on setted member m_eLoadState during callback statusChanged().
+                But these interaction feature implements second way to do so! So we must look on different callbacks
+                for same operation ... and live with it.
+                b)
+                Search for given continuations too. If any XInteractionAbort exist ... use it to abort further operations
+                for currently running operation!
+
+    @seealso    method loadComponentFromURL()
+    @seealso    member m_eLoadState
+
+    @param      "xRequest", request for interaction - normal a wrapped target exception from bottom services
+    @return     -
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register transaction and reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    if( xRequest.is() == sal_True )
+    {
+        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+
+        m_eLoadState          = E_INTERACTION;
+        m_aInteractionRequest = xRequest->getRequest();
+
+        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
+
+        sal_Int32 nCount=lContinuations.getLength();
+        for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+        {
+            xAbort = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
+            if( xAbort.is() == sal_True )
+            {
+                xAbort->select;
+                break;
+            }
+        }
+    }
 }
 
 /*-************************************************************************************************************//**
@@ -1562,30 +1631,6 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
         case PROPERTYHANDLE_ACTIVEFRAME         :
         case PROPERTYHANDLE_ISPLUGGED           :   bReturn = sal_False; // These variables are readonly(!) and can't be changed.
                                                     break;
-/*OBSOLETE
-        case PROPERTYHANDLE_HASBEAMER           :   bReturn = impl_tryToChangeProperty( m_bHasBeamer        , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASCOMMONTASKBAR    :   bReturn = impl_tryToChangeProperty( m_bHasCommonTaskBar , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASDESIGNER         :   bReturn = impl_tryToChangeProperty( m_bHasDesigner      , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASEXPLORER         :   bReturn = impl_tryToChangeProperty( m_bHasExplorer      , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASFUNCTIONBAR      :   bReturn = impl_tryToChangeProperty( m_bHasFunctionBar   , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASMACROBAR         :   bReturn = impl_tryToChangeProperty( m_bHasMacroBar      , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASNAVIGATOR        :   bReturn = impl_tryToChangeProperty( m_bHasNavigator     , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASOBJECTBAR        :   bReturn = impl_tryToChangeProperty( m_bHasObjectBar     , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASOPTIONBAR        :   bReturn = impl_tryToChangeProperty( m_bHasOptionBar     , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASSTATUSBAR        :   bReturn = impl_tryToChangeProperty( m_bHasStatusBar     , aValue, aOldValue, aConvertedValue );
-                                                    break;
-        case PROPERTYHANDLE_HASTOOLBAR          :   bReturn = impl_tryToChangeProperty( m_bHasToolbar       , aValue, aOldValue, aConvertedValue );
-                                                    break;
-*/
     }
 
     // Return state of operation.
@@ -1621,30 +1666,6 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
         case PROPERTYHANDLE_ACTIVEFRAME         :
         case PROPERTYHANDLE_ISPLUGGED           :   LOG_ERROR( "Desktop::setFastPropertyValue_NoBroadcast()", "Set of readonly property not allowed." )
                                                     break;
-/*OBSOLETE
-        case PROPERTYHANDLE_HASBEAMER           :   aValue >>= m_bHasBeamer         ;
-                                                    break;
-        case PROPERTYHANDLE_HASCOMMONTASKBAR    :   aValue >>= m_bHasCommonTaskBar  ;
-                                                    break;
-        case PROPERTYHANDLE_HASDESIGNER         :   aValue >>= m_bHasDesigner       ;
-                                                    break;
-        case PROPERTYHANDLE_HASEXPLORER         :   aValue >>= m_bHasExplorer       ;
-                                                    break;
-        case PROPERTYHANDLE_HASFUNCTIONBAR      :   aValue >>= m_bHasFunctionBar    ;
-                                                    break;
-        case PROPERTYHANDLE_HASMACROBAR         :   aValue >>= m_bHasMacroBar       ;
-                                                    break;
-        case PROPERTYHANDLE_HASNAVIGATOR        :   aValue >>= m_bHasNavigator      ;
-                                                    break;
-        case PROPERTYHANDLE_HASOBJECTBAR        :   aValue >>= m_bHasObjectBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASOPTIONBAR        :   aValue >>= m_bHasOptionBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASSTATUSBAR        :   aValue >>= m_bHasStatusBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASTOOLBAR          :   aValue >>= m_bHasToolbar        ;
-                                                    break;
-*/
     }
 }
 
@@ -1680,30 +1701,6 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
                                                     break;
         case PROPERTYHANDLE_ISPLUGGED           :   aValue <<= impl_checkPlugInState();
                                                     break;
-/*OBSOLETE
-        case PROPERTYHANDLE_HASBEAMER           :   aValue <<= m_bHasBeamer         ;
-                                                    break;
-        case PROPERTYHANDLE_HASCOMMONTASKBAR    :   aValue <<= m_bHasCommonTaskBar  ;
-                                                    break;
-        case PROPERTYHANDLE_HASDESIGNER         :   aValue <<= m_bHasDesigner       ;
-                                                    break;
-        case PROPERTYHANDLE_HASEXPLORER         :   aValue <<= m_bHasExplorer       ;
-                                                    break;
-        case PROPERTYHANDLE_HASFUNCTIONBAR      :   aValue <<= m_bHasFunctionBar    ;
-                                                    break;
-        case PROPERTYHANDLE_HASMACROBAR         :   aValue <<= m_bHasMacroBar       ;
-                                                    break;
-        case PROPERTYHANDLE_HASNAVIGATOR        :   aValue <<= m_bHasNavigator      ;
-                                                    break;
-        case PROPERTYHANDLE_HASOBJECTBAR        :   aValue <<= m_bHasObjectBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASOPTIONBAR        :   aValue <<= m_bHasOptionBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASSTATUSBAR        :   aValue <<= m_bHasStatusBar      ;
-                                                    break;
-        case PROPERTYHANDLE_HASTOOLBAR          :   aValue <<= m_bHasToolbar        ;
-                                                    break;
-*/
     }
 }
 
@@ -1938,19 +1935,6 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
         css::beans::Property( PROPERTYNAME_ACTIVECOMPONENT, PROPERTYHANDLE_ACTIVECOMPONENT, ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( PROPERTYNAME_ACTIVEFRAME    , PROPERTYHANDLE_ACTIVEFRAME    , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( PROPERTYNAME_ISPLUGGED      , PROPERTYHANDLE_ISPLUGGED      , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        /*OBSOLETE
-        Property( PROPERTYNAME_HASBEAMER        , PROPERTYHANDLE_HASBEAMER          , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASCOMMONTASKBAR , PROPERTYHANDLE_HASCOMMONTASKBAR   , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASDESIGNER      , PROPERTYHANDLE_HASDESIGNER        , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASEXPLORER      , PROPERTYHANDLE_HASEXPLORER        , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASFUNCTIONBAR   , PROPERTYHANDLE_HASFUNCTIONBAR     , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASMACROBAR      , PROPERTYHANDLE_HASMACROBAR        , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASNAVIGATOR     , PROPERTYHANDLE_HASNAVIGATOR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASOBJECTBAR     , PROPERTYHANDLE_HASOBJECTBAR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASOPTIONBAR     , PROPERTYHANDLE_HASOPTIONBAR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASSTATUSBAR     , PROPERTYHANDLE_HASSTATUSBAR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_HASTOOLBAR       , PROPERTYHANDLE_HASTOOLBAR         , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        */
     };
     // Use it to initialize sequence!
     static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPERTYCOUNT );

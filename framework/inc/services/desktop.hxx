@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-12 16:24:32 $
+ *  last change: $Author: cd $ $Date: 2001-11-13 14:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,10 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -228,7 +232,8 @@ enum ELoadState
 {
     E_NOTSET      ,
     E_SUCCESSFUL  ,
-    E_FAILED
+    E_FAILED      ,
+    E_INTERACTION
 };
 
 /*-************************************************************************************************************//**
@@ -251,6 +256,7 @@ enum ELoadState
                 XMultiPropertySet
                 XStatusListener
                 XEventListener
+                XInteractionHandler
 
     @base       ThreadHelpBase
                 TransactionBase
@@ -269,6 +275,7 @@ class Desktop   :   // interfaces
                     public  css::frame::XDispatchProvider        ,
                     public  css::frame::XFramesSupplier          ,   // => XFrame => XComponent
                     public  css::frame::XStatusListener          ,   // => XEventListener
+                    public  css::task::XInteractionHandler       ,
                     // base classes
                     // Order is neccessary for right initialization!
                     private ThreadHelpBase                       ,
@@ -355,6 +362,9 @@ class Desktop   :   // interfaces
         //   XEventListener
         virtual void                                                                SAL_CALL disposing                  ( const css::lang::EventObject&                                  aSource          ) throw( css::uno::RuntimeException          );
 
+        //   XInteractionHandler
+        virtual void                                                                SAL_CALL handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) throw( css::uno::RuntimeException          );
+
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
@@ -423,6 +433,7 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
         css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;   /// special terminate listener to close pipe and block external requests during/after terminate
         css::uno::Reference< css::frame::XTerminateListener >           m_xQuickLauncher            ;   /// special terminate listener to block terminate if tray-icon is active
+        css::uno::Any                                                   m_aInteractionRequest       ;
 
 };      //  class Desktop
 
