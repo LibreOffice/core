@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 09:11:35 $
+ *  last change: $Author: os $ $Date: 2002-04-02 15:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,14 +1329,18 @@ void SwColumnPage::SetFrmMode(BOOL bMod)
 void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     OutputDevice*  pDev = rUDEvt.GetDevice();
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
     Rectangle aRect = rUDEvt.GetRect();
     USHORT  nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
 
     Point aBLPos = aRect.TopLeft();
-    Color aOldLineColor = pDev->GetLineColor();
-    pDev->SetLineColor(Color(COL_BLACK));
+    Color aFillColor(pDev->GetFillColor());
+    Color aLineColor(pDev->GetLineColor());
+    pDev->SetFillColor(rStyleSettings.GetFieldColor());
+    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
 
     long nStep = Abs(Abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;
@@ -1383,7 +1387,8 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->DrawLine(aStart, aEnd);
         }
     }
-    pDev->SetLineColor(aOldLineColor);
+    pDev->SetFillColor(aFillColor);
+    pDev->SetLineColor(aLineColor);
 }
 
 /*-----------------07.03.97 08.48-------------------
@@ -1393,3 +1398,16 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 ColumnValueSet::~ColumnValueSet()
 {
 }
+/* -----------------------------02.04.2002 16:01------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        Format();
+    }
+    ValueSet::DataChanged( rDCEvt );
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
+ *  last change: $Author: os $ $Date: 2002-04-02 15:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class ColumnValueSet : public ValueSet
         ~ColumnValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*--------------------------------------------------------------------
