@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloseable.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-04-05 06:54:27 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ interface XCloseable: XCloseBroadcaster
                 <FALSE/> let the ownership at the original one which called the close() method. He must react for possible
                 CloseVetoExceptions and try it again at a later time. This can be usefull for a generic UI handling.
 
-        @raises CloseVetoException
+        @throws CloseVetoException
             indicates that the closing object himself or any of his currently registered listener disagree with this close() request.
 
         @see XCloseListener
