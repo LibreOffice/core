@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ama $ $Date: 2001-03-15 15:50:28 $
+#   last change: $Author: vg $ $Date: 2002-01-30 17:11:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,10 @@ CDEFS+=-Dmydebug
 
 .IF "$(GUI)$(COM)" == "WINMSC"
 LIBFLAGS=/NOI /NOE /PAGE:512
+.ENDIF
+
+.IF "$(COMID)" == "gcc3"
+ENVCFLAGS=-fno-access-control
 .ENDIF
 
 # --- Files --------------------------------------------------------
