@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 12:25:08 $
+ *  last change: $Author: fs $ $Date: 2002-07-31 08:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,10 +1139,11 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
     else
         m_xMoveOperations   = _rxCursor;
 
-    m_xBookmarkOperations   = Reference< ::com::sun::star::sdbcx::XRowLocate>(m_xMoveOperations, UNO_QUERY);
-    m_xColumnsSupplier      = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(m_xMoveOperations, UNO_QUERY);
+    m_xBookmarkOperations   = m_xBookmarkOperations.query( m_xMoveOperations );
+    m_xColumnsSupplier      = m_xColumnsSupplier.query( m_xMoveOperations );
+    m_xPropertyAccess       = m_xPropertyAccess.query( m_xMoveOperations );
 
-    if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
+    if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
     {   // all or nothing !!
         m_xMoveOperations = NULL;
         m_xBookmarkOperations = NULL;
