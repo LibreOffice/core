@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:58 $
+ *  last change:$Date: 2003-09-08 10:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.lang;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.lang.XComponent</code>
