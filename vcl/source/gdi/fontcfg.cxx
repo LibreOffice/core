@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:20:50 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,8 +639,8 @@ static const char* const aImplKillTrailingList[] =
 
 static const char* const aImplKillTrailingWithExceptionsList[] =
 {
-    "ce", "monospa", "oldfa", NULL,
-    "ps", "ca", NULL,
+    "ce", "monospace", "oldface", NULL,
+    "ps", "caps", NULL,
     NULL
 };
 
@@ -798,77 +798,63 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplIsTrailing( const sal_Unicode* pEndName, const char* pStr )
+static xub_StrLen ImplIsTrailing( const String& rName, const char* pStr )
 {
-    const char* pTempStr = pStr;
-    while ( *pTempStr )
-        pTempStr++;
-
-    xub_StrLen nStrLen = (xub_StrLen)(pTempStr-pStr);
-    const sal_Unicode* pNameStr = pEndName-nStrLen;
-    while ( (*pNameStr == (xub_Unicode)(unsigned char)*pStr) && *pStr )
-    {
-        pNameStr++;
-        pStr++;
-    }
-
-    if ( *pStr )
+    xub_StrLen nStrLen = static_cast<xub_StrLen>( strlen( pStr ) );
+    if( nStrLen >= rName.Len() )
         return 0;
-    else
-        return nStrLen;
+
+    const xub_Unicode* pEndName = rName.GetBuffer() + rName.Len();
+    const sal_Unicode* pNameStr = pEndName - nStrLen;
+    do if( *(pNameStr++) != *(pStr++) )
+        return 0;
+    while( *pStr );
+
+    return nStrLen;
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplKillTrailing( String& rName, const char* const* ppStr )
+static bool ImplKillTrailing( String& rName, const char* const* ppStr )
 {
-    const xub_Unicode* pEndName = rName.GetBuffer()+rName.Len();
-    while ( *ppStr )
+    for(; *ppStr; ++ppStr )
     {
-        xub_StrLen nTrailLen = ImplIsTrailing( pEndName, *ppStr );
-        if ( nTrailLen )
+        xub_StrLen nTrailLen = ImplIsTrailing( rName, *ppStr );
+        if( nTrailLen )
         {
             rName.Erase( rName.Len()-nTrailLen );
-            return TRUE;
+            return true;
         }
-
-        ppStr++;
     }
 
-    return FALSE;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplKillTrailingWithExceptions( String& rName, const char* const* ppStr )
+static bool ImplKillTrailingWithExceptions( String& rName, const char* const* ppStr )
 {
-    const xub_Unicode* pEndName = rName.GetBuffer()+rName.Len();
-    while ( *ppStr )
+    for(; *ppStr; ++ppStr )
     {
-        xub_StrLen nTrailLen = ImplIsTrailing( pEndName, *ppStr );
-        if ( nTrailLen )
+        xub_StrLen nTrailLen = ImplIsTrailing( rName, *ppStr );
+        if( nTrailLen )
         {
-            const xub_Unicode* pEndNameTemp = pEndName-nTrailLen;
-            while ( *ppStr )
-            {
-                if ( ImplIsTrailing( pEndNameTemp, *ppStr ) )
-                    return FALSE;
-                ppStr++;
-            }
+            // check string match against string exceptions
+            while( *++ppStr )
+                if( ImplIsTrailing( rName, *ppStr ) )
+                    return false;
 
             rName.Erase( rName.Len()-nTrailLen );
-            return TRUE;
+            return true;
         }
         else
         {
-            while ( *ppStr )
-                ppStr++;
+            // skip exception strings
+            while( *++ppStr );
         }
-
-        ppStr++;
     }
 
-    return FALSE;
+    return false;
 }
 
 // -----------------------------------------------------------------------
