@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 09:57:19 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String RID_SVXSTR_GRAFIKLINK
     Text [ italian ] = "Immagine" ;
     Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
-    Text [ finnish ] = "Kuva" ;
+    Text [ finnish ] = "Grafiikka" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
@@ -128,7 +128,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ italian ] = "Collega immagine" ;
     Text [ portuguese_brazilian ] = "Ligar a Gr?fico" ;
     Text [ portuguese ] = "Ligar imagem" ;
-    Text [ finnish ] = "Linkitä kuvat" ;
+    Text [ finnish ] = "Linkit? kuvat" ;
     Text [ danish ] = "Kæd grafik" ;
     Text [ french ] = "Image du lien" ;
     Text [ swedish ] = "Länka till grafik" ;
@@ -181,6 +181,7 @@ Bitmap RID_SVXGRF_GRAPHICLOAD
 {
     File = "grfload.bmp" ;
 };
+
 
 
 
