@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 12:52:35 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 16:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
+// class HelpInterceptor_Impl --------------------------------------------
+
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
     m_pHistory  ( NULL ),
@@ -138,6 +140,7 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
         m_xIntercepted->registerDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
 }
 
+// -----------------------------------------------------------------------
 // XDispatchProvider
 
 Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
@@ -159,6 +162,8 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     return xResult;
 }
 
+// -----------------------------------------------------------------------
+
 Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatches(
 
     const Sequence< DispatchDescriptor >& aDescripts )
@@ -176,6 +181,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
     return aReturn;
 }
 
+// -----------------------------------------------------------------------
 // XDispatchProviderInterceptor
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
@@ -186,6 +192,8 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchPr
     return m_xSlaveDispatcher;
 }
 
+// -----------------------------------------------------------------------
+
 void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
 
     throw( RuntimeException )
@@ -193,6 +201,8 @@ void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< X
 {
     m_xSlaveDispatcher = xNewSlave;
 }
+
+// -----------------------------------------------------------------------
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
 
@@ -202,6 +212,8 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchP
     return m_xMasterDispatcher;
 }
 
+// -----------------------------------------------------------------------
+
 void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
 
     throw( RuntimeException )
@@ -210,6 +222,7 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
     m_xMasterDispatcher = xNewMaster;
 }
 
+// -----------------------------------------------------------------------
 // XInterceptorInfo
 
 Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
@@ -222,18 +235,18 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
     return aURLList;;
 }
 
+// -----------------------------------------------------------------------
 // XDispatch
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
-    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
 
-    throw( RuntimeException )
+    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( RuntimeException )
 
 {
     sal_Bool bBack = ( String( DEFINE_CONST_UNICODE(".uno:Backward") ) == String( aURL.Complete ) );
     if ( bBack || String( DEFINE_CONST_UNICODE(".uno:Forward") ) == String( aURL.Complete ) )
     {
-        if ( m_pHistory && m_nCurPos > 0 )
+        if ( m_pHistory )
         {
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
@@ -257,20 +270,22 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     }
 }
 
-void SAL_CALL HelpInterceptor_Impl::addStatusListener( const Reference< XStatusListener >& xControl,
-                                                  const URL& aURL )
+// -----------------------------------------------------------------------
 
-    throw( RuntimeException )
+void SAL_CALL HelpInterceptor_Impl::addStatusListener(
+
+    const Reference< XStatusListener >& xControl, const URL& aURL ) throw( RuntimeException )
 
 {
     DBG_ASSERT( !m_xListener.is(), "listener already exists" );
     m_xListener = xControl;
 }
 
-void SAL_CALL HelpInterceptor_Impl::removeStatusListener( const Reference< XStatusListener >& xControl,
-                                                     const URL& aURL )
+// -----------------------------------------------------------------------
 
-    throw( RuntimeException )
+void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
+
+    const Reference< XStatusListener >& xControl, const URL& aURL ) throw( RuntimeException )
 
 {
     m_xListener = 0;
