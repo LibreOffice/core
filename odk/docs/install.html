@@ -85,14 +85,20 @@
                   <a href="http://www.nextgeneration.dk/gnu/make.zip">http://www.nextgeneration.dk/gnu/make.zip</a>.
                   It is not recommendable to use the Cygwin make because it don't work.
             </dl>
-            <p>The SDK provides a shell script (Windows and UNIX) to set the necessary environment variables 
-               for using the SDK and the required tools.
+            <p>The SDK provides a configure script (Unix and WindowsNT) that asks for relevant directories (SDK, StarOffice, GNU make, Java, C++, and ANT). After
+               completing the configure script a new script will be created (WindowsNT and UNIX) to set the necessary environment variables for using the SDK and the required
+               tools. 
             </p>
             <ul>
-              <li><a href="../setsdkenv_unix">setsdkenv_unix</a>
+              <li><a href="../configureUnix">configureUnix</a>
+              <li><a href="../configureWindowsNT.bat">configureWindowsNT.bat</a>
+            </ul>
+            <p>Other versions of the operating system Windows should use the batch program setsdkenv_windows.bat .
+            </p>
+            <ul>
               <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
             </ul>
-            <p>The first time you use the script you have have to prepare it for your environment. Edit the script
+            <p>The first time you use the batch program you have to prepare it for your environment. Edit the script
                and set the following variables:
             </p>
             <p> 
