@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:39:03 $
+ *  last change: $Author: fs $ $Date: 2002-08-27 12:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -702,7 +703,21 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if ( 0 == sCurrentURL.getLength() )
                 xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
-            ::com::sun::star::awt::Rectangle aRect( e.X, e.Y, 0, 0 );
+            awt::Rectangle aRect( e.X, e.Y, 0, 0 );
+            if ( ( e.X < 0 ) || ( e.Y < 0 ) )
+            {   // context menu triggered by keyboard
+                // position it in the center of the control
+                // 102205 - 16.08.2002 - fs@openoffice.org
+                Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
+                OSL_ENSURE( xWindow.is(), "OImageControlControl::mousePressed: me not a window? How this?" );
+                if ( xWindow.is() )
+                {
+                    awt::Rectangle aPosSize = xWindow->getPosSize();
+                    aRect.X = aPosSize.Width / 2;
+                    aRect.Y = aPosSize.Height / 2;
+                }
+            }
+
             const sal_Int16 nResult = xMenu->execute( xWindowPeer, aRect, PopupMenuDirection::EXECUTE_DEFAULT );
 
             switch ( nResult )
