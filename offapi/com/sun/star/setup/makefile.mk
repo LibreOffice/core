@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:44 $
+#   last change: $Author: ok $ $Date: 2000-11-16 14:06:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ PACKAGE=com$/sun$/star$/setup
 # ------------------------------------------------------------------
 
 IDLFILES=\
+    UpdateType.idl			\
     ActionType.idl			\
     BaseAction.idl			\
     CopyFileAction.idl		\

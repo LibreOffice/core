@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: InstallType.idl,v $
+ *  $RCSfile: UpdateType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: ok $ $Date: 2000-11-16 14:06:55 $
+ *  last change: $Author: ok $ $Date: 2000-11-16 14:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,37 +58,25 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_setup_InstallType_idl__
-#define __com_sun_star_setup_InstallType_idl__
+#ifndef __com_sun_star_setup_UpdateType_idl__
+#define __com_sun_star_setup_UpdateType_idl__
 
-module com {  module sun {  module star {  module setup {
+ module com {  module sun {  module star {  module setup {
 
 // DocMerge: empty anyway
-enum InstallType
+enum UpdateType
 {
     // DocMerge: empty anyway
     INVALID,
 
     // DocMerge: empty anyway
-    INSTALL,
+    EQUAL,
 
     // DocMerge: empty anyway
-    FULLINSTALL,
+    OPTIONAL,
 
     // DocMerge: empty anyway
-    CHANGE,
-
-    // DocMerge: empty anyway
-    REPAIR,
-
-    // DocMerge: empty anyway
-    DELETE,
-
-    // DocMerge: empty anyway
-    FULLDELETE,
-
-    // DocMerge: empty anyway
-    UPDATE
+    REQUIRED
     };
 }; }; }; };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSetup.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:44 $
+ *  last change: $Author: ok $ $Date: 2000-11-16 14:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #endif
 
 #include <com/sun/star/setup/OSType.idl>
+#include <com/sun/star/setup/UpdateType.idl>
 #include <com/sun/star/setup/ModuleInfo.idl>
 #include <com/sun/star/setup/InstallEnvironment.idl>
 #include <com/sun/star/setup/InstallResponse.idl>
@@ -95,11 +96,12 @@ interface XSetup: com::sun::star::uno::XInterface
     string                  getDefaultDestinationPath   ( [in] VersionIdentifier aVerIdentifier );
 
     // DocMerge: empty anyway
-    SizeInfo                getStandardSizeValues       ( [in] VersionIdentifier aVerIdentifier );
+    SizeInfo                getStandardSizeValues       ( [in] VersionIdentifier aVerIdentifier,
+                                                          [in] sequence <short> seqLanguages );
 
     // DocMerge: empty anyway
     string                  getHelpText                 ( [in] VersionIdentifier aVerIdentifier,
-                                                              [in] string strPagename );
+                                                          [in] string strPagename );
 
     // DocMerge: empty anyway
     string                  getReadmeText               ( [in] VersionIdentifier aVerIdentifier );
@@ -114,9 +116,14 @@ interface XSetup: com::sun::star::uno::XInterface
     sequence < any >        getMirrorList               ( [in] VersionIdentifier aVerIdentifier );
 
     // DocMerge: empty anyway
-    sequence < any >        getActionListForInstall     ( [in]  VersionIdentifier   aVerIdentifier,
-                                                              [in]  InstallEnvironment  aEnvironment,
-                                                              [out] InstallResponse     aResponse );
+    UpdateType              isUpdateAvailable           ( [in] VersionIdentifier aVerIdentifier,
+                                                          [out] VersionIdentifier aNewVerIdentifier );
+
+    // DocMerge: empty anyway
+    sequence < any >        getActionListForInstall     ( [in] VersionIdentifier aVerIdentifier,
+                                                          [in] VersionIdentifier aOldVerIdentifier,
+                                                          [in] InstallEnvironment aEnvironment,
+                                                          [out] InstallResponse aResponse );
     };
 
 }; }; }; };
