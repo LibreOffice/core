@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: ama $ $Date: 2002-01-22 10:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,16 +435,15 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         {
             //Teilfix(26793): Objekte, die in Rahmen verankert sind, brauchen
             //nicht angepasst werden.
-            const SwDrawContact *pCont = (SwDrawContact*)GetUserCall(pObj);
+            const SwContact *pCont = (SwContact*)GetUserCall(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
             //              InsertDocument, when a PageDesc-Attribute is
             //              set on a node. Then the SdrObject must not have
             //              an UserCall.
-            if( !pCont )
+            if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 
-            ASSERT( pCont->ISA(SwDrawContact), "DrawObj, wrong UserCall" );
-            const SwFrm *pAnchor = pCont->GetAnchor();
+            const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchor();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() ||
                  FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
@@ -477,6 +476,9 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 /****************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:29  hr
+    initial import
+
     Revision 1.117  2000/09/18 16:04:37  willem.vandorp
     OpenOffice header added.
 
