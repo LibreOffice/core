@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:37:43 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΤΪΚδΘλΚ±ΔΪ΄ζ²»Χγ΅£";
         Text[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ οπθ θμοξπςθπξβΰνθθ.";
         Text[ polish ] = "Za ma³o pamiκci dla importu.";
-        Text[ japanese ] = "²έΞί°Δ‚ΜΫ‚Μ•s\\•ª‚Θ‹σ‚«—e—ΚB";
+        Text[ japanese ] = "²έΞί°Δ‚Μ•s\\•ª‚ΘÒΣΨ‹σ‚«—e—ΚB";
         Text[ chinese_traditional ] = "¦bΏι¤J®Ι°OΎΠΕι¤£¨¬΅C";
         Text[ arabic ] = "ΗαΠΗίΡΙ ανΣΚ ίΗένΙ ΓΛδΗΑ ΗαΗΣΚνΡΗΟ.";
         Text[ greek ] = "Κατά την εισαγωγή προέκυψε πρόβλημα μνήμης.";
@@ -208,7 +208,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "²»ΓχµΔ Lotus1-2-3 ΞΔΌώΈρΚ½΅£";
         Text[ russian ] = "Νεθηβερςνϋι τξπμΰς τΰιλΰ Lotus-123.";
         Text[ polish ] = "Nieznany format pliku Lotus1-2-3.";
-        Text[ japanese ] = "•s–Ύ‚Θ Lotus123 Μ§²Ω‘®΅";
+        Text[ japanese ] = "•s–Ύ‚Θ Lotus 123 Μ§²Ω‘®B";
         Text[ chinese_traditional ] = "¤£©ϊªΊ Lotus1-2-3 ΐΙ®Χ®ζ¦΅΅C";
         Text[ arabic ] = "ΚδΣνή γαέ Lotus-123 ΫνΡ γΪΡζέ.";
         Text[ greek ] = "Άγνωστη μορφή αρχείου Lotus1-2-3.";
@@ -232,7 +232,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΤΪΚδΘλΚ±·ΆΙϊΞΔΌώ½αΉΉ΄νΞσ΅£";
         Text[ russian ] = "Ξψθακΰ β ρςπσκςσπε τΰιλΰ οπθ θμοξπςθπξβΰνθθ.";
         Text[ polish ] = "B³Ήd struktury pliku podczas importowania.";
-        Text[ japanese ] = "²έΞί°Δ‚ΜΫ‚ΜΜ§²Ω\\‘Ά‚Ι‚¨‚―‚ι΄Χ°B";
+        Text[ japanese ] = "²έΞί°Δ‚ΜΜ§²Ω\\‘Ά‚Ε‚Μ΄Χ°B";
         Text[ chinese_traditional ] = "¦bΏι¤J®Ιµo¥ΝΐΙ®Χµ²ΊcΏω»~΅C";
         Text[ arabic ] = "ΝΟΛ ΞΨΓ έν ΘδνΙ Ηαγαέ ΓΛδΗΑ ΗαΗΣΚνΡΗΟ.";
         Text[ greek ] = "Σφάλμα στη δομή του αρχείου κατά την εισαγωγή.";
@@ -282,7 +282,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "²»ΚάΦ§³ΦµΔ»ς²»ΓχµΔ Excel ΞΔΌώΈρΚ½΅£";
         Text[ russian ] = "Νεθηβερςνϋι θλθ νεοξδδεπζθβΰεμϋι τξπμΰς τΰιλΰ Excel.";
         Text[ polish ] = "Nie obs³ugiwany lub nieznany format pliku Excel.";
-        Text[ japanese ] = "x‰‡‚³‚κ‚Δ‚Θ‚Ά‚ά‚½‚Ν•s–Ύ‚ΘExcelΜ§²ΩΜ«°Ο―Δ΅";
+        Text[ japanese ] = "x‰‡‚³‚κ‚Θ‚ΆA‚ά‚½‚Ν•s–Ύ‚Θ Excel ‚ΜΜ§²Ω‘®B";
         Text[ chinese_traditional ] = "¤£¨ό¤δ΄©ªΊ©Ξ¤£©ϊªΊ Excel ΐΙ®Χ®ζ¦΅΅C";
         Text[ arabic ] = "ΚδΣνή γαέ Excel ΫνΡ γΟΪζγ΅ Γζ ΫνΡ γΪΡζέ.";
         Text[ greek ] = "Άγνωστη ή μη υποστηριζόμενη μορφή αρχείου Excel.";
@@ -331,7 +331,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΥβΈφΞΔΌώΚάµ½ΓάΒλ±£»¤΅£";
         Text[ russian ] = "Τΰιλ ηΰωθωεν οΰπξλεμ.";
         Text[ polish ] = "Plik jest zabezpieczony has³em.";
-        Text[ japanese ] = "Μ§²Ω‚ΝΚί½ά°Δή‚Ι‚ζ‚Α‚Δ•Ϋμ‚³‚κ‚Δ‚Ά‚ά‚·B";
+        Text[ japanese ] = "Μ§²Ω‚ΝΚί½ά°Δή‚Ι‚ζ‚Α‚Δ•Ϋμ‚³‚κ‚ά‚·B";
         Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ¨ό¨μ±K½X«OΕ@΅C";
         Text[ arabic ] = "εΠΗ Ηαγαέ γΝγν ΘίαγΙ ΣΡ.";
         Text[ greek ] = "Το αρχείο προστατεύεται με κωδικό πρόσβασης.";
@@ -355,7 +355,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΔΪ²ΏΚδΘλ΄νΞσ΅£";
         Text[ russian ] = "Βνσςπεννÿÿ ξψθακΰ θμοξπςΰ";
         Text[ polish ] = "Wewnκtrzny b³Ήd importu";
-        Text[ japanese ] = "“ΰ•”‚Μ²έΞί°Δ΄Χ°";
+        Text[ japanese ] = "“ΰ•”‚Μ²έΞί°Δ΄Χ°B";
         Text[ chinese_traditional ] = "¤Ί³΅Ώι¤JΏω»~΅C";
         Text[ arabic ] = "ΞΨΓ ΗΣΚνΡΗΟ ΟΗΞαν";
         Text[ greek ] = "Εσωτερικό σφάλμα εισαγωγής.";
@@ -380,7 +380,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΥβΈφΞΔΌώΊ¬ΣΠΠΠΚύ8192Φ®ΟΒµΔΚύΎέ£¬Òς΄ΛΞή·¨¶Α³φ΅£";
         Text[ russian ] = "Β τΰιλε ρξδεπζΰςρÿ δΰννϋε, νΰυξδÿωθερÿ νθζε ρςπξκθ 8192 θ οξύςξμσ οπξχθςΰςό εγξ νε σδΰεςρÿ.";
         Text[ polish ] = "Plik zawiera znaki poniΏej wiersza 8192 i z tego powodu nie moΏe zostaζ odczytany.";
-        Text[ japanese ] = "Μ§²Ω‚Ν 8192s–Ϊ‚Μ‰Ί‚ΙΓή°ΐ‚πά‚ρ‚Ε‚Ά‚ι‚Μ‚Ε“Η‚έζ‚θ‚Ε‚«‚ά‚Ή‚ρB";
+        Text[ japanese ] = "Μ§²Ω‚Ν 8192s–Ϊ‚Μ‰Ί‚ΙΓή°ΐ‚πά‚ρ‚Ε‚Ά‚ι‚½‚ίA“Η‚έζ‚θ‚Ε‚«‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ§t¦³¦CΌΖ8192¤§¤UªΊΌΖΎΪ΅A¦]¦ΉµLªkΕª¥X΅C";
         Text[ arabic ] = "νΝΚζν Ηαγαέ Ϊαμ ΘνΗδΗΚ ΓΣέα ΗαΥέ 8192΅ αεΠΗ αΗ νγίδ ήΡΗΑΚε.";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει ανάγνωση του αρχείου επειδή περιέχει δεδομένα πλέον των 8192 γραμμών.";
@@ -405,7 +405,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "Ξή·¨Α¬½ΣΞΔΌώ΅£";
         Text[ russian ] = "Νε σδΰεςρÿ ρξηδΰςό ρβÿηό ρ τΰιλξμ.";
         Text[ polish ] = "Nie moΏna by³o ustanowiζ po³Ήczenia z plikiem.";
-        Text[ japanese ] = "Μ§²Ω‚Φ‚ΜΪ‘±‚Ν‚Ε‚«‚ά‚Ή‚ρB";
+        Text[ japanese ] = "Μ§²Ω‚Φ‚ΜΪ‘±‚Ν‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk³sµ²ΐΙ®Χ΅C";
         Text[ arabic ] = "ΚΪΠΡ ΗαΗΚΥΗα ΘΗαγαέ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει σύνδεση με το αρχείο.";
@@ -480,7 +480,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "Φ»Δά΄ζΕΜµ±Η°µΔΉ¤Χχ±ν΅£";
         Text[ russian ] = "Ρξυπΰνεν ςξλόκξ ςεκσωθι λθρς.";
         Text[ polish ] = "Tylko bieΏΉcy arkusz zosta³ zapisany.";
-        Text[ japanese ] = "»έ‚Μ•\\‚Ύ‚―‚ª•Ϋ‘¶‚³‚κ‚ά‚µ‚½B";
+        Text[ japanese ] = "»έ‚Μ•\\‚Μ‚έ‚ª•Ϋ‘¶‚³‚κ‚ά‚µ‚½B";
         Text[ chinese_traditional ] = "¥u―ΰΐx¦s·ν«eªΊ¤u§@ªν΅C";
         Text[ arabic ] = "Κγ ΝέΩ ΗαΜΟζα ΗαΝΗαν έήΨ.";
         Text[ greek ] = "Αποθηκεύτηκε μόνο ο τρέχων πίνακας.";
@@ -505,7 +505,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "³¬ΉύΠΠΚύΧξΈίΟή¶Θ΅£³¬ΉύµΔΠΠ²»»α±»ΚδΘλ£΅";
         Text[ russian ] = "Μΰκρθμΰλόνξε χθρλξ ρςπξκ οπεβϋψενξ.Ρςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, θμοξπςθπξβΰνϋ νε ασδσς!";
         Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bκdΉ importowane!";
-        Text[ japanese ] = "s‚ΜΕ‚”‚π’΄‚¦‚ά‚µ‚½B‰ίθ‚Μs‚Ν²έΞί°Δ‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½!";
+        Text[ japanese ] = "s‚ΜΕ‚”‚π’΄‚¦‚Δ‚Ά‚ά‚·B‰ίθ‚Μs‚Ν²έΞί°Δ‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "¶WΉL¦CΌΖ³Μ°ª­­«Χ΅C¶WΉLªΊ¦C¤£·|³QΏι¤J΅I";
         Text[ arabic ] = "Κγ ΚΞΨν ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ. αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
@@ -530,7 +530,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "Ξή·¨ΏªΖτ΄ΣΚτµΔ FM3-ΞΔΌώ΅£";
         Text[ russian ] = "Ξςκπϋςό τΰιλ, ξςνξρÿωθιρÿ κ FM3 νε σδΰεςρÿ.";
         Text[ polish ] = "Plik pokrewny FM3 nie mσg³ zostaζ otworzony.";
-        Text[ japanese ] = "•t‘®‚·‚ιFM3Μ§²Ω‚ΝJ‚­‚±‚Ζ‚ª‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
+        Text[ japanese ] = "]‘®‚·‚ι FM3 Μ§²Ω‚πJ‚―‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¶}±Ò±qΔέªΊ FM3-ΐΙ®Χ΅C";
         Text[ arabic ] = "ΚΪΠΡ έΚΝ Ηαγαέ FM3 ΗαγΡΚΘΨ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το αντίστοιχο αρχείο FM3.";
@@ -555,7 +555,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "΄ΣΚτµΔ FM3-ΞΔΌώµΔΞΔΌώ½αΉΉΊ¬ΣΠ΄νΞσ΅£";
         Text[ russian ] = "Ξψθακΰ β ρςπσκςσπε τΰιλΰ, ξςνξρÿωεγξρÿ κ FM3.";
         Text[ polish ] = "B³Ήd w strukturze pliku pokrewnego FM3.";
-        Text[ japanese ] = "•t‘®‚·‚ιFM3Μ§²Ω‚ΜΜ§²Ω\\‘Ά‚Ι‚¨‚―‚ι΄Χ°΅";
+        Text[ japanese ] = "]‘®‚·‚ι FM3 Μ§²Ω‚ΜΜ§²Ω\\‘Ά‚Ε‚Μ΄Χ°B";
         Text[ chinese_traditional ] = "±qΔέªΊ FM3-ΐΙ®ΧªΊΐΙ®Χµ²Ίc§t¦³Ώω»~΅C";
         Text[ arabic ] = "ΞΨΓ έν ΘδνΙ Ηαγαέ έν Ηαγαέ FM3 ΗαγΡΚΘΨ.";
         Text[ greek ] = "Σφάλμα στη δομή αρχείου του αντίστοιχου αρχείου FM3.";
@@ -580,7 +580,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΞΔµµΉύΣΪΈ΄ΊΟ£¬Ξή·¨Φ΄ΠΠΧΤ¶―ΤΛΛγΉ¦Δά΅£Ηλ°΄»χ F9£¬ ΦΨΠΒΤΛΛγ΅£";
         Text[ russian ] = "Δξκσμενς ρλθψκξμ ρλξζνϋι δλÿ ΰβςξμΰςθχερκθυ βϋχθρλενθι. Δλÿ οξβςξπνξγξ βϋχθρλενθÿ νΰζμθςε F9.";
         Text[ polish ] = "Dokument jest zbyt z³oΏony dla automatycznego obliczenia. Oblicz ponownie, przyciskajΉc F9.";
-        Text[ japanese ] = "©“®vZ‚Ι‚ΝΔή·­ÒέΔ‚ª•΅G‚·‚¬‚ά‚·BF9‚ΕΔvZB";
+        Text[ japanese ] = "©“®vZ‚Ι‚ΝAΔή·­ÒέΔ‚ª•΅G‚·‚¬‚ά‚·BF9 ‚π‰‚µ‚ΔΔvZ‚µ‚ά‚·B";
         Text[ chinese_traditional ] = "¤ε¥σΉL©σ½Ζ¦X΅AµLªk°υ¦ζ¦Ϋ°ΚΉBΊβ¥\\―ΰ΅C½Π«φΐ» F9΅A ­«·sΉBΊβ΅C";
         Text[ arabic ] = "ΗαγΣΚδΟ γΪήΟ ΜΟΗπ ΘΝνΛ αΗ νγίδ ΕΜΡΗΑ ΗαΝΣΗΘ ΚαήΗΖνΗπ. ΗαΡΜΗΑ ΗαΦΫΨ Ϊαμ F9 αΕΪΗΟΙ ΗαΝΣΗΘ.";
         Text[ greek ] = "Το έγγραφο είναι υπερβολικά περίπλοκο για αυτόματο υπολογισμό. Πατήστε το πλήκτρο F9 για να εκτελεστεί ξανά ο υπολογισμός.";
@@ -605,7 +605,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΥϋΈφΞΔµµΊ¬ΣΠµΔΠΠΚύ³¬Ήύ΄ςΣ΅ΈρΚ½Φ§³ΦµΔ·¶Ξ§΅£\n³¬ΉύµΔΠΠ²»»α±»΄ζΕΜ΅£";
         Text[ russian ] = "Δξκσμενς ρξδεπζθς αξλόψε ρςπξκ, χεμ οξδδεπζθβΰεςρÿ τξπμΰςξμ βϋβξδΰ.\nΡςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, ρξυπΰνενϋ νε ασδσς.";
         Text[ polish ] = "Dokument zawiera wiκcej wierszy niΏ jest obs³ugiwane przez format wyjciowy. \nDodatkowe wiersze nie bκdΉ obs³ugiwane.";
-        Text[ japanese ] = "Δή·­ÒέΔ‚Ν§sσ‘Τ‚Μ‘®‚Ε»Ξί°Δ‚·‚ι‚ζ‚θs‚ª‘½‚·‚¬‚ά‚·B\n‰ίθ‚Μs‚Ν•Ϋ‘¶‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
+        Text[ japanese ] = "Δή·­ÒέΔ‚ΝA±³ΔΜί―Δ‚·‚ισό‘®‚Εx‰‡‚Ε‚«‚ιs”‚π‰z‚¦‚Δ‚Ά‚ά‚·B\n‰ίθ‚Μs‚Ν•Ϋ‘¶‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "Ύγ­Σ¤ε¥σ§t¦³ªΊ¦CΌΖ¶WΉL¦C¦L®ζ¦΅¤δ«ωªΊ½d³ς΅C\n¶WΉLªΊ¦C¤£·|³Qΐx¦s΅C";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ ΪΟΟ γδ ΗαΥέζέ νέζή ΗαΪΟΟ ΗαΠν νγίδ ααΚδΣνή ΗαγΝΟΟ ΟΪγε.\nαγ νΚγ ΝέΩ ΗαΥέζέ ΗαÒΗΖΟΙ.";
         Text[ greek ] = "Το έγγραφο περιέχει περισσότερες γραμμές από ότι υποστηρίζει η μορφή \nεξαγωγής. Οι πλεονάζουσες γραμμές δεν αποθηκεύτηκαν.";
@@ -630,7 +630,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ΥβΈφ³ΜΠςΞή·¨΄¦ΐνΥβΈφΞΔµµΦΠ²»ΓχµΔΠΕΟΆ΅£\nΤΪΦΨΠΒ΄ζΕΜΚ±»αΛπΚ§ΥβΠ©ΠΕΟΆ£΅";
         Text[ russian ] = "Δξκσμενς ρξδεπζθς ρβεδενθÿ, νεθηβερςνϋε ύςξι βεπρθθ οπξγπΰμμϋ.\nΟπθ οξβςξπνξμ ρξυπΰνενθθ ύςθ ρβεδενθÿ ασδσς σςεπÿνϋ!";
         Text[ polish ] = "Dokument zawiera informacje, ktσre sΉ nieznane w tej wersji programu.\nPrzy ponownym zapisie te informacje zostanΉ skasowane!";
-        Text[ japanese ] = "Δή·­ÒέΔ‚Ν‚±‚ΜΜίΫΈήΧΡ Κή°Όή®έ‚Ε‚Ν”F’m‚Ε‚«‚Θ‚Άξ•ρ‚πά‚ρ‚Ε‚Ά‚ά‚·B\n‚ ‚η‚½‚ί‚Δ•Ϋ‘¶‚·‚ιΫ ‚±‚Μξ•ρ‚ΝΈ‚ν‚κ‚ά‚·!";
+        Text[ japanese ] = "Δή·­ÒέΔ‚Ι‚Ν‚±‚ΜΜίΫΈήΧΡ‚ΜΚή°Όή®έ‚Ε‚Ν”F’m‚Ε‚«‚Θ‚Άξ•ρ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B\n•Ϋ‘¶‚µ‚Θ‚¨‚·‚ΖA‚±‚Μξ•ρ‚ΝΈ‚ν‚κ‚ά‚·B";
         Text[ chinese_traditional ] = "³o­Σµ{§ΗµLªk³B²z³o­Σ¤ε¥σ¤¤¤£©ϊªΊΈκ°T΅C\n¦b­«·sΐx¦s®Ι³o¨ΗΈκ°T·|¬y¥Ά΅I";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ γΪαζγΗΚ ΫΡνΘΙ Ϊαμ ΕΥΟΗΡ ΗαΘΡδΗγΜ εΠΗ.\nεΠε ΗαΘνΗδΗΚ Σζέ ΚΦνΪ ΪδΟ ΕΪΗΟΙ ΝέΩ ΗαγΣΚδΟ!";
         Text[ greek ] = "Το έγγραφο περιέχει πληροφορίες οι οποίες είναι άγνωστες για αυτή τη έκδοση του \nπρογράμματος. Οι πληροφορίες αυτές θα χαθούν αν επαναλαμβάνετε την αποθήκευση τους!";
@@ -654,7 +654,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "Ξή·¨ΣΓΦΈ¶¨µΔΈρΚ½΄ζΕΜΘ«²ΏµΔµ¥ΤªΈρΔΪΘέ΅£";
         Text[ russian ] = "Ρξυπΰνθςό βρε ρξδεπζθμξε ÿχεικθ β ηΰδΰννξμ τξπμΰςε νεβξημξζνξ.";
         Text[ polish ] = "Nie wszystkie zawartoci komσrek mog³y zostaζ zapisane w wybranym formacie.";
-        Text[ japanese ] = "w’θ‚µ‚½‘®‚Ε‚·‚Χ‚Δ‚ΜΎΩ“ΰ—e‚Ν•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
+        Text[ japanese ] = "w’θ‚µ‚½‘®‚ΕA‚·‚Χ‚Δ‚ΜΎΩ‚Μ“ΰ—e‚Ν•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¥Ξ«ό©wªΊ®ζ¦΅ΐx¦s¥ώ³΅ªΊΐx¦s®ζ¤Ί®e΅C";
         Text[ arabic ] = "ΚΪΠΡ ΝέΩ ία γΝΚζνΗΚ ΗαΞαΗνΗ έν ΗαΚδΣνή ΗαγΝΟΟ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτούν όλα τα περιεχόμενα κελιών στη δεδομένη μορφή.";
