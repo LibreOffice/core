@@ -21,7 +21,7 @@ mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
 
 hedabu: ..\inc\connectivity\*.hxx %_DEST%\inc%_EXT%\connectivity\*.hxx
 hedabu: ..\%__SRC%\inc\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
-..\inc\connectivity\sdbcx\*.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\*.hxx
-..\version.mk %_DEST%\inc%_EXT%\connectivity\version.mk
+hedabu: ..\inc\connectivity\sdbcx\*.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\*.hxx
+hedabu: ..\version.mk %_DEST%\inc%_EXT%\connectivity\version.mk
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
