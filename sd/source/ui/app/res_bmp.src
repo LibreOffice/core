@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 12:14:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ portuguese ] = "Estilos de objectos de apresentação" ;
             Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å¶ÔÏóÑùÊ½";
             Text[ russian ] = "Ñòèëè îáúåêòà ïğåçåíòàöèè";
-            Text[ polish ] = "Szablony obiektów prezentacji";
+            Text[ polish ] = "Style obiektów prezentacji";
             Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ µÌŞ¼Şª¸Ä ½À²Ù";
             Text[ chinese_traditional ] = "Â²³ø¼Ë¦¡";
             Text[ arabic ] = "ÃäãÇØ ßÇÆä ÚÑÖ ÊŞÏíãí";
