@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:28:49 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
 
 Status XvaCloseIM(XIM im)
 {
-      Status s;
+      Status s = False;
 
     /* MacOS X doesn't yet support XIM... FIXME */
 #if !defined(MACOSX)
@@ -292,6 +292,7 @@ Status XvaCloseIM(XIM im)
         dlclose(g_dlmodule);
             g_dlmodule = (void*)0;
         g_open_im = (OpenFunction)NULL;
+        s = True;
       }
 #endif
     return (s);
