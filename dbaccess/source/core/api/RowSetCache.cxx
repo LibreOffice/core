@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:09:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-11 06:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,6 +1605,14 @@ void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
         throw SQLException();
 
     m_pCacheSet->updateRow(*m_aInsertRow,*m_aMatrixIter,m_aUpdateTable);
+    // we don't unbound the bookmark column
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = (*m_aInsertRow)->begin()+1;
+    for(;aIter != (*m_aInsertRow)->end();++aIter)
+    {
+        aIter->setBound(sal_False);
+        aIter->setModified(sal_False);
+        aIter->setNull();
+    }
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
 //      *m_aMatrixIter = m_aInsertRow;
@@ -1622,6 +1630,7 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
     moveToBookmark((*(*_rUpdateRow))[0].makeAny());
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
     *(*m_aMatrixIter) = *(*_rUpdateRow);
+
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
 //      *m_aMatrixIter = m_aInsertRow;
@@ -1807,6 +1816,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.33  2001/05/10 14:09:19  oj
+    #86724# check null values and you of correct assignment
+
     Revision 1.32  2001/04/24 14:40:19  oj
     view fixes
 
