@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 15:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ public:
     virtual void execute_GetFocus()=0;
     virtual void execute_LoseFocus()=0;
     virtual void execute_Command( const CommandEvent& rCEvt )=0;
+    virtual bool execute_KeyInput( const KeyEvent& rKEvt )=0;
 };
 
 class ChartWindow;
@@ -255,7 +256,12 @@ private:
     void SAL_CALL       executeDispatch_InsertAxis();
     void SAL_CALL       executeDispatch_InsertGrid();
     void SAL_CALL       executeDispatch_InsertStatistic();
+
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
+    void SAL_CALL       executeDispatch_EditText();
+
+    void                StartTextEdit();
+    bool                EndTextEdit();
 
     //
     void execute_DoubleClick();
@@ -515,6 +521,7 @@ public:
     virtual void execute_GetFocus();
     virtual void execute_LoseFocus();
     virtual void execute_Command( const CommandEvent& rCEvt );
+    virtual bool execute_KeyInput( const KeyEvent& rKEvt );
     //-----------------------------------------------------------------
 };
 
