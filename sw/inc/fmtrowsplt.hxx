@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtrowsplt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:05:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -73,7 +77,7 @@
 
 class IntlWrapper;
 
-class SwFmtRowSplit : public SfxBoolItem
+class SW_DLLPUBLIC SwFmtRowSplit : public SfxBoolItem
 {
 public:
     SwFmtRowSplit( BOOL bSplit = TRUE ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}
