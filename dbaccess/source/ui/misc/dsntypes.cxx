@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_TEXT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mozab:", 0, nSeparator))
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
         return DST_ADDRESSBOOK;
 
     // find third :
@@ -383,6 +383,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/23 14:16:41  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.6  2001/01/29 16:02:05  nn
  *  added DST_CALC
  *

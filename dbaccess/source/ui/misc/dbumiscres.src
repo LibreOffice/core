@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ Resource RSC_DATASOURCE_TYPES
 {
     String STR_CONNTYPES
     {
-        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:mozab:" ;
+        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:address:" ;
     };
     String STR_CONNUINAMES
     {
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/05/23 14:16:41  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.22  2001/05/16 15:28:52  kz
  *  Merge SRC632: 16.05.01 - 17:28:14 (NoBranch)
  *

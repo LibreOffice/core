@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:15:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,17 @@ hidspecial HID_DSBROWSER_BOOKMARK_SELECTED              { HelpId = HID_DSBROWSER
 hidspecial HID_DSADMIN_TABLE_TOOLBOX                    { HelpId = HID_DSADMIN_TABLE_TOOLBOX ; };
 hidspecial HID_DSADMIN_QUERY_TOOLBOX                    { HelpId = HID_DSADMIN_QUERY_TOOLBOX ; };
 hidspecial HID_DSADMIN_BOOKMARK_TOOLBOX                 { HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX ; };
-hidspecial HID_DSADMIN_PAGE_ADDRESSBOOK                 { HelpId = HID_DSADMIN_PAGE_ADDRESSBOOK ; };
-hidspecial HID_DSADMIN_LB_ADDRESSBOOK                   { HelpId = HID_DSADMIN_LB_ADDRESSBOOK ; };
+hidspecial HID_DSADMIN_PAGE_LDAP                        { HelpId = HID_DSADMIN_PAGE_LDAP ; };
+hidspecial HID_DSADMIN_LDAP_HOSTNAME                    { HelpId = HID_DSADMIN_LDAP_HOSTNAME ; };
+hidspecial HID_DSADMIN_LDAP_BASEDN                      { HelpId = HID_DSADMIN_LDAP_BASEDN ; };
+hidspecial HID_DSADMIN_LDAP_PORTNUMBER                  { HelpId = HID_DSADMIN_LDAP_PORTNUMBER ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/05/23 14:15:20  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.25  2001/05/14 11:57:35  oj
  *  #86744# new helpids for views
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 15:06:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,10 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createConnection();
 
+    // adds a new detail page and remove all the old ones
+    void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
+    // removes all detail pages
+    void removeDetailPages();
 protected:
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();
@@ -674,6 +678,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/05/15 15:06:25  fs
+ *  #86991# +prepareSwitchDatasource
+ *
  *  Revision 1.16  2001/05/10 12:12:46  fs
  *  #86223# remember view settings while applying (no matter if synchron or asynchronously
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,18 +96,24 @@
 #define DSID_CONN_CTRLUSER          29
 #define DSID_CONN_CTRLPWD           30
 #define DSID_USECATALOG             31          // should the driver use the catalog name when the database is filebased
+#define DSID_CONN_LDAP_HOSTNAME     32
+#define DSID_CONN_LDAP_BASEDN       33
+#define DSID_CONN_LDAP_PORTNUMBER   34
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_USECATALOG
+#define DSID_LAST_ITEM_ID   DSID_CONN_LDAP_PORTNUMBER
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/20 13:38:06  oj
+ *  #85736# new checkbox for odbc
+ *
  *  Revision 1.7  2001/03/27 07:34:29  oj
  *  impl new page for adabas
  *

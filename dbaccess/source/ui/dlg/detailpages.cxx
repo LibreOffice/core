@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
@@ -745,31 +748,39 @@ namespace dbaui
     }
 
     //========================================================================
-    //= OAddressBookDetailsPage
+    //= OLDAPDetailsPage
     //========================================================================
-    OAddressBookDetailsPage::OAddressBookDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ADDRESSBOOK, _rCoreAttrs, CBTP_USE_UIDPWD)
+    OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, CBTP_USE_UIDPWD)
         ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
-        ,m_aFixedText       (this, ResId(FT_ADDRESSBOOK))
-        ,m_aAddressBookList (this, ResId(LB_ADDRESSBOOK))
+        ,m_aHostname        (this, ResId(FT_HOSTNAME))
+        ,m_aETHostname      (this, ResId(ET_HOSTNAME))
+        ,m_aBaseDN          (this, ResId(FT_BASEDN))
+        ,m_aETBaseDN        (this, ResId(ET_BASEDN))
+        ,m_aSeparator2      (this, ResId(FL_SEPARATOR2))
+        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
     {
         FreeResource();
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OAddressBookDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* OLDAPDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OAddressBookDetailsPage( pParent, _rAttrSet ) );
+        return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OAddressBookDetailsPage::getDetailIds()
+    sal_Int32* OLDAPDetailsPage::getDetailIds()
     {
         static sal_Int32* pRelevantIds = NULL;
         if (!pRelevantIds)
         {
             static sal_Int32 nRelevantIds[] =
             {
+                DSID_CONN_LDAP_HOSTNAME,
+                DSID_CONN_LDAP_BASEDN,
+                DSID_CONN_LDAP_PORTNUMBER,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -777,38 +788,22 @@ namespace dbaui
         return pRelevantIds;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OAddressBookDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet) || m_aAddressBookList.GetSelectEntryPos() != m_aAddressBookList.GetSavedValue();
-        String sAddressBook;
-        switch(m_aAddressBookList.GetSelectEntryPos())
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+
+        FILL_STRING_ITEM(m_aETHostname,_rSet,DSID_CONN_LDAP_HOSTNAME,bChangedSomething)
+        FILL_STRING_ITEM(m_aETBaseDN,_rSet,DSID_CONN_LDAP_BASEDN,bChangedSomething)
+        if (m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue())
         {
-            case 0:
-                sAddressBook.AssignAscii("DEFAULT");
-                break;
-            case 1:
-                sAddressBook.AssignAscii("LDAP");
-                break;
-            case 2:
-                sAddressBook.AssignAscii("OUTLOOK");
-                break;
-            default:
-                OSL_ENSURE(0,"Wrong Addressbook type!");
+            _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
+            bChangedSomething = sal_True;
         }
 
-        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
-        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
-        {
-            String sType = pTypeCollection->getDatasourcePrefix(DST_ADDRESSBOOK);
-            sType += sAddressBook;
-            _rSet.Put(SfxStringItem(DSID_CONNECTURL, sType));
-        }
         return bChangedSomething;
     }
     // -----------------------------------------------------------------------
-    void OAddressBookDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
@@ -816,29 +811,28 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        String sAddressBook;
 
-        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
-        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
-            sAddressBook = pTypeCollection->cutPrefix(pConnectUrl->GetValue());
+        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_LDAP_HOSTNAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, sal_True);
+        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
 
+        m_aETHostname.SetText(pHostName->GetValue());
+        m_aETBaseDN.SetText(pBaseDN->GetValue());
+        m_aNFPortNumber.SetValue(pPortNumber->GetValue());
 
-        USHORT nPos = 0;
-        if(!sAddressBook.CompareToAscii("DEFAULT"))
-            nPos = 0;
-        else if(!sAddressBook.CompareToAscii("LDAP"))
-            nPos = 1;
-        else if(!sAddressBook.CompareToAscii("OUTLOOK"))
-            nPos = 2;
-
-        m_aAddressBookList.SelectEntryPos(nPos);
         if (_bSaveValue)
-            m_aAddressBookList.SaveValue();
+        {
+            m_aETHostname.SaveValue();
+            m_aETBaseDN.SaveValue();
+            m_aNFPortNumber.SaveValue();
+        }
 
         if (bReadonly)
-            m_aAddressBookList.Disable();
+        {
+            m_aETHostname.Disable();
+            m_aETBaseDN.Disable();
+            m_aNFPortNumber.Disable();
+        }
     }
 
     //========================================================================
@@ -1149,6 +1143,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/23 14:16:42  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.4  2001/04/27 08:07:31  fs
  *  #86370# disallow UTF-8 for dBase and text data sources
  *

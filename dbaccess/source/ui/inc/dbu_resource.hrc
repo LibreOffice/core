@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
 #define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
 #define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
-#define PAGE_ADDRESSBOOK                RID_PAGE_START + 15
+#define PAGE_LDAP                       RID_PAGE_START + 15
 
 //========================================================================
 // error boxes
@@ -418,6 +418,11 @@
 #define STR_COULD_NOT_CREATE_DIRECTORY      RID_STRING_START + 162
 #define STR_MISSING_TABLES_XDROP            RID_STRING_START + 163
 #define STR_BUTTON_TEXT_ALL                 RID_STRING_START + 164
+#define STR_ADDRESSBOOK_SYSTEM              RID_STRING_START + 165
+#define STR_ADDRESSBOOK_MOZILLA             RID_STRING_START + 166
+#define STR_ADDRESSBOOK_LDAP                RID_STRING_START + 167
+#define STR_ADDRESSBOOK_OUTLOOK             RID_STRING_START + 168
+
 
 //========================================================================
 // untyped resources
@@ -432,6 +437,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2001/05/23 14:16:41  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.45  2001/05/16 15:33:27  fs
  *  #87065# +QUERY_VIEW_DESIGN_SAVEMODIFIED
  *

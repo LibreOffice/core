@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
+#endif
+#ifndef _SV_FIELD_HXX
+#include <vcl/field.hxx>
 #endif
 
 //.........................................................................
@@ -237,7 +240,7 @@ namespace dbaui
     //========================================================================
     //= OOdbcDetailsPage
     //========================================================================
-    class OAddressBookDetailsPage : public OCommonBehaviourTabPage
+    class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
@@ -248,10 +251,15 @@ namespace dbaui
 
     private:
         FixedLine           m_aSeparator1;
-        FixedText           m_aFixedText;
-        ListBox             m_aAddressBookList;
+        FixedText           m_aHostname;
+        Edit                m_aETHostname;
+        FixedText           m_aBaseDN;
+        Edit                m_aETBaseDN;
+        FixedLine           m_aSeparator2;
+        FixedText           m_aPortNumber;
+        NumericField        m_aNFPortNumber;
 
-        OAddressBookDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     };
@@ -306,6 +314,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/23 14:16:42  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.4  2001/04/27 08:07:01  fs
  *  #86370# +adjustUTF8
  *
