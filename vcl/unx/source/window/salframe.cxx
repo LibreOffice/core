@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-09 16:53:02 $
+ *  last change: $Author: ssa $ $Date: 2001-11-23 12:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             {
                 // set a document position and size
                 // the first frame gets positioned by the window manager
-                const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+                const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
                 x = rGeom.nX;
                 y = rGeom.nY;
                 w = rGeom.nWidth;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 15:04:28 $
+ *  last change: $Author: ssa $ $Date: 2001-11-23 12:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@
 #endif
 #ifndef _SV_KEYCOES_HXX
 #include <keycodes.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <window.hxx>
 #endif
 
 // =======================================================================
@@ -683,7 +689,7 @@ SalFrame::SalFrame()
     memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
     maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
 
-    memset( &maGeometry, 0, sizeof( Geometry ) );
+    memset( &maGeometry, 0, sizeof( maGeometry ) );
 
     // Daten ermitteln, wenn erster Frame angelegt wird
     if ( !pSalData->mpFirstFrame )
@@ -909,7 +915,8 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
         pFrame->maFrameData.mbOverwriteState = TRUE;
         pFrame->maFrameData.mbInShow = TRUE;
         ShowWindow( hWnd, pFrame->maFrameData.mnShowState );
-        if ( pFrame->maFrameData.mbFloatWin )
+        Window *pClientWin = ((Window*)pFrame->maFrameData.mpInst)->ImplGetClientWindow();
+        if ( pFrame->maFrameData.mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
             pFrame->maFrameData.mnShowState = SW_SHOWNOACTIVATE;
         else
             pFrame->maFrameData.mnShowState = SW_SHOW;
@@ -1003,7 +1010,8 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     BOOL bVisible = (GetWindowStyle( maFrameData.mhWnd ) & WS_VISIBLE) != 0;
     if ( !bVisible )
     {
-        if ( maFrameData.mbFloatWin )
+        Window *pClientWin = ((Window*)maFrameData.mpInst)->ImplGetClientWindow();
+        if ( maFrameData.mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
                 maFrameData.mnShowState = SW_SHOWNOACTIVATE;
         else
                 maFrameData.mnShowState = SW_SHOWNORMAL;
@@ -1166,7 +1174,7 @@ void SalFrame::GetWorkArea( Rectangle &rRect )
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    const Geometry& rGeo = GetGeometry();
+    const SalFrameGeometry& rGeo = GetGeometry();
     rWidth  = rGeo.nWidth;
     rHeight = rGeo.nHeight;
 }
@@ -3158,7 +3166,7 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
 
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
-    memset(&pFrame->maGeometry, 0, sizeof(SalFrame::Geometry) );
+    memset(&pFrame->maGeometry, 0, sizeof(SalFrameGeometry) );
 
     POINT aPt;
     aPt.x=0;

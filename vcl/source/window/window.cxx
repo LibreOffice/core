@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-14 19:10:13 $
+ *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
-        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
+        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) )
             nFrameStyle = SAL_FRAME_STYLE_FLOAT; // hmmm, was '0' before ????
 
         SalFrame* pParentFrame = NULL;
@@ -571,7 +571,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         pFrame->SetCallback( this, ImplWindowFrameProc );
 #else
         if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
-            nStyle = 0;
+            nStyle = WB_SYSTEMFLOATWIN; // window corresponds to a float win on the server
 
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
         RmFrameWindow* pFrame = new RmFrameWindow( this );
@@ -3238,12 +3238,16 @@ void Window::ImplToTop( USHORT nFlags )
              !mpFrameData->mbInSysObjToTopHdl )
         {
 #ifndef REMOTE_APPSERVER
-            USHORT nSysFlags = 0;
-            if ( nFlags & TOTOP_RESTOREWHENMIN )
-                nSysFlags = SAL_FRAME_TOTOP_RESTOREWHENMIN;
-            if ( nFlags & TOTOP_FOREGROUNDTASK )
-                nSysFlags = SAL_FRAME_TOTOP_FOREGROUNDTASK;
-            mpFrame->ToTop( nSysFlags );
+            // do not bring floating windows on the client to top
+            if( !ImplGetClientWindow() || !(ImplGetClientWindow()->GetStyle() & WB_SYSTEMFLOATWIN) )
+            {
+                USHORT nSysFlags = 0;
+                if ( nFlags & TOTOP_RESTOREWHENMIN )
+                    nSysFlags = SAL_FRAME_TOTOP_RESTOREWHENMIN;
+                if ( nFlags & TOTOP_FOREGROUNDTASK )
+                    nSysFlags = SAL_FRAME_TOTOP_FOREGROUNDTASK;
+                mpFrame->ToTop( nSysFlags );
+            }
 #else
             mpFrame->ToTop( nFlags );
 #endif
@@ -3614,7 +3618,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         {
             // menue windows never get the system focus
             // the application will keep the focus
-            if( mbFloatWin )
+            if( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ))
                 return;
             else
             {
@@ -5989,7 +5993,7 @@ void Window::SetPosSizePixel( long nX, long nY,
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
         pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
 #else
-        pWindow->mpFrame->SetClientSize( nWidth, nHeight );
+        pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nFlags );
 #endif
         // Resize should be called directly. If we havn't
         // set the correct size, we get a second resize from
@@ -6010,11 +6014,7 @@ void Window::SetPosSizePixel( long nX, long nY,
 Rectangle Window::GetDesktopRectPixel() const
 {
     Rectangle rRect;
-#ifndef REMOTE_APPSERVER
     mpFrameWindow->mpFrame->GetWorkArea( rRect );
-#else
-    rRect = Rectangle( ScreenToOutputPixel( Point() ), mpFrameWindow->GetOutputSizePixel() );
-#endif
     return rRect;
 }
 
@@ -6040,11 +6040,9 @@ Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
 {
     // relative to the screen
     Point p = OutputToScreenPixel( rPos );
-#ifndef REMOTE_APPSERVER
-    SalFrame::Geometry g = mpFrame->GetGeometry();
+    SalFrameGeometry g = mpFrame->GetGeometry();
     p.X() += g.nX;
     p.Y() += g.nY;
-#endif
     return p;
 }
 
@@ -6054,11 +6052,9 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to the screen
     Point p = ScreenToOutputPixel( rPos );
-#ifndef REMOTE_APPSERVER
-    SalFrame::Geometry g = mpFrame->GetGeometry();
+    SalFrameGeometry g = mpFrame->GetGeometry();
     p.X() -= g.nX;
     p.Y() -= g.nY;
-#endif
     return p;
 }
 
@@ -6066,8 +6062,7 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
 
 Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
 {
-#ifndef REMOTE_APPSERVER
-    SalFrame::Geometry g = mpFrame->GetGeometry();
+    SalFrameGeometry g = mpFrame->GetGeometry();
     Point aPos( OutputToScreenPixel( GetPosPixel() ) );
     aPos.X() += g.nX - g.nLeftDecoration;
     aPos.Y() += g.nY - g.nTopDecoration;
@@ -6077,8 +6072,6 @@ Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
     if( pRelativeWindow )
         aPos = pRelativeWindow->AbsoluteScreenToOutputPixel( aPos );
     return Rectangle( aPos, aSize );
-#endif
-    return Rectangle();
 }
 
 // -----------------------------------------------------------------------

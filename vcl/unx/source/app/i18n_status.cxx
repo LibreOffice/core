@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-19 17:22:44 $
+ *  last change: $Author: ssa $ $Date: 2001-11-23 12:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
         const SystemEnvData* pEnvData = GetSystemData();
         const SystemEnvData* pParentEnvData = pParent->GetSystemData();
 
-        const SalFrame::Geometry& rGeom( pParent->GetGeometry() );
+        const SalFrameGeometry& rGeom( pParent->GetGeometry() );
         int nDistance = rGeom.nTopDecoration;
         if( nDistance < 20 )
             nDistance = 20;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-08 14:08:07 $
+ *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1434,6 +1434,10 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 {
     KillOwnPopups( pWindow );
+
+    if ( pWindow->mbFrame && pWindow->mpClientWindow )
+        pWindow->mpClientWindow->Move();    // notify client to update geometry
+
 }
 
 // -----------------------------------------------------------------------
@@ -1925,7 +1929,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
 
         case SALEVENT_MOVE:
             {
-            SalFrame::Geometry g = ((Window*)pInst)->mpFrame->GetGeometry();
+            SalFrameGeometry g = ((Window*)pInst)->mpFrame->GetGeometry();
             ImplHandleMove( (Window*)pInst, g.nX, g.nY );
             }
             break;
@@ -1941,7 +1945,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
 
         case SALEVENT_MOVERESIZE:
             {
-            SalFrame::Geometry g = ((Window*)pInst)->mpFrame->GetGeometry();
+            SalFrameGeometry g = ((Window*)pInst)->mpFrame->GetGeometry();
             ImplHandleMoveResize( (Window*)pInst, g.nX, g.nY, g.nWidth, g.nHeight );
             }
             break;
@@ -2028,6 +2032,31 @@ void ImplUpdateCursorRect( Window *pWindow )
         ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
         pFrame->IsInEvtHandler( false );
         pFrame->SetCursorRect( &rRect, rWidth );
+    }
+}
+
+void ImplHandleGeometryChange( Window *pWindow, Rectangle *pRect )
+{
+    if( pWindow && pWindow->ImplGetFrame() && pRect )
+    {
+        pWindow->ImplGetFrame()->maGeometry.nX = pRect->nLeft;
+        pWindow->ImplGetFrame()->maGeometry.nY = pRect->nTop;
+        pWindow->ImplGetFrame()->maGeometry.nWidth = pRect->nRight - pRect->nLeft;
+        pWindow->ImplGetFrame()->maGeometry.nHeight = pRect->nBottom - pRect->nTop;
+        ImplHandleMoveResize( pWindow, pRect->nLeft, pRect->nTop,
+            pWindow->ImplGetFrame()->maGeometry.nWidth,
+            pWindow->ImplGetFrame()->maGeometry.nHeight );
+    }
+}
+
+void ImplHandleDecorationChange( Window *pWindow, Rectangle *pRect )
+{
+    if( pWindow && pWindow->ImplGetFrame() && pRect )
+    {
+        pWindow->ImplGetFrame()->maGeometry.nLeftDecoration = pRect->nLeft;
+        pWindow->ImplGetFrame()->maGeometry.nTopDecoration = pRect->nTop;
+        pWindow->ImplGetFrame()->maGeometry.nRightDecoration = pRect->nRight;
+        pWindow->ImplGetFrame()->maGeometry.nBottomDecoration = pRect->nBottom;
     }
 }
 
@@ -2122,7 +2151,16 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
         break;
         case RMEVENT_LOSEFOCUS:
         {
+            ImplSVData* pSVData = ImplGetSVData();
+            ULONG nOldFlags;
+            if ( pSVData->maWinData.mpFirstFloat )
+            {
+                nOldFlags = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
+                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags( nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+            }
             ImplHandleLoseFocus( pEvent->GetWindow() );
+            if ( pSVData->maWinData.mpFirstFloat )
+                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags( nOldFlags );
         };
         break;
         case RMEVENT_MOUSEWHEEL:
@@ -2161,6 +2199,18 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
         {
             LanguageType *pL = (LanguageType*)pEvent->GetData();
             ImplHandleInputContextChange( pEvent->GetWindow(), *pL );
+        }
+        break;
+        case RMEVENT_GEOMETRYCHANGE:
+        {
+            Rectangle* pRect = (Rectangle*)pEvent->GetData();
+            ImplHandleGeometryChange( pEvent->GetWindow(), pRect );
+        }
+        break;
+        case RMEVENT_DECORATIONCHANGE:
+        {
+            Rectangle* pRect = (Rectangle*)pEvent->GetData();
+            ImplHandleDecorationChange( pEvent->GetWindow(), pRect );
         }
         break;
     }
