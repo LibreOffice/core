@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:43:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ void SmDocShell::SetText(const String& rBuffer)
         if( pViewSh )
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
-            if ( GetProtocol().IsInPlaceActive() || SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+            if ( IsInPlaceActive() || SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
                 Resize();
             else
                 pViewSh->GetGraphicWindow().Invalidate();
@@ -724,7 +724,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pPrinter = rDocShell.GetPrt()) )
     {
         pPrinter->Push( PUSH_MAPMODE );
-        if ( rDocShell.GetProtocol().IsInPlaceActive() ||
+        if ( rDocShell.IsInPlaceActive() ||
              SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
@@ -750,7 +750,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
     {
         pRefDev->Push( PUSH_MAPMODE );
-        if ( rDocShell.GetProtocol().IsInPlaceActive() ||
+        if ( rDocShell.IsInPlaceActive() ||
              SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
@@ -787,7 +787,7 @@ SmPrinterAccess::~SmPrinterAccess()
 
 Printer* SmDocShell::GetPrt()
 {
-    if ( GetProtocol().IsInPlaceActive() ||
+    if ( IsInPlaceActive() ||
           SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         //Normalerweise wird der Printer vom Server besorgt. Wenn dieser aber
@@ -822,7 +822,7 @@ Printer* SmDocShell::GetPrt()
 
 OutputDevice* SmDocShell::GetRefDev()
 {
-    if ( GetProtocol().IsInPlaceActive() ||
+    if ( IsInPlaceActive() ||
          SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         OutputDevice* pOutDev = GetDocumentRefDev();
@@ -1887,7 +1887,7 @@ void SmDocShell::SetVisArea (const Rectangle & rVisArea)
     // If outplace editing, then dont resize the OutplaceWindow. But the
     // ObjectShell has to resize. Bug 56470
     BOOL bUnLockFrame;
-    if( ( GetProtocol().IsEmbed() || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && !GetProtocol().IsInPlaceActive() && GetFrame() )
+    if( ( GetProtocol().IsEmbed() || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && !IsInPlaceActive() && GetFrame() )
     {
         GetFrame()->LockAdjustPosSizePixel();
         bUnLockFrame = TRUE;
