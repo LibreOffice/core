@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:06:54 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
-#include <svtools/saveopt.hxx>
-#endif
 
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
@@ -119,140 +116,99 @@ FltError ScImportExcel( SfxMedium& r, ScDocument* p )
 
 FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
-    FltError eRet = eERR_OK;
-    SotStorageRef xStorage = new SotStorage( rMedium.GetInStream(), FALSE );
+    // check the passed Calc document
+    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    if( !pDocument ) return eERR_INTERN;        // should not happen
 
-    // OLE2 compound file
-    if( xStorage.Is() )
+    /*  Import all BIFF versions regardless on eFormat, needed for import of
+        external cells (file type detection returns Excel4.0). */
+    if( (eFormat != EIF_AUTO) && (eFormat != EIF_BIFF_LE4) && (eFormat != EIF_BIFF5) && (eFormat != EIF_BIFF8) )
     {
-        // *** look for contained streams ***
-
-        const String aStreamName5( EXC_STREAM_BOOK );
-        sal_Bool bHasBook = xStorage->IsContained( aStreamName5 ) && xStorage->IsStream( aStreamName5 );
-
-        const String aStreamName8( EXC_STREAM_WORKBOOK );
-        sal_Bool bHasWorkbook = xStorage->IsContained( aStreamName8 ) && xStorage->IsStream( aStreamName8 );
-
-        // *** handle user-defined filter selection ***
-
-        // comparing the stream names, regardless of the stream contents
-        switch( eFormat )
-        {
-            case EIF_AUTO:
-                // nothing to do
-            break;
-            case EIF_BIFF5:
-                bHasWorkbook = sal_False;
-            break;
-            case EIF_BIFF8:
-                bHasBook = sal_False;
-            break;
-            case EIF_BIFF_LE4:
-// keep auto-detection for import of external cells (file type detection returns Excel4.0)
-//                eRet = eERR_FORMAT;             //!! correct error code?
-            break;
-            default:
-                eRet = eERR_FORMAT;             //!! correct error code?
-                DBG_ERRORFILE( "ScImportExcel - wrong file format specification" );
-        }
-
-        // *** find BIFF version and stream name ***
-
-        XclBiff eDetectedBiff = xlBiffUnknown;
-        const String* pStreamName = NULL;
-
-        if( eRet == eERR_OK )
-        {
-            // BIFF8 is first class
-            if( bHasWorkbook )
-            {
-                eDetectedBiff = xlBiff8;
-                pStreamName = &aStreamName8;
-            }
-            else if( bHasBook )
-            {
-                eDetectedBiff = xlBiff5;
-                pStreamName = &aStreamName5;
-            }
-            else
-                eRet = eERR_UNKN_BIFF;
-        }
-
-        if( (eRet == eERR_OK) && pStreamName )
-        {
-            SotStorageStreamRef xStream = ScfTools::OpenStorageStreamRead( xStorage, *pStreamName );
-            DBG_ASSERT( xStream.Is(), "ScImportExcel - missing stream" );
-            xStream->SetBufferSize( 32768 );
-
-            // *** special handling for wrong BIFF versions in stream ***
-
-            XclBiff eBiff = XclImpStream::DetectBiffVersion( *xStream );
-
-            // look for BIFF5/7 stream in "Workbook"
-            if( bHasWorkbook )
-            {
-                if( (eBiff == xlBiff5) || (eBiff == xlBiff7) )
-                    eDetectedBiff = xlBiff5;
-                else if( eBiff != xlBiff8 )
-                    eDetectedBiff = xlBiffUnknown;
-            }
-            // look for BIFF8 stream in "Book"
-            else if( bHasBook )
-            {
-                if( eBiff == xlBiff8 )
-                    eDetectedBiff = xlBiff8;
-                else if( (eBiff != xlBiff5) && (eBiff != xlBiff7) )
-                    eDetectedBiff = xlBiffUnknown;
-            }
-
-            // *** and Go! ***
-
-            if( eRet == eERR_OK )
-            {
-                ImportExcel* pFilter = NULL;
-
-                if( eDetectedBiff == xlBiff5 )
-                    pFilter = new ImportExcel( rMedium, *xStream, eBiff, pDocument );
-                else if( eDetectedBiff == xlBiff8 )
-                    pFilter = new ImportExcel8( rMedium, *xStream, eBiff, pDocument );
-
-                if( pFilter )
-                    eRet = pFilter->Read();
-                else
-                {
-                    DBG_ERRORFILE( "ScImportExcel - not imported, unknown error" );
-                    eRet = eERR_UNKN_BIFF;
-                }
-                delete pFilter;
-            }
-
-            xStream->SetBufferSize( 0 );
-        }
+        DBG_ERRORFILE( "::ScImportExcel - wrong file format specification" );
+        return eERR_FORMAT;
     }
 
-    // no OLE2 storage - simple stream
-    else if( (eFormat == EIF_AUTO) || (eFormat == EIF_BIFF_LE4) )
+    // check the input stream from medium
+    SvStream* pMedStrm = rMedium.GetInStream();
+    DBG_ASSERT( pMedStrm, "::ScImportExcel - medium without input stream" );
+    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+
+    SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
+    XclBiff eBiff = xlBiffUnknown;      // The BIFF version of the main stream.
+
+    // try to open an OLE storage
+    SotStorageRef xRootStrg;
+    SotStorageStreamRef xStrgStrm;
+    if( SotStorage::IsStorageFile( pMedStrm ) )
     {
-        SvStream* pStream = rMedium.GetInStream();
-        if( pStream )
-        {
-            pStream->Seek( 0UL );
-            pStream->SetBufferSize( 32768 );
-
-            XclBiff eBiff = XclImpStream::DetectBiffVersion( *pStream );
-
-            ImportExcel aFilter( rMedium, *pStream, eBiff, pDocument );
-            eRet = aFilter.Read();
-
-            pStream->SetBufferSize( 0 );
-        }
-        else
-            eRet = eERR_OPEN;
+        xRootStrg = new SotStorage( pMedStrm, FALSE );
+        if( xRootStrg->GetError() )
+            xRootStrg = 0;
     }
 
-    // else invalid input
-    else
-        eRet = eERR_FORMAT;             //!! correct error code?
+    // try to open "Book" or "Workbook" stream in OLE storage
+    if( xRootStrg.Is() )
+    {
+        // try to open the "Book" stream
+        SotStorageStreamRef xBookStrm5 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
+        XclBiff eBookStrm5Biff = xBookStrm5.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm5 ) : xlBiffUnknown;
+
+        // try to open the "Workbook" stream
+        SotStorageStreamRef xBookStrm8 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
+        XclBiff eBookStrm8Biff = xBookStrm8.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm8 ) : xlBiffUnknown;
+
+        // decide which stream to use
+        if( (eBookStrm8Biff != xlBiffUnknown) && ((eBookStrm5Biff == xlBiffUnknown) || (eBookStrm8Biff > eBookStrm5Biff)) )
+        {
+            /*  Only "Workbook" stream exists; or both streams exist,
+                and "Workbook" has higher BIFF version than "Book" stream. */
+            xStrgStrm = xBookStrm8;
+            eBiff = eBookStrm8Biff;
+        }
+        else if( eBookStrm5Biff != xlBiffUnknown )
+        {
+            /*  Only "Book" stream exists; or both streams exist,
+                and "Book" has higher BIFF version than "Workbook" stream. */
+            xStrgStrm = xBookStrm5;
+            eBiff = eBookStrm5Biff;
+        }
+
+        pBookStrm = xStrgStrm;
+    }
+
+    // no "Book" or "Workbook" stream found, try plain input stream from medium (even for BIFF5+)
+    if( !pBookStrm )
+    {
+        eBiff = XclImpStream::DetectBiffVersion( *pMedStrm );
+        if( eBiff != xlBiffUnknown )
+            pBookStrm = pMedStrm;
+    }
+
+    // try to import the file
+    FltError eRet = eERR_UNKN_BIFF;
+    if( pBookStrm )
+    {
+        pBookStrm->SetBufferSize( 0x8000 );     // still needed?
+
+        XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pBookStrm, *pDocument, RTL_TEXTENCODING_MS_1252 );
+        ::std::auto_ptr< ImportExcel > xFilter;
+        switch( eBiff )
+        {
+            case xlBiff2:
+            case xlBiff3:
+            case xlBiff4:
+            case xlBiff5:
+            case xlBiff7:
+                xFilter.reset( new ImportExcel( aImpData ) );
+            break;
+            case xlBiff8:
+                xFilter.reset( new ImportExcel8( aImpData ) );
+            break;
+            default:    DBG_ERROR_BIFF();
+        }
+
+        eRet = xFilter.get() ? xFilter->Read() : eERR_INTERN;
+    }
 
     return eRet;
 }
@@ -268,74 +224,69 @@ FltError ScExportExcel234( SvStream &aStream, ScDocument *pDoc,
 }
 
 
-FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
+FltError ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     const BOOL bBiff8, CharSet eNach )
 {
-    String                      aWrkBook;
-    const sal_Char*             pClipboard;
-    const sal_Char*             pClassName;
+    // check the passed Calc document
+    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    if( !pDocument ) return eERR_INTERN;        // should not happen
 
+    // check the output stream from medium
+    SvStream* pMedStrm = rMedium.GetOutStream();
+    DBG_ASSERT( pMedStrm, "::ScExportExcel5 - medium without output stream" );
+    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+
+    // try to open an OLE storage
+    SotStorageRef xRootStrg = new SotStorage( pMedStrm, FALSE );
+    if( xRootStrg->GetError() ) return eERR_OPEN;
+
+    // create BIFF dependent strings
+    String aStrmName, aClipName, aClassName;
     if( bBiff8 )
     {
-        aWrkBook = EXC_STREAM_WORKBOOK;
-        pClipboard = "Biff8";
-        pClassName = "Microsoft Excel 97-Tabelle";
+        aStrmName = EXC_STREAM_WORKBOOK;
+        aClipName = CREATE_STRING( "Biff8" );
+        aClassName = CREATE_STRING( "Microsoft Excel 97-Tabelle" );
     }
     else
     {
-        aWrkBook = EXC_STREAM_BOOK;
-        pClipboard = "Biff5";
-        pClassName = "Microsoft Excel 5.0-Tabelle";
+        aStrmName = EXC_STREAM_BOOK;
+        aClipName = CREATE_STRING( "Biff5" );
+        aClassName = CREATE_STRING( "Microsoft Excel 5.0-Tabelle" );
     }
 
-    FltError                eRet = eERR_NI;
+    // open the "Book"/"Workbook" stream
+    SotStorageStreamRef xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
+    if( !xStrgStrm.Is() || xStrgStrm->GetError() ) return eERR_OPEN;
 
-    if( &rOutMedium != NULL )
+    xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
+
+    InitFuncData( bBiff8 );
+
+    FltError eRet = eERR_UNKN_BIFF;
+    XclExpRootData aExpData( bBiff8 ? xlBiff8 : xlBiff5, rMedium, xRootStrg, *xStrgStrm, *pDocument, eNach );
+    if ( bBiff8 )
     {
-        SotStorageRef xStorage = new SotStorage( rOutMedium.GetOutStream(), FALSE );
-        if( xStorage.Is() )
-        {// OLE2-Datei
-            SotStorageStreamRef xStStream = ScfTools::OpenStorageStreamWrite( xStorage, aWrkBook );
-
-            xStStream->SetBufferSize( 32768 );
-
-            InitFuncData( bBiff8 );
-
-            SvtSaveOptions aSaveOpt;
-            bool bRelUrl = TRUE == (rOutMedium.IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys());
-
-            if ( bBiff8 )
-            {
-                ExportBiff8 aFilter( rOutMedium, *xStStream, xlBiff8, pDocument, eNach, bRelUrl );
-                eRet = aFilter.Write();
-            }
-            else
-            {
-                ExportBiff5 aFilter( rOutMedium, *xStStream, xlBiff5, pDocument, eNach, bRelUrl );
-                eRet = aFilter.Write();
-            }
-
-
-            if( eRet == eERR_RNGOVRFLW )
-                eRet = SCWARN_EXPORT_MAXROW;
-
-            DeInitFuncData();
-
-            xStStream->SetBufferSize( 0 );
-
-            // CompObj schreiben
-            SvGlobalName        aName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00,
-                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-            UINT32              nClip = SotExchange::RegisterFormatName( _STRING( pClipboard ) );
-            xStorage->SetClass( aName, nClip, _STRING( pClassName ) );
-            xStStream->Commit();
-            xStorage->Commit();
-        }
-        else
-            eRet = eERR_OPEN;
+        ExportBiff8 aFilter( aExpData );
+        eRet = aFilter.Write();
     }
     else
-        eRet = eERR_OPEN;
+    {
+        ExportBiff5 aFilter( aExpData );
+        eRet = aFilter.Write();
+    }
+
+    if( eRet == eERR_RNGOVRFLW )
+        eRet = SCWARN_EXPORT_MAXROW;
+
+    DeInitFuncData();
+
+    SvGlobalName aGlobName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
+    sal_uInt32 nClip = SotExchange::RegisterFormatName( aClipName );
+    xRootStrg->SetClass( aGlobName, nClip, aClassName );
+
+    xStrgStrm->Commit();
+    xRootStrg->Commit();
 
     return eRet;
 }
