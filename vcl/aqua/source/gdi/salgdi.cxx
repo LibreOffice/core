@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.44 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-23 05:02:58 $
+ *  $Revision: 1.45 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ static void CompressRGBColor ( const PixMapPtr   pPixMap,
                                SalColor         *rSalColor
                              )
 {
-    if ( pPixMap->pixelSize == k32BitScreenDepth )
+    if ( pPixMap->pixelSize == kTrueColor )
     {
         *rSalColor = Compress32BitRGBColor( pRGBColor );
     } // if
