@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 09:59:14 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,6 @@
 #endif
 #ifndef _DOCSTDLG_HXX
 #include <docstdlg.hxx>     // fuer Dokument Style
-#endif
-#ifndef _TMPLDLG_HXX
-#include <tmpldlg.hxx>
 #endif
 #ifndef _FLDWRAP_HXX
 #include <fldwrap.hxx>
