@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:29:55 $
+ *  last change: $Author: os $ $Date: 2002-06-03 12:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     {
         Pos = MAP_APPFONT ( 83 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 100 ) ;
+        Border = TRUE;
     };
     CheckBox BTN_NUMFORMAT
     {
