@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: as $ $Date: 2001-05-02 13:00:52 $
+#   last change: $Author: as $ $Date: 2001-11-26 09:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,63 +78,31 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- applikation: "test" --------------------------------------------------
+# --- applikation: "Test ArgumentAnalyzer" --------------------------------------------------
 
-#APP1TARGET= 	test
+APP1TARGET= 	test_argumentanalyzer
 
-#APP1OBJS=		$(SLO)$/test.obj
+APP1OBJS=		$(SLO)$/test_argumentanalyzer.obj	\
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/lockhelper.obj				\
+                $(SLO)$/argumentanalyzer.obj
 
-#APP1LIBS=		$(SLB)$/fwk_classes.lib				\
-#				$(SLB)$/fwk_helper.lib
-
-#APP1STDLIBS=	$(CPPULIB)							\
-#				$(CPPUHELPERLIB)					\
-#				$(OSLLIB)							\
-#				$(SALLIB)							\
-#				$(VOSLIB)							\
-#				$(TOOLSLIB) 						\
-#				$(SVTOOLLIB)						\
-#				$(TKLIB)							\
-#				$(COMPHELPERLIB)					\
-#				$(SVLIB)
-
-#APP1DEPN=		$(SLB)$/fwk_helper.lib				\
-#				$(SLB)$/fwk_classes.lib
-
-#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-#APP1DEF=		$(MISC)$/test.def
-#.ENDIF
-
-# --- application: "threadtest" --------------------------------------------------
-
-APP2TARGET= 	threadtest
-
-APP2OBJS=		$(SLO)$/threadtest.obj				\
-                $(SLO)$/transactionmanager.obj		\
-                $(SLO)$/transactionguard.obj		\
-                $(SLO)$/fairrwlock.obj				\
-                $(SLO)$/resetableguard.obj			\
-                $(SLO)$/gate.obj					\
-                $(SLO)$/readguard.obj				\
-                $(SLO)$/writeguard.obj
-
-APP2STDLIBS=	$(CPPULIB)							\
+APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
+                $(SVTOOLLIB)						\
+                $(TOOLSLIB)							\
+                $(COMPHELPERLIB)					\
                 $(SVLIB)
 
-APP2DEPN=		$(SLO)$/fairrwlock.obj				\
-                $(SLO)$/transactionmanager.obj		\
-                $(SLO)$/transactionguard.obj		\
-                $(SLO)$/resetableguard.obj			\
-                $(SLO)$/gate.obj					\
-                $(SLO)$/readguard.obj				\
-                $(SLO)$/writeguard.obj
+APP1DEPN=		$(SLO)$/argumentanalyzer.obj		\
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/lockhelper.obj
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP2DEF=		$(MISC)$/threadtest.def
+APP1DEF=		$(MISC)$/test_argumentanalyzer.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------
