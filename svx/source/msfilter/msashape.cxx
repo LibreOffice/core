@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-15 18:17:12 $
+ *  last change: $Author: sj $ $Date: 2002-03-12 16:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3924,7 +3924,7 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
 
     { 1500, 3600 }, { 21600 - 3000, 3600 }, { 21600 - 3000, 14409 + 1800 },
 
-    { 3000, 1800 }, { 21600 - 1500, 1800 }, { 21600 - 3000, 14409 }
+    { 3000, 1800 }, { 21600 - 1500, 1800 }, { 21600 - 1500, 14409 }
 };
 static const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
 {
