@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:26:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 #endif
 
 #include <osl/file.h>
+#include <rtl/alloc.h>
+#include <rtl/memory.h>
 
 #if defined (WIN) || defined (MAC)
 #define ONLY_NEW
@@ -152,6 +154,14 @@ int rsc_stricmp( const char *string1, const char *string2 ){
     return( 0 );
 }
 
+char* rsc_strdup( const char* pStr )
+{
+    int nLen = strlen( pStr );
+    char* pBuffer = (char*)rtl_allocateMemory( nLen+1 );
+    rtl_copyMemory( pBuffer, pStr, nLen+1 );
+    return pBuffer;
+}
+
 /*************************************************************************
 |*
 |*    GetTmpFileName()
@@ -183,7 +193,7 @@ BOOL Append( FILE * fDest, ByteString aTmpFile )
 {
 #define MAX_BUF 4096
     char    szBuf[ MAX_BUF ];
-    short   nItems;
+    int     nItems;
     FILE    *fSource;
 
     fSource = fopen( aTmpFile.GetBuffer(), "rb" );
@@ -271,17 +281,16 @@ ByteString OutputFile ( ByteString aInput, char * pExt )
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
-                   USHORT nArgc )
+char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 {
     FILE    *fFile;
     int     nItems;
     char    szBuffer[4096];       // file buffer
-    USHORT  i;
+    sal_uInt32  i;
     bool bInQuotes = false;
 
     // Programmname
-    ppCmd->Append( ((RscMem *)0)->Assignsw( *ppArgv, 0 ) );
+    ppCmd->Append( rsc_strdup( *ppArgv ) );
     for( i = 1; i < nArgc; i++ )
     {
         if( '@' == **(ppArgv +i) ){ // wenn @, dann Response-Datei
@@ -298,7 +307,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      *  2. a string can contain spaces, so -DFOO="baz zum" defines one
                      *  argument no two !
                      */
-                    USHORT n = 0;
+                    unsigned int n = 0;
                     while( nItems && (!isspace( szBuffer[ n ] ) || bInQuotes) &&
                            n +1 < sizeof( szBuffer )  )
                     {
@@ -309,7 +318,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                             bInQuotes = !bInQuotes;
                     }
                     szBuffer[ n ] = '\0';
-                    ppCmd->Append( RscMem::Assignsw( szBuffer, 0 ) );
+                    ppCmd->Append( rsc_strdup( szBuffer ) );
                 }
                 nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             };
@@ -317,133 +326,12 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
             fclose( fFile );
         }
         else
-            ppCmd->Append( ((RscMem *)0)->Assignsw( *(ppArgv +i), 0 ) );
+            ppCmd->Append( rsc_strdup( *(ppArgv +i) ) );
     };
     ppCmd->Append( (void *)0 );
     return( NULL );
 }
 
-
-/*************** R s c M e m ********************************************/
-
-#ifdef DOS
-class RscCount {
-public:
-    long nCount;
-    RscCount(){ nCount = 0; }
-//  ~RscCount(){ printf( "\nMalloczaehler: %ld\n", nCount ); }
-};
-RscCount aRscCount;
-#endif
-/*************************************************************************
-|*
-|*    RscMem :: Malloc()
-|*
-|*    Beschreibung      Speicher allokieren
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
-|*
-*************************************************************************/
-void * RscMem :: Malloc( unsigned int nSize ){
-    char * pMem;
-
-#ifdef MAC
-    SpinCursor( 1 );
-#endif
-#ifdef DOS
-    aRscCount.nCount++;
-#endif
-#ifdef ONLY_NEW
-    pMem = new char[ nSize + sizeof( unsigned int ) ];
-    *(unsigned int *)pMem = nSize;
-    pMem += sizeof( unsigned int );
-#else
-    if( NULL == (pMem = (char *)malloc( nSize )) )
-        RscExit( 10 );
-#endif
-    return( pMem );
-}
-
-/*************************************************************************
-|*
-|*    RscMem :: Realloc()
-|*
-|*    Beschreibung      Speicher zusaetzlich allokieren
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
-|*
-*************************************************************************/
-void * RscMem :: Realloc( void * pMem, unsigned int nSize ){
-#ifdef MAC
-    SpinCursor( 1 );
-#endif
-#ifdef ONLY_NEW
-    char * pTmp = (char *)pMem;
-    unsigned int nMin, nOldSize;
-
-    pMem = Malloc( nSize );
-    nOldSize = *(unsigned inz *)(pTmp - sizeof( unsigned int ) );
-    nMin = (nSize < nOldSize) ? nSize : nOldSize;
-    memcpy( pMem, pTmp, nMin );
-    delete (pTmp - sizeof( unsigned int ));
-#else
-#ifdef UNX
-    if( NULL == (pMem = realloc( (char*)pMem, nSize )) )
-#else
-    if( NULL == (pMem = realloc( pMem, nSize )) )
-#endif
-        RscExit( 10 );
-#endif
-    return( pMem );
-}
-
-/*************************************************************************
-|*
-|*    RscMem :: Free()
-|*
-|*    Beschreibung      Speicher freigeben
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
-|*
-*************************************************************************/
-void RscMem :: Free( void * pMem ){
-#ifdef DOS
-    aRscCount.nCount--;
-#endif
-#ifdef ONLY_NEW
-    delete ((char *)pMem - sizeof( USHORT ));
-#else
-#ifdef UNX
-    free( (char *)pMem );
-#else
-    free( pMem );
-#endif
-#endif
-}
-
-/*************************************************************************
-|*
-|*    RscMem :: Assignsw
-|*
-|*    Beschreibung      Allokiert speicher fuer String und kopiert ihn
-|*    Parameter:        psw, der String.
-|*                      nExtraSpace, weiterer Speicher hinter dem String
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
-|*
-*************************************************************************/
-char * RscMem :: Assignsw( const char *psw, short nExtraSpace )
-{
-    char * pTmp;
-
-    if( !psw )
-        psw = "";
-    /* allocate memory    */
-    pTmp = (char *)Malloc( strlen( psw ) + 1 + nExtraSpace );
-    /* copy string into allocated memory*/
-    strcpy( pTmp, psw );
-    return( pTmp );
-}
 
 /*************** R s c P t r P t r **************************************/
 /*************************************************************************
@@ -464,7 +352,7 @@ RscPtrPtr :: RscPtrPtr(){
 |*
 |*    RscPtrPtr :: ~RscPtrPtr()
 |*
-|*    Beschreibung      Zerstört eine Tabelle mit Zeigern, die Zeiger werde
+|*    Beschreibung      Zerstï¿½rt eine Tabelle mit Zeigern, die Zeiger werde
 |*                      ebenfalls freigegebn
 |*    Ersterstellung    MM 13.02.91
 |*    Letzte Aenderung  MM 13.02.91
@@ -484,14 +372,14 @@ RscPtrPtr :: ~RscPtrPtr(){
 |*
 *************************************************************************/
 void RscPtrPtr :: Reset(){
-    USHORT i;
+    sal_uInt32 i;
 
     if( pMem ){
         for( i = 0; i < nCount; i++ ){
             if( pMem[ i ] )
-               RscMem::Free( pMem[ i ] );
+               rtl_freeMemory( pMem[ i ] );
         }
-        RscMem::Free( (void *)pMem );
+        rtl_freeMemory( (void *)pMem );
     };
     nCount = 0;
     pMem = NULL;
@@ -506,12 +394,12 @@ void RscPtrPtr :: Reset(){
 |*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
-USHORT RscPtrPtr :: Append( void * pBuffer ){
+sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
     if( !pMem )
-        pMem = (void **)RscMem::Malloc( (nCount +1) * sizeof( void * ) );
+        pMem = (void **)rtl_allocateMemory( (nCount +1) * sizeof( void * ) );
     else
-        pMem = (void **)RscMem::Realloc( (void *)pMem,
-                         (USHORT)((nCount +1) * sizeof( void * )
+        pMem = (void **)rtl_reallocateMemory( (void *)pMem,
+                         ((nCount +1) * sizeof( void * )
                        ) );
     pMem[ nCount ] = pBuffer;
     return( nCount++ );
@@ -526,7 +414,7 @@ USHORT RscPtrPtr :: Append( void * pBuffer ){
 |*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
-void * RscPtrPtr :: GetEntry( USHORT nEntry ){
+void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry ){
     if( nEntry < nCount )
         return( pMem[ nEntry ] );
     return( NULL );
@@ -573,7 +461,7 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
 RscWriteRc :: ~RscWriteRc()
 {
     if( pMem )
-        RscMem::Free( pMem );
+        rtl_freeMemory( pMem );
 }
 
 /*************************************************************************
@@ -585,11 +473,11 @@ RscWriteRc :: ~RscWriteRc()
 |*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
-unsigned int RscWriteRc :: IncSize( unsigned int nSize )
+sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
 {
     nLen += nSize;
     if( pMem )
-        pMem = RscMem::Realloc( pMem, nLen );
+        pMem = (char*)rtl_reallocateMemory( pMem, nLen );
     return( nLen - nSize );
 }
 
@@ -602,10 +490,10 @@ unsigned int RscWriteRc :: IncSize( unsigned int nSize )
 |*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
-char * RscWriteRc :: GetPointer( unsigned int nSize )
+char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 {
     if( !pMem )
-        pMem = (char *)RscMem::Malloc( nLen );
+        pMem = (char *)rtl_allocateMemory( nLen );
     return( pMem + nSize );
 }
 
@@ -619,9 +507,9 @@ char * RscWriteRc :: GetPointer( unsigned int nSize )
 |*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
-void RscWriteRc :: Put( USHORT nVal )
+void RscWriteRc :: Put( sal_uInt16 nVal )
 {
-    unsigned int    nOldLen;
+    sal_uInt32  nOldLen;
 
     nOldLen = IncSize( sizeof( nVal ) );
     PutAt( nOldLen, nVal );
@@ -629,17 +517,17 @@ void RscWriteRc :: Put( USHORT nVal )
 
 void RscWriteRc :: PutUTF8( char * pStr )
 {
-    unsigned int nStrLen = 0;
+    sal_uInt32 nStrLen = 0;
     if( pStr )
         nStrLen = strlen( pStr );
 
-    unsigned int    n = nStrLen +1;
+    sal_uInt32  n = nStrLen +1;
     if( n % 2 )
         // align to 2
         n++;
 
-    unsigned int    nOldLen = IncSize( n );
-    memcpy( GetPointer( nOldLen ), pStr, nStrLen );
+    sal_uInt32  nOldLen = IncSize( n );
+    rtl_copyMemory( GetPointer( nOldLen ), pStr, nStrLen );
     // 0 terminated
     pMem[ nOldLen + nStrLen ] = '\0';
 }
