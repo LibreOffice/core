@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:53:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ private:
 
     sal_Bool m_bWaitForClose;
     sal_Bool m_bAllowClosing;
+    sal_Bool m_bDesktopTerminated;
 
     sal_Int32 m_nNoBorderResizeReact;
 
