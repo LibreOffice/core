@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:04:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,6 +633,10 @@ SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
         GetFmt()->GetDoc()->GetDrawModel()->GetPage( 0 )->
                         InsertObject( pDrawObj, _GetOrdNumForNewRef( pFly ) );
     }
+    // <--
+    // --> OD 2004-12-13 #i38889# - assure, that new <SwVirtFlyDrawObj> instance
+    // is in a visible layer.
+    MoveObjToVisibleLayer( pDrawObj );
     // <--
     return pDrawObj;
 }
