@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-06-10 14:45:57 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog RID_SVXDLG_POSTIT
     FixedText FT_LASTEDITLABEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 24 , 8 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "Autor" ;
         Text [ ENGLISH ] = "Author" ;
         Text [ norwegian ] = "Forfatter" ;
@@ -117,8 +117,8 @@ ModalDialog RID_SVXDLG_POSTIT
     };
     FixedText FT_LASTEDIT
     {
-        Pos = MAP_APPFONT ( 38 , 14 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Pos = MAP_APPFONT ( 48 , 14 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_EDIT
