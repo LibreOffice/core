@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ ScUnoEditEngine::~ScUnoEditEngine()
 String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor )
 {
-    String aRet = EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor );
+    String aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)
     {
         const SvxFieldData* pFieldData = rField.GetField();
@@ -299,7 +299,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
     if (mpRefreshListeners)
     {
         lang::EventObject aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
         if (mpRefreshListeners)
         {
             mpRefreshListeners->disposeAndClear(aEvent);
@@ -359,13 +359,12 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<text::XTextField> xField = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
     if (xField.is())
-        aAny <<= xField;
+        return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException)
@@ -408,7 +407,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpRefreshListeners->getElements();
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
         sal_uInt32 nLength(aListeners.getLength());
         if (nLength)
         {
@@ -416,7 +415,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
             if (pInterfaces)
             {
                 lang::EventObject aEvent;
-                aEvent.Source = uno::Reference< util::XRefreshable >(const_cast<ScCellFieldsObj*>(this));
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(const_cast<ScCellFieldsObj*>(this)));
                 sal_uInt32 i(0);
                 while (i < nLength)
                 {
@@ -512,7 +511,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeE
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        uno::Sequence<uno::Type> aParentTypes = OComponentHelper::getTypes();
+        uno::Sequence<uno::Type> aParentTypes(OComponentHelper::getTypes());
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
@@ -667,7 +666,7 @@ void SAL_CALL ScCellFieldObj::attach( const uno::Reference<text::XTextRange>& xT
     ScUnoGuard aGuard;
     if (xTextRange.is())
     {
-        uno::Reference<text::XText> xText = xTextRange->getText();
+        uno::Reference<text::XText> xText(xTextRange->getText());
         if (xText.is())
         {
             xText->insertTextContent( xTextRange, this, TRUE );
@@ -710,8 +709,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellFieldObj::getPropertySetI
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -722,7 +721,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     rtl::OUString aStrVal;
     if (pEditSource)
     {
@@ -789,7 +788,7 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
 {
     ScUnoGuard aGuard;
     uno::Any aRet;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     // anchor type is always "as character", text wrap always "none"
 
@@ -1017,13 +1016,12 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<text::XTextField> xField = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
     if (xField.is())
-        aAny <<= xField;
+        return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException)
@@ -1066,7 +1064,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpRefreshListeners->getElements();
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
         sal_uInt32 nLength(aListeners.getLength());
         if (nLength)
         {
@@ -1074,7 +1072,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
             if (pInterfaces)
             {
                 lang::EventObject aEvent;
-                aEvent.Source = uno::Reference< util::XRefreshable >(const_cast<ScHeaderFieldsObj*>(this));
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(const_cast<ScHeaderFieldsObj*>(this)));
                 sal_uInt32 i(0);
                 while (i < nLength)
                 {
@@ -1202,7 +1200,7 @@ uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::Runtim
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        uno::Sequence<uno::Type> aParentTypes = OComponentHelper::getTypes();
+        uno::Sequence<uno::Type> aParentTypes(OComponentHelper::getTypes());
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
@@ -1364,7 +1362,7 @@ void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& 
     ScUnoGuard aGuard;
     if (xTextRange.is())
     {
-        uno::Reference<text::XText> xText = xTextRange->getText();
+        uno::Reference<text::XText> xText(xTextRange->getText());
         if (xText.is())
         {
             xText->insertTextContent( xTextRange, this, TRUE );
@@ -1419,14 +1417,14 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScHeaderFieldObj::getPropertySe
     if (nType == SC_SERVICE_FILEFIELD)
     {
         //  file field has different properties
-        static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo =
-            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+        static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo(
+            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
         return aFileFieldInfo;
     }
     else
     {
-        static uno::Reference<beans::XPropertySetInfo> aRef =
-            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+        static uno::Reference<beans::XPropertySetInfo> aRef(
+            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
         return aRef;
     }
 }
@@ -1438,7 +1436,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
     {
         sal_Int16 nIntVal;
@@ -1474,7 +1472,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
 
     //! Properties?
     uno::Any aRet;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     // anchor type is always "as character", text wrap always "none"
 
