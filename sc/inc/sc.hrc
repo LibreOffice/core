@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:46:48 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 10:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,9 +1331,11 @@
 #define STR_END                 (STR_START + 401)
 
 #define BMP_START               (STR_END)
+
 // Navigator
-#define RID_BMP_EXPAND          (BMP_START)
-#define RID_BMP_COLLAPSE        (BMP_START + 1)
+// not used anymore: RID_BMP_EXPAND, RID_BMP_COLLAPSE
+//#define    RID_BMP_EXPAND          (BMP_START)
+//#define    RID_BMP_COLLAPSE        (BMP_START + 1)
 #define RID_IMG_DROP_URL        (BMP_START + 2)
 #define RID_IMG_DROP_LINK       (BMP_START + 3)
 #define RID_IMG_DROP_COPY       (BMP_START + 4)
