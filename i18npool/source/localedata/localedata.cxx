@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-06-01 01:46:29 $
+ *  last change: $Author: er $ $Date: 2002-07-01 11:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,12 +804,12 @@ void* SAL_CALL LocaleData::getFunctionSymbolByName( const OUString& localeName, 
             }
         }
         //dll not loaded, load it and add it to the list
-#ifdef SAL_W32
-        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 4);
-        aBuf.appendAscii(aDllsTable[i].pDLL).appendAscii(".dll");
+#ifdef SAL_DLLPREFIX
+        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 6);    // mostly "lib*.so"
+        aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aDllsTable[i].pDLL).appendAscii( SAL_DLLEXTENSION );
 #else
-        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 6);
-        aBuf.appendAscii("lib").appendAscii(aDllsTable[i].pDLL).appendAscii(".so");
+        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 4);    // mostly "*.dll"
+        aBuf.appendAscii(aDllsTable[i].pDLL).appendAscii( SAL_DLLEXTENSION );
 #endif
         osl::Module *module = new osl::Module();
         if ( module->load(aBuf.makeStringAndClear()) ) {
