@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 15:59:13 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 15:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,13 +779,15 @@ SdrPage* SdPage::Clone() const
 SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 {
     const PresObjKind eKind = ((SdPage*)this)->GetPresObjKind(pObj);
+#ifndef SVX_LIGHT
     if( eKind != PRESOBJ_NONE )
     {
         return ((SdPage*)this)->GetStyleSheetForPresObj(eKind);
     }
-    else
-    {
-        return FmFormPage::GetTextStyleSheetForObject( pObj );
-    }
+#else
+    DBG_ASSERT(eKind == PRESOBJ_NONE, "Masterpage nicht gefunden");
+#endif
+
+    return FmFormPage::GetTextStyleSheetForObject( pObj );
 }
 
