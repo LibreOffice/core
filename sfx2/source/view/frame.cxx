@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:29:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,6 @@ TYPEINIT1(SfxFrame, SfxListener);
 TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
 
-void SfxFrame::SetLoadCancelable_Impl( SfxCancellable* pCbl )
-{
-    delete pImp->pLoadCancellable;
-    pImp->pLoadCancellable = pCbl;
-}
-
 SfxFrame::SfxFrame(SfxFrame* pParent):
     pParentFrame( pParent ),
     pChildArr(0),
@@ -283,11 +277,7 @@ void SfxFrame::Clear_Impl()
     {
         pWin = pViewSh->GetWindow();
         if ( pWin )
-        {
-            if ( pWin->GetType() ==  RSC_SPLITWINDOW )
-                ((SplitWindow*)pWin)->SetUpdateMode( sal_False );
             pWin->Hide();
-        }
     }
 
     sal_Bool bRet = sal_True;
@@ -315,15 +305,7 @@ void SfxFrame::Clear_Impl()
     else
     {
         if ( pWin )
-        {
-            if ( pWin->GetType() ==  RSC_SPLITWINDOW )
-            {
-                ((SplitWindow*)pWin)->SetUpdateMode( sal_True );
-                ((SplitWindow*)pWin)->Show();
-            }
-            else
-                pWin->Show();
-        }
+            pWin->Show();
     }
 }
 
@@ -593,22 +575,6 @@ sal_Bool SfxFrame::InsertDocument( SfxObjectShell *pDoc )
     return sal_True;
 }
 
-void SfxFrame::SetLoadEnvironment_Impl( LoadEnvironment_Impl* pEnv )
-{
-    if ( pImp->pLoadEnv )
-        pImp->pLoadEnv->EndListening( *pImp );
-
-    pImp->pLoadEnv = pEnv;
-
-    if ( pImp->pLoadEnv && !pImp->pLoadEnv->IsListening( *pImp ) )
-        pImp->pLoadEnv->StartListening( *pImp );
-}
-
-LoadEnvironment_Impl* SfxFrame::GetLoadEnvironment_Impl() const
-{
-    return pImp->pLoadEnv;
-}
-
 void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
 {
     if( !pImp->bInCancelTransfers )
@@ -639,9 +605,6 @@ void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
 
         //  ggf. StarOne-Loader canceln
         SfxFrameWeak wFrame( this );
-        if( wFrame.Is() && pImp->pLoadEnv && bCancelLoadEnv )
-            pImp->pLoadEnv->CancelTransfers();
-
         if (wFrame.Is())
             pImp->bInCancelTransfers = sal_False;
     }
@@ -878,11 +841,6 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
             pImp->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
     }
     return pImp->pDescr;
-}
-
-sal_Bool SfxFrame::TransferForReplaceInProgress() const
-{
-    return pImp->pLoadEnv && pImp->pLoadEnv->GetObjectShell() != GetCurrentDocument();
 }
 
 //-------------------------------------------------------------------------
