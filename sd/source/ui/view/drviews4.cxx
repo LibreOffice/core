@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-14 17:44:36 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 09:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,16 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                                  pFldItem->GetField()->ISA( SvxExtFileField ) ||
                                  pFldItem->GetField()->ISA( SvxAuthorField ) ) )
             {
-                SdFieldPopup aFieldPopup( pFldItem->GetField() );
+                LanguageType eLanguage( LANGUAGE_SYSTEM );
+
+                // #101743# Format popup with outliner language, if possible
+                if( pOLV->GetOutliner() )
+                {
+                    ESelection aSelection( pOLV->GetSelection() );
+                    eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.nStartPara, aSelection.nStartPos );
+                }
+
+                SdFieldPopup aFieldPopup( pFldItem->GetField(), eLanguage );
 
                 if ( rCEvt.IsMouseEvent() )
                     aMPos = rCEvt.GetMousePosPixel();

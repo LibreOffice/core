@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 09:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,10 @@ class SdFieldPopup : public PopupMenu
 private:
     const SvxFieldData* pField;
 
-    void                Fill();
+    void                Fill( LanguageType eLanguage );
 
 public:
-                        SdFieldPopup( const SvxFieldData* pInField );
+                        SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage );
                         ~SdFieldPopup();
 
     //virtual void      Select();
