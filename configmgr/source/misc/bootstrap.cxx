@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 15:30:21 $
+ *  last change: $Author: jb $ $Date: 2001-05-31 11:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,9 +594,16 @@ namespace configmgr
     sal_Bool ConnectionSettings::getReinitializeFlag() const { return m_aSettings.getBoolSetting(SETTING_REINITIALIZE); }
 
 // ---------------------------------------------------------------------------------------
+    static inline bool isValidFileURL(OUString const& _sFileURL)
+    {
+        OUString sSystemPath;
+        return _sFileURL.getLength() && oslOK(osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
+   }
+// ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::isValidPathSetting(Settings::Name const& _sSetting) const
     {
-        return haveSetting(_sSetting); // now normalized and validated on input
+        return haveSetting(_sSetting) &&
+                isValidFileURL(m_aSettings.getStringSetting(_sSetting));
     }
 
 // ---------------------------------------------------------------------------------------
@@ -614,16 +621,23 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin)
     {
-        OUString sNormalized;
+        OUString sFileURL;
 
 #ifdef TF_FILEURL
-        bool bOK = oslOK(osl_getFileURLFromSystemPath(_sSystemPath.pData, &sNormalized.pData));
+        bool bOK = _sSystemPath.getLength() &&  oslOK(osl::File::getFileURLFromSystemPath(_sSystemPath, sFileURL));
+
+        if (!bOK)
+        {
+            bOK = isValidFileURL(_sSystemPath);
+            if (bOK)
+                sFileURL = _sSystemPath;
+        }
 #else
-        bool bOK = oslOK(osl_normalizePath(_sSystemPath.pData, &sNormalized.pData));
+        bool bOK = oslOK(osl_normalizePath(_sSystemPath.pData, &sFileURL.pData));
 #endif
         if (bOK)
         {
-            putSetting(_pSetting, Settings::Setting(sNormalized, _eOrigin));
+            putSetting(_pSetting, Settings::Setting(sFileURL, _eOrigin));
         }
         else
         {
@@ -1247,38 +1261,46 @@ namespace {
     }
 
 // ----------------------------------------------------------------------------------
+// locate the office install and bootstrap ini
+
+    static bool locateBootstrapProfile(OUString& _rOfficeInstallPath, OUString& _rProfileFile)
+    {
+        // get the bootstrap.ini file, where we find basic informations about the version of the product
+        // we're running in
+        // the bootstrap.ini resides in the same dir as our executable
+        OUString sBootstrap;
+        osl_getExecutableFile(&sBootstrap.pData);
+
+        // take care for the office install path
+        _rOfficeInstallPath = sBootstrap;
+        // for this, cut two levels from the executable (the executable name and the program directory)
+        moveUpOneDirectory(_rOfficeInstallPath);
+        moveUpOneDirectory(_rOfficeInstallPath);
+        CFG_TRACE_INFO("provider bootstrapping: calculated office install path: %s", OUSTRING2ASCII(_rOfficeInstallPath));
+
+        // cut the executable file name and append the bootstrap ini file name
+        moveUpOneDirectory(sBootstrap,true);
+        sBootstrap += OUString::createFromAscii(BOOTSTRAP_FILE);
+
+        CFG_TRACE_INFO_NI("provider bootstrapping: bootstrap file to find: %s", OUSTRING2ASCII(sBootstrap));
+        _rProfileFile = sBootstrap;
+
+        osl::DirectoryItem aCheckPath;
+        return oslOK(aCheckPath.get(sBootstrap, aCheckPath));
+    }
+
+// ----------------------------------------------------------------------------------
 // locate the user path
 
-    RetVal locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath)
+    RetVal locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath)
     {
-        osl::DirectoryItem aCheckPath;
         rtl_TextEncoding const nCvtEncoding = osl_getThreadTextEncoding();
 
         RetVal nStatus = BOOTSTRAP_INI_NOT_FOUND;
 
-        OUString sProductVersionFile;
         try
         {
-            // get the bootstrap.ini file, where we find basic informations about the version of the product
-            // we're running in
-            // the bootstrap.ini resides in the same dir as our executable
-            OUString sBootstrap;
-            osl_getExecutableFile(&sBootstrap.pData);
-
-            // take care for the office install path
-            _rOfficeInstallPath = sBootstrap;
-            // for this, cut two levels from the executable (the executable name and the program directory)
-            moveUpOneDirectory(_rOfficeInstallPath);
-            moveUpOneDirectory(_rOfficeInstallPath);
-            CFG_TRACE_INFO("provider bootstrapping: calculated office install path: %s", OUSTRING2ASCII(_rOfficeInstallPath));
-
-            // cut the executable file name and append the bootstrap ini file name
-            moveUpOneDirectory(sBootstrap,true);
-            sBootstrap += OUString::createFromAscii(BOOTSTRAP_FILE);
-
-            CFG_TRACE_INFO_NI("provider bootstrapping: bootstrap file to find: %s", OUSTRING2ASCII(sBootstrap));
-
-            if (!oslOK(aCheckPath.get(sBootstrap, aCheckPath)))
+            if ( !locateBootstrapProfile(_rOfficeInstallPath,_sIniPath) )
             {
                 CFG_TRACE_WARNING_NI("provider bootstrapping: bootstrap file not found");
 
@@ -1286,7 +1308,7 @@ namespace {
             }
 
             // get the path to the sversion.ini file from the bootstrap file
-            ::osl::Profile aBootstrapFile(sBootstrap);
+            ::osl::Profile aBootstrapFile(_sIniPath);
 
             // get the path to the sversion.ini
             OString sConvertable = aBootstrapFile.readString(
@@ -1294,7 +1316,7 @@ namespace {
                     OString(BOOSTRAP_ITEM_LOCATION),
                     OString());
 
-            sProductVersionFile = rtl::OStringToOUString(sConvertable, nCvtEncoding);
+            OUString sProductVersionFile = rtl::OStringToOUString(sConvertable, nCvtEncoding);
 
             if (sProductVersionFile.getLength() == 0)
             {
@@ -1323,8 +1345,12 @@ namespace {
                 }
                 sProductVersionFile = sNormalized;
             }
+
             CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find (normalized): %s", OUSTRING2ASCII(sProductVersionFile));
 
+            _sIniPath = sProductVersionFile;
+
+            osl::DirectoryItem aCheckPath;
             if (!oslOK(aCheckPath.get(sProductVersionFile, aCheckPath)))
             {
                 CFG_TRACE_ERROR_NI("provider bootstrapping: product version file not found");
@@ -1364,7 +1390,6 @@ namespace {
             CFG_TRACE_INFO_NI("provider bootstrapping: raw user installation directory: %s", OUSTRING2ASCII(sUserPath));
 
             nStatus = BOOTSTRAP_OK; //every ini read ok
-
             {
                 // normalize the path
                 OUString sNormalized;
@@ -1384,6 +1409,7 @@ namespace {
 
             CFG_TRACE_INFO_NI("provider bootstrapping: user install directory (normalized): %s", OUSTRING2ASCII(sUserPath));
             _rUserInstallPath = sUserPath;
+            _sIniPath = OUString();
             OSL_ASSERT(nStatus == BOOTSTRAP_OK);
         }
         catch (::std::exception& e)
@@ -1400,17 +1426,17 @@ namespace {
 // locateBootstrapFiles
 // ---------------------------------------------------------------------------------------
 
-    // ----------------------------------------------------------------------------------
-    RetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfileFile)
+    static bool locateConfigProfile(OUString const& _sBasePath, OUString& _rProfileFile)
     {
-        // get the office/user install directories (the latter may be empty resp. unknown)
-        RetVal nLocateError = locateUserInstallationPath(_rOfficeInstall, _rUserInstallPath);
+        if ( !isValidFileURL(_sBasePath) ) // do we have a location ?
+            return false;
 
         // the name of our very personal ini file
         const OUString sIniName(RTL_CONSTASCII_USTRINGPARAM(CONFIGURATION_PROFILE_NAME));
 
-        // the composed name of the user dir and the ini file name
-        OUString sProfileFile = _rUserInstallPath;
+         // the composed name of the user dir and the ini file name
+        OUString sProfileFile = _sBasePath;
+
         sProfileFile += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/"));
         sProfileFile += sIniName;
 
@@ -1418,16 +1444,48 @@ namespace {
 
         // does our ini file exist in the user directory ?
         ::osl::DirectoryItem aItem;
-        if (oslOK( aItem.get(sProfileFile, aItem) ))
-        {
-            _rProfileFile = sProfileFile;
-            nLocateError = BOOTSTRAP_OK;
-        }
-        else if (nLocateError == BOOTSTRAP_OK)
-        {
-            nLocateError = SREGISTRY_INI_NOT_FOUND;
-        }
+        bool bExists = oslOK( aItem.get(sProfileFile, aItem) );
 
+        if (bExists) _rProfileFile = sProfileFile;
+
+        return bExists;
+    }
+
+    // ----------------------------------------------------------------------------------
+    RetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfileFile)
+    {
+        // get the office/user install directories (the latter may be empty resp. unknown)
+        RetVal nLocateError = locateUserInstallationPath(_rOfficeInstall, _rUserInstallPath, _rProfileFile);
+
+        switch (nLocateError)
+        {
+        case BOOTSTRAP_OK: // check if we have a sregistry.ini
+            OSL_ASSERT( isValidFileURL(_rUserInstallPath) );
+            OSL_ASSERT( _rProfileFile.getLength() == 0 );
+
+            if ( !locateConfigProfile(_rUserInstallPath,_rProfileFile) )
+            {
+                nLocateError = SREGISTRY_INI_NOT_FOUND;
+            }
+            break;
+
+        case BOOTSTRAP_INI_NOT_FOUND: // support installations without bootstrap.ini and sversion.ini
+            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
+            {
+                OUString sProfile;
+                if ( locateConfigProfile(_rOfficeInstall,sProfile) )
+                {
+                    nLocateError = BOOTSTRAP_OK;
+                    _rUserInstallPath = _rOfficeInstall;
+                    _rProfileFile = sProfile;
+                }
+            }
+            break;
+
+        default:
+            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
+            break;
+        }
         return nLocateError;
     }
 
