@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
-#include <string.h>
 
 //.........................................................................
 namespace xmloff
@@ -87,7 +86,7 @@ namespace xmloff
 
     XMLPropertyMapEntry aControlStyleProperties[] =
     {
-        { PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO, sXML_background_color,    XML_TYPE_COLOR, 0 },
+        { PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,       sXML_background_color,      XML_TYPE_COLOR, 0 },
         { PROPERTY_ALIGN,           XML_NAMESPACE_STYLE,    sXML_text_align,            XML_TYPE_TEXT_ALIGN, 0 },
         { PROPERTY_BORDER,          XML_NAMESPACE_FO,       sXML_border,                XML_TYPE_CONTROL_BORDER, 0 },
         { "FontCharWidth",          XML_NAMESPACE_STYLE,    sXML_font_char_width,       XML_TYPE_NUMBER16, 0 },
@@ -101,13 +100,15 @@ namespace xmloff
         { "FontSlant",              XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
         { "FontStrikeout",          XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_TEXT_CROSSEDOUT, 0 },
         { "FontStyleName",          XML_NAMESPACE_STYLE,    sXML_font_style_name,       XML_TYPE_STRING, 0 },
-        // "FontType" - ignored - UnoControls don't use a FontType
         { "FontUnderline",          XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
         { "FontWeight",             XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
         { "FontWidth",              XML_NAMESPACE_STYLE,    sXML_font_width,            XML_TYPE_FONT_WIDTH, 0 },
         { "FontWordLineMode",       XML_NAMESPACE_FO,       sXML_score_spaces,          XML_TYPE_NBOOL, 0 },
         { "TextColor",              XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
         { PROPERTY_FORMATKEY,       XML_NAMESPACE_STYLE,    sXML_data_style_name,       XML_TYPE_STRING, 0 },
+        { "FontEmphasisMark",       XML_NAMESPACE_STYLE,    sXML_text_emphasize,        XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 },
+        { "FontRelief",             XML_NAMESPACE_STYLE,    sXML_font_relief,           XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 },
+        { "TextLineColor",          XML_NAMESPACE_STYLE,    sXML_text_underline_color,  XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
         { 0, 0, 0, 0 }
     };
 
@@ -148,6 +149,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/28 15:01:19  fs
+ *  #86712# added a format key property
+ *
  *  Revision 1.8  2001/04/19 13:23:48  fs
  *  arggghhhh .... remove the (double) TextColor entry
  *
