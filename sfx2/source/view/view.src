@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:19:28 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ String STR_PRINTER_NOTDEFAULT
     TEXT [ ENGLISH ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?" ;
     TEXT[ english_us ] = "This document was formatted for the printer $1, but that printer is not the default printer.\nDo you want to use the default printer $2 anyway?";
     TEXT[ portuguese ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ russian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
+    TEXT[ russian ] = "İòîò äîêóìåíò îòôîğìàòèğîâàí äëÿ ïğèíòåğà $1. Íî äàííûé ïğèíòåğ íå ÿâëÿåòñÿ ïğèíòåğîì ïî óìîë÷àíèş.\nÈñïîëüçîâàòü ïğèíòåğ ïî óìîë÷àíèş $2?";
     TEXT[ greek ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ dutch ] = "Het document werd geformatteerd voor printer $1. Deze printer is echter geen standaarprinter.\nGebruik standaardprinter $2?";
     TEXT[ french ] = "Ce document a été formaté pour l'imprimante $1 qui n'est pas l'imprimante par défaut.\nUtiliser l'imprimante par défaut $2 ?";
@@ -830,11 +830,11 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ french ] = "Une boîte d'envoi est nécessaire pour exécuter cette action.\nCréez une boîte d'envoi avant de réessayer." ;
     Message [ dutch ] = "Voor de door u verlangde activiteit is een postvak UIT nodig.\nMaak een postvak UIT voordat u deze opdracht opnieuw selecteert." ;
     Message [ portuguese ] = "É necessária uma caixa de envio para executar esta acção.\nCrie primeiro uma caixa de envio e tente novamente." ;
-    Message[ chinese_simplified ] = "Ö´ĞĞÕâ¸ö²Ù×÷µÄÇ°ÌáÊÇÄúÒÑ¾­½¨Á¢ÁËÒ»¸ö·¢¼şÏä¡£\nÇëÄúÔÚ½¨Á¢Ò»¸ö·¢¼şÏäÖ®ºóÔÙÖØĞÂÖ´ĞĞÕâ¸öÃüÁî¡£";
+    Message[ chinese_simplified ] = "Ö´ĞĞÕâ¸ö²Ù×÷µÄÇ°ÌáÊÇÒÑ¾­½¨Á¢ÁËÒ»¸ö·¢¼şÏä¡£\nÇëÄúÔÚ½¨Á¢Ò»¸ö·¢¼şÏäÖ®ºóÔÙÖØĞÂÖ´ĞĞÕâ¸öÃüÁî¡£";
     Message[ russian ] = "Äëÿ âûáğàííîé Âàìè îïåğàöèè íåîáõîäèìà ïàïêà \"Îòïğàâëåííûå\".\nÏğåæäå ÷åì Âû ïîâòîğèòå ıòó îïåğàöèş, ñîçäàéòå, ïîæàëóéñòà, ïàïêó \"Îòïğàâëåííûå\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszê utwórz skrzynkê nadawcz¹, zanim wykonasz ponownie tê akcjê.";
     Message[ japanese ] = "‘I‘ğ‚µ‚½±¸¼®İ‚ÌÀs‚É‚ÍA‘—MÄÚ²‚ª•K—v‚Å‚·B\n‚±‚Ì±¸¼®İ‚ğÀs‚µ‚È‚¨‚·‘O‚ÉA‘—MÄÚ²‚ğŠi”[‚µ‚Ü‚·B";
-    Message[ chinese_traditional ] = "°õ¦æ³o­Ó°Ê§@­n¨D±z°t¸m¤@­Ó±H¥ó§X¡C\n½Ğ±z«Ø¥ß¤@­Ó±H¥ó§X¡AµM¦Z¦b­«·s°õ¦æ³o­Ó°Ê§@¡C";
+    Message[ chinese_traditional ] = "°õ¦æ³o­Ó°Ê§@­n¨D¥ı°t¸m¤@­Ó±H¥ó§X¡C\n½Ğ«Ø¥ß¤@­Ó±H¥ó§X¡AµM¦Z­«·s°õ¦æ³o­Ó°Ê§@¡C";
     Message[ greek ] = "Ãéá íá åêôåëåóôåß áõôŞ ç åíİñãåéá áğáéôåßôáé ï öÜêåëïò 'Åîåñ÷üìåíá'\nĞáñáêáëş äçìéïõñãŞóôå áõôüí ôïí öÜêåëï ğñéí ôçí åğüìåíç åêôİëåóç áõôŞ? ";
     Message[ korean ] = "¼±ÅÃÇÑ ÀÛ¾÷¿¡´Â º¸³¾ÆíÁöÇÔÀÌ ÇÊ¿äÇÕ´Ï´Ù. \nÀÌ ÀÛ¾÷À» Àç½ÇÇàÇÏ±â Àü¿¡ º¸³¾ÆíÁöÇÔÀ» ¸¸µå½Ê½Ã¿À.";
     Message[ arabic ] = "ÊäİíĞ ÇáÅÌÑÇÁ ÇáĞí ŞãÊ ÈÇÎÊíÇÑå íÍÊÇÌ Åáì ÓáÉ ÕÇÏÑÇÊ.\nÇáÑÌÇÁ ÅäÔÇÁ ÓáÉ ÕÇÏÑÇÊ¡ ŞÈá ãÍÇæáÉ ÊäİíĞ åĞÇ ÇáÅÌÑÇÁ ãÌÏÏÇğ.";
@@ -887,7 +887,7 @@ String STR_FRAMESIZE
     Text [ french ] = "Taille du Frame" ;
     Text [ dutch ] = "Kadergrootte" ;
     Text [ portuguese ] = "Tamanho da moldura" ;
-    Text[ chinese_simplified ] = "¿ò´óĞ¡";
+    Text[ chinese_simplified ] = "¿ò¶ÔÏó´óĞ¡";
     Text[ russian ] = "Ğàçìåğ êàäğà";
     Text[ polish ] = "Wielkoœæ ramki";
     Text[ japanese ] = "ÌÚ°Ñ »²½Ş";
@@ -913,7 +913,7 @@ String RID_EXTERNALFRAME_TOOLBOX
     Text [ danish ] = "Funktionslinje" ;
     Text [ portuguese_brazilian ] = "Funktionsleiste" ;
     Text [ portuguese ] = "Barra de funções" ;
-    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
+    Text[ chinese_simplified ] = "¹¦ÄÜÀ¸";
     Text[ russian ] = "Ïàíåëü ôóíêöèé";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "Ì§İ¸¼®İ ÊŞ°";
@@ -1098,6 +1098,7 @@ String STR_FORWARDMAIL
     Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
     Text[ finnish ] = "Viesti edelleenlähetettiin säännön mukaan.\nAlkuperäinen viesti liitteenä.";
 };
+
 
 
 
