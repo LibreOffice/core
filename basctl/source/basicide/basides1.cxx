@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: tbe $ $Date: 2000-12-06 13:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 
                         IDEResId nId( RID_STR_SEARCHREPLACES );
                         String aReplStr( nId );
-                        aReplStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), nFound );
+                        aReplStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), String::CreateFromInt32( nFound ) );
                         InfoBox( pCurWin, aReplStr ).Execute();
                     }
                     else
