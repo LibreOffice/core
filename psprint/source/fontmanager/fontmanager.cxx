@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
+ *  last change: $Author: pl $ $Date: 2002-05-21 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,14 +1602,13 @@ void PrintFontManager::initialize( void* pInitDisplay )
     char** pPaths = XGetFontPath( pDisplay, &nPaths );
 
     int nPos = 0;
-    int nPort = 0;
     bool bServerDirs = false;
     for( i = 0; i < nPaths; i++ )
     {
         ByteString aPath( pPaths[i] );
         if( ! bServerDirs
             && ( nPos = aPath.Search( ':' ) ) != STRING_NOTFOUND
-            && ( nPort = aPath.Copy( nPos+1 ).ToInt32() ) > 0 )
+            && ( !aPath.Equals( ":unscaled", nPos, 9 ) ) )
         {
             bServerDirs = true;
             getServerDirectories();
