@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:32:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
             const XPolyPolygon& rXPolyPoly = pPathObj->GetPathPoly();
 
             for ( USHORT i = 0, nPolyCount = rXPolyPoly.Count(); i < nPolyCount; i++ )
-                aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i ), NULL ) );
+                aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i )) );
+//BFS09             aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i ), NULL ) );
         }
 
         pModel->SetChanged( sal_False );
