@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:07 $
+ *  last change:$Date: 2004-07-23 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.ITypeDescription;
@@ -248,6 +249,82 @@ public class dbg {
         } catch(com.sun.star.uno.Exception e) {
                 out.println("Exception!!!!");
             e.printStackTrace(out);
+        }
+    }
+
+    /**
+     * Print the names and the values of a sequnze of <code>PropertyValue</code>
+     * to to standard out.
+     * @param ps The property which should displayed
+     * @see com.sun.star.beans.PropertyValue
+     */
+
+    public static void printProperyValueSequenzePairs(PropertyValue[] ps){
+        for( int i = 0; i < ps.length; i++){
+            printProperyValuePairs(ps[i], new PrintWriter(System.out));
+        }
+    }
+
+    /**
+     * Print the names and the values of a sequenze of <code>PropertyValue</code>
+     * to a print writer.
+     * @param ps The property which should displayed
+     * @param out The print writer which is used as output.
+     * @see com.sun.star.beans.PropertyValue
+     */
+    public static void printProperyValueSequenzePairs(PropertyValue[] ps, PrintWriter out){
+        for( int i = 0; i < ps.length; i++){
+            printProperyValuePairs(ps[i], out);
+        }
+    }
+
+    /**
+     * Print the name and the value of a <code>PropertyValue</code> to to standard out.
+     * @param ps The property which should displayed
+     * @see com.sun.star.beans.PropertyValue
+     */
+    public static void printProperyValuePairs(PropertyValue ps){
+        printProperyValuePairs(ps, new PrintWriter(System.out));
+    }
+
+    /**
+     * Print the name and the value of a <code>PropertyValue</code> to a print writer.
+     * @param ps The property which should displayed
+     * @param out The print writer which is used as output.
+     * @see com.sun.star.beans.PropertyValue
+     */
+    public static void printProperyValuePairs(PropertyValue ps, PrintWriter out){
+
+        if (ps.Value instanceof String[] ){
+            String[] values = (String[]) ps.Value;
+            String oneValue = "value is an empty String[]";
+            if (values.length > 0){
+                oneValue = "['";
+                for( int i=0; i < values.length; i++){
+                    oneValue += values[i];
+                    if (i+1 < values.length) oneValue += "';'";
+                }
+                oneValue += "']";
+            }
+            out.println("--------");
+            out.println("   Name: '" + ps.Name + "' contains String[]:");
+            out.println(oneValue);
+            out.println("--------");
+
+        } else if (ps.Value instanceof PropertyValue){
+            out.println("--------");
+            out.println("   Name: '" + ps.Name + "' contains PropertyValue:");
+            printProperyValuePairs((PropertyValue)ps.Value, out);
+            out.println("--------");
+
+        } else if (ps.Value instanceof PropertyValue[]){
+            out.println("--------");
+            out.println("   Name: '" + ps.Name + "' contains PropertyValue[]:");
+            printProperyValueSequenzePairs((PropertyValue[])ps.Value, out);
+            out.println("--------");
+
+        } else {
+            out.println("Name: '" + ps.Name + "' Value: '" + ps.Value.toString() + "'");
         }
     }
 
