@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:55:40 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΥΒΙύΌ¶";
                 Text[ russian ] = "Γλΰβΰ ββεπυ";
                 Text[ polish ] = "Rozdzia³ do gσry";
-                Text[ japanese ] = "Ν‚ΜΪΝήΩ‚πγ‚°‚ι";
+                Text[ japanese ] = "Ν‚π‘O‚ΙΪ“®";
                 Text[ chinese_traditional ] = "³Ή¤Ι―Ε";
                 Text[ arabic ] = "έΥα αΓΪαμ";
                 Text[ greek ] = "Προβιβασμός κεφαλαίου";
@@ -355,7 +355,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΥΒ½µΌ¶";
                 Text[ russian ] = "Γλΰβΰ βνθη";
                 Text[ polish ] = "Rozdzia³ w dσ³";
-                Text[ japanese ] = "Ν‚ΜΪΝήΩ‚π‰Ί‚°‚ι";
+                Text[ japanese ] = "Ν‚πγ‚λ‚ΙΪ“®";
                 Text[ chinese_traditional ] = "³Ή­°―Ε";
                 Text[ arabic ] = "έΥα αΓΣέα";
                 Text[ greek ] = "Υποβιβασμός κεφαλαίου";
@@ -409,7 +409,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΗΠ»»ΔΪΘέΚΣΝΌ";
                 Text[ russian ] = "Οεπεκλώχθςό βθδ ρξδεπζΰνθÿ";
                 Text[ polish ] = "Prze³Ήcz widok treci";
-                Text[ japanese ] = "“ΰ—e‚ΜΛή­°‚πΨ‚θ·‚¦";
+                Text[ japanese ] = "“ΰ—eΛή­°‚ΜΨ‚θ·‚¦";
                 Text[ chinese_traditional ] = "¤Α΄«¤Ί®eΐΛµψ";
                 Text[ arabic ] = "ΚΘΟνα ΨΡνήΙ ΪΡΦ ΗαγΝΚζνΗΚ";
                 Text[ greek ] = "Προβολή περιεχομένων Ναι/Όχι";
