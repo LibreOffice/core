@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:13:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4448,7 +4448,12 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
         // sollte es ein OLE-Object sein?
         if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect );
+        {
+            // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf,
+                              aBoundRect, rObjData.nCalledByGroup );
+            // <--
+        }
         if( !pRet )
         {
             pRet = new SdrGrafObj;
@@ -6818,8 +6823,12 @@ BOOL SvxMSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
     return TRUE;
 }
 
-SdrObject* SvxMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
-                                        const Rectangle& rBoundRect ) const
+// --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
+SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
+                                       const Graphic& rGrf,
+                                       const Rectangle& rBoundRect,
+                                       const int _nCalledByGroup ) const
+// <--
 {
     SdrObject* pRet = 0;
     String sStorageName;
