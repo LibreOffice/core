@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:37:21 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,6 @@ class X11SalFrame;
 class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef SIG_PF
-typedef void SIG_FUNC_TYP(int);
-typedef SIG_FUNC_TYP *SIG_TYP;
-#define SIG_PF SIG_TYP
-#endif
 
 DECLARE_LIST( SalDisplays, SalDisplay* )
 
@@ -102,7 +97,7 @@ typedef unsigned int pthread_t;
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalData
 {
-            SIG_TYP             sig_[30];
+protected:
             BOOL                bNoExceptions_;
 
             SalXLib            *pXLib_;
@@ -118,9 +113,9 @@ public:
 
 public:
                                 SalData();
-                                ~SalData();
+            virtual         ~SalData();
 
-            void                Init();
+            virtual void        Init();
 
             long                ShutDown() const;
             long                Close() const;
@@ -148,6 +143,8 @@ public:
     inline  void                StopTimer();
             void                Timeout() const;
 
+    static int XErrorHdl( Display*, XErrorEvent* );
+    static int XIOErrorHdl( Display* );
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -171,7 +168,6 @@ inline void SalData::XError( Display *pDisplay, XErrorEvent *pEvent ) const
 class YieldMutexReleaser
 {
     ULONG               m_nYieldCount;
-    SalYieldMutex*      m_pSalInstYieldMutex;
 public:
     inline YieldMutexReleaser();
     inline ~YieldMutexReleaser();
@@ -179,30 +175,12 @@ public:
 
 inline YieldMutexReleaser::YieldMutexReleaser()
 {
-    SalData *pSalData       = GetSalData();
-    m_pSalInstYieldMutex    = static_cast<SalYieldMutex*>(pSalData->pInstance_->GetYieldMutex());
-
-    // release YieldMutex as often as acquired
-    ULONG i;
-    if ( m_pSalInstYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
-    {
-        m_nYieldCount = m_pSalInstYieldMutex->GetAcquireCount();
-        for ( i = 0; i < m_nYieldCount; i++ )
-            m_pSalInstYieldMutex->release();
-    }
-    else
-        m_nYieldCount = 0;
+    m_nYieldCount = GetSalData()->pInstance_->ReleaseYieldMutex();
 }
 
 inline YieldMutexReleaser::~YieldMutexReleaser()
 {
-    // acquire YieldMutex again
-    while ( m_nYieldCount )
-    {
-        m_pSalInstYieldMutex->acquire();
-        m_nYieldCount--;
-    }
+    GetSalData()->pInstance_->AcquireYieldMutex( m_nYieldCount );
 }
 
 #endif // _SV_SALDATA_HXX
