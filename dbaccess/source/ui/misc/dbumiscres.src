@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.55 $
+*  $Revision: 1.56 $
 *
-*  last change: $Author: hr $ $Date: 2003-04-29 17:25:30 $
+*  last change: $Author: hr $ $Date: 2003-06-13 12:55:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -79,29 +79,30 @@ String STR_CONNUINAMES
     Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
     Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
     Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-    Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;�����;����������� �������;�������� �����";
-    Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
-    Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaC�lculo;LivroEndere�os";
-    Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;�������;������� ������;������� �����������";
-    Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
+    Text[ russian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;�����;����������� �������;�������� �����";
+    Text[ finnish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Laskentataulut;Osoitteisto";
+    Text[ portuguese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaC�lculo;LivroEndere�os";
+    Text[ greek ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;�������;������� ������;������� �����������";
+    Text[ dutch ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
     Text[ french ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;Carnet d'adresses";
     Text[ spanish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de c�lculo;Libreta de direcciones";
     Text[ italian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
-    Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
+    Text[ danish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
     Text[ swedish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
-    Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi��ka adresowa";
+    Text[ polish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi��ka adresowa";
     Text[ japanese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;テキストファイル;表計算ドキュメント;アドレス帳";
     Text[ korean ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;텍스트;스프레드시트;주소록";
     Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表;通讯簿";
     Text[ chinese_traditional ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文件;通訊錄";
     Text[ turkish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Metin;Hesap �izelgesi;Adres defteri";
-    Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;��;����� �����";
-    Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
-    Text[ thai ] = "Adabas;JDBC;ODBC;ดีเบส;ADO;ข้อความ;กระดาษคำนวณ;สมุดที่อยู่";
-    Text[ czech ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabulka;Kontakty";
+    Text[ arabic ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;��;����� �����";
+    Text[ catalan ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+    Text[ thai ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+    Text[ czech ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabulka;Kontakty";
         Text[ hebrew ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch";
-        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Planilha;Livro de Endere�os";
-        Text[ hindi ] = "Adabas;JDBC;ODBC;dBase;ADO;टेक्स्ट्;स्प्रेडशीट्;पतापुस्तक";
+        Text[ portuguese_brazilian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;Texto;Planilha;Livro de Endere�os";
+        Text[ hindi ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;टेक्स्ट्;स्प्रेडशीट्;पतापुस्तक";
+        Text[ slovak ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Zošit;Adresár";
     };
 };
 
@@ -135,6 +136,7 @@ String 1
     Text[ czech ] = "System";
         Text[ hebrew ] = "System";
         Text[ hindi ] = "Ansi";
+        Text[ slovak ] = "Systém";
     };
 };
 
@@ -167,6 +169,7 @@ Text[ thai ] = "ผิดพลาดขณะกำลังเชื่อม�
     Text[ czech ] = "Chyba při připojování k datovému zdroji";
     Text[ hebrew ] = "Fehler bei der Verbindung mit der Datenquelle";
     Text[ hindi ] = "ड़ॉटा मूल को कनेक्ट करने के समय गलती घटित हुआ";
+    Text[ slovak ] = "Chyba počas pripájania k zdroju dát";
 };
 
 String STR_OBJECT_ALREADY_EXSISTS
@@ -197,6 +200,7 @@ Text[ thai ] = "ผิดพลาดในระหว่างการสร�
     Text[ czech ] = "Chyba při vytváření!";
     Text[ hebrew ] = "Fehler beim Erzeugen";
     Text[ hindi ] = "उत्पन्न करने के समय गलती ।!";
+    Text[ slovak ] = "Chyba počas vytvárania!";
 };
 
 String STR_UNEXPECTED_ERROR
@@ -227,6 +231,7 @@ Text[ thai ] = "เกิดข้อผิดพลาดที่ไม่ค�
     Text[ czech ] = "Došlo k neočekávané chybě. Operace nemohla být provedena.";
     Text[ hebrew ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
     Text[ hindi ] = "एक अज्ञात गलती घटित हुआ । कार्य को पूरा नहीं कर सकते है ।";
+    Text[ slovak ] = "Objavila sa neočakávaná chyba. Operácia nemohla byť vykonaná.";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
@@ -257,6 +262,7 @@ Text[ thai ] = "ไม่สามารถเปิดเอกสาร\n\n$fi
     Text[ czech ] = "Dokument\n\n$file$\n\nnemohl být otevřen.";
     Text[ hebrew ] = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
     Text[ hindi ] = "लेखपत्र\n\n$file$\n\nको खोल नहीं सकते है ।";
+    Text[ slovak ] = "Dokument\n\n$file$\n\nnemohol byť otvorený.";
 };
 
 String STR_MISSING_TABLES_XDROP
@@ -287,6 +293,7 @@ Text[ thai ] = "ไม่สามารถลบตารางได้เน�
     Text[ czech ] = "Tabulka nemohla být zrušena, protože to databázové připojení nepodporuje.";
     Text[ hebrew ] = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
     Text[ hindi ] = "लेखासंचय कनेक्शन समर्थन नहीं करने के कारण सारणी को नहीं मिटा सकते है ।";
+    Text[ slovak ] = "Tabuľka nemohla byť zmazaná, pretože to databázové spojenie nepodporuje.";
 };
 
 String STR_BUTTON_TEXT_ALL
@@ -319,6 +326,7 @@ Text[ thai ] = "~ทั้งหมด";
     Text[ czech ] = "Vše";
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "~सब";
+    Text[ slovak ] = "~Všetko";
 };
 
 String STR_UNDO_COLON
@@ -349,6 +357,7 @@ Text[ thai ] = "เลิกทำ";
     Text[ czech ] = "Zpět:";
     Text[ hebrew ] = "‮ביטול פעולה:‬";
     Text[ hindi ] = "Undo:";
+    Text[ slovak ] = "Späť:";
 };
 
 String STR_REDO_COLON
@@ -379,6 +388,7 @@ Text[ thai ] = "ทำซ้ำ";
     Text[ czech ] = "Znovu:";
     Text[ hebrew ] = "‮שחזור פעולה:‬";
     Text[ hindi ] = "Redo:";
+    Text[ slovak ] = "Znovu:";
 };
 
 String STR_UNKNOWN_TYPE_FOUND
@@ -393,7 +403,10 @@ String STR_UNKNOWN_TYPE_FOUND
     Text[ korean ] = "'#1' 열에 해당하는 열 유형을 찾지 못했습니다.";
     Text[ chinese_simplified ] = "无法为列'#1'找到合适的列类型。";
     Text[ chinese_traditional ] = "無法為欄 '#1' 找到合適的欄類型。";
+    Text[ slovak ] = "Nebol nájdený zodpovedajúci typ stĺpca pre stĺpec '#1'.";
 };
+
+
 
 
 
