@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-06 13:57:58 $
+ *  last change: $Author: ab $ $Date: 2001-04-10 10:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,11 +281,15 @@ void SfxObjectShell::DoHandsOff()
     if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         HandsOff();
 
-    // Force document library container to release storage
+    // Force document library containers to release storage
     SotStorageRef xDummyStorage;
     SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
     if( pDialogCont )
         pDialogCont->setStorage( xDummyStorage );
+
+    SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+    if( pBasicCont )
+        pBasicCont->setStorage( xDummyStorage );
 
     pMedium->Close();
 //  DELETEZ( pMedium );
@@ -1003,10 +1007,14 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
             SvStorage* pStorage = pMedium->GetStorage();
             bOk = SaveCompleted( pStorage );
 
-            // Set storage in document library container
+            // Set storage in document library containers
             SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
             if( pDialogCont )
                 pDialogCont->setStorage( pStorage );
+
+            SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+            if( pBasicCont )
+                pBasicCont->setStorage( pStorage );
         }
         else if( pFilter->UsesStorage() )
             pMedium->GetStorage();
@@ -1965,6 +1973,10 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
             if( pDialogCont )
                 pDialogCont->storeLibrariesToStorage( (SotStorage*)(SvStorage*)xStor );
+
+            SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+            if( pBasicCont )
+                pBasicCont->storeLibrariesToStorage( (SotStorage*)(SvStorage*)xStor );
         }
 
         const SfxFilter* pFilter = rMedium.GetFilter();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:00:44 $
+ *  last change: $Author: ab $ $Date: 2001-04-10 11:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ void SfxObjectShell::InitBasicManager_Impl
 
     // Basic container
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-        ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager );
+        ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager, pStor );
     pBasicCont->acquire();  // Hold via UNO
     pImp->pBasicLibContainer = pBasicCont;
 
