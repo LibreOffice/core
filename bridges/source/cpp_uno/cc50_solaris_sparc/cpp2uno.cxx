@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-07 14:41:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
-#define TRACE(x) OSL_TRACE(x)
-#else
-#define TRACE(x)
-#endif
-
 #include <alloca.h>
 #include <list>
 #include <map>
@@ -90,6 +84,12 @@
 #endif
 
 #include "cc50_solaris_sparc.hxx"
+
+#if OSL_DEBUG_LEVEL > 1
+#define TRACE(x) OSL_TRACE(x)
+#else
+#define TRACE(x)
+#endif
 
 using namespace com::sun::star::uno;
 using namespace std;
@@ -442,12 +442,14 @@ MediateClassData::~MediateClassData()
 {
     TRACE( "> calling ~MediateClassData(): freeing mediate vtables... <\n" );
 
+#if 0
     // this MUST be the absolute last one which is called!
     for ( map< OUString, ClassDataBuffer* >::iterator iPos( m_aClassData.begin() ); iPos != m_aClassData.end(); ++iPos )
     {
         // todo
 //      delete (*iPos).second;
     }
+#endif
 }
 
 //__________________________________________________________________________________________________
