@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:42:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyHandler::updateDependentProperties( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater )
+    void SAL_CALL PropertyHandler::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool )
     {
-        DBG_ERROR( "PropertyHandler::updateDependentProperties: not supported!" );
+        DBG_ERROR( "PropertyHandler::actuatingPropertyChanged: not supported!" );
             // we did not return any properties in getActuatingProperties
     }
 
@@ -256,22 +256,6 @@ namespace pcr
         if ( pFound != m_aSupportedProperties.end() )
             return &(*pFound);
         return NULL;
-    }
-
-    //--------------------------------------------------------------------
-    void PropertyHandler::changeTypeOfSupportedProperty( const sal_Int32 _nPropId, const Type& _rNewType )
-    {
-        OSL_ENSURE( m_bSupportedPropertiesAreKnown, "PropertyHandler::changeTypeOfSupportedProperty: getSupportedProperties has never been called!" );
-            // if this asserts, and the caller has a valid reason, then simply call getSupportedProperties once
-
-        ::std::vector< Property >::iterator pProp = ::std::find_if(
-            m_aSupportedProperties.begin(),
-            m_aSupportedProperties.end(),
-            FindPropertyByHandle( _nPropId )
-        );
-        OSL_ENSURE( pProp != m_aSupportedProperties.end(), "PropertyHandler::changeTypeOfSupportedProperty: This property is not known!" );
-        if ( pProp != m_aSupportedProperties.end() )
-            pProp->Type = _rNewType;
     }
 
     //--------------------------------------------------------------------
