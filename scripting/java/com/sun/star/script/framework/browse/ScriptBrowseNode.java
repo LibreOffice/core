@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-15 17:18:29 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package com.sun.star.script.framework.browse;
 
-import drafts.com.sun.star.script.framework.browse.XBrowseNode;
-import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-15 17:18:29 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 package com.sun.star.script.framework.browse;
 
-import drafts.com.sun.star.script.framework.browse.XBrowseNode;
-import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.Type;
@@ -79,7 +79,7 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
     private String location;
     private Collection browsenodes;
     private XComponentContext m_XCtx;
-    public boolean deletable = false;
+    public boolean deletable = true;
     public boolean editable = false;
 
     public ParcelBrowseNode(String name) {

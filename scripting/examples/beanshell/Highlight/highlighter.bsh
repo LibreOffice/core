@@ -4,7 +4,7 @@ import com.sun.star.util.XReplaceDescriptor;
 import com.sun.star.util.XPropertyReplace;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.text.XTextDocument;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 int replaceText(searchKey, color, bold) {
 

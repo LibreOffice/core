@@ -4,23 +4,22 @@
     <module-name>   ScriptProvider  </module-name>
     <component-description>
         <author> Noel Power</author>
-        <name>  drafts.com.sun.star.script.framework.provider.ScriptProvider    </name>
+        <name>  drafts.com.sun.star.script.provider.ScriptProvider  </name>
         <description>
     This component is part of the Scripting Framework
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
         <language>  c++ </language>
         <status value="drafts"/>
-        <supported-service> drafts.com.sun.star.script.framework.provider.ScriptProvider    </supported-service>
+        <supported-service> drafts.com.sun.star.script.provider.ScriptProvider  </supported-service>
         <type>  com.sun.star.beans.XPropertySet                 </type>
         <type>  com.sun.star.uno.Exception                  </type>
         <type>  com.sun.star.io.IOException                 </type>
         <type>  com.sun.star.io.XStream                 </type>
-        <type>  drafts.com.sun.star.script.framework.provider.XScript </type>
-        <type>  drafts.com.sun.star.script.framework.provider.XScriptProvider </type>
-        <type>  drafts.com.sun.star.script.framework.runtime.XScriptInvocation </type>
-        <type>  drafts.com.sun.star.script.framework.browse.XBrowseNode </type>
-        <type>  drafts.com.sun.star.script.framework.browse.BrowseNodeTypes </type>
+        <type>  drafts.com.sun.star.script.provider.XScript </type>
+        <type>  drafts.com.sun.star.script.provider.XScriptProvider </type>
+        <type>  drafts.com.sun.star.script.browse.XBrowseNode </type>
+        <type>  drafts.com.sun.star.script.browse.BrowseNodeTypes </type>
 
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEditorForJavaScript.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-15 17:18:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 public class ScriptEditorForJavaScript {
 

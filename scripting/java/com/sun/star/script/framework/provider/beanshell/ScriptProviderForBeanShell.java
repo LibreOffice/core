@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:30 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:15 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -93,10 +93,10 @@ import java.net.URLDecoder;
 import bsh.BshClassManager;
 import bsh.Interpreter;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
-import drafts.com.sun.star.script.framework.provider.XScriptProvider;
-import drafts.com.sun.star.script.framework.provider.XScript;
+import drafts.com.sun.star.script.provider.XScriptProvider;
+import drafts.com.sun.star.script.provider.XScript;
 
 import com.sun.star.script.framework.provider.*;
 
@@ -281,7 +281,7 @@ public class ScriptProviderForBeanShell
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForBeanShell._ScriptProviderForBeanShell.class,
-                "drafts.com.sun.star.script.framework.ScriptProviderForBeanShell",
+                "drafts.com.sun.star.script.ScriptProviderForBeanShell",
                 multiFactory,
                 regKey );
         }
@@ -304,7 +304,7 @@ public class ScriptProviderForBeanShell
         String impl = "com.sun.star.scripting.runtime.beanshell." +
             "ScriptProviderForBeanShell$_ScriptProviderForBeanShell";
 
-        String service = "drafts.com.sun.star.script.framework.provider." +
+        String service = "drafts.com.sun.star.script.provider." +
             "ScriptProviderForBeanShell";
 
         if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
@@ -313,7 +313,7 @@ public class ScriptProviderForBeanShell
                 // as part of the install, this will have to be done
                 // programatically during the install as registration of java components
                 // is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
-/*                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.framework.provider.theScriptProviderForBeanShell");
+/*                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForBeanShell");
                 newKey.setStringValue(service); */
                 return true;
             }

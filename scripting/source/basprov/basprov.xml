@@ -11,7 +11,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="drafts"/>
-        <supported-service>drafts.com.sun.star.script.framework.provider.ScriptProviderForBasic</supported-service>
+        <supported-service>drafts.com.sun.star.script.provider.ScriptProviderForBasic</supported-service>
         <type>com.sun.star.beans.XPropertySet</type>
         <type>com.sun.star.frame.XModel</type>
         <type>com.sun.star.lang.IllegalArgumentException</type>
@@ -22,10 +22,10 @@
         <type>com.sun.star.uno.Exception</type>
         <type>com.sun.star.uno.RuntimeException</type>
         <type>com.sun.star.uno.XComponentContext</type>
-        <type>drafts.com.sun.star.script.framework.browse.BrowseNodeTypes</type>
-        <type>drafts.com.sun.star.script.framework.browse.XBrowseNode</type>
-        <type>drafts.com.sun.star.script.framework.provider.XScript</type>
-        <type>drafts.com.sun.star.script.framework.provider.XScriptProvider</type>
+        <type>drafts.com.sun.star.script.browse.BrowseNodeTypes</type>
+        <type>drafts.com.sun.star.script.browse.XBrowseNode</type>
+        <type>drafts.com.sun.star.script.provider.XScript</type>
+        <type>drafts.com.sun.star.script.provider.XScriptProvider</type>
     </component-description>
 
     <project-build-dependency>sfx2</project-build-dependency>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:35:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "basmethnode.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_BROWSE_BROWSENODETYPES_HPP_
-#include <drafts/com/sun/star/script/framework/browse/BrowseNodeTypes.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 
 #ifndef _SBXCLASS_HXX
@@ -88,7 +88,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script;
 
 
 //.........................................................................

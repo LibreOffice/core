@@ -5,7 +5,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheet;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 addEntry(date, total, free) {
 

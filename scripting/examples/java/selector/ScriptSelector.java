@@ -28,11 +28,11 @@ import com.sun.star.script.XInvocation;
 
 import com.sun.star.lib.uno.helper.PropertySet;
 
-import drafts.com.sun.star.script.framework.browse.XBrowseNode;
-import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
-import drafts.com.sun.star.script.framework.provider.XScript;
-import drafts.com.sun.star.script.framework.provider.XScriptProvider;
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.provider.XScriptContext;
+import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.provider.XScriptProvider;
 
 public class ScriptSelector {
 
@@ -329,7 +329,7 @@ public class ScriptSelector {
 
         try {
             String serviceName = "drafts.com.sun.star.script." +
-                "framework.provider.MasterScriptProvider";
+                "provider.MasterScriptProvider";
 
             XComponentContext xcc = ctxt.getComponentContext();
             XMultiComponentFactory xmcf = xcc.getServiceManager();

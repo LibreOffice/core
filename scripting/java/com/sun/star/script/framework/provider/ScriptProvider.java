@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:47 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -80,12 +80,12 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.reflection.InvocationTargetException;
 import com.sun.star.script.CannotConvertException;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
-import drafts.com.sun.star.script.framework.provider.XScriptProvider;
-import drafts.com.sun.star.script.framework.provider.XScript;
-import drafts.com.sun.star.script.framework.browse.XBrowseNode;
-import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.provider.XScriptProvider;
+import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.browse.DirBrowseNode;
@@ -97,8 +97,8 @@ public abstract class ScriptProvider
                XInitialization, XTypeProvider, XServiceInfo
 {
     private final String[] __serviceNames = {
-        "drafts.com.sun.star.script.framework.provider.ScriptProviderFor",
-        "drafts.com.sun.star.script.framework.provider.LanguageScriptProvider"
+        "drafts.com.sun.star.script.provider.ScriptProviderFor",
+        "drafts.com.sun.star.script.provider.LanguageScriptProvider"
     };
 
     public final static String CLASSPATH = "classpath";

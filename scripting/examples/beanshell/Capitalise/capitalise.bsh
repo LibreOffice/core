@@ -5,7 +5,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XWordCursor;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 String getNewString( theString ) {
     String newString;

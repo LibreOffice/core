@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 15:03:41 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_BROWSE_BROWSENODETYPES_HPP_
-#include <drafts/com/sun/star/script/framework/browse/BrowseNodeTypes.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
@@ -108,7 +108,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script;
 
 
 //.........................................................................
@@ -146,9 +146,9 @@ namespace basprov
             if ( !pNames )
             {
                 static Sequence< ::rtl::OUString > aNames(3);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.ScriptProviderForBasic" ) );
-                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.LanguageScriptProvider" ) );
-                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.ScriptProvider" ) );
+                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.ScriptProviderForBasic" ) );
+                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.LanguageScriptProvider" ) );
+                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.ScriptProvider" ) );
                 pNames = &aNames;
             }
         }

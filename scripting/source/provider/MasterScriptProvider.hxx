@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,9 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
-#include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
+#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
 
 #include "ScriptingContext.hxx"
 #include "ProviderCache.hxx"
@@ -79,11 +78,11 @@ namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
+#define dcsss ::drafts::com::sun::star::script
 
 class MasterScriptProvider :
-            public ::cppu::WeakImplHelper4 < dcsssf::provider::XScriptProvider,
-                dcsssf::browse::XBrowseNode, css::lang::XServiceInfo,
+            public ::cppu::WeakImplHelper4 < dcsss::provider::XScriptProvider,
+                dcsss::browse::XBrowseNode, css::lang::XServiceInfo,
                 css::lang::XInitialization >
 {
 public:
@@ -99,7 +98,7 @@ public:
     // XBrowseNode implementation
     virtual ::rtl::OUString SAL_CALL getName()
         throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::browse::XBrowseNode > > SAL_CALL getChildNodes()
+    virtual css::uno::Sequence< css::uno::Reference< dcsss::browse::XBrowseNode > > SAL_CALL getChildNodes()
         throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( css::uno::RuntimeException );
@@ -112,8 +111,8 @@ public:
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw( css::uno::RuntimeException );
 
-    // XScriptInvocation implementation
-    virtual css::uno::Reference < dcsssf::provider::XScript > SAL_CALL
+    // XScriptProvider implementation
+    virtual css::uno::Reference < dcsss::provider::XScript > SAL_CALL
         getScript( const ::rtl::OUString& scriptURI )
         throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
@@ -128,7 +127,7 @@ public:
 
     // Public method to return all Language Providers in this MasterScriptProviders
     // context.
-    css::uno::Sequence< css::uno::Reference< dcsssf::provider::XScriptProvider > > SAL_CALL
+    css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > > SAL_CALL
         getAllProviders() throw ( css::uno::RuntimeException );
 private:
     void addStorageAsListener() throw( css::uno::RuntimeException );
@@ -140,7 +139,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Reference < dcsssf::storage::XScriptStorageManager > m_xScriptStorageMgr;
+    css::uno::Reference < ::drafts::com::sun::star::script::framework::storage::XScriptStorageManager > m_xScriptStorageMgr;
 
     // This component supports XInitialization, it can be created
     // using createInstanceXXX() or createInstanceWithArgumentsXXX using

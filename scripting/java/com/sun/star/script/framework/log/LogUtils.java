@@ -42,7 +42,7 @@ public class LogUtils {
         String result = "";
         try
         {
-            baos = new ByteArrayOutputStream( 128 );
+            baos = new ByteArrayOutputStream( );
             ps = new PrintStream( baos );
             e.printStackTrace( ps );
         }

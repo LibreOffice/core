@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,15 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
 
 
 namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
+#define dcsss ::drafts::com::sun::star::script
 
 //Typedefs
 //=============================================================================
@@ -90,8 +90,8 @@ namespace func_provider
 
 struct MspInst
 {
-    css::uno::Reference< dcsssf::provider::XScriptProvider > provider;
-    css::uno::Reference< dcsssf::browse::XBrowseNode > node;
+    css::uno::Reference< dcsss::provider::XScriptProvider > provider;
+    css::uno::Reference< dcsss::browse::XBrowseNode > node;
 };
 
 typedef ::std::map < css::uno::Reference< css::frame::XModel >,
@@ -102,7 +102,7 @@ typedef ::std::hash_map< ::rtl::OUString,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
-class ActiveMSPList : public ::cppu::WeakImplHelper2< css::lang::XEventListener , dcsssf::browse::XBrowseNode >
+class ActiveMSPList : public ::cppu::WeakImplHelper2< css::lang::XEventListener , dcsss::browse::XBrowseNode >
 {
 
 public:
@@ -110,7 +110,7 @@ public:
         css::uno::XComponentContext >& xContext );
     ~ActiveMSPList();
     void addActiveMSP( const css::uno::Reference< css::frame::XModel >& xModel,
-                       const css::uno::Reference< dcsssf::provider::XScriptProvider >& msp );
+                       const css::uno::Reference< dcsss::provider::XScriptProvider >& msp );
 
     //XEventListener
     //======================================================================
@@ -123,7 +123,7 @@ public:
 
     virtual ::rtl::OUString SAL_CALL getName()
         throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::browse::XBrowseNode > > SAL_CALL getChildNodes()
+    virtual css::uno::Sequence< css::uno::Reference< dcsss::browse::XBrowseNode > > SAL_CALL getChildNodes()
         throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( css::uno::RuntimeException );

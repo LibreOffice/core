@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-15 14:32:37 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
 
 #include "ScriptingContext.hxx"
 
@@ -82,7 +82,7 @@ namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
+#define dcsss ::drafts::com::sun::star::script
 
 //Typedefs
 //=============================================================================
@@ -91,7 +91,7 @@ struct ProviderDetails
 {
     //css::uno::Reference< css::lang::XSingleServiceFactory > factory;
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
-    css::uno::Reference< dcsssf::provider::XScriptProvider > provider;
+    css::uno::Reference< dcsss::provider::XScriptProvider > provider;
 };
 typedef ::std::hash_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > ProviderDetails_hash;
@@ -104,15 +104,15 @@ public:
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext )
         throw ( css::uno::RuntimeException );
     ~ProviderCache();
-     css::uno::Reference< dcsssf::provider::XScriptProvider >
+     css::uno::Reference< dcsss::provider::XScriptProvider >
          getProvider( const ::rtl::OUString& providerName );
-     css::uno::Sequence < css::uno::Reference< dcsssf::provider::XScriptProvider > >
+     css::uno::Sequence < css::uno::Reference< dcsss::provider::XScriptProvider > >
          getAllProviders() throw ( css::uno::RuntimeException );
 private:
     void populateCache()
         throw ( css::uno::RuntimeException );
 
-   css::uno::Reference< dcsssf::provider::XScriptProvider >
+   css::uno::Reference< dcsss::provider::XScriptProvider >
         createProvider( ProviderDetails& details ) throw ( css::uno::RuntimeException );
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2003-10-28 13:47:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script;
 
 
 extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );

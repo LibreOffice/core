@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:36:44 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,18 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script;
 
 namespace func_provider
 {
 
 ::rtl::OUString s_implName = ::rtl::OUString::createFromAscii(
-    "drafts.com.sun.star.script.framework.provider.MasterScriptProvider" );
+    "drafts.com.sun.star.script.provider.MasterScriptProvider" );
 const ::rtl::OUString s_serviceNameList[] = {
     ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.framework.provider.MasterScriptProvider" ),
+        "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
     ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.framework.provider.ScriptProvider" ) };
+        "drafts.com.sun.star.script.provider.ScriptProvider" ) };
 
 Sequence< ::rtl::OUString > s_serviceNames = Sequence <
         ::rtl::OUString > ( s_serviceNameList, 2 );
@@ -125,7 +125,7 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
         }
         validateXRef( xInterface,
                           "MasterScriptProvider::initialise: cannot get StorageManager" );
-        m_xScriptStorageMgr = Reference< storage::XScriptStorageManager > ( xInterface, UNO_QUERY_THROW );
+        m_xScriptStorageMgr = Reference< framework::storage::XScriptStorageManager > ( xInterface, UNO_QUERY_THROW );
 
         // Set up contextless cache
         // if initialise method is called a new ProviderCache will be
@@ -407,7 +407,7 @@ throw ( lang::IllegalArgumentException, RuntimeException )
     try
     {
         ::rtl::OUStringBuffer buf( 80 );
-        buf.appendAscii( "drafts.com.sun.star.script.framework.provider.ScriptProviderFor");
+        buf.appendAscii( "drafts.com.sun.star.script.provider.ScriptProviderFor");
         buf.append( language );
         ::rtl::OUString serviceName = buf.makeStringAndClear();
         xScriptProvider = m_pPCache->getProvider( serviceName );

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptContext.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:28 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -76,7 +76,7 @@ import com.sun.star.uno.AnyConverter;
 
 import java.util.HashMap;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-16 15:22:58 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SCRIPTING_BASSCRIPT_HXX
 #define SCRIPTING_BASSCRIPT_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_PROVIDER_XSCRIPT_HPP_
-#include <drafts/com/sun/star/script/framework/provider/XScript.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPT_HPP_
+#include <drafts/com/sun/star/script/provider/XScript.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -82,7 +82,7 @@ namespace basprov
     //  ----------------------------------------------------
 
     typedef ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::framework::provider::XScript > BasicScriptImpl_BASE;
+        ::drafts::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
     class BasicScriptImpl : public BasicScriptImpl_BASE

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJavaScript.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:35 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -84,9 +84,9 @@ import java.io.*;
 import java.util.Vector;
 import java.net.MalformedURLException;
 
-import drafts.com.sun.star.script.framework.provider.XScriptProvider;
-import drafts.com.sun.star.script.framework.provider.XScript;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.provider.XScriptProvider;
+import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 
 import com.sun.star.script.framework.log.LogUtils;
@@ -293,7 +293,7 @@ public class ScriptProviderForJavaScript
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForJavaScript._ScriptProviderForJavaScript.class,
-                "drafts.com.sun.star.script.framework.provider.ScriptProviderForJavaScript",
+                "drafts.com.sun.star.script.provider.ScriptProviderForJavaScript",
                 multiFactory,
                 regKey );
         }
@@ -316,7 +316,7 @@ public class ScriptProviderForJavaScript
         String impl = "com.sun.star.scripting.runtime.javascript." +
             "ScriptProviderForJavaScript$_ScriptProviderForJavaScript";
 
-        String service = "drafts.com.sun.star.script.framework.provider." +
+        String service = "drafts.com.sun.star.script.provider." +
             "ScriptProviderForJavaScript";
 
         if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
@@ -325,7 +325,7 @@ public class ScriptProviderForJavaScript
                 // as part of the install, this will have to be done
                 // programatically during the install as registration of java components
                 // is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
-/*                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.framework.provider.theScriptProviderForJavaScript");
+/*                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForJavaScript");
                 newKey.setStringValue(service); */
                 return true;
             }

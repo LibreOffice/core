@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:35:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -86,7 +86,7 @@ namespace basprov
     //  ----------------------------------------------------
 
     typedef ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::framework::browse::XBrowseNode > BasicLibraryNodeImpl_BASE;
+        ::drafts::com::sun::star::script::browse::XBrowseNode > BasicLibraryNodeImpl_BASE;
 
 
     class BasicLibraryNodeImpl : public BasicLibraryNodeImpl_BASE
@@ -106,7 +106,7 @@ namespace basprov
         // XBrowseNode
         virtual ::rtl::OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::framework::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL hasChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);

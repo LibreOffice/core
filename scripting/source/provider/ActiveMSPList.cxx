@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-10 08:08:13 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
-#include <drafts/com/sun/star/script/framework/browse/BrowseNodeTypes.hpp>
+#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
 
 #include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace drafts::com::sun::star::script::framework;
+using namespace drafts::com::sun::star::script;
 
 namespace func_provider
 {
@@ -260,7 +260,7 @@ ActiveMSPList::~ActiveMSPList()
 
 void
 ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
-               const Reference< dcsssf::provider::XScriptProvider >& msp )
+               const Reference< provider::XScriptProvider >& msp )
 {
 
     ::osl::MutexGuard guard( m_mutex );
@@ -376,7 +376,7 @@ ActiveMSPList::createNonDocMSPs()
             return;
         }
         // do creation of user and share MSPs here
-        ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.framework.provider.MasterScriptProvider");
+        ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;
