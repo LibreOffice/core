@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:21:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-31 15:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,3 +1971,16 @@ String STR_PRESOBJ_IMAGE
     Text[ language_user1 ] = " ";
 };
 #endif
+
+String STR_STAROFFICE_XML_DRAW
+{
+    Text = "StarOffice XML (Draw)" ;
+    Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
+};
+
+String STR_STAROFFICE_XML_IMPRESS
+{
+    Text = "StarOffice XML (Impress)" ;
+    Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
+};
+
