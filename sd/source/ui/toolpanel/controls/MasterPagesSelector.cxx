@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,6 +839,11 @@ void MasterPagesSelector::Clear (void)
             mpPageSet->GetItemData (nIndex));
     }
     mpPageSet->Clear ();
+}
+
+void MasterPagesSelector::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+{
+    mpPageSet->SetSmartHelpId( aId, aMode );
 }
 
 } } } // end of namespace ::sd::toolpanel::controls
