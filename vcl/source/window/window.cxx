@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-12 15:50:22 $
+ *  last change: $Author: vg $ $Date: 2002-07-15 15:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3088,8 +3088,10 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         //if ( nX != mnX )
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( ImplLogicToDevicePixel( Point( nX, 0 ) ) );
+#ifndef REMOTE_APPSERVER
         if( ImplGetGraphics() && mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL )
             ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X() );
+#endif //REMOTE_APPSERVER
         if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
         {
             if ( bCopyBits && !pOverlapRegion )
