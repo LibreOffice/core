@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:43:58 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,12 @@ namespace dbaui
         /// late construction
         virtual void Construct();
         virtual void initialize();
-        // show the text or the design view
-        void switchView();
+        /** show the text or the design view
+            @return
+                <TRUE/> when all went right otherwise <FALSE/> which implies an aditional
+                call of switchView from the controller to restore the old state
+        */
+        sal_Bool switchView();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
         void     setNoneVisbleRow(sal_Int32 _nRows);

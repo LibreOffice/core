@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ namespace dbaui
         void SaveUIConfig()                                                 { m_pViewSwitch->SaveUIConfig(); }
         void reset()                                                        { m_pViewSwitch->reset(); }
 
-        void switchView();
+        sal_Bool switchView();
         virtual void GetFocus();
 
     protected:
@@ -172,6 +172,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/10/23 12:30:27  oj
+ *  #93566# slot fixes
+ *
  *  Revision 1.2  2001/09/27 06:19:05  oj
  *  #92325# impl new sql functions
  *
