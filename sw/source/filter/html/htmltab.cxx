@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:56:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1982,7 +1982,9 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
     while( !bSplitted )
     {
         sal_uInt16 nStartRow = nTopRow;
-        for( sal_uInt16 i=nTopRow; i<nBottomRow; i++ )
+        sal_uInt16 i;
+
+        for( i = nTopRow; i < nBottomRow; i++ )
         {
             // kann hinter der aktuellen HTML-Tabellen-Zeile gesplittet werden?
             sal_Bool bSplit = sal_True;
