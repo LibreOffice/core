@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 15:39:57 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@ class SwGrfNode: public SwNoTxtNode
                const String& rGrfName, const String& rFltName,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
+    SwGrfNode( const SwNodeIndex& rWhere,
+               const GraphicObject& rGrfObj,
+               SwGrfFmtColl* pGrfColl,
+               SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const String& rGrfName, const String& rFltName );
     void DelStreamName();
@@ -158,7 +162,9 @@ public:
         // aktuelle wird durch die neue ersetzt.
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     BOOL ReRead( const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic = 0, BOOL bModify = TRUE );
+                  const Graphic* pGraphic = 0,
+                  const GraphicObject* pGrfObj = 0,
+                  BOOL bModify = TRUE );
         // Laden der Grafik unmittelbar vor der Anzeige
     short SwapIn( BOOL bWaitForData = FALSE );
         // Entfernen der Grafik, um Speicher freizugeben

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 15:36:35 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ class SwFrmFmts;
 class SwFtnIdxs;
 class SwFtnInfo;
 class SwEndNoteInfo;
+class GraphicObject;
 class SwGrfFmtColl;
 class SwGrfFmtColls;
 class SwLineNumberInfo;
@@ -904,9 +905,14 @@ public:
                         const SfxItemSet* pFlyAttrSet = 0,
                         const SfxItemSet* pGrfAttrSet = 0,
                         SwFrmFmt* = 0 );
+    SwFlyFrmFmt* Insert(const SwPaM &rRg,
+                        const GraphicObject& rGrfObj,
+                        const SfxItemSet* pFlyAttrSet = 0,
+                        const SfxItemSet* pGrfAttrSet = 0,
+                        SwFrmFmt* = 0 );
         // austauschen einer Grafik (mit Undo)
     void ReRead( SwPaM&, const String& rGrfName, const String& rFltName,
-                const Graphic* pGraphic );
+                const Graphic* pGraphic, const GraphicObject* pGrfObj );
 
         //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
         // angemeldet sein.

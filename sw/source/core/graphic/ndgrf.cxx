@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 15:40:40 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,19 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
         bScaleImageMap = FALSE;
     bGrafikArrived = TRUE;
-    ReRead( rGrfName, rFltName, pGraphic, FALSE );
+    ReRead( rGrfName, rFltName, pGraphic, 0, FALSE );
+}
+
+SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
+                          const GraphicObject& rGrfObj,
+                          SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr )
+    : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
+{
+    aGrfObj = rGrfObj;
+    aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
+        bScaleImageMap = FALSE;
+    bGrafikArrived = TRUE;
 }
 
 // Konstruktor fuer den SW/G-Reader. Dieser ctor wird verwendet,
@@ -205,11 +217,13 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 // aktuelle wird durch die neue ersetzt.
 
 BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
-                        const Graphic* pGraphic, BOOL bNewGrf )
+                        const Graphic* pGraphic, const GraphicObject* pGrfObj,
+                        BOOL bNewGrf )
 {
     BOOL bReadGrf = FALSE, bSetTwipSize = TRUE;
 
-    ASSERT( pGraphic || rGrfName.Len(), "GrafikNode ohne Name und Grafik" );
+    ASSERT( pGraphic || pGrfObj || rGrfName.Len(),
+            "GraphicNode without a name, Graphic or GraphicObject" );
 
     // ReadRead mit Namen
     if( refLink.Is() )
@@ -251,6 +265,12 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
             aGrfObj.SetGraphic( *pGraphic, rGrfName );
             bReadGrf = TRUE;
         }
+        else if( pGrfObj )
+        {
+            aGrfObj = *pGrfObj;
+            aGrfObj.SetLink( rGrfName );
+            bReadGrf = TRUE;
+        }
         else
         {
             // MIB 25.02.97: Daten der alten Grafik zuruecksetzen, damit
@@ -280,6 +300,14 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
         if( aStrmName.Len() )
             DelStreamName();
     }
+    else if( pGrfObj && !rGrfName.Len() )
+    {
+        aGrfObj = *pGrfObj;
+        bReadGrf = TRUE;
+
+        if( aStrmName.Len() )
+            DelStreamName();
+    }
         // Import einer Grafik:
         // Ist die Grafik bereits geladen?
     else if( !bNewGrf && GRAPHIC_NONE != aGrfObj.GetType() )
@@ -295,7 +323,22 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
 
         if( GetNodes().IsDocNodes() )
         {
-            if( !pGraphic )
+            if( pGraphic )
+            {
+                aGrfObj.SetGraphic( *pGraphic, rGrfName );
+                bReadGrf = TRUE;
+                // Verbindung herstellen ohne ein Update; Grafik haben wir!
+                ((SwBaseLink*)&refLink)->Connect();
+            }
+            else if( pGrfObj )
+            {
+                aGrfObj = *pGrfObj;
+                aGrfObj.SetLink( rGrfName );
+                bReadGrf = TRUE;
+                // Verbindung herstellen ohne ein Update; Grafik haben wir!
+                ((SwBaseLink*)&refLink)->Connect();
+            }
+            else
             {
                 // MIB 25.02.97: Daten der alten Grafik zuruecksetzen, damit
                 // die korrekte Ersatz-Darstellung erscheint, wenn die
@@ -303,13 +346,6 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                 Graphic aGrf; aGrf.SetDefaultType();
                 aGrfObj.SetGraphic( aGrf, rGrfName );
                 ((SwBaseLink*)&refLink)->SwapIn();
-            }
-            else
-            {
-                aGrfObj.SetGraphic( *pGraphic, rGrfName );
-                bReadGrf = TRUE;
-                // Verbindung herstellen ohne ein Update; Grafik haben wir!
-                ((SwBaseLink*)&refLink)->Connect();
             }
         }
     }
@@ -375,6 +411,15 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
         pNode = new SwGrfNode( rWhere, rGrfName,
                                 rFltName, pGraphic, pGrfColl, pAutoAttr );
     return pNode;
+}
+
+SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
+                                const GraphicObject& rGrfObj,
+                                SwGrfFmtColl* pGrfColl,
+                                SwAttrSet* pAutoAttr )
+{
+    ASSERT( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
+    return new SwGrfNode( rWhere, rGrfObj, pGrfColl, pAutoAttr );
 }
 
 

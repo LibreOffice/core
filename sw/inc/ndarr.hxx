@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #endif
 
 class Graphic;
+class GraphicObject;
 class UniString;
 class SvInPlaceObject;
 class SwAttrSet;
@@ -267,6 +268,11 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
                             BOOL bDelayed = FALSE );    // in ndgrf.cxx
+
+    SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
+                            const GraphicObject& rGrfObj,
+                            SwGrfFmtColl *pColl,
+                            SwAttrSet* pAutoAttr = 0 ); // in ndgrf.cxx
 
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             SvInPlaceObject *pObj,

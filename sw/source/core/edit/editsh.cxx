@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-26 17:02:43 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,10 +337,10 @@ BOOL SwEditShell::GetGrfSize(Size& rSz) const
  ******************************************************************************/
 
 void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
-                            const Graphic* pGraphic )
+                    const Graphic* pGraphic, const GraphicObject* pGrfObj )
 {
     StartAllAction();
-    pDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic );
+    pDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );
     EndAllAction();
 }
 
@@ -1024,7 +1024,9 @@ void SwEditShell::SetLinkUpdMode( USHORT nMode )
 // von japanischen/chinesischen Zeichen)
 SwExtTextInput* SwEditShell::CreateExtTextInput()
 {
-    return GetDoc()->CreateExtTextInput( *GetCrsr() );
+    SwExtTextInput* pRet = GetDoc()->CreateExtTextInput( *GetCrsr() );
+    pRet->SetOverwriteCursor( SwCrsrShell::IsOverwriteCrsr() );
+    return pRet;
 }
 
 void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
@@ -1041,10 +1043,8 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         SET_CURR_SHELL( this );
         StartAllAction();
         pDel->SetInsText( bInsText );
+        SetOverwriteCrsr( pDel->IsOverwriteCursor() );
         GetDoc()->DeleteExtTextInput( pDel );
-
-        SetOverwriteCrsr( FALSE );
-
         EndAllAction();
     }
 }
@@ -1065,7 +1065,6 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
     {
         StartAllAction();
         SET_CURR_SHELL( this );
-
 
         if( !rData.IsOnlyCursorChanged() )
             pInput->SetInputData( rData );

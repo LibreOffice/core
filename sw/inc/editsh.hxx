@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 20:05:34 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,8 @@ public:
      * aktuelle wird durch die neue ersetzt.
      */
     void ReRead( const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic = 0 );
+                  const Graphic* pGraphic = 0,
+                  const GraphicObject* pGrafObj = 0 );
 
     // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
     const String& GetAlternateText() const;

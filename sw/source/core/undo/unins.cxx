@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,13 +822,13 @@ void SwUndoReRead::SetAndSave( SwUndoIter& rIter )
     SaveGraphicData( *pGrfNd );
     if( pOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : aEmptyStr, 0, TRUE );
+        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : aEmptyStr, 0, 0, TRUE );
         delete pOldNm;
         delete pOldFltr;
     }
     else
     {
-        pGrfNd->ReRead( aEmptyStr, aEmptyStr, pOldGrf, TRUE );
+        pGrfNd->ReRead( aEmptyStr, aEmptyStr, pOldGrf, 0, TRUE );
         delete pOldGrf;
     }
 
@@ -1034,11 +1034,14 @@ void SwUndoInsertLabel::SetDrawObj( const Point& rPos, BYTE nLId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.3 2000-11-28 20:36:53 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 15:13:25  jp
+      use CharClass/BreakIt instead of old WordSelection
+
       Revision 1.1.1.1  2000/09/19 00:08:27  hr
       initial import
 

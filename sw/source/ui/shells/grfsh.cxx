@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-24 18:01:42 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     }
                     pSet->Put( aSize );
                 }
-                else
-                    pSet->ClearItem( RES_FRM_SIZE );
+//              else
+//                  pSet->ClearItem( RES_FRM_SIZE );
 
                 // Vorlagen-AutoUpdate
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
@@ -961,6 +961,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/24 18:01:42  jp
+    Task #80752#: control for imagefilter
+
     Revision 1.4  2000/10/20 13:41:56  jp
     use correct INetURL-Decode enum
 

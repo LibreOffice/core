@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 11:13:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,7 +1153,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 if(!pGrfNode)
                     throw RuntimeException();
                 SwPaM aGrfPaM(*pGrfNode);
-                pFmt->GetDoc()->ReRead( aGrfPaM, sGrfName, sFltName, 0 );
+                pFmt->GetDoc()->ReRead( aGrfPaM, sGrfName, sFltName, 0, FALSE );
             }
         }
         else if(0 != (bNextFrame = (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_NEXT_NAME)))

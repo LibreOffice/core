@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 15:38:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,18 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                             pDfltGrfFmtColl ),
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
 }
+SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
+                            const SfxItemSet* pFlyAttrSet,
+                            const SfxItemSet* pGrfAttrSet,
+                            SwFrmFmt* pFrmFmt )
+{
+    if( !pFrmFmt )
+        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
+    return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeGrfNode(
+                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+                            rGrfObj, pDfltGrfFmtColl ),
+                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
+}
 
 SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
                         const SfxItemSet* pFlyAttrSet,
@@ -840,7 +852,8 @@ void SwDoc::ResetModified()
 
 
 void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
-                    const String& rFltName, const Graphic* pGraphic )
+                    const String& rFltName, const Graphic* pGraphic,
+                    const GraphicObject* pGrafObj )
 {
     SwGrfNode *pGrfNd;
     if( ( !rPam.HasMark()
@@ -859,7 +872,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, TRUE );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, TRUE );
         SetModified();
     }
 }
