@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:43 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,10 @@ shell::setv( sal_Int32 CommandId,
                     {
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
-                        ret[0] <<= aUnqPath;
+                        ret[0] <<= beans::PropertyValue(
+                            rtl::OUString::createFromAscii("Uri"), -1,
+                            uno::makeAny(aUnqPath),
+                            beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
                         ret[i] <<= InteractiveAugmentedIOException(
                             rtl::OUString(),
@@ -1051,7 +1054,10 @@ shell::setv( sal_Int32 CommandId,
                     {
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
-                        ret[0] <<= aUnqPath;
+                        names[0] <<= beans::PropertyValue(
+                            rtl::OUString::createFromAscii("Uri"), -1,
+                            uno::makeAny(aUnqPath),
+                            beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
                         switch( err )
                         {
