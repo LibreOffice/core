@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-08 12:54:30 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 18:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ namespace connectivity
 
         private:
             struct DBFHeader {                       /* Kopfsatz-Struktur            */
-                                DBFType db_typ;                         /* Dateityp                     */
+                                BYTE    db_typ;                         /* Dateityp                     */
                                 BYTE    db_aedat[3];                    /* Datum der letzen Aenderung   */
                                                                         /* JJ MM TT                     */
                                 ULONG   db_anz;                         /* Anzahl der Saetze            */
@@ -125,7 +125,7 @@ namespace connectivity
                             };
             struct DBFMemoHeader
                             {
-                                DBFMemoType db_typ;                     /* Dateityp                     */
+                                BYTE    db_typ;                     /* Dateityp                     */
                                 UINT32  db_next;                        /* nächster freier Block        */
                                 USHORT  db_size;                        /* Blockgröße: dBase 3 fest     */
                             };
