@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:04:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,12 @@ BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
     case FORMAT_STRING:
-        ::GetASCWriter( aEmptyStr, xWrt );
+        ::GetASCWriter( aEmptyStr, String(), xWrt );
         break;
 
     case FORMAT_RTF:
-        ::GetRTFWriter( aEmptyStr, xWrt );
+        // mba: no BaseURL for data exchange
+        ::GetRTFWriter( aEmptyStr, String(), xWrt );
         break;
     }
 
