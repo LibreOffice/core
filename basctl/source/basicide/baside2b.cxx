@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: ab $ $Date: 2000-11-28 14:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@
 
 #include <vcl/system.hxx>
 
-#ifndef _SFX_HELP_HXX //autogen
-#include <sfx2/sfxhelp.hxx>
-#endif
+//#ifndef _SFX_HELP_HXX //autogen
+//#include <sfx2/sfxhelp.hxx>
+//#endif
 
 
 long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
@@ -367,7 +367,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
         {
             String aKeyword = GetWordAtCursor();
-            SfxHelp::ShowHelp( aKeyword, TRUE );
+            //SfxHelp::ShowHelp( aKeyword, TRUE );
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
@@ -416,7 +416,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     }
                 }
             }
-            Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
+            //Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
         }
     }
     else
@@ -894,11 +894,11 @@ void EditorWindow::DoDelayedSyntaxHighlight( ULONG nPara )
 
 IMPL_LINK( EditorWindow, HelpAgentTimerHdl, Timer *, EMPTYARG )
 {
-    SfxHelpPI* pHelpAgent = SFX_APP()->GetHelpPI();
-    if ( pHelpAgent)
-    {
-        pHelpAgent->LoadTopic( GetWordAtCursor() );
-    }
+    //SfxHelpPI* pHelpAgent = SFX_APP()->GetHelpPI();
+    //if ( pHelpAgent)
+    //{
+        //pHelpAgent->LoadTopic( GetWordAtCursor() );
+    //}
     return 0;
 }
 

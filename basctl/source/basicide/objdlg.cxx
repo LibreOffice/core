@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: ab $ $Date: 2000-11-28 14:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,9 @@
 #include <iderdll2.hxx>
 #include <sbxitem.hxx>
 
-#ifndef _SFX_HELP_HXX //autogen
-#include <sfx2/sfxhelp.hxx>
-#endif
+//#ifndef _SFX_HELP_HXX //autogen
+//#include <sfx2/sfxhelp.hxx>
+//#endif
 
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
@@ -320,7 +320,7 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
                     {
                         ByteString aHelpFile( xInfo->GetHelpFile(), RTL_TEXTENCODING_UTF8 );
                         USHORT nHelpId = (USHORT)xInfo->GetHelpId();
-                        SfxHelp::ShowHelp( nHelpId, TRUE, aHelpFile.GetBuffer() );
+                        //SfxHelp::ShowHelp( nHelpId, TRUE, aHelpFile.GetBuffer() );
                     }
                 }
             }
