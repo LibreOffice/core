@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "xmlimprt.hxx"
 #include "docuno.hxx"
 
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -130,7 +133,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 ScXMLConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument() );
-                ScXMLConverter::GetApiAddressFromScAddress( aOutputPosition, aScRange.aStart );
+                ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
                 bCopyOutputData = sal_True;
             }
             break;

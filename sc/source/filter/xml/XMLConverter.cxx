@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
+#endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -296,7 +299,7 @@ sal_Int32 ScXMLConverter::GetAddressFromString(
     ScAddress aScAddress;
     nOffset = GetAddressFromString( aScAddress, rAddressStr, pDocument, nOffset );
     if( nOffset >= 0 )
-        GetApiAddressFromScAddress( rAddress, aScAddress );
+        ScUnoConversion::FillApiAddress( rAddress, aScAddress );
     return nOffset;
 }
 
@@ -309,7 +312,7 @@ sal_Int32 ScXMLConverter::GetRangeFromString(
     ScRange aScRange;
     nOffset = GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset );
     if( nOffset >= 0 )
-        GetApiRangeFromScRange( rRange, aScRange );
+        ScUnoConversion::FillApiRange( rRange, aScRange );
     return nOffset;
 }
 

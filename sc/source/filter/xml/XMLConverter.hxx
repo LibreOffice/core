@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,32 +85,8 @@
 #endif
 
 class ScArea;
+class ScDocument;
 class ScRangeList;
-
-
-//___________________________________________________________________
-
-inline sal_Bool operator==(
-        const ::com::sun::star::table::CellAddress& rApiAddress1,
-        const ::com::sun::star::table::CellAddress& rApiAddress2 )
-{
-    return
-        (rApiAddress1.Column == rApiAddress2.Column) &&
-        (rApiAddress1.Row == rApiAddress2.Row) &&
-        (rApiAddress1.Sheet == rApiAddress2.Sheet);
-}
-
-inline sal_Bool operator==(
-        const ::com::sun::star::table::CellRangeAddress& rApiRange1,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
-{
-    return
-        (rApiRange1.StartColumn == rApiRange2.StartColumn) &&
-        (rApiRange1.StartRow == rApiRange2.StartRow) &&
-        (rApiRange1.EndColumn == rApiRange2.EndColumn) &&
-        (rApiRange1.EndRow == rApiRange2.EndRow) &&
-        (rApiRange1.Sheet == rApiRange2.Sheet);
-}
 
 
 //___________________________________________________________________
@@ -153,30 +129,6 @@ public:
 
     static ScDocument*  GetScDocument(
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
-
-    static inline void  GetScAddressFromApiAddress(
-                            ScAddress& rScAddress,
-                            const ::com::sun::star::table::CellAddress& rApiAddress );
-    static inline void  GetApiAddressFromScAddress(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
-                            const ScAddress& rScAddress );
-
-    static inline void  GetScRangeFromApiRange(
-                            ScRange& rScRange,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
-    static inline void  GetApiRangeFromScRange(
-                            ::com::sun::star::table::CellRangeAddress& rApiRange,
-                            const ScRange& rScRange );
-
-    static inline void  GetApiRangeFromApiAddress(
-                            ::com::sun::star::table::CellRangeAddress& rApiRange,
-                            const ::com::sun::star::table::CellAddress& rApiAddress );
-    static inline void  GetApiStartFromApiRange(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
-    static inline void  GetApiEndFromApiRange(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
 
 // IMPORT: CellAddress / CellRange
     static sal_Int32    GetAddressFromString(
@@ -292,69 +244,6 @@ public:
                             ::rtl::OUString& sFormula,
                             const sal_Bool bIsFormula = sal_True);
 };
-
-
-inline void ScXMLConverter::GetScAddressFromApiAddress(
-        ScAddress& rScAddress,
-        const ::com::sun::star::table::CellAddress& rApiAddress )
-{
-    rScAddress.Set( rApiAddress.Column, rApiAddress.Row, rApiAddress.Sheet );
-}
-
-inline void ScXMLConverter::GetApiAddressFromScAddress(
-        ::com::sun::star::table::CellAddress& rApiAddress,
-        const ScAddress& rScAddress )
-{
-    rApiAddress.Column = rScAddress.Col();
-    rApiAddress.Row = rScAddress.Row();
-    rApiAddress.Sheet = rScAddress.Tab();
-}
-
-inline void ScXMLConverter::GetScRangeFromApiRange(
-        ScRange& rScRange,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
-{
-    rScRange.aStart.Set( rApiRange.StartColumn, rApiRange.StartRow, rApiRange.Sheet );
-    rScRange.aEnd.Set( rApiRange.EndColumn, rApiRange.EndRow, rApiRange.Sheet );
-}
-
-inline void ScXMLConverter::GetApiRangeFromScRange(
-        ::com::sun::star::table::CellRangeAddress& rApiRange,
-        const ScRange& rScRange )
-{
-    rApiRange.StartColumn = rScRange.aStart.Col();
-    rApiRange.StartRow = rScRange.aStart.Row();
-    rApiRange.Sheet = rScRange.aStart.Tab();
-    rApiRange.EndColumn = rScRange.aEnd.Col();
-    rApiRange.EndRow = rScRange.aEnd.Row();
-}
-
-inline void ScXMLConverter::GetApiRangeFromApiAddress(
-        ::com::sun::star::table::CellRangeAddress& rApiRange,
-        const ::com::sun::star::table::CellAddress& rApiAddress )
-{
-    rApiRange.StartColumn = rApiRange.EndColumn = rApiAddress.Column;
-    rApiRange.StartRow = rApiRange.EndRow = rApiAddress.Row;
-    rApiRange.Sheet = rApiAddress.Sheet;
-}
-
-inline void ScXMLConverter::GetApiStartFromApiRange(
-        ::com::sun::star::table::CellAddress& rApiAddress,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
-{
-    rApiAddress.Column = rApiRange.StartColumn;
-    rApiAddress.Row = rApiRange.StartRow;
-    rApiAddress.Sheet = rApiRange.Sheet;
-}
-
-inline void ScXMLConverter::GetApiEndFromApiRange(
-        ::com::sun::star::table::CellAddress& rApiAddress,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
-{
-    rApiAddress.Column = rApiRange.EndColumn;
-    rApiAddress.Row = rApiRange.EndRow;
-    rApiAddress.Sheet = rApiRange.Sheet;
-}
 
 
 #endif

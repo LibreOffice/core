@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -155,7 +158,7 @@ sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
     sal_Int16 nTable = rCellAddress.Sheet;
     if( aShapeVec.size() )
     {
-        ScXMLConverter::GetApiAddressFromScAddress( rCellAddress, aShapeVec[0].aAddress );
+        ScUnoConversion::FillApiAddress( rCellAddress, aShapeVec[0].aAddress );
         return (nTable == rCellAddress.Sheet);
     }
     return sal_False;
@@ -165,7 +168,7 @@ void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.aShapes.clear();
     ScAddress aAddress;
-    ScXMLConverter::GetScAddressFromApiAddress( aAddress, rMyCell.aCellAddress );
+    ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
 
     ScMyShapeVec::iterator aItr = aShapeVec.begin();
     while( (aItr != aShapeVec.end()) && (aItr->aAddress == aAddress) )
@@ -226,7 +229,7 @@ sal_Bool ScMyMergedRangesContainer::GetFirstAddress( table::CellAddress& rCellAd
     sal_Int16 nTable = rCellAddress.Sheet;
     if( aRangeVec.size() )
     {
-        ScXMLConverter::GetApiStartFromApiRange( rCellAddress, aRangeVec[0].aCellRange );
+        ScUnoConversion::FillApiStartAddress( rCellAddress, aRangeVec[0].aCellRange );
         return (nTable == rCellAddress.Sheet);
     }
     return sal_False;
@@ -239,7 +242,7 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
     if( aItr != aRangeVec.end() )
     {
         table::CellAddress aFirstAddress;
-        ScXMLConverter::GetApiStartFromApiRange( aFirstAddress, aItr->aCellRange );
+        ScUnoConversion::FillApiStartAddress( aFirstAddress, aItr->aCellRange );
         if( aFirstAddress == rMyCell.aCellAddress )
         {
             rMyCell.aMergeRange = aItr->aCellRange;
@@ -322,7 +325,7 @@ sal_Bool ScMyAreaLinksContainer::GetFirstAddress( table::CellAddress& rCellAddre
     sal_Int16 nTable = rCellAddress.Sheet;
     if( aAreaLinkVec.size() )
     {
-        ScXMLConverter::GetApiStartFromApiRange( rCellAddress, aAreaLinkVec[0].aDestRange );
+        ScUnoConversion::FillApiStartAddress( rCellAddress, aAreaLinkVec[0].aDestRange );
         return (nTable == rCellAddress.Sheet);
     }
     return sal_False;
@@ -335,7 +338,7 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
     if( aItr != aAreaLinkVec.end() )
     {
         table::CellAddress aAddress;
-        ScXMLConverter::GetApiStartFromApiRange( aAddress, aItr->aDestRange );
+        ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
         if( aAddress == rMyCell.aCellAddress )
         {
             rMyCell.bHasAreaLink = sal_True;
@@ -378,7 +381,7 @@ sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& 
     sal_Int16 nTable = rCellAddress.Sheet;
     if( aDatabaseVec.size() )
     {
-        ScXMLConverter::GetApiStartFromApiRange( rCellAddress, aDatabaseVec[0] );
+        ScUnoConversion::FillApiStartAddress( rCellAddress, aDatabaseVec[0] );
         return (nTable == rCellAddress.Sheet);
     }
     return sal_False;
@@ -392,7 +395,7 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
     if( aItr != aDatabaseVec.end() )
     {
         table::CellAddress aFirstAddress;
-        ScXMLConverter::GetApiStartFromApiRange( aFirstAddress, *aItr );
+        ScUnoConversion::FillApiStartAddress( aFirstAddress, *aItr );
         if( aFirstAddress == rMyCell.aCellAddress )
         {
             rMyCell.bHasEmptyDatabase = sal_True;
@@ -812,7 +815,7 @@ sal_Bool ScMyValidationsContainer::GetFirstAddress( table::CellAddress& rCellAdd
     sal_Int16 nTable = rCellAddress.Sheet;
     if( aValidationRangeVec.size() )
     {
-        ScXMLConverter::GetApiStartFromApiRange( rCellAddress, aValidationRangeVec[0].aRange );
+        ScUnoConversion::FillApiStartAddress( rCellAddress, aValidationRangeVec[0].aRange );
         return (nTable == rCellAddress.Sheet);
     }
     return sal_False;
@@ -825,7 +828,7 @@ void ScMyValidationsContainer::SetCellData( ScMyCell& rMyCell )
     if( aItr != aValidationRangeVec.end() )
     {
         table::CellAddress aAddress;
-        ScXMLConverter::GetApiStartFromApiRange( aAddress, aItr->aRange );
+        ScUnoConversion::FillApiStartAddress( aAddress, aItr->aRange );
         if( aAddress == rMyCell.aCellAddress )
         {
             rMyCell.nValidationIndex = aItr->nIndex;

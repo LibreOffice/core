@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
+#endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
@@ -387,7 +390,7 @@ void ScXMLDatabaseRangeContext::EndElement()
                         if (bFilterConditionSourceRange)
                         {
                             ScRange aAdvSource;
-                            ScXMLConverter::GetScRangeFromApiRange( aAdvSource, aFilterConditionSourceRangeAddress );
+                            ScUnoConversion::FillScRange( aAdvSource, aFilterConditionSourceRangeAddress );
                             pDBData->SetAdvancedQuerySource(&aAdvSource);
                         }
                     }
