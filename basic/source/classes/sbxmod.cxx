@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,9 +365,16 @@ void SbModule::Clear()
     SbxObject::Clear();
 }
 
+const ::rtl::OUString& SbModule::GetSource32() const
+{
+    return aOUSource;
+}
+
 const String& SbModule::GetSource() const
 {
-    return aSource;
+    static String aRetStr;
+    aRetStr = aOUSource;
+    return aRetStr;
 }
 
 // Parent und BASIC sind eins!
@@ -419,7 +426,12 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 void SbModule::SetSource( const String& r )
 {
-    aSource = r;
+    SetSource32( r );
+}
+
+void SbModule::SetSource32( const ::rtl::OUString& r )
+{
+    aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
     while( !aTok.IsEof() )
@@ -656,7 +668,10 @@ USHORT SbModule::Run( SbMethod* pMeth )
                pINST->nCallLvl--;           // Call-Level wieder runter
     }
     else
+    {
+        pINST->nCallLvl--;          // Call-Level wieder runter
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
+    }
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -978,11 +993,11 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
         // Ist Code vorhanden?
         if( p->GetCodeSize() )
         {
-            aSource = p->aSource;
+            aOUSource = p->aOUSource;
             // Alte Version: Image weg
             if( nVer == 1 )
             {
-                SetSource( p->aSource );
+                SetSource32( p->aOUSource );
                 delete p;
             }
             else
@@ -990,7 +1005,7 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
         }
         else
         {
-            SetSource( p->aSource );
+            SetSource32( p->aOUSource );
             delete p;
         }
     }
@@ -1003,7 +1018,7 @@ BOOL SbModule::StoreData( SvStream& rStrm ) const
         return FALSE;
     if( pImage )
     {
-        pImage->aSource = aSource;
+        pImage->aOUSource = aOUSource;
         pImage->aComment = aComment;
         pImage->aName = GetName();
         rStrm << (BYTE) 1;
@@ -1012,7 +1027,7 @@ BOOL SbModule::StoreData( SvStream& rStrm ) const
     else
     {
         SbiImage aImg;
-        aImg.aSource = aSource;
+        aImg.aOUSource = aOUSource;
         aImg.aComment = aComment;
         aImg.aName = GetName();
         rStrm << (BYTE) 1;
@@ -1029,14 +1044,14 @@ BOOL SbModule::StoreBinaryData( SvStream& rStrm )
          bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
-            pImage->aSource = String();
+            pImage->aOUSource = OUString();
             pImage->aComment = aComment;
             pImage->aName = GetName();
 
             rStrm << (BYTE) 1;
             bRet = pImage->Save( rStrm );
 
-            pImage->aSource = aSource;
+            pImage->aOUSource = aOUSource;
         }
     }
     return bRet;
@@ -1044,9 +1059,9 @@ BOOL SbModule::StoreBinaryData( SvStream& rStrm )
 
 BOOL SbModule::LoadBinaryData( SvStream& rStrm )
 {
-    String aKeepSource = aSource;
+    OUString aKeepSource = aOUSource;
     bool bRet = LoadData( rStrm, 2 );
-    aSource = aKeepSource;
+    aOUSource = aKeepSource;
     return bRet;
 }
 
@@ -1902,7 +1917,9 @@ BOOL SbJScriptModule::LoadData( SvStream& rStrm, USHORT nVer )
         return FALSE;
 
     // Source-String holen
-    rStrm.ReadByteString( aSource, gsl_getSystemTextEncoding() );
+    String aTmp;
+    rStrm.ReadByteString( aTmp, gsl_getSystemTextEncoding() );
+    aOUSource = aTmp;
     //rStrm >> aSource;
     return TRUE;
 }
@@ -1913,7 +1930,8 @@ BOOL SbJScriptModule::StoreData( SvStream& rStrm ) const
         return FALSE;
 
     // Source-String schreiben
-    rStrm.WriteByteString( aSource, gsl_getSystemTextEncoding() );
+    String aTmp = aOUSource;
+    rStrm.WriteByteString( aTmp, gsl_getSystemTextEncoding() );
     //rStrm << aSource;
     return TRUE;
 }
@@ -1933,8 +1951,21 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
     SetFlag( SBX_NO_MODIFY );
 }
 
+SbMethod::SbMethod( const SbMethod& r )
+    : SbxMethod( r )
+{
+    pMod         = r.pMod;
+    bInvalid     = r.bInvalid;
+    nStart       = r.nStart;
+    nDebugFlags  = r.nDebugFlags;
+    nLine1       = r.nLine1;
+    nLine2       = r.nLine2;
+    SetFlag( SBX_NO_MODIFY );
+}
+
 SbMethod::~SbMethod()
-{}
+{
+}
 
 SbxArray* SbMethod::GetLocals()
 {
@@ -2022,6 +2053,48 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     pBasic->ReleaseRef();
 
     return nErr;
+}
+
+
+// #100883 Own Broadcast for SbMethod
+void SbMethod::Broadcast( ULONG nHintId )
+{
+    if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
+    {
+        // Da die Methode von aussen aufrufbar ist, hier noch einmal
+        // die Berechtigung testen
+        if( nHintId & SBX_HINT_DATAWANTED )
+            if( !CanRead() )
+                return;
+        if( nHintId & SBX_HINT_DATACHANGED )
+            if( !CanWrite() )
+                return;
+
+        if( !pMod->IsCompiled() )
+            pMod->Compile();
+
+        // Block broadcasts while creating new method
+        SfxBroadcaster* pSave = pCst;
+        pCst = NULL;
+        SbMethod* pThisCopy = new SbMethod( *this );
+        SbMethodRef xHolder = pThisCopy;
+        if( pPar.Is() )
+        {
+            // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
+            pPar->PutDirect( pThisCopy, 0 );
+               SetParameters( NULL );
+        }
+
+        pCst = pSave;
+        pSave->Broadcast( SbxHint( nHintId, pThisCopy ) );
+
+        USHORT nSaveFlags = GetFlags();
+        SetFlag( SBX_READWRITE );
+        pCst = NULL;
+        Put( pThisCopy->GetValues_Impl() );
+        pCst = pSave;
+        SetFlags( nSaveFlags );
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////
