@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 15:16:02 $
+ *  last change: $Author: oj $ $Date: 2002-09-20 11:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,10 +502,10 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 
             // now append the columns
             Reference<XColumnsSupplier> xColSup(xTable,UNO_QUERY);
-            appendColumns(xColSup);
+            appendColumns(xColSup,bNew);
             // now append the primary key
             Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-            appendPrimaryKey(xKeySup);
+            appendPrimaryKey(xKeySup,bNew);
         }
         // now set the properties
         if(bNew)
@@ -898,7 +898,7 @@ const OTypeInfo* OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
     return NULL;
 }
 // -----------------------------------------------------------------------------
-void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns)
+void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns)
 {
     try
     {
@@ -919,7 +919,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
         {
             OSL_ENSURE(*aIter,"OTableRow is null!");
             OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-            if ( !pField || (*aIter)->IsReadOnly() )
+            if ( !pField || (!_bNew && (*aIter)->IsReadOnly()) )
                 continue;
 
             Reference<XPropertySet> xColumn;
@@ -959,7 +959,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
     }
 }
 // -----------------------------------------------------------------------------
-void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup)
+void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Bool _bNew)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys
@@ -977,7 +977,7 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup)
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if(xColSup.is())
     {
-        appendColumns(xColSup,sal_True);
+        appendColumns(xColSup,_bNew,sal_True);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         if(xColumns->hasElements())
             xAppend->appendByDescriptor(xKey);
@@ -1528,7 +1528,7 @@ void OTableController::alterColumns()
     if ( bNeedAppendKey )
     {
         Reference< XKeysSupplier > xKeySup( m_xTable, UNO_QUERY );
-        appendPrimaryKey( xKeySup );
+        appendPrimaryKey( xKeySup ,sal_False);
     }
 
     reSyncRows();

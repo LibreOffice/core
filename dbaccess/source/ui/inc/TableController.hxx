@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 15:15:16 $
+ *  last change: $Author: oj $ $Date: 2002-09-20 11:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,8 @@ namespace dbaui
         void loadData();
         sal_Bool checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
         String createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const String& _rDefault);
-        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns=sal_False);
-        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup);
+        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns = sal_False);
+        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,sal_Bool _bNew);
         void alterColumns();
         void dropPrimaryKey();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
