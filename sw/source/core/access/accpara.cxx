@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 16:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
@@ -731,8 +734,38 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    // HACK:
-    return GetCharBoundary( rBound, rText, nPos );
+    sal_Bool bRet = sal_False;
+
+    // ask the Break-Iterator for the glyph by moving one cell
+    // forward, and then one cell back
+    DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
+    DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
+    if( pBreakIt->xBreak.is() )
+    {
+        // get locale for this position
+        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        Locale aLocale = pBreakIt->GetLocale(
+                              GetTxtNode()->GetLang( nModelPos ) );
+
+        // get word boundary, as the Break-Iterator sees fit.
+        const USHORT nIterMode = CharacterIteratorMode::SKIPCELL;
+        sal_Int32 nDone = 0;
+        rBound.endPos = pBreakIt->xBreak->nextCharacters(
+             rText, nPos, aLocale, nIterMode, 1, nDone );
+        rBound.startPos = pBreakIt->xBreak->previousCharacters(
+             rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
+
+        DBG_ASSERT( rBound.startPos <= nPos, "start pos too high" );
+        DBG_ASSERT( rBound.endPos >= nPos, "end pos too low" );
+    }
+    else
+    {
+        // no break Iterator -> no glyph
+        rBound.startPos = nPos;
+        rBound.endPos = nPos;
+    }
+
+    return bRet;
 }
 
 
