@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,12 +185,12 @@ void OPreparedStatement::initializeResultSet( OResultSet* _pResult )
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,22 +553,22 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw(RuntimeException)
+void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::release() throw(RuntimeException)
+void SAL_CALL OStatement_Base::release() throw()
 {
     OStatement_BASE::release();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::acquire() throw(RuntimeException)
+void SAL_CALL OStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::release() throw(RuntimeException)
+void SAL_CALL OStatement::release() throw()
 {
     OStatement_BASE2::release();
 }

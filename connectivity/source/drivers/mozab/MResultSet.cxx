@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,12 +1158,12 @@ void OResultSet::getFastPropertyValue(
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
