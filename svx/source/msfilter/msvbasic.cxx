@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:09:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
         {
             String sTempStringa;
             if (mbMac)
-                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0A"));
+                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0D"));
             else
                 sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"));
             String sTempStringb(sTempStringa);
