@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-25 09:47:14 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@
 
 #define AI_STYLE_CATALOG            ACC_CODE( SID_STYLE_CATALOG, KEY_F11, FALSE, TRUE, FALSE )
 #define AI_WIN_FULLSCREEN           ACC_CODE( SID_WIN_FULLSCREEN, KEY_J, TRUE, TRUE, FALSE )
-#define AI_DESKTOPMODE              ACC_CODE( SID_DESKTOPMODE, KEY_I, TRUE, TRUE, FALSE )
+
 #define AI_FOCUSURLBOX              ACC_CODE( SID_FOCUSURLBOX, KEY_O, TRUE, TRUE, FALSE )
 #define AI_SELECTALL                ACC_CODE( SID_SELECTALL, KEY_A, FALSE, TRUE, FALSE )
 
@@ -213,10 +213,6 @@
 #define AI_MOREFRONT                ACC_CODE( SID_MOREFRONT, KEY_ADD, FALSE, TRUE, FALSE )
 #define AI_FRAME_TO_BOTTOM          ACC_CODE( SID_FRAME_TO_BOTTOM, KEY_SUBTRACT, TRUE, TRUE, FALSE )
 #define AI_MOREBACK                 ACC_CODE( SID_MOREBACK, KEY_SUBTRACT, FALSE, TRUE, FALSE )
-
-// Explorer / Beamer
-#define AI_FOCUS_EXPLORER           ACC_CODE( SID_FOCUS_EXPLORER, KEY_E, TRUE, TRUE, FALSE )
-#define AI_FOCUS_BEAMER             ACC_CODE( SID_FOCUS_BEAMER, KEY_B, TRUE, TRUE, FALSE )
 
 // sonstige Acceleratoren
 #define AI_NEWDOC                   ACC_CODE( SID_NEWDOC, KEY_N, TRUE, TRUE, FALSE )
