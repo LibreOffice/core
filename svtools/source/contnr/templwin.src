@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:25:24 $
+ *  last change: $Author: vg $ $Date: 2002-11-27 16:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_SVT_NEWDOC
     Text = "Neues Dokument";
     Text [ english_us ] = "New Document";
     Text[ portuguese ] = "Novo documento";
-    Text[ russian ] = "Новый документ";
+    Text[ russian ] = "Создать документ";
     Text[ greek ] = "New Document";
     Text[ dutch ] = "Nieuw document";
     Text[ french ] = "Nouveau document";
@@ -160,7 +160,7 @@ String STR_SVT_TEMPLATES
     Text[ dutch ] = "Sjablonen";
     Text[ french ] = "Modиles";
     Text[ spanish ] = "Plantillas";
-    Text[ finnish ] = "Mallipohjat";
+    Text[ finnish ] = "Mallit";
     Text[ italian ] = "Modelli";
     Text[ danish ] = "Typografier";
     Text[ swedish ] = "Mallar";
@@ -193,7 +193,7 @@ String STR_SVT_SAMPLES
     Text = "Beispiele";
     Text [ english_us ] = "Samples";
     Text[ portuguese ] = "Exemplos";
-    Text[ russian ] = "Образцы";
+    Text[ russian ] = "Примеры";
     Text[ greek ] = "Samples";
     Text[ dutch ] = "Voorbeelden";
     Text[ french ] = "Exemples";
@@ -210,7 +210,7 @@ String STR_SVT_SAMPLES
     Text[ turkish ] = "Samples";
     Text[ arabic ] = "Samples";
     Text[ catalan ] = "Mostres";
-    Text[ finnish ] = "Mallit";
+    Text[ finnish ] = "Esimerkit";
     Text[ thai ] = "аё•аё±аё§аё­аёўа№€аёІаё‡";
 };
 
@@ -268,7 +268,7 @@ ToolBox TB_SVT_FILEVIEW
             Text [ english_us ] = "Up One Level" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Subir um nнvel";
-            Text[ russian ] = "На один уровень вверх";
+            Text[ russian ] = "На уровень вверх";
             Text[ greek ] = "Higher";
             Text[ dutch ] = "Een niveau hoger";
             Text[ french ] = "Au rйpertoire supйrieur";
@@ -285,7 +285,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ turkish ] = "Higher";
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Un nivell amunt";
-            Text[ finnish ] = "Taso ylцspдin";
+            Text[ finnish ] = "Tasoa ylemmдs";
             Text[ thai ] = "аё‚аё¶а№‰аё™аё«аё™аё¶а№€аё‡аёЈаё°аё”аё±аёљ";
         };
         ToolBoxItem
@@ -428,7 +428,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text = "Vorschau" ;
             Text [ english_us ] = "Preview" ;
             Text[ portuguese ] = "Previsualizar";
-            Text[ russian ] = "Просмотр";
+            Text[ russian ] = "Предварительный просмотр";
             Text[ greek ] = "Preview";
             Text[ dutch ] = "Voorbeeld";
             Text[ french ] = "Aperзu";
@@ -518,7 +518,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ turkish ] = "Templates and Documents";
     Text[ arabic ] = "Templates and Documents";
     Text[ catalan ] = "Templates and Documents";
-    Text[ finnish ] = "Mallipohjat ja asiakirjat";
+    Text[ finnish ] = "Mallit ja asiakirjat";
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
     {
@@ -532,7 +532,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text = "~Verwalten...";
         Text [ english_us ] = "Organi~ze...";
         Text[ portuguese ] = "~Gerir...";
-        Text[ russian ] = "Организовать...";
+        Text[ russian ] = "Управление...";
         Text[ greek ] = "Manage...";
         Text[ dutch ] = "Be~heren...";
         Text[ french ] = "~Gйrer...";
@@ -549,7 +549,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ turkish ] = "Manage...";
         Text[ arabic ] = "Manage...";
         Text[ catalan ] = "~Organitza...";
-        Text[ finnish ] = "~Jдrjestд";
+        Text[ finnish ] = "~Jдrjestд...";
         Text[ thai ] = "аё€аё±аё”аёЈаё°а№Ђаёљаёµ~аёўаёљ...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
@@ -559,7 +559,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text = "~Bearbeiten";
         Text [ english_us ] = "~Edit";
         Text[ portuguese ] = "~Editar";
-        Text[ russian ] = "Правка";
+        Text[ russian ] = "Изменить";
         Text[ greek ] = "Edit";
         Text[ dutch ] = "Be~werken";
         Text[ french ] = "Йditer";
@@ -684,12 +684,12 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ russian ] =
     {
-         < "Заглавие" ; DI_TITLE ; > ;
+         < "Заголовок" ; DI_TITLE ; > ;
         < "Из" ; DI_FROM ; > ;
         < "Дата" ; DI_DATE ; > ;
         < "Ключевые слова" ; DI_KEYWORDS ; > ;
         < "Описание" ; DI_DESCRIPTION ; > ;
-        < "Тип содержимого" ; DI_MIMETYPE ; > ;
+        < "Тип" ; DI_MIMETYPE ; > ;
         < "Дата изменения" ; DI_MODIFIEDDATE ; > ;
         < "Изменен" ; DI_MODIFIEDBY ; > ;
         < "Дата печати" ; DI_PRINTDATE ; > ;
@@ -720,7 +720,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Sleutelwoorden" ; DI_KEYWORDS ; > ;
         < "Omschrijving" ; DI_DESCRIPTION ; > ;
         < "Inhoudstype:" ; DI_MIMETYPE ; > ;
-        < "Datum wijziging" ; DI_MODIFIEDDATE ; > ;
+        < "Gewijzigd op" ; DI_MODIFIEDDATE ; > ;
         < "Gewijzigd door" ; DI_MODIFIEDBY ; > ;
         < "Afdrukdatum" ; DI_PRINTDATE ; > ;
         < "Afgedrukt door" ; DI_PRINTBY ; > ;
@@ -760,15 +760,15 @@ StringArray STRARY_SVT_DOCINFO
     ItemList [ finnish ] =
     {
         < "Otsikko" ; DI_TITLE ; > ;
-        < "Lдhettдjд" ; DI_FROM ; > ;
+        < "Tekijд" ; DI_FROM ; > ;
         < "Pдivдmддrд" ; DI_DATE ; > ;
         < "Avainsanat" ; DI_KEYWORDS ; > ;
         < "Kuvaus" ; DI_DESCRIPTION ; > ;
         < "Tyyppi" ; DI_MIMETYPE ; > ;
-        < "Muokkausaika" ; DI_MODIFIEDDATE ; > ;
+        < "Muokattu viimeksi" ; DI_MODIFIEDDATE ; > ;
         < "Muokkaaja" ; DI_MODIFIEDBY ; > ;
-        < "Tulostusaika" ; DI_PRINTDATE ; > ;
-        < "Tulostaja" ; DI_PRINTBY ; > ;
+        < "Tulostuspдivд" ; DI_PRINTDATE ; > ;
+        < "Tulostanut" ; DI_PRINTBY ; > ;
         < "Aihe" ; DI_THEME ; > ;
         < "Koko" ; DI_SIZE ; > ;
     };
