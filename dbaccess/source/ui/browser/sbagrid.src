@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 09:52:18 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -73,7 +76,7 @@ Menu RID_SBA_GRID_COLCTXMENU
         MenuItem
         {
             Identifier = ID_BROWSER_COLATTRSET ;
-            HelpID = ID_BROWSER_COLATTRSET ;
+            HelpID = HID_BROWSER_COLUMNFORMAT ;
             Text = "Spalten~formatierung..." ;
             Text [ ENGLISH ] = "Column ~format..." ;
             Text [ norwegian ] = "Kolonne format..." ;
@@ -100,7 +103,7 @@ Menu RID_SBA_GRID_COLCTXMENU
         MenuItem
         {
             Identifier = ID_BROWSER_COLWIDTH ;
-            HelpID = ID_BROWSER_COLWIDTH ;
+            HelpID = HID_BROWSER_COLUMNWIDTH ;
             Text = "Spalten~breite..." ;
             Text [ ENGLISH ] = "Column ~width..." ;
             Text [ finnish ] = "Sarakkeen leveyden..." ;
@@ -133,7 +136,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
         MenuItem
         {
             Identifier = ID_BROWSER_TABLEATTR ;
-            HelpID = ID_BROWSER_TABLEATTR ;
+            HelpID = HID_BROWSER_TABLEFORMAT ;
             Text = "Tabellenformatierung..." ;
             Text [ ENGLISH ] = "Table format..." ;
             Text [ dutch ] = "Tabelopmaak..." ;
@@ -158,7 +161,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
         MenuItem
         {
             Identifier = ID_BROWSER_ROWHEIGHT ;
-            HelpID = ID_BROWSER_ROWHEIGHT ;
+            HelpID = HID_BROWSER_ROWHEIGHT ;
             Text = "Zeilenhöhe..." ;
             Text [ ENGLISH ] = "Row height..." ;
             Text [ norwegian ] = "Radhøyde..." ;
