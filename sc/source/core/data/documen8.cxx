@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 17:25:36 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 19:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,6 +1152,31 @@ BOOL ScDocument::GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, Str
                     rAppl  = pDde->GetAppl();
                     rTopic = pDde->GetTopic();
                     rItem  = pDde->GetItem();
+                    return TRUE;
+                }
+                ++nDdeCount;
+            }
+        }
+    }
+    return FALSE;
+}
+
+BOOL ScDocument::GetDdeLinkMode(USHORT nPos, USHORT& nMode)
+{
+    USHORT nDdeCount = 0;
+    if (pLinkManager)
+    {
+        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+            {
+                if ( nDdeCount == nPos )
+                {
+                    ScDdeLink* pDde = (ScDdeLink*)pBase;
+                    nMode = pDde->GetMode();
                     return TRUE;
                 }
                 ++nDdeCount;
