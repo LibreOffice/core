@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-19 12:42:08 $
+ *  last change: $Author: rt $ $Date: 2001-06-20 10:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ String SdExportFileDialog::ReqDisplayDirectory() const
 // ------------------------------------------------------------------------
 String SdExportFileDialog::ReqCurrFilter() const
 {
-    return mpImp ? mpImp->maCurFilter : String();
+    return mpImp ? (String)mpImp->maCurFilter : String();
 }
 
 // ------------------------------------------------------------------------
