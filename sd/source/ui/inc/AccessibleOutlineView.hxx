@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:04:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
+#define SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
-
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #include "AccessibleDocumentViewBase.hxx"
 #endif
 
@@ -71,9 +70,10 @@
 #include <svx/AccessibleTextHelper.hxx>
 #endif
 
-
-class SdWindow;
-class SdOutlineViewShell;
+namespace sd {
+class OutlineViewShell;
+class Window;
+}
 
 namespace accessibility {
 
@@ -89,14 +89,13 @@ class AccessibleOutlineView
     : public AccessibleDocumentViewBase
 {
 public:
-    //=====  internal  ========================================================
-
-    AccessibleOutlineView ( SdWindow* pSdWindow,
-                            SdOutlineViewShell* pViewShell,
-                            const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XController>& rxController,
-                            const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::accessibility::XAccessible>& rxParent);
+    AccessibleOutlineView (
+        ::sd::Window* pSdWindow,
+        ::sd::OutlineViewShell* pViewShell,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XController>& rxController,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleOutlineView  (void);
 
