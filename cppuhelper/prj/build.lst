@@ -1,3 +1,4 @@
 ch	cppuhelper	:	codemaker cppu NULL
 ch	cppuhelper								usr1	-	all	ch_mkout NULL
-ch	cppuhelper\source						nmake	-	all	ch_source NULL
+ch	cppuhelper\source						nmake	-	all	ch_source ch_unotypes NULL
+ch	cppuhelper\unotypes						nmake	-	all	ch_unotypes NULL
