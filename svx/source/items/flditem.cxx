@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 23:13:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,11 +1014,11 @@ XubString SvxExtFileField::GetFormatted() const
             break;
 
             case SVXFILEFORMAT_NAME:
-                aString = aURLObj.getBase();
+                aString = aURLObj.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
             break;
 
             case SVXFILEFORMAT_NAME_EXT:
-                aString = aURLObj.getName();
+                aString = aURLObj.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
             break;
         }
     }
