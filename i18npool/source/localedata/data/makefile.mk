@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.20 $
+#*  $Revision: 1.21 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-06-12 10:48:54 $
+#*  last change: $Author: vg $ $Date: 2003-07-02 15:07:46 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -166,6 +166,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
     $(MISC)$/localedata_ru_RU.cxx  \
+    $(MISC)$/localedata_sk_SK.cxx  \
     $(MISC)$/localedata_sl_SI.cxx  \
     $(MISC)$/localedata_sv_FI.cxx  \
     $(MISC)$/localedata_sv_SE.cxx  \
@@ -282,6 +283,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
+    $(SLO)$/localedata_sk_SK.obj	\
     $(SLO)$/localedata_sl_SI.obj	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
