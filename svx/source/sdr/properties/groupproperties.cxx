@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:50:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,10 @@ namespace sdr
                 }
 
                 // also clear local ItemSet, it's only temporary for group objects anyways.
-                mpItemSet->ClearItem();
+                if(mpItemSet)
+                {
+                    mpItemSet->ClearItem();
+                }
             }
         }
 
