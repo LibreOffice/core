@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:17:27 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -973,6 +972,7 @@ void SAL_CALL ContentImplHelper::removePropertySetInfoChangeListener(
 Reference< XInterface > SAL_CALL ContentImplHelper::getParent()
     throw( RuntimeException )
 {
+    Reference< XInterface > xParent;
     OUString aURL = getParentURL();
 
     if ( aURL.getLength() )
@@ -981,14 +981,14 @@ Reference< XInterface > SAL_CALL ContentImplHelper::getParent()
                     new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
         try
         {
-            return m_xProvider->queryContent( xId );
+            xParent.set( m_xProvider->queryContent( xId ) );
         }
         catch ( IllegalIdentifierException const & )
         {
         }
     }
 
-    return Reference< XInterface >();
+    return xParent;
 }
 
 //=========================================================================
