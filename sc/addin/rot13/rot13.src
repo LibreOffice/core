@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:46 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ swedish ] = "ROT13 algoritm, varje alfabetiskt tecken i texten roteras med 13 i alfabetet.";
         Text[ polish ] = "Algorytm ROT13, ka¿dy alfabetyczny znak tekstu zostanie obrócony o 13 w alfabecie.";
         Text[ portuguese_brazilian ] = "ROT13 Algorithm, each alphabetical character of the text is rotated by 13 in the alphabet";
-        Text[ japanese ] = "ROT13±ÙºŞØ½ŞÑ:ÃÃ·½Ä‚Ì±ÙÌ§ÍŞ¯Ä•¶š‚Í13š‚²‚Æ‚ÉŒJ‚è•Ô‚³‚ê‚Ü‚·";
+        Text[ japanese ] = "ROT13 ±ÙºŞØ½ŞÑAÃ·½Ä‚ÌŠe±ÙÌ§ÍŞ¯Ä•¶š‚Í13š‚²‚Æ‚ÉŒJ‚è•Ô‚³‚ê‚Ü‚·B";
         Text[ chinese_simplified ] = "ROT13 ·¨Ôò£¬ÎÄ±¾ÄÚÃ¿¸ö×ÖÄ¸½«ÑØ×ÖÄ¸±íµÄµÚ13¸ö×ÖÄ¸Ñ­»·Ğı×ª¡£";
         Text[ chinese_traditional ] = "ROT13 ªk«h¡A¥»¤å¤º¨C­Ó¦r¥À±Nªu¦r¥Àªíªº²Ä13­Ó¦r¥À´`Àô±ÛÂà¡C";
         Text[ arabic ] = "äÙÇã ÇáÚÏ ROT13¡ íÊã ÊÏæíÑ ßá ÍÑİ ÃÈÌÏí İí ÇáäÕ äÍæ 13 ÍÑİÇğ ãä ÍÑæİ ÇáÃáİÈÇÁ.";
