@@ -628,6 +628,7 @@ hedabu: ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 ..\xml\SvxUnoTextRange.xml %_DEST%\xml%_EXT%\SvxUnoTextRange.xml
 ..\xml\SvxUnoTextRangeEnumeration.xml %_DEST%\xml%_EXT%\SvxUnoTextRangeEnumeration.xml
 ..\xml\SvxGraphicExporter.xml %_DEST%\xml%_EXT%\SvxGraphicExporter.xml
+..\xml\SvxGraphCtrlAccessibleContext.xml %_DEST%\xml%_EXT%\SvxGraphCtrlAccessibleContext.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
