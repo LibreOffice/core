@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:25:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,6 +1896,39 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             const SwModify* pOldMod = rWW8Wrt.pOutFmtNode;
             rWW8Wrt.pOutFmtNode = pNd;
+
+            // #i44815# adjust numbering/indents for numbered paragraphs
+            //          without number (NO_NUMLEVEL)
+            if( pNd->GetNum() != NULL  &&  ! pNd->IsNumbered() )
+            {
+                // WW8 does not know numbered paragraphs without number
+                // (NO_NUMLEVEL). In OutWW8_SwNumRuleItem, we will export
+                // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
+                // no numbering. Here, we will adjust the indents to match
+                // visually.
+
+                if (pTmpSet == pNd->GetpSwAttrSet())
+                    pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+
+                // create new LRSpace item, based on the current (if present)
+                const SfxPoolItem* pItem = NULL;
+                pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pItem);
+                SvxLRSpaceItem aLRSpace(
+                    ( pItem == NULL )
+                        ? SvxLRSpaceItem(0, 0)
+                        : *static_cast<const SvxLRSpaceItem*>( pItem ) );
+
+                // new left margin = old left + label space
+                const SwNumFmt& rNumFmt = pNd->GetNumRule()->Get( pNd->GetNum()->GetRealLevel() );
+                aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
+
+                // new first line indent = 0
+                // (first line indent is ignored for NO_NUMLEVEL)
+                aLRSpace.SetTxtFirstLineOfst( 0 );
+
+                // put back the new item
+                pTmpSet->Put( aLRSpace );
+            }
 
             // Pap-Attrs, so script is not necessary
             rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
