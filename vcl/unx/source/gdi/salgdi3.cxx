@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:33:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
