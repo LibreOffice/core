@@ -28,13 +28,13 @@ import com.sun.star.script.XInvocation;
 
 import com.sun.star.lib.uno.helper.PropertySet;
 
-import drafts.com.sun.star.script.browse.XBrowseNode;
-import drafts.com.sun.star.script.browse.BrowseNodeTypes;
-import drafts.com.sun.star.script.browse.XBrowseNodeFactory;
-import drafts.com.sun.star.script.browse.BrowseNodeFactoryViewType;
-import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.provider.XScript;
-import drafts.com.sun.star.script.provider.XScriptProvider;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.browse.XBrowseNodeFactory;
+import com.sun.star.script.browse.BrowseNodeFactoryViewTypes;
+import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScript;
+import com.sun.star.script.provider.XScriptProvider;
 
 public class ScriptSelector {
 
@@ -308,11 +308,11 @@ public class ScriptSelector {
         XMultiComponentFactory xmcf = xcc.getServiceManager();
         XBrowseNodeFactory xBrowseFac = (XBrowseNodeFactory)
             UnoRuntime.queryInterface( XBrowseNodeFactory.class, xcc.getValueByName(
-                "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") );
+                "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") );
 
 
         result = (XBrowseNode)UnoRuntime.queryInterface(
-           XBrowseNode.class, xBrowseFac.getView( BrowseNodeFactoryViewType.SCRIPTORGANIZER ) );
+           XBrowseNode.class, xBrowseFac.createView( BrowseNodeFactoryViewTypes.MACROORGANIZER ) );
         return result;
     }
 }
