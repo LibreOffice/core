@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:34:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include "xestring.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#endif
+
 using ::com::sun::star::sheet::GeneralFunction;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 
@@ -84,6 +88,7 @@ namespace ScDPSortMode = ::com::sun::star::sheet::DataPilotFieldSortMode;
 namespace ScDPShowItemsMode = ::com::sun::star::sheet::DataPilotFieldShowItemsMode;
 namespace ScDPLayoutMode = ::com::sun::star::sheet::DataPilotFieldLayoutMode;
 namespace ScDPRefItemType = ::com::sun::star::sheet::DataPilotFieldReferenceItemType;
+namespace ScDPGroupBy = ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
 // ============================================================================
 // Pivot cache
@@ -296,13 +301,13 @@ sal_Int32 XclPCNumGroupInfo::GetScDateType() const
     sal_Int32 nScType = 0;
     switch( GetXclDataType() )
     {
-        case EXC_SXNUMGROUP_TYPE_SEC:   nScType = SC_DP_DATE_SECONDS;   break;
-        case EXC_SXNUMGROUP_TYPE_MIN:   nScType = SC_DP_DATE_MINUTES;   break;
-        case EXC_SXNUMGROUP_TYPE_HOUR:  nScType = SC_DP_DATE_HOURS;     break;
-        case EXC_SXNUMGROUP_TYPE_DAY:   nScType = SC_DP_DATE_DAYS;      break;
-        case EXC_SXNUMGROUP_TYPE_MONTH: nScType = SC_DP_DATE_MONTHS;    break;
-        case EXC_SXNUMGROUP_TYPE_QUART: nScType = SC_DP_DATE_QUARTERS;  break;
-        case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = SC_DP_DATE_YEARS;     break;
+        case EXC_SXNUMGROUP_TYPE_SEC:   nScType = ScDPGroupBy::SECONDS;   break;
+        case EXC_SXNUMGROUP_TYPE_MIN:   nScType = ScDPGroupBy::MINUTES;   break;
+        case EXC_SXNUMGROUP_TYPE_HOUR:  nScType = ScDPGroupBy::HOURS;     break;
+        case EXC_SXNUMGROUP_TYPE_DAY:   nScType = ScDPGroupBy::DAYS;      break;
+        case EXC_SXNUMGROUP_TYPE_MONTH: nScType = ScDPGroupBy::MONTHS;    break;
+        case EXC_SXNUMGROUP_TYPE_QUART: nScType = ScDPGroupBy::QUARTERS;  break;
+        case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = ScDPGroupBy::YEARS;     break;
         default:    DBG_ERROR1( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
     }
     return nScType;
@@ -313,13 +318,13 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
     sal_uInt16 nXclType = EXC_SXNUMGROUP_TYPE_NUM;
     switch( nScType )
     {
-        case SC_DP_DATE_SECONDS:    nXclType = EXC_SXNUMGROUP_TYPE_SEC;     break;
-        case SC_DP_DATE_MINUTES:    nXclType = EXC_SXNUMGROUP_TYPE_MIN;     break;
-        case SC_DP_DATE_HOURS:      nXclType = EXC_SXNUMGROUP_TYPE_HOUR;    break;
-        case SC_DP_DATE_DAYS:       nXclType = EXC_SXNUMGROUP_TYPE_DAY;     break;
-        case SC_DP_DATE_MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
-        case SC_DP_DATE_QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
-        case SC_DP_DATE_YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
+        case ScDPGroupBy::SECONDS:    nXclType = EXC_SXNUMGROUP_TYPE_SEC;     break;
+        case ScDPGroupBy::MINUTES:    nXclType = EXC_SXNUMGROUP_TYPE_MIN;     break;
+        case ScDPGroupBy::HOURS:      nXclType = EXC_SXNUMGROUP_TYPE_HOUR;    break;
+        case ScDPGroupBy::DAYS:       nXclType = EXC_SXNUMGROUP_TYPE_DAY;     break;
+        case ScDPGroupBy::MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
+        case ScDPGroupBy::QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
+        case ScDPGroupBy::YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
         default:    DBG_ERROR1( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
     }
     SetXclDataType( nXclType );
