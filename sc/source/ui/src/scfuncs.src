@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:57:48 $
+ *  last change: $Author: kz $ $Date: 2001-11-06 11:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6891,7 +6891,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zins" ;
             Text [ english ] = "rate" ;
             Text [ norwegian ] = "Zins" ;
-            Text [ italian ] = "Tasso interesse" ;
+            Text [ italian ] = "Tasso interesse " ;
             Text [ portuguese_brazilian ] = "Zins" ;
             Text [ portuguese ] = "Juro" ;
             Text [ finnish ] = "Korko" ;
@@ -6920,7 +6920,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "is the interest rate per period." ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juros por cada preríodo." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -6949,7 +6949,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "P" ;
             Text [ english ] = "per" ;
             Text [ norwegian ] = "P" ;
-            Text [ italian ] = "periodo" ;
+            Text [ italian ] = "Periodi " ;
             Text [ portuguese_brazilian ] = "P" ;
             Text [ portuguese ] = "Período" ;
             Text [ finnish ] = "Kausi" ;
@@ -6979,7 +6979,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Periode. Die Periode, für die die Tilgung berechnet wird. P = 1 heißt für die erste Periode, P = ZZR für die letzte." ;
             Text [ english ] = "specifies the period and must be in the range 1 to nper." ;
             Text [ norwegian ] = "Periode. Die Periode, für die die Tilgung berechnet wird. P = 1 heißt für die erste Periode, P = ZZR für die letzte." ;
-            Text [ italian ] = "Durata. La durata per la quale si desidera calcolare l'ammortamento . D = 1 significa per il primo periodo, D = NUM.RATE significa per l'ultimo." ;
+            Text [ italian ] = "La durata per la quale si desidera calcolare l'ammortamento .  1 = primo periodo, Numero rate = ultimo periodo." ;
             Text [ portuguese_brazilian ] = "Periode. Die Periode, f? die die Tilgung berechnet wird. P = 1 hei?t f? die erste Periode, P = ZZR f? die letzte." ;
             Text [ portuguese ] = "é o período para o qual se calcula a amortização. 1 indica o primeiro período, nper o último." ;
             Text [ finnish ] = "Kausi! Kausi, jonka maksut lasketaan. P = 1 tarkoittaa ensimmäistä ja P = NPER viimeistä kautta" ;
@@ -7008,7 +7008,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "nper" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate " ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -7038,7 +7038,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
             Text [ english ] = "is the total number of payment periods in an annuity." ;
             Text [ norwegian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
-            Text [ italian ] = "è il numero totale dei periodi di pagamento in un'annualità." ;
+            Text [ italian ] = "Numero totale dei periodi di pagamento in un'annualità." ;
             Text [ portuguese_brazilian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuit?t (Rente) gezahlt wird." ;
             Text [ portuguese ] = "é o número total de períodos de pagamento numa anuidade." ;
             Text [ finnish ] = "Maksukausi. Maksukaudet, joiden aikana annuiteetti (eläke) maksetaan." ;
@@ -7067,7 +7067,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "pv" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale " ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "Va" ;
             Text [ finnish ] = "PV" ;
@@ -7096,7 +7096,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ english ] = "is the present valueùthe total amount that a series of future payments is worth now." ;
             Text [ norwegian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
-            Text [ italian ] = "è il valore attuale o la somma forfettaria che rappresenta il valore attuale di una serie di pagamenti futuri." ;
+            Text [ italian ] = "Il valore attuale di una serie di pagamenti." ;
             Text [ portuguese_brazilian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ portuguese ] = "é o valor presente ou a quantia total actual correspondente a uma série de pagamentos futuros." ;
             Text [ finnish ] = "Nykyinen arvo. Annuiteetin nykyinen arvo." ;
@@ -7125,7 +7125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZW" ;
             Text [ english ] = "fv" ;
             Text [ norwegian ] = "ZW" ;
-            Text [ italian ] = "VAL.FUT" ;
+            Text [ italian ] = "Valore futuro " ;
             Text [ portuguese_brazilian ] = "ZW" ;
             Text [ portuguese ] = "Vf" ;
             Text [ finnish ] = "FV" ;
@@ -7155,7 +7155,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ english ] = "is the future value, or a cash balance you want to attain after the last payment is made." ;
             Text [ norwegian ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
-            Text [ italian ] = "Valore futuro. Valore finale che si desidera raggiungere dopo aver effettuato l'ultimo pagamento." ;
+            Text [ italian ] = "Valore finale che si desidera raggiungere dopo aver effettuato l'ultimo pagamento." ;
             Text [ portuguese_brazilian ] = "Zuk?ftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ portuguese ] = "é o valor futuro ou o saldo obtido depois de efectuado  o último pagamento." ;
             Text [ finnish ] = "Tuleva arvo. Viimeisen maksun jälkeinen arvo (loppuarvo)." ;
@@ -7184,7 +7184,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "F" ;
             Text [ english ] = "type" ;
             Text [ norwegian ] = "F" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo " ;
             Text [ portuguese_brazilian ] = "F" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -7214,7 +7214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "is the number 0 or 1 and indicates when payments are due." ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Scadenze dei pagamenti. F = 1 significa all'inizio di un periodo, F = 0 alla fine." ;
+            Text [ italian ] = "Tipo di scadenza dei pagamenti. 1 = all'inizio di un periodo, 0 = alla fine." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o número 0 ou 1 e indica as datas de vencimento dos pagamentos. 1 = início do período; 0 = fim do período." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -7283,7 +7283,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zins" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zins" ;
-            Text [ italian ] = "Tasso interesse" ;
+            Text [ italian ] = "Tasso interesse " ;
             Text [ portuguese_brazilian ] = "Zins" ;
             Text [ portuguese ] = "Juro" ;
             Text [ finnish ] = "Korko" ;
@@ -7312,7 +7312,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juros por período." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -7341,7 +7341,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate " ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -7400,7 +7400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale " ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "VA" ;
             Text [ finnish ] = "PV" ;
@@ -7458,7 +7458,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "A" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "A" ;
-            Text [ italian ] = "SP" ;
+            Text [ italian ] = "Periodo iniziale " ;
             Text [ portuguese_brazilian ] = "A" ;
             Text [ portuguese ] = "Início_período" ;
             Text [ finnish ] = "S" ;
@@ -7488,7 +7488,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 heißt die allerserte Periode." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 heißt die allerserte Periode." ;
-            Text [ italian ] = "È il periodo iniziale per il quale calcolare il deprezzamento." ;
+            Text [ italian ] = "Periodo iniziale per il quale calcolare il deprezzamento. 1 = primo periodo." ;
             Text [ portuguese_brazilian ] = "Anfangsperiode. Die erste Periode, die ber?ksichtigt wird. A = 1 hei?t die allerserte Periode." ;
             Text [ portuguese ] = "é o primeiro período no cálculo. 1 representa o primeiro período." ;
             Text [ finnish ] = "Aloituskausi. Ensimmäinen huomioitava kausi.! A = 1 tarkoittaa ensimmäistä kautta." ;
@@ -7517,7 +7517,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "E" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "E" ;
-            Text [ italian ] = "E" ;
+            Text [ italian ] = "Periodo finale " ;
             Text [ portuguese_brazilian ] = "E" ;
             Text [ portuguese ] = "Final_período" ;
             Text [ finnish ] = "loppu" ;
@@ -7576,7 +7576,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "F" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "F" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo" ;
             Text [ portuguese_brazilian ] = "F" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -7606,7 +7606,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Scadenza. I numeri 0 e 1 indicano il momento dei pagamenti (alla fine o all'inizio del periodo)." ;
+            Text [ italian ] = "Tipo di scadenza. 1 = scadenza all'inizio di un periodo, 0 = alla fine." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o vencimento dos pagamentos de juros. 1 significa no ínicio do período, 0 no final." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -7675,7 +7675,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zins" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zins" ;
-            Text [ italian ] = "Tasso interesse" ;
+            Text [ italian ] = "Tasso interesse " ;
             Text [ portuguese_brazilian ] = "Zins" ;
             Text [ portuguese ] = "Juro" ;
             Text [ finnish ] = "Korko" ;
@@ -7704,7 +7704,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juros por período." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -7733,7 +7733,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate " ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -7763,7 +7763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
-            Text [ italian ] = "Il numero totale dei periodi di pagamento" ;
+            Text [ italian ] = "Il numero totale dei periodi di pagamento." ;
             Text [ portuguese_brazilian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuit?t (Rente) gezahlt wird." ;
             Text [ portuguese ] = "é o número total de períodos de pagamento numa anuidade." ;
             Text [ finnish ] = "Maksukausi. Maksukaudet, joiden aikana annuiteetti (eläke) maksetaan." ;
@@ -7792,7 +7792,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale " ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "VA" ;
             Text [ finnish ] = "pv" ;
@@ -7850,7 +7850,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "A" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "A" ;
-            Text [ italian ] = "I" ;
+            Text [ italian ] = "Periodo iniziale " ;
             Text [ portuguese_brazilian ] = "A" ;
             Text [ portuguese ] = "Início_período" ;
             Text [ finnish ] = "S" ;
@@ -7880,7 +7880,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 ist die allererste Periode." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 ist die allererste Periode." ;
-            Text [ italian ] = "Il periodo iniziale per il quale calcolare il deprezzamento. I=1 è il primo periodo" ;
+            Text [ italian ] = "Il periodo iniziale per il quale calcolare il deprezzamento. 1 = primo periodo." ;
             Text [ portuguese_brazilian ] = "Anfangsperiode. Die erste Periode, die ber?ksichtigt wird. A = 1 ist die allererste Periode." ;
             Text [ portuguese ] = "é o primeiro período no cálculo. 1 representa o primeiro período." ;
             Text [ finnish ] = "Aloituskausi. Ensimmäinen huomioitava kausi.! A = 1 tarkoittaa ensimmäistä kautta." ;
@@ -7909,7 +7909,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "E" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "E" ;
-            Text [ italian ] = "UP" ;
+            Text [ italian ] = "Periodo finale " ;
             Text [ portuguese_brazilian ] = "E" ;
             Text [ portuguese ] = "Final_período" ;
             Text [ finnish ] = "loppu" ;
@@ -7968,7 +7968,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "F" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "F" ;
-            Text [ italian ] = "Tipo" ;
+            Text [ italian ] = "Tipo " ;
             Text [ portuguese_brazilian ] = "F" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -7998,7 +7998,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Scadenze. 1 = pagamenti dovuti all'inizio del periodo, 0 = alla fine." ;
+            Text [ italian ] = "Tipo di scadenze dei pagamaenti. 1 = all'inizio del periodo, 0 = alla fine." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o vencimento dos pagamentos de juros. 1 significa no ínicio do período, 0 no final." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -8154,7 +8154,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ english ] = "is the value at the end of the depreciation (sometimes called the salvage value of the asset)." ;
             Text [ norwegian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
-            Text [ italian ] = "È il valore residuo del bene al termine dell'ammortamento." ;
+            Text [ italian ] = "Valore residuo del bene al termine dell'ammortamento." ;
             Text [ portuguese_brazilian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ portuguese ] = "é o valor restante do bem no final da amortização." ;
             Text [ finnish ] = "Loppuarvo: Resurssin lopullinen arvo, kun resurssi on kulutettu loppuun." ;
@@ -8213,7 +8213,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ english ] = "is the number of periods over which the asset is being depreciated (sometimes called the useful life of the asset)." ;
             Text [ norwegian ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
-            Text [ italian ] = "È la vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
+            Text [ italian ] = "Vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
             Text [ portuguese_brazilian ] = "Nutzungsdauer. Die Anzahl der Perioden, ?er die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ portuguese ] = "é o número de períodos de amortização do bem económico." ;
             Text [ finnish ] = "Hyödyllinen käyttöikä. Resurssin käyttöiän hyödyllisten jaksojen määrä." ;
@@ -8271,7 +8271,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zeitraum. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ english ] = "is the period and must use the same units as life." ;
             Text [ norwegian ] = "Zeitraum. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
-            Text [ italian ] = "È il periodo dell'ammortamento espresso nelle stesse unità di misura di Vita utile." ;
+            Text [ italian ] = "Periodo dell'ammortamento espresso nelle stesse unità di misura di Vita utile." ;
             Text [ portuguese_brazilian ] = "Zeitraum. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ portuguese ] = "é o período de amortização que deseja calcular e tem a mesma unidade de tempo da vida útil." ;
             Text [ finnish ] = "Kausi! Poistokausi, jonka on oltava sama aikayksikkö kuin mitä käyttöiän määrityksessä on käytetty." ;
@@ -8612,7 +8612,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RW" ;
             Text [ english ] = "salvage" ;
             Text [ norwegian ] = "RW" ;
-            Text [ italian ] = "Valore residuo" ;
+            Text [ italian ] = "Valore residuo " ;
             Text [ portuguese_brazilian ] = "RW" ;
             Text [ portuguese ] = "Valor residual" ;
             Text [ finnish ] = "Loppuarvo" ;
@@ -8641,7 +8641,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ english ] = "is the value at the end of the depreciation (sometimes called the salvage value of the asset)." ;
             Text [ norwegian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
-            Text [ italian ] = "È il valore residuo del bene al termine dell'ammortamento." ;
+            Text [ italian ] = "Valore residuo del bene al termine dell'ammortamento." ;
             Text [ portuguese_brazilian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ portuguese ] = "é o valor restante do bem no final da amortização." ;
             Text [ finnish ] = "Loppuarvo: Resurssin lopullinen arvo, kun resurssi on kulutettu loppuun." ;
@@ -8670,7 +8670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ND" ;
             Text [ english ] = "life" ;
             Text [ norwegian ] = "ND" ;
-            Text [ italian ] = "Vita utile" ;
+            Text [ italian ] = "Vita utile " ;
             Text [ portuguese_brazilian ] = "ND" ;
             Text [ portuguese ] = "Vida útil" ;
             Text [ finnish ] = "Käyttöaika" ;
@@ -8700,7 +8700,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ english ] = "is the number of periods over which the asset is being depreciated (sometimes called the useful life of the asset)." ;
             Text [ norwegian ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
-            Text [ italian ] = "È la vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
+            Text [ italian ] = "Vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
             Text [ portuguese_brazilian ] = "Nutzungsdauer. Die Anzahl der Perioden, ?er die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ portuguese ] = "é o número de períodos de amortização do bem económico." ;
             Text [ finnish ] = "Hyödyllinen käyttöikä. Resurssin käyttöiän hyödyllisten jaksojen määrä." ;
@@ -8729,7 +8729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "P" ;
             Text [ english ] = "period" ;
             Text [ norwegian ] = "P" ;
-            Text [ italian ] = "Periodo" ;
+            Text [ italian ] = "Periodi " ;
             Text [ portuguese_brazilian ] = "P" ;
             Text [ portuguese ] = "Período" ;
             Text [ finnish ] = "Kausi" ;
@@ -8758,7 +8758,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ english ] = "is the period for which you want to calculate the depreciation." ;
             Text [ norwegian ] = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
-            Text [ italian ] = "Durata. Durata dell'ammortamento espressa nelle stesse unità di misura di Vita utile." ;
+            Text [ italian ] = "Durata dell'ammortamento espressa nelle stesse unità di misura di Vita utile." ;
             Text [ portuguese_brazilian ] = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ portuguese ] = "é o período de amortização que deseja calcular e tem a mesma unidade de tempo da vida útil." ;
             Text [ finnish ] = "Kausi! Poistokausi määritettynä samoina aikayksikköinä kuin käyttöikä." ;
@@ -8787,7 +8787,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "FA" ;
             Text [ english ] = "month" ;
             Text [ norwegian ] = "FA" ;
-            Text [ italian ] = "Fattore" ;
+            Text [ italian ] = "Fattore " ;
             Text [ portuguese_brazilian ] = "FA" ;
             Text [ portuguese ] = "Factor" ;
             Text [ finnish ] = "Kerroin" ;
@@ -8817,7 +8817,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung." ;
             Text [ english ] = "is the rate at which the balance declines." ;
             Text [ norwegian ] = "Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung." ;
-            Text [ italian ] = "È il tasso al quale il valore residuo diminuisce. Se Fattore = 2 l'ammortamento è a quote doppie." ;
+            Text [ italian ] = "Tasso al quale il valore residuo diminuisce. Se il Fattore = 2 l'ammortamento è a quote doppie." ;
             Text [ portuguese_brazilian ] = "Faktor. Faktor f? die Abnahme der Abschreibung. F = 2 hei?t Doppelraten-Abschreibung." ;
             Text [ portuguese ] = "é a taxa de declínio do saldo." ;
             Text [ finnish ] = "Kerroin: Saldon pienentymiskerroin. F = 2 tarkoittaa kaksinkertaista saldon pienentymistä" ;
@@ -8944,7 +8944,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RW" ;
             Text [ english ] = "salvage" ;
             Text [ norwegian ] = "RW" ;
-            Text [ italian ] = "Valore residuo" ;
+            Text [ italian ] = "Valore residuo " ;
             Text [ portuguese_brazilian ] = "RW" ;
             Text [ portuguese ] = "Valor residual" ;
             Text [ finnish ] = "Loppuarvo" ;
@@ -8973,7 +8973,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ english ] = "is the value at the end of the depreciation (sometimes called the salvage value of the asset)." ;
             Text [ norwegian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
-            Text [ italian ] = "È il valore residuo del bene al termine dell'ammortamento." ;
+            Text [ italian ] = "Valore residuo del bene al termine dell'ammortamento." ;
             Text [ portuguese_brazilian ] = "Restwert. Der verbleibende Wert am Ende der Nutzungsdauer." ;
             Text [ portuguese ] = "é o valor restante do bem no final da amortização." ;
             Text [ finnish ] = "Loppuarvo: Resurssin lopullinen arvo, kun resurssi on kulutettu loppuun." ;
@@ -9002,7 +9002,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ND" ;
             Text [ english ] = "life" ;
             Text [ norwegian ] = "ND" ;
-            Text [ italian ] = "Vita utile" ;
+            Text [ italian ] = "Vita utile " ;
             Text [ portuguese_brazilian ] = "ND" ;
             Text [ portuguese ] = "Vida útil" ;
             Text [ finnish ] = "Käyttöaika" ;
@@ -9032,7 +9032,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ english ] = "is the number of periods over which the asset is being depreciated (sometimes called the useful life of the asset)." ;
             Text [ norwegian ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
-            Text [ italian ] = "È la vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
+            Text [ italian ] = "Vita utile di un bene o il numero di periodi in cui il bene viene ammortizzato." ;
             Text [ portuguese_brazilian ] = "Nutzungsdauer. Die Anzahl der Perioden, ?er die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ portuguese ] = "é o número de períodos de amortização do bem económico." ;
             Text [ finnish ] = "Hyödyllinen käyttöikä. Resurssin käyttöiän hyödyllisten jaksojen määrä." ;
@@ -9061,7 +9061,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "P" ;
             Text [ english ] = "period" ;
             Text [ norwegian ] = "P" ;
-            Text [ italian ] = "Periodo" ;
+            Text [ italian ] = "Periodi " ;
             Text [ portuguese_brazilian ] = "P" ;
             Text [ portuguese ] = "Período" ;
             Text [ finnish ] = "Kausi" ;
@@ -9090,7 +9090,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ english ] = "is the period for which you want to calculate the depreciation." ;
             Text [ norwegian ] = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
-            Text [ italian ] = "Durata. Durata dell'ammortamento espresso nelle stesse unità di misura di Vita utile." ;
+            Text [ italian ] = "Durata dell'ammortamento espresso nelle stesse unità di misura di Vita utile." ;
             Text [ portuguese_brazilian ] = "Periode. Die Periode der Abschreibung in derselben Zeiteinheit wie die Nutzungsdauer." ;
             Text [ portuguese ] = "é o período de amortização que deseja calcular e tem a mesma unidade de tempo da vida útil." ;
             Text [ finnish ] = "Kaudet: Poiston laskentajaksot. Kausimäärityksessä on käyttävä samaa aikayksikköä kuin käyttöiässä." ;
@@ -9119,7 +9119,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "MA" ;
             Text [ english ] = "month" ;
             Text [ norwegian ] = "MA" ;
-            Text [ italian ] = "Mese" ;
+            Text [ italian ] = "Mese " ;
             Text [ portuguese_brazilian ] = "MA" ;
             Text [ portuguese ] = "Mês" ;
             Text [ finnish ] = "kuukausi" ;
@@ -9148,7 +9148,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Monate. Die Anzahl der Monate im ersten Jahr der Abschreibung." ;
             Text [ english ] = "is the number of months in the first year." ;
             Text [ norwegian ] = "Monate. Die Anzahl der Monate im ersten Jahr der Abschreibung." ;
-            Text [ italian ] = "È il numero di mesi nel primo anno di ammortamento." ;
+            Text [ italian ] = "Numero di mesi nel primo anno di ammortamento." ;
             Text [ portuguese_brazilian ] = "Monate. Die Anzahl der Monate im ersten Jahr der Abschreibung." ;
             Text [ portuguese ] = "é o número de meses no primeiro ano da amortização." ;
             Text [ finnish ] = "Kuukaudet: Ensimmäisen poistovuoden kuukausien määrä." ;
@@ -9666,7 +9666,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "NZ" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "NZ" ;
-            Text [ italian ] = "Interesse nominale" ;
+            Text [ italian ] = "Interesse nominale " ;
             Text [ portuguese_brazilian ] = "NZ" ;
             Text [ portuguese ] = "NOMINAL" ;
             Text [ finnish ] = "NOM" ;
@@ -9695,7 +9695,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Nominalverzinsung" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Nominalverzinsung" ;
-            Text [ italian ] = "Interesse nominale" ;
+            Text [ italian ] = "Interesse nominale." ;
             Text [ portuguese_brazilian ] = "Nominalverzinsung" ;
             Text [ portuguese ] = "Taxa de juros nominal" ;
             Text [ finnish ] = "Nimelliskorko" ;
@@ -9724,7 +9724,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "P" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "P" ;
-            Text [ italian ] = "Periodi" ;
+            Text [ italian ] = "Periodi " ;
             Text [ portuguese_brazilian ] = "P" ;
             Text [ portuguese ] = "Período" ;
             Text [ finnish ] = "Kausi" ;
@@ -9753,7 +9753,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Perioden. Die Anzahl der Zinszahlungen pro Jahr." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Perioden. Die Anzahl der Zinszahlungen pro Jahr." ;
-            Text [ italian ] = "È il numero dei periodi dei pagamenti d'interessi in un'annualità." ;
+            Text [ italian ] = "Numero dei periodi dei pagamenti d'interessi in un'annualità." ;
             Text [ portuguese_brazilian ] = "Perioden. Die Anzahl der Zinszahlungen pro Jahr." ;
             Text [ portuguese ] = "é o número de pagamentos de juros por ano." ;
             Text [ finnish ] = "Kaudet! Korkomaksujen määrä vuodessa." ;
@@ -10135,7 +10135,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Werte" ;
             Text [ english ] = "values" ;
             Text [ norwegian ] = "Werte" ;
-            Text [ italian ] = "Valori" ;
+            Text [ italian ] = "Valori " ;
             Text [ portuguese_brazilian ] = "Werte" ;
             Text [ portuguese ] = "Valores" ;
             Text [ finnish ] = "Arvot" ;
@@ -10164,7 +10164,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
             Text [ english ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return." ;
             Text [ norwegian ] = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
-            Text [ italian ] = "È riferimento a una cella celle o una matrice che contiene i valori degli importi di pagamento. " ;
+            Text [ italian ] = "Riferimento a una cella o a una matrice che contiene i valori degli importi di pagamento. " ;
             Text [ portuguese_brazilian ] = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
             Text [ portuguese ] = "é uma matriz ou uma referência a células, cujos conteúdos correspondem aos pagamentos. " ;
             Text [ finnish ] = "Matriisi tai soluviite maksuja vastaaviin soluihin. " ;
@@ -10193,7 +10193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "SW" ;
             Text [ english ] = "guess" ;
             Text [ norwegian ] = "SW" ;
-            Text [ italian ] = "Ipotesi" ;
+            Text [ italian ] = "Ipotesi " ;
             Text [ portuguese_brazilian ] = "SW" ;
             Text [ portuguese ] = "Estimativa" ;
             Text [ finnish ] = "Arvio" ;
@@ -10223,7 +10223,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Schätzwert. Startwert des Zinsfußes für das Iterationsverfahren." ;
             Text [ english ] = "is a number that you guess is close to the result of IRR." ;
             Text [ norwegian ] = "Schätzwert. Startwert des Zinsfußes für das Iterationsverfahren." ;
-            Text [ italian ] = "è un numero che si suppone vicino al risultato di TIR.COST." ;
+            Text [ italian ] = "Indica un valore ipotizzato. Il valore iniziale del tasso di interesse." ;
             Text [ portuguese_brazilian ] = "Sch?tzwert. Startwert des Zinsfu?es f? das Iterationsverfahren." ;
             Text [ portuguese ] = "é um número que se estima estar próximo do resultado da taxa de retorno interna." ;
             Text [ finnish ] = "Arvio:! Iteraatiolaskennassa käytettävä arvioitu palautusprosentti." ;
@@ -10478,7 +10478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "rente";
             Text[ french ] = "Taux";
             Text[ spanish ] = "Interés";
-            Text[ italian ] = "TASSO";
+            Text[ italian ] = "Tasso ";
             Text[ danish ] = "rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Odsetek";
@@ -10528,7 +10528,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "termijn";
             Text[ french ] = "Périodes";
             Text[ spanish ] = "Período";
-            Text[ italian ] = "Periodo";
+            Text[ italian ] = "Periodo ";
             Text[ danish ] = "period";
             Text[ swedish ] = "Period";
             Text[ polish ] = "Okres";
@@ -10578,7 +10578,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "gehele_termijn";
             Text[ french ] = "Durée_totale";
             Text[ spanish ] = "Período_total";
-            Text[ italian ] = "Periodi";
+            Text[ italian ] = "Periodi ";
             Text[ danish ] = "total_periods";
             Text[ swedish ] = "Perioder_totalt";
             Text[ polish ] = "Suma_okresów";
@@ -10628,7 +10628,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "investering";
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversión";
-            Text[ italian ] = "investimento";
+            Text[ italian ] = "Investimento ";
             Text[ danish ] = "invest";
             Text[ swedish ] = "investering";
             Text[ polish ] = "Inwestycja";
@@ -21121,7 +21121,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Laskee regressioviivan pisteitä." ;
             Text [ danish ] = "Bruger de mindste kvadraters metode til at returnere værdier under antagelse af en lineær tendes." ;
             Text [ french ] = "Calcule des points sur la droite de regression." ;
-            Text [ swedish ] = "Beräknar punkter på regressionslinjen." ;
+            Text [ swedish ] = "Beräknar punkter längs en regressionslinje." ;
             Text [ dutch ] = "Berekent waarden voor een lineaire trend." ;
             Text [ spanish ] = "Devuelve valores que resultan de una tendencia lineal." ;
             Text [ english_us ] = "Calculates points along a regression line." ;
@@ -33804,7 +33804,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Palauttaa lineaarisen regression arvon" ;
             Text [ danish ] = "Beregner en værdi baseret på lineær regression." ;
             Text [ french ] = "Renvoie une valeur suivant une ligne de regression." ;
-            Text [ swedish ] = "Beräknar ett värde baserat på linjär regression." ;
+            Text [ swedish ] = "Beräknar ett värde längs en regressionslinje." ;
             Text [ dutch ] = "Berekent een waarde op de basis van een lineaire regressie." ;
             Text [ spanish ] = "Devuelve un valor basándose en una regresión lineal." ;
             Text [ english_us ] = "Returns a value along a linear regression" ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
