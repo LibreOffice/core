@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:30:39 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,60 +1440,60 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ korean ] =
     {
-            < "알파" ; > ;
-        < "알파" ; > ;
-        < "베타" ; > ;
-        < "베타" ; > ;
-        < "감마" ; > ;
-        < "감마" ; > ;
-        < "델타" ; > ;
-        < "델타" ; > ;
-        < "엡실론" ; > ;
-        < "엡실론" ; > ;
-        < "제타" ; > ;
-        < "제타" ; > ;
-        < "에타" ; > ;
-        < "에타" ; > ;
-        < "쎄타" ; > ;
-        < "쎄타" ; > ;
-        < "요타" ; > ;
-        < "요타" ; > ;
-        < "카파" ; > ;
-        < "카파" ; > ;
-        < "람다" ; > ;
-        < "람다" ; > ;
-        < "마이" ; > ;
-        < "마이" ; > ;
-        < "나이" ; > ;
-        < "나이" ; > ;
-        < "크사이" ; > ;
-        < "크사이" ; > ;
-        < "오미크론" ; > ;
-        < "오미크론" ; > ;
-        < "파이" ; > ;
-        < "파이" ; > ;
-        < "로" ; > ;
-        < "로" ; > ;
-        < "시그마" ; > ;
-        < "시그마" ; > ;
-        < "타우" ; > ;
-        < "타우" ; > ;
-        < "입실론" ; > ;
-        < "입실론" ; > ;
-        < "화이" ; > ;
-        < "화이" ; > ;
-        < "카이" ; > ;
-        < "카이" ; > ;
-        < "사이" ; > ;
-        < "사이" ; > ;
-        < "오메가" ; > ;
-        < "오메가" ; > ;
-        < "바렙실론" ; > ;
-        < "바쎄타" ; > ;
-        < "바파이" ; > ;
-        < "파로" ; > ;
-        < "바시그마" ; > ;
-        < "바화이" ; > ;
+            < "alpha" ; > ;
+        < "ALPHA" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gamma" ; > ;
+        < "GAMMA" ; > ;
+        < "delta" ; > ;
+        < "DELTA" ; > ;
+        < "epsilon" ; > ;
+        < "EPSILON" ; > ;
+        < "zeta" ; > ;
+        < "ZETA" ; > ;
+        < "eta" ; > ;
+        < "ETA" ; > ;
+        < "theta" ; > ;
+        < "THETA" ; > ;
+        < "jota" ; > ;
+        < "JOTA" ; > ;
+        < "kappa" ; > ;
+        < "KAPPA" ; > ;
+        < "lambda" ; > ;
+        < "LAMBDA" ; > ;
+        < "my" ; > ;
+        < "MY" ; > ;
+        < "ny" ; > ;
+        < "NY" ; > ;
+        < "xi" ; > ;
+        < "XI" ; > ;
+        < "omikron" ; > ;
+        < "OMIKRON" ; > ;
+        < "pi" ; > ;
+        < "PI" ; > ;
+        < "rho" ; > ;
+        < "RHO" ; > ;
+        < "sigma" ; > ;
+        < "SIGMA" ; > ;
+        < "tau" ; > ;
+        < "TAU" ; > ;
+        < "ypsilon" ; > ;
+        < "YPSILON" ; > ;
+        < "phi" ; > ;
+        < "PHI" ; > ;
+        < "chi" ; > ;
+        < "CHI" ; > ;
+        < "psi" ; > ;
+        < "PSI" ; > ;
+        < "omega" ; > ;
+        < "OMEGA" ; > ;
+        < "varepsilon" ; > ;
+        < "vartheta" ; > ;
+        < "varpi" ; > ;
+        < "varrho" ; > ;
+        < "varsigma" ; > ;
+        < "varphi" ; > ;
         < "요소" ; > ;
         < "요소 없음" ; > ;
         < "더 작음" ; > ;
@@ -1923,6 +1923,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
