@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-11 14:07:49 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,6 @@ inline static void cpp_call(
     sal_Int32 nVtableCall,
     typelib_TypeDescriptionReference * pReturnTypeRef,
     sal_Int32 nParams, typelib_MethodParameter * pParams,
-    sal_Int32 nExceptions, typelib_TypeDescriptionReference ** ppExceptionRefs,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
     // max space for: [complex ret ptr], values|ptr ...
@@ -386,16 +385,14 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
         OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
 
-        typelib_TypeDescriptionReference * pRuntimeExcRef = 0;
-
         if (pReturn)
         {
             // dependent dispatch
-            cpp_call( pThis, nVtableCall,
-                      ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
-                      0, 0, // no params
-                      1, &pRuntimeExcRef, // RuntimeException
-                      pReturn, pArgs, ppException );
+            cpp_call(
+                pThis, nVtableCall,
+                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
+                0, 0, // no params
+                pReturn, pArgs, ppException );
         }
         else
         {
@@ -412,11 +409,11 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
 
             // dependent dispatch
-            cpp_call( pThis, nVtableCall +1, // get, then set method
-                      pReturnTypeRef,
-                      1, &aParam,
-                      1, &pRuntimeExcRef,
-                      pReturn, pArgs, ppException );
+            cpp_call(
+                pThis, nVtableCall +1, // get, then set method
+                pReturnTypeRef,
+                1, &aParam,
+                pReturn, pArgs, ppException );
 
             typelib_typedescriptionreference_release( pReturnTypeRef );
         }
@@ -466,13 +463,12 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         } // else perform queryInterface()
         default:
             // dependent dispatch
-            cpp_call( pThis, nVtableCall,
-                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
-                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
-                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
-                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nExceptions,
-                      ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->ppExceptions,
-                      pReturn, pArgs, ppException );
+            cpp_call(
+                pThis, nVtableCall,
+                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
+                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
+                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
+                pReturn, pArgs, ppException );
         }
         break;
     }
@@ -482,12 +478,9 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
-        typelib_TypeDescription * pTD = 0;
         Type const & rExcType = ::getCppuType( &aExc );
-        TYPELIB_DANGER_GET( &pTD, rExcType.getTypeLibType() );
         // binary identical null reference
-        ::uno_any_construct( *ppException, &aExc, pTD, 0 );
-        TYPELIB_DANGER_RELEASE( pTD );
+        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
     }
     }
 }

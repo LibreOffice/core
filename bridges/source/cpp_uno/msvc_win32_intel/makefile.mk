@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-30 12:06:53 $
+#   last change: $Author: dbo $ $Date: 2001-04-12 13:41:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=msci_uno
+PRJNAME=bridges
 TARGET=msci_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE

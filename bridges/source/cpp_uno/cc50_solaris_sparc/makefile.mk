@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
+#   last change: $Author: dbo $ $Date: 2001-04-12 13:41:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=cppu
+PRJNAME=bridges
 TARGET=sunpro5_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
