@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:27:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 23:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,7 +1023,7 @@ String STR_INSERTSECTION
     TEXT[ chinese_simplified ] = "²åÈëÇøÓò";
     TEXT[ russian ] = "Âñòàâèòü îáëàñòü";
     TEXT[ polish ] = "Wstaw sekcjê";
-    TEXT[ japanese ] = "—Ìˆæ‚Ì‘}“ü";
+    TEXT[ japanese ] = "”ÍˆÍ‚Ì‘}“ü";
     TEXT[ chinese_traditional ] = "´¡¤J°Ï°ì";
     TEXT[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
     TEXT[ dutch ] = "Bereik invoegen";
