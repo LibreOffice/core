@@ -241,7 +241,7 @@ sub GetDmakeCommando {
     # Setting alias for dmake
     $dmake = "dmake";
 
-    $dmake .= " ".$ENV{PROFULLSWITCH};
+    #$dmake .= " ".$ENV{PROFULLSWITCH};
     while ($arg = pop(@ARGV)) {
         $dmake .= " "."$arg";
     };
