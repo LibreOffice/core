@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
+ *  last change: $Author: dbo $ $Date: 2001-09-25 11:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,7 +1275,6 @@ DialogImport::~DialogImport()
 }
 //__________________________________________________________________________________________________
 Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormatsSupplier()
-    SAL_THROW( () )
 {
     if (! _xSupplier.is())
     {

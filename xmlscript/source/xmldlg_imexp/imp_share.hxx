@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
+ *  last change: $Author: dbo $ $Date: 2001-09-25 11:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
 
     inline Reference< XComponentContext > const & getComponentContext() SAL_THROW( () )
         { return _xContext; }
-    Reference< util::XNumberFormatsSupplier > const & getNumberFormatsSupplier() SAL_THROW( () );
+    Reference< util::XNumberFormatsSupplier > const & getNumberFormatsSupplier();
 
     inline DialogImport(
         Reference< XComponentContext > const & xContext,
