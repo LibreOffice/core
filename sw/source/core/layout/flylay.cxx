@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-31 11:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,11 +274,20 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
         FASTBOOL bAgain = FALSE;
         if ( bBot )
         {
-            const long nOld = Frm().Top();
-            Frm().Pos().Y() = Max( aClip.Top(), aClip.Bottom() - Frm().Height());
-            if ( Frm().Top() != nOld )
-                bAgain = TRUE;
-            bHeightClipped = TRUE;
+            SwFrm* pHeader = FindFooterOrHeader();
+            // In a header, correction of the position is no good idea.
+            // If the fly moves, some paragraphs has to be formatted, this
+            // could cause a change of the heigth of the headerframe,
+            // now the flyframe can change its position and so on ...
+            if( !pHeader || !pHeader->IsHeaderFrm() )
+            {
+                const long nOld = Frm().Top();
+                Frm().Pos().Y() = Max( aClip.Top(),
+                    aClip.Bottom() - Frm().Height());
+                if ( Frm().Top() != nOld )
+                    bAgain = TRUE;
+                bHeightClipped = TRUE;
+            }
         }
         if ( bRig )
         {
