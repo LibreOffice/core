@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-01-24 15:35:22 $
+ *  last change: $Author: tra $ $Date: 2001-01-26 11:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 // Suppress file error messages from system like "Floppy A: not inserted"
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 
-                    wVersionRequested = MAKEWORD(1, 1);
+                wVersionRequested = MAKEWORD(1, 1);
 
                 error = WSAStartup(wVersionRequested, &wsaData);
                 if ( 0 == error )
