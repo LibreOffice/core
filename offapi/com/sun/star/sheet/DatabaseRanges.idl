@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRanges.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::SpreadsheetDocument
  */
-service DatabaseRanges
+published service DatabaseRanges
 {
     //-------------------------------------------------------------------------
 
