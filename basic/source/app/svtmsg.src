@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:55:57 $
+ *  last change: $Author: gh $ $Date: 2001-10-25 15:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1612,10 +1612,8 @@ String S_UNO_URL_EXECUTE_FAILED_DISABLED
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
-
-
-
-
-
-
-
+String S_NO_SCROLLBAR
+{
+    Text = "Keine ScrollBar vorhanden bei ($Arg1)";
+    Text[ english_us ] = "No status bar at ($Arg1)";
+};

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2000-12-14 17:11:55 $
+ *  last change: $Author: gh $ $Date: 2001-10-25 15:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #define S_APPLICATION_START_FAILED          ( TT_START +  10 )
 #define S_TIMOUT_SENDING                    ( TT_START +  11 )
 #define S_NO_CONNECTION                     ( TT_START +  12 )
-#define S_NO_FILES_FOUND                    ( TT_START +  13 )
+#define S_NO_FILES_FOUND                    ( TT_START +  13 )  // Not used anymore. needed only for old *.res files
 #define S_ERRORS_DETECTED                   ( TT_START +  14 )
 #define S_NO_ERRORS_DETECTED                ( TT_START +  15 )
 #define S_WARNINGS_DETECTED                 ( TT_START +  16 )
