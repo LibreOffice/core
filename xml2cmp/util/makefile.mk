@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: np $ $Date: 2001-03-23 13:49:53 $
+#   last change: $Author: np $ $Date: 2002-11-14 14:03:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ TARGETTYPE=CUI
 
 
 # --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
