@@ -52,5 +52,6 @@
 #define IDS_SIZE_COLON                  1047
 #define IDS_TYPE_COLON                  1048
 
+#define IDP_SIGNET                      2000
 
 #endif
