@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:27:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 11:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,8 @@ SwFilterDetect::~SwFilterDetect()
                         const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
                                 SfxFilterMatcher(String::CreateFromAscii("swriter")).GetFilter4EA( aTypeName ) : 0;
+                        if (!pFilter)
+                            pFilter = SfxFilterMatcher(String::CreateFromAscii("sweb")).GetFilter4EA( aTypeName );
                         String aFilterName;
                         if ( pFilter )
                         {
