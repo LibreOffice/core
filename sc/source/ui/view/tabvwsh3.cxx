@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:22:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #include "uiitems.hxx"
 #include "cell.hxx"
 #include "inputhdl.hxx"
-#include "scendlg.hxx"
-#include "mtrindlg.hxx"
+//CHINA001 #include "scendlg.hxx"
+//CHINA001 #include "mtrindlg.hxx"
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "dwfunctr.hxx"
@@ -114,7 +114,7 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-
+#include "scabstdlg.hxx" //CHINA001
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -760,7 +760,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pItem->GetList( aIndexList );
             else
             {
-                ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+                //CHINA001 ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), ResId(RID_SCDLG_SHOW_TAB));
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 pDlg->SetDescription(
                     String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
                     String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
