@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-04 09:56:54 $
+ *  last change: $Author: rt $ $Date: 2002-06-06 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,8 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     pGlyphDev->SetFont(aFnt);
 
     long nTextWidth = rDev.GetTextWidth(rText);
-    Rectangle   aResult (Point(), Size(nTextWidth, rDev.GetTextHeight())),
+    Point aPoint;
+    Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
 
     BOOL bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
