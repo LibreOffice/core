@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 13:45:32 $
+ *  last change: $Author: vg $ $Date: 2002-05-08 09:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
                 const ::com::sun::star::beans::PropertyValue* pEnd = pBegin + aInfo.getLength();
                 for (; pBegin != pEnd; ++pBegin)
                 {
-                    if ( pBegin->Name == PROPERTY_BOOLEANCOMPARISONMODE )
+                    if ( pBegin->Name == static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE) )
                     {
                         pBegin->Value >>= m_nBoolCompareMode;
                     }
