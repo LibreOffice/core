@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:19:35 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:14:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,14 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 
 CFLAGS +=  -DHAVE_EXPAT_H
+
+.IF "$(SYSTEM_DB3)" == "YES"
+CFLAGS+=-DSYSTEM_DB3
+.ENDIF
+
+.IF "$(SYSTEM_SABLOT)" == "YES"
+CFLAGS+=-DSYSTEM_SABLOT
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GR
