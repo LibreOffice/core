@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 15:25:18 $
+ *  last change: $Author: pl $ $Date: 2001-05-02 13:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
     XColor *pColors;
     char *pColorAlias;
     int nElement = 0,nColor = 0,i,nX,nY;
-    char pColorName[16], pComName[16],pColorString[256];
+    char pColorString[256];
     BOOL bTransparent = FALSE;
 
     sscanf( xpm[ nElement++ ], "%d%d%d%d", &nWidth, &nHeight,
@@ -171,17 +171,26 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
     pColorAlias = new char[ nColors * nCharsPerPixel ];
     while( nElement <= nColors )
     {
-        sscanf( xpm[ nElement++ ],"%s %s %s",
-                pColorName, pComName, pColorString);
-        if( strncmp( pColorString, "None", 4 ) )
+        char* pLine = xpm[nElement++];
+        char* pStart = pLine + nCharsPerPixel;
+        while( *pStart && ( pStart[0] != 'c' || ! isspace( pStart[1] ) ) )
+            pStart++;
+        if( *pStart )
         {
-            XAllocNamedColor( pDisplay->GetDisplay(),
-                         DefaultColormap( pDisplay->GetDisplay(),
-                                          pDisplay->GetScreenNumber() ),
-                         pColorString, &pColors[nColor], &pColors[nColor] );
-            strncpy( &pColorAlias[nColor*nCharsPerPixel],
-                     pColorName, nCharsPerPixel );
-            nColor++;
+            sscanf( pStart,"c %s", pColorString);
+#ifdef DEBUG
+            fprintf(stderr, "pColorString=\"%s\"\n", pColorString );
+#endif
+            if( strncasecmp( pColorString, "None", 4 ) )
+            {
+                XAllocNamedColor( pDisplay->GetDisplay(),
+                                  DefaultColormap( pDisplay->GetDisplay(),
+                                                   pDisplay->GetScreenNumber() ),
+                                  pColorString, &pColors[nColor], &pColors[nColor] );
+                strncpy( &pColorAlias[nColor*nCharsPerPixel],
+                         pLine, nCharsPerPixel );
+                nColor++;
+            }
         }
     }
     nColors = nColor+1;
@@ -278,26 +287,20 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
            pIcon++;
     }
 
-    if( !pIcon->id )
+    if( !pIcon->id || pIcon->id == 1 ) // overwrite default icon
     {
         // call custom function to read icon
         char customIconFn[256];
 
         sprintf( customIconFn, "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
-        if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( RTLD_DEFAULT, customIconFn ) )
+        static void* pAppHdl = dlopen( NULL, RTLD_LAZY );
+        if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( pAppHdl, customIconFn ) )
                  != NULL )
         {
             pIcon = new SOICON[2];  // 2nd entry is terminator
             memset( pIcon, 0, 2*sizeof( SOICON ) );
             pIcon->id = nIcon;
             pCustomIcon( pIcon->xpmdata[0], pIcon->xpmdata[1], pIcon->xpmdata[2], pIcon->xpmdata[3] );
-        }
-        else
-        {
-#if defined DBG_UTIL || defined DEBUG
-            fprintf( stderr, "SelectAppIconPixmap: custom icon function '%s' not found!\n",
-                    customIconFn );
-#endif
         }
     }
 
