@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-07 14:58:42 $
+ *  last change: $Author: ka $ $Date: 2001-06-11 08:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,422 +275,425 @@ void SdDrawViewShell::UpdateEffectWindow()
         const SdrMarkList& rMarkList = pDrView->GetMarkList();
         ULONG nCount = rMarkList.GetMarkCount();
 
-        if( pEffectWin && pEffectWin->IsUpdateMode() && nCount > 0 )
+        if( pEffectWin && pEffectWin->IsUpdateMode() )
         {
-            // Der Code stammt aus fuoaprms.cxx und
-            // sollte verallgemeinert werden !!!
-            ULONG nObject   = 0;
-
-            short nAnimationSet     = ATTR_MISSING;
-            short nEffectSet        = ATTR_MISSING;
-            short nTextEffectSet    = ATTR_MISSING;
-            short nSpeedSet         = ATTR_MISSING;
-            short nFadeColorSet     = ATTR_MISSING;
-            short nFadeOutSet       = ATTR_MISSING;
-            short nInvisibleSet     = ATTR_MISSING;
-            short nSoundOnSet       = ATTR_MISSING;
-            short nSoundFileSet     = ATTR_MISSING;
-            short nBlueScreenSet    = ATTR_MISSING;
-            short nPlayFullSet      = ATTR_MISSING;
-            short nClickActionSet   = ATTR_MISSING;
-            short nBookmarkSet      = ATTR_MISSING;
-
-            short nSecondEffectSet      = ATTR_MISSING;
-            short nSecondSpeedSet       = ATTR_MISSING;
-            short nSecondSoundOnSet     = ATTR_MISSING;
-            short nSecondPlayFullSet    = ATTR_MISSING;
-
-
-
-        //    BOOL bDontKnow   = FALSE;
-
-                                            // defaulten (fuer Undo-Aktion)
-            presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
-            presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
-            presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
-            BOOL            bActive         = FALSE;
-            BOOL            bFadeOut        = FALSE;
-            Color           aFadeColor      = COL_LIGHTGRAY;
-            BOOL            bInvisible      = FALSE;
-            Color           aBlueScreen     = COL_LIGHTMAGENTA;
-            BOOL            bSoundOn        = FALSE;
-            String          aSound;
-            BOOL            bPlayFull       = FALSE;
-            presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
-            String          aBookmark;
-
-            presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
-            presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
-            BOOL            bSecondSoundOn  = FALSE;
-            BOOL            bSecondPlayFull = FALSE;
-
-
-            SdAnimationInfo* pInfo;
-            SdrMark* pMark;
-
-            // das erste Objekt untersuchen
-            pMark = rMarkList.GetMark(0);
-            SdrObject* pObject = pMark->GetObj();
-
-            // find out, if there is any object, which contain text
-            BOOL bHasText = FALSE;
-            if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() )
-                bHasText = bHasText || TRUE;
-
-            pInfo = pDoc->GetAnimationInfo(pObject);
-            if( pInfo )
+            if( nCount )
             {
-                bActive             = pInfo->bActive;
-                nAnimationSet       = ATTR_SET;
+                // Der Code stammt aus fuoaprms.cxx und
+                // sollte verallgemeinert werden !!!
+                ULONG nObject   = 0;
 
-                eEffect             = pInfo->eEffect;
-                nEffectSet          = ATTR_SET;
+                short nAnimationSet     = ATTR_MISSING;
+                short nEffectSet        = ATTR_MISSING;
+                short nTextEffectSet    = ATTR_MISSING;
+                short nSpeedSet         = ATTR_MISSING;
+                short nFadeColorSet     = ATTR_MISSING;
+                short nFadeOutSet       = ATTR_MISSING;
+                short nInvisibleSet     = ATTR_MISSING;
+                short nSoundOnSet       = ATTR_MISSING;
+                short nSoundFileSet     = ATTR_MISSING;
+                short nBlueScreenSet    = ATTR_MISSING;
+                short nPlayFullSet      = ATTR_MISSING;
+                short nClickActionSet   = ATTR_MISSING;
+                short nBookmarkSet      = ATTR_MISSING;
 
-                eTextEffect         = pInfo->eTextEffect;
-                nTextEffectSet      = ATTR_SET;
+                short nSecondEffectSet      = ATTR_MISSING;
+                short nSecondSpeedSet       = ATTR_MISSING;
+                short nSecondSoundOnSet     = ATTR_MISSING;
+                short nSecondPlayFullSet    = ATTR_MISSING;
 
-                eSpeed              = pInfo->eSpeed;
-                nSpeedSet           = ATTR_SET;
 
-                bFadeOut            = pInfo->bDimPrevious;
-                nFadeOutSet         = ATTR_SET;
 
-                aFadeColor          = pInfo->aDimColor;
-                nFadeColorSet       = ATTR_SET;
+            //    BOOL bDontKnow   = FALSE;
 
-                bInvisible          = pInfo->bDimHide;
-                nInvisibleSet       = ATTR_SET;
+                                                // defaulten (fuer Undo-Aktion)
+                presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
+                presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
+                presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
+                BOOL            bActive         = FALSE;
+                BOOL            bFadeOut        = FALSE;
+                Color           aFadeColor      = COL_LIGHTGRAY;
+                BOOL            bInvisible      = FALSE;
+                Color           aBlueScreen     = COL_LIGHTMAGENTA;
+                BOOL            bSoundOn        = FALSE;
+                String          aSound;
+                BOOL            bPlayFull       = FALSE;
+                presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
+                String          aBookmark;
 
-                bSoundOn            = pInfo->bSoundOn;
-                nSoundOnSet         = ATTR_SET;
+                presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
+                presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
+                BOOL            bSecondSoundOn  = FALSE;
+                BOOL            bSecondPlayFull = FALSE;
 
-                aSound              = pInfo->aSoundFile;
-                nSoundFileSet       = ATTR_SET;
 
-                aBlueScreen         = pInfo->aBlueScreen;
-                nBlueScreenSet      = ATTR_SET;
+                SdAnimationInfo* pInfo;
+                SdrMark* pMark;
 
-                bPlayFull           = pInfo->bPlayFull;
-                nPlayFullSet        = ATTR_SET;
-
-                eClickAction        = pInfo->eClickAction;
-                nClickActionSet     = ATTR_SET;
-
-                aBookmark           = pInfo->aBookmark;
-                nBookmarkSet        = ATTR_SET;
-
-                eSecondEffect       = pInfo->eSecondEffect;
-                nSecondEffectSet    = ATTR_SET;
-
-                eSecondSpeed        = pInfo->eSecondSpeed;
-                nSecondSpeedSet     = ATTR_SET;
-
-                bSecondSoundOn      = pInfo->bSecondSoundOn;
-                nSecondSoundOnSet   = ATTR_SET;
-
-                bSecondPlayFull     = pInfo->bSecondPlayFull;
-                nSecondPlayFullSet  = ATTR_SET;
-            }
-
-            // ggfs. weitere Objekte untersuchen
-            for( nObject = 1; nObject < nCount; nObject++ )
-            {
-                pMark = rMarkList.GetMark( nObject );
+                // das erste Objekt untersuchen
+                pMark = rMarkList.GetMark(0);
                 SdrObject* pObject = pMark->GetObj();
 
+                // find out, if there is any object, which contain text
+                BOOL bHasText = FALSE;
                 if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() )
                     bHasText = bHasText || TRUE;
 
                 pInfo = pDoc->GetAnimationInfo(pObject);
                 if( pInfo )
                 {
-                    if( bActive != pInfo->bActive )
-                        nAnimationSet = ATTR_MIXED;
+                    bActive             = pInfo->bActive;
+                    nAnimationSet       = ATTR_SET;
 
-                    if( eEffect != pInfo->eEffect )
-                        nEffectSet = ATTR_MIXED;
+                    eEffect             = pInfo->eEffect;
+                    nEffectSet          = ATTR_SET;
 
-                    if( eTextEffect != pInfo->eTextEffect )
-                        nTextEffectSet = ATTR_MIXED;
+                    eTextEffect         = pInfo->eTextEffect;
+                    nTextEffectSet      = ATTR_SET;
 
-                    if( eSpeed != pInfo->eSpeed )
-                        nSpeedSet = ATTR_MIXED;
+                    eSpeed              = pInfo->eSpeed;
+                    nSpeedSet           = ATTR_SET;
 
-                    if( bFadeOut != pInfo->bDimPrevious )
-                        nFadeOutSet = ATTR_MIXED;
+                    bFadeOut            = pInfo->bDimPrevious;
+                    nFadeOutSet         = ATTR_SET;
 
-                    if( aFadeColor != pInfo->aDimColor )
-                        nFadeColorSet = ATTR_MIXED;
+                    aFadeColor          = pInfo->aDimColor;
+                    nFadeColorSet       = ATTR_SET;
 
-                    if( bInvisible != pInfo->bDimHide )
-                        nInvisibleSet = ATTR_MIXED;
+                    bInvisible          = pInfo->bDimHide;
+                    nInvisibleSet       = ATTR_SET;
 
-                    if( bSoundOn != pInfo->bSoundOn )
-                        nSoundOnSet = ATTR_MIXED;
+                    bSoundOn            = pInfo->bSoundOn;
+                    nSoundOnSet         = ATTR_SET;
 
-                    if( aSound != pInfo->aSoundFile )
-                        nSoundFileSet = ATTR_MIXED;
+                    aSound              = pInfo->aSoundFile;
+                    nSoundFileSet       = ATTR_SET;
 
-                    if( aBlueScreen != pInfo->aBlueScreen )
-                        nBlueScreenSet = ATTR_MIXED;
+                    aBlueScreen         = pInfo->aBlueScreen;
+                    nBlueScreenSet      = ATTR_SET;
 
-                    if( bPlayFull != pInfo->bPlayFull )
-                        nPlayFullSet = ATTR_MIXED;
+                    bPlayFull           = pInfo->bPlayFull;
+                    nPlayFullSet        = ATTR_SET;
 
-                    if( eClickAction != pInfo->eClickAction )
-                        nClickActionSet = ATTR_MIXED;
+                    eClickAction        = pInfo->eClickAction;
+                    nClickActionSet     = ATTR_SET;
 
-                    if( aBookmark != pInfo->aBookmark )
-                        nBookmarkSet = ATTR_MIXED;
+                    aBookmark           = pInfo->aBookmark;
+                    nBookmarkSet        = ATTR_SET;
 
-                    if( eSecondEffect != pInfo->eSecondEffect )
-                        nSecondEffectSet = ATTR_MIXED;
+                    eSecondEffect       = pInfo->eSecondEffect;
+                    nSecondEffectSet    = ATTR_SET;
 
-                    if( eSecondSpeed != pInfo->eSecondSpeed )
-                        nSecondSpeedSet = ATTR_MIXED;
+                    eSecondSpeed        = pInfo->eSecondSpeed;
+                    nSecondSpeedSet     = ATTR_SET;
 
-                    if( bSecondSoundOn != pInfo->bSecondSoundOn )
-                        nSecondSoundOnSet = ATTR_MIXED;
+                    bSecondSoundOn      = pInfo->bSecondSoundOn;
+                    nSecondSoundOnSet   = ATTR_SET;
 
-                    if( bSecondPlayFull != pInfo->bSecondPlayFull )
-                        nSecondPlayFullSet = ATTR_MIXED;
+                    bSecondPlayFull     = pInfo->bSecondPlayFull;
+                    nSecondPlayFullSet  = ATTR_SET;
+                }
+
+                // ggfs. weitere Objekte untersuchen
+                for( nObject = 1; nObject < nCount; nObject++ )
+                {
+                    pMark = rMarkList.GetMark( nObject );
+                    SdrObject* pObject = pMark->GetObj();
+
+                    if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() )
+                        bHasText = bHasText || TRUE;
+
+                    pInfo = pDoc->GetAnimationInfo(pObject);
+                    if( pInfo )
+                    {
+                        if( bActive != pInfo->bActive )
+                            nAnimationSet = ATTR_MIXED;
+
+                        if( eEffect != pInfo->eEffect )
+                            nEffectSet = ATTR_MIXED;
+
+                        if( eTextEffect != pInfo->eTextEffect )
+                            nTextEffectSet = ATTR_MIXED;
+
+                        if( eSpeed != pInfo->eSpeed )
+                            nSpeedSet = ATTR_MIXED;
+
+                        if( bFadeOut != pInfo->bDimPrevious )
+                            nFadeOutSet = ATTR_MIXED;
+
+                        if( aFadeColor != pInfo->aDimColor )
+                            nFadeColorSet = ATTR_MIXED;
+
+                        if( bInvisible != pInfo->bDimHide )
+                            nInvisibleSet = ATTR_MIXED;
+
+                        if( bSoundOn != pInfo->bSoundOn )
+                            nSoundOnSet = ATTR_MIXED;
+
+                        if( aSound != pInfo->aSoundFile )
+                            nSoundFileSet = ATTR_MIXED;
+
+                        if( aBlueScreen != pInfo->aBlueScreen )
+                            nBlueScreenSet = ATTR_MIXED;
+
+                        if( bPlayFull != pInfo->bPlayFull )
+                            nPlayFullSet = ATTR_MIXED;
+
+                        if( eClickAction != pInfo->eClickAction )
+                            nClickActionSet = ATTR_MIXED;
+
+                        if( aBookmark != pInfo->aBookmark )
+                            nBookmarkSet = ATTR_MIXED;
+
+                        if( eSecondEffect != pInfo->eSecondEffect )
+                            nSecondEffectSet = ATTR_MIXED;
+
+                        if( eSecondSpeed != pInfo->eSecondSpeed )
+                            nSecondSpeedSet = ATTR_MIXED;
+
+                        if( bSecondSoundOn != pInfo->bSecondSoundOn )
+                            nSecondSoundOnSet = ATTR_MIXED;
+
+                        if( bSecondPlayFull != pInfo->bSecondPlayFull )
+                            nSecondPlayFullSet = ATTR_MIXED;
+                    }
+                    else
+                    {
+                        if (nAnimationSet == ATTR_SET && bActive == TRUE)
+                            nAnimationSet = ATTR_MIXED;
+
+                        if (nEffectSet == ATTR_SET && eEffect != presentation::AnimationEffect_NONE)
+                            nEffectSet = ATTR_MIXED;
+
+                        if (nTextEffectSet == ATTR_SET && eTextEffect != presentation::AnimationEffect_NONE)
+                            nTextEffectSet = ATTR_MIXED;
+
+                        if (nSpeedSet == ATTR_SET)
+                            nSpeedSet = ATTR_MIXED;
+
+                        if (nFadeOutSet == ATTR_SET && bFadeOut == TRUE)
+                            nFadeOutSet = ATTR_MIXED;
+
+                        if (nFadeColorSet == ATTR_SET)
+                            nFadeColorSet = ATTR_MIXED;
+
+                        if (nInvisibleSet == ATTR_SET && bInvisible == TRUE)
+                            nInvisibleSet = ATTR_MIXED;
+
+                        if (nSoundOnSet == ATTR_SET && bSoundOn == TRUE)
+                            nSoundOnSet = ATTR_MIXED;
+
+                        if (nSoundFileSet == ATTR_SET)
+                            nSoundFileSet = ATTR_MIXED;
+
+                        if (nBlueScreenSet == ATTR_SET)
+                            nBlueScreenSet = ATTR_MIXED;
+
+                        if (nPlayFullSet == ATTR_SET && bPlayFull == TRUE)
+                            nPlayFullSet = ATTR_MIXED;
+
+                        if (nClickActionSet == ATTR_SET && eClickAction != presentation::ClickAction_NONE)
+                            nClickActionSet = ATTR_MIXED;
+
+                        if (nBookmarkSet == ATTR_SET)
+                            nBookmarkSet = ATTR_MIXED;
+
+                        if (nSecondEffectSet == ATTR_SET && eSecondEffect != presentation::AnimationEffect_NONE)
+                            nSecondEffectSet = ATTR_MIXED;
+
+                        if (nSecondSpeedSet == ATTR_SET)
+                            nSecondSpeedSet = ATTR_MIXED;
+
+                        if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == TRUE)
+                            nSecondSoundOnSet = ATTR_MIXED;
+
+                        if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == TRUE)
+                            nSecondPlayFullSet = ATTR_MIXED;
+                    }
+                }
+
+                // Genau zwei Objekte mit Pfadeffekt? Dann gilt nur die Animationsinfo
+                // am bewegten Objekt.
+                if (nCount == 2)
+                {
+                    SdrObject* pObject1 = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
+                    SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
+                    SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
+                    SdAnimationInfo* pInfo1 = pDoc->GetAnimationInfo(pObject1);
+                    SdAnimationInfo* pInfo2 = pDoc->GetAnimationInfo(pObject2);
+                    SdAnimationInfo* pInfo  = NULL;
+
+                    if (pObject1->GetObjInventor() == SdrInventor &&
+                        ((eKind1 == OBJ_LINE) ||                        // 2-Punkt-Linie
+                            (eKind1 == OBJ_PLIN) ||                        // Polygon
+                            (eKind1 == OBJ_PATHLINE))                &&    // Bezier-Kurve
+                        (pInfo2 && pInfo2->eEffect == presentation::AnimationEffect_PATH))
+                    {
+                        pInfo = pInfo2;
+                    }
+
+                    if (pObject2->GetObjInventor() == SdrInventor &&
+                        ((eKind2 == OBJ_LINE) ||                        // 2-Punkt-Linie
+                            (eKind2 == OBJ_PLIN) ||                        // Polygon
+                            (eKind2 == OBJ_PATHLINE))                &&    // Bezier-Kurve
+                        (pInfo1 && pInfo1->eEffect == presentation::AnimationEffect_PATH))
+                    {
+                        pInfo = pInfo1;
+                    }
+
+                    if (pInfo)
+                    {
+                        bActive         = pInfo->bActive;          nAnimationSet       = ATTR_SET;
+                        eEffect         = pInfo->eEffect;          nEffectSet          = ATTR_SET;
+                        eTextEffect     = pInfo->eTextEffect;      nTextEffectSet      = ATTR_SET;
+                        eSpeed          = pInfo->eSpeed;           nSpeedSet           = ATTR_SET;
+                        bFadeOut        = pInfo->bDimPrevious;     nFadeOutSet         = ATTR_SET;
+                        aFadeColor      = pInfo->aDimColor;        nFadeColorSet       = ATTR_SET;
+                        bInvisible      = pInfo->bDimHide;         nInvisibleSet       = ATTR_SET;
+                        bSoundOn        = pInfo->bSoundOn;         nSoundOnSet         = ATTR_SET;
+                        aSound          = pInfo->aSoundFile;       nSoundFileSet       = ATTR_SET;
+                        aBlueScreen     = pInfo->aBlueScreen;      nBlueScreenSet      = ATTR_SET;
+                        bPlayFull       = pInfo->bPlayFull;        nPlayFullSet        = ATTR_SET;
+                        eClickAction    = pInfo->eClickAction;     nClickActionSet     = ATTR_SET;
+                        aBookmark       = pInfo->aBookmark;        nBookmarkSet        = ATTR_SET;
+                        eSecondEffect   = pInfo->eSecondEffect;    nSecondEffectSet    = ATTR_SET;
+                        eSecondSpeed    = pInfo->eSecondSpeed;     nSecondSpeedSet     = ATTR_SET;
+                        bSecondSoundOn  = pInfo->bSecondSoundOn;   nSecondSoundOnSet   = ATTR_SET;
+                        bSecondPlayFull = pInfo->bSecondPlayFull;  nSecondPlayFullSet  = ATTR_SET;
+                    }
+                }
+
+                // ItemSet fuer Dialog fuellen
+                SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
+
+                // das Set besetzen
+                if (nAnimationSet == ATTR_SET)
+                    aSet.Put( SfxBoolItem( ATTR_ANIMATION_ACTIVE, bActive));
+                else if (nAnimationSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, FALSE));
+
+                if (nEffectSet == ATTR_SET)
+                    aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, eEffect));
+                else if (nEffectSet == ATTR_MIXED)
+                    aSet.InvalidateItem( ATTR_ANIMATION_EFFECT );
+                else
+                    aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
+
+                if( bHasText )
+                {
+                    if (nTextEffectSet == ATTR_SET)
+                        aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, eTextEffect));
+                    else if (nTextEffectSet == ATTR_MIXED)
+                        aSet.InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
+                    else
+                        aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
                 }
                 else
-                {
-                    if (nAnimationSet == ATTR_SET && bActive == TRUE)
-                        nAnimationSet = ATTR_MIXED;
+                    aSet.Put(SfxVoidItem(0), ATTR_ANIMATION_TEXTEFFECT );
 
-                    if (nEffectSet == ATTR_SET && eEffect != presentation::AnimationEffect_NONE)
-                        nEffectSet = ATTR_MIXED;
+                if (nSpeedSet == ATTR_SET)
+                    aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, eSpeed));
+                else
+                    aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
 
-                    if (nTextEffectSet == ATTR_SET && eTextEffect != presentation::AnimationEffect_NONE)
-                        nTextEffectSet = ATTR_MIXED;
+                if (nFadeOutSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, bFadeOut));
+                else if (nFadeOutSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, FALSE));
 
-                    if (nSpeedSet == ATTR_SET)
-                        nSpeedSet = ATTR_MIXED;
+                if (nFadeColorSet == ATTR_SET)
+                    aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
+                else if (nFadeColorSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_COLOR);
+                else
+                    aSet.Put(SvxColorItem( RGB_Color( COL_LIGHTGRAY ), ATTR_ANIMATION_COLOR));
 
-                    if (nFadeOutSet == ATTR_SET && bFadeOut == TRUE)
-                        nFadeOutSet = ATTR_MIXED;
+                if (nInvisibleSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, bInvisible));
+                else if (nInvisibleSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, FALSE));
 
-                    if (nFadeColorSet == ATTR_SET)
-                        nFadeColorSet = ATTR_MIXED;
+                if (nSoundOnSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
+                else if (nSoundOnSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, FALSE));
 
-                    if (nInvisibleSet == ATTR_SET && bInvisible == TRUE)
-                        nInvisibleSet = ATTR_MIXED;
+                if (nSoundFileSet == ATTR_SET)
+                    aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
+                else
+                    aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
 
-                    if (nSoundOnSet == ATTR_SET && bSoundOn == TRUE)
-                        nSoundOnSet = ATTR_MIXED;
+                if (nBlueScreenSet == ATTR_SET)
+                    aSet.Put(SvxColorItem(aBlueScreen, ATTR_ANIMATION_TRANSPCOLOR));
+                else if (nBlueScreenSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_TRANSPCOLOR);
+                else
+                    aSet.Put(SvxColorItem(RGB_Color( COL_LIGHTMAGENTA ), ATTR_ANIMATION_TRANSPCOLOR));
 
-                    if (nSoundFileSet == ATTR_SET)
-                        nSoundFileSet = ATTR_MIXED;
+                if (nPlayFullSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
+                else if (nPlayFullSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, FALSE));
 
-                    if (nBlueScreenSet == ATTR_SET)
-                        nBlueScreenSet = ATTR_MIXED;
+                if (nClickActionSet == ATTR_SET)
+                    aSet.Put(SfxAllEnumItem(ATTR_ACTION, eClickAction));
+                else if (nClickActionSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ACTION);
+                else
+                    aSet.Put(SfxAllEnumItem(ATTR_ACTION, presentation::ClickAction_NONE));
 
-                    if (nPlayFullSet == ATTR_SET && bPlayFull == TRUE)
-                        nPlayFullSet = ATTR_MIXED;
+                if (nBookmarkSet == ATTR_SET)
+                    aSet.Put(SfxStringItem(ATTR_ACTION_FILENAME, aBookmark));
+                else
+                    aSet.InvalidateItem(ATTR_ACTION_FILENAME);
 
-                    if (nClickActionSet == ATTR_SET && eClickAction != presentation::ClickAction_NONE)
-                        nClickActionSet = ATTR_MIXED;
+                if (nSecondEffectSet == ATTR_SET)
+                    aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, eSecondEffect));
+                else if (nSecondEffectSet == ATTR_MIXED)
+                    aSet.InvalidateItem( ATTR_ACTION_EFFECT );
+                else
+                    aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, presentation::AnimationEffect_NONE));
 
-                    if (nBookmarkSet == ATTR_SET)
-                        nBookmarkSet = ATTR_MIXED;
+                if (nSecondSpeedSet == ATTR_SET)
+                    aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECTSPEED, eSecondSpeed));
+                else
+                    aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
 
-                    if (nSecondEffectSet == ATTR_SET && eSecondEffect != presentation::AnimationEffect_NONE)
-                        nSecondEffectSet = ATTR_MIXED;
+                if (nSecondSoundOnSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, bSecondSoundOn));
+                else if (nSecondSoundOnSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, FALSE));
 
-                    if (nSecondSpeedSet == ATTR_SET)
-                        nSecondSpeedSet = ATTR_MIXED;
+                if (nSecondPlayFullSet == ATTR_SET)
+                    aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
+                else if (nPlayFullSet == ATTR_MIXED)
+                    aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
+                else
+                    aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
 
-                    if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == TRUE)
-                        nSecondSoundOnSet = ATTR_MIXED;
-
-                    if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == TRUE)
-                        nSecondPlayFullSet = ATTR_MIXED;
-                }
+                //rSet.Put( SfxSetItem( SID_EFFECT_STATE, aSet ) );
+                pEffectWin->Update( aSet );
             }
-
-            // Genau zwei Objekte mit Pfadeffekt? Dann gilt nur die Animationsinfo
-            // am bewegten Objekt.
-            if (nCount == 2)
+            else
             {
-                SdrObject* pObject1 = rMarkList.GetMark(0)->GetObj();
-                SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
-                SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
-                SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
-                SdAnimationInfo* pInfo1 = pDoc->GetAnimationInfo(pObject1);
-                SdAnimationInfo* pInfo2 = pDoc->GetAnimationInfo(pObject2);
-                SdAnimationInfo* pInfo  = NULL;
-
-                if (pObject1->GetObjInventor() == SdrInventor &&
-                    ((eKind1 == OBJ_LINE) ||                        // 2-Punkt-Linie
-                        (eKind1 == OBJ_PLIN) ||                        // Polygon
-                        (eKind1 == OBJ_PATHLINE))                &&    // Bezier-Kurve
-                    (pInfo2 && pInfo2->eEffect == presentation::AnimationEffect_PATH))
-                {
-                    pInfo = pInfo2;
-                }
-
-                if (pObject2->GetObjInventor() == SdrInventor &&
-                    ((eKind2 == OBJ_LINE) ||                        // 2-Punkt-Linie
-                        (eKind2 == OBJ_PLIN) ||                        // Polygon
-                        (eKind2 == OBJ_PATHLINE))                &&    // Bezier-Kurve
-                    (pInfo1 && pInfo1->eEffect == presentation::AnimationEffect_PATH))
-                {
-                    pInfo = pInfo1;
-                }
-
-                if (pInfo)
-                {
-                    bActive         = pInfo->bActive;          nAnimationSet       = ATTR_SET;
-                    eEffect         = pInfo->eEffect;          nEffectSet          = ATTR_SET;
-                    eTextEffect     = pInfo->eTextEffect;      nTextEffectSet      = ATTR_SET;
-                    eSpeed          = pInfo->eSpeed;           nSpeedSet           = ATTR_SET;
-                    bFadeOut        = pInfo->bDimPrevious;     nFadeOutSet         = ATTR_SET;
-                    aFadeColor      = pInfo->aDimColor;        nFadeColorSet       = ATTR_SET;
-                    bInvisible      = pInfo->bDimHide;         nInvisibleSet       = ATTR_SET;
-                    bSoundOn        = pInfo->bSoundOn;         nSoundOnSet         = ATTR_SET;
-                    aSound          = pInfo->aSoundFile;       nSoundFileSet       = ATTR_SET;
-                    aBlueScreen     = pInfo->aBlueScreen;      nBlueScreenSet      = ATTR_SET;
-                    bPlayFull       = pInfo->bPlayFull;        nPlayFullSet        = ATTR_SET;
-                    eClickAction    = pInfo->eClickAction;     nClickActionSet     = ATTR_SET;
-                    aBookmark       = pInfo->aBookmark;        nBookmarkSet        = ATTR_SET;
-                    eSecondEffect   = pInfo->eSecondEffect;    nSecondEffectSet    = ATTR_SET;
-                    eSecondSpeed    = pInfo->eSecondSpeed;     nSecondSpeedSet     = ATTR_SET;
-                    bSecondSoundOn  = pInfo->bSecondSoundOn;   nSecondSoundOnSet   = ATTR_SET;
-                    bSecondPlayFull = pInfo->bSecondPlayFull;  nSecondPlayFullSet  = ATTR_SET;
-                }
-            }
-
-            // ItemSet fuer Dialog fuellen
-            SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
-
-            // das Set besetzen
-            if (nAnimationSet == ATTR_SET)
-                aSet.Put( SfxBoolItem( ATTR_ANIMATION_ACTIVE, bActive));
-            else if (nAnimationSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, FALSE));
-
-            if (nEffectSet == ATTR_SET)
-                aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, eEffect));
-            else if (nEffectSet == ATTR_MIXED)
-                aSet.InvalidateItem( ATTR_ANIMATION_EFFECT );
-            else
+                SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_EFFECT, ATTR_ANIMATION_TEXTEFFECT, 0);
                 aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
-
-            if( bHasText )
-            {
-                if (nTextEffectSet == ATTR_SET)
-                    aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, eTextEffect));
-                else if (nTextEffectSet == ATTR_MIXED)
-                    aSet.InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
-                else
-                    aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
+                aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
+                pEffectWin->Update( aSet );
             }
-            else
-                aSet.Put(SfxVoidItem(0), ATTR_ANIMATION_TEXTEFFECT );
-
-            if (nSpeedSet == ATTR_SET)
-                aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, eSpeed));
-            else
-                aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
-
-            if (nFadeOutSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, bFadeOut));
-            else if (nFadeOutSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, FALSE));
-
-            if (nFadeColorSet == ATTR_SET)
-                aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
-            else if (nFadeColorSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_COLOR);
-            else
-                aSet.Put(SvxColorItem( RGB_Color( COL_LIGHTGRAY ), ATTR_ANIMATION_COLOR));
-
-            if (nInvisibleSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, bInvisible));
-            else if (nInvisibleSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, FALSE));
-
-            if (nSoundOnSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
-            else if (nSoundOnSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, FALSE));
-
-            if (nSoundFileSet == ATTR_SET)
-                aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
-            else
-                aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
-
-            if (nBlueScreenSet == ATTR_SET)
-                aSet.Put(SvxColorItem(aBlueScreen, ATTR_ANIMATION_TRANSPCOLOR));
-            else if (nBlueScreenSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_TRANSPCOLOR);
-            else
-                aSet.Put(SvxColorItem(RGB_Color( COL_LIGHTMAGENTA ), ATTR_ANIMATION_TRANSPCOLOR));
-
-            if (nPlayFullSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
-            else if (nPlayFullSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, FALSE));
-
-            if (nClickActionSet == ATTR_SET)
-                aSet.Put(SfxAllEnumItem(ATTR_ACTION, eClickAction));
-            else if (nClickActionSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ACTION);
-            else
-                aSet.Put(SfxAllEnumItem(ATTR_ACTION, presentation::ClickAction_NONE));
-
-            if (nBookmarkSet == ATTR_SET)
-                aSet.Put(SfxStringItem(ATTR_ACTION_FILENAME, aBookmark));
-            else
-                aSet.InvalidateItem(ATTR_ACTION_FILENAME);
-
-            if (nSecondEffectSet == ATTR_SET)
-                aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, eSecondEffect));
-            else if (nSecondEffectSet == ATTR_MIXED)
-                aSet.InvalidateItem( ATTR_ACTION_EFFECT );
-            else
-                aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, presentation::AnimationEffect_NONE));
-
-            if (nSecondSpeedSet == ATTR_SET)
-                aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECTSPEED, eSecondSpeed));
-            else
-                aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
-
-            if (nSecondSoundOnSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, bSecondSoundOn));
-            else if (nSecondSoundOnSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, FALSE));
-
-            if (nSecondPlayFullSet == ATTR_SET)
-                aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
-            else if (nPlayFullSet == ATTR_MIXED)
-                aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
-            else
-                aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
-
-            //rSet.Put( SfxSetItem( SID_EFFECT_STATE, aSet ) );
-            pEffectWin->Update( aSet );
-        }
-        else
-        {
-            SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_EFFECT, ATTR_ANIMATION_TEXTEFFECT, 0);
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
-            pEffectWin->Update( aSet );
         }
     }
 }
