@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-06-12 12:13:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ dutch ] = "Ruby-tekst";
         Text[ french ] = "Texte ~Ruby";
         Text[ spanish ] = "Texto ruby";
-        Text[ italian ] = "Testo ruby";
+        Text[ italian ] = "Testo Ruby";
         Text[ danish ] = "Ruby text";
         Text[ swedish ] = "~Ruby-text";
         Text[ polish ] = "Transliteracja (Ruby)";
@@ -303,9 +303,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ dutch ] =
     {
-            "Links" ;
+            "links  " ;
             "Gecentreerd" ;
-            "Rechts" ;
+            "rechts  " ;
             "0 1 0" ;
             "1 2 1" ;
     };
@@ -327,8 +327,8 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ italian ] =
     {
-            "Sinistra" ;
-            "Centrato" ;
+            "A sinistra" ;
+            "Al centro" ;
             "A destra" ;
             "0 1 0" ;
             "1 2 1" ;
@@ -444,15 +444,15 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ french ] = "~Position";
         Text[ spanish ] = "~Posición";
         Text[ finnish ] = "Position";
-        Text[ italian ] = "Position";
+        Text[ italian ] = "~Posizione";
         Text[ danish ] = "Position";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
         Text[ japanese ] = "ˆÊ’u";
         Text[ korean ] = "Position";
-        Text[ chinese_simplified ] = "Position";
-        Text[ chinese_traditional ] = "Position";
+        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_traditional ] = "¦ì¸m";
         Text[ turkish ] = "Position";
         Text[ arabic ] = "Position";
         Text[ catalan ] = "Position";
@@ -473,6 +473,111 @@ ModelessDialog RID_SVXDLG_RUBY
             "Top" ;
             "Bottom" ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "Oben" ;
+        < "Unten" ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Top" ;
+        < "Bottom" ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "para cima" ;
+        < "Base" ;
+    };
+    StringList [ russian ] =
+    {
+            < "Ñâåðõó" ;
+        < "Ñíèçó" ;
+    };
+    StringList [ greek ] =
+    {
+            < "ðÜíù" ;
+        < "êÜôù" ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Boven" ;
+        < "onder" ;
+    };
+    StringList [ french ] =
+    {
+            < "En haut" ;
+        < "En bas" ;
+    };
+    StringList [ spanish ] =
+    {
+            < "Arriba" ;
+        < "Abajo" ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Ylhäällä" ;
+        < "pohjalla" ;
+    };
+    StringList [ italian ] =
+    {
+            < "In alto" ;
+        < "In basso" ;
+    };
+    StringList [ danish ] =
+    {
+            < "Top" ;
+        < "Nede" ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Uppe" ;
+        < "Nere" ;
+    };
+    StringList [ polish ] =
+    {
+            < "Na górze" ;
+        < "Na dole" ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Oben" ;
+        < "Unten" ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ã" ;
+        < "‰º" ;
+    };
+    StringList [ korean ] =
+    {
+            < "À§¿¡" ;
+        < "¾Æ·¡" ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "ÏòÉÏ" ;
+        < "ÏòÏÂ" ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¦V¤W" ;
+        < "¦V¤U" ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Yukarý" ;
+        < "Aþaðý" ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÃÚáì" ;
+        < "ÃÓÝá" ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Oben" ;
+        < "Unten" ;
+    };
     };
     FixedText FT_CHAR_STYLE
     {
@@ -487,7 +592,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ dutch ] = "Tekensjabloon voor ruby text";
         Text[ french ] = "Style de ~caractères pour le texte Ruby";
         Text[ spanish ] = "Estilo de carácter para texto ruby";
-        Text[ italian ] = "Stile del carattere per testo ruby";
+        Text[ italian ] = "Stile del carattere per testo Ruby";
         Text[ danish ] = "Character style for ruby text";
         Text[ swedish ] = "~Teckenformatmall för ruby-text";
         Text[ polish ] = "Styl znaków u¿ytych w transliteracji";
@@ -556,7 +661,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ portuguese_brazilian ] = "Preview:";
         Text[ japanese ] = "ÌßÚËÞ­°:";
         Text[ korean ] = "¹Ì¸®º¸±â:";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ:";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ£º";
         Text[ chinese_traditional ] = "¹wÄý¡G";
         Text[ turkish ] = "Preview:";
         Text[ arabic ] = "ãÚÇíäÉ:";
@@ -588,8 +693,8 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ portuguese_brazilian ] = "Apply";
         Text[ japanese ] = "“K—p";
         Text[ korean ] = "Àû¿ë";
-        Text[ chinese_simplified ] = "Ì×ÓÃ";
-        Text[ chinese_traditional ] = "®M¥Î";
+        Text[ chinese_simplified ] = "²ÉÓÃ";
+        Text[ chinese_traditional ] = "±Ä¥Î";
         Text[ turkish ] = "Apply";
         Text[ arabic ] = "ÊØÈíÞ";
         Text[ catalan ] = "Aplicar";
@@ -634,7 +739,7 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ dutch ] = "Fonetisch teken";
     Text[ french ] = "Ruby";
     Text[ spanish ] = "Carácter fonético guía";
-    Text[ italian ] = "Testo ruby";
+    Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Ruby";
     Text[ swedish ] = "Fonetiskt hjälptecken";
     Text[ polish ] = "Ruby";
@@ -648,5 +753,6 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ catalan ] = "Carácter fonético guía";
     Text[ finnish ] = "Phonetisches Leitzeichen";
 };
+
 
 
