@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:13:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 
 namespace {
 
-bool lclHasString( ScDocument& rDoc, USHORT nCol, USHORT nRow, USHORT nTab, const String& rString )
+bool lclHasString( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString )
 {
     String aCompStr;
     rDoc.GetString( nCol, nRow, nTab, aCompStr );
@@ -106,7 +106,7 @@ ScConversionEngineBase::ScConversionEngineBase(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
         ESelection* pEdSelection,
-        USHORT nCol, USHORT nRow, USHORT nTab,
+        SCCOL nCol, SCROW nRow, SCTAB nTab,
         bool bCellSelection ) :
     ScEditEngineDefaulter( pEnginePool ),
     mrViewData( rViewData ),
@@ -153,7 +153,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
         if( bMultiTab )
             mrDoc.GetString( mnCurrCol, mnCurrRow, mnStartTab, aVisibleStr );
 
-        for( USHORT nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
+        for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
             //  #69965# always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
@@ -198,8 +198,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
         }
     }
     pCell = NULL;
-    USHORT nNewCol = mnCurrCol;
-    USHORT nNewRow = mnCurrRow;
+    SCCOL nNewCol = mnCurrCol;
+    SCROW nNewRow = mnCurrRow;
 
     if( mbInitialState )
     {
@@ -311,7 +311,7 @@ void ScConversionEngineBase::ShowFinishDialog()
 
 // private --------------------------------------------------------------------
 
-void ScConversionEngineBase::FillFromCell( USHORT nCol, USHORT nRow, USHORT nTab )
+void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     CellType eCellType;
     mrDoc.GetCellType( nCol, nRow, nTab, eCellType );
@@ -349,7 +349,7 @@ ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
         ESelection* pEdSelection,
-        USHORT nCol, USHORT nRow, USHORT nTab,
+        SCCOL nCol, SCROW nRow, SCTAB nTab,
         bool bCellSelection, XSpellCheckerRef xSpeller ) :
     ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection )
 {
@@ -401,7 +401,7 @@ ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
         ESelection* pEdSelection,
-        USHORT nCol, USHORT nRow, USHORT nTab,
+        SCCOL nCol, SCROW nRow, SCTAB nTab,
         bool bCellSelection, LanguageType eConvLanguage ) :
     ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection ),
     meConvLang( eConvLanguage )
