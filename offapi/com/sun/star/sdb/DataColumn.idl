@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataColumn.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:15:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,15 @@
 
  module com {  module sun {  module star {  module sdb {
 
-interface XColumn;
-interface XColumnUpdate;
+ published interface XColumn;
+ published interface XColumnUpdate;
 
 
 // DocMerge from xml: service com::sun::star::sdb::DataColumn
 /** defines a column used for a result set which contains the data definition
     and the data of the column of the current row of a result set.
  */
-service DataColumn
+published service DataColumn
 {
     // DocMerge: empty anyway
     service com::sun::star::sdb::ResultColumn;
