@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+#   last change: $Author: kso $ $Date: 2000-10-25 06:31:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ UCB_MAJOR=1
 .INCLUDE: sv.mk
 
 SLOFILES=\
-    $(SLO)$/flatany.obj \
     $(SLO)$/identify.obj \
     $(SLO)$/ucb.obj \
     $(SLO)$/ucbcfg.obj \
@@ -100,7 +99,6 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \
-    $(STORELIB) \
     $(UCBHELPERLIB)
 SHL1LIBS=\
     $(LIB1TARGET) \
