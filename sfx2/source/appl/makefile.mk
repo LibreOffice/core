@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ok $ $Date: 2001-09-14 10:28:55 $
+#   last change: $Author: pb $ $Date: 2001-10-17 11:00:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,49 +95,49 @@ OBJFILES =	\
         $(OBJ)$/appctor.obj
 
 SLOFILES =  \
-                $(SLO)$/imagemgr.obj\
-        $(SLO)$/rmacceptor.obj\
-        $(SLO)$/appuno.obj \
-        $(SLO)$/appmail.obj \
-        $(SLO)$/appmain.obj \
-        $(SLO)$/appopen.obj \
-        $(SLO)$/appinit.obj \
-        $(SLO)$/appmisc.obj \
-        $(SLO)$/appdemo.obj \
-        $(SLO)$/appreg.obj \
-        $(SLO)$/appcfg.obj \
-        $(SLO)$/appquit.obj \
-        $(SLO)$/appchild.obj \
-        $(SLO)$/appserv.obj \
-        $(SLO)$/appdata.obj \
-        $(SLO)$/app.obj \
-        $(SLO)$/appbas.obj \
-        $(SLO)$/appdde.obj \
-        $(SLO)$/workwin.obj \
-        $(SLO)$/sfxhelp.obj \
-        $(SLO)$/childwin.obj \
-        $(SLO)$/sfxdll.obj \
-        $(SLO)$/module.obj \
-        $(SLO)$/picklist.obj \
-        $(SLO)$/appsys.obj \
-        $(SLO)$/loadenv.obj \
-        $(SLO)$/dlgcont.obj \
-        $(SLO)$/namecont.obj \
-        $(SLO)$/scriptcont.obj \
-        $(SLO)$/oinstanceprovider.obj \
-        $(SLO)$/opluginframefactory.obj \
-        $(SLO)$/pluginacceptthread.obj  \
-        $(SLO)$/officeacceptthread.obj \
-        $(SLO)$/newhelp.obj \
-        $(SLO)$/helpinterceptor.obj \
-                $(SLO)$/cmdlineargs.obj \
-        $(SLO)$/shutdownicon.obj \
-        $(SLO)$/shutdowniconw32.obj \
-        $(SLO)$/sfxpicklist.obj
-
+    $(SLO)$/imagemgr.obj\
+    $(SLO)$/rmacceptor.obj\
+    $(SLO)$/appuno.obj \
+    $(SLO)$/appmail.obj \
+    $(SLO)$/appmain.obj \
+    $(SLO)$/appopen.obj \
+    $(SLO)$/appinit.obj \
+    $(SLO)$/appmisc.obj \
+    $(SLO)$/appdemo.obj \
+    $(SLO)$/appreg.obj \
+    $(SLO)$/appcfg.obj \
+    $(SLO)$/appquit.obj \
+    $(SLO)$/appchild.obj \
+    $(SLO)$/appserv.obj \
+    $(SLO)$/appdata.obj \
+    $(SLO)$/app.obj \
+    $(SLO)$/appbas.obj \
+    $(SLO)$/appdde.obj \
+    $(SLO)$/workwin.obj \
+    $(SLO)$/sfxhelp.obj \
+    $(SLO)$/childwin.obj \
+    $(SLO)$/sfxdll.obj \
+    $(SLO)$/module.obj \
+    $(SLO)$/picklist.obj \
+    $(SLO)$/appsys.obj \
+    $(SLO)$/loadenv.obj \
+    $(SLO)$/dlgcont.obj \
+    $(SLO)$/namecont.obj \
+    $(SLO)$/scriptcont.obj \
+    $(SLO)$/oinstanceprovider.obj \
+    $(SLO)$/opluginframefactory.obj \
+    $(SLO)$/pluginacceptthread.obj  \
+    $(SLO)$/officeacceptthread.obj \
+    $(SLO)$/newhelp.obj \
+    $(SLO)$/helpinterceptor.obj \
+    $(SLO)$/cmdlineargs.obj \
+    $(SLO)$/shutdownicon.obj \
+    $(SLO)$/shutdowniconw32.obj \
+    $(SLO)$/sfxpicklist.obj \
+    $(SLO)$/helpdispatch.obj
 
 EXCEPTIONSFILES=\
-                $(SLO)$/imagemgr.obj\
+    $(SLO)$/imagemgr.obj		\
     $(SLO)$/appmain.obj			\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/frstinit.obj		\
@@ -150,13 +150,13 @@ EXCEPTIONSFILES=\
     $(SLO)$/sfxhelp.obj			\
     $(SLO)$/shutdownicon.obj	\
     $(SLO)$/shutdowniconw32.obj \
-    $(SLO)$/sfxpicklist.obj
+    $(SLO)$/sfxpicklist.obj		\
+    $(SLO)$/helpdispatch.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
         $(SLO)$/appmac.obj
 .ENDIF
-
 
 # --- Targets -------------------------------------------------------
 
