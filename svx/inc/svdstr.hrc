@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 11:59:51 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,10 @@
 #define STR_ObjNamePluralGRAFBMPTRANS       (STR_ObjNameBegin + 139)
 #define STR_ObjNamePluralGRAFBMPTRANSLNK    (STR_ObjNameBegin + 140)
 
-#define STR_ObjNameEnd               (STR_ObjNamePluralGRAFBMPTRANSLNK)
+#define STR_ObjNameSingulCUSTOMSHAPE        (STR_ObjNameBegin + 141)
+#define STR_ObjNamePluralCUSTOMSHAPE        (STR_ObjNameBegin + 142)
+
+#define STR_ObjNameEnd               (STR_ObjNamePluralCUSTOMSHAPE)
 
 #define STR_EditBegin                (STR_ObjNameEnd+1)
 #define STR_EditWithCopy             (STR_EditBegin  +  0)
@@ -543,7 +546,7 @@
 #define SIP_XA_FILLBMP_SIZEX                (SIP_Begin +  28)
 #define SIP_XA_FILLBMP_SIZEY                (SIP_Begin +  29)
 #define SIP_XA_FILLFLOATTRANSPARENCE        (SIP_Begin +  30)
-#define SIP_XA_FILLRESERVED2                (SIP_Begin +  31)
+#define SIP_XA_SECONDARYFILLCOLOR           (SIP_Begin +  31)
 #define SIP_XA_FILLBMP_SIZELOG              (SIP_Begin +  32)
 #define SIP_XA_FILLBMP_TILEOFFSETX          (SIP_Begin +  33)
 #define SIP_XA_FILLBMP_TILEOFFSETY          (SIP_Begin +  34)
@@ -632,11 +635,11 @@
 #define SIP_SA_TEXT_ANIDELAY                (SIP_Begin + 117)
 #define SIP_SA_TEXT_ANIAMOUNT               (SIP_Begin + 118)
 #define SIP_SA_TEXT_CONTOURFRAME            (SIP_Begin + 119)
-#define SIP_SA_AUTOSHAPE_ADJUSTMENT         (SIP_Begin + 120)
+#define SIP_SA_CUSTOMSHAPE_ADJUSTMENT       (SIP_Begin + 120)
 #define SIP_SA_XMLATTRIBUTES                (SIP_Begin + 121)
 #define SIP_SA_TEXT_USEFIXEDCELLHEIGHT      (SIP_Begin + 122)
-#define SIP_SA_RESERVE16                    (SIP_Begin + 123)
-#define SIP_SA_RESERVE17                    (SIP_Begin + 124)
+#define SIP_SA_WORDWRAP                     (SIP_Begin + 123)
+#define SIP_SA_AUTOGROWSIZE                 (SIP_Begin + 124)
 #define SIP_SA_RESERVE18                    (SIP_Begin + 125)
 #define SIP_SA_RESERVE19                    (SIP_Begin + 126)
 #define SIP_SDRATTRSET_MISC                 (SIP_Begin + 127)
