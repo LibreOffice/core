@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleTable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:22:43 $
+ *  last change:$Date: 2003-05-22 13:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,8 @@ public class _XAccessibleTable extends MultiMethodTest {
         int selRows[] = null;
 
         if (xASel != null) {
-            log.println("XAccessibleSelection.selectAllAccessible()");
-            xASel.selectAllAccessible();
+            log.println("XAccessibleSelection.selectAllAccessibleChildren()");
+            xASel.selectAllAccessibleChildren();
         }
 
         log.println("getSelectedAccessibleRows()");
@@ -487,8 +487,8 @@ public class _XAccessibleTable extends MultiMethodTest {
         int selCols[] = null;
 
         if (xASel != null) {
-            log.println("XAccessibleSelection.selectAllAccessible()");
-            xASel.selectAllAccessible();
+            log.println("XAccessibleSelection.selectAllAccessibleChildren()");
+            xASel.selectAllAccessibleChildren();
         }
 
         log.println("getSelectedAccessibleColumns()");
@@ -558,8 +558,8 @@ public class _XAccessibleTable extends MultiMethodTest {
         }
 
         if (xASel != null) {
-            log.println("XAccessibleSelection.selectAllAccessible()");
-            xASel.selectAllAccessible();
+            log.println("XAccessibleSelection.selectAllAccessibleChildren()");
+            xASel.selectAllAccessibleChildren();
         }
 
         try {
@@ -620,8 +620,8 @@ public class _XAccessibleTable extends MultiMethodTest {
         }
 
         if (xASel != null) {
-            log.println("XAccessibleSelection.selectAllAccessible()");
-            xASel.selectAllAccessible();
+            log.println("XAccessibleSelection.selectAllAccessibleChildren()");
+            xASel.selectAllAccessibleChildren();
         }
 
         try {
@@ -804,8 +804,8 @@ public class _XAccessibleTable extends MultiMethodTest {
         }
 
         if (xASel != null) {
-            log.println("XAccessibleSelection.selectAllAccessible()");
-            xASel.selectAllAccessible();
+            log.println("XAccessibleSelection.selectAllAccessibleChildren()");
+            xASel.selectAllAccessibleChildren();
         }
 
         try {
