@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-06 13:22:55 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ using namespace rtl;
 
 char __READONLY_DATA sXML_drawing[] = "drawing";
 char __READONLY_DATA sXML_impress[] = "presentation";
-char __READONLY_DATA sXML_content[] = "Content.xml";
+char __READONLY_DATA sXML_contentStreamName[] = "Content.xml";
 
 // ----------------
 // - SdXMLWrapper -
@@ -178,7 +178,7 @@ BOOL SdXMLWrapper::Import()
 //  {
 //      bLoadDoc = TRUE;
 //      bInsert = bInsertMode;
-//      nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
+ //     nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
 //  }
 //  aOpt.ResetAllFmtsOnly();
 
@@ -194,7 +194,7 @@ BOOL SdXMLWrapper::Import()
         if( pStorage )
         {
 
-            static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_content ) );
+            static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) );
 
             xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
 
@@ -306,7 +306,7 @@ BOOL SdXMLWrapper::Export()
 
     if( pStorage )
     {
-        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( sXML_content ) ),
+        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) ),
                                                          STREAM_READ | STREAM_WRITE | STREAM_TRUNC ) );
 
         if( !xOStm.Is() || xOStm->GetError() )
