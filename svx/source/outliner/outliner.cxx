@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 15:51:26 $
+ *  last change: $Author: mt $ $Date: 2000-10-19 11:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
+#endif
+
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
 #endif
 
 #ifndef _SVX_SVXFONT_HXX
@@ -981,14 +985,19 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
 
-    Font aBulletFont( *pFmt->GetBulletFont() );
+    Font aBulletFont;
+    if ( pFmt->GetNumType() == SVX_NUM_CHAR_SPECIAL )
+        aBulletFont = *pFmt->GetBulletFont();
+    else
+        aBulletFont = pEditEngine->GetStandardFont( nPara );
+
     aBulletFont.SetAlign( ALIGN_BOTTOM );
     aBulletFont.SetSize( Size( 0, nScaledLineHeight ) );
-    Color aColor( COL_BLACK );
-    if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
-        aColor = pFmt->GetBulletColor();
-    aBulletFont.SetColor( aColor );
-
+    if( pEditEngine->IsFlatMode() || ( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
+    {
+        Color aColor( COL_BLACK );
+        aBulletFont.SetColor( aColor );
+    }
     return aBulletFont;
 }
 
@@ -1086,7 +1095,9 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
             {
                 if ( !bStrippingPortions )
                 {
-                    pFmt->GetBrush()->GetGraphic()->GetBitmapEx().Draw( pOutDev, aBulletArea.TopLeft(), pPara->aBulSize );
+                    // MT: Remove CAST when KA made the Draw-Method const
+                    if ( pFmt->GetBrush()->GetGraphicObject() )
+                        ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletArea.TopLeft(), pPara->aBulSize );
                 }
             }
         }
