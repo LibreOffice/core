@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:15:58 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String SAMPLES
     Text[ arabic ] = "áßí ÊÓÊØíÚ ÇÓÊÎÏÇã åĞÇ ÇáãËÇá Úáì ÇáäÍæ ÇáÃãËá¡ Úáíß ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ ÈÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ.";
     Text[ turkish ] = "Bu örneğin tüm işlevlerini kullanabilmek için, bu şablon ile yeni bir belge oluşturun.";
     Text[ catalan ] = "Para que esté disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
+    Text[ finnish ] = "Jotta voisit käyttää mallin toimintoja täysipainoisesti, luo asiakirja tämän mallipohjan avulla.";
 };
 
 String SAMPLES + 1
@@ -118,6 +119,7 @@ String SAMPLES + 1
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "Bilgi";
     Text[ catalan ] = "Indicación";
+    Text[ finnish ] = "Huomautukset";
 };
 
 // --------------------------------------------------------------------
@@ -145,6 +147,7 @@ String STYLES
     Text[ turkish ] = "Konu seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de temas";
+    Text[ finnish ] = "Teeman valinta";
 };
 
 String STYLES + 1
@@ -163,13 +166,14 @@ String STYLES + 1
     Text[ swedish ] = "Fel uppstod när det aktuella dokumentet skulle sparas i urklippet! Följande åtgärd går inte att ångra.";
     Text[ polish ] = "B³¹d podczas tymczasowego zapisywania aktualnych dokumentów! Nastêpuj¹cej akcji nie mo¿na cofn¹æ.";
     Text[ portuguese_brazilian ] = "Error while temporarily saving the document! The following action cannot be undone.";
-    Text[ japanese ] = "•\\¦’†‚ÌÄŞ·­ÒİÄ‚ğ¸Ø¯ÌßÎŞ°ÄŞ‚É•Û‘¶‚·‚éÛ‚É´×°”­¶! Ÿ‚Ì±¸¼®İ‚ÍŒ³‚É–ß‚¹‚Ü‚¹‚ñB";
+    Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚ğ¸Ø¯ÌßÎŞ°ÄŞ‚É•Û‘¶‚·‚é‚Æ‚«‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½BŸ‚Ì±¸¼®İ‚ÍŒ³‚É–ß‚¹‚Ü‚¹‚ñB";
     Text[ korean ] = "ÇöÀç ¹®¼­¸¦ Áß°£ ÀúÀåÇÏ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù!  ¿¬¼ÓµÇ´Â ÀÛ¾÷À» ½ÇÇàÃë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ´æÅÌµ±Ç°ÎÄµµÊ±·¢Éú´íÎó£¡ÎŞ·¨È¡ÏûÏÂÁĞ²Ù×÷¡£";
     Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº°Ê§@¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
     Text[ turkish ] = "Belgeyi panoya kaydederken hata oluştu! Bir sonraki işlem geri alınamaz.";
     Text[ catalan ] = "¡Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acción.";
+    Text[ finnish ] = "On ilmennyt virhe tallennettaessa asiakirjaa leikepöydälle! Seuraavaa toimintoa ei voi peruuttaa.";
 };
 
 String STYLES + 2
@@ -177,7 +181,7 @@ String STYLES + 2
     Text = "~Abbrechen";
     Text[English] = "Cancel";
     Text[ english_us ] = "~Cancel";
-    Text[ portuguese ] = "Cancelar";
+    Text[ portuguese ] = "~Cancelar";
     Text[ russian ] = "Îòìåíà";
     Text[ greek ] = "~Áêıñùóç";
     Text[ dutch ] = "~Annuleren";
@@ -196,6 +200,7 @@ String STYLES + 2
     Text[ turkish ] = "İptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Cancelar";
+    Text[ finnish ] = "Cancel";
 };
 
 String STYLES + 3
@@ -203,7 +208,7 @@ String STYLES + 3
     Text = "~OK";
     Text[English] = "OK";
     Text[ english_us ] = "~OK";
-    Text[ portuguese ] = "OK";
+    Text[ portuguese ] = "~OK";
     Text[ russian ] = "OK";
     Text[ greek ] = "~OK";
     Text[ dutch ] = "~OK";
@@ -222,6 +227,7 @@ String STYLES + 3
     Text[ turkish ] = "Tamam";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Aceptar";
+    Text[ finnish ] = "OK";
 };
 
 // --------------------------------------------------------------------
@@ -248,6 +254,7 @@ String AgendaDlgName
     Text[ arabic ] = "ŞÇáÈ ÈÑæÊæßæá";
     Text[ turkish ] = "Tutanak şablonu";
     Text[ catalan ] = "Plantilla de protocolo";
+    Text[ finnish ] = "Pöytäkirjamallipohja";
 };
 
 String AgendaDlgNoCancel
@@ -286,6 +293,7 @@ String AgendaDlgFrame
     Text[ arabic ] = "äæÚ ÇáÈÑæÊæßæá";
     Text[ turkish ] = "Tutanak tipi";
     Text[ catalan ] = "Tipo de protocolo";
+    Text[ finnish ] = "Pöytäkirjatyyppi";
 };
 
 String AgendaDlgButton1
@@ -311,6 +319,7 @@ String AgendaDlgButton1
     Text[ arabic ] = "ÈÑæÊæßæá ÇáäÊíÌÉ";
     Text[ turkish ] = "Sonuç tutanağı";
     Text[ catalan ] = "Protocolo de resultado";
+    Text[ finnish ] = "Tulospöytäkirja";
 };
 
 String AgendaDlgButton2
@@ -336,6 +345,7 @@ String AgendaDlgButton2
     Text[ arabic ] = "ÈÑæÊæßæá ÎØ ÇáÓíÑ";
     Text[ turkish ] = "Değerlendirme tutanağı";
     Text[ catalan ] = "Protocolo del transcurso";
+    Text[ finnish ] = "Arviointipöytäkirja";
 };
 
 // --------------------------------------------------------------------
@@ -362,6 +372,7 @@ String CorrespondenceNoTextmark
     Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ 'Recipient' äÇŞÕÉ.";
     Text[ turkish ] = "'Alıcı' Belirteci mevcut değil.";
     Text[ catalan ] = "Falta la marca de texto 'Recipient'.";
+    Text[ finnish ] = "Kirjanmerkki Vastaanottaja puuttuu.";
 };
 
 String CorrespondenceNoTextmark+1
@@ -387,6 +398,7 @@ String CorrespondenceNoTextmark+1
     Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
     Text[ turkish ] = "Standart mektup alanları eklenemiyor.";
     Text[ catalan ] = "No se pueden insertar campos de cartas en serie.";
+    Text[ finnish ] = "Lomakekirjekenttien liittäminen ei onnistu.";
 };
 
 String CorrespondenceMsgError
@@ -412,6 +424,7 @@ String CorrespondenceMsgError
     Text[ arabic ] = "ÎØÃ";
     Text[ turkish ] = "Hata";
     Text[ catalan ] = "Error";
+    Text[ finnish ] = "Virhe";
 };
 
 String CorrespondenceDialog
@@ -430,13 +443,14 @@ String CorrespondenceDialog
     Text[ danish ] = "Hvad vil du skrive?";
     Text[ polish ] = "Co chcesz napisaæ?";
     Text[ portuguese_brazilian ] = "What do you want to write?";
-    Text[ japanese ] = "‰½‚ğ‘‚«‚Ü‚·‚©?";
+    Text[ japanese ] = "‰½‚ğ‘‚«‚Ü‚·‚©B";
     Text[ korean ] = "¹«¾ùÀ» ¾²½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÄúÏëÊéĞ´Ê²Ã´ÎÄµµ£¿";
     Text[ chinese_traditional ] = "­n¶ñ¼gªº¤º®e¡H";
     Text[ arabic ] = "ãÇĞÇ ÊÑíÏ Ãä ÊßÊÈ¿";
     Text[ turkish ] = "Ne yazmak istiyorsunuz?";
     Text[ catalan ] = "¿Qué desea escribir?";
+    Text[ finnish ] = "Mitä haluat kirjoittaa?";
 };
 
 String CorrespondenceDialog+1
@@ -455,7 +469,7 @@ String CorrespondenceDialog+1
     Text[ danish ] = "Enkelt brev";
     Text[ polish ] = "Pojedynczy list";
     Text[ portuguese_brazilian ] = "Single letter";
-    Text[ japanese ] = "1’Ê‚¸‚Â";
+    Text[ japanese ] = "‚P’Ê‚¸‚Â";
     Text[ korean ] = "´ÜÀÏ ÆíÁö";
     Text[ chinese_simplified ] = "µ¥¼şĞÅº¯";
     Text[ chinese_traditional ] = "³æ«Ê«H¥ó";
@@ -463,6 +477,7 @@ String CorrespondenceDialog+1
     Text[ turkish ] = "Tek mektup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta individual";
+    Text[ finnish ] = "Yksittäinen kirje";
 };
 
 String CorrespondenceDialog+2
@@ -488,6 +503,7 @@ String CorrespondenceDialog+2
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
     Text[ turkish ] = "Standart mektup";
     Text[ catalan ] = "Carta en serie";
+    Text[ finnish ] = "Lomakekirje";
 };
 
 String TextField
@@ -497,7 +513,7 @@ String TextField
     Text[ english_us ] = "User data field is not defined!";
     Text[ language_user1 ] = "Mitteilung in einer Messagebox";
 
-    Text[ portuguese ] = "Textfield is not defined!";
+    Text[ portuguese ] = "Campo de dados do utilizador não definido.";
     Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ íå çàäàíî.";
     Text[ greek ] = "Äåí ïñßóôçêå ôï ğåäßï ôùí äåäïìİíùí ôïõ ÷ñŞóôç!";
     Text[ dutch ] = "Geen veld voor gebruikersgegevens gedefinieerd!";
@@ -515,4 +531,5 @@ String TextField
     Text[ turkish ] = "Textfield is not defined!";
     Text[ arabic ] = "áã íÊã ÊÚííä ÍŞá ÈíÇäÇÊ ÇáãÓÊÎÏã!";
     Text[ catalan ] = "¡El campo de datos de usuario no está definido!";
+    Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
 };
