@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 10:46:39 $
+ *  last change: $Author: fme $ $Date: 2002-05-21 08:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,11 +619,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
         aSub[SW_CTL].SetCharSet( rFont.GetCharSet() );
         aSub[SW_CTL].SvxFont::SetPropr( 100 );   // 100% der FontSize
         Size aTmpSize = aSub[SW_CTL].aSize;
-#ifdef BIDI
         aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
-#else
-        aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
-#endif
         aSub[SW_CTL].SetSize( aTmpSize );
         aSub[SW_CTL].SetItalic( pAttrSet->GetCTLPosture().GetPosture() );
         aSub[SW_CTL].SetWeight( pAttrSet->GetCTLWeight().GetWeight() );
