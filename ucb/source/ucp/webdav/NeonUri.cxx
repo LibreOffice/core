@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-25 13:52:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,15 +114,28 @@ void NeonUri::calculateURI ()
 ::rtl::OUString NeonUri::GetPathBaseName () const
 {
     sal_Int32 nPos = mPath.lastIndexOf ('/');
+    sal_Int32 nTrail = 0;
     if (nPos == mPath.getLength () - 1)
     {
         // Trailing slash found. Skip.
+        nTrail = 1;
         nPos = mPath.lastIndexOf ('/', nPos);
     }
     if (nPos != -1)
-        return mPath.copy (nPos + 1, mPath.getLength () - nPos - 1);
+        return mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail);
     else
         return OUString::createFromAscii ("/");
+}
+
+::rtl::OUString NeonUri::GetPathBaseNameUnescaped () const
+{
+    OString aName
+        = OUStringToOString( GetPathBaseName(), RTL_TEXTENCODING_UTF8 );
+
+    char* pU = uri_unescape( aName.getStr() );
+    OUString aNameU = OUString::createFromAscii( pU );
+    free( pU );
+    return aNameU;
 }
 
 ::rtl::OUString NeonUri::GetPathDirName () const
@@ -147,4 +160,14 @@ void NeonUri::AppendPath (const OUString& path)
     mPath += path;
     calculateURI ();
 };
+
+// static
+OUString NeonUri::escapeSegment( const OUString& segment )
+{
+    OString aSegment = OUStringToOString( segment, RTL_TEXTENCODING_UTF8 );
+    char * pE = uri_abspath_escape( aSegment.getStr() );
+    OUString aSegmentE = OUString::createFromAscii( pE );
+    free( pE );
+    return aSegmentE;
+}
 
