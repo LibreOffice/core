@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:56 $
+#   last change: $Author: oj $ $Date: 2000-10-24 13:06:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,10 @@
 PRJ=..$/..
 PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
+LIBTARGET=NO
 TARGET=shared
+LIB1TARGET=$(SLB)$/dbashared.lib
+LIB2TARGET=$(SLB)$/dbushared.lib
 
 #ENABLE_EXCEPTIONS=TRUE
 
@@ -78,13 +81,26 @@ TARGET=shared
 SLOFILES=	\
         $(SLO)$/stubs.obj	\
         $(SLO)$/registrationhelper.obj	\
-        $(SLO)$/stringconstants.obj	\
+        $(SLO)$/dbastrings.obj	\
+        $(SLO)$/dbustrings.obj	\
         $(SLO)$/apitools.obj
 
 EXCEPTIONSFILES=	\
         $(SLO)$/apitools.obj	\
         $(SLO)$/registrationhelper.obj	\
         $(SLO)$/stubs.obj
+
+LIB1OBJFILES=	\
+        $(SLO)$/stubs.obj	\
+        $(SLO)$/registrationhelper.obj	\
+        $(SLO)$/dbastrings.obj	\
+        $(SLO)$/apitools.obj
+        
+LIB2OBJFILES=	\
+        $(SLO)$/stubs.obj	\
+        $(SLO)$/registrationhelper.obj	\
+        $(SLO)$/dbustrings.obj	\
+        $(SLO)$/apitools.obj
 
 # --- Targets ----------------------------------
 
