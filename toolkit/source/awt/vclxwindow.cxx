@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:06:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <com/sun/star/awt/Style.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
@@ -536,9 +536,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xContext;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -547,12 +547,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
         if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() )
         {
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
             if ( xAcc.is() )
             {
-                ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
+                ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
                 if ( pWindow->GetType() == WINDOW_MENUBARWINDOW
-                     || ( xCont.is() && xCont->getAccessibleRole() == ::drafts::com::sun::star::accessibility::AccessibleRole::POPUPMENU ) )
+                     || ( xCont.is() && xCont->getAccessibleRole() == ::com::sun::star::accessibility::AccessibleRole::POPUP_MENU ) )
                 {
                     xContext = xCont;
                 }
@@ -560,15 +560,15 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         else if ( nType == WINDOW_STATUSBAR )
         {
-            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
+            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
         }
         else if ( nType == WINDOW_TABCONTROL )
         {
-            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
         }
         else
         {
-            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
         }
     }
 
@@ -607,7 +607,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XVclWindowPeer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XLayoutConstrains*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
-                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessible*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::accessibility::XAccessible*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
 }
@@ -622,7 +622,7 @@ IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
     VCLXDevice::getTypes()
@@ -647,7 +647,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     {
         DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessibility wrapper!" );
     }
-    mxAccessibleContext = ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >();
+    mxAccessibleContext = ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >();
 
     if ( !mbDisposing )
     {
@@ -1563,7 +1563,6 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     ::vos::OGuard aGuard( GetMutex() );
 
     using namespace ::com::sun::star;
-    using namespace ::drafts::com::sun::star;
 
     // check if it comes from our AccessibleContext
     uno::Reference< uno::XInterface > aAC( mxAccessibleContext, uno::UNO_QUERY );
@@ -1576,8 +1575,8 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     }
 }
 
-// ::drafts::com::sun::star::accessibility::XAccessible
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+// ::com::sun::star::accessibility::XAccessible
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     using namespace ::com::sun::star;
 
