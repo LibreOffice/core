@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2002-11-11 08:28:53 $
+#   last change: $Author: oj $ $Date: 2002-11-11 08:56:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SLOFILES=\
         $(SLO)$/YUser.obj				\
         $(SLO)$/YUsers.obj				\
         $(SLO)$/YKeys.obj				\
-        $(SLO)$/YDatabaseMetaData.obj	\
         $(SLO)$/Yservices.obj
         
 
