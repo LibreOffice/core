@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:08:16 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 11:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ namespace dbaui
                                         ?   RememberAuthentication_PERSISTENT
                                         :   RememberAuthentication_SESSION
                                     :   RememberAuthentication_NO);
-                        xSuppAuthent->setAccount(aLogin.GetAccount());
+                        if (_rAuthRequest.HasAccount)
+                            xSuppAuthent->setAccount(aLogin.GetAccount());
                         xSuppAuthent->select();
                     }
                     break;
@@ -424,6 +425,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/26 18:08:16  fs
+ *  handling of parameter requests
+ *
  *  Revision 1.2  2000/10/26 07:32:32  fs
  *  special login request text, with interpreting the ServerName as data source name
  *
