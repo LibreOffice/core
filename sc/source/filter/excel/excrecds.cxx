@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:23:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------------
+
+#ifndef INCLUDED_SVX_COUNTRYID_HXX
+#include <svx/countryid.hxx>
+#endif
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -197,8 +201,7 @@ const ULONG ExcDummy_02b::nMyLen = sizeof( ExcDummy_02b::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_02c -
 const BYTE      ExcDummy_02c::pMyData[] = {
-    0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
-    0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00          // COUNTRY
+    0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00          // DEFAULTROWHEIGHT
 };
 const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
 
@@ -550,6 +553,23 @@ ULONG ExcDummy_02c::GetLen( void ) const
 const BYTE* ExcDummy_02c::GetData( void ) const
 {
     return pMyData;
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
+    XclExpRecord( EXC_ID_COUNTRY, 4 )
+{
+    mnUICountry = static_cast< sal_uInt16 >(
+        ::svx::ConvertLanguageToCountry( rRoot.GetUILanguage() ) );
+    mnDocCountry = static_cast< sal_uInt16 >(
+        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+}
+
+void XclExpCountry::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << mnUICountry << mnDocCountry;
 }
 
 
