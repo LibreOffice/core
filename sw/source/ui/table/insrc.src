@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:02:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ italian ] = "Davanti" ;
         Text [ portuguese_brazilian ] = "~antes" ;
         Text [ portuguese ] = "à ~frente" ;
-        Text [ finnish ] = "~edelle" ;
+        Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "foran" ;
         Text [ french ] = "A~vant" ;
         Text [ swedish ] = "~framför" ;
@@ -142,7 +142,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ italian ] = "~Dietro" ;
         Text [ portuguese_brazilian ] = "~atrás" ;
         Text [ portuguese ] = "~atrás" ;
-        Text [ finnish ] = "~jälkeen" ;
+        Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "efter" ;
         Text [ french ] = "~Après" ;
         Text [ swedish ] = "~bakom" ;
@@ -252,7 +252,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ italian ] = " righe" ;
         Text [ portuguese_brazilian ] = "fileiras" ;
         Text [ portuguese ] = " Linhas" ;
-        Text [ finnish ] = " rivejä" ;
+        Text [ finnish ] = " Rivit" ;
         Text [ danish ] = "rækker" ;
         Text [ french ] = " Lignes" ;
         Text [ swedish ] = " rader" ;
@@ -279,7 +279,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ italian ] = " colonne" ;
         Text [ portuguese_brazilian ] = "colunas" ;
         Text [ portuguese ] = " Colunas" ;
-        Text [ finnish ] = " sarakkeita" ;
+        Text [ finnish ] = " Sarakkeet" ;
         Text [ danish ] = "kolonner" ;
         Text [ french ] = " Colonnes" ;
         Text [ swedish ] = " kolumner" ;
