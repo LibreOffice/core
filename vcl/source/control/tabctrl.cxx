@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:06 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,14 +301,14 @@ void TabControl::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_TABCONTROL_ITEMLIST )
     {
-        USHORT nEle = ReadShortRes();
+        ULONG nEle = ReadLongRes();
 
         // Item hinzufuegen
-        for( USHORT i = 0; i < nEle; i++ )
+        for( ULONG i = 0; i < nEle; i++ )
         {
             InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
@@ -1585,12 +1585,12 @@ void TabControl::InsertPage( const ResId& rResId, USHORT nPos )
 {
     GetRes( rResId.SetRT( RSC_TABCONTROLITEM ) );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
     USHORT nItemId  = 1;
 
     // ID
     if ( nObjMask & RSC_TABCONTROLITEM_ID )
-        nItemId = ReadShortRes();
+        nItemId = ReadLongRes();
 
     // Text
     XubString aTmpStr;
@@ -1602,7 +1602,7 @@ void TabControl::InsertPage( const ResId& rResId, USHORT nPos )
     if ( nObjMask & RSC_TABCONTROLITEM_PAGERESID )
     {
         ImplTabItem* pItem = mpItemList->GetObject( GetPagePos( nItemId ) );
-        pItem->mnTabPageResId = ReadShortRes();
+        pItem->mnTabPageResId = ReadLongRes();
     }
 }
 
