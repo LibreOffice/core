@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 14:42:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 16:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,8 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
     {
         pOutliner->SetRefDevice(pSh->GetPrt());
         pOutliner->SetSpeller(xSpell);
-        pOutliner->SetHyphenator( ::GetHyphenator() );
+        uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
+        pOutliner->SetHyphenator( xHyphenator );
         pSh->SetCalcFieldValueHdl(pOutliner);
 
         sal_uInt32 nCntrl = pOutliner->GetControlWord();

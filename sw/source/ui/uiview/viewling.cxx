@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:22:58 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 16:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
 //      pSpell->NewDic( pStr ? *pStr : (const String&) aEmptyStr, LANGUAGE_NOLANGUAGE, sal_False );
     }
     {
-        SvxDicListChgClamp aClamp( SvxGetDictionaryList() );
+        Reference<XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+        SvxDicListChgClamp aClamp( xDictionaryList );
         SwSpellWrapper aWrap( this, xSpell, bStart, bAllRight,
                               bOther, bSelection );
         aWrap.SpellDocument();
