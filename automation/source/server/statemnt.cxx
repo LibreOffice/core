@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:56:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,9 +320,9 @@ void StatementFlow::SendViaSocket()
     if ( bSending )
     {
 #if OSL_DEBUG_LEVEL > 1
-        m_pDbgWin->AddText( "SendViaSocket rekursiv aufgerufen. Abgebrochen!!!\n" );
+        m_pDbgWin->AddText( "SendViaSocket called recursively. Aborted!!!\n" );
 #endif
-        DBG_ERROR("SendViaSocket rekursiv aufgerufen. Abgebrochen!!!");
+        DBG_ERROR("SendViaSocket called recursively. Aborted!!!");
         return;
     }
     bSending = TRUE;
@@ -399,7 +399,7 @@ BOOL StatementFlow::Execute()
         break;
 //  case RET_:
     default:
-        DBG_ERROR( "Unbekannter Flowcontrol" );
+        DBG_ERROR( "Unknown Flowcontrol" );
         break;
     }
 
@@ -1491,21 +1491,17 @@ long DisplayHidWin::VCLEventHook( NotifyEvent& rEvt )
 
 BOOL StatementCommand::DisplayHID()
 {
-    // Return TRUE =
-    static StatementCommand *pDisplayInstance = NULL;
-    static DisplayHidWin *pDisplayHidWin;
-    static Window *Old = NULL, *Act = NULL;
-    static String aOriginalCaption;
+    // Return TRUE -> reexecute command
 
     if ( !bBool2 )  // Wird auf FALSE initialisiert
     {
         bBool2 = TRUE;              // Wir sind initialisiert.
-        pDisplayInstance = this;    // Und haben die Macht (Alle anderen beenden sich)
+        GetTTSettings()->pDisplayInstance = this;   // Und haben die Macht (Alle anderen beenden sich)
 
         if ( !(nParams & PARAM_ULONG_1) )
         {
-            if( pDisplayHidWin )    // Nichts verändern
-                nLNr1 = pDisplayHidWin->GetConfig();
+            if( GetTTSettings()->pDisplayHidWin )   // Nichts verändern
+                nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
             else    // Beim ersten Aufruf wollen wir alles richtig einstellen
                 nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
 
@@ -1515,40 +1511,40 @@ BOOL StatementCommand::DisplayHID()
                 nLNr1 &= ( ~DH_MODE_SEND_DATA );
         }
 
-        if ( pDisplayHidWin )
-            pDisplayHidWin->SetConfig( nLNr1 );
+        if ( GetTTSettings()->pDisplayHidWin )
+            GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
     }
 
-    if ( pDisplayInstance && pDisplayInstance != this )
+    if ( GetTTSettings()->pDisplayInstance && GetTTSettings()->pDisplayInstance != this )
     {
         DBG_WARNING("Mehrere DisplayHID am laufen");
         return FALSE;       // Noch eine andere Instanz macht das gleiche!
     }
 
-    if ( !pDisplayHidWin )
+    if ( !GetTTSettings()->pDisplayHidWin )
     {
-        pDisplayHidWin = new DisplayHidWin();
-        aOriginalCaption = pDisplayHidWin->GetText();
-        pDisplayHidWin->Show();
+        GetTTSettings()->pDisplayHidWin = new DisplayHidWin();
+        GetTTSettings()->aOriginalCaption = GetTTSettings()->pDisplayHidWin->GetText();
+        GetTTSettings()->pDisplayHidWin->Show();
         if ( bBool1 )
             nLNr1 |= DH_MODE_SEND_DATA;
-        pDisplayHidWin->SetConfig( nLNr1 );
+        GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
 
-        Old = NULL;
-        Act = NULL;
-        pDisplayInstance = this;
+        GetTTSettings()->Old = NULL;
+        GetTTSettings()->Act = NULL;
+        GetTTSettings()->pDisplayInstance = this;
     }
     else
     {
-        pDisplayHidWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
-        pDisplayHidWin->GetWindow( WINDOW_OVERLAP )->EnableInput( TRUE, TRUE );
+        GetTTSettings()->pDisplayHidWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
+        GetTTSettings()->pDisplayHidWin->GetWindow( WINDOW_OVERLAP )->EnableInput( TRUE, TRUE );
     }
 
 
-    if ( pDisplayHidWin->IsVisible() && !bDying )
+    if ( GetTTSettings()->pDisplayHidWin->IsVisible() && !bDying )
     {
 
-        if ( pDisplayHidWin->IsDraging() )
+        if ( GetTTSettings()->pDisplayHidWin->IsDraging() )
         {
 
 
@@ -1584,66 +1580,66 @@ BOOL StatementCommand::DisplayHID()
             }
 
 
-            Old = Act;
-//          Act = GetMouseWin();
-            Act = pDisplayHidWin->LastMouseMoveWin();
+            GetTTSettings()->Old = GetTTSettings()->Act;
+//          GetTTSettings()->Act = GetMouseWin();
+            GetTTSettings()->Act = GetTTSettings()->pDisplayHidWin->LastMouseMoveWin();
 
-            if ( !StatementList::WinPtrValid ( Old ) )
-                Old = NULL;
-            if ( !StatementList::WinPtrValid ( Act ) )
-                Act = NULL;
+            if ( !StatementList::WinPtrValid ( GetTTSettings()->Old ) )
+                GetTTSettings()->Old = NULL;
+            if ( !StatementList::WinPtrValid ( GetTTSettings()->Act ) )
+                GetTTSettings()->Act = NULL;
 
-            if ( Act && Act->GetType() == WINDOW_BORDERWINDOW )
-                Act = Act->GetWindow( WINDOW_CLIENT );
+            if ( GetTTSettings()->Act && GetTTSettings()->Act->GetType() == WINDOW_BORDERWINDOW )
+                GetTTSettings()->Act = GetTTSettings()->Act->GetWindow( WINDOW_CLIENT );
 
-            if ( Act != Old )
+            if ( GetTTSettings()->Act != GetTTSettings()->Old )
             {
-                if ( Old )
+                if ( GetTTSettings()->Old )
                 {
-                    RESET_WIN(Old);
+                    RESET_WIN(GetTTSettings()->Old);
                 }
-                if ( Act )
+                if ( GetTTSettings()->Act )
                 {
-                    SET_WIN(Act);
-                    pDisplayHidWin->SetDisplayText(Act->GetSmartUniqueOrHelpId().GetText().AppendAscii(" WinType: ")
-                        .Append(UniString::CreateFromInt64(Act->GetType())).AppendAscii("  ").Append(Act->GetText()));
-                    if ( Act && !Act->GetSmartUniqueId().Equals( Act->GetSmartHelpId() ) )
-                        pDisplayHidWin->SetText(UniString( TTProperties::GetSvtResId( TT_ALTERNATE_CAPTION ) ).Append(Act->GetSmartHelpId().GetText()));
+                    SET_WIN(GetTTSettings()->Act);
+                    GetTTSettings()->pDisplayHidWin->SetDisplayText(GetTTSettings()->Act->GetSmartUniqueOrHelpId().GetText().AppendAscii(" WinType: ")
+                        .Append(UniString::CreateFromInt64(GetTTSettings()->Act->GetType())).AppendAscii("  ").Append(GetTTSettings()->Act->GetText()));
+                    if ( GetTTSettings()->Act && !GetTTSettings()->Act->GetSmartUniqueId().Equals( GetTTSettings()->Act->GetSmartHelpId() ) )
+                        GetTTSettings()->pDisplayHidWin->SetText(UniString( TTProperties::GetSvtResId( TT_ALTERNATE_CAPTION ) ).Append(GetTTSettings()->Act->GetSmartHelpId().GetText()));
                     else
-                        pDisplayHidWin->SetText( aOriginalCaption );
+                        GetTTSettings()->pDisplayHidWin->SetText( GetTTSettings()->aOriginalCaption );
                 }
                 else
-                    pDisplayHidWin->SetDisplayText(CUniString("Kein Window/Control gefunden"));
+                    GetTTSettings()->pDisplayHidWin->SetDisplayText(CUniString("Kein Window/Control gefunden"));
             }
-            else if ( Act )
+            else if ( GetTTSettings()->Act )
             {
-//              SET_WIN(Act);
-                if ( pDisplayHidWin->IsDisplayTextModified() && pDisplayHidWin->GetDisplayText().Len() > 0 )
+//              SET_WIN(GetTTSettings()->Act);
+                if ( GetTTSettings()->pDisplayHidWin->IsDisplayTextModified() && GetTTSettings()->pDisplayHidWin->GetDisplayText().Len() > 0 )
                 {
-                    Act->SetSmartUniqueId( SmartId( pDisplayHidWin->GetDisplayText().ToInt32() ) );
-                    pDisplayHidWin->ClearDisplayTextModified();
+                    GetTTSettings()->Act->SetSmartUniqueId( SmartId( GetTTSettings()->pDisplayHidWin->GetDisplayText().ToInt32() ) );
+                    GetTTSettings()->pDisplayHidWin->ClearDisplayTextModified();
                 }
             }
 /*          if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
             {
-                pDisplayHidWin->ToTop( TOTOP_NOGRABFOCUS );
+                GetTTSettings()->pDisplayHidWin->ToTop( TOTOP_NOGRABFOCUS );
             }
 */
-            if ( pDisplayHidWin->IsSendData() /*&& bBool2*/ && Act )
+            if ( GetTTSettings()->pDisplayHidWin->IsSendData() /*&& bBool2*/ && GetTTSettings()->Act )
             {
                 if ( !StatementFlow::bSending )
                 {   // Normalerweise syncronisierung über Protokoll. Hier ist das aber asyncron!!!
-                    WriteControlData( Act, pDisplayHidWin->GetConfig() );
+                    WriteControlData( GetTTSettings()->Act, GetTTSettings()->pDisplayHidWin->GetConfig() );
                     new StatementFlow( this, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen
                 }
             }
-        }   //if ( pDisplayHidWin->IsDraging() )
+        }   //if ( GetTTSettings()->pDisplayHidWin->IsDraging() )
         else
         {
-            if ( Act )
+            if ( GetTTSettings()->Act )
             {
-                RESET_WIN(Act);
-                Act = NULL;
+                RESET_WIN(GetTTSettings()->Act);
+                GetTTSettings()->Act = NULL;
             }
         }
 
@@ -1662,12 +1658,12 @@ BOOL StatementCommand::DisplayHID()
     }
     else
     {
-        delete pDisplayHidWin;
-        pDisplayHidWin = NULL;
-        pDisplayInstance = NULL;
+        delete GetTTSettings()->pDisplayHidWin;
+        GetTTSettings()->pDisplayHidWin = NULL;
+        GetTTSettings()->pDisplayInstance = NULL;
     }
 
-    return pDisplayHidWin != NULL;
+    return GetTTSettings()->pDisplayHidWin != NULL;
 }
 
 class TranslateWin : public WorkWindow
@@ -1900,6 +1896,8 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
                 }
             }
 
+            if ( !StatementList::WinPtrValid ( Old ) )
+                Old = NULL;
 
             if ( Act != Old )
             {
@@ -2152,9 +2150,6 @@ void TranslateWin::EnableTranslation()
 
 void StatementCommand::Translate()
 {
-    static TranslateWin *pTranslateWin = NULL;
-    static BOOL bToTop = TRUE;
-
     // Es wurde eine initale UniqueId mitgegeben. Dann nur die dopelten Shortcuts liefern
     if( (nParams & PARAM_ULONG_1) && nLNr1 )
     {
@@ -2169,26 +2164,26 @@ void StatementCommand::Translate()
         return;
     }
 
-    if ( !pTranslateWin )
+    if ( !GetTTSettings()->pTranslateWin )
     {
-        pTranslateWin = new TranslateWin;
-        bToTop = TRUE;
+        GetTTSettings()->pTranslateWin = new TranslateWin;
+        GetTTSettings()->bToTop = TRUE;
     }
 
-    pTranslateWin->Show();
-    if ( bToTop )
+    GetTTSettings()->pTranslateWin->Show();
+    if ( GetTTSettings()->bToTop )
     {
-        pTranslateWin->ToTop();
-        bToTop = FALSE;
+        GetTTSettings()->pTranslateWin->ToTop();
+        GetTTSettings()->bToTop = FALSE;
     }
 
-//  pTranslateWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
-    pTranslateWin->GetWindow( WINDOW_OVERLAP )->EnableInput( TRUE, TRUE );
+//  GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
+    GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->EnableInput( TRUE, TRUE );
 
-    if ( pTranslateWin->IsTranslationAvailable() )
+    if ( GetTTSettings()->pTranslateWin->IsTranslationAvailable() )
     {
         String aTranslation;
-        Window* pTranslationWindow = pTranslateWin->GetTranslationWindow();
+        Window* pTranslationWindow = GetTTSettings()->pTranslateWin->GetTranslationWindow();
 
         DBG_ASSERT( pTranslationWindow, "Kein Translation Window" );
 
@@ -2228,19 +2223,19 @@ void StatementCommand::Translate()
             aTranslation += ';';
 
             aTranslation += '\"';
-            aTranslation += pTranslateWin->GetOriginalText();
+            aTranslation += GetTTSettings()->pTranslateWin->GetOriginalText();
             aTranslation += '\"';
 
             aTranslation += ';';
 
             aTranslation += '\"';
-            aTranslation += pTranslateWin->GetTranslationText();
+            aTranslation += GetTTSettings()->pTranslateWin->GetTranslationText();
             aTranslation += '\"';
 
             aTranslation += ';';
 
             aTranslation += '\"';
-            aTranslation += pTranslateWin->GetComment();
+            aTranslation += GetTTSettings()->pTranslateWin->GetComment();
             aTranslation += '\"';
 
             // alle CRs quoten (NF)
@@ -2249,28 +2244,28 @@ void StatementCommand::Translate()
             aTranslation.SearchAndReplaceAll( CUniString("\t"), CUniString("\\t") );
 
             pRet->GenReturn ( RET_Value, aSmartMethodId, aTranslation );
-            pTranslateWin->EnableTranslation();
-            bToTop = TRUE;
+            GetTTSettings()->pTranslateWin->EnableTranslation();
+            GetTTSettings()->bToTop = TRUE;
         }
         else
         {
             pRet->GenReturn ( RET_Value, aSmartMethodId, String() );
-            pTranslateWin->EnableTranslation();
-            ErrorBox( pTranslateWin, TTProperties::GetSvtResId( TT_NO_CONTROL ) ).Execute();
-            bToTop = TRUE;
+            GetTTSettings()->pTranslateWin->EnableTranslation();
+            ErrorBox( GetTTSettings()->pTranslateWin, TTProperties::GetSvtResId( TT_NO_CONTROL ) ).Execute();
+            GetTTSettings()->bToTop = TRUE;
         }
 
     }
-    else if ( pTranslateWin->IsNextDialog() )
+    else if ( GetTTSettings()->pTranslateWin->IsNextDialog() )
     {
         pRet->GenReturn ( RET_Value, aSmartMethodId, CUniString("1") );
-        pTranslateWin->ResetNextDialog();
-        pTranslateWin->LoseFocus();
-        bToTop = TRUE;
+        GetTTSettings()->pTranslateWin->ResetNextDialog();
+        GetTTSettings()->pTranslateWin->LoseFocus();
+        GetTTSettings()->bToTop = TRUE;
     }
     else
     {
-        pTranslateWin->EnableTranslation();
+        GetTTSettings()->pTranslateWin->EnableTranslation();
         pRet->GenReturn ( RET_Value, aSmartMethodId, String() );
     }
 }
@@ -2318,23 +2313,28 @@ Window* StatementCommand::GetNextRecoverWin()
     {
         // zuerst weitere Fenster auf dem Fenster suchen und schliessen
         pControl = GetNextOverlap( pBase );
-        if ( pControl && pControl->IsVisible() && !IsFirstDocFrame( pControl ) && !IsIMEWin( pControl ) )
+        if ( pControl && pControl->GetType() == WINDOW_HELPTEXTWINDOW )
+        {}  // skip it
+        else
         {
-            Window* pTB = pControl->GetChild( 0 );
-            if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
-                return pTB;
-            else
-                return pControl;
+            if ( pControl && pControl->IsVisible() && !IsFirstDocFrame( pControl ) && !IsIMEWin( pControl ) )
+            {
+                Window* pTB = pControl->GetChild( 0 );
+                if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
+                    return pTB;
+                else
+                    return pControl;
+            }
+
+            // dann das Fenster selbst Schliessen
+               // erstes DocWin überspringen
+            // Assumption that Doc Windows are Borderwindows and ButtonDialog and such are not
+            if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
+                return pBase;
+
+            if ( !pFirstDocFrame && IsFirstDocFrame( pBase ) )
+                pFirstDocFrame = pBase;
         }
-
-        // dann das Fenster selbst Schliessen
-           // erstes DocWin überspringen
-        // Assumption that Doc Windows are Borderwindows and ButtonDialog and such are not
-        if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
-            return pBase;
-
-        if ( !pFirstDocFrame && IsFirstDocFrame( pBase ) )
-            pFirstDocFrame = pBase;
 
         pBase = Application::GetNextTopLevelWindow( pBase );
     }
@@ -2531,8 +2531,8 @@ BOOL StatementCommand::Execute()
                                     break;
                                 }
                             default:
-                                DBG_ERROR( "Unbekannter Fenstertyp" );
-                                REPORT_WIN_CLOSEDc(pControl, "Unbekannter Fenstertyp");
+                                DBG_ERROR( "Unknown Windowtype" );
+                                REPORT_WIN_CLOSEDc(pControl, "Unknown Windowtype");
                                 ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_UNKNOWN ), pControl->GetType() );
                                 #if OSL_DEBUG_LEVEL > 1
                                 m_pDbgWin->AddText( " Unbekannter Objekttyp aus UId" );
@@ -5505,11 +5505,10 @@ USHORT nValidTextItemCount = 0;\
     {\
         pMyItem = pThisEntry->GetItem( nIndex );\
         if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )\
-            if ( ((SvLBoxString*)pMyItem)->GetText().Len() )\
-            {\
-                pItem = (SvLBoxString*)pMyItem;\
-                nValidTextItemCount++;\
-            }\
+        {\
+            pItem = (SvLBoxString*)pMyItem;\
+            nValidTextItemCount++;\
+        }\
         nIndex++;\
     }\
 }
@@ -6348,10 +6347,10 @@ SvLBoxString* pItem = NULL;\
                         break;
                     }
                 default:
-                    DBG_ERROR( "Unbekannter Objekttyp aus UId oder Methode nicht unterstützt" );
+                    DBG_ERROR( "Unknown Objekttype from UId or Method not suported" );
                     ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
 #if OSL_DEBUG_LEVEL > 1
-                    m_pDbgWin->AddText( " Unbekannter Objekttyp aus UId" );
+                    m_pDbgWin->AddText( " Unknown Objekttype from UId or Method not suported" );
 #endif
                     break;
             }
