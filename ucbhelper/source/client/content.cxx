@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kso $ $Date: 2002-06-21 14:53:34 $
+ *  last change: $Author: kso $ $Date: 2002-09-06 11:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,7 +1544,8 @@ Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
         m_xContent->addContentEventListener( m_xContentEventListener );
 
 #ifdef DEBUG
-        // Only done on demand in product version, but a nice debug helper.
+        // Only done on demand in product version for performance reasons,
+        // but a nice debug helper.
         getURL();
 #endif
     }
@@ -1577,12 +1578,17 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
         m_xContent->addContentEventListener( m_xContentEventListener );
 
 #ifdef DEBUG
-        // Only done on demand in product version, but a nice debug helper.
+        // Only done on demand in product version for performance reasons,
+        // but a nice debug helper.
         getURL();
 #endif
     }
     else
     {
+        // We need m_xContent's URL in order to be able to create the
+        // content object again if demanded ( --> Content_Impl::getContent() )
+        getURL();
+
         m_xContent = 0;
     }
 }
