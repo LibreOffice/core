@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleText.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:35:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XSimpleText
 /** is the main interface for a distinct text unit, i.e. the main text of
     a document, the text for headers and footers or for single cells of a
     table.@see XText
@@ -97,7 +96,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XSimpleText::createTextCursor
     /** @returns
                 a new instance of a <type>TextCursor</type> service which can
                 be used to travel in the given text context.
@@ -108,7 +106,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XSimpleText::createTextCursorByRange
     /** @returns
                 a new instance of a <type>TextCursor</type> which is located
                 at the specified <type>TextRange</type> to travel in the
@@ -126,27 +123,25 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSimpleText::insertString
     /** inserts a string of characters into the text.
 
         <p>The string may contain the following white spaces:
-
         </p>
         <ul>
-        <li>blank
-        </li>
-        <li>tab
-        </li>
-        <li>cr (which will insert a paragraph break)
-        </li>
-        <li>lf (which will insert a line break)
-        </li>
+            <li>blank</li>
+            <li>tab</li>
+            <li>cr (which will insert a paragraph break)</li>
+            <li>lf (which will insert a line break)</li>
         </ul>
 
         @param xRange
             specifies the position of insertion. For example,
             <method>XSimpleText::createTextCursor</member> can be used to
             get an <type>XTextRange</type> for this argument.
+
+            <p>If the parameter <member>bAbsorb</member> was <TRUE/>
+            the text range will contain the new inserted string, otherwise
+            the range (and it's text) will remain unchanged.
 
         @param aString
             specifies the string to insert.
@@ -155,15 +150,17 @@ published interface XSimpleText: com::sun::star::text::XTextRange
             specifies whether the text spanned by <var>xRange</var> will be
             replaced. If <TRUE/> then the content of <var>xRange</var> will
             be replaced by <var>aString</var>, otherwise <var>aString</var>
-            will be inserted at the end of <var>xRange</var>.
+            will be inserted at the beginning of <var>xRange</var>.
 
-        @example <listing>
-        xText.insertString( xTextCursor, "Hello " + aName$ + ",", false )
+        @example
+            <listing>
+            xText.insertString( xTextCursor, "Hello " + aName$ + ",", false )
 
-        xText.insertControlCharacter( xTextCursor,
-        ControlCharacter_PARAGRAPH_BREAK, false );
+            xText.insertControlCharacter( xTextCursor,
+            ControlCharacter_PARAGRAPH_BREAK, false );
 
-        xText.insertString( xTextCursor, "more text ...", false ) </listing>
+            xText.insertString( xTextCursor, "more text ...", false )
+            </listing>
      */
     [oneway] void insertString( [in] com::sun::star::text::XTextRange xRange,
              [in] string aString,
@@ -171,7 +168,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSimpleText::insertControlCharacter
     /** inserts a control character (like a paragraph break or a hard
         space) into the text.@see com::sun::star::text::ControlCharacter
      */
