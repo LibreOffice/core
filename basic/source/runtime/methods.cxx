@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-06 14:32:21 $
+ *  last change: $Author: ab $ $Date: 2001-09-07 12:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,11 @@ static CharClass& GetCharClass( void )
     }
     static CharClass aCharClass( aLocale );
     return aCharClass;
+}
+
+static inline BOOL isFolder( FileStatus::Type aType )
+{
+    return ( aType == FileStatus::Directory || aType == FileStatus::Volume );
 }
 
 
@@ -861,7 +866,7 @@ void implRemoveDirRecursive( const String& aDirPath )
     FileStatus aFileStatus( FileStatusMask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
-    sal_Bool bFolder = (aType == FileStatus::Directory);
+    sal_Bool bFolder = isFolder( aType );
 
     if( !bExists || !bFolder )
     {
@@ -891,7 +896,7 @@ void implRemoveDirRecursive( const String& aDirPath )
 
         // Directory?
         FileStatus::Type aType = aFileStatus.getFileType();
-        sal_Bool bFolder = (aType == FileStatus::Directory);
+        sal_Bool bFolder = isFolder( aType );
         if( bFolder )
         {
             implRemoveDirRecursive( aPath );
@@ -1993,7 +1998,7 @@ String getDirectoryPath( String aPathStr )
         if( nRet == FileBase::E_None )
         {
             FileStatus::Type aType = aFileStatus.getFileType();
-            if( aType == FileStatus::Directory )
+            if( isFolder( aType ) )
             {
                 aRetStr = aPathStr;
             }
@@ -2528,7 +2533,7 @@ RTLFUNC(Dir)
                         if( bOnlyFolders )
                         {
                             FileStatus::Type aType = aFileStatus.getFileType();
-                            sal_Bool bFolder = (aType == FileStatus::Directory);
+                            sal_Bool bFolder = isFolder( aType );
                             if( !bFolder )
                                 continue;
                         }
@@ -2645,7 +2650,7 @@ RTLFUNC(GetAttr)
             sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
-            sal_Bool bDirectory = (aType == FileStatus::Directory);
+            sal_Bool bDirectory = isFolder( aType );
             if( bReadOnly )
                 nFlags |= 0x0001; // ATTR_READONLY
             if( bDirectory )
