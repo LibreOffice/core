@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:51:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-25 09:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,8 +513,10 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
             ASSERT( aRows.Seek_Entry(&aRow),
                     "Parent-Zeile nicht gefunden" );
+            SwWriteTableRow aRowCheckPos(nCheckPos,bUseLayoutHeights);
+            SwWriteTableRow aRowRPos(nRPos,bUseLayoutHeights);
             ASSERT( !bUseLayoutHeights ||
-                    SwWriteTableRow(nCheckPos,bUseLayoutHeights) == SwWriteTableRow(nRPos,bUseLayoutHeights),
+                    aRowCheckPos == aRowRPos,
                     "Hoehe der Zeilen stimmt nicht mit Parent ueberein" );
 #endif
         }
