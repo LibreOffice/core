@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: khz $ $Date: 2000-09-21 12:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,9 +922,13 @@ class SwEscherEx : public  EscherEx
 
     INT32 ToFract16( INT32 nVal, UINT32 nMax ) const
         {
-            INT32 nMSVal = ( nVal / 65536) * nMax;
-            nMSVal += ( nVal * 65536 ) / nMax;
-            return nMSVal;
+            if( nMax )
+            {
+                INT32 nMSVal = ( nVal / 65536) * nMax;
+                nMSVal += ( nVal * 65536 ) / nMax;
+                return nMSVal;
+            }
+            return 0;
         }
     INT32 DrawModelToEmu( INT32 nVal ) const
         { return BigMulDiv( nVal, nEmuMul, nEmuDiv ); }
@@ -1624,11 +1628,14 @@ SvStream* SwEscherEx::QueryPicStream()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.2 2000-09-21 12:18:55 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.23  2000/09/18 16:04:57  willem.vandorp
       OpenOffice header added.
 
