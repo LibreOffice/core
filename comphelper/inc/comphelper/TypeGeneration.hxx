@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:06:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 #define CPPU_E2T(type)      ((com::sun::star::uno::Type*)type)
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -148,6 +152,6 @@ namespace comphelper
         // <--
         CPPUTYPE_END
     };
-    void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );
+    COMPHELPER_DLLPUBLIC void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );
 }
 #endif
