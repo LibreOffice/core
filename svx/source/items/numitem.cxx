@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:35:28 $
+ *  last change: $Author: mt $ $Date: 2001-03-22 14:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
 
     if( nVersion < NUMITEM_VERSION_03 )
         cBullet = ByteString::ConvertToUnicode( cBullet,
-                            pBulletFont ?  pBulletFont->GetCharSet()
+                            (pBulletFont&&pBulletFont->GetCharSet()) ?  pBulletFont->GetCharSet()
                                         : RTL_TEXTENCODING_SYMBOL );
 }
 /* -----------------08.12.98 11:14-------------------
