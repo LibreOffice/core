@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextGridMode.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 11:39:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** this set of constants describes different modes for text grids
  */
-constants TextGridMode
+published constants TextGridMode
 {
     //-------------------------------------------------------------------------
 
