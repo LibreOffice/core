@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,8 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString::createFromAscii("UseSSL")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
 
     try
     {
@@ -536,12 +538,18 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, sal_True);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
                 sNewUrl = lcl_createHostWithPort(pHostName,pPortNumber);
-                String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
-                if ( sUrl.Len() )
+                String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
+                if ( !sDatabaseName.Len() && pUrlItem )
+                    sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
+                    // TODO: what's that? Why is the database name transported via the URL Item?
+                    // Huh? Anybody there?
+
+                if ( sDatabaseName.Len() )
                 {
                     sNewUrl += String::CreateFromAscii("/");
-                    sNewUrl += sUrl;
+                    sNewUrl += sDatabaseName;
                 }
             }
             break;
@@ -1021,6 +1029,16 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
     }
 }
+
+
+String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
+{
+    SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
+    OSL_ENSURE(pUrlItem,"Document URL is NULL. -> GPF!");
+    return pUrlItem->GetValue();
+}
+
+
 // -----------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
