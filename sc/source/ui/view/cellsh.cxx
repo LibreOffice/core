@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:32:11 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_DATA_SELECT:
                 //  ab 506f wird die ganze Spalte angesehen
-                if ( !pDoc->HasStringCells(ScRange(nPosX,0,nTab, nPosX,MAXROW,nTab)) )
+                if ( !pDoc->HasSelectionData( nPosX, nPosY, nTab ) )
                     rSet.DisableItem( nWhich );
                 break;
 
