@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:31:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,11 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2005-01-12 #i40155#
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
+// <--
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
@@ -1398,8 +1403,10 @@ SwFlyList *SwTxtFly::InitFlyList()
     //              floating screen objects
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
     const SwDoc* pDoc = pCurrFrm->GetTxtNode()->GetDoc();
-    const sal_Bool bWrapAllowed = pDoc->IsFormerTextWrapping() ||
-                                ( !pCurrFrm->IsInFtn() && !bFooterHeader );
+    // --> OD 2005-01-12 #i40155# - check, if frame is marked not to wrap
+    const sal_Bool bWrapAllowed = ( pDoc->IsFormerTextWrapping() ||
+                                    ( !pCurrFrm->IsInFtn() && !bFooterHeader ) ) &&
+                                  !SwLayouter::FrmNotToWrap( *pDoc, *pCurrFrm );
     // <--
 
     bOn = sal_False;
