@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-02-20 14:06:01 $
+#   last change: $Author: kz $ $Date: 2003-12-11 12:37:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,8 @@ IDLFILES=\
     TextField.idl\
     FormattedField.idl\
     TimeField.idl\
+    ScrollBar.idl\
+    SpinButton.idl\
 
 # ------------------------------------------------------------------
 
