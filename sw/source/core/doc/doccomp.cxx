@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-11 11:45:45 $
+ *  last change: $Author: dvo $ $Date: 2002-11-11 15:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,14 +1777,12 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
 
                         SwUndoCompDoc* pUndo = pDoc->DoesUndo()
                                     ? new SwUndoCompDoc( *pCpyRedl ) : 0;
-                        if( pDoc->AppendRedline( pCpyRedl ) )
-                        {
-                            ++nIns;
-                            if( pUndo )
-                                (pDoc->*pFn)( pUndo );
-                        }
-                        else
-                            delete pUndo;
+
+                        // now modify doc: append redline, undo (and count)
+                        pDoc->AppendRedline( pCpyRedl );
+                        if( pUndo )
+                            (pDoc->*pFn)( pUndo );
+                        ++nIns;
 
                         *pDStt = *pREnd;
 
@@ -1811,18 +1809,17 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
     if( pDestRedl )
     {
         SwUndoCompDoc* pUndo = pDoc->DoesUndo() ? new SwUndoCompDoc( *pDestRedl ) : 0;
-        if( pDoc->AppendRedline( pDestRedl ) )
-        {
-            ++nIns;
-            if( pUndo )
-                (pDoc->*pFn)( pUndo );
-        }
-        else
-        {
-            // AppendRedline returns false if redline has been deleted!
+
+        // now modify doc: append redline, undo (and count)
+        bool bRedlineAccepted = pDoc->AppendRedline( pDestRedl );
+        if( pUndo )
+            (pDoc->*pFn)( pUndo );
+        ++nIns;
+
+        // if AppendRedline has deleted our redline, we may not keep a
+        // reference to it
+        if( ! bRedlineAccepted )
             pDestRedl = NULL;
-            delete pUndo;
-        }
     }
     return nIns;
 }
