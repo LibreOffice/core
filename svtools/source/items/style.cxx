@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-01 14:14:34 $
+ *  last change: $Author: er $ $Date: 2002-11-29 14:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,8 +527,10 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const XubString& rStr)
     {
         SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(n);
 
-        if ( DoesStyleMatch( pStyle ) &&
-             pStyle->GetName().Equals( rStr ) )
+        // #98454# performance: in case of bSearchUsed==TRUE it may be
+        // significant to first compare the name and only if it matches to call
+        // the style sheet IsUsed() method in DoesStyleMatch().
+        if ( pStyle->GetName().Equals( rStr ) && DoesStyleMatch( pStyle ) )
         {
             nAktPosition = n;
             return pAktStyle = pStyle;
