@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:35:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,7 @@ void SdXMLStylesContext::EndElement()
                 SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
                 if( pStylesContext )
                 {
-                    pStyle = pStylesContext->FindStyleChildContext(pStyle->GetFamily(), pStyle->GetParent());
+                    pStyle = pStylesContext->FindStyleChildContext(pStyle->GetFamily(), pStyle->GetParentName());
 
                     if(pStyle && pStyle->ISA(XMLShapeStyleContext))
                     {
@@ -1550,7 +1550,8 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                     if(xStyle.is())
                     {
                             // set parent style name
-                            xStyle->setParentStyle(pStyle->GetParent());
+                        ::rtl::OUString sParentStyleDisplayName = const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() );
+                        xStyle->setParentStyle( sParentStyleDisplayName );
                     }
                 }
                 catch( Exception& e )
