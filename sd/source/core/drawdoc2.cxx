@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:17:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,7 +1686,7 @@ USHORT SdDrawDocument::CreatePage (
     // User layout of current standard page.
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
     pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
-    pStandardPage->getHeaderFooterSettings() = pPreviousStandardPage->getHeaderFooterSettings();
+    pStandardPage->setHeaderFooterSettings( pPreviousStandardPage->getHeaderFooterSettings() );
 
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
@@ -1698,7 +1698,7 @@ USHORT SdDrawDocument::CreatePage (
     // Use layout of current notes page.
     pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
     pNotesPage->SetAutoLayout(eNotesLayout, TRUE);
-    pNotesPage->getHeaderFooterSettings() = pPreviousNotesPage->getHeaderFooterSettings();
+    pNotesPage->setHeaderFooterSettings( pPreviousNotesPage->getHeaderFooterSettings() );
 
     return InsertPageSet (
         pActualPage, ePageKind,
