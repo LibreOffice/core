@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FirstLoadComponent.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:58:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,37 +38,28 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
-
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XComponent;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetView;
-
+import com.sun.star.sheet.XCellRangesQuery;
+import com.sun.star.sheet.XSheetCellRanges;
+import com.sun.star.sheet.XCellAddressable;
 import com.sun.star.table.XCell;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XComponentLoader;
-
-import com.sun.star.uno.AnyConverter;
-
-import com.sun.star.sheet.XCellRangesQuery;
-import com.sun.star.sheet.XSheetCellRanges;
-import com.sun.star.sheet.XCellAddressable;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 
-/*
- * FirstLoadComponent.java
- *
- * Created on 31. März 2002, 18:21
- */
+import com.sun.star.uno.AnyConverter;
+
 
 /**
  *
@@ -102,18 +93,29 @@ public class FirstLoadComponent {
 
     private void useConnection() throws java.lang.Exception {
         try {
-            xRemoteServiceManager = this.getRemoteServiceManager(
-                    "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+            // get the remote office component context
+            xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+
+            xRemoteServiceManager = xRemoteContext.getServiceManager();
+        }
+        catch( Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        try {
             Object desktop = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xRemoteContext);
-            XComponentLoader xComponentLoader = (XComponentLoader)UnoRuntime.queryInterface(
-                XComponentLoader.class, desktop);
+            XComponentLoader xComponentLoader = (XComponentLoader)
+                UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
             PropertyValue[] loadProps = new PropertyValue[0];
             XComponent xSpreadsheetComponent = xComponentLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, loadProps);
 
-            XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument)UnoRuntime.queryInterface(
-                XSpreadsheetDocument.class, xSpreadsheetComponent);
+            XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument)
+                UnoRuntime.queryInterface(XSpreadsheetDocument.class,
+                                          xSpreadsheetComponent);
 
             XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
             xSpreadsheets.insertNewByName("MySheet", (short)0);
@@ -135,19 +137,24 @@ public class FirstLoadComponent {
                 XPropertySet.class, xCell);
             xCellProps.setPropertyValue("CellStyle", "Result");
 
-            XModel xSpreadsheetModel = (XModel)UnoRuntime.queryInterface(XModel.class, xSpreadsheetComponent);
+            XModel xSpreadsheetModel = (XModel)UnoRuntime.queryInterface(
+                XModel.class, xSpreadsheetComponent);
             XController xSpreadsheetController = xSpreadsheetModel.getCurrentController();
-            XSpreadsheetView xSpreadsheetView = (XSpreadsheetView)UnoRuntime.queryInterface(
-                XSpreadsheetView.class, xSpreadsheetController);
+            XSpreadsheetView xSpreadsheetView = (XSpreadsheetView)
+                UnoRuntime.queryInterface(XSpreadsheetView.class,
+                                          xSpreadsheetController);
             xSpreadsheetView.setActiveSheet(xSpreadsheet);
 
             // *********************************************************
             // example for use of enum types
-            xCellProps.setPropertyValue("VertJustify", com.sun.star.table.CellVertJustify.TOP);
+            xCellProps.setPropertyValue("VertJustify",
+                                        com.sun.star.table.CellVertJustify.TOP);
+
 
             // *********************************************************
             // example for a sequence of PropertyValue structs
-            // create an array with one PropertyValue struct, it contains references only
+            // create an array with one PropertyValue struct, it contains
+            // references only
             loadProps = new PropertyValue[1];
 
             // instantiate PropertyValue struct and set its member fields
@@ -155,17 +162,18 @@ public class FirstLoadComponent {
             asTemplate.Name = "AsTemplate";
             asTemplate.Value = new Boolean(true);
 
-            // assign PropertyValue struct to array of references for PropertyValue structs
+            // assign PropertyValue struct to array of references for PropertyValue
+            // structs
             loadProps[0] = asTemplate;
 
             // load calc file as template
             //xSpreadsheetComponent = xComponentLoader.loadComponentFromURL(
-            //    "file:///X:/Office60Eng/share/samples/english/spreadsheets/DataAnalysys.sxc", "_blank", 0, loadProps);
+            //    "file:///c:/temp/DataAnalysys.ods", "_blank", 0, loadProps);
 
             // *********************************************************
             // example for use of XEnumerationAccess
-            XCellRangesQuery xCellQuery = (XCellRangesQuery)UnoRuntime.queryInterface(
-                XCellRangesQuery.class, sheet);
+            XCellRangesQuery xCellQuery = (XCellRangesQuery)
+                UnoRuntime.queryInterface(XCellRangesQuery.class, sheet);
             XSheetCellRanges xFormulaCells = xCellQuery.queryContentCells(
                 (short)com.sun.star.sheet.CellFlags.FORMULA);
             XEnumerationAccess xFormulas = xFormulaCells.getCells();
@@ -174,11 +182,12 @@ public class FirstLoadComponent {
             while (xFormulaEnum.hasMoreElements()) {
                 Object formulaCell = xFormulaEnum.nextElement();
                 xCell = (XCell)UnoRuntime.queryInterface(XCell.class, formulaCell);
-                XCellAddressable xCellAddress = (XCellAddressable)UnoRuntime.queryInterface(
-                    XCellAddressable.class, xCell);
-                System.out.println("Formula cell in column " + xCellAddress.getCellAddress().Column
-                    + ", row " + xCellAddress.getCellAddress().Row
-                    + " contains " + xCell.getFormula());
+                XCellAddressable xCellAddress = (XCellAddressable)
+                    UnoRuntime.queryInterface(XCellAddressable.class, xCell);
+                System.out.println("Formula cell in column " +
+                                   xCellAddress.getCellAddress().Column
+                                   + ", row " + xCellAddress.getCellAddress().Row
+                                   + " contains " + xCell.getFormula());
             }
 
         }
@@ -186,32 +195,5 @@ public class FirstLoadComponent {
             xRemoteContext = null;
             throw e;
         }
-    }
-
-    private XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception {
-        if (xRemoteContext == null) {
-            // First step: create local component context, get local servicemanager and
-            // ask it to create a UnoUrlResolver object with an XUnoUrlResolver interface
-            XComponentContext xLocalContext =
-                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            // query XUnoUrlResolver interface from urlResolver object
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
-
-            // Second step: use xUrlResolver interface to import the remote StarOffice.ServiceManager,
-            // retrieve its property DefaultContext and get the remote servicemanager
-            Object initialObject = xUnoUrlResolver.resolve( unoUrl );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-                XComponentContext.class, context);
-        }
-        return xRemoteContext.getServiceManager();
     }
 }
