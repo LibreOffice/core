@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:43:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,16 +1171,16 @@ SdPage* MasterPageContainer::Implementation::GetSlideForMasterPage (
                 PK_STANDARD);
             if (pCandidate != NULL)
             {
-                USHORT nMasterPageCount (pCandidate->GetMasterPageCount());
-                for (USHORT i=0; i<nMasterPageCount; i++)
-                {
-                    if (static_cast<SdPage*>(pCandidate->GetMasterPage(i))
-                        == pMasterPage)
-                    {
-                        bFound = true;
-                        break;
-                    }
-                }
+          //                USHORT nMasterPageCount (pCandidate->GetMasterPageCount());
+          //                for (USHORT i=0; i<nMasterPageCount; i++)
+          //                {
+          if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
+          == pMasterPage)
+        {
+          bFound = true;
+          break;
+        }
+          //                }
             }
             if (nPageIndex == 0)
                 break;

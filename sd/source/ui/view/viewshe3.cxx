@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:02:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1508,7 +1508,6 @@ void ViewShell::CreateOrDuplicatePage (
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-    USHORT nPos = 0;
     SetOfByte aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
@@ -1518,7 +1517,7 @@ void ViewShell::CreateOrDuplicatePage (
         if (pDocument->GetSdPage(0, ePageKind) > 0)
             pTemplatePage = pDocument->GetSdPage(0, ePageKind);
     if (pTemplatePage != NULL)
-        aVisibleLayers = pTemplatePage->GetMasterPageVisibleLayers(nPos);
+        aVisibleLayers = pTemplatePage->TRG_GetMasterPageVisibleLayers();
     else
         aVisibleLayers.SetAll();
 

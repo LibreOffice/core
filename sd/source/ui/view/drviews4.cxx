@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:14:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     {
                         Rectangle aMarkRect;
                         pDrView->GetMarkedObjectList().TakeBoundRect(NULL,aMarkRect);
-                        aMenuPos = pWindow->LogicToPixel( aMarkRect.Center() );
+                        aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
 
                         //move the point into the visible window area
                         if( aMenuPos.X() < 0 )

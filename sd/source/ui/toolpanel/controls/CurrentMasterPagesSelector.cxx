@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:43:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,14 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
         pPage = mrDocument.GetSdPage (nIndex, PK_STANDARD);
         if (pPage != NULL && pPage->IsSelected())
         {
-            USHORT nMasterPageCount (pPage->GetMasterPageCount());
-            for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
-            {
-                SdPage* pMasterPage = static_cast<SdPage*>(
-                    pPage->GetMasterPage(nIndex));
+      //USHORT nMasterPageCount (pPage->GetMasterPageCount());
+      //            for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
+      //            {
+      SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
+      SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
                 if (pMasterPage != NULL)
                     aNames.insert (pMasterPage->GetName());
-            }
+        //            }
         }
     }
 

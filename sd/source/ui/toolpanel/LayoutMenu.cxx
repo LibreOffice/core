@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:33:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ SfxRequest LayoutMenu::CreateRequest (
         if (pPage == NULL)
             break;
 
-        SetOfByte aVisibleLayers (pPage->GetMasterPageVisibleLayers(0));
+        SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
 
         aRequest.AppendItem(
             SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));

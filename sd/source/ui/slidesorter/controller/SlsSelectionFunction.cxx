@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:15:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,7 @@ void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
                 pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
             }
-            aShowViewOld.InitRedraw(pVDevOld, Region(Rectangle(Point(), aCPageSize)));
+            aShowViewOld.CompleteRedraw(pVDevOld, Region(Rectangle(Point(), aCPageSize)));
             // #111097# IsRedrawReady() always gives sal_True while (!aShowViewOld.IsRedrawReady()){}
         }
         else
@@ -790,7 +790,7 @@ void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
             pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
         }
 
-        aShowView.InitRedraw(pVDev, Region(Rectangle(Point(0,0), aCPageSize)));
+        aShowView.CompleteRedraw(pVDev, Region(Rectangle(Point(0,0), aCPageSize)));
         // #111097# IsRedrawReady() always gives sal_True while (!aShowView.IsRedrawReady()){}
     }
     else

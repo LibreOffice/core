@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:15:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             // ...and make it visible
             if(GetView()->AreObjectsMarked())
-                GetView()->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+                GetView()->MakeVisible(GetView()->GetAllMarkedRect(), *GetActiveWindow());
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:16:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
         BYTE nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
         BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
-        SetOfByte aVisibleLayers = mrController.GetActualPage()->GetMasterPageVisibleLayers( 0 );
+        SetOfByte aVisibleLayers = mrController.GetActualPage()->TRG_GetMasterPageVisibleLayers();
 
         // (#67720#)
         SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:48:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 09:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3042,61 +3042,61 @@ String STR_UNDO_HANGULHANJACONVERSION
 
 String STR_LEFT_PANE_TITLE
 {
-    Text = "Folien";
-    Text [ english_us ] = "Slides";
+    Text [ de ] = "Folien";
+    Text [ en-US ] = "Slides";
 };
 String STR_RIGHT_PANE_TITLE
 {
-    Text = "Aufgabenbereich";
-    Text [ english_us ] = "Task Panel";
+    Text [ de ] = "Aufgabenbereich";
+    Text [ en-US ] = "Task Panel";
 };
 String STR_TASKPANEL_MASTER_PAGE_TITLE
 {
-    Text = "Master Pages";
-    Text [ english_us ] = "Master Pages";
+    Text [ de ] = "Master Pages";
+    Text [ en-US ] = "Master Pages";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
 {
-    Text = "Panel";
-    Text [ english_us ] = "Panel";
+    Text [ de ] = "Panel";
+    Text [ en-US ] = "Panel";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
 {
-    Text = "Lock Aufgabenbereich";
-    Text [ english_us ] = "Lock Task Panel";
+    Text [ de ] = "Lock Aufgabenbereich";
+    Text [ en-US ] = "Lock Task Panel";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
-    Text = "Unlock Aufgabenbereich";
-    Text [ english_us ] = "Unlock Task Panel";
+    Text [ de ] = "Unlock Aufgabenbereich";
+    Text [ en-US ] = "Unlock Task Panel";
 };
 String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
 {
-    Text = "Verwendete Master Pages";
-    Text [ english_us ] = "Currently Used Master Pages";
+    Text [ de ] = "Verwendete Master Pages";
+    Text [ en-US ] = "Currently Used Master Pages";
 };
 String STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE
 {
-    Text = "Zuletzt verwendete Master Pages";
-    Text [ english_us ] = "Recently Used Master Pages";
+    Text [ de ] = "Zuletzt verwendete Master Pages";
+    Text [ en-US ] = "Recently Used Master Pages";
 };
 String STR_TASKPANEL_ALL_MASTER_PAGES_TITLE
 {
-    Text = "Verfügbare Master Pages";
-    Text [ english_us ] = "All Available Master Pages";
+    Text [ de ] = "Verfügbare Master Pages";
+    Text [ en-US ] = "All Available Master Pages";
 };
 String STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION
 {
-    Text = "Vorschau nicht verfügbar";
-    Text [ english_us ] = "Preview not available";
+    Text [ de ] = "Vorschau nicht verfügbar";
+    Text [ en-US ] = "Preview not available";
 };
 String STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION
 {
-    Text = "Erzeuge Vorschau";
-    Text [ english_us ] = "Preparing preview";
+    Text [ de ] = "Erzeuge Vorschau";
+    Text [ en-US ] = "Preparing preview";
 };
 String STR_TASKPANEL_LAYOUT_MENU_TITLE
 {
-    Text = "Layouts";
-    Text [ english_us ] = "Layouts";
+    Text [ de ] = "Layouts";
+    Text [ en-US ] = "Layouts";
 };

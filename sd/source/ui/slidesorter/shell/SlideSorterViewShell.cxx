@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:26:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 09:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "glob.hrc"
+#include "sdattr.hrc"
 #include "sdresid.hxx"
 #include "Window.hxx"
 #include "FrameView.hxx"
@@ -469,7 +470,7 @@ void SlideSorterViewShell::Paint (
     ::sd::Window* pWindow)
 {
     SetActiveWindow (pWindow);
-    mpSlideSorterView->InitRedraw (pWindow, Region(rBBox));
+    mpSlideSorterView->CompleteRedraw (pWindow, Region(rBBox));
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:03:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void ViewShell::SetupRulers (void)
             }
         }
     }
-
+    /*
     SvBorder aBorder (
         bHasRuler && pVRulerArray[0]!=NULL
         ? pVRulerArray[0]->GetSizePixel().Width()
@@ -859,6 +859,7 @@ void ViewShell::SetupRulers (void)
         aScrBarWH.Width(),
         aScrBarWH.Height());
     GetViewShellBase().SetBorderPixel (aBorder);
+    */
 }
 
 
