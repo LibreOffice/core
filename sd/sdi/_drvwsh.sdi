@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:44:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,11 +214,6 @@ interface DrawView : Object
         StateMethod = GetMenuState ;
     ]
     SID_NAVIGATOR // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_PREVIEW_WIN // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
@@ -2124,26 +2119,6 @@ interface DrawView : Object
         StateMethod = GetCtrlState ;
     ]
     SID_OUTPUT_QUALITY_CONTRAST // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_COLOR // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_GRAYSCALE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_CONTRAST // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
