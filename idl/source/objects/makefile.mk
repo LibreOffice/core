@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+#   last change: $Author: hjs $ $Date: 2001-05-08 10:43:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,24 +71,10 @@ TARGET=objects
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(COM)"=="WTC"
-CFLAGS+=-od
-.ENDIF
 
 CDEFS+=-DIDL_COMPILER
 # --- Files --------------------------------------------------------------
-
-CXXFILES=   bastype.cxx             \
-            basobj.cxx              \
-            types.cxx               \
-            object.cxx              \
-            slot.cxx                \
-            module.cxx              \
-            $(PROJECTPCHSOURCE).cxx
 
 OBJFILES=   $(OBJ)$/bastype.obj      \
             $(OBJ)$/basobj.obj       \
