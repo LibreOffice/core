@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 06:33:17 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 14:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ namespace pcr
 
         autoSizeWindow();
 
-        SetExtFormat(XTDATEF_SYSTEM_SHORT_YYYY);
+        SetExtDateFormat(XTDATEF_SYSTEM_SHORT_YYYY);
         EnableEmptyFieldValue(sal_True);
     }
 
@@ -1244,6 +1244,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/07/23 06:33:17  fs
+ *  #90040# use LocaleDataWrapper instead of International class
+ *
  *  Revision 1.4  2001/02/19 16:32:29  fs
  *  OColorControl: insert the standard entry at position 0
  *
