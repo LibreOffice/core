@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 12:24:52 $
+ *  last change: $Author: mt $ $Date: 2001-04-25 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
     {
-        if ( mbStackMode && IsMouseMoveSelect() )
+        if ( mbStackMode && IsMouseMoveSelect() && IsReallyVisible() )
         {
             Size aSz = GetOutputSizePixel();
 //          if ( ( rMEvt.GetPosPixel().X() < 0 ) || ( rMEvt.GetPosPixel().X() > aSz.Width() ) )
@@ -792,7 +792,9 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 USHORT nSelect = (USHORT) ( ( rMEvt.GetPosPixel().Y() + mnBorder ) / mnMaxHeight ) + (USHORT) mnTop;
                 nSelect = Min( nSelect, (USHORT) ( mnTop + mnMaxVisibleEntries ) );
                 nSelect = Min( nSelect, (USHORT) ( mpEntryList->GetEntryCount() - 1 ) );
-                if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) )
+                // Select only visible Entries with MouseMove, otherwise Tracking...
+                if ( IsVisible( nSelect ) && (
+                     ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
                 {
                     mbTrackingSelect = TRUE;
                     if ( SelectEntries( nSelect, LET_TRACKING, FALSE, FALSE ) )
