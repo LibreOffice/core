@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:44:12 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,7 @@
 #include <alloca.h>
 #endif
 
-#ifdef USE_BUILTIN_RASTERIZER
 #include <gcach_xpeer.hxx>
-#endif // USE_BUILTIN_RASTERIZER
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -90,6 +88,9 @@
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
+#endif
+#ifndef _VCL_PSPGRAPHICS_H
+#include <pspgraphics.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -148,105 +149,11 @@
 
 // -----------------------------------------------------------------------
 
-#ifdef USE_BUILTIN_RASTERIZER
 static X11GlyphPeer aX11GlyphPeer;
-#endif // USE_BUILTIN_RASTERIZER
 
 using namespace rtl;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-/*
- *  returns:
- *  true: cut out positions rStart to rStop from output because fax number was swallowed
- *  false: do nothing
- */
-
-String X11SalGraphics::FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const
-{
-    rCutStop = rCutStart = STRING_NOTFOUND;
-
-#ifdef _USE_PRINT_EXTENSION_
-    return String( rOrig );
-#else
-    if( ! m_pPhoneNr )
-        return String( rOrig );
-#endif
-
-#define FAX_PHONE_TOKEN          "@@#"
-#define FAX_PHONE_TOKEN_LENGTH   3
-#define FAX_END_TOKEN            "@@"
-#define FAX_END_TOKEN_LENGTH     2
-
-    bool bRet = false;
-    bool bStarted = false;
-    bool bStopped = false;
-    USHORT nPos;
-    USHORT nStart = 0;
-    USHORT nStop = rLen;
-    String aPhone = rOrig.Copy( nIndex, rLen );
-
-    static String aPhoneNumber;
-    static bool bIsCollecting = false;
-
-    if( ! bIsCollecting )
-    {
-        if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
-        {
-            nStart = nPos;
-            bIsCollecting = true;
-            aPhoneNumber.Erase();
-            bRet = true;
-            bStarted = true;
-        }
-    }
-    if( bIsCollecting )
-    {
-        bRet = true;
-        nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
-        if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
-        {
-            bIsCollecting = false;
-            nStop = nPos + FAX_END_TOKEN_LENGTH;
-            bStopped = true;
-        }
-        int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
-        int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
-        aPhoneNumber += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
-        if( ! bIsCollecting )
-        {
-#ifndef PRINTER_DUMMY
-            *m_pPhoneNr = aPhoneNumber;
-#endif
-            aPhoneNumber.Erase();
-        }
-    }
-    if( aPhoneNumber.Len() > 1024 )
-    {
-        bIsCollecting = false;
-        aPhoneNumber.Erase();
-        bRet = false;
-    }
-
-    String aRet;
-    if( bRet
-#ifndef MACOSX
-        && m_bSwallowFaxNo
-#endif
-        )
-    {
-        rLen -= nStop - nStart;
-        rCutStart = nStart+nIndex;
-        rCutStop = nStop+nIndex;
-        if( rCutStart )
-            aRet = rOrig.Copy( 0, rCutStart );
-        aRet += rOrig.Copy( rCutStop );
-    }
-    else
-        aRet = rOrig;
-
-    return aRet;
-}
 
 // ----------------------------------------------------------------------------
 //
@@ -255,9 +162,6 @@ String X11SalGraphics::FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, 
 // ----------------------------------------------------------------------------
 
 #ifndef _USE_PRINT_EXTENSION_
-
-static FontItalic ToFontItalic (psp::italic::type eItalic);
-static FontWeight ToFontWeight (psp::weight::type eWeight);
 
 class FontLookup
 {
@@ -337,8 +241,8 @@ FontLookup::FontLookup ( ::std::list< psp::fontID >::iterator& it,
     psp::FastPrintFontInfo aInfo;
     if (rMgr.getFontFastInfo (*it, aInfo))
     {
-        mnItalic = ToFontItalic (aInfo.m_eItalic);
-        mnWeight = ToFontWeight (aInfo.m_eWeight);
+        mnItalic = PspGraphics::ToFontItalic (aInfo.m_eItalic);
+        mnWeight = PspGraphics::ToFontWeight (aInfo.m_eWeight);
         mbDisplay=    aInfo.m_eType == psp::fonttype::Builtin
                    || aInfo.m_eType == psp::fonttype::Unknown ? False : True;
         maName   = rtl::OUStringToOString
@@ -712,7 +616,6 @@ GetMaxFontHeight()
 
 bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-    nFontOrientation_   = pEntry->mnOrientation;
     bFontVertical_      = pEntry->mbVertical;
 
 #ifdef HDU_DEBUG
@@ -752,9 +655,6 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
         mpServerFont[ nFallbackLevel ] = pServerFont;
         return true;
     }
-
-    if( m_pPrinterGfx != NULL )
-        return false;
 
     bFontGC_    = FALSE;
     ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
@@ -857,7 +757,6 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
 
 //--------------------------------------------------------------------------
 
-#ifdef USE_BUILTIN_RASTERIZER
 void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
     Display* pDisplay = GetXDisplay();
@@ -1147,185 +1046,6 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
 
 //--------------------------------------------------------------------------
 
-#ifndef _USE_PRINT_EXTENSION_
-
-class PspFontLayout : public GenericSalLayout
-{
-public:
-                        PspFontLayout( ::psp::PrinterGfx& );
-    virtual bool        LayoutText( ImplLayoutArgs& );
-    virtual void        InitFont() const;
-    virtual void        DrawText( SalGraphics& ) const;
-private:
-    ::psp::PrinterGfx&  mrPrinterGfx;
-    int                 mnFontID;
-    int                 mnFontHeight;
-    int                 mnFontWidth;
-    bool                mbVertical;
-    bool                mbArtItalic;
-    bool                mbArtBold;
-};
-
-//--------------------------------------------------------------------------
-
-PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
-:   mrPrinterGfx( rGfx )
-{
-    mnFontID     = mrPrinterGfx.GetFontID();
-    mnFontHeight = mrPrinterGfx.GetFontHeight();
-    mnFontWidth  = mrPrinterGfx.GetFontWidth();
-    mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
-}
-
-//--------------------------------------------------------------------------
-
-bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
-{
-    mbVertical = ((rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0);
-
-    long nUnitsPerPixel = 1;
-    int nOldGlyphId = -1;
-    long nGlyphWidth = 0;
-    int nCharPos = -1;
-    Point aNewPos( 0, 0 );
-    GlyphItem aPrevItem;
-    rtl_TextEncoding aFontEnc = mrPrinterGfx.GetFontMgr().getFontEncoding( mnFontID );
-    for(;;)
-    {
-        bool bRightToLeft;
-        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
-            break;
-
-        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
-        int nGlyphIndex = cChar;  // printer glyphs = unicode
-        // symbol font aliasing: 0x0020-0x00ff -> 0xf020 -> 0xf0ff
-        if( aFontEnc == RTL_TEXTENCODING_SYMBOL )
-            if( cChar < 256 )
-                cChar += 0xf000;
-
-        // update fallback_runs if needed
-        psp::CharacterMetric aMetric;
-        mrPrinterGfx.GetFontMgr().getMetrics( mnFontID, cChar, cChar, &aMetric, mbVertical );
-        if( aMetric.width == -1 && aMetric.height == -1 )
-            rArgs.NeedFallback( nCharPos, bRightToLeft );
-
-        // apply pair kerning to prev glyph if requested
-        if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
-        {
-            // TODO: get kerning value from printer
-            int nKern = 0; //GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            nGlyphWidth += nKern;
-            aPrevItem.mnNewWidth = nGlyphWidth;
-        }
-
-        // finish previous glyph
-        if( nOldGlyphId >= 0 )
-            AppendGlyph( aPrevItem );
-        nOldGlyphId = nGlyphIndex;
-        aNewPos.X() += nGlyphWidth;
-
-        // prepare GlyphItem for appending it in next round
-        nUnitsPerPixel = mrPrinterGfx.GetCharWidth( cChar, cChar, &nGlyphWidth );
-        int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        nGlyphIndex |= GF_ISCHAR;
-        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
-    }
-
-    // append last glyph item if any
-    if( nOldGlyphId >= 0 )
-        AppendGlyph( aPrevItem );
-
-    SetOrientation( mrPrinterGfx.GetFontAngle() );
-    SetUnitsPerPixel( nUnitsPerPixel );
-    return (nOldGlyphId >= 0);
-}
-
-class PspServerFontLayout : public ServerFontLayout
-{
-public:
-    PspServerFontLayout( ::psp::PrinterGfx&, ServerFont& rFont );
-
-    virtual void        InitFont() const;
-private:
-    ::psp::PrinterGfx&  mrPrinterGfx;
-    int                 mnFontID;
-    int                 mnFontHeight;
-    int                 mnFontWidth;
-    bool                mbVertical;
-    bool                mbArtItalic;
-    bool                mbArtBold;
-};
-
-PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont )
-        :   ServerFontLayout( rFont ),
-            mrPrinterGfx( rGfx )
-{
-    mnFontID     = mrPrinterGfx.GetFontID();
-    mnFontHeight = mrPrinterGfx.GetFontHeight();
-    mnFontWidth  = mrPrinterGfx.GetFontWidth();
-    mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
-}
-
-void PspServerFontLayout::InitFont() const
-{
-    mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
-                          mnOrientation, mbVertical, mbArtItalic, mbArtBold );
-}
-
-//--------------------------------------------------------------------------
-
-void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
-{
-    const int nMaxGlyphs = 200;
-    long        aGlyphAry[ nMaxGlyphs ];
-    long        aWidthAry[ nMaxGlyphs ];
-    sal_Int32   aIdxAry  [ nMaxGlyphs ];
-    sal_Unicode aUnicodes[ nMaxGlyphs ];
-    Point aPos;
-    long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    for( int nStart = 0;; )
-    {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry );
-        if( !nGlyphCount )
-            break;
-
-        long nXOffset = 0;
-        for( int i = 0; i < nGlyphCount; ++i )
-        {
-            nXOffset += aWidthAry[ i ];
-            aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
-            long nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
-            aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
-            aGlyphAry[i] = nGlyphIdx;
-        }
-
-        rGfx.DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
-    }
-}
-
-//--------------------------------------------------------------------------
-
-void PspFontLayout::InitFont() const
-{
-    mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
-        mnOrientation, mbVertical, mbArtItalic, mbArtBold );
-}
-
-//--------------------------------------------------------------------------
-
-void PspFontLayout::DrawText( SalGraphics& ) const
-{
-    DrawPrinterLayout( *this, mrPrinterGfx );
-}
-
-#endif // _USE_PRINT_EXTENSION_
-
-//--------------------------------------------------------------------------
-
 static Point
 RotatedPoint( Point &rOrigin, int nDx, int nAngle )
 {
@@ -1338,16 +1058,15 @@ RotatedPoint( Point &rOrigin, int nDx, int nAngle )
 
 //--------------------------------------------------------------------------
 
-#endif // USE_BUILTIN_RASTERIZER
-
 void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
-#ifdef USE_BUILTIN_RASTERIZER
-    if( m_pPrinterGfx != NULL )
-    {
-        // print complex text
-        DrawPrinterLayout( rLayout, *m_pPrinterGfx );
-    }
+    // draw complex text
+    ServerFont& rFont = rLayout.GetServerFont();
+
+    if( aX11GlyphPeer.GetGlyphSet( rFont ) )
+        DrawServerAAFontString( rLayout );
+    else if( aX11GlyphPeer.ForcedAntialiasing( rFont ) )
+        DrawServerAAForcedString( rLayout );
     else
     {
         // draw complex text
@@ -1366,7 +1085,6 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
             DrawServerSimpleFontString( rLayout );
 #endif
     }
-#endif
 }
 
 //--------------------------------------------------------------------------
@@ -1428,11 +1146,9 @@ ULONG X11SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
 {
     ULONG nPairs = 0;
-#ifdef USE_BUILTIN_RASTERIZER
     if( mpServerFont[0] )
         nPairs = mpServerFont[0]->GetFontCodeRanges( pCodePairs );
     else
-#endif //USE_BUILTIN_RASTERIZER
     if( mXFont[0] )
         nPairs = mXFont[0]->GetFontCodeRanges( pCodePairs );
     return nPairs;
@@ -1469,50 +1185,12 @@ CheckNoNegativeCoordinateWorkaround()
 
 USHORT X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-#ifndef _USE_PRINT_EXTENSION_
-    if( (m_pPrinterGfx != NULL) )
-    {
-        sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
-
-        bool bArtItalic = false;
-        bool bArtBold = false;
-        if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
-        {
-            psp::italic::type eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
-            if( eItalic != psp::italic::Italic && eItalic != psp::italic::Oblique )
-                bArtItalic = true;
-        }
-        int nWeight = (int)pEntry->meWeight;
-        int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-        if( nRealWeight < nWeight-2 ||
-            ( nRealWeight < (int)psp::weight::SemiBold && nWeight > (int)WEIGHT_NORMAL) )
-        {
-            bArtBold = true;
-        }
-
-        // also set the serverside font for layouting
-        setFont( pEntry, nFallbackLevel );
-
-        // set the printer font
-        return m_pPrinterGfx->SetFont( nID,
-                                                      pEntry->mnHeight,
-                                                      pEntry->mnWidth,
-                                                      pEntry->mnOrientation,
-                                                      pEntry->mbVertical,
-                                                      bArtItalic,
-                                                      bArtBold
-                                                      );
-    }
-    else
-#endif
-    {
-        USHORT nRetVal = 0;
-        if( !setFont( pEntry, nFallbackLevel ) )
-            nRetVal |= SAL_SETFONT_BADFONT;
-        if( bPrinter_ || (mpServerFont[ nFallbackLevel ] != NULL) )
-            nRetVal |= SAL_SETFONT_USEDRAWTEXTARRAY;
-        return nRetVal;
-    }
+    USHORT nRetVal = 0;
+    if( !setFont( pEntry, nFallbackLevel ) )
+        nRetVal |= SAL_SETFONT_BADFONT;
+    if( bPrinter_ || (mpServerFont[ nFallbackLevel ] != NULL) )
+        nRetVal |= SAL_SETFONT_USEDRAWTEXTARRAY;
+    return nRetVal;
 }
 
 // ----------------------------------------------------------------------------
@@ -1520,158 +1198,13 @@ USHORT X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 void
 X11SalGraphics::SetTextColor( SalColor nSalColor )
 {
-#ifndef _USE_PRINT_EXTENSION_
-    if (m_pPrinterGfx != NULL)
-    {
-        psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
-                                  SALCOLOR_GREEN (nSalColor),
-                                  SALCOLOR_BLUE  (nSalColor));
-        m_pPrinterGfx->SetTextColor (aColor);
-    }
-    else
-    {
-#endif
-
     if( nTextColor_ != nSalColor )
     {
         nTextColor_     = nSalColor;
         nTextPixel_     = GetPixel( nSalColor );
         bFontGC_         = FALSE;
     }
-
-#ifndef _USE_PRINT_EXTENSION_
-    }
-#endif
 }
-
-// ----------------------------------------------------------------------------
-
-#ifndef _USE_PRINT_EXTENSION_
-
-static FontWidth
-ToFontWidth (psp::width::type eWidth)
-{
-    switch (eWidth)
-    {
-        case psp::width::UltraCondensed: return WIDTH_ULTRA_CONDENSED;
-        case psp::width::ExtraCondensed: return WIDTH_EXTRA_CONDENSED;
-        case psp::width::Condensed:      return WIDTH_CONDENSED;
-        case psp::width::SemiCondensed:  return WIDTH_SEMI_CONDENSED;
-        case psp::width::Normal:         return WIDTH_NORMAL;
-        case psp::width::SemiExpanded:   return WIDTH_SEMI_EXPANDED;
-        case psp::width::Expanded:       return WIDTH_EXPANDED;
-        case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
-        case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
-    }
-    return WIDTH_DONTKNOW;
-}
-
-static FontWeight
-ToFontWeight (psp::weight::type eWeight)
-{
-    switch (eWeight)
-    {
-        case psp::weight::Thin:       return WEIGHT_THIN;
-        case psp::weight::UltraLight: return WEIGHT_ULTRALIGHT;
-        case psp::weight::Light:      return WEIGHT_LIGHT;
-        case psp::weight::SemiLight:  return WEIGHT_SEMILIGHT;
-        case psp::weight::Normal:     return WEIGHT_NORMAL;
-        case psp::weight::Medium:     return WEIGHT_MEDIUM;
-        case psp::weight::SemiBold:   return WEIGHT_SEMIBOLD;
-        case psp::weight::Bold:       return WEIGHT_BOLD;
-        case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
-        case psp::weight::Black:      return WEIGHT_BLACK;
-    }
-    return WEIGHT_DONTKNOW;
-}
-
-static FontPitch
-ToFontPitch (psp::pitch::type ePitch)
-{
-    switch (ePitch)
-    {
-        case psp::pitch::Fixed:     return PITCH_FIXED;
-        case psp::pitch::Variable:  return PITCH_VARIABLE;
-    }
-    return PITCH_DONTKNOW;
-}
-
-static FontItalic
-ToFontItalic (psp::italic::type eItalic)
-{
-    switch (eItalic)
-    {
-        case psp::italic::Upright:  return ITALIC_NONE;
-        case psp::italic::Oblique:  return ITALIC_OBLIQUE;
-        case psp::italic::Italic:   return ITALIC_NORMAL;
-    }
-    return ITALIC_DONTKNOW;
-}
-
-static FontFamily
-ToFontFamily (psp::family::type eFamily)
-{
-    switch (eFamily)
-    {
-        case psp::family::Decorative: return FAMILY_DECORATIVE;
-        case psp::family::Modern:     return FAMILY_MODERN;
-        case psp::family::Roman:      return FAMILY_ROMAN;
-        case psp::family::Script:     return FAMILY_SCRIPT;
-        case psp::family::Swiss:      return FAMILY_SWISS;
-        case psp::family::System:     return FAMILY_SYSTEM;
-    }
-    return FAMILY_DONTKNOW;
-}
-
-static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData, bool bAliases = true )
-{
-    rData.meFamily      = ToFontFamily (aInfo.m_eFamilyStyle);
-    rData.meWeight      = ToFontWeight (aInfo.m_eWeight);
-
-    rData.meItalic      = ToFontItalic (aInfo.m_eItalic);
-    rData.meWidthType   = ToFontWidth  (aInfo.m_eWidth);
-    rData.mePitch       = ToFontPitch  (aInfo.m_ePitch);
-    rData.meCharSet     = aInfo.m_aEncoding;
-    rData.maName        = aInfo.m_aFamilyName;
-    // rData.meScript       = SCRIPT_DONTKNOW;
-    /*rData.maStyleName = XXX */
-
-    rData.mnWidth       = 0;
-    rData.mnHeight      = 0;
-    rData.mbOrientation = TRUE;
-    rData.mnQuality     = (aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0);
-    rData.mnVerticalOrientation= 0;
-    rData.meType        = TYPE_SCALABLE;
-    rData.mbDevice      = (aInfo.m_eType == psp::fonttype::Builtin);
-    String aMapNames;
-    if( bAliases )
-    {
-        for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
-        {
-            if( it != aInfo.m_aAliases.begin() )
-                aMapNames.Append(';');
-            aMapNames.Append( String( *it ) );
-        }
-    }
-    rData.maMapNames    = aMapNames;
-    switch( aInfo.m_eType )
-    {
-        case psp::fonttype::TrueType:
-            rData.mbSubsettable = TRUE;
-            rData.mbEmbeddable  = FALSE;
-            break;
-        case psp::fonttype::Type1:
-            rData.mbSubsettable = FALSE;
-            rData.mbEmbeddable  = TRUE;
-            break;
-        default:
-            rData.mbSubsettable = FALSE;
-            rData.mbEmbeddable  = FALSE;
-            break;
-    }
-}
-
-#endif
 
 // ----------------------------------------------------------------------------
 
@@ -1691,7 +1224,7 @@ ImplFontData* X11SalGraphics::AddTempDevFont( const String& rFileURL, const Stri
     psp::FastPrintFontInfo aInfo;
     rMgr.getFontFastInfo( nFontId, aInfo );
     ImplFontData* pFontData = new ImplFontData;
-    SetImplFontData( aInfo, *pFontData );
+    PspGraphics::SetImplFontData( aInfo, *pFontData );
     pFontData->maName = rFontName;
     pFontData->mnQuality += 5800;
 
@@ -1707,162 +1240,64 @@ ImplFontData* X11SalGraphics::AddTempDevFont( const String& rFileURL, const Stri
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
-#ifndef _USE_PRINT_EXTENSION_
-    if (m_pJobData != NULL)
+    XlfdStorage* pFonts = GetDisplay()->GetXlfdList();
+
+    for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
     {
-        const char* pLangBoost = NULL;
-        const LanguageType aLang = Application::GetSettings().GetUILanguage();
-        switch( aLang )
-        {
-            case LANGUAGE_JAPANESE:
-                pLangBoost = "jan";    // japanese is default
-                break;
-            case LANGUAGE_CHINESE:
-            case LANGUAGE_CHINESE_SIMPLIFIED:
-            case LANGUAGE_CHINESE_SINGAPORE:
-                pLangBoost = "zhs";
-                break;
-            case LANGUAGE_CHINESE_TRADITIONAL:
-            case LANGUAGE_CHINESE_HONGKONG:
-            case LANGUAGE_CHINESE_MACAU:
-                pLangBoost = "zht";
-                break;
-            case LANGUAGE_KOREAN:
-            case LANGUAGE_KOREAN_JOHAB:
-                pLangBoost = "kor";
-                break;
-        }
-
-        ::std::list< psp::fontID > aList;
-        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        rMgr.getFontList( aList, m_pJobData->m_pParser );
-
-        ::std::list< psp::fontID >::iterator it;
-        for (it = aList.begin(); it != aList.end(); ++it)
-        {
-            psp::FastPrintFontInfo aInfo;
-            if (rMgr.getFontFastInfo (*it, aInfo))
-            {
-                OUString aFamilyName = aInfo.m_aFamilyName;
-                std::list< OUString >::const_iterator alias_it = aInfo.m_aAliases.begin();
-                do
-                {
-                    ImplFontData *pFontData = new ImplFontData;
-                    SetImplFontData( aInfo, *pFontData, false );
-                    pFontData->mpSysData = (void*)*it;
-                    pFontData->maName = aFamilyName;
-
-                    if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-                        pFontData->maName = pFontData->maName.Copy( 4 );
-                    if( aInfo.m_eType == psp::fonttype::TrueType )
-                    {
-                        // prefer truetype fonts
-                        pFontData->mnQuality += 10;
-                        // asian type 1 fonts are not known
-                        ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
-                        int nPos = aFileName.SearchBackward( '_' );
-                        if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
-                            pFontData->mnQuality += 5;
-                        else
-                        {
-                            if( pLangBoost && aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
-                                pFontData->mnQuality += 10;
-                        }
-                    }
-                    pList->Add( pFontData );
-
-                    aFamilyName = OUString();
-                    if( alias_it != aInfo.m_aAliases.end() )
-                    {
-                        aFamilyName = *alias_it;
-                        ++alias_it;
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "inserting alias name %s for font family %s\n",
-                                 OUStringToOString( aFamilyName, osl_getThreadTextEncoding() ).getStr(),
-                                 OUStringToOString( aInfo.m_aFamilyName, osl_getThreadTextEncoding() ).getStr() );
-#endif
-                    }
-                } while( aFamilyName.getLength() );
-            }
-        }
+        ImplFontData *pFontData = new ImplFontData;
+        pFonts->Get(nIdx)->ToImplFontData( pFontData );
+        if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+            pFontData->maName = pFontData->maName.Copy( 4 );
+        pFontData->mbSubsettable    = FALSE;
+        pFontData->mbEmbeddable     = FALSE;
+        pList->Add( pFontData );
     }
-    else
-#endif
-    {
-        XlfdStorage* pFonts = GetDisplay()->GetXlfdList();
 
-        for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
-        {
-            ImplFontData *pFontData = new ImplFontData;
-            pFonts->Get(nIdx)->ToImplFontData( pFontData );
-            if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-                pFontData->maName = pFontData->maName.Copy( 4 );
-            pFontData->mbSubsettable    = FALSE;
-            pFontData->mbEmbeddable     = FALSE;
-            pList->Add( pFontData );
-        }
-
-#ifdef USE_BUILTIN_RASTERIZER
-        aX11GlyphPeer.SetDisplay( GetXDisplay(),
-            GetDisplay()->GetVisual()->GetVisual() );
+    aX11GlyphPeer.SetDisplay( GetXDisplay(),
+                              GetDisplay()->GetVisual()->GetVisual() );
 #ifdef MACOSX
-        GlyphCache::EnsureInstance( aX11GlyphPeer, true );
+    GlyphCache::EnsureInstance( aX11GlyphPeer, true );
 #else
-        GlyphCache::EnsureInstance( aX11GlyphPeer, false );
+    GlyphCache::EnsureInstance( aX11GlyphPeer, false );
 #endif
-        GlyphCache& rGC = GlyphCache::GetInstance();
+    GlyphCache& rGC = GlyphCache::GetInstance();
 
-        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        ::std::list< psp::fontID > aList;
-        ::std::list< psp::fontID >::iterator it;
-        rMgr.getFontList( aList );
-        for( it = aList.begin(); it != aList.end(); ++it )
+    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    ::std::list< psp::fontID > aList;
+    ::std::list< psp::fontID >::iterator it;
+    rMgr.getFontList( aList );
+    for( it = aList.begin(); it != aList.end(); ++it )
+    {
+        psp::FastPrintFontInfo aInfo;
+        if( rMgr.getFontFastInfo( *it, aInfo ) )
         {
-            psp::FastPrintFontInfo aInfo;
-            if( rMgr.getFontFastInfo( *it, aInfo ) )
-            {
-                if( aInfo.m_eType == psp::fonttype::Builtin )
-                    continue;
-
-                ImplFontData aFontData;
-                SetImplFontData( aInfo, aFontData );
-
-                // prefer builtin_rasterizer fonts
-                aFontData.mnQuality += 4096;
-                // prefer truetype fonts
-                if( aInfo.m_eType == psp::fonttype::TrueType )
-                    aFontData.mnQuality += 1000;
-                int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-                if( aFontData.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-                    aFontData.maName = aFontData.maName.Copy( 4 );
-                if( nFaceNum < 0 )
-                    nFaceNum = 0;
-                // handling of alias names is done by GlyphCache::FetchFontList
-                rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
-                                 aInfo.m_nID, &aFontData );
-            }
+            if( aInfo.m_eType == psp::fonttype::Builtin )
+                continue;
+            ImplFontData aFontData;
+            PspGraphics::SetImplFontData( aInfo, aFontData );
+            // prefer builtin_rasterizer fonts
+            aFontData.mnQuality += 4096;
+            // prefer truetype fonts
+            if( aInfo.m_eType == psp::fonttype::TrueType )
+                aFontData.mnQuality += 1000;
+            int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
+            if( aFontData.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+                aFontData.maName = aFontData.maName.Copy( 4 );
+            if( nFaceNum < 0 )
+                nFaceNum = 0;
+            // handling of alias names is done by GlyphCache::FetchFontList
+            rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
+                             aInfo.m_nID, &aFontData );
         }
-
-        rGC.FetchFontList( pList );
-#endif // USE_BUILTIN_RASTERIZER
     }
+
+    rGC.FetchFontList( pList );
 }
 
 // ----------------------------------------------------------------------------
 
 void X11SalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
 {
-#ifndef _USE_PRINT_EXTENSION_
-    if( m_pPrinterGfx != NULL )
-    {
-        const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );
-        if( rInfo.m_bPerformFontSubstitution )
-        {
-            for( std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
-                pOutDev->ImplAddDevFontSubstitute( it->first, it->second, FONT_SUBSTITUTE_ALWAYS );
-        }
-    }
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1878,44 +1313,6 @@ sal_DivideNeg( long n1, long n2 )
 void
 X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 {
-#ifndef _USE_PRINT_EXTENSION_
-    if (m_pPrinterGfx != NULL)
-    {
-        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        psp::PrintFontInfo aInfo;
-
-        if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
-        {
-            sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
-            sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
-            if( ! nTextWidth )
-                nTextWidth = nTextHeight;
-
-            pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
-            pMetric->mnSlant        = 0;
-            pMetric->mbDevice       = aInfo.m_eType == psp::fonttype::Builtin ? sal_True : sal_False;
-
-            pMetric->meCharSet      = aInfo.m_aEncoding;
-
-            pMetric->meFamily       = ToFontFamily (aInfo.m_eFamilyStyle);
-            pMetric->meWeight       = ToFontWeight (aInfo.m_eWeight);
-            pMetric->mePitch        = ToFontPitch  (aInfo.m_ePitch);
-            pMetric->meItalic       = ToFontItalic (aInfo.m_eItalic);
-            pMetric->meType         = TYPE_SCALABLE;
-
-            pMetric->mnFirstChar    =   0;
-            pMetric->mnLastChar     = 255;
-
-            pMetric->mnWidth        = nTextWidth;
-            pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
-            pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
-            pMetric->mnIntLeading       = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
-            pMetric->mnExtLeading       = 0; //TODO!!!
-        }
-        return;
-    }
-#endif
-
     if( mpServerFont[0] != NULL )
     {
         long rDummyFactor;
@@ -1949,30 +1346,6 @@ X11SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
             return nGotPairs;
         }
     }
-    else
-    {
-#ifndef _USE_PRINT_EXTENSION_
-        const ::std::list< ::psp::KernPair >& rPairs( m_pPrinterGfx->getKernPairs() );
-        ULONG nHavePairs = rPairs.size();
-        if( pKernPairs && nPairs )
-        {
-            ::std::list< ::psp::KernPair >::const_iterator it;
-            int i;
-            int nTextScale = m_pPrinterGfx->GetFontWidth();
-            if( ! nTextScale )
-                nTextScale = m_pPrinterGfx->GetFontHeight();
-            for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
-            {
-                pKernPairs[i].mnChar1   = it->first;
-                pKernPairs[i].mnChar2   = it->second;
-                pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
-            }
-
-        }
-        return nHavePairs;
-#endif
-    }
-
     return 0;
 }
 
@@ -2017,27 +1390,11 @@ BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-#if !defined(_USE_PRINT_EXTENSION_)
-    // workaround for printers not handling glyph indexing for non-TT fonts
-    if( m_pPrinterGfx != NULL )
-    {
-        int nFontId = m_pPrinterGfx->GetFontID();
-        if( psp::fonttype::TrueType != psp::PrintFontManager::get().getFontType( nFontId ) )
-            rArgs.mnFlags |= SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
-        else if( nFallbackLevel > 0 )
-            rArgs.mnFlags &= ~SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
-    }
-#endif // !defined(_USE_PRINT_EXTENSION_)
-
     GenericSalLayout* pLayout = NULL;
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = m_pPrinterGfx ? new PspServerFontLayout( *m_pPrinterGfx, *mpServerFont[nFallbackLevel] ) : new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
-#if !defined(_USE_PRINT_EXTENSION_)
-    else if( m_pPrinterGfx != NULL )
-        pLayout = new PspFontLayout( *m_pPrinterGfx );
-#endif // !defined(_USE_PRINT_EXTENSION_)
+        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
     else if( mXFont[ nFallbackLevel ] )
         pLayout = new X11FontLayout( *mXFont[ nFallbackLevel ] );
     else
@@ -2065,41 +1422,7 @@ BOOL X11SalGraphics::CreateFontSubset(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = (psp::fontID)pFont->mpSysData;
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return FALSE;
-
-    // fill in font info
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
-        default:
-            return FALSE;
-    }
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
-
-    int xMin, yMin, xMax, yMax;
-    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
-
-    if( ! rMgr.createFontSubset( aFont,
-                                 rToFile,
-                                 pGlyphIDs,
-                                 pEncoding,
-                                 pWidths,
-                                 nGlyphs
-                                 ) )
-        return FALSE;
-
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    return TRUE;
+    return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
 #else
     return FALSE;
 #endif
@@ -2116,61 +1439,7 @@ const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Uni
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = (psp::fontID)pFont->mpSysData;
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return NULL;
-
-    // fill in font info
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
-        default:
-            return NULL;
-    }
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
-
-    int xMin, yMin, xMax, yMax;
-    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
-
-    psp::CharacterMetric aMetrics[256];
-    sal_Unicode aUnicodes[256];
-    if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
-    {
-        for( int i = 0; i < 256; i++ )
-            aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
-        pUnicodes = aUnicodes;
-    }
-    if( ! rMgr.getMetrics( aFont, pUnicodes, 256, aMetrics ) )
-        return NULL;
-
-    OString aSysPath = rMgr.getFontFileSysPath( aFont );
-    struct stat aStat;
-    if( stat( aSysPath.getStr(), &aStat ) )
-        return NULL;
-    int fd = open( aSysPath.getStr(), O_RDONLY );
-    if( fd < 0 )
-        return NULL;
-    void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
-    close( fd );
-    if( pFile == MAP_FAILED )
-        return NULL;
-
-    *pDataLen = aStat.st_size;
-
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    for( int i = 0; i < 256; i++ )
-
-        pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
-
-    return pFile;
-
+    return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 #else
     return NULL;
 #endif
@@ -2180,7 +1449,9 @@ const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Uni
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-    munmap( (char*)pData, nLen );
+#ifndef _USE_PRINT_EXTENSION_
+    PspGraphics::DoFreeEmbedFontData( pData, nLen );
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -2194,17 +1465,7 @@ const std::map< sal_Unicode, sal_Int32 >* X11SalGraphics::GetFontEncodingVector(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = (psp::fontID)pFont->mpSysData;
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-    {
-        if( pNonEncoded )
-            *pNonEncoded = NULL;
-        return NULL;
-    }
-
-    return rMgr.getEncodingMap( aFont, pNonEncoded );
+    return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 #else
     return NULL;
 #endif
