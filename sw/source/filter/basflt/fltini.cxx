@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:15:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,6 +1011,7 @@ const CharSetNameMap *GetCharSetNameMap()
         IMPLENTRY(GB_18030),
         IMPLENTRY(BIG5_HKSCS),
         IMPLENTRY(TIS_620),
+        IMPLENTRY(PT154),
         IMPLENTRY(UCS4),
         IMPLENTRY(UCS2),
         IMPLENTRY(UNICODE),
