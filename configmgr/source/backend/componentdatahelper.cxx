@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,8 @@ bool DataBuilderContext::isWritable(INode const * pNode) const
         CFG_NOTHROW( )
 {
     OSL_PRECOND(pNode,"Unexpected NULL node pointer");
-    return pNode->getAttributes().bWritable;
+    return pNode->getAttributes().isWritable();
+
 }
 // -----------------------------------------------------------------------------
 
@@ -241,7 +242,7 @@ bool DataBuilderContext::isRemovable(ISubtree const * pItem) const
         CFG_NOTHROW( )
 {
     OSL_PRECOND(pItem,"Unexpected NULL item pointer");
-    return pItem->getAttributes().bNullable || pItem->getAttributes().isReplacedForUser();
+    return pItem->getAttributes().isRemovable();
 }
 
 // -----------------------------------------------------------------------------
@@ -525,7 +526,7 @@ std::auto_ptr<ISubtree> ComponentDataFactory::createLocalizedContainer( OUString
                                                                         node::Attributes const & _aAttributes) const
 {
     node::Attributes aLocalizedAttributes(_aAttributes);
-    aLocalizedAttributes.bLocalized = true;
+    aLocalizedAttributes.setLocalized (true);
 
     return getNodeFactory().createSetNode( _aName,
                                             toTemplateName(_aValueType),
