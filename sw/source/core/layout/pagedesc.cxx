@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:14:40 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,6 @@ SwPageFtnInfo::SwPageFtnInfo() :
 
 SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
     nMaxHeight( rCpy.GetHeight() ),
-//  aPen( rCpy.GetPen() ),
     nLineWidth(rCpy.nLineWidth),
     aLineColor(rCpy.aLineColor),
     aWidth( rCpy.GetWidth() ),
@@ -461,7 +460,6 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
 SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
     nMaxHeight  = rCpy.GetHeight();
-//  aPen        = rCpy.GetPen();
     nLineWidth  = rCpy.nLineWidth;
     aLineColor  = rCpy.aLineColor;
     aWidth      = rCpy.GetWidth();
@@ -483,9 +481,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 
 BOOL SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
-//  const Pen aTmp( rCmp.GetPen() );
     return ( nMaxHeight == rCmp.GetHeight() &&
-//           aPen       == aTmp &&
              nLineWidth == rCmp.nLineWidth &&
              aLineColor == rCmp.aLineColor &&
              aWidth     == rCmp.GetWidth() &&
