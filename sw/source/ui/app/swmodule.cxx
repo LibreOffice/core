@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:05:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _SVX_FONTWORK_HXX //autogen
 #include <svx/fontwork.hxx>
+#endif
+#ifndef SW_SPELL_DIALOG_CHILD_WINDOW_HXX
+#include <SwSpellDialogChildWindow.hxx>
 #endif
 #ifndef _TBXALIGN_HXX //autogen
 #include <svx/tbxalign.hxx>
@@ -621,6 +624,7 @@ void SwDLL::RegisterControls()
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
+    SwSpellDialogChildWindow::RegisterChildWindow(sal_False, pMod);
 
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );
