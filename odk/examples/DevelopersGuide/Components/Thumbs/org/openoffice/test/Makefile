@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:22:14 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:18:16 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -49,26 +49,15 @@ include $(SETTINGS)/dk.mk
 
 include ../../../thumbs.mk
 
-IDLFILES = XImageShrink.idl
-
-IDLFILES2 = ImageShrink.idl
-
 PACKAGE = org/openoffice/test
-
-GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
-GENURDFILES += $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES2))
-
-CLASSFILES = $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
-
 # Targets
 .PHONY: ALL
 ALL : \
-	$(CLASSFILES)
+	$(GENCLASSFILES)
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -77,18 +66,14 @@ $(OUT_COMP_GEN)/%.urd : %.idl
 	$(IDLC) -I. -I../../.. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
+$(OUT_COMP_CLASS)/%.class : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
-
-$(CLASSFILES) : $(GENJAVAFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES)
+	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMPONENT_RDB) $(OFFICE_TYPE_LIBRARY)
 
 .PHONY: clean
 clean :
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(CLASSFILES)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(GENCLASSFILES)))
