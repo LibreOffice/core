@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:15:22 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void SAL_CALL
     AccessibleGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleGraphicShape"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleGraphicShape"));
 }
 
 
@@ -202,14 +202,14 @@ uno::Sequence<uno::Type> SAL_CALL
     switch (nShapeType)
     {
         case DRAWING_GRAPHIC_OBJECT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("GraphicObjectShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape"));
             break;
 
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleGraphicShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleGraphicShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
+                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
                     + xDescriptor->getShapeType();
     }
 

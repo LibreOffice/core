@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:15:41 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("invalid action description");
+    throw lang::IndexOutOfBoundsException();
 }
 
 
@@ -130,8 +130,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException)
 {
-    Any aKeyBinding;
-    return aKeyBinding;
+    throw lang::IndexOutOfBoundsException();
 }
 
 
@@ -177,7 +176,7 @@ void SAL_CALL
     AccessibleOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleOLEShape"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleOLEShape"));
 }
 
 
@@ -215,26 +214,26 @@ uno::Sequence<uno::Type> SAL_CALL
     switch (nShapeType)
     {
         case DRAWING_OLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("OLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OLEShape"));
             break;
         case DRAWING_CAPTION:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("CaptionOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionOLEShape"));
             break;
         case DRAWING_FRAME:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("FrameOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("FrameOLEShape"));
             break;
         case DRAWING_PLUGIN:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("PluginOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PluginOLEShape"));
             break;
         case DRAWING_APPLET:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("AppletOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("AppletOLEShape"));
             break;
 
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleOLEShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
+                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
                     + xDescriptor->getShapeType();
     }
 
