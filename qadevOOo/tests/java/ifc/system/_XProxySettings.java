@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XProxySettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:55 $
+ *  last change:$Date: 2003-09-08 11:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 
 package ifc.system;
 
-import com.sun.star.system.XProxySettings;
 import java.util.Hashtable;
+
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.system.XProxySettings;
 
 /**
  * Tests <code>com.sun.star.system.XProxySettings</code> interface. The result
