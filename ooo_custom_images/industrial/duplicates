@@ -15,3 +15,5 @@ numberformatcurrency, <formcurrencyfield?>
 numberformatdate, <formdatefield?>
 insobjctrl, insertobjectdialog
 zoomout, zoomminus
+hyphenate, hyphenation
+thesaurus, thesuarusdialog
