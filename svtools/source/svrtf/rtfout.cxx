@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:02:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
                     bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,
-                        eDestEnc, nFlags));
+                                         eDestEnc, nFlags))
+                                            || (RTL_TEXTENCODING_UTF8==eDestEnc); // #i43933# do not export UTF-8 chars in RTF;
                     if (bWriteAsUnicode)
                     {
                         sBuf.convertToString(&sConverted,
