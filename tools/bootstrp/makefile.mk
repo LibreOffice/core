@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: nf $ $Date: 2001-11-13 18:01:56 $
+#   last change: $Author: nf $ $Date: 2002-01-28 17:08:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ OBJFILES=                       \
     $(OBJ)$/fattr.obj 		\
     $(OBJ)$/minormk.obj 	\
     $(OBJ)$/prodmap.obj 	\
+    $(OBJ)$/xmlparse.obj 	\
     $(OBJ)$/mkcreate.obj
 
 SLOFILES=                   \
@@ -109,6 +110,7 @@ SLOFILES=                   \
     $(SLO)$/fattr.obj 		\
     $(SLO)$/minormk.obj 	\
     $(SLO)$/prodmap.obj 	\
+    $(SLO)$/xmlparse.obj 	\
     $(SLO)$/mkcreate.obj
 
 LIB1TARGET= $(LB)$/btstrp.lib
@@ -151,6 +153,12 @@ APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
 #APP5TARGET=	zipdep
 APP5OBJS=	$(OBJ)$/zipdep.obj
+APP5LIBS=	$(LB)$/bootstrp.lib
+APP5STDLIBS=$(STATIC_LIBS) 
+APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/zipdep.obj
+
+APP5TARGET=	saxophon
+APP5OBJS=	$(OBJ)$/xmlparse.obj
 APP5LIBS=	$(LB)$/bootstrp.lib
 APP5STDLIBS=$(STATIC_LIBS) 
 APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/zipdep.obj
