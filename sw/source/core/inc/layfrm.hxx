@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:15:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,7 @@ public:
         //Proportionale Groessenanpassung der untergeordneten.
     void ChgLowersProp( const Size& rOldSize );
 
-    void AdjustColumns( const SwFmtCol *pCol, BOOL bAdjustAttributes,
-                        BOOL bAutoWidth = FALSE);
+    void AdjustColumns( const SwFmtCol *pCol, BOOL bAdjustAttributes );
 
     void ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         const BOOL bChgFtn = FALSE );
