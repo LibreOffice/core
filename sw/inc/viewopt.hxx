@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:13:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@ namespace svtools{ class ColorConfig;}
 //#define           0x00001000L
 //#define      0x00002000L
 #define VIEWOPT_1_POSTITS       0x00004000L
-#define VIEWOPT_1_HIDDEN        0x00008000L
-//#define      0x00010000L
+#define VIEWOPT_1_FLD_HIDDEN    0x00008000L
+#define VIEWOPT_1_CHAR_HIDDEN   0x00010000L
 #define VIEWOPT_1_GRAPHIC       0x00020000L
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
@@ -307,10 +307,19 @@ public:
                               sal_Bool bIsScript ) const;
            USHORT GetPostItsWidth( const OutputDevice *pOut = 0 ) const;
 
-    inline BOOL IsHidden() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_HIDDEN) ? TRUE : FALSE; }
-    inline void SetHidden( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_HIDDEN); }
+    inline BOOL IsShowHiddenChar(sal_Bool bHard = sal_False) const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
+                                    ? TRUE : FALSE; }
+
+    inline void SetShowHiddenChar( BOOL b )
+        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CHAR_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_CHAR_HIDDEN); }
+
+
+    inline BOOL IsShowHiddenField() const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) ? TRUE : FALSE; }
+    inline void SetShowHiddenField( BOOL b )
+        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FLD_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_FLD_HIDDEN); }
 
     inline BOOL IsGraphic() const
         { return nCoreOptions & VIEWOPT_1_GRAPHIC ? TRUE : FALSE; }
