@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:22:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -616,23 +613,7 @@ void lcl_InsertVectors(ListBox& rBox,
     for(aIt = rRemain.begin(); aIt != rRemain.end(); aIt++)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
-long lcl_GetTwipValue(MetricField& rMetric)
-{
-    return rMetric.Denormalize(rMetric.GetValue(FUNIT_TWIP));
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void lcl_SetTwipValue(MetricField& rMetric, long nValue)
-{
-    rMetric.SetValue(rMetric.Normalize(nValue),FUNIT_TWIP);
-}
 /* -----------------------------20.08.2002 16:12------------------------------
 
  ---------------------------------------------------------------------------*/
