@@ -8433,3 +8433,12 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?RemoveItem@SfxToolBoxManager@@QAEXGG@Z
 ??0SfxTBData@@QAE@GGGVString@@EPAVSfxInterface@@@Z
 ?MakeUserImage@SfxImageManager@@QAE?AVImage@@GAAV2@@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+?lcl_translateBasic2Uno@?%O:\SRC651\src\sfx2\source\doc\objmisc.cxx1098711751@@YAXABVSbxVariableRef@@PAX@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+??0?$pair@$$CBVOUString@rtl@@PAX@_STL@@QAE@ABVOUString@rtl@@ABQAX@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBGVOUString@rtl@@@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@G@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@W4Accelerator_XML_Entry@OReadAcceleratorDocumentHandler@@@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+?deallocate@?$_STLP_alloc_proxy@PAU?$_Rb_tree_node@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@@_STL@@U12@V?$allocator@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@@2@@_STL@@QAEXPAU?$_Rb_tree_node@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@@2@I@Z
