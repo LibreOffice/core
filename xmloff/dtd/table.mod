@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.30 2001-04-04 13:43:59 dr Exp $
+	$Id: table.mod,v 1.31 2001-04-11 05:20:39 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -161,7 +161,7 @@
 <!ENTITY % table-row-groups "( (%table-rows;,(%table-header-rows;,%table-rows;?)?) | (%table-header-rows;,%table-rows;?) )">
 <!ELEMENT table:table (table:table-source?, table:scenario?, office:forms?, table:shapes?, %table-column-groups;, %table-row-groups;)>
 <!ATTLIST table:table
-	table:name %string; #REQUIRED
+	table:name %string; #IMPLIED
 	table:style-name %styleName; #IMPLIED
 	table:protected %boolean; "false"
 	table:protection-key CDATA #IMPLIED
