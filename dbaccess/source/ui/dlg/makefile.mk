@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.21 $
+ #  $Revision: 1.22 $
  #
- #  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
+ #  last change: $Author: vg $ $Date: 2003-04-01 14:02:29 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -96,37 +96,6 @@ SRCFILES =	\
         sqlmessage.src
 
 # ... object files ............................
-
-SLOFILES=	\
-        $(SLO)$/datasourceselector.obj	\
-        $(SLO)$/datasourcemap.obj	\
-        $(SLO)$/UserAdmin.obj	\
-        $(SLO)$/directsql.obj	\
-        $(SLO)$/generalpage.obj	\
-        $(SLO)$/tablespage.obj	\
-        $(SLO)$/missingdocdlg.obj	\
-        $(SLO)$/doclinkdialog.obj	\
-        $(SLO)$/AdabasStat.obj	\
-        $(SLO)$/AdabasPage.obj	\
-        $(SLO)$/indexfieldscontrol.obj	\
-        $(SLO)$/indexdialog.obj	\
-        $(SLO)$/RelationDlg.obj	\
-        $(SLO)$/adtabdlg.obj	\
-        $(SLO)$/dlgsave.obj		\
-        $(SLO)$/dlgsize.obj		\
-        $(SLO)$/dlgattr.obj		\
-        $(SLO)$/queryorder.obj	\
-        $(SLO)$/queryfilter.obj	\
-        $(SLO)$/paramdialog.obj	\
-        $(SLO)$/odbcconfig.obj	\
-        $(SLO)$/dsselect.obj	\
-        $(SLO)$/dbadmin.obj		\
-        $(SLO)$/commonpages.obj	\
-        $(SLO)$/detailpages.obj	\
-        $(SLO)$/adminpages.obj	\
-        $(SLO)$/sqlmessage.obj	\
-        $(SLO)$/dbfindex.obj
-
 EXCEPTIONSFILES=	\
         $(SLO)$/datasourcemap.obj	\
         $(SLO)$/UserAdmin.obj	\
@@ -148,25 +117,22 @@ EXCEPTIONSFILES=	\
         $(SLO)$/commonpages.obj	\
         $(SLO)$/detailpages.obj	\
         $(SLO)$/sqlmessage.obj	\
+        $(SLO)$/finteraction.obj	\
         $(SLO)$/dbfindex.obj
+
+SLOFILES=	\
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/datasourceselector.obj	\
+        $(SLO)$/missingdocdlg.obj	\
+        $(SLO)$/dlgsize.obj		\
+        $(SLO)$/dlgattr.obj		\
+        $(SLO)$/odbcconfig.obj	\
+        $(SLO)$/dsselect.obj	\
+        $(SLO)$/adminpages.obj
+
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
 
-
- #########################################################################
- # history:
- #	$Log: not supported by cvs2svn $
- #	Revision 1.20  2001/06/25 16:05:58  fs
- #	#88004# +datasourceselector.cxx / +datasourcemap.cxx
- #	
- #	Revision 1.19  2001/06/20 07:10:07  oj
- #	#88434# new page for user admin
- #	
- #	Revision 1.18  2001/06/19 11:00:02  fs
- #	#88393# +directsql.*
- #	
- #	Revision 1.0 20.09.00 10:58:55  fs
- ########################################################################/
 
