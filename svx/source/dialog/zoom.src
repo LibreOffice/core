@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:34:34 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 21:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ english_us ] = "~Page Width" ;
         Text[ chinese_simplified ] = "“≥øÌ(~P)";
         Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
-        Text[ polish ] = "Szeroko?Ê strony";
+        Text[ polish ] = "SzerokoúÊ strony";
         Text[ japanese ] = "Õﬂ∞ºﬁïù(~P)";
         Text[ chinese_traditional ] = "≠∂ºe(~P)";
         Text[ arabic ] = "⁄—÷ «·’›Õ…";
@@ -237,6 +237,26 @@ ModalDialog RID_SVXDLG_ZOOM
         Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Zoomfaktor" ;
         Text [ ENGLISH ] = "Zoom" ;
+        Text[ english_us ] = "Zoom";
+        Text[ portuguese ] = "Zoom";
+        Text[ russian ] = "Zoom";
+        Text[ greek ] = "Zoom";
+        Text[ dutch ] = "Zoom";
+        Text[ french ] = "Zoom";
+        Text[ spanish ] = "Escala";
+        Text[ finnish ] = "Zoom";
+        Text[ italian ] = "Zoom";
+        Text[ danish ] = "Zoom";
+        Text[ swedish ] = "Zoomfaktor";
+        Text[ polish ] = "Faktor powiÍkszenia";
+        Text[ portuguese_brazilian ] = "Zoom";
+        Text[ japanese ] = "Zoom";
+        Text[ korean ] = "Zoom";
+        Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
+        Text[ chinese_traditional ] = "≈„•‹§Ò®“";
+        Text[ turkish ] = "Zoom";
+        Text[ arabic ] = "Zoom";
+        Text[ catalan ] = "Zoom";
     };
     OKButton BTN_ZOOM_OK
     {
@@ -259,5 +279,21 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ turkish ] = "÷lÁek";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala";
+    Text[ english_us ] = "Zoom";
+    Text[ portuguese ] = "Zoom";
+    Text[ russian ] = "Ã‡Ò¯Ú‡·";
+    Text[ dutch ] = "Zoom";
+    Text[ french ] = "Zoom";
+    Text[ spanish ] = "Escala";
+    Text[ finnish ] = "Zoomaa";
+    Text[ italian ] = "Zoom";
+    Text[ danish ] = "MÂlestok";
+    Text[ swedish ] = "Zoom";
+    Text[ polish ] = "PowiÍkszenie";
+    Text[ portuguese_brazilian ] = "Zoom";
+    Text[ japanese ] = "Ωﬁ∞—";
+    Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
+    Text[ chinese_traditional ] = "≈„•‹§Ò®“";
+    Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";
 };
  // ********************************************************************** EOF
