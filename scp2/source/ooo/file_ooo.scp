@@ -284,17 +284,6 @@ File gid_File_Bin_Soffice
   #endif
 End
 
-#ifdef WNT
-
-File gid_File_Bin_Soffice_Langpack
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "soffice.exe";
-    Styles = (PACKED, LANGUAGEPACK);
-End
-
-#endif
-
 #ifndef WITHOUT_FONTOOO
 
 File gid_File_Exe_Msfontextract
@@ -1942,12 +1931,6 @@ File gid_File_Share_Config_Sofficecfg_Chart_Menubar_Xml
     Name = "/uiconfig/schart/menubar/menubar.xml";
 End
 */
-
-#ifdef WNT
-
-STD_SHELLNEW_FILE(gid_File_Shellnew_Html_Soffice, soffice.html)
-
-#endif
 
 #ifdef WNT
 
