@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-17 17:31:36 $
+ *  last change: $Author: pl $ $Date: 2001-12-18 12:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2743,7 +2743,10 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
             XFree( Children );
     } while( hDummy != hRoot );
 
-    if( GetStackingWindow() == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
+    if( GetStackingWindow() == None
+        && hWM_Parent != hPresentationWindow
+        && ( ! pDisableStackingCheck || ! *pDisableStackingCheck )
+        )
     {
         mhStackingWindow = hWM_Parent;
         if (bAccessParentWindow)
