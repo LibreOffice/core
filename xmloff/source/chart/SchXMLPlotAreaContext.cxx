@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,8 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
         case XML_TOK_PA_AXIS:
-            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName, mxDiagram, maAxes );
+            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName,
+                                              mxDiagram, maAxes, mrCategoriesAddress );
             break;
 
         case XML_TOK_PA_SERIES:
@@ -262,12 +263,6 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                                                     mnSeries, mnMaxSeriesLength, mnDomainOffset );
                 mnSeries++;
             }
-            break;
-
-        case XML_TOK_PA_CATEGORIES:
-            pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
-                                                          nPrefix, rLocalName,
-                                                          mrCategoriesAddress );
             break;
 
         case XML_TOK_PA_WALL:
@@ -577,11 +572,13 @@ void SchXMLPlotAreaContext::EndElement()
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                       uno::Reference< chart::XDiagram > xDiagram,
-                                      std::vector< SchXMLAxis >& aAxes ) :
+                                      std::vector< SchXMLAxis >& aAxes,
+                                      ::rtl::OUString & rCategoriesAddress ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mxDiagram( xDiagram ),
-        maAxes( aAxes )
+        maAxes( aAxes ),
+        mrCategoriesAddress( rCategoriesAddress )
 {
 }
 
@@ -1011,19 +1008,27 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
-    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
+    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetAxisElemTokenMap();
 
-    if( nPrefix == XML_NAMESPACE_CHART )
+    switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
-        if( IsXMLToken( rLocalName, XML_TITLE ) )
+        case XML_TOK_AXIS_TITLE:
         {
             uno::Reference< drawing::XShape > xTitleShape = getTitleShape();
-            pContext = new SchXMLTitleContext( mrImportHelper, rImport, rLocalName,
+            pContext = new SchXMLTitleContext( mrImportHelper, GetImport(), rLocalName,
                                                maCurrentAxis.aTitle,
                                                xTitleShape,
                                                maCurrentAxis.aPosition );
         }
-        else if( IsXMLToken( rLocalName, XML_GRID ) )
+        break;
+
+        case XML_TOK_AXIS_CATEGORIES:
+            pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
+                                                          nPrefix, rLocalName,
+                                                          mrCategoriesAddress );
+            break;
+
+        case XML_TOK_AXIS_GRID:
         {
             sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
             sal_Bool bIsMajor = sal_True;       // default value for class is "major"
@@ -1050,11 +1055,14 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             CreateGrid( sAutoStyleName, bIsMajor );
 
             // don't create a context => use default context. grid elements are empty
+            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
         }
-    }
+        break;
 
-    if( ! pContext )
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+        default:
+            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+            break;
+    }
 
     return pContext;
 }
