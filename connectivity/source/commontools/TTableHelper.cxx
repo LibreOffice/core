@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TTableHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:00:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,10 +325,16 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
             xStmt->execute(sSql);
             ::comphelper::disposeComponent(xStmt);
         }
+
         OTable_TYPEDEF::rename(newName);
     }
     else
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
+}
+// -----------------------------------------------------------------------------
+Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
+{
+    return m_xMetaData;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
