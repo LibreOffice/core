@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:51:09 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,10 +581,10 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                         case 2:
                         {
                             const sal_uInt8* pSubTable = pTable;
-                            sal_uInt16 nRowWidth    = getUInt16BE( pTable );
+                            /*sal_uInt16 nRowWidth    =*/ getUInt16BE( pTable );
                             sal_uInt16 nOfLeft      = getUInt16BE( pTable );
                             sal_uInt16 nOfRight     = getUInt16BE( pTable );
-                            sal_uInt16 nOfArray     = getUInt16BE( pTable );
+                            /*sal_uInt16 nOfArray     =*/ getUInt16BE( pTable );
                             const sal_uInt8* pTmp = pSubTable + nOfLeft;
                             sal_uInt16 nFirstLeft   = getUInt16BE( pTmp );
                             sal_uInt16 nLastLeft    = getUInt16BE( pTmp ) + nFirstLeft - 1;
@@ -592,7 +592,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                             sal_uInt16 nFirstRight  = getUInt16BE( pTmp );
                             sal_uInt16 nLastRight   = getUInt16BE( pTmp ) + nFirstRight -1;
 
-                            int nPairs = (int)(nLastLeft-nFirstLeft+1)*(int)(nLastRight-nFirstRight+1);
+                            // int nPairs = (int)(nLastLeft-nFirstLeft+1)*(int)(nLastRight-nFirstRight+1);
                             for( aPair.first = nFirstLeft; aPair.first < nLastLeft; aPair.first++ )
                             {
                                 for( aPair.second = 0; aPair.second < nLastRight; aPair.second++ )
@@ -634,18 +634,18 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
                 // Loop through each of the 'kern' subtables
                 KernPair aPair;
-                for( i = 0; i < pImplTTFont->nkern; i++ )
+                for( i = 0; (unsigned int)i < pImplTTFont->nkern; i++ )
                 {
                     const sal_uInt8* pTable = pImplTTFont->kerntables[i];
 
-                    sal_uInt32 nLength      = getUInt32BE( pTable );
+                    /*sal_uInt32 nLength      =*/ getUInt32BE( pTable );
                     sal_uInt16 nCoverage    = getUInt16BE( pTable );
-                    sal_uInt16 nTupleIndex  = getUInt16BE( pTable );
+                    /*sal_uInt16 nTupleIndex  =*/ getUInt16BE( pTable );
 
                     // Get kerning type
-                    sal_Bool bKernVertical     = nCoverage & 0x8000;
-                    sal_Bool bKernCrossStream  = nCoverage & 0x4000;
-                    sal_Bool bKernVariation    = nCoverage & 0x2000;
+                    // sal_Bool bKernVertical     = nCoverage & 0x8000;
+                    // sal_Bool bKernCrossStream  = nCoverage & 0x4000;
+                    // sal_Bool bKernVariation    = nCoverage & 0x2000;
 
                     // Kerning sub-table format, 0 through 3
                     sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
@@ -1154,6 +1154,7 @@ PrintFontManager::PrintFontManager() :
 
 PrintFontManager::~PrintFontManager()
 {
+    deinitFontconfig();
     for( ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
     delete m_pAtoms;
@@ -1238,7 +1239,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         // first look for an adjacent file
         static const char* pSuffix[] = { ".afm", ".AFM" };
 
-        for( int i = 0; i < sizeof(pSuffix)/sizeof(pSuffix[0]); i++ )
+        for( unsigned int i = 0; i < sizeof(pSuffix)/sizeof(pSuffix[0]); i++ )
         {
             ByteString aName( rFontFile );
             aName.Erase( aName.Len()-4 );
@@ -1549,6 +1550,8 @@ void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const std::l
                     break;
                 case fonttype::TrueType:
                     static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFDs.front();
+                    break;
+                default:
                     break;
             }
         }
