@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-19 12:45:43 $
+ *  last change: $Author: os $ $Date: 2001-06-05 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,37 +249,35 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
 #endif
     OUString sPath = C2U(cConfigBaseURL);
     sPath += rCfgItem.GetSubTreeName();
-    Sequence< Any > aArgs(1);
+    Sequence< Any > aArgs(2);
+    Any* pArgs = aArgs.getArray();
     PropertyValue aPath;
     aPath.Name = C2U("nodepath");
     aPath.Value <<= sPath;
-    aArgs[0] <<= aPath;
-    if(rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE)
-    {
-        aArgs.realloc(2);
-        PropertyValue aUpdate;
-        aUpdate.Name = C2U("lazywrite");
-        sal_Bool bTrue = sal_True;
-        aUpdate.Value.setValue(&bTrue, ::getBooleanCppuType());
-        aArgs.getArray()[1] <<= aUpdate;
-    }
-    else
+    pArgs[0] <<= aPath;
+    sal_Bool bLazy = 0 != rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE;
+    PropertyValue aUpdate;
+    aUpdate.Name = C2U("lazywrite");
+    sal_Bool bTrue = sal_True;
+    aUpdate.Value.setValue(&bTrue, ::getBooleanCppuType());
+    pArgs[1] <<= aUpdate;
+
     // Initialize item with support for reading/writing more then one locales at same time!
     // It's neccessary for creation of a complete configuration entry without changing office locale
     // at runtime.
     if(rCfgItem.GetMode()&CONFIG_MODE_ALL_LOCALES)
     {
-        aArgs.realloc(3);
-
+        aArgs.realloc(4);
+        pArgs = aArgs.getArray();
         PropertyValue aProperty;
 
         aProperty.Name  =   C2U("lazywrite");
         aProperty.Value <<= sal_True        ;
-        aArgs[1] <<= aProperty;
+        pArgs[2] <<= aProperty;
 
         aProperty.Name  =   C2U("locale");
         aProperty.Value <<= C2U("*"     );
-        aArgs[2] <<= aProperty;
+        pArgs[3] <<= aProperty;
     }
 
     Reference< XMultiServiceFactory > xCfgProvider = GetConfigurationProvider();
