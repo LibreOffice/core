@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:08:17 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,20 @@
 #ifndef DBAUI_TABLEWINDOWTITLE_HXX
 #define DBAUI_TABLEWINDOWTITLE_HXX
 
-#ifndef _SV_CTRL_HXX
-#include <vcl/ctrl.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 namespace dbaui
 {
     class OTableWindow;
-    class OTableWindowTitle : public Control
+    class OTableWindowTitle : public FixedText
     {
         OTableWindow* m_pTabWin;
 
     protected:
         virtual void Command(const CommandEvent& rEvt);
-        virtual void Paint( const Rectangle& rRect );
+        //  virtual void Paint( const Rectangle& rRect );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
         virtual void KeyInput( const KeyEvent& rEvt );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );

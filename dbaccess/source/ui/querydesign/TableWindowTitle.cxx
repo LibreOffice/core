@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ using namespace ::com::sun::star::uno;
 DBG_NAME(OTableWindowTitle);
 //------------------------------------------------------------------------------
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
-     Control( pParent, WB_3DLOOK )
+     FixedText( pParent, WB_3DLOOK|WB_CENTER|WB_NOLABEL )
     ,m_pTabWin( pParent )
 {
     DBG_CTOR(OTableWindowTitle,NULL);
@@ -190,18 +190,19 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
 }
 
 //------------------------------------------------------------------------------
-void OTableWindowTitle::Paint( const Rectangle& rRect )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Ausgabe des Textes in der Titelzeile
-    Rectangle aWinRect( Point(0,0), GetSizePixel() );
-    DrawText( aWinRect, GetText(), TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER|TEXT_DRAW_ENDELLIPSIS );
-}
+//void OTableWindowTitle::Paint( const Rectangle& rRect )
+//{
+//  //////////////////////////////////////////////////////////////////////
+//  // Ausgabe des Textes in der Titelzeile
+//  Rectangle aWinRect( Point(0,0), GetSizePixel() );
+//  DrawText( aWinRect, GetText(), TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER|TEXT_DRAW_ENDELLIPSIS );
+//}
 
 //------------------------------------------------------------------------------
 void OTableWindowTitle::KeyInput( const KeyEvent& rEvt )
 {
-    m_pTabWin->KeyInput( rEvt );
+    if ( m_pTabWin )
+        m_pTabWin->KeyInput( rEvt );
 }
 
 //------------------------------------------------------------------------------
