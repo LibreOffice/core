@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jp $ $Date: 2001-10-19 08:20:41 $
+#   last change: $Author: jp $ $Date: 2001-10-19 13:30:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,14 +103,15 @@ SLOFILES =  \
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockListContext.obj	\
-        $(SLO)$/SwXMLTextBlocks.obj
+        $(SLO)$/SwXMLTextBlocks.obj \
+        $(SLO)$/SwXMLTextBlocks1.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/SwXMLBlockImport.obj	\
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockListContext.obj	\
-        $(SLO)$/SwXMLTextBlocks.obj
+        $(SLO)$/SwXMLTextBlocks1.obj
 
 # --- Tagets -------------------------------------------------------
 
