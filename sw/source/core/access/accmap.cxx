@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-04 13:08:33 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,11 @@ void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const Reference< X
 void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
         const SfxHint& rHint )
 {
+    // do not broadcast notifications for writer fly frames, because there
+    // are no shapes that need to know about them.
     const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
-    if( !pSdrHint )
+    if( !pSdrHint ||
+        (pSdrHint->GetObject() && pSdrHint->GetObject()->IsWriterFlyFrame()) )
         return;
 
     ASSERT( mpDrawModel, "draw model listener is disposed" );

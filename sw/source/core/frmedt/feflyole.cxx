@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-07 13:09:11 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,27 @@
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
+#ifndef _SFX_CLIENTSH_HXX
+#include <sfx2/clientsh.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SCHDLL0_HXX
+#include <sch/schdll0.hxx>
+#endif
+#ifndef _SCH_DLL_HXX
+#include <sch/schdll.hxx>
+#endif
+#ifndef _SCH_MEMCHRT_HXX
+#include <sch/memchrt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 
 #ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
@@ -104,8 +125,9 @@
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
 #endif
-
-
+#ifndef _SWCLI_HXX
+#include <swcli.hxx>
+#endif
 
 SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
 {
@@ -176,6 +198,46 @@ void SwFEShell::MakeObjVisible( const SvEmbeddedObject *pIPObj ) const
             ((SwFEShell*)this)->EndAction();
         }
     }
+}
+
+BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
+{
+    SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
+    BOOL bRet = pIPClient && pIPClient->IsInPlaceActive();
+    if( bRet )
+    {
+        if( CNT_OLE == GetCntType() )
+            ClearAutomaticContour();
+
+        //  Link fuer Daten-Highlighting im Chart zuruecksetzen
+        SvtModuleOptions aMOpt;
+        if( aMOpt.IsChart() )
+        {
+            SvInPlaceObject* pObj = pIPClient->GetIPObj();
+            SvGlobalName aObjClsId( *pObj->GetSvFactory() );
+            SchMemChart* pMemChart;
+            if( SchModuleDummy::HasID( aObjClsId ) &&
+                0 != (pMemChart = SchDLL::GetChartData( pObj ) ))
+            {
+                pMemChart->SetSelectionHdl( Link() );
+
+//ggfs. auch die Selektion restaurieren
+                LockView( TRUE );   //Scrollen im EndAction verhindern
+                ClearMark();
+                LockView( FALSE );
+            }
+        }
+
+        if( ((SwOleClient*)pIPClient)->IsCheckForOLEInCaption() !=
+            IsCheckForOLEInCaption() )
+            SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
+
+        //InPlace beenden.
+        pIPClient->GetProtocol().Reset2Open();
+        SFX_APP()->SetViewFrame( GetSfxViewShell()->GetViewFrame() );
+
+    }
+    return bRet;
 }
 
 

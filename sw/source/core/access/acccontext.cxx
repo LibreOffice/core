@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 12:41:23 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
+#endif
+#ifndef _FESH_HXX
+#include "fesh.hxx"
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
@@ -1355,6 +1358,53 @@ void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
 sal_Bool SwAccessibleContext::HasCursor()
 {
     return sal_False;
+}
+
+sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
+                                      sal_Bool bAdd )
+{
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+    if( !pCrsrShell )
+        return sal_False;
+
+    SwFEShell* pFEShell = pCrsrShell->ISA( SwFEShell )
+                                ? static_cast<SwFEShell*>( pCrsrShell )
+                                : 0;
+    // Get rid of activated OLE object
+    if( pFEShell )
+        pFEShell->FinishOLEObj();
+
+    sal_Bool bRet = sal_False;
+    if( pObj )
+    {
+        if( pFEShell )
+        {
+            Point aDummy;
+            sal_uInt8 nFlags = bAdd ? SW_ADD_SELECT : 0;
+            pFEShell->SelectObj( aDummy, nFlags, pObj );
+            bRet = sal_True;
+        }
+    }
+    else if( pPaM )
+    {
+        // Get rid of frame selection. If there is one, make text cursor
+        // visible again.
+        sal_Bool bCallShowCrsr = sal_False;
+        if( pFEShell && (pFEShell->IsFrmSelected() ||
+                         pFEShell->IsObjSelected()) )
+        {
+            Point aPt( LONG_MIN, LONG_MIN );
+            pFEShell->SelectObj( aPt, 0 );
+            bCallShowCrsr = sal_True;
+        }
+        pCrsrShell->KillPams();
+        pCrsrShell->SetSelection( *pPaM );
+        if( bCallShowCrsr )
+            pCrsrShell->ShowCrsr();
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,

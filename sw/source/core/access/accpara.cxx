@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,8 +971,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
         SwPaM aPaM( aStartPos );
 
         // set PaM at cursor shell
-        pCrsrSh->KillPams();
-        pCrsrSh->SetSelection( aPaM );
+        Select( aPaM );
     }
 }
 
@@ -1145,9 +1144,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
         SwPaM aPaM( aStartPos );
 
         // set PaM at cursor shell
-        pCrsrShell->KillPams();
-        pCrsrShell->SetSelection( aPaM );
-        bRet = sal_True;
+        bRet = Select( aPaM );
     }
 
     return bRet;
@@ -1366,9 +1363,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
             GetPortionData().GetModelPosition(nEndIndex);
 
         // set PaM at cursor shell
-        pCrsrShell->KillPams();
-        pCrsrShell->SetSelection( aPaM );
-        bRet = sal_True;
+        bRet = Select( aPaM );
     }
 
     return bRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-29 13:49:43 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,46 +745,6 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         ((SwOleClient*)&xCli)->SetInDoVerb( FALSE );
         CalcAndSetScale( xObj );
     }
-}
-
-BOOL SwWrtShell::FinishOLEObj()                     // Server wird beendet
-{
-    SfxInPlaceClient* pIPClient = GetView().GetIPClient();
-    BOOL bRet = pIPClient && pIPClient->IsInPlaceActive();
-    if( bRet )
-    {
-        if( CNT_OLE == GetCntType() )
-            ClearAutomaticContour();
-
-        //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-        SvtModuleOptions aMOpt;
-        if( aMOpt.IsChart() )
-        {
-            SvInPlaceObject* pObj = pIPClient->GetIPObj();
-            SvGlobalName aObjClsId( *pObj->GetSvFactory() );
-            SchMemChart* pMemChart;
-            if( SchModuleDummy::HasID( aObjClsId ) &&
-                0 != (pMemChart = SchDLL::GetChartData( pObj ) ))
-            {
-                pMemChart->SetSelectionHdl( Link() );
-
-//ggfs. auch die Selektion restaurieren
-                LockView( TRUE );   //Scrollen im EndAction verhindern
-                ClearMark();
-                LockView( FALSE );
-            }
-        }
-
-        if( ((SwOleClient*)pIPClient)->IsCheckForOLEInCaption() !=
-            IsCheckForOLEInCaption() )
-            SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
-
-        //InPlace beenden.
-        pIPClient->GetProtocol().Reset2Open();
-        SFX_APP()->SetViewFrame( GetView().GetViewFrame() );
-
-    }
-    return bRet;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:25 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 class Window;
 class SwAccessibleMap;
 class SwCrsrShell;
+class SdrObject;
+class SwPaM;
 namespace utl { class AccessibleStateSetHelper; };
 namespace accessibility { class AccessibleShape; }
 
@@ -402,6 +404,9 @@ public:
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
+    sal_Bool Select( SwPaM *pPaM, SdrObject *pObj, sal_Bool bAdd );
+    inline sal_Bool Select( SwPaM& rPaM );
+    inline sal_Bool Select( SdrObject *pObj, sal_Bool bAdd );
     static ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
                                  const ::rtl::OUString *pArg2 = 0 );
@@ -442,6 +447,14 @@ inline ViewShell* SwAccessibleContext::GetShell()
 inline const ViewShell* SwAccessibleContext::GetShell() const
 { return GetMap()->GetShell(); }
 
+inline sal_Bool SwAccessibleContext::Select( SwPaM& rPaM )
+{
+    return Select( &rPaM, 0, sal_False );
+}
+inline sal_Bool SwAccessibleContext::Select( SdrObject *pObj, sal_Bool bAdd )
+{
+    return Select( 0, pObj, bAdd );
+}
 
 #endif
 

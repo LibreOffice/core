@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
+#endif
+#ifndef _FESH_HXX
+#include "fesh.hxx"
 #endif
 #ifndef _ACCFRMOBJSLIST_HXX
 #include <accfrmobjslist.hxx>
@@ -1393,16 +1396,19 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // create the new selection
     const SwStartNode* pStartNode = pBox->GetSttNd();
-    if( (pSelectedTable == NULL) ||
-        (! pCrsrShell->IsTableMode() ) )
+    if( pSelectedTable == NULL )
     {
         // if we're in the wrong table, or there's no table selection
         // at all, then select the current table cell.
-        SwPaM* pPaM = pCrsrShell->GetCrsr();
-        pPaM->DeleteMark();
-        *(pPaM->GetPoint()) = SwPosition( *pStartNode );
-        pPaM->Move( fnMoveForward, fnGoNode );
-//        pCrsrShell->SelTblBox();
+//      SwPaM* pPaM = pCrsrShell->GetCrsr();
+//      pPaM->DeleteMark();
+//      *(pPaM->GetPoint()) = SwPosition( *pStartNode );
+//      pPaM->Move( fnMoveForward, fnGoNode );
+// //   pCrsrShell->SelTblBox();
+
+        SwPaM aPaM( *pStartNode );
+        aPaM.Move( fnMoveForward, fnGoNode );
+        Select( aPaM );
     }
     else
     {
@@ -1413,21 +1419,22 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         aPaM.Move( fnMoveForward, fnGoNode );
         aPaM.SetMark();
         *(aPaM.GetMark()) = *(pCrsrShell->GetCrsr()->GetMark());
+        Select( aPaM );
 
         // if only one box is selected, we select this one in
         // order to maintain our table selection
-        if( aPaM.GetPoint()->nNode.GetNode().FindTableBoxStartNode() ==
-            aPaM.GetMark()->nNode.GetNode().FindTableBoxStartNode() )
-        {
-//            pCrsrShell->SelTblBox();
-        }
-        else
-        {
+//        if( aPaM.GetPoint()->nNode.GetNode().FindTableBoxStartNode() ==
+//           aPaM.GetMark()->nNode.GetNode().FindTableBoxStartNode() )
+//        {
+// //            pCrsrShell->SelTblBox();
+//         }
+//         else
+//         {
             // finally; set the selection. This will call UpdateCursor
             // on the cursor shell, too.
-            pCrsrShell->KillPams();
-            pCrsrShell->SetSelection( aPaM );
-        }
+//            pCrsrShell->KillPams();
+ //           pCrsrShell->SetSelection( aPaM );
+//         }
     }
 }
 

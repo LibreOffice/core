@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 14:53:13 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,7 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
+    BOOL    FinishOLEObj();                             // Server wird beendet
 
     //Attribute der Tabelle besorgen/setzen.
     void GetTblAttr( SfxItemSet & ) const;

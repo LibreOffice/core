@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
         const SdrObject *pObj = aChild.GetSdrObject();
         if( pObj )
         {
-            Point aDummy;
-            sal_uInt8 nFlags = aChild.GetSwFrm() ? 0 : SW_ADD_SELECT;
-            pFEShell->SelectObj( aDummy, nFlags,
-                                  const_cast< SdrObject *>( pObj ) );
-            bRet = sal_True;
+            bRet = rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
         }
     }
     // no frame shell, or no frame, or no fly frame -> can't select
@@ -224,10 +220,7 @@ void SwAccessibleSelectionHelper::selectAllAccessible(  )
             const SwFrm* pFrm = rChild.GetSwFrm();
             if( pObj && !(pFrm != 0 && pFEShell->IsObjSelected()) )
             {
-                Point aDummy;
-                sal_uInt8 nFlags = pFrm ? 0 : SW_ADD_SELECT;
-                pFEShell->SelectObj( aDummy, nFlags,
-                                     const_cast< SdrObject *>( pObj ) );
+                rContext.Select( const_cast< SdrObject *>( pObj ), 0==pFrm );
                 if( pFrm )
                     break;
             }
