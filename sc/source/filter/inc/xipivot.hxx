@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:33:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ private:
 class XclImpPivotCache : protected XclImpRoot
 {
 public:
-    explicit            XclImpPivotCache( const XclImpRoot& rRoot, sal_uInt16 nStrmId );
+    explicit            XclImpPivotCache( const XclImpStream& rBookStrm, sal_uInt16 nStrmId );
                         ~XclImpPivotCache();
 
     // data access ------------------------------------------------------------
