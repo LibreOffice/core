@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 12:55:20 $
+ *  last change: $Author: dbo $ $Date: 2001-06-13 08:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,12 @@ class ComponentContext
 
     struct ContextEntry
     {
+        Any lateInit;
         Any value;
-        bool bLateInitService;
 
-        inline ContextEntry( bool bLateInitService_, Any const & value_ )
-            : value( value_ )
-            , bLateInitService( bLateInitService_ )
+        inline ContextEntry( Any const & lateInit_, Any const & value_ )
+            : lateInit( lateInit_ )
+            , value( value_ )
             {}
     };
     typedef ::std::hash_map< OUString, ContextEntry *, OUStringHash > t_map;
@@ -183,21 +183,21 @@ Any ComponentContext::getValueByName( OUString const & rName )
     {
         ContextEntry * pEntry = iFind->second;
 
-        if (pEntry->bLateInitService)
+        if (pEntry->lateInit.hasValue())
         {
             try
             {
                 Reference< XInterface > xInstance;
 
                 Reference< lang::XSingleComponentFactory > xFac;
-                if (pEntry->value >>= xFac) // try via factory
+                if (pEntry->lateInit >>= xFac) // try via factory
                 {
                     xInstance = xFac->createInstanceWithContext( this );
                 }
                 else // optionally service name
                 {
                     OUString aServiceName;
-                    if ((pEntry->value >>= aServiceName) && aServiceName.getLength())
+                    if ((pEntry->lateInit >>= aServiceName) && aServiceName.getLength())
                     {
                         if (m_xSMgr.is())
                         {
@@ -215,10 +215,10 @@ Any ComponentContext::getValueByName( OUString const & rName )
                 if (xInstance.is())
                 {
                     ClearableMutexGuard aGuard( m_mutex );
-                    if (pEntry->bLateInitService)
+                    if (pEntry->lateInit.hasValue())
                     {
                         pEntry->value.setValue( &xInstance, ::getCppuType( &xInstance ) );
-                        pEntry->bLateInitService = false;
+                        pEntry->lateInit.clear();
                     }
                     else // inited in the meantime
                     {
@@ -296,11 +296,12 @@ void ComponentContext::disposing()
         {
             Reference< lang::XComponent > xComp;
 
-            if (pEntry->bLateInitService)
+            if (pEntry->lateInit.hasValue())
             {
                 // may be in late init
                 MutexGuard aGuard( m_mutex );
                 pEntry->value >>= xComp;
+                pEntry->lateInit.clear();
             }
             else
             {
@@ -362,7 +363,19 @@ ComponentContext::ComponentContext(
         {
             rEntry.value >>= m_xSMgr;
         }
-        m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
+
+        ContextEntry * pEntry;
+        if (rEntry.bLateInitService)
+        {
+            // value is factory or string for late init
+            pEntry = new ContextEntry( rEntry.value, Any() );
+        }
+        else
+        {
+            // only value, no late init factory nor string
+            pEntry = new ContextEntry( Any(), rEntry.value );
+        }
+        m_map[ rEntry.name ] = pEntry;
     }
 
     m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
@@ -398,7 +411,19 @@ ComponentContext::ComponentContext(
         {
             rEntry.value >>= m_xSMgr;
         }
-        m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
+
+        ContextEntry * pEntry;
+        if (rEntry.bLateInitService)
+        {
+            // value is factory or string for late init
+            pEntry = new ContextEntry( rEntry.value, Any() );
+        }
+        else
+        {
+            // only value, no late init factory nor string
+            pEntry = new ContextEntry( Any(), rEntry.value );
+        }
+        m_map[ rEntry.name ] = pEntry;
     }
 
     m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
@@ -420,7 +445,7 @@ ComponentContext::ComponentContext(
                     {
                         Reference< registry::XRegistryKey > const & xKey = pKeys[ nPos ];
                         m_map[ xKey->getKeyName().copy( sizeof("/SINGLETONS") /* -\0 +'/' */ ) ] =
-                            new ContextEntry( true, makeAny( xKey->getStringValue() ) );
+                            new ContextEntry( makeAny( xKey->getStringValue() ), Any() );
                     }
                     catch (Exception & rExc)
                     {
