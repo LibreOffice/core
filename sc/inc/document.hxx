@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
+ *  last change: $Author: gt $ $Date: 2001-02-14 09:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ class ScDPCollection;
 class ScMatrix;
 class ScScriptTypeData;
 class ScPoolHelper;
+class ScImpExpLogMsg;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -1463,6 +1464,9 @@ public:
     SfxItemPool*        GetEditPool() const;
     SfxItemPool*        GetEnginePool() const;
     ScFieldEditEngine&  GetEditEngine();
+
+    void            AddToImpExpLog( const ScImpExpLogMsg& rMsg );
+    void            AddToImpExpLog( ScImpExpLogMsg* pMsg );
 
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );

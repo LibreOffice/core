@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nn $ $Date: 2001-01-31 16:42:08 $
+#   last change: $Author: gt $ $Date: 2001-02-14 09:29:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,8 @@ CXXFILES = \
     dbdocutl.cxx \
     pagepar.cxx \
     conditio.cxx \
-    validat.cxx
+    validat.cxx \
+    scimpexpmsg.cxx
 
 SLOFILES =  \
     $(SLO)$/bclist.obj \
@@ -191,7 +192,8 @@ SLOFILES =  \
     $(SLO)$/dbdocutl.obj \
     $(SLO)$/pagepar.obj \
     $(SLO)$/conditio.obj \
-    $(SLO)$/validat.obj
+    $(SLO)$/validat.obj \
+    $(SLO)$/scimpexpmsg.obj
 
 EXCEPTIONSFILES= \
     $(SLO)$/documen6.obj \
