@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:44:49 $
+ *  last change: $Author: jp $ $Date: 2002-03-12 12:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_COLRITEM_HXX //autogen
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
@@ -845,14 +848,15 @@ void SwDocShell::SubInitNew()
     sal_Bool bWeb = ISA(SwWebDocShell);
 
     sal_uInt16 nRange[] =   {
+                            RES_CHRATR_COLOR, RES_CHRATR_COLOR,
                             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
                             RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                             RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
                             0, 0, 0  };
     if(!bWeb)
     {
-        nRange[6] = RES_PARATR_TABSTOP;
-        nRange[7] = RES_PARATR_HYPHENZONE;
+        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 3 ] = RES_PARATR_TABSTOP;
+        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 2 ] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
 
@@ -886,6 +890,7 @@ void SwDocShell::SubInitNew()
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                             SVX_TAB_ADJUST_DEFAULT ) );
     }
+    aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
     pDoc->SetDefault( aDfltSet );
     pDoc->ResetModified();
 }
