@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-11 09:19:55 $
+#   last change: $Author: kz $ $Date: 2004-08-16 16:36:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -221,6 +221,10 @@ my $error_installset = 8;
 my $error_copyBasic = 9;
 my $error_patchBootstrap = 10;
 
+my $command_normal = 0;
+my $command_withoutErrorcheck = 1;
+my $command_withoutOutput = 2;
+
 if ($is_oo) {
     $PRODUCT="OpenOffice";
 }
@@ -268,7 +272,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.2 $ ';
+$id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -431,21 +435,21 @@ sub doTest {
     # check setup log file (error 7)
 
 #   $Command = "$PERL check_setup.pl \"$programpath" . "setup.log\"";
-#   execute_Command ($Command, $error_setup_log, $show_Message);
+#   execute_Command ($Command, $error_setup_log, $show_Message, $command_normal );
 
     # patch config (error 3)
 
     $Command = "$PERL config.pl \"$basedir \" \"$userinstallpath \" \"$DATA \"";
-    execute_Command ($Command, $error_patchConfig, $show_Message);
+    execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)
 
     $Command = "$COPY_FILE \"$DATA" . "scripts$PathSeparator" . "\"*.x* \"$standardbasicpath" . "Standard$PathSeparator\"";
-    execute_Command_withoutOutput ($Command, $error_copyBasic, $show_Message);
+    execute_Command ($Command, $error_copyBasic, $show_Message, $command_withoutOutput);
 
     createPath("$basicpath", $error_copyBasic);
     $Command = "$COPY_DIR \"$standardbasicpath\"* \"$basicpath\"";
-    execute_Command_withoutOutput ($Command, $error_copyBasic, $show_Message);
+    execute_Command ($Command, $error_copyBasic, $show_Message, $command_withoutOutput);
 
 
     # patching bootstrap (error 11)
@@ -461,17 +465,17 @@ sub doTest {
     if ((defined($ENV{OS})) && (defined($ENV{PROEXT})) && ($ENV{OS} eq "LINUX") && ($ENV{PROEXT} eq ".pro") && $is_do_statistics)  {
         print "collecting statistic...\n";
         $Command = "$PERL stats.pl -p=\"$programpath" . "soffice\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
-        execute_Command ($Command, $error_startOffice, $show_Message);
+        execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
     }
     else {
         $Command = "\"$programpath" . "soffice\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
-        execute_Command ($Command, $error_startOffice, $show_Message);
+        execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
     }
 
     # test if smoketest is ok (error 5)
 
     $Command = "$PERL testlog.pl \"$LOGPATH\"";
-    execute_Command ($Command, $error_testResult, $show_Message);
+    execute_Command ($Command, $error_testResult, $show_Message, $command_normal);
 
     # deinstall office (error 6)
 
@@ -479,12 +483,12 @@ sub doTest {
         print "Deinstalling Office\n";
     }
 #   $Command = "$PERL deinstall.pl \"$LOGPATH\" \"$installpath\"";
-#   execute_Command ($Command, $error_deinstall, $show_NoMessage);
+#   execute_Command ($Command, $error_deinstall, $show_NoMessage, $command_normal);
 }
 
 sub doInstall {
     my ($installsetpath, $dest_installdir) = @_;
-    my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir);
+    my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output);
     if (($gui eq "WNT") or ($gui eq $cygwin)) {
         $mask = "\\.msi\$";
         getSubFiles ("$installsetpath", \@DirArray, $mask);
@@ -493,7 +497,7 @@ sub doInstall {
         }
         foreach $file (@DirArray) {
             $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
-            execute_Command ($Command, $error_setup, $show_Message);
+            execute_Command ($Command, $error_setup, $show_Message,  $command_normal);
         }
         @DirArray = ();
         getSubDirsFullPath ($dest_installdir, \@DirArray);
@@ -504,7 +508,7 @@ sub doInstall {
             print_error ($error_setup, $show_Message);
         }
         else {
-            $basedir = $$dest_installdir;
+            $basedir = $dest_installdir;
          }
     }
     elsif ($gui eq "UNX") {
@@ -519,7 +523,7 @@ sub doInstall {
             createPath ($optdir, $error_setup);
             createPath ($rpmdir, $error_setup);
             $Command = "rpm --initdb --dbpath $rpmdir";
-            execute_Command ($Command, $error_setup, $show_Message);
+            execute_Command ($Command, $error_setup, $show_Message, $command_normal);
             $mask = "\\.rpm\$";
             getSubFiles ("$installsetpath", \@DirArray, $mask);
             if ($#DirArray == -1) {
@@ -530,7 +534,7 @@ sub doInstall {
                     next;
                 }
                 $Command = "rpm --install --nodeps -vh --relocate /opt=$optdir --dbpath $rpmdir $installsetpath$file";
-                execute_Command_withoutErrorcheck ($Command, $error_setup, $show_Message);
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
@@ -553,8 +557,14 @@ sub doInstall {
                 if ( ($file =~ /-gnome/) or ($file =~ /-cde/) or () ) {
                     next;
                 }
-                $Command = "/usr/sbin/pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
-                execute_Command_withoutErrorcheck ($Command, $error_setup, $show_Message);
+                $Command = "pkgparam -d $installsetpath $file BASEDIR";
+                $output = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                chomp $output;
+                if ($output ne "") {
+                    createPath ("$dest_installdir$output", $error_setup);
+                }
+                $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
         }
         @DirArray = ();
@@ -877,71 +887,50 @@ sub setInstallpath {
 }
 
 sub execute_Command {
-    my ($Command, $Errorcode, $showMessage) = @_;
-    my ($Returncode);
+    my ($Command, $Errorcode, $showMessage, $command_action) = @_;
+    my ($Returncode, $output);
     if (!$is_debug) {
         print "$Command\n" if $is_command_infos;
-        $Returncode = system ("$Command");
+        if ( ($command_action and $command_withoutOutput) == $command_withoutOutput) {
+            ($Returncode, $output) = execute_system ("$Command");
+        }
+        else {
+            $Returncode = system ("$Command");
+        }
         if ($Returncode) {
             if ($showMessage) {
-                print_error ($error_messages[$Errorcode], $Errorcode);
+                if (($command_action and $command_withoutErrorcheck) == $command_withoutErrorcheck) {
+                    print_warning ($error_messages[$Errorcode], $Errorcode);
+                }
+                else {
+                    print_error ($error_messages[$Errorcode], $Errorcode);
+                }
             }
             else {
-                do_exit ($Errorcode);
+                if (($command_action and $command_withoutErrorcheck) != $command_withoutErrorcheck) {
+                    do_exit ($Errorcode);
+                }
             }
         }
     }
     else {
         print "$Command\n";
     }
-}
-
-sub execute_Command_withoutErrorcheck {
-    my ($Command, $Errorcode, $showMessage) = @_;
-    my ($Returncode);
-    if (!$is_debug) {
-        print "$Command\n" if $is_command_infos;
-        $Returncode = system ("$Command");
-        if ($Returncode) {
-            if ($showMessage) {
-                print_warning ($error_messages[$Errorcode], $Errorcode);
-            }
-        }
-    }
-    else {
-        print "$Command\n";
-    }
-}
-
-sub execute_Command_withoutOutput {
-    my ($Command, $Errorcode, $showMessage) = @_;
-    my ($Returncode);
-    if (!$is_debug) {
-        print "$Command\n" if $is_command_infos;
-        $Returncode = execute_system ("$Command");
-        if ($Returncode) {
-            if ($showMessage) {
-                print_error ($error_messages[$Errorcode], $Errorcode);
-            }
-            else {
-                do_exit ($Errorcode);
-            }
-        }
-    }
-    else {
-        print "$Command\n";
-    }
+    return $output;
 }
 
 sub execute_system {
     my ($command) = shift;
-
+    my ($output, $line);
     if ( $is_command_infos ) {
         print STDERR "TRACE_SYSTEM: $command\n";
     }
     open( COMMAND, "$command 2>&1 |");
+    while ($line = <COMMAND>) {
+        $output .= $line;
+    }
     close(COMMAND);
-    return $?;
+    return $?, $output;
 }
 
 sub print_warning
