@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:37:49 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,7 +1336,7 @@ SdrObject* XclImpDffManager::ProcessObj(
                 pTextSdrObj->SetMergedItem(XFillColorItem(XubString(), Color(0xffffff)));
             }
 
-            ApplyAttributes( rStrm, aItemSet, pTextSdrObj );
+            ApplyAttributes( rStrm, aItemSet, rObjData.eShapeType, rObjData.nSpFlags );
         }
         switch( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
         {
