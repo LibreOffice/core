@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-04 16:59:29 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,6 @@
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
 #endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <drag.hxx>
-#endif
-#endif
 
 #define SYSDATA_ONLY_BASETYPE
 #include <sysdata.hxx>
@@ -269,6 +264,93 @@ static void ImplInitAppFontData( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
+void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
+{
+    // We prefer Andale Sans UI as our UI Font
+    String aAndaleSansUI( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) );
+    if ( mpFrameData->mpFontList->FindFont( aAndaleSansUI ) )
+    {
+        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+        Font aFont = aStyleSettings.GetAppFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetAppFont( aFont );
+        aFont = aStyleSettings.GetHelpFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetHelpFont( aFont );
+        aFont = aStyleSettings.GetTitleFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetTitleFont( aFont );
+        aFont = aStyleSettings.GetFloatTitleFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetFloatTitleFont( aFont );
+        aFont = aStyleSettings.GetMenuFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetMenuFont( aFont );
+        aFont = aStyleSettings.GetToolFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetToolFont( aFont );
+        aFont = aStyleSettings.GetLabelFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetLabelFont( aFont );
+        aFont = aStyleSettings.GetInfoFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetInfoFont( aFont );
+        aFont = aStyleSettings.GetRadioCheckFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetRadioCheckFont( aFont );
+        aFont = aStyleSettings.GetPushButtonFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetPushButtonFont( aFont );
+        aFont = aStyleSettings.GetFieldFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetFieldFont( aFont );
+        aFont = aStyleSettings.GetIconFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetIconFont( aFont );
+        aFont = aStyleSettings.GetGroupFont();
+        aFont.SetName( aAndaleSansUI );
+        aStyleSettings.SetGroupFont( aFont );
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
+
+    if ( bCallHdl )
+        GetpApp()->SystemSettingsChanging( rSettings, this );
+
+#ifdef DBG_UTIL
+    // Evt. AppFont auf Fett schalten, damit man feststellen kann,
+    // ob fuer die Texte auf anderen Systemen genuegend Platz
+    // vorhanden ist
+    if ( DbgIsBoldAppFont() )
+    {
+        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+        Font aFont = aStyleSettings.GetAppFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetAppFont( aFont );
+        aFont = aStyleSettings.GetGroupFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetGroupFont( aFont );
+        aFont = aStyleSettings.GetLabelFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetLabelFont( aFont );
+        aFont = aStyleSettings.GetRadioCheckFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetRadioCheckFont( aFont );
+        aFont = aStyleSettings.GetPushButtonFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetPushButtonFont( aFont );
+        aFont = aStyleSettings.GetFieldFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetFieldFont( aFont );
+        aFont = aStyleSettings.GetIconFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetIconFont( aFont );
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
+#endif
+}
+
+// -----------------------------------------------------------------------
+
 MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, Window* pSource, Window* pDest )
 {
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
@@ -330,6 +412,7 @@ void Window::ImplInitData( WindowType nType )
     mnParentClipMode    = 0;            // Flags for Parent-ClipChildren-Mode
     mnActivateMode      = 0;            // Wird bei System/Overlap-Windows umgesetzt
     mnDlgCtrlFlags      = 0;            // DialogControl-Flags
+    mnLockCount         = 0;            // LockCount
     mbFrame             = FALSE;        // TRUE: Window is a frame window
     mbBorderWin         = FALSE;        // TRUE: Window is a border window
     mbOverlapWin        = FALSE;        // TRUE: Window is a overlap window
@@ -488,11 +571,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         if ( !pFrame )
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         pFrame->SetCallback( this, ImplWindowFrameProc );
-
-#ifndef TF_SVDATA
-        // initialize system-Drag&Drop-interface
-        DragManager::SystemEnableDrop( pFrame, TRUE );
-#endif
 #else
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
         RmFrameWindow* pFrame = new RmFrameWindow( this );
@@ -551,10 +629,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbInSysObjFocusHdl = FALSE;
         mpFrameData->mbInSysObjToTopHdl = FALSE;
         mpFrameData->mbSysObjFocus      = FALSE;
-
-#ifndef TF_SVDATA
-        mpFrameData->mpDragTimer        = NULL;
-#endif
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
 
@@ -567,9 +641,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 mpFrameData->mxClipboard = Reference< XClipboard >( pSVData->mxClientFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
             }
 
-               if ( mpFrame->IsValid() )
+            if ( mpFrame->IsValid() )
                 mpFrame->GetFrameInterface()->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
-
 #else
             Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
             if ( xFactory.is() )
@@ -606,12 +679,12 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                     aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
 
                     aClipboardAL.realloc( 2 );
-                      aClipboardAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                      aClipboardAL[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
+                    aClipboardAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aClipboardAL[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
 
                     aSelectionAL.realloc( 2 );
-                      aSelectionAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                      aSelectionAL[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
+                    aSelectionAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aSelectionAL[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
@@ -657,7 +730,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 }
             }
 #endif
-
         }
 
         // createInstance can throw any exception
@@ -667,49 +739,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             mpFrameData->mxDropTarget.clear();
             mpFrameData->mxDragSource.clear();
         }
-
-
-#ifndef REMOTE_APPSERVER
-        // Muessen Application-Settings noch upgedatet werden
-        if ( !pSVData->maAppData.mbSettingsInit )
-        {
-            mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
-            GetpApp()->SystemSettingsChanging( *pSVData->maAppData.mpSettings, this );
-#ifdef DBG_UTIL
-            // Evt. AppFont auf Fett schalten, damit man feststellen kann,
-            // ob fuer die Texte auf anderen Systemen genuegend Platz
-            // vorhanden ist
-            if ( DbgIsBoldAppFont() )
-            {
-                StyleSettings aStyleSettings = pSVData->maAppData.mpSettings->GetStyleSettings();
-                Font aFont = aStyleSettings.GetAppFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetAppFont( aFont );
-                aFont = aStyleSettings.GetGroupFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetGroupFont( aFont );
-                aFont = aStyleSettings.GetLabelFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetLabelFont( aFont );
-                aFont = aStyleSettings.GetRadioCheckFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetRadioCheckFont( aFont );
-                aFont = aStyleSettings.GetPushButtonFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetPushButtonFont( aFont );
-                aFont = aStyleSettings.GetFieldFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetFieldFont( aFont );
-                aFont = aStyleSettings.GetIconFont();
-                aFont.SetWeight( WEIGHT_BOLD );
-                aStyleSettings.SetIconFont( aFont );
-                pSVData->maAppData.mpSettings->SetStyleSettings( aStyleSettings );
-            }
-#endif
-            OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
-            pSVData->maAppData.mbSettingsInit = TRUE;
-        }
-#endif
     }
 
     // init data
@@ -762,6 +791,17 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 if ( !mpFrameData->mpFontList->Count() )
                     mpGraphics->GetDevFontList( mpFrameData->mpFontList );
             }
+        }
+#endif
+
+#ifndef REMOTE_APPSERVER
+        // Muessen Application-Settings noch upgedatet werden
+        if ( !pSVData->maAppData.mbSettingsInit )
+        {
+            mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
+            ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
+            OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
+            pSVData->maAppData.mbSettingsInit = TRUE;
         }
 #endif
 
@@ -4154,11 +4194,6 @@ Window::~Window()
 
     if ( mbFrame )
     {
-#ifndef REMOTE_APPSERVER
-#ifndef TF_SVDATA
-        DragManager::SystemEnableDrop( mpFrame, FALSE);
-#endif
-#endif
         if ( mpFrameData->mnFocusId )
             Application::RemoveUserEvent( mpFrameData->mnFocusId );
         if ( mpFrameData->mnMouseMoveId )
@@ -4226,10 +4261,6 @@ Window::~Window()
 #else
         mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
         delete mpFrame;
-#endif
-#ifndef TF_SVDATA
-        if ( mpFrameData->mpDragTimer )
-            delete mpFrameData->mpDragTimer;
 #endif
         delete mpFrameData;
 #ifdef REMOTE_APPSERVER
@@ -4477,34 +4508,6 @@ void Window::Tracking( const TrackingEvent& )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
-
-#ifndef TF_SVDATA
-
-// -----------------------------------------------------------------------
-
-BOOL Window::QueryDrop( DropEvent& rDEvt )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    NotifyEvent aNEvt( EVENT_QUERYDROP, this, &rDEvt, FALSE );
-    Notify( aNEvt );
-    return (BOOL)aNEvt.GetReturnValue();
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Window::Drop( const DropEvent& rDEvt )
-{
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
-    NotifyEvent aNEvt( EVENT_DROP, this, &rDEvt, FALSE );
-    Notify( aNEvt );
-    return (BOOL)aNEvt.GetReturnValue();
-}
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -4772,6 +4775,34 @@ void Window::PostStateChanged( StateChangedType nState )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     PostUserEvent( LINK( this, Window, ImplAsyncStateChangedHdl ), (void*)(ULONG)nState );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Window::IsLocked( BOOL bChilds, BOOL bSystemWindows ) const
+{
+    return mnLockCount != 0;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Window::IsUICaptured( BOOL bChilds ) const
+{
+    return Application::IsUICaptured();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Window::IsUserActive( USHORT nTest, BOOL bChilds ) const
+{
+    return Application::IsUserActive( nTest );
+}
+
+// -----------------------------------------------------------------------
+
+ULONG Window::GetLastInputInterval() const
+{
+    return Application::GetLastInputInterval();
 }
 
 // -----------------------------------------------------------------------
