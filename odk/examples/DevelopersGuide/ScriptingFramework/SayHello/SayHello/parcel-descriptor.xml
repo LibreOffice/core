@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="Java" xmlns:parcel="scripting.dtd">
+    <script language="Java">
+        <locale lang="en">
+            <displayname value="SayHello"/>
+            <description>
+                Prints Hello in a Writer document
+            </description>
+        </locale>
+        <functionname value="SayHello.start"/>
+        <logicalname value="SayHello.start"/>
+        <languagedepprops>
+          <prop name="classpath" value="SayHello.jar"/>
+        </languagedepprops>
+    </script>
+</parcel>
