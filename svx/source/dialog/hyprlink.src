@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:37:12 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ english_us ] = "Internet URLs" ;
         QuickHelpText [ italian ] = "Casella di raccolta per gli URL di Internet" ;
         QuickHelpText [ spanish ] = "URLs de Internet" ;
-        QuickHelpText [ french ] = "Boîte centrale pour les URLs d'Internet" ;
+        QuickHelpText [ french ] = "URL Internet" ;
         QuickHelpText [ portuguese_brazilian ] = "Sammelbox für Internet-URLs" ;
         QuickHelpText [ portuguese ] = "Caixa para URLs da Internet" ;
         QuickHelpText [ swedish ] = "Samlingsbox till webbadresser" ;
@@ -412,6 +412,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
     Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
 };
+
 
 
 
