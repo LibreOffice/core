@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-29 12:14:24 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHHELPER_HPP_
+#include <com/sun/star/frame/XDispatchHelper.hpp>
+#endif
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 
@@ -1104,21 +1116,37 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     ErrCode eErr = aWrt.Write( xWrt );
                     if( !ERRCODE_TOERROR( eErr ) )
                     {
-                        pStrm->Seek( STREAM_SEEK_TO_END );
-                        *pStrm << '\0';
-                        pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        //Die Lockbytes werden owner des Stream*
-                        SvLockBytes *pLockBytes = new SvLockBytes( pStrm, TRUE );
-                        //Das Item wird owner des LockBytes*
-                        SfxLockBytesItem aItem( SID_OUTLINE_TO_IMPRESS, pLockBytes );
-                        SfxModule *pMod = (*(SfxModule**)GetAppData(SHL_DRAW))->Load();
-                        SfxItemSet aSet( pMod->GetPool(), SID_OUTLINE_TO_IMPRESS,
-                                                            SID_OUTLINE_TO_IMPRESS );
-                        aSet.Put( aItem );
-                        SfxAllItemSet aArgs( pMod->GetPool() );
-                        aArgs.Put( aSet );
-                        SfxRequest aReq( SID_OUTLINE_TO_IMPRESS, 0, aArgs );
-                        pMod->ExecuteSlot( aReq );
+                        Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                        if ( xProv.is() )
+                        {
+                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                            if ( xHelper.is() )
+                            {
+                                pStrm->Seek( STREAM_SEEK_TO_END );
+                                *pStrm << '\0';
+                                pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+
+                                // Transfer ownership of stream to a lockbytes object
+                                SvLockBytes aLockBytes( pStrm, TRUE );
+                                SvLockBytesStat aStat;
+                                if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
+                                {
+                                    sal_uInt32 nLen = aStat.nSize;
+                                    ULONG nRead = 0;
+                                    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                                    aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
+
+                                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
+                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Value <<= aSeq;
+                                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
+                                }
+                            }
+                        }
                     }
                     else
                         ErrorHandler::HandleError(ErrCode( eErr ));
@@ -1158,18 +1186,37 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
-                        //Die Lockbytes werden owner des Stream*
-                        SvLockBytes *pLockBytes = new SvLockBytes( pStrm, TRUE );
-                        //Das Item wird owner des LockBytes*
-                        SfxLockBytesItem aItem( SID_OUTLINE_TO_IMPRESS, pLockBytes );
-                        SfxModule *pMod = (*(SfxModule**)GetAppData(SHL_DRAW))->Load();
-                        SfxItemSet aSet( pMod->GetPool(), SID_OUTLINE_TO_IMPRESS,
-                                                          SID_OUTLINE_TO_IMPRESS );
-                        aSet.Put( aItem );
-                        SfxAllItemSet aArgs( pMod->GetPool() );
-                        aArgs.Put( aSet );
-                        SfxRequest aReq( SID_OUTLINE_TO_IMPRESS, 0, aArgs );
-                        pMod->ExecuteSlot( aReq );
+                        Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                        if ( xProv.is() )
+                        {
+                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                            if ( xHelper.is() )
+                            {
+                                pStrm->Seek( STREAM_SEEK_TO_END );
+                                *pStrm << '\0';
+                                pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+
+                                // Transfer ownership of stream to a lockbytes object
+                                SvLockBytes aLockBytes( pStrm, TRUE );
+                                SvLockBytesStat aStat;
+                                if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
+                                {
+                                    sal_uInt32 nLen = aStat.nSize;
+                                    ULONG nRead = 0;
+                                    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                                    aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
+
+                                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
+                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Value <<= aSeq;
+                                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
+                                }
+                            }
+                        }
                     }
                     else
                     {
