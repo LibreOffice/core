@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:02:21 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,13 @@ namespace pcr
         DEF_INFO_2( FILLCOLOR,         FILLCOLOR,          FILLCOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( LINECOLOR,         LINECOLOR,          LINECOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( BORDER,            BORDER,             BORDER,            FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+
+        DEF_INFO_2( ICONSIZE,          ICONSIZE,           ICONSIZE,          FORM_VISIBLE, ENUM ),
+        DEF_INFO_1( SHOW_POSITION,     SHOW_POSITION,      SHOW_POSITION,     FORM_VISIBLE ),
+        DEF_INFO_1( SHOW_NAVIGATION,   SHOW_NAVIGATION,    SHOW_NAVIGATION,   FORM_VISIBLE ),
+        DEF_INFO_1( SHOW_RECORDACTIONS,SHOW_RECORDACTIONS, SHOW_RECORDACTIONS,FORM_VISIBLE ),
+        DEF_INFO_1( SHOW_FILTERSORT,   SHOW_FILTERSORT,    SHOW_FILTERSORT,   FORM_VISIBLE ),
+
         DEF_INFO_3( DROPDOWN,          DROPDOWN,           DROPDOWN,          FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
         DEF_INFO_2( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
@@ -289,9 +296,9 @@ namespace pcr
         DEF_INFO_4( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, VIRTUAL_PROP, ENUM ),
         DEF_INFO_2( HSCROLL,           HSCROLL,            HSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( VSCROLL,           VSCROLL,            VSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM ),
+        DEF_INFO_4( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM, VIRTUAL_PROP ),
         DEF_INFO_2( PUSHBUTTONTYPE,    PUSHBUTTONTYPE,     PUSHBUTTONTYPE,    DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_2( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, ACTUATING ),
+        DEF_INFO_3( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, ACTUATING, VIRTUAL_PROP ),
         DEF_INFO_1( TARGET_FRAME,      TARGET_FRAME,       TARGET_FRAME,      FORM_VISIBLE ),
         DEF_INFO_1( SUBMIT_ACTION,     SUBMIT_ACTION,      SUBMIT_ACTION,     FORM_VISIBLE ),
         DEF_INFO_1( SUBMIT_TARGET,     SUBMIT_TARGET,      SUBMIT_TARGET,     FORM_VISIBLE ),
@@ -376,6 +383,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_BORDER:
                 nCommaSeparatedListResId = RID_STR_BORDER_TYPE;
+                break;
+            case PROPERTY_ID_ICONSIZE:
+                nCommaSeparatedListResId = RID_STR_ICONSIZE_TYPE;
                 break;
             case PROPERTY_ID_COMMANDTYPE:
                 nStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
