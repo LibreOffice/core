@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:40:02 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:38:37 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -129,11 +129,11 @@ $(CLASSFILES) : $(JAVAFILES)
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(<F)
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
