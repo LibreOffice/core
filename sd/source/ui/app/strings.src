@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:05:19 $
+ *  last change: $Author: rt $ $Date: 2001-06-15 21:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6450,7 +6450,7 @@ String STR_UNDO_SET_PRESLAYOUT
     Text [ dutch ] = "Presentatie-lay-out toepassen" ;
     Text [ swedish ] = "Tilldela presentationslayout" ;
     Text [ danish ] = "Tildel præsentationslayout" ;
-    Text [ portuguese ] = "Configurar página de apresentação" ;
+    Text [ portuguese ] = "Aplicar configuração da apresentação" ;
     Text [ portuguese_brazilian ] = "Pr?sentationslayout zuweisen" ;
     Text[ chinese_simplified ] = "Ö¸¶¨ÑİÊ¾ÎÄ¸å°æÊ½";
     Text[ russian ] = "Íàçíà÷èòü ğàçìåòêó ïğåçåíòàöèè";
@@ -8568,7 +8568,7 @@ String STR_EFFECT_MOVE
     Text = "Bewegen" ;
     Text [ ENGLISH ] = "Move" ;
     Text[ english_us ] = "Move";
-    Text[ portuguese ] = "Move";
+    Text[ portuguese ] = "Mover";
     Text[ russian ] = "Ïåğåìåùàòü";
     Text[ greek ] = "Ìåôáêßíçóç";
     Text[ dutch ] = "Move";
@@ -13342,5 +13342,6 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
