@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmthdft.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 13:23:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ public:
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
 };
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ <  3 ) )
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtHeader &SwAttrSet::GetHeader(BOOL bInP) const
     { return (const SwFmtHeader&)Get( RES_HEADER,bInP); }
