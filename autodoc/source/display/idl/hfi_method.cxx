@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_method.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ HF_IdlMethod::Produce_byData( const String &      i_sName,
                               param_list &        i_rParams,
                               type_list &         i_rExceptions,
                               bool                i_bOneway,
+                              bool                i_bEllipse,
                               const client &      i_ce ) const
 {
     CurOut()
@@ -106,7 +107,8 @@ HF_IdlMethod::Produce_byData( const String &      i_sName,
                        i_nReturnType,
                        i_rParams,
                        i_rExceptions,
-                       i_bOneway );
+                       i_bOneway,
+                       i_bEllipse );
     CurOut() << new Html::HorizontalLine;
     write_Docu(CurOut(), i_ce);
     leave_ContentCell();
@@ -117,7 +119,8 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
                                  type_id             i_nReturnType,
                                  param_list &        i_rParams,
                                  type_list &         i_rExceptions,
-                                 bool                i_bOneway ) const
+                                 bool                i_bOneway,
+                                 bool                i_bEllipse ) const
 {
     HF_FunctionDeclaration
         aDecl(CurOut()) ;
@@ -127,11 +130,16 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
     // Front:
     if (i_bOneway)
         front << "[oneway] ";
-    HF_IdlTypeText
-        aReturn(Env(), front,true);
-    aReturn.Produce_byData(i_nReturnType);
+    if (i_nReturnType.IsValid())
+    {   // Normal function, but not constructors:
+        HF_IdlTypeText
+            aReturn(Env(), front,true);
+        aReturn.Produce_byData(i_nReturnType);
+        front
+            << new Html::LineBreak;
+
+    }
     front
-        << new Html::LineBreak
         >> *new Html::Bold
             << i_sName;
 
@@ -140,7 +148,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
         types = aDecl.Types();
     Xml::Element &
         names = aDecl.Names();
-    bool bParams = bool( BOOL_OF(i_rParams) );
+    bool bParams = i_rParams.operator bool();
     if (bParams)
     {
         front
@@ -160,6 +168,11 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
             write_Param( aType, names, (*i_rParams) );
         }   // end for
 
+        if (i_bEllipse)
+        {
+            names
+                << " ...";
+        }
         names
             << " )";
     }
@@ -168,7 +181,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
             << "()";
 
 
-    if ( BOOL_OF(i_rExceptions) )
+    if ( i_rExceptions.operator bool() )
     {
         Xml::Element &
             rExcOut = aDecl.Add_RaisesLine("raises", NOT bParams);
