@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:51:29 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,8 @@
 
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
-#if SUPD<653
 #ifndef WB_RIGHT_ALIGNED
 #define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
-#endif
 #endif
 
 static BOOL bProtectDocShellVisArea = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:07:26 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,16 +354,12 @@ class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 protected:
 
     virtual void exportStyleAttributes(
-#if SUPD < 650
             SvXMLAttributeList& rAttrList,
-#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-#endif
             ) const;
 public:
 
@@ -372,23 +368,15 @@ public:
 };
 
 void SwXMLAutoStylePoolP::exportStyleAttributes(
-#if SUPD < 650
             SvXMLAttributeList& rAttrList,
-#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-#endif
             ) const
 {
-#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap);
-#else
-    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily, rProperties, rPropExp );
-#endif
 
     if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
     {
