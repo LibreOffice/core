@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-24 13:49:15 $
+ *  last change: $Author: hro $ $Date: 2001-10-19 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     if (hProcess = OpenProcess(STANDARD_RIGHTS_REQUIRED |
                                PROCESS_QUERY_INFORMATION | SYNCHRONIZE, FALSE, (DWORD)Ident))
     {
-        pProcImpl = malloc(sizeof(oslProcessImpl));
+        pProcImpl = rtl_allocateMemory(sizeof(oslProcessImpl));
         pProcImpl->m_hProcess  = hProcess;
         pProcImpl->m_IdProcess = Ident;
     }
@@ -552,7 +552,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
     {
         CloseHandle(((oslProcessImpl*)Process)->m_hProcess);
 
-        free((oslProcessImpl*)Process);
+        rtl_freeMemory((oslProcessImpl*)Process);
     }
 }
 
