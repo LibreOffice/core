@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:15:40 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _FRM_EVENT_THREAD_HXX_
 #include "EventThread.hxx"
 #endif
-#ifndef _FORMS_LISTBOX_HXX_
-#include "ListBox.hxx"
-#endif
 #ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
 #endif
@@ -78,6 +75,9 @@
 #include "frm_resource.hrc"
 #endif
 
+#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #endif
@@ -208,6 +208,9 @@
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
+#endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -1287,16 +1290,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             for(i=0; i<nCurCnt; ++i )
             {
                 sal_Int16  nSelPos = pSels[i];
-                // Wenn Index in WerteListe, Eintrag aus Werteliste holen
-                // ansonsten angezeigten Wert nehmen. Ein
-                // LISTBOX_EMPTY_VALUE entspricht einem leeren, aber
-                // vorhandenem VALUE des Option-Tags.
                 if (nSelPos < nValCnt && pVals[nSelPos].getLength())
                 {
-                    if( pVals[nSelPos] == LISTBOX_EMPTY_VALUE )
-                        aSubValue = ::rtl::OUString();
-                    else
-                        aSubValue = pVals[nSelPos];
+                    aSubValue = pVals[nSelPos];
                 }
                 else
                 {
