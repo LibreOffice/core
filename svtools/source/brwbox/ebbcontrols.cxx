@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-15 07:36:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,11 @@ namespace svt
             SetBackground();
         }
 
-        pBox = new TriStateBox(this);
-        pBox->SetSizePixel(CheckBox::GetCheckImage(pBox->GetSettings(), BUTTON_DRAW_CHECKED).GetSizePixel());
+        EnableChildTransparentMode();
+
+        pBox = new TriStateBox(this,WB_CENTER|WB_VCENTER);
+        pBox->EnableChildTransparentMode();
+        pBox->SetPaintTransparent( sal_True );
         pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
         pBox->Show();
     }
@@ -313,12 +316,21 @@ namespace svt
     void CheckBoxControl::Resize()
     {
         Control::Resize();
-        Rectangle aRect(Point(0,0) , GetSizePixel());
-        Size aCheckSize = pBox->GetSizePixel();
-        aFocusRect = aRect;
-        aRect.Left() += std::max(0L,(aRect.GetSize().Width() >> 1)  - (aCheckSize.Width() >> 1));
-        aRect.Top()  += std::max(0L,(aRect.GetSize().Height() >> 1) - (aCheckSize.Height() >> 1));
-        pBox->SetPosPixel(aRect.TopLeft());
+        pBox->SetPosSizePixel(Point(0,0),GetSizePixel());
+    }
+
+    //------------------------------------------------------------------------------
+    void CheckBoxControl::StateChanged( StateChangedType nStateChange )
+    {
+        Control::StateChanged(nStateChange);
+        if ( nStateChange == STATE_CHANGE_ZOOM )
+            pBox->SetZoom(GetZoom());
+    }
+
+    //------------------------------------------------------------------------------
+    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+    {
+        pBox->Draw(pDev,rPos,rSize,nFlags);
     }
 
     //------------------------------------------------------------------------------
@@ -503,19 +515,4 @@ namespace svt
 }   // namespace svt
 // .......................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/10/12 16:57:26  hr
- *  #92830#: required change: std::min()/std::max()
- *
- *  Revision 1.2  2001/09/28 12:57:51  hr
- *  #65293#: std::min/std::max
- *
- *  Revision 1.1  2001/06/15 12:49:36  fs
- *  initial checkin - moved this herein from svx/source/fmcomp/dbchk*
- *
- *
- *  Revision 1.0 15.06.01 14:09:52  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 08:55:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,17 +145,4 @@ void FileControl::ImplBrowseFile( )
         DBG_ERROR( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/08/22 13:44:16  mt
- *  #97709# Maybe URL is already a file URL...
- *
- *  Revision 1.1  2001/09/04 09:00:26  fs
- *  initial checkin - exception enabled parts of filectrl.cxx
- *
- *
- *  Revision 1.0 03.09.01 17:45:21  fs
- ************************************************************************/
 

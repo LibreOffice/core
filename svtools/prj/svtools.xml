@@ -63,7 +63,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleTreeListBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleTreeListBox</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -72,7 +72,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleTreeListBoxEntry</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleTreeListBoxEntry</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -81,7 +81,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleIconChoiceControl</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleIconChoiceControl</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -90,7 +90,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleIconChoiceControlEntry</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleIconChoiceControlEntry</supported-service>
     </component-description>
     <component-description>
         <author>Thomas Benisch</author>

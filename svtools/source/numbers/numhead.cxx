@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numhead.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-07-01 10:55:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,47 +280,4 @@ void ImpSvNumMultipleWriteHeader::StartEntry()
     ULONG nPos = rStream.Tell();
     nEntryStart = nPos;
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:59:03  hr
-    initial import
-
-    Revision 1.9  2000/09/18 14:13:40  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/08/31 13:41:32  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.7  1999/04/06 15:24:24  ER
-    #64244# add: static ImpSvNumMultipleReadHeader Skip
-
-
-      Rev 1.6   06 Apr 1999 17:24:24   ER
-   #64244# add: static ImpSvNumMultipleReadHeader Skip
-
-      Rev 1.5   17 Oct 1997 14:31:08   ER
-   new: Keyword NNN, ,- ; Datumformate System/DIN, #.##0,-- ; Comments
-
-      Rev 1.4   30 Jul 1997 12:54:20   ER
-   onSave: StoreSYSTEM, onLoad: ConvertSystem; Header aufgeraeumt
-
-      Rev 1.3   22 Feb 1996 11:36:26   STE
-   imp imp imp
-
-      Rev 1.2   26 Jul 1995 19:35:14   STE
-   International
-
-      Rev 1.1   05 Jul 1995 17:04:42   STE
-   die ersten beiden Klassen auskommentiert
-
-      Rev 1.0   05 Jul 1995 16:28:20   STE
-   Initial revision.
-
-
-------------------------------------------------------------------------*/
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-03 10:55:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,11 +859,14 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
     if ( nCurColId == nItemId )
         nCurColId = 0;
 
-    if ( nFirstCol >= nPos && nFirstCol > 0 )
-        --nFirstCol;
-
     // Spalte entfernen
     delete( pCols->Remove( (ULONG) nPos ));
+    // OJ #93534#
+    if ( nFirstCol >= nPos && nFirstCol > FrozenColCount() )
+    {
+        OSL_ENSURE(nFirstCol > 0,"FirstCol must be greater zero!");
+        --nFirstCol;
+    }
 
     // Handlecolumn nicht in der Headerbar
     if (nItemId)

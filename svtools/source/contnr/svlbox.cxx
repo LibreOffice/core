@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 08:57:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,6 +1820,8 @@ Link SvLBox::GetDragFinishedHdl() const
 void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
+
     if ( IsEnabled() )
         rStateSet.AddState( AccessibleStateType::ENABLED );
     if ( GetSelectionMode() == MULTIPLE_SELECTION )

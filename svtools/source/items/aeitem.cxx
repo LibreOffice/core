@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-27 09:11:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void SfxAllEnumItem::DisableValue( USHORT nValue )
     pDisabledValues->Insert( nValue, pDisabledValues->Count() );
 }
 
-BOOL SfxAllEnumItem::IsEnabled( USHORT nValue )
+BOOL SfxAllEnumItem::IsEnabled( USHORT nValue ) const
 {
     if ( pDisabledValues )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:16:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Menu RID_CONTEXTMENU
             Text[ portuguese ] = "~Abrir";
             Text[ danish ] = "Å~bn";
             Text[ french ] = "Ouvrir";
-            Text[ swedish ] = "~Öppna";
+            Text[ swedish ] = "Öpp~na";
             Text[ dutch ] = "Ope~nen";
             Text[ spanish ] = "~Abrir";
             Text[ english_us ] = "~Open";
@@ -97,8 +97,9 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "ì—´ê¸°(~O)";
             Text[ turkish ] = "Aç";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Abrir";
+            Text[ catalan ] = "~Obre";
             Text[ finnish ] = "~Avaa";
+            Text[ thai ] = "à¹€~à¸›à¸´à¸”";
         };
         MenuItem
         {
@@ -111,14 +112,14 @@ Menu RID_CONTEXTMENU
             Text[ portuguese ] = "Abrir em ~nova janela";
             Text[ danish ] = "Åbn i nyt vindue";
             Text[ french ] = "Ouvrir dans une nouvelle ~fenêtre";
-            Text[ swedish ] = "~Öppna i ett nytt fönster";
+            Text[ swedish ] = "Öppna i ett nytt ~fönster";
             Text[ dutch ] = "Openen in nieuw ~venster";
             Text[ spanish ] = "Abrir en ~ventana nueva";
             Text[ english_us ] = "Open in New ~Window";
             Text[ chinese_simplified ] = "ä½¿ç”¨ä¸€ä¸ªæ–°è§†çª—æ‰“å¼€(~W)";
             Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
             Text[ polish ] = "Otwórz w nowym oknie";
-            Text[ japanese ] = "æ–°ã—ã„ï½³ï½¨ï¾ï¾„ï¾ï½³ã‚’é–‹ã(~W)";
+            Text[ japanese ] = "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‹ã(~W)";
             Text[ chinese_traditional ] = "ç”¨ä¸€å€‹æ–°è¦–çª—é–‹å•Ÿ(~W)";
             Text[ arabic ] = "İÊÍ İí äÇİĞÉ ÌÏíÏÉ";
             Text[ dutch ] = "Openen in nieuw ~venster";
@@ -127,8 +128,9 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "ìƒˆ ì°½ì—ì„œ ì—´ê¸°(~W)";
             Text[ turkish ] = "Yeni bir pencerede aç";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Abrir en ~ventana nueva";
-            Text[ finnish ] = "~Avaa uudessa ikkunassa";
+            Text[ catalan ] = "Obre en una ~finestra nova";
+            Text[ finnish ] = "Avaa uudessa ~ikkunassa";
+            Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸™~à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ";
         };
         MenuItem
         {
@@ -146,9 +148,9 @@ Menu RID_CONTEXTMENU
             Text[ spanish ] = "~Descargar...";
             Text[ english_us ] = "~Download...";
             Text[ chinese_simplified ] = "ä¸‹è½½(~D)...";
-            Text[ russian ] = "Çàãğóçêà...";
+            Text[ russian ] = "Çàãğóçèòü...";
             Text[ polish ] = "Pobieranie...";
-            Text[ japanese ] = "ï¾€ï¾ï½³ï¾ï¾›ï½°ï¾„ï¾(~D)...";
+            Text[ japanese ] = "ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰(~D)...";
             Text[ chinese_traditional ] = "ä¸‹è¼‰(~D)...";
             Text[ arabic ] = "ÊäÒíá...";
             Text[ dutch ] = "~Downloaden...";
@@ -157,8 +159,9 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "ë‹¤ìš´ë¡œë“œ(~D)...";
             Text[ turkish ] = "İndir...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Descargar...";
-            Text[ finnish ] = "~Nouda";
+            Text[ catalan ] = "~Descarregar...";
+            Text[ finnish ] = "~Lataa...";
+            Text[ thai ] = "~à¸”à¸²à¸§à¸™à¹Œà¹‚à¸«à¸¥à¸”...";
         };
         MenuItem
         {
@@ -182,17 +185,18 @@ Menu RID_CONTEXTMENU
             Text[ chinese_simplified ] = "æ–°å¢é“¾æ¥(~L)";
             Text[ russian ] = "Äîáàâèòü ññûëêó";
             Text[ polish ] = "Dodaj ³¹cze";
-            Text[ japanese ] = "ï¾˜ï¾ï½¸ã®è¿½åŠ (~L)";
+            Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®è¿½åŠ (~L)";
             Text[ chinese_traditional ] = "åŠ å…¥æ·å¾‘(~L)";
             Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
             Text[ dutch ] = "Koppeling ~toevoegen";
             Text[ chinese_simplified ] = "æ–°å¢é“¾æ¥(~L)";
             Text[ greek ] = "ĞñïóèŞê~ç óıíäåóçò";
-            Text[ korean ] = "ì—°ê²°  ì¶”ê°€(~L)";
+            Text[ korean ] = "ë§í¬ ì¶”ê°€(~L)";
             Text[ turkish ] = "Bağlantıyı ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Añadir vínculo";
-            Text[ finnish ] = "~Lisää linkki";
+            Text[ catalan ] = "~Afegeix un enllaç";
+            Text[ finnish ] = "Lisää ~linkki";
+            Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸à¸²à¸£à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
         };
         MenuItem
         {
@@ -212,24 +216,32 @@ Menu RID_CONTEXTMENU
             Text[ italian ] = "Copia ~link" ;
             Text[ spanish ] = "Copiar ~vínculo" ;
             Text[ french ] = "Copier le ~lien" ;
-            Text[ dutch ] = "~Link kopiëren" ;
+            Text[ dutch ] = "Kopel~ling kopiëren" ;
             Text[ chinese_simplified ] = "å¤åˆ¶é“¾æ¥(~Y)";
             Text[ russian ] = "Êîïèğîâàòü ññûëêó";
             Text[ polish ] = "Kopiuj ³¹cze";
-            Text[ japanese ] = "ï¾˜ï¾ï½¸ã®ï½ºï¾‹ï¾Ÿï½°(~Y)";
+            Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ã‚³ãƒ”ãƒ¼(~Y)";
             Text[ chinese_traditional ] = "è¤‡è£½æ·å¾‘(~Y)";
             Text[ arabic ] = "äÓÎ ÇáÇÑÊÈÇØ";
-            Text[ dutch ] = "~Link kopiëren";
+            Text[ dutch ] = "Kopel~ling kopiëren";
             Text[ chinese_simplified ] = "å¤åˆ¶é“¾æ¥(~Y)";
             Text[ greek ] = "ÁíôéãñáöŞ ~óıíäåóçò";
             Text[ korean ] = "ë§í¬ ë³µì‚¬(~Y)";
             Text[ turkish ] = "Bağlantıyı kopyala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Copiar ~vínculo";
+            Text[ catalan ] = "Copia l'~enllaç";
             Text[ finnish ] = "~Kopioi linkki";
+            Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­~à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
         };
     };
 };
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ FontList::~FontList()
 {
     // Gegebenenfalls SizeArray loeschen
     if ( mpSizeAry )
-        delete mpSizeAry;
+        delete[] mpSizeAry;
 
     // FontInfos loeschen
     ImplFontListNameInfo* pData = (ImplFontListNameInfo*)First();
@@ -840,7 +840,7 @@ const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
     // Size-Array vorher loeschen
     if ( mpSizeAry )
     {
-        delete ((FontList*)this)->mpSizeAry;
+        delete[] ((FontList*)this)->mpSizeAry;
         ((FontList*)this)->mpSizeAry = NULL;
     }
 

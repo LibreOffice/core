@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LANG, "\\lang" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LDBLQUOTE, "\\ldblquote" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LEVEL, "\\level" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LI, "\\li" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LIN, "\\lin" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LINE, "\\line" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LINEBETCOL, "\\linebetcol" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LINECONT, "\\linecont" );
@@ -360,6 +361,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_REVISIONS, "\\revisions
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_REVPROP, "\\revprop" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_REVTIM, "\\revtim" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_RI, "\\ri" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_RIN, "\\rin" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ROW, "\\row" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_RQUOTE, "\\rquote" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_RTF, "\\rtf" );
@@ -1173,89 +1175,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.7 2002-09-26 14:13:26 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2002/01/25 16:21:07  jp
-      Task #96678# new tokens for flyframe directions
-
-      Revision 1.5  2001/05/03 11:47:16  jp
-      new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
-
-      Revision 1.4  2001/02/16 09:27:42  jp
-      new token: horzvert
-
-      Revision 1.3  2000/11/16 17:54:11  jp
-      new tokens for twoline/underline color
-
-      Revision 1.2  2000/11/10 11:23:04  jp
-      new Tokens for the CJK-Version
-
-      Revision 1.1.1.1  2000/09/18 16:59:05  hr
-      initial import
-
-      Revision 1.19  2000/09/18 14:13:46  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/08/31 13:51:38  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.17  2000/03/28 11:47:53  jp
-      changes for Unicode
-
-      Revision 1.16  2000/01/07 10:46:14  jp
-      Task #71411#: new SW token
-
-      Revision 1.15  1999/11/01 11:27:39  jp
-      neue tokens
-
-      Revision 1.14  1999/10/25 14:36:55  jp
-      Bug #69464#: new tabstop token tql
-
-      Revision 1.13  1999/07/22 17:44:51  jp
-      new RTF-Tokens for Header/Footer height
-
-      Revision 1.12  1999/02/16 11:01:16  JP
-      Task #61633#: neue Unter-/Durchstreichungs Werte
-
-
-      Rev 1.11   16 Feb 1999 12:01:16   JP
-   Task #61633#: neue Unter-/Durchstreichungs Werte
-
-      Rev 1.10   27 May 1998 21:22:34   JP
-   Bug #50585#: fehlendes Token lfolevel zugefuegt
-
-      Rev 1.9   03 Apr 1998 18:55:20   JP
-   RTF-Parser um neue Tokens erweitert, nTokenValue wurde ein long
-
-      Rev 1.8   20 Nov 1997 22:28:02   JP
-   HeaderFile Umstellung
-
-      Rev 1.7   08 Oct 1996 13:51:18   JP
-   neue RTF-Token zugefuegt
-
-      Rev 1.6   16 Oct 1995 17:01:16   JP
-   neue Tokens
-
-      Rev 1.5   29 Sep 1995 20:03:30   JP
-   neues Token: kerning
-
-      Rev 1.4   10 Aug 1995 21:02:26   JP
-   neue Token fuer Fonts; Segmentierung
-
-      Rev 1.3   29 Jul 1995 22:40:04   JP
-   neue Token lesen/auswerten: expand/-tw
-
-      Rev 1.2   05 Jul 1995 13:58:22   JP
-   neue Tokens COLSX/COLNO/COLSR
-
-      Rev 1.1   04 Jan 1995 16:20:32   JP
-   TokenName und Token korrigiert
-
-      Rev 1.0   22 Dec 1994 17:19:52   JP
-   Initial revision.
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.8 2003-03-27 14:39:42 hr Exp $
 
 *************************************************************************/
 

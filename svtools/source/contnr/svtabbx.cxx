@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:48:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,12 +458,12 @@ String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
                 {
                     if( aResult.Len() )
                         aResult += '\t';
-                    aResult += ((SvLBoxString*)pStr)->GetText();
+                    aResult += static_cast<SvLBoxString*>( pStr )->GetText();
                 }
                 else
                 {
                     if( nCol == 0 )
-                        return ((SvLBoxString*)pStr)->GetText();
+                        return static_cast<SvLBoxString*>( pStr )->GetText();
                     nCol--;
                 }
             }
@@ -479,15 +479,13 @@ String SvTabListBox::GetEntryText( ULONG nPos, USHORT nCol ) const
     return GetEntryText( pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, ULONG nPos,
-    USHORT nCol )
+void SvTabListBox::SetEntryText( const XubString& rStr, ULONG nPos, USHORT nCol )
 {
     SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     SetEntryText( rStr, pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry,
-    USHORT nCol )
+void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, USHORT nCol )
 {
     DBG_ASSERT(pEntry,"SetEntryText:Invalid Entry");
     if( !pEntry )
@@ -534,8 +532,6 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry,
     }
     GetModel()->InvalidateEntry( pEntry );
 }
-
-
 
 ULONG SvTabListBox::GetEntryPos( const XubString& rStr, USHORT nCol )
 {
@@ -595,6 +591,43 @@ const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, USHORT& rLen
     return pPtr;
 }
 
+String SvTabListBox::GetTabEntryText( ULONG nPos, USHORT nCol ) const
+{
+    SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
+    DBG_ASSERT( pEntry, "GetTabEntryText(): Invalid entry " );
+    XubString aResult;
+    if ( pEntry )
+    {
+        USHORT nCount = pEntry->ItemCount();
+        USHORT nCur = ( 0 == nCol && IsCellFocusEnabled() ) ? GetCurrentTabPos() : 0;
+        while( nCur < nCount )
+        {
+            SvLBoxItem* pStr = pEntry->GetItem( nCur );
+            if ( pStr->IsA() == SV_ITEM_ID_LBOXSTRING )
+            {
+                if ( nCol == 0xffff )
+                {
+                    if ( aResult.Len() )
+                        aResult += '\t';
+                    aResult += static_cast<SvLBoxString*>( pStr )->GetText();
+                }
+                else
+                {
+                    if ( nCol == 0 )
+                    {
+                        String sRet = static_cast<SvLBoxString*>( pStr )->GetText();
+                        if ( sRet.Len() == 0 )
+                            sRet = String( SvtResId( STR_SVT_ACC_EMPTY_FIELD ) );
+                        return sRet;
+                    }
+                    --nCol;
+                }
+            }
+            ++nCur;
+        }
+    }
+    return aResult;
+}
 
 void SvTabListBox::SetTabJustify( USHORT nTab, SvTabJustify eJustify)
 {
@@ -766,12 +799,20 @@ sal_Bool SvHeaderTabListBox::HasRowHeader() const
 // -----------------------------------------------------------------------
 sal_Bool SvHeaderTabListBox::IsCellFocusable() const
 {
-    return sal_False;
+    return IsCellFocusEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
-    return sal_False;
+    sal_Bool bRet = ( IsCellFocusEnabled() == TRUE );
+    if ( bRet )
+    {
+        // first set cursor to _nRow
+        SetCursor( GetEntry( _nRow ), TRUE );
+        // then set the focus into _nColumn
+        bRet = ( SetCurrentTabPos( _nColumn ) == true );
+    }
+    return bRet;
 }
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SetNoSelection()
@@ -836,7 +877,7 @@ sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn
 // -----------------------------------------------------------------------
 String SvHeaderTabListBox::GetCellText( long _nRow, USHORT _nColumn ) const
 {
-    return ::rtl::OUString( GetEntryText( _nRow, _nColumn ) );
+    return ::rtl::OUString( GetTabEntryText( _nRow, _nColumn ) );
 }
 // -----------------------------------------------------------------------
 Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen )

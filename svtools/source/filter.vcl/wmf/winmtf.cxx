@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-04 12:27:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 
 #include "winmtf.hxx"
 #include <vcl/metaact.hxx>
-
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
+#endif
 // ------------------------------------------------------------------------
 
 void WinMtfClipPath::ImpUpdateType()
@@ -185,9 +187,6 @@ void WinMtfPathObj::ClosePath()
 
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
-    Size    aFontSize( Size( 0, rFont.lfHeight ) );
-
-    aFont.SetSize( aFontSize );
     CharSet eCharSet;
     switch ( rFont.lfCharSet )
     {
@@ -207,9 +206,12 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
             eCharSet = RTL_TEXTENCODING_BIG5;
         break;
 
+        case HANGEUL_CHARSET :
+            eCharSet = RTL_TEXTENCODING_MS_949;
+        break;
+
         case OEM_CHARSET:
         case DEFAULT_CHARSET:
-        case HANGEUL_CHARSET:
         default:
             eCharSet = gsl_getSystemTextEncoding();
         break;
@@ -296,6 +298,27 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         aFont.SetOrientation( (short)rFont.lfOrientation );
     else
         aFont.SetOrientation( (short)rFont.lfEscapement );
+
+    Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
+    if ( rFont.lfHeight > 0 )
+    {
+        // converting the cell height into a font height
+        VirtualDevice aVDev;
+        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
+        aFont.SetSize( aFontSize );
+        aVDev.SetFont( aFont );
+        FontMetric aMetric( aVDev.GetFontMetric() );
+        long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
+        if ( nHeight )
+        {
+            aFontSize.Height() *= rFont.lfHeight;
+            aFontSize.Height() /= nHeight;
+        }
+    }
+    else
+        aFontSize.Height() *= -1;
+
+    aFont.SetSize( aFontSize );
 };
 
 // ------------------------------------------------------------------------
@@ -402,10 +425,14 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         {
             if ( ( mnMapMode == MM_TEXT ) && mnRefExtX && mnRefExtY )
             {
+                fX2 -= mnWinOrgX;
+                fY2 -= mnWinOrgY;
                 fX2 *= mnDevWidth;
                 fY2 *= mnDevHeight;
                 fX2 /= mnRefExtX;
                 fY2 /= mnRefExtY;
+                fX2 += mnDevOrgX;
+                fY2 += mnDevOrgY;
             }
             else
             {
@@ -485,7 +512,7 @@ void WinMtfOutput::ImplMap( Font& rFont )
     if( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
 
-    rFont.SetSize( Size( 0, aFontSize.Height() ) );
+    rFont.SetSize( aFontSize );
 
     if( ( mnWinExtX * mnWinExtY ) < 0 )
         rFont.SetOrientation( 3600 - rFont.GetOrientation() );
@@ -1326,7 +1353,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
     sal_Int32 nOldGfxMode = GetGfxMode();
-    SetGfxMode( nGfxMode );
+    SetGfxMode( GM_COMPATIBLE );
     if ( pDXArry )
     {
         sal_Int32 i, nSum, nLen = rText.Len();
@@ -1338,7 +1365,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
             pDXArry[ i ] = nSum;
         }
     }
-
+    SetGfxMode( nGfxMode );
     sal_Bool bChangeFont = sal_False;
     if ( mnLatestTextAlign != mnTextAlign )
     {
@@ -1438,8 +1465,12 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
 
-        if( mnTextAlign & TA_RIGHT_CENTER )
-            rPosition.X() -= ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : ( nTextWidth >> 1 );
+        if ( mnTextAlign & TA_RIGHT_CENTER )
+        {
+            double fLenght = ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1;
+            rPosition.X() -= (sal_Int32)( fLenght * cos( maFont.GetOrientation() * F_PI1800 ) );
+            rPosition.Y() -= (sal_Int32)(-( fLenght * sin( maFont.GetOrientation() * F_PI1800 ) ) );
+        }
 
         if( mnTextAlign & TA_UPDATECP )
             maActPos.X() = rPosition.X() + nTextWidth;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-09 08:11:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 #define TABBAR_OFFSET_X2        2
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
+
+const USHORT ADDNEWPAGE_AREAWIDTH = 10;
 
 // =======================================================================
 
@@ -649,7 +651,7 @@ USHORT TabBar::ImplGetLastFirstPos()
         return 0;
 
     USHORT  nLastFirstPos = nCount-1;
-    long    nWinWidth = mnOutWidth-mnOffX-TABBAR_OFFSET_X;
+    long    nWinWidth = mnOutWidth-mnOffX-TABBAR_OFFSET_X-ADDNEWPAGE_AREAWIDTH;
     long    nWidth = mpItemList->GetObject( nLastFirstPos )->mnWidth;
     while ( nLastFirstPos && (nWidth < nWinWidth) )
     {
@@ -1822,6 +1824,8 @@ void TabBar::SetCurPageId( USHORT nPageId )
                 long nWidth = mnOutWidth;
                 if ( nWidth > TABBAR_OFFSET_X )
                     nWidth -= TABBAR_OFFSET_X;
+                if ( nWidth > ADDNEWPAGE_AREAWIDTH )
+                    nWidth -= ADDNEWPAGE_AREAWIDTH;
 
                 if ( pItem->maRect.IsEmpty() )
                     ImplFormat();

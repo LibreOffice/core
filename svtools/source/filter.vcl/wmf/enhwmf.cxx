@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-15 16:56:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,22 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_SETWINDOWORGEX :
             {
                 *pWMF >> nX32 >> nY32;
+                nX32 += FRound( ( (double) rclFrame.Left() * nPixX ) / ( nMillX * 100.0 ) );
+                nY32 += FRound( ( (double) rclFrame.Top() * nPixY ) / ( nMillY * 100.0 ) );
                 pOut->SetWinOrg( Point( nX32, nY32 ) );
+            }
+            break;
+
+            case EMR_SCALEWINDOWEXTEX :
+            {
+                *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
+                pOut->ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+            }
+            break;
+
+            case EMR_SETVIEWPORTORGEX :
+            {
+                *pWMF >> nX32 >> nY32;
             }
             break;
 
@@ -437,10 +452,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_SCALEWINDOWEXTEX :
+            case EMR_SETVIEWPORTEXTEX :
             {
-                *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
-                pOut->ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                *pWMF >> nX32 >> nY32;
             }
             break;
 
@@ -960,6 +974,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             {
                 sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
                 sal_uInt32  nCurPos, nLen, nOffString, nOptions, offDx;
+                sal_Int32*  pDX = NULL;
 
                 nCurPos = pWMF->Tell() - 8;
 
@@ -972,13 +987,21 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 Point aPos( ptlReferenceX, ptlReferenceY );
                 if ( nLen )
                 {
+                    if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
+                    {
+                        pWMF->Seek( nCurPos + offDx );
+                        pDX = new sal_Int32[ nLen ];
+                        sal_uInt32 i;
+                        for ( i = 0; i < nLen; i++ )
+                            *pWMF >> pDX[ i ];
+                    }
                     pWMF->Seek( nCurPos + nOffString );
+                    String aText;
                     if ( bFlag )
                     {
                         sal_Char* pBuf = new sal_Char[ nLen ];
                         pWMF->Read( pBuf, nLen );
-                        String aText( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                        pOut->DrawText( aPos, aText, NULL, bRecordPath, nGfxMode );
+                        aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
                         delete[] pBuf;
                     }
                     else
@@ -994,11 +1017,12 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                             *pTmp = nTmp;
                         }
 #endif
-                        String aText( pBuf, (xub_StrLen)nLen );
-                        pOut->DrawText( aPos, aText, NULL, bRecordPath, nGfxMode );
+                        aText = String( pBuf, (xub_StrLen)nLen );
                         delete[] pBuf;
                     }
+                    pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );
                 }
+                delete[] pDX;
             }
             break;
 
@@ -1197,8 +1221,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_SETTEXTJUSTIFICATION :     WinMtfAssertHandler( "SetTextJustification", 0 );   break;
 
             case EMR_GDICOMMENT :
-            case EMR_SETVIEWPORTEXTEX :
-            case EMR_SETVIEWPORTORGEX :
             case EMR_HEADER :               // has already been read at ReadHeader()
             break;
 #endif
@@ -1218,10 +1240,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
 BOOL EnhWMFReader::ReadHeader()
 {
-    Rectangle   aPlaceableBound;
     UINT32      nUINT32, nHeaderSize, nPalEntries;
     INT32       nLeft, nTop, nRight, nBottom;
-    INT32       nPixX, nPixY, nMillX, nMillY;
 
     // METAFILEHEADER SPARE ICH MIR HIER
     // Einlesen des METAHEADER
@@ -1234,10 +1254,10 @@ BOOL EnhWMFReader::ReadHeader()
 
     // picture frame size
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
-    aPlaceableBound.Left() = nLeft;
-    aPlaceableBound.Top() = nTop;
-    aPlaceableBound.Right() = nRight;
-    aPlaceableBound.Bottom() = nBottom;
+    rclFrame.Left() = nLeft;
+    rclFrame.Top() = nTop;
+    rclFrame.Right() = nRight;
+    rclFrame.Bottom() = nBottom;
 
     *pWMF >> nUINT32;                                   // signature
 
@@ -1255,11 +1275,11 @@ BOOL EnhWMFReader::ReadHeader()
     pWMF->SeekRel( 0xc );
     *pWMF >> nPalEntries >> nPixX >> nPixY >> nMillX >> nMillY;
 
-    pOut->SetDevExt( aPlaceableBound.GetSize() );
-    pOut->SetWinOrg( Point( FRound( ( (double) aPlaceableBound.Left() * nPixX ) / ( nMillX * 100.0 ) ),
-                                FRound( ( (double) aPlaceableBound.Top() * nPixY ) / ( nMillY * 100.0 ) ) ) );
-    Size aRefSize( FRound( ( (double)aPlaceableBound.GetWidth() * nPixX ) / ( nMillX * 100.0 ) ),
-                            FRound( ( (double) aPlaceableBound.GetHeight() * nPixY ) / ( nMillY * 100.0 ) ) );
+    pOut->SetDevExt( rclFrame.GetSize() );
+    pOut->SetWinOrg( Point( FRound( ( (double) rclFrame.Left() * nPixX ) / ( nMillX * 100.0 ) ),
+                                FRound( ( (double) rclFrame.Top() * nPixY ) / ( nMillY * 100.0 ) ) ) );
+    Size aRefSize( FRound( ( (double)rclFrame.GetWidth() * nPixX ) / ( nMillX * 100.0 ) ),
+                            FRound( ( (double) rclFrame.GetHeight() * nPixY ) / ( nMillY * 100.0 ) ) );
     // set the ReferenceDevice which is necessary for mapmode MM_TEXT
     pOut->SetRefExt( aRefSize );
     pOut->SetWinExt( aRefSize );

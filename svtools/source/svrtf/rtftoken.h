@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _RTFTOKEN_H
 #define _RTFTOKEN_H
@@ -586,7 +588,9 @@ enum RTF_TOKEN_IDS {
     RTF_QC,
     RTF_FI,
     RTF_LI,
+    RTF_LIN,
     RTF_RI,
+    RTF_RIN,
     RTF_SB,
     RTF_SA,
     RTF_SL,
@@ -1267,101 +1271,6 @@ enum RTF_TOKEN_IDS {
 
 };
 
+#endif // _RTFTOKEN_H
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.7 2002-09-26 14:13:26 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2002/01/25 16:21:07  jp
-      Task #96678# new tokens for flyframe directions
-
-      Revision 1.5  2001/05/03 11:47:16  jp
-      new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
-
-      Revision 1.4  2001/02/16 09:27:42  jp
-      new token: horzvert
-
-      Revision 1.3  2000/11/16 17:54:11  jp
-      new tokens for twoline/underline color
-
-      Revision 1.2  2000/11/10 11:23:04  jp
-      new Tokens for the CJK-Version
-
-      Revision 1.1.1.1  2000/09/18 16:59:05  hr
-      initial import
-
-      Revision 1.20  2000/09/18 14:13:47  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.19  2000/08/31 13:51:38  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.18  2000/03/28 11:47:56  jp
-      changes for Unicode
-
-      Revision 1.17  2000/01/07 10:46:18  jp
-      Task #71411#: new SW token
-
-      Revision 1.16  1999/11/01 11:27:43  jp
-      neue tokens
-
-      Revision 1.15  1999/10/25 14:36:59  jp
-      Bug #69464#: new tabstop token tql
-
-      Revision 1.14  1999/07/22 17:44:52  jp
-      new RTF-Tokens for Header/Footer height
-
-      Revision 1.13  1999/02/16 11:01:18  JP
-      Task #61633#: neue Unter-/Durchstreichungs Werte
-
-
-      Rev 1.12   16 Feb 1999 12:01:18   JP
-   Task #61633#: neue Unter-/Durchstreichungs Werte
-
-      Rev 1.11   27 May 1998 22:15:48   JP
-   vertikales Alignment in Zellen ist ein Tabellen- und kein Absatztoken
-
-      Rev 1.10   27 May 1998 21:22:32   JP
-   Bug #50585#: fehlendes Token lfolevel zugefuegt
-
-      Rev 1.9   03 Apr 1998 18:55:22   JP
-   RTF-Parser um neue Tokens erweitert, nTokenValue wurde ein long
-
-      Rev 1.8   08 Oct 1996 13:51:20   JP
-   neue RTF-Token zugefuegt
-
-      Rev 1.7   16 Oct 1995 17:01:16   JP
-   neue Tokens
-
-      Rev 1.6   29 Sep 1995 20:03:40   JP
-   neues Token: kerning
-
-      Rev 1.5   10 Aug 1995 21:02:28   JP
-   neue Token fuer Fonts; Segmentierung
-
-      Rev 1.4   29 Jul 1995 22:40:06   JP
-   neue Token lesen/auswerten: expand/-tw
-
-      Rev 1.3   05 Jul 1995 13:41:18   JP
-   neue Tokens COLSX/COLNO/COLSR
-
-      Rev 1.2   04 Jan 1995 16:19:46   JP
-   Tokengruppierung fuer Tabellen
-
-      Rev 1.1   23 Dec 1994 15:01:52   JP
-   jetzt auch mit BrushItem
-
-      Rev 1.0   22 Dec 1994 17:19:52   JP
-   Initial revision.
-
-*************************************************************************/
-
-
-#endif
-    // _RTFTOKEN_H
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

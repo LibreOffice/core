@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 14:50:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,9 @@ BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
         if(xPrSet.is())
         {
             Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
-            Property aProperty = xInfo->getPropertyByName(OUString::createFromAscii(aPropNames[ePath].pPropName));
+            const char* pA = aPropNames[ePath].pPropName;
+            ::rtl::OUString sU = OUString::createFromAscii(pA);
+            Property aProperty = xInfo->getPropertyByName(sU);
             bReadonly = 0 != (aProperty.Attributes & PropertyAttribute::READONLY);
         }
     }
@@ -433,7 +435,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& r
         {
             m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ (sal_Int32)ePath], a );
         }
-        catch ( IllegalArgumentException& )
+        catch (const Exception&)
         {
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-27 06:18:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,19 @@ String STR_SVT_PRNDLG_READY
     Text [ spanish ] = "Preparado" ;
     Text [ french ] = "Disponible" ;
     Text [ dutch ] = "Klaar" ;
-    Text[ chinese_simplified ] = "¾ÍĞ÷";
+    Text[ chinese_simplified ] = "å°±ç»ª";
     Text[ russian ] = "Ãîòîâ";
     Text[ polish ] = "Gotowe";
-    Text[ japanese ] = "±²ÄŞØİ¸Ş’†";
-    Text[ chinese_traditional ] = "´Nºü";
+    Text[ japanese ] = "ã‚¢ã‚¤ãƒ‰ãƒªãƒ³ã‚°ä¸­";
+    Text[ chinese_traditional ] = "å°±ç·’";
     Text[ arabic ] = "ÌÇåÒÉ";
     Text[ greek ] = "Óå åôïéìüôçôá";
-    Text[ korean ] = "ÁØºñ";
+    Text[ korean ] = "ì¤€ë¹„";
     Text[ turkish ] = "Hazır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Preparado";
+    Text[ catalan ] = "Preparat";
     Text[ finnish ] = "Valmis";
+    Text[ thai ] = "à¸à¸£à¹‰à¸­à¸¡";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
@@ -100,18 +101,19 @@ String STR_SVT_PRNDLG_PAUSED
     Text [ spanish ] = "Detenido" ;
     Text [ french ] = "Arrêté" ;
     Text [ dutch ] = "Gestopt" ;
-    Text[ chinese_simplified ] = "ÔİÍ£";
-    Text[ russian ] = "Îñòàíîâëåí";
+    Text[ chinese_simplified ] = "æš‚åœ";
+    Text[ russian ] = "Ïğèîñòàíîâëåí";
     Text[ polish ] = "Zatrzymane";
-    Text[ japanese ] = "’†’f";
-    Text[ chinese_traditional ] = "¼È°±";
+    Text[ japanese ] = "ä¸­æ–­";
+    Text[ chinese_traditional ] = "æš«åœ";
     Text[ arabic ] = "ãæŞæİÉ";
     Text[ greek ] = "ÄéáêïğŞ";
-    Text[ korean ] = "ÀÏ½ÃÁ¤Áö";
+    Text[ korean ] = "ì¼ì‹œ ì •ì§€";
     Text[ turkish ] = "Durduruldu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Detenido";
+    Text[ catalan ] = "En pausa";
     Text[ finnish ] = "Keskeytetty";
+    Text[ thai ] = "à¸«à¸¢à¸¸à¸”";
 };
 String STR_SVT_PRNDLG_PENDING
 {
@@ -123,21 +125,22 @@ String STR_SVT_PRNDLG_PENDING
     Text [ swedish ] = "Radering i vänteläge" ;
     Text [ danish ] = "Slet igangværende" ;
     Text [ italian ] = "In attesa di eliminare" ;
-    Text [ spanish ] = "Eliminación pendiente" ;
+    Text [ spanish ] = "A la espera de ser borrado" ;
     Text [ french ] = "Suppression imminente" ;
     Text [ dutch ] = "Wissen verwacht" ;
-    Text[ chinese_simplified ] = "É¾³ıµÈºòµÄ";
+    Text[ chinese_simplified ] = "åˆ é™¤ç­‰å€™çš„";
     Text[ russian ] = "Óäàëåíèå îòëîæåíî";
     Text[ polish ] = "Oczekiwanie na usuniêcie";
-    Text[ japanese ] = "íœ‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·";
-    Text[ chinese_traditional ] = "§R°£µ¥­Ôªº";
+    Text[ japanese ] = "å‰Šé™¤ã‚’å¾…ã£ã¦ã„ã¾ã™";
+    Text[ chinese_traditional ] = "åˆªé™¤ç­‰å€™çš„";
     Text[ arabic ] = "ÇáÍĞİ ãÚáŞ";
     Text[ greek ] = "ÄéáãñáöŞ óôç óõíİ÷åéá";
-    Text[ korean ] = "´ë±âÁß ÀÛ¾÷ »èÁ¦";
+    Text[ korean ] = "ë°€ë¦° ì‘ì—… ì‚­ì œ";
     Text[ turkish ] = "Silinmek üzere";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminación pendiente";
+    Text[ catalan ] = "Eliminació pendent";
     Text[ finnish ] = "Odotetaan poistamista";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸£à¸­à¸à¸²à¸£à¸¥à¸š";
 };
 String STR_SVT_PRNDLG_BUSY
 {
@@ -152,18 +155,19 @@ String STR_SVT_PRNDLG_BUSY
     Text [ spanish ] = "Ocupado" ;
     Text [ french ] = "Système occupé" ;
     Text [ dutch ] = "Bezig" ;
-    Text[ chinese_simplified ] = "Ã¦Âµ";
-    Text[ russian ] = "Â äåéñòâèè";
+    Text[ chinese_simplified ] = "å¿™ç¢Œ";
+    Text[ russian ] = "Çàíÿò";
     Text[ polish ] = "Zajêty";
-    Text[ japanese ] = "ËŞ¼Ş°ó‘Ô";
-    Text[ chinese_traditional ] = "¦£¸L";
+    Text[ japanese ] = "ãƒ“ã‚¸ãƒ¼çŠ¶æ…‹";
+    Text[ chinese_traditional ] = "å¿™ç¢Œ";
     Text[ arabic ] = "ãÔÛæáÉ";
     Text[ greek ] = "Áğáó÷ïëçìİíïò";
-    Text[ korean ] = "»ç¿ëÁß";
+    Text[ korean ] = "ì‚¬ìš© ì¤‘";
     Text[ turkish ] = "Meşgul";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ocupado";
+    Text[ catalan ] = "Ocupat";
     Text[ finnish ] = "Varattu";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸§à¹ˆà¸²à¸‡";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
@@ -178,18 +182,19 @@ String STR_SVT_PRNDLG_INITIALIZING
     Text [ spanish ] = "Inicializar" ;
     Text [ french ] = "Initialisation" ;
     Text [ dutch ] = "Initialiseren" ;
-    Text[ chinese_simplified ] = "³õÊ¼»¯";
-    Text[ russian ] = "Èíèöèàëèçèğîâàòü";
+    Text[ chinese_simplified ] = "åˆå§‹åŒ–";
+    Text[ russian ] = "Èíèöèàëèçàöèÿ";
     Text[ polish ] = "Inicjacja";
-    Text[ japanese ] = "‰Šú‰»";
-    Text[ chinese_traditional ] = "ªì©l¤Æ";
+    Text[ japanese ] = "åˆæœŸåŒ–";
+    Text[ chinese_traditional ] = "åˆå§‹åŒ–";
     Text[ arabic ] = "ÊåíÆÉ";
     Text[ greek ] = "Áñ÷éêïğïßçóç";
-    Text[ korean ] = "ÃÊ±âÈ­";
+    Text[ korean ] = "ì´ˆê¸°í™”";
     Text[ turkish ] = "Başlat";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inicializar";
+    Text[ catalan ] = "S'està inicialitzant";
     Text[ finnish ] = "Alustetaan";
+    Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡";
 };
 String STR_SVT_PRNDLG_WAITING
 {
@@ -204,18 +209,19 @@ String STR_SVT_PRNDLG_WAITING
     Text [ spanish ] = "En espera" ;
     Text [ french ] = "En attente" ;
     Text [ dutch ] = "Wachtend" ;
-    Text[ chinese_simplified ] = "µÈºò";
-    Text[ russian ] = "Â îæèäàíèè";
+    Text[ chinese_simplified ] = "ç­‰å€™";
+    Text[ russian ] = "Îæèäàíèå";
     Text[ polish ] = "Oczekiwanie";
-    Text[ japanese ] = "‘Ò‹@’†";
-    Text[ chinese_traditional ] = "µ¥­Ô";
+    Text[ japanese ] = "å¾…æ©Ÿä¸­";
+    Text[ chinese_traditional ] = "ç­‰å€™";
     Text[ arabic ] = "ÇäÊÙÇÑ";
     Text[ greek ] = "ÁíáìïíŞ";
-    Text[ korean ] = "´ë±âÁß";
+    Text[ korean ] = "ëŒ€ê¸° ì¤‘";
     Text[ turkish ] = "Beklemede";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "En espera";
+    Text[ catalan ] = "S'està esperant";
     Text[ finnish ] = "Odotetaan";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸£à¸­";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
@@ -230,18 +236,19 @@ String STR_SVT_PRNDLG_WARMING_UP
     Text [ spanish ] = "Arranque" ;
     Text [ french ] = "Préchauffage" ;
     Text [ dutch ] = "Beginnen" ;
-    Text[ chinese_simplified ] = "Ô¤ÈÈ";
-    Text[ russian ] = "Çàïóñê";
+    Text[ chinese_simplified ] = "é¢„çƒ­";
+    Text[ russian ] = "Ïîäãîòîâêà ê ñòàğòó";
     Text[ polish ] = "Rozgrzewanie";
-    Text[ japanese ] = "€”õ’†";
-    Text[ chinese_traditional ] = "¹w¼ö";
+    Text[ japanese ] = "æº–å‚™ä¸­";
+    Text[ chinese_traditional ] = "é ç†±";
     Text[ arabic ] = "ÇÓÊÚÏÇÏ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "Ğñïåôïéìáóßá";
-    Text[ korean ] = "ÁØºñÁß";
+    Text[ korean ] = "ì¤€ë¹„ ì¤‘";
     Text[ turkish ] = "Isınıyor";
-    Text[ catalan ] = "Arranque";
+    Text[ catalan ] = "S'està arrencant";
     Text[ finnish ] = "Lämpenee";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸­à¸¸à¹ˆà¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
@@ -256,18 +263,19 @@ String STR_SVT_PRNDLG_PROCESSING
     Text [ spanish ] = "Procesar" ;
     Text [ french ] = "Traiter" ;
     Text [ dutch ] = "Verwerken" ;
-    Text[ chinese_simplified ] = "´¦Àí";
+    Text[ chinese_simplified ] = "å¤„ç†";
     Text[ russian ] = "Îáğàáîòêà";
     Text[ polish ] = "Opracuj";
-    Text[ japanese ] = "ˆ—";
-    Text[ chinese_traditional ] = "³B²z";
+    Text[ japanese ] = "å‡¦ç†";
+    Text[ chinese_traditional ] = "è™•ç†";
     Text[ arabic ] = "ãÚÇáÌÉ";
     Text[ greek ] = "Åğåîåñãáóßá";
-    Text[ korean ] = "ÁøÇàÁß";
+    Text[ korean ] = "ì§„í–‰ ì¤‘";
     Text[ turkish ] = "İşleniyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Procesar";
+    Text[ catalan ] = "S'està processant";
     Text[ finnish ] = "Käsitellään";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸”à¸³à¹€à¸™à¸´à¸™à¸à¸²à¸£";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
@@ -282,18 +290,19 @@ String STR_SVT_PRNDLG_PRINTING
     Text [ spanish ] = "Imprimir" ;
     Text [ french ] = "Imprimer" ;
     Text [ dutch ] = "Afdrukken" ;
-    Text[ chinese_simplified ] = "´òÓ¡";
+    Text[ chinese_simplified ] = "æ‰“å°";
     Text[ russian ] = "Ïå÷àòü";
     Text[ polish ] = "Drukuj";
-    Text[ japanese ] = "ˆóü";
-    Text[ chinese_traditional ] = "¦C¦L";
+    Text[ japanese ] = "å°åˆ·";
+    Text[ chinese_traditional ] = "åˆ—å°";
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ greek ] = "Åêôığùóç";
-    Text[ korean ] = "ÀÎ¼â";
+    Text[ korean ] = "ì¸ì‡„";
     Text[ turkish ] = "Yazdır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimir";
+    Text[ catalan ] = "S'està imprimint";
     Text[ finnish ] = "Tulostetaan";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
@@ -308,18 +317,19 @@ String STR_SVT_PRNDLG_OFFLINE
     Text [ spanish ] = "Desconectado" ;
     Text [ french ] = "Hors ligne" ;
     Text [ dutch ] = "Offline" ;
-    Text[ chinese_simplified ] = "ÍÑ»ú";
-    Text[ russian ] = "Offline";
+    Text[ chinese_simplified ] = "è„±æœº";
+    Text[ russian ] = "Îôëàéí";
     Text[ polish ] = "Offline";
-    Text[ japanese ] = "µÌ×²İ";
-    Text[ chinese_traditional ] = "Â÷½u";
+    Text[ japanese ] = "ã‚ªãƒ•ãƒ©ã‚¤ãƒ³";
+    Text[ chinese_traditional ] = "é›¢ç·š";
     Text[ arabic ] = "ÛíÑ ãÊÕá";
     Text[ greek ] = "×ùñßò óıíäåóç";
-    Text[ korean ] = "¿ÀÇÁ¶óÀÎ";
+    Text[ korean ] = "ì˜¤í”„ë¼ì¸";
     Text[ turkish ] = "Çevrimdışı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desconectado";
-    Text[ finnish ] = "Offline";
+    Text[ catalan ] = "Desconnectat";
+    Text[ finnish ] = "Offline-tila";
+    Text[ thai ] = "à¸­à¸­à¸Ÿà¹„à¸¥à¸™à¹Œ";
 };
 String STR_SVT_PRNDLG_ERROR
 {
@@ -334,18 +344,19 @@ String STR_SVT_PRNDLG_ERROR
     Text [ spanish ] = "Error" ;
     Text [ french ] = "Erreur" ;
     Text [ dutch ] = "Fout" ;
-    Text[ chinese_simplified ] = "´íÎó";
+    Text[ chinese_simplified ] = "é”™è¯¯";
     Text[ russian ] = "Îøèáêà";
     Text[ polish ] = "B³¹d";
-    Text[ japanese ] = "´×°";
-    Text[ chinese_traditional ] = "¿ù»~";
+    Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼";
+    Text[ chinese_traditional ] = "éŒ¯èª¤";
     Text[ arabic ] = "ÎØÃ";
     Text[ greek ] = "ÓöÜëìá";
-    Text[ korean ] = "¿À·ù";
+    Text[ korean ] = "ì˜¤ë¥˜";
     Text[ turkish ] = "Hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error";
     Text[ finnish ] = "Virhe";
+    Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
@@ -360,18 +371,19 @@ String STR_SVT_PRNDLG_SERVER_UNKNOWN
     Text [ spanish ] = "Servidor desconocido" ;
     Text [ french ] = "Serveur inconnu" ;
     Text [ dutch ] = "Onbekende server" ;
-    Text[ chinese_simplified ] = "²»Ã÷µÄ·şÎñÆ÷";
+    Text[ chinese_simplified ] = "ä¸æ˜çš„æœåŠ¡å™¨";
     Text[ russian ] = "Íåèçâåñòíûé ñåğâåğ";
     Text[ polish ] = "Nieznany serwer";
-    Text[ japanese ] = "•s–¾‚Ì»°ÊŞ°";
-    Text[ chinese_traditional ] = "¤£©úªº¦øªA¾¹";
+    Text[ japanese ] = "ä¸æ˜ã®ã‚µãƒ¼ãƒãƒ¼";
+    Text[ chinese_traditional ] = "ä¸æ˜çš„ä¼ºæœå™¨";
     Text[ arabic ] = "ãÒæøÏ ÛíÑ ãÚÑæİ";
     Text[ greek ] = "¢ãíùóôïò äéáêïìéóôŞò";
-    Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¼­¹ö";
+    Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” ì„œë²„";
     Text[ turkish ] = "Bilinmeyen sunucu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Servidor desconocido";
+    Text[ catalan ] = "Servidor desconegut";
     Text[ finnish ] = "Tuntematon palvelin";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œ";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
@@ -386,18 +398,19 @@ String STR_SVT_PRNDLG_PAPER_JAM
     Text [ spanish ] = "Bloqueo de papel" ;
     Text [ french ] = "Bourrage papier" ;
     Text [ dutch ] = "Papieropstopping" ;
-    Text[ chinese_simplified ] = "¿¨Ö½";
+    Text[ chinese_simplified ] = "å¡çº¸";
     Text[ russian ] = "Çàåäàíèå áóìàãè";
     Text[ polish ] = "Papier zablokowany";
-    Text[ japanese ] = "—p†‹l‚Ü‚è";
-    Text[ chinese_traditional ] = "¥d¯È";
+    Text[ japanese ] = "ç”¨ç´™è©°ã¾ã‚Š";
+    Text[ chinese_traditional ] = "å¡ç´™";
     Text[ arabic ] = "ÊßÏÓ ÇáæÑŞ";
     Text[ greek ] = "ÌğëïêÜñéóìá ÷áñôéïı";
-    Text[ korean ] = "¿ëÁö °É¸²";
+    Text[ korean ] = "ìš©ì§€ ê±¸ë¦¼";
     Text[ turkish ] = "Kağıt sıkışması";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bloqueo de papel";
+    Text[ catalan ] = "Bloqueig de paper";
     Text[ finnish ] = "Paperitukos";
+    Text[ thai ] = "à¸à¸£à¸°à¸”à¸²à¸©à¸•à¸´à¸”";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
@@ -412,18 +425,19 @@ String STR_SVT_PRNDLG_PAPER_OUT
     Text [ spanish ] = "Falta de papel" ;
     Text [ french ] = "Manque de papier" ;
     Text [ dutch ] = "Geen papier" ;
-    Text[ chinese_simplified ] = "Ö½ÓÃÍê";
+    Text[ chinese_simplified ] = "çº¸ç”¨å®Œ";
     Text[ russian ] = "Íåõâàòêà áóìàãè";
     Text[ polish ] = "Brak papieru";
-    Text[ japanese ] = "—p†•s‘«";
-    Text[ chinese_traditional ] = "¯È¥Î§¹";
+    Text[ japanese ] = "ç”¨ç´™ä¸è¶³";
+    Text[ chinese_traditional ] = "ç´™ç”¨å®Œ";
     Text[ arabic ] = "äŞÕ İí ÇáæÑŞ";
     Text[ greek ] = "¸ëëåéøç ÷áñôéïı";
-    Text[ korean ] = "¿ëÁö°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ korean ] = "ìš©ì§€ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.";
     Text[ turkish ] = "Yeterli miktarda kağıt yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Falta de papel";
+    Text[ catalan ] = "No hi ha prou paper";
     Text[ finnish ] = "Ei tarpeeksi paperia";
+    Text[ thai ] = "à¸à¸£à¸°à¸”à¸²à¸©à¹„à¸¡à¹ˆà¸à¸­";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
@@ -438,18 +452,19 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text [ spanish ] = "Alimentación manual" ;
     Text [ french ] = "Alimentation manuelle" ;
     Text [ dutch ] = "Handmatige papiertoevoer" ;
-    Text[ chinese_simplified ] = "ÊÖ¹¤ËÍÖ½";
+    Text[ chinese_simplified ] = "æ‰‹å·¥é€çº¸";
     Text[ russian ] = "Ğó÷íàÿ ïîäà÷à áóìàãè";
     Text[ polish ] = "Rêczne podawanie papieru";
-    Text[ japanese ] = "è“®‚Å—p†‹Ÿ‹‹";
-    Text[ chinese_traditional ] = "¤â°Ê°e¯È";
+    Text[ japanese ] = "æ‰‹å‹•ã§ç”¨ç´™ä¾›çµ¦";
+    Text[ chinese_traditional ] = "æ‰‹å‹•é€ç´™";
     Text[ arabic ] = "ÇáÅãÏÇÏ ÈÇáæÑŞ íÏæíÇğ";
     Text[ greek ] = "×åéñïêßíçôïò åöïäéáóìüò ÷áñôéïı";
-    Text[ korean ] = "¼öµ¿ ±ŞÁö";
+    Text[ korean ] = "ìˆ˜ë™ ê¸‰ì§€";
     Text[ turkish ] = "El ile besleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alimentación manual";
+    Text[ catalan ] = "Alimentació manual";
     Text[ finnish ] = "Manuaalinen syöttö";
+    Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸”à¹‰à¸§à¸¢à¸•à¸™à¹€à¸­à¸‡";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
@@ -462,20 +477,21 @@ String STR_SVT_PRNDLG_PAPER_PROBLEM
     Text [ danish ] = "Papirproblem" ;
     Text [ italian ] = "Errore carta" ;
     Text [ spanish ] = "Problema de papel" ;
-    Text [ french ] = "Problème d'allimentation de papier" ;
+    Text [ french ] = "Problème d'alimentation de papier" ;
     Text [ dutch ] = "Papierprobleem" ;
-    Text[ chinese_simplified ] = "Ö½ÕÅÎÊÌâ";
+    Text[ chinese_simplified ] = "çº¸å¼ é—®é¢˜";
     Text[ russian ] = "Ïğîáëåìà ñ áóìàãîé";
     Text[ polish ] = "Problem z papierem";
-    Text[ japanese ] = "—p†‚Ì–â‘è";
-    Text[ chinese_traditional ] = "¯È±i°İÃD";
+    Text[ japanese ] = "ç”¨ç´™ã®å•é¡Œ";
+    Text[ chinese_traditional ] = "ç´™å¼µå•é¡Œ";
     Text[ arabic ] = "ãÔßáÉ İí ÇáæÑŞ";
     Text[ greek ] = "Ğñüâëçìá ìå ôï ÷áñôß";
-    Text[ korean ] = "¿ëÁö ¹®Á¦";
+    Text[ korean ] = "ìš©ì§€ ë¬¸ì œ";
     Text[ turkish ] = "Kağıt sorunu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Problema de papel";
+    Text[ catalan ] = "Problema amb el paper";
     Text[ finnish ] = "Paperiongelma";
+    Text[ thai ] = "à¸›à¸±à¸à¸«à¸²à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸šà¸à¸£à¸°à¸”à¸²à¸©";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
@@ -490,18 +506,19 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text [ spanish ] = "I/O activos" ;
     Text [ french ] = "E/S active" ;
     Text [ dutch ] = "I/O actief" ;
-    Text[ chinese_simplified ] = "Æô¶¯ÊäÈë/Êä³ö";
+    Text[ chinese_simplified ] = "å¯åŠ¨è¾“å…¥/è¾“å‡º";
     Text[ russian ] = "Àêòèâíûé Âõîä/Âûõîä";
     Text[ polish ] = "We/Wy aktywne";
-    Text[ japanese ] = "I/O ±¸Ã¨ÌŞ";
-    Text[ chinese_traditional ] = "±Ò°Ê¿é¤J/¿é¥X";
+    Text[ japanese ] = "I/O ã‚¢ã‚¯ãƒ†ã‚£ãƒ–";
+    Text[ chinese_traditional ] = "å•Ÿå‹•è¼¸å…¥/è¼¸å‡º";
     Text[ arabic ] = "ÇáÅÏÎÇá/ÇáÅÎÑÇÌ äÔØ";
     Text[ greek ] = "Åéó/Åî åíåñãÜ";
-    Text[ korean ] = "I/O È°¼º";
+    Text[ korean ] = "I/O í™œì„±";
     Text[ turkish ] = "G/Ç aktif";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "I/O activos";
-    Text[ finnish ] = "Keskeytys käytössä";
+    Text[ catalan ] = "E/S actives";
+    Text[ finnish ] = "I/O aktiivinen";
+    Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™ I/O à¸­à¸¢à¸¹à¹ˆ";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
@@ -516,18 +533,19 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text [ spanish ] = "La papelera de salida está llena" ;
     Text [ french ] = "Le bac de sortie est plein" ;
     Text [ dutch ] = "Postvak UIT is vol" ;
-    Text[ chinese_simplified ] = "Êä³ö»º³åÇøÒçÂú";
-    Text[ russian ] = "Óñòğîéñòâî âûäà÷è çàïîëíåíî";
+    Text[ chinese_simplified ] = "è¾“å‡ºç¼“å†²åŒºæº¢æ»¡";
+    Text[ russian ] = "Âûõîäíîé ëîòîê çàïîëíåí";
     Text[ polish ] = "Zasobnik wyjœciowy zape³niony";
-    Text[ japanese ] = "ˆóü±³ÄÌß¯Ä—p‚Ì—eŠí‚ª‚¢‚Á‚Ï‚¢‚Å‚·B";
-    Text[ chinese_traditional ] = "¶×¥X½w½Ä°Ï·¸º¡";
+    Text[ japanese ] = "å°åˆ·ã‚¢ã‚¦ãƒˆãƒ—ãƒƒãƒˆç”¨ã®å®¹å™¨ãŒã„ã£ã±ã„ã§ã™ã€‚";
+    Text[ chinese_traditional ] = "åŒ¯å‡ºç·©è¡å€æº¢æ»¿";
     Text[ arabic ] = "ÏÑÌ ÇáÅÎÑÇÌ ããÊáÆ";
     Text[ greek ] = "Ôï ôìŞìá åîáãùãŞò åßíáé ğëŞñåò";
-    Text[ korean ] = "Ãâ·ÂÇÔÀÌ °¡µæ Âü";
+    Text[ korean ] = "ì¶œë ¥í•¨ì´ ê½‰ ì°¸";
     Text[ turkish ] = "Çıktı çekmecesi doldu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La papelera de salida está llena";
+    Text[ catalan ] = "La paperera de sortida està plena";
     Text[ finnish ] = "Tulostuslokero täynnä";
+    Text[ thai ] = "à¸–à¸±à¸‡à¸‚à¸¢à¸°à¸£à¸µà¹„à¸‹à¹€à¸„à¸´à¸¥à¸¡à¸µà¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¹€à¸•à¹‡à¸¡";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
@@ -542,18 +560,19 @@ String STR_SVT_PRNDLG_TONER_LOW
     Text [ spanish ] = "Tóner bajo" ;
     Text [ french ] = "Faible réserve de toner" ;
     Text [ dutch ] = "Lage tonerstand" ;
-    Text[ chinese_simplified ] = "Ä«·Û²»×ã";
-    Text[ russian ] = "Íèçêîå ñîñòîÿíèå òîíåğà";
+    Text[ chinese_simplified ] = "å¢¨ç²‰ä¸è¶³";
+    Text[ russian ] = "Òîíåğ íà èñõîäå";
     Text[ polish ] = "Ma³o tonera";
-    Text[ japanese ] = "ÄÅ°‚Ìc—Ê‚ª­‚È‚­‚È‚Á‚Ä‚¢‚Ü‚·";
-    Text[ chinese_traditional ] = "¾¥¯»¤£¨¬";
+    Text[ japanese ] = "ãƒˆãƒŠãƒ¼ã®æ®‹é‡ãŒå°‘ãªããªã£ã¦ã„ã¾ã™";
+    Text[ chinese_traditional ] = "å¢¨ç²‰ä¸è¶³";
     Text[ arabic ] = "ÇäÎİÇÖ ãÓÍæŞ ÇáÍÈÑ";
     Text[ greek ] = "×áìçëŞ óôÜèìç ôïõ Toner";
-    Text[ korean ] = "Åä³Ê°¡ Àû½À´Ï´Ù.";
+    Text[ korean ] = "í† ë„ˆê°€ ì ìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Toner azaldı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tóner bajo";
+    Text[ catalan ] = "Tòner baix";
     Text[ finnish ] = "Väriaine vähissä";
+    Text[ thai ] = "à¸«à¸¡à¸¶à¸à¸à¸´à¸¡à¸à¹Œà¸™à¹‰à¸­à¸¢";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
@@ -568,18 +587,19 @@ String STR_SVT_PRNDLG_NO_TONER
     Text [ spanish ] = "No hay tóner" ;
     Text [ french ] = "Pas de toner" ;
     Text [ dutch ] = "Geen toner" ;
-    Text[ chinese_simplified ] = "Ä«·ÛÓÃÍê";
+    Text[ chinese_simplified ] = "å¢¨ç²‰ç”¨å®Œ";
     Text[ russian ] = "Íåò òîíåğà";
     Text[ polish ] = "Brak tonera";
-    Text[ japanese ] = "ÄÅ°‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ japanese ] = "ãƒˆãƒŠãƒ¼ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "¾¥¯»¥Î§¹";
+    Text[ chinese_traditional ] = "å¢¨ç²‰ç”¨å®Œ";
     Text[ arabic ] = "áÇ íæÌÏ ãÓÍæŞ ÇáÍÈÑ";
     Text[ greek ] = "Äåí õğÜñ÷åé Ôoner";
-    Text[ korean ] = "Åä³Ê°¡ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "í† ë„ˆ ì—†ìŒ";
     Text[ turkish ] = "Toner bitti";
-    Text[ catalan ] = "No hay tóner";
+    Text[ catalan ] = "No hi ha tòner";
     Text[ finnish ] = "Väri lopussa";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸«à¸¡à¸¶à¸à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
@@ -591,21 +611,22 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text [ swedish ] = "Kassera sida" ;
     Text [ danish ] = "Kasser side" ;
     Text [ italian ] = "Esci" ;
-    Text [ spanish ] = "Eliminar página" ;
+    Text [ spanish ] = "Borrar página" ;
     Text [ french ] = "Suppression de page" ;
     Text [ dutch ] = "Pagina's uitzonderen" ;
-    Text[ chinese_simplified ] = "É¾³ıÒ³";
-    Text[ russian ] = "Óäàëåíèå ñòğàíèöû";
+    Text[ chinese_simplified ] = "åˆ é™¤é¡µ";
+    Text[ russian ] = "Óäàëèòü ñòğàíèöó";
     Text[ polish ] = "Usuñ stronê";
-    Text[ japanese ] = "Íß°¼Şíœ";
-    Text[ chinese_traditional ] = "§R°£­¶";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã®å‰Šé™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤é ";
     Text[ arabic ] = "ÍĞİ ÕİÍÉ";
     Text[ greek ] = "ÄéáãñáöŞ óåëßäáò";
-    Text[ korean ] = "ÆäÀÌÁö »èÁ¦";
+    Text[ korean ] = "í˜ì´ì§€ ì‚­ì œ";
     Text[ turkish ] = "Sayfayı sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar página";
+    Text[ catalan ] = "Elimina la pàgina";
     Text[ finnish ] = "Poista sivu";
+    Text[ thai ] = "à¸¥à¸šà¸«à¸™à¹‰à¸²";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
@@ -620,18 +641,19 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
     Text [ spanish ] = "Intervención necesaria del usuario " ;
     Text [ french ] = "Intervention de l'utilisateur requise" ;
     Text [ dutch ] = "Ingrijpen door gebruiker noodzakelijk" ;
-    Text[ chinese_simplified ] = "ĞèÒªÊ¹ÓÃÕßÉè¶¨";
+    Text[ chinese_simplified ] = "éœ€è¦ä½¿ç”¨è€…è®¾å®š";
     Text[ russian ] = "Íåîáõîäèìî âìåøàòåëüñòâî ïîëüçîâàòåëÿ";
     Text[ polish ] = "Konieczna interwencja u¿ytkownika";
-    Text[ japanese ] = "Õ°»Ş°‚Ì±¸¾½‚ª•K—v";
-    Text[ chinese_traditional ] = "»İ­n¦Û­q";
+    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚¢ã‚¯ã‚»ã‚¹ãŒå¿…è¦";
+    Text[ chinese_traditional ] = "éœ€è¦è‡ªè¨‚";
     Text[ arabic ] = "ãä ÇáÖÑæÑí Ãä íÊÏÎá ÇáãÓÊÎÏã";
     Text[ greek ] = "Ğáñİìâáóç ôïõ ÷ñŞóôç áíáãêáßá";
-    Text[ korean ] = "»ç¿ëÀÚ °³ÀÔÀÌ ÇÊ¿äÇÔ";
+    Text[ korean ] = "ì‚¬ìš©ì ê°„ì„­ì´ í•„ìš”";
     Text[ turkish ] = "Kullanıcı müdahalesi gerekiyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Intervención necesaria del usuario ";
+    Text[ catalan ] = "Intervenció necessaria de l'usuari";
     Text[ finnish ] = "Käyttäjän toimia tarvitaan";
+    Text[ thai ] = "à¸ˆà¸³à¹€à¸›à¹‡à¸™à¸•à¹‰à¸­à¸‡à¸‚à¸±à¸”à¸ˆà¸±à¸‡à¸«à¸§à¸°à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
@@ -645,19 +667,20 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text [ italian ] = "Non c'è abbastanza memoria" ;
     Text [ spanish ] = "Memoria insuficiente" ;
     Text [ french ] = "Mémoire insuffisante !" ;
-    Text [ dutch ] = "Niet voldoende opslagruimte" ;
-    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã";
+    Text [ dutch ] = "Onvoldoende geheugen" ;
+    Text[ chinese_simplified ] = "å†…å­˜ä¸è¶³";
     Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè";
     Text[ polish ] = "Nie wystarczy pamiêci";
-    Text[ japanese ] = "\\•ª‚ÈÒÓØ‚ª‚ ‚è‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
+    Text[ japanese ] = "ãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ãŒè¶³ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³";
     Text[ arabic ] = "ÇáĞÇßÑÉ ÛíÑ ßÇİíÉ";
     Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß";
-    Text[ korean ] = "¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ korean ] = "ë©”ëª¨ë¦¬ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.";
     Text[ turkish ] = "Bellek yeterli değil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Memoria insuficiente";
+    Text[ catalan ] = "No hi ha prou memòria";
     Text[ finnish ] = "Muisti ei riitä";
+    Text[ thai ] = "à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³à¹„à¸¡à¹ˆà¸à¸­";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
@@ -671,19 +694,20 @@ String STR_SVT_PRNDLG_DOOR_OPEN
     Text [ italian ] = "Apri copertura" ;
     Text [ spanish ] = "Abrir cubierta" ;
     Text [ french ] = "Boîtier ouvert" ;
-    Text [ dutch ] = "Afdekking  boven" ;
-    Text[ chinese_simplified ] = "»¤¸Ç³¨¿ª";
-    Text[ russian ] = "Êğûøêà îòêğûòà";
+    Text [ dutch ] = "Afdekking boven" ;
+    Text[ chinese_simplified ] = "æŠ¤ç›–æ•å¼€";
+    Text[ russian ] = "Êğûøêà ëîòêà îòêğûòà";
     Text[ polish ] = "Pokrywa otwarta";
-    Text[ japanese ] = "ÌßØİÀ°‚ÌŠW‚ªŠJ‚¢‚Ä‚¢‚Ü‚·";
-    Text[ chinese_traditional ] = "Å@»\\´¯¶}";
+    Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ãƒ¼ã®è“‹ãŒé–‹ã„ã¦ã„ã¾ã™";
+    Text[ chinese_traditional ] = "è­·è“‹æ•é–‹";
     Text[ arabic ] = "ÇáÛØÇÁ ãİÊæÍ";
     Text[ greek ] = "ÊÜëõììá áíïé÷ôü";
-    Text[ korean ] = "µ¤°³ ¿­¸²";
+    Text[ korean ] = "ë®ê°œê°€ ì—´ë ¤ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Kapak açık";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Abrir cubierta";
+    Text[ catalan ] = "Coberta oberta";
     Text[ finnish ] = "Avoin kansi";
+    Text[ thai ] = "à¸à¸²à¸›à¸´à¸”à¹€à¸›à¸´à¸”";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
@@ -698,18 +722,19 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text [ spanish ] = "Modo de ahorro energético" ;
     Text [ french ] = "Mode économie d'énergie" ;
     Text [ dutch ] = "Energiespaarmodus" ;
-    Text[ chinese_simplified ] = "½ÚÔ¼µçÔ´Ä£Ê½";
-    Text[ russian ] = "Ğåæèì ıêîíîìèè ıëåêòğîıíåğãèè";
+    Text[ chinese_simplified ] = "èŠ‚çº¦ç”µæºæ¨¡å¼";
+    Text[ russian ] = "Ğåæèì ıêîíîìèè ıíåğãèè";
     Text[ polish ] = "Tryb oszczêdzania energii";
-    Text[ japanese ] = "´ÈÙ·Ş°ßŒ¸Ó°ÄŞ";
-    Text[ chinese_traditional ] = "¸`¬ù¹q·½¼Ò¦¡";
+    Text[ japanese ] = "ã‚¨ãƒãƒ«ã‚®ãƒ¼ç¯€æ¸›ãƒ¢ãƒ¼ãƒ‰";
+    Text[ chinese_traditional ] = "ç¯€ç´„é›»æºæ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÊæİíÑ ÇáØÇŞÉ";
     Text[ greek ] = "ÊáôÜóôáóç åîïéêïíüìçóçò åíİñãåéáò";
-    Text[ korean ] = "ÀıÀü ¸ğµå";
+    Text[ korean ] = "ì ˆì „ ëª¨ë“œ";
     Text[ turkish ] = "Enerji tasarruf kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo de ahorro energético";
+    Text[ catalan ] = "Mode d'estalvi d'energia";
     Text[ finnish ] = "Virransäästötila";
+    Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸›à¸£à¸°à¸«à¸¢à¸±à¸”à¸à¸³à¸¥à¸±à¸‡";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
@@ -724,18 +749,19 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text [ spanish ] = "Predeterminada" ;
     Text [ french ] = "Imprimante par défaut" ;
     Text [ dutch ] = "Standaardprinter" ;
-    Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
-    Text[ russian ] = "Ñòàíäàğòíûé ïğèíòåğ";
+    Text[ chinese_simplified ] = "é»˜è®¤æ‰“å°æœº";
+    Text[ russian ] = "Ïğèíòåğ ïî óìîë÷àíèş";
     Text[ polish ] = "Drukarka domyœlna";
-    Text[ japanese ] = "•W€ÌßØİÀ";
-    Text[ chinese_traditional ] = "Àq»{¦Lªí¾÷";
+    Text[ japanese ] = "æ¨™æº–ãƒ—ãƒªãƒ³ã‚¿";
+    Text[ chinese_traditional ] = "é»˜èªå°è¡¨æ©Ÿ";
     Text[ arabic ] = "ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ";
     Text[ greek ] = "Ğñïåğéëåãìİíïò åêôõğùôŞò";
-    Text[ korean ] = "±âº» ÇÁ¸°ÅÍ";
+    Text[ korean ] = "ê¸°ë³¸ í”„ë¦°í„°";
     Text[ turkish ] = "Standart yazıcı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Predeterminada";
+    Text[ catalan ] = "Impressora per defecte";
     Text[ finnish ] = "Oletustulostin";
+    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
@@ -750,18 +776,19 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text [ spanish ] = "%d documentos" ;
     Text [ french ] = "%d documents" ;
     Text [ dutch ] = "%d documenten" ;
-    Text[ chinese_simplified ] = "%d ÎÄµµ";
+    Text[ chinese_simplified ] = "%d æ–‡æ¡£";
     Text[ russian ] = "%d äîêóìåíòà(îâ)";
     Text[ polish ] = "%d dokumenty";
-    Text[ japanese ] = "%d‚ÌÄŞ·­ÒİÄ";
-    Text[ chinese_traditional ] = "%d ¤å¥ó";
+    Text[ japanese ] = "%dã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "%d æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ%d ";
     Text[ greek ] = "%d İããñáöá";
-    Text[ korean ] = "%d ¹®¼­";
+    Text[ korean ] = "%d ë¬¸ì„œ";
     Text[ turkish ] = "%d belge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%d documentos";
+    Text[ catalan ] = "%d documents";
     Text[ finnish ] = "%d asiakirjaa";
+    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£ %d ";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -796,18 +823,19 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ french ] = "Imprimante" ;
         Text [ dutch ] = "Printer" ;
         Text [ portuguese ] = "Impressora" ;
-        Text[ chinese_simplified ] = "´òÓ¡»ú";
+        Text[ chinese_simplified ] = "æ‰“å°æœº";
         Text[ russian ] = "Ïğèíòåğ";
         Text[ polish ] = "Drukarka";
-        Text[ japanese ] = "ÌßØİÀ";
-        Text[ chinese_traditional ] = "¦Lªí¾÷";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
+        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
         Text[ arabic ] = "ÇáØÇÈÚÉ";
         Text[ greek ] = "ÅêôõğùôŞò";
-        Text[ korean ] = "ÇÁ¸°ÅÍ";
+        Text[ korean ] = "í”„ë¦°í„°";
         Text[ turkish ] = "Yazıcı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Impresora";
-        Text[ finnish ] = "Tulostin ";
+        Text[ catalan ] = "Impressora";
+        Text[ finnish ] = "Tulostin";
+        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
     };
     FixedText FT_NAME
     {
@@ -821,21 +849,22 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ portuguese ] = "~Nome" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "~Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
     };
     ListBox LB_NAMES
     {
@@ -860,18 +889,19 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ spanish ] = "~Propiedades..." ;
         Text [ french ] = "~Propriétés..." ;
         Text [ dutch ] = "~Eigenschappen..." ;
-        Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
+        Text[ chinese_simplified ] = "å±æ€§(~I)...";
         Text[ russian ] = "~Ñâîéñòâà...";
         Text[ polish ] = "W³aœciwoœci...";
-        Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
-        Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
+        Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£(~I)...";
+        Text[ chinese_traditional ] = "å±¬æ€§(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
         Text[ greek ] = "Éäéüôçôåò...";
-        Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´(~I)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Propiedades...";
-        Text[ finnish ] = "~Ominaisuudet";
+        Text[ catalan ] = "~Propietats...";
+        Text[ finnish ] = "Ominaisuu~det...";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡~à¸šà¸±à¸•à¸´...";
     };
     FixedText FT_STATUS
     {
@@ -888,18 +918,19 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ french ] = "État" ;
         Text [ dutch ] = "Status" ;
         Text [ portuguese ] = "Estado" ;
-        Text[ chinese_simplified ] = "×´Ì¬";
+        Text[ chinese_simplified ] = "çŠ¶æ€";
         Text[ russian ] = "Ñîñòîÿíèå";
         Text[ polish ] = "Stan";
-        Text[ japanese ] = "½Ã°À½";
-        Text[ chinese_traditional ] = "ª¬ºA";
+        Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹";
+        Text[ chinese_traditional ] = "ç‹€æ…‹";
         Text[ arabic ] = "ÇáÍÇáÉ";
         Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ korean ] = "»óÅÂ";
+        Text[ korean ] = "ìƒíƒœ";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estado";
+        Text[ catalan ] = "Estat";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¸ªà¸–à¸²à¸™à¸°";
     };
     FixedText FI_STATUS
     {
@@ -921,18 +952,19 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ french ] = "Type" ;
         Text [ dutch ] = "Type" ;
         Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "À²Ìß";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "ì¢…ë¥˜";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     };
     FixedText FI_TYPE
     {
@@ -954,18 +986,19 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ french ] = "Emplacement" ;
         Text [ dutch ] = "Plaats" ;
         Text [ portuguese ] = "Lugar" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
-        Text[ russian ] = "Ìåñòî";
+        Text[ chinese_simplified ] = "ä½ç½®";
+        Text[ russian ] = "Ğàñïîëîæåíèå";
         Text[ polish ] = "Lokalizacja";
-        Text[ japanese ] = "êŠ";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "å ´æ‰€";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæŞÚ";
         Text[ greek ] = "Ôïğïèåóßá";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "êµ¬/êµ°/ì‹œ";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ubicación";
+        Text[ catalan ] = "Ubicació";
         Text[ finnish ] = "Sijainti";
+        Text[ thai ] = "à¸—à¸µà¹ˆà¸•à¸±à¹‰à¸‡";
     };
     FixedText FI_LOCATION
     {
@@ -985,20 +1018,21 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ italian ] = "Commento" ;
         Text [ spanish ] = "Comentario" ;
         Text [ french ] = "Commentaire" ;
-        Text [ dutch ] = "Commentaar" ;
+        Text [ dutch ] = "Opmerkingen" ;
         Text [ portuguese ] = "Comentário" ;
-        Text[ chinese_simplified ] = "×¢½â";
+        Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ russian ] = "Êîììåíòàğèé";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "µù¸Ñ";
+        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
+        Text[ chinese_traditional ] = "è¨»è§£";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ¼®";
+        Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentario";
-        Text[ finnish ] = "Kommentti";
+        Text[ catalan ] = "Comentari";
+        Text[ finnish ] = "Huomautus";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
     };
     FixedText FI_COMMENT
     {
@@ -1026,19 +1060,33 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Pos = MAP_APPFONT ( 204 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "Éè¶¨´òÓ¡»ú";
-    Text[ russian ] = "Íàñòğîèòü ïğèíòåğ";
+    Text[ chinese_simplified ] = "è®¾å®šæ‰“å°æœº";
+    Text[ russian ] = "Íàñòğîéêè ïğèíòåğà";
     Text[ polish ] = "Ustaw drukarkê";
-    Text[ japanese ] = "ÌßØİÀİ’è";
-    Text[ chinese_traditional ] = "³]¸m¦Lªí¾÷";
+    Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿è¨­å®š";
+    Text[ chinese_traditional ] = "è¨­ç½®å°è¡¨æ©Ÿ";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáØÇÈÚÉ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "Ñıèìéóç åêôõğùôŞ";
-    Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤";
+    Text[ korean ] = "í”„ë¦°í„° ì„¤ì •";
     Text[ turkish ] = "Yazıcı ayarları";
-    Text[ catalan ] = "Configurar impresora";
+    Text[ catalan ] = "Configura la impressora";
     Text[ finnish ] = "Tulostimen asetukset";
+    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadlib.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,58 +64,57 @@
 #include <stdlib.h>
 
 #include <tools/string.hxx>
-#include <libcall.hxx>
+#include <osl/module.h>
+#include <rtl/ustring.hxx>
 
+using namespace rtl;
 
 extern "C" {
-
 struct VersionInfo
 {
-    char    aTime[20];
-    char    aDate[20];
-    char    aUpd[5];
-    char    aMinor;
-    char    aBuild[5];
-#if SUPD>564
-    char    aInpath[20];
-#endif
+        const char*     pTime;
+        const char*     pDate;
+        const char*     pUpd;
+        const char*     pMinor;
+        const char*     pBuild;
+        const char*     pInpath;
 };
 
-#ifdef WNT
-__declspec(dllexport)
-#endif
-    VersionInfo *GetVersionInfo();
-};
-
-typedef VersionInfo*(__LOADONCALLAPI *PFUNC)(void);
+typedef VersionInfo*(__LOADONCALLAPI *GetVersionInfo)(void);
+}
 
 int __LOADONCALLAPI main( int argc, char **argv )
 {
-    VersionInfo *pInfo = 0L;
-    PFUNC pFunc;
+    VersionInfo *pInfo = NULL;
 
     if ( argc != 2 )
     {
         fprintf( stderr, "USAGE: %s DllName \n", argv[0] );
         exit(0);
     }
-    SvLibrary aLibrary(argv[1]);
-    pFunc = (PFUNC) aLibrary.GetFunction( "GetVersionInfo" );
-    if ( pFunc )
-        pInfo = (*pFunc)();
+    OUString aLib = OUString::createFromAscii(argv[1]);
+    oslModule aLibrary = osl_loadModule( aLib.pData, SAL_LOADMODULE_DEFAULT );
+    if ( aLibrary )
+    {
+        void* pFunc = osl_getSymbol( aLibrary, OUString::createFromAscii( "GetVersionInfo" ).pData );
+        if ( pFunc )
+            pInfo = (*(GetVersionInfo)pFunc)();
+    }
     if ( pInfo )
     {
-        fprintf( stdout, "Date : %s\n", pInfo->aDate );
-        fprintf( stdout, "Time : %s\n", pInfo->aTime );
-        fprintf( stdout, "UPD : %s\n", pInfo->aUpd );
-        fprintf( stdout, "Minor : %c\n", pInfo->aMinor );
-        fprintf( stdout, "Build : %s\n", pInfo->aBuild );
-#if SUPD>564
-        fprintf( stdout, "Inpath : %s\n", pInfo->aInpath );
-#endif
+        fprintf( stdout, "Date : %s\n", pInfo->pDate );
+        fprintf( stdout, "Time : %s\n", pInfo->pTime );
+        fprintf( stdout, "UPD : %s\n", pInfo->pUpd );
+        fprintf( stdout, "Minor : %s\n", pInfo->pMinor );
+        fprintf( stdout, "Build : %s\n", pInfo->pBuild );
+        fprintf( stdout, "Inpath : %s\n", pInfo->pInpath );
     }
     else
         fprintf( stderr, "VersionInfo not Found !\n" );
+
+    if ( aLibrary )
+        osl_unloadModule( aLibrary );
+
     return 0;
 }
 

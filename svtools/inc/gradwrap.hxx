@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: isethint.cxx,v $
+ *  $RCSfile: gradwrap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,50 +59,53 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 
-#include "isethint.hxx"
-#include "itemset.hxx"
-
-//====================================================================
-
-TYPEINIT1(SfxItemSetHint, SfxHint);
-
-//====================================================================
+#ifndef _SVGEN_HXX
+#include <svgen.hxx>
+#endif
 
 
-SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
+/******************************************************************************
+|*
+|*  class GradientWrapper
+|*
+|*  Ersterstellung:     KA 24.11.95
+|*  letzte Aenderung:   KA 24.11.95
+|*
+|*  Zeck:   dient beim MetaFile-Export dazu, die eigentliche Berechungs-
+|*          funktionalitaet zu kapseln. Das Schreiben der Records fuer
+|*          die unterschiedlichen File-Formate geschieht ueber LinkHandler.
+|*
+|*          Klassen, die diesen Wrapper benutzen, muessen drei Linkhandler
+|*          zur Verfuegung stellen, die im Ctor uebergeben werden:
+|*
+|*              1. Linkhandler zum Schreiben eines Records fuer Polygonausgabe
+|*              2. Linkhandler zum Schreiben eines Records fuer PolyPolygonausgabe
+|*              3. Linkhandler zum Schreiben eines Records fuer Setzen der Brush
+|*
+\******************************************************************************/
 
-/*  [Beschreibung]
 
-    Dieser Ctor "ubernimmt das als Parameter "ubergeben <SfxItemSet>,
-    das im Dtor gel"oscht wird.
-*/
-
-:   _pItemSet( pItemSet )
+class GradientWrapper
 {
-}
+    Link        aDrawPolyRecordHdl;
+    Link        aDrawPolyPolyRecordHdl;
+    Link        aSetFillInBrushRecordHdl;
 
-//--------------------------------------------------------------------
-
-SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
-
-/*  [Beschreibung]
-
-    Dieser Ctor kopiert das als Parameter "ubergeben <SfxItemSet>.
-*/
-
-:   _pItemSet( rItemSet.Clone() )
-{
-}
-
-//--------------------------------------------------------------------
-
-SfxItemSetHint::~SfxItemSetHint()
-{
-    delete _pItemSet;
-}
-
-//--------------------------------------------------------------------
+                GradientWrapper() {};
 
 
+public:
+                GradientWrapper(const Link& rDrawPolyRecordHdl,
+                                const Link& rDrawPolyPolyRecordHdl,
+                                const Link& rSetFillInBrushHdl);
+                ~GradientWrapper();
+
+
+    void        WriteLinearGradient(const Rectangle& rRect,
+                                    const Gradient& rGradient);
+    void        WriteRadialGradient(const Rectangle& rRect,
+                                    const Gradient& rGradient);
+    void        WriteRectGradient(const Rectangle& rRect,
+                                  const Gradient& rGradient);
+};

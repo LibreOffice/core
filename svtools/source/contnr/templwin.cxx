@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 17:22:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,7 +1006,6 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         aCurrentURL = rURL;
 
     ViewNonEmptyWin();
-
     pEditWin->Clear();
 
     if ( rURL.Len() > 0 && bPreview && xDocInfo.is() )
@@ -1043,37 +1042,42 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         {
             if ( bPreview )
             {
-                WaitObject aWaitCursor( GetParent() );
-                // disabling must be done here, does not work in ctor because
-                // execute of the dialog will overwrite it
-                // ( own execute method would help )
-                pTextWin->EnableInput( FALSE, TRUE );
-                if ( pTextWin->IsReallyVisible() )
+                if ( m_aOpenURL != aURL.Complete )
                 {
-                    sal_Bool    b = sal_True;
-                    Sequence < PropertyValue > aArgs( 3 );
-                    aArgs[0].Name = ASCII_STR("Preview");
-                    aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
-                    aArgs[1].Name = ASCII_STR("ReadOnly");
-                    aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
-                    aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
-                    b = sal_False;
-                    aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
-                    xDisp->dispatch( aURL, aArgs );
-
-                    ::rtl::OUString                                         aDispURL;
-                    Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
-                    if( xCtrl.is() )
+                    WaitObject aWaitCursor( GetParent() );
+                    // disabling must be done here, does not work in ctor because
+                    // execute of the dialog will overwrite it
+                    // ( own execute method would help )
+                    pTextWin->EnableInput( FALSE, TRUE );
+                    if ( pTextWin->IsReallyVisible() )
                     {
-                        Reference< ::com::sun::star::frame::XModel >        xMdl = xCtrl->getModel();
-                        if( xMdl.is() )
-                            aDispURL = xMdl->getURL();
-                    }
+                        sal_Bool    b = sal_True;
+                        Sequence < PropertyValue > aArgs( 3 );
+                        aArgs[0].Name = ASCII_STR("Preview");
+                        aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
+                        aArgs[1].Name = ASCII_STR("ReadOnly");
+                        aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
+                        aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
+                        b = sal_False;
+                        aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
+                        xDisp->dispatch( aURL, aArgs );
 
-                    if( aDispURL != aURL.Complete )
-                    {
-                        xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
-                        ViewEmptyWin();
+                        ::rtl::OUString                                         aDispURL;
+                        Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
+                        if( xCtrl.is() )
+                        {
+                            Reference< ::com::sun::star::frame::XModel >        xMdl = xCtrl->getModel();
+                            if( xMdl.is() )
+                                aDispURL = xMdl->getURL();
+                        }
+
+                        if( aDispURL != aURL.Complete )
+                        {
+                            xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+                            ViewEmptyWin();
+                        }
+                        else
+                            m_aOpenURL = aDispURL;
                     }
                 }
             }
@@ -1083,9 +1087,13 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                 aArgs[0].Name = ASCII_STR("AsTemplate");
                 aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
+                m_aOpenURL = rtl::OUString();
             }
             else
+            {
                 xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+                m_aOpenURL = rtl::OUString();
+            }
         }
     }
 }

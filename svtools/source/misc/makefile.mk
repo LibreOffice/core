@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 12:55:24 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:39:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,22 +149,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/cliplistener.obj		\
     $(SLO)$/stringtransfer.obj		\
     $(SLO)$/imagemgr.obj
-
-UNOTYPES=\
-    com.sun.star.io.XInputStream						\
-    com.sun.star.io.XOutputStream						\
-    com.sun.star.io.XSeekable							\
-    com.sun.star.uno.TypeClass							\
-    com.sun.star.uno.XWeak								\
-    com.sun.star.lang.XMultiServiceFactory				\
-    com.sun.star.lang.XSingleServiceFactory				\
-    com.sun.star.registry.MergeConflictException		\
-    com.sun.star.registry.XSimpleRegistry				\
-    com.sun.star.frame.XConfigManager					\
-    com.sun.star.datatransfer.XTransferable				\
-    com.sun.star.datatransfer.DataFlavor				\
-    com.sun.star.datatransfer.clipboard.XClipboard		\
-    com.sun.star.datatransfer.clipboard.XClipboardOwner
 
 # --- Targets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-15 07:35:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,58 +1447,4 @@ namespace svt
 // .......................................................................
 }   // namespace svt
 // .......................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.15  2002/09/10 14:32:09  fs
- *  #102119# added optional smart tab traveling (focus first/last cell when getting the focus)
- *
- *  Revision 1.14  2002/08/08 11:43:35  oj
- *  #102008# only send a ACCESSIBLE_ACTIVE_DESCENDANT_EVENT event when we have the focus
- *
- *  Revision 1.13  2002/07/26 07:44:24  bm
- *  #101228# new browser flag EBBF_HANDLE_COLUMN_TEXT for displaying text in column
- *           0 in the handle column (like in the normal browse-box).
- *           EBBF_NOROWPICTURE => EBBF_NO_HANDLE_COLUMN_CONTENT to reduce confusion now
- *
- *  Revision 1.12  2002/06/21 14:04:32  oj
- *  #99812# new helper method used to know if accessible object was already created
- *
- *  Revision 1.11  2002/06/21 08:29:15  oj
- *  #99812# correct event notifications to make the browsebox accessible
- *
- *  Revision 1.10  2002/06/12 13:41:38  dr
- *  #99812# create an acc. cell before asking for it
- *
- *  Revision 1.9  2002/05/31 13:25:17  oj
- *  #99812# accessible adjustments
- *
- *  Revision 1.8  2002/04/30 15:27:44  fs
- *  #99048# corrected column selection
- *
- *  Revision 1.7  2002/04/29 14:25:33  oj
- *  #98772# enable new imagelist
- *
- *  Revision 1.6  2002/04/17 11:56:23  oj
- *  #98286# improve accessibility
- *
- *  Revision 1.5  2002/04/11 15:57:05  fs
- *  #98483# allow for row/column selection (event when currently editing)
- *
- *  Revision 1.4  2001/12/05 14:37:37  oj
- *  #95598# PaintTristate correct for parentupdate
- *
- *  Revision 1.3  2001/10/12 16:57:26  hr
- *  #92830#: required change: std::min()/std::max()
- *
- *  Revision 1.2  2001/09/28 13:00:28  hr
- *  #65293#: gcc-3.0.1. needs lvalue
- *
- *  Revision 1.1  2001/06/15 12:49:19  fs
- *  initial checkin - moved this herein from svx/source/fmcomp/dbbrowse*
- *
- *
- *  Revision 1.0 15.06.01 12:45:03  fs
- ************************************************************************/
 

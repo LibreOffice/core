@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 18:05:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
-#ifndef _SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -115,13 +115,8 @@ const double _D_MAX_LONG_   = (double) 0x7fffffff;      // 2147483647.0
 const USHORT _MAX_FRACTION_PREC = 3;
 const double D_EPS = 1.0E-2;
 
-#ifdef S390
-const double _D_MAX_D_BY_100  = 7.2E73;
-const double _D_MIN_M_BY_1000 = 5.4E-76;
-#else
 const double _D_MAX_D_BY_100  = 1.7E306;
 const double _D_MIN_M_BY_1000 = 2.3E-305;
-#endif
 
 static BYTE cCharWidths[ 128-32 ] = {
     1,1,1,2,2,3,2,1,1,1,1,2,1,1,1,1,
@@ -1776,15 +1771,41 @@ void SvNumberformat::Build50Formatstring( String& rStr ) const
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
 {
-    OutString.Erase();
     USHORT nStandardPrec = rScan.GetStandardPrec();
     if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
-        SolarMath::DoubleToString(OutString, fNumber, 'E', nStandardPrec /*2*/,
-                       GetFormatter().GetNumDecimalSep().GetChar(0));
+        OutString = ::rtl::math::doubleToUString( fNumber,
+                rtl_math_StringFormat_E, nStandardPrec /*2*/,
+                GetFormatter().GetNumDecimalSep().GetChar(0));
     else
     {
-        SolarMath::DoubleToString( OutString, fNumber, 'F', nStandardPrec /*2*/,
-                       GetFormatter().GetNumDecimalSep().GetChar(0), TRUE );
+#if 0
+{
+        // debugger test case for ANSI standard correctness
+        ::rtl::OUString aTest;
+        // expect 0.00123   OK
+        aTest = ::rtl::math::doubleToUString( 0.001234567,
+                rtl_math_StringFormat_G, 3, '.', sal_True );
+        // expect 123       OK
+        aTest = ::rtl::math::doubleToUString( 123.4567,
+                rtl_math_StringFormat_G, 3, '.', sal_True );
+        // expect 123.5     OK
+        aTest = ::rtl::math::doubleToUString( 123.4567,
+                rtl_math_StringFormat_G, 4, '.', sal_True );
+        // expect 1e+03 (as 999.6 rounded to 3 significant digits results in
+        // 1000 with an exponent equal to significant digits)
+        // Currently (24-Jan-2003) we do fail in this case and output 1000
+        // instead, negligible.
+        aTest = ::rtl::math::doubleToUString( 999.6,
+                rtl_math_StringFormat_G, 3, '.', sal_True );
+        // expect what? result is 1.2e+004
+        aTest = ::rtl::math::doubleToUString( 12345.6789,
+                rtl_math_StringFormat_G, -3, '.', sal_True );
+}
+#endif
+
+        OutString = ::rtl::math::doubleToUString( fNumber,
+                rtl_math_StringFormat_F, nStandardPrec /*2*/,
+                GetFormatter().GetNumDecimalSep().GetChar(0), sal_True );
         if (OutString.GetChar(0) == '-' &&
             OutString.GetTokenCount('0') == OutString.Len())
             OutString.EraseLeadingChars('-');            // nicht -0
@@ -1812,8 +1833,9 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, String& OutString)
         return;
     }
 
-    SolarMath::DoubleToString( OutString, fNumber, 'A', INT_MAX,
-                    GetFormatter().GetNumDecimalSep().GetChar(0), TRUE );
+    OutString = ::rtl::math::doubleToUString( fNumber,
+            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+            GetFormatter().GetNumDecimalSep().GetChar(0), sal_True );
 
     if ( eType & NUMBERFORMAT_PERCENT && bModified)
         OutString += '%';
@@ -2320,9 +2342,9 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         bSign = TRUE;                   // Formaten
                     fNumber = -fNumber;
                 }
-                String sStr;
-                SolarMath::DoubleToString(sStr, fNumber, 'E',
-                    rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
+                String sStr( ::rtl::math::doubleToUString( fNumber,
+                            rtl_math_StringFormat_E,
+                            rInfo.nCntPre + rInfo.nCntPost - 1, '.' ));
 
                 String ExpStr;
                 short nExpSign = 1;
@@ -2444,7 +2466,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     if (bSign && !rInfo.bThousand)     // kein []-Format
         fNumber = 1.0 - fNumber;        // "Kehrwert"
     double fTime = fNumber * 86400.0;
-    fTime = SolarMath::Round( fTime, int(nCntPost) );
+    fTime = ::rtl::math::round( fTime, int(nCntPost) );
     if (bSign && fTime == 0.0)
         bSign = FALSE;                      // nicht -00:00:00
 
@@ -2455,8 +2477,8 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     ULONG nSeconds = (ULONG)floor( fTime );
 
-    String sSecStr;
-    SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
+    String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
+                rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
     if ( bInputLine )
@@ -2964,11 +2986,11 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         nCntPost = xub_StrLen(rInfo.nCntPost);
     }
     double fTime = (fNumber - floor( fNumber )) * 86400.0;
-    fTime = SolarMath::Round( fTime, int(nCntPost) );
+    fTime = ::rtl::math::round( fTime, int(nCntPost) );
     ULONG nSeconds = (ULONG)floor( fTime );
 
-    String sSecStr;
-    SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
+    String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
+                rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
     if ( bInputLine )
@@ -3256,7 +3278,7 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
     else
     {
         bSign = FALSE;
-        if ( SolarMath::IsSignBitSet( fNumber ) )
+        if ( ::rtl::math::isSignBitSet( fNumber ) )
             fNumber = -fNumber;     // yes, -0.0 is possible, eliminate '-'
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -3293,12 +3315,14 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
         {
             if (rInfo.nCntPost + nPrecExp > 15 && nPrecExp < 15)
             {
-                SolarMath::DoubleToString( sStr, fNumber, 'F', 15-nPrecExp );
+                sStr = ::rtl::math::doubleToUString( fNumber,
+                        rtl_math_StringFormat_F, 15-nPrecExp, '.');
                 for (long l = 15-nPrecExp; l < (long) rInfo.nCntPost; l++)
                     sStr += '0';
             }
             else
-                SolarMath::DoubleToString( sStr, fNumber, 'F', rInfo.nCntPost );
+                sStr = ::rtl::math::doubleToUString( fNumber,
+                        rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
             sStr.EraseLeadingChars('0');        // fuehrende Nullen weg
         }
         else if (fNumber == 0.0)            // Null
@@ -3308,7 +3332,8 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
         else                                // Integer
         {
-            SolarMath::DoubleToString(sStr, fNumber, 'F', 0);
+            sStr = ::rtl::math::doubleToUString( fNumber,
+                    rtl_math_StringFormat_F, 0, '.');
             sStr.EraseLeadingChars('0');        // fuehrende Nullen weg
         }
         xub_StrLen nPoint = sStr.Search( '.' );
@@ -3893,7 +3918,9 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
         }
-        SolarMath::DoubleToString( rStr, fLimit, 'A', INT_MAX, rDecSep.GetChar(0), TRUE );
+        rStr += String( ::rtl::math::doubleToUString( fLimit,
+                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                rDecSep.GetChar(0), sal_True));
         rStr += ']';
     }
 }

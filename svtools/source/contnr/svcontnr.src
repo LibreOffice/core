@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-18 19:17:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,18 @@ String STR_SVT_ACC_DESC_TABLISTBOX
     Text[ russian ] = "Row: %1, Column: %2";
     Text[ greek ] = "Row: %1, Column: %2";
     Text[ dutch ] = "Row: %1, Column: %2";
-    Text[ french ] = "Row: %1, Column: %2";
-    Text[ spanish ] = "Row: %1, Column: %2";
+    Text[ french ] = "Ligne : %1, colonne : %2";
+    Text[ spanish ] = "Fila: %1, columna: %2";
     Text[ finnish ] = "Row: %1, Column: %2";
-    Text[ italian ] = "Row: %1, Column: %2";
+    Text[ italian ] = "Riga: %1, colonna: %2";
     Text[ danish ] = "Row: %1, Column: %2";
-    Text[ swedish ] = "Row: %1, Column: %2";
+    Text[ swedish ] = "Rad: %1, kolumn: %2";
     Text[ polish ] = "Row: %1, Column: %2";
     Text[ portuguese_brazilian ] = "Row: %1, Column: %2";
-    Text[ japanese ] = "Row: %1, Column: %2";
-    Text[ korean ] = "Row: %1, Column: %2";
-    Text[ chinese_simplified ] = "Row: %1, Column: %2";
-    Text[ chinese_traditional ] = "Row: %1, Column: %2";
+    Text[ japanese ] = "行: %1, 列: %2";
+    Text[ korean ] = "행: %1, 열: %2";
+    Text[ chinese_simplified ] = "行：%1, 列：%2";
+    Text[ chinese_traditional ] = "列：%1，欄：%2";
     Text[ turkish ] = "Row: %1, Column: %2";
     Text[ arabic ] = "Row: %1, Column: %2";
     Text[ catalan ] = "Row: %1, Column: %2";
@@ -120,18 +120,18 @@ String STR_SVT_ACC_DESC_FILEVIEW
     Text[ russian ] = ", Type: %1, URL: %2";
     Text[ greek ] = ", Type: %1, URL: %2";
     Text[ dutch ] = ", Type: %1, URL: %2";
-    Text[ french ] = ", Type: %1, URL: %2";
-    Text[ spanish ] = ", Type: %1, URL: %2";
+    Text[ french ] = ", type : %1, URL : %2";
+    Text[ spanish ] = ", Tipo: %1, URL: %2";
     Text[ finnish ] = ", Type: %1, URL: %2";
-    Text[ italian ] = ", Type: %1, URL: %2";
+    Text[ italian ] = ", tipo: %1, URL: %2";
     Text[ danish ] = ", Type: %1, URL: %2";
-    Text[ swedish ] = ", Type: %1, URL: %2";
+    Text[ swedish ] = ", typ: %1, URL: %2";
     Text[ polish ] = ", Type: %1, URL: %2";
     Text[ portuguese_brazilian ] = ", Type: %1, URL: %2";
-    Text[ japanese ] = ", Type: %1, URL: %2";
-    Text[ korean ] = ", Type: %1, URL: %2";
-    Text[ chinese_simplified ] = ", Type: %1, URL: %2";
-    Text[ chinese_traditional ] = ", Type: %1, URL: %2";
+    Text[ japanese ] = ", タイプ: %1, URL: %2";
+    Text[ korean ] = ", 유형: %1, URL: %2";
+    Text[ chinese_simplified ] = "，类型：%1, URL: %2";
+    Text[ chinese_traditional ] = "，類型：%1，URL：%2";
     Text[ turkish ] = ", Type: %1, URL: %2";
     Text[ arabic ] = ", Type: %1, URL: %2";
     Text[ catalan ] = ", Type: %1, URL: %2";
@@ -145,18 +145,18 @@ String STR_SVT_ACC_DESC_FOLDER
     Text[ russian ] = "Folder";
     Text[ greek ] = "Folder";
     Text[ dutch ] = "Folder";
-    Text[ french ] = "Folder";
-    Text[ spanish ] = "Folder";
+    Text[ french ] = "Dossier";
+    Text[ spanish ] = "Carpeta";
     Text[ finnish ] = "Folder";
-    Text[ italian ] = "Folder";
+    Text[ italian ] = "Cartella";
     Text[ danish ] = "Folder";
-    Text[ swedish ] = "Folder";
+    Text[ swedish ] = "Mapp";
     Text[ polish ] = "Folder";
     Text[ portuguese_brazilian ] = "Folder";
-    Text[ japanese ] = "Folder";
-    Text[ korean ] = "Folder";
-    Text[ chinese_simplified ] = "Folder";
-    Text[ chinese_traditional ] = "Folder";
+    Text[ japanese ] = "フォルダ";
+    Text[ korean ] = "폴더";
+    Text[ chinese_simplified ] = "文件夹";
+    Text[ chinese_traditional ] = "資料夾";
     Text[ turkish ] = "Folder";
     Text[ arabic ] = "Folder";
     Text[ catalan ] = "Folder";
@@ -170,34 +170,50 @@ String STR_SVT_ACC_DESC_FILE
     Text[ russian ] = "File";
     Text[ greek ] = "File";
     Text[ dutch ] = "File";
-    Text[ french ] = "File";
-    Text[ spanish ] = "File";
+    Text[ french ] = "Fichier";
+    Text[ spanish ] = "Archivo";
     Text[ finnish ] = "File";
     Text[ italian ] = "File";
     Text[ danish ] = "File";
-    Text[ swedish ] = "File";
+    Text[ swedish ] = "Fil";
     Text[ polish ] = "File";
     Text[ portuguese_brazilian ] = "File";
-    Text[ japanese ] = "File";
-    Text[ korean ] = "File";
-    Text[ chinese_simplified ] = "File";
-    Text[ chinese_traditional ] = "File";
+    Text[ japanese ] = "ファイル";
+    Text[ korean ] = "파일";
+    Text[ chinese_simplified ] = "文件";
+    Text[ chinese_traditional ] = "檔案";
     Text[ turkish ] = "File";
     Text[ arabic ] = "File";
     Text[ catalan ] = "File";
     Text[ thai ] = "File";
 };
+String STR_SVT_ACC_EMPTY_FIELD
+{
+    Text = "Leeres Feld";
+    Text [ english_us ] = "Empty Field";
+    Text[ portuguese ] = "Empty Field";
+    Text[ russian ] = "Empty Field";
+    Text[ greek ] = "Empty Field";
+    Text[ dutch ] = "Empty Field";
+    Text[ french ] = "Champ vide";
+    Text[ spanish ] = "Campo vac�o";
+    Text[ finnish ] = "Empty Field";
+    Text[ italian ] = "Campo vuoto";
+    Text[ danish ] = "Empty Field";
+    Text[ swedish ] = "Tomt f�lt";
+    Text[ polish ] = "Empty Field";
+    Text[ japanese ] = "Empty Field";
+    Text[ korean ] = "빈 필드";
+    Text[ chinese_simplified ] = "空白字段";
+    Text[ chinese_traditional ] = "空白欄位";
+    Text[ turkish ] = "Empty Field";
+    Text[ arabic ] = "Empty Field";
+    Text[ catalan ] = "Empty Field";
+    Text[ thai ] = "Empty Field";
+};
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/09/13 12:36:56  pb
- *  fix: #102696# accessibility strings added
- *
- *  Revision 1.1  2002/07/19 13:26:53  fs
- *  initial checkin - shared resource file for this directory
- *
- *
- *  Revision 1.0 19.07.2002 14:28:03  fs
- ************************************************************************/
+
+
+
+
 

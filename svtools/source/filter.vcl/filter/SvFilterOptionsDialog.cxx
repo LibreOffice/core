@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:27:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <syslocale.hxx>
 #endif
 
 #if defined WIN || (defined OS2 && !defined ICC)
@@ -362,7 +365,13 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
         if ( aConfigPath.Len() )
         {
             FilterConfigItem aConfigItem( aConfigPath );
-            eFieldUnit = (FieldUnit)aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) ), FUNIT_CM );
+            String aPropertyName;
+            SvtSysLocale aSysLocale;
+            if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MEASURE_METRIC )
+                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+            else
+                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "NonMetric" ) );
+            eFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
         }
     }
 }

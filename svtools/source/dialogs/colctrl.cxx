@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-08 09:51:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,9 +665,12 @@ Color ColorHSB::GetRGB() const
         n = (UINT16) dH;
         f = dH - n;
 
-        UINT8 a = (UINT8) ( nB * ( 100 - mnSat ) / 100 );
-        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)mnSat * f + 0.5 ) ) / 100 );
-        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)mnSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+        // #107375# Doing the calculation completely in floating
+        // point, the former optimization gave sometimes negative
+        // results for c and was pointless anyway
+        UINT8 a = static_cast<UINT8>( nB * ( 100.0 - mnSat ) / 100.0 );
+        UINT8 b = static_cast<UINT8>( nB * ( 100.0 - mnSat * f ) / 100.0 );
+        UINT8 c = static_cast<UINT8>( nB * ( 100.0 - mnSat * ( 1.0 - f ) ) / 100.0 );
 
         switch( n )
         {

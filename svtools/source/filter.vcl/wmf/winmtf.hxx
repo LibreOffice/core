@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-26 18:13:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,8 +715,8 @@ class WinMtf
 
 class EnhWMFReader : public WinMtf
 {
-
-private:
+    Rectangle       rclFrame;
+    sal_Int32       nPixX, nPixY, nMillX, nMillY;
 
     sal_Bool        bRecordPath;
     sal_Int32       nRecordCount;

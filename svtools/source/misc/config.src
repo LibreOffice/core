@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:06:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,27 +69,35 @@ String STR_WARNING_ITEM
     TEXT [ italian ] = "La voce ha una versione errata!" ;
     TEXT [ portuguese_brazilian ] = "Vers?o errada do item!" ;
     TEXT [ portuguese ] = "O registo tem a versão errada!" ;
-    TEXT [ finnish ] = "Virheellinen versio!" ;
+    TEXT [ finnish ] = "Virheellinen versio" ;
     TEXT [ danish ] = "Elementets version er forkert! " ;
     TEXT [ french ] = "Version incorrecte !" ;
     TEXT [ swedish ] = "Post har fel version!" ;
-    TEXT [ dutch ] = "Verkeerde versie van item!" ;
+    TEXT [ dutch ] = "Foutieve versie van item!" ;
     TEXT [ spanish ] = "¡La entrada contiene una versión incorrecta!" ;
     TEXT [ english_us ] = "Incorrect Version!" ;
     TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
-    TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ ıëåìåíòà!";
+    TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ!";
     TEXT[ polish ] = "Wersja elementu jest nieprawid³owa!";
-    TEXT[ japanese ] = "ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
+    TEXT[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
     TEXT[ chinese_traditional ] = "æ¢ç›®ç‰ˆæœ¬ç„¡æ•ˆ";
     TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
-    TEXT[ dutch ] = "Verkeerde versie van item!";
+    TEXT[ dutch ] = "Foutieve versie van item!";
     TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
     TEXT[ greek ] = "Ç êáôá÷şñéóç õğÜñ÷åé óå ëÜèïò İêäïóç!";
-    TEXT[ korean ] = "ì•„ì´í…œì´ í‹€ë¦° ë²„ì „ì„ ê°€ì§€ê³  ìˆìŠµë‹ˆë‹¤!";
+    TEXT[ korean ] = "ì˜ëª»ëœ ë²„ì „ì…ë‹ˆë‹¤.";
     TEXT[ turkish ] = "Girişin sürümü yanlış!";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "¡La entrada contiene una versión incorrecta!";
+    TEXT[ catalan ] = "Versió incorrecta!";
+    TEXT[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡!";
 };
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-27 06:17:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,20 @@ String STR_FILEDLG_SELECT
     Text [ italian ] = "Scelta cartella" ;
     Text [ spanish ] = "Seleccionar directorio" ;
     Text [ french ] = "Sélection du répertoire" ;
-    Text [ dutch ] = "Map selecteren" ;
-    Text[ chinese_simplified ] = "Ñ¡ÔñÄ¿Â¼";
+    Text [ dutch ] = "Directory selecteren" ;
+    Text[ chinese_simplified ] = "é€‰æ‹©ç›®å½•";
     Text[ russian ] = "Âûáîğ êàòàëîãà";
     Text[ polish ] = "Wybierz katalog";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğ‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Ü¥Ø¿ı";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡ç›®éŒ„";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÏáíá";
     Text[ greek ] = "ÅğéëïãŞ êáôáëüãïõ";
-    Text[ korean ] = "µğ·ºÅä¸® ¼±ÅÃ";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ ì„ íƒ";
     Text[ turkish ] = "Dizin seç";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar directorio";
+    Text[ catalan ] = "Seleccioneu el directori";
     Text[ finnish ] = "Valitse hakemisto";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸ªà¸²à¸£à¸šà¸š";
 };
 String STR_FILEDLG_CANTCHDIR
 {
@@ -99,18 +100,19 @@ String STR_FILEDLG_CANTCHDIR
     Text [ french ] = "Impossible de passer au répertoire" ;
     Text [ dutch ] = "Kan niet in map komen" ;
     Text [ portuguese ] = "Impossível mudar para directório" ;
-    Text[ chinese_simplified ] = "ÎŞ·¨×ªµ½Ä¿Â¼";
-    Text[ russian ] = "Ñìåíèòü êàòàëîã íåâîçìîæíî";
+    Text[ chinese_simplified ] = "æ— æ³•è½¬åˆ°ç›®å½•";
+    Text[ russian ] = "Íåâîçìîæíî èçìåíèòü êàòàëîã";
     Text[ polish ] = "Nie mo¿e zmieniæ katalogu";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªkÂà¨ì¥Ø¿ı";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•è½‰åˆ°ç›®éŒ„";
     Text[ arabic ] = "áÇ íãßä ÊÛííÑ ÇáÏáíá";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áëëáãŞ óôïí êáôÜëïãï";
-    Text[ korean ] = "µğ·ºÅä¸®¸¦ º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ë¥¼ ë³€ê²½í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Dizin değiştirilemiyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible cambiar en directorio";
+    Text[ catalan ] = "No es pot canviar el directori";
     Text[ finnish ] = "Hakemistoon ei voi siirtyä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹„à¸›à¸—à¸µà¹ˆà¸ªà¸²à¸£à¸šà¸š";
 };
 String STR_FILEDLG_OPEN
 {
@@ -125,18 +127,19 @@ String STR_FILEDLG_OPEN
     Text [ spanish ] = "Abrir" ;
     Text [ french ] = "Ouvrir" ;
     Text [ dutch ] = "Openen" ;
-    Text[ chinese_simplified ] = "´ò¿ª";
+    Text[ chinese_simplified ] = "æ‰“å¼€";
     Text[ russian ] = "Îòêğûòü";
     Text[ polish ] = "Otwórz";
-    Text[ japanese ] = "ŠJ‚­";
-    Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
+    Text[ japanese ] = "é–‹ã";
+    Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”";
     Text[ arabic ] = "İÊÍ";
     Text[ greek ] = "¢íïéãìá";
-    Text[ korean ] = "¿­±â";
+    Text[ korean ] = "ì—´ê¸°";
     Text[ turkish ] = "Aç";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Abrir";
+    Text[ catalan ] = "Obre";
     Text[ finnish ] = "Avaa";
+    Text[ thai ] = "à¹€à¸›à¸´à¸”";
 };
 String STR_FILEDLG_FILE
 {
@@ -151,18 +154,19 @@ String STR_FILEDLG_FILE
     Text [ spanish ] = "~Archivo" ;
     Text [ french ] = "~Fichier" ;
     Text [ dutch ] = "~Bestand" ;
-    Text[ chinese_simplified ] = "ÎÄ¼ş(~F)";
+    Text[ chinese_simplified ] = "æ–‡ä»¶(~F)";
     Text[ russian ] = "~Ôàéë";
     Text[ polish ] = "Plik";
-    Text[ japanese ] = "Ì§²Ù(~F)";
-    Text[ chinese_traditional ] = "ÀÉ®×(~F)";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«(~F)";
+    Text[ chinese_traditional ] = "æª”æ¡ˆ(~F)";
     Text[ arabic ] = "ãáİ";
     Text[ greek ] = "Áñ÷åßï";
-    Text[ korean ] = "ÆÄÀÏ(~F)";
+    Text[ korean ] = "íŒŒì¼(~F)";
     Text[ turkish ] = "~Dosya";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Archivo";
+    Text[ catalan ] = "~Fitxer";
     Text[ finnish ] = "~Tiedosto";
+    Text[ thai ] = "à¹~à¸Ÿà¹‰à¸¡";
 };
 String STR_FILEDLG_DIR
 {
@@ -177,18 +181,19 @@ String STR_FILEDLG_DIR
     Text [ spanish ] = "~Directorio" ;
     Text [ french ] = "~Répertoire" ;
     Text [ dutch ] = "~Directory" ;
-    Text[ chinese_simplified ] = "Ä¿Â¼(~D)";
+    Text[ chinese_simplified ] = "ç›®å½•(~D)";
     Text[ russian ] = "Êàòàëîã";
     Text[ polish ] = "Katalog";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ(~D)";
-    Text[ chinese_traditional ] = "¥Ø¿ı(~D)";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(~D)";
+    Text[ chinese_traditional ] = "ç›®éŒ„(~D)";
     Text[ arabic ] = "Ïáíá";
     Text[ greek ] = "ÊáôÜëïãïò";
-    Text[ korean ] = "µğ·ºÅä¸®(~D)";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬(~D)";
     Text[ turkish ] = "~Dizin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Directorio";
+    Text[ catalan ] = "~Directori";
     Text[ finnish ] = "~Hakemisto";
+    Text[ thai ] = "~à¸ªà¸²à¸£à¸šà¸š";
 };
 String STR_FILEDLG_TYPE
 {
@@ -201,20 +206,21 @@ String STR_FILEDLG_TYPE
     Text [ danish ] = "Filtype" ;
     Text [ italian ] = "Tipo di file" ;
     Text [ spanish ] = "Tipo de ar~chivo" ;
-    Text [ french ] = "~Type de fichier" ;
-    Text [ dutch ] = "Bestand~type" ;
-    Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ(~T)";
+    Text [ french ] = "Type de fichier" ;
+    Text [ dutch ] = "Bestands~type" ;
+    Text[ chinese_simplified ] = "æ–‡ä»¶ç±»å‹(~T)";
     Text[ russian ] = "Òèï ôàéëà";
     Text[ polish ] = "Typ pliku";
-    Text[ japanese ] = "Ì§²Ù‚Ìí—Ş(~T)";
-    Text[ chinese_traditional ] = "ÀÉ®×Ãş«¬(~T)";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡(~T)";
+    Text[ chinese_traditional ] = "æª”æ¡ˆé¡å‹(~T)";
     Text[ arabic ] = "äæÚ Çáãáİ";
     Text[ greek ] = "Ôığïò áñ÷åßïõ";
-    Text[ korean ] = "ÆÄÀÏ  À¯Çü(~T)";
+    Text[ korean ] = "íŒŒì¼ í˜•ì‹(~T)";
     Text[ turkish ] = "Dosya ~tipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tipo de ar~chivo";
+    Text[ catalan ] = "~Tipus de fitxer";
     Text[ finnish ] = "Tiedosto~tyyppi";
+    Text[ thai ] = "~à¸Šà¸™à¸´à¸”à¹à¸Ÿà¹‰à¸¡";
 };
 String STR_FILEDLG_CANTOPENFILE
 {
@@ -229,18 +235,19 @@ String STR_FILEDLG_CANTOPENFILE
     Text [ spanish ] = "No es posible abrir el archivo" ;
     Text [ french ] = "Impossible d'ouvrir le fichier" ;
     Text [ dutch ] = "Kan bestand niet openen" ;
-    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş";
-    Text[ russian ] = "Îòêğûòü ôàéë íåâîçìîæíî";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€æ–‡ä»¶";
+    Text[ russian ] = "Íåâîçìîæíî îòêğûòü ôàéë";
     Text[ polish ] = "Nie mo¿e otworzyæ pliku";
-    Text[ japanese ] = "Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªk¶}±ÒÀÉ®×";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿæª”æ¡ˆ";
     Text[ arabic ] = "áÇ íãßä İÊÍ Çáãáİ";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï";
-    Text[ korean ] = "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Dosya açılamıyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible abrir el archivo";
+    Text[ catalan ] = "No es pot obrir el fitxer";
     Text[ finnish ] = "Tiedostoa ei voi avata";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
@@ -255,18 +262,19 @@ String STR_FILEDLG_CANTOPENDIR
     Text [ spanish ] = "No es posible abrir el directorio" ;
     Text [ french ] = "Impossible d'ouvrir le répertoire" ;
     Text [ dutch ] = "Kan map niet openen" ;
-    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÄ¿Â¼";
-    Text[ russian ] = "Îòêğûòü êàòàëîã íåâîçìîæíî";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€ç›®å½•";
+    Text[ russian ] = "Íåâîçìîæíî îòêğûòü êàòàëîã";
     Text[ polish ] = "Nie mo¿e otworzyæ katalogu";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªk¶}±Ò¥Ø¿ı";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿç›®éŒ„";
     Text[ arabic ] = "áÇ íãßä İÊÍ ÇáÏáíá";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ï êáôÜëïãïò";
-    Text[ korean ] = "µğ·ºÅä¸®¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ë¥¼ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Dizin açılamıyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible abrir el directorio";
+    Text[ catalan ] = "No es pot obrir el directori";
     Text[ finnish ] = "Hakemistoa ei voi avata";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¸ªà¸²à¸£à¸šà¸š";
 };
 String STR_FILEDLG_OVERWRITE
 {
@@ -281,18 +289,19 @@ String STR_FILEDLG_OVERWRITE
     Text [ spanish ] = "El archivo ya existe.\n¿Desea sobrescribirlo?" ;
     Text [ french ] = "Ce fichier existe déjà. \nVoulez-vous le remplacer ?" ;
     Text [ dutch ] = "Het bestand bestaat reeds. \nOverschrijven?" ;
-    Text[ chinese_simplified ] = "ÎÄ¼şÒÑ¾­´æÔÚ¡£ \nÒª¸ÄĞ´ÎÄ¼ş£¿";
-    Text[ russian ] = "İòî ôàéë óæå ñóùåñòâóåò. \nÏåğåïèñàòü åãî?";
+    Text[ chinese_simplified ] = "æ–‡ä»¶å·²ç»å­˜åœ¨ã€‚ \nè¦æ”¹å†™æ–‡ä»¶ï¼Ÿ";
+    Text[ russian ] = "Ôàéë óæå ñóùåñòâóåò. \nÏåğåïèñàòü?";
     Text[ polish ] = "Plik ju¿ istnieje. \nSkasowaæ plik przez zapisanie?";
-    Text[ japanese ] = "Ì§²Ù‚Í‚ ‚è‚Ü‚·B \nã‘‚«‚µ‚Ü‚·‚©H";
-    Text[ chinese_traditional ] = "ÀÉ®×¦s¦b¡C \n±z­nÂĞ¼gÀÉ®×¡H";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚ã‚Šã¾ã™ã€‚ \nä¸Šæ›¸ãã—ã¾ã™ã‹ï¼Ÿ";
+    Text[ chinese_traditional ] = "æª”æ¡ˆå­˜åœ¨ã€‚ \næ‚¨è¦è¦†å¯«æª”æ¡ˆï¼Ÿ";
     Text[ arabic ] = "åĞÇ Çáãáİ ãæÌæÏ ãÓÈŞÇğ.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ greek ] = "Ôï áñ÷åßï áõôü õğÜñ÷åé Şäç. \nÍá áíôéêáôáóôáèåß;";
-    Text[ korean ] = "ÀÌ ÆÄÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. \nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ì´ íŒŒì¼ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. \në®ì–´ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Dosya mevcut. \nÜzerine yazılsın mı?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El archivo ya existe.\n¿Desea sobrescribirlo?";
+    Text[ catalan ] = "Aquest fitxer ja existeix. \nVoleu sobreescriure'l?";
     Text[ finnish ] = "Tiedosto on jo olemassa. \nKorvataanko?";
+    Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸™à¸µà¹‰à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§ \nà¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ ?";
 };
 String STR_FILEDLG_GOUP
 {
@@ -307,18 +316,19 @@ String STR_FILEDLG_GOUP
     Text [ spanish ] = "Subir un nivel" ;
     Text [ french ] = "Niveau supérieur" ;
     Text [ dutch ] = "Een niveau hoger" ;
-    Text[ chinese_simplified ] = "ÏòÉÏÉıÒ»¼¶";
+    Text[ chinese_simplified ] = "å‘ä¸Šå‡ä¸€çº§";
     Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
     Text[ polish ] = "Jeden poziom wy¿ej";
-    Text[ japanese ] = "‚P‚Âã‚ÌÌ«ÙÀŞ‚Ö";
-    Text[ chinese_traditional ] = "¦V¤W¤@¯Å";
+    Text[ japanese ] = "ï¼‘ã¤ä¸Šã®ãƒ•ã‚©ãƒ«ãƒ€ã¸";
+    Text[ chinese_traditional ] = "å‘ä¸Šä¸€ç´š";
     Text[ arabic ] = "ãÓÊæì æÇÍÏ ááÃÚáì";
     Text[ greek ] = "¸íá åğßğåäï ğéï øçëÜ";
-    Text[ korean ] = "ÇÑ ¼öÁØ À§·Î";
+    Text[ korean ] = "í•œ ìˆ˜ì¤€ ìœ„ë¡œ";
     Text[ turkish ] = "Bir seviye yukarı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subir un nivel";
-    Text[ finnish ] = "Yksi taso ylös";
+    Text[ catalan ] = "Un nivell amunt";
+    Text[ finnish ] = "Tasoa ylemmäs";
+    Text[ thai ] = "à¸‚à¸¶à¹‰à¸™à¸«à¸™à¸¶à¹ˆà¸‡à¸£à¸°à¸”à¸±à¸š";
 };
 String STR_FILEDLG_SAVE
 {
@@ -333,18 +343,19 @@ String STR_FILEDLG_SAVE
     Text [ spanish ] = "Guardar" ;
     Text [ french ] = "Enregistrer" ;
     Text [ dutch ] = "Opslaan" ;
-    Text[ chinese_simplified ] = "´æÅÌ";
+    Text[ chinese_simplified ] = "å­˜ç›˜";
     Text[ russian ] = "Ñîõğàíèòü";
     Text[ polish ] = "Zapisz";
-    Text[ japanese ] = "•Û‘¶";
-    Text[ chinese_traditional ] = "Àx¦s";
+    Text[ japanese ] = "ä¿å­˜";
+    Text[ chinese_traditional ] = "å„²å­˜";
     Text[ arabic ] = "ÍİÙ";
     Text[ greek ] = "ÁğïèŞêåõóç";
-    Text[ korean ] = "ÀúÀå";
+    Text[ korean ] = "ì €ì¥";
     Text[ turkish ] = "Kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar";
+    Text[ catalan ] = "Desa";
     Text[ finnish ] = "Tallenna";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
 };
 String STR_FILEDLG_DRIVES
 {
@@ -359,18 +370,19 @@ String STR_FILEDLG_DRIVES
     Text [ spanish ] = "~Unidades" ;
     Text [ french ] = "~Unités" ;
     Text [ dutch ] = "~Stations" ;
-    Text[ chinese_simplified ] = "Çı¶¯ÅÌ(~R)";
-    Text[ russian ] = "Äèñêè";
+    Text[ chinese_simplified ] = "é©±åŠ¨ç›˜(~R)";
+    Text[ russian ] = "Äèñê";
     Text[ polish ] = "Napêdy";
-    Text[ japanese ] = "ÄŞ×²ÌŞ(~R)";
-    Text[ chinese_traditional ] = "ÅX°Ê¾¹(~R)";
+    Text[ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒ–(~R)";
+    Text[ chinese_traditional ] = "é©…å‹•å™¨(~R)";
     Text[ arabic ] = "ãÍÑßÇÊ ÇáÃŞÑÇÕ";
     Text[ greek ] = "ÌïíÜäá äßóêïõ";
-    Text[ korean ] = "µå¶óÀÌºê(~R)";
+    Text[ korean ] = "ë“œë¼ì´ë¸Œ(~R)";
     Text[ turkish ] = "~Sürücü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Unidades";
+    Text[ catalan ] = "~Unitat";
     Text[ finnish ] = "A~sema";
+    Text[ thai ] = "à¹„à¸”~à¸£à¹‰à¸Ÿà¹Œ";
 };
 String STR_FILEDLG_HOME
 {
@@ -384,19 +396,20 @@ String STR_FILEDLG_HOME
     Text [ italian ] = "Cartella utente" ;
     Text [ spanish ] = "Directorio de usuario" ;
     Text [ french ] = "Répertoire d'utilisateur" ;
-    Text [ dutch ] = "Gebruikers-map" ;
-    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼";
+    Text [ dutch ] = "Gebruikersmap" ;
+    Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½•";
     Text[ russian ] = "Êàòàëîã ïîëüçîâàòåëÿ";
     Text[ polish ] = "Katalog u¿ytkowników";
-    Text[ japanese ] = "Õ°»Ş°‚ÌÃŞ¨Ú¸ÄØ";
-    Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı";
+    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
+    Text[ chinese_traditional ] = "è‡ªè¨‚ç›®éŒ„";
     Text[ arabic ] = "Ïáíá ÇáãÓÊÎÏã";
     Text[ greek ] = "ÊáôÜëïãïò ÷ñŞóôç";
-    Text[ korean ] = "»ç¿ëÀÚ µğ·ºÅä¸®";
+    Text[ korean ] = "ì‚¬ìš©ì ë””ë ‰í† ë¦¬";
     Text[ turkish ] = "Kullanıcı dizini";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Directorio de usuario";
+    Text[ catalan ] = "Directori de l'usuari";
     Text[ finnish ] = "Oma hakemisto";
+    Text[ thai ] = "à¸ªà¸²à¸£à¸šà¸šà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
 };
 String STR_FILEDLG_NEWDIR
 {
@@ -410,19 +423,20 @@ String STR_FILEDLG_NEWDIR
     Text [ italian ] = "Crea cartella" ;
     Text [ spanish ] = "Crear directorio" ;
     Text [ french ] = "Créer un répertoire" ;
-    Text [ dutch ] = "Map maken" ;
-    Text[ chinese_simplified ] = "´´½¨Ä¿Â¼";
+    Text [ dutch ] = "Directory maken" ;
+    Text[ chinese_simplified ] = "åˆ›å»ºç›®å½•";
     Text[ russian ] = "Ñîçäàòü êàòàëîã";
     Text[ polish ] = "Utwórz katalog";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğì¬";
-    Text[ chinese_traditional ] = "«Ø¥ß¥Ø¿ı";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ä½œæˆ";
+    Text[ chinese_traditional ] = "å»ºç«‹ç›®éŒ„";
     Text[ arabic ] = "ÅäÔÇÁ Ïáíá";
     Text[ greek ] = "Äçìéïõñãßá êáôáëüãïõ";
-    Text[ korean ] = "µğ·ºÅä¸® ¸¸µé±â";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Dizin oluştur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crear directorio";
+    Text[ catalan ] = "Crea un directori";
     Text[ finnish ] = "Luo hakemisto";
+    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸ªà¸²à¸£à¸šà¸š";
 };
 String STR_FILEDLG_ASKNEWDIR
 {
@@ -435,21 +449,35 @@ String STR_FILEDLG_ASKNEWDIR
     Text [ italian ] = "Volete creare una cartella %s ?" ;
     Text [ spanish ] = "¿Desea crear el directorio %s?" ;
     Text [ french ] = "Souhaitez vous créer le répertoire %s ?" ;
-    Text [ dutch ] = "Wilt u dat map %s wordt aangelegd ?" ;
+    Text [ dutch ] = "Wilt u dat map %s wordt gemaakt?" ;
     Text [ portuguese ] = "Deseja criar o directório %s ?" ;
-    Text[ chinese_simplified ] = "ÄúÒª½¨Á¢Õâ¸öÄ¿Â¼ %s £¿";
+    Text[ chinese_simplified ] = "æ‚¨è¦å»ºç«‹è¿™ä¸ªç›®å½• %s ï¼Ÿ";
     Text[ russian ] = "Ñîçäàòü êàòàëîã %s ?";
     Text[ polish ] = "Czy utworzyæ katalog %s?";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ%s‚ğì¬‚µ‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "±z­n«Ø¥ß³o­Ó¥Ø¿ı %s ¡H";
+    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª %s ã‚’ä½œæˆã—ã¾ã™ã‹ã€‚";
+    Text[ chinese_traditional ] = "æ‚¨è¦å»ºç«‹é€™å€‹ç›®éŒ„ %s ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÁ ÇáÏáíá %s¿";
     Text[ greek ] = "Èİëåôå íá äçìéïõñãçèåß ï êáôÜëïãïò %s;";
-    Text[ korean ] = "µğ·ºÅä¸® %s ¸¦ ¸¸µå½Ã°Ú½À´Ï±î ?";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ %s ë¥¼ ë§Œë“œì‹œê² ìŠµë‹ˆê¹Œ ?";
     Text[ turkish ] = "%s oluşturulsun mu ?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¿Desea crear el directorio %s?";
+    Text[ catalan ] = "Voleu crear el directori %s?";
     Text[ finnish ] = "Haluatko luoda hakemiston %s?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¸ªà¸²à¸£à¸šà¸š %s à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

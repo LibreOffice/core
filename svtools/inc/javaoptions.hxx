@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-05-18 13:09:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@ class SvtJavaOptions : utl::ConfigItem
 {
     SvtJavaOptions_Impl* pImpl;
 public:
+    enum EOption
+    {
+        E_ENABLED,
+        E_SECURITY,
+        E_NETACCESS,
+        E_USERCLASSPATH,
+        E_EXECUTEAPPLETS
+    };
+
     SvtJavaOptions();
     ~SvtJavaOptions();
 
@@ -93,6 +102,8 @@ public:
     void SetNetAccess(sal_Int32 nSet) ;
     void SetUserClassPath(const rtl::OUString& rSet);
     void SetExecuteApplets(sal_Bool bSet);
+
+    sal_Bool IsReadOnly( EOption eOption ) const;
 };
 
 #endif //

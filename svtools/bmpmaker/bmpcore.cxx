@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-30 16:27:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,13 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                              const String& rName,
                              const LangInfo& rLang )
 {
-       const char*         pCollectPath = getenv( "BMP_COLLECT_PATH" );
     const sal_uInt32    nOldPos = pSRS->Tell();
+       const char*         pCollectFile = getenv( "BMP_COLLECT_FILE" );
+       SvFileStream*       pCollectStm = pCollectFile ? new SvFileStream( String( pCollectFile, RTL_TEXTENCODING_ASCII_US ),
+                                                                          STREAM_WRITE ) : NULL;
+
+    if( pCollectStm )
+        pCollectStm->Seek( STREAM_SEEK_TO_END );
 
     if( rInDirs.size() )
     {
@@ -189,30 +194,6 @@ void BmpCreator::ImplCreate( SvStream& rStm,
             aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
             Message( aInfo );
 
-/*
-            if( pCollectPath )
-            {
-                String aLocalStr( aLocalPath.GetPath().GetFull() );
-                aLocalStr.EraseLeadingChars( '/' );
-                aLocalStr.SearchAndReplace( ':', '_' );
-                aLocalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
-                aLocalCollectPath += DirEntry( aLocalStr );
-                aLocalCollectPath.MakeDir();
-
-                String aGlobalStr( aGlobalPath.GetPath().GetFull() );
-                aGlobalStr.EraseLeadingChars( '/' );
-                aGlobalStr.SearchAndReplace( ':', '_' );
-                aGlobalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
-                aGlobalCollectPath += DirEntry( aGlobalStr );
-                aGlobalCollectPath.MakeDir();
-
-                if( !aLocalCollectPath.Exists() || !aGlobalCollectPath.Exists() )
-                {
-                    pCollectPath = NULL;
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: couldn't create collect path" ) ), 0 );
-                }
-            }
-*/
 
             // create bit vector to hold flags for valid bitmaps
             ::std::bit_vector aValidBmpBitVector( aNameVector.size(), false );
@@ -234,13 +215,11 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                         aIStm >> aBmp;
                         aIStm.Close();
 
-/*
-                        if( pCollectPath && !aBmp.IsEmpty() )
+                        if( pCollectStm && !aBmp.IsEmpty() )
                         {
-                            DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
-                            aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
+                            const ByteString aCollectString( aFileName, RTL_TEXTENCODING_ASCII_US );
+                            pCollectStm->WriteLine( aCollectString );
                         }
-*/
                     }
                 }
 
@@ -341,6 +320,7 @@ void BmpCreator::ImplCreate( SvStream& rStm,
         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: SOLARSRC environment variable not set!" ) ), EXIT_MISSING_SOLARSRC_ENV );
 
     pSRS->Seek( nOldPos );
+    delete pCollectStm;
 }
 
 // -----------------------------------------------------------------------------

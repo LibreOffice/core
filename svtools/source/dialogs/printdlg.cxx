@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-18 15:50:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maFiComment     ( this, SvtResId( FI_COMMENT ) ),
     maCbxFilePrint  ( this, SvtResId( CBX_FILEPRINT ) ),
     maFiPrintFile   ( this, SvtResId( FI_PRINTFILE ) ),
-    maBtnBrowse     ( this, SvtResId( BTN_BROWSE ) ),
+    maBtnBrowse_nomore  ( this, SvtResId( BTN_BROWSE ) ),
     maFlPrintRange  ( this, SvtResId( FL_PRINTRANGE ) ),
     maRbtAll        ( this, SvtResId( RBT_ALL ) ),
     maRbtPages      ( this, SvtResId( RBT_PAGES ) ),
@@ -189,7 +189,6 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maStatusTimer.SetTimeoutHdl( LINK( this, PrintDialog, ImplStatusHdl ) );
     maBtnProperties.SetClickHdl( LINK( this, PrintDialog, ImplPropertiesHdl ) );
     maLbName.SetSelectHdl( LINK( this, PrintDialog, ImplChangePrinterHdl ) );
-    maBtnBrowse.SetClickHdl( LINK( this, PrintDialog, ImplBrowseHdl ) );
 
     maFiPrintFile.SetStyle( maFiPrintFile.GetStyle() | WB_PATHELLIPSIS );
 
@@ -203,6 +202,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maCbxCollate.SetClickHdl( aLink );
     maBtnOptions.SetClickHdl( aLink );
     maEdtFaxNo.SetModifyHdl( aLink );
+    maBtnOK.SetClickHdl( aLink );
 
     maRbtAll.Check();
     ImplSetImages();
@@ -258,7 +258,7 @@ void PrintDialog::ImplSetInfo()
     {
         maFiPrintFile.Show( FALSE );
         maCbxFilePrint.Show( FALSE );
-        maBtnBrowse.Show( FALSE );
+        maBtnBrowse_nomore.Show( FALSE );
         maFiFaxNo.Show( TRUE );
         maEdtFaxNo.Show( TRUE );
         Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
@@ -269,7 +269,7 @@ void PrintDialog::ImplSetInfo()
     {
         maFiPrintFile.Show( TRUE );
         maCbxFilePrint.Show( TRUE );
-        maBtnBrowse.Show( TRUE );
+        maBtnBrowse_nomore.Show( FALSE );
         maFiFaxNo.Show( FALSE );
         maEdtFaxNo.Show( FALSE );
     }
@@ -282,9 +282,6 @@ void PrintDialog::ImplCheckOK()
 {
     // Ueberprueft, ob der OK-Button enabled ist
     BOOL bEnable = TRUE;
-
-    if ( maCbxFilePrint.IsChecked() )
-        bEnable = maFiPrintFile.GetText().Len() > 0;
 
     if ( bEnable && maRbtPages.IsChecked() )
         bEnable = maEdtPages.GetText().Len() > 0;
@@ -416,7 +413,7 @@ IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
+bool PrintDialog::ImplGetFilename()
 {
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
@@ -477,29 +474,18 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
                 maFiPrintFile.SetText( aObj.PathToFileName() );
+                return true;
             }
-            ImplCheckOK();
-            return 0;
         }
     }
 
-    return 0;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
 {
-    // Drucken in Datei
-    if ( !p || (p == &maCbxFilePrint) )
-    {
-        BOOL bCheck = maCbxFilePrint.IsChecked();
-        if ( bCheck && !maFiPrintFile.GetText().Len() )
-            ImplBrowseHdl( &maBtnBrowse );
-        maFiPrintFile.Enable( bCheck );
-        maBtnBrowse.Enable( bCheck );
-    }
-
     // Radiobuttons (Umfang)
     if ( !p || (p == &maRbtAll) || (p == &maRbtPages) || (p == &maRbtSelection) )
     {
@@ -510,7 +496,7 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
         ImplCheckOK();
     }
 
-    // Edit-Felder (Dateiname, Seiten)
+    // Edit-Felder (Seiten)
     if ( p == &maEdtPages )
         ImplCheckOK();
 
@@ -559,6 +545,11 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
     // Zus"atze
     if ( p == &maBtnOptions )
         ClickOptionsHdl();
+
+    if( p == &maBtnOK )
+    {
+        EndDialog( maCbxFilePrint.IsChecked() ? ImplGetFilename() : TRUE );
+    }
 
     return 0;
 }

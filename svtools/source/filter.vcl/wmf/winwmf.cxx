@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 13:50:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,8 +1271,6 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 }
                 break;
             }
-            if ( nFunction == W_META_SETWINDOWEXT )
-                break;
             pWMF->Seek( nStartPos += nRecSize * 2 );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:17:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,18 @@ ModalDialog DLG_EXPORT_PIX
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
         Text[ chinese_simplified ] = "å½©è‰²åˆ†è¾¨ç‡";
-        Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
+        Text[ russian ] = "Ãëóáèíà öâåòà";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "è‰²ã®è§£åƒåº¦";
         Text[ chinese_traditional ] = "å½©è‰²è§£æåº¦";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
-        Text[ korean ] = "ì»¬ëŸ¬ í•´ìƒë„";
+        Text[ korean ] = "ìƒ‰ í•´ìƒë„";
         Text[ turkish ] = "Renk çözünürlüğü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Resolución del color";
-        Text[ finnish ] = "Värin erottelukyky";
+        Text[ catalan ] = "Resolució del color";
+        Text[ finnish ] = "Väritarkkuus";
+        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸ªà¸µ";
     };
     ListBox LB_COLORS
     {
@@ -166,8 +167,8 @@ ModalDialog DLG_EXPORT_PIX
             < "1bit-ditrering" ; Default ; > ;
             < "4bit-gråskalepalett" ; Default ; > ;
             < "4bit-färgpalett" ; Default ; > ;
-            < "8Bit - gråskalepalett" ; Default ; > ;
-            < "8Bit - färgpalett" ; Default ; > ;
+            < "8bit - gråskalepalett" ; Default ; > ;
+            < "8bit - färgpalett" ; Default ; > ;
             < "24bit - True Colors" ; Default ; > ;
         };
         stringlist [ danish ] =
@@ -212,18 +213,18 @@ ModalDialog DLG_EXPORT_PIX
             < "Palette de couleurs 4 bits" ; Default ; > ;
             < "Niveaux de gris 8 bits" ; Default ; > ;
             < "Palette de couleurs 8 bits" ; Default ; > ;
-            < "Couleurs 24 bit (Truecolor)" ; Default ; > ;
+            < "Couleurs 24 bits (True color)" ; Default ; > ;
         };
         stringlist [ dutch ] =
         {
             < "Origineel" ; Default ; > ;
-            < "1Bit - grenswaarde" ; Default ; > ;
-            < "1Bit - geditherd" ; Default ; > ;
-            < "4Bit - grijswaardenpalet" ; Default ; > ;
-            < "4Bit - kleurenpalet" ; Default ; > ;
-            < "8Bit - grijswaardenpalet" ; Default ; > ;
-            < "8Bit - kleurenpalet" ; Default ; > ;
-            < "24Bit - echte kleuren" ; Default ; > ;
+            < "1-bits-drempelwaarde" ; Default ; > ;
+            < "1-bits-geditherd" ; Default ; > ;
+            < "4-bits-grijswaardenpalet" ; Default ; > ;
+            < "4-bits-kleurenpalet" ; Default ; > ;
+            < "8-bits-grijswaardenpalet" ; Default ; > ;
+            < "8-bits-kleurenpalet" ; Default ; > ;
+            < "24-bits-ware kleuren" ; Default ; > ;
         };
     StringList [ chinese_simplified ] =
     {
@@ -239,11 +240,11 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ russian ] =
     {
     < "Îğèãèíàë" ; Default ; > ;
-        < "1-ğàçğÿäíîå ïîğîãîâîå çíà÷åíèå" ; Default ; > ;
-        < "1-ğàçğÿäíîå ïñåâäîïîëóòîíîâîå èçîáğàæåíèå" ; Default ; > ;
-        < "4-ğàçğÿäíàÿ ãàììà îòòåíêîâ ñåğîãî" ; Default ; > ;
+        < "1-ğàçğÿäíîå ïîğîãîâîå ïğåîáğàçîâàíèå" ; Default ; > ;
+        < "1-ğàçğÿäíîå äèôôóçíîå ïğåîáğàçîâàíèå" ; Default ; > ;
+        < "4-ğàçğÿäíàÿ ïàëèòğà îòòåíêîâ ñåğîãî" ; Default ; > ;
         < "4-ğàçğÿäíàÿ öâåòîâàÿ ïàëèòğà" ; Default ; > ;
-        < "8-ğàçÿäíàÿ ãàììà îòòåíêîâ ñåğîãî" ; Default ; > ;
+        < "8-ğàçğÿäíàÿ ïàëèòğà îòòåíêîâ ñåğîãî" ; Default ; > ;
         < "8-ğàçğÿäíàÿ öâåòîâàÿ ïàëèòğà" ; Default ; > ;
         < "24-ğàçğÿäíîå êîäèğîâàíèå öâåòà" ; Default ; > ;
     };
@@ -260,14 +261,14 @@ ModalDialog DLG_EXPORT_PIX
     };
     StringList [ japanese ] =
     {
-            < "ï½µï¾˜ï½¼ï¾ï¾…ï¾™" ; Default ; > ;
+            < "ã‚ªãƒªã‚¸ãƒŠãƒ«" ; Default ; > ;
         < "1Bit ã—ãã„å€¤" ; Default ; > ;
-        < "1Bit ï¾ƒï¾ï½¨ï½»ï¾æ³•" ; Default ; > ;
-        < "4Bit-ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™" ; Default ; > ;
-        < "4Bit-ï½¶ï¾—ï½°ï¾Šï¾Ÿï¾šï½¯ï¾„" ; Default ; > ;
-        < "8Bit-ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™" ; Default ; > ;
-        < "8Bit-ï½¶ï¾—ï½°ï¾Šï¾Ÿï¾šï½¯ï¾„" ; Default ; > ;
-        < "24Bit ~True Color" ; Default ; > ;
+        < "1ãƒ“ãƒƒãƒ‰ãƒ‡ã‚£ã‚¶ãƒªãƒ³ã‚°" ; Default ; > ;
+        < "4Bit-ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«" ; Default ; > ;
+        < "4ãƒ“ãƒƒãƒˆ ã‚«ãƒ©ãƒ¼ãƒ‘ãƒ¬ãƒƒãƒˆ" ; Default ; > ;
+        < "8Bit-ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«" ; Default ; > ;
+        < "8ãƒ“ãƒƒãƒˆ ã‚«ãƒ©ãƒ¼ãƒ‘ãƒ¬ãƒƒãƒˆ" ; Default ; > ;
+        < "24Bit True Color" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -305,13 +306,13 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ korean ] =
     {
             < "ì›ë³¸" ; Default ; > ;
-        < "1 ë¹„íŠ¸- ì„ê³„ê°’" ; Default ; > ;
-        < "1ë¹„íŠ¸ - ë””ë”ë§" ; Default ; > ;
-        < "4 ë¹„íŠ¸ - íšŒìƒ‰ë„íŒ”ë ˆíŠ¸" ; Default ; > ;
-        < "4 ë¹„íŠ¸ - ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
-        < "8 ë¹„íŠ¸ - íšŒìƒ‰ë„ íŒ”ë ˆíŠ¸" ; Default ; > ;
-        < "8 ë¹„íŠ¸-ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
-        < "24 ë¹„íŠ¸ - íŠ¸ë£¨ ì»¬ëŸ¬" ; Default ; > ;
+        < "1 ë¹„íŠ¸ ì„ê³„ê°’" ; Default ; > ;
+        < "1 ë¹„íŠ¸ ë””ë”ë§" ; Default ; > ;
+        < "4 ë¹„íŠ¸ íšŒìƒ‰ì¡°" ; Default ; > ;
+        < "4 ë¹„íŠ¸ ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "8 ë¹„íŠ¸ íšŒìƒ‰ì¡°" ; Default ; > ;
+        < "8 ë¹„íŠ¸ ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "24 ë¹„íŠ¸ íŠ¸ë£¨ ì»¬ëŸ¬" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -338,24 +339,35 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ catalan ] =
     {
             < "Original" ; Default ; > ;
-        < "Valor umbral de 1 bit" ; Default ; > ;
-        < "1 bit - difusionado" ; Default ; > ;
-        < "Paleta de escala de grises 4 bits" ; Default ; > ;
-        < "Paleta de colores de 4 bits" ; Default ; > ;
-        < "Paleta de escala de grises 8 bits" ; Default ; > ;
-        < "Paleta de colores de 8 bits" ; Default ; > ;
-        < "Color real 24 bits" ; Default ; > ;
+        < "1 bit - Valor llindar" ; Default ; > ;
+        < "1 bit - difús" ; Default ; > ;
+        < "4 bits - Escala de grisos" ; Default ; > ;
+        < "4 bits - Paleta de colors" ; Default ; > ;
+        < "8 bits - Escala de grisos" ; Default ; > ;
+        < "8 bits - Paleta de colors" ; Default ; > ;
+        < "24 bits - Colors reals" ; Default ; > ;
     };
     StringList [ finnish ] =
     {
             < "Alkuperäinen" ; Default ; > ;
-        < "1-bittinen - Raja-arvo" ; Default ; > ;
+        < "1-bittinen - Kynnysarvo" ; Default ; > ;
         < "1-bittinen - Rasterointi" ; Default ; > ;
         < "4-bittinen - Harmaasävy" ; Default ; > ;
         < "4-bittinen - Väripaletti" ; Default ; > ;
         < "8-bittinen - Harmaasävyt" ; Default ; > ;
         < "8-bittinen - Väripaletti" ; Default ; > ;
         < "24-bittinen - True Color -värit" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š" ; Default ; > ;
+        < "1 à¸šà¸´à¸— - à¸„à¹ˆà¸²à¸à¸²à¸£à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™" ; Default ; > ;
+        < "1 à¸šà¸´à¸— - à¸ªà¸±à¹ˆà¸™" ; Default ; > ;
+        < "4 à¸šà¸´à¸— - à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²" ; Default ; > ;
+        < "4 à¸šà¸´à¸— - à¸ˆà¸²à¸™à¸ª" ; Default ; > ;
+        < "8 à¸šà¸´à¸— - à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²" ; Default ; > ;
+        < "8 à¸šà¸´à¸— - à¸ˆà¸²à¸™à¸ªà¸µ" ; Default ; > ;
+        < "24 à¸šà¸´à¸— - à¸ªà¸µà¸ˆà¸£à¸´à¸‡" ; Default ; > ;
     };
     };
     CheckBox CBX_RLE
@@ -377,15 +389,16 @@ ModalDialog DLG_EXPORT_PIX
         Text[ chinese_simplified ] = "RLE - ç¼–ç ";
         Text[ russian ] = "Êîäèğîâêà RLE";
         Text[ polish ] = "Kodowanie RLE";
-        Text[ japanese ] = "RLE ï½ºï½°ï¾ƒï¾ï½¨ï¾ï½¸ï¾";
+        Text[ japanese ] = "RLE ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°";
         Text[ chinese_traditional ] = "RLE ç·¨ç¢¼";
         Text[ arabic ] = "ÊÑãíÒ RLE";
         Text[ greek ] = "Êùäéêïğïßçóç RLE";
         Text[ korean ] = "RLE ì½”ë”©";
         Text[ turkish ] = "RLE kodlama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Codificación RLE";
+        Text[ catalan ] = "Codificació RLE";
         Text[ finnish ] = "RLE-koodaus";
+        Text[ thai ] = "à¸à¸²à¸£à¹€à¸‚à¹‰à¸²à¸£à¸«à¸±à¸ª RLE ";
     };
     FixedLine GRP_MODE_PIX
     {
@@ -405,15 +418,16 @@ ModalDialog DLG_EXPORT_PIX
         Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ greek ] = "ÊáôÜóôáóç";
         Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
+        Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
     };
     RadioButton RB_ORIGINAL_PIX
     {
@@ -426,15 +440,15 @@ ModalDialog DLG_EXPORT_PIX
         Text [ english_us ] = "~Original" ;
         Text [ italian ] = "~Originale" ;
         Text [ spanish ] = "~Original" ;
-        Text [ french ] = "~Original" ;
+        Text [ french ] = "Original" ;
         Text [ swedish ] = "~Original" ;
         Text [ danish ] = "Original" ;
         Text [ portuguese ] = "~Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
         Text[ chinese_simplified ] = "åŸä»¶(~O)";
-        Text[ russian ] = "Îğèãèíàë";
+        Text[ russian ] = "Èñõîäíûé ğåæèì";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«(~O)";
         Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ greek ] = "Áñ÷éêü";
@@ -443,6 +457,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
         Text[ finnish ] = "~Alkuperäinen";
+        Text[ thai ] = "~à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
     };
     RadioButton RB_RES_PIX
     {
@@ -453,7 +468,7 @@ ModalDialog DLG_EXPORT_PIX
         TabStop = TRUE ;
         Text [ dutch ] = "~Resolutie" ;
         Text [ english_us ] = "~Resolution" ;
-        Text [ italian ] = "~Risoluzione" ;
+        Text [ italian ] = "Risoluzione" ;
         Text [ spanish ] = "~Resolución" ;
         Text [ french ] = "Résolution" ;
         Text [ swedish ] = "~Upplösning" ;
@@ -470,8 +485,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "í•´ìƒë„(~R)";
         Text[ turkish ] = "~Çözünürlük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Resolución";
+        Text[ catalan ] = "~Resolució";
         Text[ finnish ] = "~Tarkkuus";
+        Text[ thai ] = "~à¸„à¸§à¸²à¸¡à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
     };
     ComboBox CBB_RES_PIX
     {
@@ -506,15 +522,16 @@ ModalDialog DLG_EXPORT_PIX
         Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º(~S)";
         Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tamaño";
+        Text[ catalan ] = "~Mida";
         Text[ finnish ] = "~Koko";
+        Text[ thai ] = "~à¸‚à¸™à¸²à¸”";
     };
     MetricField MTF_SIZEX_PIX
     {
@@ -558,8 +575,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho";
+        Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField MTF_SIZEY_PIX
     {
@@ -605,6 +623,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura";
         Text[ finnish ] = "Korkeus";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
     };
     OKButton BTN_OK_PIX
     {
@@ -652,15 +671,16 @@ ModalDialog DLG_EXPORT_VEC
         Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ greek ] = "ÊáôÜóôáóç";
         Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
+        Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
     };
     RadioButton RB_ORIGINAL_VEC
     {
@@ -673,15 +693,15 @@ ModalDialog DLG_EXPORT_VEC
         Text [ english_us ] = "~Original" ;
         Text [ italian ] = "~Originale" ;
         Text [ spanish ] = "~Original" ;
-        Text [ french ] = "~Original" ;
+        Text [ french ] = "Original" ;
         Text [ swedish ] = "~Original" ;
         Text [ danish ] = "Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
         Text [ portuguese ] = "~Original" ;
         Text[ chinese_simplified ] = "åŸä»¶(~O)";
-        Text[ russian ] = "Îğèãèíàë";
+        Text[ russian ] = "Èñõîäíûé ğàçìåğ";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«(~O)";
         Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ greek ] = "Áñ÷éêü";
@@ -690,6 +710,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
         Text[ finnish ] = "~Alkuperäinen";
+        Text[ thai ] = "~à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
     };
     RadioButton RB_SIZE_VEC
     {
@@ -710,15 +731,16 @@ ModalDialog DLG_EXPORT_VEC
         Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º(~S)";
         Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tamaño";
+        Text[ catalan ] = "~Mida";
         Text[ finnish ] = "~Koko";
+        Text[ thai ] = "~à¸‚à¸™à¸²à¸”";
     };
     FixedLine GRP_SIZE_VEC
     {
@@ -738,15 +760,16 @@ ModalDialog DLG_EXPORT_VEC
         Text[ chinese_simplified ] = "å¤§å°";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ï½»ï½²ï½½ï¾";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º";
         Text[ chinese_traditional ] = "å¤§å°";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "í¬ê¸°";
         Text[ turkish ] = "Büyüklük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tamaño";
+        Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
+        Text[ thai ] = "à¸‚à¸™à¸²à¸”";
     };
     FixedText FT_SIZEX_VEC
     {
@@ -773,8 +796,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho";
+        Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField MTF_SIZEX_VEC
     {
@@ -820,6 +844,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura";
         Text[ finnish ] = "Korkeus";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
     };
     MetricField MTF_SIZEY_VEC
     {
@@ -858,6 +883,15 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 17:19:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,40 +217,22 @@ ImplRulerData::ImplRulerData()
 
 ImplRulerData::~ImplRulerData()
 {
-    if ( pLines )
-        delete pLines;
-
-    if ( pArrows )
-        delete pArrows;
-
-    if ( pBorders )
-        delete pBorders;
-
-    if ( pIndents )
-        delete pIndents;
-
-    if ( pTabs )
-        delete pTabs;
+    delete[] pLines;
+    delete[] pArrows;
+    delete[] pBorders;
+    delete[] pIndents;
+    delete[] pTabs;
 }
 
 // -----------------------------------------------------------------------
 
 ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
 {
-    if ( pLines )
-        delete pLines;
-
-    if ( pArrows )
-        delete pArrows;
-
-    if ( pBorders )
-        delete pBorders;
-
-    if ( pIndents )
-        delete pIndents;
-
-    if ( pTabs )
-        delete pTabs;
+    delete[] pLines;
+    delete[] pArrows;
+    delete[] pBorders;
+    delete[] pIndents;
+    delete[] pTabs;
 
     memcpy( this, &rData, sizeof( ImplRulerData ) );
 
@@ -1172,9 +1154,6 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
             continue;
 
         long n;
-        if(mpData->bTextRTL)
-            n =  mpData->nMargin2 - mpData->pTabs[i].nPos;
-        else
             n = mpData->pTabs[i].nPos;
         n += +mpData->nNullVirOff;
         long nTopBottom = GetStyle() & WB_RIGHT_ALIGNED ? nVirTop : nVirBottom;
@@ -1483,7 +1462,6 @@ void Ruler::ImplInitExtraField( BOOL bUpdate )
         maExtraRect.Top()    = RULER_OFF;
         maExtraRect.Right()  = RULER_OFF+mnVirHeight-1;
         maExtraRect.Bottom() = RULER_OFF+mnVirHeight-1;
-        mnVirOff = maExtraRect.Right()+1;
         if(mpData->bTextRTL)
         {
             Size aWinSize = GetOutputSizePixel();
@@ -1491,7 +1469,11 @@ void Ruler::ImplInitExtraField( BOOL bUpdate )
                 maExtraRect.Move(aWinSize.Width() - maExtraRect.GetWidth() - maExtraRect.Left(), 0);
             else
                 maExtraRect.Move(0, aWinSize.Height() - maExtraRect.GetHeight() - maExtraRect.Top());
+            mnVirOff = 0;
         }
+        else
+            mnVirOff = maExtraRect.Right()+1;
+
     }
     else
     {
@@ -1519,11 +1501,13 @@ void Ruler::ImplDraw()
         // Lineal ueber das VirtualDevice ausgeben
         Point   aOffPos;
         Size    aVirDevSize = maVirDev.GetOutputSizePixel();
-        Size    aVirDevSize2 = maVirDev.GetOutputSizePixel();
+//        Size    aVirDevSize2 = maVirDev.GetOutputSizePixel();
         if ( mnWinStyle & WB_HORZ )
         {
-            if(!mpData->bTextRTL)
-                aOffPos.X() = mnVirOff;
+            aOffPos.X() = mnVirOff;
+            if(mpData->bTextRTL)
+                aVirDevSize.Width() -= maExtraRect.GetWidth();
+
 //  else
 //      aVirDevSize.Width() -= mnVirOff;
             aOffPos.Y() = RULER_OFF;
@@ -1531,12 +1515,11 @@ void Ruler::ImplDraw()
         else
         {
             aOffPos.X() = RULER_OFF;
-            if(!mpData->bTextRTL)
-                aOffPos.Y() = mnVirOff;
+            aOffPos.Y() = mnVirOff;
 //  else
 //      aVirDevSize.Height() -= mnVirOff;
         }
-        DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize2, maVirDev );
+        DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize, maVirDev );
 
         // Positionslinien neu malen
         ImplInvertLines( TRUE );
@@ -1746,8 +1729,6 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
                         aRect.Right()   = n1-RULER_TAB_CWIDTH2+RULER_TAB_CWIDTH;
                     }
 
-                    if(mpData->bTextRTL)
-                        nX = mpData->nMargin2 - nX;
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
                         pHitTest->eType     = RULER_TYPE_TAB;
@@ -2956,7 +2937,7 @@ void Ruler::SetLines( USHORT n, const RulerLine* pLineAry )
     {
         if ( !mpData->pLines )
             return;
-        delete mpData->pLines;
+        delete[] mpData->pLines;
         mpData->nLines = 0;
         mpData->pLines = NULL;
     }
@@ -2964,8 +2945,7 @@ void Ruler::SetLines( USHORT n, const RulerLine* pLineAry )
     {
         if ( mpData->nLines != n )
         {
-            if ( mpData->pLines )
-                delete mpData->pLines;
+            delete[] mpData->pLines;
             mpData->nLines = n;
             mpData->pLines = new RulerLine[n];
         }
@@ -2986,7 +2966,7 @@ void Ruler::SetArrows( USHORT n, const RulerArrow* pArrowAry )
     {
         if ( !mpData->pArrows )
             return;
-        delete mpData->pArrows;
+        delete[] mpData->pArrows;
         mpData->nArrows = 0;
         mpData->pArrows = NULL;
     }
@@ -2994,8 +2974,7 @@ void Ruler::SetArrows( USHORT n, const RulerArrow* pArrowAry )
     {
         if ( mpData->nArrows != n )
         {
-            if ( mpData->pArrows )
-                delete mpData->pArrows;
+            delete[] mpData->pArrows;
             mpData->nArrows = n;
             mpData->pArrows = new RulerArrow[n];
         }
@@ -3033,7 +3012,7 @@ void Ruler::SetBorders( USHORT n, const RulerBorder* pBrdAry )
     {
         if ( !mpData->pBorders )
             return;
-        delete mpData->pBorders;
+        delete[] mpData->pBorders;
         mpData->nBorders = 0;
         mpData->pBorders = NULL;
     }
@@ -3041,8 +3020,7 @@ void Ruler::SetBorders( USHORT n, const RulerBorder* pBrdAry )
     {
         if ( mpData->nBorders != n )
         {
-            if ( mpData->pBorders )
-                delete mpData->pBorders;
+            delete[] mpData->pBorders;
             mpData->nBorders = n;
             mpData->pBorders = new RulerBorder[n];
         }
@@ -3080,7 +3058,7 @@ void Ruler::SetIndents( USHORT n, const RulerIndent* pIndentAry )
     {
         if ( !mpData->pIndents )
             return;
-        delete mpData->pIndents;
+        delete[] mpData->pIndents;
         mpData->nIndents = 0;
         mpData->pIndents = NULL;
     }
@@ -3088,8 +3066,7 @@ void Ruler::SetIndents( USHORT n, const RulerIndent* pIndentAry )
     {
         if ( mpData->nIndents != n )
         {
-            if ( mpData->pIndents )
-                delete mpData->pIndents;
+            delete[] mpData->pIndents;
             mpData->nIndents = n;
             mpData->pIndents = new RulerIndent[n];
         }
@@ -3125,7 +3102,7 @@ void Ruler::SetTabs( USHORT n, const RulerTab* pTabAry )
     {
         if ( !mpData->pTabs )
             return;
-        delete mpData->pTabs;
+        delete[] mpData->pTabs;
         mpData->nTabs = 0;
         mpData->pTabs = NULL;
     }
@@ -3133,8 +3110,7 @@ void Ruler::SetTabs( USHORT n, const RulerTab* pTabAry )
     {
         if ( mpData->nTabs != n )
         {
-            if ( mpData->pTabs )
-                delete mpData->pTabs;
+            delete[] mpData->pTabs;
             mpData->nTabs = n;
             mpData->pTabs = new RulerTab[n];
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-27 16:23:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ polish ] = "Data modyfikacji";
     Text[ portuguese_brazilian ] = "Modified Date";
     Text[ japanese ] = "ε¤‰ζ›΄ζ—¥ζ™‚";
-    Text[ korean ] = "λ³€κ²½λ‚ μ§";
+    Text[ korean ] = "λ³€κ²½ λ‚ μ§";
     Text[ chinese_simplified ] = "δΏ®ζ”Ήη„ζ—¶ι—΄";
     Text[ chinese_traditional ] = "δΏ®ζ”Ήη„ζ—¥ζ";
     Text[ turkish ] = "Modified Date";
@@ -192,7 +192,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ polish ] = "Utworzenie folderu %1 nie powiod³o siκ.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
     Text[ japanese ] = "γƒ•γ‚©γƒ«γƒ€ %1 γ―ζ Όη΄γ•γ‚γΎγ›γ‚“γ§γ—γγ€‚";
-    Text[ korean ] = "ν΄λ” %1μ„(λ¥Ό) λ§λ“¤ μ μ—†μµλ‹λ‹¤";
+    Text[ korean ] = "ν΄λ” %1μ„(λ¥Ό) λ§λ“¤ μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•ε›ε»Ίζ–‡δ»¶ε¤Ή %1 γ€‚";
     Text[ chinese_traditional ] = "η„΅ζ³•ζ–°εΆθ³‡ζ–™ε¤Ύ %1 γ€‚";
     Text[ turkish ] = "Could not create the folder %1.";
@@ -242,7 +242,7 @@ String STR_SVT_KB
     Text [ french ] = "Ko" ;
     Text [ dutch ] = "KB" ;
     Text[ chinese_simplified ] = "εƒε­—θ‚";
-    Text[ russian ] = "κΑ";
+    Text[ russian ] = "Κα";
     Text[ polish ] = "KB";
     Text[ japanese ] = "γ‚­γƒ­γƒγ‚¤γƒ";
     Text[ chinese_traditional ] = "KB";
@@ -336,7 +336,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ greek ] = "Delete";
             Text[ dutch ] = "~Wissen";
             Text[ french ] = "~Supprimer";
-            Text[ spanish ] = "~Eliminar";
+            Text[ spanish ] = "~Borrar";
             Text[ finnish ] = "~Poista";
             Text[ italian ] = "~Elimina";
             Text[ danish ] = "~Slet";
@@ -393,7 +393,7 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text [ English ] = "Confirm delete" ;
     Text [ english_us ] = "Confirm Delete" ;
     Text [ italian ] = "Conferma 'Elimina'" ;
-    Text [ spanish ] = "Confirmar eliminaciσn" ;
+    Text [ spanish ] = "Confirmar \"borrado\"" ;
     Text [ french ] = "Confirmation de suppression" ;
     Text [ dutch ] = "Wisopdracht bevestigen" ;
     Text [ swedish ] = "Bekrδfta radering" ;
@@ -464,7 +464,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ swedish ] = "Δr du sδker pε att du vill radera de markerade data?" ;
         Text [ danish ] = "Vil du virkelig slette de markerede data?" ;
         Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
-        Text [ spanish ] = "ΏDesea realmente eliminar los datos seleccionados?" ;
+        Text [ spanish ] = "ΏDesea realmente borrar los datos seleccionados?" ;
         Text [ french ] = "Κtes vous sϋr de vouloir supprimer les donnιes sιlectionnιes ?" ;
         Text [ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?" ;
         Text [ portuguese_brazilian ] = "Sind Sie sicher, da? Sie die selektierten Daten l?chen wollen?" ;
@@ -478,7 +478,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
         Text[ chinese_simplified ] = "ηθ¦ε ι™¤ι€‰δΈ­η„ζ•°ζ®οΌ";
         Text[ greek ] = "Θέλετε πραγματικά να διαγραφούν τα επιλεγμένα δεδομένα;";
-        Text[ korean ] = "μ„ νƒν• λ°μ΄ν„°λ¥Ό μ •λ§λ΅ μ‚­μ ν•κ² μµλ‹κΉ?";
+        Text[ korean ] = "μ„ νƒν• λ°μ΄ν„°λ¥Ό μ •λ§λ΅ μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
         Text[ turkish ] = "Seηilen verileri gerηekten silmek istiyor musunuz?";
         Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
         Text[ catalan ] = "Voleu realment suprimir les dades seleccionades?";
@@ -498,7 +498,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ greek ] = "Διαγραφή";
         Text[ dutch ] = "~Wissen";
         Text[ french ] = "Supprimer";
-        Text[ spanish ] = "~Eliminar";
+        Text[ spanish ] = "~Borrar";
         Text[ swedish ] = "~Radera";
         Text[ russian ] = "Σδΰλθςό";
         Text[ italian ] = "E~limina";
@@ -529,7 +529,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ greek ] = "Διαγραφή όλ~α";
         Text[ dutch ] = "~Alle wissen";
         Text[ french ] = "Supprimer ~tout";
-        Text[ spanish ] = "~Eliminar todos";
+        Text[ spanish ] = "~Borrar todo";
         Text[ swedish ] = "Radera ~alla";
         Text[ russian ] = "Σδΰλθςό βρε";
         Text[ italian ] = "~Elimina tutti";
@@ -559,7 +559,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ greek ] = "~Να μη διαγραφεί";
         Text[ dutch ] = "~Niet wissen";
         Text[ french ] = "~Ne pas supprimer";
-        Text[ spanish ] = "~No eliminar";
+        Text[ spanish ] = "~No borrar";
         Text[ swedish ] = "Radera i~nte";
         Text[ russian ] = "Νε σδΰλÿςό";
         Text[ italian ] = "~Non eliminare";
@@ -567,7 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ polish ] = "Nie usuwaj";
         Text[ portuguese_brazilian ] = "~Nein";
         Text[ japanese ] = "ε‰ι™¤γ—γªγ„(~N)";
-        Text[ korean ] = "μ‚­μ  μ·¨μ†(~N)";
+        Text[ korean ] = "μ‚­μ  μ•ν•¨(~N)";
         Text[ chinese_simplified ] = "δΈε ι™¤(~N)";
         Text[ chinese_traditional ] = "δΈθ¦εªι™¤(~N)";
         Text[ arabic ] = "ΪΟγ ΗαΝΠέ";
@@ -584,4 +584,9 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
 

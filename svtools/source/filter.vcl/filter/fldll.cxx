@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: isethint.cxx,v $
+ *  $RCSfile: fldll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,50 +59,52 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef WIN
 
-#include "isethint.hxx"
-#include "itemset.hxx"
+#ifndef _SVWIN_H
+#include <svwin.h>
+#endif
 
-//====================================================================
-
-TYPEINIT1(SfxItemSetHint, SfxHint);
-
-//====================================================================
+// Statische DLL-Verwaltungs-Variablen
+static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
 
 
-SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
+/***************************************************************************
+|*
+|*    LibMain()
+|*
+|*    Beschreibung       Initialisierungsfunktion der DLL
+|*    Ersterstellung     TH 05.05.93
+|*    Letzte Aenderung   TH 05.05.93
+|*
+***************************************************************************/
 
-/*  [Beschreibung]
-
-    Dieser Ctor "ubernimmt das als Parameter "ubergeben <SfxItemSet>,
-    das im Dtor gel"oscht wird.
-*/
-
-:   _pItemSet( pItemSet )
+extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 {
+#ifndef WNT
+    if ( nHeap )
+        UnlockData( 0 );
+#endif
+
+    hDLLInst = hDLL;
+
+    return TRUE;
 }
 
-//--------------------------------------------------------------------
+/***************************************************************************
+|*
+|*    WEP()
+|*
+|*    Beschreibung      DLL-Deinitialisierung
+|*    Ersterstellung     TH 05.05.93
+|*    Letzte Aenderung   TH 05.05.93
+|*
+***************************************************************************/
 
-SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
-
-/*  [Beschreibung]
-
-    Dieser Ctor kopiert das als Parameter "ubergeben <SfxItemSet>.
-*/
-
-:   _pItemSet( rItemSet.Clone() )
+extern "C" int CALLBACK WEP( int )
 {
+    return 1;
 }
 
-//--------------------------------------------------------------------
-
-SfxItemSetHint::~SfxItemSetHint()
-{
-    delete _pItemSet;
-}
-
-//--------------------------------------------------------------------
-
+#endif
 

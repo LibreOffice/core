@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:41:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
+#define CFG_READONLY_DEFAULT sal_False
 /* -----------------------------10.04.01 12:39--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -101,6 +102,16 @@ class SvtCJKOptions_Impl : public utl::ConfigItem
     sal_Bool        bDoubleLines;
     sal_Bool        bEmphasisMarks;
     sal_Bool        bVerticalCallOut;
+
+    sal_Bool        bROCJKFont;
+    sal_Bool        bROVerticalText;
+    sal_Bool        bROAsianTypography;
+    sal_Bool        bROJapaneseFind;
+    sal_Bool        bRORuby;
+    sal_Bool        bROChangeCaseMap;
+    sal_Bool        bRODoubleLines;
+    sal_Bool        bROEmphasisMarks;
+    sal_Bool        bROVerticalCallOut;
 
 public:
     SvtCJKOptions_Impl();
@@ -126,6 +137,7 @@ public:
         return  bCJKFont||bVerticalText||bAsianTypography||bJapaneseFind||
                 bRuby||bChangeCaseMap||bDoubleLines||bEmphasisMarks||bVerticalCallOut;   }
     void    SetAll(sal_Bool bSet);
+    sal_Bool IsReadOnly(SvtCJKOptions::EOption eOption) const;
 };
 /*-- 10.04.01 12:41:57---------------------------------------------------
 
@@ -143,7 +155,16 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     bChangeCaseMap(sal_True),
     bDoubleLines(sal_True),
     bEmphasisMarks(sal_True),
-    bVerticalCallOut(sal_True)
+    bVerticalCallOut(sal_True),
+    bROCJKFont(CFG_READONLY_DEFAULT),
+    bROVerticalText(CFG_READONLY_DEFAULT),
+    bROAsianTypography(CFG_READONLY_DEFAULT),
+    bROJapaneseFind(CFG_READONLY_DEFAULT),
+    bRORuby(CFG_READONLY_DEFAULT),
+    bROChangeCaseMap(CFG_READONLY_DEFAULT),
+    bRODoubleLines(CFG_READONLY_DEFAULT),
+    bROEmphasisMarks(CFG_READONLY_DEFAULT),
+    bROVerticalCallOut(CFG_READONLY_DEFAULT)
 {
 }
 /*-- 10.04.01 12:41:57---------------------------------------------------
@@ -157,9 +178,32 @@ SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
  ---------------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
 {
-    bCJKFont = bVerticalText = bAsianTypography = bJapaneseFind =
-            bRuby = bChangeCaseMap = bDoubleLines = bEmphasisMarks = bVerticalCallOut = bSet;
-    SetModified();
+    sal_Bool bModified = sal_False;
+
+    if (
+        !bROCJKFont          &&
+        !bROVerticalText     &&
+        !bROAsianTypography  &&
+        !bROJapaneseFind     &&
+        !bRORuby             &&
+        !bROChangeCaseMap    &&
+        !bRODoubleLines      &&
+        !bROEmphasisMarks    &&
+        !bROVerticalCallOut
+       )
+    {
+        bCJKFont=bSet;
+        bVerticalText=bSet;
+        bAsianTypography=bSet;
+        bJapaneseFind=bSet;
+        bRuby=bSet;
+        bChangeCaseMap=bSet;
+        bDoubleLines=bSet;
+        bEmphasisMarks=bSet;
+        bVerticalCallOut=bSet;
+
+        SetModified();
+    }
 }
 /*-- 10.04.01 12:41:56---------------------------------------------------
 
@@ -184,9 +228,12 @@ void SvtCJKOptions_Impl::Load()
         EnableNotification( aPropertyNames );
     }
     Sequence< Any > aValues = GetProperties(aPropertyNames);
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates(aPropertyNames);
     const Any* pValues = aValues.getConstArray();
+    const sal_Bool* pROStates = aROStates.getConstArray();
     DBG_ASSERT( aValues.getLength() == aPropertyNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aPropertyNames.getLength() )
+    DBG_ASSERT( aROStates.getLength() == aPropertyNames.getLength(), "GetReadOnlyStates failed" );
+    if ( aValues.getLength() == aPropertyNames.getLength() && aROStates.getLength() == aPropertyNames.getLength() )
     {
         for ( int nProp = 0; nProp < aPropertyNames.getLength(); nProp++ )
         {
@@ -195,15 +242,15 @@ void SvtCJKOptions_Impl::Load()
                 sal_Bool bValue = *(sal_Bool*)pValues[nProp].getValue();
                 switch ( nProp )
                 {
-                    case 0: bCJKFont = bValue; break;
-                    case 1: bVerticalText = bValue; break;
-                    case 2: bAsianTypography = bValue; break;
-                    case 3: bJapaneseFind = bValue; break;
-                    case 4: bRuby = bValue; break;
-                    case 5: bChangeCaseMap = bValue; break;
-                    case 6: bDoubleLines = bValue; break;
-                    case 7: bEmphasisMarks = bValue; break;
-                    case 8: bVerticalCallOut = bValue; break;
+                    case 0: { bCJKFont = bValue; bROCJKFont = pROStates[nProp]; } break;
+                    case 1: { bVerticalText = bValue; bROVerticalText = pROStates[nProp]; } break;
+                    case 2: { bAsianTypography = bValue; bROAsianTypography = pROStates[nProp]; } break;
+                    case 3: { bJapaneseFind = bValue; bROJapaneseFind = pROStates[nProp]; } break;
+                    case 4: { bRuby = bValue; bRORuby = pROStates[nProp]; } break;
+                    case 5: { bChangeCaseMap = bValue; bROChangeCaseMap = pROStates[nProp]; } break;
+                    case 6: { bDoubleLines = bValue; bRODoubleLines = pROStates[nProp]; } break;
+                    case 7: { bEmphasisMarks = bValue; bROEmphasisMarks = pROStates[nProp]; } break;
+                    case 8: { bVerticalCallOut = bValue; bROVerticalCallOut = pROStates[nProp]; } break;
                 }
             }
         }
@@ -222,30 +269,149 @@ void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& aPropertyNames )
   -----------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::Commit()
 {
-    OUString* pNames = aPropertyNames.getArray();
-    Sequence<Any> aValues(aPropertyNames.getLength());
+    OUString* pOrgNames = aPropertyNames.getArray();
+    sal_Int32 nOrgCount = aPropertyNames.getLength();
+
+    Sequence< OUString > aNames(nOrgCount);
+    Sequence< Any > aValues(nOrgCount);
+
+    OUString* pNames = aNames.getArray();
     Any* pValues = aValues.getArray();
+    sal_Int32 nRealCount = 0;
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
-    for(int nProp = 0; nProp < aPropertyNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < nOrgCount; nProp++)
     {
         switch(nProp)
         {
-            case  0: bVal = bCJKFont; break;
-            case  1: bVal = bVerticalText; break;
-            case  2: bVal = bAsianTypography; break;
-            case  3: bVal = bJapaneseFind; break;
-            case  4: bVal = bRuby; break;
-            case  5: bVal = bChangeCaseMap; break;
-            case  6: bVal = bDoubleLines; break;
-            case  7: bVal = bEmphasisMarks; break;
-            case  8: bVal = bVerticalCallOut; break;
+            case  0:
+                {
+                    if (!bROCJKFont)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bCJKFont, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  1:
+                {
+                    if (!bROVerticalText)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bVerticalText, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  2:
+                {
+                    if (!bROAsianTypography)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bAsianTypography, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  3:
+                {
+                    if (!bROJapaneseFind)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bJapaneseFind, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  4:
+                {
+                    if (!bRORuby)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bRuby, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  5:
+                {
+                    if (!bROChangeCaseMap)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bChangeCaseMap, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  6:
+                {
+                    if (!bRODoubleLines)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bDoubleLines, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  7:
+                {
+                    if (!bROEmphasisMarks)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bEmphasisMarks, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
+
+            case  8:
+                {
+                    if (!bROVerticalCallOut)
+                    {
+                        pNames[nRealCount] = pOrgNames[nProp];
+                        pValues[nRealCount].setValue(&bVerticalCallOut, rType);
+                        ++nRealCount;
+                    }
+                }
+                break;
         }
-        pValues[nProp].setValue(&bVal, getBooleanCppuType());
     }
-    PutProperties(aPropertyNames, aValues);
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
+    PutProperties(aNames, aValues);
 }
+/*-- 13.02.2003 12:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
+{
+    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    switch(eOption)
+    {
+        case SvtCJKOptions::E_CJKFONT : bReadOnly = bROCJKFont; break;
+        case SvtCJKOptions::E_VERTICALTEXT : bReadOnly = bROVerticalText; break;
+        case SvtCJKOptions::E_ASIANTYPOGRAPHY : bReadOnly = bROAsianTypography; break;
+        case SvtCJKOptions::E_JAPANESEFIND : bReadOnly = bROJapaneseFind; break;
+        case SvtCJKOptions::E_RUBY : bReadOnly = bRORuby; break;
+        case SvtCJKOptions::E_CHANGECASEMAP : bReadOnly = bROChangeCaseMap; break;
+        case SvtCJKOptions::E_DOUBLELINES : bReadOnly = bRODoubleLines; break;
+        case SvtCJKOptions::E_EMPHASISMARKS : bReadOnly = bROEmphasisMarks; break;
+        case SvtCJKOptions::E_VERTICALCALLOUT : bReadOnly = bROVerticalCallOut; break;
+        case SvtCJKOptions::E_ALL : if (bROCJKFont || bROVerticalText || bROAsianTypography || bROJapaneseFind || bRORuby || bROChangeCaseMap || bRODoubleLines || bROEmphasisMarks || bROVerticalCallOut)
+                                        bReadOnly = sal_True;
+                                break;
+    }
+    return bReadOnly;
+}
+
 // global ----------------------------------------------------------------
 
 static SvtCJKOptions_Impl*  pCJKOptions = NULL;
@@ -346,6 +512,11 @@ sal_Bool    SvtCJKOptions::IsAnyEnabled() const
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
     return pCJKOptions->IsAnyEnabled();
 }
+/*-- 13.02.2003 12:11---------------------------------------------------
 
-
-
+  -----------------------------------------------------------------------*/
+sal_Bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    return pCJKOptions->IsReadOnly(eOption);
+}

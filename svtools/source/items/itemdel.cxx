@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemdel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,14 +104,14 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 {
     DBG_CTOR(SfxItemDesruptor_Impl, 0);
 
-    pItem->SetRef( SFX_ITEMS_DELETEONIDLE );
+    DBG_ASSERT( 0 == pItem->GetRefCount(), "desrupting pooled item" );
+    pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
 
     // im Idle abarbeiten
     GetpApp()->InsertIdleHdl( aLink, 1 );
 
     // und in Liste eintragen (damit geflusht werden kann)
-    SfxItemDesruptorList_Impl* &rpList
-     = ImpSvtData::GetSvtData().pItemDesruptList;
+    SfxItemDesruptorList_Impl* &rpList = ImpSvtData::GetSvtData().pItemDesruptList;
     if ( !rpList )
         rpList = new SfxItemDesruptorList_Impl;
     const SfxItemDesruptor_Impl *pThis = this;
@@ -127,17 +127,15 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
     GetpApp()->RemoveIdleHdl( aLink );
 
     // und aus Liste austragen
-    SfxItemDesruptorList_Impl* &rpList
-     = ImpSvtData::GetSvtData().pItemDesruptList;
+    SfxItemDesruptorList_Impl* &rpList = ImpSvtData::GetSvtData().pItemDesruptList;
     DBG_ASSERT( rpList, "no DesruptorList" );
     const SfxItemDesruptor_Impl *pThis = this;
     if ( rpList ) HACK(warum?)
         rpList->Remove( rpList->GetPos(pThis) );
 
-    // Item l"oschen
-    pItem->SetRef( 0 );
+    // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
+    pItem->SetRefCount( 0 );
     DBG_CHKOBJ( pItem, SfxPoolItem, 0 );
-    DBG_ASSERT( 0 == pItem->GetRef(), "desrupting pooled item" );
     delete pItem;
 }
 
@@ -152,7 +150,7 @@ IMPL_LINK( SfxItemDesruptor_Impl, Delete, void *, pvoid )
 // ------------------------------------------------------------------------
 SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem )
 {
-    DBG_ASSERT( 0 == pItem->GetRef(), "deleting item in use" );
+    DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
     new SfxItemDesruptor_Impl( pItem );
     return pItem;
 }

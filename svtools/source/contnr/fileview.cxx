@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 16:21:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <string>
+#include <functional>
 #include "fileview.hxx"
 #include "svtdata.hxx"
 #include "imagemgr.hxx"
@@ -151,8 +151,8 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_H
+#include <rtl/math.hxx>
 #endif
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
@@ -679,7 +679,7 @@ public:
 
     void                    Clear();
 
-    void                    GetFolderContent_Impl( const String& rFolder );
+    sal_Bool                GetFolderContent_Impl( const String& rFolder );
     void                    FilterFolderContent_Impl( const OUString &rFilter );
 
     void                    OpenFolder_Impl();
@@ -803,10 +803,9 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
         nDec = 3;
     }
 
-    String aSizeStr;
-    SvtSysLocale aSysLocale;
-    SolarMath::DoubleToString(
-        aSizeStr, fSize, 'F', nDec, aSysLocale.GetLocaleData().getNumDecimalSep().GetChar(0) );
+    OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
+                rtl_math_StringFormat_F, nDec,
+                SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0)));
     aSizeStr += aUnitStr;
 
     return aSizeStr;
@@ -1338,7 +1337,7 @@ sal_Bool SvtFileView::CreateNewFolder( const String& rNewFolder )
     INetURLObject aObj( mpImp->maViewURL );
     aObj.insertName( rNewFolder, false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
     String sURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    if ( ::utl::UCBContentHelper::MakeFolder( sURL ) )
+    if ( ::utl::UCBContentHelper::MakeFolder( sURL, sal_True ) )
     {
         String sTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
         String sEntry = mpImp->FolderInserted( sURL, sTitle );
@@ -1385,10 +1384,7 @@ sal_Bool SvtFileView::PreviousLevel( String& rNewURL )
 {
     sal_Bool bRet = sal_False;
     if ( HasPreviousLevel( rNewURL ) )
-    {
-        Initialize( rNewURL, mpImp->maCurrentFilter );
-        bRet = sal_True;
-    }
+        bRet = Initialize( rNewURL, mpImp->maCurrentFilter );
 
     return bRet;
 }
@@ -1425,18 +1421,21 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::Initialize( const String& rURL, const String& rFilter )
+sal_Bool SvtFileView::Initialize( const String& rURL, const String& rFilter )
 {
     WaitObject aWaitCursor( this );
 
     mpImp->maViewURL = rURL;
-    ExecuteFilter( rFilter );
+    if ( !ExecuteFilter( rFilter ) )
+        return sal_False;
+
     mpImp->maOpenDoneLink.Call( this );
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aContents )
+sal_Bool SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aContents )
 {
     WaitObject aWaitCursor( this );
 
@@ -1450,22 +1449,27 @@ void SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aC
     mpImp->OpenFolder_Impl();
 
     mpImp->maOpenDoneLink.Call( this );
+
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::ExecuteFilter( const String& rFilter )
+sal_Bool SvtFileView::ExecuteFilter( const String& rFilter )
 {
     mpImp->maCurrentFilter = rFilter;
     mpImp->maCurrentFilter.ToLowerAscii();
 
     mpImp->Clear();
-    mpImp->GetFolderContent_Impl( mpImp->maViewURL );
+    if ( !mpImp->GetFolderContent_Impl( mpImp->maViewURL ) )
+        return sal_False;
+
     mpImp->FilterFolderContent_Impl( rFilter );
 
     mpImp->SortFolderContent_Impl();    // possibly not necessary!!!!!!!!!!
     mpImp->CreateDisplayText_Impl();
     mpImp->OpenFolder_Impl();
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1780,6 +1784,7 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool 
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
     mpView = new ViewTabListBox_Impl( pParent, this, nFlags );
+    mpView->EnableCellFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1810,7 +1815,7 @@ void SvtFileView_Impl::Clear()
 }
 
 // -----------------------------------------------------------------------
-void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
+sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1818,6 +1823,8 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
+    sal_Bool bSuccess = sal_False;
 
     try
     {
@@ -1936,6 +1943,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                         maContent.push_back( pData );
                     }
                 }
+                bSuccess = sal_True;
             }
             catch( CommandAbortedException& )
             {
@@ -1955,6 +1963,12 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
+
+    if ( !bSuccess )
+        // clear any "intermediate" and unfinished result
+        maContent.clear();
+
+    return bSuccess;
 }
 // -----------------------------------------------------------------------
 namespace
@@ -2035,7 +2049,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     String sCompareString;
     do
     {
-        if ( (*aContentLoop)->mbIsFolder == sal_True )
+        if ( (*aContentLoop)->mbIsFolder )
             ++aContentLoop;
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:24:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_doctype32,
     "HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\"" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_doctype40,
+    "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"" );
 
 
 // diese werden nur eingeschaltet

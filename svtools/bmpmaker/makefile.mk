@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ka $ $Date: 2002-01-10 10:08:41 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:35:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,16 @@ LIBTARGET=NO
 OBJFILES=   $(OBJ)$/bmp.obj			\
             $(OBJ)$/bmpgui.obj		\
             $(OBJ)$/bmpcore.obj		\
-            $(OBJ)$/g2g.obj			
+            $(OBJ)$/g2g.obj			\
+            $(OBJ)$/bmpsum.obj      
 
 
 SRC1FILES=bmp.src
 SRS1NAME=bmp
 RES1TARGET=bmp
 SRS1FILES=$(SRS)$/bmp.srs
+
+# --- APP1TARGET ---------------------------------------------------
 
 APP1TARGET= $(TARGET)
 
@@ -110,6 +113,18 @@ APP1BASE=0x10000000
 .IF "$(OS)"=="MACOSX"
 ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
 .ENDIF
+
+# --- APP2TARGET --------------------------------------------------
+
+APP2TARGET	=	bmpsum
+APP2BASE	=	0x10000000
+APP2DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
+APP2OBJS	=   $(OBJ)$/bmpsum.obj
+
+APP2STDLIBS	=	$(SVLIB)		\
+                $(TOOLSLIB)		\
+                $(VOSLIB) 		\
+                $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 

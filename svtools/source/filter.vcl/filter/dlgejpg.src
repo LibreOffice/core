@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:08:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "Qualité" ;
         Text [ dutch ] = "Kwaliteit" ;
         Text [ swedish ] = "Kvalitet" ;
-        Text [ danish ] = "Kvalitet" ;
+        Text [ danish ] = "Kvalitet." ;
         Text [ portuguese_brazilian ] = "Qualität" ;
         Text [ portuguese ] = "Qualidade" ;
         Text[ chinese_simplified ] = "è´¨é‡";
@@ -122,8 +122,9 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "í™”ì§ˆ";
         Text[ turkish ] = "Kalite";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Calidad";
+        Text[ catalan ] = "Qualitat";
         Text[ finnish ] = "Laatu";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸ à¸²à¸";
     };
     FixedText FI_DESCR
     {
@@ -137,11 +138,11 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "1 : qualité min.\n100 : qualité max." ;
         Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
+        Text [ danish ] = "~1: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
         Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
         Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
-        Text[ russian ] = "1: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
+        Text[ russian ] = "1: íèçêîå êà÷åñòâî\\: âûñîêîå êà÷åñòâî";
         Text[ polish ] = "1: min. jakoœæ\n100: maks. jakoœæ";
         Text[ japanese ] = "1: æœ€ä½\n100: æœ€é«˜";
         Text[ chinese_traditional ] = "1: æœ€å·®å“è³ª \n100: æœ€ä½³å“è³ª";
@@ -149,11 +150,12 @@ ModalDialog DLG_EXPORT_JPG
         Text[ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit";
         Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
         Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
-        Text[ korean ] = "1: ìµœì†Œ ì„±ëŠ¥\n100: ìµœëŒ€ ì„±ëŠ¥";
+        Text[ korean ] = "1: ìµœì†Œ í’ˆì§ˆ\n100: ìµœëŒ€ í’ˆì§ˆ";
         Text[ turkish ] = "0: asg. kalite\n100: azm. kalite";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "0: mín. calidad\n100: máx. calidad";
-        Text[ finnish ] = "0: väh. Laatu\n100: Enint. Laatu";
+        Text[ catalan ] = "0: mín. qualitat\n100: màx. qualitat";
+        Text[ finnish ] = "1: vähimmäislaatu \n100: enimmäislaatu";
+        Text[ thai ] = "1: à¸„à¸¸à¸“à¸ à¸²à¸à¸•à¹ˆà¸³à¸ªà¸¸à¸”\n100: à¸„à¸¸à¸“à¸ à¸²à¸à¸ªà¸¹à¸‡à¸ªà¸¸à¸”";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -184,19 +186,20 @@ ModalDialog DLG_EXPORT_JPG
         Text [ dutch ] = "Kleurdichtheid" ;
         Text [ portuguese ] = "Resolução de cores" ;
         Text[ chinese_simplified ] = "é¢œè‰²åˆ†è¾¨ç‡";
-        Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
+        Text[ russian ] = "Ãëóáèíà öâåòà";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "è‰²ã®è§£åƒåº¦";
-        Text[ chinese_traditional ] = "é¡”è‰²è§£æåº¦";
+        Text[ chinese_traditional ] = "é¡è‰²è§£æåº¦";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ dutch ] = "Kleurdichtheid";
         Text[ chinese_simplified ] = "é¢œè‰²åˆ†è¾¨ç‡";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
-        Text[ korean ] = "ì»¬ëŸ¬ í•´ìƒë„";
+        Text[ korean ] = "ìƒ‰ í•´ìƒë„";
         Text[ turkish ] = "Renk çözünürlüğü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Resolución del color";
-        Text[ finnish ] = "Värin erottelukyky";
+        Text[ catalan ] = "Resolució del color";
+        Text[ finnish ] = "Väritarkkuus";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸‚à¸­à¸‡à¸ªà¸µ";
     };
     RadioButton RB_GRAY
     {
@@ -217,17 +220,18 @@ ModalDialog DLG_EXPORT_JPG
         Text[ chinese_simplified ] = "ç°åº¦";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
         Text[ polish ] = "Odcienie szaroœci";
-        Text[ japanese ] = "ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™";
+        Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«";
         Text[ chinese_traditional ] = "ç°éš";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
         Text[ dutch ] = "Grijswaarden";
         Text[ chinese_simplified ] = "ç°åº¦";
         Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
-        Text[ korean ] = "íšŒìƒ‰ë„";
+        Text[ korean ] = "íšŒìƒ‰ì¡°";
         Text[ turkish ] = "Gri tonlama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Escala de grises";
+        Text[ catalan ] = "Escala de grisos";
         Text[ finnish ] = "Harmaasävy";
+        Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²";
     };
     RadioButton RB_RGB
     {
@@ -243,29 +247,30 @@ ModalDialog DLG_EXPORT_JPG
         Text [ danish ] = "Ægte farver" ;
         Text [ italian ] = "Colori reali" ;
         Text [ spanish ] = "Colores reales" ;
-        Text [ french ] = "Vraies couleurs (Truecolor)" ;
-        Text [ dutch ] = "Echte kleuren" ;
+        Text [ french ] = "Vraies couleurs (True color)" ;
+        Text [ dutch ] = "Ware kleuren" ;
         Text[ chinese_simplified ] = "ä»¿çœŸè‰²";
-        Text[ russian ] = "Íàòóğàëüíûå öâåòà";
+        Text[ russian ] = "Èñòèííûé öâåò";
         Text[ polish ] = "Trwa³e kolory";
         Text[ japanese ] = "True Color";
         Text[ chinese_traditional ] = "å…¨å½©";
         Text[ arabic ] = "ÃáæÇä ÍŞíŞíÉ";
-        Text[ dutch ] = "Echte kleuren";
+        Text[ dutch ] = "Ware kleuren";
         Text[ chinese_simplified ] = "ä»¿çœŸè‰²";
         Text[ greek ] = "ÖõóéêÜ ÷ñşìáôá";
         Text[ korean ] = "íŠ¸ë£¨ ì»¬ëŸ¬";
         Text[ turkish ] = "Gerçek renkler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colores reales";
+        Text[ catalan ] = "Colors reals";
         Text[ finnish ] = "True Color -värit";
+        Text[ thai ] = "à¸ªà¸µà¸ˆà¸£à¸´à¸‡";
     };
     Text [ portuguese_brazilian ] = "JPEG Optionen" ;
     Text [ portuguese ] = "Opções JPEG" ;
     Text[ chinese_simplified ] = "JPEG é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû JPEG";
     Text[ polish ] = "Opcje JPEG";
-    Text[ japanese ] = "JPEG ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "JPEG ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "JPEG é¸é …";
     Text[ arabic ] = "ÎíÇÑÇÊJPEG ";
     Text[ dutch ] = "JPEG-opties";
@@ -274,9 +279,22 @@ ModalDialog DLG_EXPORT_JPG
     Text[ korean ] = "JPEG ì˜µì…˜";
     Text[ turkish ] = "JPEG seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones JPEG";
-    Text[ finnish ] = "JPEG-valinnat";
+    Text[ catalan ] = "Opcions JPEG";
+    Text[ finnish ] = "JPEG-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ JPEG ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

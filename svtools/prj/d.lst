@@ -27,9 +27,11 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\bin\svt?????.sym %_DEST%\bin%_EXT%\svt?????.sym
 ..\%__SRC%\bin\svl?????.dll %_DEST%\bin%_EXT%\svl?????.dll
 ..\%__SRC%\bin\bmp.* %_DEST%\bin%_EXT%\bmp.*
+..\%__SRC%\bin\bmpsum.* %_DEST%\bin%_EXT%\bmpsum.*
 ..\%__SRC%\bin\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
 ..\%__SRC%\bin\g2g.* %_DEST%\bin%_EXT%\g2g.*
 ..\%__SRC%\bin\bmp %_DEST%\bin%_EXT%\bmp
+..\%__SRC%\bin\bmpsum %_DEST%\bin%_EXT%\bmpsum
 ..\%__SRC%\bin\bmpgui %_DEST%\bin%_EXT%\bmpgui
 ..\%__SRC%\bin\g2g %_DEST%\bin%_EXT%\g2g
 ..\%__SRC%\res\bmp.* %_DEST%\bin%_EXT%\bmp.*
@@ -40,6 +42,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\misc\svtools.hid %_DEST%\bin%_EXT%\svtools.hid
 ..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
 
+hedabu: ..\inc\globalnameitem.hxx %_DEST%\inc%_EXT%\svtools\globalnameitem.hxx
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\svtools\imagemgr.hxx
 hedabu: ..\inc\imagemgr.hrc %_DEST%\inc%_EXT%\svtools\imagemgr.hrc
 hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\svtools\testtool.hxx
@@ -178,7 +181,6 @@ hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
 hedabu: ..\inc\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
 hedabu: ..\inc\svmedit.hxx %_DEST%\inc%_EXT%\svtools\svmedit.hxx
-hedabu: ..\inc\svmedit2.hxx %_DEST%\inc%_EXT%\svtools\svmedit2.hxx
 hedabu: ..\inc\svstdarr.hxx %_DEST%\inc%_EXT%\svtools\svstdarr.hxx
 hedabu: ..\inc\extattr.hxx %_DEST%\inc%_EXT%\svtools\extattr.hxx
 hedabu: ..\inc\metitem.hxx %_DEST%\inc%_EXT%\svtools\metitem.hxx
@@ -320,6 +322,7 @@ hedabu: ..\inc\cmdoptions.hxx %_DEST%\inc%_EXT%\svtools\cmdoptions.hxx
 hedabu: ..\inc\ctloptions.hxx %_DEST%\inc%_EXT%\svtools\ctloptions.hxx
 hedabu: ..\inc\languageoptions.hxx %_DEST%\inc%_EXT%\svtools\languageoptions.hxx
 hedabu: ..\inc\sourceviewconfig.hxx %_DEST%\inc%_EXT%\svtools\sourceviewconfig.hxx
+hedabu: ..\inc\colorcfg.hxx %_DEST%\inc%_EXT%\svtools\colorcfg.hxx
 
 hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
 hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:14:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,21 +73,22 @@ String STR_WIZDLG_FINISH
     Text[ russian ] = "~√ÓÚÓ‚Ó";
     Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
     Text[ dutch ] = "~Voltooien";
-    Text[ french ] = "~CrÈer";
+    Text[ french ] = "CrÈer";
     Text[ spanish ] = "~Crear";
     Text[ italian ] = "~Crea";
-    Text[ danish ] = "~Finish";
+    Text[ danish ] = "~Udf¯r";
     Text[ swedish ] = "~F‰rdigst‰ll";
     Text[ polish ] = "UtwÛrz";
     Text[ portuguese_brazilian ] = "~Finish";
     Text[ japanese ] = "ÂÆå‰∫Ü(~R)";
-    Text[ korean ] = "ÎßàÏπ®(~R)";
+    Text[ korean ] = "ÎßåÎì§Í∏∞(~R)";
     Text[ chinese_simplified ] = "ÂÆåÊàê(~R)";
     Text[ chinese_traditional ] = "ÂÆåÊàê(~R)";
     Text[ turkish ] = "~Finish";
     Text[ arabic ] = "≈‰‘«¡";
-    Text[ catalan ] = "~Crear";
+    Text[ catalan ] = "~Crea";
     Text[ finnish ] = "~Luo";
+    Text[ thai ] = "‡∏™~‡∏£‡πâ‡∏≤‡∏á";
 };
 
 String STR_WIZDLG_NEXT
@@ -99,22 +100,23 @@ String STR_WIZDLG_NEXT
     Text[ portuguese ] = "~Seguinte >>";
     Text[ russian ] = "~ƒ‡ÎÂÂ >>";
     Text[ greek ] = "≈¸ÏÂÌÔ >>";
-    Text[ dutch ] = "~Next >>";
-    Text[ french ] = "~Suivant >>";
+    Text[ dutch ] = "Volge~nde >>";
+    Text[ french ] = "Suivant >>";
     Text[ spanish ] = "~Siguiente >>";
     Text[ italian ] = "~Avanti >>";
-    Text[ danish ] = "~Next >>";
+    Text[ danish ] = "~NÊste >>";
     Text[ swedish ] = "~N‰sta >>";
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "~Next >>";
     Text[ japanese ] = "Ê¨°„Å∏(~N) >>";
-    Text[ korean ] = "Îã§Ïùå (~N) >>";
-    Text[ chinese_simplified ] = "ÁªßÁª≠  (~N) >>";
-    Text[ chinese_traditional ] = "ÁπºÁ∫å (~N) >>";
+    Text[ korean ] = "Îã§Ïùå(~N) >>";
+    Text[ chinese_simplified ] = "ÁªßÁª≠(~N) >>";
+    Text[ chinese_traditional ] = "ÁπºÁ∫å(~N) >>";
     Text[ turkish ] = "~Next >>";
     Text[ arabic ] = "«· «·Ì <<";
-    Text[ catalan ] = "~Siguiente >>";
-    Text[ finnish ] = "Seuraava >>";
+    Text[ catalan ] = "~Seg¸ent >>";
+    Text[ finnish ] = "~Seuraava >>";
+    Text[ thai ] = "~‡∏ñ‡∏±‡∏î‡πÑ‡∏õ >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -127,10 +129,10 @@ String STR_WIZDLG_PREVIOUS
     Text[ russian ] = "<<~Õ‡Á‡‰";
     Text[ greek ] = "<< –ﬂÛ˘";
     Text[ dutch ] = "<< ~Vorige";
-    Text[ french ] = "<< ~PrÈcÈdent";
+    Text[ french ] = "<< PrÈcÈdent";
     Text[ spanish ] = "<< ~Regresar";
     Text[ italian ] = "<<~Indietro";
-    Text[ danish ] = "<< ~Previous";
+    Text[ danish ] = "<< ~Tilbage";
     Text[ swedish ] = "<< T~illbaka";
     Text[ polish ] = "<< Wstecz";
     Text[ portuguese_brazilian ] = "<< ~Previous";
@@ -140,27 +142,60 @@ String STR_WIZDLG_PREVIOUS
     Text[ chinese_traditional ] = "<< ËøîÂõû(~K)";
     Text[ turkish ] = "<< ~Previous";
     Text[ arabic ] = "<< ~Previous";
-    Text[ catalan ] = "<< ~Anterior";
-    Text[ finnish ] = "<< Takaisin";
+    Text[ catalan ] = "<< ~Enrere";
+    Text[ finnish ] = "<< ~Edellinen";
+    Text[ thai ] = "<< ‡∏Å‡∏•‡∏±~‡∏ö‡πÑ‡∏õ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.22  2001/11/07 09:50:10  kz
- *  Merge SRC638: 07.11.01 - 10:50:15
+ *  Revision 1.17.2.8.4.4.2.1  2003/02/22 16:31:59  hr
+ *  INTEGRATION: CWS mergep (1.17.2.8.4.4.66); FILE MERGED
+ *  2003/02/22 10:37:47 nf 1.17.2.8.4.4.66.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 13:11:21 hjs 1.17.2.8.4.4.66.1: #107113# merge on SRX644p
  *
- *  Revision 1.21  2001/08/29 20:08:52  kz
- *  Merge SRC638: 08/29/01 - 22:08:32
+ *  Revision 1.17.2.8.4.4.66.2  2003/02/22 10:37:47  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
  *
- *  Revision 1.20  2001/08/24 13:31:01  rt
- *  Merge SRC638: 24.08.01 - 15:29:25
+ *  Revision 1.17.2.8.4.4.66.1  2003/01/31 13:11:21  hjs
+ *  #107113# merge on SRX644p
  *
- *  Revision 1.19  2001/08/21 20:21:36  kz
- *  Merge SRC638: 21.08.01 - 22:20:56
+ *  Revision 1.17.2.8.4.4  2002/11/27 16:27:56  kz
+ *  Merge SRX644: 27.11.02 - 17:24:03
  *
- *  Revision 1.18  2001/08/14 14:39:25  kz
- *  Merge SRC638: 14.08.01 - 16:38:56
+ *  Revision 1.17.2.8.4.3  2002/08/05 20:17:27  kz
+ *  Merge SRX643: 05.08.02 - 22:14:24
+ *
+ *  Revision 1.17.2.8.4.2  2002/08/01 20:13:34  kz
+ *  Merge SRX643: 01.08.02 - 22:10:05
+ *
+ *  Revision 1.17.2.8.4.1  2002/04/29 20:09:39  kz
+ *  Merge SRX642: 29.04.02 - 22:09:15
+ *
+ *  Revision 1.17.2.8  2001/11/23 22:46:12  rt
+ *  Merge SRC641: 23.11.01 - 22:44:59
+ *
+ *  Revision 1.17.2.7  2001/11/13 22:28:07  kz
+ *  Merge SRC641: 13.11.01 - 22:28:01
+ *
+ *  Revision 1.17.2.6  2001/11/01 21:28:34  kz
+ *  Merge SRC641: 01.11.01 - 22:28:12
+ *
+ *  Revision 1.17.2.5  2001/10/19 20:49:17  vg
+ *  Merge SRC641: 19.10.01 - 22:49:44
+ *
+ *  Revision 1.17.2.4  2001/10/17 20:41:52  kz
+ *  Merge SRC641: 17.10.01 - 22:40:51
+ *
+ *  Revision 1.17.2.3  2001/10/11 20:39:53  kz
+ *  Merge SRC641: 11.10.01 - 22:39:21
+ *
+ *  Revision 1.17.2.2  2001/09/25 21:05:13  kz
+ *  Merge SRC641: 25.09.01 - 23:04:43
+ *
+ *  Revision 1.17.2.1  2001/09/21 20:22:42  kz
+ *  Merge SRC641: 21.09.01 - 22:22:13
  *
  *  Revision 1.17  2001/08/08 09:10:26  kz
  *  Merge SRC638: 08.08.01 - 11:09:54
@@ -216,6 +251,10 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
+
+
+
 
 
 

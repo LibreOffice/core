@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 10:22:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ using namespace com::sun::star::uno;
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
 
+#define CFG_READONLY_DEFAULT    sal_False
+
 struct SvtLoadSaveOptions_Impl
 {
     SvtSaveOptions_Impl* pSaveOpt;
@@ -109,6 +111,21 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveRelFSys,
                                         bSaveUnpacked,
                                         bDoPrettyPrinting;
+
+    sal_Bool                            bROAutoSaveTime,
+                                        bROSaveGraphics,
+                                        bROUseUserData,
+                                        bROBackup,
+                                        bROAutoSave,
+                                        bROAutoSavePrompt,
+                                        bRODocInfSave,
+                                        bROSaveWorkingSet,
+                                        bROSaveDocWins,
+                                        bROSaveDocView,
+                                        bROSaveRelINet,
+                                        bROSaveRelFSys,
+                                        bROSaveUnpacked,
+                                        bRODoPrettyPrinting;
 public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
@@ -116,36 +133,215 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
 
-    void                    SetAutoSaveTime( sal_Int32 n )      { nAutoSaveTime = n; SetModified();  }
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
-    void                    SetUseUserData( BOOL b )            { bUseUserData = b; SetModified();}
     BOOL                    IsUseUserData() const               { return bUseUserData; }
-    void                    SetBackup( BOOL b )                 { bBackup = b; SetModified();}
     BOOL                    IsBackup() const                    { return bBackup; }
-    void                    SetAutoSave( BOOL b )               { bAutoSave = b; SetModified();    }
     BOOL                    IsAutoSave() const                  { return bAutoSave; }
-    void                    SetAutoSavePrompt( BOOL b )         { bAutoSavePrompt = b; SetModified();  }
     BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
-    void                    SetDocInfoSave(BOOL b)              { bDocInfSave = b; SetModified(); }
     BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
-    void                    SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )   { eSaveGraphics = eMode; SetModified(); }
     SvtSaveOptions::SaveGraphicsMode        GetSaveGraphicsMode() const         { return eSaveGraphics; }
-    void                    SetSaveWorkingSet( BOOL b )         { bSaveWorkingSet = b; SetModified();}
     BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    void                    SetSaveDocWins( BOOL b )            { bSaveDocWins = b; SetModified();}
     BOOL                    IsSaveDocWins() const               { return bSaveDocWins; }
-    void                    SetSaveDocView( BOOL b )            { bSaveDocView = b; SetModified();}
     BOOL                    IsSaveDocView() const               { return bSaveDocView; }
-    void                    SetSaveRelINet( BOOL b )            { bSaveRelINet = b; SetModified();}
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
-    void                    SetSaveRelFSys( BOOL b )            { bSaveRelFSys = b; SetModified();}
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
-    void                    SetSaveUnpacked( BOOL b )           { bSaveUnpacked = b; SetModified();}
     BOOL                    IsSaveUnpacked() const              { return bSaveUnpacked; }
+    sal_Bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
 
-    void                    EnablePrettyPrinting( sal_Bool _bDoPP ) { bDoPrettyPrinting = _bDoPP; SetModified(); }
-    sal_Bool                IsPrettyPrintingEnabled( ) const        { return bDoPrettyPrinting; }
+    void                    SetAutoSaveTime( sal_Int32 n );
+    void                    SetUseUserData( BOOL b );
+    void                    SetBackup( BOOL b );
+    void                    SetAutoSave( BOOL b );
+    void                    SetAutoSavePrompt( BOOL b );
+    void                    SetDocInfoSave( BOOL b );
+    void                    SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode );
+    void                    SetSaveWorkingSet( BOOL b );
+    void                    SetSaveDocWins( BOOL b );
+    void                    SetSaveDocView( BOOL b );
+    void                    SetSaveRelINet( BOOL b );
+    void                    SetSaveRelFSys( BOOL b );
+    void                    SetSaveUnpacked( BOOL b );
+    void                    EnablePrettyPrinting( sal_Bool _bDoPP );
+
+    sal_Bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
+
+void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
+{
+    if (!bROAutoSaveTime && nAutoSaveTime!=n)
+    {
+        nAutoSaveTime = n;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetUseUserData( BOOL b )
+{
+    if (!bROUseUserData && bUseUserData!=b)
+    {
+        bUseUserData = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetBackup( BOOL b )
+{
+    if (!bROBackup && bBackup!=b)
+    {
+        bBackup = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetAutoSave( BOOL b )
+{
+    if (!bROAutoSave && bAutoSave!=b)
+    {
+        bAutoSave = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetAutoSavePrompt( BOOL b )
+{
+    if (!bROAutoSavePrompt && bAutoSavePrompt!=b)
+    {
+        bAutoSavePrompt = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetDocInfoSave(BOOL b)
+{
+    if (!bRODocInfSave && bDocInfSave!=b)
+    {
+        bDocInfSave = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
+{
+    if (!bROSaveGraphics && eSaveGraphics!=eMode)
+    {
+        eSaveGraphics = eMode;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveWorkingSet( BOOL b )
+{
+    if (!bROSaveWorkingSet && bSaveWorkingSet!=b)
+    {
+        bSaveWorkingSet = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveDocWins( BOOL b )
+{
+    if (!bROSaveDocWins && bSaveDocWins!=b)
+    {
+        bSaveDocWins = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveDocView( BOOL b )
+{
+    if (!bROSaveDocView && bSaveDocView!=b)
+    {
+        bSaveDocView = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveRelINet( BOOL b )
+{
+    if (!bROSaveRelINet && bSaveRelINet!=b)
+    {
+        bSaveRelINet = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveRelFSys( BOOL b )
+{
+    if (!bROSaveRelFSys && bSaveRelFSys!=b)
+    {
+        bSaveRelFSys = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetSaveUnpacked( BOOL b )
+{
+    if (!bROSaveUnpacked && bSaveUnpacked!=b)
+    {
+        bSaveUnpacked = b;
+        SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::EnablePrettyPrinting( sal_Bool _bDoPP )
+{
+    if (!bRODoPrettyPrinting && bDoPrettyPrinting!=_bDoPP)
+    {
+        bDoPrettyPrinting = _bDoPP;
+        SetModified();
+    }
+}
+
+sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
+{
+    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    switch(eOption)
+    {
+        case SvtSaveOptions::E_AUTOSAVETIME :
+            bReadOnly = bROAutoSaveTime;
+            break;
+        case SvtSaveOptions::E_SAVEGRAPHICS :
+            bReadOnly = bROSaveGraphics;
+            break;
+        case SvtSaveOptions::E_USEUSERDATA :
+            bReadOnly = bROUseUserData;
+            break;
+        case SvtSaveOptions::E_BACKUP :
+            bReadOnly = bROBackup;
+            break;
+        case SvtSaveOptions::E_AUTOSAVE :
+            bReadOnly = bROAutoSave;
+            break;
+        case SvtSaveOptions::E_AUTOSAVEPROMPT :
+            bReadOnly = bROAutoSavePrompt;
+            break;
+        case SvtSaveOptions::E_DOCINFSAVE :
+            bReadOnly = bRODocInfSave;
+            break;
+        case SvtSaveOptions::E_SAVEWORKINGSET :
+            bReadOnly = bROSaveWorkingSet;
+            break;
+        case SvtSaveOptions::E_SAVEDOCWINS :
+            bReadOnly = bROSaveDocWins;
+            break;
+        case SvtSaveOptions::E_SAVEDOCVIEW :
+            bReadOnly = bROSaveDocView;
+            break;
+        case SvtSaveOptions::E_SAVERELINET :
+            bReadOnly = bROSaveRelINet;
+            break;
+        case SvtSaveOptions::E_SAVERELFSYS :
+            bReadOnly = bROSaveRelFSys;
+            break;
+        case SvtSaveOptions::E_SAVEUNPACKED :
+            bReadOnly = bROSaveUnpacked;
+            break;
+        case SvtSaveOptions::E_DOPRETTYPRINTING :
+            bReadOnly = bRODoPrettyPrinting;
+            break;
+    }
+    return bReadOnly;
+}
 
 #define FORMAT           0
 #define TIMEINTERVALL    1
@@ -209,13 +405,30 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveRelFSys( sal_False )
     , bSaveUnpacked( sal_False )
     , bDoPrettyPrinting( sal_False )
+    , bROAutoSaveTime( CFG_READONLY_DEFAULT )
+    , bROSaveGraphics( CFG_READONLY_DEFAULT )
+    , bROUseUserData( CFG_READONLY_DEFAULT )
+    , bROBackup( CFG_READONLY_DEFAULT )
+    , bROAutoSave( CFG_READONLY_DEFAULT )
+    , bROAutoSavePrompt( CFG_READONLY_DEFAULT )
+    , bRODocInfSave( CFG_READONLY_DEFAULT )
+    , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
+    , bROSaveDocWins( CFG_READONLY_DEFAULT )
+    , bROSaveDocView( CFG_READONLY_DEFAULT )
+    , bROSaveRelINet( CFG_READONLY_DEFAULT )
+    , bROSaveRelFSys( CFG_READONLY_DEFAULT )
+    , bROSaveUnpacked( CFG_READONLY_DEFAULT )
+    , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates( aNames );
     EnableNotification( aNames );
     const Any* pValues = aValues.getConstArray();
+    const sal_Bool* pROStates = aROStates.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    DBG_ASSERT( aROStates.getLength() == aNames.getLength(), "GetReadOnlyStates failed" );
+    if ( aValues.getLength() == aNames.getLength() && aROStates.getLength() == aNames.getLength() )
     {
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
@@ -230,6 +443,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                             nAutoSaveTime = nTemp;
                         else
                             DBG_ERROR( "Wrong Type!" );
+                        bROAutoSaveTime = pROStates[nProp];
                         break;
 
                     case FORMAT :
@@ -237,6 +451,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                             eSaveGraphics = (SvtSaveOptions::SaveGraphicsMode) nTemp;
                         else
                             DBG_ERROR( "Wrong Type!" );
+                        bROSaveGraphics = pROStates[nProp];
                         break;
 
                     default:
@@ -248,40 +463,52 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                             {
                                 case USEUSERDATA :
                                     bUseUserData = bTemp;
+                                    bROUseUserData = pROStates[nProp];
                                     break;
                                 case CREATEBACKUP :
                                     bBackup = bTemp;
+                                    bROBackup = pROStates[nProp];
                                     break;
                                 case AUTOSAVE :
                                     bAutoSave = bTemp;
+                                    bROAutoSave = pROStates[nProp];
                                     break;
                                 case PROMPT :
                                     bAutoSavePrompt = bTemp;
+                                    bROAutoSavePrompt = pROStates[nProp];
                                     break;
                                 case EDITPROPERTY :
                                     bDocInfSave = bTemp;
+                                    bRODocInfSave = pROStates[nProp];
                                     break;
                                 case SAVEWORKINGSET :
                                     bSaveWorkingSet = bTemp;
+                                    bROSaveWorkingSet = pROStates[nProp];
                                     break;
                                 case SAVEDOCWINS :
                                     bSaveDocWins = bTemp;
+                                    bROSaveDocWins = pROStates[nProp];
                                     break;
                                 case SAVEVIEWINFO :
                                     bSaveDocView = bTemp;
+                                    bROSaveDocView = pROStates[nProp];
                                     break;
                                 case FILESYSTEM :
                                     bSaveRelFSys = bTemp;
+                                    bROSaveRelFSys = pROStates[nProp];
                                     break;
                                 case INTERNET :
                                     bSaveRelINet = bTemp;
+                                    bROSaveRelINet = pROStates[nProp];
                                     break;
                                 case UNPACKED :
                                     bSaveUnpacked = bTemp;
+                                    bROSaveUnpacked = pROStates[nProp];
                                     break;
 
                                 case PRETTYPRINTING:
                                     bDoPrettyPrinting = bTemp;
+                                    bRODoPrettyPrinting = pROStates[nProp];
                                     break;
 
                                 default :
@@ -303,60 +530,131 @@ SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
 
 void SvtSaveOptions_Impl::Commit()
 {
-    Sequence< OUString > aNames = GetPropertyNames();
+    Sequence< OUString > aOrgNames = GetPropertyNames();
+    OUString* pOrgNames = aOrgNames.getArray();
+    sal_Int32 nOrgCount = aOrgNames.getLength();
+
+    Sequence< OUString > aNames( nOrgCount );
+    Sequence< Any > aValues( nOrgCount );
     OUString* pNames = aNames.getArray();
+    Any* pValues = aValues.getArray();
+    sal_Int32 nRealCount = 0;
 
-    Sequence< Any > aValues( aNames.getLength() );
-    Any* pValues    =               aValues.getArray();
-    Any* pValuesEnd = pValues   +   aValues.getLength();
-
-    sal_Int32 nWhich = 0;
-    for ( ; pValues < pValuesEnd; ++pValues, ++nWhich )
+    for (sal_Int32 i=0; i<nOrgCount; ++i)
     {
-        switch ( nWhich )
+        switch (i)
         {
             case TIMEINTERVALL :
-                *pValues <<= nAutoSaveTime;
+                if (!bROAutoSaveTime)
+                {
+                    pValues[nRealCount] <<= nAutoSaveTime;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case FORMAT :
-                *pValues <<= (sal_Int16 ) eSaveGraphics;
+                if (!bROSaveGraphics)
+                {
+                    pValues[nRealCount] <<= (sal_Int16)eSaveGraphics;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case USEUSERDATA :
-                *pValues <<= bUseUserData;
+                if (!bROUseUserData)
+                {
+                    pValues[nRealCount] <<= bUseUserData;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case CREATEBACKUP :
-                *pValues <<= bBackup;
+                if (!bROBackup)
+                {
+                    pValues[nRealCount] <<= bBackup;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case AUTOSAVE :
-                *pValues <<= bAutoSave;
+                if (!bROAutoSave)
+                {
+                    pValues[nRealCount] <<= bAutoSave;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case PROMPT :
-                *pValues <<= bAutoSavePrompt;
+                if (!bROAutoSavePrompt)
+                {
+                    pValues[nRealCount] <<= bAutoSavePrompt;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case EDITPROPERTY :
-                *pValues <<= bDocInfSave;
+                if (!bRODocInfSave)
+                {
+                    pValues[nRealCount] <<= bDocInfSave;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case SAVEWORKINGSET :
-                *pValues <<= bSaveWorkingSet;
+                if (!bROSaveWorkingSet)
+                {
+                    pValues[nRealCount] <<= bSaveWorkingSet;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case SAVEDOCWINS :
-                *pValues <<= bSaveDocWins;
+                if (!bROSaveDocWins)
+                {
+                    pValues[nRealCount] <<= bSaveDocWins;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case SAVEVIEWINFO :
-                *pValues <<= bSaveDocView;
+                if (!bROSaveDocView)
+                {
+                    pValues[nRealCount] <<= bSaveDocView;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case FILESYSTEM :
-                *pValues <<= bSaveRelFSys;
+                if (!bROSaveRelFSys)
+                {
+                    pValues[nRealCount] <<= bSaveRelFSys;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case INTERNET :
-                *pValues <<= bSaveRelINet;
+                if (!bROSaveRelINet)
+                {
+                    pValues[nRealCount] <<= bSaveRelINet;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
             case UNPACKED :
-                *pValues <<= bSaveUnpacked;
+                if (!bROSaveUnpacked)
+                {
+                    pValues[nRealCount] <<= bSaveUnpacked;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
-
             case PRETTYPRINTING:
-                *pValues <<= bDoPrettyPrinting;
+                if (!bRODoPrettyPrinting)
+                {
+                    pValues[nRealCount] <<= bDoPrettyPrinting;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
                 break;
 
             default:
@@ -364,6 +662,8 @@ void SvtSaveOptions_Impl::Commit()
         }
     }
 
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
 }
 
@@ -609,3 +909,7 @@ sal_Bool SvtSaveOptions::IsPrettyPrinting() const
     return pImp->pSaveOpt->IsPrettyPrintingEnabled();
 }
 
+sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
+{
+    return pImp->pSaveOpt->IsReadOnly(eOption);
+}

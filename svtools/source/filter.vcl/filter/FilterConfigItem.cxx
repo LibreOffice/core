@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-28 10:07:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
     {
         pPropVal->Value >>= aRetValue;
     }
-    else  if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
     {
         aAny >>= aRetValue;
     }
@@ -441,6 +441,25 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
     aString.Name = rKey;
     aString.Value <<= aRetValue;
     WritePropertyValue( aFilterData, aString );
+    return aRetValue;
+}
+
+Any FilterConfigItem::ReadAny( const ::rtl::OUString& rKey, const Any& rDefault )
+{
+    Any aAny, aRetValue( rDefault );
+    PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
+    if ( pPropVal )
+    {
+        aRetValue = pPropVal->Value;
+    }
+    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+    {
+        aRetValue = aAny;
+    }
+    PropertyValue aPropValue;
+    aPropValue.Name = rKey;
+    aPropValue.Value = aRetValue;
+    WritePropertyValue( aFilterData, aPropValue );
     return aRetValue;
 }
 
@@ -589,6 +608,34 @@ void FilterConfigItem::WriteString( const OUString& rKey, const OUString& rNewVa
                     {
                         DBG_ERROR( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
+                }
+            }
+        }
+    }
+}
+
+void FilterConfigItem::WriteAny( const OUString& rKey, const Any& rNewAny )
+{
+    PropertyValue aPropValue;
+    aPropValue.Name = rKey;
+    aPropValue.Value = rNewAny;
+    WritePropertyValue( aFilterData, aPropValue );
+    if ( xPropSet.is() )
+    {
+        Any aAny;
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+        {
+            if ( aAny != rNewAny )
+            {
+                try
+                {
+                    xPropSet->setPropertyValue( rKey, rNewAny );
+                    bModified = sal_True;
+                }
+                catch ( com::sun::star::uno::Exception& )
+                {
+                    DBG_ERROR( "FilterConfigItem::WriteAny - could not set PropertyValue" );
+
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-27 11:14:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
@@ -80,9 +77,6 @@
 #endif
 #ifndef TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
@@ -168,32 +162,7 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
                     bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
                 }
                 if (!bMaybeFile)
-                {
-                    //TODO! there is no property "Exists," is there?
-                    sal_Bool bExists = false;
-                    try
-                    {
-                        ::ucb::Content(aAbsURIRef.
-                                           GetMainURL(
-                                               INetURLObject::NO_DECODE),
-                                       0).
-                                getPropertyValue(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                      "Exists")))
-                            >>= bExists;
-                    }
-                    catch (com::sun::star::ucb::ContentCreationException const
-                               &)
-                    {
-                        DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
-                    }
-                    catch (uno::Exception const &)
-                    {
-                        DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
-                    }
-                    if (!bExists)
-                        aAbsURIRef = aNonFileURIRef;
-                }
+                    aAbsURIRef = aNonFileURIRef;
             }
         }
     }

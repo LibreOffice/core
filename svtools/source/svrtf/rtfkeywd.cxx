@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <string.h>
 #include <ctype.h>
@@ -255,7 +257,9 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {sRTF_QC,            RTF_QC},
 {sRTF_FI,            RTF_FI},
 {sRTF_LI,            RTF_LI},
+{sRTF_LIN,           RTF_LIN},
 {sRTF_RI,            RTF_RI},
+{sRTF_RIN,           RTF_RIN},
 {sRTF_SB,            RTF_SB},
 {sRTF_SA,            RTF_SA},
 {sRTF_SL,            RTF_SL},
@@ -1238,4 +1242,4 @@ int GetRTFToken( const String& rSearch )
     return nRet;
 }
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

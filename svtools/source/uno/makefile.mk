@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 12:54:26 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:39:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,155 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
-
-#not all needed...
-
-UNOTYPES= \
-    com.sun.star.awt.CharSet \
-    com.sun.star.awt.DeviceCapability \
-    com.sun.star.awt.FontDescriptor \
-    com.sun.star.awt.FontPitch \
-    com.sun.star.awt.FontSlant \
-    com.sun.star.awt.FontStrikeout \
-    com.sun.star.awt.FontStrikeout \
-    com.sun.star.awt.FontType \
-    com.sun.star.awt.FontUnderline \
-    com.sun.star.awt.FontWeight \
-    com.sun.star.awt.FontWidth \
-    com.sun.star.awt.KeyModifier \
-    com.sun.star.awt.MenuItemStyle \
-    com.sun.star.awt.MessageBoxCommand \
-    com.sun.star.awt.MouseButton \
-    com.sun.star.awt.PopupMenuDirection \
-    com.sun.star.awt.ScrollBarOrientation \
-    com.sun.star.awt.Style \
-    com.sun.star.awt.TextAlign \
-    com.sun.star.awt.VclWindowPeerAttribute \
-    com.sun.star.awt.WindowAttribute \
-    com.sun.star.awt.XActionListener \
-    com.sun.star.awt.XAdjustmentListener \
-    com.sun.star.awt.XBitmap \
-    com.sun.star.awt.XButton \
-    com.sun.star.awt.XCheckBox \
-    com.sun.star.awt.XComboBox \
-    com.sun.star.awt.XControl \
-    com.sun.star.awt.XControlContainer \
-    com.sun.star.awt.XControlModel \
-    com.sun.star.awt.XCurrencyField \
-    com.sun.star.awt.XDateField \
-    com.sun.star.awt.XDevice \
-    com.sun.star.awt.XDialog \
-    com.sun.star.awt.XFileDialog \
-    com.sun.star.awt.XFixedText \
-    com.sun.star.awt.XFocusListener \
-    com.sun.star.awt.XFont \
-    com.sun.star.awt.XGraphics \
-    com.sun.star.awt.XImageButton \
-    com.sun.star.awt.XImageConsumer \
-    com.sun.star.awt.XImageProducer \
-    com.sun.star.awt.ImageStatus \
-    com.sun.star.awt.XInfoPrinter \
-    com.sun.star.awt.XItemListener \
-    com.sun.star.awt.XKeyListener \
-    com.sun.star.awt.XLayoutConstrains \
-    com.sun.star.awt.XListBox \
-    com.sun.star.awt.XMenuListener \
-    com.sun.star.awt.XMessageBox \
-    com.sun.star.awt.XMouseListener \
-    com.sun.star.awt.XMouseMotionListener \
-    com.sun.star.awt.XNumericField \
-    com.sun.star.util.XNumberFormatsSupplier \
-    com.sun.star.awt.XPaintListener \
-    com.sun.star.awt.XPatternField \
-    com.sun.star.awt.XPointer \
-    com.sun.star.awt.XPrinter \
-    com.sun.star.awt.XPrinterPropertySet \
-    com.sun.star.awt.XPrinterServer \
-    com.sun.star.awt.XProgressBar \
-    com.sun.star.awt.XProgressMonitor \
-    com.sun.star.awt.XRadioButton \
-    com.sun.star.awt.XRegion \
-    com.sun.star.awt.XScrollBar \
-    com.sun.star.awt.XSpinField \
-    com.sun.star.awt.XSpinListener \
-    com.sun.star.awt.XSystemDependentWindowPeer \
-    com.sun.star.awt.XTabController \
-    com.sun.star.awt.XTabControllerModel \
-    com.sun.star.awt.XTextArea \
-    com.sun.star.awt.XTextComponent \
-    com.sun.star.awt.XTextEditField \
-    com.sun.star.awt.XTextLayoutConstrains \
-    com.sun.star.awt.XTextListener \
-    com.sun.star.awt.XTimeField \
-    com.sun.star.awt.XToolkit \
-    com.sun.star.awt.XTopWindow \
-    com.sun.star.awt.XTopWindowListener \
-    com.sun.star.awt.XUnoControlContainer \
-    com.sun.star.awt.XVclContainer \
-    com.sun.star.awt.XVclContainerListener \
-    com.sun.star.awt.XVclContainerPeer \
-    com.sun.star.awt.XVclWindowPeer \
-    com.sun.star.awt.XWindow \
-    com.sun.star.awt.XWindowListener \
-    com.sun.star.beans.PropertyAttribute \
-    com.sun.star.beans.PropertyChangeEvent \
-    com.sun.star.beans.PropertyState \
-    com.sun.star.beans.PropertyStateChangeEvent \
-    com.sun.star.beans.PropertyValue \
-    com.sun.star.beans.PropertyValues \
-    com.sun.star.beans.XFastPropertySet \
-    com.sun.star.beans.XMultiPropertySet \
-    com.sun.star.beans.XPropertiesChangeListener \
-    com.sun.star.beans.XPropertyAccess \
-    com.sun.star.beans.XPropertyChangeListener \
-    com.sun.star.beans.XPropertyContainer \
-    com.sun.star.beans.XPropertySet \
-    com.sun.star.beans.XPropertySetInfo \
-    com.sun.star.beans.XPropertyState \
-    com.sun.star.beans.XVetoableChangeListener \
-    com.sun.star.container.XContainer \
-    com.sun.star.container.XContainerListener \
-    com.sun.star.container.XNameContainer \
-    com.sun.star.frame.XModel \
-    com.sun.star.frame.XFrameLoader \
-    com.sun.star.frame.XLoadEventListener \
-    com.sun.star.frame.XController \
-    com.sun.star.frame.XDispatch \
-    com.sun.star.frame.XDispatchProvider \
-    com.sun.star.frame.XStorable \
-    com.sun.star.frame.XFrame \
-    com.sun.star.frame.FeatureStateEvent \
-    com.sun.star.frame.DispatchDescriptor \
-    com.sun.star.io.XInputStream \
-    com.sun.star.io.XMarkableStream \
-    com.sun.star.io.XObjectInputStream \
-    com.sun.star.io.XConnectable \
-    com.sun.star.io.XActiveDataControl \
-    com.sun.star.io.XActiveDataSink \
-    com.sun.star.io.XActiveDataSource \
-    com.sun.star.lang.IllegalArgumentException \
-    com.sun.star.lang.SystemDependent \
-    com.sun.star.lang.XEventListener \
-    com.sun.star.lang.XMultiServiceFactory \
-    com.sun.star.lang.XServiceInfo \
-    com.sun.star.lang.XServiceName \
-    com.sun.star.lang.XSingleServiceFactory \
-    com.sun.star.lang.XTypeProvider \
-    com.sun.star.lang.XUnoTunnel \
-    com.sun.star.registry.XRegistryKey \
-    com.sun.star.uno.TypeClass \
-    com.sun.star.util.XSearchable \
-    com.sun.star.util.XSearchDescriptor \
-    com.sun.star.util.XURLTransformer \
-    com.sun.star.view.XScreenCursor \
-    com.sun.star.text.XTextCursor \
-    com.sun.star.text.XText \
-    com.sun.star.text.XTextRange \
-    com.sun.star.text.XTextViewCursor \
-    com.sun.star.text.XTextViewCursorSupplier \
-    com.sun.star.uno.XAggregation \
-    com.sun.star.uno.XWeak
-
 
 .IF "$(GUI)"!="DOS"
 SRS1NAME=	uno

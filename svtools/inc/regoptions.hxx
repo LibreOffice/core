@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 13:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,11 +143,4 @@ namespace svt
 //........................................................................
 
 #endif // SVTOOLS_REGOPTIONS_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 19.12.01 13:41:17  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 17:19:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,23 +264,41 @@ SfxUndoManager::~SfxUndoManager()
 
 void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
 {
-    // Redo-Actions loeschen
-    for ( USHORT nPos = pActUndoArray->aUndoActions.Count();
-          nPos > pActUndoArray->nCurUndoAction &&
-              !pActUndoArray->aUndoActions[nPos - 1 ]->IsLinked();
-          --nPos )
-    {
-        delete pActUndoArray->aUndoActions[nPos-1];
-        pActUndoArray->aUndoActions.Remove(
-            nPos - 1 );
-    }
+    // Remove entries from the pActUndoArray when we have to reduce
+    // the number of entries due to a lower nMaxUndoActionCount.
+    // Both redo and undo action entries will be removed until we reached the
+    // new nMaxUndoActionCount.
 
-    while ( nMaxUndoActionCount < pActUndoArray->aUndoActions.Count() &&
-            !pActUndoArray->aUndoActions[0]->IsLinked())
+    long nNumToDelete = pActUndoArray->aUndoActions.Count() - nMaxUndoActionCount;
+    if ( nNumToDelete > 0 )
     {
-        delete pActUndoArray->aUndoActions[0];
-        pActUndoArray->aUndoActions.Remove(0);
-        --pActUndoArray->nCurUndoAction;
+        while ( nNumToDelete > 0 )
+        {
+            USHORT nPos = pActUndoArray->aUndoActions.Count();
+            if ( nPos > pActUndoArray->nCurUndoAction )
+            {
+                if ( !pActUndoArray->aUndoActions[nPos-1]->IsLinked() )
+                {
+                    delete pActUndoArray->aUndoActions[nPos-1];
+                    pActUndoArray->aUndoActions.Remove( nPos-1 );
+                    --nNumToDelete;
+                }
+            }
+
+            if ( nNumToDelete > 0 && pActUndoArray->nCurUndoAction > 0 )
+            {
+                if ( !pActUndoArray->aUndoActions[0]->IsLinked() )
+                {
+                    delete pActUndoArray->aUndoActions[0];
+                    pActUndoArray->aUndoActions.Remove(0);
+                    --pActUndoArray->nCurUndoAction;
+                    --nNumToDelete;
+                }
+            }
+
+            if ( nPos == pActUndoArray->aUndoActions.Count() )
+                break; // Cannot delete more entries
+        }
     }
 
     pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;

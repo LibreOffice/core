@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-12 11:22:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
 void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 {
     USHORT nWeight,i;
-    BYTE nCharSet,nPitchFamily;
+    BYTE nPitchFamily;
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
 
@@ -443,13 +443,25 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     if (rFont.GetUnderline()==UNDERLINE_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
     if (rFont.GetStrikeout()==STRIKEOUT_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
 
-    switch (rFont.GetCharSet())
+    sal_uInt8   nCharSet;
+    CharSet     eFontNameEncoding = rFont.GetCharSet();
+    switch ( eFontNameEncoding )
     {
-        case RTL_TEXTENCODING_SYMBOL    :   nCharSet = W_SYMBOL_CHARSET; break;
         case RTL_TEXTENCODING_SHIFT_JIS :   nCharSet = W_SHIFTJIS_CHARSET; break;
         case RTL_TEXTENCODING_BIG5      :   nCharSet = W_CHINESEBIG5_CHARSET; break;
+        case RTL_TEXTENCODING_MS_949    :   nCharSet = W_HANGEUL_CHARSET; break;
         case RTL_TEXTENCODING_MS_932    :   nCharSet = 0x3c; break;
-        default:                            nCharSet = W_ANSI_CHARSET;
+        case RTL_TEXTENCODING_SYMBOL    :
+        {
+            nCharSet = W_SYMBOL_CHARSET;
+            eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
+        }
+        break;
+        default:
+        {
+            nCharSet = W_ANSI_CHARSET;
+            eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
+        }
     }
     *pWMF << nCharSet;
 
@@ -470,7 +482,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     }
     *pWMF << nPitchFamily;
 
-    ByteString aFontName( rFont.GetName(), gsl_getSystemTextEncoding() );
+    ByteString aFontName( rFont.GetName(), eFontNameEncoding );
     for ( i = 0; i < W_LF_FACESIZE; i++ )
     {
         sal_Char nChar = ( i < aFontName.Len() ) ? aFontName.GetChar( i ) : 0;

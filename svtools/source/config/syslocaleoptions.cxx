@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-09-23 13:44:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#define CFG_READONLY_DEFAULT    sal_False
+
 using namespace osl;
 using namespace utl;
 using namespace rtl;
@@ -121,6 +123,9 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         SvtBroadcaster          m_aBroadcaster;
         ULONG                   m_nBlockedHint;     // pending hints
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
+
+        sal_Bool                m_bROLocale;
+        sal_Bool                m_bROCurrency;
 
     static  const Sequence< /* const */ OUString >  GetPropertyNames();
 
@@ -148,7 +153,7 @@ public:
             SvtBroadcaster&     GetBroadcaster()
                                     { return m_aBroadcaster; }
             void                BlockBroadcasts( BOOL bBlock );
-
+            sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
 };
 
 
@@ -180,6 +185,8 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
     , m_nBlockedHint( 0 )
     , m_nBroadcastBlocked( 0 )
+    , m_bROLocale(CFG_READONLY_DEFAULT)
+    , m_bROCurrency(CFG_READONLY_DEFAULT)
 {
     if ( !IsValidConfigMgr() )
         ChangeLocaleSettings();     // assume SYSTEM defaults during Setup
@@ -187,9 +194,12 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     {
         const Sequence< OUString > aNames = GetPropertyNames();
         Sequence< Any > aValues = GetProperties( aNames );
+        Sequence< sal_Bool > aROStates = GetReadOnlyStates( aNames );
         const Any* pValues = aValues.getConstArray();
+        const sal_Bool* pROStates = aROStates.getConstArray();
         DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-        if ( aValues.getLength() == aNames.getLength() )
+        DBG_ASSERT( aROStates.getLength() == aNames.getLength(), "GetReadOnlyStates failed" );
+        if ( aValues.getLength() == aNames.getLength() && aROStates.getLength() == aNames.getLength() )
         {
             for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
             {
@@ -205,6 +215,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     m_aLocaleString = aStr;
                                 else
                                     DBG_ERRORFILE( "Wrong property type!" );
+                                m_bROLocale = pROStates[nProp];
                             }
                             break;
                         case PROPERTYHANDLE_CURRENCY :
@@ -214,6 +225,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     m_aCurrencyString = aStr;
                                 else
                                     DBG_ERRORFILE( "Wrong property type!" );
+                                m_bROCurrency = pROStates[nProp];
                             }
                             break;
                         default:
@@ -246,6 +258,25 @@ void SvtSysLocaleOptions_Impl::BlockBroadcasts( BOOL bBlock )
     }
 }
 
+sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
+{
+    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    switch(eOption)
+    {
+        case SvtSysLocaleOptions::E_LOCALE :
+            {
+                bReadOnly = m_bROLocale;
+                break;
+            }
+        case SvtSysLocaleOptions::E_CURRENCY :
+            {
+                bReadOnly = m_bROCurrency;
+                break;
+            }
+    }
+    return bReadOnly;
+}
+
 
 void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
 {
@@ -268,23 +299,46 @@ void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
 
 void SvtSysLocaleOptions_Impl::Commit()
 {
-    const Sequence< OUString > aNames = GetPropertyNames();
-    Sequence< Any > aValues( aNames.getLength() );
+    const Sequence< OUString > aOrgNames = GetPropertyNames();
+    sal_Int32 nOrgCount = aOrgNames.getLength();
+
+    Sequence< OUString > aNames( nOrgCount );
+    Sequence< Any > aValues( nOrgCount );
+
+    OUString* pNames = aNames.getArray();
     Any* pValues = aValues.getArray();
-    for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
+    sal_Int32 nRealCount = 0;
+
+    for ( sal_Int32 nProp = 0; nProp < nOrgCount; nProp++ )
     {
         switch ( nProp )
         {
             case PROPERTYHANDLE_LOCALE :
-                pValues[nProp] <<= m_aLocaleString;
-            break;
+                {
+                    if (!m_bROLocale)
+                    {
+                        pNames[nRealCount] = aOrgNames[nProp];
+                        pValues[nRealCount] <<= m_aLocaleString;
+                        ++nRealCount;
+                    }
+                }
+                break;
             case PROPERTYHANDLE_CURRENCY :
-                pValues[nProp] <<= m_aCurrencyString;
-            break;
+                {
+                    if (!m_bROLocale)
+                    {
+                        pNames[nRealCount] = aOrgNames[nProp];
+                        pValues[nRealCount] <<= m_aCurrencyString;
+                        ++nRealCount;
+                    }
+                }
+                break;
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
     }
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
     ClearModified();
 }
@@ -292,7 +346,7 @@ void SvtSysLocaleOptions_Impl::Commit()
 
 void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
 {
-    if ( rStr != m_aLocaleString )
+    if (!m_bROLocale && rStr != m_aLocaleString )
     {
         m_aLocaleString = rStr;
         SetModified();
@@ -320,7 +374,7 @@ ULONG SvtSysLocaleOptions_Impl::ChangeLocaleSettings()
 
 void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
 {
-    if ( rStr != m_aCurrencyString )
+    if (!m_bROCurrency && rStr != m_aCurrencyString )
     {
         m_aCurrencyString = rStr;
         SetModified();
@@ -341,6 +395,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
 {
     ULONG nHint = 0;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
+    Sequence< sal_Bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProp = 0; nProp < nCount; ++nProp )
     {
@@ -348,6 +403,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aLocaleString;
+            m_bROLocale = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
             nHint |= ChangeLocaleSettings();
         }
@@ -355,6 +411,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Currency property type" );
             seqValues[nProp] >>= m_aCurrencyString;
+            m_bROCurrency = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
         }
     }
@@ -471,6 +528,11 @@ LanguageType SvtSysLocaleOptions::GetLocaleLanguageType() const
     return pOptions->GetLocaleLanguageType();
 }
 
+sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->IsReadOnly( eOption );
+}
 
 // static
 void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,

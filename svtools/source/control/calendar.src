@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.1.1.9 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:13:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,12 @@ String STR_SVT_CALENDAR_DAY
     Text[ dutch ] = "Dag";
     Text[ chinese_simplified ] = "Â§©";
     Text[ greek ] = "«Ï›Ò·";
-    Text[ korean ] = "ÏùºÏûê";
+    Text[ korean ] = "Ïùº";
     Text[ turkish ] = "G¸n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "DÌa";
+    Text[ catalan ] = "Dia";
     Text[ finnish ] = "P‰iv‰";
+    Text[ thai ] = "‡∏ß‡∏±‡∏ô";
 };
 String STR_SVT_CALENDAR_WEEK
 {
@@ -113,8 +114,9 @@ String STR_SVT_CALENDAR_WEEK
     Text[ korean ] = "Ï£º";
     Text[ turkish ] = "Hafta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Semana";
+    Text[ catalan ] = "Setmana";
     Text[ finnish ] = "Viikko";
+    Text[ thai ] = "‡∏™‡∏±‡∏õ‡∏î‡∏≤‡∏´‡πå";
 };
 String STR_SVT_CALENDAR_TODAY
 {
@@ -141,8 +143,9 @@ String STR_SVT_CALENDAR_TODAY
     Text[ korean ] = "Ïò§Îäò";
     Text[ turkish ] = "Bug¸n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Hoy";
+    Text[ catalan ] = "Avui";
     Text[ finnish ] = "T‰n‰‰n";
+    Text[ thai ] = "‡∏ß‡∏±‡∏ô‡∏ô‡∏µ‡πâ";
 };
 String STR_SVT_CALENDAR_NONE
 {
@@ -158,7 +161,7 @@ String STR_SVT_CALENDAR_NONE
     Text [ french ] = "Aucun(e)" ;
     Text [ dutch ] = "Geen" ;
     Text[ chinese_simplified ] = "Êó†";
-    Text[ russian ] = "¡ÂÁ";
+    Text[ russian ] = "œÛÒÚÓ";
     Text[ polish ] = "brak";
     Text[ japanese ] = "„Å™„Åó";
     Text[ chinese_traditional ] = "ÁÑ°";
@@ -169,9 +172,19 @@ String STR_SVT_CALENDAR_NONE
     Text[ korean ] = "ÏóÜÏùå";
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ninguno";
+    Text[ catalan ] = "Cap";
     Text[ finnish ] = "Ei mit‰‰n";
+    Text[ thai ] = "‡πÑ‡∏°‡πà‡∏°‡∏µ";
 };
+
+
+
+
+
+
+
+
+
 
 
 

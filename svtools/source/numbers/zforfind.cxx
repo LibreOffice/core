@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2002-09-30 12:51:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
@@ -256,7 +256,7 @@ double ImpSvNumberInputScan::StringToDouble( const String& rStr, BOOL bForceFrac
         nPos++;
     }
     if ( fFrac )
-        return fNum + SolarMath::Pow10Exp( fFrac, nExp );
+        return fNum + ::rtl::math::pow10Exp( fFrac, nExp );
     return fNum;
 }
 
@@ -1297,7 +1297,7 @@ input for the following reasons:
         if ( res && pCal->isValid() )
         {
             double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
-            fDays = floor( pCal->getLocalDateTime() );
+            fDays = ::rtl::math::approxFloor( pCal->getLocalDateTime() );
             fDays -= fDiff;
             nTryOrder = nFormatOrder;   // break for
         }
@@ -2508,10 +2508,10 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     if ( nESign == -1 )
                         sResString += '-';
                     sResString += sStrArray[nNums[nAnzNums-1]];
-                    int nErrno = 0;
-                    fOutNumber = SolarMath::StringToDouble(
-                        sResString.GetBuffer(), ',', '.', nErrno );
-                    if ( nErrno == ERANGE )
+                    rtl_math_ConversionStatus eStatus;
+                    fOutNumber = ::rtl::math::stringToDouble(
+                        sResString, '.', ',', &eStatus, NULL );
+                    if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
                     {
                         F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
                         if (nESign == -1)

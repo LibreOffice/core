@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-05 09:32:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYCOUNT                   5
 
+#define CFG_READONLY_DEFAULT    sal_False
+
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
@@ -199,6 +201,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
+        sal_Bool IsReadOnly( SvtSecurityOptions::EOption eOption ) const;
         sal_Bool IsWarningEnabled() const;
         void SetWarningEnabled( sal_Bool bSet );
         sal_Bool IsConfirmationEnabled() const;
@@ -239,11 +242,17 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
     private:
 
-        Sequence< OUString >    m_seqSecureURLs     ;
-        EBasicSecurityMode      m_eBasicMode    ;
+        Sequence< OUString >    m_seqSecureURLs;
+        EBasicSecurityMode      m_eBasicMode;
         sal_Bool                m_bExecutePlugins;
         sal_Bool                m_bWarning;
         sal_Bool                m_bConfirmation;
+
+        sal_Bool                m_bROConfirmation;
+        sal_Bool                m_bROWarning;
+        sal_Bool                m_bROExecutePlugins;
+        sal_Bool                m_bROBasicMode;
+        sal_Bool                m_bROSecureURLs;
 };
 
 //_________________________________________________________________________________________________________________
@@ -255,17 +264,23 @@ class SvtSecurityOptions_Impl : public ConfigItem
 //*****************************************************************************************************************
 SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_SECURITY         )
+    :   ConfigItem          ( ROOTNODE_SECURITY       )
     // Init member then.
-    ,   m_seqSecureURLs     ( DEFAULT_SECUREURL         )
-    ,   m_eBasicMode    ( DEFAULT_STAROFFICEBASIC   )
-    ,   m_bExecutePlugins( sal_True )
-    ,   m_bWarning( sal_True )
-    ,   m_bConfirmation( sal_True )
+    ,   m_seqSecureURLs     ( DEFAULT_SECUREURL       )
+    ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
+    ,   m_bExecutePlugins   ( sal_True                )
+    ,   m_bWarning          ( sal_True                )
+    ,   m_bConfirmation     ( sal_True                )
+    ,   m_bROConfirmation   ( CFG_READONLY_DEFAULT    )
+    ,   m_bROWarning        ( CFG_READONLY_DEFAULT    )
+    ,   m_bROExecutePlugins ( CFG_READONLY_DEFAULT    )
+    ,   m_bROBasicMode      ( CFG_READONLY_DEFAULT    )
+    ,   m_bROSecureURLs     ( CFG_READONLY_DEFAULT    )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
+    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -288,6 +303,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                         sal_uInt32 nCount = m_seqSecureURLs.getLength();
                                                         for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
                                                             m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
+                                                        m_bROSecureURLs = seqRO[nProperty];
                                                     }
                                                     break;
 
@@ -296,22 +312,26 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                         sal_Int32 nMode;
                                                         seqValues[nProperty] >>= nMode;
                                                         m_eBasicMode = (EBasicSecurityMode)nMode;
+                                                        m_bROBasicMode = seqRO[nProperty];
                                                     }
                                                     break;
 
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
                                                         if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
                                                             DBG_ERROR("Wrong type for ExecutePlugins!");
+                                                        m_bROExecutePlugins = seqRO[nProperty];
                                                     }
                                                     break;
             case PROPERTYHANDLE_WARNINGENABLED  :   {
                                                         if ( !( seqValues[nProperty] >>= m_bWarning ) )
                                                             DBG_ERROR("Wrong type for Warning!");
+                                                        m_bROWarning = seqRO[nProperty];
                                                     }
                                                     break;
             case PROPERTYHANDLE_CONFIRMATIONENABLED :   {
                                                         if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
                                                             DBG_ERROR("Wrong type for Confirmation!");
+                                                        m_bROConfirmation = seqRO[nProperty];
                                                     }
                                                     break;
         }
@@ -341,6 +361,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
 {
     // Use given list of updated properties to get his values from configuration directly!
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
+    Sequence< sal_Bool > seqRO = GetReadOnlyStates( seqPropertyNames );
     // Safe impossible cases.
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
@@ -356,6 +377,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
                 m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
+            m_bROSecureURLs = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
@@ -363,21 +385,25 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
             sal_Int32 nMode;
             seqValues[nProperty] >>= nMode;
             m_eBasicMode = (EBasicSecurityMode)nMode;
+            m_bROBasicMode = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_EXECUTEPLUGINS )
         {
             if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
                 DBG_ERROR("Wrong type for ExecutePlugins!");
+            m_bROExecutePlugins = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_WARNINGENABLED )
         {
             if ( !( seqValues[nProperty] >>= m_bWarning ) )
                 DBG_ERROR("Wrong type for ExecutePlugins!");
+            m_bROWarning = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_CONFIRMATIONENABLED )
         {
             if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
                 DBG_ERROR("Wrong type for ExecutePlugins!");
+            m_bROConfirmation = seqRO[nProperty];
         }
         #ifdef DEBUG
         else DBG_ASSERT( sal_False, "SvtSecurityOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
@@ -391,44 +417,105 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
 void SvtSecurityOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = GetPropertyNames  ();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
-    for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
+    Sequence< OUString >    lOrgNames = GetPropertyNames();
+    sal_Int32               nOrgCount = lOrgNames.getLength();
+
+    Sequence< OUString >    lNames(nOrgCount);
+    Sequence< Any >         lValues(nOrgCount);
+    sal_Int32               nRealCount = 0;
+
+    for( sal_Int32 nProperty=0; nProperty<nOrgCount; ++nProperty )
     {
         switch( nProperty )
         {
             case PROPERTYHANDLE_SECUREURL       :   {
-                                                        Sequence < OUString > seqURLs( m_seqSecureURLs );
-                                                        SvtPathOptions aOpt;
-                                                        sal_uInt32 nCount = seqURLs.getLength();
-                                                        for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-                                                            seqURLs[nItem] = aOpt.UseVariable( seqURLs[nItem] );
-                                                        seqValues[nProperty] <<= seqURLs;
+                                                        if (!m_bROSecureURLs)
+                                                        {
+                                                            Sequence < OUString > lURLs( m_seqSecureURLs );
+                                                            SvtPathOptions aOpt;
+                                                            for( sal_Int32 nItem=0; nItem<lURLs.getLength(); ++nItem )
+                                                                lURLs[nItem] = aOpt.UseVariable( lURLs[nItem] );
+                                                            lValues[nRealCount] <<= lURLs;
+                                                            lNames[nRealCount] = lOrgNames[nProperty];
+                                                            ++nRealCount;
+                                                        }
                                                     }
                                                     break;
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
-                                                        seqValues[nProperty] <<= (sal_Int32)m_eBasicMode;
+                                                        if (!m_bROBasicMode)
+                                                        {
+                                                            lValues[nRealCount] <<= (sal_Int32)m_eBasicMode;
+                                                            lNames[nRealCount] = lOrgNames[nProperty];
+                                                            ++nRealCount;
+                                                        }
                                                     }
                                                     break;
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
-                                                        seqValues[nProperty] <<= m_bExecutePlugins;
+                                                        if (!m_bROExecutePlugins)
+                                                        {
+                                                            lValues[nRealCount] <<= m_bExecutePlugins;
+                                                            lNames[nRealCount] = lOrgNames[nProperty];
+                                                            ++nRealCount;
+                                                        }
                                                     }
                                                     break;
             case PROPERTYHANDLE_WARNINGENABLED  :   {
-                                                        seqValues[nProperty] <<= m_bWarning;
+                                                        if (!m_bROWarning)
+                                                        {
+                                                            lValues[nRealCount] <<= m_bWarning;
+                                                            lNames[nRealCount] = lOrgNames[nProperty];
+                                                            ++nRealCount;
+                                                        }
                                                     }
                                                     break;
             case PROPERTYHANDLE_CONFIRMATIONENABLED  :
                                                     {
-                                                        seqValues[nProperty] <<= m_bConfirmation;
+                                                        if (!m_bROConfirmation)
+                                                        {
+                                                            lValues[nRealCount] <<= m_bConfirmation;
+                                                            lNames[nRealCount] = lOrgNames[nProperty];
+                                                            ++nRealCount;
+                                                        }
                                                     }
                                                     break;
         }
     }
     // Set properties in configuration.
-    PutProperties( seqNames, seqValues );
+    lNames.realloc(nRealCount);
+    lValues.realloc(nRealCount);
+    PutProperties( lNames, lValues );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) const
+{
+    sal_Bool bReadonly = sal_True;
+    switch(eOption)
+    {
+        case SvtSecurityOptions::E_SECUREURLS :
+            bReadonly = m_bROSecureURLs;
+            break;
+
+        case SvtSecurityOptions::E_BASICMODE :
+            bReadonly = m_bROBasicMode;
+            break;
+
+        case SvtSecurityOptions::E_EXECUTEPLUGINS :
+            bReadonly = m_bROExecutePlugins;
+            break;
+
+        case SvtSecurityOptions::E_WARNING :
+            bReadonly = m_bROWarning;
+            break;
+
+        case SvtSecurityOptions::E_CONFIRMATION :
+            bReadonly = m_bROConfirmation;
+            break;
+    }
+    return bReadonly;
 }
 
 //*****************************************************************************************************************
@@ -444,8 +531,12 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetSecureURLs() const
 //*****************************************************************************************************************
 void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
-    m_seqSecureURLs = seqURLList;
-    SetModified();
+    DBG_ASSERT(!m_bROSecureURLs, "SvtSecurityOptions_Impl::SetSecureURLs()\nYou tried to write on a readonly value!\n")
+    if (!m_bROSecureURLs && m_seqSecureURLs!=seqURLList)
+    {
+        m_seqSecureURLs = seqURLList;
+        SetModified();
+    }
 }
 
 //*****************************************************************************************************************
@@ -461,8 +552,12 @@ EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
 //*****************************************************************************************************************
 void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
 {
-    m_eBasicMode = eMode;
-    SetModified();
+    DBG_ASSERT(!m_bROBasicMode, "SvtSecurityOptions_Impl::SetBasicMode()\nYou tried to write on a readonly value!\n")
+    if (!m_bROBasicMode && m_eBasicMode!=eMode)
+    {
+        m_eBasicMode = eMode;
+        SetModified();
+    }
 }
 
 sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
@@ -472,8 +567,12 @@ sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
 
 void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
 {
-    m_bExecutePlugins =  bSet;
-    SetModified();
+    DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n")
+    if (!m_bROExecutePlugins && m_bExecutePlugins!=bSet)
+    {
+        m_bExecutePlugins = bSet;
+        SetModified();
+    }
 }
 
 sal_Bool SvtSecurityOptions_Impl::IsWarningEnabled() const
@@ -483,8 +582,12 @@ sal_Bool SvtSecurityOptions_Impl::IsWarningEnabled() const
 
 void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
 {
-    m_bWarning =  bSet;
-    SetModified();
+    DBG_ASSERT(!m_bROWarning, "SvtSecurityOptions_Impl::SetWarningEnabled()\nYou tried to write on a readonly value!\n")
+    if (!m_bROWarning && m_bWarning!=bSet)
+    {
+        m_bWarning = bSet;
+        SetModified();
+    }
 }
 
 sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
@@ -494,8 +597,12 @@ sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
 
 void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
 {
-    m_bConfirmation =  bSet;
-    SetModified();
+    DBG_ASSERT(!m_bROConfirmation, "SvtSecurityOptions_Impl::SetConfirmationEnabled()\nYou tried to write on a readonly value!\n")
+    if (!m_bROConfirmation && m_bConfirmation!=bSet)
+    {
+        m_bConfirmation = bSet;
+        SetModified();
+    }
 }
 
 //*****************************************************************************************************************
@@ -610,6 +717,15 @@ SvtSecurityOptions::~SvtSecurityOptions()
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtSecurityOptions::IsReadOnly( EOption eOption ) const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsReadOnly(eOption);
 }
 
 //*****************************************************************************************************************

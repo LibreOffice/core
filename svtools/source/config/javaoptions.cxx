@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-05-18 13:09:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,36 +75,60 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
+#define CFG_READONLY_DEFAULT    sal_False
 /* -----------------------------10.04.01 12:39--------------------------------
 
  ---------------------------------------------------------------------------*/
 class SvtExecAppletsItem_Impl : public utl::ConfigItem
 {
     sal_Bool  bExecute;
+    sal_Bool  bRO;
 public:
     SvtExecAppletsItem_Impl();
 
     virtual void    Commit();
 
     sal_Bool IsExecuteApplets() const {return bExecute;}
-    void     SetExecuteApplets(sal_Bool bSet) {bExecute = bSet;}
+    void     SetExecuteApplets(sal_Bool bSet);
+    sal_Bool IsReadOnly() const {return bRO;}
 };
+/* -----------------------------10.02.2003 07:46------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvtExecAppletsItem_Impl::SetExecuteApplets(sal_Bool bSet)
+{
+    OSL_ENSURE(!bRO, "SvtExecAppletsItem_Impl::SetExecuteApplets()\nYou tried to write on a readonly value!\n");
+    if (!bRO)
+    {
+        bExecute = bSet;
+        SetModified();
+    }
+}
 /* -----------------------------18.05.01 14:44--------------------------------
 
  ---------------------------------------------------------------------------*/
 SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl() :
         utl::ConfigItem(C2U("Office.Common/Java/Applet")),
-        bExecute(sal_False)
+        bRO            (CFG_READONLY_DEFAULT            ),
+        bExecute       (sal_False                       )
 {
     Sequence< OUString > aNames(1);
     aNames.getArray()[0] = C2U("Enable");
     Sequence< Any > aValues = GetProperties(aNames);
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates(aNames);
     const Any* pValues = aValues.getConstArray();
-    if(aValues.getLength() && pValues[0].hasValue())
+    const sal_Bool* pROStates = aROStates.getConstArray();
+    if(aValues.getLength() && aROStates.getLength() && pValues[0].hasValue())
+    {
         bExecute = *(sal_Bool*)pValues[0].getValue();
+        bRO = pROStates[0];
+    }
 }
 void    SvtExecAppletsItem_Impl::Commit()
 {
+    if (bRO)
+        return;
+
     Sequence< OUString > aNames(1);
     aNames.getArray()[0] = C2U("Enable");
     Sequence< Any > aValues(1);
@@ -122,10 +146,21 @@ struct SvtJavaOptions_Impl
     sal_Int32               nNetAccess;
     rtl::OUString           sUserClassPath;
 
+    sal_Bool                bROEnabled;
+    sal_Bool                bROSecurity;
+    sal_Bool                bRONetAccess;
+    sal_Bool                bROUserClassPath;
+    sal_Bool                bROExecuteApplets;
+
     SvtJavaOptions_Impl() :
-        bEnabled(sal_False),
-        bSecurity(sal_False),
-        nNetAccess(0),
+        bROEnabled          (CFG_READONLY_DEFAULT),
+        bROSecurity         (CFG_READONLY_DEFAULT),
+        bRONetAccess        (CFG_READONLY_DEFAULT),
+        bROUserClassPath    (CFG_READONLY_DEFAULT),
+        bROExecuteApplets   (CFG_READONLY_DEFAULT),
+        bEnabled            (sal_False),
+        bSecurity           (sal_False),
+        nNetAccess          (0),
         aPropertyNames(4)
         {
             OUString* pNames = aPropertyNames.getArray();
@@ -143,8 +178,10 @@ SvtJavaOptions::SvtJavaOptions() :
     pImpl(new SvtJavaOptions_Impl)
 {
     Sequence< Any > aValues = GetProperties(pImpl->aPropertyNames);
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates(pImpl->aPropertyNames);
     const Any* pValues = aValues.getConstArray();
-    if ( aValues.getLength() == pImpl->aPropertyNames.getLength() )
+    const sal_Bool* pROStates = aROStates.getConstArray();
+    if ( aValues.getLength() == pImpl->aPropertyNames.getLength() && aROStates.getLength() == pImpl->aPropertyNames.getLength() )
     {
         for ( int nProp = 0; nProp < pImpl->aPropertyNames.getLength(); nProp++ )
         {
@@ -152,10 +189,30 @@ SvtJavaOptions::SvtJavaOptions() :
             {
                 switch ( nProp )
                 {
-                    case 0: pImpl->bEnabled = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 1: pImpl->bSecurity = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 2: pValues[nProp] >>= pImpl->nNetAccess; break;
-                    case 3: pValues[nProp] >>= pImpl->sUserClassPath; break;
+                    case 0:
+                    {
+                        pImpl->bEnabled = *(sal_Bool*)pValues[nProp].getValue();
+                        pImpl->bROEnabled = pROStates[nProp];
+                    }
+                    break;
+                    case 1:
+                    {
+                        pImpl->bSecurity = *(sal_Bool*)pValues[nProp].getValue();
+                        pImpl->bROSecurity = pROStates[nProp];
+                    }
+                    break;
+                    case 2:
+                    {
+                        pValues[nProp] >>= pImpl->nNetAccess;
+                        pImpl->bRONetAccess = pROStates[nProp];
+                    }
+                    break;
+                    case 3:
+                    {
+                        pValues[nProp] >>= pImpl->sUserClassPath;
+                        pImpl->bROUserClassPath = pROStates[nProp];
+                    }
+                    break;
                 }
             }
         }
@@ -174,22 +231,62 @@ SvtJavaOptions::~SvtJavaOptions()
 void    SvtJavaOptions::Commit()
 {
     pImpl->aExecItem.Commit();
-    OUString* pNames = pImpl->aPropertyNames.getArray();
-    Sequence<Any> aValues(pImpl->aPropertyNames.getLength());
-    Any* pValues = aValues.getArray();
+
+    sal_Int32 nOrgCount = pImpl->aPropertyNames.getLength();
+    Sequence< OUString > aNames(nOrgCount);
+    Sequence< Any > aValues(nOrgCount);
+    sal_Int32 nRealCount = 0;
 
     const Type& rType = ::getBooleanCppuType();
-    for(int nProp = 0; nProp < pImpl->aPropertyNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < nOrgCount; nProp++)
     {
         switch(nProp)
         {
-            case  0: pValues[nProp].setValue(&pImpl->bEnabled, rType); break;
-            case  1: pValues[nProp].setValue(&pImpl->bSecurity, rType);break;
-            case  2: pValues[nProp] <<= pImpl->nNetAccess; break;
-            case  3: pValues[nProp] <<= pImpl->sUserClassPath; break;
+            case  0:
+            {
+                if (!pImpl->bROEnabled)
+                {
+                    aValues[nRealCount].setValue(&pImpl->bEnabled, rType);
+                    aNames[nRealCount] = pImpl->aPropertyNames[nProp];
+                    ++nRealCount;
+                }
+            }
+            break;
+            case  1:
+            {
+                if (!pImpl->bROSecurity)
+                {
+                    aValues[nRealCount].setValue(&pImpl->bSecurity, rType);
+                    aNames[nRealCount] = pImpl->aPropertyNames[nProp];
+                    ++nRealCount;
+                }
+            }
+            break;
+            case  2:
+            {
+                if (!pImpl->bRONetAccess)
+                {
+                    aValues[nRealCount] <<= pImpl->nNetAccess;
+                    aNames[nRealCount] = pImpl->aPropertyNames[nProp];
+                    ++nRealCount;
+                }
+            }
+            break;
+            case  3:
+            {
+                if (!pImpl->bROUserClassPath)
+                {
+                    aValues[nRealCount] <<= pImpl->sUserClassPath;
+                    aNames[nRealCount] = pImpl->aPropertyNames[nProp];
+                    ++nRealCount;
+                }
+            }
+            break;
         }
     }
-    PutProperties(pImpl->aPropertyNames, aValues);
+    aValues.realloc(nRealCount);
+    aNames.realloc(nRealCount);
+    PutProperties(aNames,aValues);
 }
 /*-- 18.05.01 13:28:35---------------------------------------------------
 
@@ -224,7 +321,8 @@ rtl::OUString&  SvtJavaOptions::GetUserClassPath()const
   -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetEnabled(sal_Bool bSet)
 {
-    if(pImpl->bEnabled != bSet)
+    OSL_ENSURE(!pImpl->bROEnabled, "SvtJavaOptions::SetEnabled()\nYou tried to write on a readonly value!\n");
+    if(!pImpl->bROEnabled && pImpl->bEnabled != bSet)
     {
         pImpl->bEnabled = bSet;
         SetModified();
@@ -235,7 +333,8 @@ void SvtJavaOptions::SetEnabled(sal_Bool bSet)
   -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetSecurity(sal_Bool bSet)
 {
-    if(pImpl->bSecurity != bSet)
+    OSL_ENSURE(!pImpl->bROSecurity, "SvtJavaOptions::SetSecurity()\nYou tried to write on a readonly value!\n");
+    if(!pImpl->bROSecurity && pImpl->bSecurity != bSet)
     {
         pImpl->bSecurity = bSet;
         SetModified();
@@ -246,7 +345,8 @@ void SvtJavaOptions::SetSecurity(sal_Bool bSet)
   -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetNetAccess(sal_Int32 nSet)
 {
-    if(pImpl->nNetAccess != nSet)
+    OSL_ENSURE(!pImpl->bRONetAccess, "SvtJavaOptions::SetNetAccess()\nYou tried to write on a readonly value!\n");
+    if(!pImpl->bRONetAccess && pImpl->nNetAccess != nSet)
     {
         pImpl->nNetAccess = nSet;
         SetModified();
@@ -257,7 +357,8 @@ void SvtJavaOptions::SetNetAccess(sal_Int32 nSet)
   -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetUserClassPath(const rtl::OUString& rSet)
 {
-    if(pImpl->sUserClassPath != rSet)
+    OSL_ENSURE(!pImpl->bROUserClassPath, "SvtJavaOptions::SetUserClassPath()\nYou tried to write on a readonly value!\n");
+    if(!pImpl->bROUserClassPath && pImpl->sUserClassPath != rSet)
     {
         pImpl->sUserClassPath = rSet;
         SetModified();
@@ -276,13 +377,35 @@ sal_Bool        SvtJavaOptions::IsExecuteApplets() const
   -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetExecuteApplets(sal_Bool bSet)
 {
-    if(pImpl->aExecItem.IsExecuteApplets() != bSet)
+    if(!pImpl->aExecItem.IsReadOnly() && pImpl->aExecItem.IsExecuteApplets() != bSet)
     {
         pImpl->aExecItem.SetExecuteApplets(bSet);
         SetModified();
     }
 }
+/*--10.02.2003 08:40---------------------------------------------------
 
-
-
-
+-----------------------------------------------------------------------*/
+sal_Bool SvtJavaOptions::IsReadOnly( EOption eOption ) const
+{
+    sal_Bool bRO = sal_True;
+    switch(eOption)
+    {
+        case E_ENABLED :
+            bRO = pImpl->bROEnabled;
+            break;
+        case E_SECURITY :
+            bRO = pImpl->bROSecurity;
+            break;
+        case E_NETACCESS :
+            bRO = pImpl->bRONetAccess;
+            break;
+        case E_USERCLASSPATH :
+            bRO = pImpl->bROUserClassPath;
+            break;
+        case E_EXECUTEAPPLETS :
+            bRO = pImpl->aExecItem.IsReadOnly();
+            break;
+    }
+    return bRO;
+}

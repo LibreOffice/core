@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 22:08:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,24 +68,25 @@ String EXPORT_DIALOG_TITLE
     Text [ english_us ] = " Options" ;
     Text [ italian ] = " Opzioni" ;
     Text [ spanish ] = "  Opciones" ;
-    Text [ french ] = "[_]Options" ;
-    Text [ dutch ] = "  Opties" ;
-    Text [ swedish ] = "  Alternativ" ;
+    Text [ french ] = " Options" ;
+    Text [ dutch ] = "Opties" ;
+    Text [ swedish ] = " -alternativ" ;
     Text [ danish ] = " Alternativer" ;
     Text [ portuguese_brazilian ] = " Optionen" ;
     Text [ portuguese ] = " Opções" ;
     Text[ chinese_simplified ] = " é€‰é¡¹";
     Text[ russian ] = "  Ïàğàìåòğû";
     Text[ polish ] = " Opcje";
-    Text[ japanese ] = " ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = " ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = " é¸é …";
     Text[ arabic ] = " ÇáÎíÇÑÇÊ";
     Text[ greek ] = " Åğéëïãİò";
     Text[ korean ] = " ì˜µì…˜";
     Text[ turkish ] = " Seçenekler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "  Opciones";
+    Text[ catalan ] = "Opcions";
     Text[ finnish ] = " Asetukset";
+    Text[ thai ] = " à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
 };
 
 String KEY_MODE
@@ -112,6 +113,10 @@ String KEY_RLE_CODING
 {
     Text = "RLE_Coding" ;
 };
+
+
+
+
 
 
 

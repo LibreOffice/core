@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-24 09:09:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,29 +231,4 @@ namespace svt
 //........................................................................
 }   // namespace svt
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/07/03 08:02:10  pb
- *  fix: #88808# closer button always clickable
- *
- *  Revision 1.4  2001/06/21 10:20:38  hjs
- *  no project prefix
- *
- *  Revision 1.3  2001/06/18 15:36:47  mba
- *  #87300#: always enable input for help agent window
- *
- *  Revision 1.2  2001/05/11 09:07:24  rt
- *  #65293# fix for gcc (needs temporary variable for Point() )
- *
- *  Revision 1.1  2001/05/07 15:18:58  fs
- *  initial checkin - window for the new help agent
- *
- *  Revision 1.1  2001/05/07 13:42:30  fs
- *  initial checkin - help agent window
- *
- *
- *  Revision 1.0 03.05.01 11:51:40  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-20 15:43:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,7 +1681,8 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPor
     aUserOptions.allowPunctuationOutsideMargin = sal_False;
     aUserOptions.allowHyphenateEnglish = sal_False;
 
-    i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
+    static const com::sun::star::lang::Locale aDefLocale;
+    i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, aDefLocale, pLine->GetStart(), aHyphOptions, aUserOptions );
     USHORT nBreakPos = (USHORT)aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
     {

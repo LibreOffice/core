@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-06 12:30:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,4 @@ namespace svt
 //.........................................................................
 
 #endif // SFX2_TEMPLATEFOLDERCACHE_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/11/07 14:27:58  fs
- *  initial checkin - helper class for caching the state of OOo's template folders
- *
- *
- *  Revision 1.0 07.11.01 12:38:24  fs
- ************************************************************************/
 

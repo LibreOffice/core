@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-#include "rtfkeywd.hxx"
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#include "rtfkeywd.hxx"
 
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_HEXCHAR, "\\'" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_IGNORE, "\\*" );
@@ -246,6 +247,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LANG, "\\lang" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LDBLQUOTE, "\\ldblquote" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LEVEL, "\\level" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LI, "\\li" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LIN, "\\lin" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LINE, "\\line" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LINEBETCOL, "\\linebetcol" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LINECONT, "\\linecont" );
@@ -349,6 +351,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_REVISIONS, "\\revisions" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_REVPROP, "\\revprop" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_REVTIM, "\\revtim" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_RI, "\\ri" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_RIN, "\\rin" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ROW, "\\row" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_RQUOTE, "\\rquote" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_RTF, "\\rtf" );
@@ -1152,5 +1155,4 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_PGBRK, "\\pgbrk" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_PGDSCNO, "\\pgdscno" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_SOUTLVL, "\\soutlvl" );
 
-
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-27 16:23:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ polish ] = "Standard";
     Text[ portuguese_brazilian ] = "Normal";
     Text[ japanese ] = "通常の字体";
-    Text[ korean ] = "정상";
+    Text[ korean ] = "일반";
     Text[ chinese_simplified ] = "一般";
     Text[ chinese_traditional ] = "一般";
     Text[ turkish ] = ", standart";
@@ -206,7 +206,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ polish ] = "Zbi�r znak�w";
     Text[ portuguese_brazilian ] = "Character Set";
     Text[ japanese ] = "文字種";
-    Text[ korean ] = "문자 집합";
+    Text[ korean ] = "문자집합";
     Text[ chinese_simplified ] = "字符集";
     Text[ chinese_traditional ] = "字型";
     Text[ turkish ] = "Character Set";
@@ -251,7 +251,7 @@ String STR_SVT_COLLATE_PINYIN
     Text [ ENGLISH ] = "Pinyin" ;
     Text[ english_us ] = "Pinyin";
     Text[ portuguese ] = "Pinyin";
-    Text[ russian ] = "Pinyin";
+    Text[ russian ] = "�������";
     Text[ greek ] = "Pinyin";
     Text[ dutch ] = "Pinyin";
     Text[ french ] = "Pinyin";
@@ -262,7 +262,7 @@ String STR_SVT_COLLATE_PINYIN
     Text[ polish ] = "Pinyin";
     Text[ portuguese_brazilian ] = "Pinyin";
     Text[ japanese ] = "ピンイン(中国語のローマ字表記法)";
-    Text[ korean ] = "Pinyin";
+    Text[ korean ] = "한어병음";
     Text[ chinese_simplified ] = "拼音";
     Text[ chinese_traditional ] = "拼音";
     Text[ turkish ] = "Pinyin";
@@ -290,7 +290,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Stroke";
     Text[ japanese ] = "総画数";
-    Text[ korean ] = "스트로크";
+    Text[ korean ] = "획수";
     Text[ chinese_simplified ] = "笔画";
     Text[ chinese_traditional ] = "筆畫";
     Text[ turkish ] = "Stroke";
@@ -318,7 +318,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ polish ] = "Korze�-rdze�";
     Text[ portuguese_brazilian ] = "Radical";
     Text[ japanese ] = "漢字の部首";
-    Text[ korean ] = "극단";
+    Text[ korean ] = "부수";
     Text[ chinese_simplified ] = "部首";
     Text[ chinese_traditional ] = "部首";
     Text[ turkish ] = "Radical";
@@ -363,7 +363,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text [ ENGLISH ] = "Zhuyin" ;
     Text[ english_us ] = "Zhuyin";
     Text[ portuguese ] = "Zhuyin";
-    Text[ russian ] = "Zhuyin";
+    Text[ russian ] = "������";
     Text[ greek ] = "Zhuyin";
     Text[ dutch ] = "Zhuyin";
     Text[ french ] = "Zhuyin";
@@ -374,7 +374,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ polish ] = "Zhuyin";
     Text[ portuguese_brazilian ] = "Zhuyin";
     Text[ japanese ] = "注音（中国語の漢字の発音を表記するための表記文字）";
-    Text[ korean ] = "Zhuyin";
+    Text[ korean ] = "한어주음";
     Text[ chinese_simplified ] = "注音";
     Text[ chinese_traditional ] = "注音";
     Text[ turkish ] = "Zhuyin";
@@ -422,7 +422,7 @@ String STR_SVT_COLLATE_PHONETIC_F
     Text[ finnish ] = "Phonetic (alphanumeric first)";
     Text[ italian ] = "Fonetico (alfanumerico prima)";
     Text[ danish ] = "Phonetic (alphanumeric first)";
-    Text[ swedish ] = "Phonetiskt (alfanumeriskt f�rst)";
+    Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst)";
     Text[ polish ] = "Phonetic (alphanumeric first)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first)";
     Text[ japanese ] = "読み（英数字を先に）";
@@ -533,7 +533,7 @@ String STR_SVT_INDEXENTRY_PINYIN
     Text[ polish ] = "Pinyin";
     Text[ portuguese_brazilian ] = "Pinyin";
     Text[ japanese ] = "ピンイン（中国語のローマ字表記法）";
-    Text[ korean ] = "중국어 병음";
+    Text[ korean ] = "한어병음";
     Text[ chinese_simplified ] = "拼音";
     Text[ chinese_traditional ] = "拼音";
     Text[ turkish ] = "Pinyin";
@@ -614,7 +614,7 @@ String STR_SVT_INDEXENTRY_ZHUYIN
     Text[ polish ] = "Zhuyin";
     Text[ portuguese_brazilian ] = "Zhuyin";
     Text[ japanese ] = "注音（中国語の漢字の発音を表記するための表記文字）";
-    Text[ korean ] = "중국어 주음";
+    Text[ korean ] = "한어주음";
     Text[ chinese_simplified ] = "注音";
     Text[ chinese_traditional ] = "注音";
     Text[ turkish ] = "Zhuyin";
@@ -636,7 +636,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_FS
     Text[ finnish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ italian ] = "Fonetico (alfanumerico prima ordinato per sillabe)";
     Text[ danish ] = "Phonetic (alphanumeric first, grouped by syllables)";
-    Text[ swedish ] = "Phonetiskt (alfanumeriskt f�rst, grupperat efter stavelser)";
+    Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ japanese ] = "読み（英数字を先に、あいうえお順）";
@@ -714,7 +714,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ finnish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ italian ] = "Fonetico (alfanumerico ultimo, ordinato per consonanti)";
     Text[ danish ] = "Phonetic (alphanumeric last, grouped by consonants)";
-    Text[ swedish ] = "Phonetiskt (alfanumeriskt sist, grupperat efter konsonanter)";
+    Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ japanese ] = "読み（英数字を後に、あかさたな順）";
@@ -726,4 +726,9 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ catalan ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ thai ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
+
+
+
+
+
 

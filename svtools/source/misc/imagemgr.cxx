@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-05 07:35:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
 #endif
 
 #include "svtools.hrc"
@@ -560,6 +563,77 @@ USHORT GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
+ResMgr* GetIsoResMgr_Impl()
+{
+    static ResMgr* pIsoResMgr = NULL;
+
+    if ( !pIsoResMgr )
+    {
+        ByteString aResMgrName( "iso" );
+        aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
+        pIsoResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+    }
+
+    return pIsoResMgr;
+}
+
+ImageList* CreateImageList_Impl( USHORT nResId )
+{
+    ImageList* pList = NULL;
+    ResMgr* pResMgr = GetIsoResMgr_Impl();
+    DBG_ASSERT( pResMgr, "SvFileInformationManager::CreateImageList_Impl(): no resmgr" );
+    ResId aResId( nResId, pResMgr );
+    aResId.SetRT( RSC_IMAGELIST );
+    if ( pResMgr->IsAvailable( aResId ) )
+        pList = new ImageList( aResId );
+    else
+        pList = new ImageList();
+    return pList;
+}
+
+Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+{
+    ImageList* pList = NULL;
+
+    static ImageList* _pSmallOfficeImgList = NULL;
+    static ImageList* _pBigOfficeImgList = NULL;
+    static ImageList* _pSmallHCOfficeImgList = NULL;
+    static ImageList* _pBigHCOfficeImgList = NULL;
+
+    if ( bBig )
+    {
+        if ( bHighContrast )
+        {
+            if ( !_pBigHCOfficeImgList )
+                _pBigHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST );
+            pList = _pBigHCOfficeImgList;
+        }
+        else
+        {
+            if ( !_pBigOfficeImgList )
+                _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
+            pList = _pBigOfficeImgList;
+        }
+    }
+    else
+    {
+        if ( bHighContrast )
+        {
+            if ( !_pSmallHCOfficeImgList )
+                _pSmallHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST );
+            pList = _pSmallHCOfficeImgList;
+        }
+        else
+        {
+            if ( !_pSmallOfficeImgList )
+                _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
+            pList = _pSmallOfficeImgList;
+        }
+    }
+
+    return pList->GetImage( nImageId );
+}
+
 Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
     if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
@@ -604,7 +678,10 @@ Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
         }
     }
 
-    return pList->GetImage( nImageId );
+    if ( pList->GetImagePos( nImageId ) != IMAGELIST_IMAGE_NOTFOUND )
+        return pList->GetImage( nImageId );
+    else
+        return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
 }
 
 //****************************************************************************

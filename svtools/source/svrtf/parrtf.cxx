@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 17:08:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #include <stdio.h>                      // for EOF
 
 #ifndef _RTL_TENCINFO_H
@@ -74,6 +76,7 @@
 #include "rtfkeywd.hxx"
 #include "parrtf.hxx"
 
+const int MAX_STRING_LEN = 1024;
 const int MAX_TOKEN_LEN = 128;
 
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
@@ -88,7 +91,7 @@ SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
 {
     // default ist ANSI-CodeSet
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
-    bRTF_InTextRead = FALSE;
+    bRTF_InTextRead = false;
 }
 
 SvRTFParser::~SvRTFParser()
@@ -99,7 +102,7 @@ int SvRTFParser::_GetNextToken()
 {
     int nRet = 0;
     do {
-        int bNextCh = TRUE;
+        int bNextCh = true;
         switch( nNextCh )
         {
         case '\\':
@@ -164,10 +167,10 @@ int SvRTFParser::_GetNextToken()
                         }
 
                         // Minus fuer numerischen Parameter
-                        int bNegValue = FALSE;
+                        int bNegValue = false;
                         if( '-' == nNextCh )
                         {
-                            bNegValue = TRUE;
+                            bNegValue = true;
                             nNextCh = GetNextChar();
                         }
 
@@ -197,7 +200,7 @@ int SvRTFParser::_GetNextToken()
                             nRet = RTF_UNKNOWNCONTROL;
 
                         // bug 76812 - unicode token handled as normal text
-                        bNextCh = FALSE;
+                        bNextCh = false;
                         switch( nRet )
                         {
                         case RTF_UC:
@@ -263,7 +266,7 @@ int SvRTFParser::_GetNextToken()
                     {
                         // Bug 34631 - "\ " ueberlesen - Blank als Zeichen
                         // eState = SVPAR_ERROR;
-                        bNextCh = FALSE;
+                        bNextCh = false;
                     }
                     break;
                 }
@@ -355,10 +358,10 @@ sal_Unicode SvRTFParser::GetHexValue()
 void SvRTFParser::ScanText( const sal_Unicode cBreak )
 {
     String aStrBuffer;
-    int bWeiter = TRUE;
+    int bWeiter = true;
     while( bWeiter && IsParserWorking() )
     {
-        int bNextCh = TRUE;
+        int bNextCh = true;
         switch( nNextCh )
         {
         case '\\':
@@ -403,7 +406,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             }
                         }
 
-                        bNextCh = FALSE;
+                        bNextCh = false;
 
                         if (aByteString.Len())
                             aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
@@ -433,7 +436,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         if( '-' == nNextCh || RTF_ISDIGIT( nNextCh ) )
                         {
-                            bRTF_InTextRead = TRUE;
+                            bRTF_InTextRead = true;
 
                             String sSave( aToken );
                             nNextCh = '\\';
@@ -458,14 +461,14 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                     cAnsi = GetHexValue();
                                 nNextCh = GetNextChar();
                             }
-                            bNextCh = FALSE;
+                            bNextCh = false;
                             aToken = sSave;
-                            bRTF_InTextRead = FALSE;
+                            bRTF_InTextRead = false;
                         }
                         else
                         {
                             nNextCh = '\\';
-                            bWeiter = FALSE;        // Abbrechen, String zusammen
+                            bWeiter = false;        // Abbrechen, String zusammen
                         }
                     }
                     break;
@@ -473,7 +476,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 default:
                     rInput.SeekRel( -1 );
                     nNextCh = '\\';
-                    bWeiter = FALSE;        // Abbrechen, String zusammen
+                    bWeiter = false;        // Abbrechen, String zusammen
                     break;
                 }
             }
@@ -484,7 +487,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 // weiter
         case '{':
         case '}':
-            bWeiter = FALSE;
+            bWeiter = false;
             break;
 
         case 0x0a:
@@ -492,8 +495,8 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             break;
 
         default:
-            if( nNextCh == cBreak || aToken.Len() >= STRING_MAXLEN)
-                bWeiter = FALSE;
+            if( nNextCh == cBreak || aToken.Len() >= MAX_STRING_LEN)
+                bWeiter = false;
             else
             {
                 do {
@@ -507,7 +510,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         return;
                     }
                 } while( RTF_ISALPHA( nNextCh ) || RTF_ISDIGIT( nNextCh ) );
-                bNextCh = FALSE;
+                bNextCh = false;
             }
         }
 
@@ -558,6 +561,7 @@ void SvRTFParser::ReadOLEData()     { SkipGroup(); }
 SvParserState SvRTFParser::CallParser()
 {
     sal_Char cFirstCh;
+    nNextChPos = rInput.Tell();
     rInput >> cFirstCh; nNextCh = cFirstCh;
     eState = SVPAR_WORKING;
     nOpenBrakets = 0;
@@ -691,4 +695,4 @@ void SvRTFParser::RestoreState()
 }
 #endif
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

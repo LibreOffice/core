@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-11-26 12:05:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@ void ValueSet::ImplInit( WinBits nWinStyle )
     mbScroll            = FALSE;
     mbDropPos           = FALSE;
     mbFullMode          = TRUE;
+
+    // #106446#, #106601# force mirroring of virtual device
+    maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
 
     ImplInitSettings( TRUE, TRUE, TRUE );
 }
@@ -1457,41 +1460,50 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_LEFT:
-            do
-            {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = nLastItem;
-                else if ( !nCalcPos )
-                {
-                    if ( mpNoneItem )
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    else
-                        nItemPos = nLastItem;
-                }
-                else
-                    nItemPos = nCalcPos-1;
-                nCalcPos = nItemPos;
-            }
-            while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
-            break;
-
         case KEY_RIGHT:
-            do
+            // When RTL is active then reverst the meaning of the left and
+            // right cursor keys.  With this the cursor keys react even
+            // under RTL visually i.e. KEY_LEFT always goes left
+            // indepentantly of RTL.
+            if ((rKEvt.GetKeyCode().GetCode()==KEY_LEFT && ! IsRTLActive())
+                || (rKEvt.GetKeyCode().GetCode()==KEY_RIGHT && IsRTLActive()))
             {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = 0;
-                else if ( nCalcPos == nLastItem )
+                do
                 {
-                    if ( mpNoneItem )
-                        nItemPos = VALUESET_ITEM_NONEITEM;
+                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                        nItemPos = nLastItem;
+                    else if ( !nCalcPos )
+                    {
+                        if ( mpNoneItem )
+                            nItemPos = VALUESET_ITEM_NONEITEM;
+                        else
+                            nItemPos = nLastItem;
+                    }
                     else
-                        nItemPos = 0;
+                        nItemPos = nCalcPos-1;
+                    nCalcPos = nItemPos;
                 }
-                else
-                    nItemPos = nCalcPos+1;
-                nCalcPos = nItemPos;
+                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
             }
-            while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+            else
+            {
+                do
+                {
+                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                        nItemPos = 0;
+                    else if ( nCalcPos == nLastItem )
+                    {
+                        if ( mpNoneItem )
+                            nItemPos = VALUESET_ITEM_NONEITEM;
+                        else
+                            nItemPos = 0;
+                    }
+                    else
+                        nItemPos = nCalcPos+1;
+                    nCalcPos = nItemPos;
+                }
+                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+            }
             break;
 
         case KEY_UP:
@@ -1645,19 +1657,36 @@ void ValueSet::Paint( const Rectangle& rRect )
 
 void ValueSet::GetFocus()
 {
+    OSL_TRACE ("value set getting focus");
     ImplDrawSelect();
     Control::GetFocus();
+
+    // Send accessibility event.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aNewState <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    ImplFireAccessibleEvent (
+        ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        aOldState, aNewState);
+
 }
 
 // -----------------------------------------------------------------------
 
 void ValueSet::LoseFocus()
 {
+    OSL_TRACE ("value set losing focus");
     if ( mbNoSelection && mnSelItemId )
         ImplHideSelect( mnSelItemId );
     else
         HideFocus();
     Control::LoseFocus();
+
+    // Send accessibility event.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aOldState <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    ImplFireAccessibleEvent (
+        ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        aOldState, aNewState);
 }
 
 // -----------------------------------------------------------------------
@@ -2186,8 +2215,8 @@ void ValueSet::SelectItem( USHORT nItemId )
                     if( pItemAcc )
                     {
                         ::com::sun::star::uno::Any aOldAny, aNewAny;
-                        aOldAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                        pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+                        aOldAny <<= mpItemList->GetObject( nPos )->GetAccessible();
+                        ImplFireAccessibleEvent (::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, aOldAny, aNewAny );
                     }
                 }
             }
@@ -2203,13 +2232,15 @@ void ValueSet::SelectItem( USHORT nItemId )
                 else
                     pItem = mpNoneItem;
 
-                ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible() );
+                ValueItemAcc* pItemAcc = NULL;
+                if (pItem != NULL)
+                    pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible() );
 
                 if( pItemAcc )
                 {
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
-                    aNewAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                    pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+                    aNewAny <<= pItem->GetAccessible();
+                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, aOldAny, aNewAny );
                 }
             }
 
@@ -2683,4 +2714,13 @@ void ValueSet::HideDropPos()
         ImplDrawDropPos( FALSE );
         mbDropPos = FALSE;
     }
+}
+
+
+
+
+bool ValueSet::IsRTLActive (void)
+{
+    return Application::GetSettings().GetLayoutRTL ()
+        && IsRTLEnabled();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pickerhistory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-31 09:20:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,4 @@ namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_PICKERHISTORY_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 31.10.01 09:47:02  fs
- ************************************************************************/
 

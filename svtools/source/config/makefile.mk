@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: os $ $Date: 2002-08-30 09:52:28 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..$/..
 
 PRJNAME=SVTOOLS
 TARGET=config
+TARGET1=heavyconfig
 
 # --- Settings -----------------------------------------------------
 
@@ -116,6 +117,13 @@ EXCEPTIONSFILES = \
     $(SLO)$/inetoptions.obj				\
     $(SLO)$/xmlaccelcfg.obj			\
     $(SLO)$/pathoptions.obj
+
+# --- heavyconfig.lib Files --------------------------------------------------------
+
+LIB1TARGET= $(SLB)$/$(TARGET1).lib
+
+LIB1OBJFILES=  \
+        $(SLO)$/colorcfg.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,7 @@ extern "C" {
 
 /*-----------------------  FILE u_const.h  ---------------------------*/
 
-#ifndef S390
 #define IEEE
-#endif
 
 /* IEEE - Norm fuer die Darstellung von Gleitkommazahlen:
 
@@ -133,12 +131,10 @@ extern "C" {
 
 #else               /*------------------ sonst -----------------------*/
 
-#ifndef S390
 double exp  (double);
 double atan (double);
 double pow  (double,double);
 double sqrt (double);
-#endif
 
 double masch()            /* MACH_EPS maschinenunabhaengig bestimmen  */
 {
@@ -167,14 +163,8 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
    gepasst werden.
    */
 
-#ifndef S390
 #define MAXEXPON  1023.0                   /* groesster Exponent      */
 #define MINEXPON -1024.0                   /* kleinster Exponent      */
-#else
-#include <float.h>
-#define MAXEXPON  75.0
-#define MINEXPON  -79.0
-#endif
 
 
 #define MACH_EPS  masch()

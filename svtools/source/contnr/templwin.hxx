@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 17:22:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ private:
     LanguageType                    eLangType;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
+    ::rtl::OUString                 m_aOpenURL;
     sal_Bool                        bDocInfo;
 
     void                    ShowDocInfo( const String& rURL );

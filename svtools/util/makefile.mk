@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.41 $
+#*  $Revision: 1.42 $
 #*
-#*  last change: $Author: hro $ $Date: 2002-09-30 08:52:05 $
+#*  last change: $Author: hr $ $Date: 2003-03-27 14:39:53 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -68,6 +68,7 @@ RESTARGET=svt
 RESTARGETSIMPLE=svs
 VERSION=$(UPD)
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
@@ -125,7 +126,8 @@ LIB7FILES=	\
         $(SLB)$/svcontnr.lib	\
         $(SLB)$/syslocale.lib   \
         $(SLB)$/svhtml2.lib     \
-        $(SLB)$/filepicker.lib
+        $(SLB)$/filepicker.lib  \
+        $(SLB)$/heavyconfig.lib
 
 
 .IF "$(GUI)" == "OS2"
@@ -308,23 +310,10 @@ ALL: $(SLB)$/svl.lib \
     $(MISC)$/$(SHL2TARGET).def \
     $(MISC)$/$(SHL1TARGET).def \
     $(SVTTARGETS) \
-    $(SRS)$/hidother.hid \
     ALLTAR
 .ENDIF          # "$(L10N-framework)"==""
 
 .INCLUDE :	target.mk
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-    @+echo no hids
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ELSE
-    @echo nix
-.ENDIF
 
 # --- Svtools-Control-Filter-Datei ---
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-26 10:14:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,17 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
     else
         SvLBox::Insert( pEntry, pParent, nPos );
 
+    short nExpWidth = (short)rDefExpBmp.GetSizePixel().Width();
+    short nColWidth = (short)rDefColBmp.GetSizePixel().Width();
+    short nMax = Max(nExpWidth, nColWidth);
+    // #97680# ----------------
+    nMax = pImp->UpdateContextBmpWidthVector( pEntry, nMax );
+    if( nMax > nContextBmpWidthMax )
+    {
+        nContextBmpWidthMax = nMax;
+        SetTabs();
+    }
+
     aPrevInsertedExpBmp = rDefExpBmp;
     aPrevInsertedColBmp = rDefColBmp;
 
@@ -492,15 +503,6 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
     aCurInsertedExpBmp = aExpEntryBmp;
     aCurInsertedColBmp = aCollEntryBmp;
 
-    short nExpWidth = (short)aExpEntryBmp.GetSizePixel().Width();
-    short nColWidth = (short)aCollEntryBmp.GetSizePixel().Width();
-    short nMax = Max(nExpWidth, nColWidth);
-    if( nMax > nContextBmpWidthMax )
-    {
-        nContextBmpWidthMax = nMax;
-        SetTabs();
-    }
-
     SvLBoxEntry* pEntry = CreateEntry();
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, aText, aCollEntryBmp, aExpEntryBmp );
@@ -511,6 +513,17 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
         SvLBox::Insert( pEntry, nPos );
     else
         SvLBox::Insert( pEntry, pParent, nPos );
+
+    short nExpWidth = (short)aExpEntryBmp.GetSizePixel().Width();
+    short nColWidth = (short)aCollEntryBmp.GetSizePixel().Width();
+    short nMax = Max(nExpWidth, nColWidth);
+    // #97680# ----------------
+    nMax = pImp->UpdateContextBmpWidthVector( pEntry, nMax );
+    if( nMax > nContextBmpWidthMax )
+    {
+        nContextBmpWidthMax = nMax;
+        SetTabs();
+    }
 
     aPrevInsertedExpBmp = aExpEntryBmp;
     aPrevInsertedColBmp = aCollEntryBmp;
@@ -541,9 +554,11 @@ void SvTreeListBox::SetExpandedEntryBmp( SvLBoxEntry* pEntry, const Image& aBmp,
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    if( aSize.Width() > nContextBmpWidthMax )
+    // #97680# ---------------
+    short nWidth = pImp->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
+    if( nWidth > nContextBmpWidthMax )
     {
-        nContextBmpWidthMax = (short)aSize.Width();
+        nContextBmpWidthMax = nWidth;
         SetTabs();
     }
 }
@@ -559,9 +574,11 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvLBoxEntry* pEntry,const Image& aBmp, 
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    if( aSize.Width() > nContextBmpWidthMax )
+    // #97680# -----------
+    short nWidth = pImp->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
+    if( nWidth > nContextBmpWidthMax )
     {
-        nContextBmpWidthMax = (short)aSize.Width();
+        nContextBmpWidthMax = nWidth;
         SetTabs();
     }
 }
@@ -1538,6 +1555,9 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     BOOL bHorSBar = pImp->HasHorScrollBar();
     PreparePaint( pEntry );
 
+    // #97680# ------------------
+    pImp->UpdateContextBmpWidthMax( pEntry );
+
     if( nTreeFlags & TREEFLAG_RECALCTABS )
         SetTabs();
 
@@ -2463,6 +2483,21 @@ void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
         pCheckButtonData->SetDefaultImages( this );
 }
 
+BOOL SvTreeListBox::IsCellFocusEnabled() const
+{
+    return pImp->IsCellFocusEnabled();
+}
+
+bool SvTreeListBox::SetCurrentTabPos( USHORT _nNewPos )
+{
+    return pImp->SetCurrentTabPos( _nNewPos );
+}
+
+USHORT SvTreeListBox::GetCurrentTabPos() const
+{
+    return pImp->GetCurrentTabPos();
+}
+
 void SvTreeListBox::InitStartEntry()
 {
     if( !pImp->pStartEntry )
@@ -2558,5 +2593,10 @@ Rectangle SvTreeListBox::GetBoundingRect( SvLBoxEntry* pEntry )
     Point aPos = GetEntryPos( pEntry );
     Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
     return aRect;
+}
+
+void SvTreeListBox::EnableCellFocus()
+{
+    pImp->EnableCellFocus();
 }
 

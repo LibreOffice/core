@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-06 09:05:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
 #endif
+// #97680# -----------------
+#include <vector>
 
 class SvTreeListBox;
 class Point;
@@ -184,6 +186,7 @@ private:
     ULONG               nCurUserEvent; //-1 == kein Userevent amn Laufen
     short               nHorSBarHeight, nVerSBarWidth;
     USHORT              nFlags;
+    USHORT              nCurTabPos;
 
     WinBits             nWinBits;
     BOOL                bSimpleTravel : 1; // ist TRUE bei SINGLE_SELECTION
@@ -193,12 +196,16 @@ private:
     BOOL                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with FALSE
     BOOL                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with FALSE
     BOOL                bContextMenuHandling : 1;
+    BOOL                bIsCellFocusEnabled : 1;
 
     Point               aEditClickPos;
     Timer               aEditTimer;
 
     // #102891# -------------------
     IntlWrapper *       pIntlWrapper;
+
+    // #97680# --------------------
+    std::vector< short > aContextBmpWidthVector;
 
     DECL_LINK( EditTimerCall, Timer * );
 
@@ -273,6 +280,13 @@ private:
 
     // #102891# -------------------
     void                UpdateIntlWrapper();
+
+    // #97680# --------------------
+    short               UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth );
+    void                UpdateContextBmpWidthMax( SvLBoxEntry* pEntry );
+    void                UpdateContextBmpWidthVectorFromMovedEntry( SvLBoxEntry* pEntry );
+
+    void                CalcCellFocusRect( SvLBoxEntry* pEntry, Rectangle& rRect );
 
 public:
     SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
@@ -379,6 +393,12 @@ public:
     void                CallEventListeners( ULONG nEvent, void* pData = NULL );
     void                AddEventListener( const Link& rEventListener );
     void                RemoveEventListener( const Link& rEventListener );
+
+    /** Enables, that one cell of a tablistbox entry can be focused */
+    inline BOOL         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
+    inline void         EnableCellFocus() { bIsCellFocusEnabled = TRUE; }
+    bool                SetCurrentTabPos( USHORT _nNewPos );
+    inline USHORT       GetCurrentTabPos() const { return nCurTabPos; }
 };
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
@@ -464,7 +484,6 @@ inline void SvImpLBox::PaintEntry( SvLBoxEntry* pEntry )
     pView->PaintEntry( pEntry, nY );
 }
 
-
 inline BOOL SvImpLBox::IsLineVisible( long nY ) const
 {
     BOOL bRet = TRUE;
@@ -478,7 +497,5 @@ inline void SvImpLBox::TreeInserted( SvLBoxEntry* pTree )
     EntryInserted( pTree );
 }
 
-
-#endif
-
+#endif // #ifndef _SVIMPLBOX_HXX
 

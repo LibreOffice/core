@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 15:15:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,4 @@ namespace svt
 //........................................................................
 
 #endif  // _SVTOOLS_HELPAGENTWIDNOW_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/05/07 13:39:39  fs
- *  initial checkin - help agent window
- *
- *
- *  Revision 1.0 03.05.01 11:49:19  fs
- ************************************************************************/
 

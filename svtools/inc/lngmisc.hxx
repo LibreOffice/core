@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmisc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:40:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ BOOL    HasHyphens( const rtl::OUString &rTxt );
 INT32   GetNumControlChars( const rtl::OUString &rTxt );
 BOOL    RemoveHyphens( rtl::OUString &rTxt );
 BOOL    RemoveControlChars( rtl::OUString &rTxt );
+
+BOOL    ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
 
 } // namespace linguistic
 

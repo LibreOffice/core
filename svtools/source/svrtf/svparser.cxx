@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-15 17:20:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdio.h>
 #include "svparser.hxx"
@@ -85,29 +86,6 @@
 #define SVPAR_CSM_UCS2L     0x0008U
 #define SVPAR_CSM_SWITCH    0x8000U
 
-#ifdef ASYNCHRON_TEST
-//HACK
-#include "svgen.hxx"
-#include "toolerr.hxx"
-class _SvLockBytes_Impl
-{
-    AutoTimer aTimer;
-    SvStream& rIn;
-
-    ULONG nDataRead;
-    Link aCallDataRead;
-
-    DECL_STATIC_LINK( _SvLockBytes_Impl, DataRead, Timer* );
-
-public:
-    _SvLockBytes_Impl( SvStream& rInput, const Link& rCallBack );
-    ~_SvLockBytes_Impl();
-
-    ErrCode ReadAt( ULONG nPos, void* pArr, ULONG nCount, ULONG* pReadCnt );
-};
-//HACK
-#endif
-
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {
@@ -124,11 +102,6 @@ struct SvParser_Impl
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
 
-#ifdef ASYNCHRON_TEST
-// HACK
-_SvLockBytes_Impl* pLB;
-//HACK
-#endif
 #ifndef PRODUCT
     SvFileStream aOut;
 #endif
@@ -149,7 +122,6 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     nTokenStackSize( nStackSize ), nTokenStackPos( 0 ),
     nTokenValue( 0 ),
     pImplData( 0 ),
-//  bWaitForData( FALSE )
     bDownloadingFile( FALSE ),
     eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
 {
@@ -160,14 +132,6 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     pTokenStack = new TokenStackType[ nTokenStackSize ];
     pTokenStackPos = pTokenStack;
 
-
-#ifdef ASYNCHRON_TEST
-//HACK
-    pImplData = new SvParser_Impl;
-    pImplData->pLB = new _SvLockBytes_Impl( rInput,
-                            STATIC_LINK( this, SvParser, NewDataRead ) );
-//HACK
-#endif
 #ifndef PRODUCT
 
     // wenn die Datei schon existiert, dann Anhaengen:
@@ -187,11 +151,6 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
 
 SvParser::~SvParser()
 {
-//HACK
-#ifdef ASYNCHRON_TEST
-delete pImplData->pLB;
-#endif
-//HACK
 #ifndef PRODUCT
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << "\n\n >>>>>>>>>>>>>>> Dump Ende <<<<<<<<<<<<<<<\n";
@@ -261,44 +220,15 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
     }
 }
 
+void SvParser::RereadLookahead()
+{
+    rInput.Seek(nNextChPos);
+    nNextCh = GetNextChar();
+}
+
 sal_Unicode SvParser::GetNextChar()
 {
     sal_Unicode c = 0U;
-
-#ifdef ASYNCHRON_TEST
-//HACK
-    ULONG nRead;
-    sal_Char cAsync;
-    ULONG nErr = pImplData->pLB->ReadAt( rInput.Tell(), &cAsync, 1, &nRead );
-    if( ERRCODE_IO_PENDING == nErr )
-    {
-/*      if( bWaitForData )
-        {
-            eState = SVPAR_WAITFORDATA;
-            while( SVPAR_WAITFORDATA == eState )
-                Application::Reschedule();
-            pImplData->pLB->ReadAt( rInput.Tell(), &c, 1, &nRead );
-        }
-        else
-*/      {
-            eState = SVPAR_PENDING;
-            return cAsync;
-        }
-    }
-
-    // Fehlerfall?
-    if( !nRead )
-    {
-        eState = rInput.IsEof() ? SVPAR_ACCEPTED : SVPAR_ERROR;
-        return cAsync;
-    }
-
-    if( rInput.IsEof() )
-        return EOF;
-
-    c = cAsnyc
-//HACK
-#else
 
     // When reading muliple bytes, we don't have to care about the file
     // position when we run inti the pending state. The file position is
@@ -337,6 +267,8 @@ sal_Unicode SvParser::GetNextChar()
 
         bSwitchToUCS2 = FALSE;
     }
+
+    nNextChPos = rInput.Tell();
 
     if( RTL_TEXTENCODING_UCS2 == eSrcEnc )
     {
@@ -514,8 +446,6 @@ sal_Unicode SvParser::GetNextChar()
         else
             return sal_Unicode(EOF);
     }
-
-#endif
 
 #ifndef PRODUCT
     if( pImplData->aOut.IsOpen() )
@@ -758,54 +688,4 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
     return 0;
 }
 
-
-/**/
-#ifdef ASYNCHRON_TEST
-
-_SvLockBytes_Impl::_SvLockBytes_Impl( SvStream& rInput, const Link& rCallback )
-    : rIn( rInput ), aCallDataRead( rCallback )
-{
-    nDataRead = 50;
-
-    aTimer.SetTimeout( 1000 );      // jede Sekunde 100 Zeichen lesen
-    aTimer.SetTimeoutHdl( STATIC_LINK( this, _SvLockBytes_Impl, DataRead ));
-    aTimer.Start();
-}
-
-_SvLockBytes_Impl::~_SvLockBytes_Impl()
-{
-    aTimer.Stop();
-}
-
-ErrCode _SvLockBytes_Impl::ReadAt( ULONG nPos, void* pArr, ULONG nCount,
-                                ULONG* pReadCnt )
-{
-    ErrCode nRet = 0;
-    if( nPos + nCount > nDataRead )
-    {
-        nCount = nDataRead - nPos;
-        nRet = ERRCODE_IO_PENDING;
-    }
-
-    if( nCount )
-    {
-        rIn.Seek( nPos );
-        *pReadCnt = rIn.Read( pArr, nCount );
-    }
-    else
-        *pReadCnt = 0;
-    return rIn.GetError() ? rIn.GetError()
-                          : ( rIn.IsEof() ? 0 : nRet );
-}
-
-IMPL_STATIC_LINK( _SvLockBytes_Impl, DataRead, Timer*, pTimer )
-{
-    pThis->nDataRead += 100;
-    pThis->aCallDataRead.Call( pThis );
-
-    return 0;
-}
-
-#endif
-
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

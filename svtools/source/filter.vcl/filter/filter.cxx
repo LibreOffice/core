@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:26:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,13 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-static List* pFilterHdlList = NULL;
+static List*        pFilterHdlList = NULL;
+
+static ::osl::Mutex& getListMutex()
+{
+    static ::osl::Mutex s_aListProtection;
+    return s_aListProtection;
+}
 
 // -------------------------
 // - ImpFilterOutputStream -
@@ -849,11 +855,34 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
+    sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ), 0 );
+    sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) ), 0 );
+
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32   nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, pResMgr ) ), 0 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, pResMgr ) ), -1 );
+        if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
+        {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
+            nMode = 0;      // then we are defaulting this mode to 0
+            if ( nLogicalWidth || nLogicalHeight )
+                nMode = 2;
+        }
+
+
+        Size aOriginalSize;
+        Size aPrefSize( rGraphic.GetPrefSize() );
+        MapMode aPrefMapMode( rGraphic.GetPrefMapMode() );
+        if ( aPrefMapMode == MAP_PIXEL )
+            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+        else
+            aOriginalSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+        if ( !nLogicalWidth )
+            nLogicalWidth = aOriginalSize.Width();
+        if ( !nLogicalHeight )
+            nLogicalHeight = aOriginalSize.Height();
         if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
+
             // Auflösung wird eingestellt
             if( nMode == 1 )
             {
@@ -877,11 +906,8 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else if( nMode == 2 )
             {
                 Bitmap  aBitmap( rGraphic.GetBitmap() );
-
-                ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
-                ::com::sun::star::awt::Size aSize = rConfigItem.ReadSize( String( ResId( KEY_SIZE, pResMgr ) ), aDefaultSize );
                 aBitmap.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-                aBitmap.SetPrefSize( Size( aSize.Width, aSize.Height ) );
+                aBitmap.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
                 aGraphic = Graphic( aBitmap );
             }
             else
@@ -901,8 +927,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
                 ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
-                ::com::sun::star::awt::Size aSize = rConfigItem.ReadSize( String( ResId( KEY_SIZE, pResMgr ) ), aDefaultSize );
-                Size aNewSize( OutputDevice::LogicToLogic( Size( aSize.Width, aSize.Height ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
+                Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
 
                 if( aNewSize.Width() && aNewSize.Height() )
                 {
@@ -915,7 +940,8 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
         }
-       }
+
+    }
     else
         aGraphic = rGraphic;
 
@@ -1082,12 +1108,14 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 
 GraphicFilter::~GraphicFilter()
 {
-
-    pFilterHdlList->Remove( (void*)this );
-    if ( !pFilterHdlList->Count() )
     {
-        delete pFilterHdlList, pFilterHdlList = NULL;
-        delete pConfig;
+        ::osl::MutexGuard aGuard( getListMutex() );
+        pFilterHdlList->Remove( (void*)this );
+        if ( !pFilterHdlList->Count() )
+        {
+            delete pFilterHdlList, pFilterHdlList = NULL;
+            delete pConfig;
+        }
     }
 
 
@@ -1098,16 +1126,19 @@ GraphicFilter::~GraphicFilter()
 
 void GraphicFilter::ImplInit()
 {
-    if ( !pFilterHdlList )
     {
-        pFilterHdlList = new List;
-        pConfig = new FilterConfigCache( bUseConfig );
+        ::osl::MutexGuard aGuard( getListMutex() );
+
+        if ( !pFilterHdlList )
+        {
+            pFilterHdlList = new List;
+            pConfig = new FilterConfigCache( bUseConfig );
+        }
+        else
+            pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
+
+        pFilterHdlList->Insert( (void*)this );
     }
-    else
-        pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
-
-    pFilterHdlList->Insert( (void*)this );
-
 
     if( bUseConfig )
     {
@@ -1452,6 +1483,11 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         {
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
+
+            // set LOGSIZE flag always, if not explicitly disabled
+            // (see #90508 and #106763)
+            if( 0 == ( nImportFlags & GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG ) )
+                nImportFlags |= GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
 
             if( !ImportJPEG( rIStream, rGraphic, NULL, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;

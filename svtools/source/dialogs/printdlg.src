@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:24:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ε±¬ζ€§(~I)...";
         Text[ arabic ] = "ΞΥΗΖΥ...";
         Text[ greek ] = "Ιδιότητες...";
-        Text[ korean ] = "λ“±λ΅μ •λ³΄(~I)...";
+        Text[ korean ] = "λ“±λ΅ μ •λ³΄(~I)...";
         Text[ turkish ] = "~Φzellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Propietats...";
@@ -231,7 +231,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ι΅ε‹";
         Text[ arabic ] = "ΗαδζΪ";
         Text[ greek ] = "Τύπος";
-        Text[ korean ] = "μ ν•";
+        Text[ korean ] = "μΆ…λ¥";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
@@ -265,7 +265,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "δ½η½®";
         Text[ arabic ] = "ΗαγζήΪ";
         Text[ greek ] = "Θέση";
-        Text[ korean ] = "μ„μΉ";
+        Text[ korean ] = "κµ¬/κµ°/μ‹";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicaciσ";
@@ -299,7 +299,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "θ¨»θ§£";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
-        Text[ korean ] = "μ£Όμ„";
+        Text[ korean ] = "μ„¤λª…";
         Text[ turkish ] = "Aηύklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentari";
@@ -407,7 +407,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ε—ε°η―„ε";
         Text[ arabic ] = "δΨΗή ΗαΨΘΗΪΙ";
         Text[ greek ] = "Περιοχή εκτύπωσης";
-        Text[ korean ] = "μΈμ‡„ μμ—­";
+        Text[ korean ] = "μΈμ‡„ λ²”μ„";
         Text[ turkish ] = "Yazdύrma aralύπύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ΐrea d'impressiσ";
@@ -465,7 +465,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ι ";
         Text[ arabic ] = "ΥέΝΗΚ";
         Text[ greek ] = "Σελίδες";
-        Text[ korean ] = "νμ΄μ§€";
+        Text[ korean ] = "μΈμ‡„ν•  νμ΄μ§€";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pΰgines";
@@ -494,7 +494,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ιΈζ“‡";
         Text[ arabic ] = "ΗαΚΝΟνΟ";
         Text[ greek ] = "Επιλογή";
-        Text[ korean ] = "μ„ νƒ";
+        Text[ korean ] = "μ„ νƒ μμ—­";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Selecciσ";
@@ -540,7 +540,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "δ»¶ζ•Έ";
         Text[ arabic ] = "δΣΞ";
         Text[ greek ] = "Αντίγραφα";
-        Text[ korean ] = "λ³µμ‚¬";
+        Text[ korean ] = "μΈμ‡„ λ§¤μ";
         Text[ turkish ] = "Kopya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cςpies";
@@ -569,7 +569,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ε—ε°δ»¶ζ•Έ";
         Text[ arabic ] = "ΪΟΟ ΗαδΣΞ";
         Text[ greek ] = "Αντί~γραφα";
-        Text[ korean ] = "μ‚¬λ³Έ μ";
+        Text[ korean ] = "λ§¤μ";
         Text[ turkish ] = "~Kopya sayύsύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre de cςpies";
@@ -611,7 +611,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ζ’εΊ(~L)";
         Text[ arabic ] = "ΚΡΚνΘ ΗαδΣΞ";
         Text[ greek ] = "Ταξινόμηση";
-        Text[ korean ] = "λ¶„λ¥(~L)";
+        Text[ korean ] = "ν• λ¶€μ”© μΈμ‡„(~L)";
         Text[ turkish ] = "S~ύrala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Compara";
@@ -742,6 +742,11 @@ Image RID_IMG_PRNDLG_NOCOLLATE_HC
     ImageBitmap = Bitmap { File = "ncollate_h.bmp" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-17 09:04:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,32 +367,4 @@ void OGenericUnoDialog::destroyDialog()
 //.........................................................................
 }   // namespace svt
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/03/22 15:51:13  jl
- *  replaced OSL_ENSHURE by OSL_ENSURE
- *
- *  Revision 1.1  2000/11/24 12:34:35  fs
- *  initial checkin - frame for dialogs usuable as UNO service
- *
- *  Revision 1.4  2000/11/01 16:34:16  fs
- *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
- *
- *  Revision 1.3  2000/10/31 08:08:38  fs
- *  split up initialize - now using implInitialize, thus enabling derived classes to handle single parameters only
- *
- *  Revision 1.2  2000/10/27 08:08:47  fs
- *  don't include stringconstants.hrc directly anymore
- *
- *  Revision 1.1  2000/10/25 12:56:19  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.1  2000/10/05 10:06:09  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 21.09.00 09:10:05  fs
- ************************************************************************/
 

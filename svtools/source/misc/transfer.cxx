@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:30:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,9 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+
+
+
     try
     {
         if( !mpFormats->size() )
@@ -555,7 +558,9 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     sal_Bool                        bAdd = sal_True;
 
     while( aIter != aEnd )
+
     {
+
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
             aIter = aEnd;
@@ -1008,6 +1013,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
 
 void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
                                     sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
+
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XDragSource > xDragSource( pWindow->GetDragSource() );
@@ -1081,6 +1087,7 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
         rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
     }
 
+
     return aSeq;
 }
 
@@ -1128,6 +1135,7 @@ void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::C
 void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& Source ) throw (RuntimeException)
 {
     mpListener = NULL;
+
 }
 
 // --------------------------
@@ -1145,6 +1153,7 @@ TransferableDataHelper::TransferableDataHelper() :
 TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
     mxTransfer( rxTransferable ),
     mpFormats( new DataFlavorExVector ),
+
     mpClipboardListener( NULL )
 {
     InitFormats();
@@ -1214,6 +1223,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
+
             }
 
             aFlavorEx.MimeType = rFlavor.MimeType;
@@ -1257,6 +1267,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                         xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) )
                     {
                         rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_STRING;
+
                     }
                 }
             }
@@ -1265,8 +1276,13 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_RTF;
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/html" ) ) )
+
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
+            }
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) )
+            {
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
             }
         }
     }
@@ -1332,6 +1348,7 @@ sal_uInt32 TransferableDataHelper::GetFormatCount() const
 
 // -----------------------------------------------------------------------------
 
+
 SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
     DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
@@ -1389,6 +1406,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 
     return aReturn;
 }
+
 
 // -----------------------------------------------------------------------------
 
@@ -1480,6 +1498,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OU
         }
         else if( aAny >>= aSeq )
         {
+
             const sal_Char* pChars = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
             sal_Int32       nLen = aSeq.getLength();
 
@@ -1861,10 +1880,31 @@ sal_Bool TransferableDataHelper::GetFileList(
             FileList& rFileList )
 {
     SotStorageStreamRef xStm;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    sal_Bool            bRet = sal_False;
 
-    if( bRet )
-        bRet = ERRCODE_NONE == ( *xStm >> rFileList ).GetError();
+    for( sal_uInt32 i = 0, nFormatCount = GetFormatCount(); ( i < nFormatCount ) && !bRet; ++i )
+    {
+        if( SOT_FORMAT_FILE_LIST == GetFormat( i ) )
+        {
+            const DataFlavor aFlavor( GetFormatDataFlavor( i ) );
+
+            if( GetSotStorageStream( aFlavor, xStm ) )
+            {
+                if( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) > -1 )
+                {
+                    ByteString aByteString;
+
+                    while( xStm->ReadLine( aByteString ) )
+                        if( aByteString.Len() && aByteString.GetChar( 0 ) != '#' )
+                            rFileList.AppendFile( String( aByteString, RTL_TEXTENCODING_UTF8 ) );
+
+                    bRet = sal_True;
+                 }
+                 else
+                    bRet = ( ( *xStm >> rFileList ).GetError() == ERRCODE_NONE );
+            }
+        }
+    }
 
     return bRet;
 }
@@ -1901,6 +1941,7 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
     sal_Bool                bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
+
     {
         rxStream = new SotStorageStream( String() );
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
@@ -1911,6 +1952,7 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
 }
 
 // -----------------------------------------------------------------------------
+
 
 sal_Bool TransferableDataHelper::GetInterface( SotFormatStringId nFormat, Reference< XInterface >& rIf )
 {
@@ -1980,6 +2022,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
     if( xClipboard.is() )
        {
            try
+
         {
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
 

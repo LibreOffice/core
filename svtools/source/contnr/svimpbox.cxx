@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2002-12-11 13:42:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,23 +98,25 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#define NODE_BMP_TABDIST_NOTVALID -2000000
+#define NODE_BMP_TABDIST_NOTVALID   -2000000
+#define FIRST_ENTRY_TAB             1
 
 Image   SvImpLBox::s_aDefCollapsed;
 Image   SvImpLBox::s_aDefExpanded;
 Image   SvImpLBox::s_aDefCollapsedHC;
 Image   SvImpLBox::s_aDefExpandedHC;
 
-
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
+
     aVerSBar( pLBView, WB_DRAG | WB_VSCROLL ),
     aHorSBar( pLBView, WB_DRAG | WB_HSCROLL ),
     aScrBarBox( pLBView ),
-    aOutputSize( 0,0 ),
+    aOutputSize( 0, 0 ),
     aSelEng( pLBView, (FunctionSet*)0 ),
     aFctSet( this, &aSelEng, pLBView ),
     pIntlWrapper( NULL ), // #102891# -----------------------
-    pTabBar(0)
+    pTabBar( NULL )
+
 {
     pView = pLBView;
     pTree = pLBTree;
@@ -128,10 +130,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     aHorSBar.SetScrollHdl( LINK( this, SvImpLBox, ScrollLeftRightHdl ) );
     aHorSBar.SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
     aVerSBar.SetEndScrollHdl( LINK( this, SvImpLBox, EndScrollHdl ) );
-#if SUPD > 358
     aVerSBar.SetRange( Range(0,0) );
     aVerSBar.Hide();
-#endif
     aHorSBar.SetRange( Range(0,0) );
     aHorSBar.SetPageSize( 24 ); // Pixel
     aHorSBar.SetLineSize( 8 ); // Pixel
@@ -156,6 +156,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     pActiveTab = 0;
 
     nFlags = 0;
+    nCurTabPos = FIRST_ENTRY_TAB;
 
     aEditTimer.SetTimeout( 800 );
     aEditTimer.SetTimeoutHdl( LINK(this,SvImpLBox,EditTimerCall) );
@@ -168,7 +169,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     bInVScrollHdl = FALSE;
     nFlags |= F_FILLING;
 
-    bSubLstOpRet = bSubLstOpLR = bContextMenuHandling = FALSE;
+    bSubLstOpRet = bSubLstOpLR = bContextMenuHandling = bIsCellFocusEnabled = FALSE;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -197,6 +198,81 @@ void SvImpLBox::UpdateIntlWrapper()
             delete pIntlWrapper;
             pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
         }
+    }
+}
+
+// #97680# ----------------------
+short SvImpLBox::UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth )
+{
+    DBG_ASSERT( pView->pModel, "View and Model aren't valid!" );
+
+    USHORT nDepth = pView->pModel->GetDepth( pEntry );
+    DBG_ASSERT( aContextBmpWidthVector.size() >= nDepth, "Some level missing!" );
+    if( aContextBmpWidthVector.size() == nDepth )
+    {
+        aContextBmpWidthVector.resize( nDepth + 1 );
+        aContextBmpWidthVector.at( nDepth ) = 0;
+    }
+    short nContextBmpWidth = aContextBmpWidthVector[ nDepth ];
+    if( nContextBmpWidth < nWidth )
+    {
+        aContextBmpWidthVector.at( nDepth ) = nWidth;
+        return nWidth;
+    }
+    else
+        return nContextBmpWidth;
+}
+
+void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvLBoxEntry* pEntry )
+{
+    DBG_ASSERT( pEntry, "Moved Entry is invalid!" );
+
+    short nDepth = pView->pModel->GetDepth( pEntry );
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    short nExpWidth = (short)pBmpItem->GetBitmap1().GetSizePixel().Width();
+    short nColWidth = (short)pBmpItem->GetBitmap2().GetSizePixel().Width();
+    short nMax = Max(nExpWidth, nColWidth);
+    UpdateContextBmpWidthVector( pEntry, nMax );
+
+    if( pEntry->HasChilds() ) // recursive call, whether expanded or not
+    {
+        SvLBoxEntry* pChild = pView->FirstChild( pEntry );
+        DBG_ASSERT( pChild, "The first child is invalid!" );
+        do
+        {
+            UpdateContextBmpWidthVectorFromMovedEntry( pChild );
+            pChild = pView->Next( pChild );
+        } while ( pChild );
+    }
+}
+
+void SvImpLBox::UpdateContextBmpWidthMax( SvLBoxEntry* pEntry )
+{
+    USHORT nDepth = pView->pModel->GetDepth( pEntry );
+    if( aContextBmpWidthVector.size() < 1 )
+        return;
+    short nWidth = aContextBmpWidthVector[ nDepth ];
+    if( nWidth != pView->nContextBmpWidthMax ) {
+        pView->nContextBmpWidthMax = nWidth;
+        nFlags |= F_IGNORE_CHANGED_TABS;
+        pView->SetTabs();
+        nFlags &= ~F_IGNORE_CHANGED_TABS;
+    }
+}
+
+void SvImpLBox::CalcCellFocusRect( SvLBoxEntry* pEntry, Rectangle& rRect )
+{
+    if ( pEntry && bIsCellFocusEnabled )
+    {
+        if ( nCurTabPos > FIRST_ENTRY_TAB )
+        {
+            SvLBoxItem* pItem = pCursor->GetItem( nCurTabPos );
+            rRect.Left() = pView->GetTab( pCursor, pItem )->GetPos();
+        }
+        SvLBoxItem* pNextItem = pCursor->GetItem( nCurTabPos + 1 );
+        long nRight = pView->GetTab( pCursor, pNextItem )->GetPos() - 1;
+        if ( nRight < rRect.Right() )
+            rRect.Right() = nRight;
     }
 }
 
@@ -253,6 +329,9 @@ void SvImpLBox::Clear()
     nFlags |= F_FILLING;
     if( !aHorSBar.IsVisible() && !aVerSBar.IsVisible() )
         aScrBarBox.Hide();
+
+    // #97680# ---------
+    aContextBmpWidthVector.clear();
 }
 
 // *********************************************************************
@@ -552,6 +631,7 @@ void SvImpLBox::RecalcFocusRect()
         pView->HideFocus();
         long nY = GetEntryLine( pCursor );
         Rectangle aRect = pView->GetFocusRect( pCursor, nY );
+        CalcCellFocusRect( pCursor, aRect );
         Region aOldClip( pView->GetClipRegion());
         Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
@@ -629,6 +709,7 @@ void SvImpLBox::ShowCursor( BOOL bShow )
     {
         long nY = GetEntryLine( pCursor );
         Rectangle aRect = pView->GetFocusRect( pCursor, nY );
+        CalcCellFocusRect( pCursor, aRect );
         Region aOldClip( pView->GetClipRegion());
         Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
@@ -821,7 +902,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
 
     nFlags |= F_IN_PAINT;
 
-//#if SUPD > 364
     if( nFlags & F_FILLING )
     {
         SvLBoxEntry* pFirst = pView->First();
@@ -836,7 +916,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
             return;
         }
     }
-//#endif
 
     if( !pStartEntry )
     {
@@ -1097,19 +1176,7 @@ void SvImpLBox::DrawNet()
 
 static long GetOptSize( TabBar* pTabBar )
 {
-#if SUPD > 373
     return pTabBar->CalcWindowSizePixel().Width();
-#else
-    long nWidth = 0;
-    USHORT nCount = pTabBar->GetPageCount();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
-    {
-        USHORT nId = pTabBar->GetPageId( nCur );
-        nWidth+= pTabBar->GetTextSize(pTabBar->GetPageText(nId)).Width();
-        nWidth += 18;
-    }
-    return nWidth;
-#endif
 }
 
 void SvImpLBox::PositionScrollBars( Size& rSize, USHORT nMask )
@@ -1791,6 +1858,9 @@ void SvImpLBox::MovingEntry( SvLBoxEntry* pEntry )
 
 void SvImpLBox::EntryMoved( SvLBoxEntry* pEntry )
 {
+    // #97680# --------------
+    UpdateContextBmpWidthVectorFromMovedEntry( pEntry );
+
     aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1));
     USHORT nFirstPos = (USHORT)pTree->GetAbsPos( pStartEntry );
     USHORT nNewPos = (USHORT)pTree->GetAbsPos( pEntry );
@@ -1887,10 +1957,8 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
         SyncVerThumb(); // falls vor Thumb eingefuegt wurde
         ShowVerSBar();
         ShowCursor( TRUE );
-//#if SUPD > 364
         if( pStartEntry != pView->First() && (nFlags & F_FILLING) )
             pView->Update();
-//#endif
     }
 }
 
@@ -2051,9 +2119,12 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
 
+    SvLBoxEntry* pEntry = GetEntry( aPos );
+    if ( pEntry != pCursor )
+        // new entry selected -> reset current tab position to first tab
+        nCurTabPos = FIRST_ENTRY_TAB;
     nFlags &= (~F_FILLING);
     pView->GrabFocus();
-    SvLBoxEntry* pEntry = GetEntry( aPos );
     if( !pEntry )
         return;
 
@@ -2069,7 +2140,9 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( pXItem )
     {
         SvLBoxTab* pXTab = pView->GetTab( pEntry, pXItem );
-        if ( !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && pXTab->IsEditable() )
+        if ( !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && pXTab->IsEditable()
+            && pEntry == pView->FirstSelected() && NULL == pView->NextSelected( pEntry ) )
+                // #i8234# FirstSelected() and NextSelected() ensures, that inplace editing is only triggered, when only one entry is selected
             nFlags |= F_START_EDITTIMER;
 #ifndef MAC
         if ( !pView->IsSelected( pEntry ) )
@@ -2204,7 +2277,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
             pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pCursor ));
-
+            if ( pNewCursor )
+                // new entry selected -> reset current tab position to first tab
+                nCurTabPos = FIRST_ENTRY_TAB;
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
@@ -2225,6 +2300,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
             pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pCursor ));
+            if ( pNewCursor )
+                // new entry selected -> reset current tab position to first tab
+                nCurTabPos = FIRST_ENTRY_TAB;
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
@@ -2252,6 +2330,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RIGHT:
+        {
             if( bSubLstOpLR && IsNowExpandable() )
                 pView->Expand( pCursor );
             else if( pView->nWindowStyle & WB_HSCROLL )
@@ -2269,11 +2348,22 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     EndScroll();
                 }
             }
+            else if ( bIsCellFocusEnabled && pCursor )
+            {
+                if ( nCurTabPos < ( pView->TabCount() - 2 ) )
+                {
+                    ++nCurTabPos;
+                    ShowCursor( TRUE );
+                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                }
+            }
             else
                 bKeyUsed = FALSE;
             break;
+        }
 
         case KEY_LEFT:
+        {
             if( pView->nWindowStyle & WB_HSCROLL )
             {
                 long    nThumb = aHorSBar.GetThumbPos();
@@ -2301,9 +2391,19 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             else if( bSubLstOpLR && IsExpandable() )
                 pView->Collapse( pCursor );
+            else if ( bIsCellFocusEnabled )
+            {
+                if ( nCurTabPos > FIRST_ENTRY_TAB )
+                {
+                    --nCurTabPos;
+                    ShowCursor( TRUE );
+                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                }
+            }
             else
                 bKeyUsed = FALSE;
             break;
+        }
 
         case KEY_PAGEUP:
             if( !bMod1 )
@@ -3442,5 +3542,21 @@ void SvImpLBox::AddEventListener( const Link& rEventListener )
 void SvImpLBox::RemoveEventListener( const Link& rEventListener )
 {
     maEventListeners.remove( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+bool SvImpLBox::SetCurrentTabPos( USHORT _nNewPos )
+{
+    bool bRet = false;
+
+    if ( pView && _nNewPos < ( pView->TabCount() - 2 ) )
+    {
+        nCurTabPos = _nNewPos;
+        ShowCursor( TRUE );
+        bRet = true;
+    }
+
+    return bRet;
 }
 

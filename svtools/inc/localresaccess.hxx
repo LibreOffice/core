@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-06 07:19:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,20 +114,4 @@ namespace svt
 //.........................................................................
 
 #endif // _SVTOOLS_LOCALRESACCESS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/05/24 16:48:37  fs
- *  #99484# new (easier) ctor, +IsAvailableRes
- *
- *  Revision 1.1  2001/02/05 17:04:48  fs
- *  initial checkin - accessing local resources
- *
- *  Revision 1.1  2000/10/05 10:08:35  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 28.09.00 10:43:07  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 12:53:53 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:38:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,6 +139,7 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/items2.lib
 LIB3OBJFILES=\
+    $(SLO)$/globalnameitem.obj	\
     $(SLO)$/aeitem.obj	\
     $(SLO)$/args.obj	\
     $(SLO)$/compat.obj	\

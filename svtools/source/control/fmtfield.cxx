@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-18 15:15:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,15 +105,260 @@
 #include <syslocale.hxx>
 #endif
 
+#ifndef REGEXP_SUPPORT
+#include <map>
+#endif
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
+
+#ifdef REGEXP_SUPPORT
+
 //==============================================================================
-// regulaerer Ausdruck, um komplette Zahlen und alles, was waehrend der Eingabe einer kompletten Zahl als Fragment vorkommt,
-// abzudecken :
-// [+/-][{ziffer}*.]*{ziffer}*[,{ziffer}*][e[+/-]{ziffer}*]
+// regular expression to validate complete numbers, plus every fragment which can occur during the input
+// of a complete number
+// [+/-][{digit}*.]*{digit}*[,{digit}*][e[+/-]{digit}*]
 const char __FAR_DATA szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
-    // (die beiden _ sind fuer die Normierung, damit kann ich erzwingen, dass nie ein Teilstring gefunden wird)
+    // (the two _ are for normalizing it: With this, we can ensure that a to-be-checked text is always
+    // matched as a _whole_)
+#else
+
+// hmm. No support for regular expression. Well, I always (not really :) wanted to write a finite automat
+// so here comes a finite automat ...
+
+namespace validation
+{
+    // the states of our automat.
+    enum State
+    {
+        START,              // at the very start of the string
+        NUM_START,          // the very start of the number
+
+        DIGIT_PRE_COMMA,    // some pre-comma digits are read, perhaps including some thousand separators
+
+        DIGIT_POST_COMMA,   // reading digits after the comma
+        EXPONENT_START,     // at the very start of the exponent value
+                            //    (means: not including the "e" which denotes the exponent)
+        EXPONENT_DIGIT,     // currently reading the digits of the exponent
+
+        END                 // reached the end of the string
+    };
+
+    // a row in the transition table (means the set of states to be reached from a given state)
+    typedef ::std::map< sal_Unicode, State >        StateTransitions;
+
+    // a single transition
+    typedef StateTransitions::value_type            Transition;
+
+    // the complete transition table
+    typedef ::std::map< State, StateTransitions >   TransitionTable;
+
+    // the validator class
+    class NumberValidator
+    {
+    private:
+        TransitionTable     m_aTransitions;
+        const sal_Unicode   m_cThSep;
+        const sal_Unicode   m_cDecSep;
+
+    public:
+        NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
+
+        sal_Bool isValidNumericFragment( const String& _rText );
+
+    private:
+        sal_Bool implValidateNormalized( const String& _rText );
+    };
+
+    //--------------------------------------------------------------------------
+    //..........................................................................
+    static void lcl_insertStopTransition( StateTransitions& _rRow )
+    {
+        _rRow.insert( Transition( '_', END ) );
+    }
+
+    //..........................................................................
+    static void lcl_insertStartExponentTransition( StateTransitions& _rRow )
+    {
+        _rRow.insert( Transition( 'e', EXPONENT_START ) );
+    }
+
+    //..........................................................................
+    static void lcl_insertSignTransitions( StateTransitions& _rRow, const State eNextState )
+    {
+        _rRow.insert( Transition( '-', eNextState ) );
+        _rRow.insert( Transition( '+', eNextState ) );
+    }
+
+    //..........................................................................
+    static void lcl_insertDigitTransitions( StateTransitions& _rRow, const State eNextState )
+    {
+        for ( sal_Unicode aChar = '0'; aChar <= '9'; ++aChar )
+            _rRow.insert( Transition( aChar, eNextState ) );
+    }
+
+    //..........................................................................
+    static void lcl_insertCommonPreCommaTransitions( StateTransitions& _rRow, const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
+    {
+        // digits are allowed
+        lcl_insertDigitTransitions( _rRow, DIGIT_PRE_COMMA );
+
+        // the thousand separator is allowed
+        _rRow.insert( Transition( _cThSep, DIGIT_PRE_COMMA ) );
+
+        // a comma is allowed
+        _rRow.insert( Transition( _cDecSep, DIGIT_POST_COMMA ) );
+    }
+
+    //--------------------------------------------------------------------------
+    NumberValidator::NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
+        :m_cThSep( _cThSep )
+        ,m_cDecSep( _cDecSep )
+    {
+        // build up our transition table
+
+        // how to procede from START
+        {
+            StateTransitions& rRow = m_aTransitions[ START ];
+            rRow.insert( Transition( '_', NUM_START ) );
+                // if we encounter the normalizing character, we want to procede with the number
+        }
+
+        // how to procede from NUM_START
+        {
+            StateTransitions& rRow = m_aTransitions[ NUM_START ];
+
+            // a sign is allowed
+            lcl_insertSignTransitions( rRow, DIGIT_PRE_COMMA );
+
+            // common transitions for the two pre-comma states
+            lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
+
+            // the exponent may start here
+            // (this would mean string like "_+e10_", but this is a valid fragment, though no valid number)
+            lcl_insertStartExponentTransition( rRow );
+        }
+
+        // how to procede from DIGIT_PRE_COMMA
+        {
+            StateTransitions& rRow = m_aTransitions[ DIGIT_PRE_COMMA ];
+
+            // common transitions for the two pre-comma states
+            lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
+
+            // the exponent may start here
+            lcl_insertStartExponentTransition( rRow );
+
+            // the final transition indicating the end of the string
+            // (if there is no comma and no post-comma, then the string may end here)
+            lcl_insertStopTransition( rRow );
+        }
+
+        // how to procede from DIGIT_POST_COMMA
+        {
+            StateTransitions& rRow = m_aTransitions[ DIGIT_POST_COMMA ];
+
+            // there might be digits, which would keep the state at DIGIT_POST_COMMA
+            lcl_insertDigitTransitions( rRow, DIGIT_POST_COMMA );
+
+            // the exponent may start here
+            lcl_insertStartExponentTransition( rRow );
+
+            // the string may end here
+            lcl_insertStopTransition( rRow );
+        }
+
+        // how to procede from EXPONENT_START
+        {
+            StateTransitions& rRow = m_aTransitions[ EXPONENT_START ];
+
+            // there may be a sign
+            lcl_insertSignTransitions( rRow, EXPONENT_DIGIT );
+
+            // there may be digits
+            lcl_insertDigitTransitions( rRow, EXPONENT_DIGIT );
+
+            // the string may end here
+            lcl_insertStopTransition( rRow );
+        }
+
+        // how to procede from EXPONENT_DIGIT
+        {
+            StateTransitions& rRow = m_aTransitions[ EXPONENT_DIGIT ];
+
+            // there may be digits
+            lcl_insertDigitTransitions( rRow, EXPONENT_DIGIT );
+
+            // the string may end here
+            lcl_insertStopTransition( rRow );
+        }
+
+        // how to procede from END
+        {
+            StateTransitions& rRow = m_aTransitions[ EXPONENT_DIGIT ];
+            // no valid transition to leave this state
+            // (note that we, for consistency, nevertheless want to have a row in the table)
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    sal_Bool NumberValidator::implValidateNormalized( const String& _rText )
+    {
+        const sal_Unicode* pCheckPos = _rText.GetBuffer();
+        State eCurrentState = START;
+
+        while ( END != eCurrentState )
+        {
+            // look up the transition row for the current state
+            TransitionTable::const_iterator aRow = m_aTransitions.find( eCurrentState );
+            DBG_ASSERT( m_aTransitions.end() != aRow,
+                "NumberValidator::implValidateNormalized: invalid transition table (row not found)!" );
+
+            if ( m_aTransitions.end() != aRow )
+            {
+                // look up the current character in this row
+                StateTransitions::const_iterator aTransition = aRow->second.find( *pCheckPos );
+                if ( aRow->second.end() != aTransition )
+                {
+                    // there is a valid transition for this character
+                    eCurrentState = aTransition->second;
+                    ++pCheckPos;
+                    continue;
+                }
+            }
+
+            // if we're here, there is no valid transition
+            break;
+        }
+
+        DBG_ASSERT( ( END != eCurrentState ) || ( 0 == *pCheckPos ),
+            "NumberValidator::implValidateNormalized: inconsistency!" );
+            // if we're at END, then the string should be done, too - the string should be normalized, means ending
+            // a "_" and not containing any other "_" (except at the start), and "_" is the only possibility
+            // to reach the END state
+
+        // the string is valid if and only if we reached the final state
+        return ( END == eCurrentState );
+    }
+
+    //--------------------------------------------------------------------------
+    sal_Bool NumberValidator::isValidNumericFragment( const String& _rText )
+    {
+        if ( !_rText.Len() )
+            // empty strings are always allowed
+            return sal_True;
+
+        // normalize the string
+        String sNormalized( RTL_CONSTASCII_STRINGPARAM( "_") );
+        sNormalized.Append( _rText );
+        sNormalized.AppendAscii( "_" );
+
+        return implValidateNormalized( sNormalized );
+    }
+}
+
+#endif
 
 //==============================================================================
 SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
@@ -478,7 +723,7 @@ void FormattedField::GetFormat(XubString& rFormatString, LanguageType& eLang) co
 {
     DBG_CHKTHIS(FormattedField, NULL);
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
-    DBG_ASSERT(pFormatEntry != NULL, "FormattedField::ResetConformanceTester : no number format for the given format key.");
+    DBG_ASSERT(pFormatEntry != NULL, "FormattedField::GetFormat: no number format for the given format key.");
     rFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : XubString();
     eLang = pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 }
@@ -910,7 +1155,11 @@ void FormattedField::Last()
 //------------------------------------------------------------------------------
 DoubleNumericField::~DoubleNumericField()
 {
+#ifdef REGEXP_SUPPORT
     delete m_pConformanceTester;
+#else
+    delete m_pNumberValidator;
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -923,10 +1172,11 @@ void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 //------------------------------------------------------------------------------
 BOOL DoubleNumericField::CheckText(const XubString& sText) const
 {
-    // Ich wuerde das CheckText gern ueber den NumberFormatter laufen lassen (da gibt es schliesslich ein IsNumberFormat),
-    // aber der erkennt leider keine Fragmente (also zum Beispiel '1e', was waehrend der Eingabe zwangslaeufig irgendwann mal
-    // vorkommt), also dieser Umweg ueber einen SearchText.
+    // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
+    // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
+    // Thus, the roundabout way via a regular expression
 
+#ifdef REGEXP_SUPPORT
     if (!sText.Len())
         return TRUE;
 
@@ -941,12 +1191,14 @@ BOOL DoubleNumericField::CheckText(const XubString& sText) const
         return TRUE;
 
     return FALSE;
+#else
+    return m_pNumberValidator->isValidNumericFragment( sText );
+#endif
 }
 
 //------------------------------------------------------------------------------
 void DoubleNumericField::ResetConformanceTester()
 {
-    String sDescription = String::CreateFromAscii(szNumericInput);
     // the thousands and the decimal separator are language dependent
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
 
@@ -966,6 +1218,9 @@ void DoubleNumericField::ResetConformanceTester()
         if (sSeparator.Len())
             cSeparatorDecimal = sSeparator.GetBuffer()[0];
     }
+
+#ifdef REGEXP_SUPPORT
+    String sDescription = String::CreateFromAscii(szNumericInput);
 
     String sReplaceWith((sal_Unicode)'\\');
     sReplaceWith += cSeparatorThousand;
@@ -989,6 +1244,10 @@ void DoubleNumericField::ResetConformanceTester()
     aParam.Locale.Country = sCountry;
 
     m_pConformanceTester = new ::utl::TextSearch(aParam);
+#else
+    delete m_pNumberValidator;
+    m_pNumberValidator = new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal );
+#endif
 }
 
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 12:56:33 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:38:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,21 +73,6 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
-
-UNOTYPES = \
-    com.sun.star.awt.FontWeight \
-    com.sun.star.awt.XTextArea \
-    com.sun.star.awt.XTextComponent \
-    com.sun.star.awt.XTextLayoutConstrains \
-    com.sun.star.lang.EventObject \
-    drafts.com.sun.star.accessibility.AccessibleEventId \
-    drafts.com.sun.star.accessibility.AccessibleRole \
-    drafts.com.sun.star.accessibility.AccessibleStateType \
-    drafts.com.sun.star.accessibility.AccessibleTextType \
-    drafts.com.sun.star.accessibility.XAccessible \
-    drafts.com.sun.star.accessibility.XAccessibleContext \
-    drafts.com.sun.star.accessibility.XAccessibleEditableText \
-    drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
 
 SLOFILES=   \
             $(SLO)$/textdata.obj	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-06 13:53:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,59 +96,6 @@ public:
     static void Set( SfxBrushItemLink* pLink );
 };
 #endif  // _SFX_BRUSHITEMLINK_DECLARED
-
-////////////////////////////////////////////////////////////////////////////////
-/*
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:58:54  hr
-    initial import
-
-    Revision 1.15  2000/09/18 14:13:18  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.14  2000/08/31 13:41:16  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.13  2000/03/22 11:47:48  kso
-    Removed: SmartUno leftovers.
-
-    Revision 1.12  2000/03/21 11:39:32  kso
-    Added: [Put|QueryValue( ... com::sun::star::uno::Any ... )
-
-    Revision 1.11  2000/02/09 16:16:37  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.10  1999/08/19 14:23:00  dv
-    no include cntwall.hxx needed
-
-    Revision 1.9  1999/08/18 23:33:43  hjs
-    includes
-
-    Revision 1.8  1999/08/18 09:17:45  dv
-    #66082# The WallpaperLoader is now constructed with a CntWallpaperItem
-
-    Revision 1.7  1999/06/25 09:02:25  dv
-    #63380# WallpaperLoader neu
-
-    Revision 1.6  1999/06/15 12:29:07  hjs
-    once again...
-
-    Revision 1.4  1998/08/13 15:17:28  DV
-    #52764# Put/Query Value neu
-
-      Rev 1.3   13 Aug 1998 17:17:28   DV
-   #52764# Put/Query Value neu
-
-      Rev 1.2   03 Jul 1998 09:42:08   OV
-   Impl.
-
-      Rev 1.1   01 Jul 1998 09:28:02   OV
-   Erweiterungen, Umstellungen
-
-      Rev 1.0   30 Jun 1998 10:50:56   OV
-   Neu: SfxWallpaperItem
-
-*/
 
 #endif // _WALLITEM_HXX
 

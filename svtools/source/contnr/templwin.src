@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-27 16:24:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String STR_SVT_NEWDOC
     Text[ greek ] = "New Document";
     Text[ dutch ] = "Nieuw document";
     Text[ french ] = "Nouveau document";
-    Text[ spanish ] = "Nuevo documento";
+    Text[ spanish ] = "Documento nuevo";
     Text[ finnish ] = "Uusi asiakirja";
     Text[ italian ] = "Nuovo documento";
     Text[ danish ] = "Nyt dokument";
@@ -129,7 +129,7 @@ String STR_SVT_MYDOCS
     Text[ polish ] = "Moje dokumenty";
     Text[ portuguese_brazilian ] = "My Documents";
     Text[ japanese ] = "マイドキュメント";
-    Text[ korean ] = "고유 문서";
+    Text[ korean ] = "내 문서";
     Text[ chinese_simplified ] = "我的文档";
     Text[ chinese_traditional ] = "我的文件夾";
     Text[ turkish ] = "My Documents";
@@ -167,7 +167,7 @@ String STR_SVT_TEMPLATES
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Templates";
     Text[ japanese ] = "テンプレート";
-    Text[ korean ] = "템플릿";
+    Text[ korean ] = "서식 파일";
     Text[ chinese_simplified ] = "样式";
     Text[ chinese_traditional ] = "樣式";
     Text[ turkish ] = "Templates";
@@ -204,7 +204,7 @@ String STR_SVT_SAMPLES
     Text[ polish ] = "Przyk�ady";
     Text[ portuguese_brazilian ] = "Samples";
     Text[ japanese ] = "サンプル文書";
-    Text[ korean ] = "예";
+    Text[ korean ] = "샘플 문서";
     Text[ chinese_simplified ] = "示例文档";
     Text[ chinese_traditional ] = "示例";
     Text[ turkish ] = "Samples";
@@ -279,7 +279,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ polish ] = "Katalog wy�ej";
             Text[ portuguese_brazilian ] = "Higher";
             Text[ japanese ] = "１つ上のフォルダへ";
-            Text[ korean ] = "한 레벨 위로";
+            Text[ korean ] = "한 수준 위로";
             Text[ chinese_simplified ] = "目录向上一层";
             Text[ chinese_traditional ] = "目錄向上一層";
             Text[ turkish ] = "Higher";
@@ -411,7 +411,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ polish ] = "W�a�ciwo�ci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
             Text[ japanese ] = "ドキュメントのプロパティ";
-            Text[ korean ] = "문서 등록정보";
+            Text[ korean ] = "문서 등록 정보";
             Text[ chinese_simplified ] = "文档属性";
             Text[ chinese_traditional ] = "文件屬性";
             Text[ turkish ] = "Docinfo";
@@ -512,7 +512,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
     Text[ japanese ] = "テンプレートとドキュメント";
-    Text[ korean ] = "스타일과 문서";
+    Text[ korean ] = "서식 파일 및 문서";
     Text[ chinese_simplified ] = "样式和文档";
     Text[ chinese_traditional ] = "樣式和文件";
     Text[ turkish ] = "Templates and Documents";
@@ -754,7 +754,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Modificado por" ; DI_MODIFIEDBY ; > ;
         < "Fecha de impresi�n" ; DI_PRINTDATE ; > ;
         < "Impreso por" ; DI_PRINTBY ; > ;
-        < "Tema" ; DI_THEME ; > ;
+        < "Asunto" ; DI_THEME ; > ;
         < "Tama�o" ; DI_SIZE ; > ;
     };
     ItemList [ finnish ] =
@@ -865,15 +865,15 @@ StringArray STRARY_SVT_DOCINFO
     ItemList [ korean ] =
     {
         < "제목" ; DI_TITLE ; > ;
-        < "(으)로 부터" ; DI_FROM ; > ;
+        < "작성자" ; DI_FROM ; > ;
         < "날짜" ; DI_DATE ; > ;
-        < "키워드들" ; DI_KEYWORDS ; > ;
+        < "키워드" ; DI_KEYWORDS ; > ;
         < "설명" ; DI_DESCRIPTION ; > ;
-        < "내용 유형" ; DI_MIMETYPE ; > ;
-        < "변경 일자" ; DI_MODIFIEDDATE ; > ;
-        < "..에 의해 변경" ; DI_MODIFIEDBY ; > ;
-        < "인쇄일자" ; DI_PRINTDATE ; > ;
-        < "..에 의해 인쇄" ; DI_PRINTBY ; > ;
+        < "유형" ; DI_MIMETYPE ; > ;
+        < "변경 날짜" ; DI_MODIFIEDDATE ; > ;
+        < "변경 날짜" ; DI_MODIFIEDBY ; > ;
+        < "인쇄 날짜" ; DI_PRINTDATE ; > ;
+        < "인쇄 날짜" ; DI_PRINTBY ; > ;
         < "주제" ; DI_THEME ; > ;
         < "크기" ; DI_SIZE ; > ;
     };
@@ -985,7 +985,7 @@ String STR_SVT_NEWDOC_HELP
     Text[ swedish ] = "Klicka h�r f�r att skapa nya dokument.";
     Text[ polish ] = "Click here to create new documents.";
     Text[ japanese ] = "ここをクリックすると、新しいドキュメントが作成できます。";
-    Text[ korean ] = "새 문서를 만들기 위해 여기를 클릭해주십시오.";
+    Text[ korean ] = "새 문서를 만들려면 여기를 클릭해주십시오.";
     Text[ chinese_simplified ] = "在这里您能够建立新的文档。";
     Text[ chinese_traditional ] = "您在此能夠建立新的文件。";
     Text[ turkish ] = "Click here to create new documents.";
@@ -1029,7 +1029,7 @@ String STR_SVT_TEMPLATES_HELP
     Text[ swedish ] = "Inneh�ller mallar f�r att skapa nya dokument";
     Text[ polish ] = "Contains templates for creating new documents";
     Text[ japanese ] = "新しいドキュメントが作成できるテンプレートが含まれています";
-    Text[ korean ] = "새 문서 만들기용 템플릿이 수록되어 있습니다.";
+    Text[ korean ] = "새 문서 만들기용 서식 파일이 수록되어 있습니다.";
     Text[ chinese_simplified ] = "存放用来新增文档的样式文档";
     Text[ chinese_traditional ] = "存放用來新增文件的樣式文件";
     Text[ turkish ] = "Contains templates for creating new documents";
@@ -1051,10 +1051,15 @@ String STR_SVT_SAMPLES_HELP
     Text[ swedish ] = "Inneh�ller exempeldokument f�r brev, rapporter och andra dokument";
     Text[ polish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ japanese ] = "レター、レポート、その他のドキュメントに使えるサンプル文書が含まれています";
-    Text[ korean ] = "편지, 보고서 및 기타 문서용 샘플 문서가 수록되어 있습니다.";
+    Text[ korean ] = "편지, 보고서 및 기타 문서용의 샘플 문서가 수록되어 있습니다.";
     Text[ chinese_simplified ] = "存放一套信件、报表及其他文档的事例文档";
     Text[ chinese_traditional ] = "存放一套信件、報表及其它文件的範例文件";
     Text[ turkish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ arabic ] = "Contains a selection of sample letters, reports and other documents";
 };
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-17 15:04:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,11 @@ public:
     sal_uInt32              GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     void                    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
-    void                    Initialize( const String& rURL, const String& rFilter );
-    void                    Initialize( const String& rURL,
+    sal_Bool                Initialize( const String& rURL, const String& rFilter );
+    sal_Bool                Initialize( const String& rURL,
                                         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
-    void                    ExecuteFilter( const String& rFilter );
+    sal_Bool                ExecuteFilter( const String& rFilter );
     void                    SetNoSelection();
     void                    ResetCursor();
 
