@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:34:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ Resource RSC_CHARSETS
     {
         Text = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
         Text [ english ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
-        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
+        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
 
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
         Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
@@ -157,8 +157,8 @@ String STR_GENERAL_SDB_ERROR
     Text[ spanish ] = "Error durante la conexión con la fuente de datos";
     Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
     Text[ danish ] = "Fejl under forbindelsen med datakilden";
-    Text[ swedish ] = "Fel under föbindelsen med datakällan";
-    Text[ polish ] = "B³¹d w ³¹czeniu ze Ÿród³em danych";
+    Text[ swedish ] = "Fel under förbindelsen med datakällan";
+    Text[ polish ] = "B³¹d w ³¹czeniu ze ?ród³em danych";
     Text[ portuguese_brazilian ] = "Error while connecting to the data source";
     Text[ japanese ] = "ÃŞ°À¿°½‚ÖÚ‘±‚Ì´×°";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º¿¡ ¿¬°á½Ã¿¡ ¿À·ù";
@@ -252,7 +252,26 @@ String STR_MISSING_TABLES_XDROP
 {
     Text = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
     Text [ english ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text [ english_us ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
+    Text[ portuguese ] = "A tabela não tem suporte na ligação da base de dados e por isso impossível de eliminar.";
+    Text[ russian ] = "Óäàëèòü òàáëèöó íåâîçìîæíî, ïîñêîëüêó ñîåäèåíåíèå áàçû äàííûõ ıòîãî íå ïîääåğæèâàåò.";
+    Text[ greek ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ dutch ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportée par la connexion de BD.";
+    Text[ spanish ] = "No se puede eliminar la tabla porque la conexión con la base de datos no apoya esta acción.";
+    Text[ finnish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ italian ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ danish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
+    Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
+    Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ÍÃŞ°ÀÍŞ°½‚ÌÚ‘±‚ª‚±‚ê‚ğx‰‡‚µ‚È‚¢‚½‚ßíœ‚Å‚«‚Ü‚¹‚ñB";
+    Text[ korean ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ chinese_simplified ] = "ÒòÎªÊı¾İ¿âµÄÁ¬½Ó²»Ö§³ÖÕâ¸ö¹¦ÄÜ¶øÎŞ·¨É¾³ıÕâ¸ö±í¸ñ¡£";
+    Text[ chinese_traditional ] = "¦]¬°¸ê®Æ®w³s½u¤£¤ä´©³o­Ó°Ê§@¦ÓµLªk§R°£³o­Óªí®æ¡C";
+    Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ catalan ] = "The table can't be dropped, 'cause the database connection does not support this.";
 };
 
 String STR_BUTTON_TEXT_ALL
@@ -262,11 +281,33 @@ String STR_BUTTON_TEXT_ALL
     Text [ english_us ] = "~All";
 
     Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
+    Text[ portuguese ] = "~Tudo";
+    Text[ russian ] = "~Âñå";
+    Text[ greek ] = "~All";
+    Text[ dutch ] = "~All";
+    Text[ french ] = "~Tout";
+    Text[ spanish ] = "~Todos";
+    Text[ finnish ] = "~All";
+    Text[ italian ] = "~All";
+    Text[ danish ] = "~All";
+    Text[ swedish ] = "~Alla";
+    Text[ polish ] = "~Wszystkie";
+    Text[ portuguese_brazilian ] = "~All";
+    Text[ japanese ] = "‚·‚×‚Ä(~A)";
+    Text[ korean ] = "~All";
+    Text[ chinese_simplified ] = "È«²¿";
+    Text[ chinese_traditional ] = "¥ş³¡";
+    Text[ turkish ] = "~All";
+    Text[ arabic ] = "~All";
+    Text[ catalan ] = "~All";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/05/12 06:34:09  kz
+ *  Merge SRC631: 12.05.01 - 08:34:37 (NoBranch)
+ *
  *  Revision 1.20  2001/05/10 12:20:04  fs
  *  #86223# new strings
  *
