@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:08:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,9 @@ public:
                            const BYTE* pLevel = 0 ) const;
     BYTE DirType( const xub_StrLen nPos ) const;
 
+#if OSL_DEBUG_LEVEL > 1
     BYTE CompType( const xub_StrLen nPos ) const;
+#endif
 
     //
     // HIDDEN TEXT STUFF START
