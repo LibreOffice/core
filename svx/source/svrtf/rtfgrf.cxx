@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2000-09-25 18:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,8 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
         else
             *(pData) = ( nVal << 4 ) & 0xf0;
     }
-    return bValidData ? nLen / 4  : STRING_NOTFOUND;
+    // the len div 2, because 2 character are one byte
+    return bValidData ? nLen / 2  : STRING_NOTFOUND;
 }
 
 BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
