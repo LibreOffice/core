@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 08:38:34 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 10:57:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ CDEFS += -DSW_DLLIMPLEMENTATION
 # set default symbol visibility / scope to hidden
 .IF "$(COMNAME)" == "gcc3"
 .IF "$(CCNUMVER)" >= "000300040000"
-#CFLAGS += -fvisibility=hidden
+CFLAGS += -fvisibility=hidden
 .ENDIF # 3.4.0
 .ENDIF # gcc3
 
