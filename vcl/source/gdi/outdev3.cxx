@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-20 09:39:15 $
+ *  last change: $Author: hdu $ $Date: 2001-11-20 10:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8580,7 +8580,7 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
         return nIndex;
 
     const sal_Unicode* pStr = rStr.GetBuffer();
-    for(; nIndex < nEnd; ++pStr, ++nIndex )
+    for( pStr += nIndex; nIndex < nEnd; ++pStr, ++nIndex )
         if( ! aFontCharMap.HasChar( *pStr ) )
             break;
 
