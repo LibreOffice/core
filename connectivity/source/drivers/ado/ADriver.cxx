@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
+    if ( !acceptsURL(url) )
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
 }
