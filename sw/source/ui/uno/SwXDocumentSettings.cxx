@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:11:38 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,10 @@ enum SwDocumentSettingsPropertyHandles
     // FME 2004-04-22 #108724#, #i13832#, #i24135#
     HANDLE_USE_FORMER_TEXT_WRAPPING,
     // #i20158#: OASIS file format
-    HANDLE_CHANGES_PASSWORD
+    HANDLE_CHANGES_PASSWORD,
+    // --> OD 2004-07-08 #i28701#
+    HANDLE_CONSIDER_WRAP_ON_OBJPOS
+    // <--
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -223,6 +226,10 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // FME 2004-04-22 #108724#, #i13832#, #i24135#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),      HANDLE_CHANGES_PASSWORD,        CPPUTYPE_SEQINT8,           0,   0},
+        // --> OD 2004-07-08 #i28701#
+        { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,
+     0,   0},
+        // <--
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -606,6 +613,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetUseFormerTextWrapping( bTmp );
         }
         break;
+        // --> OD 2004-07-08 #i28701#
+        case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetConsiderWrapOnObjPos( bTmp );
+        }
+        break;
+        // <--
         case HANDLE_CHANGES_PASSWORD:
         {
             Sequence <sal_Int8> aNew;
@@ -840,11 +855,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        case HANDLE_CHANGES_PASSWORD:
+        // --> OD 2004-07-08 #i28701#
+        case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
         {
-            rValue <<= mpDoc->GetRedlinePasswd();
+            sal_Bool bTmp = mpDoc->ConsiderWrapOnObjPos();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
+        // <--
         default:
             throw UnknownPropertyException();
     }
