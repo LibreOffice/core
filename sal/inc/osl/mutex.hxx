@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 08:29:56 $
+ *  last change: $Author: pl $ $Date: 2001-06-22 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,9 +182,35 @@ namespace osl
         }
     };
 
+    template< class T >
+    class ResettableGuard : public ClearableGuard< T >
+    {
+    protected:
+        T* pResetT;
+    public:
+        ResettableGuard( T* pT ) :
+                ClearableGuard( pT ),
+                pResetT( pT )
+        {}
+
+        ResettableGuard( T& rT ) :
+                ClearableGuard( rT ),
+                pResetT( &rT )
+        {}
+
+        void reset()
+        {
+            if( pResetT )
+            {
+                pT = pResetT;
+                pT->acquire();
+            }
+        }
+    };
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
-
+    typedef ResettableGuard< Mutex > ResettableMutexGuard;
 }
 
 #endif  /* __cplusplus */
