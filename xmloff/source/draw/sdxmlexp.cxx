@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
+ *  last change: $Author: aw $ $Date: 2000-12-13 11:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3174,15 +3174,22 @@ void SdXMLExport::ImpPrepareExport3DScene(SvXMLExport& rExp,
         // shadeMode
         aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
         drawing::ShadeMode xShadeMode;
-        aAny >>= xShadeMode;
-        if(xShadeMode == drawing::ShadeMode_FLAT)
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
-        else if(xShadeMode == drawing::ShadeMode_PHONG)
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
-        else if(xShadeMode == drawing::ShadeMode_SMOOTH)
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+        if(aAny >>= xShadeMode)
+        {
+            if(xShadeMode == drawing::ShadeMode_FLAT)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
+            else if(xShadeMode == drawing::ShadeMode_PHONG)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
+            else if(xShadeMode == drawing::ShadeMode_SMOOTH)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+            else
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
+        }
         else
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
+        {
+            // ShadeMode enum not there, write default
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+        }
         rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
 
         // ambientColor
