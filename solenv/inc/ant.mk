@@ -1,11 +1,21 @@
 
+# --- Force JDK14 switch  ------------------------------------------
+
+.IF "$(USE_JDK_VERSION)" == "140"
+JDK_VERSION=140
+JAVA_HOME=$(JDK14PATH)
+BAR=FOO
+PATH!:=$(JDK14PATH)$/bin$(PATH_SEPERATOR)$(PATH)
+XCLASSPATH:=$(JDK14PATH)$/jre/lib/rt.jar
+CLASSPATH:=$(XCLASSPATH)
+.ENDIF
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
 
-
 .IF "$(J2EE_HOME)"==""
-J2EE_HOME=$(SOLARROOT)$/j2sdkee1.2
+J2EE_HOME=$(SOLARROOT)$/j2sdkee1.3
 .ENDIF
 
 # --- ANT build environment  ---------------------------------------
@@ -29,6 +39,7 @@ ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
 .ENDIF
 
 ANT=java -Xmx128m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
+#ANT=java -version
 
 .IF "$(ANT_BUILDFILE)"==""
 ANT_BUILDFILE=build.xml
@@ -60,6 +71,7 @@ ANT_FLAGS!:=-f $(ANT_BUILDFILE) -Dwdk.build=$(wdkbuild) $(ANT_FLAGS) -emacs -v
 
 CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
 .EXPORT : CLASSPATH
+.EXPORT : PATH
 
 # --- TARGETS -----------------------------------------------------
 
@@ -104,7 +116,7 @@ jar .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(ANT) $(ANTFLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
     $(ANT) $(ANT_FLAGS) $@
