@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:26:48 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,12 @@ Menu RID_MENU_SPELL
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
             Text[ italian ] = "Controllo ~ortografico";
             Text[ danish ] = "~Stavekontrol";
-            Text[ swedish ] = "~Rättstavning";
+            Text[ swedish ] = "~Rättstavning...";
             Text[ polish ] = "~Pisownia";
             Text[ portuguese_brazilian ] = "~Rechtschreibung";
             Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)";
             Text[ korean ] = "ë§ì¶¤ë²•(~S)";
-            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)";
+            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
             Text[ turkish ] = "~Yazım kılavuzu";
             Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
@@ -478,12 +478,12 @@ String RID_STR_WORD
     Text[ finnish ] = "Word is %x";
     Text[ italian ] = "Word is %x";
     Text[ danish ] = "Word is %x";
-    Text[ swedish ] = "Word is %x";
+    Text[ swedish ] = "Ordet är %x";
     Text[ polish ] = "Word is %x";
     Text[ portuguese_brazilian ] = "Word is %x";
     Text[ japanese ] = "Word is %x";
     Text[ korean ] = "Word is %x";
-    Text[ chinese_simplified ] = "Word is %x";
+    Text[ chinese_simplified ] = "å•è¯æ˜¯ %x";
     Text[ chinese_traditional ] = "å­—æ˜¯ %x";
     Text[ turkish ] = "Word is %x";
     Text[ arabic ] = "Word is %x";
@@ -505,12 +505,12 @@ String RID_STR_PARAGRAPH
     Text[ finnish ] = "Paragraph is %x";
     Text[ italian ] = "Paragraph is %x";
     Text[ danish ] = "Paragraph is %x";
-    Text[ swedish ] = "Paragraph is %x";
+    Text[ swedish ] = "Stycket är %x";
     Text[ polish ] = "Paragraph is %x";
     Text[ portuguese_brazilian ] = "Paragraph is %x";
     Text[ japanese ] = "Paragraph is %x";
     Text[ korean ] = "Paragraph is %x";
-    Text[ chinese_simplified ] = "Paragraph is %x";
+    Text[ chinese_simplified ] = "æ®µè½æ˜¯ %x";
     Text[ chinese_traditional ] = "æ®µè½æ˜¯ %x";
     Text[ turkish ] = "Paragraph is %x";
     Text[ arabic ] = "Paragraph is %x";
