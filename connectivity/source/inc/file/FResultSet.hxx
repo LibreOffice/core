@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
+ *  last change: $Author: oj $ $Date: 2000-10-04 13:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             void GetAssignValues();
 
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
+            sal_Bool moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
         protected:
 
             using OResultSet_BASE::rBHelper;

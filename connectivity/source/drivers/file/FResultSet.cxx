@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 16:02:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-04 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,6 +1351,7 @@ Error:
 //------------------------------------------------------------------
 BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
     OSL_ENSHURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
 
     OFileTable::FilePosition eDelPosition = eCursorPosition;
@@ -1374,48 +1375,44 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
             break;
     }
 
-    sal_Bool bCheck = sal_True;
-    // Relatve Bewegung wird in Next oder Prior umgesetzt
-    sal_Int32 nNewOffset = nOffset;
+    sal_Int32 nNewOffset    = nOffset;
 
     if (eCursorPosition == OFileTable::FILE_ABSOLUTE)
     {
-        bCheck = sal_False;
-        ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
-        for(;aIter != m_aBookmarkToPos.end();++aIter)
+        return moveAbsolute(nOffset,bRetrieveData);
+    }
+    else if (eCursorPosition == OFileTable::FILE_LAST)
+    {
+        sal_Int32 nCurPos = 1;
+        // first position on the last known row
+        if(m_aBookmarkToPos.empty())
         {
-            if(aIter->second == nOffset)
-            {
-                nNewOffset = aIter->first+1;
-                break;
-            }
-        }
-
-        if(aIter == m_aBookmarkToPos.end())
-        {
-            sal_Int32 nCurPos = 1;
-            --nNewOffset;
             bDataFound = Move(OFileTable::FILE_FIRST, 1, bRetrieveData);
-            if(bDataFound && !m_aRow->isDeleted())
-            {
-                m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
-                --nNewOffset;
-            }
-            while (bDataFound && nNewOffset)            // solange iterieren bis man auf einem gültigen Satz ist
-            {
-                bDataFound = Move(eDelPosition, 1, bRetrieveData);
-                if(bDataFound && !m_aRow->isDeleted())
-                {
-                    m_aBookmarkToPos[(*m_aRow)[0]] = ++nCurPos;
-                    --nNewOffset;
-                }
-            }
         }
         else
         {
-            bDataFound = Move(eCursorPosition, nNewOffset, bRetrieveData);
-            bDone = bDataFound && !m_aRow->isDeleted();
+            bDataFound = Move(OFileTable::FILE_BOOKMARK, m_aBookmarkToPos.rbegin()->first, bRetrieveData);
+            OSL_ENSHURE(!m_aRow->isDeleted(),"A bookmark should not be deleted!");
+            nCurPos    = m_aBookmarkToPos.rbegin()->second;
         }
+
+        // and than move forward until we are after the last row
+        while(bDataFound)
+        {
+            bDataFound = Move(OFileTable::FILE_NEXT, 1, bRetrieveData);
+            if(bDataFound && !m_aRow->isDeleted())
+            {
+                ++nCurPos;
+                m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+            }
+            else if(!bDataFound)
+            {
+                // i already know the last bookmark :-)
+                bDataFound = Move(OFileTable::FILE_BOOKMARK, m_aBookmarkToPos.rbegin()->first, bRetrieveData);
+                break;
+            }
+        }
+        return bDataFound;
     }
     else if (eCursorPosition != OFileTable::FILE_RELATIVE)
     {
@@ -1430,23 +1427,87 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         else
             bDone = FALSE;
     }
-    if(bCheck)
-    {
-        sal_Int32 nRowPos = m_nRowPos;
+    sal_Int32 nRowPos = m_nRowPos;
 
-        while (bDataFound && !bDone)            // solange iterieren bis man auf einem gültigen Satz ist
+    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gültigen Satz ist
+    {
+        bDataFound = Move(eDelPosition, 1, bRetrieveData);
+        if (eCursorPosition != OFileTable::FILE_RELATIVE)
+            bDone = bDataFound && !m_aRow->isDeleted();
+        else if (bDataFound && !m_aRow->isDeleted())
+            bDone = (--nDelOffset) == 0;
+        else
+            bDone = FALSE;
+    }
+
+    if(bDataFound && bDone && m_aBookmarkToPos.find((*m_aRow)[0]) == m_aBookmarkToPos.end())
+        m_aBookmarkToPos[(*m_aRow)[0]] = (nRowPos +1);
+
+    return bDataFound;
+}
+// -------------------------------------------------------------------------
+sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
+{
+    sal_Bool bDataFound = sal_False;
+    sal_Int32 nNewOffset = _nOffset;
+    // first search if we already know the bookmark
+    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
+    for(;aIter != m_aBookmarkToPos.end();++aIter)
+    {
+        if(aIter->second == _nOffset)
         {
-            bDataFound = Move(eDelPosition, 1, bRetrieveData);
-            if (eCursorPosition != OFileTable::FILE_RELATIVE)
-                bDone = bDataFound && !m_aRow->isDeleted();
-            else if (bDataFound && !m_aRow->isDeleted())
-                bDone = (--nDelOffset) == 0;
-            else
-                bDone = FALSE;
+            nNewOffset = aIter->first;
+            break;
+        }
+    }
+
+    if(aIter == m_aBookmarkToPos.end())
+    {
+        // bookmark isn't in the map yet
+        // start at the last position in the map
+        sal_Int32 nCurPos = 0,nLastBookmark = 1;
+        OFileTable::FilePosition eFilePos = OFileTable::FILE_FIRST;
+        if(m_aBookmarkToPos.size() > 1)
+        {
+            eFilePos  = OFileTable::FILE_BOOKMARK;
+            for(aIter = m_aBookmarkToPos.begin();aIter != m_aBookmarkToPos.end();++aIter)
+            {
+                if(aIter->second > _nOffset)
+                {
+                    --aIter;
+                    break;
+                }
+            }
+            if(aIter == m_aBookmarkToPos.end())
+                --aIter;
+            nLastBookmark   = aIter->first;
+            nCurPos         = aIter->second - 1;
+            nNewOffset      = nNewOffset - nCurPos;
         }
 
-        if(bDataFound)
-            m_aBookmarkToPos[(*m_aRow)[0]] = (nRowPos +1);
+        bDataFound = Move(eFilePos, nLastBookmark, _bRetrieveData);
+        if(bDataFound && !m_aRow->isDeleted())
+        {
+            ++nCurPos;
+            m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+            --nNewOffset;
+        }
+        // now move to that row we need and don't count deleted rows
+        while (bDataFound && nNewOffset)
+        {
+            bDataFound = Move(OFileTable::FILE_NEXT, 1, _bRetrieveData);
+            if(bDataFound && !m_aRow->isDeleted())
+            {
+                ++nCurPos;
+                m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+                --nNewOffset;
+            }
+        }
+    }
+    else
+    {
+        bDataFound = Move(OFileTable::FILE_BOOKMARK, nNewOffset, _bRetrieveData);
+        OSL_ENSHURE(!m_aRow->isDeleted(),"moveAbsolute row can't be deleted!");
     }
     return bDataFound;
 }
