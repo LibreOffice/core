@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_pp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:11:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@ Context_Preprocessor::Context_Preprocessor( TkpContext & i_rFollowUpContext )
 void
 Context_Preprocessor::ReadCharChain( CharacterSource &  io_rText )
 {
-    int o_rCount_BackslashedLineBreaks = 0;
-
     jumpOverWhite( io_rText );
     jumpToWhite( io_rText );
     const char * sPP_Keyword = io_rText.CutToken();
@@ -148,23 +146,6 @@ Context_Preprocessor::ReadDefine( CharacterSource & io_rText )
     }
 }
 
-
-#if 0   // Version Autodoc before 2.0
-void
-Context_Preprocessor::ReadCharChain( CharacterSource &  io_rText )
-{
-    int o_rCount_BackslashedLineBreaks = 0;
-    jumpToEol(io_rText,o_rCount_BackslashedLineBreaks);
-    for ( ; o_rCount_BackslashedLineBreaks > 0; --o_rCount_BackslashedLineBreaks )
-        Dealer().Deal_Eol();
-
-    if (io_rText.CurChar() != NULCH)
-        jumpOverEol(io_rText);
-    io_rText.CutToken();
-    Dealer().Deal_Eol();
-    SetNewToken(0);
-}
-#endif
 
 Context_PP_MacroParams::Context_PP_MacroParams( Cx_Base & i_rFollowUpContext )
     :   Cx_Base(&i_rFollowUpContext),
