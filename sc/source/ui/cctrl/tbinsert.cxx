@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:15:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/imagemgr.hxx>
+#include <vcl/toolbox.hxx>
 
 #include "tbinsert.hxx"
 #include "tbinsert.hrc"
