@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 12:57:32 $
+ *  last change: $Author: hdu $ $Date: 2002-02-26 15:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
 #endif
 
 // -----------
@@ -348,7 +351,19 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
             MetaTextAction* pA = (MetaTextAction*) mpAct;
             const Point     aPt( pOut->LogicToPixel( pA->GetPoint() ) );
             const XubString aString( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+#ifdef ENABLE_CTL
+            SalLayout* pSalLayout = pOut->ImplLayout( aString, 0, aString.Len(), aPt );
+            if( pSalLayout )
+            {
+                Rectangle aBoundRect( pOut->ImplGetTextBoundRect( *pSalLayout ) );
+                mpRect = new Rectangle( pOut->PixelToLogic( aBoundRect ) );
+                pSalLayout->Release();
+            }
+            else
+                mpRect = new Rectangle();
+#else // ENABLE_CTL
             mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPt.X(), aPt.Y(), aString.GetBuffer(), aString.Len(), NULL ) ) );
+#endif // ENABLE_CTL
         }
         break;
 
@@ -373,7 +388,19 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
                     }
                 }
 
+#ifdef ENABLE_CTL
+                SalLayout* pSalLayout = pOut->ImplLayout( aString, 0, aString.Len(), aPtPix, 0, pPixDX );
+                if( pSalLayout )
+                {
+                    Rectangle aBoundRect( pOut->ImplGetTextBoundRect( *pSalLayout ) );
+                    mpRect = new Rectangle( pOut->PixelToLogic( aBoundRect ) );
+                    pSalLayout->Release();
+                }
+                else
+                    mpRect = new Rectangle();
+#else // ENABLE_CTL
                 mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPtPix.X(), aPtPix.Y(), aString.GetBuffer(), aString.Len(), pPixDX ) ) );
+#endif // ENABLE_CTL
                 delete[] pPixDX;
             }
         }
