@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-05 23:31:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 16:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@ static const sal_Int16 NumberChar_bo        = 24;
 static const sal_Int16 NumberChar_my        = 25;
 static const sal_Int16 NumberChar_km        = 26;
 static const sal_Int16 NumberChar_mn        = 27;
-static const sal_Int16 NumberChar_Count     = 28;
+static const sal_Int16 NumberChar_he        = 28;
+static const sal_Int16 NumberChar_Count     = 29;
 
 static sal_Unicode NumberChar[][10] = {
 //  0   1   2   3   4   5   6   7   8   9
@@ -102,6 +103,7 @@ static sal_Unicode NumberChar[][10] = {
     { 0x1040, 0x1041, 0x1042, 0x1043, 0x1044, 0x1045, 0x1046, 0x1047, 0x1048, 0x1049 }, // Myammar
     { 0x17E0, 0x17E1, 0x17E2, 0x17E3, 0x17E4, 0x17E5, 0x17E6, 0x17E7, 0x17E8, 0x17E9 }, // Cambodian (Khmer)
     { 0x1810, 0x1811, 0x1812, 0x1813, 0x1814, 0x1815, 0x1816, 0x1817, 0x1818, 0x1819 }, // Mongolian
+    { 0x0020, 0x05D0, 0x05D1, 0x05D2, 0x05D3, 0x05D4, 0x05D5, 0x05D6, 0x05D7, 0x05D8 }, // Hebrew
 };
 
 static sal_Unicode DecimalChar[] = {
@@ -133,6 +135,7 @@ static sal_Unicode DecimalChar[] = {
     0x002E, // Myammar
     0x002E, // Cambodian (Khmer)
     0x002E, // Mongolian
+    0x002E, // Hebrew
 };
 
 static sal_Unicode MinusChar[] = {
@@ -164,6 +167,7 @@ static sal_Unicode MinusChar[] = {
     0x002D, // Myammar
     0x002D, // Cambodian (Khmer)
     0x002D, // Mongolian
+    0x002D, // Hebrew
 };
 
 static sal_uInt16 SeparatorChar[] = {
@@ -195,6 +199,7 @@ static sal_uInt16 SeparatorChar[] = {
     0x002C, // Myammar
     0x002C, // Cambodian (Khmer)
     0x002C, // Mongolian
+    0x002C, // Hebrew
 };
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
