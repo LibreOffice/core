@@ -13,6 +13,7 @@ OpenOffice
 			FILEFORMATVERSION 1.0
 			PACKAGEVERSION 1.9.{milestone}
 			PACKAGEREVISION 1
+			LICENSENAME LGPL, SISSL
 	    }
 				active			1
 				compression		5
