@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:00:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,10 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                 const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
                 // look for intro bit map; if present, hide it
                 if( pFrame->nStyle_ & SAL_FRAME_STYLE_INTRO )
-                    const_cast<X11SalFrame*>(pFrame)->Show( FALSE );
+                {
+                    if( pFrame->bMapped_ )
+                        const_cast<X11SalFrame*>(pFrame)->Show( FALSE );
+                }
             }
         }
 
@@ -2753,11 +2756,18 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
     // try to figure out the vcl code for the keysym
     nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
+
     // try to figure out a printable if XmbLookupString returns only a keysym
     // and NOT a printable. Do not store it in pPrintable[0] since it is expected to
     // be in system encoding, not unicode.
+    // #i8988##, if KeySym and printable look equally promising then prefer KeySym
+    // the printable is bound to the encoding so the KeySym might contain more
+    // information (in et_EE locale: "Compose + Z + <" delivers "," in printable and
+    // (the desired) Zcaron in KeySym
+
     sal_Unicode nKeyString = 0x0;
-    if (nLen == 0)
+    if (   (nLen == 0)
+        || ((nLen == 1) && (nKeySym > 0)) )
         nKeyString = KeysymToUnicode (nKeySym);
     // if we have nothing we give up
     if( !nKeyCode && !nLen && !nKeyString)
@@ -2776,6 +2786,13 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     sal_Size     nSize;
     pBuffer = (sal_Unicode*) malloc( nBufferSize + 2 );
     pBuffer[ 0 ] = 0;
+
+    if (nKeyString != 0)
+    {
+        pString = &nKeyString;
+        nSize = 1;
+    }
+    else
     if (nLen > 0 && nEncoding != RTL_TEXTENCODING_UNICODE)
     {
         // create text converter
@@ -2809,10 +2826,9 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
           nSize = nLen;
     }
     else
-    /* if (nKeyString != 0) */
     {
-        pString = &nKeyString;
-        nSize = 1;
+        pString = pBuffer;
+        nSize   = 0;
     }
 
     DeletionListener aDeleteWatch( this );
