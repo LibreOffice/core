@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-23 08:01:52 $
+ *  last change: $Author: hdu $ $Date: 2002-09-25 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.14 2002-09-23 08:01:52 hdu Exp $
+/* $Id: sft.c,v 1.15 2002-09-25 09:23:12 hdu Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -431,49 +431,6 @@ _inline const char *UnicodeRangeName(sal_uInt16 bit)
 
   return ulcodes[bit];
 }
-
-
-#if 0
-/* It would have been nice if it worked, but I found so many fonts that don't
- * follow the TrueType spec (sorted table directory) that I have to re-write this
- * stuff.
- */
-
-static sal_uInt8 *getTDEntry(TrueTypeFont *ttf, sal_uInt32 tag) /*FOLD01*/
-{
-    int l = 0, r = ttf->ntables-1, i;
-    sal_uInt32 t;
-
-    do {
-        i = (l + r) >> 1;
-        t = GetUInt32(ttf->ptr + 12, i << 4, 1);
-        if (tag >= t) l = i + 1;
-        if (tag <= t) r = i - 1;
-    } while (l <= r);
-
-    if (l - r == 2) {
-        return ttf->ptr + 12 + 16 * (l - 1);
-    }
-    return 0;
-}
-
-static sal_uInt8 *getTable(TrueTypeFont *ttf, sal_uInt32 tag) /*FOLD01*/
-{
-    sal_uInt8 *ptr = getTDEntry(ttf, tag);
-    if (!ptr) return 0;
-
-    return ttf->ptr + GetUInt32(ptr, 8, 1);
-}
-
-static sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 tag) /*FOLD01*/
-{
-    sal_uInt8 *ptr = getTDEntry(ttf, tag);
-    if (!ptr) return 0;
-
-    return GetUInt32(ptr, 12, 1);
-}
-
-#endif
 
 _inline sal_uInt8 *getTable(TrueTypeFont *ttf, sal_uInt32 ord)
 {
@@ -1706,10 +1663,11 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
             return SF_TTFORMAT;
         for( p = pHead + 12; p > t->ptr; --p ) {
             if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 ) {
-                int nDelta = p - (pHead + 12), j;
-                for( j=0; j<NUM_TAGS; ++j )
-                    if( t->tables[j] )
-                        *(char*)&t->tables[j] += nDelta;
+                int nDelta = (pHead + 12) - p, j;
+                if( nDelta )
+                    for( j=0; j<NUM_TAGS; ++j )
+                        if( t->tables[j] )
+                            *(char**)&t->tables[j] -= nDelta;
                 break;
             }
         }
