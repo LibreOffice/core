@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:34:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,7 +893,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
                     m_eStatus = GRS_INVALID;
             }
         }
-        if (IsValid())
+        if (!m_bIsNew && IsValid())
             m_aBookmark = pCur->getBookmark();
         else
             m_aBookmark = ::com::sun::star::uno::Any();
@@ -936,7 +936,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
                 m_bIsNew = sal_False;
         }
 
-        if (IsValid())
+        if (!m_bIsNew && IsValid())
             m_aBookmark = pCur->getBookmark();
         else
             m_aBookmark = ::com::sun::star::uno::Any();
