@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,11 @@ public:
 
         PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
     };
+private:
 
-    static ::std::list< PPDParser* >            aAllParsers;
+    static ::std::list< PPDParser* >           aAllParsers;
+    static ::std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >*
+                                                pAllPPDFiles;
 
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
@@ -213,6 +216,10 @@ public:
     void parseOpenUI( const String& rLine );
     void parseConstraint( const String& rLine );
     void parse( ::std::list< String >& rLines );
+
+    static void scanPPDDir( const String& rDir );
+    static void initPPDFiles();
+    static String getPPDFile( const String& rFile );
 public:
     static const PPDParser* getParser( String aFile );
     static String getPPDPrinterName( const String& rFile );
