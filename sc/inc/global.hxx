@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:41:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ inline BOOL ValidColRowTab(USHORT nCol, USHORT nRow, USHORT nTab)
 #define SC_SCENARIO_TWOWAY      8
 #define SC_SCENARIO_ATTRIB      16
 #define SC_SCENARIO_VALUE       32
+#define SC_SCENARIO_PROTECT     64
 
 
 #ifndef DELETEZ
