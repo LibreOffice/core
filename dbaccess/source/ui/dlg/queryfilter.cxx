@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:13:51 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,9 +429,9 @@ void DlgFilterCrit::GetFilterList() const
         if(aFilter.getLength())
         {
             if(aLB_WHERECOND2.GetSelectEntryPos())
-                aFilter += ::rtl::OUString::createFromAscii(" AND ");
-            else
                 aFilter += ::rtl::OUString::createFromAscii(" OR ");
+            else
+                aFilter += ::rtl::OUString::createFromAscii(" AND ");
         }
         aFilter += getCondition(aLB_WHEREFIELD2,aLB_WHERECOMP2,aET_WHEREVALUE2);
     }
@@ -441,55 +441,16 @@ void DlgFilterCrit::GetFilterList() const
         if(aFilter.getLength())
         {
             if(aLB_WHERECOND3.GetSelectEntryPos())
-                aFilter += ::rtl::OUString::createFromAscii(" AND ");
-            else
                 aFilter += ::rtl::OUString::createFromAscii(" OR ");
+            else
+                aFilter += ::rtl::OUString::createFromAscii(" AND ");
         }
         aFilter += getCondition(aLB_WHEREFIELD3,aLB_WHERECOMP3,aET_WHEREVALUE3);
     }
-    // now set the filter in the querycomposer
-//  ::rtl::OUString aOldFilter = m_xQueryComposer->getFilter();
-//  if(aOldFilter.getLength())
-//  {
-//      aOldFilter += ::rtl::OUString::createFromAscii(" AND ");
-//      aOldFilter += aFilter;
-//      aFilter = aOldFilter;
-//  }
     m_xQueryComposer->setFilter(aFilter);
 }
 
 //------------------------------------------------------------------------------
-//void DlgFilterCrit::SetFilterList( const FilterPredicateItemList* pItemList )
-//{
-//  for (sal_uInt16 i=0; i<pItemList->Count(); ++i)
-//  {
-//      FilterPredicateItem* pCritItem = pItemList->GetObject(i);
-//      SetLine(i, pCritItem);
-//  }
-//
-//  // die nicht gesetzten auf 'kein' '=' ''
-//  sal_uInt16 nItemsSet = pItemList ? min((sal_Int32)pItemList->Count(), 3L) : 0;
-//  if (nItemsSet<3)
-//  {
-//      aLB_WHEREFIELD3.SelectEntryPos(0);
-//      aLB_WHERECOMP3.SelectEntryPos(0);
-//      aET_WHEREVALUE3.SetText(String());
-//  }
-//  if (nItemsSet<2)
-//  {
-//      aLB_WHEREFIELD2.SelectEntryPos(0);
-//      aLB_WHERECOMP2.SelectEntryPos(0);
-//      aET_WHEREVALUE2.SetText(String());
-//  }
-//  if (nItemsSet<1)
-//  {
-//      aLB_WHEREFIELD1.SelectEntryPos(0);
-//      aLB_WHERECOMP1.SelectEntryPos(0);
-//      aET_WHEREVALUE1.SetText(String());
-//  }
-//  EnableLines();
-//}
-
 //------------------------------------------------------------------------------
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
 {
