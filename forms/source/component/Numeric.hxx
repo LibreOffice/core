@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:59:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ protected:
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
 
-    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
 protected:
     DECLARE_XCLONEABLE();
