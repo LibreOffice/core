@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-20 13:07:15 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 14:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 
 /////////////////////////////////////////////////////////////////
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxBoolItem /*SfxUInt16Item*/ );
+SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
 SvxClipBoardControl::SvxClipBoardControl(
