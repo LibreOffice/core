@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:21:41 $
+ *  last change: $Author: pl $ $Date: 2002-07-10 15:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #ifndef IMAGE_STDBTN_COLOR
 #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 #endif
+#define IMAGE_MAGENTA_MASK Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 
 ModalDialog DLG_SVT_PRNDLG_PRINTDLG
 {
@@ -608,22 +609,12 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 132 , 118 ) ;
         Size = MAP_APPFONT ( 67 , 22 ) ;
-        Fixed = Image
-        {
-            ImageBitmap = Bitmap { File = "collate.bmp" ; };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-        };
         Hide = TRUE ;
     };
     FixedImage IMG_NOT_COLLATE
     {
         Pos = MAP_APPFONT ( 132 , 118 ) ;
         Size = MAP_APPFONT ( 67 , 22 ) ;
-        Fixed = Image
-        {
-            ImageBitmap = Bitmap { File = "ncollate.bmp" ; };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-        };
         Hide = TRUE ;
     };
     PushButton BTN_OPTIONS
@@ -710,6 +701,30 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
+};
+
+Image RID_IMG_PRNDLG_COLLATE
+{
+    ImageBitmap = Bitmap { File = "collate.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+Image RID_IMG_PRNDLG_NOCOLLATE
+{
+    ImageBitmap = Bitmap { File = "ncollate.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+Image RID_IMG_PRNDLG_COLLATE_HC
+{
+    ImageBitmap = Bitmap { File = "collate_h.bmp" ; };
+    MaskColor = IMAGE_MAGENTA_MASK ;
+};
+
+Image RID_IMG_PRNDLG_NOCOLLATE_HC
+{
+    ImageBitmap = Bitmap { File = "ncollate_h.bmp" ; };
+    MaskColor = IMAGE_MAGENTA_MASK ;
 };
 
 

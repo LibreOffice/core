@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2002-07-09 09:49:40 $
+ *  last change: $Author: pl $ $Date: 2002-07-10 15:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maEdtFaxNo.SetModifyHdl( aLink );
 
     maRbtAll.Check();
+    ImplSetImages();
 }
 
 // -----------------------------------------------------------------------
@@ -206,6 +207,22 @@ PrintDialog::~PrintDialog()
 {
     ImplFreePrnDlgListBox( &maLbName, FALSE );
     delete mpPrinterImpl;
+}
+
+// -----------------------------------------------------------------------
+
+void PrintDialog::ImplSetImages()
+{
+    if( ! GetSettings().GetStyleSettings().GetDialogColor().IsDark() )
+    {
+        maImgCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_COLLATE ) ), BMP_COLOR_NORMAL );
+        maImgNotCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_NOCOLLATE ) ), BMP_COLOR_NORMAL );
+    }
+    else
+    {
+        maImgCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_COLLATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+        maImgNotCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_NOCOLLATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -588,6 +605,8 @@ void PrintDialog::DataChanged( const DataChangedEvent& rDCEvt )
         ImplSetInfo();
         ImplCheckOK();
     }
+    else if ( rDCEvt.GetType() == DATACHANGED_SETTINGS )
+        ImplSetImages();
 
     ModalDialog::DataChanged( rDCEvt );
 }
