@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:07:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,10 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
     // Am Container die Tab-Reihenfolge aktivieren...
 
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
-     if ( !xC.is() || !xC->getPeer().is() )
+    Reference< XVclContainerPeer >  xVclContainerPeer;
+    if ( xC.is() )
+        xVclContainerPeer = xVclContainerPeer.query( xC->getPeer() );
+     if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
     // vieleicht erhalte ich hier einen TabController,
@@ -370,7 +373,6 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
     if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, sal_True ) )
         return;
 
-    Reference< XVclContainerPeer >  xVclContainerPeer( xC->getPeer(), UNO_QUERY );
     xVclContainerPeer->setTabOrder( aCompSeq, aTabSeq, mxModel->getGroupControl() );
 
     ::rtl::OUString aName;
