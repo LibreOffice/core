@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:33:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 /** factory to create interprocess bridges.
  */
-interface XBridgeFactory: com::sun::star::uno::XInterface
+published interface XBridgeFactory: com::sun::star::uno::XInterface
 {
     /** tries to create a UNO interprocess bridge.
 
