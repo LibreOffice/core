@@ -504,7 +504,6 @@ UDK_3.1 {
 
         osl_joinProcessWithTimeout;
 
-        rtl_convertUStringToString;
         rtl_getTextEncodingFromWindowsCodePage;
         rtl_getWindowsCodePageFromTextEncoding;
 } UDK_3_0_0;
