@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:20:00 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,12 +321,12 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::r
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODriver::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODriver::acquire() throw()
 {
     ODriver_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODriver::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODriver::release() throw()
 {
     ODriver_BASE::release();
 }
@@ -340,214 +340,214 @@ void* ODriver::getOdbcFunction(sal_Int32 _nIndex) const
     switch(_nIndex)
     {
         case ODBC3SQLAllocHandle:
-            pFunction = pODBC3SQLAllocHandle;;
+            pFunction = (void*)pODBC3SQLAllocHandle;;
             break;
         case ODBC3SQLConnect:
-            pFunction = pODBC3SQLConnect;
+            pFunction = (void*)pODBC3SQLConnect;
             break;
         case ODBC3SQLDriverConnect:
-            pFunction = pODBC3SQLDriverConnect;
+            pFunction = (void*)pODBC3SQLDriverConnect;
             break;
         case ODBC3SQLBrowseConnect:
-            pFunction = pODBC3SQLBrowseConnect;
+            pFunction = (void*)pODBC3SQLBrowseConnect;
             break;
         case ODBC3SQLDataSources:
-            pFunction = pODBC3SQLDataSources;
+            pFunction = (void*)pODBC3SQLDataSources;
             break;
         case ODBC3SQLDrivers:
-            pFunction = pODBC3SQLDrivers;
+            pFunction = (void*)pODBC3SQLDrivers;
             break;
         case ODBC3SQLGetInfo:
 
-            pFunction = pODBC3SQLGetInfo;
+            pFunction = (void*)pODBC3SQLGetInfo;
             break;
         case ODBC3SQLGetFunctions:
 
-            pFunction = pODBC3SQLGetFunctions;
+            pFunction = (void*)pODBC3SQLGetFunctions;
             break;
         case ODBC3SQLGetTypeInfo:
 
-            pFunction = pODBC3SQLGetTypeInfo;
+            pFunction = (void*)pODBC3SQLGetTypeInfo;
             break;
         case ODBC3SQLSetConnectAttr:
 
-            pFunction = pODBC3SQLSetConnectAttr;
+            pFunction = (void*)pODBC3SQLSetConnectAttr;
             break;
         case ODBC3SQLGetConnectAttr:
 
-            pFunction = pODBC3SQLGetConnectAttr;
+            pFunction = (void*)pODBC3SQLGetConnectAttr;
             break;
         case ODBC3SQLSetEnvAttr:
 
-            pFunction = pODBC3SQLSetEnvAttr;
+            pFunction = (void*)pODBC3SQLSetEnvAttr;
             break;
         case ODBC3SQLGetEnvAttr:
 
-            pFunction = pODBC3SQLGetEnvAttr;
+            pFunction = (void*)pODBC3SQLGetEnvAttr;
             break;
         case ODBC3SQLSetStmtAttr:
 
-            pFunction = pODBC3SQLSetStmtAttr;
+            pFunction = (void*)pODBC3SQLSetStmtAttr;
             break;
         case ODBC3SQLGetStmtAttr:
 
-            pFunction = pODBC3SQLGetStmtAttr;
+            pFunction = (void*)pODBC3SQLGetStmtAttr;
             break;
         case ODBC3SQLPrepare:
 
-            pFunction = pODBC3SQLPrepare;
+            pFunction = (void*)pODBC3SQLPrepare;
             break;
         case ODBC3SQLBindParameter:
 
-            pFunction = pODBC3SQLBindParameter;
+            pFunction = (void*)pODBC3SQLBindParameter;
             break;
         case ODBC3SQLSetCursorName:
 
-            pFunction = pODBC3SQLSetCursorName;
+            pFunction = (void*)pODBC3SQLSetCursorName;
             break;
         case ODBC3SQLExecute:
 
-            pFunction = pODBC3SQLExecute;
+            pFunction = (void*)pODBC3SQLExecute;
             break;
         case ODBC3SQLExecDirect:
 
-            pFunction = pODBC3SQLExecDirect;
+            pFunction = (void*)pODBC3SQLExecDirect;
             break;
         case ODBC3SQLDescribeParam:
 
-            pFunction = pODBC3SQLDescribeParam;
+            pFunction = (void*)pODBC3SQLDescribeParam;
             break;
         case ODBC3SQLNumParams:
 
-            pFunction = pODBC3SQLNumParams;
+            pFunction = (void*)pODBC3SQLNumParams;
             break;
         case ODBC3SQLParamData:
 
-            pFunction = pODBC3SQLParamData;
+            pFunction = (void*)pODBC3SQLParamData;
             break;
         case ODBC3SQLPutData:
 
-            pFunction = pODBC3SQLPutData;
+            pFunction = (void*)pODBC3SQLPutData;
             break;
         case ODBC3SQLRowCount:
 
-            pFunction = pODBC3SQLRowCount;
+            pFunction = (void*)pODBC3SQLRowCount;
             break;
         case ODBC3SQLNumResultCols:
 
-            pFunction = pODBC3SQLNumResultCols;
+            pFunction = (void*)pODBC3SQLNumResultCols;
             break;
         case ODBC3SQLDescribeCol:
 
-            pFunction = pODBC3SQLDescribeCol;
+            pFunction = (void*)pODBC3SQLDescribeCol;
             break;
         case ODBC3SQLColAttribute:
 
-            pFunction = pODBC3SQLColAttribute;
+            pFunction = (void*)pODBC3SQLColAttribute;
             break;
         case ODBC3SQLBindCol:
 
-            pFunction = pODBC3SQLBindCol;
+            pFunction = (void*)pODBC3SQLBindCol;
             break;
         case ODBC3SQLFetch:
 
-            pFunction = pODBC3SQLFetch;
+            pFunction = (void*)pODBC3SQLFetch;
             break;
         case ODBC3SQLFetchScroll:
 
-            pFunction = pODBC3SQLFetchScroll;
+            pFunction = (void*)pODBC3SQLFetchScroll;
             break;
         case ODBC3SQLGetData:
 
-            pFunction = pODBC3SQLGetData;
+            pFunction = (void*)pODBC3SQLGetData;
             break;
         case ODBC3SQLSetPos:
 
-            pFunction = pODBC3SQLSetPos;
+            pFunction = (void*)pODBC3SQLSetPos;
             break;
         case ODBC3SQLBulkOperations:
 
-            pFunction = pODBC3SQLBulkOperations;
+            pFunction = (void*)pODBC3SQLBulkOperations;
             break;
         case ODBC3SQLMoreResults:
 
-            pFunction = pODBC3SQLMoreResults;
+            pFunction = (void*)pODBC3SQLMoreResults;
             break;
         case ODBC3SQLGetDiagRec:
 
-            pFunction = pODBC3SQLGetDiagRec;
+            pFunction = (void*)pODBC3SQLGetDiagRec;
             break;
         case ODBC3SQLColumnPrivileges:
 
-            pFunction = pODBC3SQLColumnPrivileges;
+            pFunction = (void*)pODBC3SQLColumnPrivileges;
             break;
         case ODBC3SQLColumns:
 
-            pFunction = pODBC3SQLColumns;
+            pFunction = (void*)pODBC3SQLColumns;
             break;
         case ODBC3SQLForeignKeys:
 
-            pFunction = pODBC3SQLForeignKeys;
+            pFunction = (void*)pODBC3SQLForeignKeys;
             break;
         case ODBC3SQLPrimaryKeys:
 
-            pFunction = pODBC3SQLPrimaryKeys;
+            pFunction = (void*)pODBC3SQLPrimaryKeys;
             break;
         case ODBC3SQLProcedureColumns:
 
-            pFunction = pODBC3SQLProcedureColumns;
+            pFunction = (void*)pODBC3SQLProcedureColumns;
             break;
         case ODBC3SQLProcedures:
 
-            pFunction = pODBC3SQLProcedures;
+            pFunction = (void*)pODBC3SQLProcedures;
             break;
         case ODBC3SQLSpecialColumns:
 
-            pFunction = pODBC3SQLSpecialColumns;
+            pFunction = (void*)pODBC3SQLSpecialColumns;
             break;
         case ODBC3SQLStatistics:
 
-            pFunction = pODBC3SQLStatistics;
+            pFunction = (void*)pODBC3SQLStatistics;
             break;
         case ODBC3SQLTablePrivileges:
 
-            pFunction = pODBC3SQLTablePrivileges;
+            pFunction = (void*)pODBC3SQLTablePrivileges;
             break;
         case ODBC3SQLTables:
 
-            pFunction = pODBC3SQLTables;
+            pFunction = (void*)pODBC3SQLTables;
             break;
         case ODBC3SQLFreeStmt:
 
-            pFunction = pODBC3SQLFreeStmt;
+            pFunction = (void*)pODBC3SQLFreeStmt;
             break;
         case ODBC3SQLCloseCursor:
 
-            pFunction = pODBC3SQLCloseCursor;
+            pFunction = (void*)pODBC3SQLCloseCursor;
             break;
         case ODBC3SQLCancel:
 
-            pFunction = pODBC3SQLCancel;
+            pFunction = (void*)pODBC3SQLCancel;
             break;
         case ODBC3SQLEndTran:
 
-            pFunction = pODBC3SQLEndTran;
+            pFunction = (void*)pODBC3SQLEndTran;
             break;
         case ODBC3SQLDisconnect:
 
-            pFunction = pODBC3SQLDisconnect;
+            pFunction = (void*)pODBC3SQLDisconnect;
             break;
         case ODBC3SQLFreeHandle:
 
-            pFunction = pODBC3SQLFreeHandle;
+            pFunction = (void*)pODBC3SQLFreeHandle;
             break;
         case ODBC3SQLGetCursorName:
 
-            pFunction = pODBC3SQLGetCursorName;
+            pFunction = (void*)pODBC3SQLGetCursorName;
             break;
         case ODBC3SQLNativeSql:
 
-            pFunction = pODBC3SQLNativeSql;
+            pFunction = (void*)pODBC3SQLNativeSql;
             break;
         default:
             OSL_ENSURE(0,"Function unknown!");
