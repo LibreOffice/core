@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:08:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,17 +132,20 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
-
-// #UndoRedo#
 #ifndef _SVX_LBOXCTRL_HXX_
 #include <svx/lboxctrl.hxx>
 #endif
-
 #ifndef _SVX_CLIPBOARDCTL_HXX_
 #include <svx/clipboardctl.hxx>
 #endif
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #include <svx/extrusioncontrols.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIACHILD_HXX
+#include <avmedia/mediaplayer.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIATOOLBOX_HXX
+#include <avmedia/mediatoolbox.hxx>
 #endif
 
 #include "sddll.hxx"
@@ -246,6 +249,7 @@ void SdDLL::RegisterControllers()
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
     SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
+    ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneChildWindow::RegisterChildWindow(0, pMod);
     ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
     ::sd::notes::NotesChildWindow::RegisterChildWindow(0, pMod);
@@ -307,4 +311,6 @@ void SdDLL::RegisterControllers()
     svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
     svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+
+    ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 }
