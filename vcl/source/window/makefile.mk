@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.11 $
+#	$Revision: 1.12 $
 #
-#	last change: $Author: rt $ $Date: 2004-01-05 11:27:48 $
+#	last change: $Author: vg $ $Date: 2004-01-06 14:13:19 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -112,38 +112,12 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/dndlcon.obj     \
             $(SLO)$/taskpanelist.obj
 
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=					\
-            $(SLO)$/brdwin.obj		\
-            $(SLO)$/keycod.obj		\
-            $(SLO)$/window.obj		\
-            $(SLO)$/winproc.obj 	\
-            $(SLO)$/wrkwin.obj		\
-            $(SLO)$/introwin.obj	\
-            $(SLO)$/accel.obj		\
-            $(SLO)$/cursor.obj		\
-            $(SLO)$/dlgctrl.obj 	\
-            $(SLO)$/floatwin.obj	\
-            $(SLO)$/menu.obj		\
-            $(SLO)$/msgbox.obj		\
-            $(SLO)$/split.obj		\
-            $(SLO)$/status.obj		\
-            $(SLO)$/syschild.obj	\
-            $(SLO)$/syswin.obj		\
-            $(SLO)$/tabpage.obj 	\
-            $(SLO)$/toolbox.obj 	\
-            $(SLO)$/toolbox2.obj	\
-            $(SLO)$/dialog.obj		\
-            $(SLO)$/dndevdis.obj	\
-            $(SLO)$/dndlcon.obj
-.ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/window.obj		\
             $(SLO)$/winproc.obj		\
             $(SLO)$/syswin.obj		\
             $(SLO)$/dndevdis.obj	\
             $(SLO)$/dndlcon.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
