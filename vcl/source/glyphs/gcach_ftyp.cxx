@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.62 $
- *  last change: $Author: hdu $ $Date: 2001-11-23 16:00:17 $
+ *  $Revision: 1.63 $
+ *  last change: $Author: hdu $ $Date: 2001-11-23 16:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,17 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
     }
 
     if( pGlyphFT->format != ft_glyph_format_bitmap )
+    {
         FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
+
+        // orthogonal transforms are handled by bitmap operations
+        // apply other transforms here
+        if( (nAngle % 900) != 0 || nGlyphFlags )
+        {
+            FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+            nAngle = 0;
+        }
+    }
     else
     {
         // FT<=205 ignores transforms for bitmaps, so do it manually
@@ -726,14 +736,6 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
         rBmpGlyphFT->left += (aVector.x + 32) >> 6;
         rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
     }
-
-    // orthogonal transforms are handled by bitmap operations
-    // apply other transforms here
-    if( (nAngle % 900) != 0 )
-    {
-        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
-        nAngle = 0;
-     }
 
     return nAngle;
 }
