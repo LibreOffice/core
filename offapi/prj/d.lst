@@ -53,6 +53,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\applicat.rdb
@@ -105,6 +106,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\view\*.idl %_DEST%\idl%_EXT%\com\sun\star\view\*.idl
 ..\com\sun\star\xml\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\*.idl
 ..\com\sun\star\xml\sax\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\sax\*.idl
+..\com\sun\star\ui\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\*.idl
 ..\com\sun\star\ui\dialogs\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs\*.idl
 
 ..\drafts\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\frame\*.idl
