@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-01-29 14:29:40 $
+ *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText           aLevelFT;
     SwIdxTreeListBox    aLevelLB;
 
+    FixedText       aTokenFT;
     SwTokenWindow   aTokenWIN;
     PushButton      aAllLevelsPB;
 
@@ -459,8 +460,6 @@ class SwTOXEntryTabPage : public SfxTabPage
 
     FixedText       aChapterEntryFT;
     ListBox         aChapterEntryLB;    // type of chapter info
-//  FixedText       aSortingFT;
-//  ListBox         aSortingLB;
 
     FixedText       aFillCharFT;
     ComboBox        aFillCharCB;        // fill char for tab stop

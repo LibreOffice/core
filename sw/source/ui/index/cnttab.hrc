@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:26 $
+ *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,7 @@
 #define MB_AUTOMARK         29
 #define FL_IDXOPTIONS       30
 
-
-
+#define FT_TOKEN            32
 #define CB_USE_DASH         33
 #define FL_LEVEL            34
 #define WIN_TOKEN               35

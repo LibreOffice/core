@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-01-29 14:29:40 $
+ *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2076,6 +2076,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
     aLevelLB(this,              ResId(LB_LEVEL              )),
     aLevelFT(this,              ResId(FT_LEVEL              )),
+    aTokenFT(this,              ResId(FT_TOKEN              )),
     aTokenWIN(this,             ResId(WIN_TOKEN             )),
     aAllLevelsPB(this,          ResId(PB_ALL_LEVELS         )),
     aEntryNoPB(this,            ResId(PB_ENTRYNO            )),
@@ -2132,7 +2133,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
-
     aLevelLB.SetWindowBits( WB_HSCROLL );
     aLevelLB.SetSpaceBetweenEntries(0);
     aLevelLB.SetSelectionMode( SINGLE_SELECTION );
@@ -2405,6 +2405,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
             lcl_ChgXPos(aAuthFieldsLB,   nDiff);
             lcl_ChgXPos(aAuthInsertPB,   nDiff);
             lcl_ChgXPos(aAuthRemovePB,   nDiff);
+            lcl_ChgXPos(aTokenFT, nDiff);
             lcl_ChgXPos(aTokenWIN,   nDiff);
             lcl_ChgWidth(aTokenWIN, -nDiff);
             lcl_ChgXPos(aSortDocPosRB,   nDiff);
@@ -2997,7 +2998,7 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         pActiveCtrl(0),
         sCharStyle(ResId(STR_CHARSTYLE))
 {
-    SetStyle(GetStyle()|WB_TABSTOP);
+    SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
     SetHelpId(HID_TOKEN_WINDOW);
     for(sal_uInt16 i = 0; i < TOKEN_END; i++)
     {
