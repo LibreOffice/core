@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,14 @@ namespace connectivity
         {
             sal_uInt16  m_nRowPos;
         protected:
-            OValueRow   m_pRow;
+            OValueRefRow    m_pRow;
 
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
             sal_uInt16 getRowPos() const {return m_nRowPos;}
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
-            void bindValue(OValueRow _pRow);                        // Bindung an den Wert, den der Operand repräsentiert
+            void bindValue(const OValueRefRow& _pRow);                      // Bindung an den Wert, den der Operand repräsentiert
 
             TYPEINFO();
         };
@@ -182,7 +182,6 @@ namespace connectivity
 
             TYPEINFO();
         };
-
 
         // WerteOperanden
         class OOperandValue : public OOperand
@@ -225,6 +224,8 @@ namespace connectivity
             OOperandResult(sal_Int32 eDbType)
                             :OOperandValue(eDbType) {}
         public:
+            OOperandResult(const ORowSetValue& _rVar)
+                            :OOperandValue(_rVar, _rVar.getTypeKind()) {}
             TYPEINFO();
         };
 
@@ -249,9 +250,17 @@ namespace connectivity
             }
         };
 
+        /** special stop operand
+            is appended when a list of arguments ends
+        */
+        class OStopOperand : public OOperandValue
+        {
+        public:
+            OStopOperand(){}
+            TYPEINFO();
+        };
 
         // Operatoren
-
         class OOperator : public OCode
         {
         public:
@@ -384,6 +393,40 @@ namespace connectivity
         {
             return getValue().getDouble() != double(0.0);
         }
+
+        // operator
+        class ONthOperator : public OOperator
+        {
+        public:
+            virtual void Exec(OCodeStack&);
+
+            TYPEINFO();
+
+        protected:
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const = 0;
+        };
+
+        class OBinaryOperator : public OOperator
+        {
+        public:
+            virtual void Exec(OCodeStack&);
+
+            TYPEINFO();
+
+        protected:
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const = 0;
+        };
+
+        class OUnaryOperator : public OOperator
+        {
+        public:
+            virtual void Exec(OCodeStack&);
+            virtual sal_uInt16 getRequestedOperands() const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const = 0;
+
+            TYPEINFO();
+
+        };
     }
 }
 
