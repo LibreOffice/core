@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:35:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,8 +1526,12 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 // assign graphic
                 rImpGraphic = *aGraphic.ImplGetImpGraphic();
-                rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
-                rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
+
+                if( aLink.IsPrefMapModeValid() )
+                    rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
+
+                if( aLink.IsPrefSizeValid() )
+                    rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
 
                 if( bSetLink )
                     rImpGraphic.ImplSetLink( aLink );
