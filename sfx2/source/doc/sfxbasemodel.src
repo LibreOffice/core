@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:29:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@ StringArray EVENT_NAMES_ARY
         < "OnUnfocus"           ; SFX_EVENT_DEACTIVATEDOC ; > ;
         < "OnPrint"             ; SFX_EVENT_PRINTDOC ; > ;
         < "OnModifyChanged"     ; SFX_EVENT_MODIFYCHANGED ; > ;
+        < "OnCopyTo"            ; SFX_EVENT_SAVETODOC ; > ;
+        < "OnCopyToDone"        ; SFX_EVENT_SAVETODOCDONE ; > ;
+        < "OnViewCreated"       ; SFX_EVENT_VIEWCREATED ; > ;
+        < "OnPrepareViewClosing"; SFX_EVENT_PREPARECLOSEVIEW ; > ;
+        < "OnViewClosed"        ; SFX_EVENT_CLOSEVIEW ; > ;
     };
 };
 
