@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: as $ $Date: 2002-08-12 11:47:27 $
+#   last change: $Author: as $ $Date: 2002-08-15 06:52:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,57 +77,81 @@ COMP5TYPELIST=		lgd
 
 .INCLUDE :  settings.mk
 
-# --- export library for sfx2 -------------------------------------------------
-
-LIB1TARGET=		$(SLB)$/fweobj.lib
-
-LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
-                $(SLO)$/bmkmenu.obj							\
-                $(SLO)$/eventsconfiguration.obj				\
-                $(SLO)$/eventsdocumenthandler.obj			\
-                $(SLO)$/imageproducer.obj					\
-                $(SLO)$/lockhelper.obj						\
-                $(SLO)$/menuconfiguration.obj				\
-                $(SLO)$/menudocumenthandler.obj				\
-                $(SLO)$/saxnamespacefilter.obj				\
-                $(SLO)$/statusbarconfiguration.obj			\
-                $(SLO)$/statusbardocumenthandler.obj		\
-                $(SLO)$/toolboxconfiguration.obj			\
-                $(SLO)$/toolboxdocumenthandler.obj			\
-                $(SLO)$/toolboxlayoutdocumenthandler.obj	\
-                $(SLO)$/imagesconfiguration.obj				\
-                $(SLO)$/imagesdocumenthandler.obj			\
-                $(SLO)$/xmlnamespaces.obj					\
-                $(SLO)$/actiontriggerpropertyset.obj		\
-                $(SLO)$/actiontriggerseparatorpropertyset.obj		\
-                $(SLO)$/actiontriggercontainer.obj			\
-                $(SLO)$/propertysetcontainer.obj			\
-                $(SLO)$/rootactiontriggercontainer.obj		\
-                $(SLO)$/actiontriggerhelper.obj				\
-                $(SLO)$/imagewrapper.obj					\
-                $(SLO)$/interaction.obj
-
 # --- internal import -------------------------------------------------
 
-LIB2TARGET=		$(SLB)$/fwiobj.lib
+LIB1TARGET=     $(SLB)$/fwiobj.lib
 
-LIB2OBJFILES=	$(SLO)$/wildcard.obj						\
-                $(SLO)$/converter.obj						\
-                $(SLO)$/lockhelper.obj						\
-                $(SLO)$/transactionmanager.obj				\
-                $(SLO)$/filtercache.obj						\
-                $(SLO)$/filtercachedata.obj					\
+LIB1OBJFILES=   $(SLO)$/wildcard.obj                            \
+                $(SLO)$/argumentanalyzer.obj                    \
+                $(SLO)$/converter.obj                           \
+                $(SLO)$/lockhelper.obj                          \
+                $(SLO)$/transactionmanager.obj                  \
+                $(SLO)$/filtercache.obj                         \
+                $(SLO)$/filtercachedata.obj                     \
                 $(SLO)$/protocolhandlercache.obj
+
+# --- export library for sfx2 -------------------------------------------------
+
+LIB2TARGET=     $(SLB)$/fweobj.lib
+
+LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
+                $(SLO)$/bmkmenu.obj                             \
+                $(SLO)$/eventsconfiguration.obj                 \
+                $(SLO)$/eventsdocumenthandler.obj               \
+                $(SLO)$/imageproducer.obj                       \
+                $(SLO)$/lockhelper.obj                          \
+                $(SLO)$/menuconfiguration.obj                   \
+                $(SLO)$/menudocumenthandler.obj                 \
+                $(SLO)$/saxnamespacefilter.obj                  \
+                $(SLO)$/statusbarconfiguration.obj              \
+                $(SLO)$/statusbardocumenthandler.obj            \
+                $(SLO)$/toolboxconfiguration.obj                \
+                $(SLO)$/toolboxdocumenthandler.obj              \
+                $(SLO)$/toolboxlayoutdocumenthandler.obj        \
+                $(SLO)$/imagesconfiguration.obj                 \
+                $(SLO)$/imagesdocumenthandler.obj               \
+                $(SLO)$/xmlnamespaces.obj                       \
+                $(SLO)$/actiontriggerpropertyset.obj            \
+                $(SLO)$/actiontriggerseparatorpropertyset.obj   \
+                $(SLO)$/actiontriggercontainer.obj              \
+                $(SLO)$/propertysetcontainer.obj                \
+                $(SLO)$/rootactiontriggercontainer.obj          \
+                $(SLO)$/actiontriggerhelper.obj                 \
+                $(SLO)$/imagewrapper.obj                        \
+                $(SLO)$/interaction.obj
+
+# --- import classes library ---------------------------------------------------
+
+SHL1TARGET=     fwi$(UPD)$(DLLPOSTFIX)
+
+SHL1IMPLIB=     ifwi
+
+SHL1LIBS=       $(LIB1TARGET)
+
+SHL1STDLIBS=    $(CPPULIB)                          \
+                $(CPPUHELPERLIB)                    \
+                $(VOSLIB)                           \
+                $(SALLIB)                           \
+                $(TOOLSLIB)                         \
+                $(UNOTOOLSLIB)
+
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=       $(SHL1TARGET)
+
+DEFLIB1NAME=    fwiobj
+DEF1DEPN=       $(MISC)$/$(SHL1TARGET).flt
+
 
 # --- export classes library ---------------------------------------------------
 
-SHL1TARGET=		fwe$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=     fwe$(UPD)$(DLLPOSTFIX)
 
-SHL1IMPLIB=		ifwe
+SHL2IMPLIB=     ifwe
 
-SHL1LIBS= 		$(LIB1TARGET)
+SHL2LIBS=       $(LIB2TARGET)
 
-SHL1STDLIBS=	$(VCLLIB)							\
+SHL2STDLIBS=    $(VCLLIB)                           \
                 $(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
@@ -136,36 +160,15 @@ SHL1STDLIBS=	$(VCLLIB)							\
                 $(SVLLIB)							\
                 $(TOOLSLIB)							\
                 $(COMPHELPERLIB)					\
-                $(UNOTOOLSLIB)
+                $(UNOTOOLSLIB)                      \
+                $(FWILIB)
 
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
 
-DEF1NAME=		$(SHL1TARGET)
+DEF2NAME=       $(SHL2TARGET)
 
-DEFLIB1NAME=	fweobj
-DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt
-
-# --- import classes library ---------------------------------------------------
-
-SHL2TARGET=		fwi$(UPD)$(DLLPOSTFIX)
-
-SHL2IMPLIB=		ifwi
-
-SHL2LIBS= 		$(LIB2TARGET)
-
-SHL2STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(VOSLIB)							\
-                $(SALLIB)							\
-                $(TOOLSLIB)							\
-                $(UNOTOOLSLIB)
-
-SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=		$(SHL2TARGET)
-
-DEFLIB2NAME=	fwiobj
-DEF2DEPN=		$(MISC)$/$(SHL2TARGET).flt
+DEFLIB2NAME=    fweobj
+DEF2DEPN=       $(MISC)$/$(SHL2TARGET).flt
 
 # --- light services library ----------------------------------------------------
 
@@ -173,8 +176,7 @@ SHL3TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 
 SHL3IMPLIB=		ifwl
 
-SHL3OBJS=		$(SLO)$/argumentanalyzer.obj		\
-                $(SLO)$/contenthandlerfactory.obj	\
+SHL3OBJS=       $(SLO)$/contenthandlerfactory.obj   \
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/mediatypedetectionhelper.obj\
@@ -192,7 +194,7 @@ SHL3STDLIBS=	$(CPPULIB)							\
                 $(FWILIB)
 
 SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
-SHL3DEPN=		$(SHL2IMPLIBN) $(SHL2TARGETN)
+SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF3NAME=		$(SHL3TARGET)
 
@@ -204,8 +206,7 @@ SHL4TARGET=		fwk$(UPD)$(DLLPOSTFIX)
 
 SHL4IMPLIB=		ifwk
 
-SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
-                $(SLO)$/asyncquit.obj				\
+SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/basedispatcher.obj			\
                 $(SLO)$/blankdispatcher.obj			\
                 $(SLO)$/createdispatcher.obj		\
@@ -239,12 +240,12 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/jobexecutor.obj				\
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchrecorder.obj		\
-                $(SLO)$/servicehandler.obj		\
+                $(SLO)$/servicehandler.obj          \
                 $(SLO)$/stillinteraction.obj		\
-                $(SLO)$/restricteduiinteraction.obj		\
+                $(SLO)$/restricteduiinteraction.obj \
                 $(SLO)$/loadeventlistener.obj		\
-                $(SLO)$/asyncloadthread.obj		\
-                $(SLO)$/componentloader.obj		\
+                $(SLO)$/asyncloadthread.obj         \
+                $(SLO)$/componentloader.obj         \
                 $(SLO)$/persistentwindowstate.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\
@@ -258,8 +259,8 @@ SHL4STDLIBS=	$(CPPULIB)							\
                 $(COMPHELPERLIB)					\
                 $(UCBHELPERLIB)						\
                 $(UNOTOOLSLIB)						\
+                $(FWILIB)                           \
                 $(FWELIB)							\
-                $(FWILIB)							\
                 $(SVLLIB)							\
                 $(SOTLIB)
 
@@ -277,17 +278,18 @@ SHL5TARGET=		lgd$(UPD)$(DLLPOSTFIX)
 SHL5IMPLIB=		ilgd
 
 SHL5OBJS=		$(SLO)$/registerlogindialog.obj		\
-                 $(SLO)$/logindialog.obj				\
-                $(SLO)$/lockhelper.obj
+                $(SLO)$/logindialog.obj
 
 SHL5STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
                 $(SALLIB)							\
                 $(SVLIB)							\
-                $(TOOLSLIB)
+                $(TOOLSLIB)                         \
+                $(FWILIB)
 
 SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
+SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF5NAME=		$(SHL5TARGET)
 
@@ -304,8 +306,10 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo WEP>>$@
     @echo m_pLoader>$@
     @echo _TI2>>$@
+    @echo _TI3>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+    @echo _STL::pair>>$@
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
@@ -314,7 +318,5 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo WEP>>$@
     @echo m_pLoader>$@
     @echo _TI2>>$@
-    @echo _TI3>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
-    @echo _STL::pair>>$@
