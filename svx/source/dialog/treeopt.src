@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:05:21 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1917,11 +1917,11 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "网格" ;        RID_SVXPAGE_GRID        ; > ;
             < "标准字体(西文)" ;RID_SW_TP_STD_FONT       ; > ;
             < "标准字体(中日韩)" ;RID_SW_TP_STD_FONT_CJK       ; > ;
-            < "标准字体 (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
+            < "基本字体 (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
             < "打印" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
             < "表格" ;        RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "更改" ;    RID_SW_TP_REDLINE_OPT    ; > ;
-            < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
+            < "兼容" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
         };
         ItemList [ chinese_traditional ] =
         {
@@ -2759,7 +2759,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "全球的" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
             < "计算" ;            SID_SC_TP_CALC              ;> ;
             < "排序列单" ;      SID_SC_TP_USERLISTS         ;> ;
-            < "更改" ;        SID_SC_TP_CHANGES           ;> ;
+            < "根改" ;        SID_SC_TP_CHANGES           ;> ;
             < "网格" ;            SID_SC_TP_GRID              ;> ;
             < "打印" ;            RID_SC_TP_PRINT             ;> ;
         };
