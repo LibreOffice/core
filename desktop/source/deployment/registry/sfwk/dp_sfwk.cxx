@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:50:37 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "svtools/inettype.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <memory>
 
 
@@ -75,7 +75,7 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 using ::rtl::OUString;
 namespace css = ::com::sun::star;
@@ -357,7 +357,7 @@ void PackageImpl:: initPackageHandler()
 
     Reference< provider::XScriptProviderFactory > xFac(
         that->getComponentContext()->getValueByName(
-            OUSTR( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
+            OUSTR( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
 
     if ( xFac.is() )
     {
