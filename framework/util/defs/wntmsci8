@@ -4266,3 +4266,7 @@ __CTA2?AVbad_alloc@std@@
 ?queryInterface@ActionTriggerContainer@framework@@WEM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
 ?release@ActionTriggerContainer@framework@@WEM@AAXXZ
 ?exists@HandlerCache@framework@@QBEEABVOUString@rtl@@@Z
+?iquery@?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXChangesBatch@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
