@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:45:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ bool testRelToAbs(RelToAbsTest const * pTest, std::size_t nSize)
         }
         INetURLObject aAbs;
         aBase.GetNewAbsURL(pTest[i].m_pRel, &aAbs);
-        ByteString aTheAbs(aAbs.GetMainURL(INetURLObject::NO_DECODE),
+        ByteString aTheAbs(String(aAbs.GetMainURL(INetURLObject::NO_DECODE)),
                            RTL_TEXTENCODING_ISO_8859_1);
         if (!(aTheAbs.Equals(pTest[i].m_pAbs)
               || pTest[i].m_pAlt && aTheAbs.Equals(pTest[i].m_pAlt)))
@@ -166,9 +166,10 @@ bool testRelToAbs(RelToAbsTest const * pTest, std::size_t nSize)
             bSuccess = false;
         }
         aTheAbs = ByteString(
-            INetURLObject::GetAbsURL(
-                aBase.GetMainURL(INetURLObject::NO_DECODE),
-                UniString(pTest[i].m_pRel, RTL_TEXTENCODING_ISO_8859_1)),
+            String(
+                INetURLObject::GetAbsURL(
+                    aBase.GetMainURL(INetURLObject::NO_DECODE),
+                    UniString(pTest[i].m_pRel, RTL_TEXTENCODING_ISO_8859_1))),
             RTL_TEXTENCODING_ISO_8859_1);
         if (!(aTheAbs.Equals(pTest[i].m_pAbs)
               || pTest[i].m_pAlt && aTheAbs.Equals(pTest[i].m_pAlt)))
@@ -381,7 +382,12 @@ main()
                 { 0, "../", "http://a/b/c/", 0 },
                 { 0, "../g", "http://a/b/c/g", 0 },
                 { 0, "../../", "http://a/b/", 0 },
-                { 0, "../../g", "http://a/b/g", 0 } };
+                { 0, "../../g", "http://a/b/g", 0 },
+                { "file:///", "generic:", "file:///generic:", 0 },
+                { 0, "generic:#fragment", "file:///generic:#fragment", 0 },
+                { 0, "generic:something", "generic:something", 0 },
+                { 0, "c:/foo/bar", "file:///c:/foo/bar", 0 },
+                { 0, "c:\\foo\\bar", "file:///c:%5Cfoo%5Cbar", 0 } };
         if (!testRelToAbs(aTest, sizeof aTest / sizeof (RelToAbsTest)))
             bSuccess = false;
     }
@@ -738,6 +744,64 @@ main()
                 || !bWasAbsolute)
             {
                 printf("BAD smartRel2Abs(\"a:\\\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "generic:")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM("file:///generic:"))
+                || bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"generic:\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "generic:#fragment")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM(
+                             "file:///generic:#fragment"))
+                || bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"generic:#fragment\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "generic:something")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM("generic:something"))
+                || !bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"generic:something\")\n");
                 bSuccess = false;
             }
         }
