@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:40:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-10 09:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ static const struct {
         { "sv_SE",  lcl_DATA_EURO, "sv" },
         { "sv_FI",  lcl_DATA_EURO, NULL },
         { "ca_ES",  lcl_DATA_EURO, "ca" },
+        { "gl_ES",  lcl_DATA_EURO, "gl" },
         { "cs_CZ",  lcl_DATA_EURO, "cs" },
         { "sk_SK",  lcl_DATA_EURO, "sk" },
         { "da_DK",  lcl_DATA_EURO, "da" },
@@ -176,6 +177,7 @@ static const struct {
         { "sr_YU",  lcl_DATA_EURO, "sr" },
         { "hr_HR",  lcl_DATA_EURO, "hr" },
         { "bs_BA",  lcl_DATA_EURO, "bs" },
+        { "eu",     lcl_DATA_EURO, "eu" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -206,6 +208,9 @@ static const struct {
         { "ia",     lcl_DATA_OTHERS, "ia" },
         { "mn_MN",  lcl_DATA_OTHERS, "mn" },
         { "az_AZ",  lcl_DATA_OTHERS, "az" },
+        { "sw_TZ",  lcl_DATA_OTHERS, "sw" },
+        { "km_KH",  lcl_DATA_OTHERS, "km" },
+        { "lo_LA",  lcl_DATA_OTHERS, "lo" },
 
 //      { "be_BY",  lcl_DATA, "be" },
 //      { "br_AE",  lcl_DATA, "br" },
