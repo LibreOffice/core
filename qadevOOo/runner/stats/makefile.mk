@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Date: 2003-10-06 12:41:51 $
+#   last change: $Date: 2004-07-23 13:42:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET = runner_stats
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES = ridl.jar jurt.jar unoil.jar
 
 JAVAFILES =	\
             DataBaseOutProducer.java        \
