@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ struct SbiGlobals
     xub_StrLen      nLine;          // aktuelle Zeile
     xub_StrLen      nCol1,nCol2;    // aktuelle Spalten (von,bis)
     BOOL            bCompiler;      // Flag fuer Compiler-Error
-    BOOL            bCompWait;      // Flag, beim Compilieren WaitCursor eingeschaltet ist
     BOOL            bGlobalInitErr; // Beim GlobalInit trat ein Compiler-Fehler auf
     BOOL            bRunInit;       // TRUE, wenn RunInit vom Basic aktiv ist
     String          aErrMsg;        // Puffer fuer GetErrorText()
