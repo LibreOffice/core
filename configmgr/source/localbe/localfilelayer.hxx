@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:30:52 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <drafts/com/sun/star/configuration/backend/XUpdatableLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
+#include <drafts/com/sun/star/configuration/backend/XCompositeLayer.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XTIMESTAMPED_HPP_
 #include <drafts/com/sun/star/configuration/backend/XTimeStamped.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XTIMESTAMPED_HPP_
@@ -74,9 +78,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif // _CPPUHELPER_IMPLBASE2_HXX_
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif // _CPPUHELPER_IMPLBASE3_HXX_
+
+#ifndef VECTOR_INCLUDED_
+#define VECTOR_INCLUDED_
+#include <vector>
+#endif // VECTOR_INCLUDED_
 
 namespace configmgr { namespace localbe {
 
@@ -87,8 +96,8 @@ namespace lang = css::lang ;
 namespace backend = drafts::com::sun::star::configuration::backend ;
 
 /**
-  Implementation of the XUpdatableLayer interface for a local
-  file access.
+  Implementation of the XUpdatableLayer and XCompositeLayer
+  interfaces for a local file access.
   The read data is accessible through a canned implementation of
   an XML parser, and the write data is defined through a canned
   implementation of an XML writer.
@@ -97,28 +106,46 @@ namespace backend = drafts::com::sun::star::configuration::backend ;
   the access to the handlers.
   The timestamp is refreshed on each read operation only.
   */
-class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
+class LocalFileLayer : public cppu::WeakImplHelper3<backend::XUpdatableLayer,
+                                                    backend::XCompositeLayer,
                                                     backend::XTimeStamped> {
     public :
         /**
-          Constructor using the file URL to define the source
-          of the layer contents.
+          Constructor providing the base directory and the
+          file subpath describing the file to access.
+          An optional resource directory provides the location
+          of sublayers of the component.
 
           @param xFactory   service factory used to access canned services
-          @param aFileUrl   file URL
+          @param aBaseDir   base directory
+          @param aComponent subpath describing the component file
+          @param aResDir    optional resource directory, if empty it is
+                            assumed the layer does not have sublayers.
           */
         LocalFileLayer(
                 const uno::Reference<lang::XMultiServiceFactory>& xFactory,
-                const rtl::OUString& aFileUrl) ;
+                const rtl::OUString& aBaseDir,
+                const rtl::OUString& aComponent,
+                const rtl::OUString& aResDir) ;
         /** Destructor */
         ~LocalFileLayer(void) ;
-        // XUpdatableLayer
+        // XLayer
         virtual void SAL_CALL readData(
                 const uno::Reference<backend::XLayerHandler>& xHandler)
-            throw (uno::RuntimeException) ;
+            throw (lang::WrappedTargetException, uno::RuntimeException) ;
+        // XUpdatableLayer
         virtual void SAL_CALL replaceWith(
                 const uno::Reference<backend::XLayer>& aNewLayer)
-            throw (uno::RuntimeException) ;
+            throw (lang::WrappedTargetException, uno::RuntimeException) ;
+        // XCompositeLayer
+        virtual uno::Sequence<rtl::OUString> SAL_CALL listSubLayerIds(void)
+            throw (uno::RuntimeException) { return mSubLayers ; }
+        virtual void SAL_CALL readSubLayerData(
+                const uno::Reference<backend::XLayerHandler>& xHandler,
+                const rtl::OUString& aSubLayerId)
+            throw (lang::IllegalArgumentException,
+                    lang::WrappedTargetException,
+                    uno::RuntimeException) ;
         // XTimeStamped
         virtual rtl::OUString SAL_CALL getTimestamp(void)
             throw (uno::RuntimeException) { return mTimestamp ; }
@@ -151,6 +178,30 @@ class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
         uno::Reference<backend::XLayer> mLayerReader ;
         /** XLayerHandler implementation for getWriteHandler */
         uno::Reference<backend::XLayerHandler> mLayerWriter ;
+        /** List of available sublayers... */
+        uno::Sequence<rtl::OUString> mSubLayers ;
+        /** .. and the corresponding file URLs. */
+        std::vector<rtl::OUString> mSubLayerFiles ;
+
+        /**
+          Fills the list of available sublayers.
+
+          @param aResDir    resource directory containing potential sublayers
+          @param aComponent component subpath
+          */
+        void fillSubLayerList(const rtl::OUString& aResDir,
+                              const rtl::OUString& aComponent) ;
+        /**
+          Describes the contents of a particular file to a handler.
+
+          @param xHandler   handler to describe the data to
+          @param aFileUrl   URL of the file
+          @throws com::sun::star::lang::WrappedTargetException
+                  if an error occurs while accessing the data.
+          */
+        void readData(const uno::Reference<backend::XLayerHandler>& xHandler,
+                      const rtl::OUString& aFileUrl)
+            throw (lang::WrappedTargetException, uno::RuntimeException) ;
 } ;
 
 } } // configmgr.localbe
