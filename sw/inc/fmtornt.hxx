@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 13:21:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy 
     return *this;
 }
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx
 inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(BOOL bInP) const
     { return (const SwFmtVertOrient&)Get( RES_VERT_ORIENT,bInP); }
