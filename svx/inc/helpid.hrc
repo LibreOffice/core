@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 16:55:13 $
+ *  last change: $Author: os $ $Date: 2001-02-16 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,11 +487,12 @@
 #define HID_WARN_NAME_DUPLICATE                 (HID_SVX_START + 397)
 #define HID_POPUP_COLOR_CTRL                    (HID_SVX_START + 398)
 
+#define HID_RUBY_DIALOG                         (HID_SVX_START + 399)
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END         HID_POPUP_COLOR_CTRL
+#define ACT_SVX_HID_END         HID_RUBY_DIALOG
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
