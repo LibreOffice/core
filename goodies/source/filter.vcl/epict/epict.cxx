@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 15:49:29 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 15:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,7 +1695,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 {
                     USHORT nCount,i;
                     SetAttrForFrame();
-                    nCount=pA->GetPolyPolygon().Count();
+                    nCount = aSimplePolyPoly.Count();
                     for ( i = 0; i < nCount; i++ )
                         WriteOpcode_Poly( PDM_FRAME, aSimplePolyPoly.GetObject( i ) );
                 }
