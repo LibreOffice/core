@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:27:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,7 +1622,7 @@ ToFontFamily (psp::family::type eFamily)
     return FAMILY_DONTKNOW;
 }
 
-static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData )
+static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData, bool bAliases = true )
 {
     rData.meFamily      = ToFontFamily (aInfo.m_eFamilyStyle);
     rData.meWeight      = ToFontWeight (aInfo.m_eWeight);
@@ -1643,11 +1643,14 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
     rData.meType        = TYPE_SCALABLE;
     rData.mbDevice      = (aInfo.m_eType == psp::fonttype::Builtin);
     String aMapNames;
-    for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
+    if( bAliases )
     {
-        if( it != aInfo.m_aAliases.begin() )
-            aMapNames.Append(';');
-        aMapNames.Append( String( *it ) );
+        for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
+        {
+            if( it != aInfo.m_aAliases.begin() )
+                aMapNames.Append(';');
+            aMapNames.Append( String( *it ) );
+        }
     }
     rData.maMapNames    = aMapNames;
     switch( aInfo.m_eType )
@@ -1739,27 +1742,46 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
             psp::FastPrintFontInfo aInfo;
             if (rMgr.getFontFastInfo (*it, aInfo))
             {
-                ImplFontData *pFontData = new ImplFontData;
-                SetImplFontData( aInfo, *pFontData );
-                pFontData->mpSysData = (void*)*it;
-                if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-                    pFontData->maName = pFontData->maName.Copy( 4 );
-                if( aInfo.m_eType == psp::fonttype::TrueType )
+                OUString aFamilyName = aInfo.m_aFamilyName;
+                std::list< OUString >::const_iterator alias_it = aInfo.m_aAliases.begin();
+                do
                 {
-                    // prefer truetype fonts
-                    pFontData->mnQuality += 10;
-                    // asian type 1 fonts are not known
-                    ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
-                    int nPos = aFileName.SearchBackward( '_' );
-                    if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
-                        pFontData->mnQuality += 5;
-                    else
+                    ImplFontData *pFontData = new ImplFontData;
+                    SetImplFontData( aInfo, *pFontData, false );
+                    pFontData->mpSysData = (void*)*it;
+                    pFontData->maName = aFamilyName;
+
+                    if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+                        pFontData->maName = pFontData->maName.Copy( 4 );
+                    if( aInfo.m_eType == psp::fonttype::TrueType )
                     {
-                        if( pLangBoost && aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
-                            pFontData->mnQuality += 10;
+                        // prefer truetype fonts
+                        pFontData->mnQuality += 10;
+                        // asian type 1 fonts are not known
+                        ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
+                        int nPos = aFileName.SearchBackward( '_' );
+                        if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
+                            pFontData->mnQuality += 5;
+                        else
+                        {
+                            if( pLangBoost && aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
+                                pFontData->mnQuality += 10;
+                        }
                     }
-                }
-                pList->Add( pFontData );
+                    pList->Add( pFontData );
+
+                    aFamilyName = OUString();
+                    if( alias_it != aInfo.m_aAliases.end() )
+                    {
+                        aFamilyName = *alias_it;
+                        ++alias_it;
+#if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "inserting alias name %s for font family %s\n",
+                                 OUStringToOString( aFamilyName, osl_getThreadTextEncoding() ).getStr(),
+                                 OUStringToOString( aInfo.m_aFamilyName, osl_getThreadTextEncoding() ).getStr() );
+#endif
+                    }
+                } while( aFamilyName.getLength() );
             }
         }
     }
@@ -1800,8 +1822,10 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
             {
                 if( aInfo.m_eType == psp::fonttype::Builtin )
                     continue;
+
                 ImplFontData aFontData;
                 SetImplFontData( aInfo, aFontData );
+
                 // prefer builtin_rasterizer fonts
                 aFontData.mnQuality += 4096;
                 // prefer truetype fonts
@@ -1812,8 +1836,9 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
                     aFontData.maName = aFontData.maName.Copy( 4 );
                 if( nFaceNum < 0 )
                     nFaceNum = 0;
+                // handling of alias names is done by GlyphCache::FetchFontList
                 rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
-                    aInfo.m_nID, &aFontData );
+                                 aInfo.m_nID, &aFontData );
             }
         }
 
