@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:59:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ String STR_HUMAN_SWWEBDOC_NAME
     Text[ turkish ] = "HTML";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "HTML";
+    Text[ finnish ] = "HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
@@ -132,6 +133,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ finnish ] = "%PRODUCTNAME 4.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
 {
@@ -159,6 +161,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
@@ -179,10 +182,11 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ japanese ] = "%PRODUCTNAME 6.0 HTML Œ`Ž®ÄÞ·­ÒÝÄ";
     Text[ korean ] = "%PRODUCTNAME 5.£°HTML ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML ¤å¥ó";
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ arabic ] = "%PRODUCTNAME 6.0 HTML";
     Text[ catalan ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 HTML";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -210,6 +214,7 @@ String STR_SHELLNAME_WEBTEXT
     Text[ turkish ] = "Metin/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto/Web";
+    Text[ finnish ] = "Teksti/Web";
 };
 String STR_SHELLNAME_WEBFRAME
 {
@@ -237,6 +242,7 @@ String STR_SHELLNAME_WEBFRAME
     Text[ turkish ] = "Çerçeve/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco/Web";
+    Text[ finnish ] = "Kehys/Web";
 };
 String RID_WEBTOOLS_TOOLBOX
 {
@@ -264,6 +270,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text[ turkish ] = "Ana araç çubuðu/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de herramientas/Web";
+    Text[ finnish ] = "Päätyökalurivi/Web";
 };
 ToolBox RID_WEBTOOLS_TOOLBOX
 {
@@ -422,6 +429,7 @@ String RID_WEBTEXT_TOOLBOX
     Text[ turkish ] = "Metin nesne çubuðu/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objetos de texto/Web";
+    Text[ finnish ] = "Tekstiobjektipalkki/Web";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
 {
@@ -458,7 +466,7 @@ String RID_WEBFRAME_TOOLBOX
     Text [ italian ] = "Barra degli oggetti per cornice/Web" ;
     Text [ portuguese_brazilian ] = "Moldura/Web" ;
     Text [ portuguese ] = "Barra de objectos de moldura/Web" ;
-    Text [ finnish ] = "Kehys/Web" ;
+    Text [ finnish ] = "Kehysobjektipalkki/Web" ;
     Text [ danish ] = "Rammeobjektlinje/Web" ;
     Text [ french ] = "Barre d'objets de cadre/Web" ;
     Text [ swedish ] = "Ramobjektlist/Webb" ;
@@ -525,7 +533,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text [ italian ] = "Barra degli oggetti grafici/Web" ;
     Text [ portuguese_brazilian ] = "Gr fico/Web" ;
     Text [ portuguese ] = "Barra de objectos gráficos/Web" ;
-    Text [ finnish ] = "Kuva/Web" ;
+    Text [ finnish ] = "Grafiikkaobjektipalkki/Web" ;
     Text [ danish ] = "Grafikobjektlinje/Web" ;
     Text [ french ] = "Barre d'objets graphiques/Web" ;
     Text [ swedish ] = "Grafikobjektlist/Webb" ;
