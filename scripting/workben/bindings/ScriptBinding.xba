@@ -1114,6 +1114,7 @@ sub PopulateScriptList( lang as String, loc as String )
 	endif
 
 	scriptStorageID = scriptstoragemgr.getScriptStorageID( scriptLocationURI )
+	dim resultList() as Object
 	if ( scriptStorageID &gt; -1 ) then
 		storage = scriptstoragemgr.getScriptStorage( scriptStorageID )
 		implementations() = storage.getAllImplementations()
@@ -1139,8 +1140,9 @@ sub PopulateScriptList( lang as String, loc as String )
 					endif
 				endif
 			next n
+			resultList = tempDisplayList()
 		endif
-	ScriptDisplayList(0) = tempDisplayList()
+	ScriptDisplayList(0) = resultList()
 	endif
 	scriptList.selectItemPos( 0, true )
 
@@ -1600,6 +1602,12 @@ sub SubMenuListListener()
 	end if
 end sub
 
+REM a keypress listener that in turn fires the MenuCL on a return key even only
+sub fireMenuComboListernerOnRet( eventobj as object )
+	if (eventobj.KeyCode = 1280 ) then
+		MenuComboListener()
+	endif
+end sub
 
 &apos;Populates the SubMenuList with the appropriate menu items from the Top-level menu selected from the combo box
 sub MenuComboListener()
@@ -1611,6 +1619,13 @@ sub MenuComboListener()
 	loop while not( newToplevelMenu = menuItems( counter ) )
 	
 	PopulateSubMenuList( counter )
+end sub
+
+REM a keypress listener that in turn fires the LLCL on a return key even only
+sub fireLangLocComboListernerOnRet( eventobj as object )
+	if (eventobj.KeyCode = 1280 ) then
+		LangLocComboListener()
+	endif
 end sub
 
 sub LangLocComboListener()
@@ -1655,6 +1670,12 @@ sub LangLocComboListener()
     
 end sub
 
+REM a keypress listener that in turn fires the KeyCL on a return key even only
+sub fireKeyComboListernerOnRet( eventobj as object )
+	if (eventobj.KeyCode = 1280 ) then
+		KeyComboListener()
+	endif
+end sub
 
 &apos;Populates the KeyList with the appropriate key combos from the Top-level key group selected from the combo box
 sub KeyComboListener()

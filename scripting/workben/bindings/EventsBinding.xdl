@@ -7,9 +7,11 @@
  <dlg:bulletinboard>
   <dlg:combobox dlg:id="LocationCombo" dlg:tab-index="0" dlg:left="63" dlg:top="19" dlg:width="108" dlg:height="12" dlg:spin="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
+   <script:event script:event-name="on-keydown" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.fireLangLocComboListernerOnRet" script:language="StarBasic"/>
   </dlg:combobox>
-  <dlg:combobox dlg:id="LanguageCombo" dlg:tab-index="1" dlg:left="63" dlg:top="32" dlg:width="108" dlg:height="12" dlg:spin="true">
+  <dlg:combobox dlg:id="LanguageCombo" dlg:tab-index="1" dlg:left="63" dlg:top="31" dlg:width="108" dlg:height="12" dlg:spin="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
+   <script:event script:event-name="on-keydown" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.fireLangLocComboListernerOnRet" script:language="StarBasic"/>
   </dlg:combobox>
   <dlg:checkbox dlg:id="detail" dlg:tab-index="2" dlg:left="17" dlg:top="57" dlg:width="44" dlg:height="10" dlg:value="Detailed view" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
