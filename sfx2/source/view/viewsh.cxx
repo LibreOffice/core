@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 10:43:09 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,6 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -914,6 +909,15 @@ USHORT SfxViewShell::PrepareClose
         return FALSE;
     }
 
+    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
+    for ( USHORT nPos=0; rArr.Count(); )
+    {
+        ModelessDialogPtr_Impl pEntry = rArr[nPos];
+        rArr.Remove( nPos );
+        delete pEntry->pDialog;
+        delete pEntry;
+    }
+
     return TRUE;
 }
 
@@ -1732,4 +1736,41 @@ Reference < XController > SfxViewShell::GetController()
     return pImp->pController;
 }
 
+void SfxViewShell::AddModelessDialog( Dialog* pDialog, USHORT nSlotId )
+{
+    ModelessDialogPtr_Impl pEntry = new ModelessDialog_Impl;
+    pEntry->pDialog = pDialog;
+    pEntry->nSlotId = nSlotId;
+    pImp->aDialogArr.Insert( pEntry, pImp->aDialogArr.Count() );
+
+}
+
+BOOL SfxViewShell::HasModelessDialog( USHORT nSlotId )
+{
+    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
+    for ( USHORT nPos=0; nPos<rArr.Count(); nPos++ )
+    {
+        ModelessDialogPtr_Impl pEntry = rArr[nPos];
+        if ( pEntry->nSlotId == nSlotId )
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+void SfxViewShell::RemoveModelessDialog( USHORT nSlotId )
+{
+    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
+    for ( USHORT nPos=0; nPos<rArr.Count(); nPos++ )
+    {
+        ModelessDialogPtr_Impl pEntry = rArr[nPos];
+        if ( pEntry->nSlotId == nSlotId )
+        {
+            rArr.Remove( nPos );
+            delete pEntry->pDialog;
+            delete pEntry;
+            break;
+        }
+    }
+}
 

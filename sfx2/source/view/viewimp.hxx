@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 15:56:13 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@ class SfxAcceleratorManager;
 class SfxOfficeDispatch;
 class SfxBaseController;
 
+struct ModelessDialog_Impl
+{
+    Dialog* pDialog;
+    USHORT  nSlotId;
+};
+
+typedef ModelessDialog_Impl* ModelessDialogPtr_Impl;
+SV_DECL_PTRARR( ModelessDialogPtrArr_Impl, ModelessDialogPtr_Impl, 4, 4 );
+
 typedef SfxShell* SfxShellPtr_Impl;
 SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 );
 
@@ -89,6 +98,7 @@ struct SfxViewShell_Impl
 {
     BOOL                        bControllerSet;
     SfxShellArr_Impl            aArr;
+    ModelessDialogPtrArr_Impl   aDialogArr;
     SbxObjectRef                xSelectionObj;
     SvBorder                    aBorder;
     Size                        aOptimalSize;

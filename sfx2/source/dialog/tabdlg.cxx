@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-09 06:51:48 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #include "app.hxx"
 #include "sfxresid.hxx"
 #include "sfxhelp.hxx"
+#include "ctrlitem.hxx"
+#include "bindings.hxx"
 
 #include "dialog.hrc"
 #include "helpid.hrc"
@@ -115,6 +117,89 @@ struct Data_Impl
     {}
 };
 
+TYPEINIT1(SfxTabDialogItem,SfxSetItem);
+
+SfxTabDialogItem::SfxTabDialogItem( const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool )
+    : SfxSetItem( rAttr, pItemPool )
+{
+}
+
+SfxTabDialogItem::SfxTabDialogItem( USHORT nId, const SfxItemSet& rItemSet )
+    : SfxSetItem( nId, rItemSet )
+{
+}
+
+SfxPoolItem* __EXPORT SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
+{
+    return new SfxTabDialogItem( *this, pToPool );
+}
+
+SfxPoolItem* __EXPORT SfxTabDialogItem::Create(SvStream& rStream, USHORT nVersion) const
+{
+    DBG_ERROR( "Use it only in UI!" );
+    return NULL;
+}
+
+class SfxTabDialogController : public SfxControllerItem
+{
+    SfxTabDialog*   pDialog;
+    const SfxItemSet*     pSet;
+public:
+                    SfxTabDialogController( USHORT nId, SfxBindings& rBindings, SfxTabDialog* pDlg )
+                        : SfxControllerItem( nId, rBindings )
+                        , pDialog( pDlg )
+                        , pSet( NULL )
+                    {}
+
+                    ~SfxTabDialogController();
+
+    DECL_LINK(      Execute_Impl, void* );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+};
+
+SfxTabDialogController::~SfxTabDialogController()
+{
+    delete pSet;
+}
+
+IMPL_LINK( SfxTabDialogController, Execute_Impl, void*, pVoid )
+{
+    if ( pDialog->OK_Impl() && pDialog->Ok() )
+    {
+        const SfxPoolItem* aItems[2];
+        SfxTabDialogItem aItem( GetId(), *pDialog->GetOutputItemSet() );
+        aItems[0] = &aItem;
+        aItems[1] = NULL;
+        GetBindings().Execute( GetId(), aItems );
+    }
+
+    return 0;
+}
+
+void SfxTabDialogController::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    const SfxSetItem* pSetItem = PTR_CAST( SfxSetItem, pState );
+    if ( pSetItem )
+    {
+        pSet = pDialog->pSet = pSetItem->GetItemSet().Clone();
+        BOOL bDialogStarted = FALSE;
+        for ( USHORT n=0; n<pDialog->aTabCtrl.GetPageCount(); n++ )
+        {
+            USHORT nId = pDialog->aTabCtrl.GetPageId( n );
+            SfxTabPage* pTabPage = (SfxTabPage*) pDialog->aTabCtrl.GetTabPage( nId );
+            if ( pTabPage )
+            {
+                pTabPage->Reset( pSetItem->GetItemSet() );
+                bDialogStarted = TRUE;
+            }
+        }
+
+        if ( bDialogStarted )
+            pDialog->Show();
+    }
+    else
+        pDialog->Hide();
+}
 
 DECL_PTRARRAY(SfxTabDlgData_Impl, Data_Impl *, 4,4)
 
@@ -127,6 +212,7 @@ struct TabDlg_Impl
     SfxTabDlgData_Impl* pData;
 
     PushButton*         pApplyButton;
+    SfxTabDialogController* pController;
 
     TabDlg_Impl( BYTE nCnt ) :
 
@@ -135,7 +221,8 @@ struct TabDlg_Impl
         bInOK           ( FALSE ),
         bHideResetBtn   ( FALSE ),
         pData           ( new SfxTabDlgData_Impl( nCnt ) ),
-        pApplyButton    ( NULL )
+        pApplyButton    ( NULL ),
+        pController     ( NULL )
     {}
 };
 
@@ -348,7 +435,7 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
 
 // class SfxTabDialog ----------------------------------------------------
 
-#define INI_LIST \
+#define INI_LIST(ItemSetPtr) \
     aTabCtrl    ( this, ResId(ID_TABCONTROL ) ),\
     aOKBtn      ( this ),\
     pUserBtn    ( pUserButtonText? new PushButton(this): 0 ),\
@@ -356,7 +443,7 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
     aHelpBtn    ( this ),\
     aResetBtn   ( this ),\
     aBaseFmtBtn ( this ),\
-    pSet        ( pItemSet ),\
+    pSet        ( ItemSetPtr ),\
     pOutSet     ( 0 ),\
     pExampleSet ( 0 ),\
     pRanges     ( 0 ),\
@@ -387,7 +474,7 @@ SfxTabDialog::SfxTabDialog
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
-    INI_LIST,
+    INI_LIST(pItemSet),
     pFrame( pViewFrame )
 {
     Init_Impl( bFmt, pUserButtonText );
@@ -413,11 +500,46 @@ SfxTabDialog::SfxTabDialog
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
-    INI_LIST,
+    INI_LIST(pItemSet),
     pFrame( 0 )
 {
     Init_Impl( bFmt, pUserButtonText );
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
+}
+
+SfxTabDialog::SfxTabDialog
+
+/*  [Beschreibung]
+
+    Konstruktor, tempor"ar ohne Frame
+*/
+
+(
+    Window* pParent,                // Parent-Fenster
+    const ResId& rResId,            // ResourceId
+    USHORT nSetId,
+    SfxBindings& rBindings,
+    BOOL bEditFmt,      // Flag: es werden Vorlagen bearbeitet
+                        // wenn ja -> zus"atzlicher Button f"ur Standard
+    const String* pUserButtonText   // Text f"ur BenutzerButton;
+                                    // wenn != 0, wird der UserButton erzeugt
+) :
+    TabDialog( pParent, rResId ),
+    INI_LIST(NULL),
+    pFrame( 0 )
+{
+    rBindings.ENTERREGISTRATIONS();
+    pImpl->pController = new SfxTabDialogController( nSetId, rBindings, this );
+    rBindings.LEAVEREGISTRATIONS();
+
+    EnableApplyButton( TRUE );
+    SetApplyHandler( LINK( pImpl->pController, SfxTabDialogController, Execute_Impl ) );
+
+    rBindings.Invalidate( nSetId );
+    rBindings.Update( nSetId );
+    DBG_ASSERT( pSet, "No ItemSet!" );
+
+    Init_Impl( bFmt, pUserButtonText );
 }
 
 // -----------------------------------------------------------------------
@@ -455,6 +577,7 @@ SfxTabDialog::~SfxTabDialog()
         delete pDataObject;
     }
 
+    delete pImpl->pController;
     delete pImpl->pApplyButton;
     delete pImpl->pData;
     delete pImpl;
