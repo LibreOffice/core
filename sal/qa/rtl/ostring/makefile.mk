@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:42:19 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:55:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 INCPRE+= $(PRJ)$/qa$/inc
 
 PRJNAME=sal
-TARGET=rtl_ostring2
+TARGET=qa_rtl_ostring2
 
 ENABLE_EXCEPTIONS=TRUE
 
