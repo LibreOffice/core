@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 		<group oor:name="SearchEngine">
 			<info>
 				<desc xml:lang="en-US">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="el">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="el">Ορίζει τον τύπο της αναζήτησης δηλ. ακριβής ή αναζήτηση κατά συνάφεια.</desc>
 				<desc xml:lang="nl">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="fr">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="fi">Specifies the search type, i.e. nexus or exact search.</desc>
@@ -96,6 +96,8 @@
 				<desc xml:lang="hi-IN">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="x-comment">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="sk">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="hu">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="sl">Specifies the search type, i.e. nexus or exact search.</desc>
 			</info>
 			<group oor:name="And">
 				<info>
@@ -125,6 +127,8 @@
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="sk">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc xml:lang="hu">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc xml:lang="sl">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -154,12 +158,14 @@
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the suffix.</desc>
-						<desc xml:lang="el">Specifies the suffix.</desc>
+						<desc xml:lang="el">Ορίζει το επίθεμα.</desc>
 						<desc xml:lang="nl">Specifies the suffix.</desc>
 						<desc xml:lang="fr">Specifies the suffix.</desc>
 						<desc xml:lang="fi">Specifies the suffix.</desc>
@@ -184,12 +190,14 @@
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 						<desc xml:lang="sk">Specifies the suffix.</desc>
+						<desc xml:lang="hu">Specifies the suffix.</desc>
+						<desc xml:lang="sl">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the separator</desc>
-						<desc xml:lang="el">Specifies the separator</desc>
+						<desc xml:lang="el">Ορίζει το διαχωριστικό</desc>
 						<desc xml:lang="nl">Specifies the separator</desc>
 						<desc xml:lang="fr">Specifies the separator</desc>
 						<desc xml:lang="fi">Specifies the separator</desc>
@@ -214,6 +222,8 @@
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
 						<desc xml:lang="sk">Specifies the separator</desc>
+						<desc xml:lang="hu">Specifies the separator</desc>
+						<desc xml:lang="sl">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -244,6 +254,8 @@
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -274,6 +286,8 @@
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
 								<desc xml:lang="x-comment">None</desc>
 								<desc xml:lang="sk">Žiadne</desc>
+								<desc xml:lang="hu">None</desc>
+								<desc xml:lang="sl">None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -304,6 +318,8 @@
 								<desc xml:lang="hi-IN">अप्पर</desc>
 								<desc xml:lang="x-comment">Upper</desc>
 								<desc xml:lang="sk">Horný</desc>
+								<desc xml:lang="hu">Upper</desc>
+								<desc xml:lang="sl">Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -334,6 +350,8 @@
 								<desc xml:lang="hi-IN">लोवर</desc>
 								<desc xml:lang="x-comment">Lower</desc>
 								<desc xml:lang="sk">Spodný</desc>
+								<desc xml:lang="hu">Lower</desc>
+								<desc xml:lang="sl">Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -367,6 +385,8 @@
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="sk">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc xml:lang="hu">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc xml:lang="sl">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -396,12 +416,14 @@
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the suffix.</desc>
-						<desc xml:lang="el">Specifies the suffix.</desc>
+						<desc xml:lang="el">Ορίζει το επίθεμα.</desc>
 						<desc xml:lang="nl">Specifies the suffix.</desc>
 						<desc xml:lang="fr">Specifies the suffix.</desc>
 						<desc xml:lang="fi">Specifies the suffix.</desc>
@@ -426,12 +448,14 @@
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 						<desc xml:lang="sk">Specifies the suffix.</desc>
+						<desc xml:lang="hu">Specifies the suffix.</desc>
+						<desc xml:lang="sl">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the separator</desc>
-						<desc xml:lang="el">Specifies the separator</desc>
+						<desc xml:lang="el">Ορίζει το διαχωριστικό</desc>
 						<desc xml:lang="nl">Specifies the separator</desc>
 						<desc xml:lang="fr">Specifies the separator</desc>
 						<desc xml:lang="fi">Specifies the separator</desc>
@@ -456,6 +480,8 @@
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
 						<desc xml:lang="sk">Specifies the separator</desc>
+						<desc xml:lang="hu">Specifies the separator</desc>
+						<desc xml:lang="sl">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -486,6 +512,8 @@
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -516,6 +544,8 @@
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
 								<desc xml:lang="x-comment">None</desc>
 								<desc xml:lang="sk">Žiadne</desc>
+								<desc xml:lang="hu">None</desc>
+								<desc xml:lang="sl">None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -546,6 +576,8 @@
 								<desc xml:lang="hi-IN">अप्पर</desc>
 								<desc xml:lang="x-comment">Upper</desc>
 								<desc xml:lang="sk">Horný</desc>
+								<desc xml:lang="hu">Upper</desc>
+								<desc xml:lang="sl">Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -576,6 +608,8 @@
 								<desc xml:lang="hi-IN">लोवर</desc>
 								<desc xml:lang="x-comment">Lower</desc>
 								<desc xml:lang="sk">Spodný</desc>
+								<desc xml:lang="hu">Lower</desc>
+								<desc xml:lang="sl">Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -609,6 +643,8 @@
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="sk">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc xml:lang="hu">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc xml:lang="sl">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -638,6 +674,8 @@
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -668,6 +706,8 @@
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 						<desc xml:lang="sk">Specifies the suffix.</desc>
+						<desc xml:lang="hu">Specifies the suffix.</desc>
+						<desc xml:lang="sl">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -698,6 +738,8 @@
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
 						<desc xml:lang="sk">Specifies the separator</desc>
+						<desc xml:lang="hu">Specifies the separator</desc>
+						<desc xml:lang="sl">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -728,6 +770,8 @@
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -758,6 +802,8 @@
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
 								<desc xml:lang="x-comment">None</desc>
 								<desc xml:lang="sk">Žiadne</desc>
+								<desc xml:lang="hu">None</desc>
+								<desc xml:lang="sl">None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -788,6 +834,8 @@
 								<desc xml:lang="hi-IN">अप्पर</desc>
 								<desc xml:lang="x-comment">Upper</desc>
 								<desc xml:lang="sk">Horný</desc>
+								<desc xml:lang="hu">Upper</desc>
+								<desc xml:lang="sl">Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -818,6 +866,8 @@
 								<desc xml:lang="hi-IN">लोवर</desc>
 								<desc xml:lang="x-comment">Lower</desc>
 								<desc xml:lang="sk">Spodný</desc>
+								<desc xml:lang="hu">Lower</desc>
+								<desc xml:lang="sl">Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -854,6 +904,8 @@
 				<desc xml:lang="hi-IN">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="x-comment">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="sk">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc xml:lang="hu">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc xml:lang="sl">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
 			<prop oor:name="ooInetDNSServer" oor:type="xs:string">
 				<!-- OldPath: Inet/DNS -->
@@ -888,6 +940,8 @@
 					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="x-comment">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="sk">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="hu">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="sl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -924,6 +978,8 @@
 					<desc xml:lang="hi-IN">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="x-comment">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="sk">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc xml:lang="hu">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc xml:lang="sl">Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -960,6 +1016,8 @@
 					<desc xml:lang="hi-IN">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="x-comment">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="sk">Specifies the type of proxy selection.</desc>
+					<desc xml:lang="hu">Specifies the type of proxy selection.</desc>
+					<desc xml:lang="sl">Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -990,6 +1048,8 @@
 							<desc xml:lang="hi-IN">No proxies</desc>
 							<desc xml:lang="x-comment">No proxies</desc>
 							<desc xml:lang="sk">No proxies</desc>
+							<desc xml:lang="hu">No proxies</desc>
+							<desc xml:lang="sl">No proxies</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -1020,6 +1080,8 @@
 							<desc xml:lang="hi-IN">Automatic proxy configuration</desc>
 							<desc xml:lang="x-comment">Automatic proxy configuration</desc>
 							<desc xml:lang="sk">Automatic proxy configuration</desc>
+							<desc xml:lang="hu">Automatic proxy configuration</desc>
+							<desc xml:lang="sl">Automatic proxy configuration</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1050,6 +1112,8 @@
 							<desc xml:lang="hi-IN">Manual proxy configuration</desc>
 							<desc xml:lang="x-comment">Manual proxy configuration</desc>
 							<desc xml:lang="sk">Manual proxy configuration</desc>
+							<desc xml:lang="hu">Manual proxy configuration</desc>
+							<desc xml:lang="sl">Manual proxy configuration</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1086,6 +1150,8 @@
 					<desc xml:lang="hi-IN">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="sk">Specifies the name of the FTP proxy server.</desc>
+					<desc xml:lang="hu">Specifies the name of the FTP proxy server.</desc>
+					<desc xml:lang="sl">Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1122,6 +1188,8 @@
 					<desc xml:lang="hi-IN">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="sk">Specifies the port of the FTP proxy server.</desc>
+					<desc xml:lang="hu">Specifies the port of the FTP proxy server.</desc>
+					<desc xml:lang="sl">Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1152,6 +1220,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1182,6 +1252,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1218,6 +1290,8 @@
 					<desc xml:lang="hi-IN">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="sk">Specifies the name of the HTTP proxy server.</desc>
+					<desc xml:lang="hu">Specifies the name of the HTTP proxy server.</desc>
+					<desc xml:lang="sl">Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1254,6 +1328,8 @@
 					<desc xml:lang="hi-IN">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="sk">Specifies the port of the HTTP proxy server.</desc>
+					<desc xml:lang="hu">Specifies the port of the HTTP proxy server.</desc>
+					<desc xml:lang="sl">Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1284,6 +1360,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1314,6 +1392,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1351,6 +1431,8 @@
 					<desc xml:lang="hi-IN">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="sk">Specifies the name of the Socks proxy server.</desc>
+					<desc xml:lang="hu">Specifies the name of the Socks proxy server.</desc>
+					<desc xml:lang="sl">Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1388,6 +1470,8 @@
 					<desc xml:lang="hi-IN">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="sk">Specifies the port of the Socks proxy server.</desc>
+					<desc xml:lang="hu">Specifies the port of the Socks proxy server.</desc>
+					<desc xml:lang="sl">Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1418,6 +1502,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1448,6 +1534,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1483,10 +1571,13 @@
 				<desc xml:lang="hi-IN">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="x-comment">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="sk">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc xml:lang="hu">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc xml:lang="sl">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
