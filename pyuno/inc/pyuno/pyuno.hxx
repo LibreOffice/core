@@ -215,6 +215,10 @@ public:
         const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const
         throw ( com::sun::star::uno::RuntimeException);
 
+    /** extracts a proper uno exception from a given python exception
+     */
+    com::sun::star::uno::Any extractUnoException(
+        const PyRef & excType, const PyRef & excValue, const PyRef & excTraceback) const;
 
     /** Returns the internal handle. Should only be used by the module implementation
      */
