@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-08 13:20:49 $
+ *  last change: $Author: cd $ $Date: 2002-05-14 05:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,7 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SfxMenuCfgItemArr& rCfg)
             else if ( rCfg[n]->aCommand.Len() )
             {
                 pSuper->SetItemCommand( nId, rCfg[n]->aCommand );
+                pSuper->SetHelpId( nId, (ULONG) nId ); // Set help id even if we have a command
             }
             else
             {
@@ -1261,11 +1262,6 @@ void SfxMenuBarManager::RestoreSlotIds( Menu* pMenu, USHORT nPopupMenuId )
                             ULONG           nHelpId     = pMenu->GetHelpId( nId );
                             ULONG           nUserValue  = pMenu->GetUserValue( nId );
                             MenuItemBits    nBits       = pMenu->GetItemBits( nId );
-
-                            //Special case for open doc
-                            if ( nPopupMenuId == SID_PICKLIST &&
-                                 aCommand.CompareToAscii( ".uno:Open" ) == COMPARE_EQUAL )
-                                nNewId = SID_OPENDOC;
 
                             // There is no VCL method to reset the item ID, so I have to remove/insert the menu entry
                             pMenu->RemoveItem( nSVPos );
