@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 14:15:16 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ class SwXTextField : public cppu::WeakImplHelper5
     String                      m_sTypeName;
 
 
-    SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
+    //SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
     SwDoc*       GetDoc() {return m_pDoc;}
 public:
     SwXTextField(sal_uInt16 nServiceId);
@@ -238,6 +238,7 @@ public:
 
     const SwField*      GetField() const;
     const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
+    void Invalidate();
 };
 /* -----------------21.12.98 10:26-------------------
  *
