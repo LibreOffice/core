@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 08:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,17 @@
 #ifndef _SV_PRINTDLG_HXX_ //autogen
 #include <svtools/printdlg.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PRINTWARNINGOPTIONS_HXX
+#include <svtools/printwarningoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
+#include <svtools/printoptions.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "printer.hxx"
+#include "printopt.hxx"
 #include "sfxtypes.hxx"
 #include "prnmon.hxx"
 #include "viewsh.hxx"
@@ -485,6 +493,53 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
     if ( !FONTS() )
         UpdateFonts_Impl();
     return SfxFindFont_Impl(*FONTS(), rFontName);
+}
+
+//--------------------------------------------------------------------
+
+BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentObjects )
+{
+    BOOL    bTransparencyWarningShown = FALSE;
+    BOOL    bReduceTransparency = FALSE;
+    BOOL    bRet = TRUE;
+
+    if( bDocumentContainsTransparentObjects )
+    {
+        SvtPrintWarningOptions aWarnOpt;
+
+        if( aWarnOpt.IsTransparency() )
+        {
+            TransparencyPrintWarningBox aWarnBox( pUIParent );
+            const USHORT                nRet = aWarnBox.Execute();
+
+            if( nRet == RET_CANCEL )
+                bRet = FALSE;
+            else
+            {
+                bTransparencyWarningShown = TRUE;
+                bReduceTransparency = ( nRet != RET_NO );
+                aWarnOpt.SetTransparency( !aWarnBox.IsNoWarningChecked() );
+            }
+        }
+    }
+
+    if( bRet )
+    {
+        const SvtPrinterOptions     aPrinterOpt;
+        const SvtPrintFileOptions   aPrintFileOpt;
+        const SvtBasePrintOptions*  pPrinterOpt = &aPrinterOpt;
+        const SvtBasePrintOptions*  pPrintFileOpt = &aPrintFileOpt;
+        PrinterOptions              aNewPrinterOptions;
+
+        ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
+
+        if( bTransparencyWarningShown )
+            aNewPrinterOptions.SetReduceTransparency( bReduceTransparency );
+
+        SetPrinterOptions( aNewPrinterOptions );
+    }
+
+    return bRet;
 }
 
 //--------------------------------------------------------------------
