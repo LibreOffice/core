@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:06:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
         Text[ czech ] = "Standardní";\
         Text[ hebrew ] = "‮ברירת מגדל‬";\
         Text[ hindi ] = "~अनुपस्थिति";\
+        Text[ slovak ] = "Výcho~dzie";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -183,6 +184,7 @@
                     Text[ czech ] = "Horní index";\
                     Text[ hebrew ] = "~Hochstellen";\
                     Text[ hindi ] = "~सूपरस्क्रिप्ट्";\
+                    Text[ slovak ] = "Ho~rný index";\
                 };\
                 MenuItem\
                 {\
@@ -216,6 +218,7 @@
                     Text[ czech ] = "Dolní index";\
                     Text[ hebrew ] = "~Tiefstellen";\
                     Text[ hindi ] = "स~बस्क्रिप्ट्";\
+                    Text[ slovak ] = "Do~lný index";\
                 };\
             };\
         };\
@@ -234,6 +237,7 @@
         Text[ czech ] = "Styl";\
         Text[ hebrew ] = "Sti~l";\
         Text[ hindi ] = "~शैली";\
+        Text[ slovak ] = "Š~týl";\
     };\
     MenuItem\
     {\
@@ -292,6 +296,7 @@
                     Text[ czech ] = "Vlevo";\
                     Text[ hebrew ] = "~Links";\
                     Text[ hindi ] = "~बायाँ";\
+                    Text[ slovak ] = "~Vľavo";\
                 };\
                 MenuItem\
                 {\
@@ -327,6 +332,7 @@
                     Text[ czech ] = "Vpravo";\
                     Text[ hebrew ] = "~Rechts";\
                     Text[ hindi ] = "~दाहिना";\
+                    Text[ slovak ] = "Vp~ravo";\
                 };\
                 MenuItem\
                 {\
@@ -362,6 +368,7 @@
                     Text[ czech ] = "Na střed";\
                     Text[ hebrew ] = "~Zentriert";\
                     Text[ hindi ] = "~केन्द्रित";\
+                    Text[ slovak ] = "~Na stred";\
                 };\
                 MenuItem\
                 {\
@@ -396,6 +403,7 @@
                     Text[ czech ] = "Do bloku";\
                     Text[ hebrew ] = "~Blocksatz";\
                     Text[ hindi ] = "व्यवस्था किया हुआ";\
+                    Text[ slovak ] = "~Do bloku";\
                 };\
             };\
         };\
@@ -414,6 +422,7 @@
         Text[ czech ] = "Zarovnání";\
         Text[ hebrew ] = "‮ישור‬";\
         Text[ hindi ] = "~पंक्तिकरण";\
+        Text[ slovak ] = "Z~arovnanie";\
     };\
     MenuItem\
     {\
@@ -469,6 +478,7 @@
         Text[ czech ] = "Řádkování";\
         Text[ hebrew ] = "‮ריווח שורה‬";\
         Text[ hindi ] = "~रेखा अंतर देना";\
+        Text[ slovak ] = "R~iadkovanie";\
     };
 
 #define MN_DRWTXT \
@@ -514,6 +524,7 @@
         Text[ czech ] = "Text...";\
         Text[ hebrew ] = "~Text...";\
         Text[ hindi ] = "टे~क्स्ट्...";\
+        Text[ slovak ] = "Te~xt...";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -550,6 +561,7 @@
         Text[ czech ] = "Původní velikost";\
         Text[ hebrew ] = "Original~größe";\
         Text[ hindi ] = "~यथार्थ परिमाण";\
+        Text[ slovak ] = "Pôv~odná veľkosť";\
     };
 
 #define MN_RENAME_OBJECT \
@@ -583,6 +595,7 @@
         Text[ czech ] = "Pojmenovat objekt...";\
         Text[ hebrew ] = "Ob~jekt benennen...";\
         Text[ hindi ] = "~Name Object...";\
+        Text[ slovak ] = "~Názov objektu...";\
     };
 
 #define MN_MIRRORSUB \
@@ -639,6 +652,7 @@
                     Text[ czech ] = "Svisle";\
                     Text[ hebrew ] = "~Vertikal";\
                     Text[ hindi ] = "~लंबरूप प्रकार से";\
+                    Text[ slovak ] = "~Zvisle";\
                 };\
                 MenuItem\
                 {\
@@ -672,6 +686,7 @@
                     Text[ czech ] = "Vodorovně";\
                     Text[ hebrew ] = "~Horizontal";\
                     Text[ hindi ] = "~समतल";\
+                    Text[ slovak ] = "~Vodorovne";\
                 };\
             };\
         };\
@@ -690,6 +705,7 @@
         Text[ czech ] = "Překlopit";\
         Text[ hebrew ] = "Sp~iegeln";\
         Text[ hindi ] = "~प्लिप";\
+        Text[ slovak ] = "~Prevrátiť";\
     };
 
 #define MN_ARRANGESUB \
@@ -751,6 +767,7 @@
                     Text[ czech ] = "Přenést do popředí";\
                     Text[ hebrew ] = "W~eiter nach vorn";\
                     Text[ hindi ] = "~आगे की ओर लाओ";\
+                    Text[ slovak ] = "Preniesť ~bližšie";\
                 };\
                 MenuItem\
                 {\
@@ -785,6 +802,7 @@
                     Text[ czech ] = "Přenést do pozadí";\
                     Text[ hebrew ] = "Weiter ~nach hinten";\
                     Text[ hindi ] = "पी~छे की ओर भेजो";\
+                    Text[ slovak ] = "P~reniesť ďalej";\
                 };\
                 MenuItem\
                 {\
@@ -816,6 +834,7 @@
         Text[ czech ] = "Uspořádat";\
         Text[ hebrew ] = "‮סידור‬";\
         Text[ hindi ] = "~क्रम में रखो";\
+        Text[ slovak ] = "Uspori~adať";\
     };
 
 #define MN_ANCHORSUB \
@@ -865,6 +884,7 @@
                     Text[ czech ] = "Ke stránce";\
                     Text[ hebrew ] = "An der ~Seite";\
                     Text[ hindi ] = "पृ~ष्ठ केलिए";\
+                    Text[ slovak ] = "K stránk~e";\
                 };\
                 MenuItem\
                 {\
@@ -897,6 +917,7 @@
                     Text[ czech ] = "K buňce";\
                     Text[ hebrew ] = "An der ~Zelle";\
                     Text[ hindi ] = "~कोष्ठ केलिए";\
+                    Text[ slovak ] = "K ~bunke";\
                 };\
             };\
         };\
@@ -920,6 +941,7 @@
         Text[ czech ] = "Ukotvit";\
         Text[ hebrew ] = "~Verankerung";\
         Text[ hindi ] = "ऐ~न्कर";\
+        Text[ slovak ] = "~Ukotviť";\
     };
 
 #define MN_ALIGNSUB \
@@ -989,6 +1011,7 @@
         Text[ czech ] = "Zarovnání";\
         Text[ hebrew ] = "Aus~richtung";\
         Text[ hindi ] = "पं~क्तिकरण";\
+        Text[ slovak ] = "~Zarovnanie";\
     };
 
  //
@@ -1027,6 +1050,7 @@ String RID_DRAW_OBJECTBAR
     Text[ czech ] = "Panel nástrojů Kreslení";
     Text[ hebrew ] = "Zeichenobjektleiste";
     Text[ hindi ] = "रेखाचित्र वस्तु पट्टी";
+    Text[ slovak ] = "Panel nástrojov kreslenia";
 };
 ToolBox RID_DRAW_OBJECTBAR
 {
@@ -1205,6 +1229,7 @@ String RID_TEXT_TOOLBOX
     Text[ czech ] = "Panel nástrojů Text";
     Text[ hebrew ] = "Textobjektleiste";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी";
+    Text[ slovak ] = "Panel textu";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -1735,6 +1760,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ czech ] = "Panel nástrojů Obrázky";
     Text[ hebrew ] = "Grafikobjektleiste";
     Text[ hindi ] = "सुचित्र वस्तु पट्टी";
+    Text[ slovak ] = "Panel obrázkov";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -2000,6 +2026,7 @@ String RID_POPUP_DRAW
     Text[ czech ] = "Rozbalovací menu pro kresby";
     Text[ hebrew ] = "Popup-Menü für Zeichenobjekte";
     Text[ hindi ] = "रेखाचित्र वस्तुओं केलिए पाप्-अप् मेनु";
+    Text[ slovak ] = "Rozbaľovacie menu pre kresby";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -2163,6 +2190,7 @@ Menu RID_POPUP_CHART
             Text[ czech ] = "Upravit oblast dat...";
             Text[ hebrew ] = "~Datenbereich ändern...";
             Text[ hindi ] = "ड़ॉटा फैलाव को ~सुधारो...";
+            Text[ slovak ] = "~Upraviť dátovú oblasť...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -2205,6 +2233,7 @@ String RID_POPUP_DRAWTEXT
     Text[ czech ] = "Rozbalovací menu pro text";
     Text[ hebrew ] = "Popup-Menü für Text-Objekte";
     Text[ hindi ] = "टेक्स्ट् वस्तुओं केलिए पाप्-अप् मेनु";
+    Text[ slovak ] = "Rozbaľovacie menu pre textové objekty";
 };
 
 Menu RID_POPUP_DRAWTEXT
@@ -2235,6 +2264,8 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
+
+
 
 
 
