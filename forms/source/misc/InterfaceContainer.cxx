@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 09:47:49 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 16:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,17 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             {
                 Any aElement = xObj->queryInterface(m_aElementType);
                 if (aElement.hasValue())
-                    insert(m_aItems.size(), *static_cast<const InterfaceRef*>(aElement.getValue()), sal_False);
+                {
+                    Reference< XInterface > xElement;
+                    aElement >>= xElement;
+                    implInsert(
+                        m_aItems.size(),    // position
+                        xElement,           // element to insert
+                        sal_False,          // no event attacher manager handling
+                        sal_True,           // approve the element
+                        sal_True            // fire the event
+                    );
+                }
                 else
                     ; // form konnte nicht gelesen werden; nyi
             }
@@ -538,7 +548,7 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
     if (j != m_aItems.end())
     {
         OInterfaceMap::iterator i = m_aMap.begin();
-        while (i != m_aMap.end() && (*i).second != _rSource.Source)
+        while (i != m_aMap.end() && i->second != _rSource.Source)
             ++i;
 
         m_aMap.erase(i);
@@ -595,7 +605,7 @@ Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) thr
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
 
-    return Any(&(*aPair.first).second, m_aElementType);
+    return (*aPair.first).second->queryInterface( m_aElementType );
 }
 
 //------------------------------------------------------------------------------
@@ -632,34 +642,59 @@ Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsEx
     if (_nIndex < 0 || (_nIndex >= (sal_Int32)m_aItems.size()))
         throw IndexOutOfBoundsException();
 
-    return Any(&m_aItems[_nIndex], m_aElementType);
+    return m_aItems[_nIndex]->queryInterface( m_aElementType );
 }
 
 //------------------------------------------------------------------------------
-void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( IllegalArgumentException )
+InterfaceRef OInterfaceContainer::approveNewElement( const Any& _rObject )
 {
-    if (!xElement.is())
+    Reference< XInterface > xObject;
+    _rObject >>= xObject;
+    return approveNewElement( xObject );
+}
+
+//------------------------------------------------------------------------------
+InterfaceRef OInterfaceContainer::approveNewElement( const InterfaceRef& _rxObject )
+{
+    if ( !_rxObject.is() )
         throw IllegalArgumentException(FRM_RES_STRING(RID_STR_NEED_NON_NULL_OBJECT), static_cast<XContainer*>(this), 1);
 
-    // das richtige Interface besorgen
-    Any aCorrectType = xElement->queryInterface(m_aElementType);
-    if (!aCorrectType.hasValue())
+    Any aCorrectType = _rxObject->queryInterface( m_aElementType );
+    if ( !aCorrectType.hasValue() )
         lcl_throwIllegalArgumentException();
-    InterfaceRef xCorrectType = *static_cast<const InterfaceRef*>(aCorrectType.getValue());
+
+    Reference< XPropertySet > xSet( _rxObject, UNO_QUERY );
+    if ( !xSet.is() || !hasProperty( PROPERTY_NAME, xSet ) )
+        lcl_throwIllegalArgumentException();
+
+    Reference< XChild > xChild( _rxObject, UNO_QUERY );
+    if ( !xChild.is() || xChild->getParent().is() )
+        lcl_throwIllegalArgumentException();
+
+    return _rxObject;
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const InterfaceRef& _rxElement,
+    sal_Bool _bEvents, sal_Bool _bApprove, sal_Bool _bFire ) throw( IllegalArgumentException )
+{
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
+
+    // will throw an exception if necessary
+    if ( _bApprove )
+        approveNewElement( _rxElement );
+
+    // das richtige Interface besorgen
+    InterfaceRef xCorrectType;
+    Any aCorrectedType = _rxElement->queryInterface( m_aElementType );
+    aCorrectedType >>= xCorrectType;
+    Reference<XPropertySet>  xSet( _rxElement, UNO_QUERY );
+
+    // approveNewElement has ensured that both xCorrectType and xSet are not NULL
 
     ::rtl::OUString sName;
-    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
-    if (xSet.is())
-    {
-        if (!hasProperty(PROPERTY_NAME, xSet))
-            lcl_throwIllegalArgumentException();
-
-        Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
-        aValue >>= sName;
-        xSet->addPropertyChangeListener(PROPERTY_NAME, this);
-    }
-    else
-        lcl_throwIllegalArgumentException();
+    xSet->getPropertyValue(PROPERTY_NAME) >>= sName;
+    xSet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     if (_nIndex > (sal_Int32)m_aItems.size()) // ermitteln des tatsaechlichen Indexs
     {
@@ -671,26 +706,31 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
 
     m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef  >(sName,xCorrectType));
 
-    Reference<XChild>  xChild(xElement, UNO_QUERY);
+    Reference<XChild>  xChild(_rxElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(static_cast<XContainer*>(this));
 
-    if (bEvents)
+    if (_bEvents)
     {
         m_xEventAttacher->insertEntry(_nIndex);
-        Reference< XInterface > xAsIFace(xElement, UNO_QUERY);  // important to normalize this ....
+        Reference< XInterface > xAsIFace(_rxElement, UNO_QUERY);    // important to normalize this ....
         m_xEventAttacher->attach( _nIndex, xAsIFace, makeAny( xSet ) );
     }
 
     // notify derived classes
     implInserted(xCorrectType);
 
-    // notify listeners
-    ContainerEvent aEvt;
-    aEvt.Source   = static_cast<XContainer*>(this);
-    aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = Any(&xCorrectType, m_aElementType);
-    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
+    if ( _bFire )
+    {
+        aGuard.clear();
+
+        // notify listeners
+        ContainerEvent aEvt;
+        aEvt.Source   = static_cast<XContainer*>(this);
+        aEvt.Accessor <<= _nIndex;
+        aEvt.Element  = aCorrectedType;
+        NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -716,30 +756,25 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
 
 // XIndexContainer
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const Any& Element) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        lcl_throwIllegalArgumentException();
-
-    ::osl::MutexGuard aGuard( m_rMutex );
     Reference< XInterface > xElement;
-    Element >>= xElement;
-    insert(_nIndex, xElement, sal_True);
+    _rElement >>= xElement;
+    implInsert( _nIndex, xElement );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        lcl_throwIllegalArgumentException();
-
-    ::osl::MutexGuard aGuard( m_rMutex );
     if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
         throw IndexOutOfBoundsException();
 
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
+
+    InterfaceRef  xNewElement = approveNewElement( Element );
 
     InterfaceRef  xOldElement(m_aItems[_nIndex]);
-    InterfaceRef  xNewElement(*(InterfaceRef *)Element.getValue());
+
 
     OInterfaceMap::iterator j = m_aMap.begin();
     while (j != m_aMap.end() && (*j).second != xOldElement) ++j;
@@ -759,18 +794,11 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
 
     // neue einfuegen
     ::rtl::OUString sName;
-    xSet = Reference<XPropertySet> (xNewElement, UNO_QUERY);
-    if (xSet.is())
-    {
-        if (!hasProperty(PROPERTY_NAME, xSet))
-            lcl_throwIllegalArgumentException();
+    xSet = xSet.query( xNewElement );
+    DBG_ASSERT( xSet.is(), "OInterfaceContainer::replaceByIndex: what did approveNewElement do?" );
 
-        Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
-        aValue >>= sName;
-        xSet->addPropertyChangeListener(PROPERTY_NAME, this);
-    }
-    else
-        lcl_throwIllegalArgumentException();
+    xSet->getPropertyValue(PROPERTY_NAME) >>= sName;
+    xSet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // remove the old one
     m_aMap.erase(j);
@@ -790,11 +818,12 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
     implReplaced(xOldElement, xNewElement);
 
     // benachrichtigen
+    aGuard.clear();
     ContainerEvent aEvt;
     aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = Any(&xNewElement, m_aElementType);
-    aEvt.ReplacedElement = Any(&xOldElement, m_aElementType);
+    aEvt.Element  = xNewElement->queryInterface( m_aElementType );
+    aEvt.ReplacedElement = xOldElement->queryInterface( m_aElementType );
     NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementReplaced, aEvt);
 }
 
@@ -833,31 +862,15 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( Index
     // notify listeners
     ContainerEvent aEvt;
     aEvt.Source     = static_cast<XContainer*>(this);
-    aEvt.Element    = Any(&xElement, m_aElementType);
+    aEvt.Element    = xElement->queryInterface( m_aElementType );
     aEvt.Accessor   <<= _nIndex;
     NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementRemoved, aEvt);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
-    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        lcl_throwIllegalArgumentException();
-
-    Reference< XInterface > xElement;
-    Element >>= xElement;
-
-    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
-    if (xSet.is())
-    {
-        if (!hasProperty(PROPERTY_NAME, xSet))
-            lcl_throwIllegalArgumentException();
-
-        xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
-    }
-
-    insertByIndex(m_aItems.size(), Element);
+    insertByIndex( m_aItems.size(), _rElement );
 }
 
 //------------------------------------------------------------------------
@@ -872,7 +885,8 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
         lcl_throwIllegalArgumentException();
 
-    Reference<XPropertySet>  xSet(*(InterfaceRef *)Element.getValue(), UNO_QUERY);
+    Reference<XPropertySet> xSet;
+    Element >>= xSet;
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))

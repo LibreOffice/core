@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 09:49:36 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 16:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,18 @@ public:
 protected:
     // helper
     virtual void SAL_CALL disposing();
-    virtual void insert(sal_Int32 _nIndex, const InterfaceRef& _Object, sal_Bool bEvents = sal_True)
-                    throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void removeElementsNoEvents(sal_Int32 nIndex);
+
+    /// to be overridden if elements which are to be inserted into the container shall be checked
+    virtual InterfaceRef approveNewElement( const ::com::sun::star::uno::Any& _rObject );
+    virtual InterfaceRef approveNewElement( const InterfaceRef& _rxObject );
+            void implInsert(
+                sal_Int32 _nIndex,
+                const InterfaceRef& _rxObject,
+                sal_Bool _bEvents = sal_True,
+                sal_Bool _bApprove = sal_True,
+                sal_Bool _bFire = sal_True
+            ) throw(::com::sun::star::lang::IllegalArgumentException);
 
     // called after the object is inserted, but before the "real listeners" are notified
     virtual void implInserted(const InterfaceRef& _rxObject) { }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 16:46:19 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,7 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
-    virtual void insert(sal_Int32 _nIndex, const InterfaceRef& _Object, sal_Bool bEvents)
-                    throw(::com::sun::star::lang::IllegalArgumentException);
+    virtual InterfaceRef approveNewElement( const InterfaceRef& _rxObject );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumn(sal_Int32 nTypeId) const;
 

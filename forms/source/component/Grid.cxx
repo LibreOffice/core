@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 16:58:34 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 16:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,10 @@ void OGridControlModel::disposing()
 
 // XEventListener
 //------------------------------------------------------------------------------
-void OGridControlModel::disposing(const EventObject& e) throw( RuntimeException )
+void OGridControlModel::disposing(const EventObject& _rEvent) throw( RuntimeException )
 {
-    OControlModel::disposing(e);
+    OControlModel::disposing( _rEvent );
+    OInterfaceContainer::disposing( _rEvent );
 }
 
 // XSelectionSupplier
@@ -1039,12 +1040,13 @@ void OGridControlModel::implReplaced(const InterfaceRef& _rxReplacedObject, cons
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( IllegalArgumentException )
+InterfaceRef OGridControlModel::approveNewElement( const InterfaceRef& _rxObject )
 {
-    OGridColumn* pCol = getColumnImplementation(xElement);
-    if (!pCol)
+    OGridColumn* pCol = getColumnImplementation( _rxObject );
+    if ( !pCol )
         throw IllegalArgumentException();
-    OInterfaceContainer::insert(_nIndex, xElement, bEvents);
+
+    return OInterfaceContainer::approveNewElement( _rxObject );
 }
 
 // XPersistObject
@@ -1207,8 +1209,8 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
                 xMark->deleteMark(nMark);
             }
 
-            if (xCol.is())
-                insert(i, xCol, sal_False);
+            if ( xCol.is() )
+                implInsert( i, xCol, sal_False, sal_False, sal_False );
         }
     }
 
