@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 10:46:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 09:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/inimgr.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/iniman.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/urlbmk.hxx>
 #include <vcl/drag.hxx>

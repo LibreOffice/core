@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:07 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 09:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/iniman.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
