@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
+ *  last change: $Author: obr $ $Date: 2001-06-28 12:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,31 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDRAGCONTEXT_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #endif
 
-class DNDListenerContainer : public ::cppu::WeakComponentImplHelper2<
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDROPCONTEXT_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
+#endif
+
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
+#endif
+
+class DNDListenerContainer : public ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer, \
+    ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
+    ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
     ::com::sun::star::datatransfer::dnd::XDropTarget >
 {
     ::osl::Mutex m_aMutex;
 
     sal_Bool m_bActive;
     sal_Int8 m_nDefaultActions;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext > m_xDropTargetDragContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext > m_xDropTargetDropContext;
 
 public:
 
@@ -124,6 +137,22 @@ public:
     virtual void SAL_CALL addDragGestureListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureListener >& dgl ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeDragGestureListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureListener >& dgl ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL resetRecognizer(  ) throw(::com::sun::star::uno::RuntimeException);
+
+       /*
+     * XDropTargetDragContext
+     */
+
+    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rejectDrag(  ) throw (::com::sun::star::uno::RuntimeException);
+
+
+       /*
+     * XDropTargetDropContext
+     */
+
+    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rejectDrop(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dropComplete( sal_Bool success ) throw (::com::sun::star::uno::RuntimeException);
 
     /*
      * XDropTarget
