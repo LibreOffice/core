@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-21 08:01:33 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 05:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,9 +1123,12 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 //------------------------------------------------------------------------------
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
-    PopupMenu* pNewMenu = new PopupMenu(SVX_RES(RID_FMSHELL_CONVERSIONMENU));
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
 
-    ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
+    PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
+
+    ImageList aImageList( SVX_RES( bIsHiContrastMode ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL) );
     for (int i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
     {
         // das entsprechende Image dran
