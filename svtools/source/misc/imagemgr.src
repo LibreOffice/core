@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-11 10:31:48 $
+ *  last change: $Author: rt $ $Date: 2002-11-25 15:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,48 +1443,112 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
 String STR_DESCRIPTION_SXMATH_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formel" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Formula" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Formula";
 };
 
 String STR_DESCRIPTION_SXCHART_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Diagramm" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Chart" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Chart";
 };
 
 String STR_DESCRIPTION_SXDRAW_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnung" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Drawing";
 };
 
 String STR_DESCRIPTION_SXCALC_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Spreadsheet";
 };
 
 String STR_DESCRIPTION_SXIMPRESS_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Presentation";
 };
 
 String STR_DESCRIPTION_SXWRITER_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Text Document" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Text Document";
 };
 
 String STR_DESCRIPTION_SXGLOBAL_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument" ;
-    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Master Document" ;
+    Text[ french ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Master Document";
 };
 
 String STR_DESCRIPTION_MATHML_DOC
 {
     Text = "MathML Dokument" ;
     Text [ english_us ] = "MathML Document" ;
+    Text[ french ] = "MathML Document";
+    Text[ spanish ] = "MathML Document";
+    Text[ italian ] = "MathML Document";
+    Text[ swedish ] = "MathML Document";
+    Text[ japanese ] = "MathML Document";
+    Text[ korean ] = "MathML Document";
+    Text[ chinese_simplified ] = "MathML Document";
+    Text[ chinese_traditional ] = "MathML Document";
 };
 
