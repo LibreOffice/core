@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-26 14:21:28 $
+ *  last change: $Author: aw $ $Date: 2002-05-23 13:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ class SdrHdlBitmapSet
     BitmapEx                aCrosshair;
     BitmapEx                aGlue;
     BitmapEx                aAnchor;
+    BitmapEx                aAnchorPressed;
 
     void FillBitmapsFromResource(UINT16 nResId);
 
@@ -234,6 +235,10 @@ void SdrHdlBitmapSet::FillBitmapsFromResource(UINT16 nResId)
     aAnchor = aMarkersBitmap; aAnchor.Crop(Rectangle(Point(24, 55), Size(24, 23)));
     aAnchor = BitmapEx( aAnchor.GetBitmap().CreateDisplayBitmap( pOut ),
         aAnchor.GetMask().CreateDisplayBitmap( pOut ) );
+
+    aAnchorPressed = aMarkersBitmap; aAnchorPressed.Crop(Rectangle(Point(48, 55), Size(24, 23)));
+    aAnchorPressed = BitmapEx( aAnchorPressed.GetBitmap().CreateDisplayBitmap( pOut ),
+        aAnchorPressed.GetMask().CreateDisplayBitmap( pOut ) );
 }
 
 BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
@@ -257,6 +262,8 @@ BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nI
         case Crosshair: return aCrosshair; break;
         case Glue: return aGlue; break;
         case Anchor: return aAnchor; break;
+        // #98388# add AnchorPressed to be able to aninate anchor control
+        case AnchorPressed: return aAnchorPressed; break;
         default: DBG_ERROR( "unknown kind of marker" ); return aRect_7x7[nInd]; break;
     }
 }
@@ -584,7 +591,9 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 
         //case Crosshair:           eRetval = ; break;
         //case Glue:                eRetval = ; break;
-        //case Anchor:          eRetval = ; break;
+
+        // #98388# let anchor blink with it's pressed state
+        case Anchor:            eRetval = AnchorPressed;    break;
     }
 
     return eRetval;
@@ -627,10 +636,11 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
                     eNextBigger = Crosshair;
                     break;
 
-                case Anchor:
-                    // here, use the bIsFineHdl state
-                    bIsFineHdl = !bIsFineHdl;
-                    break;
+                // #98388# do nothing for anchor here; it's handled by GetNextBigger(...)
+                //case Anchor:
+                //  // here, use the bIsFineHdl state
+                //  bIsFineHdl = !bIsFineHdl;
+                //  break;
             }
         }
 
@@ -642,11 +652,15 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
             ? pModernSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex)
             : pSimpleSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex);
 
-        pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
-            (UINT16)(rBmpEx1.GetSizePixel().Width() - 1) >> 1,
-            (UINT16)(rBmpEx1.GetSizePixel().Height() - 1) >> 1,
-            (UINT16)(rBmpEx2.GetSizePixel().Width() - 1) >> 1,
-            (UINT16)(rBmpEx2.GetSizePixel().Height() - 1) >> 1);
+        // #98388# when anchor is used take upper left as reference point inside the handle
+        if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
+            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
+                (UINT16)(rBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(rBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                (UINT16)(rBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(rBmpEx2.GetSizePixel().Height() - 1) >> 1);
+        else
+            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2);
     }
     else
     {
@@ -655,7 +669,8 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
             ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
             : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
 
-        if(eKindOfMarker != Anchor)
+        // #98388# upper left as reference point inside the handle for AnchorPressed, too
+        if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
             pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
                 (UINT16)(rBmpEx.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(rBmpEx.GetSizePixel().Height() - 1) >> 1);
@@ -768,7 +783,11 @@ BOOL SdrHdl::IsFocusHdl() const
         case HDL_REF2:      // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
         //case HDL_MIRX:        // Die Spiegelachse selbst
         case HDL_GLUE:      // GluePoint
+
+        // #98388# do NOT activate here, let SW implement their own SdrHdl and
+        // overload IsFocusHdl() there to make the anchor accessible
         //case HDL_ANCHOR:      // anchor symbol (SD, SW)
+
         //case HDL_TRNS:        // interactive transparence
         //case HDL_GRAD:        // interactive gradient
         //case HDL_COLR:        // interactive color
