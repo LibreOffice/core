@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:45:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ dutch ] = "Indexidentificator:";
         Text [ chinese_simplified ] = "Ë÷Òı±êÖ¾£º";
         Text [ greek ] = "Áíáãíùñéóôéêü åõñåôçñßïõ:";
-        Text [ korean ] = "ÀÎµ¦½º È®ÀÎÀÚ:";
+        Text [ korean ] = "»öÀÎ È®ÀÎÀÚ:";
         Text[ turkish ] = "Index identifier:";
         Text[ catalan ] = "Identificador de índice:";
         Text[ finnish ] = "Indexbezeichner:";
@@ -318,7 +318,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ dutch ] = "~Duidelijk";
         Text[ french ] = "~Unique";
         Text[ spanish ] = "Ú~nico";
-        Text[ italian ] = "Univoco";
+        Text[ italian ] = "~Univoco";
         Text[ danish ] = "Unique";
         Text[ swedish ] = "~Entydig";
         Text[ polish ] = "Unikatowy";
@@ -388,7 +388,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Close";
         Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ korean ] = "~´İ±â";
+        Text[ korean ] = "´İ±â";
         Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
         Text[ chinese_traditional ] = "Ãö³¬(~C)";
         Text[ turkish ] = "~Close";
@@ -437,7 +437,7 @@ String STR_TAB_INDEX_SORTORDER
     Text [ portuguese ] = "Ordem de classificação" ;
     Text [ chinese_simplified ] = "ÅÅĞò¹æÔò";
     Text [ russian ] = "Ïîğÿäîê ñîğòèğîâêè";
-    Text [ polish ] = "Kolejno?æ sortowania";
+    Text [ polish ] = "Kolejnoœæ sortowania";
     Text [ japanese ] = "•À‚×‘Ö‚¦‡˜";
     Text [ chinese_traditional ] = "±Æ§Ç³W«h";
     Text [ arabic ] = "ÊÑÊíÈ ÇáİÑÒ";
@@ -655,7 +655,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ italian ] = "close index design!";
     Title[ danish ] = "close index design";
     Title[ swedish ] = "Lämna indexutkast!";
-    Title[ polish ] = "Opu?æ projekt indeksu!";
+    Title[ polish ] = "Opuœæ projekt indeksu!";
     Title[ portuguese_brazilian ] = "close index design";
     Title[ japanese ] = "²İÃŞ¯¸½‚ÌÃŞ»Ş²İ‚ğ•Â‚¶‚é!";
     Title[ korean ] = "»öÀÎ µğÀÚÀÎ ´İ±â!";
@@ -680,7 +680,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ dutch ] = "Er bestaat reeds een andere index met de naam \"$name$\".";
     Text[ french ] = "Un autre index nommé \"$name$\" existe déjà.";
     Text[ spanish ] = "Ya existe otro índice con el nombre \"$name$\".";
-    Text[ italian ] = "There's already another index named \"$name$\".";
+    Text[ italian ] = "Esiste già un altro indice dal nome \"$name$\".";
     Text[ danish ] = "There's already another index named \"$name$\".";
     Text[ swedish ] = "Det finns redan ett annat index med namnet \"$name$\".";
     Text[ polish ] = "Istnieje ju¿ inny indeks o nazwie \"$name$\".";
@@ -710,7 +710,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ italian ] = "In una definizione di indice una colonna di tabella può apparire solo una volta, tuttavia la colonna \"$name$\" appare due volte.";
     Text[ danish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ swedish ] = "I en indexdefinition får varje tabellkolumn förekomma högst en gång, men du har använt kolumnen \"$name$\" två gånger.";
-    Text[ polish ] = "U¿y³e? dwa razy kolumny \"$name$\" - uwzglêdnij, ¿e pojedyncze kolumny tabeli wystêpowaæ mog¹ w definicji indeksu tylko raz!";
+    Text[ polish ] = "U¿y³eœ dwa razy kolumny \"$name$\" - uwzglêdnij, ¿e pojedyncze kolumny tabeli wystêpowaæ mog¹ w definicji indeksu tylko raz!";
     Text[ portuguese_brazilian ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ japanese ] = "²İÃŞ¯¸½‚Ì’è‹`‚Å‚ÍAÃ°ÌŞÙ‚Ì—ñ‚ÌŒ©o‚µ‚ÍŠeˆê‰ñ‚¸‚Â‚µ‚©g‚¦‚Ü‚¹‚ñB—ñ‚ÌŒ©o‚µ \"$name$\" ‚ÍA“ñ‰ñ–Ú‚Ì“ü—Í‚Å‚·B";
     Text[ korean ] = "»öÀÎ Á¤ÀÇ¿¡¼­, °¢ µµÇ¥ ¿­Àº ÃÖ´ë ÇÑ¹ø ÀÔ·ÂÇÒ ¼ö ÀÖÁö¸¸, »ç¿ëÀÚ´Â ¿­ \"$name$\" (À»)¸¦ µÎ¹ø ÀÔ·ÂÇÏ¿´½À´Ï´Ù.";
@@ -725,6 +725,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/16 15:45:11  kz
+ *  Merge SRC632: 16.05.01 - 17:45:00 (NoBranch)
+ *
  *  Revision 1.11  2001/05/11 05:18:16  kz
  *  Merge SRC631: 11.05.01 - 07:17:45 (NoBranch)
  *
