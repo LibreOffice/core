@@ -350,11 +350,10 @@ End Sub
 Sub FindWholeYearHolidays_JP(ByVal YearInt as Integer)
 Dim lDate&amp;
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元日&quot;, cHolidayType_Full)
-
 	&apos; 2nd Monday in January
 	CalInsertBankholiday(GetMonthDate(YearInt, 1, 2, 7), &quot;成人の日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 2, 11), &quot;建国記念の日&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 3, 21), &quot;春分の日&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 3, 20), &quot;春分の日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 4, 29), &quot;みどりの日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 3), &quot;憲法記念日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 4), &quot;国民の休日&quot;, cHolidayType_Full)
@@ -375,6 +374,7 @@ End Sub
 
 
 Sub FindWholeYearHolidays_TW(YearInt as Integer)
+	CalculateChineseNewYear(YearInt)
 	CalInsertBankholiday(DateSerial(YearInt, 2, 28), &quot;和平紀念日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;婦女節&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 3, 29), &quot;革命先烈紀念日（青年節）&quot;, cHolidayType_Half)
@@ -391,4 +391,82 @@ Sub FindWholeYearHolidays_TW(YearInt as Integer)
 	CalInsertBankholiday(DateSerial(YearInt, 10, 31), &quot;先總統  蔣公誕辰紀念日&quot;, cHolidayType_Half) 
 	CalInsertBankholiday(DateSerial(YearInt, 12, 11), &quot;國父誕辰紀念日（中華文化復興節）&quot;, cHolidayType_Half) 
 	CalInsertBankholiday(DateSerial(YearInt, 12, 25), &quot;行憲紀念日&quot;, cHolidayType_Half) 
-End Sub</script:module>
+End Sub
+
+
+Sub CalculateChineseNewYear(iSelYear as Integer)
+Dim lDate as Long
+	Select Case iSelYear
+		Case 1995
+			lDate = DateSerial(iSelYear, 1, 31)
+		Case 1996
+			lDate = DateSerial(iSelYear, 2, 19)
+		Case 1997
+			lDate = DateSerial(iSelYear, 2, 7)
+		Case 1998
+			lDate = DateSerial(iSelYear, 1, 28)
+		Case 1999
+			lDate = DateSerial(iSelYear,2, 16)
+		Case 2000
+			lDate = DateSerial(iSelYear,2, 5)
+		Case 2001
+			lDate = DateSerial(iSelYear, 1, 24)
+		Case 2002
+			lDate = DateSerial(iSelYear,2, 12)
+		Case 2003
+			lDate = DateSerial(iSelYear,2, 1)
+		Case 2004
+			lDate = DateSerial(iSelYear, 1, 22)
+		Case 2005
+			lDate = DateSerial(iSelYear,2, 9)
+		Case 2006
+			lDate = DateSerial(iSelYear, 1, 29)
+		Case 2007
+			lDate = DateSerial(iSelYear,2, 18)
+		Case 2008
+			lDate = DateSerial(iSelYear,2, 7)
+		Case 2009
+			lDate = DateSerial(iSelYear, 1, 26)
+		Case 2010
+			lDate = DateSerial(iSelYear,2, 10)
+		Case 2011
+			lDate = DateSerial(iSelYear,2, 3)
+		Case 2012
+			lDate = DateSerial(iSelYear, 1, 23)
+		Case 2013
+			lDate = DateSerial(iSelYear,2, 10)
+		Case 2014
+			lDate = DateSerial(iSelYear, 1, 31)
+		Case 2015
+			lDate = DateSerial(iSelYear,2, 19)
+		Case 2016
+			lDate = DateSerial(iSelYear,2, 9)
+		Case 2017
+			lDate = DateSerial(iSelYear, 1, 28)
+		Case 2018
+			lDate = DateSerial(iSelYear,2, 16)
+		Case 2019
+			lDate = DateSerial(iSelYear,2, 5)
+		Case 2020
+			lDate = DateSerial(iSelYear, 1, 25)
+	End Select
+	CalInsertBankholiday(lDate-1, &quot;農曆除夕&quot;, cHolidayType_Full)
+	CalInsertBankholiday(lDate, &quot;道教節&quot;, cHolidayType_Full)
+	CalInsertBankholiday(lDate+1, &quot;春節&quot;, cHolidayType_Full)
+End Sub
+
+
+&apos; Todo: Was passiert mit den Jahren vor 1980?
+Function CalculateJapaneseSpringDay(iSelYear as Integer)
+	If (iSelYear &gt; 1979) And (iSelYear &lt; 2100) Then
+		CalculateJapaneseSpringDay() = Int(20.8431 + 0.242194)* (iSelYear-1980) - (Int((iSelYear-1980)/4))
+	End If
+End Function
+
+
+Function CalculateJapaneseAutumnDay(iSelYear as Integer)
+	If (iSelYear &gt; 1979) And (iSelYear &lt; 2100) Then
+		CalculateJapaneseAutumnDay() = Int(23.8431 + 0.242194)* (iSelYear-1980) - (Int((iSelYear-1980)/4))
+	End If
+End Function
+</script:module>

@@ -84,6 +84,7 @@ Dim iThisMonth as Integer
 	CalChoosenLand = -2
 	CurOwnMonth = -1
 	CalLoadOwnData()
+&apos;	sCurLanguage = &quot;ja&quot;
 	With DlgCalModel
 		.cmdDelete.Enabled = False
 		.lstMonth.StringItemList() = cCalShortMonthNames()
@@ -129,7 +130,6 @@ End Sub
 
 Sub CalcmdCancel()
 	Call CalSaveOwnData()
-&apos;	bCancelTask = True
 	DlgCalendar.EndExecute &apos;Visible = False
 End Sub
 
@@ -147,7 +147,7 @@ Dim SelYear as String
 	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 	iSelYear = DlgCalModel.txtYear.Value
-&apos;	sCurLangLocale = &quot;zh&quot;
+&apos;	sCurLangLocale = &quot;ja&quot;
 &apos;	sCurCountryLocale = &quot;TW&quot;
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
