@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datetime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:56 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ULONG DateTime::GetSecFromDateTime( const Date& rDate ) const
         return 0;
     else
     {
-        ULONG nSec = *this-rDate;
+        ULONG nSec = *this- (DateTime) rDate;
         nSec *= 24UL*60*60;
         long nHour = GetHour();
         long nMin  = GetMin();
