@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:08:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #include "global.hxx"
 #include "stlsheet.hxx"
 #include "editutil.hxx"
-#include "namecrea.hxx"         // wegen Flags
+//CHINA001 #include "namecrea.hxx"          // wegen Flags
 #include "cell.hxx"
 #include "scresid.hxx"
 #include "inputhdl.hxx"
@@ -127,7 +127,7 @@
 #include "dociter.hxx"
 #include "sizedev.hxx"
 #include "editable.hxx"
-
+#include "scui_def.hxx" //CHINA001
 //==================================================================
 
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
