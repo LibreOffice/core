@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-31 11:23:27 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                         aTransCorrMat.Translate(aTransformCorrection);
 
                         // treanslate new object, add translate in front of obj transform
-                        pNew->SetTransform(aTransCorrMat * pNew->GetTransform());
+                        pNew->SetTransform(pNew->GetTransform() * aTransCorrMat); // #112587#
 
                         // force new camera and SnapRect on scene, geometry may have really
                         // changed
@@ -1128,7 +1128,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             Matrix4D aMatrix;
 
             aMatrix.Translate(-aCenter);
-            pScene->SetTransform(pScene->GetTransform() * aMatrix);
+            pScene->SetTransform(aMatrix * pScene->GetTransform()); // #112587#
 
             // Szene initialisieren
             pScene->NbcSetSnapRect(aRect);
@@ -2223,7 +2223,7 @@ void E3dView::MergeScenes ()
 
                         Matrix4D aMatrix;
                         aMatrix.Translate(Vector3D(aBoundRect.Left () - aCenter.X (), aCenter.Y(), 0));
-                        pNewObj->SetTransform(pNewObj->GetTransform() * aMatrix);
+                        pNewObj->SetTransform(aMatrix * pNewObj->GetTransform()); // #112587#
 
                         if (pNewObj) aBoundVol.Union (pNewObj->GetBoundVolume());
                         pScene->Insert3DObj (pNewObj);
