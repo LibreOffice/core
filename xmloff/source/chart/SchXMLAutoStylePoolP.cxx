@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: bm $ $Date: 2002-01-08 17:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,9 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
             sal_Int16 nContextID = aPropMapper->GetEntryContextId( iter->mnIndex );
             if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )
             {
-                sal_Int32 nNumberFormat;
-                if( iter->maValue >>= nNumberFormat )
+                sal_Int32 nNumberFormat = -1;
+                if( ( iter->maValue >>= nNumberFormat ) &&
+                    ( nNumberFormat != -1 ))
                 {
                     rtl::OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
                     if( sAttrValue.getLength() )
