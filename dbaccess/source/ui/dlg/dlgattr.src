@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:57:11 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Πίσω";
         Text[ korean ] = "µΪ·Ξ(~K)";
         Text[ turkish ] = "Geri";
+        Text[ catalan ] = "~Regresar";
     };
     String TP_ATTR_CHAR
     {
@@ -163,6 +164,7 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Γραμματοσειρά";
         Text[ korean ] = "±Ϋ²Γ";
         Text[ turkish ] = "Yazύtipi";
+        Text[ catalan ] = "Fuente";
     };
     String TP_ATTR_NUMBER
     {
@@ -188,6 +190,7 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Μορφή";
         Text[ korean ] = "Ό­½Δ";
         Text[ turkish ] = "Format";
+        Text[ catalan ] = "Formato";
     };
     String TP_ATTR_ALIGN
     {
@@ -213,6 +216,7 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Στοίχιση";
         Text[ korean ] = "ΈΒΓγ";
         Text[ turkish ] = "Hizalama";
+        Text[ catalan ] = "Alineaciσn";
     };
     String ST_ROW
     {
@@ -236,6 +240,7 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Μορφοποίηση πίνακα";
         Text[ korean ] = "ΕΧΐΜΊν Ό­½Δ";
         Text[ turkish ] = "Tablo formatύ";
+        Text[ catalan ] = "Formateado de tabla";
     };
     Text[ chinese_simplified ] = "ΧΦ¶ΞΈρΚ½";
     Text[ russian ] = "Τξπμΰς οξλÿ";
@@ -246,4 +251,5 @@ TabDialog DLG_ATTR
     Text[ greek ] = "Μορφοποίηση πεδίου";
     Text[ korean ] = "ΗΚµε Ό­½Δ";
     Text[ turkish ] = "Alan formatύ";
+    Text[ catalan ] = "Formato de campo";
 };
