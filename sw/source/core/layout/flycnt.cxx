@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-10 12:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,8 +994,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 
 void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {
-//  SwPageFrm *pPage = FindPageFrm();
-//  const SwRect aOld( AddSpacesToFrm() );
+    SwPageFrm *pOldPage = FindPageFrm();
+    const SwRect aOld( AddSpacesToFrm() );
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), rNew );
     if( pCnt->IsProtected() )
         pCnt = (SwCntntFrm*)GetAnchor();
@@ -1103,8 +1103,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     GetFmt()->GetDoc()->EndUndo( UNDO_END );
 
-//  if ( pPage != FindPageFrm() )
-//      ::Notify_Background(GetVirtDrawObj(), pPage, aOld, PREP_FLY_LEAVE, FALSE);
+    if ( pOldPage != FindPageFrm() )
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
+                             FALSE );
 }
 
 /*************************************************************************
