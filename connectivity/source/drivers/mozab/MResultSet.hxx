@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@ namespace connectivity
         {
         protected:
             OStatement_Base*                            m_pStatement;
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
             sal_uInt32                                  m_nRowPos;
             sal_uInt32                                  m_nOldRowPos;
             sal_Bool                                    m_bWasNull;
