@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-01 11:00:45 $
+ *  last change: $Author: ab $ $Date: 2001-08-20 07:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,10 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
+        StarBASICRef ThisBasic = maBasicRef;
+        StarBASICRef aAppBasicRef = maBasicRef;
+
         SbxObject* p = maBasicRef;
-        StarBASICRef aAppBasicRef;
         while( (p = p->GetParent()) != NULL )
         {
             if( p->IsA( TYPE( StarBASIC ) ) )
@@ -234,15 +236,34 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         // Full qualified name?
         String aMacro( aScriptEvent.ScriptCode );
+        String aLocation;
         if( aMacro.GetTokenCount( '.' ) == 3 )
         {
             sal_uInt16 nLast = 0;
-            String aLibName = aMacro.GetToken( 0, '.', nLast );
+            OUString aFullLibName = aMacro.GetToken( 0, '.', nLast );
+
+            sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
+            if (nIndex >= 0)
+                aLocation = aFullLibName.copy( 0, nIndex );
+
             String aModul = aMacro.GetToken( 0, '.', nLast );
             aMacro.Erase( 0, nLast );
         }
 
-        SbxVariable* pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
+        if( aLocation.EqualsAscii("application") )
+            ThisBasic = NULL;
+        else if( aLocation.EqualsAscii("document") )
+            aAppBasicRef = NULL;
+
+        SbxVariable* pMethVar = NULL;
+        if( ThisBasic.Is() )
+        {
+            // Search only in own Basic, not automatically in application basic
+            USHORT nFlags = ThisBasic->GetFlags();
+            ThisBasic->ResetFlag( SBX_GBLSEARCH );
+            pMethVar = ThisBasic->Find( aMacro, SbxCLASS_DONTCARE );
+            ThisBasic->SetFlags( nFlags );
+        }
         if( (!pMethVar || !pMethVar->ISA(SbMethod)) && aAppBasicRef.Is() )
             pMethVar = aAppBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
         SbMethod* pMeth = PTR_CAST(SbMethod,pMethVar);
@@ -461,7 +482,6 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
             for( j = 0 ; j < nNameCount ; j++ )
             {
-                OUString aType, aMethod, aName;
                 ScriptEventDescriptor aDesc;
 
                 Any aElement = xEventCont->getByName( pNames[ j ] );
