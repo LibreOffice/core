@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:32 $
+ *  last change: $Author: fme $ $Date: 2001-08-01 10:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,8 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 
+    pDoc = &rDoc;
+
     // do we have to apply additional paragraph attributes?
     if ( bAttrSet && rAS.Count() )
     {
@@ -409,7 +411,6 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
         }
     }
 
-    pDoc = &rDoc;
     // It is possible, that Init is called more than once, e.g., in a
     // SwTxtFrm::FormatOnceMore situation.
     delete pFnt;
