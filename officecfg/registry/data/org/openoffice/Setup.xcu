@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:25:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >scalc</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Calc</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >CalcWindowState</value>
                 </prop>
@@ -130,6 +133,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sdraw</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Draw</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >DrawWindowState</value>
@@ -157,6 +163,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >simpress</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Impress</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >ImpressWindowState</value>
                 </prop>
@@ -182,6 +191,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >smath</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Math</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >MathWindowState</value>
@@ -209,6 +221,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sglobal</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Writer</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterGlobalWindowState</value>
                 </prop>
@@ -235,6 +250,9 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >swriter</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Writer</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterWindowState</value>
                 </prop>
@@ -260,6 +278,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sweb</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Writer/Web</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterWebWindowState</value>
@@ -342,6 +363,9 @@
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >BasicIDEWindowState</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Basic</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.frame.StartModule" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -375,6 +399,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >schart</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Chart</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >ChartWindowState</value>
