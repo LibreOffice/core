@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 12:34:04 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 12:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ void TextView::ImpSetSelection( const TextSelection& rSelection )
     if ( rSelection != maSelection )
     {
         maSelection = rSelection;
-        mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSCROLLED ) );
+        mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSELECTIONCHANGED ) );
     }
 }
 
