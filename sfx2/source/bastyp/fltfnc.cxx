@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:07:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #endif
 #ifndef _INETTYPE_HXX //autogen
 #include <svtools/inettype.hxx>
-#endif
-#ifndef _INET_CONFIG_HXX //autogen
-#include <inet/inetcfg.hxx>
 #endif
 #ifndef _SFXRECTITEM_HXX
 #include <svtools/rectitem.hxx>
