@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redcom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:34:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,28 @@
 #include "redcom.hxx"
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext)
 {
-    pDlg = new SvxPostItDialog(pParent,rCoreSet,bPrevNext,TRUE);
-    pDocShell=pShell;
-    pDlg->DontChangeAuthor();
-    pDlg->HideAuthor();
+    //CHINA001 pDlg = new SvxPostItDialog(pParent,rCoreSet,bPrevNext,TRUE);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
+    {
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, ResId(RID_SVXDLG_POSTIT), bPrevNext, TRUE );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        pDocShell=pShell;
+        pDlg->DontChangeAuthor();
+        pDlg->HideAuthor();
 
-    pDlg->SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
-    pDlg->SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
+        pDlg->SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
+        pDlg->SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
 
-    ReInit(pAction);
+        ReInit(pAction);
+    }
 }
 
 ScRedComDialog::~ScRedComDialog()
@@ -196,7 +203,7 @@ void ScRedComDialog::SelectCell()
     }
 }
 
-IMPL_LINK(ScRedComDialog, PrevHdl, SvxPostItDialog*, pDlg )
+IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog*, pDlg )
 {
     if (pDocShell!=NULL && pDlg->GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
@@ -207,7 +214,7 @@ IMPL_LINK(ScRedComDialog, PrevHdl, SvxPostItDialog*, pDlg )
     return 0;
 }
 
-IMPL_LINK(ScRedComDialog, NextHdl, SvxPostItDialog*, pDlg )
+IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog*, pDlg )
 {
     if ( pDocShell!=NULL && pDlg->GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
