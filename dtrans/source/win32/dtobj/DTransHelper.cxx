@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:24:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 15:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,12 @@
 
 CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
                                         HGLOBAL hGlob,
-                                        sal_Bool bDelStgOnRelease,
-                                        sal_Bool bReleaseStreamOnDestr ) :
+                                        sal_Bool bDelStgOnRelease ) :
     m_lpStream( NULL ),
-    m_bDelStgOnRelease( bDelStgOnRelease ),
-    m_bReleaseStreamOnDestr( bReleaseStreamOnDestr )
+    m_bDelStgOnRelease( bDelStgOnRelease )
 {
-    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
-
     if ( bAutoInit )
-        init( hGlob, m_bDelStgOnRelease, m_bReleaseStreamOnDestr );
+        init( hGlob, m_bDelStgOnRelease );
 }
 
 //------------------------------------------------------------------------
@@ -96,7 +92,7 @@ CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
 
 CStgTransferHelper::~CStgTransferHelper( )
 {
-    if ( m_bReleaseStreamOnDestr && m_lpStream )
+    if ( m_lpStream )
         m_lpStream->Release( );
 }
 
@@ -168,6 +164,8 @@ void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 {
     OSL_ASSERT( ppStream );
     *ppStream = m_lpStream;
+    if ( *ppStream )
+        static_cast< LPUNKNOWN >( *ppStream )->AddRef( );
 }
 
 //------------------------------------------------------------------------
@@ -176,15 +174,11 @@ void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 
 void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
                                         sal_uInt32 uiFlags,
-                                        sal_Bool bDelStgOnRelease,
-                                        sal_Bool bReleaseStreamOnDestr )
+                                        sal_Bool bDelStgOnRelease )
 {
-    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
-
     cleanup( );
 
     m_bDelStgOnRelease      = bDelStgOnRelease;
-    m_bReleaseStreamOnDestr = bReleaseStreamOnDestr;
 
     HGLOBAL hGlob = GlobalAlloc( uiFlags, newSize );
     if ( NULL == hGlob )
@@ -210,15 +204,11 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
 //------------------------------------------------------------------------
 
 void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
-                                         sal_Bool bDelStgOnRelease,
-                                        sal_Bool bReleaseStreamOnDestr )
+                                         sal_Bool bDelStgOnRelease )
 {
-    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
-
     cleanup( );
 
     m_bDelStgOnRelease      = bDelStgOnRelease;
-    m_bReleaseStreamOnDestr = bReleaseStreamOnDestr;
 
     HRESULT hr = CreateStreamOnHGlobal( hGlob, m_bDelStgOnRelease, &m_lpStream );
     if ( FAILED( hr ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-08 11:40:20 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,18 +274,11 @@ void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
     OSL_PRECOND( !nInitStgSize || nInitStgSize && (nInitStgSize >= nBytesToTransfer),
                  "Memory size less than number of bytes to transfer" );
 
-    // if the client wants the data only via IStream we setup the storage transfer
-    // helper so that the stream will not be released on destruction
-    sal_Bool bShouldReleaseStream =
-        ((fetc.tymed & TYMED_HGLOBAL) || !(fetc.tymed & TYMED_ISTREAM));
-
-    CStgTransferHelper stgTransfHelper(
-        AUTO_INIT, NULL, sal_False, bShouldReleaseStream );
+    CStgTransferHelper stgTransfHelper( AUTO_INIT );
 
     // setup storage size
     if ( nInitStgSize > 0 )
-        stgTransfHelper.init(
-            nInitStgSize, GMEM_MOVEABLE | GMEM_ZEROINIT, sal_False, bShouldReleaseStream );
+        stgTransfHelper.init( nInitStgSize, GHND );
 
 #ifndef _DEBUG
     stgTransfHelper.write( lpStorage, nBytesToTransfer );

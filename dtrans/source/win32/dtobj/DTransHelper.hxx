@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:24:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 15:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,7 @@ public:
     CStgTransferHelper(
         sal_Bool bAutoInit = sal_False,
         HGLOBAL  hGlob = NULL,
-        sal_Bool bDelStgOnRelease = sal_False,
-        sal_Bool bReleaseStreamOnDestr = sal_True );
+        sal_Bool bDelStgOnRelease = sal_False );
 
     ~CStgTransferHelper( );
 
@@ -118,13 +117,11 @@ public:
     void SAL_CALL init(
         SIZE_T newSize,
         sal_uInt32 uiFlags = GHND,
-        sal_Bool bDelStgOnRelease = sal_False,
-        sal_Bool bReleasStreamOnDestr = sal_True );
+        sal_Bool bDelStgOnRelease = sal_False );
 
     void SAL_CALL init(
         HGLOBAL hGlob,
-        sal_Bool bDelStgOnRelease = sal_False,
-        sal_Bool bReleaseStreamOnDestr = sal_True );
+        sal_Bool bDelStgOnRelease = sal_False );
 
     // returns the size of the managed memory
     sal_uInt32 SAL_CALL memSize( ) const;
@@ -136,7 +133,6 @@ public:
 private:
     LPSTREAM m_lpStream;
     sal_Bool m_bDelStgOnRelease;
-    sal_Bool m_bReleaseStreamOnDestr;
 
 private:
     CStgTransferHelper( const CStgTransferHelper& );
