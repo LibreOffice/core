@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:12:56 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
 struct SwPrintData;
+struct SwTableEntry;
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -450,18 +451,6 @@ class SwDoc
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
     // -------------------------------------------------------------------
-    // static - Members
-    static SvStringsDtor    *pTextNmArray,          // Array fuer alle
-                            *pListsNmArray,         // Pool-Vorlagen-Namen
-                            *pExtraNmArray,
-                            *pRegisterNmArray,
-                            *pDocNmArray,
-                            *pHTMLNmArray;
-    static SvStringsDtor    *pFrmFmtNmArray,
-                            *pChrFmtNmArray,
-                            *pHTMLChrFmtNmArray;
-    static SvStringsDtor    *pPageDescNmArray;
-    static SvStringsDtor    *pNumRuleNmArray;
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
@@ -521,20 +510,6 @@ class SwDoc
     void        PrtDataChanged();   //Printer oder JobSetup geandert, es muss
                                     //fuer entsprechende Invalidierungen und
                                     //Benachrichtigungen gesorgt werden.
-
-    static SvStringsDtor* NewNmArray( SvStringsDtor*&, sal_uInt16 nStt, sal_uInt16 nEnd );
-    SvStringsDtor* NewTextNmArray() const;
-    SvStringsDtor* NewListsNmArray() const;
-    SvStringsDtor* NewExtraNmArray() const;
-    SvStringsDtor* NewRegisterNmArray() const;
-    SvStringsDtor* NewDocNmArray() const;
-    SvStringsDtor* NewHTMLNmArray() const;
-    SvStringsDtor* NewFrmFmtNmArray() const;
-    SvStringsDtor* NewChrFmtNmArray() const;
-    SvStringsDtor* NewHTMLChrFmtNmArray() const;
-    SvStringsDtor* NewPageDescNmArray() const;
-    SvStringsDtor* NewNumRuleNmArray() const;
-
 
     // gcc: aFtnInfo::CopyCtor ist private, also muessen wir uns auch schuetzen
     SwDoc( const SwDoc &);
@@ -1165,36 +1140,6 @@ public:
     // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
     sal_Bool IsUsed( const SwModify& ) const;
     sal_Bool IsUsed( const SwNumRule& ) const;
-
-        // ist der Name ein Pool-Vorlagen-Name, returne seine ID,
-        // sonst USHRT_MAX
-    static sal_uInt16 GetPoolId( const String& rName, SwGetPoolIdFromName );
-
-    const SvStringsDtor& GetTextNmArray() const
-        { return pTextNmArray ? *pTextNmArray : *NewTextNmArray(); }
-    const SvStringsDtor& GetListsNmArray() const
-        { return pListsNmArray ? *pListsNmArray : *NewListsNmArray(); }
-    const SvStringsDtor& GetExtraNmArray() const
-        { return pExtraNmArray ? *pExtraNmArray : *NewExtraNmArray(); }
-    const SvStringsDtor& GetRegisterNmArray() const
-        { return pRegisterNmArray ? *pRegisterNmArray : *NewRegisterNmArray(); }
-    const SvStringsDtor& GetDocNmArray() const
-        { return pDocNmArray ? *pDocNmArray : *NewDocNmArray(); }
-    const SvStringsDtor& GetHTMLNmArray() const
-        { return pHTMLNmArray ? *pHTMLNmArray : *NewHTMLNmArray(); }
-    const SvStringsDtor& GetFrmFmtNmArray() const
-        { return pFrmFmtNmArray ? *pFrmFmtNmArray : *NewFrmFmtNmArray(); }
-    const SvStringsDtor& GetChrFmtNmArray() const
-        { return pChrFmtNmArray ? *pChrFmtNmArray : *NewChrFmtNmArray(); }
-    const SvStringsDtor& GetHTMLChrFmtNmArray() const
-        { return pHTMLChrFmtNmArray ? *pHTMLChrFmtNmArray : *NewHTMLChrFmtNmArray(); }
-    const SvStringsDtor& GetPageDescNmArray() const
-        { return pPageDescNmArray ? *pPageDescNmArray : *NewPageDescNmArray(); }
-    const SvStringsDtor& GetNumRuleNmArray() const
-        { return pNumRuleNmArray ? *pNumRuleNmArray : *NewNumRuleNmArray(); }
-
-        // erfrage zu einer PoolId den Namen (steht im poolfmt.cxx)
-    static String& GetPoolNm( sal_uInt16 nId, String& rFillNm );
 
         // setze den Namen der neu geladenen Dokument-Vorlage
     sal_uInt16 SetDocPattern( const String& rPatternName );
