@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 08:48:06 $
+ *  last change: $Author: fme $ $Date: 2002-10-21 09:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,16 +553,16 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 
     Point aOldPoint( rPoint );
 
-#ifdef BIDI
-    if ( IsRightToLeft() )
-        SwitchRTLtoLTR( (Point&)rPoint );
-#endif
-
     if ( IsVertical() )
     {
         SwitchVerticalToHorizontal( (Point&)rPoint );
         ((SwTxtFrm*)this)->SwapWidthAndHeight();
     }
+
+#ifdef BIDI
+    if ( IsRightToLeft() )
+        SwitchRTLtoLTR( (Point&)rPoint );
+#endif
 
     SwFillData *pFillData = ( pCMS && pCMS->pFill ) ?
                         new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 09:10:17 $
+ *  last change: $Author: fme $ $Date: 2002-10-21 09:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,12 +738,13 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 
         SWAP_IF_NOT_SWAPPED( this )
 
+        if ( IsVertical() )
+            SwitchVerticalToHorizontal( (SwRect&)rRect );
+
 #ifdef BIDI
         if ( IsRightToLeft() )
             SwitchRTLtoLTR( (SwRect&)rRect );
 #endif
-        if ( IsVertical() )
-            SwitchVerticalToHorizontal( (SwRect&)rRect );
 
         ViewShell *pSh = GetShell();
         OutputDevice *pOldRef = pSh->GetReferenzDevice();

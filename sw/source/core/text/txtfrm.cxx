@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ama $ $Date: 2002-10-18 14:10:16 $
+ *  last change: $Author: fme $ $Date: 2002-10-21 09:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,14 +359,22 @@ SwFrmSwapper::~SwFrmSwapper()
 
 void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 {
+    SWAP_IF_NOT_SWAPPED( this )
+
     long nWidth = rRect.Width();
     rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rRect.Right() );
     rRect.Width( nWidth );
+
+    UNDO_SWAP( this )
 }
 
 void SwTxtFrm::SwitchLTRtoRTL( Point& rPoint ) const
 {
+    SWAP_IF_NOT_SWAPPED( this )
+
     rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X();
+
+    UNDO_SWAP( this )
 }
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
