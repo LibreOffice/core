@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: mib $ $Date: 2001-11-28 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,8 +454,10 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
             if( USHRT_MAX == nBlk1del )
                 nBlk1del = cur;
         }
-        p = ppInf[ ++cur ];
         nElem -= nel;
+        if( !nElem )
+            break;
+        p = ppInf[ ++cur ];
         pos = 0;
     }
     // Am Ende die Tabelle updaten, falls Bloecke geloescht waren
