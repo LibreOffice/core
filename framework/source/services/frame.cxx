@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-09 15:39:56 $
+ *  last change: $Author: mba $ $Date: 2001-02-09 15:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
     // Initialize a new dispatchhelper-object to handle dispatches for SELF private and fast!
     // We use these helper as slave for our interceptor helper ...
     // (Attention: These helper hold a weakreference to us!)
-    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this, m_aMutex );
+    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this );
 
     // Initialize a new interception helper object to handle dispatches and interceptor mechanism PRIVATE!
     // These helper don't need any reference to use ...
