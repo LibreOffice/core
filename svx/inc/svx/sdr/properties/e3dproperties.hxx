@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:30:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
     namespace properties
     {
-        class E3dProperties : public AttributeProperties
+        class SVX_DLLPUBLIC E3dProperties : public AttributeProperties
         {
         protected:
             // create a new itemset
