@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-11 15:31:07 $
+ *  last change: $Author: aw $ $Date: 2001-07-23 15:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,6 +1148,9 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             {
                 Point aVclPoint( aPnt.X, aPnt.Y );
 
+                // #88657# metric of pool maybe twips (writer)
+                ForceMetricToItemPoolMetric(aVclPoint);
+
                 // #88491# position relative to anchor
                 aVclPoint += pObj->GetAnchorPos();
 
@@ -1672,6 +1675,9 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
                 // #88491# make pos relative to anchor
                 aVclPnt -= pObj->GetAnchorPos();
+
+                // #88657# metric of pool maybe twips (writer)
+                ForceMetricTo100th_mm(aVclPnt);
 
                 awt::Point aPnt( aVclPnt.X(), aVclPnt.Y() );
                 aAny <<= aPnt;
