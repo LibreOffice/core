@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 16:48:37 $
+ *  last change: $Author: gt $ $Date: 2002-06-06 07:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace svt
         {
         }
 
-        OLocalResourceAccess(ResId& _rId, RESOURCE_TYPE _rType)
+        OLocalResourceAccess(const ResId& _rId, RESOURCE_TYPE _rType)
             :Resource(_rId.SetRT(_rType).SetAutoRelease(sal_False))
             ,m_pManager(_rId.GetResMgr())
         {
@@ -118,6 +118,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/05/24 16:48:37  fs
+ *  #99484# new (easier) ctor, +IsAvailableRes
+ *
  *  Revision 1.1  2001/02/05 17:04:48  fs
  *  initial checkin - accessing local resources
  *
