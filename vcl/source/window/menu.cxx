@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:29:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,11 +201,6 @@ DBG_NAME( Menu );
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
-
-inline BOOL ImplIsMouseFollow()
-{
-    return ( Application::GetSettings().GetMouseSettings().GetFollow() & MOUSE_FOLLOW_MENU ) ? TRUE : FALSE;
-}
 
 struct MenuItemData
 {
@@ -3666,10 +3661,7 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
     //if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
     //    pActivePopup->ImplGetFloatingWindow()->ToTop( TOTOP_NOGRABFOCUS );
 
-//  if ( !ImplIsMouseFollow() ) // Issuezilla#591
-    {
-        ImplHighlightItem( rMEvt, TRUE );
-    }
+    ImplHighlightItem( rMEvt, TRUE );
 
     nMBDownPos = nHighlightedItem;
 }
@@ -3706,21 +3698,19 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeaveWindow() )
     {
-        if ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) )
-        {
-            // #102461# do not remove highlight if a popup menu is open at this position
-            MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
-            // close popup with some delayed if we leave somewhere else
-            if( pActivePopup && pData && pData->pSubMenu != pActivePopup )
-                pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start();
+        // #102461# do not remove highlight if a popup menu is open at this position
+        MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
+        // close popup with some delayed if we leave somewhere else
+        if( pActivePopup && pData && pData->pSubMenu != pActivePopup )
+            pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start();
 
-            if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
-                ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
-        }
+        if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
+            ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+
         if ( IsScrollMenu() )
             ImplScroll( rMEvt.GetPosPixel() );
     }
-    else if ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) )
+    else
     {
         aSubmenuCloseTimer.Stop();
         if( bIgnoreFirstMove )
@@ -4498,7 +4488,7 @@ void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
     {
-        ChangeHighlightItem( nEntry, ImplIsMouseFollow() ? FALSE : TRUE );
+        ChangeHighlightItem( nEntry, FALSE );
     }
     else
     {
@@ -4524,8 +4514,7 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     }
 
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
-    if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem )
-         && ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) ) )
+    if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
         ChangeHighlightItem( nEntry, FALSE );
 }
 
