@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:06:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@
 #endif
 
 //Uncomment to dump debugging streams of graphics
-#define DEBUGDUMP
+#if OSL_DEBUG_LEVEL > 1
+//#   define DEBUGDUMP
+#endif
 
 class SwDoc;
 class SwTxtFmtColl;
@@ -693,6 +695,11 @@ namespace sw
         */
         const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode);
 
+        const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
+        const SwNumRule* GetOutlineNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
+        const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
+
+
         /** Get the SwNoTxtNode associated with a SwFrmFmt if here is one
 
             There are two differing types of numbering formats that may be on a
@@ -996,10 +1003,15 @@ namespace sw
             @param rDest
             The destination stream
 
+            @param nLen
+            Optional Length of data to copy from rSrc to rDest, if unused copy
+            all available data from rSrc
+
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void DumpStream(const SvStream &rSrc, SvStream &rDest);
+        void DumpStream(const SvStream &rSrc, SvStream &rDest,
+            sal_uInt32 nLen = STREAM_SEEK_TO_END);
 #endif
     }
 }
