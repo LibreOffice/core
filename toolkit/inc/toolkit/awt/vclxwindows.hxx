@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 15:36:12 $
+ *  last change: $Author: tbe $ $Date: 2002-06-19 13:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,8 @@ class ComboBox;
 class FormatterBase;
 class SpinField;
 class ToolBox;
+class VclSimpleEvent;
+class VclMenuEvent;
 
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
@@ -1113,6 +1115,9 @@ private:
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >    m_xParent;
 
 protected:
+    DECL_LINK( MenuEventListener, VclSimpleEvent* );
+    virtual void    ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
@@ -1122,7 +1127,7 @@ public:
 
     Menu*               GetMenu() { return m_pMenu; }
 
-    void                SetMenu( Menu* pMenu ) { m_pMenu = pMenu; }
+    void                SetMenu( Menu* pMenu );
     void                SetIndexInParent( sal_Int32 nIndexInParent ) { m_nIndexInParent = nIndexInParent; }
     void                SetAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent ) { m_xParent = rxParent; }
 

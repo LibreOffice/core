@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-17 13:08:39 $
+ *  last change: $Author: tbe $ $Date: 2002-06-19 13:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 //  ----------------------------------------------------
 //  class VCLXButton
@@ -4376,18 +4380,87 @@ VCLXMenuWindow::VCLXMenuWindow()
 }
 
 VCLXMenuWindow::VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent )
-    :m_pMenu( pMenu )
+    :m_pMenu( 0 )
     ,m_nIndexInParent( nIndexInParent )
     ,m_xParent( rxParent )
 {
+    SetMenu( pMenu );
 }
 
 VCLXMenuWindow::~VCLXMenuWindow()
 {
+    SetMenu( 0 );
 }
+
+void VCLXMenuWindow::SetMenu( Menu* pMenu )
+{
+    if ( m_pMenu != pMenu )
+    {
+        if ( m_pMenu )
+        {
+            m_pMenu->RemoveEventListener( LINK( this, VCLXMenuWindow, MenuEventListener ) );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent( GetAccessibleContext().get(), ::com::sun::star::uno::UNO_QUERY );
+            if ( xComponent.is() )
+                xComponent->dispose();
+        }
+
+        m_pMenu = pMenu;
+
+        if ( m_pMenu )
+            m_pMenu->AddEventListener( LINK( this, VCLXMenuWindow, MenuEventListener ) );
+    }
+}
+
+IMPL_LINK( VCLXMenuWindow, MenuEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "VCLXMenuWindow - Unknown MenuEvent!" );
+    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
+    {
+        DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu(), "VCLXMenuWindow - Menu?" );
+        ProcessMenuEvent( *(VclMenuEvent*)pEvent );
+    }
+    return 0;
+}
+
+void VCLXMenuWindow::ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent )
+{
+    switch ( rVclMenuEvent.GetId() )
+    {
+        case VCLEVENT_OBJECT_DYING:
+        {
+            SetMenu( 0 );
+        }
+        break;
+        default:
+        {
+        }
+        break;
+    }
+}
+
+void VCLXMenuWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_WINDOW_MENUBAR:
+        {
+            SetMenu( (Menu*)rVclWindowEvent.GetData() );
+        }
+        break;
+        default:
+        {
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+        }
+        break;
+    }
+}
+
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXMenuWindow::CreateAccessibleContext()
 {
+    DBG_ASSERT( m_pMenu, "VCLXMenuWindow::CreateAccessibleContext: no menu!" );
+
     return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu( this, m_pMenu, m_nIndexInParent, m_xParent );
 }
 
