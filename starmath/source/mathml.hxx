@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:03 $
+ *  last change: $Author: cmc $ $Date: 2001-06-26 14:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,7 @@ protected:
     void ExportExpression(const SmNode *pNode,int nLevel);
     void ExportText(const SmNode *pNode, int nLevel);
     void ExportMath(const SmNode *pNode, int nLevel);
+    void ExportPolygon(const SmNode *pNode, int nLevel);
     void ExportBinaryHorizontal(const SmNode *pNode,int nLevel);
     void ExportUnaryHorizontal(const SmNode *pNode,int nLevel);
     void ExportBrace(const SmNode *pNode, int nLevel);
