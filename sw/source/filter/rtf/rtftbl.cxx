@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 13:51:32 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,15 @@ void SwRTFParser::ReadTable( int nToken )
     SwHoriOrient eAdjust = HORI_LEFT;       // default fuer Tabellen
     SwTwips nLSpace = 0;
     USHORT nBrdDist = MIN_BORDER_DIST;
+    bool bUseLeftRowPad = false, bUseRightRowPad = false,
+        bUseTopRowPad = false, bUseBottomRowPad = false;
+    long nLeftRowPad = 0, nRightRowPad = 0, nTopRowPad = 0, nBottomRowPad = 0;
+
+    bool bUseLeftCellPad = false, bUseRightCellPad = false,
+        bUseTopCellPad = false, bUseBottomCellPad = false;
+    long nLeftCellPad = 0, nRightCellPad = 0, nTopCellPad = 0,
+        nBottomCellPad = 0;
+
     SwVertOrient eVerOrient = VERT_NONE;
     long nLineHeight = 0;
     USHORT nBoxCnt = aMergeBoxes.Count()-1;
@@ -207,6 +216,56 @@ void SwRTFParser::ReadTable( int nToken )
     do {
         switch( nToken )
         {
+        case RTF_TRPADDFL:
+            bUseLeftRowPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_TRPADDFT:
+            bUseTopRowPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_TRPADDFR:
+            bUseRightRowPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_TRPADDFB:
+            bUseBottomRowPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_TRPADDL:
+            nLeftRowPad = nTokenValue;
+            break;
+        case RTF_TRPADDT:
+            nTopRowPad = nTokenValue;
+            break;
+        case RTF_TRPADDR:
+            nRightRowPad = nTokenValue;
+            break;
+        case RTF_TRPADDB:
+            nBottomRowPad = nTokenValue;
+            break;
+
+        case RTF_CLPADFL:
+            bUseLeftCellPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_CLPADFT:
+            bUseTopCellPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_CLPADFR:
+            bUseRightCellPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_CLPADFB:
+            bUseBottomCellPad = (nTokenValue == 3) ? true : false;
+            break;
+        case RTF_CLPADL:
+            nLeftCellPad = nTokenValue;
+            break;
+        case RTF_CLPADT:
+            nTopCellPad = nTokenValue;
+            break;
+        case RTF_CLPADR:
+            nRightCellPad = nTokenValue;
+            break;
+        case RTF_CLPADB:
+            nBottomCellPad = nTokenValue;
+            break;
+
         case RTF_TRRH:
             nLineHeight = nTokenValue;
             break;
@@ -252,6 +311,27 @@ void SwRTFParser::ReadTable( int nToken )
                 pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
                 aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
+
+                SvxBoxItem aBox(pFmt->GetBox());
+
+                if (bUseRightCellPad)
+                    aBox.SetDistance(nRightCellPad, BOX_LINE_RIGHT);
+                if (bUseBottomCellPad)
+                    aBox.SetDistance(nBottomCellPad, BOX_LINE_BOTTOM);
+
+                //Yes, these are the wrong way around, there appears to
+                //be a bug in word where these are swapped.
+                if (bUseLeftCellPad)
+                    aBox.SetDistance(nLeftCellPad, BOX_LINE_TOP);
+                if (bUseTopCellPad)
+                    aBox.SetDistance(nTopCellPad, BOX_LINE_LEFT);
+
+                pFmt->SetAttr(aBox);
+
+                bUseLeftCellPad = false;
+                bUseRightCellPad = false;
+                bUseTopCellPad = false;
+                bUseBottomCellPad = false;
             }
             break;
 
@@ -325,18 +405,36 @@ void SwRTFParser::ReadTable( int nToken )
                 const SfxPoolItem* pItem;
                 SfxItemSet& rSet = (SfxItemSet&)pBoxFmt->GetAttrSet();
                 ReadBorderAttr( nToken, rSet, TRUE );
-                if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, FALSE, &pItem ))
+                if (SFX_ITEM_SET == rSet.GetItemState(RES_BOX, FALSE, &pItem))
                 {
                     SvxBoxItem aBox( *(SvxBoxItem*)pItem );
+#if 1
+                    aBox.SetDistance(bUseLeftRowPad ? nLeftRowPad : nBrdDist,
+                            BOX_LINE_LEFT);
+
+                    aBox.SetDistance(bUseRightRowPad ? nRightRowPad : nBrdDist,
+                            BOX_LINE_RIGHT);
+
+                    aBox.SetDistance(bUseTopRowPad ? nTopRowPad : 0,
+                            BOX_LINE_TOP);
+
+                    aBox.SetDistance(bUseBottomRowPad ? nBottomRowPad : 0,
+                            BOX_LINE_BOTTOM);
+
+                    rSet.Put(aBox);
+#else
                     BOOL bChg = FALSE;
-                    for ( int nLn = 0; nLn < 4; ++nLn )
+                    for (int nLn = 0; nLn < 4; ++nLn)
+                    {
                         if( aBox.GetLine( nLn ) && !aBox.GetDistance( nLn ) )
                         {
                             aBox.SetDistance( 2 > nLn ? 18 : nBrdDist, nLn );
                             bChg = TRUE;
                         }
-                    if( bChg )
+                    }
+                    if (bChg)
                         rSet.Put( aBox );
+#endif
                 }
             }
             else if( RTF_TABLEDEF != (nToken & ~(0xff | RTF_SWGDEFS)) )
@@ -784,6 +882,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2002/07/31 13:51:32  cmc
+      #101615# RTL support for frames and tables rtf im/ex
+
       Revision 1.6  2002/06/03 17:29:46  hr
       #65293#: std::map<>::insert(std::pair<>) relies on member templates
       which are currently switched off for the STLport-4.5.3/Forte 6 update 1

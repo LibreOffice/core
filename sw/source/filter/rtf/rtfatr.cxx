@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 13:51:31 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,9 +1587,8 @@ static Writer& OutRTF_SwOLENode( Writer& rWrt, SwCntntNode & rNode )
     return rWrt;
 }
 
-
-static void OutTBLBorderLine( SwRTFWriter& rWrt, const SvxBorderLine* pLine,
-                                const sal_Char* pStr, USHORT nDist )
+static void OutTBLBorderLine(SwRTFWriter& rWrt, const SvxBorderLine* pLine,
+    const sal_Char* pStr)
 {
     ByteString sLineStr;
     if( pLine->GetInWidth() )
@@ -1622,29 +1621,50 @@ static void OutTBLBorderLine( SwRTFWriter& rWrt, const SvxBorderLine* pLine,
     }
 
     rWrt.Strm() << pStr << sLineStr.GetBuffer() << sRTF_BRDRCF;
-    rWrt.OutULong( rWrt.GetId( pLine->GetColor() ) ) << sRTF_BRSP;
+    rWrt.OutULong( rWrt.GetId( pLine->GetColor() ) );
+}
+
+static void OutBorderLine(SwRTFWriter& rWrt, const SvxBorderLine* pLine,
+    const sal_Char* pStr, USHORT nDist)
+{
+    OutTBLBorderLine(rWrt, pLine, pStr);
+    rWrt.Strm() << sRTF_BRSP;
     rWrt.OutULong( nDist );
 }
 
-static void OutSwTblBorder( SwRTFWriter& rWrt, const SvxBoxItem& rBox )
+static void OutSwTblBorder(SwRTFWriter& rWrt, const SvxBoxItem& rBox,
+    const SvxBoxItem *pDefault)
 {
-    static USHORT __READONLY_DATA aBorders[] = {
-            BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-    static const char* __READONLY_DATA aBorderNames[] = {
-            sRTF_CLBRDRT, sRTF_CLBRDRL, sRTF_CLBRDRB, sRTF_CLBRDRR };
-    const USHORT* pBrd = aBorders;
-    const char** pBrdNms = (const char**)aBorderNames;
-    for( int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms )
+    static const USHORT aBorders[] =
     {
-        // funktioniert im WinWord so nicht
-        USHORT nDist = 0; //rBox.GetDistance( *pBrd );
-        const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-        if( pLn )
-            OutTBLBorderLine( rWrt, pLn, *pBrdNms, nDist );
-        else if( nDist )
+        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+    };
+    static const char* aBorderNames[] =
+    {
+        sRTF_CLBRDRT, sRTF_CLBRDRL, sRTF_CLBRDRB, sRTF_CLBRDRR
+    };
+    //Yes left and top are swapped with eachother for cell padding! Because
+    //that's what the thunderingly annoying rtf export/import word xp does.
+    static const char* aCellPadNames[] =
+    {
+        sRTF_CLPADL, sRTF_CLPADT, sRTF_CLPADB, sRTF_CLPADR
+    };
+    static const char* aCellPadUnits[] =
+    {
+        sRTF_CLPADFL, sRTF_CLPADFT, sRTF_CLPADFB, sRTF_CLPADFR
+    };
+    const USHORT* pBrd = aBorders;
+    for (int i = 0; i < 4; ++i)
+    {
+        if (const SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
+            OutTBLBorderLine(rWrt, pLn, aBorderNames[i]);
+        if (!pDefault || pDefault->GetDistance(aBorders[i]) !=
+            rBox.GetDistance(aBorders[i]))
         {
-            rWrt.Strm() << *pBrdNms << sRTF_BRSP;
-            rWrt.OutULong( nDist );
+            rWrt.Strm() << aCellPadUnits[i];
+            rWrt.OutULong(3);
+            rWrt.Strm() << aCellPadNames[i];
+            rWrt.OutULong(rBox.GetDistance(aBorders[i]));
         }
     }
 }
@@ -1804,6 +1824,33 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             rWrt.OutLong( nHeight );
         }
 
+        const SvxBoxItem *pDefaultBox = 0;
+        if (nColCnt)
+        {
+            pDefaultBox = &(pBoxArr[0]->GetBox()->GetFrmFmt()->GetBox());
+
+            static const USHORT aBorders[] =
+            {
+                BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+            };
+            static const char* aRowPadNames[] =
+            {
+                sRTF_TRPADDT, sRTF_TRPADDL, sRTF_TRPADDB, sRTF_TRPADDR
+            };
+            static const char* aRowPadUnits[] =
+            {
+                sRTF_TRPADDFT, sRTF_TRPADDFL, sRTF_TRPADDFB, sRTF_TRPADDFR
+            };
+            const USHORT* pBrd = aBorders;
+            for (int i = 0; i < 4; ++i)
+            {
+                rWrt.Strm() << aRowPadUnits[i];
+                rWrt.OutULong(3);
+                rWrt.Strm() << aRowPadNames[i];
+                rWrt.OutULong(pDefaultBox->GetDistance(aBorders[i]));
+            }
+        }
+
         // Breite der Boxen ausgeben
         SwTwips nSz = 0, nCalc;
         for( nBox = 0; nBox < nColCnt; ++nBox )
@@ -1819,9 +1866,11 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                                 : sRTF_CLVMRG );
 
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(
-                                            RES_BOX, TRUE, &pItem ) )
-                OutSwTblBorder( rRTFWrt, (SvxBoxItem&)*pItem );
+            if (SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(RES_BOX, TRUE,
+                &pItem))
+            {
+                OutSwTblBorder(rRTFWrt, (SvxBoxItem&)*pItem, pDefaultBox);
+            }
 
 // RTF kennt Schattierung in unserem Sinne nicht!
 //              if( SFX_ITEM_SET == pBoxFmt->GetAttrSet().GetItemState(
@@ -3446,7 +3495,7 @@ RTF kennt keine Rahmen Umrandung!
             *rBox.GetTop() == *rBox.GetBottom() &&
             *rBox.GetTop() == *rBox.GetLeft() &&
             *rBox.GetTop() == *rBox.GetRight() )
-            OutTBLBorderLine( rRTFWrt, rBox.GetTop(), sRTF_BOX, nDist );
+            OutBorderLine( rRTFWrt, rBox.GetTop(), sRTF_BOX, nDist );
         else
         {
             OUT_BRDLINE( rBox.GetTop(),     sRTF_BRDRT, nDist );
@@ -3469,17 +3518,18 @@ RTF kennt keine Rahmen Umrandung!
             nDist == rBox.GetDistance( BOX_LINE_LEFT ) &&
             nDist == rBox.GetDistance( BOX_LINE_BOTTOM ) &&
             nDist == rBox.GetDistance( BOX_LINE_RIGHT ))
-            OutTBLBorderLine( rRTFWrt, rBox.GetTop(), sRTF_BOX, nDist );
+            OutBorderLine( rRTFWrt, rBox.GetTop(), sRTF_BOX, nDist );
         else
         {
             const USHORT* pBrd = aBorders;
             const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
-            for( int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms )
+            for(int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
             {
-                const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-                if( pLn )
-                    OutTBLBorderLine( rRTFWrt, pLn, *pBrdNms,
-                                        rBox.GetDistance( *pBrd ) );
+                if (const SvxBorderLine* pLn = rBox.GetLine(*pBrd))
+                {
+                    OutBorderLine(rRTFWrt, pLn, *pBrdNms,
+                        rBox.GetDistance(*pBrd));
+                }
             }
         }
     }
