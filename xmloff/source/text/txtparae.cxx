@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:55:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,7 +2080,10 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         nShapeFeatures |= SEF_EXPORT_NO_WS;
     }
 
-    if( !bShape )
+    // OD 2004-06-01 #i27691# - correction: no export of svg:x, if object
+    // is anchored as-character.
+    if ( !bShape &&
+         eAnchor != TextContentAnchorType_AS_CHARACTER )
     {
         // svg:x
         sal_Int16 nHoriOrient =  HoriOrientation::NONE;
