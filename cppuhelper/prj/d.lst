@@ -16,7 +16,8 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\implbase10.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase10.hxx
 ..\inc\cppuhelper\implbase11.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase11.hxx
 ..\inc\cppuhelper\implbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase12.hxx
-					
+..\inc\cppuhelper\implbase13.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase13.hxx
+
 ..\inc\cppuhelper\compbase.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase.hxx
 ..\inc\cppuhelper\compbase_ex.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase_ex.hxx
 ..\inc\cppuhelper\compbase1.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase1.hxx
