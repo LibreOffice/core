@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:41:42 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ TabPage TP_FLD_DB
         Text[ greek ] = "~Τύπος πεδίου";
         Text[ korean ] = "ΗΚµεΐ―Ηό(~T)";
         Text[ turkish ] = "Alan tipi";
+        Text[ catalan ] = "~Tipo de campo";
     };
     ListBox LB_DBTYPE
     {
@@ -142,6 +143,7 @@ TabPage TP_FLD_DB
         TEXT[ greek ] = "Όρος";
         TEXT[ korean ] = "Α¶°Η)(~C)";
         TEXT[ turkish ] = "Koώul";
+        TEXT[ catalan ] = "Con~diciσn";
     };
     Edit ED_DBCONDITION
     {
@@ -178,6 +180,7 @@ TabPage TP_FLD_DB
         TEXT[ greek ] = "Αριθμός εγγραφής";
         TEXT[ korean ] = "µ¥ΐΜΕΝ ·ΉΔΪµε  ΉψΘ£";
         TEXT[ turkish ] = "Veri kόmesi numarasύ";
+        TEXT[ catalan ] = "Nϊmero de registro";
     };
     Edit ED_DBSETNUMBER
     {
@@ -212,6 +215,7 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Επιλογή βάσης δεδομένων";
         Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ό±ΕΓ(~E)";
         Text[ turkish ] = "Veritabanύ seηimi";
+        Text[ catalan ] = "~Seleccionar base de datos";
     };
     Control TLB_DBLIST
     {
@@ -245,6 +249,7 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Από βάση δεδομένων";
         Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί·ΞΊΞΕΝ";
         Text[ turkish ] = "Kaynak veritabanύ";
+        Text[ catalan ] = "De la base de datos";
     };
     RadioButton RB_DBFORMAT
     {
@@ -270,6 +275,7 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Προσαρμοσμένο";
         Text[ korean ] = "»ηΏλΐΪ Α¤ΐΗ";
         Text[ turkish ] = "Kullanύcύ tanύmlύ";
+        Text[ catalan ] = "Definido por el usuario";
     };
     ListBox LB_DBNUMFORMAT
     {
@@ -315,6 +321,7 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Μορφή";
         Text[ korean ] = "Ό­½Δ";
         Text[ turkish ] = "Format";
+        Text[ catalan ] = "Formato";
     };
     Text [ english_us ] = "Database" ;
     Text [ portuguese_brazilian ] = "Datenbank" ;
@@ -334,4 +341,5 @@ TabPage TP_FLD_DB
     Text[ greek ] = "Βάση δεδομένων";
     Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί";
     Text[ turkish ] = "Veritabanύ";
+    Text[ catalan ] = "Base de datos";
 };
