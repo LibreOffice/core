@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-12 12:22:07 $
+ *  last change: $Author: pl $ $Date: 2002-06-14 11:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1411,11 +1411,19 @@ void SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
             }
             else if( it->second->m_eState == Selection::IncrementalTransfer )
             {
-                // append data
-                Sequence< sal_Int8 > aData( it->second->m_aData.getLength() + nItems*nFormat/8 );
-                memcpy( aData.getArray(), it->second->m_aData.getArray(), it->second->m_aData.getLength() );
-                memcpy( aData.getArray() + it->second->m_aData.getLength(), pData, nItems*nFormat/8 );
-                it->second->m_aData = aData;
+                if( nItems )
+                {
+                    // append data
+                    Sequence< sal_Int8 > aData( it->second->m_aData.getLength() + nItems*nFormat/8 );
+                    memcpy( aData.getArray(), it->second->m_aData.getArray(), it->second->m_aData.getLength() );
+                    memcpy( aData.getArray() + it->second->m_aData.getLength(), pData, nItems*nFormat/8 );
+                    it->second->m_aData = aData;
+                }
+                else
+                {
+                    it->second->m_eState = Selection::Inactive;
+                    it->second->m_aDataArrived.set();
+                }
             }
             if( pData )
                 XFree( pData );
