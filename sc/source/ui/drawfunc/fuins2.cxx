@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:02:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,15 +681,26 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                                 x += n / 2; break;
                             }
                         }
-                        SCROW j;
-                        for( j = 0; j <= nR0; j++ )
-                            y += pScDoc->FastGetRowHeight( j, nT0 );
-                        while( ++j <= MAXROW )
+                        y += pScDoc->FastGetRowHeight( 0, nR0, nT0);
+                        // Find the first non-hidden row with row height >0 and
+                        // add the half of it's height.
+                        SCROW j = pScDoc->FastGetFirstNonHiddenRow( nR0 + 1, nT0 );
+                        if (j <= MAXROW)
                         {
-                            USHORT n = pScDoc->FastGetRowHeight( j, nT0 );
-                            if( n )
-                            {
-                                y += n / 2; break;
+                            USHORT n = pScDoc->FastGetOriginalRowHeight( j, nT0);
+                            if (n)
+                                y += n / 2;
+                            else
+                            {   // bad luck, not hidden but height 0
+                                for( ++j; j <= MAXROW; ++j )
+                                {
+                                    n = pScDoc->FastGetRowHeight( j, nT0 );
+                                    if( n )
+                                    {
+                                        y += n / 2;
+                                        break;  // for
+                                    }
+                                }
                             }
                         }
                         // Das ganze von Twips nach 1/100 mm
