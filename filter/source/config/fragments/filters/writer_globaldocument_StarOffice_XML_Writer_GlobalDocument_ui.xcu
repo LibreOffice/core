@@ -1,0 +1,7 @@
+    <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">StarOffice 6.0/7 Master Document</value>
+            <value xml:lang="de">StarOffice 6.0/7 Globaldokument</value>
+            <value xml:lang="x-translate">StarOffice 6.0/7 Master Document</value>
+        </prop>
+    </node>
