@@ -161,7 +161,7 @@ main( int argc, char* argv[])
 
 	pOutput = GetOutputFile( argc, argv );
 	if ( !pOutput ) {
-		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd]][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
+		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
