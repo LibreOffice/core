@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:19 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-12 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,10 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         File parcelDir = FileUtil.toFile(parcelBase);
         File contentsDir = FileUtil.toFile(contentsBase);
 
-        File targetfile = new File(node.getTargetDir() + File.separator +
+        // The Location property is not displayed so just
+        // use the Parcel Recipe directory as the target directory
+        File targetDir = FileUtil.toFile(pf.getPrimaryFile());
+        File targetfile = new File(targetDir, File.separator +
             parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
 
         boolean proceed = configure();
@@ -134,7 +137,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             out.println("\nGENERATION SUCCESSFUL.");
             out.println("\nRight click on the generated parcel to deploy it");
 
-            if (node.getTargetDir().equals(parcelDir))
+            if (targetDir.equals(parcelDir))
                 parcelBase.refresh(true);
         }
         catch (IOException ioe) {
