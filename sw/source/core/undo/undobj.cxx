@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:45:00 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,12 @@
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
-
+#ifndef _UNDO_HRC
+#include <undo.hrc>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
                           private SwUndoSaveSection
@@ -264,6 +269,23 @@ SwUndo::~SwUndo()
 void SwUndo::Repeat( SwUndoIter& rIter )
 {
     rIter.pLastUndoObj = this;
+}
+
+String SwUndo::GetComment() const
+{
+    String sResult(SW_RES(UNDO_BASE + nId));
+
+    SwRewriter aRewriter = GetRewriter();
+    sResult = aRewriter.Apply(sResult);
+
+    return sResult;
+}
+
+SwRewriter SwUndo::GetRewriter() const
+{
+    SwRewriter aResult;
+
+    return aResult;
 }
 
 //------------------------------------------------------------
@@ -841,7 +863,6 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     }
 }
 
-
 // START
 SwUndoStart::SwUndoStart( USHORT nId )
     : SwUndo( UNDO_START ), nUserId( nId ), nEndOffset( 0 )
@@ -867,6 +888,24 @@ void SwUndoStart::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.bWeiter = FALSE;
 }
 
+String SwUndoStart::GetComment() const
+{
+    String sResult(SW_RES(UNDO_BASE + nUserId));
+
+    sResult = GetRewriter().Apply(sResult);
+
+    return sResult;
+}
+
+SwRewriter SwUndoStart::GetRewriter() const
+{
+    return mRewriter;
+}
+
+void SwUndoStart::SetRewriter(const SwRewriter & rRewriter)
+{
+    mRewriter = rRewriter;
+}
 
 // END
 SwUndoEnd::SwUndoEnd( USHORT nId )
@@ -893,6 +932,25 @@ void SwUndoEnd::Redo( SwUndoIter& rUndoIter )
 void SwUndoEnd::Repeat( SwUndoIter& rUndoIter )
 {
     rUndoIter.bWeiter = FALSE;
+}
+
+String SwUndoEnd::GetComment() const
+{
+    String sResult(SW_RES(UNDO_BASE + nUserId));
+
+    sResult = GetRewriter().Apply(sResult);
+
+    return sResult;
+}
+
+void SwUndoEnd::SetRewriter(const SwRewriter & rRewriter)
+{
+    mRewriter = rRewriter;
+}
+
+SwRewriter SwUndoEnd::GetRewriter() const
+{
+    return mRewriter;
 }
 
 /*  */
@@ -1102,3 +1160,30 @@ BOOL SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
     return bRet;
 }
 
+// #111827#
+String ShortenString(const String & rStr, int aLength, const String & rFillStr)
+{
+    if (aLength - rFillStr.Len() < 2)
+        ASSERT(0, "improper arguments");
+
+    String aResult;
+
+    if (rStr.Len() <= aLength)
+        aResult = rStr;
+    else
+    {
+        aLength -= rFillStr.Len();
+
+        if (aLength < 2)
+            aLength = 2;
+
+        int aFrontLen = aLength - aLength / 2;
+        int aBackLen = aLength - aFrontLen;
+
+        aResult += rStr.Copy(0, aFrontLen);
+        aResult += rFillStr;
+        aResult += rStr.Copy(rStr.Len() - aBackLen, aBackLen);
+    }
+
+    return aResult;
+}
