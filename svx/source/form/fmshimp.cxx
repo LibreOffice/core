@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:59:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
+#endif
+
+#ifndef SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
+#include "fmtextcontrolshell.hxx"
 #endif
 
 #ifndef _SVDPAGV_HXX //autogen
@@ -676,6 +680,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_bChangingDesignMode(sal_False)
         ,m_bUseWizards(sal_True)
         ,m_bPreparedClose( sal_False )
+        ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
 {
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
@@ -712,6 +717,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
 //------------------------------------------------------------------------
 FmXFormShell::~FmXFormShell()
 {
+    delete m_pTextShell;
     DBG_DTOR(FmXFormShell,NULL);
 }
 
@@ -839,15 +845,23 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(rEvent.Source == m_xExternalViewController, "FmXFormShell::formActivated : where did this come from ?");
-    setActiveController(Reference< XFormController>(rEvent.Source, UNO_QUERY));
+
+    Reference< XFormController > xController( rEvent.Source, UNO_QUERY );
+    OSL_ENSURE( xController.is(), "FmXFormShell::formActivated: invalid event source!" );
+
+    setActiveController( xController );
+    m_pTextShell->formActivated( xController );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(rEvent.Source == m_xExternalViewController, "FmXFormShell::formDeactivated : where did this come from ?");
+
+    Reference< XFormController > xController( rEvent.Source, UNO_QUERY );
+    OSL_ENSURE( xController.is(), "FmXFormShell::formDeactivated: invalid event source!" );
+
+    m_pTextShell->formDeactivated( xController );
 }
 
 //------------------------------------------------------------------------------
@@ -859,7 +873,7 @@ void FmXFormShell::disposing()
         setActiveController( NULL, sal_True );
         // do NOT save the content of the old form (the second parameter tells this)
         // if we're here, then we expect that PrepareClose has been called, and thus the user
-        // got a chance to commit or reject any changes. So in case we're here and the there
+        // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
         // 2002-11-11 - 104702 - fs@openoffice.org
 
@@ -870,6 +884,8 @@ void FmXFormShell::disposing()
         m_pExternalViewInterceptor->release();
         m_pExternalViewInterceptor = NULL;
     }
+
+    m_pTextShell->dispose();
 
     m_xAttachedFrame = NULL;
 
@@ -2658,6 +2674,8 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     }
 
     m_pShell->m_bDesignMode = bDesign;
+    m_pTextShell->designModeChanged( m_pShell->m_bDesignMode );
+
     if (bDesign)
     {
         SdrMarkList aList;
@@ -3995,6 +4013,36 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
             // unlock the environment
             pModel->GetUndoEnv().UnLock();
     }
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
+{
+    m_pTextShell->ExecuteTextAttribute( _rReq );
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::GetTextAttributeState( SfxItemSet& _rSet )
+{
+    m_pTextShell->GetTextAttributeState( _rSet );
+}
+
+//------------------------------------------------------------------------
+bool FmXFormShell::IsActiveControl( bool _bCountRichTextOnly ) const
+{
+    return m_pTextShell->IsActiveControl( _bCountRichTextOnly );
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::ForgetActiveControl()
+{
+    m_pTextShell->ForgetActiveControl();
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
+{
+    m_pTextShell->SetControlActivationHandler( _rHdl );
 }
 
 //==============================================================================
