@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: os $ $Date: 2002-02-28 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,17 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
 
     aFtDescription.SetText( rDesc );
     aEdtName.SetText( rName );
+    ModifyHdl(&aEdtName);
+    aEdtName.SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
 }
+/* -----------------------------27.02.2002 15:22------------------------------
 
-/*************************************************************************/
-
-void SvxNameDialog::GetName( String& rName )
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, pEdit)
 {
-    rName = aEdtName.GetText();
+    if(aCheckNameHdl.IsSet())
+        aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
+    return 0;
 }
 
 /*************************************************************************
