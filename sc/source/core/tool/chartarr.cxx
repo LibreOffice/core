@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ void ScChartArray::CopySettings( SchMemChart& rDest, const SchMemChart& rSource 
 
 // -----------------------------------------------------------------------
 
-ScChartArray::ScChartArray( ScDocument* pDoc, USHORT nTab,
-                    USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
+                    SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                     const String& rChartName ) :
         aName( rChartName ),
         pDocument( pDoc ),
@@ -165,7 +165,11 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SvStream& rStream, ScMultipleReadH
         bDummyUpperLeft( FALSE ),
         bValid( TRUE )
 {
-    USHORT nCol2, nRow2, nTable;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTable;
 
     rHdr.StartEntry();
 
@@ -181,6 +185,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SvStream& rStream, ScMultipleReadH
     rHdr.EndEntry();
 
     SetRangeList( ScRange( nStartCol, nStartRow, nTable, nCol2, nRow2, nTable ) );
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
@@ -201,10 +206,10 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
         {
             const SchSingleCell& rAddr1 = (*iRange).maUpperLeft.maCells[0];
             const SchSingleCell& rAddr2 = (*iRange).maLowerRight.maCells[0];
-            USHORT nTab = (USHORT) (*iRange).mnTableNumber;
+            SCTAB nTab = (SCTAB) (*iRange).mnTableNumber;
             ScRange aRange(
-                (USHORT) rAddr1.mnColumn, (USHORT) rAddr1.mnRow, nTab,
-                (USHORT) rAddr2.mnColumn, (USHORT) rAddr2.mnRow, nTab );
+                (SCCOL) rAddr1.mnColumn, (SCROW) rAddr1.mnRow, nTab,
+                (SCCOL) rAddr2.mnColumn, (SCROW) rAddr2.mnRow, nTab );
             aRangeListRef->Append( aRange );
         }
     }
@@ -221,22 +226,27 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
             String aOpt = ((SchMemChart&)rData).SomeData2();
             xub_StrLen nOptToken = aOpt.GetTokenCount( cTok );
             BOOL bNewChart = (nOptToken >= 4);      // as of 341/342
-            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+            SCCOL nCol1;
+            SCROW nRow1;
+            SCTAB nTab1;
+            SCCOL nCol2;
+            SCROW nRow2;
+            SCTAB nTab2;
             xub_StrLen nInd = 0;
             for ( xub_StrLen j=0; j < nToken; j+=5 )
             {
                 xub_StrLen nInd2 = nInd;
-                nTab1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nTab1 = (SCTAB) aPos.GetToken( 0, cTok, nInd ).ToInt32();
                 // To make old versions (<341/342) skip it, the token separator
                 // is a ','
                 if ( bNewChart )
-                    nTab2 = (USHORT) aPos.GetToken( 1, ',', nInd2 ).ToInt32();
+                    nTab2 = (SCTAB) aPos.GetToken( 1, ',', nInd2 ).ToInt32();
                 else
                     nTab2 = nTab1;
-                nCol1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-                nRow1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-                nCol2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-                nRow2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nCol1 = (SCCOL) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nRow1 = (SCROW) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nCol2 = (SCCOL) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nRow2 = (SCROW) aPos.GetToken( 0, cTok, nInd ).ToInt32();
                 AddToRangeList( ScRange( nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2 ) );
             }
@@ -253,8 +263,8 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
                         bDummyUpperLeft = ( aOpt.GetChar(2) != '0' );
                         xub_StrLen nInd = 4;    // 111;
                         eGlue = (ScChartGlue) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
-                        nStartCol = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
-                        nStartRow = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
+                        nStartCol = (SCCOL) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
+                        nStartRow = (SCROW) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
                         bInitOk = TRUE;
                     }
                 }
@@ -271,7 +281,8 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
     if ( !bInitOk )
     {   // muessen in GlueState neu berechnet werden
         InvalidateGlue();
-        nStartCol = nStartRow = 0;
+        nStartCol = 0;
+        nStartRow = 0;
         bDummyUpperLeft = FALSE;
     }
 }
@@ -354,7 +365,8 @@ void ScChartArray::GlueState()
         else
         {
             InvalidateGlue();
-            nStartCol = nStartRow = 0;
+            nStartCol = 0;
+            nStartRow = 0;
         }
         return;
     }
@@ -363,31 +375,34 @@ void ScChartArray::GlueState()
     pR = aRangeListRef->First();
     nStartCol = pR->aStart.Col();
     nStartRow = pR->aStart.Row();
-    USHORT nMaxCols, nMaxRows, nEndCol, nEndRow;
-    nMaxCols = nMaxRows = nEndCol = nEndRow = 0;
+    SCCOL nMaxCols, nEndCol;
+    SCROW nMaxRows, nEndRow;
+    nMaxCols = nEndCol = 0;
+    nMaxRows = nEndRow = 0;
     do
     {   // umspannenden Bereich etc. feststellen
-        USHORT nTmp, n1, n2;
-        if ( (n1 = pR->aStart.Col()) < nStartCol )
-            nStartCol = n1;
-        if ( (n2 = pR->aEnd.Col()) > nEndCol )
-            nEndCol = n2;
-        if ( (nTmp = n2 - n1 + 1) > nMaxCols )
-            nMaxCols = nTmp;
-        if ( (n1 = pR->aStart.Row()) < nStartRow )
-            nStartRow = n1;
-        if ( (n2 = pR->aEnd.Row()) > nEndRow )
-            nEndRow = n2;
-        if ( (nTmp = n2 - n1 + 1) > nMaxRows )
-            nMaxRows = nTmp;
+        SCCOL nColTmp, nCol1, nCol2;
+        if ( (nCol1 = pR->aStart.Col()) < nStartCol )
+            nStartCol = nCol1;
+        if ( (nCol2 = pR->aEnd.Col()) > nEndCol )
+            nEndCol = nCol2;
+        if ( (nColTmp = nCol2 - nCol1 + 1) > nMaxCols )
+            nMaxCols = nColTmp;
+        SCROW nRowTmp, nRow1, nRow2;
+        if ( (nRow1 = pR->aStart.Row()) < nStartRow )
+            nStartRow = nRow1;
+        if ( (nRow2 = pR->aEnd.Row()) > nEndRow )
+            nEndRow = nRow2;
+        if ( (nRowTmp = nRow2 - nRow1 + 1) > nMaxRows )
+            nMaxRows = nRowTmp;
     } while ( pR = aRangeListRef->Next() );
-    USHORT nC = nEndCol - nStartCol + 1;
+    SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
     {
         eGlue = SC_CHARTGLUE_ROWS;
         return;
     }
-    USHORT nR = nEndRow - nStartRow + 1;
+    SCROW nR = nEndRow - nStartRow + 1;
     if ( nR == 1 )
     {
         eGlue = SC_CHARTGLUE_COLS;
@@ -427,7 +442,12 @@ void ScChartArray::GlueState()
     memset( pA, 0, nCR * sizeof(BYTE) );
 #endif
 
-    USHORT nCol, nRow, nCol1, nRow1, nCol2, nRow2;
+    SCCOL nCol;
+    SCROW  nRow;
+    SCCOL  nCol1;
+    SCROW  nRow1;
+    SCCOL  nCol2;
+    SCROW  nRow2;
     for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
     {   // Selektionen 2D als belegt markieren
         nCol1 = pR->aStart.Col() - nStartCol;
@@ -525,7 +545,12 @@ void ScChartArray::GlueState()
 
 void ScChartArray::CheckColRowHeaders()
 {
-    USHORT i, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
 
     BOOL bColStrings = TRUE;
     BOOL bRowStrings = TRUE;
@@ -544,16 +569,16 @@ void ScChartArray::CheckColRowHeaders()
             bColStrings = bRowStrings = FALSE;
         else
         {
-            for (i=nCol1; i<=nCol2 && bColStrings; i++)
+            for (SCCOL i=nCol1; i<=nCol2 && bColStrings; i++)
             {
                 if ( i==nCol1 || (pDocument->GetColFlags( i, nTab1) & CR_HIDDEN) == 0 )
                     if (pDocument->HasValueData( i, nRow1, nTab1 ))
                         bColStrings = FALSE;
             }
-            for (i=nRow1; i<=nRow2 && bRowStrings; i++)
+            for (SCROW j=nRow1; j<=nRow2 && bRowStrings; j++)
             {
-                if ( i==nRow1 || (pDocument->GetRowFlags( i, nTab1) & CR_HIDDEN) == 0 )
-                    if (pDocument->HasValueData( nCol1, i, nTab1 ))
+                if ( j==nRow1 || (pDocument->GetRowFlags( j, nTab1) & CR_HIDDEN) == 0 )
+                    if (pDocument->HasValueData( nCol1, j, nTab1 ))
                         bRowStrings = FALSE;
             }
         }
@@ -578,7 +603,7 @@ void ScChartArray::CheckColRowHeaders()
                         nRow1, nTab1) & CR_HIDDEN) != 0 )
                     nRow1++;
                 if ( nCol1 <= nCol2 )
-                    for (i=nRow1; i<=nRow2 && bRowStrings; i++)
+                    for (SCROW i=nRow1; i<=nRow2 && bRowStrings; i++)
                     {
                         if ( i==nRow1 || (pDocument->GetRowFlags( i, nTab1) & CR_HIDDEN) == 0 )
                             if (pDocument->HasValueData( nCol1, i, nTab1 ))
@@ -600,7 +625,7 @@ void ScChartArray::CheckColRowHeaders()
                         nRow1++;
                 }
                 if ( nRow1 <= nRow2 )
-                    for (i=nCol1; i<=nCol2 && bColStrings; i++)
+                    for (SCCOL i=nCol1; i<=nCol2 && bColStrings; i++)
                     {
                         if ( i==nCol1 || (pDocument->GetColFlags( i, nTab1) & CR_HIDDEN) == 0 )
                             if (pDocument->HasValueData( i, nRow1, nTab1 ))
@@ -636,20 +661,26 @@ SchMemChart* ScChartArray::CreateMemChart()
 
 SchMemChart* ScChartArray::CreateMemChartSingle()
 {
-    USHORT i,nCol,nRow;
+    SCSIZE nCol;
+    SCSIZE nRow;
 
         //
         //  wirkliche Groesse (ohne versteckte Zeilen/Spalten)
         //
 
-    USHORT nColAdd = bRowHeaders ? 1 : 0;
-    USHORT nRowAdd = bColHeaders ? 1 : 0;
+    SCCOL nColAdd = bRowHeaders ? 1 : 0;
+    SCROW nRowAdd = bColHeaders ? 1 : 0;
 
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
     aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    USHORT nStrCol = nCol1;     // fuer Beschriftung merken
-    USHORT nStrRow = nRow1;
+    SCCOL nStrCol = nCol1;      // fuer Beschriftung merken
+    SCROW nStrRow = nRow1;
     // Beschriftungen auch nach HiddenCols finden
     while ( (pDocument->GetColFlags( nCol1, nTab1) & CR_HIDDEN) != 0 )
         nCol1++;
@@ -667,19 +698,26 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
         nRow1 += nRowAdd;
     }
 
-    USHORT nTotalCols = ( nCol1 <= nCol2 ? nCol2 - nCol1 + 1 : 0 );
-    USHORT* pCols = new USHORT[nTotalCols ? nTotalCols : 1];
-    USHORT nColCount = 0;
-    for (i=0; i<nTotalCols; i++)
+    SCSIZE nTotalCols = ( nCol1 <= nCol2 ? nCol2 - nCol1 + 1 : 0 );
+    SCCOL* pCols = new SCCOL[nTotalCols > 0 ? nTotalCols : 1];
+    SCSIZE nColCount = 0;
+    for (SCSIZE i=0; i<nTotalCols; i++)
         if ((pDocument->GetColFlags(nCol1+i,nTab1)&CR_HIDDEN)==0)
             pCols[nColCount++] = nCol1+i;
 
-    USHORT nTotalRows = ( nRow1 <= nRow2 ? nRow2 - nRow1 + 1 : 0 );
-    USHORT* pRows = new USHORT[nTotalRows ? nTotalRows : 1];
-    USHORT nRowCount = 0;
-    for (i=0; i<nTotalRows; i++)
-        if ((pDocument->GetRowFlags(nRow1+i,nTab1)&CR_HIDDEN)==0)
-            pRows[nRowCount++] = nRow1+i;
+    SCSIZE nTotalRows = ( nRow1 <= nRow2 ? nRow2 - nRow1 + 1 : 0 );
+    SCROW* pRows = new SCROW[nTotalRows > 0 ? nTotalRows : 1];
+    SCSIZE nRowCount = 0;
+    for (SCSIZE j=0; j<nTotalRows; j++)
+        if ((pDocument->GetRowFlags(nRow1+j,nTab1)&CR_HIDDEN)==0)
+            pRows[nRowCount++] = nRow1+j;
+
+    // May happen at least with more than 32k rows.
+    if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
+    {
+        nColCount = 0;
+        nRowCount = 0;
+    }
 
     BOOL bValidData = TRUE;
     if ( !nColCount )
@@ -699,7 +737,8 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
         //  Daten
         //
 
-    SchMemChart* pMemChart = SchDLL::NewMemChart( nColCount, nRowCount );
+    SchMemChart* pMemChart = SchDLL::NewMemChart(
+            static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
@@ -736,7 +775,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                                 nVal = pFCell->GetValue();
                         }
                     }
-                    pMemChart->SetData(nCol, nRow, nVal);
+                    pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
                 }
             }
         }
@@ -746,7 +785,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
 
             for (nCol=0; nCol<nColCount; nCol++)
                 for (nRow=0; nRow<nRowCount; nRow++)
-                    pMemChart->SetData( nCol, nRow, DBL_MIN );
+                    pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
         }
 
         //
@@ -767,11 +806,11 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                 aPos.Format( aColStr, SCA_VALID_COL, NULL );
                 aString += aColStr;
             }
-            pMemChart->SetColText(nCol, aString);
+            pMemChart->SetColText( static_cast<short>(nCol), aString);
 
             ULONG nNumberAttr = pDocument->GetNumberFormat( ScAddress(
                                             pCols[nCol], nRow1, nTab1 ) );
-            pMemChart->SetNumFormatIdCol( nCol, nNumberAttr );
+            pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
@@ -792,11 +831,11 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                 aString += ' ';
                 aString += String::CreateFromInt32( pRows[nRow]+1 );
             }
-            pMemChart->SetRowText(nRow, aString);
+            pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
             ULONG nNumberAttr = pDocument->GetNumberFormat( ScAddress(
                                             nCol1, pRows[nRow], nTab1 ) );
-            pMemChart->SetNumFormatIdRow( nRow, nNumberAttr );
+            pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
 
         //
@@ -838,52 +877,84 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
 SchMemChart* ScChartArray::CreateMemChartMulti()
 {
     CreatePositionMap();
-    USHORT nColCount = pPositionMap->GetColCount();
-    USHORT nRowCount = pPositionMap->GetRowCount();
+    SCSIZE nColCount = pPositionMap->GetColCount();
+    SCSIZE nRowCount = pPositionMap->GetRowCount();
 
-    USHORT nCol, nRow;
+    SCSIZE nCol;
+    SCSIZE nRow;
+
+    // May happen at least with more than 32k rows.
+    if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
+    {
+        nColCount = 0;
+        nRowCount = 0;
+    }
+
+    BOOL bValidData = TRUE;
+    if ( !nColCount )
+    {
+        bValidData = FALSE;
+        nColCount = 1;
+    }
+    if ( !nRowCount )
+    {
+        bValidData = FALSE;
+        nRowCount = 1;
+    }
 
     //
     //  Daten
     //
 
-    SchMemChart* pMemChart = SchDLL::NewMemChart( nColCount, nRowCount );
+    SchMemChart* pMemChart = SchDLL::NewMemChart(
+            static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
         pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
-        BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-        ULONG nIndex = 0;
-        for ( nCol = 0; nCol < nColCount; nCol++ )
+        if (bValidData)
         {
-            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+            BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+            ULONG nIndex = 0;
+            for ( nCol = 0; nCol < nColCount; nCol++ )
             {
-                double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
-                const ScAddress* pPos = pPositionMap->GetPosition( nIndex );
-                if ( pPos )
-                {   // sonst: Luecke
-                    ScBaseCell* pCell = pDocument->GetCell( *pPos );
-                    if (pCell)
-                    {
-                        CellType eType = pCell->GetCellType();
-                        if (eType == CELLTYPE_VALUE)
+                for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+                {
+                    double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
+                    const ScAddress* pPos = pPositionMap->GetPosition( nIndex );
+                    if ( pPos )
+                    {   // sonst: Luecke
+                        ScBaseCell* pCell = pDocument->GetCell( *pPos );
+                        if (pCell)
                         {
-                            nVal = ((ScValueCell*)pCell)->GetValue();
-                            if ( bCalcAsShown && nVal != 0.0 )
+                            CellType eType = pCell->GetCellType();
+                            if (eType == CELLTYPE_VALUE)
                             {
-                                ULONG nFormat = pDocument->GetNumberFormat( *pPos );
-                                nVal = pDocument->RoundValueAsShown( nVal, nFormat );
+                                nVal = ((ScValueCell*)pCell)->GetValue();
+                                if ( bCalcAsShown && nVal != 0.0 )
+                                {
+                                    ULONG nFormat = pDocument->GetNumberFormat( *pPos );
+                                    nVal = pDocument->RoundValueAsShown( nVal, nFormat );
+                                }
+                            }
+                            else if (eType == CELLTYPE_FORMULA)
+                            {
+                                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+                                if ( (pFCell->GetErrCode() == 0) && pFCell->IsValue() )
+                                    nVal = pFCell->GetValue();
                             }
                         }
-                        else if (eType == CELLTYPE_FORMULA)
-                        {
-                            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                            if ( (pFCell->GetErrCode() == 0) && pFCell->IsValue() )
-                                nVal = pFCell->GetValue();
-                        }
                     }
+                    pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
                 }
-                pMemChart->SetData(nCol, nRow, nVal);
             }
+        }
+        else
+        {
+            //! Flag, dass Daten ungueltig ??
+
+            for (nCol=0; nCol<nColCount; nCol++)
+                for (nRow=0; nRow<nRowCount; nRow++)
+                    pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
         }
 
 //2do: Beschriftung bei Luecken
@@ -892,7 +963,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
         //  Spalten-Header
         //
 
-        USHORT nPosCol = 0;
+        SCCOL nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
         {
             String aString, aColStr;
@@ -913,20 +984,20 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
 //                aString += String::CreateFromInt32( nPosCol );
                 aString += aColStr;
             }
-            pMemChart->SetColText(nCol, aString);
+            pMemChart->SetColText( static_cast<short>(nCol), aString);
 
             ULONG nNumberAttr = 0;
             pPos = pPositionMap->GetPosition( nCol, 0 );
             if ( pPos )
                 nNumberAttr = pDocument->GetNumberFormat( *pPos );
-            pMemChart->SetNumFormatIdCol( nCol, nNumberAttr );
+            pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
         //  Zeilen-Header
         //
 
-        USHORT nPosRow = 0;
+        SCROW nPosRow = 0;
         for ( nRow = 0; nRow < nRowCount; nRow++ )
         {
             String aString;
@@ -946,13 +1017,13 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
                     nPosRow++;
                 aString += String::CreateFromInt32( nPosRow );
             }
-            pMemChart->SetRowText(nRow, aString);
+            pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
             ULONG nNumberAttr = 0;
             pPos = pPositionMap->GetPosition( 0, nRow );
             if ( pPos )
                 nNumberAttr = pDocument->GetNumberFormat( *pPos );
-            pMemChart->SetNumFormatIdRow( nRow, nNumberAttr );
+            pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
 
         //
@@ -998,7 +1069,12 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
 void ScChartArray::SetExtraStrings( SchMemChart& rMem )
 {
     ScRangePtr pR;
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
 #if 0
 /* now this is done in SchMemChart::ConvertChartRangeForCalc() for SO5 file format
     const sal_Unicode cTok = ';';
@@ -1040,7 +1116,7 @@ void ScChartArray::SetExtraStrings( SchMemChart& rMem )
     for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
     {
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for ( USHORT nTab = nTab1; nTab <= nTab2; ++nTab )
+        for ( SCTAB nTab = nTab1; nTab <= nTab2; ++nTab )
         {
             SchCellRangeAddress aCellRangeAddress;
             SchSingleCell aCell;
@@ -1092,17 +1168,25 @@ void ScChartArray::CreatePositionMap()
     if ( pPositionMap )
         return ;
 
-    USHORT nColAdd = bRowHeaders ? 1 : 0;
-    USHORT nRowAdd = bColHeaders ? 1 : 0;
+    SCSIZE nColAdd = bRowHeaders ? 1 : 0;
+    SCSIZE nRowAdd = bColHeaders ? 1 : 0;
 
-    USHORT nCol, nRow, nTab, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
 
     //
     //  wirkliche Groesse (ohne versteckte Zeilen/Spalten)
     //
 
-    USHORT nColCount, nRowCount;
-    nColCount = nRowCount = 0;
+    SCSIZE nColCount = 0;
+    SCSIZE nRowCount = 0;
 
     GlueState();
 
@@ -1113,19 +1197,19 @@ void ScChartArray::CreatePositionMap()
     ScRangePtr pR;
     Table* pCol;
     ScAddress* pPos;
-    USHORT nNoGlueRow = 0;
+    SCROW nNoGlueRow = 0;
     for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
     {
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
             // nTab im ColKey, um gleiche Col/Row in anderer Table haben zu koennen
-            ScAddress aInsCol( (bNoGlue ? 0 : nCol1), 0, nTab );
-            for ( nCol = nCol1; nCol <= nCol2; nCol++, aInsCol.IncCol() )
+            ULONG nInsCol = (static_cast<ULONG>(nTab) << 16) | (bNoGlue ? 0 :
+                    static_cast<ULONG>(nCol1));
+            for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
                 if ( (pDocument->GetColFlags( nCol, nTab) & CR_HIDDEN) == 0 )
                 {
-                    ULONG nInsCol = (ULONG)(UINT32) aInsCol;
                     if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
                     {   // meistens gleiche Cols
                         if ( !(pCol = (Table*) pCols->Get( nInsCol )) )
@@ -1169,18 +1253,18 @@ void ScChartArray::CreatePositionMap()
     delete pNewRowTable;
 
     // Anzahl der Daten
-    nColCount = (USHORT) pCols->Count();
+    nColCount = pCols->Count();
     if ( pCol = (Table*) pCols->First() )
     {
         if ( bDummyUpperLeft )
             pCol->Insert( 0, (void*)0 );        // Dummy fuer Beschriftung
-        nRowCount = (USHORT) pCol->Count();
+        nRowCount = pCol->Count();
     }
     else
         nRowCount = 0;
-    if ( nColCount )
+    if ( nColCount > 0 )
         nColCount -= nColAdd;
-    if ( nRowCount )
+    if ( nRowCount > 0 )
         nRowCount -= nRowAdd;
 
     if ( nColCount==0 || nRowCount==0 )
@@ -1238,30 +1322,31 @@ void ScChartArray::CreatePositionMap()
 }
 
 
-ScChartPositionMap::ScChartPositionMap( USHORT nChartCols, USHORT nChartRows,
-            USHORT nColAdd, USHORT nRowAdd, Table& rCols ) :
-        nCount( (ULONG) nChartCols * nChartRows ),
+ScChartPositionMap::ScChartPositionMap( SCSIZE nChartCols, SCSIZE nChartRows,
+            SCSIZE nColAdd, SCSIZE nRowAdd, Table& rCols ) :
+        nCount( nChartCols * nChartRows ),
         nColCount( nChartCols ),
         nRowCount( nChartRows ),
         ppData( new ScAddress* [ nChartCols * nChartRows ] ),
         ppColHeader( new ScAddress* [ nChartCols ] ),
         ppRowHeader( new ScAddress* [ nChartRows ] )
 {
-    DBG_ASSERT( nColCount && nRowCount, "ScChartPositionMap without dimension" );
+    DBG_ASSERT( nColCount > 0 && nRowCount > 0, "ScChartPositionMap without dimension" );
 #ifdef WIN
 #error ScChartPositionMap not implemented for 16-bit dumdums
 #endif
 
     ScAddress* pPos;
-    USHORT nCol, nRow;
+    SCSIZE nCol;
+    SCSIZE nRow;
 
     Table* pCol = (Table*) rCols.First();
 
     // Zeilen-Header
     pPos = (ScAddress*) pCol->First();
-    if ( nRowAdd )
+    if ( nRowAdd > 0 )
         pPos = (ScAddress*) pCol->Next();
-    if ( nColAdd )
+    if ( nColAdd > 0 )
     {   // eigenstaendig
         for ( nRow = 0; nRow < nRowCount; nRow++ )
         {
@@ -1277,24 +1362,24 @@ ScChartPositionMap::ScChartPositionMap( USHORT nChartCols, USHORT nChartRows,
             pPos = (ScAddress*) pCol->Next();
         }
     }
-    if ( nColAdd )
+    if ( nColAdd > 0 )
         pCol = (Table*) rCols.Next();
 
     // Daten spaltenweise und Spalten-Header
-    ULONG nIndex = 0;
+    SCSIZE nIndex = 0;
     for ( nCol = 0; nCol < nColCount; nCol++ )
     {
         if ( pCol )
         {
             pPos = (ScAddress*) pCol->First();
-            if ( nRowAdd )
+            if ( nRowAdd > 0 )
             {
                 ppColHeader[ nCol ] = pPos;     // eigenstaendig
                 pPos = (ScAddress*) pCol->Next();
             }
             else
                 ppColHeader[ nCol ] = ( pPos ? new ScAddress( *pPos ) : NULL );
-            for ( USHORT nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
                 ppData[ nIndex ] = pPos;
                 pPos = (ScAddress*) pCol->Next();
@@ -1335,13 +1420,13 @@ ScChartPositionMap::~ScChartPositionMap()
 }
 
 
-ScRangeListRef ScChartPositionMap::GetColRanges( USHORT nChartCol ) const
+ScRangeListRef ScChartPositionMap::GetColRanges( SCSIZE nChartCol ) const
 {
     ScRangeListRef xRangeList = new ScRangeList;
     if ( nChartCol < nColCount )
     {
-        ULONG nStop = GetIndex( nChartCol, nRowCount );
-        for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
+        SCSIZE nStop = GetIndex( nChartCol, nRowCount );
+        for ( SCSIZE nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
         {
             if ( ppData[ nIndex ] )
                 xRangeList->Join( *ppData[ nIndex ] );
@@ -1351,13 +1436,13 @@ ScRangeListRef ScChartPositionMap::GetColRanges( USHORT nChartCol ) const
 }
 
 
-ScRangeListRef ScChartPositionMap::GetRowRanges( USHORT nChartRow ) const
+ScRangeListRef ScChartPositionMap::GetRowRanges( SCSIZE nChartRow ) const
 {
     ScRangeListRef xRangeList = new ScRangeList;
     if ( nChartRow < nRowCount )
     {
-        ULONG nStop = GetIndex( nColCount, nChartRow );
-        for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
+        SCSIZE nStop = GetIndex( nColCount, nChartRow );
+        for ( SCSIZE nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
                 nIndex += nRowCount )
         {
             if ( ppData[ nIndex ] )
