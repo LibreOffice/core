@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:51 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ static struct
 static Paper getPaperType( const String& rPaperName )
 {
     ByteString aPaper( rPaperName, RTL_TEXTENCODING_ISO_8859_1 );
-    for( int i = 0; i < sizeof( aPaperTab )/sizeof( aPaperTab[0] ); i++ )
+    for( unsigned int i = 0; i < sizeof( aPaperTab )/sizeof( aPaperTab[0] ); i++ )
     {
         if( ! strcmp( aPaper.GetBuffer(), aPaperTab[i].name ) )
             return aPaperTab[i].paper;
@@ -282,8 +282,6 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     // copy input slot
     const PPDKey* pKey = NULL;
     const PPDValue* pValue = NULL;
-    ::std::list< const PPDValue* > aValues;
-    ::std::list< const PPDValue* >::iterator it;
 
     pJobSetup->mnPaperBin = 0xffff;
     pKey                        = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
@@ -399,7 +397,6 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 
 static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     String aFaxNumber( rFaxNumber );
     String aCmdLine( rCommand );
     if( ! aFaxNumber.Len() )
@@ -409,17 +406,23 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
         {
             String aNewNr;
             if( pFaxNrFunction( aNewNr ) )
-                aFaxNumber = aNewNr, aEncoding;
+                aFaxNumber = aNewNr;
         }
     }
 
+    bool bSuccess = false;
     if( aFaxNumber.Len() )
     {
         while( aCmdLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber ) != STRING_NOTFOUND )
         ;
+        bSuccess = passFileToCommandLine( rFileName, aCmdLine );
     }
-
-    return passFileToCommandLine( rFileName, aCmdLine );
+    else
+    {
+        // clean up temp file; passFileToCommandLine would have done this
+        unlink( ByteString( rFileName, osl_getThreadTextEncoding() ).GetBuffer() );
+    }
+    return bSuccess;
 }
 
 static bool createPdf( const String& rToFile, const String& rFromFile, const String& rCommandLine )
