@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 16:00:25 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 15:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1856,7 +1856,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 if ( !bHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
                                 {
                                     //  set hyphenator the first time it is needed
-                                    pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+                                    com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+                                    pEngine->SetHyphenator( xXHyphenator );
                                     bHyphenatorSet = TRUE;
                                 }
                             }
@@ -2589,7 +2590,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 if ( !bHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
                                 {
                                     //  set hyphenator the first time it is needed
-                                    pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+                                    com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+                                    pEngine->SetHyphenator( xXHyphenator );
                                     bHyphenatorSet = TRUE;
                                 }
                             }
