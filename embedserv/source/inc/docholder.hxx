@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-12 15:37:59 $
+ *  last change: $Author: mav $ $Date: 2003-03-19 08:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,21 +67,27 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #endif
 
-class DocumentHolder : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+class DocumentHolder : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseListener,
+                                                        ::com::sun::star::frame::XTerminateListener >
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
 
 public:
 
-    DocumentHolder();
+    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     ~DocumentHolder();
 
     void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc );
     void CloseDocument();
+    void FreeOffice();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
 
@@ -93,6 +99,12 @@ public:
         throw( ::com::sun::star::util::CloseVetoException );
 
     virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aSource );
+
+// XTerminateListener
+    virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& aSource )
+        throw( ::com::sun::star::frame::TerminationVetoException );
+
+    virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& aSource );
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-17 11:02:34 $
+ *  last change: $Author: mav $ $Date: 2003-03-19 08:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,13 +227,14 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
 {
-    m_pDocHolder = new DocumentHolder();
+    m_pDocHolder = new DocumentHolder( xFactory );
     m_pDocHolder->acquire();
 }
 
 EmbedDocument_Impl::~EmbedDocument_Impl()
 {
     m_pDocHolder->CloseDocument();
+    m_pDocHolder->FreeOffice();
     m_pDocHolder->release();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-12 15:37:57 $
+ *  last change: $Author: mav $ $Date: 2003-03-19 08:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include "docholder.hxx"
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #endif
@@ -70,20 +73,68 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 using namespace ::com::sun::star;
 
 // add mutex locking ???
 
-DocumentHolder::DocumentHolder()
+DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+: m_xFactory( xFactory )
 {
+    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
+    uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+    if ( xDesktop.is() )
+        xDesktop->addTerminateListener( (frame::XTerminateListener*)this );
 }
 
 DocumentHolder::~DocumentHolder()
 {
     if ( m_xDocument.is() )
         CloseDocument();
+
+    if ( m_xFactory.is() )
+        FreeOffice();
+}
+
+void DocumentHolder::FreeOffice()
+{
+    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
+    uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+    if ( xDesktop.is() )
+    {
+        xDesktop->removeTerminateListener( (frame::XTerminateListener*)this );
+
+        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
+        if ( xFramesSupplier.is() )
+        {
+            uno::Reference< frame::XFrames > xFrames = xFramesSupplier->getFrames();
+            if ( xFrames.is() && !xFrames->hasElements() )
+            {
+                try
+                {
+                    xDesktop->terminate();
+                }
+                catch( uno::Exception & )
+                {}
+            }
+        }
+
+        m_xFactory = uno::Reference< lang::XMultiServiceFactory >();
+    }
 }
 
 void DocumentHolder::CloseDocument()
@@ -141,5 +192,22 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         m_xDocument = uno::Reference< frame::XModel >();
+}
+
+void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& aSource )
+        throw( frame::TerminationVetoException )
+{
+    if ( m_xDocument.is() )
+        throw frame::TerminationVetoException();
+}
+
+void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSource )
+{
+    OSL_ENSURE( !m_xDocument.is(), "Just a disaster..." );
+
+    uno::Reference< frame::XDesktop > xDesktop( aSource.Source, uno::UNO_QUERY );
+
+    if ( xDesktop.is() )
+        xDesktop->removeTerminateListener( (frame::XTerminateListener*)this );
 }
 
