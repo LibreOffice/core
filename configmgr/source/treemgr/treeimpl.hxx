@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-13 12:21:48 $
+ *  last change: $Author: jb $ $Date: 2000-12-14 08:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,22 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         inline
         TreeDepth& incDepth(TreeDepth& rDepth)
-        { if (rDepth != c_TreeDepthAll) ++rDepth; return rDepth; }
+        {
+            if (rDepth != c_TreeDepthAll) ++rDepth;
+            return rDepth;
+        }
+
+        inline
+        TreeDepth& decDepth(TreeDepth& rDepth)
+        {
+            OSL_ENSURE(rDepth != 0,"Cannot decrement zero depth");
+            if (rDepth != c_TreeDepthAll && rDepth != 0) --rDepth;
+            return rDepth;
+        }
 
         inline
         TreeDepth childDepth(TreeDepth nDepth)
         { return decDepth(nDepth); }
-
-        inline
-        TreeDepth& decDepth(TreeDepth& rDepth)
-        { if (rDepth != c_TreeDepthAll && rDepth != 0) --rDepth; return rDepth; }
 
         inline
         TreeDepth parentDepth(TreeDepth nDepth)
