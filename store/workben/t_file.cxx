@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-15 15:35:31 $
+ *  last change: $Author: mhu $ $Date: 2001-11-29 18:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _T_FILE_CXX "$Revision: 1.4 $"
+#define _T_FILE_CXX "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -83,7 +83,14 @@
 #include <store/filelckb.hxx>
 #endif
 
+#ifndef INCLUDED_STDIO_H
+#include <stdio.h>
+#define INCLUDED_STDIO_H
+#endif
+
 using namespace store;
+
+#define TEST_PAGESIZE 16384
 
 /*========================================================================
  *
@@ -93,7 +100,10 @@ using namespace store;
 int SAL_CALL main (int argc, char **argv)
 {
     if (argc < 2)
+    {
+        fprintf (stderr, "usage: t_file <output-filename>\n");
         return 0;
+    }
 
     rtl::Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
     if (!xLockBytes.is())
@@ -103,78 +113,124 @@ int SAL_CALL main (int argc, char **argv)
         argv[1], rtl_str_getLength(argv[1]),
         osl_getThreadTextEncoding());
 
-#if 0  /* EXP */
-
-    if (aFilename.getLength() > 0)
-    {
-        oslFileError result;
-
-        rtl::OUString aNormalizedPath;
-        result = osl_normalizePath (
-            aFilename.pData, &(aNormalizedPath.pData));
-        if (!(result == osl_File_E_None))
-        {
-            // Neither System, nor Normalized. Try parsing as Url.
-            result = osl_getNormalizedPathFromFileURL (
-                aFilename.pData, &(aNormalizedPath.pData));
-            if (!(result == osl_File_E_None))
-            {
-                // Invalid path.
-                return (store_E_InvalidParameter);
-            }
-        }
-
-        rtl::OUString aSystemPath;
-        result = osl_getSystemPathFromNormalizedPath (
-            aNormalizedPath.pData, &(aSystemPath.pData));
-        if (!(result == osl_File_E_None))
-        {
-            // Invalid path.
-            return (store_E_InvalidParameter);
-        }
-
-        aFilename = aSystemPath;
-    }
-
-#endif /* EXP */
-
     storeError eErrCode = xLockBytes->create (
         aFilename.pData, store_AccessReadWrite);
     if (eErrCode != store_E_None)
     {
         // Check reason.
         if (eErrCode != store_E_NotExists)
+        {
+            fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
             return eErrCode;
+        }
 
         // Create.
         eErrCode = xLockBytes->create (
             aFilename.pData, store_AccessReadCreate);
         if (eErrCode != store_E_None)
+        {
+            fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
             return eErrCode;
+        }
     }
 
-    sal_uInt32 k = 0;
-    eErrCode = xLockBytes->writeAt (
-        0, argv[0], rtl_str_getLength(argv[0]), k);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+    sal_Char buffer[TEST_PAGESIZE];
+    rtl_fillMemory (buffer, sizeof(buffer), sal_uInt8('B'));
 
-    eErrCode = xLockBytes->setSize (1024);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+    sal_uInt32 i, k;
+    for (k = 0; k < 4; k++)
+    {
+        sal_uInt32 index = k * TEST_PAGESIZE / 4;
+        buffer[index] = 'A';
+    }
 
-    eErrCode = xLockBytes->writeAt (
-        1024, argv[1], rtl_str_getLength(argv[1]), k);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+    for (i = 0; i < 256; i++)
+    {
+        sal_uInt32 offset = i * TEST_PAGESIZE;
+        eErrCode = xLockBytes->setSize (offset + TEST_PAGESIZE);
+        if (eErrCode != store_E_None)
+        {
+            fprintf (stderr, "t_file: setSize() error: %d\n", eErrCode);
+            return eErrCode;
+        }
 
-    eErrCode = xLockBytes->setSize (2048);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+        for (k = 0; k < 4; k++)
+        {
+            sal_uInt32 magic = i * 4 + k, done = 0;
+            if (magic)
+            {
+                sal_uInt32 verify = 0;
+                eErrCode = xLockBytes->readAt (
+                    0, &verify, sizeof(verify), done);
+                if (eErrCode != store_E_None)
+                {
+                    fprintf (stderr, "t_file: readAt() error: %d\n", eErrCode);
+                    return eErrCode;
+                }
+                if (verify != magic)
+                {
+                    // Failure.
+                    fprintf (stderr, "Expected %d read %d\n", magic, verify);
+                }
+            }
+
+            sal_uInt32 index = k * TEST_PAGESIZE / 4;
+            eErrCode = xLockBytes->writeAt (
+                offset + index, &(buffer[index]), TEST_PAGESIZE / 4, done);
+            if (eErrCode != store_E_None)
+            {
+                fprintf (stderr, "t_file: writeAt() error: %d\n", eErrCode);
+                return eErrCode;
+            }
+
+            magic += 1;
+            eErrCode = xLockBytes->writeAt (
+                0, &magic, sizeof(magic), done);
+            if (eErrCode != store_E_None)
+            {
+                fprintf (stderr, "t_file: writeAt() error: %d\n", eErrCode);
+                return eErrCode;
+            }
+        }
+    }
 
     eErrCode = xLockBytes->flush();
     if (eErrCode != store_E_None)
+    {
+        fprintf (stderr, "t_file: flush() error: %d\n", eErrCode);
         return eErrCode;
+    }
+
+    sal_Char verify[TEST_PAGESIZE];
+    for (i = 0; i < 256; i++)
+    {
+        sal_uInt32 offset = i * TEST_PAGESIZE, done = 0;
+
+        eErrCode = xLockBytes->readAt (offset, verify, TEST_PAGESIZE, done);
+        if (eErrCode != store_E_None)
+        {
+            fprintf (stderr, "t_file: readAt() error: %d\n", eErrCode);
+            return eErrCode;
+        }
+
+        sal_uInt32 index = 0;
+        if (offset == 0)
+        {
+            sal_uInt32 magic = 256 * 4;
+            if (rtl_compareMemory (&verify[index], &magic, sizeof(magic)))
+            {
+                // Failure.
+                fprintf (stderr, "t_file: Unexpected value at 0x00000000\n");
+            }
+            index += 4;
+        }
+        if (rtl_compareMemory (
+            &verify[index], &buffer[index], TEST_PAGESIZE - index))
+        {
+            // Failure.
+            fprintf (stderr, "t_file: Unexpected block at 0x%08x\n", offset);
+        }
+    }
 
     xLockBytes.clear();
     return 0;
