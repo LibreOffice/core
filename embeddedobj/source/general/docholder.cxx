@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:31:21 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,29 +146,29 @@
 #ifndef _COM_SUN_STAR_EMBED_XINPLACECLIENT_HPP_
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMENUBARMERGINGACCEPTOR_HPP_
-#include <drafts/com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMENUBARMERGINGACCEPTOR_HPP_
+#include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XDOCKINGAREAACCEPTOR_HPP_
-#include <drafts/com/sun/star/ui/XDockingAreaAcceptor.hpp>
+#ifndef _COM_SUN_STAR_UI_XDOCKINGAREAACCEPTOR_HPP_
+#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
-#include <drafts/com/sun/star/ui/XUIElementSettings.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
+#include <com/sun/star/ui/XUIElementSettings.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XCONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XCONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -407,7 +407,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
 
     try
     {
-        uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY_THROW );
         xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
         if ( xLayoutManager.is() )
@@ -566,10 +566,10 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
 {
     uno::Reference< container::XIndexAccess > xResult;
 
-    uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManagerSupplier > xUIConfSupplier(
+    uno::Reference< ::com::sun::star::ui::XUIConfigurationManagerSupplier > xUIConfSupplier(
                 m_xComponent,
                 uno::UNO_QUERY_THROW );
-    uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager > xUIConfigManager(
+    uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xUIConfigManager(
                 xUIConfSupplier->getUIConfigurationManager(),
                 uno::UNO_QUERY_THROW );
 
@@ -585,20 +585,20 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     if ( !xResult.is() )
     {
         // no internal document configuration, use the one from the module
-        uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > xModuleMan(
+        uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleMan(
                 m_xFactory->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.ModuleManager" ) ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
                     uno::UNO_QUERY_THROW );
         ::rtl::OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( aModuleIdent.getLength() )
         {
-            uno::Reference< ::drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
+            uno::Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
                     m_xFactory->createInstance( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ),
+                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ),
                     uno::UNO_QUERY_THROW );
-            uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
+            uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
@@ -694,14 +694,14 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
 }
 
 //---------------------------------------------------------------------------
-sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xOwnLM,
-                                               const uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xContLM,
+sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
+                                               const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp )
 {
     sal_Bool bMenuMerged = sal_False;
     try
     {
-        uno::Reference< drafts::com::sun::star::ui::XUIElementSettings > xUISettings(
+        uno::Reference< ::com::sun::star::ui::XUIElementSettings > xUISettings(
             xContLM->getElement(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ) ) ),
             uno::UNO_QUERY_THROW );
@@ -713,7 +713,7 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< drafts::com::su
         uno::Reference< frame::XDispatchProvider > xOwnDisp( m_xFrame, uno::UNO_QUERY_THROW );
 
         uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenuesForInplace( xContMenu, xContDisp, xOwnMenu, xOwnDisp );
-        uno::Reference< drafts::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
+        uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
     }
@@ -723,14 +723,14 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< drafts::com::su
     return bMenuMerged;
 }
 
-sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM,
+sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
                                  const uno::Reference< frame::XDispatchProvider >& xContainerDP )
 {
     sal_Bool bResult = sal_False;
     if ( xContainerLM.is() )
     {
-           uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xOwnLM;
-           uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
+           uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
+           uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
@@ -766,10 +766,10 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::drafts::com::sun::star:
             {
                 try {
                     xOwnLM->setDockingAreaAcceptor( m_xCachedDocAreaAcc );
-                       m_xCachedDocAreaAcc = uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >();
+                       m_xCachedDocAreaAcc = uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >();
 
                     xOwnLM->setVisible( sal_False );
-                    uno::Reference< drafts::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
+                    uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                                       uno::UNO_QUERY_THROW );
                     xMerge->removeMergedMenuBar();
                 } catch( uno::Exception& ) {}
@@ -786,13 +786,13 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::drafts::com::sun::star:
 }
 
 //---------------------------------------------------------------------------
-sal_Bool DocumentHolder::HideUI( const uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM )
+sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM )
 {
     sal_Bool bResult = sal_False;
 
     if ( xContainerLM.is() )
     {
-           uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xOwnLM;
+           uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
@@ -808,12 +808,12 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::drafts::com::sun::star:
                 if ( xSupp.is() )
                     xSupp->setActiveFrame( 0 );
 
-                uno::Reference< drafts::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
+                uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                                 uno::UNO_QUERY_THROW );
                 xMerge->removeMergedMenuBar();
 
                 xOwnLM->setDockingAreaAcceptor( m_xCachedDocAreaAcc );
-                   m_xCachedDocAreaAcc = uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >();
+                   m_xCachedDocAreaAcc = uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >();
 
                 xOwnLM->setVisible( sal_False );
                 xContainerLM->unlock();
