@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 10:55:36 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ korean ] =
         {
-            < "An" ; 1 ; > ;
-            < "Kopie" ; 2 ; > ;
-            < "Blindkopie" ; 3 ; > ;
+            < "수신:" ; 1 ; > ;
+            < "복사" ; 2 ; > ;
+            < "BCC" ; 3 ; > ;
         };
         StringList [ chinese_simplified ] =
         {
@@ -499,11 +499,11 @@ Window RID_MAIL_WINDOW
         };
         StringList [ korean ] =
         {
-            < "Sehr hoch" ; 1 ; > ;
-            < "Hoch" ; 2 ; > ;
-            < "Normal" ; 3 ; > ;
-            < "Niedrig" ; 4 ; > ;
-            < "Sehr niedrig" ; 5 ; > ;
+            < "매우 높은" ; 1 ; > ;
+            < "높은" ; 2 ; > ;
+            < "보통" ; 3 ; > ;
+            < "낮은" ; 4 ; > ;
+            < "매우 낮은" ; 5 ; > ;
         };
         StringList [ chinese_simplified ] =
         {
