@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:57:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,9 @@ void SdTransferable::AddSupportedFormats()
         }
         else if( pGraphic )
         {
+            // #i25616#
+            AddFormat( SOT_FORMATSTR_ID_DRAWING );
+
             AddFormat( SOT_FORMATSTR_ID_SVXB );
 
             if( pGraphic->GetType() == GRAPHIC_BITMAP )
