@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 08:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ namespace dbaccess
         OConfigurationNode          m_aConfigurationNode;
         // comes from the driver can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
+        IColumnFactory*             m_pColFactoryImpl;
 
         sal_Bool                    m_bInitialized  : 1;
         sal_Bool                    m_bAddColumn    : 1;
@@ -336,12 +337,24 @@ namespace dbaccess
             @param      _bCaseSensitive     the initial case sensitivity flag
             @see        setCaseSensitive
         */
-        OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
-            sal_Bool _bAddColumn = sal_False,sal_Bool _bDropColumn = sal_False);
-        OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+        OColumns(
+                ::cppu::OWeakObject& _rParent,
+                ::osl::Mutex& _rMutex,
+                sal_Bool _bCaseSensitive,
+                const ::std::vector< ::rtl::OUString>& _rVector,
+                IColumnFactory* _pColFactory,
+                sal_Bool _bAddColumn = sal_False,
+                sal_Bool _bDropColumn = sal_False);
+
+        OColumns(
+            ::cppu::OWeakObject& _rParent,
+            ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
-            sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
-            sal_Bool _bAddColumn = sal_False,sal_Bool _bDropColumn = sal_False);
+            sal_Bool _bCaseSensitive,
+            const ::std::vector< ::rtl::OUString> &_rVector,
+                IColumnFactory* _pColFactory,
+            sal_Bool _bAddColumn = sal_False,
+            sal_Bool _bDropColumn = sal_False);
         ~OColumns();
 
         //XInterface
@@ -364,7 +377,7 @@ namespace dbaccess
             @see    OColumn::readUIFrom
             @see    storeSettings
         */
-        virtual void    loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory);
+        virtual void    loadSettings(const OConfigurationNode& _rLocation);
 
         /** store the columns configuration information under the current configuration node.
             @param  _rCommitLocation        Since the current configuration does not support different types of
