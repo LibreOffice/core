@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:07:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
-
+#include <functional>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
