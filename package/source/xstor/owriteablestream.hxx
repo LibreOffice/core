@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:45:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ private:
 
     ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > ReadStreamProperties();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > ReadPackageStreamProperties();
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InsertOwnProps(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
                             sal_Bool bUseCommonPass );
