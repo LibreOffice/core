@@ -192,6 +192,7 @@ hedabu: ..\inc\extattr.hxx %_DEST%\inc%_EXT%\svtools\extattr.hxx
 hedabu: ..\inc\metitem.hxx %_DEST%\inc%_EXT%\svtools\metitem.hxx
 hedabu: ..\inc\nfversi.hxx %_DEST%\inc%_EXT%\svtools\nfversi.hxx
 hedabu: ..\inc\nfkeytab.hxx %_DEST%\inc%_EXT%\svtools\nfkeytab.hxx
+hedabu: ..\inc\nfsymbol.hxx %_DEST%\inc%_EXT%\svtools\nfsymbol.hxx
 hedabu: ..\inc\wizdlg.hxx %_DEST%\inc%_EXT%\svtools\wizdlg.hxx
 hedabu: ..\inc\zforlist.hxx %_DEST%\inc%_EXT%\svtools\zforlist.hxx
 hedabu: ..\inc\zformat.hxx %_DEST%\inc%_EXT%\svtools\zformat.hxx
