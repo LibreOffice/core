@@ -1,3 +1,5 @@
+all_fragments+=xslt
+
 # -----------------------------------------------
 # count = 2
 T4_XSLT = \
@@ -31,6 +33,6 @@ CONTENTHANDLERS_4fcfg_xslt = $(foreach,i,$(C4_XSLT) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_xslt = \
     $(TYPES_4fcfg_xslt) \
-    $(FILTERS_4fcfg_xslt) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_xslt) \
     $(CONTENTHANDLERS_4fcfg_xslt)
