@@ -6836,3 +6836,8 @@ _real@8@40008000000000000000
 ?SERVICE_PERSISTENT_COMPONENT_TIMEFIELD@xmloff@@3UConstAsciiString@1@B
 ?SERVICE_RADIOBUTTON@xmloff@@3UConstAsciiString@1@B
 ?SERVICE_TIMEFIELD@xmloff@@3UConstAsciiString@1@B
+?__query@?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?Imp_IsOnDoubleChar@@YAEABVOUString@rtl@@J@Z
+?GetExport@XMLShapeExport@@AAEAAVSvXMLExport@@XZ
+?__copy@_STL@@YAPAUXMLPropertyState@@PBU2@0PAU2@Urandom_access_iterator_tag@1@PAH@Z
+??0DataRowPointStyle@chartxml@@QAE@JJJVOUString@rtl@@J@Z
