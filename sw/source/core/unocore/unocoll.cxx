@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-17 12:26:44 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.DatabaseSetNumber",    //SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM
         "com.sun.star.text.TextField.Database",         //SW_SERVICE_FIELDTYPE_DATABASE
         "com.sun.star.text.TextField.DatabaseName",     //SW_SERVICE_FIELDTYPE_DATABASE_NAME
-        "",     //SW_SERVICE_FIELDTYPE_TABLEFIELD
+        "com.sun.star.text.TextField.TableFormula",//SW_SERVICE_FIELDTYPE_TABLE_FORMULA
         "com.sun.star.text.TextField.PageCount",            //SW_SERVICE_FIELDTYPE_PAGE_COUNT
         "com.sun.star.text.TextField.ParagraphCount",   //SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT
         "com.sun.star.text.TextField.WordCount",            //SW_SERVICE_FIELDTYPE_WORD_COUNT
@@ -544,6 +544,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_INPUT_USER                :
         case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT               :
         case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS       :
+        case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
             xRet =  (cppu::OWeakObject*)new SwXTextField(nObjectType);
         break;
         case SW_SERVICE_FIELDMASTER_USER:
@@ -602,7 +603,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_IMAP_POLYGON   :
             xRet = SvUnoImageMapPolygonObject_createInstance( lcl_GetSupportedMacroItems() );
         break;
-//      case SW_SERVICE_FIELDTYPE_TABLEFIELD:
         default:
             throw uno::RuntimeException();
     }

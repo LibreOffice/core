@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:32:04 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM           45
 #define SW_SERVICE_FIELDTYPE_DATABASE                   46
 #define SW_SERVICE_FIELDTYPE_DATABASE_NAME              47
-#define SW_SERVICE_FIELDTYPE_TABLEFIELD                 48
+#define SW_SERVICE_FIELDTYPE_TABLE_FORMULA              48
 #define SW_SERVICE_FIELDTYPE_PAGE_COUNT                 49
 #define SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT            50
 #define SW_SERVICE_FIELDTYPE_WORD_COUNT                 51

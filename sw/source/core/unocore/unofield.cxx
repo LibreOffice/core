@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 08:54:43 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,13 +747,25 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             pRet = aCombinedCharactersPropMap;
         }
         break;
+        case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
+        {
+            static SfxItemPropertyMap aTableFormulaPropMap[] =
+            {
+                {SW_PROP_NAME(UNO_NAME_CONTENT), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_FORMULA), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION), FIELD_PROP_BOOL1,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
+                {0,0,0,0}
+            };
+            pRet = aTableFormulaPropMap;
+        }
+        break;
         case SW_SERVICE_FIELDTYPE_DUMMY_3:
         case SW_SERVICE_FIELDTYPE_DUMMY_4:
         case SW_SERVICE_FIELDTYPE_DUMMY_5:
         case SW_SERVICE_FIELDTYPE_DUMMY_6:
         case SW_SERVICE_FIELDTYPE_DUMMY_7:
         case SW_SERVICE_FIELDTYPE_DUMMY_8:
-        case SW_SERVICE_FIELDTYPE_TABLEFIELD            :
         {
             static SfxItemPropertyMap aEmptyPropMap         [] =
             {
@@ -977,6 +989,7 @@ const ServiceIdResId aServiceToRes[] =
     {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
     {RES_AUTHORITY,     SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
     {RES_COMBINED_CHARS,    SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS     },
+    {RES_TABLEFLD,      SW_SERVICE_FIELDTYPE_TABLE_FORMULA              },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
 //-----------------------------------------------------------------
@@ -1725,6 +1738,9 @@ SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
     //Set visible as default!
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
         m_pProps->bBool2 = sal_True;
+    else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
+        m_pProps->bBool1 = sal_True;
+
 }
 /*-- 14.12.98 11:37:15---------------------------------------------------
 
@@ -2329,6 +2345,29 @@ void SwXTextField::attachToRange(
                 // create field
                 pFld = new SwCombinedCharField(
                     (SwCombinedCharFieldType*)pFldType, m_pProps->sPar1);
+            }
+            break;
+            case SW_SERVICE_FIELDTYPE_TABLE_FORMULA :
+            {
+                // get or create field type
+                SwFieldType* pFldType = pDoc->GetFldType(RES_TABLEFLD,
+                                                         aEmptyStr);
+                if(NULL == pFldType)
+                    pFldType = pDoc->InsertFldType(SwTblFieldType(pDoc));
+
+                // create field
+                USHORT nType = GSE_FORMULA;
+                if(!m_pProps->bBool1)
+                {
+                    nType |= SUB_CMD;
+                    if(m_pProps->bFormatIsDefault)
+                        m_pProps->nFormat = -1;
+                }
+                pFld = new SwTblField(
+                    (SwTblFieldType*)pFldType, m_pProps->sPar2,
+                    nType,
+                    m_pProps->nFormat);
+               ((SwTblField*)pFld)->ChgExpStr(m_pProps->sPar1);
             }
             break;
             default: DBG_ERROR("was ist das fuer ein Typ?");
