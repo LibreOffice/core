@@ -2,6 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
 
@@ -23,3 +24,5 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\source\simpleregistry\simreg.xml %_DEST%\xml%_EXT%\simreg.xml
 ..\source\tdmanager\tdmgr.xml %_DEST%\xml%_EXT%\tdmgr.xml
 ..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\tcv.xml
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
