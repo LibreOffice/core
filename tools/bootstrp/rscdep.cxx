@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-29 14:58:33 $
+ *  last change: $Author: hr $ $Date: 2002-02-07 16:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,6 @@
 *
 ***************************************************************/
 
-#ifdef WNT
-#define __STDC__ 1
-#include <string.h>
-char    *optarg = NULL;
-int     optind  = 1;
-int     optopt  = 0;
-int     opterr  = 0;
-#endif
-
-
 #ifdef UNX
 #include <unistd.h>
 #endif
@@ -97,9 +87,6 @@ int     opterr  = 0;
 #endif
 
 #include "cppdep.hxx"
-
-/* Heiner Rechtien: poor man's getopt() */
-int     simple_getopt(int argc, char *argv[], const char *optstring);
 
 class RscHrcDep : public CppDep
 {
@@ -124,7 +111,17 @@ void RscHrcDep::Execute()
     CppDep::Execute();
 }
 
-static String aDelim = DirEntry::GetAccessDelimiter();
+//static String aDelim;
+
+/* poor man's getopt() */
+int     simple_getopt(int argc, char *argv[], const char *optstring);
+#ifdef WNT
+static char *optarg = NULL;
+static int  optind = 1;
+static int  optopt = 0;
+static int  opterr = 0;
+#endif
+
 
 int
 #ifdef WNT
@@ -139,6 +136,7 @@ main( int argc, char **argv )
     String aSrsBaseName;
     BOOL bSource = FALSE;
     ByteString aRespArg;
+    String aDelim = String(DirEntry::GetAccessDelimiter());
 
     RscHrcDep *pDep = new RscHrcDep;
 
