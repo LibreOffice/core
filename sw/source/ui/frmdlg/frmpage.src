@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-24 20:34:04 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,7 +1055,7 @@ TabPage TP_FRM_STD
         Text[ polish ] = "~Autom. wysokoζ";
         Text[ portuguese_brazilian ] = "Altura autom?tica";
         Text[ japanese ] = "ι«γ•θ‡ªε‹•θªΏζ•΄(~G)";
-        Text[ korean ] = "μλ™ λ†’μ΄μ΅°μ (~G)";
+        Text[ korean ] = "μλ™ λ†’μ΄ μ΅°μ (~G)";
         Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ι«εΊ¦(~G)";
         Text[ chinese_traditional ] = "θ‡ªε‹•θªΏζ•΄ι«εΊ¦(~G)";
         Text[ turkish ] = "otom. ~yόksekl.";
@@ -1436,7 +1436,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "ηΏ»θ½‰ε°ε¶ζ•Έι ιΆ(~M)";
         Text[ arabic ] = "ΗδΪίΗΣ Ϊαμ ΗαΥέΝΗΚ ΗαÒζΜνΙ";
         Text[ greek ] = "Καθρε~πτισμός στις άρτιες σελίδες";
-        Text[ korean ] = "μ§μ μª½ λ§μ£Όλ³΄κΈ°(~M)";
+        Text[ korean ] = "μ§μ νμ΄μ§€ λ§μ£Όλ³΄κΈ°(~M)";
         Text[ turkish ] = "Ηift numaralύ sayfalarda ya~nsύt";
         Text[ catalan ] = "Reflejar en ~pαginas pares";
         Text[ finnish ] = "~Mirror on even pages";
@@ -2230,7 +2230,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "ζ›Ώδ»£ζ–‡ε­—(~A)";
         Text[ arabic ] = "δΥ ΘΟνα";
         Text[ greek ] = "Εν~αλλακτικά (Μόνο κείμενο)";
-        Text[ korean ] = "λ€μ²΄γ€€ν…μ¤νΈ(~A)";
+        Text[ korean ] = "λ€μ²΄ ν…μ¤νΈ(~A)";
         Text[ turkish ] = "~Alternatif metin";
         Text[ catalan ] = "Te~xto alternativo";
         Text[ finnish ] = "~Vaihtoehtoinen (vain teksti)";
@@ -2473,7 +2473,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "ε―η·¨θΌ―ε”―θ®€ζ–‡δ»¶(~E)";
         Text[ arabic ] = "ήΗΘα ααΚΝΡνΡ έν γΣΚδΟ ααήΡΗΑΙ έήΨ";
         Text[ greek ] = "Δυνατότητα ~επεξεργασίας σε έγγραφο τύπου \"Μόνο για ανάγνωση\"";
-        Text[ korean ] = "μ½κΈ°μ „μ© λ¬Έμ„μ—μ„ νΈμ§‘κ°€λ¥(~E)";
+        Text[ korean ] = "μ½κΈ° μ „μ© λ¬Έμ„μ—μ„ νΈμ§‘κ°€λ¥(~E)";
         Text[ turkish ] = "Salt okunur belge iηinde dόzenlenebilir";
         Text[ catalan ] = "Se puede editar en documentos de solo lectura";
         Text[ finnish ] = "~Muokattavissa vain luku -asiakirjassa";
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
