@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxDrawPage.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 19:46:01 $
+ *  last change:$Date: 2004-03-19 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._svx;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DrawTools;
-import util.InstCreator;
-import util.SOfficeFactory;
-import util.ShapeDsc;
 
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
@@ -83,6 +71,20 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.DrawTools;
+import util.FormTools;
+import util.InstCreator;
+import util.SOfficeFactory;
+import util.ShapeDsc;
+
 
 /**
  * Test for object which is represented by service
@@ -130,34 +132,34 @@ import com.sun.star.uno.XInterface;
  * @see ifc.drawing._XShapeCombiner
  */
 public class SvxDrawPage extends TestCase {
-
     XSpreadsheetDocument xDoc = null;
 
     /**
      * Creates a new Draw document.
      */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a sheetdocument" );
+            log.println("creating a sheetdocument");
             xDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     /**
      * Disposes the Draw document created before
      */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
-        util.DesktopTools.closeDoc(xDoc);;
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xSheetDoc ");
+        util.DesktopTools.closeDoc(xDoc);
+        ;
     }
-
 
     /**
      * Creating a Testenvironment for the interfaces to be tested.
@@ -177,68 +179,80 @@ public class SvxDrawPage extends TestCase {
      *      <code>com.sun.star.drawing.Line</code> service </li>
      * </ul>
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
         XInterface oObj = null;
-        XShape oShape = null ;
+        XShape oShape = null;
         XDrawPages oDP = null;
 
-        XComponent xComp = (XComponent) UnoRuntime.queryInterface(XComponent.class, xDoc);
+        XComponent xComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xDoc);
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
+
         try {
-            log.println( "getting Drawpages" );
-            XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDoc);
+            log.println("getting Drawpages");
+
+            XDrawPagesSupplier oDPS = (XDrawPagesSupplier) UnoRuntime.queryInterface(
+                                              XDrawPagesSupplier.class, xDoc);
             oDP = (XDrawPages) oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);
-            oObj = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDP.getByIndex(0));
+            oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class),
+                                                     oDP.getByIndex(0));
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) tParam.getMSF());
 
-            oShape = SOF.createShape(xComp,5000,3500,7500,5000,"Rectangle");
+            oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000,
+                                     "Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape);
-            XShape oShape1 = SOF.createShape(xComp,
-                5000,5500,5000,5000,"Rectangle");
+
+            XShape oShape1 = SOF.createShape(xComp, 5000, 5500, 5000, 5000,
+                                             "Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape1);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create enviroment", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create enviroment", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create enviroment", e);
         }
 
         // create test environment here
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+
+        //adding a controlButton to have a Form
+        FormTools.insertControlShape(
+                (XComponent) UnoRuntime.queryInterface(XComponent.class, xDoc),
+                3000, 4500, 15000, 1000, "CommandButton");
 
         // relation for XShapes interface
-        ShapeDsc sDsc = new ShapeDsc(5000,3500,7500,10000,"Line");
-        tEnv.addObjRelation("Shape", new InstCreator(xDoc, sDsc)) ;
+        ShapeDsc sDsc = new ShapeDsc(5000, 3500, 7500, 10000, "Line");
+        tEnv.addObjRelation("Shape", new InstCreator(xDoc, sDsc));
 
-        log.println("ImplementationName: "+util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
+
 
         // adding relation for XShapeGrouper
         tEnv.addObjRelation("DrawPage", oObj);
 
         // adding relation for XMasterPageTarget
+
         /*XMasterPagesSupplier oMPS = (XMasterPagesSupplier)
             UnoRuntime.queryInterface(XMasterPagesSupplier.class, xDoc);
         XDrawPages oGroup = oMPS.getMasterPages();
         tEnv.addObjRelation("MasterPageSupplier",oGroup); */
-
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class SvxDrawPage
-
+} // finish class SvxDrawPage
