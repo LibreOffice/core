@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:59:58 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ finnish ] = "~Poista" ;
                     Text [ danish ] = "~Slet" ;
                     Text [ french ] = "~Supprimer" ;
-                    Text [ swedish ] = "~Radera" ;
+                    Text [ swedish ] = "R~adera" ;
                     Text [ dutch ] = "~Wissen" ;
                     Text [ spanish ] = "~Eliminar" ;
                     Text [ english_us ] = "~Delete" ;
@@ -822,5 +822,6 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
 
 
