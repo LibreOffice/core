@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:59:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSLISTENER_HPP_
-#include <com/sun/star/util/XCloseListener.hpp>
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
@@ -111,7 +111,7 @@ namespace sfx2
 
 class PluginObject : public ::cppu::WeakImplHelper5 <
         com::sun::star::util::XCloseable,
-        com::sun::star::util::XCloseListener,
+        com::sun::star::lang::XEventListener,
         com::sun::star::frame::XSynchronousFrameLoader,
         com::sun::star::lang::XInitialization,
         com::sun::star::beans::XPropertySet >
@@ -133,8 +133,6 @@ class PluginObject : public ::cppu::WeakImplHelper5 <
     virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
