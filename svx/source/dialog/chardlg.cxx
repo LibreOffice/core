@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 14:55:43 $
+ *  last change: $Author: jp $ $Date: 2001-08-17 12:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -420,7 +426,14 @@ void SvxCharNamePage::Initialize()
 
     m_pColorLB->SetUpdateMode( FALSE );
 
-    m_pColorLB->InsertEntry(Color(COL_AUTO), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
+    {
+        SfxPoolItem* pDummy;
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
+        if( !pFrame || SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState(
+                                    SID_ATTR_AUTO_COLOR_INVALID, pDummy ))
+            m_pColorLB->InsertEntry( Color( COL_AUTO ),
+                                     SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
+    }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
@@ -1438,7 +1451,13 @@ void SvxCharEffectsPage::Initialize()
     }
 
     m_aColorLB.SetUpdateMode( FALSE );
-    m_aColorLB.InsertAutomaticEntry();
+    {
+        SfxPoolItem* pDummy;
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
+        if( !pFrame || SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState(
+                                    SID_ATTR_AUTO_COLOR_INVALID, pDummy ))
+            m_aColorLB.InsertAutomaticEntry();
+    }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
