@@ -28,15 +28,15 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar
 
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 
-..\uiconfig\modules\dbapp\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\menubar\*.xml
-..\uiconfig\modules\dbbrowser\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\menubar\*.xml
-..\uiconfig\modules\dbquery\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\menubar\*.xml
-..\uiconfig\modules\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\menubar\*.xml
-..\uiconfig\modules\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar\*.xml
-..\uiconfig\modules\dbapp\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\toolbar\*.xml
-..\uiconfig\modules\dbbrowser\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar\*.xml
-..\uiconfig\modules\dbquery\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\toolbar\*.xml
-..\uiconfig\modules\dbrelation\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar\*.xml
-..\uiconfig\modules\dbtable\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar\*.xml
+..\uiconfig\dbapp\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\menubar\*.xml
+..\uiconfig\dbbrowser\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\menubar\*.xml
+..\uiconfig\dbquery\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\menubar\*.xml
+..\uiconfig\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\menubar\*.xml
+..\uiconfig\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar\*.xml
+..\uiconfig\dbapp\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\toolbar\*.xml
+..\uiconfig\dbbrowser\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar\*.xml
+..\uiconfig\dbquery\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\toolbar\*.xml
+..\uiconfig\dbrelation\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar\*.xml
+..\uiconfig\dbtable\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
