@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-13 12:01:04 $
+ *  last change: $Author: as $ $Date: 2000-10-16 11:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,6 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#include <vos/timer.hxx>
-
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -103,6 +101,7 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 using namespace ::std                           ;
+using namespace ::vos                           ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const
@@ -115,26 +114,6 @@ using namespace ::std                           ;
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
-class AsyncQuit_Impl : public ::vos::OTimer
-{
-    Reference < XDesktop >  xDesktop;
-public:
-                            AsyncQuit_Impl::AsyncQuit_Impl( const Reference < XDesktop >& rDesktop );
-    virtual void SAL_CALL   onShot();
-};
-
-AsyncQuit_Impl::AsyncQuit_Impl( const Reference < XDesktop >& rDesktop )
-    : xDesktop( rDesktop )
-{
-    setAbsoluteTime( 5000 );
-    start();
-}
-
-void AsyncQuit_Impl::onShot()
-{
-    if ( xDesktop.is() )
-        xDesktop->terminate();
-}
 
 //*****************************************************************************************************************
 //  constructor
@@ -224,13 +203,6 @@ void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( Runtim
         // Don't reset owner-property of removed frame!
         // This must do the caller of this method himself.
         // See documentation of interface XFrames for further informations.
-
-        if ( !m_pFrameContainer->getCount() )
-        {
-            Reference < XDesktop > xDesktop ( xOwner, UNO_QUERY );
-            if ( xDesktop.is() )
-                new AsyncQuit_Impl( xDesktop );
-        }
     }
     // Else; Do nothing! Ouer owner is dead.
     LOG_ASSERT( !(xOwner.is()==sal_False), "OFrames::remove()\nOuer owner is dead - you can't remove any frames ...!\n" )

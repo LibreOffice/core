@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2000-10-16 11:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,6 @@ namespace framework{
                     XFrames
                     XIndexAccess
                     XElementAccess
-                    [ XDebugging if TEST_TREE is defined! ]
     @base           OWeakObject
 
     @ATTENTION      Don't use this class as direct member - use it dynamicly. Do not derive from this class.
@@ -157,7 +156,6 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-//class OFrames :   DERIVE_FROM_XSPECIALDEBUGINTERFACE      // => These macro will expand to nothing, if no testmode is set in debug.h!
 class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess => XElementAccess
                     public OWEAKOBJECT
 {
@@ -197,7 +195,6 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
-//      DECLARE_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
 
         //---------------------------------------------------------------------------------------------------------
         //  XFrames
