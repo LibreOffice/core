@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 10:19:19 $
+ *  last change: $Author: as $ $Date: 2001-10-26 08:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,6 @@ SfxFilterListener::SfxFilterListener( const ::rtl::OUString&    sFactory   ,
     :   m_aMutex    (            )
     ,   m_pContainer( pContainer )
 {
-    OSL_ENSURE( !implcp_ctor( sFactory, pContainer ), "SfxFilterListener::SfxFilterListener()\nInvalid parameter detected!\n" );
-
     // search for right factory long name by using given shortname.
     // These value is neccessary for "ReadExternalFilter()" call during our "flushed()" function.
     m_sFactory = ::rtl::OUString();
@@ -210,9 +208,6 @@ SfxFilterListener::~SfxFilterListener()
 *//*-*************************************************************************************************************/
 void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    OSL_ENSURE( !implcp_flushed( aSource ), "SfxFilterListener::flushed()\nInvalid parameter detected!\n" );
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -247,9 +242,6 @@ void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) thr
 *//*-*************************************************************************************************************/
 void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    OSL_ENSURE( !implcp_disposing( aSource ), "SfxFilterListener::disposing()\nInvalid parameter detected!\n" );
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -265,41 +257,3 @@ void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) t
         m_pContainer = NULL;
     }
 }
-
-/*-************************************************************************************************************//**
-    @descr          These debug methods are active for product versions only.
-                    They test incoming paramater of public interface methods to
-                    and her result is directly used to warn programmer by showing
-                    an assertion!
-*//*-*************************************************************************************************************/
-#ifdef DEBUG
-//-----------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFilterListener::implcp_ctor( const ::rtl::OUString&    sFactory   ,
-                                         const SfxFilterContainer* pContainer )
-{
-    return(
-            ( &sFactory            == NULL )    ||
-            ( sFactory.getLength() <  1    )    ||
-            ( pContainer           == NULL )
-          );
-}
-
-//-----------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFilterListener::implcp_flushed( const lang::EventObject& aSource )
-{
-    return(
-            ( &aSource            == NULL      )    ||
-            ( aSource.Source.is() == sal_False )
-          );
-}
-
-//-----------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFilterListener::implcp_disposing( const lang::EventObject& aSource )
-{
-    return(
-            ( &aSource            == NULL      )    ||
-            ( aSource.Source.is() == sal_False )
-          );
-}
-
-#endif // DEBUG

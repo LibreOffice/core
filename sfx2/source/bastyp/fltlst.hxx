@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 10:19:25 $
+ *  last change: $Author: as $ $Date: 2001-10-26 08:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,6 @@ class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util
               SfxFilterListener( const ::rtl::OUString&    sFactory   ,
                                        SfxFilterContainer* pContainer );
              ~SfxFilterListener(                                      );
-
-    // debug interface
-    #ifdef DEBUG
-    private:
-            sal_Bool implcp_ctor     ( const ::rtl::OUString&                     sFactory   ,
-                                       const SfxFilterContainer*                  pContainer );
-            sal_Bool implcp_flushed  ( const ::com::sun::star::lang::EventObject& aSource    );
-            sal_Bool implcp_disposing( const ::com::sun::star::lang::EventObject& aSource    );
-    #endif
 
     // uno interface
     public:
