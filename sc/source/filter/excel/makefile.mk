@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-11 09:00:15 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:25:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,6 +142,8 @@ NOOPTFILES= \
 
 EXCEPTIONSFILES = \
         $(SLO)$/xlocx.obj					\
+        $(SLO)$/xehelper.obj				\
+        $(SLO)$/xecontent.obj				\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj
 
