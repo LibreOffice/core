@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:32:45 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,10 @@
 #ifndef _LAYHELP_HXX
 #include <layhelp.hxx>
 #endif
-
+// OD 16.04.2003 #i13147# - for <SwFlyFrm::GetContour(..)>
+#ifndef _NDGRF_HXX
+#include <ndgrf.hxx>
+#endif
 
 #include "doc.hxx"
 #include "viewsh.hxx"
@@ -2393,33 +2396,103 @@ SwRect SwFlyFrm::AddSpacesToFrm() const
 |*  Letzte Aenderung    MA 10. Jan. 97
 |*
 |*************************************************************************/
-
-BOOL SwFlyFrm::GetContour( PolyPolygon & rPoly ) const
+/// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTxtFrm> contains
+/// a graphic, load of intrinsic graphic has to be avoided.
+BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
+                           const sal_Bool _bForPaint ) const
 {
     BOOL bRet = FALSE;
     if( GetFmt()->GetSurround().IsContour() && Lower() &&
         Lower()->IsNoTxtFrm() )
     {
         SwNoTxtNode *pNd = (SwNoTxtNode*)((SwCntntFrm*)Lower())->GetNode();
-        const Graphic aGrf( pNd->GetGraphic() );
-        if( GRAPHIC_NONE != aGrf.GetType() )
+        // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
+        // in order to avoid load of graphic, if <SwNoTxtNode> contains a graphic
+        // node and method is called for paint.
+        const GraphicObject* pGrfObj = NULL;
+        sal_Bool bGrfObjCreated = sal_False;
+        const SwGrfNode* pGrfNd = pNd->GetGrfNode();
+        if ( pGrfNd && _bForPaint )
+        {
+            pGrfObj = &(pGrfNd->GetGrfObj());
+        }
+        else
+        {
+            pGrfObj = new GraphicObject( pNd->GetGraphic() );
+            bGrfObjCreated = sal_True;
+        }
+        ASSERT( pGrfObj, "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
+        if ( pGrfObj && pGrfObj->GetType() != GRAPHIC_NONE )
         {
             if( !pNd->HasContour() )
+            {
+                // OD 16.04.2003 #i13147# - no <CreateContour> for a graphic
+                // during paint. Thus, return (value of <bRet> should be <FALSE>).
+                if ( pGrfNd && _bForPaint )
+                {
+                    ASSERT( false, "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );
+                    return bRet;
+                }
                 pNd->CreateContour();
-            pNd->GetContour( rPoly );
+            }
+            pNd->GetContour( rContour );
             //Der Node haelt das Polygon passend zur Originalgroesse der Grafik
             //hier muss die Skalierung einkalkuliert werden.
             SwRect aClip;
             SwRect aOrig;
             Lower()->Calc();
             ((SwNoTxtFrm*)Lower())->GetGrfArea( aClip, &aOrig, FALSE );
-            SvxContourDlg::ScaleContour( rPoly, aGrf, MAP_TWIP, aOrig.SSize() );
-            rPoly.Move( aOrig.Left(), aOrig.Top() );
+            // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
+            // in order to avoid that graphic has to be loaded for contour scale.
+            //SvxContourDlg::ScaleContour( rContour, aGrf, MAP_TWIP, aOrig.SSize() );
+            {
+                OutputDevice*   pOutDev = Application::GetDefaultDevice();
+                const MapMode   aDispMap( MAP_TWIP );
+                const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
+                const Size      aGrfSize( pGrfObj->GetPrefSize() );
+                double          fScaleX;
+                double          fScaleY;
+                Size            aOrgSize;
+                Point           aNewPoint;
+                BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+
+                if ( bPixelMap )
+                    aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );
+                else
+                    aOrgSize = pOutDev->LogicToLogic( aGrfSize, aGrfMap, aDispMap );
+
+                if ( aOrgSize.Width() && aOrgSize.Height() )
+                {
+                    fScaleX = (double) aOrig.Width() / aOrgSize.Width();
+                    fScaleY = (double) aOrig.Height() / aOrgSize.Height();
+
+                    for ( USHORT j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
+                    {
+                        Polygon& rPoly = rContour[ j ];
+
+                        for ( USHORT i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+                        {
+                            if ( bPixelMap )
+                                aNewPoint = pOutDev->PixelToLogic( rPoly[ i ], aDispMap  );
+                            else
+                                aNewPoint = pOutDev->LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
+
+                            rPoly[ i ] = Point( FRound( aNewPoint.X() * fScaleX ), FRound( aNewPoint.Y() * fScaleY ) );
+                        }
+                    }
+                }
+            }
+            // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
+            if ( bGrfObjCreated )
+            {
+                delete pGrfObj;
+            }
+            rContour.Move( aOrig.Left(), aOrig.Top() );
             if( !aClip.Width() )
                 aClip.Width( 1 );
             if( !aClip.Height() )
                 aClip.Height( 1 );
-            rPoly.Clip( aClip.SVRect() );
+            rContour.Clip( aClip.SVRect() );
             bRet = TRUE;
         }
     }
