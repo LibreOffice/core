@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:45:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3589,7 +3589,9 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     Size    aBtnSize    = pItem->maRect.GetSize();
     if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
     {
-        if ( pItem->mnBits & TIB_DROPDOWN )
+        // separate button not for dropdown only where the whole button is painted
+        if ( pItem->mnBits & TIB_DROPDOWN &&
+            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
         {
             Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
             if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
@@ -3802,24 +3804,27 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     // paint optional drop down arrow
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
-        BOOL bSetColor = TRUE;
-
         Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz ) );
-        ImplErase( this, aDropDownRect, bHighlight, bHasOpenPopup );
-
+        BOOL bSetColor = TRUE;
         if ( !pItem->mbEnabled || !IsEnabled() )
         {
             bSetColor = FALSE;
             SetFillColor( rStyleSettings.GetShadowColor() );
         }
-        if( bHighlight || (pItem->meState == STATE_CHECK) )
-        {
-            if( bHasOpenPopup )
-                ImplDrawFloatwinBorder( pItem );
-            else
-                ImplDrawButton( this, aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), FALSE );
-        }
 
+        // dropdown only will be painted without inner border
+        if( (pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY )
+        {
+            ImplErase( this, aDropDownRect, bHighlight, bHasOpenPopup );
+
+            if( bHighlight || (pItem->meState == STATE_CHECK) )
+            {
+                if( bHasOpenPopup )
+                    ImplDrawFloatwinBorder( pItem );
+                else
+                    ImplDrawButton( this, aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), FALSE );
+            }
+        }
         ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
     }
 
@@ -4544,8 +4549,10 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 // was dropdown arrow pressed
                 if( (it->mnBits & TIB_DROPDOWN) )
                 {
-                    if(it->GetDropDownRect( mbHorz ).IsInside( aMousePos ) )
+                    if( ( (it->mnBits & TIB_DROPDOWNONLY) == TIB_DROPDOWNONLY) || it->GetDropDownRect( mbHorz ).IsInside( aMousePos ))
                     {
+                        // dropdownonly always triggers the dropdown handler, over the whole button area
+
                         // the drop down arrow should not trigger the item action
                         GetDropdownClickHdl().Call( this );
 
