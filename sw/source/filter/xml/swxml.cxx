@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef _RSCSFX_HXX
 #include <rsc/rscsfx.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -418,6 +421,17 @@ sal_Int32 ReadThroughComponent(
             return 0;
     }
 
+    // set Base URL
+    uno::Reference< beans::XPropertySet > xInfoSet;
+    if( rFilterArguments.getLength() > 0 )
+        rFilterArguments.getConstArray()[0] >>= xInfoSet;
+    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    if( xInfoSet.is() )
+    {
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+    }
+
     // get input stream
     SvStorageStreamRef xEventsStream;
     xEventsStream = pStorage->OpenStream( sStreamName,
@@ -528,6 +542,18 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
               &::getCppuType((Sequence<sal_Int8>*)0),
 #endif
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "PrivateData", sizeof("PrivateData")-1, 0,
+              &::getCppuType( (Reference<XInterface> *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BaseURI", sizeof("BaseURI")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName", sizeof("StreamName")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -562,17 +588,17 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
     xInfoSet->setPropertyValue(sProgressRange, aProgRange);
 
-    // prepare filter arguments
+    // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs( 5 );
     Any *pArgs = aFilterArgs.getArray();
+    *pArgs++ <<= xInfoSet;
+    *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
-    *pArgs++ <<= xStatusIndicator;
-    *pArgs++ <<= xInfoSet;
     Sequence<Any> aEmptyArgs( 3 );
     pArgs = aEmptyArgs.getArray();
-    *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xInfoSet;
+    *pArgs++ <<= xStatusIndicator;
 
     // prepare for special modes
     sal_uInt16 nStyleFamilyMask = 0U;
@@ -599,6 +625,20 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         rPaM.GetBound(false).nContent.Assign(0, 0);
     }
 
+    // Set base URI
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName,
+                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
+    {
+        OUString aName( pStorage->GetName() );
+        if( aName.getLength() )
+        {
+            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+        }
+    }
+
     rDoc.AddLink(); // prevent deletion
     sal_uInt32 nRet = 0;
 
@@ -617,9 +657,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     aAny <<= rDoc.GetRedlinePasswd();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
 
+
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( REDLINE_NONE );
 
+    sal_Bool bOASIS = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
     sal_uInt32 nWarn = 0;
     sal_uInt32 nWarn2 = 0;
     // read storage streams
@@ -628,14 +670,16 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         nWarn = ReadThroughComponent(
             pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLMetaImporter",
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
+                    : "com.sun.star.comp.Writer.XMLMetaImporter"),
             aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
             sal_False );
 
         nWarn2 = ReadThroughComponent(
             pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLSettingsImporter",
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
+                    : "com.sun.star.comp.Writer.XMLSettingsImporter"),
             aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
             IsOrganizerMode() );
@@ -643,7 +687,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     nRet = ReadThroughComponent(
         pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
-        "com.sun.star.comp.Writer.XMLStylesImporter",
+        (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
+                : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
         aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
         IsOrganizerMode() );
@@ -651,7 +696,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
         nRet = ReadThroughComponent(
            pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
-           "com.sun.star.comp.Writer.XMLContentImporter",
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
+                    : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
            sal_False );
