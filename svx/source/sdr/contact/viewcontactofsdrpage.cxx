@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:47:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@ namespace sdr
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
         void ViewContactOfSdrPage::PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
+            // Make processed page accessible from SdrPageView via DisplayInfo
+            rDisplayInfo.SetProcessedPage(&GetSdrPage());
+
             // test for page painting
             if(!rDisplayInfo.GetControlLayerPainting() && rDisplayInfo.GetPagePainting())
             {
@@ -259,6 +262,9 @@ namespace sdr
                     }
                 }
             }
+
+            // Reset processed page at DisplayInfo and DisplayInfo at SdrPageView
+            rDisplayInfo.SetProcessedPage(0L);
         }
 
         void ViewContactOfSdrPage::DrawPaper(DisplayInfo& rDisplayInfo)
