@@ -309,7 +309,7 @@ all : 	\
     $(EXAMPLESLIST) \
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
-    $(DESTDIRLIB)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIR)$/classes$/unoil.jar \
     $(DESTDIR)$/classes$/officebean.jar \
@@ -356,7 +356,7 @@ $(DESTDIR)$/classes$/officebean.jar : $(OUT)$/class$/officebean.jar
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
     $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
 
-$(DESTDIRLIB)$/libofficebean.so : $(OUT)$/lib$/libofficebean.so
+$(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
 
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk

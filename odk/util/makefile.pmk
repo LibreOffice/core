@@ -46,6 +46,12 @@ MY_TEXTCOPY=cat
 
 MY_DLLPREFIX=
 MY_DLLPOSTFIX=.dll
+MY_DLLOUT=$(OUT)$/bin
+DLLOUT=$(SOLARBINDIR)
+
+DESTDIRBIN=$(DESTDIR)$/windows$/bin
+DESTDIRLIB=$(DESTDIR)$/windows$/lib
+DESTDIRDLL=$(DESTDIRBIN)
 
 .ELSE
 #--------------------
@@ -58,24 +64,43 @@ MY_TEXTCOPY= tr -d "\015"
 
 MY_DLLPREFIX=lib
 MY_DLLPOSTFIX=.so
-
-.ENDIF
-MY_TEXTCOPY_SOURCEPRE=<
-MY_TEXTCOPY_TARGETPRE=>
+MY_DLLOUT=$(OUT)$/lib
+DLLOUT=$(SOLARLIBDIR)
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
+##############
+# SOLARIS SPARC
+##############
 DESTDIRBIN=$(DESTDIR)$/solsparc$/bin
 DESTDIRLIB=$(DESTDIR)$/solsparc$/lib
+DESTDIRDLL=$(DESTDIRLIB)
+
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
+##########
+# SOLARIS INTEL
+##########
 DESTDIRBIN=$(DESTDIR)$/solia$/bin
 DESTDIRLIB=$(DESTDIR)$/solia$/lib
+DESTDIRDLL=$(DESTDIRLIB)
+
 .ELIF "$(OS)"=="LINUX"
+###########
+# LINUX
+###########
 DESTDIRBIN=$(DESTDIR)$/linux$/bin
 DESTDIRLIB=$(DESTDIR)$/linux$/lib
-.ELIF "$(OS)"=="IRIX"
+DESTDIRDLL=$(DESTDIRLIB)
+
+.ELIF "$(OS)"=="IRIX "
+###########
+# IRIX
+###########
 DESTDIRBIN=$(DESTDIR)$/irix$/bin
 DESTDIRLIB=$(DESTDIR)$/irix$/lib
-.ELIF "$(OS)"=="WNT"
-DESTDIRBIN=$(DESTDIR)$/windows$/bin
-DESTDIRLIB=$(DESTDIR)$/windows$/lib
+DESTDIRDLL=$(DESTDIRLIB)
 .ENDIF
+
+.ENDIF
+
+MY_TEXTCOPY_SOURCEPRE=<
+MY_TEXTCOPY_TARGETPRE=>
