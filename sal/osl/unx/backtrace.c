@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 15:55:35 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 10:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,32 @@
  ************************************************************************/
 
 
- /* Only Solaris Sparc */
-#if defined( SOLARIS ) && defined ( SPARC )
+ /* Only Solaris */
+#ifdef SOLARIS
 
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
+#include <stdio.h>
 #include <sys/frame.h>
 #include "backtrace.h"
 
+#if defined(SPARC)
+
 #define FRAME_PTR_OFFSET 1
 #define FRAME_OFFSET 0
+
+#elif defined( INTEL )
+
+#define FRAME_PTR_OFFSET 3
+#define FRAME_OFFSET 1
+
+#else
+
+#error Unknown Solaris target platform.
+
+#endif /* defined SPARC or INTEL */
+
 
 int backtrace( void **buffer, int max_frames )
 {
@@ -79,7 +94,9 @@ int backtrace( void **buffer, int max_frames )
     int i;
 
     /* flush register windows */
+#ifdef SPARC
     asm("ta 3");
+#endif
     /* get stack- and framepointer */
     setjmp(ctx);
     fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
@@ -97,4 +114,38 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
-#endif /* defined SOLARIS && defined SPARC */
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+    FILE    *fp = fdopen( fd, "w" );
+
+    if ( fp )
+    {
+        void **pFramePtr;
+
+        for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
+        {
+            Dl_info     dli;
+            ptrdiff_t   offset;
+
+            if ( 0 != dladdr( *pFramePtr, &dli ) )
+            {
+                if ( dli.dli_fname && dli.dli_fbase )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
+                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+                }
+                if ( dli.dli_sname && dli.dli_saddr )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
+                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+                }
+            }
+            fprintf( fp, "[0x%x]\n", *pFramePtr );
+        }
+
+        fflush( fp );
+        fclose( fp );
+    }
+}
+
+#endif /* defined SOLARIS */

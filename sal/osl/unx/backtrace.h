@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 15:55:43 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 10:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
- /* Only Solaris Sparc */
-#if defined( SOLARIS ) && defined ( SPARC )
+ /* Only Solaris */
+#ifdef SOLARIS
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,8 +71,10 @@ extern "C" {
 
 int backtrace( void **buffer, int max_frames );
 
+void backtrace_symbols_fd( void **buffer, int size, int fd );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /* defined SOLARIS && defined SPARC */
+#endif /* defined SOLARIS */
