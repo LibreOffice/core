@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-02 12:10:24 $
+ *  last change: $Author: ab $ $Date: 2002-11-05 08:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,21 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
-            pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED) );
+        {
+            SdrView* pView = GetView();
+            if( !rCEvt.IsMouseEvent() && pView->HasMarked() )
+            {
+                Rectangle aMarkedRect( pView->GetMarkedRect() );
+                Point MarkedCenter( aMarkedRect.Center() );
+                Point PosPixel( LogicToPixel( MarkedCenter ) );
+                pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED), this, &PosPixel );
+            }
+            else
+            {
+                pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED) );
+            }
+
+        }
     }
     else
         IDEBaseWindow::Command( rCEvt );
