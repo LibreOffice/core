@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:41:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #include <hash_map>
 #include <string.h>
 
+#ifndef NE_SOCKET_H
+#include <neon/ne_socket.h>
+#endif
 #ifndef NE_AUTH_H
 #include <neon/ne_auth.h>
 #endif
@@ -851,7 +854,7 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
 
         if ( rValue.operation == PROPSET )
         {
-            pItems[ n ].type = ne_proppatch_operation::ne_propset;
+            pItems[ n ].type = ne_propset;
 
             rtl::OUString aStringValue;
             if ( DAVProperties::isUCBDeadProperty( *pName ) )
@@ -903,7 +906,7 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
         }
         else
         {
-            pItems[ n ].type  = ne_proppatch_operation::ne_propremove;
+            pItems[ n ].type  = ne_propremove;
             pItems[ n ].value = 0;
         }
     }
