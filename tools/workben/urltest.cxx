@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:35:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,12 @@ main()
                 { "news:abc@def.ghi@", 0 },
                 { "news:%21%22%23@def", "news:%21%22%23@def" },
                 { "news:!%22%23@def", "news:!%22%23@def" },
-                { "news: @def", "news:%20@def" } };
+                { "news: @def", "news:%20@def" },
+                { "vnd.sun.star.tdoc:", 0 },
+                { "vnd.sun.star.tdoc:a/b/c", 0 },
+                { "vnd.sun.star.tdoc:/", "vnd.sun.star.tdoc:/" },
+                { "vnd.sun.star.tdoc:/a;b/", "vnd.sun.star.tdoc:/a%3Bb/" },
+                { "vnd.sun.star.tdoc:/a?b", "vnd.sun.star.tdoc:/a%3Fb" } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
