@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:27:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 11:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ static string g_buildid;
 static string g_strDefaultLanguage;
 static string g_strXMLFileName;
 static string g_strPStackFileName;
+static string g_strChecksumFileName;
 static string g_strProgramDir;
 
 static char g_szStackFile[L_tmpnam] = "";
@@ -295,7 +296,7 @@ bool write_report( const hash_map< string, string >& rSettings )
        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
        "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
        "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
-       "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.0\" feedback=\"%s\" email=\"%s\">\n"
+       "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n"
        "<reportmail:title>%s</reportmail:title>\n"
        "<reportmail:attachment name=\"description.txt\" media-type=\"text/plain\" class=\"UserComment\"/>\n"
        "<reportmail:attachment name=\"stack.txt\" media-type=\"text/plain\" class=\"pstack output\"/>\n"
@@ -337,6 +338,14 @@ bool write_report( const hash_map< string, string >& rSettings )
         fcopy( fp, fpxml );
         fclose( fpxml );
     }
+
+    FILE *fpchk = fopen( g_strChecksumFileName.c_str(), "r" );
+    if ( fpchk )
+    {
+        fcopy( fp, fpchk );
+        fclose( fpchk );
+    }
+
     fprintf( fp, "</errormail:errormail>\n" );
 
     fclose( fp );
@@ -800,6 +809,11 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
         {
             if ( ++n < argc )
                 g_strPStackFileName = argv[n];
+        }
+        else if ( 0 == strcmp( argv[n], "-chksum" ) )
+        {
+            if ( ++n < argc )
+                g_strChecksumFileName = argv[n];
         }
         else if ( argv[n] && strlen(argv[n]) )
         {
