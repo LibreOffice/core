@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ private:
     void    Modify_Impl( const ::rtl::OUString* pNewFile, const ::rtl::OUString* pNewFilter,
                          const ::rtl::OUString* pNewOptions, const ::rtl::OUString* pNewSource,
                          const com::sun::star::table::CellRangeAddress* pNewDest );
+    void    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
     void    Refreshed_Impl();
 
 public:
@@ -350,6 +351,8 @@ public:
     void                    setFilter(const ::rtl::OUString& Filter);
     ::rtl::OUString         getFilterOptions(void) const;
     void                    setFilterOptions(const ::rtl::OUString& FilterOptions);
+    sal_Int32               getRefreshDelay(void) const;
+    void                    setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XAreaLink
     virtual ::rtl::OUString SAL_CALL getSourceArea() throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 15:33:59 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@
 #define SC_UNONAME_FILTER           "Filter"
 #define SC_UNONAME_FILTOPT          "FilterOptions"
 #define SC_UNONAME_LINKURL          "Url"
+#define SC_UNONAME_REFDELAY         "RefreshDelay"
 
 //  search descriptor
 #define SC_UNO_SRCHBACK             "SearchBackwards"
