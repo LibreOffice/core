@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:05:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,13 @@ SpellChecker::~SpellChecker()
          if (aDicts[i]) delete aDicts[i];
          aDicts[i] = NULL;
   }
-  delete[] aDicts;
+  if (aDicts) delete[] aDicts;
   aDicts = NULL;
-  delete[] aDEncs;
+  if (aDEncs) delete[] aDEncs;
   aDEncs = NULL;
-  delete[] aDLocs;
+  if (aDLocs) delete[] aDLocs;
   aDLocs = NULL;
-  delete[] aDNames;
+  if (aDNames) delete[] aDNames;
   aDNames = NULL;
   numdict = 0;
   if (pPropHelper)
@@ -264,19 +264,13 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 aSuppLocales.realloc(numlocs);
 
             } else {
-            /* no dictionary.lst so just use default en_US dictionary at shared location  */
-            numdict = 1;
-            aDicts = new MySpell*[1];
-                aDEncs  = new rtl_TextEncoding[1];
-                aDLocs = new Locale[1];
-                aDNames = new OUString[1];
-            aSuppLocales.realloc(1);
-            Locale *pLocale = aSuppLocales.getArray();
-        Locale nLoc( A2OU("en"), A2OU("US"), OUString() );
-        pLocale[0] = nLoc;
-                aDLocs[0] = nLoc;
-                aDicts[0] = NULL;
-                aDNames[0] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU("en_US");
+          /* no dictionary.lst found so register no dictionaries */
+            numdict = 0;
+            aDicts = NULL;
+                aDEncs  = NULL;
+                aDLocs = NULL;
+                aDNames = NULL;
+            aSuppLocales.realloc(0);
             }
 
             /* de-allocation of memory is handled inside the DictMgr */
