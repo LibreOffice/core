@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: os $ $Date: 2000-11-24 16:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,8 @@ void SvTreeListBox::SetCheckButtonState( SvLBoxEntry* pEntry, SvButtonState eSta
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
         SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-        DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+        if(!pItem)
+            return ;
         switch( eState )
         {
             case SV_BUTTON_CHECKED:
@@ -558,7 +559,8 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvLBoxEntry* pEntry ) const
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
         SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-        DBG_ASSERT(pItem,"GetChButnState:Item not found")
+        if(!pItem)
+            return SV_BUTTON_TRISTATE;
         USHORT nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
