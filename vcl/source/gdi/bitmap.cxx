@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
+ *  last change: $Author: ka $ $Date: 2002-04-23 10:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,7 +1777,7 @@ Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
     Color*  pDstColors = NULL;
     ULONG   nColorCount = 0;
 
-    Image::GetColorTransformArrays( static_cast< ImageColorTransform >( eColorMode ), pSrcColors, pDstColors, nColorCount );
+    Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
 
     if( nColorCount && pSrcColors && pDstColors )
         aRet.Replace( pSrcColors, pDstColors, nColorCount );
