@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:40:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,11 @@ using namespace ::rtl;
 
 //////////////////////////////////////////////////////////////////////
 
-SdrHHCWrapper::SdrHHCWrapper( SwView* pVw, INT16 nLanguage ) :
+SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
+       LanguageType nSourceLanguage, LanguageType nTargetLanguage,
+       const Font* pTargetFnt,
+       sal_Int32 nConvOptions,
+       sal_Bool bInteractive ) :
     SdrOutliner(pVw->GetDocShell()->GetDoc()->GetDrawModel()->
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                 OUTLINERMODE_TEXTOBJECT ),
@@ -155,7 +159,11 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw, INT16 nLanguage ) :
     pOutlView( NULL ),
     pListIter( NULL ),
     nDocIndex( 0 ),
-    nLang( nLanguage )
+    nSourceLang( nSourceLanguage ),
+    nTargetLang( nTargetLanguage ),
+    pTargetFont( pTargetFnt ),
+    nOptions( nConvOptions ),
+    bIsInteractive( bInteractive )
 {
     SetRefDevice( pView->GetDocShell()->GetDoc()->GetPrt() );
 
@@ -201,7 +209,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
 
 void SdrHHCWrapper::StartTextConversion()
 {
-    pOutlView->StartTextConversion( nLang, sal_True );
+    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, sal_True );
 }
 
 
@@ -275,7 +283,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
                 ClearModifyFlag();
 
-                if (HasConvertibleTextPortion( nLang ))
+                if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
                     ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );

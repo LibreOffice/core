@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdrhhcwrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:40:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,18 @@ class SdrHHCWrapper : public SdrOutliner
     SdrTextObj*         pTextObj;
     OutlinerView*       pOutlView;
     SdrObjListIter*     pListIter;
+    sal_Int32           nOptions;
     sal_uInt16          nDocIndex;
-    INT16               nLang;
+    LanguageType        nSourceLang;
+    LanguageType        nTargetLang;
+    const Font*         pTargetFont;
+    sal_Bool            bIsInteractive;
 
 public:
-    SdrHHCWrapper( SwView* pVw, INT16 nLanguage );
+    SdrHHCWrapper( SwView* pVw,
+                   LanguageType nSourceLanguage, LanguageType nTargetLanguage,
+                   const Font* pTargetFnt,
+                   sal_Int32 nConvOptions, sal_Bool bInteractive );
 
     virtual ~SdrHHCWrapper();
 
