@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:21:53 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,11 +1522,6 @@ void Edit::Resize()
 
 void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
-    if ( GetSubEdit() )
-    {
-        GetSubEdit()->Draw( pDev, rPos, rSize, nFlags );
-    }
-
     ImplInitSettings( TRUE, TRUE, TRUE );
 
     Point aPos = pDev->LogicToPixel( rPos );
@@ -1606,6 +1601,11 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
 
     pDev->DrawText( Point( aPos.X() + nOffX, aPos.Y() + nOffY ), aText );
     pDev->Pop();
+
+    if ( GetSubEdit() )
+    {
+        GetSubEdit()->Draw( pDev, rPos, rSize, nFlags );
+    }
 }
 
 // -----------------------------------------------------------------------
