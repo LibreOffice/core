@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:28:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,16 @@
 
 // Value range limit helpers --------------------------------------------------
 
+/** Returns the value, if it is not less than nMin, otherwise nMin. */
+template< typename ReturnType, typename Type >
+inline ReturnType llimit( Type nValue, ReturnType nMin )
+{ return static_cast< ReturnType >( ::std::max< Type >( nValue, nMin ) ); }
+
+/** Returns the value, if it fits into ReturnType, otherwise the minimum value of ReturnType. */
+template< typename ReturnType, typename Type >
+inline ReturnType llimit( Type nValue )
+{ return ::llimit( nValue, ::std::numeric_limits< ReturnType >::min() ); }
+
 /** Returns the value, if it is not greater than nMax, otherwise nMax. */
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit( Type nValue, ReturnType nMax )
@@ -123,6 +133,16 @@ inline ReturnType ulimit( Type nValue, ReturnType nMax )
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit( Type nValue )
 { return ::ulimit( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+
+/** Returns the value, if it is not less than nMin and not greater than nMax, otherwise one of the limits. */
+template< typename ReturnType, typename Type >
+inline ReturnType lulimit( Type nValue, ReturnType nMin, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::max< Type >( ::std::min< Type >( nValue, nMax ), nMin ) ); }
+
+/** Returns the value, if it fits into ReturnType, otherwise one of the limits of ReturnType. */
+template< typename ReturnType, typename Type >
+inline ReturnType lulimit( Type nValue )
+{ return ::lulimit( nValue, ::std::numeric_limits< ReturnType >::min(), ::std::numeric_limits< ReturnType >::max() ); }
 
 
 // Read from bitfields --------------------------------------------------------
