@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-23 10:02:29 $
+ *  last change: $Author: bm $ $Date: 2002-08-29 09:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,9 +530,10 @@ void SchXMLChartContext::EndElement()
             xLegendShape->setPosition( maLegendPos );
     }
 
+    // #102413# BuildChart to manifest legend position
+    SCH_BUILDCHART( xDoc );
+
     //  No more BuildCharts until Initialize is called (by Draw or SaveAs).
-    if( xDoc.is())
-        xDoc->lockControllers();
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
