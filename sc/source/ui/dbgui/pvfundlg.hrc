@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:11:16 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #define LB_SHOW_FROM    7
 #define LB_SHOW_USING   8
 #define LB_HIERARCHY    9
+#define LB_DIMS         10
 
 #define FT_NAMELABEL    1
 #define FT_NAME         2
@@ -104,6 +105,7 @@
 #define FT_SHOW_FROM    8
 #define FT_SHOW_USING   9
 #define FT_HIERARCHY    10
+#define FT_DIMS         11
 
 #define CB_SHOWALL      1
 #define CB_LAYOUT_EMPTY 2
