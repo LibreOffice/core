@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-14 13:10:32 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 14:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,15 @@ DECLARE_LIST( StringList_Impl, OUString* );
 
 #define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
+
+// -----------------------------------------------------------------------
+
+static sal_Bool isHighContrast( const Window* _pView )
+{
+    return _pView->GetDisplayBackground().GetColor().IsDark();
+}
+
+// -----------------------------------------------------------------------
 
 // structs   -------------------------------------------------------------
 
@@ -1307,7 +1316,7 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         // detect image
         sal_Bool bDoInsert = sal_True;
         INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE );
+        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( this ) );
 
         if ( bDoInsert )
         {
@@ -2112,10 +2121,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
                                             (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
                                             (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE );
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE, isHighContrast( mpView ));
     }
 }
 
@@ -2198,7 +2207,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 
         // detect the image
         INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
-        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
+        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( mpView ) );
 
         maContent.push_back( pEntry );
     }
@@ -2397,7 +2406,7 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
 
     OUString aValue;
     OUString aTab     = OUString::createFromAscii( "\t" );
