@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 15:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,8 +522,10 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                         {
                             sal_Bool bIsStandard;
                             sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
-                            if ((nCellType != nCurrentCellType) && !(nCurrentCellType == util::NumberFormat::SCIENTIFIC) &&
-                                !(nCurrentCellType == util::NumberFormat::FRACTION))
+                            if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
+                                ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
+                                (nCurrentCellType == util::NumberFormat::FRACTION) ||
+                                (nCurrentCellType == 0))))
                             {
                                 try
                                 {
@@ -601,8 +603,10 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                     {
                         sal_Bool bIsStandard;
                         sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
-                        if ((nCellType != nCurrentCellType) && !(nCurrentCellType == util::NumberFormat::SCIENTIFIC) &&
-                            !(nCurrentCellType == util::NumberFormat::FRACTION))
+                        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
+                            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
+                            (nCurrentCellType == util::NumberFormat::FRACTION) ||
+                            (nCurrentCellType == 0))))
                         {
                             try
                             {
