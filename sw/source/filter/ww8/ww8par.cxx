@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:44:28 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@
 
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -1076,13 +1079,18 @@ void SwWW8ImplReader::ImportDop()
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 
-    rDoc._SetUseVirtualDevice(!pWDop->fUsePrinterMetrics);
     if (!pWDop->fUsePrinterMetrics)
         maTracer.Log(sw::log::ePrinterMetrics);
 
     if (!pWDop->fNoLeading)
         maTracer.Log(sw::log::eExtraLeading);
 
+    if ( pWDop->fUsePrinterMetrics )
+        rDoc._SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::DISABLED );
+    else
+        rDoc._SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION );
+
+    rDoc.SetAddExtLeading(!pWDop->fNoLeading);
     rDoc.SetAddFlyOffsets( true );
 
     //import magic doptypography information, if its there
