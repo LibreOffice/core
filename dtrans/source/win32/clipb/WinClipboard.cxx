@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:27:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace
 //------------------------------------------------------------------------
 
 CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceManager, const OUString& aClipboardName ) :
-    WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >( m_aMutex ),
+    WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >( m_aCbListenerMutex ),
     m_SrvMgr( rServiceManager )
 {
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
@@ -200,6 +200,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
 void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
+    MutexGuard aGuard( m_aMutex );
     rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
 }
 
@@ -210,6 +211,7 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
 void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
+    MutexGuard aGuard( m_aMutex );
     rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
 }
 

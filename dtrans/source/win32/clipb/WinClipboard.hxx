@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:27:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ class CWinClipbImpl;
 class CWinClipboardDummy
 {
 protected:
-    ::osl::Mutex m_aMutex;
+    osl::Mutex m_aMutex;
+    osl::Mutex m_aCbListenerMutex;
 };
 
 class CWinClipboard :
