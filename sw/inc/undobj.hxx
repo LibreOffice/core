@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:41:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,8 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
          bJoinPrev : 1,
          bMoveRange : 1;
 
+    bool bMoveRedlines; // use DOC_MOVEREDLINES when calling SwDoc::Move
+
     void DelFtn( const SwPaM& );
 public:
     SwUndoMove( const SwPaM&, const SwPosition& );
@@ -585,6 +587,8 @@ public:
     ULONG GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
     void AddTblMrgFlyHstry( SwHistory& rHstr );
+
+    void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 
     OUT_UNDOBJ( Move )
 };
