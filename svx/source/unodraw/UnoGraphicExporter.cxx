@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 10:51:03 $
+ *  last change: $Author: cl $ $Date: 2002-06-21 07:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
+    sal_Bool bExportOnlyBackground = false;
 
     if( NULL == pFilter || NULL == pPage || NULL == pDoc )
         return sal_False;
@@ -453,6 +454,11 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             {
                 pValues->Value >>= nHeight;
             }
+            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+            {
+                pValues->Value >>= bExportOnlyBackground;
+            }
+
             pValues++;
         }
     }
@@ -469,111 +475,128 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
     sal_Bool            bTranslucent = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii().EqualsAscii( "gif" );
 
+    std::vector< SdrObject* > aShapes;
+
     // export complete page?
     if ( !mxShape.is() )
     {
-        sal_uInt16 nPage = pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0;
-
-        const Size aSize( pPage->GetSize() );
-
-        // generate a bitmap to convert it to a pixel format.
-        // For gif pictures there can also be a vector format used (bTranslucent)
-        if ( !bVectorType && !bTranslucent )
+        if( bExportOnlyBackground )
         {
-            const Size      aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
-            long    nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
-            long    nHeightPix = 0;
-
-            if( (nWidth != -1) && (nWidth < MAX_EXT_PIX) )
-                nWidthPix = nWidth;
-
-            if( (nHeight != -1) && (nHeight < MAX_EXT_PIX) )
-                nHeightPix = nHeight;
-
-            SdrView*        pView;
-
-            if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
-                nWidthPix = nWidth;
-
-            if( PTR_CAST( FmFormModel, pDoc ) )
+            if( pPage->IsMasterPage() )
             {
-                pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                aShapes.push_back( pPage->GetObj(0) );
             }
             else
             {
-                pView = new SdrView( pDoc, &aVDev );
+                if( pPage->GetBackgroundObj() )
+                    aShapes.push_back( pPage->GetBackgroundObj() );
             }
-
-
-            VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
-
-            if( pVDev )
-            {
-                aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
-                aGraphic.SetPrefMapMode( aMap );
-                aGraphic.SetPrefSize( aSize );
-                delete pVDev;
-            }
-
-            delete pView;
         }
-        // create a metafile to export a vector format
         else
         {
-            GDIMetaFile aMtf;
+            sal_uInt16 nPage = pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0;
 
-            aVDev.SetMapMode( aMap );
-            aMtf.Record( &aVDev );
+            const Size aSize( pPage->GetSize() );
 
-            SdrView*        pView;
-
-            if( PTR_CAST( FmFormModel, pDoc ) )
+            // generate a bitmap to convert it to a pixel format.
+            // For gif pictures there can also be a vector format used (bTranslucent)
+            if ( !bVectorType && !bTranslucent )
             {
-                pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                const Size      aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
+                long    nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
+                long    nHeightPix = 0;
+
+                if( (nWidth != -1) && (nWidth < MAX_EXT_PIX) )
+                    nWidthPix = nWidth;
+
+                if( (nHeight != -1) && (nHeight < MAX_EXT_PIX) )
+                    nHeightPix = nHeight;
+
+                SdrView*        pView;
+
+                if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
+                    nWidthPix = nWidth;
+
+                if( PTR_CAST( FmFormModel, pDoc ) )
+                {
+                    pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                }
+                else
+                {
+                    pView = new SdrView( pDoc, &aVDev );
+                }
+
+
+                VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
+
+                if( pVDev )
+                {
+                    aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
+                    aGraphic.SetPrefMapMode( aMap );
+                    aGraphic.SetPrefSize( aSize );
+                    delete pVDev;
+                }
+
+                delete pView;
             }
+            // create a metafile to export a vector format
             else
             {
-                pView = new SdrView( pDoc, &aVDev );
+                GDIMetaFile aMtf;
+
+                aVDev.SetMapMode( aMap );
+                aMtf.Record( &aVDev );
+
+                SdrView*        pView;
+
+                if( PTR_CAST( FmFormModel, pDoc ) )
+                {
+                    pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                }
+                else
+                {
+                    pView = new SdrView( pDoc, &aVDev );
+                }
+
+                Size aNewSize;
+                if ( pView && pPage )
+                {
+                    pView->SetBordVisible( FALSE );
+                    pView->SetPageVisible( FALSE );
+                    pView->ShowPage( pPage, Point() );
+
+                    const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                    aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                                          aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+                    const Rectangle aClipRect( aNewOrg, aNewSize );
+                    MapMode         aVMap( aMap );
+
+                    SdrPageView* pPageView  = pView->GetPageView( pPage );
+
+                    aVDev.Push();
+                    aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+                    aVDev.SetRelativeMapMode( aVMap );
+                    aVDev.IntersectClipRegion( aClipRect );
+                    pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ) ) );
+                    aVDev.Pop();
+
+                    aMtf.Stop();
+                    aMtf.WindStart();
+                    aMtf.SetPrefMapMode( aMap );
+                    aMtf.SetPrefSize( aNewSize );
+
+                     aGraphic = Graphic( RemoveClipRegionActions( aMtf ) );
+                }
+
+                if( bTranslucent )
+                {
+                    Size aOutSize;
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( nWidth, nHeight, aNewSize, aOutSize ) );
+                }
+
+                if ( pView )
+                    delete pView;
             }
-
-            Size aNewSize;
-            if ( pView && pPage )
-            {
-                pView->SetBordVisible( FALSE );
-                pView->SetPageVisible( FALSE );
-                pView->ShowPage( pPage, Point() );
-
-                const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                                      aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
-                const Rectangle aClipRect( aNewOrg, aNewSize );
-                MapMode         aVMap( aMap );
-
-                SdrPageView* pPageView  = pView->GetPageView( pPage );
-
-                aVDev.Push();
-                aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-                aVDev.SetRelativeMapMode( aVMap );
-                aVDev.IntersectClipRegion( aClipRect );
-                pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ) ) );
-                aVDev.Pop();
-
-                aMtf.Stop();
-                aMtf.WindStart();
-                aMtf.SetPrefMapMode( aMap );
-                aMtf.SetPrefSize( aNewSize );
-
-                 aGraphic = Graphic( RemoveClipRegionActions( aMtf ) );
-            }
-
-            if( bTranslucent )
-            {
-                Size aOutSize;
-                aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( nWidth, nHeight, aNewSize, aOutSize ) );
-            }
-
-            if ( pView )
-                delete pView;
         }
     }
 
@@ -581,8 +604,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     else
     {
         // build list of SdrObject
-        std::vector< SdrObject* > aShapes;
-
         if( mxShapes.is() )
         {
             Reference< XShape > xShape;
@@ -606,7 +627,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
         if( 0 == aShapes.size() )
             return sal_False;
+    }
 
+    if( aShapes.size() )
+    {
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;
 
@@ -652,7 +676,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             Point aOfs( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
     //              aOfs+= pM->GetPageView()->GetOffset();
-            aXOut.SetOffset( aOfs );
+//          aXOut.SetOffset( aOfs );
 
             SdrPaintInfoRec aInfoRec;
             aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
@@ -673,6 +697,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
+            aMtf.Move( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
 
             if( !bVectorType )
             {
@@ -750,7 +775,16 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
             if( !xChild.is() )
                 break;
 
-            mxPage = Reference< XDrawPage >::query( xChild->getParent() );
+            Reference< XInterface > xInt;
+            do
+            {
+                xInt = xChild->getParent();
+                mxPage = Reference< XDrawPage >::query( xInt );
+                if( !mxPage.is() )
+                    xChild = Reference< XChild >::query( xInt );
+            }
+            while( !mxPage.is() && xChild.is() );
+
             if( !mxPage.is() )
                 break;
         }
