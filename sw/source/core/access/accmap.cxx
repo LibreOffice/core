@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-30 12:40:18 $
+ *  last change: $Author: mib $ $Date: 2002-06-12 14:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2014,15 +2014,35 @@ sal_Bool SwAccessibleMap::ReplaceChild (
             }
         }
     }
+    if( !pObj )
+        return sal_False;
 
-    if( pObj )
+    Dispose( 0, pObj );
+
     {
-        Dispose( 0, pObj );
-        SwRect aEmptyRect;
-        InvalidatePosOrSize( 0, pObj, aEmptyRect );
+        vos::OGuard aGuard( maMutex );
+
+        if( !mpShapeMap )
+            mpShapeMap = new SwAccessibleShapeMap_Impl( this );
+
+        SwAccessibleShapeMap_Impl::iterator aIter =
+            mpShapeMap->find( pObj );
+        Reference < XAccessible > xAcc( pReplacement );
+        if( aIter != mpShapeMap->end() )
+        {
+            (*aIter).second = xAcc;
+        }
+        else
+        {
+            SwAccessibleShapeMap_Impl::value_type aEntry( pObj, xAcc );
+            mpShapeMap->insert( aEntry );
+        }
     }
 
-    return pObj != 0;
+    SwRect aEmptyRect;
+    InvalidatePosOrSize( 0, pObj, aEmptyRect );
+
+    return sal_True;
 }
 
 Point SwAccessibleMap::CoreToPixel( const Point& rPoint ) const
