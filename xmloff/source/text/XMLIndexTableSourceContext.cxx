@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 12:45:19 $
+ *  last change: $Author: dvo $ $Date: 2001-01-12 18:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,15 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
 {
-    { sXML_text,        ReferenceFieldPart::TEXT },
-    { sXML_category_and_value, ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { sXML_caption,     ReferenceFieldPart::ONLY_CAPTION },
+
+    { sXML_text,            ReferenceFieldPart::TEXT },
+    { sXML_category_and_value,  ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { sXML_caption,         ReferenceFieldPart::ONLY_CAPTION },
+
+    // wrong values that previous versions wrote:
+    { sXML_chapter,         ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { sXML_page,            ReferenceFieldPart::ONLY_CAPTION },
+
     { 0,                0 }
 };
 
@@ -190,15 +196,13 @@ void XMLIndexTableSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT:
         {
-            // TODO: API problem
-
-//          sal_uInt16 nTmp;
-//          if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
-//                                              lcl_aReferenceTypeTokenMap))
-//          {
-//              nDisplayFormat = nTmp;
-//              bDisplayFormatOK = sal_True;
-//          }
+             sal_uInt16 nTmp;
+             if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
+                                                 lcl_aReferenceTypeTokenMap))
+            {
+                 nDisplayFormat = nTmp;
+                 bDisplayFormatOK = sal_True;
+             }
             break;
         }
 
