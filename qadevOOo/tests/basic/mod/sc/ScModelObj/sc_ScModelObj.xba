@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScModelObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:00:18 $ 
+'*  last change:$Date: 2003-03-18 11:15:54 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -101,7 +101,23 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
-    if NOT isNULL(oControllerDoc) then oControllerDoc.dispose()
+    if NOT isNULL(oComponentInstance) then oComponentInstance
+        if (hasUnoInterfaces(oComponentInstance, _
+                                           "com.sun.star.util.XCloseable")) then
+            oComponentInstance.close(FALSE)
+        elseif (hasUnoInterfaces(oComponentInstance, _
+                                           "com.sun.star.lang.XComponent")) then
+            oComponentInstance.dispose()
+        end if
+    end if    
+    if NOT isNULL(oControllerDoc) then oControllerDoc
+        if (hasUnoInterfaces(oControllerDoc, _
+                                           "com.sun.star.util.XCloseable")) then
+            oControllerDoc.close(FALSE)
+        elseif (hasUnoInterfaces(oControllerDoc, _
+                                           "com.sun.star.lang.XComponent")) then
+            oControllerDoc.dispose()
+        end if
+    end if
 End Sub
 </script:module>
