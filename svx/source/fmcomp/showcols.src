@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ italian ] = "Le seguenti colonne sono momentaneamente nascoste. Selezionate le colonne da mostrare si nuovo e confermate il comando con OK.";
         Text[ danish ] = "Følgende kolonner er for tiden skjult. Marker dem, som du igen vil vise, og tryk på OK.";
         Text[ swedish ] = "Följande kolumner är dolda för närvarande. Markera kolumnerna som skall visas igen och välj OK.";
-        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ narazie ukryte. Zaznacz proszê wszystkie kolumny, który maj¹ zostaæ wyœwietlone i naciœnij OK.";
+        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ na razie ukryte. Nale¿y zaznaczyæ kolumny, które maj¹ zostaæ wyœwietlone i nacisn¹æ nastêpnie przycisk OK.";
         Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
         Text[ japanese ] = "Ÿ‚Ì—ñ‚ÍŒ»İ‰B‚³‚ê‚Ä‚¢‚Ü‚·B•\\¦‚·‚×‚«—ñ‚ğ‘I‘ğ‚µ‚ÄOK‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¼±ÅÃ Ç¥½ÃÇÏ¿© È®ÀÎ ¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
