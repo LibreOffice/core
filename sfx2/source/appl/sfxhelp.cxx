@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-19 07:20:37 $
+ *  last change: $Author: pb $ $Date: 2001-06-21 08:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                     }
 
                     default:
-                        DBG_ERROR( "Wrong Type!" );
+                        DBG_ERROR( "Wrong Property!" );
                         break;
                 }
             }
@@ -406,7 +406,7 @@ SfxHelp::~SfxHelp()
     delete pImp;
 }
 
-String SfxHelp::GetHelpModuleName( ULONG nHelpId )
+String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
 {
     String aModuleName;
     SfxViewFrame *pViewFrame = SfxViewFrame::Current();
@@ -437,6 +437,60 @@ String SfxHelp::GetHelpModuleName( ULONG nHelpId )
     return aModuleName;
 }
 
+String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
+{
+    // build up the help URL
+    String aHelpURL;
+    if ( aTicket.Len() )
+    {
+        // if there is a ticket, we are inside a plugin, so a special Help URL must be sent
+        aHelpURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
+        aHelpURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_CallMode=portal&HELP_Device=html");
+
+        if ( !nHelpId )
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&startId=go");
+        }
+        else
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=-");
+            aHelpURL += String::CreateFromInt64( nHelpId );
+        }
+
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
+        aHelpURL += rModuleName;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_User=");
+        aHelpURL += aUser;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
+        aHelpURL += aTicket;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Language=");
+        aHelpURL += aLanguageStr;
+        if ( aCountryStr.Len() )
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_Country=");
+            aHelpURL += aCountryStr;
+        }
+    }
+    else
+    {
+        aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
+        aHelpURL += rModuleName;
+
+        if ( !nHelpId )
+        {
+            aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+        }
+        else
+        {
+            aHelpURL += '/';
+            aHelpURL += String::CreateFromInt64( nHelpId );
+        }
+
+        AppendConfigToken_Impl( aHelpURL, sal_True );
+    }
+
+    return aHelpURL;
+}
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
     Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -503,14 +557,14 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 
 BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 {
-    String aHelpModuleName( GetHelpModuleName( nHelpId ) );
+    String aHelpModuleName( GetHelpModuleName_Impl( nHelpId ) );
     String aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
     return Start( aHelpURL, pWindow );
 }
 
 XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
-    String aModuleName = GetHelpModuleName( nHelpId );
+    String aModuleName = GetHelpModuleName_Impl( nHelpId );
     XubString aHelpText = pImp->GetHelpText( nHelpId, aModuleName );;
     if ( bIsDebug )
     {
@@ -525,88 +579,45 @@ XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 
 String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
 {
-    // build up the help URL
-    String aHelpURL;
-    if ( aTicket.Len() )
-    {
-        // if there is a ticket, we are inside a plugin, so a special Help URL must be sent
-        aHelpURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
-        aHelpURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_CallMode=portal&HELP_Device=html");
-
-        if ( !nHelpId )
-        {
-            aHelpURL += DEFINE_CONST_UNICODE("&startId=go");
-        }
-        else
-        {
-            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=-");
-            aHelpURL += String::CreateFromInt64( nHelpId );
-        }
-
-        aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
-        aHelpURL += rModuleName;
-        aHelpURL += DEFINE_CONST_UNICODE("&HELP_User=");
-        aHelpURL += aUser;
-        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
-        aHelpURL += aTicket;
-        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Language=");
-        aHelpURL += aLanguageStr;
-        if ( aCountryStr.Len() )
-        {
-            aHelpURL += DEFINE_CONST_UNICODE("&HELP_Country=");
-            aHelpURL += aCountryStr;
-        }
-    }
-    else
-    {
-        aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
-        aHelpURL += rModuleName;
-
-        if ( !nHelpId )
-        {
-            aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-        }
-        else
-        {
-            aHelpURL += '/';
-            aHelpURL += String::CreateFromInt64( nHelpId );
-        }
-
-        AppendConfigToken_Impl( aHelpURL, sal_True );
-    }
-
-    return aHelpURL;
+    String aURL;
+    SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+    if ( pHelp )
+        aURL = pHelp->CreateHelpURL_Impl( nHelpId, rModuleName );
+    return aURL;
 }
 
 void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
 {
-    SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
-    if ( !pOpt->HasId( nHelpId ) )
-        return;
-
-    try
+    if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
     {
-        URL aURL;
-        aURL.Complete = CreateHelpURL( nHelpId, GetHelpModuleName( nHelpId ) );
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-        xTrans->parseStrict(aURL);
+        SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+        if ( pHelp )
+        {
+            SfxHelpOptions_Impl *pOpt = pHelp->pImp->GetOptions();
+            if ( !pOpt->HasId( nHelpId ) )
+                return;
 
-        Reference< XDispatchProvider > xDispProv( pFrame->GetTopFrame()->GetFrameInterface(), UNO_QUERY );
-        Reference< XDispatch > xHelpDispatch;
-        if (xDispProv.is())
-            xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_helpagent"), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
+            try
+            {
+                URL aURL;
+                aURL.Complete = pHelp->CreateHelpURL_Impl( nHelpId, pHelp->GetHelpModuleName_Impl( nHelpId ) );
+                Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                xTrans->parseStrict(aURL);
 
-        DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );
-        if ( xHelpDispatch.is() )
-            xHelpDispatch->dispatch( aURL, Sequence< PropertyValue >() );
-    }
-    catch( const Exception& )
-    {
-        DBG_ASSERT( sal_False, "OpenHelpAgent: caught an exception while executing the dispatch!" );
+                Reference< XDispatchProvider > xDispProv( pFrame->GetTopFrame()->GetFrameInterface(), UNO_QUERY );
+                Reference< XDispatch > xHelpDispatch;
+                if (xDispProv.is())
+                    xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_helpagent"), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
+
+                DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );
+                if ( xHelpDispatch.is() )
+                    xHelpDispatch->dispatch( aURL, Sequence< PropertyValue >() );
+            }
+            catch( const Exception& )
+            {
+                DBG_ASSERT( sal_False, "OpenHelpAgent: caught an exception while executing the dispatch!" );
+            }
+        }
     }
 }
 
-SfxHelp* SfxHelp::GetHelp()
-{
-    return (SfxHelp*) Application::GetHelp();
-}

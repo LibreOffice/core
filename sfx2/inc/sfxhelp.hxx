@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-19 07:18:52 $
+ *  last change: $Author: pb $ $Date: 2001-06-21 08:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,12 @@ class SfxHelp : public Help
 private:
     virtual BOOL    Start( ULONG nHelpId, const Window* pWindow );
     virtual BOOL    Start( const String& rURL, const Window* pWindow );
-    String          GetHelpModuleName( ULONG nHelpId );
+
+    String          GetHelpModuleName_Impl( ULONG nHelpId );
+    String          CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
 
 public:
 
-    static SfxHelp* GetHelp();
                     SfxHelp();
                     ~SfxHelp();
     void            SetTicket( const String& rTicket )
@@ -94,8 +95,9 @@ public:
                     { aUser = rUser;}
 
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
-    void            OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
-    String          CreateHelpURL( ULONG nHelpId, const String& rModuleName );
+
+    static String       CreateHelpURL( ULONG nHelpId, const String& rModuleName );
+    static void         OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
 };
 
 #endif // #ifndef _SFX_HELP_HXX
