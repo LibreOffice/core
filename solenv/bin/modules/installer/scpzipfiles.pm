@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-18 16:56:08 $
+#   last change: $Author: obo $ $Date: 2004-06-22 10:24:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ package installer::scpzipfiles;
 use installer::files;
 use installer::globals;
 use installer::logger;
+use installer::pathanalyzer;
 use installer::systemactions;
 
 ########################################################################################
@@ -142,11 +143,26 @@ sub resolving_scpzip_replace_flag
             {
                 # copy files and edit them with the variables defined in the zip.lst
 
+                my $longfilename = 0;
+
                 my $onefilename = $onefile->{'Name'};
                 my $sourcepath = $onefile->{'sourcepath'};
-                $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
+
+                if ( $onefilename =~ /^\s*\Q$installer::globals::separator\E/ ) # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
+                {
+                    $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;
+                    $longfilename = 1;
+                }
+
                 my $destinationpath = $replacedir . $onefilename;
                 my $movepath = $destinationpath . ".orig";
+
+                if ( $longfilename )    # the destination directory has to be created before copying
+                {
+                    my $destdir = $movepath;
+                    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destdir);
+                    installer::systemactions::create_directory_structure($destdir);
+                }
 
                 my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
 
