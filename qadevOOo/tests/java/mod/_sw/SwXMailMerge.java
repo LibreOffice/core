@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:46:39 $
+ *  last change:$Date: 2003-09-08 12:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,24 @@
 
 package mod._sw;
 
-import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
+
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRowSet;
-import com.sun.star.sdbc.XConnection;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.NamedValue;
+import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.task.XJob;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Here <code>com.sun.star.text.MailMerge</code> service is tested.<p>
@@ -85,7 +88,6 @@ import com.sun.star.task.XJob;
 */
 public class SwXMailMerge extends TestCase {
 
-    private XInterface acceptor = null ;
 
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
@@ -111,7 +113,7 @@ public class SwXMailMerge extends TestCase {
         XJob Job = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
                 ("com.sun.star.text.MailMerge");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
@@ -120,17 +122,18 @@ public class SwXMailMerge extends TestCase {
         // <set some variables>
         String cTestDoc = utils.getFullTestURL("MailMerge.sxw");
         //cMailMerge_DocumentURL = cTestDoc
-        String cOutputURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF());
+        String cOutputURL = utils.getOfficeTemp( (XMultiServiceFactory) Param.getMSF());
         String cDataSourceName  = "Bibliography";
         String cDataCommand = "biblio";
         Object[] sel = new Object[2];
         sel[0] = new int[2];
         sel[1] = new int[5];
+        Object[] myBookMarks = new Object[2];
         // </set some variables>
 
         // <create XResultSet>
         try {
-            oRowSet = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oRowSet = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
                 ("com.sun.star.sdb.RowSet");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
@@ -176,16 +179,30 @@ public class SwXMailMerge extends TestCase {
                     UnoRuntime.queryInterface(XConnection.class, oConnection);
         // </create XResultSet>
 
+
+        // <create Bookmarks>
+        try {
+            XRowLocate oRowLocate = (XRowLocate) UnoRuntime.queryInterface(
+                                                  XRowLocate.class, oResultSet);
+            oResultSet.first();
+            myBookMarks[0] = oRowLocate.getBookmark();
+            oResultSet.next();
+            myBookMarks[1] = oRowLocate.getBookmark();
+        } catch (com.sun.star.sdbc.SQLException e) {
+            throw new StatusException("Cant get Bookmarks", e);
+        }
+        // </create Bookmarks>
         // <fill object with values>
         XPropertySet oObjProps = (XPropertySet)
                             UnoRuntime.queryInterface(XPropertySet.class, oObj);
         try {
             oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
-            oObjProps.setPropertyValue("DataCommand", cDataCommand);
-            oObjProps.setPropertyValue("DataCommandType", new Integer(com.sun.star.sdb.CommandType.TABLE));
+            oObjProps.setPropertyValue("Command", cDataCommand);
+            oObjProps.setPropertyValue("CommandType", new Integer(com.sun.star.sdb.CommandType.TABLE));
             oObjProps.setPropertyValue("OutputType", new Short(com.sun.star.text.MailMergeType.FILE));
             oObjProps.setPropertyValue("DocumentURL", cTestDoc);
             oObjProps.setPropertyValue("OutputURL", cOutputURL);
+            System.out.println("OUTPUT: "+cOutputURL);
             oObjProps.setPropertyValue("FileNamePrefix", "Author");
             oObjProps.setPropertyValue("FileNameFromColumn", new Boolean(false));
             oObjProps.setPropertyValue("Selection", new Object[0]);
@@ -203,15 +220,15 @@ public class SwXMailMerge extends TestCase {
 
         // <create object relations>
         Object[] vXJobArgs = new Object[4];
-    NamedValue[] vXJobArg0 = new NamedValue[9];
-    NamedValue[] vXJobArg1 = new NamedValue[8];
+    NamedValue[] vXJobArg0 = new NamedValue[8];
+    NamedValue[] vXJobArg1 = new NamedValue[7];
         NamedValue[] vXJobArg2 = new NamedValue[10];
     NamedValue[] vXJobArg3 = new NamedValue[0];
 
         // first Arguments
            vXJobArg0[0] = new NamedValue("DataSourceName", cDataSourceName);
-    vXJobArg0[1] = new NamedValue("DataCommand", cDataCommand);
-        vXJobArg0[2] = new NamedValue("DataCommandType",
+    vXJobArg0[1] = new NamedValue("Command", cDataCommand);
+        vXJobArg0[2] = new NamedValue("CommandType",
                                new Integer(com.sun.star.sdb.CommandType.TABLE));
     vXJobArg0[3] = new NamedValue("OutputType",
                              new Short(com.sun.star.text.MailMergeType.FILE));
@@ -219,25 +236,25 @@ public class SwXMailMerge extends TestCase {
     vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
     vXJobArg0[6] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg0[7] = new NamedValue("FileNameFromColumn", new Boolean(true));
-    vXJobArg0[8] = new NamedValue("Selection", sel);
+//  vXJobArg0[8] = new NamedValue("Selection", sel);
 
         //second Arguments
            vXJobArg1[0] = new NamedValue("DataSourceName", cDataSourceName);
-    vXJobArg1[1] = new NamedValue("DataCommand", cDataCommand);
-        vXJobArg1[2] = new NamedValue("DataCommandType",
+    vXJobArg1[1] = new NamedValue("Command", cDataCommand);
+        vXJobArg1[2] = new NamedValue("CommandType",
                                new Integer(com.sun.star.sdb.CommandType.TABLE));
     vXJobArg1[3] = new NamedValue("OutputType",
                              new Short(com.sun.star.text.MailMergeType.PRINTER));
     vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
     vXJobArg1[5] = new NamedValue("FileNamePrefix", "Author");
     vXJobArg1[6] = new NamedValue("FileNameFromColumn", new Boolean(true));
-    vXJobArg1[7] = new NamedValue("Selection", sel);
+//  vXJobArg1[7] = new NamedValue("Selection", sel);
 
         // third Arguments
-           vXJobArg2[0] = new NamedValue("Connection", oXConnection);
+           vXJobArg2[0] = new NamedValue("ActiveConnection", oXConnection);
     vXJobArg2[1] = new NamedValue("DataSourceName", cDataSourceName);
-        vXJobArg2[2] = new NamedValue("DataCommand", cDataCommand);
-        vXJobArg2[3] = new NamedValue("DataCommandType",
+        vXJobArg2[2] = new NamedValue("Command", cDataCommand);
+        vXJobArg2[3] = new NamedValue("CommandType",
                                new Integer(com.sun.star.sdb.CommandType.TABLE));
     vXJobArg2[4] = new NamedValue("OutputType",
                              new Short(com.sun.star.text.MailMergeType.FILE));
@@ -245,7 +262,8 @@ public class SwXMailMerge extends TestCase {
     vXJobArg2[6] = new NamedValue("OutputURL", cOutputURL);
     vXJobArg2[7] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg2[8] = new NamedValue("FileNameFromColumn", new Boolean(true));
-    vXJobArg2[9] = new NamedValue("Selection", sel);
+    vXJobArg2[9] = new NamedValue("Selection", myBookMarks);
+//      vXJobArg2[9] = new NamedValue("Selection", sel);
 
         vXJobArgs[0] = vXJobArg0;
         vXJobArgs[1] = vXJobArg1;
