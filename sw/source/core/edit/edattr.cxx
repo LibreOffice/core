@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:06:35 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 11:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,8 +470,8 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     return nRet;
 }
 
-BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
-                        USHORT &rScrpt, BOOL bInSelection )
+BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+                            USHORT &rScrpt, BOOL bInSelection )
 {
     BOOL bRet = FALSE;
     const String& rTxt = rTNd.GetTxt();
@@ -491,8 +491,8 @@ BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             if( bInSelection )
             {
                 USHORT nScript;
-                for( n = 0; n < nEnd;
-                    n = pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+                for( n = 0; n < nEnd; n = (xub_StrLen)
+                        pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
                 {
                     nScript = pBreakIt->xBreak->getScriptType( sExp, n );
                     rScrpt |= nScript;
@@ -533,7 +533,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                             nPos = aIdx.GetIndex();
                     }
 
-                    if( !lcl_GetIsFldAtPos( *pTNd, nPos, nRet, FALSE ))
+                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE ))
                         nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
                                     getScriptType( pTNd->GetTxt(), nPos ));
                 }
@@ -558,25 +558,13 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
 
-                        BOOL bFirstCall = TRUE;
-                        USHORT nScript = pBreakIt->xBreak->getScriptType(
-                                                                rTxt, nChg );
-                        if( ScriptType::WEAK == nScript )
-                        {
-                            bFirstCall = FALSE;
-                            nChg = pBreakIt->xBreak->endOfScript(
-                                                        rTxt, nChg, nScript );
-                        }
-
+                        USHORT nScript;
                         while( nChg < nEndPos )
                         {
-                            if( bFirstCall )
-                                bFirstCall = FALSE;
-                            else
-                                nScript = pBreakIt->xBreak->getScriptType(
+                            nScript = pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
 
-                            if( !lcl_GetIsFldAtPos( *pTNd, nChg, nRet, TRUE ))
+                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE ) )
                                 nRet |= lcl_SetScriptFlags( nScript );
 
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
@@ -584,7 +572,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                                 break;
 
                             xub_StrLen nFldPos = nChg+1;
-                            nChg = pBreakIt->xBreak->endOfScript(
+                            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript(
                                                     rTxt, nChg, nScript );
                             nFldPos = rTxt.Search(
                                             CH_TXTATR_BREAKWORD, nFldPos );
