@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 14:51:06 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,14 @@
 
 #include <stdlib.h>
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
-#endif
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
@@ -762,8 +759,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
 (
     Window *pParent,
     const SfxItemSet& rSet,
-    sal_uInt16 nUniqueId,
-    sal_Bool bGroupBox
+    sal_uInt16 nUniqueId
+#if SUPD < 637
+    ,sal_Bool bGroupBox
+#endif
 ) :
 
 /*      [Beschreibung]
@@ -777,12 +776,16 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pGroupBox       ( 0 ),
+#if SUPD < 637
+    pDummy          ( NULL ),
+#endif
 
     pPage           ( 0 ),
     pOptions        ( &rSet ),
-    pOutSet         ( 0 ),
-    bGrpBox         ( bGroupBox )
+    pOutSet         ( 0 )
+#if SUPD < 637
+    ,bGrpBox         ( bGroupBox )
+#endif
 
 {
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
@@ -795,8 +798,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
     SfxViewFrame*           pViewFrame,
     Window*                         pParent,
     const SfxItemSet&       rSet,
-    sal_uInt16                          nUniqueId,
-    sal_Bool                            bGroupBox
+    sal_uInt16                          nUniqueId
+#if SUPD < 637
+    ,sal_Bool                            bGroupBox
+#endif
 ) :
 
 /*  [Beschreibung]
@@ -810,12 +815,16 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pGroupBox       ( 0 ),
+#if SUPD < 637
+    pDummy          ( NULL ),
+#endif
 
     pPage           ( 0 ),
     pOptions        ( &rSet ),
-    pOutSet         ( 0 ),
-    bGrpBox         ( bGroupBox )
+    pOutSet         ( 0 )
+#if SUPD < 637
+    ,bGrpBox         ( bGroupBox )
+#endif
 
 {
 }
@@ -826,8 +835,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
 (
     Window* pParent,
     sal_uInt16 nUniqueId,
-    const SfxItemSet* pInSet,
-    sal_Bool bGroupBox
+    const SfxItemSet* pInSet
+#if SUPD < 637
+    ,sal_Bool bGroupBox
+#endif
 )
 
 /*      [Beschreibung]
@@ -842,12 +853,16 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pGroupBox       ( 0 ),
+#if SUPD < 637
+    pDummy          ( NULL ),
+#endif
 
     pPage           ( 0 ),
     pOptions        ( pInSet ),
-    pOutSet         ( 0 ),
-    bGrpBox         ( bGroupBox )
+    pOutSet         ( 0 )
+#if SUPD < 637
+    ,bGrpBox         ( bGroupBox )
+#endif
 
 {
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
@@ -860,8 +875,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
     SfxViewFrame* pViewFrame,
     Window* pParent,
     sal_uInt16 nUniqueId,
-    const SfxItemSet* pInSet,
-    sal_Bool bGroupBox
+    const SfxItemSet* pInSet
+#if SUPD < 637
+    ,sal_Bool bGroupBox
+#endif
 )
 
 /*  [Beschreibung]
@@ -875,12 +892,15 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pGroupBox       ( 0 ),
-
+#if SUPD < 637
+    pDummy          ( NULL ),
+#endif
     pPage           ( 0 ),
     pOptions        ( pInSet ),
-    pOutSet         ( 0 ),
-    bGrpBox         ( bGroupBox )
+    pOutSet         ( 0 )
+#if SUPD < 637
+    ,bGrpBox         ( bGroupBox )
+#endif
 
 {
 }
@@ -898,7 +918,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pOKBtn;
     delete pCancelBtn;
     delete pHelpBtn;
-    delete pGroupBox;
     delete pPage;
 }
 
@@ -915,8 +934,10 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
 */
 
 {
+#if SUPD < 637
     DBG_ASSERT( !bGrpBox, "GroupBox no more supported" );
     bGrpBox = sal_False;
+#endif
 
     if ( !pOKBtn )
     {
@@ -927,8 +948,6 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         pCancelBtn = new CancelButton( this );
     if ( !pHelpBtn )
         pHelpBtn = new HelpButton( this );
-    if ( !pGroupBox )
-        pGroupBox = new GroupBox( this );
 
     if ( pPage )
         delete pPage;
@@ -1030,5 +1049,4 @@ const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
     pRanges[aUS.Count()] = 0;
     return pRanges;
 }
-
 
