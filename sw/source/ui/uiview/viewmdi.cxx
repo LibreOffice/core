@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:34:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     SwViewOption aOpt( *pOpt );
     SwDocShell* pDocShell = GetDocShell();
-    if ( pDocShell->GetProtocol().IsEmbed() ||
-         pDocShell->GetCreateMode() == SFX_CREATE_MODE_STANDARD  )
+    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
     {
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
         //View updaten.
