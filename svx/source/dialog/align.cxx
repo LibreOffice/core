@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 10:05:43 $
+ *  last change: $Author: dr $ $Date: 2002-04-03 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,9 +317,6 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         aBtnAsianVert.EnableTriState();
         aBtnAsianVert.SetState( TriState( STATE_DONTKNOW ) );
     }
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_LOCKPOS );
-    if( pItem )
 
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_MARGIN );
     if( pItem )
