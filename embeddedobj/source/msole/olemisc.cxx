@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:54:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,13 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_bStoreVisRepl( sal_True )
-, m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
 , m_bWaitSaveCompleted( sal_False )
+, m_bVisReplInStream( sal_True )
+, m_bStoreVisRepl( sal_True )
+, m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 {
 }
@@ -110,10 +111,11 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_bStoreVisRepl( sal_True )
-, m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
+, m_bVisReplInStream( sal_True )
+, m_bStoreVisRepl( sal_True )
+, m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
 {
 }
@@ -136,12 +138,79 @@ OleEmbeddedObject::~OleEmbeddedObject()
 }
 
 //------------------------------------------------------
+void OleEmbeddedObject::MakeEventListenerNotification_Impl( const ::rtl::OUString& aEventName )
+{
+    if ( m_pInterfaceContainer )
+    {
+           ::cppu::OInterfaceContainerHelper* pContainer =
+            m_pInterfaceContainer->getContainer(
+                                    ::getCppuType( ( const uno::Reference< document::XEventListener >*) NULL ) );
+        if ( pContainer != NULL )
+        {
+            document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
+            {
+                try
+                {
+                    ((document::XEventListener*)pIterator.next())->notifyEvent( aEvent );
+                }
+                catch( uno::RuntimeException& )
+                {
+                }
+            }
+        }
+    }
+}
+
+//----------------------------------------------
+void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
+{
+    if ( m_pInterfaceContainer )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
+                            ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
+        if ( pContainer != NULL )
+        {
+            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+
+            while (pIterator.hasMoreElements())
+            {
+                if ( bBeforeChange )
+                {
+                    try
+                    {
+                        ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // even if the listener complains ignore it for now
+                    }
+                }
+                else
+                {
+                       try
+                    {
+                        ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // if anything happened it is problem of listener, ignore it
+                    }
+                }
+            }
+        }
+    }
+}
+
+//------------------------------------------------------
 void OleEmbeddedObject::GetRidOfComponent()
 {
 #ifdef WNT
     if ( m_pOleComponent )
     {
-        if ( m_nObjectState != embed::EmbedStates::LOADED )
+        if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
             SaveObject_Impl();
 
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
@@ -244,10 +313,10 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
+    if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not running!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -257,7 +326,11 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_pOleComponent )
-        throw uno::RuntimeException(); // TODO
+    {
+        // TODO/LATER: Is it correct???
+        return uno::Reference< util::XCloseable >();
+        // throw uno::RuntimeException(); // TODO
+    }
 
     return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
 }
