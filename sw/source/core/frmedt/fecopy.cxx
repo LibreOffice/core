@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:20:15 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 12:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1212,6 +1212,10 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     if( 1 == pModel->GetPage(0)->GetObjCount() &&
         1 == pView->GetMarkList().GetMarkCount() )
     {
+        // OD 10.07.2003 #110742# - replace a marked 'virtual' drawing object
+        // by its corresponding 'master' drawing object in the mark list.
+        SwDrawView::ReplaceMarkedDrawVirtObjs( *pView );
+
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
         SdrObject* pOldObj = pView->GetMarkList().GetMark( 0 )->GetObj();
 
