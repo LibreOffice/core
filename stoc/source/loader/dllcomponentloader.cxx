@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifdef _DEBUG
+#include <stdio.h>
+#endif
 #include <stdlib.h>
 #include <osl/file.h>
 #include <vector>
@@ -79,6 +82,12 @@
 #endif
 #ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#ifdef _DEBUG
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _UNO_ENVIRONMENT_H_
@@ -107,13 +116,23 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 
+#define SERVICENAME "com.sun.star.loader.SharedLibrary"
+#define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
+
+#define EXPAND_PROTOCOL "vnd.sun.star.expand"
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
@@ -121,9 +140,6 @@ using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace rtl;
 using namespace osl;
-
-#define SERVICENAME "com.sun.star.loader.SharedLibrary"
-#define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
 
 namespace stoc_loader
 {
@@ -186,14 +202,20 @@ public:
     virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) throw(CannotRegisterImplementationException, RuntimeException);
 
 private:
+    Reference< util::XMacroExpander > m_xMacroExpander;
+    OUString expand_url( OUString const & url )
+        SAL_THROW( (RuntimeException) );
+
+    Reference< XComponentContext > m_xContext;
     Reference<XMultiServiceFactory> m_xSMgr;
 };
 
 //*************************************************************************
 DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
+    : m_xContext( xCtx )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    m_xSMgr = Reference< XMultiServiceFactory > ( xCtx->getServiceManager(), UNO_QUERY );
+    m_xSMgr.set( m_xContext->getServiceManager(), UNO_QUERY );
 }
 
 //*************************************************************************
@@ -253,6 +275,55 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
 //      m_xSMgr = rServiceManager;
 }
 
+//==================================================================================================
+OUString DllComponentLoader::expand_url( OUString const & url )
+    SAL_THROW( (RuntimeException) )
+{
+    if (0 == url.compareToAscii( RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ))
+    {
+        if (! m_xMacroExpander.is())
+        {
+            Reference< util::XMacroExpander > xExpander;
+            m_xContext->getValueByName(
+                OUSTR("/singletons/com.sun.star.util.theMacroExpander") ) >>= xExpander;
+            if (! xExpander.is())
+            {
+                throw DeploymentException(
+                    OUSTR("no macro expander singleton available!"), Reference< XInterface >() );
+            }
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if (! m_xMacroExpander.is())
+            {
+                m_xMacroExpander = xExpander;
+            }
+        }
+
+        // cut protocol
+        OUString macro( url.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
+        // decode uric class chars
+        macro = Uri::decode( macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        // expand macro string
+        OUString ret( m_xMacroExpander->expandMacros( macro ) );
+#ifdef _DEBUG
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("DllComponentLoader::expand_url(): ") );
+        buf.append( url );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ") );
+        buf.append( macro );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ") );
+        buf.append( ret );
+        OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+//         OSL_TRACE( str.getStr() );
+        // use printf here, because OSL_TRACE forwards to printf directly, so %... gets lost
+        fprintf( stderr, "%s\n", str.getStr() );
+#endif
+        return ret;
+    }
+    else
+    {
+        return url;
+    }
+}
 
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
@@ -261,7 +332,8 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
     throw(CannotActivateFactoryException, RuntimeException)
 {
-    return loadSharedLibComponentFactory( rLibName, OUString(), rImplName, m_xSMgr, xKey );
+    return loadSharedLibComponentFactory(
+        expand_url( rLibName ), OUString(), rImplName, m_xSMgr, xKey );
 }
 
 
@@ -271,7 +343,8 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 
     throw(CannotRegisterImplementationException, RuntimeException)
 {
-    writeSharedLibComponentInfo( rLibName, OUString(), m_xSMgr, xKey );
+    writeSharedLibComponentInfo(
+        expand_url( rLibName ), OUString(), m_xSMgr, xKey );
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-14 13:14:53 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ using namespace ModuleA;
 using namespace ModuleB;
 using namespace ModuleC;
 using namespace ModuleA::ModuleB;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -414,12 +415,20 @@ int __cdecl main( int argc, char * argv[] )
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
+    Reference< XComponentContext > xContext;
+    Reference< beans::XPropertySet > xProps( xMgr, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    xProps->getPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+    OSL_ASSERT( xContext.is() );
+    xMgr.clear();
 
     sal_Bool bSucc = sal_False;
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ), UNO_QUERY );
+            xContext->getServiceManager()->createInstanceWithContext(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ), xContext ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
@@ -430,8 +439,9 @@ int __cdecl main( int argc, char * argv[] )
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
-        OSL_ENSURE( xRefl.is(), "### no corereflection!" );
+        Reference< XIdlReflection > xRefl;
+        xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) ) >>= xRefl;
+        OSL_ENSURE( xRefl.is(), "### CoreReflection singleton not accessable!?" );
 
         bSucc = test_corefl( xRefl );
     }
@@ -444,7 +454,7 @@ int __cdecl main( int argc, char * argv[] )
         OSL_TRACE( "\n" );
     }
 
-    Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
+    Reference< XComponent >( xContext, UNO_QUERY )->dispose();
 
     printf( "testcorefl %s !\n", (bSucc ? "succeeded" : "failed") );
     return (bSucc ? 0 : -1);

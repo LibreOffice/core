@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-26 16:40:15 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 
 #include <rtl/ustring>
 #include <rtl/process.h>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <uno/environment.h>
@@ -149,7 +148,6 @@ namespace stoc_javaloader {
         Reference<XMultiComponentFactory>  _xSMgr;
         Reference<XComponentContext>  _xCtx;
         Reference<XImplementationLoader> _javaLoader;
-        ::rtl::Bootstrap _bootstrap;
 
     public:
         JavaComponentLoader(const Reference<XComponentContext> & xCtx) throw(RuntimeException);
@@ -166,34 +164,9 @@ namespace stoc_javaloader {
         virtual sal_Bool SAL_CALL writeRegistryInfo(const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl) throw(CannotRegisterImplementationException, RuntimeException);
     };
 
-    /* Using bootstrap variables here is only a very temporary solution, the right thing will
-       be to have a macroexpander singleton the component context, however we couldn't
-       introduce new types in a product patch.
-     */
-    static OUString getIniName()
-    {
-        OUString exe;
-        osl_getExecutableFile( &(exe.pData) );
-
-        sal_Int32 nIndex = exe.lastIndexOf( '/' );
-        OUString ret;
-        if( exe.getLength() && nIndex != -1 )
-        {
-            OUStringBuffer buf( exe.getLength() + 10 );
-            buf.append( exe.getStr() , nIndex +1 ).appendAscii( SAL_CONFIGFILE("uno") );
-            ret = buf.makeStringAndClear();
-        }
-#ifdef DEBUG
-        OString o = OUStringToOString( ret , RTL_TEXTENCODING_ASCII_US );
-        printf( "Used ininame %s\n" , o.getStr() );
-#endif
-        return ret;
-    }
-
     JavaComponentLoader::JavaComponentLoader(const Reference<XComponentContext> & xCtx) throw(RuntimeException)
         : _xSMgr(xCtx->getServiceManager())
         , _xCtx( xCtx )
-        , _bootstrap( getIniName() )
     {
         sal_Int32 size = 0;
         uno_Environment ** ppJava_environments = NULL;
@@ -348,13 +321,7 @@ namespace stoc_javaloader {
     sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(const Reference<XRegistryKey> & xKey, const OUString & blabla, const OUString & rLibName)
         throw(CannotRegisterImplementationException, RuntimeException)
     {
-        OUString libPath( rLibName );
-        rtl_bootstrap_expandMacros_from_handle( *(void **)&_bootstrap, &(libPath.pData) );
-#ifdef DEBUG
-        OString o = OUStringToOString( libPath, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, "C++-JavaLoader::writeRegistryInfo using path %s\n" , o.getStr() );
-#endif
-        return _javaLoader->writeRegistryInfo(xKey, blabla, libPath);
+        return _javaLoader->writeRegistryInfo(xKey, blabla, rLibName);
     }
 
 
@@ -364,13 +331,7 @@ namespace stoc_javaloader {
                                                                  const Reference<XRegistryKey> & xKey)
         throw(CannotActivateFactoryException, RuntimeException)
     {
-        OUString libPath( rLibName );
-        rtl_bootstrap_expandMacros_from_handle( *(void **)&_bootstrap, &(libPath.pData) );
-#ifdef DEBUG
-        OString o = OUStringToOString( libPath, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, "C++-JavaLoader::activate using path %s\n" , o.getStr() );
-#endif
-        return _javaLoader->activate(rImplName, blabla, libPath, xKey);
+        return _javaLoader->activate(rImplName, blabla, rLibName, xKey);
     }
 
     static Mutex & getInitMutex()

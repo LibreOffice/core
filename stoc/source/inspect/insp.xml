@@ -35,6 +35,7 @@
         <type>  com.sun.star.uno.XAggregation                   </type>
         <type>  com.sun.star.uno.XWeak                          </type>
         <type>  com.sun.star.uno.TypeClass                      </type>
+        <type>  com.sun.star.uno.DeploymentException                    </type>
         <type>  com.sun.star.container.XEnumerationAccess       </type>
         <type>  com.sun.star.container.XNameContainer           </type>
         <type>  com.sun.star.container.XIndexContainer          </type>

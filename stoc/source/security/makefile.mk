@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+#   last change: $Author: dbo $ $Date: 2002-06-14 13:26:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ DEF1NAME=$(SHL1TARGET)
 
 # msvc++: no inlining for debugging
 .IF "$(COM)" == "MSC"
-CFLAGS += /Ob0
+CFLAGS += -Ob0
 .ENDIF
 
 # some diagnose

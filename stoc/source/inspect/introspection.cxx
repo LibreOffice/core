@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-10 15:28:45 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1757,9 +1758,30 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
 #endif
 
     // Spezielle Klassen holen
-    Reference< XInterface > xServiceIface = m_xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) );
-    if( xServiceIface.is() )
-        mxCoreReflection = Reference< XIdlReflection >::query( xServiceIface );
+//  Reference< XInterface > xServiceIface = m_xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) );
+//  if( xServiceIface.is() )
+//      mxCoreReflection = Reference< XIdlReflection >::query( xServiceIface );
+    Reference< XPropertySet > xProps( rXSMgr, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    if (xProps.is())
+    {
+        Reference< XComponentContext > xContext;
+        xProps->getPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+        OSL_ASSERT( xContext.is() );
+        if (xContext.is())
+        {
+            xContext->getValueByName(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) ) >>= mxCoreReflection;
+            OSL_ENSURE( mxCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+        }
+    }
+    if (! mxCoreReflection.is())
+    {
+        throw DeploymentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+            Reference< XInterface >() );
+    }
 
     mxElementAccessClass = mxCoreReflection->forName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XElementAccess")) );
     mxNameContainerClass = mxCoreReflection->forName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XNameContainer")) );

@@ -53,6 +53,7 @@ XNameContainer and XEnumerationContainer
         <type>  com.sun.star.lang.XMultiComponentFactory        </type>
         <type>  com.sun.star.lang.XSingleComponentFactory       </type>
         <type>  com.sun.star.registry.XRegistryKey              </type>
+        <type>  com.sun.star.uno.DeploymentException                    </type>
         <type>  com.sun.star.uno.XAggregation                   </type>
         <type>  com.sun.star.uno.XWeak                          </type>
         <type>  com.sun.star.uno.XComponentContext              </type>

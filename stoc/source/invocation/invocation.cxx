@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 13:48:48 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase2.hxx>
 
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -1162,11 +1163,22 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")),
             xCtx),
         UNO_QUERY);
-    xCoreReflection = Reference<XIdlReflection>(
-        mxSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")),
-            xCtx),
-        UNO_QUERY);
+    mxCtx->getValueByName(
+        OUString(
+            RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) )
+                >>= xCoreReflection;
+    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+    if (! xCoreReflection.is())
+    {
+        throw DeploymentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+            Reference< XInterface >() );
+    }
+//         xCoreReflection = Reference<XIdlReflection>(
+//      mxSMgr->createInstanceWithContext(
+//          OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")),
+//          xCtx),
+//      UNO_QUERY);
 }
 
 InvocationService::~InvocationService()
