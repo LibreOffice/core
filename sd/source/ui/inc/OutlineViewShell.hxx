@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:12:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@ public:
     virtual void Deactivate( BOOL IsMDIActivate );
 
     virtual SdPage* GetActualPage();
+
+    /// inherited from sd::ViewShell
+    virtual SdPage* getCurrentPage() const;
+
     /** Return a string that describes the currently selected pages.
     */
     String GetPageRangeString (void);
