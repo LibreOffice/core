@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:38:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,17 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
+#ifndef _OFF_APP_HXX
+#include <offmgr/app.hxx>
+#endif
+#include <comcore.hrc> // #111827#
+#include <undo.hrc>
+// #include <svx/svxacorr.hxx>
+// #include <comphelper/processfactory.hxx>
+// #include <svx/unolingu.hxx>
+// #include <unotools/localedatawrapper.hxx>
+
+// using namespace comphelper;
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
@@ -550,7 +561,35 @@ SwUndoDelete::~SwUndoDelete()
     delete pRedlSaveData;
 }
 
+SwRewriter SwUndoDelete::GetRewriter() const
+{
+    SwRewriter aResult;
+    String * pStr = NULL;
 
+    if (nNode != 0)
+        aResult.AddRule(UNDO_ARG1, String(SW_RES(STR_PARAGRAPHS)));
+    else
+    {
+        if (pSttStr != NULL)
+            pStr = pSttStr;
+        else if (pEndStr != NULL)
+            pStr = pEndStr;
+
+        if (pStr != NULL)
+        {
+            String aStr;
+
+            aStr += String(SW_RES(STR_START_QUOTE));
+            aStr += ShortenString(*pStr, nUndoStringLength,
+                                  String(SW_RES(STR_LDOTS)));
+            aStr += String(SW_RES(STR_END_QUOTE));
+
+            aResult.AddRule(UNDO_ARG1, aStr);
+        }
+    }
+
+    return aResult;
+}
 
 void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 {
