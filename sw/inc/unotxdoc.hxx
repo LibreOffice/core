@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 12:57:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,10 +494,11 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     SfxViewShell *  GuessViewShell();
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const ::com::sun::star::uno::Any& rSelection );
 
+protected:
+    virtual ~SwXTextDocument();
+public:
+    SwXTextDocument(SwDocShell* pShell);
 
-    public:
-        SwXTextDocument(SwDocShell* pShell);
-        virtual ~SwXTextDocument();
     inline void notifyRefreshListeners() { aRefreshCont.Refreshed(); }
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
