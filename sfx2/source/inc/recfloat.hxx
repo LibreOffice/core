@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:06:55 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 10:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ public:
                             Window* pParent );
     virtual BOOL        Close();
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
+    virtual void        StateChanged( StateChangedType nStateChange );
 };
 
 #endif

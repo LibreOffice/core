@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-23 13:15:25 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 10:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include "app.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
+#include "viewfrm.hxx"
+#include "viewsh.hxx"
 
 SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
 
@@ -136,5 +138,22 @@ void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxFloatingWindow::FillInfo( rInfo );
     rInfo.bVisible = sal_False;
+}
+
+void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
+        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+
+        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
+        aPoint.X() += 20;
+        aPoint.Y() += 10;
+        SetPosPixel( aPoint );
+    }
+
+    SfxFloatingWindow::StateChanged( nStateChange );
 }
 
