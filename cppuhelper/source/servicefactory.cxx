@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-23 10:10:46 $
+ *  last change: $Author: kr $ $Date: 2001-07-25 09:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,15 +436,15 @@ static OUString findBoostrapArgument(const OUString & arg_name, sal_Bool * pFall
         osl_getExecutableFile(&fileName.pData);
 
         // get rid of a potential executable extension
-        OUString progExt = OUString::createFromAscii(SAL_PRGEXTENSION);
-        if(fileName.lastIndexOf(progExt) == (fileName.getLength() - progExt.getLength()))
-           fileName = fileName.copy(0, fileName.lastIndexOf(progExt));
+        OUString progExt = OUString::createFromAscii(".bin");
+        if(fileName.getLength() > progExt.getLength()
+        && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+           fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-#ifdef WNT
-        progExt = progExt.toAsciiUpperCase();
-           if(fileName.lastIndexOf(progExt) == (fileName.getLength() - progExt.getLength()))
-           fileName = fileName.copy(0, fileName.lastIndexOf(progExt));
-#endif
+        progExt = OUString::createFromAscii(".exe");
+        if(fileName.getLength() > progExt.getLength()
+        && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+           fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
         result = fileName;
         result += OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
