@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:36:04 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ class CFormatRegistrar
 public:
     CFormatRegistrar( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
                       const CDataFormatTranslator& aDataFormatTranslator );
-    ~CFormatRegistrar( );
 
     void SAL_CALL RegisterFormats( const com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >& aFlavorList,
                                    CFormatEtcContainer& aFormatEtcContainer );
@@ -170,7 +169,7 @@ private:
     rtl::OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
     CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const;
 
-    void SAL_CALL FindLocaleForTextCodePage( );
+    sal_Bool SAL_CALL findLocaleForTextCodePage( );
 
     static sal_Bool SAL_CALL isLocaleOemCodePage( LCID lcid, sal_uInt32 codepage );
     static sal_Bool SAL_CALL isLocaleAnsiCodePage( LCID lcid, sal_uInt32 codepage );
@@ -184,7 +183,6 @@ private:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
 
-    static HANDLE     m_hEvtEnumLocaleReady;
     static LCID       m_TxtLocale;
     static sal_uInt32 m_TxtCodePage;
 

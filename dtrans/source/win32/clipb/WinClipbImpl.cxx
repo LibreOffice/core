@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:32:44 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ using namespace com::sun::star::datatransfer::clipboard::RenderingCapabilities;
 
 // definition of static members
 CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;
+osl::Mutex     CWinClipbImpl::s_aMutex;
 
 //------------------------------------------------------------------------
 //
@@ -139,7 +140,10 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 
 CWinClipbImpl::~CWinClipbImpl( )
 {
+    ClearableMutexGuard aGuard( s_aMutex );
     s_pCWinClipbImpl = NULL;
+    aGuard.clear( );
+
     unregisterClipboardViewer( );
 }
 
@@ -260,6 +264,8 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 
 void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
 {
+    MutexGuard aGuard( s_aMutex );
+
     // reassocition to instance through static member
     if ( NULL != s_pCWinClipbImpl )
         s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );

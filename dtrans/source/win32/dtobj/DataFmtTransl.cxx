@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:31:04 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
     try
     {
         aAny = refXTransferable->getTransferData( aFlavor );
-        if ( aAny.hasValue( ) && (aAny.getValueType( ) == CPPUTYPE_SEQSALINT8) );
+        if ( aAny.hasValue( ) && (aAny.getValueType( ) == CPPUTYPE_SEQSALINT8) )
         {
             Sequence< sal_Int8 > byteStream;
             aAny >>= byteStream;

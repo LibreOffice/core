@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:32:44 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE5_HXX_
+#include <cppuhelper/compbase5.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -140,10 +140,11 @@ protected:
 
 class CWinClipboard :
     public CWinClipboardDummy,
-    public cppu::WeakComponentImplHelper4<
+    public cppu::WeakComponentImplHelper5<
         ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
         ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
         ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
+        ::com::sun::star::lang::XEventListener,
         ::com::sun::star::lang::XServiceInfo >
 {
 public:
@@ -156,9 +157,12 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+
+    virtual void SAL_CALL setContents(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw( ::com::sun::star::uno::RuntimeException );
+
     virtual ::rtl::OUString SAL_CALL getName(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
@@ -178,16 +182,27 @@ public:
     // XClipboardNotifier
     //------------------------------------------------
 
-    virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+    virtual void SAL_CALL addClipboardListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+
+    virtual void SAL_CALL removeClipboardListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
-    // XComponent
+    // overwrite base class method, which is called
+    // by base class dispose function
     //------------------------------------------------
 
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing();
+
+    //------------------------------------------------
+    // XEventListener
+    //------------------------------------------------
+
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
+        throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-HANDLE     CFormatRegistrar::m_hEvtEnumLocaleReady = NULL;
 LCID       CFormatRegistrar::m_TxtLocale           = 0;
 sal_uInt32 CFormatRegistrar::m_TxtCodePage         = GetACP( );
 
@@ -163,12 +162,7 @@ sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
     FormatEtcMap_t::const_iterator iter =
         find( m_FormatMap.begin(), m_FormatMap.end(), fetc );
 
-    if ( iter != m_FormatMap.end( ) )
-    {
-        return ( ( fetc == CFormatEtc( *iter )) == 1  );
-    }
-
-    return sal_False;
+    return ( iter != m_FormatMap.end( ) );
 }
 
 //------------------------------------------------------------------------
@@ -204,9 +198,7 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
     if ( m_EnumIterator != m_FormatMap.end( ) )
     {
         for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++, ++m_EnumIterator )
-        {
             CopyFormatEtc( lpFetc, *m_EnumIterator );
-        }
     }
 
     return nFetched;
@@ -242,35 +234,32 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XMultiServiceFactory >& Ser
     m_bHasSynthesizedLocale( sal_False ),
     m_SrvMgr( ServiceManager )
 {
-    CFormatRegistrar::m_hEvtEnumLocaleReady = CreateEvent( NULL,
-                                                             sal_False,
-                                                           sal_False,
-                                                           NULL );
-
-    OSL_ASSERT( CFormatRegistrar::m_hEvtEnumLocaleReady );
 }
 
-//------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// this function converts all DataFlavors of the given FlavorList into
+// an appropriate FORMATETC structure, for some formats like unicodetext,
+// text and text/html we will offer an accompany format e.g.:
 //
-//------------------------------------------------------------------------
-
-CFormatRegistrar::~CFormatRegistrar( )
-{
-    if ( CFormatRegistrar::m_hEvtEnumLocaleReady )
-    {
-        sal_Bool bRet = CloseHandle(
-            CFormatRegistrar::m_hEvtEnumLocaleReady );
-
-        OSL_ASSERT( bRet );
-    }
-}
-
-//------------------------------------------------------------------------
+// DataFlavor               | Registered Clipformat     |   Registered accompany clipformat
+// -------------------------|---------------------------|-----------------------------------
+// text/plain;charset=ansi  | CF_TEXT                   |   CF_UNICODETEXT
+//                          |                           |   CF_LOCALE (if charset != GetACP()
+//                          |                           |
+// text/plain;charset=oem   | CF_OEMTEXT                |   CF_UNICODETEXT
+//                          |                           |   CF_LOCALE (if charset != GetOEMCP()
+//                          |                           |
+// text/plain;charset=utf-16| CF_UNICODETEXT            |   CF_TEXT
+//                          |                           |
+// text/html                | HTML (Hypertext ...)      |   HTML Format
+//                          |                           |
 //
-//------------------------------------------------------------------------
+// if some tries to register different text formats with different charsets the last
+// registered wins and the others are ignored
+// ----------------------------------------------------------------------------------------
 
-void SAL_CALL CFormatRegistrar::RegisterFormats( const Sequence< DataFlavor >& aFlavorList,
-                                                 CFormatEtcContainer& aFormatEtcContainer )
+void SAL_CALL CFormatRegistrar::RegisterFormats(
+    const Sequence< DataFlavor >& aFlavorList, CFormatEtcContainer& aFormatEtcContainer )
 {
     sal_Int32  nFlavors = aFlavorList.getLength( );
     sal_Bool   bSuccess = sal_False;
@@ -283,22 +272,6 @@ void SAL_CALL CFormatRegistrar::RegisterFormats( const Sequence< DataFlavor >& a
 
         if ( needsToSynthesizeAccompanyFormats( fetc ) )
         {
-
-#ifdef _DEBUG
-            CFormatEtc fetcdbg;
-
-            if ( fetc.getClipformat() == CF_TEXT )
-            {
-                fetcdbg = getFormatEtcForClipformat( CF_OEMTEXT );
-                OSL_ASSERT( !aFormatEtcContainer.hasFormatEtc( fetcdbg ) );
-            }
-            else if ( fetc.getClipformat() == CF_OEMTEXT )
-            {
-                fetcdbg = getFormatEtcForClipformat( CF_TEXT );
-                OSL_ASSERT( !aFormatEtcContainer.hasFormatEtc( fetcdbg ) );
-            }
-#endif
-
             // we don't validate if the operation succeded
             // because an accompany format might have be
             // registered so that it's no problem if the
@@ -308,12 +281,34 @@ void SAL_CALL CFormatRegistrar::RegisterFormats( const Sequence< DataFlavor >& a
             // register unicode text it will fail
             aFormatEtcContainer.addFormatEtc( fetc );
 
-            synthesizeAndRegisterAccompanyFormats( fetc, aFlavor, aFormatEtcContainer );
+            synthesizeAndRegisterAccompanyFormats(
+                fetc, aFlavor, aFormatEtcContainer );
         }
         else
             aFormatEtcContainer.addFormatEtc( fetc );
     }
 }
+
+/*
+    For all Flavors from Transferable
+        if not is TextFlavor
+            add Format to FormatList
+        else if not UnicodeTextRegistred
+            if isUnicodeText or Transferable Has Unicodetext
+                add Unicode Format to FormatList
+                add Text to FormatList
+                UnicodeTextRegistered = true
+            else
+                if findLocaleForTextCharset successful
+                    add Unicode Format to FormatList
+                    add Text or OemText to FormatList
+                    add Locale to FormatList
+                    HasSynthesizedLocale = true
+                    save the TextFlavor so that access is easier in GetData
+                end if
+            end if
+        end if
+*/
 
 //------------------------------------------------------------------------
 //
@@ -408,10 +403,20 @@ void SAL_CALL CFormatRegistrar::synthesizeAndRegisterAccompanyFormats(
 
         if ( !isEqualCurrentSystemCodePage( m_TxtCodePage ) )
         {
-            FindLocaleForTextCodePage( );
             fetc = getFormatEtcForClipformat( CF_LOCALE );
-            aFormatEtcContainer.addFormatEtc( fetc );
-            m_bHasSynthesizedLocale = sal_True;
+
+            if ( findLocaleForTextCodePage( ) )
+            {
+                aFormatEtcContainer.addFormatEtc( fetc );
+                m_bHasSynthesizedLocale = sal_True;
+            }
+            else // could not find a locale for this charset
+            {
+                // remove the locale if there is one
+                // already registered
+                aFormatEtcContainer.removeFormatEtc( fetc );
+                m_bHasSynthesizedLocale = sal_False;
+            }
         }
 
         // register may fail if we have already
@@ -491,10 +496,11 @@ sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) 
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFormatRegistrar::FindLocaleForTextCodePage( )
+sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
 {
+    m_TxtLocale = 0;
     EnumSystemLocalesA( CFormatRegistrar::EnumLocalesProc, LCID_SUPPORTED );
-    WaitForSingleObject( CFormatRegistrar::m_hEvtEnumLocaleReady, 60000 );
+    return ( IsValidLocale( m_TxtLocale, LCID_SUPPORTED ) );
 }
 
 //------------------------------------------------------------------------
@@ -545,7 +551,6 @@ BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
          isLocaleOemCodePage( lcid, CFormatRegistrar::m_TxtCodePage ) )
     {
         CFormatRegistrar::m_TxtLocale = lcid;
-        SetEvent( CFormatRegistrar::m_hEvtEnumLocaleReady );
         return sal_False; // stop enumerating
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:32:57 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ const sal_Bool AUTO_RESET                       = sal_False;
 const sal_Bool INIT_NONSIGNALED                 = sal_False;
 
 //----------------------------------------------------------------
-//
+// we use one condition for every request
 //----------------------------------------------------------------
 
 typedef struct _MsgCtx

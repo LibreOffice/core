@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:32:44 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,8 @@ private:
     CMtaOleClipboard        m_MtaOleClipboard;
     CWinClipboard*          m_pWinClipboard;
     CXNotifyingDataObject*  m_pCurrentClipContent;
-    osl::Mutex              m_aMutex;
+
+    static osl::Mutex       s_aMutex;
     static CWinClipbImpl*   s_pCWinClipbImpl;
 
 private:
