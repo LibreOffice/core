@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 13:36:42 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 18:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ spanish ] = "<< Regresar";
         Text[ finnish ] = "<< Back";
         Text[ italian ] = "<< Indietro";
-        Text[ danish ] = "<< Back";
+        Text[ danish ] = "<< Tilbage";
         Text[ swedish ] = "<< Tillbaka";
         Text[ polish ] = "<< Back";
         Text[ portuguese_brazilian ] = "<< Back";
@@ -95,7 +95,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "<< ËøîÂõû";
         Text[ turkish ] = "<< Back";
         Text[ arabic ] = "<< Back";
-        Text[ catalan ] = "<< Back";
+        Text[ catalan ] = "<< Endarrere";
     };
     PushButton PB_NEXT
     {
@@ -110,7 +110,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ spanish ] = "Siguiente >>";
         Text[ finnish ] = "Next >>";
         Text[ italian ] = "Avanti >>";
-        Text[ danish ] = "Next >>";
+        Text[ danish ] = "NÊste >>";
         Text[ swedish ] = "N‰sta >>";
         Text[ polish ] = "Next >>";
         Text[ portuguese_brazilian ] = "Next >>";
@@ -120,7 +120,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "ÁπºÁ∫å >>";
         Text[ turkish ] = "Next >>";
         Text[ arabic ] = "Next >>";
-        Text[ catalan ] = "Next >>";
+        Text[ catalan ] = "Endavant >>";
     };
     CancelButton PB_CANCEL
     {
@@ -139,7 +139,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ spanish ] = "Aceptar";
         Text[ finnish ] = "Accept";
         Text[ italian ] = "Accetto";
-        Text[ danish ] = "Accept";
+        Text[ danish ] = "Accepter";
         Text[ swedish ] = "Acceptera";
         Text[ polish ] = "Accept";
         Text[ portuguese_brazilian ] = "Accept";
@@ -164,7 +164,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ spanish ] = "Crear";
         Text[ finnish ] = "Finish";
         Text[ italian ] = "Fine";
-        Text[ danish ] = "Finish";
+        Text[ danish ] = "Udf¯r";
         Text[ swedish ] = "F‰rdigst‰ll";
         Text[ polish ] = "Finish";
         Text[ portuguese_brazilian ] = "Finish";
@@ -174,7 +174,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "ÂÆåÊàê";
         Text[ turkish ] = "Finish";
         Text[ arabic ] = "Finish";
-        Text[ catalan ] = "Finish";
+        Text[ catalan ] = "Crea";
     };
     String ST_LICENSE_AGREEMENT
     {
@@ -188,7 +188,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ spanish ] = " - Contrato de licencia para el uso de software ";
         Text[ finnish ] = " - Software License Agreement";
         Text[ italian ] = " - Accordo di licenza del software";
-        Text[ danish ] = " - Software License Agreement";
+        Text[ danish ] = "#NAME?";
         Text[ swedish ] = " - Licensavtal fˆr progamvara";
         Text[ polish ] = " - Software License Agreement";
         Text[ portuguese_brazilian ] = " - Software License Agreement";
@@ -244,7 +244,7 @@ TabPage RID_TP_WELCOME
     Text[ spanish ] = "Bienvenido";
     Text[ finnish ] = "Welcome";
     Text[ italian ] = "Benvenuti";
-    Text[ danish ] = "Welcome";
+    Text[ danish ] = "Velkommen";
     Text[ swedish ] = "V‰lkommen";
     Text[ polish ] = "Welcome";
     Text[ portuguese_brazilian ] = "Welcome";
@@ -272,13 +272,15 @@ TabPage RID_TP_WELCOME
         "Dieses Schulungsangebot ist 90 Tage ab Registrierung g¸ltig."\
         "Besuchen Sie folgende Webseite f¸r weitere Details.\n\nhttp://www.sun.com/star/service\n\n"\
         "Wir w¸nschen Ihnen viel Spaﬂ und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
-        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun website at\n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\n"\
+        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\n"\
         "Get FREE StarOffice 6.0 software support valid for 60 days from date of purchase and FREE "\
         "access to \"Transitioning to the %PRODUCTNAME %PRODUCTVERSION Application Suite\" (WO-1605), "\
         "a web-based training course available through the Sun(tm) Web Learning Center "\
         "(valid for 90 days from the date of registration)."\
         "To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\n"\
         "We hope you enjoy working with %PRODUCTNAME.";
+        Text[ danish ] = "Velkommen til %PRODUCTNAME %PRODUCTVERSION OEM\n\nFor at starte %PRODUCTNAME %PRODUCTVERSION OEM skal du indtaste dine brugerdata i det skÊrmbillede, der f¯lger efter teksten vedr¯rende licens. I Vigtigt-filen, der ligger i %PRODUCTNAME-produktbiblioteket, kan du finde vigtige oplysninger om programmet. LÊs alle disse oplysninger grundigt igennem. Du finder desuden udf¯rlige oplysninger pÂ Suns websted pÂ adressen \n\nhttp://www.sun.com/staroffice.\n\nSupport og trÊning:\n\nBenyt dig af vores gratis support-telefon. Du kan ogsÂ g¯re brug af et gratis, webbaseret StarOffice-kursus fra Sun Web Learning Centers. Disse tilbud er gÊldende i 60 dage efter k¯bsdatoen. Bes¯g denne webside for at fÂ yderligere oplysninger:\n\nhttp://www.sun.com/star/service\n\nVi ¯nsker dig god forn¯jelse med %PRODUCTNAME.\nDit %PRODUCTNAME-team.";
+        Text[ catalan ] = "Benvinguts a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduÔu les dades personals en el quadre de di‡leg mÈs avall del text de llicËncia.\n\nHi ha informaciÛ important als fitxers readme que estan ubicats en el directori de l'StarOffice. Llegiu els fitxers amb atenciÛ.\n\nTambÈ podeu trobar informaciÛ detallada a la p‡gina d'Internet de Sun a\n\nhttp://www.sun.com/staroffice.\n\nEsperem que gaudeixi treballant amb l'StarOffice.";
     };
 };
 TabPage RID_TP_LICENSE
@@ -299,7 +301,7 @@ TabPage RID_TP_LICENSE
     Text[ spanish ] = "Contrato de licencia";
     Text[ finnish ] = "License Agreement";
     Text[ italian ] = "Contratto di licenza";
-    Text[ danish ] = "License Agreement";
+    Text[ danish ] = "Licensaftale";
     Text[ swedish ] = "Licensavtal";
     Text[ polish ] = "License Agreement";
     Text[ portuguese_brazilian ] = "License Agreement";
@@ -319,7 +321,7 @@ TabPage RID_TP_LICENSE
         Text [ english_us ] = "Read the following License Agreement carefully. Use the scroll bar to view the entire text." ;
         Text [ portuguese_brazilian ] = "Bitte lesen Sie das folgende Lizenzabkommen. Mit der Bildlaufleiste k?nen Sie den Rest des Lizenzabkommens sichtbar machen." ;
         Text [ swedish ] = "L‰s fˆljande licensavtal. Med hj‰lp av rullningslisten kan du se resten av avtalet." ;
-        Text [ danish ] = "LÊs venligst den f¯lgende licensaftale. Ved hjÊlp af rullepanelet kan du se resten af licensaftalen." ;
+        Text [ danish ] = "LÊs den f¯lgende licensaftale. Du kan se resten af licensaftalen ved hjÊlp af rullepanelet." ;
         Text [ italian ] = "Leggete il seguente contratto di licenza. Con la barra di scorrimento Ë possibile visualizzare il resto del contratto stesso." ;
         Text [ spanish ] = "Lea el siguiente acuerdo de licencia. Utilice la barra de desplazamiento para ver el resto del texto." ;
         Text [ french ] = "Veuillez lire le contrat de licence ci-aprËs en utilisant la barre de dÈfilement pour vous dÈplacer dans le texte." ;
@@ -356,7 +358,7 @@ TabPage RID_TP_LICENSE
         Text [ portuguese ] = "Clique no bot„o '%1' se concordar com os termos do contrato de licenÁa. Se n„o os aceitar clique no bot„o '%2' e a instalaÁ„o ser· cancelada." ;
         Text [ portuguese_brazilian ] = "Akzeptieren Sie s?mtliche Bedingungen im vorliegenden Lizenzabkommen, klicken Sie auf die Schaltfl?che '%1'. Stimmen Sie den Bedingungen nicht zu klicken Sie auf '%2', die Installation wird dann abgebrochen." ;
         Text [ swedish ] = "Om du accepterar alla villkor i licensavtalet, klicka pÂ '%1'. Om du inte accepterar villkoren, klicka pÂ '%2' fˆr att avbryta installationen." ;
-        Text [ danish ] = "Hvis du accepterer alle betingelser i licensaftalen, klik pÂ '%1' knappen. I modsat fald klik pÂ '%2' for at afbryde installationen." ;
+        Text [ danish ] = "Hvis du accepterer alle betingelser i denne licensaftale, skal du klikke pÂ knappen '%1'. Hvis du ikke accepterer betingelserne, skal du klikke pÂ '%2'. Herefter afbrydes installationen." ;
         Text [ italian ] = "Se accettate tutte le condizioni del presente contratto di licenza cliccate su '%1'. Se non le accettate cliccate invece su '%2'. In questo modo l'installazione verr‡ interrotta." ;
         Text [ spanish ] = "Si acepta todas las condiciones de este acuerdo de licencia pulse '%1'. En caso de no ser asÌ, pulse '%2' para interrumpir la instalaciÛn." ;
         Text [ french ] = "Si vous acceptez tous les termes du contrat de licence, cliquez sur '%1'. Dans le cas contraire, cliquez sur '%2' pour interrompre l'installation." ;
