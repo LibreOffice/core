@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-06 21:06:53 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ TabPage PAGE_GENERAL
         Text [ spanish ] = "~Fuente de datos URL:";
         Text [ italian ] = "~Fonte di dati URL";
         Text [ danish ] = "Datakilde URL:";
-        Text [ swedish ] = "URL fˆr d~atak‰lla";
+        Text [ swedish ] = "~URL fˆr datak‰lla";
         Text [ polish ] = "URL ürÛd≥a danych";
         Text [ portuguese_brazilian ] = "~Data source URL:";
         Text [ japanese ] = "„Éá„Éº„Çø„ÇΩ„Éº„Çπ URL(~D)";
@@ -979,7 +979,7 @@ TabPage PAGE_DBASE
         Text [ NORWEGIAN ] = "Show deleted records" ;
         Text [ DANISH ] = "Vis inaktive dataposter" ;
         Text [ english_US ] = "Display i~nactive records" ;
-        Text [ SPANISH ] = "Mostrar registros inacti~vos" ;
+        Text [ SPANISH ] = "Mostrar los registros inacti~vos" ;
         Text [ FINNISH ] = "N‰yt‰ ~k‰ytt‰m‰ttˆm‰t tietueet" ;
         Text [ FRENCH ] = "Afficher les enregistrements ~dÈsactivÈs" ;
         Text [ ITALIAN ] = "~Mostra record non attivi" ;
@@ -1097,7 +1097,7 @@ TabPage PAGE_ADO
         Text [ FRENCH ] = "Nom d'~utilisateur" ;
         Text [ ITALIAN ] = "Nome ~utente" ;
         Text [ DUTCH ] = "~Gebruikersnaam" ;
-        Text [ SWEDISH ] = "~Anv‰ndarnamn" ;
+        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
         Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
         Text [ portuguese_brazilian ] = "~Benutzername" ;
         Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
@@ -1247,7 +1247,7 @@ TabPage PAGE_JDBC
         Text [ FRENCH ] = "Nom d'~utilisateur" ;
         Text [ ITALIAN ] = "Nome ~utente" ;
         Text [ DUTCH ] = "Naam ~gebruiker" ;
-        Text [ SWEDISH ] = "~Anv‰ndarnamn" ;
+        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
         Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
         Text [ portuguese_brazilian ] = "~Benutzername" ;
         Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
@@ -1367,7 +1367,7 @@ TabPage PAGE_ODBC
         Text [ FRENCH ] = "Nom d'~utilisateur" ;
         Text [ ITALIAN ] = "Nome ~utente" ;
         Text [ DUTCH ] = "Naam ~gebruiker" ;
-        Text [ SWEDISH ] = "~Anv‰ndarnamn" ;
+        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
         Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
         Text [ portuguese_brazilian ] = "~Benutzername" ;
         Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
@@ -1552,7 +1552,7 @@ TabPage PAGE_LDAP
         Text [ FRENCH ] = "Nom d'~utilisateur" ;
         Text [ ITALIAN ] = "Nome ~utente" ;
         Text [ DUTCH ] = "Naam ~gebruiker" ;
-        Text [ SWEDISH ] = "~Anv‰ndarnamn" ;
+        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
         Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
         Text [ portuguese_brazilian ] = "~Benutzername" ;
         Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
@@ -2299,7 +2299,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ greek ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ dutch ] = "Kruis in de bovenstaande lijst de tabellen aan die weergegeven moeten worden.";
         Text[ french ] = "Dans la liste ci-dessus, marquez d'une croix les tables ‡ rendre visibles pour les applications.";
-        Text[ spanish ] = "Active en la lista superior las tablas que deben estar visibles para las aplicaciones.";
+        Text[ spanish ] = "Seleccione las tablas que se deban visualizar en las aplicaciones.";
         Text[ finnish ] = "Merkitse yll‰ olevaan luetteloon ne taulukot, joiden haluat n‰kyv‰n sovelluksissa.";
         Text[ italian ] = "Selezionate le tabelle da visualizzare nell'applicazione.";
         Text[ danish ] = "In the list above, please check the tables which should be visible for the applications.";
@@ -2356,7 +2356,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ greek ] = "–ÒÔ‚ÔÎﬁ ÛÙÁÎ˛Ì ›Í‰ÔÛÁÚ (·Ì ÂﬂÌ·È ‰È·Ë›ÛÈÏÂÚ)";
         Text [ dutch ] = "Versiekolommen weergeven (indien beschikbaar)";
         Text [ french ] = "Afficher les colonnes de version (si disponibles)";
-        Text [ spanish ] = "Mostrar columnas de versiÛn (si est·n disponibles)";
+        Text [ spanish ] = "Mostrar las columnas de versiÛn (si est·n disponibles)";
         Text [ italian ] = "Mostra colonne di versione (se disponibili)";
         Text [ danish ] = "Suppress version columns";
         Text [ swedish ] = "Visa versionskolumner (om tillg‰ngliga)";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.89  2002/02/06 21:06:53  kz
+ *  Merge SRC641: 06.02.02 - 22:06:22
+ *
  *  Revision 1.88  2002/02/05 21:08:26  kz
  *  Merge SRC641: 02/05/02 - 22:07:58
  *
