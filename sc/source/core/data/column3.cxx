@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:52 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #include "patattr.hxx"
 #include "cellform.hxx"
 #include "collect.hxx"
-#include "compiler.hxx"
+#include "errorcodes.hxx"
 #include "brdcst.hxx"
 #include "docoptio.hxx"         // GetStdPrecision fuer GetMaxStringLen
 #include "subtotal.hxx"
