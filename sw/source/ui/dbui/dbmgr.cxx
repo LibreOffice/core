@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:25:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1398,6 +1398,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                     sSourceDocumentURL, ::aEmptyStr );
             const SfxFilter* pStoreToFilter = pSfxFlt;
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
+            const String* pStoreToFilterOptions = 0;
             // if a save_to filter is set then use it - otherwise use the default
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
             {
@@ -1410,7 +1411,11 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 const SfxFilter* pFilter =
                         pFilterContainer->GetFilter4FilterName( rMergeDescriptor.sSaveToFilter );
                 if(pFilter)
+                {
                     pStoreToFilter = pFilter;
+                    if(rMergeDescriptor.sSaveToFilterOptions.Len())
+                        pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
+                }
             }
             String sAddress;
             bCancel = FALSE;
@@ -1578,6 +1583,13 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     sFileURL,
                                     STREAM_STD_READWRITE, TRUE );
                                 pDstMed->SetFilter( pStoreToFilter );
+                                if(pDstMed->GetItemSet())
+                                {
+                                    if(pStoreToFilterOptions )
+                                        pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
+                                    if(rMergeDescriptor.aSaveToFilterData.getLength())
+                                        pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
+                                }
 
                                 xWorkDocSh->DoSaveAs(*pDstMed);
                                 xWorkDocSh->DoSaveCompleted(pDstMed);
@@ -1685,6 +1697,13 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
                     STREAM_STD_READWRITE, TRUE );
                 pDstMed->SetFilter( pStoreToFilter );
+                if(pDstMed->GetItemSet())
+                {
+                    if(pStoreToFilterOptions )
+                        pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
+                    if(rMergeDescriptor.aSaveToFilterData.getLength())
+                        pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
+                }
 
                 xTargetDocShell->DoSaveAs(*pDstMed);
                 xTargetDocShell->DoSaveCompleted(pDstMed);
@@ -3081,7 +3100,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
         uno::Reference< frame::XStorable > xStore( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
         xStore->storeToURL( sSourceDocURL, aValues );
-
 
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
