@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 11:47:19 $
+ *  last change: $Author: cmc $ $Date: 2001-02-07 10:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2202,8 +2202,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
             REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
             REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
-//          FRAME,          // Paragraph printable area
-            PRTAREA,        // Paragraph
+            FRAME,          // Paragraph Text area
+//          PRTAREA,        // Paragraph area
             REL_CHAR        // to a Character
 
 //          REL_PG_LEFT,    // in left page-border
@@ -2997,11 +2997,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.8 2001-01-18 11:47:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.9 2001-02-07 10:13:02 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/01/18 11:47:19  cmc
+      #82894# ocx controls 79055 related oversight
+
       Revision 1.7  2000/12/20 16:22:42  khz
       #79453# set Outliner Mode at new OutlinerParaObject (and khz says BYE !)
 
