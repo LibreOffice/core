@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:17:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-
-#pragma hdrstop
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -155,7 +152,7 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 
 bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     bool bSaveRelFile, const std::vector<String>& rStrings,
-    const std::vector<String>& rExtra)
+    const std::vector<ww::bytes>& rExtra)
 {
     // this code will be called after reading all text into the
     // empty sections
@@ -220,7 +217,9 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             // entry (== -1) otherwise the group indicates the group in the
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
-            if ((rExtra[nGlosEntry].ToInt32() + 2) != -1)
+            const ww::bytes &rData = rExtra[nGlosEntry];
+            USHORT n = SVBT16ToShort( &(rData[2]) );
+            if(n != 0xFFFF)
             {
                 rBlocks.ClearDoc();
                 const String &rLNm = rStrings[nGlosEntry];
@@ -272,13 +271,13 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     {
         //read the names of the autotext entries
         std::vector<String> aStrings;
-        std::vector<String> aExtra;
+        std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =
             WW8Fib::GetFIBCharset(pGlossary->chseTables);
 
         WW8ReadSTTBF(true, *xTableStream, pGlossary->fcSttbfglsy,
-            pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aExtra );
+            pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
 
         rStrm->Seek(0);
 
@@ -303,7 +302,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                     0);
                 pRdr->LoadDoc(aPamo,this);
 
-                bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aExtra);
+                bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);
 
                 delete pRdr;
             }
