@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-12 10:27:55 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 15:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,9 @@ using namespace vos;
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+
+// static counter for OLE-Objects
+static sal_uInt32 nMSOleObjCntr = 0;
 
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
@@ -4874,7 +4877,6 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             String aDstStgName( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
 
-                            static sal_uInt32 nMSOleObjCntr = 0;
                             aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
 
                             SvStorageRef xObjStor( rDestStorage.OpenStorage(
@@ -4916,7 +4918,6 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         String aDstStgName( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
 
-        static sal_uInt32 nMSOleObjCntr = 0;
         aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
         SvStorageRef xObjStor;
 
