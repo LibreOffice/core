@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-07 12:32:52 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 17:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #include "dlgutil.hxx"
 
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <svx/writingmodeitem.hxx>
+#include <writingmodeitem.hxx>
 #endif
 
 static USHORT pRanges[] =
