@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ElementChange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module util {
 
 /** This structure describes a single change that is part of a batch of changes.
  */
-struct ElementChange
+published struct ElementChange
 {
     /** This contains the accessor to the element which changed.
 
