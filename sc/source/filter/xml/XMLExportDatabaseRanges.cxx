@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,9 +424,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                 rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
                 if (aConnection == sheet::FilterConnection_AND)
                 {
-                    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                    rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList());
-                    rExport.ClearAttrList();
+                    rExport.StartElement( aName, sal_True);
                     bOpenAndElement = sal_True;
                 }
                 else
@@ -438,17 +436,14 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                         aConnection = aTableFilterFields[i].Connection;
                         if (aTableFilterFields[i].Connection == sheet::FilterConnection_AND)
                         {
-                            rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                            rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList());
-                            rExport.ClearAttrList();
+                            rExport.StartElement( aName, sal_True );
                             bOpenAndElement = sal_True;
                             WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
                             aPrevFilterField = aTableFilterFields[i];
                             if (i == nTableFilterFields - 1)
                             {
                                 WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                                rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                                rExport.GetDocHandler()->endElement(aName);
+                                rExport.EndElement(aName, sal_True);
                                 bOpenAndElement = sal_False;
                             }
                         }
@@ -458,8 +453,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                             aPrevFilterField = aTableFilterFields[i];
                             if (bOpenAndElement)
                             {
-                                rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                                rExport.GetDocHandler()->endElement(aName);
+                                rExport.EndElement(aName, sal_True);
                                 bOpenAndElement = sal_False;
                             }
                             if (i == nTableFilterFields - 1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,9 +293,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
                 if (aConnection == SC_AND)
                 {
-                    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                    rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList());
-                    rExport.ClearAttrList();
+                    rExport.StartElement( aName, sal_True );
                     bOpenAndElement = sal_True;
                 }
                 else
@@ -307,17 +305,14 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                         aConnection = aQueryParam.GetEntry(static_cast<USHORT>(j)).eConnect;
                         if (aQueryParam.GetEntry(static_cast<USHORT>(j)).eConnect == SC_AND)
                         {
-                            rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                            rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList());
-                            rExport.ClearAttrList();
+                            rExport.StartElement( aName, sal_True );
                             bOpenAndElement = sal_True;
                             WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
                             aPrevFilterField = aQueryParam.GetEntry(static_cast<USHORT>(j));
                             if (j == nQueryEntryCount - 1)
                             {
                                 WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                                rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                                rExport.GetDocHandler()->endElement(aName);
+                                rExport.EndElement(aName, sal_True);
                                 bOpenAndElement = sal_False;
                             }
                         }
@@ -327,8 +322,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                             aPrevFilterField = aQueryParam.GetEntry(static_cast<USHORT>(j));
                             if (bOpenAndElement)
                             {
-                                rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-                                rExport.GetDocHandler()->endElement(aName);
+                                rExport.EndElement(aName, sal_True);
                                 bOpenAndElement = sal_False;
                             }
                             if (j == nQueryEntryCount - 1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 12:40:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,17 +828,12 @@ void ScXMLExport::WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatCo
 
 void ScXMLExport::OpenHeaderColumn()
 {
-    rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_HEADER_COLUMNS)));
-    GetDocHandler()->ignorableWhitespace(sWS);
-    GetDocHandler()->startElement( sName, GetXAttrList());
-    ClearAttrList();
+    StartElement( XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, sal_True );
 }
 
 void ScXMLExport::CloseHeaderColumn()
 {
-    rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_HEADER_COLUMNS)));
-    GetDocHandler()->ignorableWhitespace(sWS);
-    GetDocHandler()->endElement(sName);
+    EndElement(XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, sal_True);
 }
 
 void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader)
@@ -1028,26 +1023,18 @@ void ScXMLExport::WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex,
         AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,
             *pCellStyles->GetStyleNameByIndex(nCellStyleIndex,
                 (*pDefaults->GetRowDefaults())[nRow].bIsAutoStyle));
-    rtl::OUString aName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_ROW));
-    GetDocHandler()->ignorableWhitespace(sWS);
-    GetDocHandler()->startElement( aName, GetXAttrList());
-    ClearAttrList();
+    StartElement( XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True);
 }
 
 void ScXMLExport::OpenHeaderRows()
 {
-    rtl::OUString aName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_HEADER_ROWS));
-    GetDocHandler()->ignorableWhitespace(sWS);
-    GetDocHandler()->startElement( aName, GetXAttrList());
-    ClearAttrList();
+    StartElement( XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, sal_True);
     bRowHeaderOpen = sal_True;
 }
 
 void ScXMLExport::CloseHeaderRows()
 {
-    rtl::OUString sName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_HEADER_ROWS));
-    GetDocHandler()->ignorableWhitespace(sWS);
-    GetDocHandler()->endElement(sName);
+    EndElement(XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, sal_True);
 }
 
 void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
@@ -1153,9 +1140,7 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
 {
     if (nOpenRow > -1)
     {
-        rtl::OUString sName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_ROW));
-        GetDocHandler()->ignorableWhitespace(sWS);
-        GetDocHandler()->endElement(sName);
+        EndElement(XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True);
         if (bHasRowHeader && nRow == aRowHeaderRange.EndRow)
         {
             CloseHeaderRows();

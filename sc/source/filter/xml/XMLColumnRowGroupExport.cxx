@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,7 @@ void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 {
     if (!rGroup.bDisplay)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
-    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->startElement( rName, rExport.GetXAttrList());
-    rExport.ClearAttrList();
+    rExport.StartElement( rName, sal_True);
 }
 
 void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
@@ -176,8 +174,7 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 
 void ScMyOpenCloseColumnRowGroup::CloseGroup()
 {
-    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->endElement( rName );
+    rExport.EndElement( rName, sal_True );
 }
 
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
