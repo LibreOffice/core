@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:34:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,11 @@ namespace dbaui
                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                        sal_Bool bIsAutoIncrement) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
+            const ::rtl::OUString& _rDataSourceName,
+            void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
+        );
 
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
