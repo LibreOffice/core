@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-28 11:28:39 $
+ *  last change: $Author: hro $ $Date: 2001-03-30 12:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #endif
+
+#include <rtl/string.hxx>
+#include <osl/thread.h>
 
 #ifndef _FILRSET_HXX_
 #include "filrset.hxx"
@@ -2625,45 +2628,41 @@ shell::remove( sal_Int32 CommandId,
 
 
 
-sal_Bool SAL_CALL
-shell::ensuredir( const rtl::OUString& rUnqPath )
+sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
 {
-    rtl::OUString aUnqPath;
+    rtl::OUString aPath;
+
+    if ( rUnqPath.getLength() < 1 )
+        return sal_False;
+
     if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-        aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
+        aPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
     else
-        aUnqPath = rUnqPath;
+        aPath = rUnqPath;
 
-    sal_Int32 nPos = 3; // start after "//./"
-    while ( nPos != - 1 )
+
+    osl::FileBase::RC   nError = osl::Directory::create( aPath );
+    sal_Bool            bSuccess = (nError == osl::File::E_None || nError == osl::FileBase::E_EXIST);
+
+    if ( !bSuccess)
     {
-        nPos = aUnqPath.indexOf( '/', nPos + 1 );
+        rtl::OUString   aParentDir = getParentName( aPath );
 
-        rtl::OUString aPath = ( nPos == -1 )
-                            ? aUnqPath
-                            : aUnqPath.copy( 0, nPos );
-
-        osl::FileBase::RC nError = osl::Directory::create( aPath );
-
-        if ( nError == osl::FileBase::E_None )
+        if ( aParentDir != aPath )
         {
-            // created.
-            rtl::OUString aPrtPath = getParentName( aPath );
-            notifyInsert( getContentEventListeners( aPrtPath ),aPath );
-        }
-        else if ( nError != osl::FileBase::E_EXIST )
-        {
-            // Workaround for drives.
-            if ( ( nError == osl::FileBase::E_ACCES ) &&
-                 ( aPath.getLength() == 6 ) &&
-                 ( aPath[ aPath.getLength() - 1 ] == sal_Unicode( ':' ) ) )
-                continue;
+            bSuccess = ensuredir( getParentName( aPath ) );
 
-            return false;
+            // After parent directory structure exists try it one's more
+
+            if ( bSuccess )
+            {
+                nError = osl::Directory::create( aPath );
+                bSuccess = (nError == osl::File::E_None || nError == osl::FileBase::E_EXIST);
+            }
         }
     }
 
-    return true;
+    return bSuccess;
 }
 
 
@@ -3163,9 +3162,9 @@ shell::getParentName( const rtl::OUString& aFileName )
 
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
         aParent += rtl::OUString::createFromAscii( "/" );
+
     if( 0 == aParent.compareToAscii( "//." ) )
         aParent = rtl::OUString::createFromAscii( "//./" );
-
 
     return aParent;
 }
