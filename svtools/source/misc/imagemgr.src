@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-11 10:01:12 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ String STR_DESCRIPTION_SOURCEFILE
     Text[ turkish ] = "Kaynak kod";
     Text[ finnish ] = "L�hdekoodi";
     Text[ catalan ] = "Source Code";
+    Text[ thai ] = "Source code";
 };
 String STR_DESCRIPTION_BOOKMARKFILE
 {
@@ -247,6 +248,7 @@ String STR_DESCRIPTION_BOOKMARKFILE
     Text[ turkish ] = "Yer i�areti dosyas�";
     Text[ finnish ] = "Kirjanmerkkitiedosto";
     Text[ catalan ] = "Bookmark file";
+    Text[ thai ] = "แฟ้มที่คั่น";
 };
 String STR_DESCRIPTION_GRAPHIC_DOC
 {
@@ -274,6 +276,7 @@ String STR_DESCRIPTION_GRAPHIC_DOC
     Text[ turkish ] = "Grafik";
     Text[ finnish ] = "Kuvat";
     Text[ catalan ] = "Graphic";
+    Text[ thai ] = "กราฟิค";
 };
 String STR_DESCRIPTION_CFGFILE
 {
@@ -301,6 +304,7 @@ String STR_DESCRIPTION_CFGFILE
     Text[ turkish ] = "Konfig�rasyon dosyas�";
     Text[ finnish ] = "Kokoonpanotiedosto";
     Text[ catalan ] = "Configuration file";
+    Text[ thai ] = "แฟ้มกำหนดค่า";
 };
 String STR_DESCRIPTION_APPLICATION
 {
@@ -328,6 +332,7 @@ String STR_DESCRIPTION_APPLICATION
     Text[ turkish ] = "Uygulama";
     Text[ finnish ] = "Sovellus";
     Text[ catalan ] = "Application";
+    Text[ thai ] = "โปรแกรมประยุกต์";
 };
 String STR_DESCRIPTION_DATABASE_TABLE
 {
@@ -355,6 +360,7 @@ String STR_DESCRIPTION_DATABASE_TABLE
     Text[ turkish ] = "Veritaban� tablosu";
     Text[ finnish ] = "Tietokantataulukko";
     Text[ catalan ] = "Database Table";
+    Text[ thai ] = "ตารางฐานข้อมูล";
 };
 String STR_DESCRIPTION_SYSFILE
 {
@@ -382,6 +388,7 @@ String STR_DESCRIPTION_SYSFILE
     Text[ turkish ] = "Sistem dosyas�";
     Text[ finnish ] = "J�rjestelm�tiedosto";
     Text[ catalan ] = "System file";
+    Text[ thai ] = "แฟ้มระบบ";
 };
 String STR_DESCRIPTION_WORD_DOC
 {
@@ -409,6 +416,7 @@ String STR_DESCRIPTION_WORD_DOC
     Text[ turkish ] = "MS Word belgesi";
     Text[ finnish ] = "MS Word -asiakirja";
     Text[ catalan ] = "MS Word Document";
+    Text[ thai ] = "เอกสาร MS Word ";
 };
 String STR_DESCRIPTION_HELP_DOC
 {
@@ -436,6 +444,7 @@ String STR_DESCRIPTION_HELP_DOC
     Text[ turkish ] = "Yard�m dosyas�";
     Text[ finnish ] = "Ohjetiedosto";
     Text[ catalan ] = "Help file";
+    Text[ thai ] = "แฟ้มช่วยเหลือ";
 };
 String STR_DESCRIPTION_HTMLFILE
 {
@@ -463,6 +472,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text[ turkish ] = "Internet belgesi";
     Text[ finnish ] = "Internet-asiakirja";
     Text[ catalan ] = "Internet Document";
+    Text[ thai ] = "เอกสารอินเตอร์เน็ต";
 };
 String STR_DESCRIPTION_ARCHIVFILE
 {
@@ -490,6 +500,7 @@ String STR_DESCRIPTION_ARCHIVFILE
     Text[ turkish ] = "Ar�iv dosyas�";
     Text[ finnish ] = "Arkistotiedosto";
     Text[ catalan ] = "Archive file";
+    Text[ thai ] = "แฟ้มเก็บถาวร";
 };
 String STR_DESCRIPTION_LOGFILE
 {
@@ -517,6 +528,7 @@ String STR_DESCRIPTION_LOGFILE
     Text[ turkish ] = "Protokol dosyas�";
     Text[ finnish ] = "Lokitiedosto";
     Text[ catalan ] = "Log file";
+    Text[ thai ] = "แฟ้ม Log ";
 };
 String STR_DESCRIPTION_SMATH_DOC
 {
@@ -544,6 +556,7 @@ String STR_DESCRIPTION_SMATH_DOC
     Text[ turkish ] = "%PRODUCTNAME formul�";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME kaava";
     Text[ catalan ] = "%PRODUCTNAME Formula";
+    Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SCHART_DOC
 {
@@ -571,6 +584,7 @@ String STR_DESCRIPTION_SCHART_DOC
     Text[ turkish ] = "%PRODUCTNAME �emas�";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME kaavio";
     Text[ catalan ] = "%PRODUCTNAME Chart";
+    Text[ thai ] = "แผนภูมิ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SDRAW_DOC
 {
@@ -598,6 +612,7 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text[ turkish ] = "%PRODUCTNAME �izimi";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME piirros";
     Text[ catalan ] = "Drawing (%PRODUCTNAME)";
+    Text[ thai ] = "วาดรูป %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SCALC_DOC
 {
@@ -625,6 +640,7 @@ String STR_DESCRIPTION_SCALC_DOC
     Text[ turkish ] = "%PRODUCTNAME tablosu";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME laskentataulukko";
     Text[ catalan ] = "Spreadsheet (%PRODUCTNAME)";
+    Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SIMPRESS_DOC
 {
@@ -648,10 +664,11 @@ String STR_DESCRIPTION_SIMPRESS_DOC
     Text[ dutch ] = "%PRODUCTNAME presentatie";
     Text[ chinese_simplified ] = "%PRODUCTNAME 演示文稿";
     Text[ greek ] = "���������� (%PRODUCTNAME)";
-    Text[ korean ] = "%PRODUCTNAME 프레젠테이션";
+    Text[ korean ] = "%PRODUCTNAME 프리젠테이션";
     Text[ turkish ] = "%PRODUCTNAME sunusu";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME esitys";
     Text[ catalan ] = "Presentation (%PRODUCTNAME)";
+    Text[ thai ] = "การนำเสนอ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SWRITER_DOC
 {
@@ -679,6 +696,7 @@ String STR_DESCRIPTION_SWRITER_DOC
     Text[ turkish ] = "%PRODUCTNAME metin";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME teksti";
     Text[ catalan ] = "Text (%PRODUCTNAME)";
+    Text[ thai ] = "ข้อความ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_GLOBALDOC
 {
@@ -706,6 +724,7 @@ String STR_DESCRIPTION_GLOBALDOC
     Text[ turkish ] = "%PRODUCTNAME Metin ana belgesi";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME tekstip��asiakirja";
     Text[ catalan ] = "%PRODUCTNAME Text Master Document";
+    Text[ thai ] = "เอกสารข้อความต้นฉบับ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_SIMAGE_DOC
 {
@@ -733,6 +752,7 @@ String STR_DESCRIPTION_SIMAGE_DOC
     Text[ turkish ] = "%PRODUCTNAME resmi";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME kuva";
     Text[ catalan ] = "Picture (%PRODUCTNAME)";
+    Text[ thai ] = "ภาพ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_TEXTFILE
 {
@@ -760,6 +780,7 @@ String STR_DESCRIPTION_TEXTFILE
     Text[ turkish ] = "Metin dosyas�";
     Text[ finnish ] = "Tekstitiedosto";
     Text[ catalan ] = "Text file";
+    Text[ thai ] = "แฟ้มข้อความ";
 };
 String STR_DESCRIPTION_LINK
 {
@@ -787,6 +808,7 @@ String STR_DESCRIPTION_LINK
     Text[ turkish ] = "Ba�lant�";
     Text[ finnish ] = "Linkki";
     Text[ catalan ] = "Link";
+    Text[ thai ] = "เชื่อมโยง";
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
 {
@@ -814,6 +836,7 @@ String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
     Text[ turkish ] = "%PRODUCTNAME �ablonu";
     Text[ finnish ] = " Ohjelman %PRODUCTNAME mallipohja";
     Text[ catalan ] = "%PRODUCTNAME Template";
+    Text[ thai ] = "แม่แบบ %PRODUCTNAME ";
 };
 String STR_DESCRIPTION_EXCEL_DOC
 {
@@ -841,6 +864,7 @@ String STR_DESCRIPTION_EXCEL_DOC
     Text[ turkish ] = "MS Excel belgesi";
     Text[ finnish ] = "MS Excel -asiakirja";
     Text[ catalan ] = "MS Excel Document";
+    Text[ thai ] = "เอกสาร MS Excel ";
 };
 String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
 {
@@ -868,6 +892,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text[ turkish ] = "MS Excel �ablonu";
     Text[ finnish ] = "MS Excel -mallipohja";
     Text[ catalan ] = "MS Excel Template";
+    Text[ thai ] = "แม่แบบ MS Excel ";
 };
 String STR_DESCRIPTION_BATCHFILE
 {
@@ -895,6 +920,7 @@ String STR_DESCRIPTION_BATCHFILE
     Text[ turkish ] = "Toplu i� dosyas�";
     Text[ finnish ] = "Er�ajotiedosto";
     Text[ catalan ] = "Batch file";
+    Text[ thai ] = "แฟ้มแบบกลุ่ม";
 };
 String STR_DESCRIPTION_FILE
 {
@@ -922,6 +948,7 @@ String STR_DESCRIPTION_FILE
     Text[ turkish ] = "Dosya";
     Text[ finnish ] = "Tiedosto";
     Text[ catalan ] = "File";
+    Text[ thai ] = "แฟ้ม";
 };
 String STR_DESCRIPTION_FOLDER
 {
@@ -949,6 +976,7 @@ String STR_DESCRIPTION_FOLDER
     Text[ turkish ] = "Klas�r";
     Text[ finnish ] = "Kansio";
     Text[ catalan ] = "Folder";
+    Text[ thai ] = "โฟลเดอร์";
 };
 String STR_DESCRIPTION_FACTORY_WRITER
 {
@@ -974,6 +1002,7 @@ String STR_DESCRIPTION_FACTORY_WRITER
     Text[ arabic ] = "����� ��";
     Text[ catalan ] = "Documento de texto";
     Text[ finnish ] = "Tekstiasiakirja";
+    Text[ thai ] = "เอกสารข้อความ";
 };
 String STR_DESCRIPTION_FACTORY_CALC
 {
@@ -999,6 +1028,7 @@ String STR_DESCRIPTION_FACTORY_CALC
     Text[ arabic ] = "����� ����";
     Text[ catalan ] = "Hoja de c�lculo";
     Text[ finnish ] = "Laskentataulukko";
+    Text[ thai ] = "กระดาษคำนวณ";
 };
 String STR_DESCRIPTION_FACTORY_IMPRESS
 {
@@ -1017,13 +1047,14 @@ String STR_DESCRIPTION_FACTORY_IMPRESS
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "Presentation";
     Text[ japanese ] = "プレゼンテーション";
-    Text[ korean ] = "프레젠테이션";
+    Text[ korean ] = "프리젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報";
     Text[ turkish ] = "Sunu";
     Text[ arabic ] = "��� ������";
     Text[ catalan ] = "Presentaci�n";
     Text[ finnish ] = "Esitys";
+    Text[ thai ] = "การนำเสนอ";
 };
 String STR_DESCRIPTION_FACTORY_DRAW
 {
@@ -1049,6 +1080,7 @@ String STR_DESCRIPTION_FACTORY_DRAW
     Text[ arabic ] = "����";
     Text[ catalan ] = "Dibujo";
     Text[ finnish ] = "Piirros";
+    Text[ thai ] = "วาดรูป";
 };
 String STR_DESCRIPTION_FACTORY_WRITERWEB
 {
@@ -1074,6 +1106,7 @@ String STR_DESCRIPTION_FACTORY_WRITERWEB
     Text[ arabic ] = "�����HTML ";
     Text[ catalan ] = "Documento HTML";
     Text[ finnish ] = "HTML-asiakirja";
+    Text[ thai ] = "เอกสาร HTML ";
 };
 String STR_DESCRIPTION_FACTORY_GLOBALDOC
 {
@@ -1099,6 +1132,7 @@ String STR_DESCRIPTION_FACTORY_GLOBALDOC
     Text[ arabic ] = "����� ����";
     Text[ catalan ] = "Documento maestro";
     Text[ finnish ] = "P��asiakirja";
+    Text[ thai ] = "เอกสารต้นฉบับ";
 };
 String STR_DESCRIPTION_FACTORY_MATH
 {
@@ -1123,6 +1157,7 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ turkish ] = "Formula";
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
+    Text[ thai ] = "สูตรคำนวณ";
 };
 String STR_DESCRIPTION_CALC_TEMPLATE
 {
@@ -1147,6 +1182,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ turkish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ thai ] = "%PRODUCTNAME 6.0 Spreadsheet Template";
 };
 String STR_DESCRIPTION_DRAW_TEMPLATE
 {
@@ -1171,6 +1207,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ turkish ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ thai ] = "%PRODUCTNAME 6.0 Drawing Template";
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
@@ -1189,12 +1226,13 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ japanese ] = "%PRODUCTNAME 6.0 プレゼンテーション テンプレート";
-    Text[ korean ] = "%PRODUCTNAME 6.0 프레젠테이션 템플릿";
+    Text[ korean ] = "%PRODUCTNAME 6.0 프리젠테이션 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 演示文稿样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 簡報樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ thai ] = "%PRODUCTNAME 6.0 Presentation Template";
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
 {
@@ -1219,6 +1257,7 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ turkish ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ thai ] = "%PRODUCTNAME 6.0 Text Document Template";
 };
 String STR_DESCRIPTION_LOCALE_VOLUME
 {
@@ -1243,6 +1282,7 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ turkish ] = "Local drive";
     Text[ arabic ] = "Local drive";
     Text[ catalan ] = "Local drive";
+    Text[ thai ] = "Local drive";
 };
 String STR_DESCRIPTION_FLOPPY_VOLUME
 {
@@ -1267,6 +1307,7 @@ String STR_DESCRIPTION_FLOPPY_VOLUME
     Text[ turkish ] = "Floppy disk";
     Text[ arabic ] = "Floppy disk";
     Text[ catalan ] = "Floppy disk";
+    Text[ thai ] = "Disk drive";
 };
 String STR_DESCRIPTION_CDROM_VOLUME
 {
@@ -1291,6 +1332,7 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ turkish ] = "CD-ROM drive";
     Text[ arabic ] = "CD-ROM drive";
     Text[ catalan ] = "CD-ROM drive";
+    Text[ thai ] = "CD-ROM drive";
 };
 String STR_DESCRIPTION_REMOTE_VOLUME
 {
@@ -1315,6 +1357,7 @@ String STR_DESCRIPTION_REMOTE_VOLUME
     Text[ turkish ] = "Network connection";
     Text[ arabic ] = "Network connection";
     Text[ catalan ] = "Network connection";
+    Text[ thai ] = "Network connection";
 };
 String STR_DESCRIPTION_POWERPOINT
 {
@@ -1340,6 +1383,7 @@ String STR_DESCRIPTION_POWERPOINT
     Text[ turkish ] = "MS PowerPoint Document";
     Text[ arabic ] = "MS PowerPoint Document";
     Text[ catalan ] = "MS PowerPoint Document";
+    Text[ thai ] = "MS PowerPoint Document";
 };
 
 String STR_DESCRIPTION_POWERPOINT_TEMPLATE
@@ -1366,6 +1410,7 @@ String STR_DESCRIPTION_POWERPOINT_TEMPLATE
     Text[ turkish ] = "MS PowerPoint Template";
     Text[ arabic ] = "MS PowerPoint Template";
     Text[ catalan ] = "MS PowerPoint Template";
+    Text[ thai ] = "MS PowerPoint Template";
 };
 
 String STR_DESCRIPTION_POWERPOINT_SHOW
@@ -1392,6 +1437,7 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ turkish ] = "MS PowerPoint Show";
     Text[ arabic ] = "MS PowerPoint Show";
     Text[ catalan ] = "MS PowerPoint Show";
+    Text[ thai ] = "MS PowerPoint Show";
 };
 
 
