@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 16:46:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,14 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
 
-SvXMLAutoCorrectExport::SvXMLAutoCorrectExport( const SvxAutocorrWordList *  pNewAutocorr_List, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-: pAutocorr_List ( pNewAutocorr_List),
-  SvXMLExport(rFileName, rHandler)
+// #110680#
+SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const SvxAutocorrWordList *  pNewAutocorr_List,
+    const rtl::OUString &rFileName,
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    pAutocorr_List( pNewAutocorr_List )
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
@@ -111,10 +115,14 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum eClass)
     return 0;
 }
 
-SvXMLExceptionListExport::SvXMLExceptionListExport( const SvStringsISortDtor &rNewList, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-: rList ( rNewList),
-  SvXMLExport(rFileName, rHandler)
+// #110680#
+SvXMLExceptionListExport::SvXMLExceptionListExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const SvStringsISortDtor &rNewList,
+    const rtl::OUString &rFileName,
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    rList( rNewList )
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
