@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:10:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void GraphCtrl::InitSdrModel()
     pPage->SetSize( aGraphSize );
     pPage->SetBorder( 0, 0, 0, 0 );
     pModel->InsertPage( pPage );
-    pModel->SetChanged( FALSE );
+    pModel->SetChanged( sal_False );
 
     // View anlegen
     pView = new GraphCtrlView( pModel, this );
