@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:04:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5938,7 +5938,7 @@ void Window::SetParent( Window* pNewParent )
 
     // Testen, ob sich das Overlap-Window aendert
     Window* pOldOverlapWindow;
-    Window* pNewOverlapWindow;
+    Window* pNewOverlapWindow = NULL;
     if ( ImplIsOverlapWindow() )
         pOldOverlapWindow = NULL;
     else
@@ -8721,7 +8721,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     else
         SetLineColor();
 
-    USHORT nPercent;
+    USHORT nPercent = 0;
     if( !highlight )
     {
         if( bDark )
