@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:44:25 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 10:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void ODbaseTable::construct()
     INetURLObject aURL;
     aURL.SetURL(sFileName);
 
-    OSL_ENSURE(aURL.getExtension() == m_pConnection->getExtension(),
+    OSL_ENSURE( m_pConnection->matchesExtension( aURL.getExtension() ),
         "ODbaseTable::ODbaseTable: invalid extension!");
         // getEntry is expected to ensure the corect file name
 
@@ -497,7 +497,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _s
             sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
 
             // name and extension have to coincide
-            if ((sName == _sName) && (sExt == sNeededExt))
+            if ( ( sName == _sName ) && ( _pConnection->matchesExtension( sExt ) ) )
             {
                 Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
                 aURL = xContentAccess->queryContentIdentifierString();
@@ -825,7 +825,7 @@ BOOL ODbaseTable::CreateImpl()
     }
     aURL.SetURL(aName);
 
-    if(aURL.getExtension() != m_pConnection->getExtension())
+    if ( !m_pConnection->matchesExtension( aURL.getExtension() ) )
         aURL.setExtension(m_pConnection->getExtension());
 
     Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
@@ -1788,7 +1788,7 @@ void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::
     INetURLObject aURL;
     aURL.SetURL(aName);
 
-    if(aURL.getExtension() != m_pConnection->getExtension())
+    if ( !m_pConnection->matchesExtension( aURL.getExtension() ) )
         aURL.setExtension(m_pConnection->getExtension());
     String sNewName(newName);
     sNewName.AppendAscii(".");
