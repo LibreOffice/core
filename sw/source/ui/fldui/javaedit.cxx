@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:54:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,15 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
 #endif
 
 #ifndef _WRTSH_HXX
@@ -317,7 +326,15 @@ void SwJavaEditDialog::SetFld()
     {
         aText = aUrlED.GetText();
         if(aText.Len())
-            aText = URIHelper::SmartRelToAbs(aText);
+        {
+            SfxMedium* pMedium = pSh->GetView().GetDocShell()->GetMedium();
+            INetURLObject aAbs;
+            if( pMedium )
+                aAbs = pMedium->GetURLObject();
+
+            aText = URIHelper::SmartRel2Abs(
+                aAbs, aText, URIHelper::GetMaybeFileHdl());
+        }
     }
     else
         aText = aEditED.GetText();
