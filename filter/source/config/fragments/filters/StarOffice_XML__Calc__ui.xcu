@@ -1,0 +1,7 @@
+    <node oor:name="StarOffice XML (Calc)" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">StarOffice 6.0/7 Spreadsheet</value>
+            <value xml:lang="de">StarOffice 6.0/7 Tabellendokument</value>
+            <value xml:lang="x-translate">StarOffice 6.0/7 Spreadsheet</value>
+        </prop>
+    </node>
