@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-10 16:12:49 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 14:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ service MediaDescriptor
         a "template" type.
         </p>
      */
-    [property] boolean AsTemplate;
+    [optional,property] boolean AsTemplate;
 
     //-------------------------------------------------------------------------
     /** the author of the document
@@ -131,7 +131,7 @@ service MediaDescriptor
         author of version.
         </p>
      */
-    [property] string Author;
+    [optional,property] string Author;
 
     //-------------------------------------------------------------------------
     /** identifier of used character set
@@ -141,7 +141,7 @@ service MediaDescriptor
         byte characters (if necessary).
         </p>
      */
-    [property] string CharacterSet;
+    [optional,property] string CharacterSet;
 
     //-------------------------------------------------------------------------
     /** description of document
@@ -151,7 +151,7 @@ service MediaDescriptor
         comment (description) for stored version.
         </p>
      */
-    [property] string Comment;
+    [optional,property] string Comment;
 
     //-------------------------------------------------------------------------
     /** pack specific properties of caller
@@ -162,7 +162,7 @@ service MediaDescriptor
         type of adressed component.
         </p>
      */
-    [property] any ComponentData;
+    [optional,property] any ComponentData;
 
     //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::URL</member>
@@ -173,7 +173,7 @@ service MediaDescriptor
 
         @deprecated
      */
-    [property] string FileName;
+    [optional,property] string FileName;
 
     //-------------------------------------------------------------------------
     /** internal filter name
@@ -186,7 +186,7 @@ service MediaDescriptor
         it will be preferred.
         </p>
      */
-    [property] string FilterName;
+    [optional,property] string FilterName;
 
     //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::FilterOptions</member>
@@ -197,7 +197,7 @@ service MediaDescriptor
 
         @deprecated
      */
-    [property] string FilterFlags;
+    [optional,property] string FilterFlags;
 
     //-------------------------------------------------------------------------
     /** additional properties for filter
@@ -209,7 +209,7 @@ service MediaDescriptor
         enough, filters can use the property <member>MediaDescriptor::FilterData</member>.
         </p>
      */
-    [property] string FilterOptions;
+    [optional,property] string FilterOptions;
 
         //-------------------------------------------------------------------------
     /** additional properties for filter
@@ -220,7 +220,7 @@ service MediaDescriptor
         <member>MediaDescriptor::FilterOptions</member> isn't enough.
         </p>
      */
-    [property] any FilterData;
+    [optional,property] any FilterData;
 
     //-------------------------------------------------------------------------
     /** load document invisible
@@ -230,7 +230,7 @@ service MediaDescriptor
         specified, the component is made visible by default.
         </p>
      */
-    [property] boolean Hidden;
+    [optional,property] boolean Hidden;
 
     //-------------------------------------------------------------------------
     /** content of document
@@ -259,7 +259,7 @@ service MediaDescriptor
         or stored components' copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */
-    [property] com::sun::star::task::XInteractionHandler InteractionHandler;
+    [optional,property] com::sun::star::task::XInteractionHandler InteractionHandler;
 
     //-------------------------------------------------------------------------
     /** jump to a marked position after loading
@@ -269,7 +269,7 @@ service MediaDescriptor
         this syntax with a '#' is not specified in most URL schemas.
         </p>
      */
-    [property] string JumpMark;
+    [optional,property] string JumpMark;
 
     //-------------------------------------------------------------------------
     /** specify mime type of content
@@ -281,7 +281,7 @@ service MediaDescriptor
         so passing a wrong MediaType will cause failure of loading.
         </p>
      */
-    [property] string MediaType;
+    [optional,property] string MediaType;
 
     //-------------------------------------------------------------------------
     /** please use the corresponding parameters of this descriptor instead
@@ -320,7 +320,7 @@ service MediaDescriptor
 
         @deprecated
      */
-    [property] string OpenFlags;
+    [optional,property] string OpenFlags;
 
     //-------------------------------------------------------------------------
     /** opens a new view for an already loaded document
@@ -332,7 +332,7 @@ service MediaDescriptor
         depends on the default window handling of the <type scope="com::sun::star::frame">Desktop</type> environment.
         </p>
      */
-    [property] boolean OpenNewView;
+    [optional,property] boolean OpenNewView;
 
 
     //-------------------------------------------------------------------------
@@ -343,7 +343,7 @@ service MediaDescriptor
         so an error occurs if the target file already exists.
         </p>
      */
-    [property] boolean Overwrite;
+    [optional,property] boolean Overwrite;
 
     //-------------------------------------------------------------------------
     /** pasword for loading storing documents
@@ -354,7 +354,7 @@ service MediaDescriptor
         will fail, storing will be done without encryption.
         </p>
      */
-    [property] string Password;
+    [optional,property] string Password;
 
     //-------------------------------------------------------------------------
     /** contains the data for HTTP post method as a sequence of bytes.
@@ -365,7 +365,7 @@ service MediaDescriptor
         (usually in webforms). Default is: no PostData.
         </p>
      */
-    [property] sequence< byte > PostData;
+    [optional,property] sequence< byte > PostData;
 
     //-------------------------------------------------------------------------
     /** use <member>MediaDescriptor::PostData</member> instead of this
@@ -377,7 +377,7 @@ service MediaDescriptor
 
         @deprecated
      */
-    [property] string PostString;
+    [optional,property] string PostString;
 
     //-------------------------------------------------------------------------
     /** show preview
@@ -388,7 +388,7 @@ service MediaDescriptor
         Default is <FALSE/>.
         </p>
      */
-    [property] boolean Preview;
+    [optional,property] boolean Preview;
 
     //-------------------------------------------------------------------------
     /** open document readonly
@@ -404,7 +404,7 @@ service MediaDescriptor
         be disabled or removed.
         </p>
      */
-    [property] boolean ReadOnly;
+    [optional,property] boolean ReadOnly;
 
     //-------------------------------------------------------------------------
     /** name of document referrer
@@ -419,7 +419,7 @@ service MediaDescriptor
         Don't be confused about the wrong spelling; is kept for compatibility reasons.
         </p>
      */
-    [property] string Referer;
+    [optional,property] string Referer;
 
     //-------------------------------------------------------------------------
     /** can be used for status informations
@@ -432,7 +432,7 @@ service MediaDescriptor
         copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */
-    [property] com::sun::star::task::XStatusIndicator StatusIndicator;
+    [optional,property] com::sun::star::task::XStatusIndicator StatusIndicator;
 
     //-------------------------------------------------------------------------
     /** name of the template instead of the URL
@@ -443,7 +443,7 @@ service MediaDescriptor
         <member>MediaDescriptor::TemplateRegionName</member>.
         </p>
      */
-    [property] string TemplateName;
+    [optional,property] string TemplateName;
 
     //-------------------------------------------------------------------------
     /** name of the template instead of the URL
@@ -454,7 +454,7 @@ service MediaDescriptor
         <member>MediaDescriptor::TemplateRegionName</member>.
         </p>
      */
-    [property] string TemplateRegionName;
+    [optional,property] string TemplateRegionName;
 
     //-------------------------------------------------------------------------
     /** regulate using of compressing
@@ -465,7 +465,7 @@ service MediaDescriptor
         support folders). Default is <FALSE/>.
         </p>
      */
-    [property] boolean Unpacked;
+    [optional,property] boolean Unpacked;
 
     //-------------------------------------------------------------------------
     /** URL of the document
@@ -475,7 +475,7 @@ service MediaDescriptor
         must include f.e. an optional <member>MediaDescriptor::JumpMark</member> too.
         </p>
      */
-    [property] string URL;
+    [optional,property] string URL;
 
     //-------------------------------------------------------------------------
     /** storage version
@@ -486,7 +486,7 @@ service MediaDescriptor
         loaded, the "main" document is processed.
         </p>
      */
-    [property] short Version;
+    [optional,property] short Version;
 
     //-------------------------------------------------------------------------
     /** set special view state
@@ -497,7 +497,7 @@ service MediaDescriptor
         interface. Default is: no view data.
         </p>
      */
-    [property] any ViewData;
+    [optional,property] any ViewData;
 
     //-------------------------------------------------------------------------
     /** id of the initial view
@@ -508,21 +508,21 @@ service MediaDescriptor
         should be treated by the component as the default view.
         </p>
      */
-    [property] short ViewId;
+    [optional,property] short ViewId;
 
     //-------------------------------------------------------------------------
     /** should the macro be executed.
         the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
         constant list
      */
-    [property] short MacroExecutionMode;
+    [optional,property] short MacroExecutionMode;
 
     //-------------------------------------------------------------------------
     /** can the document be updated depending from links.
         the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
         constant list
      */
-    [property] short UpdateDocMode;
+    [optional,property] short UpdateDocMode;
 };
 
 //=============================================================================
