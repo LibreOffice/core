@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:50:14 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,23 +309,29 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
 
                 // Resource name must be without ".xml"
                 sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
-                OUString aUIElementName;
-                if ( nIndex > 0 )
-                    aUIElementName = aUIElementNames[n].copy( 0, nIndex );
-
-                aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
-                aUIElementData.aName        = aUIElementNames[n];
-
-                if ( eLayer == LAYER_USERDEFINED )
+                if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
                 {
-                    aUIElementData.bModified    = false;
-                    aUIElementData.bDefault     = false;
-                    aUIElementData.bDefaultNode = false;
-                }
+                    OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
+                    OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-                // Create hash_map entries for all user interface elements inside the storage. We don't load the
-                // settings to speed up the process.
-                rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                    if (( aUIElementName.getLength() > 0 ) &&
+                        ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
+                    {
+                        aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
+                        aUIElementData.aName        = aUIElementNames[n];
+
+                        if ( eLayer == LAYER_USERDEFINED )
+                        {
+                            aUIElementData.bModified    = false;
+                            aUIElementData.bDefault     = false;
+                            aUIElementData.bDefaultNode = false;
+                        }
+
+                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // settings to speed up the process.
+                        rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                    }
+                }
             }
         }
     }
