@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:23:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,20 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Text[ chinese_traditional ] = "驗證(~V)";
         Text[ slovak ] = "Pot~vrdiť";
         Text[ portuguese_brazilian ] = "~Validar";
+        Text[ greek ] = "~Validate";
+        Text[ dutch ] = "~Validate";
+        Text[ finnish ] = "~Validate";
+        Text[ czech ] = "Validovat";
+        Text[ danish ] = "~Validate";
+        Text[ arabic ] = "~Validate";
+        Text[ hebrew ] = "~Validate";
+        Text[ catalan ] = "~Validate";
+        Text[ hindi ] = "~Validate";
+        Text[ portuguese ] = "~Validate";
+        Text[ russian ] = "~Validate";
+        Text[ polish ] = "~Validate";
+        Text[ turkish ] = "~Validate";
+        Text[ thai ] = "~Validate";
     };
     Text[ french ] = "Sortie filtre XML";
     Text[ spanish ] = "Salida filtro XML";
@@ -108,7 +122,23 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
     Text[ chinese_traditional ] = "XML 篩選器匯出";
     Text[ slovak ] = "XML Filter výstup";
     Text[ portuguese_brazilian ] = "Sa�da do filtro XML";
+    Text[ greek ] = "XML Filter output";
+    Text[ dutch ] = "XML Filter output";
+    Text[ finnish ] = "XML Filter output";
+    Text[ czech ] = "Výstup XML filtru";
+    Text[ danish ] = "XML Filter output";
+    Text[ arabic ] = "XML Filter output";
+    Text[ hebrew ] = "XML Filter output";
+    Text[ catalan ] = "XML Filter output";
+    Text[ hindi ] = "XML Filter output";
+    Text[ portuguese ] = "XML Filter output";
+    Text[ russian ] = "XML Filter output";
+    Text[ polish ] = "XML Filter output";
+    Text[ turkish ] = "XML Filter output";
+    Text[ thai ] = "XML Filter output";
 };
+
+
 
 
 
