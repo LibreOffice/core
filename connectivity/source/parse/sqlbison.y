@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.21 2001-03-21 13:52:43 jl Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.22 2001-04-04 07:28:24 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: jl $ $Date: 2001-03-21 13:52:43 $ $Revision: 1.21 $
+//	$Author: oj $ $Date: 2001-04-04 07:28:24 $ $Revision: 1.22 $
 //
 // Description:
 //
@@ -2854,19 +2854,19 @@ column:
 		SQL_TOKEN_NAME
 	|	SQL_TOKEN_POSITION
 		{
-			sal_uInt16 nNod = $$->getRuleID();
+			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
 			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQL_NODE_NAME);
 		}
 	|	SQL_TOKEN_CHAR_LENGTH
 		{
-			sal_uInt16 nNod = $$->getRuleID();
+			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
 			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQL_NODE_NAME);
 		}
 	|	SQL_TOKEN_EXTRACT
 		{
-			sal_uInt16 nNod = $$->getRuleID();
+			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
 			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQL_NODE_NAME);
 		}
@@ -3083,10 +3083,10 @@ const Locale& OParseContext::getDefaultLocale()
 		// 74342 - 21.03.00 - FS
 
 		// TODO check the decimal sep and thousand sep
-//		if(!m_xLocaleData.is())
-//			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY); 
+//		if(!s_xLocaleData.is())
+//			s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY); 
 //
-//		m_xLocaleData->getLocaleItem(*m_pLocale).
+//		s_xLocaleData->getLocaleItem(*m_pLocale).
 //		aIntl.SetNumThousandSep(',');
 //		aIntl.SetNumDecimalSep('.');
 		bInitialized = sal_True;
@@ -3139,10 +3139,10 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 
 		// Platzhalter austauschen
 		aMatchStr = pTokenNode->getTokenValue();
-		sal_uInt16 nLen = aMatchStr.getLength();
+		sal_Int32 nLen = aMatchStr.getLength();
 		const sal_Char* sSearch  = bInternational ? "%_" : "*?";
 		const sal_Char* sReplace = bInternational ? "*?" : "%_";
-		for (sal_uInt16 i = 0; i < nLen; i++)
+		for (sal_Int32 i = 0; i < nLen; i++)
 		{
 			sal_Char c = aMatchStr.getStr()[i];
 			if (c == sSearch[0] || c == sSearch[1])
@@ -3152,7 +3152,7 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 				else
 				{
 					sal_Unicode cCharacter = sReplace[(c == sSearch[0]) ? 0 : 1];
-					aMatchStr.replaceAt(i , 1, ::rtl::OUString(&cCharacter, 1));
+					aMatchStr = aMatchStr.replaceAt(i , 1, ::rtl::OUString(&cCharacter, 1));
 				}
 			}
 		}
@@ -3171,7 +3171,7 @@ sal_Int32			OSQLParser::s_nRefCount	= 0;
 ::osl::Mutex		OSQLParser::s_aMutex;
 OSQLScanner*		OSQLParser::s_pScanner = 0;
 OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
-
+::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>		OSQLParser::s_xLocaleData = NULL;
 //-----------------------------------------------------------------------------
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext)
 		   :m_pContext(_pContext)
@@ -3198,8 +3198,8 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 		s_pScanner->setScanner();
 		s_pGarbageCollector = new OSQLParseNodes();
 
-		if(!m_xLocaleData.is())
-			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+		if(!s_xLocaleData.is())
+			s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
 
 		// auf 0 zuruecksetzen
 		memset(OSQLParser::s_nRuleIDs,0,sizeof(sal_uInt16) * OSQLParseNode::rule_count+1);
@@ -3225,8 +3225,9 @@ OSQLParser::~OSQLParser()
 
 			delete s_pGarbageCollector;
 			s_pGarbageCollector = NULL;
-		}
-		m_xLocaleData = NULL;
+			// is only set the first time so we should delete it only when there no more instances
+			s_xLocaleData = NULL;
+		}		
 	}
 }
 // -------------------------------------------------------------------------
@@ -3374,7 +3375,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 				s_pScanner->SetRule(s_pScanner->GetSTRINGRule());
 				break;
 			default:
-				if (m_pLocale && m_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',')
+				if (m_pLocale && s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',')
 					s_pScanner->SetRule(s_pScanner->GetGERRule());
 				else
 					s_pScanner->SetRule(s_pScanner->GetENGRule());
@@ -3670,7 +3671,7 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 	::rtl::OUString aValue;
 	if(!m_xCharClass.is())
 		m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification")),UNO_QUERY);
-	if(m_xCharClass.is() && m_xLocaleData.is())
+	if(m_xCharClass.is() && s_xLocaleData.is())
 	{
 		try
 		{
@@ -3681,7 +3682,7 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString::createFromAscii("."));
 				if((nPos+_nScale) < aValue.getLength())
 					aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,::rtl::OUString());
-				aValue.replaceAt(aValue.lastIndexOf(nPos),1,m_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator);
+				aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString::createFromAscii(".")),1,s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator);
 				return aValue;
 			}
 		}
@@ -3866,7 +3867,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 					default:
 					{
 						m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_VALUE_NO_LIKE);
-						m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
+						m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
 					}
 				}
 			}
@@ -4070,14 +4071,14 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 						case DataType::REAL:
 						case DataType::DOUBLE:
 							// kill thousand seperators if any
-							if (m_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
+							if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
 							{
-								pLiteral->m_aNodeValue.replace('.', sal_Unicode());
+								pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
 								// and replace decimal
-								pLiteral->m_aNodeValue.replace(',', '.');
+								pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
 							}
 							else
-								pLiteral->m_aNodeValue.replace(',', sal_Unicode());
+								pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
 							nErg = buildNode(pAppend,pLiteral,pCompare);
 							break;
 						case DataType::CHAR:
@@ -4099,14 +4100,14 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 							if (inPredicateCheck())
 							{
 								// kill thousand seperators if any
-								if (m_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
+								if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
 								{
-									pLiteral->m_aNodeValue.replace('.', sal_Unicode());
+									pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
 									// and replace decimal
-									pLiteral->m_aNodeValue.replace(',', '.');
+									pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
 								}
 								else
-									pLiteral->m_aNodeValue.replace(',', sal_Unicode());
+									pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
 							}
 							nErg = buildNode(pAppend,pLiteral,pCompare);
 							break;
