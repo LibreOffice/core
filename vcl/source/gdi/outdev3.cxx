@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: th $ $Date: 2001-02-27 15:38:01 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 13:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4585,6 +4585,15 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
             }
         }
     }
+#ifdef DBG_UTIL
+    for ( USHORT nL = 0; nL < rLineInfo.Count(); nL++ )
+    {
+        ImplTextLineInfo* pLine = rLineInfo.GetLine( nL );
+        String aLine( rStr, pLine->GetIndex(), pLine->GetLen() );
+        DBG_ASSERT( aLine.Search( _CR ) == STRING_NOTFOUND, "ImplGetTextLines - Found CR!" );
+        DBG_ASSERT( aLine.Search( _LF ) == STRING_NOTFOUND, "ImplGetTextLines - Found LF!" );
+    }
+#endif
 
     return nMaxLineWidth;
 }
