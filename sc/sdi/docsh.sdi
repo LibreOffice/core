@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:21:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ interface TableSelection : Selection
     FID_RESET_PRINTZOOM         [ ExecMethod = Execute; StateMethod = GetState; ]
     SbxObject Cells SID_SC_CELLS
     (
-        UINT16  Column      SID_SC_CELLS,
-        UINT16  Row         FN_PARAM_1
+        INT16   Column      SID_SC_CELLS,
+        INT32   Row         FN_PARAM_1
     )
     [
     ]
