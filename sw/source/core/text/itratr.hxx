@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:04:00 $
+ *  last change: $Author: hr $ $Date: 2000-12-11 16:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ private:
     MSHORT nChgCnt;
     BYTE nPropFont;
     void SeekFwd( const xub_StrLen nPos );
-    inline SetFnt( SwFont* pNew ) { pFnt = pNew; }
+    inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
 
 protected:
     void Chg( SwTxtAttr *pHt );
