@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
+ *  last change: $Author: sj $ $Date: 2002-05-14 09:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,6 +1243,37 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
         if ( !mXShapes.is() )
             break;
+
+        /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
+           taken the property from the master */
+        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
+        if ( bHasBackground )
+            bHasBackground = ( aAny >>= mXBackgroundPropSet );
+        if ( !bHasBackground )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPageTarget >
+                aXMasterPageTarget( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+            if ( aXMasterPageTarget.is() )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > aXMasterDrawPage;
+                aXMasterDrawPage = aXMasterPageTarget->getMasterPage();
+                if ( aXMasterDrawPage.is() )
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXMasterPagePropSet;
+                    aXMasterPagePropSet = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        ( aXMasterDrawPage, ::com::sun::star::uno::UNO_QUERY );
+                    if ( aXMasterPagePropSet.is() )
+                    {
+                        sal_Bool bHasBackground = GetPropertyValue( aAny, aXMasterPagePropSet,
+                                String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
+                        if ( bHasBackground )
+                        {
+                            aAny >>= mXBackgroundPropSet;
+                        }
+                    }
+                }
+            }
+        }
         return TRUE;
     }
     return FALSE;
@@ -1770,9 +1801,105 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     aAny >>= bIsDark;
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
             }
+
             nCharColor &= 0xffffff;
-            if ( nCharColor )                           // #97884# the fact that Ppt is displaying embossed text always using
-                nCharAttr &=~ 0x200;                    // a black color, we can't export this attribute for all other colors,
+
+            /* the portion is using the embossed or engraved attribute, which we want to map to the relief feature of PPT.
+            Because the relief feature of PPT is dependent to the background color, such a mapping can not always be used. */
+            if ( nCharAttr & 0x200 )
+            {
+                sal_uInt32 nBackgroundColor = 0xffffff;
+                sal_uInt32 nEmbossedCharColor = nCharColor;
+
+                if ( !nCharColor )          // special threatment for
+                    nCharColor = 0xffffff;  // black fontcolor
+
+                ::com::sun::star::uno::Any aAny;
+                ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
+                    aAny >>= aFS;
+                switch( aFS )
+                {
+                    case ::com::sun::star::drawing::FillStyle_GRADIENT :
+                    {
+                        Point aEmptyPoint = Point();
+                        Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                        EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                        aPropOpt.CreateGradientProperties( mXPropSet );
+                        aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
+                    }
+                    break;
+                    case ::com::sun::star::drawing::FillStyle_SOLID :
+                    {
+                        if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
+                            nBackgroundColor = mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) );
+                    }
+                    break;
+                    case ::com::sun::star::drawing::FillStyle_NONE :
+                    {
+                        ::com::sun::star::uno::Any aAny;
+                        ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
+                        if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
+                            aAny >>= aFS;
+                        switch( aFS )
+                        {
+                            case ::com::sun::star::drawing::FillStyle_GRADIENT :
+                            {
+                                Point aEmptyPoint = Point();
+                                Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                                EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                                aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
+                                aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
+                            }
+                            break;
+                            case ::com::sun::star::drawing::FillStyle_SOLID :
+                            {
+                                if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
+                                    nBackgroundColor = mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) );
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+
+                sal_Int32 nB = nBackgroundColor & 0xff;
+                nB += (sal_uInt8)( nBackgroundColor >> 8  );
+                nB += (sal_uInt8)( nBackgroundColor >> 16 );
+                // if the background color is nearly black, relief can't been used, because the text would not be visible
+                if ( nB < 0x60 || ( nBackgroundColor != nCharColor ) )
+                {
+                    nCharAttr &=~ 0x200;
+
+                    // now check if the text is part of a group, and if the previous object has the same color than the fontcolor
+                    // ( and if fillcolor is not available the background color ), it is sometimes
+                    // not possible to export the 'embossed' flag
+                    if ( GetCurrentGroupLevel() && ( mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos >= 2 ) )
+                    {
+                        sal_uInt32 nPreviousGroupIndex = mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos - 2;
+
+                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aGroupedShape;
+                        ::com::sun::star::uno::Any aAny( GetCurrentGroupAccess()->getByIndex( nPreviousGroupIndex ) );
+                        aAny >>= aGroupedShape;
+                        if ( aGroupedShape.is() )
+                        {
+                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aPropSetOfNextShape
+                                ( aGroupedShape, ::com::sun::star::uno::UNO_QUERY );
+                            if ( aPropSetOfNextShape.is() )
+                            {
+                                if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
+                                                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
+                                {
+                                    if ( nCharColor == mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) ) )
+                                    {
+                                        nCharAttr |= 0x200;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             nCharColor |= 0xfe000000;
             if ( nInstance == 4 )                       // special handling for normal textobjects:
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
@@ -3024,8 +3151,8 @@ TextObj& TextObj::operator=( TextObj& rTextObj )
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
-                    sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBuStr )
+void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
+    TextRuleEntry* pTextRule, SvStream& rExtBuStr )
 {
     PPTExParaSheet& rParaSheet = mpStyleSheet->GetParaSheet( nTextInstance );
 

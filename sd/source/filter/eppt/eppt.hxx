@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
+ *  last change: $Author: sj $ $Date: 2002-05-14 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,8 @@ struct GroupEntry
 
 class GroupTable
 {
+    protected:
+
         sal_uInt32              mnIndex;
         sal_uInt32              mnCurrentGroupEntry;
         sal_uInt32              mnMaxGroupEntry;
@@ -894,6 +896,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages >           mXDrawPages;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >            mXDrawPage;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXPagePropSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXBackgroundPropSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >              mXShapes;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >               mXShape;
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef des globalen Text
@@ -1003,8 +1006,8 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
-        void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
-                                            sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );
+        void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
+                                TextRuleEntry* pTextRule, SvStream& rExtBu );
         void                ImplWritePage( const PHLayout& rLayout,
                                                 EscherSolverContainer& rSolver,
                                                     PageType ePageType,
