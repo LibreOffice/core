@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-04 19:13:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2431,7 +2431,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ danish ] = "~IndsÊt" ; \
             Text [ french ] = "C~oller" ; \
             Text [ swedish ] = "~Infoga" ; \
-            Text [ dutch ] = "~Invoegen" ; \
+            Text [ dutch ] = "~Plakken" ; \
             Text [ spanish ] = "~Insertar" ; \
             Text [ english_us ] = "~Insert" ; \
             Text[ chinese_simplified ] = "≤Â»Î(~I)";    \
