@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:47:13 $
+ *  last change: $Author: obo $ $Date: 2001-11-01 16:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,8 +236,8 @@ public:
 
 // com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw( );
+    virtual void SAL_CALL release() throw( );
 
 // OComponentHelper
     virtual void SAL_CALL disposing(void);
