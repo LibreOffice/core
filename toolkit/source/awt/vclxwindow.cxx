@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:58:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,126 @@
 #include <vcl/dockwin.hxx>
 #endif
 
+#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
+#include <comphelper/asyncnotification.hxx>
+#endif
+
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
+
+//====================================================================
+//= VCLXWindowImpl
+//====================================================================
+#define EVENT_MOUSE_PRESSED     0
+#define EVENT_MOUSE_RELEASED    1
+#define EVENT_MOUSE_ENTERED     2
+#define EVENT_MOUSE_EXITED      3
+
+class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
+{
+private:
+    typedef ::comphelper::EventObjectHolder< ::com::sun::star::awt::MouseEvent >
+        MouseEventType;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        ComponentReference;
+
+private:
+    VCLXWindow&                         mrAntiImpl;
+    ::vos::IMutex&                      mrMutex;
+    ::comphelper::AsyncEventNotifier*   mpAsyncNotifier;
+
+public:
+    /** ctor
+    @param _pAntiImpl
+        the <type>VCLXWindow</type> instance which the object belongs to. Must
+        live longer then the object just being constructed.
+    */
+    VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex );
+
+    /** asynchronously notifies a mousePressed event to the VCLXWindow's XMouseListeners
+    */
+    void    notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rMouseEvent, sal_uInt16 _nType );
+
+    /** notifies the object that its VCLXWindow is being disposed
+    */
+    void    disposing();
+
+protected:
+    // IEventProcessor
+    virtual void processEvent( const ::comphelper::EventDescription& _rEvent );
+    virtual ComponentReference getComponent();
+};
+
+//--------------------------------------------------------------------
+VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
+    :mrAntiImpl( _rAntiImpl )
+    ,mrMutex( _rMutex )
+    ,mpAsyncNotifier( NULL )
+{
+}
+
+//--------------------------------------------------------------------
+void VCLXWindowImpl::disposing()
+{
+    ::vos::OGuard aGuard( mrMutex );
+    if ( mpAsyncNotifier )
+    {
+        mpAsyncNotifier->release();
+        mpAsyncNotifier = NULL;
+    }
+}
+
+//--------------------------------------------------------------------
+void VCLXWindowImpl::notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rMouseEvent, sal_uInt16 _nType )
+{
+    ::vos::OGuard aGuard( mrMutex );
+    if ( mrAntiImpl.GetMouseListeners().getLength() )
+    {
+        if ( !mpAsyncNotifier )
+        {
+            mpAsyncNotifier = new ::comphelper::AsyncEventNotifier( this );
+            mpAsyncNotifier->acquire();
+            mpAsyncNotifier->create();
+        }
+        mpAsyncNotifier->addEvent( new MouseEventType( _rMouseEvent, _nType ) );
+    }
+}
+
+//--------------------------------------------------------------------
+void VCLXWindowImpl::processEvent( const ::comphelper::EventDescription& _rEvent )
+{
+    const MouseEventType aEventDescriptor( static_cast< const MouseEventType& >( _rEvent ) );
+    const ::com::sun::star::awt::MouseEvent& rEvent( aEventDescriptor.getEventObject() );
+    switch ( aEventDescriptor.getEventType() )
+    {
+    case EVENT_MOUSE_PRESSED:
+        mrAntiImpl.GetMouseListeners().mousePressed( rEvent );
+        break;
+    case EVENT_MOUSE_RELEASED:
+        mrAntiImpl.GetMouseListeners().mouseReleased( rEvent );
+        break;
+    case EVENT_MOUSE_ENTERED:
+        mrAntiImpl.GetMouseListeners().mouseEntered( rEvent );
+        break;
+    case EVENT_MOUSE_EXITED:
+        mrAntiImpl.GetMouseListeners().mouseExited( rEvent );
+        break;
+    default:
+        DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this?" );
+    }
+}
+
+//--------------------------------------------------------------------
+VCLXWindowImpl::ComponentReference VCLXWindowImpl::getComponent()
+{
+    return static_cast< ::com::sun::star::awt::XWindow* >( &mrAntiImpl );
+}
+
+//====================================================================
+//====================================================================
 
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
 
@@ -229,9 +344,13 @@ VCLXWindow::VCLXWindow()
       maPaintListeners( *this ),
       maContainerListeners( *this ),
       maTopWindowListeners( *this ),
-      mnListenerLockLevel( 0 )
+      mnListenerLockLevel( 0 ),
+      mpImpl( NULL ),
+      mbDrawingOntoParent( false )
 {
     DBG_CTOR( VCLXWindow, 0 );
+
+    mpImpl = new VCLXWindowImpl( *this, GetMutex() );
 
     mbDisposing = sal_False;
     mbDesignMode = sal_False;
@@ -248,6 +367,8 @@ VCLXWindow::~VCLXWindow()
         GetWindow()->SetWindowPeer( NULL, NULL );
         GetWindow()->SetAccessible( NULL );
     }
+
+    DELETEZ( mpImpl );
 }
 
 void VCLXWindow::SetWindow( Window* pWindow )
@@ -524,7 +645,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, aMEvt );
                 aEvent.PopupTrigger = sal_True;
-                GetMouseListeners().mousePressed( aEvent );
+                mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
         }
         break;
@@ -537,10 +658,10 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *pMouseEvt );
 
-                if ( pMouseEvt->IsEnterWindow() )
-                    GetMouseListeners().mouseEntered( aEvent );
-                else
-                    GetMouseListeners().mouseExited( aEvent );
+                mpImpl->notifyMouseEvent(
+                    aEvent,
+                    pMouseEvt->IsEnterWindow() ? EVENT_MOUSE_ENTERED : EVENT_MOUSE_EXITED
+                );
             }
 
             if ( GetMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
@@ -564,7 +685,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 ::com::sun::star::awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
-                GetMouseListeners().mousePressed( aEvent );
+                mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
         }
         break;
@@ -575,7 +696,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 ::com::sun::star::awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
-                GetMouseListeners().mouseReleased( aEvent );
+                mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_RELEASED );
             }
         }
         break;
@@ -796,6 +917,8 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     if ( !mbDisposing )
     {
         mbDisposing = sal_True;
+
+        mpImpl->disposing();
 
         ::com::sun::star::lang::EventObject aObj;
         aObj.Source = static_cast< ::cppu::OWeakObject* >( this );
@@ -1857,32 +1980,44 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
         if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
         {
-            BOOL bWasVisible = pWindow->IsVisible();
-            Point aOldPos( pWindow->GetPosPixel() );
-
-            if ( bWasVisible && aOldPos == aPos )
+            // #i40647# don't draw here if this is a recursive call
+            // sometimes this is called recursively, because the Update call on the parent
+            // (strangely) triggers another paint. Prevent a stack overflow here
+            // Yes, this is only fixing symptoms for the moment ....
+            // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
+            if ( !mbDrawingOntoParent )
             {
+                mbDrawingOntoParent = true;
+
+                BOOL bWasVisible = pWindow->IsVisible();
+                Point aOldPos( pWindow->GetPosPixel() );
+
+                if ( bWasVisible && aOldPos == aPos )
+                {
+                    pWindow->Update();
+                    return;
+                }
+
+                pWindow->SetPosPixel( aPos );
+
+                // Erstmal ein Update auf den Parent, damit nicht beim Update
+                // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
+                // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
+                if( pWindow->GetParent() )
+                    pWindow->GetParent()->Update();
+
+                pWindow->Show();
                 pWindow->Update();
-                return;
+                pWindow->SetParentUpdateMode( sal_False );
+                pWindow->Hide();
+                pWindow->SetParentUpdateMode( sal_True );
+
+                pWindow->SetPosPixel( aOldPos );
+                if ( bWasVisible )
+                    pWindow->Show( TRUE );
+
+                mbDrawingOntoParent = false;
             }
-
-            pWindow->SetPosPixel( aPos );
-
-            // Erstmal ein Update auf den Parent, damit nicht beim Update
-            // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
-            // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
-            if( pWindow->GetParent() )
-                pWindow->GetParent()->Update();
-
-            pWindow->Show();
-            pWindow->Update();
-            pWindow->SetParentUpdateMode( sal_False );
-            pWindow->Hide();
-            pWindow->SetParentUpdateMode( sal_True );
-
-            pWindow->SetPosPixel( aOldPos );
-            if ( bWasVisible )
-                pWindow->Show( TRUE );
         }
         else if ( pDev )
         {
