@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:43:54 $
+ *  last change: $Author: tbe $ $Date: 2001-11-08 17:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4806,17 +4806,24 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ arabic ] = "Standard;OK;Cancel;Help";
     Text[ catalan ] = "Standard;OK;Cancel;Help";
 };
-
 String RID_STR_UNABLETOCONNECT
 {
     Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergestellt werden.";
     Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
 };
+String RID_STR_TEXT
+{
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/11/08 11:43:54  fs
+ *  #94300# removed ShowCentury property
+ *
  *  Revision 1.33  2001/10/30 15:20:02  fs
  *  +RID_STR_UNABLETOCONNECT
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:37:20 $
+ *  last change: $Author: tbe $ $Date: 2001-11-08 17:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_TITLE,               PROPERTY_ID_TITLE,              sal_True,  String(ModuleRes(RID_STR_TITLE)),            nPos++, 0,                                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_LABEL,               PROPERTY_ID_LABEL,              sal_True,  String(ModuleRes(RID_STR_LABEL)),            nPos++, HID_PROP_LABEL,                     PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_CONTROLLABEL,        PROPERTY_ID_CONTROLLABEL,       sal_False, String(ModuleRes(RID_STR_LABELCONTROL)),     nPos++, HID_PROP_CONTROLLABEL,              PROP_FORM_VISIBLE                    ),
+                OPropertyInfoImpl(PROPERTY_TEXT,                PROPERTY_ID_TEXT,               sal_True,  String(ModuleRes(RID_STR_TEXT)),             nPos++, HID_PROP_TEXT,                                        PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_MAXTEXTLEN,          PROPERTY_ID_MAXTEXTLEN,         sal_True,  String(ModuleRes(RID_STR_MAXTEXTLEN)),       nPos++, HID_PROP_MAXTEXTLEN,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_EDITMASK,            PROPERTY_ID_EDITMASK,           sal_True,  String(ModuleRes(RID_STR_EDITMASK)),         nPos++, HID_PROP_EDITMASK,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_LITERALMASK,         PROPERTY_ID_LITERALMASK,        sal_True,  String(ModuleRes(RID_STR_LITERALMASK)),      nPos++, HID_PROP_LITERALMASK,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
@@ -198,9 +199,10 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_TIMEFORMAT,          PROPERTY_ID_TIMEFORMAT,         sal_True,  String(ModuleRes(RID_STR_TIMEFORMAT)),       nPos++, HID_PROP_TIMEFORMAT,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_DEFAULT_TIME,        PROPERTY_ID_DEFAULT_TIME,       sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULT_TIME,              PROP_FORM_VISIBLE                    ),
 
+                OPropertyInfoImpl(PROPERTY_EFFECTIVE_VALUE,     PROPERTY_ID_EFFECTIVE_VALUE,    sal_False, String(ModuleRes(RID_STR_VALUE)),            nPos++, 0,                                                    PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_EFFECTIVE_MIN,       PROPERTY_ID_EFFECTIVE_MIN,      sal_False, String(ModuleRes(RID_STR_VALUEMIN)),         nPos++, HID_PROP_EFFECTIVEMIN,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_EFFECTIVE_MAX,       PROPERTY_ID_EFFECTIVE_MAX,      sal_False, String(ModuleRes(RID_STR_VALUEMAX)),         nPos++, HID_PROP_EFFECTIVEMAX,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EFFECTIVE_DEFAULT,   PROPERTY_ID_EFFECTIVE_DEFAULT,  sal_False, String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_EFFECTIVEDEFAULT,          PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                OPropertyInfoImpl(PROPERTY_EFFECTIVE_DEFAULT,   PROPERTY_ID_EFFECTIVE_DEFAULT,  sal_False, String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_EFFECTIVEDEFAULT,          PROP_FORM_VISIBLE                    ),
                 OPropertyInfoImpl(PROPERTY_FORMATKEY,           PROPERTY_ID_FORMATKEY,          sal_True,  String(ModuleRes(RID_STR_FORMATKEY)),        nPos++, HID_PROP_FORMATKEY,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
 
                 OPropertyInfoImpl(PROPERTY_PROGRESSVALUE,       PROPERTY_ID_PROGRESSVALUE,      sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE)),    nPos++, 0,                                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
@@ -513,6 +515,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/11/08 11:37:20  fs
+ *  #94300# removed ShowCentury property
+ *
  *  Revision 1.14  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *

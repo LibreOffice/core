@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:37:43 $
+ *  last change: $Author: tbe $ $Date: 2001-11-08 17:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
     PCR_CONSTASCII_STRING( PROPERTY_SCALEIMAGE,             "ScaleImage");
     PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
+    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -220,6 +221,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/11/08 11:37:43  fs
+ *  #94300# removed ShowCentury property
+ *
  *  Revision 1.13  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *

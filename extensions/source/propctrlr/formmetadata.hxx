@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:37:20 $
+ *  last change: $Author: tbe $ $Date: 2001-11-08 17:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,8 @@ namespace pcr
     #define PROPERTY_ID_VALUE                116
     #define PROPERTY_ID_SCALEIMAGE           117
     #define PROPERTY_ID_PUSHBUTTONTYPE       118
+    #define PROPERTY_ID_EFFECTIVE_VALUE      119
+    #define PROPERTY_ID_TEXT                 120
 
 //............................................................................
 } // namespace pcr
@@ -268,6 +270,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/11/08 11:37:20  fs
+ *  #94300# removed ShowCentury property
+ *
  *  Revision 1.10  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
