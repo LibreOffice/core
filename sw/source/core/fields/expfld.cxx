@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 12:01:31 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
+#ifndef _UNOFIELD_HXX
+#include <unofield.hxx>
+#endif
 
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -1186,9 +1188,15 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
     else if( rProperty.EqualsAscii( UNO_NAME_SEQUENCE_VALUE ))
         rAny <<= (sal_Int16)nSeqNo;
     else if( rProperty.EqualsAscii( UNO_NAME_VARIABLE_NAME ))
-        rAny <<= OUString( GetPar1() );
+        rAny <<= SwXFieldMaster::GetSetExpProgrammaticName(GetPar1());
     else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
-         rAny <<= OUString( GetFormula() );
+    {
+        //I18N - if the formula contains only "TypeName+1"
+        //and it's one of the initially created sequence fields
+        //then the localized names has to be replaced by a programmatic name
+        OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
+        rAny <<= OUString( sFormula );
+    }
     else if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
         rAny <<= (Double)GetValue();
     else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
@@ -1256,13 +1264,18 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
     {
         OUString uTmp;
         rAny >>= uTmp;
+        uTmp = SwXFieldMaster::GetSetExpUIName(uTmp);
         SetPar1( uTmp );
     }
     else if( rProperty.EqualsAscii( UNO_NAME_CONTENT ))
     {
         OUString uTmp;
         rAny >>= uTmp;
-        SetFormula( uTmp );
+        //I18N - if the formula contains only "TypeName+1"
+        //and it's one of the initially created sequence fields
+        //then the localized names has to be replaced by a programmatic name
+        OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
+        SetFormula( sFormula );
     }
     else if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
     {
