@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-31 08:27:24 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,7 +950,7 @@ IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
 {
     if (aNotify)
     {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
         if (aHint.get())
             rEditSource.GetBroadcaster().Broadcast( *aHint.get() );
     }
@@ -1279,6 +1279,11 @@ sal_Bool SmTextForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& n
     }
 
     return sal_False;
+}
+
+sal_Bool SmTextForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+{
+    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex );
 }
 
 USHORT SmTextForwarder::GetLineCount( USHORT nPara ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-31 08:27:25 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ public:
     virtual OutputDevice*   GetRefDevice() const;
     virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
     virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
+    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
     virtual USHORT          GetLineCount( USHORT nPara ) const;
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
     virtual sal_Bool        Delete( const ESelection& );
