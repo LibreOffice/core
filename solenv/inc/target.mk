@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:32 $
+#   last change: $Author: obo $ $Date: 2001-10-10 11:52:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2048,9 +2048,9 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN) \
         $(PRJHIDTARGET) \
-        $(DO_JS)$(SIGNFORNETSCAPE) \
-        $(DO_JS)$(SIGNFOREXPLORER) \
-        $(DO_JS)$(SIGNFORJARSIGNER) \
+                $(SIGNFORNETSCAPE) \
+                $(SIGNFOREXPLORER) \
+                $(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
         $(REMOTE_BUILD)\
         last_target
