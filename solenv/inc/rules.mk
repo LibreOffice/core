@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hjs $ $Date: 2001-03-09 18:55:46 $
+#   last change: $Author: hjs $ $Date: 2001-03-14 17:50:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -321,7 +321,7 @@ $(MISC)$/s_%.dpcc : %.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -332,7 +332,7 @@ $(MISC)$/o_%.dpcc : %.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -343,7 +343,7 @@ $(MISC)$/s_%.dpcc : %.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -354,7 +354,7 @@ $(MISC)$/o_%.dpcc : %.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -365,7 +365,7 @@ $(MISC)$/s_%.dpcc : %.cpp
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -376,7 +376,7 @@ $(MISC)$/o_%.dpcc : %.cpp
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -388,9 +388,9 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.c
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -403,9 +403,9 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.c
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -418,9 +418,9 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -433,9 +433,9 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.cxx
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -449,7 +449,7 @@ $(MISC)$/s_%.dpcc : %.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -460,7 +460,7 @@ $(MISC)$/o_%.dpcc : %.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -472,9 +472,9 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.m
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -487,9 +487,9 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.m
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -503,7 +503,7 @@ $(MISC)$/s_%.dpcc : %.s
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
