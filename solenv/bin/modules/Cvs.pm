@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-18 17:01:19 $
+#   last change: $Author: hr $ $Date: 2004-03-02 13:26:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -373,7 +373,7 @@ sub tag
     my $connectionfailure  = 0;
     my $invalidfile        = 0;
     foreach ( @{$response_ref} ) {
-        /^T $file/ && ++$tagged;
+        /^T \Q$file\E/ && ++$tagged;
         /NOT MOVING tag/ && ++$cant_move;
         /nothing known about/ && ++$invalidfile;
         /\[tag aborted\]: connect to/ && ++$connectionfailure;
