@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-18 11:23:34 $
+#   last change: $Author: tl $ $Date: 2001-04-09 07:50:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ SLOFILES=	\
         $(SLO)$/grafctrl.obj	\
         $(SLO)$/itemwin.obj		\
         $(SLO)$/layctrl.obj		\
+        $(SLO)$/lboxctrl.obj	\
         $(SLO)$/linectrl.obj	\
         $(SLO)$/tbcontrl.obj	\
         $(SLO)$/tbxalign.obj	\
@@ -104,6 +105,7 @@ SLOFILES=	\
 
 SRCFILES = \
         colrctrl.src			\
+        lboxctrl.src			\
         linectrl.src			\
         tbcontrl.src			\
         tbxdraw.src				\
