@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 
+#include <svtools/pathoptions.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
@@ -101,6 +102,8 @@ static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 // class XColorTable
 // ------------------
 
+static XColorTable* pTable=0;
+
 /*************************************************************************
 |*
 |* XColorTable::XColorTable()
@@ -120,6 +123,13 @@ XColorTable::XColorTable( const String& rPath,
 
 XColorTable::~XColorTable()
 {
+}
+
+XColorTable* XColorTable::GetStdColorTable()
+{
+    if ( !pTable )
+        pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+    return pTable;
 }
 
 /************************************************************************/
