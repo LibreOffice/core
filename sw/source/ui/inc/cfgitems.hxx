@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:43:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _AUTHRATR_HXX
 #include <authratr.hxx>
 #endif
@@ -92,7 +95,7 @@ void        SetPrt( SfxPrinter* );
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Dokumentanzeige
 --------------------------------------------------------- */
-class SwDocDisplayItem : public SfxPoolItem
+class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
     friend class SwWriterApp;
     friend class SwShdwCrsrOptionsTabPage;
@@ -128,7 +131,7 @@ public:
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, Elementeseite
 --------------------------------------------------------- */
-class SwElemItem : public SfxPoolItem
+class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
     BOOL bHorzScrollbar :1;
@@ -169,7 +172,7 @@ public:
 Item fuer Einstellungsdialog - Drucker/Zusaetze
 --------------------------------------------------------- */
 
-class SwAddPrinterItem : public SfxPoolItem, public SwPrintData
+class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
 
@@ -208,7 +211,7 @@ public:
 Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------------- */
 
-class SwShadowCursorItem : public SfxPoolItem
+class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     BYTE eMode;
     BOOL bOn;
