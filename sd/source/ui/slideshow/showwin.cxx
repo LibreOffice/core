@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:34:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
 #endif
 #include "sdresid.hxx"
 #include "helpids.h"
