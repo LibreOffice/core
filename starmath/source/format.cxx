@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 11:49:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
     else
     {
         const USHORT *pTable;
-        switch (GetScriptTypeOfLanguage( nLang ))
+        switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
         {
             case SCRIPTTYPE_LATIN :     pTable = aLatinDefFnts; break;
             case SCRIPTTYPE_ASIAN :     pTable = aCJKDefFnts; break;
