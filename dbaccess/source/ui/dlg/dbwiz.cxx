@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:43:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,20 @@ ODbTypeWizDialog::~ODbTypeWizDialog()
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
     m_eType = _pTabPage->GetSelectedType();
+    switch(m_eType)
+    {
+        case DST_MOZILLA:
+        case DST_OUTLOOK:
+        case DST_OUTLOOKEXP:
+        case DST_EVOLUTION:
+            enableButtons(WZB_NEXT,sal_False);
+            enableButtons(WZB_FINISH,sal_True);
+            break;
+        default:
+            enableButtons(WZB_NEXT,sal_True);
+            enableButtons(WZB_FINISH,sal_False);
+            break;
+    }
     return 1L;
 }
 //-------------------------------------------------------------------------
@@ -209,7 +223,18 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
     switch(_nCurrentState)
     {
         case START_PAGE:
-            nNextState = CONNECTION_PAGE;
+            switch(m_eType)
+            {
+                case DST_MOZILLA:
+                case DST_OUTLOOK:
+                case DST_OUTLOOKEXP:
+                case DST_EVOLUTION:
+                    nNextState = WZS_INVALID_STATE;
+                    break;
+                default:
+                    nNextState = CONNECTION_PAGE;
+                    break;
+            }
             break;
         case CONNECTION_PAGE:
             switch(m_eType)
