@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 10:45:25 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 07:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,6 +732,760 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 #pragma optimize("g",off)
 #endif
 
+#ifdef BIDI
+
+void SwFntObj::DrawText( SwDrawTextInfo &rInf )
+{
+
+static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+    BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType();
+    Font* pTmpFont = bPrt ? pPrtFont : GetScrFont();
+
+    // robust: better use the printer font instead of using no font at all
+    ASSERT( pTmpFont, "No screen or printer font?" );
+    if ( ! pTmpFont )
+        pTmpFont = pPrtFont;
+
+    // HACK: UNDERLINE_WAVE darf nicht mehr missbraucht werden, daher
+    // wird die graue Wellenlinie des ExtendedAttributSets zunaechst
+    // in der Fontfarbe erscheinen.
+
+    const BOOL bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
+    const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft();
+    const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
+    const BOOL bBidiPor = ( bSwitchL2R && TEXT_LAYOUT_COMPLEX_DISABLED == nMode ) ||
+                          ( ! bSwitchL2R && TEXT_LAYOUT_COMPLEX_DISABLED != nMode );
+
+    // If font is CTL font and complex text layout is disabled at the output
+    // device, we have to correct this
+    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+         TEXT_LAYOUT_COMPLEX_DISABLED == nMode )
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+
+    // be sure to have the same value at the printer
+    if ( pPrinter )
+        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
+
+    Point aPos( rInf.GetPos() );
+    if( !bPrt )
+    {
+        if( rInf.GetpOut() != pPixOut || rInf.GetOut().GetMapMode() != *pPixMap )
+        {
+            *pPixMap = rInf.GetOut().GetMapMode();
+            pPixOut = rInf.GetpOut();
+            Size aTmp( 1, 1 );
+            nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
+        }
+        aPos.X() += nPixWidth;
+    }
+    BOOL bChgColor = FALSE;
+    ColorData nNewColor;
+    if( bPrt && rInf.GetShell()->GetViewOptions()->IsBlackFont() )
+    {
+        if( COL_BLACK != pTmpFont->GetColor().GetColor() )
+        {
+            nNewColor = COL_BLACK;
+            bChgColor = TRUE;
+        }
+    }
+    else if( COL_AUTO == pTmpFont->GetColor().GetColor() )
+    {
+        ViewShell* pSh = rInf.GetShell();
+        if( pSh && pSh->GetWin() )
+        {
+            const StyleSettings& rS = pSh->GetWin()->GetSettings().GetStyleSettings();
+            nNewColor = rInf.GetDarkBack()
+                ? COL_WHITE : rS.GetWindowTextColor().GetColor();
+        }
+        else
+            nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
+
+        bChgColor = TRUE;
+    }
+    if( bChgColor )
+    {
+        Color aOldColor( pTmpFont->GetColor() );
+        Color aBlack( nNewColor );
+        pTmpFont->SetColor( aBlack );
+        if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+            rInf.GetOut().SetFont( *pTmpFont );
+        pTmpFont->SetColor( aOldColor );
+    }
+    else if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+        rInf.GetOut().SetFont( *pTmpFont );
+
+    if ( STRING_LEN == rInf.GetLen() )
+        rInf.SetLen( rInf.GetText().Len() );
+
+    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        {
+            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            long* pKernArray = new long[rInf.GetLen()];
+
+            if ( pPrinter )
+                pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
+            else
+                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                            rInf.GetIdx(), rInf.GetLen() );
+
+            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            const USHORT i = nWidthPerChar ?
+                                ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                                1;
+
+            nWidthPerChar = i * nGridWidth;
+
+            // position of first character, we take the printer position
+            long nCharWidth = pKernArray[ 0 ];
+            USHORT nHalfWidth = nWidthPerChar / 2;
+
+            long nNextFix;
+
+            // punctuation characters are not centered
+            xub_Unicode cChar = rInf.GetText().GetChar( rInf.GetIdx() );
+            BYTE nType = lcl_WhichPunctuation( cChar );
+            switch ( nType )
+            {
+            case SwScriptInfo::NONE :
+                aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
+                nNextFix = nCharWidth / 2;
+                break;
+            case SwScriptInfo::SPECIAL_RIGHT :
+                nNextFix = nHalfWidth;
+                break;
+            default:
+                aPos.X() += nWidthPerChar - nCharWidth;
+                nNextFix = nCharWidth - nHalfWidth;
+            }
+
+            // calculate offsets
+            for ( xub_StrLen j = 1; j < rInf.GetLen(); ++j )
+            {
+                long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
+                nNextFix += nWidthPerChar;
+
+                // punctuation characters are not centered
+                cChar = rInf.GetText().GetChar( rInf.GetIdx() + j );
+                nType = lcl_WhichPunctuation( cChar );
+                switch ( nType )
+                {
+                case SwScriptInfo::NONE :
+                    pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
+                    break;
+                case SwScriptInfo::SPECIAL_RIGHT :
+                    pKernArray[ j - 1 ] = nNextFix - nHalfWidth;
+                    break;
+                default:
+                    pKernArray[ j - 1 ] = nNextFix + nHalfWidth - nScr;
+                }
+            }
+
+            if ( bSwitchH2V )
+                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                pKernArray, rInf.GetIdx(), rInf.GetLen() );
+
+            delete[] pKernArray;
+            return;
+        }
+    }
+
+    // "No screen adj"
+    if ( bPrt || (
+        rInf.GetShell()->GetDoc()->IsBrowseMode() &&
+        !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
+        !rInf.GetBullet() && ( rInf.GetSpace() || !rInf.GetKern() ) &&
+        !rInf.GetWrong() && !rInf.GetGreyWave() ) )
+    {
+        const Fraction aTmp( 1, 1 );
+        BOOL bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
+                        && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
+
+        if ( bSwitchL2R )
+            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+        if ( bSwitchH2V )
+            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+        if( rInf.GetSpace() )
+        // Hack, solange DrawStretchText auf Druckern nicht funktioniert:
+        //  || bStretch || rInf.GetKern() )
+        {
+            long *pKernArray = new long[rInf.GetLen()];
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                         rInf.GetIdx(), rInf.GetLen() );
+            if( bStretch )
+            {
+                xub_StrLen nZwi = rInf.GetLen() - 1;
+                long nDiff = rInf.GetWidth() - pKernArray[ nZwi ]
+                             - rInf.GetLen() * rInf.GetKern();
+                long nRest = nDiff % nZwi;
+                long nAdd;
+                if( nRest < 0 )
+                {
+                    nAdd = -1;
+                    nRest += nZwi;
+                }
+                else
+                {
+                    nAdd = +1;
+                    nRest = nZwi - nRest;
+                }
+                nDiff /= nZwi;
+                long nSum = nDiff;
+                for( xub_StrLen i = 0; i < nZwi; )
+                {
+                    pKernArray[ i ] += nSum;
+                    if( ++i == nRest )
+                        nDiff += nAdd;
+                    nSum += nDiff;
+                }
+            }
+            long nKernSum = rInf.GetKern();
+
+            if ( bStretch || bPaintBlank || rInf.GetKern() )
+            {
+                for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
+                     nKernSum += rInf.GetKern() )
+                {
+                    if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
+                        nKernSum += rInf.GetSpace();
+                    pKernArray[i] += nKernSum;
+                }
+
+                // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
+                // einer Textausgabe besondere Massnahmen:
+                if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
+                    rInf.GetText().GetChar( rInf.GetIdx()+rInf.GetLen()-1 ) ) )
+                {
+                    // Wenn es sich um ein singulaeres, unterstrichenes Space
+                    // handelt, muessen wir zwei ausgeben:
+                    if( 1 == rInf.GetLen() )
+                    {
+                        pKernArray[0] = rInf.GetSpace();
+                        rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
+                            RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
+                    }
+                    else
+                    {
+                        pKernArray[ rInf.GetLen() - 2 ] += rInf.GetSpace();
+                        rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                            pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                    }
+                }
+                else
+                    rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                        pKernArray, rInf.GetIdx(), rInf.GetLen() );
+            }
+            else
+            {
+                Point aTmpPos( aPos );
+                xub_StrLen j = 0;
+                xub_StrLen i;
+                for( i = 0; i < rInf.GetLen(); i++ )
+                {
+                    if( CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx()+i ) )
+                    {
+                        nKernSum += rInf.GetSpace();
+                        if( j < i )
+                            rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                                                    rInf.GetIdx() + j, i - j );
+                        j = i + 1;
+                        aTmpPos.X() = aPos.X() + pKernArray[ i ] + nKernSum;
+                    }
+                }
+                if( j < i )
+                    rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                                            rInf.GetIdx() + j, i - j );
+            }
+            delete[] pKernArray;
+        }
+        else if( bStretch )
+        {
+            USHORT nTmpWidth = rInf.GetWidth();
+            if( rInf.GetKern() && rInf.GetLen() && nTmpWidth > rInf.GetKern() )
+                nTmpWidth -= rInf.GetKern();
+            rInf.GetOut().DrawStretchText( aPos, nTmpWidth,
+                             rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
+        }
+        else if( rInf.GetKern() )
+        {
+            long nTmpWidth = GetTextSize( rInf ).Width();
+            if( bChgColor && COL_AUTO == pTmpFont->GetColor().GetColor() )
+            {
+                Color aOldColor( pTmpFont->GetColor() );
+                Color aBlack( nNewColor );
+                pTmpFont->SetColor( aBlack );
+                if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+                    rInf.GetOut().SetFont( *pTmpFont );
+                pTmpFont->SetColor( aOldColor );
+            }
+            rInf.GetOut().DrawStretchText( aPos, (USHORT)nTmpWidth,
+                               rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
+        }
+        else
+            rInf.GetOut().DrawText( aPos, rInf.GetText(),
+                                    rInf.GetIdx(), rInf.GetLen() );
+    }
+    else
+    {
+        const String* pStr = &rInf.GetText();
+        String aStr( aEmptyStr );
+        BOOL bBullet = rInf.GetBullet();
+        if( bSymbol )
+            bBullet = FALSE;
+        long *pKernArray = new long[ rInf.GetLen() ];
+        CheckScrFont( rInf.GetShell(), rInf.GetpOut() );
+        long nScrPos;
+
+        // get screen array
+        long* pScrArray = new long[ rInf.GetLen() ];
+        rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
+                                    rInf.GetIdx(), rInf.GetLen() );
+
+        if ( pPrinter )
+        {
+            if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
+                pPrinter->SetFont( *pPrtFont );
+            pPrinter->GetTextArray( rInf.GetText(), pKernArray, rInf.GetIdx(),
+                                    rInf.GetLen() );
+        }
+        else
+        {
+            BOOL bRestore = FALSE;
+            MapMode aOld( rInf.GetOut().GetMapMode() );
+            if( rInf.GetZoom().GetNumerator() &&
+                rInf.GetZoom() != aOld.GetScaleX() )
+            {
+                MapMode aNew( aOld );
+                aNew.SetScaleX( rInf.GetZoom() );
+                aNew.SetScaleY( rInf.GetZoom() );
+                rInf.GetOut().SetMapMode( aNew );
+                bRestore = TRUE;
+            }
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
+            if( bRestore )
+                rInf.GetOut().SetMapMode( aOld );
+        }
+
+        //
+        // Modify Printer and ScreenArrays for special justifications
+        //
+        short nSpaceAdd = rInf.GetSpace();
+
+        if ( rInf.GetFont() && rInf.GetLen() )
+        {
+            const BYTE nActual = rInf.GetFont()->GetActual();
+            const SwScriptInfo* pSI = rInf.GetScriptInfo();
+
+            // apply kana compression
+            if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
+            {
+                pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
+                               rInf.GetKanaComp(), (USHORT)aFont.GetSize().Height() );
+                pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                               rInf.GetKanaComp(),
+                               (USHORT)aFont.GetSize().Height(), &aPos );
+            }
+
+            // apply kashida justification
+            if ( SW_CTL == nActual && rInf.GetSpace() && pSI && pSI->CountKashida() &&
+                 LANGUAGE_HEBREW != rInf.GetFont()->GetLanguage( SW_CTL ) )
+            {
+                pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(), rInf.GetLen(),
+                                     rInf.GetSpace() );
+                nSpaceAdd = 0;
+            }
+
+            // apply Asian justification
+            if ( SW_CJK == nActual && rInf.GetSpace() &&
+                 LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
+            {
+                long nSpaceSum = rInf.GetSpace();
+                for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
+                {
+                    pKernArray[ nI ] += nSpaceSum;
+                    pScrArray[ nI ] += nSpaceSum;
+                    nSpaceSum += rInf.GetSpace();
+                }
+
+                nSpaceAdd = 0;
+            }
+        }
+
+        nScrPos = pScrArray[ 0 ];
+
+        if( bBullet )
+        {
+            // !!! HACK !!!
+            // The Arabic layout engine requires some context of the string
+            // which should be painted.
+            xub_StrLen nCopyStart = rInf.GetIdx();
+            if ( nCopyStart )
+                --nCopyStart;
+
+            xub_StrLen nCopyLen = rInf.GetLen();
+            if ( nCopyStart + nCopyLen < rInf.GetText().Len() )
+                ++nCopyLen;
+
+            aStr = rInf.GetText().Copy( nCopyStart, nCopyLen );
+            pStr = &aStr;
+            for( xub_StrLen i = 0; i < aStr.Len(); ++i )
+                if( CH_BLANK == aStr.GetChar( i ) )
+                    aStr.SetChar( i, CH_BULLET );
+        }
+
+        xub_StrLen nCnt = rInf.GetText().Len();
+        if ( nCnt < rInf.GetIdx() )
+            nCnt = 0;
+        else
+            nCnt -= rInf.GetIdx();
+        nCnt = Min( nCnt, rInf.GetLen() );
+        long nKernSum = rInf.GetKern();
+        xub_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+
+        // Wenn es sich um ein singulaeres, unterstrichenes Space
+        // im Blocksatz handelt, muessen wir zwei ausgeben:
+        if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
+        {
+            pKernArray[0] = rInf.GetSpace() + rInf.GetKern();
+
+            if ( bSwitchL2R )
+                rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+            if ( bSwitchH2V )
+                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+            rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
+                RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
+            if( bBullet )
+                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray,
+                                              0, 1 );
+        }
+        else
+        {
+            xub_Unicode nCh;
+
+            // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
+            USHORT nMul = 3;
+
+            if ( pPrtFont->GetKerning() )
+                nMul = 1;
+
+            const USHORT nDiv = nMul+1;
+
+            // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
+            // Zwischenraum aufsummiert.
+            // Die Spaces selbst werden im Normalfall in der Mitte des
+            // Zwischenraums positioniert, deshalb die nSpace/2-Mimik.
+            // Bei wortweiser Unterstreichung muessen sie am Anfang des
+            // Zwischenraums stehen, damit dieser nicht unterstrichen wird.
+            // Ein Space am Anfang oder am Ende des Textes muss allerdings
+            // vor bzw. hinter den kompletten Zwischenraum gesetzt werden,
+            // sonst wuerde das Durch-/Unterstreichen Luecken aufweisen.
+            long nSpaceSum = 0;
+            USHORT nHalfSpace = pPrtFont->IsWordLineMode() ? 0 : nSpaceAdd / 2;
+            USHORT nOtherHalf = nSpaceAdd - nHalfSpace;
+            if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
+                nSpaceSum = nHalfSpace;
+            for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
+            {
+                nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
+
+                ASSERT( pScrArray, "Where is the screen array?" )
+                long nScr;
+                nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
+
+                // Wenn vor uns ein (Ex-)SPACE ist, positionieren wir uns optimal,
+                // d.h. unseren rechten Rand auf die 100% Druckerposition,
+                // sind wir sogar selbst ein Ex-SPACE, so positionieren wir uns
+                // linksbuendig zur Druckerposition.
+                if ( nCh == CH_BLANK )
+                {
+#ifdef FONT_TEST_DEBUG
+                    lcl_Pos( 3, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
+                    nScrPos = pKernArray[i-1] + nScr;
+#endif
+                    if ( cChPrev == CH_BLANK )
+                        nSpaceSum += nOtherHalf;
+                    if ( i + 1 == nCnt )
+                        nSpaceSum += nSpaceAdd;
+                    else
+                        nSpaceSum += nHalfSpace;
+                }
+                else
+                {
+                    if ( cChPrev == CH_BLANK )
+                    {
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
+                        nScrPos = pKernArray[i-1] + nScr;
+#endif
+                        // kein Pixel geht verloren:
+                        nSpaceSum += nOtherHalf;
+                    }
+                    else if ( cChPrev == '-' )
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
+                        nScrPos = pKernArray[i-1] + nScr;
+#endif
+                    else
+                    {
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 0, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
+                        nScrPos += nScr;
+                        nScrPos = ( nMul * nScrPos + pKernArray[i] ) / nDiv;
+#endif
+                    }
+                }
+                cChPrev = nCh;
+                pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
+            }
+
+            // the layout engine requires the total width of the output
+            pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
+
+            if( rInf.GetGreyWave() )
+            {
+                if( rInf.GetLen() )
+                {
+                    long nHght = rInf.GetOut().LogicToPixel(
+                                    pPrtFont->GetSize() ).Height();
+                    if( WRONG_SHOW_MIN < nHght )
+                    {
+                        pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
+                        if ( rInf.GetOut().GetConnectMetaFile() )
+                            rInf.GetOut().Push();
+
+                        USHORT nWave =
+                            WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                            ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
+                            WAVE_FLAT );
+                        Color aCol( rInf.GetOut().GetLineColor() );
+                        BOOL bColSave = aCol != *pWaveCol;
+                        if ( bColSave )
+                            rInf.GetOut().SetLineColor( *pWaveCol );
+
+                        Point aEnd;
+                        long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
+
+
+                        USHORT nDir = bBidiPor ?
+                                        1800 :
+                                        UnMapDirection(
+                                        GetFont()->GetOrientation(),
+                                        bSwitchH2V );
+                        switch ( nDir )
+                        {
+                        case 0 :
+                            aEnd.X() = rInf.GetPos().X() + nKernVal;
+                            aEnd.Y() = rInf.GetPos().Y();
+                            break;
+                        case 900 :
+                            aEnd.X() = rInf.GetPos().X();
+                            aEnd.Y() = rInf.GetPos().Y() - nKernVal;
+                            break;
+                        case 1800 :
+                            aEnd.X() = rInf.GetPos().X() - nKernVal;
+                            aEnd.Y() = rInf.GetPos().Y();
+                            break;
+                        case 2700 :
+                            aEnd.X() = rInf.GetPos().X();
+                            aEnd.Y() = rInf.GetPos().Y() + nKernVal;
+                            break;
+                        }
+
+                        Point aPos( rInf.GetPos() );
+
+                        if ( bSwitchL2R )
+                        {
+                            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+                            rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
+                        }
+
+                        if ( bSwitchH2V )
+                        {
+                            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                            rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
+                        }
+                        rInf.GetOut().DrawWaveLine( aPos, aEnd, nWave );
+
+                        if ( bColSave )
+                            rInf.GetOut().SetLineColor( aCol );
+
+                        if ( rInf.GetOut().GetConnectMetaFile() )
+                            rInf.GetOut().Pop();
+                    }
+                }
+            }
+            else if( rInf.GetWrong() && !bSymbol )
+            {
+                if( rInf.GetLen() )
+                {
+                    xub_StrLen nStart = rInf.GetIdx();
+                    xub_StrLen nWrLen = rInf.GetLen();
+                    if( rInf.GetWrong()->Check( nStart, nWrLen ) )
+                    {
+                        long nHght = rInf.GetOut().LogicToPixel(
+                                                pPrtFont->GetSize() ).Height();
+                        if( WRONG_SHOW_MIN < nHght )
+                        {
+                            pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
+                            if ( rInf.GetOut().GetConnectMetaFile() )
+                                rInf.GetOut().Push();
+
+                            USHORT nWave =
+                                WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                                ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
+                                WAVE_FLAT );
+                            Color aCol( rInf.GetOut().GetLineColor() );
+                            BOOL bColSave = aCol != *pSpellCol;
+                            if ( bColSave )
+                                rInf.GetOut().SetLineColor( *pSpellCol );
+
+                            do
+                            {
+                                nStart -= rInf.GetIdx();
+                                Point aStart( rInf.GetPos() );
+                                Point aEnd;
+                                short nBlank = 0;
+                                const xub_StrLen nEnd = nStart + nWrLen;
+
+                                if( nEnd < nCnt
+                                    && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
+                                {
+                                    if( nEnd + 1 == nCnt )
+                                        nBlank -= rInf.GetSpace();
+                                    else
+                                        nBlank -= nHalfSpace;
+                                }
+
+                                // determine start, end and length of wave line
+                                long nKernStart = nStart ?
+                                                  pKernArray[ USHORT( nStart - 1 ) ] :
+                                                  0;
+                                long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
+
+                                USHORT nDir = bBidiPor ?
+                                              1800 :
+                                              UnMapDirection(
+                                                GetFont()->GetOrientation(),
+                                                bSwitchH2V );
+                                switch ( nDir )
+                                {
+                                case 0 :
+                                    aStart.X() += nKernStart;
+                                    aEnd.X() = nBlank + rInf.GetPos().X() + nKernEnd;
+                                    aEnd.Y() = rInf.GetPos().Y();
+                                    break;
+                                case 900 :
+                                    aStart.Y() -= nKernStart;
+                                    aEnd.X() = rInf.GetPos().X();
+                                    aEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
+                                    break;
+                                case 1800 :
+                                    aStart.X() -= nKernStart;
+                                    aEnd.X() = rInf.GetPos().X() - nKernEnd - nBlank;
+                                    aEnd.Y() = rInf.GetPos().Y();
+                                    break;
+                                case 2700 :
+                                    aStart.Y() += nKernStart;
+                                    aEnd.X() = rInf.GetPos().X();
+                                    aEnd.Y() = nBlank + rInf.GetPos().Y() + nKernEnd;
+                                    break;
+                                }
+
+                                if ( bSwitchL2R )
+                                {
+                                    rInf.GetFrm()->SwitchLTRtoRTL( aStart );
+                                    rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
+                                }
+
+                                if ( bSwitchH2V )
+                                {
+                                    rInf.GetFrm()->SwitchHorizontalToVertical( aStart );
+                                    rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
+                                }
+                                rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+                                nStart = nEnd + rInf.GetIdx();
+                                nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
+                            }
+                            while( nWrLen && rInf.GetWrong()->Check( nStart, nWrLen ) );
+
+                            if ( bColSave )
+                                rInf.GetOut().SetLineColor( aCol );
+
+                            if ( rInf.GetOut().GetConnectMetaFile() )
+                                rInf.GetOut().Pop();
+                        }
+                    }
+                }
+            }
+            xub_StrLen nOffs = 0;
+            xub_StrLen nLen = rInf.GetLen();
+#ifdef COMING_SOON
+            if( aPos.X() < rInf.GetLeft() )
+            {
+                while( nOffs < nLen &&
+                    aPos.X() + pKernArray[ nOffs ] < rInf.GetLeft() )
+                    ++nOffs;
+                if( nOffs < nLen )
+                {
+                    --nLen;
+                    while( nLen > nOffs &&
+                        aPos.X() + pKernArray[ nLen ] > rInf.GetRight() )
+                        --nLen;
+                    ++nLen;
+                    if( nOffs )
+                        --nOffs;
+                }
+                if( nOffs )
+                {
+                    long nDiff = pKernArray[ nOffs - 1 ];
+                    aPos.X() += nDiff;
+                    for( xub_StrLen nX = nOffs; nX < nLen; ++nX )
+                        pKernArray[ nX ] -= nDiff;
+                }
+            }
+#endif
+            if( nOffs < nLen )
+            {
+                // If we paint bullets instead of spaces, we use a copy of
+                // the paragraph string. For the layout engine, the copy
+                // of the string has to be an environment of the range which
+                // is painted
+                register xub_StrLen nTmpIdx = bBullet ?
+                                              ( rInf.GetIdx() ? 1 : 0 ) :
+                                              rInf.GetIdx();
+
+                if ( bSwitchL2R )
+                    rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+
+
+                if ( bSwitchH2V )
+                    rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
+                                    nTmpIdx + nOffs , nLen - nOffs );
+            }
+        }
+        delete[] pScrArray;
+        delete[] pKernArray;
+    }
+}
+
+#else
+
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
 
@@ -752,28 +1506,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
-#ifdef BIDI
-    const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft();
-    const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
-    const BOOL bBidiPor = ( bSwitchL2R && TEXT_LAYOUT_COMPLEX_DISABLED == nMode ) ||
-                          ( ! bSwitchL2R && TEXT_LAYOUT_COMPLEX_DISABLED != nMode );
-
-    // If font is CTL font and complex text layout is disabled at the output
-    // device, we have to correct this
-    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
-         TEXT_LAYOUT_COMPLEX_DISABLED == nMode )
-        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
-
-    // be sure to have the same value at the printer
-    if ( pPrinter )
-        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
-#endif
-
 #ifdef VERTICAL_LAYOUT
     const BOOL bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
     // this flag indicates that each character in the current portion
     // gets an extra spacing for Asian justified alignment
-    const BOOL bAsianFont = rInf.GetFont() &&
+    const BOOL bAsianJust = rInf.GetFont() &&
                             SW_CJK == rInf.GetFont()->GetActual() &&
                             LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK );
 #endif
@@ -922,10 +1659,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         BOOL bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
-#ifdef BIDI
-        if ( bSwitchL2R )
-            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
 #ifdef VERTICAL_LAYOUT
         if ( bSwitchH2V )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1062,15 +1795,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         CheckScrFont( rInf.GetShell(), rInf.GetpOut() );
         long nScrPos;
 
-#ifdef BIDI
-        long* pScrArray = new long[ rInf.GetLen() ];
-        rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
-                                    rInf.GetIdx(), rInf.GetLen() );
-        nScrPos = pScrArray[ 0 ];
-#else
         xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
         rInf.GetOut().GetCharWidth( cCh, cCh, &nScrPos );
-#endif
 
         USHORT nType;
         if( bCompress && ( SwScriptInfo::NONE !=
@@ -1110,6 +1836,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if( bRestore )
                 rInf.GetOut().SetMapMode( aOld );
         }
+
         if( bCompress )
             rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),
                                     rInf.GetLen(), rInf.GetKanaComp(),
@@ -1139,10 +1866,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         {
             pKernArray[0] = rInf.GetSpace() + rInf.GetKern();
 
-#ifdef BIDI
-            if ( bSwitchL2R )
-                rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
 #ifdef VERTICAL_LAYOUT
             if ( bSwitchH2V )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1160,14 +1883,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-#ifndef BIDI
+
             long *pScrArray = NULL;
-#endif
 
             if ( pPrtFont->GetKerning() )
             {
                 nMul = 1;
-#ifndef BIDI
                 if( KERNING_ASIAN == pPrtFont->GetKerning() )
                 {
                     pScrArray = new long[ rInf.GetLen() ];
@@ -1175,10 +1896,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                         rInf.GetIdx(), rInf.GetLen() );
                     nScrPos = pScrArray[0];
                 }
-#endif
             }
 
             const USHORT nDiv = nMul+1;
+
             // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
             // Zwischenraum aufsummiert.
             // Die Spaces selbst werden im Normalfall in der Mitte des
@@ -1197,18 +1918,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
 
-#ifdef BIDI
-                ASSERT( pScrArray, "Where is the screen array?" )
-                long nScr;
-                nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
-#else
-
                 long nScr;
                 if( pScrArray )
                     nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
                 else
                     rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
-#endif
                 if( bCompress && ( SwScriptInfo::NONE != ( nType =
                     rInf.GetScriptInfo()->CompType( rInf.GetIdx() + i ) ) ) )
                 {
@@ -1244,7 +1958,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         nSpaceSum += nHalfSpace;
                 }
 #ifdef VERTICAL_LAYOUT
-                else if ( bAsianFont )
+                else if ( bAsianJust )
                 {
                     nScrPos = pKernArray[i-1] + nScr;
                     nSpaceSum += rInf.GetSpace();
@@ -1281,9 +1995,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 cChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
             }
-#ifdef BIDI
-            pKernArray[rInf.GetLen() - 1] = rInf.GetWidth();
-#endif
 
             if( rInf.GetGreyWave() )
             {
@@ -1311,17 +2022,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 
 #ifdef VERTICAL_LAYOUT
-#ifdef BIDI
-                        USHORT nDir = bBidiPor ?
-                                        1800 :
-                                        UnMapDirection(
-                                        GetFont()->GetOrientation(),
-                                        bSwitchH2V );
-#else
                         USHORT nDir = UnMapDirection(
                                         GetFont()->GetOrientation(),
                                         bSwitchH2V );
-#endif
                         switch ( nDir )
 #else
                         switch ( GetFont()->GetOrientation() )
@@ -1335,12 +2038,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                             aEnd.X() = rInf.GetPos().X();
                             aEnd.Y() = rInf.GetPos().Y() - nKernVal;
                             break;
-#ifdef BIDI
-                        case 1800 :
-                            aEnd.X() = rInf.GetPos().X() - nKernVal;
-                            aEnd.Y() = rInf.GetPos().Y();
-                            break;
-#endif
                         case 2700 :
                             aEnd.X() = rInf.GetPos().X();
                             aEnd.Y() = rInf.GetPos().Y() + nKernVal;
@@ -1349,14 +2046,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 #ifdef VERTICAL_LAYOUT
                         Point aPos( rInf.GetPos() );
-
-#ifdef BIDI
-                        if ( bSwitchL2R )
-                        {
-                            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-                            rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
-                        }
-#endif
 
                         if ( bSwitchH2V )
                         {
@@ -1425,17 +2114,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
 #ifdef VERTICAL_LAYOUT
-#ifdef BIDI
-                                USHORT nDir = bBidiPor ?
-                                              1800 :
-                                              UnMapDirection(
-                                                GetFont()->GetOrientation(),
-                                                bSwitchH2V );
-#else
                                 USHORT nDir = UnMapDirection(
                                                 GetFont()->GetOrientation(),
                                                 bSwitchH2V );
-#endif
                                 switch ( nDir )
 #else
                                 switch ( GetFont()->GetOrientation() )
@@ -1451,13 +2132,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                     aEnd.X() = rInf.GetPos().X();
                                     aEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
                                     break;
-#ifdef BIDI
-                                case 1800 :
-                                    aStart.X() -= nKernStart;
-                                    aEnd.X() = rInf.GetPos().X() - nKernEnd - nBlank;
-                                    aEnd.Y() = rInf.GetPos().Y();
-                                    break;
-#endif
                                 case 2700 :
                                     aStart.Y() += nKernStart;
                                     aEnd.X() = rInf.GetPos().X();
@@ -1466,15 +2140,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 }
 
 #ifdef VERTICAL_LAYOUT
-
-#ifdef BIDI
-                                if ( bSwitchL2R )
-                                {
-                                    rInf.GetFrm()->SwitchLTRtoRTL( aStart );
-                                    rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
-                                }
-#endif
-
                                 if ( bSwitchH2V )
                                 {
                                     rInf.GetFrm()->SwitchHorizontalToVertical( aStart );
@@ -1529,10 +2194,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             {
                 register xub_StrLen nTmpIdx = bBullet ? 0 : rInf.GetIdx();
 
-#ifdef BIDI
-                if ( bSwitchL2R )
-                    rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
+
 #ifdef VERTICAL_LAYOUT
                 if ( bSwitchH2V )
                     rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1541,16 +2203,14 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                     nTmpIdx + nOffs , nLen - nOffs );
             }
-#ifndef BIDI
             delete[] pScrArray;
-#endif
         }
-#ifdef BIDI
-        delete[] pScrArray;
-#endif
         delete[] pKernArray;
     }
 }
+
+#endif
+
 
 // Optimierung war fuer DrawText() ausgeschaltet
 #if defined( WNT ) && defined( MSC )    // && defined( W40 )
@@ -1741,6 +2401,114 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     return aTxtSize;
 }
 
+#ifdef BIDI
+
+xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
+{
+    short nSpaceAdd = rInf.GetSpace() ? rInf.GetSpace() : - rInf.GetSperren();
+    short nKern = rInf.GetKern();
+
+    if( nSpaceAdd < 0 )
+    {
+        nKern -= nSpaceAdd;
+        nSpaceAdd = 0;
+    }
+    long *pKernArray = new long[ rInf.GetLen() ];
+
+    if ( pPrinter )
+        pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                                rInf.GetIdx(), rInf.GetLen() );
+    else
+        rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
+                            rInf.GetIdx(), rInf.GetLen() );
+
+    if ( rInf.GetFont() && rInf.GetLen() )
+    {
+        const BYTE nActual = rInf.GetFont()->GetActual();
+        const SwScriptInfo* pSI = rInf.GetScriptInfo();
+
+        // if this is true, we have to check for kana compression
+        if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
+        {
+            pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                           rInf.GetKanaComp(),
+                           (USHORT) aFont.GetSize().Height() );
+        }
+
+        // if this is true, we have to check for kashida justification
+        if ( SW_CTL == nActual && rInf.GetSpace() && pSI && pSI->CountKashida() )
+        {
+            pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
+                                 rInf.GetSpace() );
+            nSpaceAdd = 0;
+        }
+
+        // Asian justification: Each character gets some extra space
+        if ( SW_CJK == rInf.GetFont()->GetActual() &&
+             LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
+        {
+            long nSpaceSum = rInf.GetSpace();
+            for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
+            {
+                pKernArray[ nI ] += nSpaceSum;
+                nSpaceSum += rInf.GetSpace();
+            }
+
+            nSpaceAdd = 0;
+        }
+    }
+
+    long nLeft = 0;
+    long nRight = 0;
+    xub_StrLen nCnt = 0;
+    xub_StrLen nSpaceSum = 0;
+    long nKernSum = 0;
+
+    if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        {
+            const USHORT nGridWidth = pGrid->GetBaseHeight();
+
+            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            USHORT i = nWidthPerChar ?
+                        ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                        1;
+
+            nWidthPerChar = i * nGridWidth;
+
+            nCnt = (USHORT)(rInf.GetOfst() / nWidthPerChar);
+            if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
+                ++nCnt;
+
+            delete[] pKernArray;
+            return nCnt;
+        }
+    }
+
+    while ( ( nRight < long( rInf.GetOfst() ) ) && ( nCnt < rInf.GetLen() ) )
+    {
+        nLeft = nRight;
+
+        if ( nSpaceAdd &&
+             CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) )
+            nSpaceSum += nSpaceAdd;
+        nRight = pKernArray[ nCnt++ ] + nKernSum + nSpaceSum;
+        nKernSum += nKern;
+    }
+    if ( nCnt && ( nRight > long( rInf.GetOfst() ) ) &&
+                 ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) )
+      --nCnt;
+
+    delete[] pKernArray;
+    return nCnt;
+}
+
+#else
+
 xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
     short nSpaceAdd = rInf.GetSpace() ? rInf.GetSpace() : - rInf.GetSperren();
@@ -1763,6 +2531,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     if( rInf.GetScriptInfo() && rInf.GetKanaComp() && rInf.GetLen() )
         rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),rInf.GetLen(),
                         rInf.GetKanaComp(), (USHORT) aFont.GetSize().Height() );
+
 
     long nLeft = 0;
     long nRight = 0;
@@ -1796,7 +2565,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         }
     }
 
-    const BOOL bAsianFont = rInf.GetFont() &&
+    // Asian justification: Each character gets some extra space
+    const BOOL bAsianJust = rInf.GetFont() &&
                             SW_CJK == rInf.GetFont()->GetActual() &&
                             LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK );
 #endif
@@ -1806,7 +2576,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         nLeft = nRight;
 
 #ifdef VERTICAL_LAYOUT
-        if ( nSpaceAdd && ( bAsianFont ||
+        if ( nSpaceAdd && ( bAsianJust ||
              CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) ) )
             nSpaceSum += nSpaceAdd;
 #else
@@ -1824,6 +2594,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     delete[] pKernArray;
     return nCnt;
 }
+
+#endif
 
 /*************************************************************************
 |*
