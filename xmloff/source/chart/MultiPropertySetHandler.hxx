@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-06 16:31:02 $
+ *  last change: $Author: bm $ $Date: 2001-08-10 06:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ BOOL    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequen
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet> xMultiSet (
         mxObject, ::com::sun::star::uno::UNO_QUERY);
-    if (mxObject.is())
+    if (xMultiSet.is())
         try
         {
             ::std::map< ::rtl::OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
@@ -308,7 +308,7 @@ BOOL    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequen
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xSingleSet (
         mxObject, ::com::sun::star::uno::UNO_QUERY);
-    if (mxObject.is())
+    if (xSingleSet.is())
         try
         {
             ::std::map< ::rtl::OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
