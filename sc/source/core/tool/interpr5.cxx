@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:07:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -741,7 +735,9 @@ void ScInterpreter::ScMatValue()
                 SCROW nRow2;
                 SCTAB nTab2;
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                if (nCol2 - nCol1 >= nR && nRow2 - nRow1 >= nC && nTab1 == nTab2)
+                if (nCol2 - nCol1 >= static_cast<SCCOL>(nR) &&
+                        nRow2 - nRow1 >= static_cast<SCROW>(nC) &&
+                        nTab1 == nTab2)
                 {
                     ScAddress aAdr( nCol1 + nR, nRow1 + nC, nTab1 );
                     ScBaseCell* pCell = GetCell( aAdr );
@@ -1461,16 +1457,17 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (pMat1->IsString(i,j) && pMat2->IsString(i,j))
-                {
-                    String aTmp( pMat1->GetString(i,j) );
-                    aTmp += pMat2->GetString(i,j);
-                    pResMat->PutString( aTmp , i, j);
-                }
+                USHORT nErr = pMat1->GetError( i, j);
+                if (!nErr)
+                    nErr = pMat2->GetError( i, j);
+                if (nErr)
+                    pResMat->PutError( nErr, i, j);
                 else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
-//! TODO: Xcl does concatenate value strings
+                {
+                    String aTmp( pMat1->GetString( *pFormatter, i, j));
+                    aTmp += pMat2->GetString( *pFormatter, i, j);
+                    pResMat->PutString( aTmp, i, j);
+                }
             }
         }
     }
@@ -1653,29 +1650,40 @@ void ScInterpreter::ScAmpersand()
         if (pResMat)
         {
             SCSIZE nCount = nC * nR;
-            if (bFlag)
+            if (nGlobalError)
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (!pMat->IsValue(i))
-                    {
-                        String sS = sStr;
-                        sS += pMat->GetString(i);
-                        pResMat->PutString(sS, i);
-                    }
+                    pResMat->PutError( nGlobalError, i);
+            }
+            else if (bFlag)
+            {
+                for ( SCSIZE i = 0; i < nCount; i++ )
+                {
+                    USHORT nErr = pMat->GetError( i);
+                    if (nErr)
+                        pResMat->PutError( nErr, i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                    {
+                        String aTmp( sStr);
+                        aTmp += pMat->GetString( *pFormatter, i);
+                        pResMat->PutString( aTmp, i);
+                    }
+                }
             }
             else
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (!pMat->IsValue(i))
-                    {
-                        String sS = pMat->GetString(i);
-                        sS += sStr;
-                        pResMat->PutString(sS, i);
-                    }
+                {
+                    USHORT nErr = pMat->GetError( i);
+                    if (nErr)
+                        pResMat->PutError( nErr, i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                    {
+                        String aTmp( pMat->GetString( *pFormatter, i));
+                        aTmp += sStr;
+                        pResMat->PutString( aTmp, i);
+                    }
+                }
             }
             PushMatrix(pResMat);
         }
@@ -2553,7 +2561,6 @@ void ScInterpreter::ScRGP()
             PushError();
             return;
         }
-        BOOL bVariancesOk = TRUE;
         ScMatrixRef pQ = GetNewMat(M+1, M+2);
         ScMatrixRef pE = GetNewMat(M+2, 1);
         ScMatrixRef pV = GetNewMat(M+1, 1);
