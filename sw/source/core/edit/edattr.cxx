@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:17:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
                                             pCNd->GetAttr( RES_LR_SPACE );
                 if( bRight )
                 {
-                    USHORT nNext = rLS.GetTxtLeft() + nDefDist;
+                    long nNext = rLS.GetTxtLeft() + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
                     SwFrm* pFrm = pCNd->GetFrm();
@@ -442,10 +442,6 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
                     else
                         bRet = FALSE;
                 }
-                else if( bModulus )
-                    bRet = 0 != rLS.GetLeft();
-                else
-                    bRet = nDefDist <= rLS.GetLeft();
             }
 
         if( !bRet )
