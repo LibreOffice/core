@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,13 +116,7 @@ MacroWarning::MacroWarning( Window* _pParent, uno::Reference< dcss::xml::crypto:
 //  maDisableBtn.SetClickHdl( LINK( this, MacroWarning, DisableBtnHdl ) );
 
     if( mxCert.is() )
-    {
-        String  aCN_Id( String::CreateFromAscii( "CN" ) );
-        String  s;
-        s = XmlSec::GetContentPart( mxCert->getSubjectName(), aCN_Id );
-
-        maSignsFI.SetText( s );
-    }
+        maSignsFI.SetText( XmlSec::GetContentPart( mxCert->getSubjectName() ) );
     else
         // nothing to view!
         maViewSignsBtn.Disable();
