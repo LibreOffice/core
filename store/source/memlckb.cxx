@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memlckb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:49:56 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 17:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_MEMLCKB_CXX_ "$Revision: 1.2 $"
+#define _STORE_MEMLCKB_CXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -70,9 +70,6 @@
 
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H_
-#include <rtl/memory.h>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -93,6 +90,16 @@
 #include <store/types.h>
 #endif
 
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
+
+#ifndef INCLUDED_CSTRING
+#include <cstring>
+#define INCLUDED_CSTRING
+#endif
+
 using namespace store;
 
 /*========================================================================
@@ -100,6 +107,33 @@ using namespace store;
  * OMemoryLockBytes internals.
  *
  *======================================================================*/
+/* MSVC 6.0 still has std functions in global namespace */
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#define __STORE_CSTD
+#else
+#define __STORE_CSTD std
+#endif /* _MSC_VER */
+
+#ifdef DEBUG
+#define inline static
+#endif /* DEBUG */
+
+/*
+ * __store_memcpy.
+ */
+inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
+{
+    __STORE_CSTD::memcpy (dst, src, n);
+}
+
+/*
+ * __store_memset.
+ */
+inline void __store_memset (void * dst, int val, sal_uInt32 n)
+{
+    __STORE_CSTD::memset (dst, val, n);
+}
+
 #ifdef DEBUG
 #ifdef inline
 #undef inline
@@ -121,6 +155,15 @@ class OMemoryLockBytes_Impl
     sal_uInt32  m_nSize;
 
 public:
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
+
     OMemoryLockBytes_Impl (void);
     ~OMemoryLockBytes_Impl (void);
 
@@ -181,7 +224,7 @@ inline storeError OMemoryLockBytes_Impl::resize (sal_uInt32 nSize)
         }
 
         if (nSize > m_nSize)
-            rtl_zeroMemory (m_pBuffer + m_nSize, nSize - m_nSize);
+            __store_memset (m_pBuffer + m_nSize, 0, nSize - m_nSize);
         m_nSize = nSize;
     }
     return store_E_None;
@@ -205,7 +248,7 @@ inline storeError OMemoryLockBytes_Impl::readAt (
         if (!(nBytes > 0))
             return store_E_None;
 
-        rtl_copyMemory (pBuffer, m_pBuffer + nOffset, nBytes);
+        __store_memcpy (pBuffer, m_pBuffer + nOffset, nBytes);
         rnDone = nBytes;
     }
     return store_E_None;
@@ -227,7 +270,7 @@ inline storeError OMemoryLockBytes_Impl::writeAt (
             return eErrCode;
     }
 
-    rtl_copyMemory (m_pBuffer + nOffset, pBuffer, nBytes);
+    __store_memcpy (m_pBuffer + nOffset, pBuffer, nBytes);
     rnDone = nBytes;
 
     return store_E_None;
