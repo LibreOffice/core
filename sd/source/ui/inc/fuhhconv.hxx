@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuhhconv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:03:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@ class FuHangulHanjaConversion : public FuPoor
         SfxRequest& rReq );
     ~FuHangulHanjaConversion();
 
-    void StartConversion( INT16 nLanguage );
+    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
+                          const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
 };
