@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:52:32 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,12 @@
  *
  ************************************************************************/
 
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
-#include <cppuhelper/implbase1.hxx>
-#endif
-
-#include <osl/diagnose.h>
-
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/propshlp.hxx>
-
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include "osl/diagnose.h"
+#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/weak.hxx"
+#include "cppuhelper/propshlp.hxx"
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
 
 
 using namespace osl;
@@ -178,11 +173,21 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
 //  class PropertySetHelper
 //  ----------------------------------------------------
 OPropertySetHelper::OPropertySetHelper(
-    OBroadcastHelper  & rBHelper_ )
-    SAL_THROW( () )
-    : rBHelper( rBHelper_ )
-    , aBoundLC( rBHelper_.rMutex )
-    , aVetoableLC( rBHelper_.rMutex )
+    OBroadcastHelper  & rBHelper_ ) SAL_THROW( () )
+    : rBHelper( rBHelper_ ),
+      aBoundLC( rBHelper_.rMutex ),
+      aVetoableLC( rBHelper_.rMutex ),
+      m_pReserved( 0 )
+{
+}
+
+OPropertySetHelper::OPropertySetHelper(
+    OBroadcastHelper  & rBHelper_, bool bIgnoreRuntimeExceptionsWhileFiring )
+    : rBHelper( rBHelper_ ),
+      aBoundLC( rBHelper_.rMutex ),
+      aVetoableLC( rBHelper_.rMutex ),
+      m_pReserved( reinterpret_cast< void * >(
+                       bIgnoreRuntimeExceptionsWhileFiring ? 1 : 0 ) )
 {
 }
 
@@ -546,6 +551,9 @@ void OPropertySetHelper::fire
             }
         }
 
+        bool bIgnoreRuntimeExceptionsWhileFiring =
+            (m_pReserved == reinterpret_cast< void const * >(1));
+
         // fire the events for all changed properties
         for( i = 0; i < nChangesLen; i++ )
         {
@@ -562,10 +570,42 @@ void OPropertySetHelper::fire
                 while( aIt.hasMoreElements() )
                 {
                     XInterface * pL = aIt.next();
-                    if( bVetoable ) // fire change Events?
-                        ((XVetoableChangeListener *)pL)->vetoableChange( pEvts[i] );
-                    else
-                        ((XPropertyChangeListener *)pL)->propertyChange( pEvts[i] );
+                    try
+                    {
+                        try
+                        {
+                            if( bVetoable ) // fire change Events?
+                            {
+                                ((XVetoableChangeListener *)pL)->vetoableChange(
+                                    pEvts[i] );
+                            }
+                            else
+                            {
+                                ((XPropertyChangeListener *)pL)->propertyChange(
+                                    pEvts[i] );
+                            }
+                        }
+                        catch (DisposedException & exc)
+                        {
+                            OSL_ENSURE( exc.Context.is(),
+                                        "DisposedException without Context!" );
+                            if (exc.Context == pL)
+                                aIt.remove();
+                            else
+                                throw;
+                        }
+                    }
+                    catch (RuntimeException & exc)
+                    {
+                        OSL_TRACE(
+                            OUStringToOString(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                              "caught RuntimeException while "
+                                              "firing listeners: ") ) +
+                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        if (! bIgnoreRuntimeExceptionsWhileFiring)
+                            throw;
+                    }
                 }
             }
             // broadcast to all listeners with "" property name
@@ -587,10 +627,42 @@ void OPropertySetHelper::fire
                 while( aIt.hasMoreElements() )
                 {
                     XInterface * pL = aIt.next();
-                    if( bVetoable ) // fire change Events?
-                        ((XVetoableChangeListener *)pL)->vetoableChange( pEvts[i] );
-                    else
-                        ((XPropertyChangeListener *)pL)->propertyChange( pEvts[i] );
+                    try
+                    {
+                        try
+                        {
+                            if( bVetoable ) // fire change Events?
+                            {
+                                ((XVetoableChangeListener *)pL)->vetoableChange(
+                                    pEvts[i] );
+                            }
+                            else
+                            {
+                                ((XPropertyChangeListener *)pL)->propertyChange(
+                                    pEvts[i] );
+                            }
+                        }
+                        catch (DisposedException & exc)
+                        {
+                            OSL_ENSURE( exc.Context.is(),
+                                        "DisposedException without Context!" );
+                            if (exc.Context == pL)
+                                aIt.remove();
+                            else
+                                throw;
+                        }
+                    }
+                    catch (RuntimeException & exc)
+                    {
+                        OSL_TRACE(
+                            OUStringToOString(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                              "caught RuntimeException while "
+                                              "firing listeners: ") ) +
+                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        if (! bIgnoreRuntimeExceptionsWhileFiring)
+                            throw;
+                    }
                 }
             }
         }
@@ -610,9 +682,37 @@ void OPropertySetHelper::fire
                 OInterfaceIteratorHelper aIt( *pCont );
                 while( aIt.hasMoreElements() )
                 {
-                    XPropertiesChangeListener * pL = (XPropertiesChangeListener *)aIt.next();
-                    // fire the hole event sequence to the XPropertiesChangeListener's
-                    pL->propertiesChange( aEvts );
+                    XPropertiesChangeListener * pL =
+                        (XPropertiesChangeListener *)aIt.next();
+                    try
+                    {
+                        try
+                        {
+                            // fire the hole event sequence to the
+                            // XPropertiesChangeListener's
+                            pL->propertiesChange( aEvts );
+                        }
+                        catch (DisposedException & exc)
+                        {
+                            OSL_ENSURE( exc.Context.is(),
+                                        "DisposedException without Context!" );
+                            if (exc.Context == pL)
+                                aIt.remove();
+                            else
+                                throw;
+                        }
+                    }
+                    catch (RuntimeException & exc)
+                    {
+                        OSL_TRACE(
+                            OUStringToOString(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                              "caught RuntimeException while "
+                                              "firing listeners: ") ) +
+                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        if (! bIgnoreRuntimeExceptionsWhileFiring)
+                            throw;
+                    }
                 }
             }
         }
