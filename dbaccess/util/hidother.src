@@ -1,63 +1,63 @@
 /*************************************************************************
- *
- *  $RCSfile: hidother.src,v $
- *
- *  $Revision: 1.54 $
- *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:10:49 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
+*
+*  $RCSfile: hidother.src,v $
+*
+*  $Revision: 1.55 $
+*
+*  last change: $Author: obo $ $Date: 2004-11-17 14:55:23 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+*  =============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+*  =================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
 
 #include "../inc/dbaccess_helpid.hrc"
 #include "../inc/dbaccess_slotid.hrc"
@@ -286,12 +286,7 @@ hidspecial HID_BROWSER_UNDO_RECORD                      { HelpId = HID_BROWSER_U
 // missing pre processor for helpids so we have to include them here
 hidspecial SID_RELATION_ADD_RELATION                    { HelpId = SID_RELATION_ADD_RELATION ; };
 hidspecial SID_FM_NATIVESQL                             { HelpId = SID_FM_NATIVESQL ; };
-hidspecial SID_QUERY_VIEW_FUNCTIONS                     { HelpId = SID_QUERY_VIEW_FUNCTIONS ; };
-hidspecial SID_QUERY_VIEW_TABLES                        { HelpId = SID_QUERY_VIEW_TABLES ; };
-hidspecial SID_QUERY_VIEW_ALIASES                       { HelpId = SID_QUERY_VIEW_ALIASES ; };
-hidspecial SID_QUERY_DISTINCT_VALUES                    { HelpId = SID_QUERY_DISTINCT_VALUES ; };
 hidspecial SID_FM_ADDTABLE                              { HelpId = SID_FM_ADDTABLE ; };
-hidspecial SID_BROWSER_CLEAR_QUERY                      { HelpId = SID_BROWSER_CLEAR_QUERY ; };
 hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUTE ; };
 
 hidspecial HID_DSADMIN_SQL92CHECK                       { HelpId = HID_DSADMIN_SQL92CHECK ; };
@@ -356,7 +351,6 @@ hidspecial UID_APP_DETAILPAGE_HELPER                    { HelpId = UID_APP_DETAI
 hidspecial HID_APP_VIEW_PREVIEW_CB                      { HelpId = HID_APP_VIEW_PREVIEW_CB ; };
 hidspecial HID_APP_VIEW_PREVIEW_1                       { HelpId = HID_APP_VIEW_PREVIEW_1 ; };
 hidspecial HID_APP_VIEW_PREVIEW_2                       { HelpId = HID_APP_VIEW_PREVIEW_2 ; };
-hidspecial HID_APP_STATUS_BAR                           { HelpId = HID_APP_STATUS_BAR ; };
 hidspecial UID_APP_VIEW_HORZ_SPLIT                      { HelpId = UID_APP_VIEW_HORZ_SPLIT ; };
 hidspecial UID_APP_VIEW_PREVIEW_1                       { HelpId = UID_APP_VIEW_PREVIEW_1 ; };
 hidspecial HID_APP_VIEW_PREVIEW_3                       { HelpId = HID_APP_VIEW_PREVIEW_3 ; };
@@ -382,6 +376,79 @@ hidspecial HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE     { HelpId = HID_P
 
 hidspecial HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION             { HelpId = HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION ; };
 hidspecial HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION             { HelpId = HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION ; };
+
+hidspecial SID_INDEXDESIGN { HelpId = SID_INDEXDESIGN; };
+hidspecial SID_DOCUMENT_DATA_SOURCE { HelpId = SID_DOCUMENT_DATA_SOURCE; };
+hidspecial SID_DB_NEW { HelpId = SID_DB_NEW; };
+hidspecial SID_DB_APP_DISABLE_PREVIEW { HelpId = SID_DB_APP_DISABLE_PREVIEW; };
+hidspecial SID_DB_APP_DSCONNECTION_TYPE { HelpId = SID_DB_APP_DSCONNECTION_TYPE; };
+hidspecial SID_DB_APP_DSADVANCED_SETTINGS { HelpId = SID_DB_APP_DSADVANCED_SETTINGS; };
+
+hidspecial SID_DB_APP_VIEW_DOCINFO_PREVIEW { HelpId = SID_DB_APP_VIEW_DOCINFO_PREVIEW; };
+hidspecial SID_DB_APP_VIEW_DOC_PREVIEW { HelpId = SID_DB_APP_VIEW_DOC_PREVIEW; };
+hidspecial SID_DB_APP_VIEW_TABLES { HelpId = SID_DB_APP_VIEW_TABLES; };
+hidspecial SID_DB_APP_VIEW_QUERIES { HelpId = SID_DB_APP_VIEW_QUERIES; };
+hidspecial SID_DB_APP_DSIMPORT { HelpId = SID_DB_APP_DSIMPORT; };
+hidspecial SID_DB_APP_VIEW_FORMS { HelpId = SID_DB_APP_VIEW_FORMS; };
+hidspecial SID_DB_APP_DSRELDESIGN { HelpId = SID_DB_APP_DSRELDESIGN; };
+hidspecial SID_DB_APP_DSUSERADMIN { HelpId = SID_DB_APP_DSUSERADMIN; };
+hidspecial SID_DB_APP_TABLEFILTER { HelpId = SID_DB_APP_TABLEFILTER; };
+hidspecial SID_DB_APP_CLOSECONNECTION { HelpId = SID_DB_APP_CLOSECONNECTION; };
+hidspecial SID_DB_APP_DSPROPS { HelpId = SID_DB_APP_DSPROPS; };
+hidspecial SID_DB_APP_DBADMIN { HelpId = SID_DB_APP_DBADMIN; };
+
+hidspecial SID_DB_APP_CONVERTTOVIEW { HelpId = SID_DB_APP_CONVERTTOVIEW; };
+hidspecial SID_DB_APP_REFRESH_TABLES { HelpId = SID_DB_APP_REFRESH_TABLES; };
+hidspecial SID_DB_APP_VIEW_REPORTS { HelpId = SID_DB_APP_VIEW_REPORTS; };
+hidspecial SID_DB_APP_DSEXPORT { HelpId = SID_DB_APP_DSEXPORT; };
+
+hidspecial SID_DB_APP_TABLE_DELETE { HelpId = SID_DB_APP_TABLE_DELETE; };
+hidspecial SID_DB_APP_TABLE_RENAME { HelpId = SID_DB_APP_TABLE_RENAME; };
+hidspecial SID_DB_APP_TABLE_EDIT { HelpId = SID_DB_APP_TABLE_EDIT; };
+hidspecial SID_DB_APP_TABLE_OPEN { HelpId = SID_DB_APP_TABLE_OPEN; };
+
+hidspecial SID_DB_APP_QUERY_DELETE { HelpId = SID_DB_APP_QUERY_DELETE; };
+hidspecial SID_DB_APP_QUERY_RENAME { HelpId = SID_DB_APP_QUERY_RENAME; };
+hidspecial SID_DB_APP_QUERY_EDIT { HelpId = SID_DB_APP_QUERY_EDIT; };
+hidspecial SID_DB_APP_QUERY_OPEN { HelpId = SID_DB_APP_QUERY_OPEN; };
+
+hidspecial SID_DB_APP_FORM_DELETE { HelpId = SID_DB_APP_FORM_DELETE; };
+hidspecial SID_DB_APP_FORM_RENAME { HelpId = SID_DB_APP_FORM_RENAME; };
+hidspecial SID_DB_APP_FORM_EDIT { HelpId = SID_DB_APP_FORM_EDIT; };
+hidspecial SID_DB_APP_FORM_OPEN { HelpId = SID_DB_APP_FORM_OPEN; };
+
+hidspecial SID_DB_APP_REPORT_DELETE { HelpId = SID_DB_APP_REPORT_DELETE; };
+hidspecial SID_DB_APP_REPORT_RENAME { HelpId = SID_DB_APP_REPORT_RENAME; };
+hidspecial SID_DB_APP_REPORT_EDIT { HelpId = SID_DB_APP_REPORT_EDIT; };
+hidspecial SID_DB_APP_REPORT_OPEN { HelpId = SID_DB_APP_REPORT_OPEN; };
+
+hidspecial SID_DB_APP_DELETE { HelpId = SID_DB_APP_DELETE; };
+hidspecial SID_DB_APP_RENAME { HelpId = SID_DB_APP_RENAME; };
+hidspecial SID_DB_APP_EDIT { HelpId = SID_DB_APP_EDIT; };
+hidspecial SID_DB_APP_OPEN { HelpId = SID_DB_APP_OPEN; };
+
+hidspecial SID_BROWSER_CLEAR_QUERY { HelpId = SID_BROWSER_CLEAR_QUERY; };
+hidspecial SID_RELATION_ADD_RELATION { HelpId = SID_RELATION_ADD_RELATION; };
+hidspecial SID_QUERY_VIEW_FUNCTIONS { HelpId = SID_QUERY_VIEW_FUNCTIONS; };
+hidspecial SID_QUERY_VIEW_TABLES { HelpId = SID_QUERY_VIEW_TABLES; };
+hidspecial SID_QUERY_VIEW_ALIASES { HelpId = SID_QUERY_VIEW_ALIASES; };
+hidspecial SID_QUERY_DISTINCT_VALUES { HelpId = SID_QUERY_DISTINCT_VALUES; };
+hidspecial SID_FORM_CREATE_REPWIZ_PRE_SEL { HelpId = SID_FORM_CREATE_REPWIZ_PRE_SEL; };
+hidspecial SID_REPORT_CREATE_REPWIZ_PRE_SEL { HelpId = SID_REPORT_CREATE_REPWIZ_PRE_SEL; };
+hidspecial SID_FORM_NEW_PILOT_PRE_SEL { HelpId = SID_FORM_NEW_PILOT_PRE_SEL; };
+hidspecial SID_APP_NEW_FOLDER { HelpId = SID_APP_NEW_FOLDER; };
+hidspecial SID_APP_NEW_FORM { HelpId = SID_APP_NEW_FORM; };
+hidspecial SID_DB_APP_PASTE_SPECIAL { HelpId = SID_DB_APP_PASTE_SPECIAL; };
+hidspecial SID_DB_QUERY_PREVIEW { HelpId = SID_DB_QUERY_PREVIEW; };
+
+hidspecial SID_DB_APP_STATUS_TYPE { HelpId = SID_DB_APP_STATUS_TYPE; };
+hidspecial SID_DB_APP_STATUS_DBNAME { HelpId = SID_DB_APP_STATUS_DBNAME; };
+hidspecial SID_DB_APP_STATUS_USERNAME { HelpId = SID_DB_APP_STATUS_USERNAME; };
+hidspecial SID_DB_APP_STATUS_HOSTNAME { HelpId = SID_DB_APP_STATUS_HOSTNAME; };
+
+hidspecial SID_DB_APP_SENDREPORTASMAIL { HelpId = SID_DB_APP_SENDREPORTASMAIL; };
+hidspecial SID_DB_APP_SENDREPORTTOWRITER { HelpId = SID_DB_APP_SENDREPORTTOWRITER; };
+hidspecial SID_DB_NEW_VIEW_SQL { HelpId = SID_DB_NEW_VIEW_SQL; };
 
 hidspecial HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE           { HelpId = HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE ; };
 hidspecial HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE           { HelpId = HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE ; };
@@ -446,3 +513,4 @@ hidspecial HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS                { HelpId = H
 hidspecial HID_DSADMIN_USESSL_LDAP                                  { HelpId = HID_DSADMIN_USESSL_LDAP ; };
 hidspecial HID_DSADMIN_DOSLINEENDS                                  { HelpId = HID_DSADMIN_DOSLINEENDS ; };
 hidspecial SID_DB_QUERY_PREVIEW                         { HelpId = SID_DB_QUERY_PREVIEW ; };
+
