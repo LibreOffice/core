@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 10:00:24 $
+ *  last change: $Author: cl $ $Date: 2002-08-01 12:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                     pFillAttrLB->SelectEntry( aString );
                     // NEU
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                    if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         long nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
@@ -384,7 +384,7 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                     pFillAttrLB->SelectEntry( aString );
                     // NEU
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                    if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         long nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
@@ -441,7 +441,7 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                     pFillAttrLB->SelectEntry( aString );
                     // NEU
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                    if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         long nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
