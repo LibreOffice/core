@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 14:40:52 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     bRowHeaderOpen(sal_False),
     pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL),
-    aXShapesVec()
+    aXShapesVec(),
+    pDefaults(NULL)
 {
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
@@ -433,6 +434,7 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pValidationsContainer = new ScMyValidationsContainer();
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
     pCellsItr = new ScMyNotEmptyCellsIterator(*this);
+    pDefaults = new ScMyDefaultStyles();
 
     // document is not set here - create ScChangeTrackingExportHelper later
 
@@ -445,7 +447,7 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(*this));
     xColumnStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
-    xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper);
+    xTableStylesExportPropertySetMapper = new ScXMLTableExportPropertyMapper(xTableStylesPropertySetMapper);
 
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
         xCellStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
@@ -534,11 +536,8 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                         uno::Any aPropAny = xShapeProp->getPropertyValue(
                                             OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
                                         sal_Int16 nLayerID;
-                                        if( aPropAny >>= nLayerID )
-                                        {
-                                            if( nLayerID != SC_LAYER_INTERN )
-                                                nShapesCount++;
-                                        }
+                                        if( (aPropAny >>= nLayerID) && (nLayerID != SC_LAYER_INTERN) )
+                                            nShapesCount++;
                                     }
                                 }
                             }
@@ -672,7 +671,7 @@ void ScXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
+table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_uInt16 nTable)
 {
     table::CellRangeAddress aCellAddress;
     uno::Reference<sheet::XSheetCellCursor> xCursor = xTable->createCursor();
@@ -770,7 +769,8 @@ sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>&
     return sal_False;
 }
 
-void ScXMLExport::WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible)
+void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
+    const sal_Int32 nIndex, const sal_Bool bIsAutoStyle, const sal_Bool bIsVisible)
 {
     CheckAttrList();
     AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pColumnStyles->GetStyleNameByIndex(nStyleIndex));
@@ -781,7 +781,31 @@ void ScXMLExport::WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nS
         OUString sOUEndCol = OUString::valueOf(static_cast <sal_Int32> (nRepeatColumns));
         AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_repeated, sOUEndCol);
     }
+    if (nIndex != -1)
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_default_cell_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
     SvXMLElementExport aElemR(*this, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True);
+}
+
+void ScXMLExport::WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,
+    const sal_Int32 nStyleIndex, const sal_Bool bIsVisible)
+{
+    sal_Int32 nRepeat(1);
+    sal_Int32 nPrevIndex((*pDefaults->GetColDefaults())[nColumn].nIndex);
+    sal_Bool bPrevAutoStyle((*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle);
+    for (sal_Int32 i = nColumn + 1; i < nColumn + nRepeatColumns; i++)
+    {
+        if (((*pDefaults->GetColDefaults())[nColumn].nIndex != nPrevIndex) ||
+            ((*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle != bPrevAutoStyle))
+        {
+            WriteSingleColumn(nRepeat, nStyleIndex, nPrevIndex, bPrevAutoStyle, bIsVisible);
+            nPrevIndex = (*pDefaults->GetColDefaults())[nColumn].nIndex;
+            bPrevAutoStyle = (*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle;
+            nRepeat = 1;
+        }
+        else
+            nRepeat++;
+    }
+    WriteSingleColumn(nRepeat, nStyleIndex, nPrevIndex, bPrevAutoStyle, bIsVisible);
 }
 
 void ScXMLExport::OpenHeaderColumn()
@@ -799,7 +823,7 @@ void ScXMLExport::CloseHeaderColumn()
     GetDocHandler()->endElement(sName);
 }
 
-void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader)
+void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader)
 {
     sal_Int32 nColsRepeated (1);
     rtl::OUString sParent;
@@ -839,7 +863,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                 bIsFirst = sal_False;
                                 if (nColumn > 0)
                                 {
-                                    WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                    WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
                                     if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                         pGroupColumns->CloseGroups(nColumn - 1);
                                 }
@@ -855,7 +879,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                             }
                             else
                             {
-                                WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
                                 CloseHeaderColumn();
                                 if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                     pGroupColumns->CloseGroups(nColumn - 1);
@@ -880,7 +904,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                         else
                         {
                             bIsFirst = sal_False;
-                            WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                            WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
                             if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                 pGroupColumns->CloseGroups(nColumn - 1);
                             if (pGroupColumns->IsGroupStart(nColumn))
@@ -899,7 +923,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                 }
             }
             //if (nColsRepeated > 1 || bIsFirst)
-                WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
                 CloseHeaderColumn();
             if (pGroupColumns->IsGroupEnd(nColumn - 1))
@@ -928,12 +952,14 @@ void ScXMLExport::WriteRowContent()
         }
         else
         {
-            if (aRange.nIndex == nIndex && aRange.bIsAutoStyle == bIsAutoStyle &&
+            if (((aRange.nIndex == nIndex && aRange.bIsAutoStyle == bIsAutoStyle) ||
+                (aRange.nIndex == nIndex && nIndex == -1)) &&
                 nPrevValidationIndex == aRange.nValidationIndex)
                 nCols += aRange.nRepeatColumns;
             else
             {
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
+                if (nIndex != -1)
+                    AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
                 if (nPrevValidationIndex > -1)
                     AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nPrevValidationIndex));
                 if (nCols > 1)
@@ -953,7 +979,8 @@ void ScXMLExport::WriteRowContent()
     if (!bIsFirst)
     {
         table::CellAddress aCellAddress;
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
+        if (nIndex != -1)
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
         if (nPrevValidationIndex > -1)
             AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nPrevValidationIndex));
         if (nCols > 1)
@@ -966,7 +993,8 @@ void ScXMLExport::WriteRowContent()
     }
 }
 
-void ScXMLExport::WriteRowStartTag(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEqualRows)
+void ScXMLExport::WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex,
+    const sal_Int8 nFlag, const sal_Int32 nEqualRows)
 {
     AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pRowStyles->GetStyleNameByIndex(nIndex));
     if (nFlag)
@@ -980,6 +1008,11 @@ void ScXMLExport::WriteRowStartTag(const sal_Int32 nIndex, const sal_Int8 nFlag,
         GetMM100UnitConverter().convertNumber(aBuf, nEqualRows);
         AddAttribute(XML_NAMESPACE_TABLE, sXML_number_rows_repeated, aBuf.makeStringAndClear());
     }
+    sal_Int32 nCellStyleIndex((*pDefaults->GetRowDefaults())[nRow].nIndex);
+    if (nCellStyleIndex != -1)
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_default_cell_style_name,
+            *pCellStyles->GetStyleNameByIndex(nCellStyleIndex,
+                (*pDefaults->GetRowDefaults())[nRow].bIsAutoStyle));
     rtl::OUString aName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_row)));
     GetDocHandler()->ignorableWhitespace(sWS);
     GetDocHandler()->startElement( aName, GetXAttrList());
@@ -1022,17 +1055,17 @@ void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const
             nEquals = aRowHeaderRange.EndRow - nStartRow + 1;
         else
             nEquals = nEqualRows;
-        WriteRowStartTag(nIndex, nFlag, nEquals);
+        WriteRowStartTag(nStartRow, nIndex, nFlag, nEquals);
         nOpenRow = nStartRow + nEquals - 1;
         if (nEquals < nEqualRows)
         {
             CloseRow(nStartRow + nEquals - 1);
-            WriteRowStartTag(nIndex, nFlag, nEqualRows - nEquals);
+            WriteRowStartTag(nStartRow, nIndex, nFlag, nEqualRows - nEquals);
             nOpenRow = nStartRow + nEqualRows - 1;
         }
     }
     else
-        WriteRowStartTag(nIndex, nFlag, nEqualRows);
+        WriteRowStartTag(nStartRow, nIndex, nFlag, nEqualRows);
 }
 
 void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
@@ -1044,7 +1077,7 @@ void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
     pRowFormatRanges->Clear();
 }
 
-void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow)
+void ScXMLExport::OpenRow(const sal_uInt16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow)
 {
     if (nRepeatRow > 1)
     {
@@ -1121,7 +1154,7 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
 }
 
 void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
-    const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int16 nSheet)
+    const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_uInt16 nSheet)
 {
     pRowFormatRanges->Clear();
     if (nStartRow == nEndRow)
@@ -1369,11 +1402,15 @@ void ScXMLExport::_ExportContent()
                         sal_Bool bHasColumnHeader(GetColumnHeader(aColumnHeaderRange));
                         if (bHasColumnHeader)
                             pSharedData->SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
-                        ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
                         bHasRowHeader = GetRowHeader(aRowHeaderRange);
                         bRowHeaderOpen = sal_False;
                         if (bHasRowHeader)
                             pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
+                        pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
+                            pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
+                        pRowFormatRanges->SetRowDefaults(pDefaults->GetRowDefaults());
+                        pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
+                        ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
                         sal_Bool bIsFirst(sal_True);
                         sal_Int32 nEqualCells(0);
                         ScMyCell aCell;
@@ -1476,9 +1513,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
                         uno::Any aNumberFormat = xCellProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
                         sal_Int32 nNumberFormat;
                         if (aNumberFormat >>= nNumberFormat)
-                        {
                             addDataStyle(nNumberFormat);
-                        }
                     }
                 }
             }
@@ -1534,9 +1569,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 rtl::OUString sParent;
                                 rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
                                 if (!sName.getLength())
-                                {
                                     sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
-                                }
                                 aTableStyles.push_back(sName);
                             }
                         }
@@ -1570,9 +1603,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 uno::Any aNumberFormat = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
                                                 sal_Int32 nNumberFormat;
                                                 if (aNumberFormat >>= nNumberFormat)
-                                                {
                                                     addDataStyle(nNumberFormat);
-                                                }
                                                 uno::Any aStyle = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)));
                                                 rtl::OUString sStyleName;
                                                 if (aStyle >>= sStyleName)
@@ -1760,9 +1791,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 {
                                                     uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
                                                     if (xText.is())
-                                                    {
                                                         GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
-                                                    }
                                                 }
                                             }
                                         }
@@ -1970,9 +1999,7 @@ sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsS
                 uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
                 sal_Int16 nNumberFormat;
                 if ( aNumberFormat >>= nNumberFormat )
-                {
                     return nNumberFormat;
-                }
             }
             catch ( uno::Exception& )
             {
@@ -1991,9 +2018,7 @@ sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference 
         uno::Any aNumberFormatPropertyKey = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
         sal_Int32 nNumberFormatPropertyKey;
         if ( aNumberFormatPropertyKey>>=nNumberFormatPropertyKey )
-        {
             return nNumberFormatPropertyKey;
-        }
     }
     return 0;
 }
@@ -2252,11 +2277,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     uno::Any aPropAny = xShapeProp->getPropertyValue(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
                     sal_Int16 nLayerID;
-                    if( aPropAny >>= nLayerID )
-                    {
-                        if( nLayerID == SC_LAYER_BACK )
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
-                    }
+                    if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+                        AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
                 }
                 ExportShape(xShape, pPoint);
             }
@@ -2285,11 +2307,8 @@ void ScXMLExport::WriteTableShapes()
                     uno::Any aPropAny = xShapeProp->getPropertyValue(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
                     sal_Int16 nLayerID;
-                    if( aPropAny >>= nLayerID )
-                    {
-                        if( nLayerID == SC_LAYER_BACK )
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
-                    }
+                    if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+                        AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
                 }
                 ExportShape(xShape, NULL);
             }
@@ -2529,7 +2548,8 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
                 if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1, nValidationIndex1, nNumberFormat1) &&
                     GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2, nValidationIndex2, nNumberFormat2))
                 {
-                    if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
+                    if (((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) ||
+                        (nIndex1 == nIndex2) && (nIndex1 == -1)) &&
                         (nValidationIndex1 == nValidationIndex2) &&
                         IsCellTypeEqual(aCell1, aCell2))
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 14:41:33 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 class ScRangeList;
@@ -269,7 +272,8 @@ enum ScXMLTableColAttrTokens
 {
     XML_TOK_TABLE_COL_ATTR_STYLE_NAME,
     XML_TOK_TABLE_COL_ATTR_REPEATED,
-    XML_TOK_TABLE_COL_ATTR_VISIBILITY
+    XML_TOK_TABLE_COL_ATTR_VISIBILITY,
+    XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME
 };
 
 enum ScXMLTableRowTokens
@@ -282,7 +286,8 @@ enum ScXMLTableRowAttrTokens
 {
     XML_TOK_TABLE_ROW_ATTR_STYLE_NAME,
     XML_TOK_TABLE_ROW_ATTR_VISIBILITY,
-    XML_TOK_TABLE_ROW_ATTR_REPEATED
+    XML_TOK_TABLE_ROW_ATTR_REPEATED,
+    XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME
 //  XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT
 };
 
@@ -653,12 +658,19 @@ struct ScMyImportValidation
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
+class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
     ScDocument*             pDoc;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
+    ScMyStylesImportHelper*             pStylesImportHelper;
+    rtl::OUString                       sNumberFormat;
+    rtl::OUString                       sLocale;
+    rtl::OUString                       sCellStyle;
+    rtl::OUString                       sStandardFormat;
+    rtl::OUString                       sType;
 
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
@@ -911,6 +923,13 @@ public:
 
     void SetFirstTableStyle(const rtl::OUString& rValue) { sFirstTableStyle = rValue; }
     rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
+    ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
+    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
+    sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
+    void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties, const sal_Int16 nCellType,
+        const rtl::OUString& rCurrency);
+    void SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
+        const sal_Int16 nCellType, const rtl::OUString& rCurrency);
 };
 
 #endif

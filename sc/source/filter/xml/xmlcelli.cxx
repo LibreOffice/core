@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _SC_XMLTEXTPCONTEXT_HXX
 #include "XMLTextPContext.hxx"
+#endif
+#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
+#include "XMLStylesImportHelper.hxx"
 #endif
 
 #ifndef SC_UNONAMES_HXX
@@ -163,9 +166,7 @@
 #include <comphelper/extract.hxx>
 #endif
 
-#define SC_LOCALE           "Locale"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
-#define SC_STANDARDFORMAT   "StandardFormat"
 
 using namespace com::sun::star;
 
@@ -299,6 +300,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
         }
     }
+    GetScImport().GetStylesImportHelper()->SetAttributes(sStyleName, sCurrencySymbol, nCellType);
 }
 
 sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const
@@ -462,7 +464,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     return pContext;
 }
 
-sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
+/*sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetScImport().GetNumberFormatsSupplier();
     if (xNumberFormatsSupplier.is())
@@ -489,9 +491,9 @@ sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, s
         }
     }
     return 0;
-}
+}*/
 
-void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& xCellRange,
+/*void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& xCellRange,
                                                 const table::CellAddress& aCellAddress)
 {
     if (nCellType != util::NumberFormat::TEXT)
@@ -703,7 +705,7 @@ sal_Int32 ScXMLTableRowCellContext::SetCurrencySymbol(const sal_Int32 nKey)
         }
     }
        return nKey;
-}
+}*/
 
 sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
@@ -835,7 +837,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
         uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
         if (xProperties.is())
         {
-            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
+            /*XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
             XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
             if (pStyle)
@@ -845,7 +847,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
                 uno::Any aStyleName;
                 aStyleName <<= sStyleName;
                 xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-            }
+            }*/
             SetContentValidation(xProperties);
         }
     }
@@ -857,7 +859,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
     if (xProperties.is())
     {
-        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
+        /*XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
         if (pStyle)
@@ -867,7 +869,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             uno::Any aStyleName;
             aStyleName <<= sStyleName;
             xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-        }
+        }*/
         SetContentValidation(xProperties);
     }
 }
@@ -1096,24 +1098,30 @@ void ScXMLTableRowCellContext::EndElement()
                 }
                 if (nCellsRepeated > 1 || nRepeatedRows > 1)
                 {
-                    SetCellProperties(xCellRange, aCellPos);
-                    SetType(xCellRange, aCellPos);
+                    SetCellProperties(xCellRange, aCellPos); // set now only the validation
+                    //SetType(xCellRange, aCellPos);
+                    ScRange aScRange( static_cast<USHORT>(aCellPos.Column),
+                        static_cast<USHORT>(aCellPos.Row), aCellPos.Sheet,
+                        static_cast<USHORT>(aCellPos.Column + nCellsRepeated - 1),
+                        static_cast<USHORT>(aCellPos.Row + nRepeatedRows - 1), aCellPos.Sheet );
+                    GetScImport().GetStylesImportHelper()->AddRange(aScRange);
                 }
                 else
                 {
-                    SetCellProperties(xTempCell);
-                    SetType(xTempCell);
+                    GetScImport().GetStylesImportHelper()->AddCell(aCellPos);
+                    SetCellProperties(xTempCell); // set now only the validation
+                    //SetType(xTempCell);
                 }
             }
             else
             {
                 uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row);
-                SetCellProperties(xCell);
+                SetCellProperties(xCell); // set now only the validation
+                DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+                GetScImport().GetStylesImportHelper()->AddCell(aCellPos);
                 ScXMLConverter::ParseFormula(sOUFormula);
                 if (!bIsMatrix)
-                {
                     xCell->setFormula(sOUFormula);
-                }
                 else
                 {
                     if (nMatrixCols > 0 && nMatrixRows > 0)
@@ -1125,31 +1133,13 @@ void ScXMLTableRowCellContext::EndElement()
                         {
                             uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
                             if (xArrayFormulaRange.is())
-                            {
                                 xArrayFormulaRange->setArrayFormula(sOUFormula);
-                            }
                         }
                     }
                 }
                 SetAnnotation(xCell);
                 SetDetectiveObj( aCellPos );
                 SetCellRangeSource( aCellPos );
-//2do: results of formula cells should be stored in XML and set upon reading
-                // No API implemented because this is the only place where needed ever, isn't it?
-                //! QAD HACK! be sure that getCellByPosition() really returned a ScCellObj
-                ScCellObj* pCellObj = (ScCellObj*) ScCellRangesBase::getImplementation( xCell );
-                if ( pCellObj )
-                {
-                    if ( FALSE )
-                    {
-//2do: make it real
-                    BOOL bIsStringResult = TRUE;
-                    if ( bIsStringResult )
-                        pCellObj->SetFormulaResultString( sOUText );
-                    else
-                        pCellObj->SetFormulaResultDouble( fValue );
-                    }
-                }
             }
         }
     }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+#   last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,6 +114,7 @@ CXXFILES = \
         XMLExportIterator.cxx \
         XMLColumnRowGroupExport.cxx \
         XMLStylesExportHelper.cxx \
+        XMLStylesImportHelper.cxx \
         XMLExportDataPilot.cxx \
         XMLExportDatabaseRanges.cxx \
         XMLTableShapeImportHelper.cxx \
@@ -162,6 +163,7 @@ SLOFILES =  \
         $(SLO)$/XMLExportIterator.obj \
         $(SLO)$/XMLColumnRowGroupExport.obj \
         $(SLO)$/XMLStylesExportHelper.obj \
+        $(SLO)$/XMLStylesImportHelper.obj \
         $(SLO)$/XMLExportDataPilot.obj \
         $(SLO)$/XMLExportDatabaseRanges.obj \
         $(SLO)$/XMLTableShapeImportHelper.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,11 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                     sVisibility = sValue;
                 }
                 break;
+            case XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME:
+                {
+                    sCellStyleName = sValue;
+                }
+                break;
         }
     }
 }
@@ -233,6 +238,7 @@ void ScXMLTableColContext::EndElement()
         }
     }
     GetScImport().GetTables().AddColCount(nColCount);
+    GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,

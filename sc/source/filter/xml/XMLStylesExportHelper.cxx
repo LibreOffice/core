@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -455,6 +458,31 @@ const rtl::OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32
 
 //==============================================================================
 
+void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
+    const sal_Int32 nLastRow, const sal_Int32 nLastCol,
+    const ScFormatRangeStyles* pCellStyles, const ScDocument* pDoc)
+{
+    sal_uInt16 nPos;
+    if (pRowDefaults)
+        delete pRowDefaults;
+    pRowDefaults = new ScMyDefaultStyleList(nLastRow + 1);
+    for (sal_Int32 i = 0; i <= nLastRow; i++)
+        if (pDoc->GetRowDefault(nTable,
+            static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastCol), nPos))
+            (*pRowDefaults)[i].nIndex = pCellStyles->GetStyleNameIndex(nTable,
+                                        static_cast<sal_Int32>(nPos), i,
+                                        (*pRowDefaults)[i].bIsAutoStyle);
+    if (pColDefaults)
+        delete pColDefaults;
+    pColDefaults = new ScMyDefaultStyleList(nLastCol + 1);
+    for (i = 0; i <= nLastCol; i++)
+        if (pDoc->GetColDefault(nTable,
+            static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastRow), nPos))
+            (*pColDefaults)[i].nIndex = pCellStyles->GetStyleNameIndex(nTable,
+                                        i, static_cast<sal_Int32>(nPos),
+                                        (*pColDefaults)[i].bIsAutoStyle);
+}
+
 ScMyRowFormatRange::ScMyRowFormatRange()
     : nStartColumn(0),
     nRepeatColumns(0),
@@ -471,13 +499,17 @@ sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange)
 }
 
 ScRowFormatRanges::ScRowFormatRanges()
-    : aRowFormatRanges(),
+    : pRowDefaults(NULL),
+    pColDefaults(NULL),
+    aRowFormatRanges(),
     nSize(0)
 {
 }
 
 ScRowFormatRanges::ScRowFormatRanges(const ScRowFormatRanges* pRanges)
-    : aRowFormatRanges(pRanges->aRowFormatRanges),
+    : pRowDefaults(pRanges->pRowDefaults),
+    pColDefaults(pRanges->pColDefaults),
+    aRowFormatRanges(pRanges->aRowFormatRanges),
     nSize(pRanges->nSize)
 {
 }
@@ -492,10 +524,74 @@ void ScRowFormatRanges::Clear()
     nSize = 0;
 }
 
-void ScRowFormatRanges::AddRange(const ScMyRowFormatRange& aFormatRange)
+void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 nRepeat, const sal_Int32 nPrevIndex,
+    const sal_Bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange)
 {
-    aRowFormatRanges.push_back(aFormatRange);
+    ScMyRowFormatRange aRange;
+    aRange.nStartColumn = nPrevStartCol;
+    aRange.nRepeatColumns = nRepeat;
+    aRange.nRepeatRows = rFormatRange.nRepeatRows;
+    aRange.nValidationIndex = rFormatRange.nValidationIndex;
+    aRange.bIsAutoStyle = rFormatRange.bIsAutoStyle;
+    if ((nPrevIndex == rFormatRange.nIndex) &&
+        (bPrevAutoStyle == rFormatRange.bIsAutoStyle))
+        aRange.nIndex = -1;
+    else
+        aRange.nIndex = rFormatRange.nIndex;
+    aRowFormatRanges.push_back(aRange);
     nSize++;
+}
+
+void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
+    const sal_Int32 nRow)
+{
+    DBG_ASSERT(pRowDefaults, "no row defaults");
+    DBG_ASSERT(pColDefaults, "no column defaults");
+    sal_Int32 nEnd (rFormatRange.nRepeatRows + nRow - 1);
+    sal_Int32 nPrevIndex((*pRowDefaults)[nRow].nIndex);
+    sal_Bool bPrevAutoStyle((*pRowDefaults)[nRow].bIsAutoStyle);
+    sal_Int32 i(nRow + 1);
+    sal_Bool bReady(sal_False);
+    while ((i < nEnd) && !bReady)
+    {
+        if ((nPrevIndex != (*pRowDefaults)[i].nIndex) ||
+            (bPrevAutoStyle != (*pRowDefaults)[i].bIsAutoStyle))
+            bReady = sal_True;
+        else
+            i++;
+    }
+    if (bReady)
+        rFormatRange.nRepeatRows = i - nRow + 1;
+    if (nPrevIndex == -1)
+    {
+        nPrevIndex = (*pColDefaults)[rFormatRange.nStartColumn].nIndex;
+        bPrevAutoStyle = (*pColDefaults)[rFormatRange.nStartColumn].bIsAutoStyle;
+        sal_Int32 nPrevStartCol(rFormatRange.nStartColumn);
+        sal_Int32 nRepeat(1);
+        for(i = rFormatRange.nStartColumn + 1; i < (rFormatRange.nStartColumn + rFormatRange.nRepeatColumns); i++)
+        {
+            if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
+                (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
+            {
+                AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
+                nPrevStartCol = nPrevStartCol + nRepeat - 1;
+                nRepeat = 1;
+                nPrevIndex = (*pColDefaults)[i].nIndex;
+                bPrevAutoStyle = (*pColDefaults)[i].bIsAutoStyle;
+            }
+            else
+                nRepeat++;
+        }
+        AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
+        DBG_ASSERT((nPrevStartCol + nRepeat) == (rFormatRange.nStartColumn + rFormatRange.nRepeatColumns), "something wents wrong");
+    }
+    else if ((nPrevIndex == rFormatRange.nIndex) &&
+        (bPrevAutoStyle == rFormatRange.bIsAutoStyle))
+    {
+        rFormatRange.nIndex = -1;
+        aRowFormatRanges.push_back(rFormatRange);
+        nSize++;
+    }
 }
 
 sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
@@ -672,7 +768,29 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     }
 }
 
-sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable,
+    const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle) const
+{
+    DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
+    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
+    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
+    while (aItr != pFormatRanges->end())
+    {
+        if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
+            ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
+            ((*aItr).aRangeAddress.StartRow <= nRow) &&
+            ((*aItr).aRangeAddress.EndRow >= nRow))
+        {
+            bIsAutoStyle = aItr->bIsAutoStyle;
+            return (*aItr).nStyleNameIndex;
+        }
+        else
+            aItr++;
+    }
+    return -1;
+}
+
+sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
     sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
@@ -722,7 +840,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                 ((*aItr).aRangeAddress.EndColumn <= nEndColumn)))
             {
                 ScMyRowFormatRange aRange;
-                aRange.aRangeAddress = aItr->aRangeAddress;
+//              aRange.aRangeAddress = aItr->aRangeAddress;
                 aRange.nIndex = aItr->nStyleNameIndex;
                 aRange.nValidationIndex = aItr->nValidationIndex;
                 aRange.bIsAutoStyle = aItr->bIsAutoStyle;
@@ -749,7 +867,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     aRange.nStartColumn = aItr->aRangeAddress.StartColumn;
                 }
                 aRange.nRepeatRows = aItr->aRangeAddress.EndRow - nRow + 1;
-                pRowFormatRanges->AddRange(aRange);
+                pRowFormatRanges->AddRange(aRange, nRow);
                 nColumns += aRange.nRepeatColumns;
             }
             aItr++;

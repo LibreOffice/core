@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ private:
     rtl::OUString                       sPassword;
     std::vector<ScMyTableData*>         aTableVec;
     com::sun::star::table::CellAddress  aRealCellPos;
+    sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
     sal_Int16                           nTableCount;
@@ -187,6 +188,7 @@ public:
     void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
                                                 const sal_Bool bProtection, const rtl::OUString& sPassword);
     void                                AddRow();
+    void                                SetRowStyle(const rtl::OUString& rCellStyleName);
     void                                CloseRow();
     void                                AddColumn(sal_Bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
@@ -194,6 +196,7 @@ public:
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
+    void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     sal_Int16                           GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }

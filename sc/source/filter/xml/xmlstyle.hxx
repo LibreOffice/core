@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)
 #define CTF_SC_ROWBREAKBEFORE                       (XML_SC_CTF_START + 52)
 
+#define CTF_SC_MASTERPAGENAME                       (XML_SC_CTF_START + 53)
+
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
 //ShapeStyles
@@ -181,6 +183,24 @@ public:
     ScXMLRowExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLRowExportPropertyMapper();
+};
+
+class ScXMLTableExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+protected:
+public:
+    ScXMLTableExportPropertyMapper(
+            const UniReference< XMLPropertySetMapper >& rMapper );
+    virtual ~ScXMLTableExportPropertyMapper();
+
+    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+    virtual void handleSpecialItem(
+            SvXMLAttributeList& rAttrList,
+            const XMLPropertyState& rProperty,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties = 0,
+            sal_uInt32 nIdx = 0 ) const;
 };
 
 class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP

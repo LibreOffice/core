@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
     nRepeatedRows(1)
 //  sOptimalHeight(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
 {
+    rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -146,6 +147,11 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                 nRepeatedRows = sValue.toInt32();
             }
             break;
+            case XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME:
+            {
+                sCellStyleName = sValue;
+            }
+            break;
             /*case XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT:
             {
                 sOptimalHeight = sValue;
@@ -154,6 +160,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
         }
     }
     GetScImport().GetTables().AddRow();
+    GetScImport().GetTables().SetRowStyle(sCellStyleName);
 }
 
 ScXMLTableRowContext::~ScXMLTableRowContext()

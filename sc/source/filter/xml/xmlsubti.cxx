@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 14:41:33 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
+#endif
+#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
+#include "XMLStylesImportHelper.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -217,7 +220,8 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
     aResizeShapes(rTempImport),
-    aVDev()
+    aVDev(),
+    nCurrentColStylePos(0)
 {
     aTableVec.resize(nDefaultTabCount, NULL);
 }
@@ -237,6 +241,7 @@ ScMyTables::~ScMyTables()
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
                         const sal_Bool bTempProtection, const rtl::OUString& sTempPassword)
 {
+    nCurrentColStylePos = 0;
     sCurrentSheetName = sTableName;
     ScMyTableData* aTable;
     while (nTableCount > 0)
@@ -416,9 +421,10 @@ void ScMyTables::InsertRow()
     if ( xCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
+        sal_Int32 nRow(GetRealCellPos().Row);
         for (sal_Int32 j = 0; j < GetRealCellPos().Column - aTableVec[nTableCount - 1]->GetColumn() - 1; j++)
         {
-            if (IsMerged(xCellRange, j, GetRealCellPos().Row - 1, aCellAddress))
+            if (IsMerged(xCellRange, j, nRow - 1, aCellAddress))
             {
                 //unmerge
                 uno::Reference <table::XCellRange> xMergeCellRange =
@@ -438,6 +444,7 @@ void ScMyTables::InsertRow()
                 xMergeable->merge(sal_True);
             j += aCellAddress.EndColumn - aCellAddress.StartColumn;
         }
+        rImport.GetStylesImportHelper()->InsertRow(nRow, nCurrentSheet, rImport.GetDocument());
     }
 }
 
@@ -473,6 +480,11 @@ void ScMyTables::AddRow()
         + aTableVec[nTableCount - 1]->GetRowsPerRow(nRow));
 }
 
+void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
+{
+    rImport.GetStylesImportHelper()->SetRowStyle(rCellStyleName);
+}
+
 void ScMyTables::CloseRow()
 {
     sal_Int32 nToMerge;
@@ -495,10 +507,11 @@ void ScMyTables::InsertColumn()
     if ( xCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
+        sal_Int32 nCol(GetRealCellPos().Column);
         for (sal_Int32 j = 0; j <= GetRealCellPos().Row - aTableVec[nTableCount - 1]->GetRow() - 1; j++)
         {
             table::CellRangeAddress aTempCellAddress;
-            if (IsMerged(xCellRange, GetRealCellPos().Column - 1, j, aCellAddress))
+            if (IsMerged(xCellRange, nCol - 1, j, aCellAddress))
             {
                 //unmerge
                 uno::Reference <table::XCellRange> xMergeCellRange =
@@ -532,6 +545,7 @@ void ScMyTables::InsertColumn()
                 xMergeable->merge(sal_True);
             j += aCellAddress.EndRow - aCellAddress.StartRow;
         }
+        rImport.GetStylesImportHelper()->InsertCol(nCol, nCurrentSheet, rImport.GetDocument());
     }
 }
 
@@ -658,6 +672,7 @@ void ScMyTables::UpdateRowHeights()
 
 void ScMyTables::DeleteTable()
 {
+    nCurrentColStylePos = 0;
     if (nTableCount > 0)
     {
         ScMyTableData* aTable = aTableVec[nTableCount - 1];
@@ -677,6 +692,8 @@ void ScMyTables::DeleteTable()
             xProtectable->protect(sKey);
         }*/
     }
+    if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
+        rImport.GetStylesImportHelper()->SetStylesToRanges(rImport);
     UpdateRowHeights();
     aResizeShapes.ResizeShapes(xCurrentSheet);
 }
@@ -700,6 +717,13 @@ table::CellAddress ScMyTables::GetRealCellPos()
 void ScMyTables::AddColCount(sal_Int32 nTempColCount)
 {
     aTableVec[nTableCount - 1]->SetColCount(aTableVec[nTableCount - 1]->GetColCount() + nTempColCount);
+}
+
+void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName)
+{
+    DBG_ASSERT(nTableCount == 1, "not possible to use default styles on columns in subtables");
+    rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColStylePos, nRepeat);
+    nCurrentColStylePos += nRepeat;
 }
 
 uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()

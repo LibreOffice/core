@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #endif
 
 class ScDocument;
-class   ScXMLExport;
+class ScXMLExport;
 
 struct ScMyValidation
 {
@@ -138,9 +138,37 @@ public:
 
 //==============================================================================
 
+struct ScMyDefaultStyle
+{
+    sal_Int32   nIndex;
+    sal_Bool    bIsAutoStyle;
+
+    ScMyDefaultStyle() : nIndex(-1), bIsAutoStyle(sal_True) {}
+};
+
+typedef std::vector<ScMyDefaultStyle> ScMyDefaultStyleList;
+
+class ScFormatRangeStyles;
+
+class ScMyDefaultStyles
+{
+    ScMyDefaultStyleList* pRowDefaults;
+    ScMyDefaultStyleList* pColDefaults;
+
+public:
+    ScMyDefaultStyles() : pRowDefaults(NULL), pColDefaults(NULL) {}
+
+    void FillDefaultStyles(const sal_uInt16 nTable,
+        const sal_Int32 nLastRow, const sal_Int32 nLastCol,
+        const ScFormatRangeStyles* pCellStyles, const ScDocument* pDoc);
+
+    const ScMyDefaultStyleList* GetRowDefaults() { return pRowDefaults; }
+    const ScMyDefaultStyleList* GetColDefaults() { return pColDefaults; }
+};
+
 struct ScMyRowFormatRange
 {
-    com::sun::star::table::CellRangeAddress aRangeAddress;
+//  com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32   nStartColumn;
     sal_Int32   nRepeatColumns;
     sal_Int32   nRepeatRows;
@@ -157,16 +185,23 @@ typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
 class ScRowFormatRanges
 {
     ScMyRowFormatRangesList     aRowFormatRanges;
+    const ScMyDefaultStyleList* pRowDefaults;
+    const ScMyDefaultStyleList* pColDefaults;
     sal_uInt32                  nSize;
+
+    void AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 nRepeat, const sal_Int32 nPrevIndex,
+        const sal_Bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange);
 
 public:
     ScRowFormatRanges();
     ScRowFormatRanges(const ScRowFormatRanges* pRanges);
     ~ScRowFormatRanges();
 
+    void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
+    void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void Clear();
-    void AddRange(const ScMyRowFormatRange& aFormatRange);
-    sal_Bool GetNext(ScMyRowFormatRange& aFormatRange);
+    void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
+    sal_Bool GetNext(ScMyRowFormatRange& rFormatRange);
     sal_Int32 GetMaxRows();
     sal_Int32 GetSize();
     void Sort();
@@ -181,6 +216,7 @@ struct ScMyFormatRange
     sal_Int32                               nValidationIndex;
     sal_Int32                               nNumberFormat;
     sal_Bool                                bIsAutoStyle : 1;
+    sal_Bool                                bWriteStyleName : 1;
 
     ScMyFormatRange();
     sal_Bool operator< (const ScMyFormatRange& rRange);
@@ -202,7 +238,11 @@ public:
     void AddNewTable(const sal_Int16 nTable);
     sal_Int32 AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle = sal_True);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+    // does not delete ranges
+    sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+        sal_Bool& bIsAutoStyle) const;
+    // deletes not necessary ranges
+    sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int16 nTable, ScRowFormatRanges* pFormatRanges);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
+#ifndef XMLOFF_NUMEHELP_HXX
+#include <xmloff/numehelp.hxx>
+#endif
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -108,6 +111,12 @@
 #endif
 #ifndef SC_CHGVISET_HXX
 #include "chgviset.hxx"
+#endif
+#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
+#include "XMLStylesImportHelper.hxx"
+#endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -140,12 +149,21 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
+
+#define SC_LOCALE           "Locale"
+#define SC_STANDARDFORMAT   "StandardFormat"
 
 using namespace com::sun::star;
 
@@ -426,6 +444,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableColAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
     { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,    XML_TOK_TABLE_COL_ATTR_REPEATED         },
     { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_COL_ATTR_VISIBILITY       },
+    { XML_NAMESPACE_TABLE, sXML_default_cell_style_name,    XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME },
     XML_TOKEN_MAP_END
 };
 
@@ -441,6 +460,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
     { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
     { XML_NAMESPACE_TABLE, sXML_number_rows_repeated,       XML_TOK_TABLE_ROW_ATTR_REPEATED             },
+    { XML_NAMESPACE_TABLE, sXML_default_cell_style_name,    XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME },
 //  { XML_NAMESPACE_TABLE, sXML_use_optimal_height,         XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT   },
     XML_TOKEN_MAP_END
 };
@@ -1452,7 +1472,13 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     sSC_string(RTL_CONSTASCII_USTRINGPARAM(sXML_string)),
     sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean)),
     bRemoveLastChar(sal_False),
-    pChangeTrackingImportHelper(NULL)
+    pChangeTrackingImportHelper(NULL),
+    pStylesImportHelper(NULL),
+    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)),
+    sLocale(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)),
+    sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
+    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
+    sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE))
 
 //  pParaItemMapper( 0 ),
 {
@@ -1460,6 +1486,8 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
                                   sXML_n_text, XML_NAMESPACE_TEXT );
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
                                   sXML_n_table, XML_NAMESPACE_TABLE );*/
+    pStylesImportHelper = new ScMyStylesImportHelper(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
 
     xScPropHdlFactory = new XMLScPropHdlFactory;
     xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);
@@ -1837,3 +1865,181 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
     }
 }
 
+sal_Int16 ScXMLImport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
+{
+    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
+    if (xNumberFormatsSupplier.is())
+    {
+        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+        if (xNumberFormats.is())
+        {
+            try
+            {
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(sStandardFormat);
+                aIsStandardFormat >>= bIsStandard;
+                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(sType);
+                sal_Int16 nNumberFormat;
+                if ( aNumberFormat >>= nNumberFormat )
+                {
+                    return nNumberFormat;
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
+            }
+        }
+    }
+    return 0;
+}
+
+sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency)
+{
+    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
+    if (xNumberFormatsSupplier.is())
+    {
+        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+        if (xNumberFormats.is())
+        {
+            try
+            {
+                uno::Reference <beans::XPropertySet> xProperties = xNumberFormats->getByKey(nKey);
+                if (xProperties.is())
+                {
+                    uno::Any aAny = xProperties->getPropertyValue(sLocale);
+                    lang::Locale aLocale;
+                    if (aAny >>= aLocale)
+                    {
+                        LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
+                        rtl::OUStringBuffer aBuffer(15);
+                        aBuffer.appendAscii("#");
+                        aBuffer.append( aLocaleData.getNumThousandSep() );
+                        aBuffer.appendAscii("##0");
+                        aBuffer.append( aLocaleData.getNumDecimalSep() );
+                        aBuffer.appendAscii("00 [$");
+                        aBuffer.append(rCurrency);
+                        aBuffer.appendAscii("]");
+                        return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
+                    }
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
+            }
+        }
+    }
+       return nKey;
+}
+
+void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties, const sal_Int16 nCellType,
+    const rtl::OUString& rCurrency)
+{
+    if (nCellType != util::NumberFormat::TEXT)
+    {
+        uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
+        if (xNumberFormatsSupplier.is())
+        {
+            uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+            if (xNumberFormats.is())
+            {
+                uno::Reference <util::XNumberFormatTypes> xNumberFormatTypes (xNumberFormats, uno::UNO_QUERY);
+                if (xNumberFormatTypes.is())
+                {
+                    uno::Any aKey = rProperties->getPropertyValue( sNumberFormat );
+                    sal_Int32 nKey;
+                    if ( aKey >>= nKey )
+                    {
+                        sal_Bool bIsStandard;
+                        sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
+                        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
+                            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
+                            (nCurrentCellType == util::NumberFormat::FRACTION) ||
+                            (nCurrentCellType == 0))))
+                        {
+                            try
+                            {
+                                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
+                                if (xNumberFormatProperties.is())
+                                {
+                                    if (nCellType != util::NumberFormat::CURRENCY)
+                                    {
+                                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(sLocale);
+                                        lang::Locale aLocale;
+                                        if ( aNumberLocale >>= aLocale )
+                                        {
+                                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
+                                            uno::Any aNumberFormatPropertyKey;
+                                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
+                                            rProperties->setPropertyValue( sNumberFormat, aNumberFormatPropertyKey );
+                                        }
+                                    }
+                                    else if (rCurrency.getLength())
+                                    {
+                                        nKey = SetCurrencySymbol(nKey, rCurrency);
+                                        uno::Any aAny;
+                                        aAny <<= nKey;
+                                        rProperties->setPropertyValue( sNumberFormat, aAny);
+                                    }
+                                }
+                            }
+                            catch ( uno::Exception& )
+                            {
+                                DBG_ERROR("Numberformat not found");
+                            }
+                        }
+                        else
+                        {
+                            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength())
+                            {
+                                rtl::OUString sNewCurrencySymbol;
+                                if (XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(nKey, sNewCurrencySymbol, xNumberFormatsSupplier))
+                                {
+                                    if (!sNewCurrencySymbol.equals(rCurrency))
+                                    {
+                                        nKey = SetCurrencySymbol(nKey, rCurrency);
+                                        uno::Any aAny;
+                                        aAny <<= nKey;
+                                        rProperties->setPropertyValue( sNumberFormat, aAny);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
+        const sal_Int16 nCellType, const rtl::OUString& rCurrency)
+{
+    uno::Reference<sheet::XSpreadsheet> xTable = GetTables().GetCurrentXSheet();
+    if (xTable.is())
+    {
+        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
+        uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+        if (xPropCellRange.is())
+        {
+            uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
+            if (xProperties.is())
+            {
+                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetAutoStyles();
+                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_TABLE_CELL, rStyleName, sal_True);
+                if (pStyle)
+                    pStyle->FillPropertySet(xProperties);
+                else
+                {
+                    uno::Any aStyleName;
+                    aStyleName <<= rStyleName;
+                    xProperties->setPropertyValue(sCellStyle, aStyleName);
+                }
+                SetType(xProperties, nCellType, rCurrency);
+            }
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ struct ScXMLMapContent;
 class XMLTableStyleContext : public XMLPropStyleContext
 {
     ::rtl::OUString             sDataStyleName;
+    rtl::OUString               sPageStyle;
     const rtl::OUString         sNumberFormat;
     SvXMLStylesContext*         pStyles;
     std::vector<ScXMLMapContent>    aMaps;
@@ -217,6 +218,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
+    sal_Int32 nMasterPageNameIndex;
     sal_Bool bAutoStyles : 1;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;

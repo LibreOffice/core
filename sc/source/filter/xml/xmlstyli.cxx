@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,13 +531,11 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     // TODO: use a map here
     if( rLocalName.compareToAscii( sXML_data_style_name ) == 0 )
-    {
         sDataStyleName = rValue;
-    }
+    else if (rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
+        sPageStyle = rValue;
     else
-    {
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
-    }
 }
 
 struct ScXMLMapContent
@@ -594,48 +592,60 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
 void XMLTableStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
-    if (!IsDefaultStyle() && (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL))
+    if (!IsDefaultStyle())
     {
-        if (!bParentSet)
+        if (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL)
         {
-            rtl::OUString sParentName = GetParent();
-            uno::Any aStyleName;
-            aStyleName <<= sParentName;
-            AddProperty(CTF_SC_CELLSTYLE, aStyleName);
-            bParentSet = sal_True;
-        }
-        if ((nNumberFormat == -1) && sDataStyleName.getLength())
-        {
-            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-            if (!pStyle)
+            if (!bParentSet)
             {
-                XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
-                pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                    FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                rtl::OUString sParentName = GetParent();
+                uno::Any aStyleName;
+                aStyleName <<= sParentName;
+                AddProperty(CTF_SC_CELLSTYLE, aStyleName);
+                bParentSet = sal_True;
             }
-            if (pStyle)
+            if ((nNumberFormat == -1) && sDataStyleName.getLength())
             {
-                uno::Any aNumberFormat;
-                nNumberFormat = pStyle->GetKey();
-                aNumberFormat <<= nNumberFormat;
-                //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                AddProperty(CTF_SC_NUMBERFORMAT, aNumberFormat);
+                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                if (!pStyle)
+                {
+                    XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
+                    pStyle = (SvXMLNumFormatContext *)pMyStyles->
+                        FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                }
+                if (pStyle)
+                {
+                    uno::Any aNumberFormat;
+                    nNumberFormat = pStyle->GetKey();
+                    aNumberFormat <<= nNumberFormat;
+                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
+                    AddProperty(CTF_SC_NUMBERFORMAT, aNumberFormat);
+                }
             }
-        }
-        if (!bConditionalFormatCreated && (aMaps.size() > 0))
-        {
-            aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
-            std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
-            while(aItr != aMaps.end())
+            if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
-                //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
-                GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell);
+                aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
+                std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
+                while(aItr != aMaps.end())
+                {
+                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
+                    GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell);
 
-                aItr++;
+                    aItr++;
+                }
+                AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
+                bConditionalFormatCreated = sal_True;
             }
-            AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
-            bConditionalFormatCreated = sal_True;
+        }
+        else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
+        {
+            if (sPageStyle.getLength())
+            {
+                uno::Any aAny;
+                aAny <<= sPageStyle;
+                AddProperty(CTF_SC_MASTERPAGENAME, aAny);
+            }
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -728,6 +738,7 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
     nNumberFormatIndex(-1),
     nConditionalFormatIndex(-1),
     nCellStyleIndex(-1),
+    nMasterPageNameIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
 }
@@ -941,6 +952,13 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
             nConditionalFormatIndex =
                 GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nConditionalFormatIndex;
+    }
+    else if (nContextID == CTF_SC_MASTERPAGENAME)
+    {
+        if (nMasterPageNameIndex == -1)
+                nMasterPageNameIndex =
+                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
+        return nMasterPageNameIndex;
     }
     else
         return -1;

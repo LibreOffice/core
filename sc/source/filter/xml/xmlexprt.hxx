@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class ScMyDetectiveOpContainer;
 struct ScMyCell;
 class ScDocument;
 class ScMySharedData;
+class ScMyDefaultStyles;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -126,6 +127,7 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
+    ScMyDefaultStyles*                  pDefaults;
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
@@ -133,7 +135,7 @@ class ScXMLExport : public SvXMLExport
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     sal_Int32                   nOpenRow;
-    sal_Int16                   nCurrentTable;
+    sal_uInt16                  nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;
     sal_Bool                    bRowHeaderOpen : 1;
     sal_Bool                    mbShowProgress : 1;
@@ -154,25 +156,28 @@ class ScXMLExport : public SvXMLExport
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
-                                                        const sal_Int16 nTable);
+                                                        const sal_uInt16 nTable);
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
-    void WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
+    void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
+        const sal_Int32 nIndex, const sal_Bool bIsAutoStyle, const sal_Bool bIsVisible);
+    void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,
+        const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
     void OpenHeaderColumn();
     void CloseHeaderColumn();
-    void ExportColumns(const sal_Int16 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
+    void ExportColumns(const sal_uInt16 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
-        const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int16 nSheet);
+        const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_uInt16 nSheet);
     void WriteRowContent();
-    void WriteRowStartTag(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
     void OpenHeaderRows();
     void CloseHeaderRows();
     void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
     void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
         const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
+    void OpenRow(const sal_uInt16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
     void CloseRow(const sal_Int32 nRow);
     sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
     sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
@@ -242,6 +247,7 @@ public:
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
 
     void GetChangeTrackViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     rtl::OUString sCurrencySymbol;
     rtl::OUString sStyleName;
     rtl::OUString sContentValidationName;
+    ScMyAnnotation          aMyAnnotation;
+    ScMyImpDetectiveObjVec  aDetectiveObjVec;
+    ScMyImpCellRangeSource  aCellRangeSource;
     double      fValue;
     sal_Int32   nMergedRows, nMergedCols;
     sal_Int32   nMatrixRows, nMatrixCols;
@@ -132,19 +135,16 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Bool    bIsEmpty : 1;
     sal_Bool    bHasTextImport : 1;
     sal_Bool    bIsFirstTextImport : 1;
-    ScMyAnnotation          aMyAnnotation;
-    ScMyImpDetectiveObjVec  aDetectiveObjVec;
-    ScMyImpCellRangeSource  aCellRangeSource;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
+//  sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
 
-    void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
-                                                const com::sun::star::table::CellAddress& aCellAddress);
-    void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
-    sal_Int32 SetCurrencySymbol(sal_Int32 nKey);
+//  void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
+//                                              const com::sun::star::table::CellAddress& aCellAddress);
+//  void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+//  sal_Int32 SetCurrencySymbol(sal_Int32 nKey);
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
