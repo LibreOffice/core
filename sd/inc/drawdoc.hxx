@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:14:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,20 @@
 #endif
 #include <memory>
 
+#ifndef _SDPAGE_HXX
+#include "sdpage.hxx"
+#endif
+
 namespace sd {
 class FrameView;
 class Outliner;
 }
+
 class Timer;
 class SfxObjectShell;
+class FrameView;
+class SdDrawDocShell;
+class SdOutliner;
 class SdPage;
 class SdAnimationInfo;
 class SdIMapInfo;
@@ -161,9 +169,11 @@ class SdrUndoUserCallObj : public SdrUndoObj
 protected:
     SdPage*                         mpOld;
     SdPage*                         mpNew;
+    PresObjKind                     meKind;
 
 public:
     SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pNew);
+    SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pOld, SdPage* pNew);
 
     virtual void Undo();
     virtual void Redo();
@@ -476,6 +486,7 @@ public:
     void                StopWorkStartupDelay();
 
     void                NewOrLoadCompleted(DocCreationMode eMode);
+    void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
     BOOL                IsNewOrLoadCompleted() const {return bNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(ULONG nPos) {
@@ -485,7 +496,7 @@ public:
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
-    IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const Window& rCmpWnd );
+    IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
 
     Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
 
